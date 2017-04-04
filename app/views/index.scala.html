@@ -1,0 +1,11 @@
+@styles = {
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+}
+
+@scripts = {
+	<script type="text/javascript" href="@routes.Assets.at("stylesheets/main.js")"></script>
+}
+
+@main(title = "Index", styles, scripts) {
+	<p>Hello World!</p>
+}

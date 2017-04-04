@@ -1,0 +1,14 @@
+@(title: String, styles: Html = Html(""), scripts: Html = Html(""))(content: Html)
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>@title</title>
+	@styles
+</head>
+<body>
+	@content
+	@scripts
+</body>
+</html>
