@@ -97,23 +97,6 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support.private.conf
-        - PolicyName: PushMetrics
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - cloudwatch:PutMetricData
-                Resource: '*'
-        - PolicyName: PushLogs
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:*
-                Resource:
-                  - arn:aws:logs:*:*:*
         - PolicyName: UpdateSSHKeys
           PolicyDocument:
             Version: 2012-10-17
