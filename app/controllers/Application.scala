@@ -7,5 +7,8 @@ class Application extends Controller {
 	def helloWorld = Action {
 		Ok(views.html.index())
 	}
-	
+
+	def healthcheck = Action {
+		Ok("healthy")
+	}
 }
