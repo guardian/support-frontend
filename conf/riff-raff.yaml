@@ -1,0 +1,19 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: frontend
+    parameters:
+      templatePath: cfn.yaml
+  ami:
+    type: ami-cloudformation-parameter
+    app: frontend
+    parameters:
+      amiTags:
+        Recipe: xenial-membership
+        AmigoStage: PROD
+    dependencies: [cfn]
+  app:
+    type: autoscaling
+    dependencies: [cfn, ami]
