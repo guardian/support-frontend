@@ -1,0 +1,211 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: support-frontend
+Parameters:
+  VpcId:
+    Type: String
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    Default: vpc-e6e00183
+  Subnets:
+    Type: CommaDelimitedList
+    Description: The list of SubnetIds in your Virtual Private Cloud (VPC)
+    Default: subnet-cb91ae8d, subnet-a7b74ac2, subnet-179e8063
+  Stack:
+    Description: Applied directly as a tag
+    Type: String
+  Stage:
+    Description: Applied directly as a tag
+    Type: String
+  App:
+    Description: Applied directly as a tag
+    Type: String
+  AMI:
+    Description: AMI ID
+    Type: String
+    Default: ami-0eb88168
+Mappings:
+  StageVariables:
+    CODE:
+      MaxInstances: 2
+      MinInstances: 1
+      InstanceType: t2.small
+      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+    PROD:
+      MaxInstances: 6
+      MinInstances: 3
+      InstanceType: t2.small
+      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+Resources:
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchConfigurationName: !Ref LaunchConfig
+      MinSize: !FindInMap [ StageVariables, !Ref Stage, MinInstances ]
+      MaxSize: !FindInMap [ StageVariables, !Ref Stage, MaxInstances ]
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Stack
+          Value: !Ref Stack
+          PropagateAtLaunch: true
+        - Key: App
+          Value: !Ref App
+          PropagateAtLaunch: true
+        - Key: Stage
+          Value: !Ref Stage
+          PropagateAtLaunch: true
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref AMI
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
+      IamInstanceProfile: !Ref InstanceProfile
+      AssociatePublicIpAddress: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -ev
+          mkdir /etc/gu
+          aws --region ${AWS::Region} s3 cp s3://membership-private/${Stage}/support.private.conf /etc/gu
+          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/${App}_1.0-SNAPSHOT_all.deb /tmp
+          dpkg -i /tmp/${App}_1.0-SNAPSHOT_all.deb
+          /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/${App}/application.log
+          chown ${App} /etc/gu/support.private.conf
+          chmod 0600 /etc/gu/support.private.conf
+  AppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: PrivateBucket
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support.private.conf
+        - PolicyName: PushMetrics
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudwatch:PutMetricData
+                Resource: '*'
+        - PolicyName: PushLogs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource:
+                  - arn:aws:logs:*:*:*
+        - PolicyName: UpdateSSHKeys
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: arn:aws:s3:::github-public-keys/Membership-and-Subscriptions/*
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref AppRole
+
+  ElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub ${Stack}-${App}-${Stage}
+      Subnets: !Ref Subnets
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+      Tags:
+        - Key: Stack
+          Value: !Ref Stack
+        - Key: App
+          Value: !Ref App
+        - Key: Stage
+          Value: !Ref Stage
+
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn:
+          Ref: TargetGroup
+      LoadBalancerArn:
+        Ref: ElasticLoadBalancer
+      Certificates:
+        - CertificateArn: !FindInMap [ StageVariables, !Ref Stage, CertificateARN ]
+      Port: 443
+      Protocol: HTTPS
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub ${Stack}-${App}-${Stage}
+      Port: 9000
+      Protocol: HTTP
+      VpcId:
+        Ref: VpcId
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /healthcheck
+      HealthCheckPort: 9000
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref VpcId
+    DependsOn:
+    - ElasticLoadBalancer
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Permit incoming HTTP access on port 80, egress to port 9000
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          CidrIp: 0.0.0.0/0
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open up SSH access and enable HTTP access on the configured port
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 77.91.248.0/21
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          CidrIp: 77.91.248.0/21
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
