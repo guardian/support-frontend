@@ -114,7 +114,7 @@ Resources:
   ElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Sub ${Stack}-${App}-${Stage}
+      Name: !Sub ${Stack}-${Stage}-${App}
       Subnets: !Ref Subnets
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
@@ -143,7 +143,7 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub ${Stack}-${App}-${Stage}
+      Name: !Sub ${Stack}-${Stage}-${App}
       Port: 9000
       Protocol: HTTP
       VpcId:
