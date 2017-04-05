@@ -18,6 +18,7 @@ Parameters:
   App:
     Description: Applied directly as a tag
     Type: String
+    Default: frontend
   AMI:
     Description: AMI ID
     Type: String
