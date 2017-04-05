@@ -14,6 +14,6 @@ deployments:
         Recipe: xenial-membership
         AmigoStage: PROD
     dependencies: [cfn]
-  app:
+  frontend:
     type: autoscaling
     dependencies: [cfn, ami]

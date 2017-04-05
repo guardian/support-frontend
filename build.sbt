@@ -1,4 +1,4 @@
-name := "support-frontend"
+name := "frontend"
 
 version := "1.0-SNAPSHOT"
 
@@ -37,6 +37,7 @@ packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
 
 riffRaffPackageType := (packageBin in Debian).value
+riffRaffManifestProjectName := s"support:${name.value}"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
