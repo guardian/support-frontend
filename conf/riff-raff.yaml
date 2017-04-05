@@ -17,3 +17,4 @@ deployments:
   frontend:
     type: autoscaling
     dependencies: [cfn, ami]
+    bucket: membership-dist
