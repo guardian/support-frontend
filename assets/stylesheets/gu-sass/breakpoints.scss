@@ -1,3 +1,21 @@
+// This module uses the sass-mq library (https://github.com/sass-mq/sass-mq).
+// The breakpoints specified here are picked up when it is imported at the end
+// of this file.
+//
+// It exposes an 'mq' mixin, which is used as follows:
+// 
+// - Make the text black from the tablet until the desktop breakpoints.
+// @include mq($from: tablet, until: desktop) {
+//     color: #000;
+// }
+
+// - The following is equivalent to the previous example.
+// @include mq(tablet, desktop) {
+//     color: #000;
+// }
+//
+// More information is available on the library Github page.
+
 $mq-breakpoints: (
 	mobile: 320px,
 	mobileMedium: 375px,
