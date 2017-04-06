@@ -6,4 +6,8 @@ addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.6.1")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.2")
 
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0" excludeAll ExclusionRule(organization = "com.danieltrinh"))
+
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "0.9.7")
+
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.1.7"

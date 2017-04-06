@@ -6,6 +6,8 @@ scalaVersion := "2.11.8"
 
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
 
+lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).settings(
   buildInfoKeys := Seq[BuildInfoKey](
     name,
@@ -18,7 +20,12 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
     }))
   ),
   buildInfoPackage := "app",
-  buildInfoOptions += BuildInfoOption.ToMap
+  buildInfoOptions += BuildInfoOption.ToMap,
+  scalastyleFailOnError := true,
+  testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+  (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+  (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
+  (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
 )
 
 
