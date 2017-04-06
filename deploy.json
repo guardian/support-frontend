@@ -1,0 +1,26 @@
+{
+  "defaultStacks": ["content-api"],
+  "packages": {
+    "guardian-support-monthly-contributions-lambdas": {
+      "type": "aws-lambda",
+      "data": {
+        "functions": {
+          "PROD": {
+            "name": "apple-news-analytics-PROD-Lambda-5HDT8QSOSRYZ",
+            "filename": "guardian-support-monthly-contributions-lambdas.zip"
+          }
+        },
+        "fileName": "guardian-support-monthly-contributions-lambdas.zip",
+        "bucket": "support-dist"
+      }
+    }
+  },
+  "recipes": {
+    "lambda": {
+      "actionsBeforeApp": ["apple-news-analytics-lambda-fetch-reports.uploadLambda", "apple-news-analytics-lambda-fetch-reports.updateLambda"]
+    },
+    "default": {
+      "depends": ["lambda"]
+    }
+  }
+}
