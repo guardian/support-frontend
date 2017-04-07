@@ -38,6 +38,19 @@ Resources:
         Runtime: "java8"
         Timeout: "60"
 
+  CreateZuoraSubscriptionLambda:
+        Type: "AWS::Lambda::Function"
+        Description: "Step 2. Create Zuora subscription"
+        Properties:
+          Handler: "com.gu.support.workers.lambdas.CreateZuoraSubscription::handleRequest"
+          MemorySize: 256
+          Role: !GetAtt [ LambdaExecutionRole, Arn ]
+          Code:
+                      S3Bucket: support-workers-dist
+                      S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+          Runtime: "java8"
+          Timeout: "60"
+
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -76,10 +89,19 @@ Resources:
                 },
                 "CreateSalesForceContact": {
                   "Type": "Task",
-                  "Resource": "${createSalesForceContatcArn}",
+                  "Resource": "${createSalesForceContactArn}",
+                  "Next": "CreateZuoraSubscription"
+                },
+                "CreateZuoraSubscription": {
+                  "Type": "Task",
+                  "Resource": "${createZuoraSubscriptionArn}",
                   "End": true
                 }
               }
             }
-          - {createPaymentMethodArn: !GetAtt [ CreatePaymentMethodLambda, Arn ], createSalesForceContatcArn: !GetAtt [ CreateSalesForceContactLambda, Arn ]}
+          - {
+            createPaymentMethodArn: !GetAtt [ CreatePaymentMethodLambda, Arn ],
+            createSalesForceContactArn: !GetAtt [ CreateSalesForceContactLambda, Arn ],
+            createZuoraSubscriptionArn: !GetAtt [ CreateZuoraSubscriptionLambda, Arn ]
+          }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
