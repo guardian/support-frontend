@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        helloWorldPage: 'pages/hello-world/helloWorld.js'
+        helloWorldPage: 'pages/hello-world/helloWorld.jsx'
     },
 
     output: {
@@ -28,7 +28,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {

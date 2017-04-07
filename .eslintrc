@@ -1,17 +1,22 @@
 {
-    "extends": ['eslint:recommended',
-		'airbnb'] ,
+    "extends": [
+        "eslint:recommended",
+		"airbnb"
+    ],
     "env": {
         "amd": true,
         "browser": true,
         "node": true
     },
     "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
+        "ecmaVersion": 6
     },
+    "plugins" : [
+      "react"
+    ],
     "globals"   : {
-        "guardian": true
+        "guardian": true,
+        "React" : true
     },
     "rules": {
         "curly": [2, "all"],
