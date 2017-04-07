@@ -14,8 +14,17 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" %  "logback-classic" % "1.1.7",
   "com.amazonaws" % "aws-lambda-java-core" % "1.1.0",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.11.13",
-  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+  "org.scalatest" %% "scalatest" % "2.2.5" % "test",
+  "org.mockito" % "mockito-core" % "1.9.5"
 )
+
+val circeVersion = "0.7.0"
+
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)
 
 topLevelDirectory in Universal := None
 packageName in Universal := normalizedName.value

@@ -1,14 +1,16 @@
 package com.gu.support.lambda
 
-import java.util.{ Map => JMap }
 
-import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
+import com.amazonaws.services.lambda.runtime.Context
+import com.gu.support.lambda.helpers.Handler
+import com.gu.support.lambda.model.{DummyInput, User}
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.generic.auto._
 
-class CreatePaymentMethod extends RequestHandler[JMap[String, Object], String] with LazyLogging {
 
-  override def handleRequest(event: JMap[String, Object], context: Context): String = {
-    "Success"
+class CreatePaymentMethod extends Handler[DummyInput, User] with LazyLogging {
+  override protected def handler(input: DummyInput, context: Context) = {
+    logger.info(s"input: $input")
+    User("123", "My User")
   }
-
 }
