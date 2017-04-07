@@ -2,6 +2,8 @@ name := "frontend"
 
 version := "1.0-SNAPSHOT"
 
+packageSummary := "Support Play APP"
+
 scalaVersion := "2.11.8"
 
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
@@ -54,3 +56,5 @@ javaOptions in Universal ++= Seq(
   "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
+
+addCommandAlias("devrun", "run 9000")
