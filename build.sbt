@@ -21,6 +21,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoOptions += BuildInfoOption.ToMap
 )
 
+libraryDependencies ++= Seq(
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
+)
 
 sources in (Compile,doc) := Seq.empty
 
