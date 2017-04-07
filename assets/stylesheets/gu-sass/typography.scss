@@ -1,0 +1,60 @@
+// This contains the Guardian font combinations as currently used on
+// support-frontend (https://github.com/guardian/support-frontend).
+//
+// It specifies the standard Guardian fonts and their fallbacks.
+//
+// It also provides a helper mixin for retrieving font information.
+
+// ----- Font Families ----- //
+
+$gu-egyptian-web: 'Guardian Egyptian Web', Georgia, serif !default;
+$gu-text-egyptian-web: 'Guardian Text Egyptian Web', Georgia, serif !default;
+$gu-sans-web: 'Guardian Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
+$gu-text-sans-web: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
+
+
+// ----- Font Properties ----- //
+
+$gu-fonts: (
+	copy: (
+		family: $gu-text-egyptian-web,
+		font-weight: normal,
+		sizes: (
+			14: 20px,
+			16: 24px,
+			18: 28px
+		)
+	)
+);
+
+
+// ----- Mixins ----- //
+
+// Used to populate font information.
+//
+// Usage:
+//
+// gu-font(copy, 16);
+// gu-font(copy, 14, $weight: bold)
+// gu-font(copy, 18, $line-height: 22)
+//
+@mixin gu-font($name, $size, $weight: null, $line-height: null) {
+
+	$font-data: map-get($gu-fonts, $name);
+
+	font-size: $size + 0px;
+	font-family: map-get($font-data, family);
+
+	@if ($weight) {
+		font-weight: $weight;
+	} @else {
+		font-weight: map-get($font-data, font-weight);
+	}
+
+	@if ($line-height) {
+		line-height: $line-height + 0px;
+	} @else {
+		line-height: map-get(map-get($font-data, sizes), $size);
+	}
+
+}

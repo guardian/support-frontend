@@ -1,0 +1,27 @@
+{
+  "name": "support-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the supporter platform.",
+  "scripts": {
+    "validate": "",
+    "build": "npm-run-all build:*",
+    "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
+    "build:js": "webpack",
+    "unit": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guardian/support-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/guardian/support-frontend/issues"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "node-sass": "^4.5.2",
+    "npm-run-all": "^4.0.2",
+    "sass-mq": "^3.3.2",
+    "webpack": "~2.3.3",
+    "webpack-dev-server": "^2.4.2"
+  }
+}
