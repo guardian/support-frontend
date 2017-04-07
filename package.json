@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Frontend for the supporter platform.",
   "scripts": {
-    "lint": "echo 'Linting'",
+    "lint": "eslint assets/javascripts",
     "build": "npm-run-all build:*",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
     "unit": "",
-    "clean" : "echo 'cleaning'",
-    "devrun" : "npm-run-all --serial clean lint build:** webpack-dev-server",
-    "webpack-dev-server" : "webpack-dev-server --port 9111"
+    "clean": "echo 'cleaning'",
+    "devrun": "npm-run-all --serial clean lint build:** webpack-dev-server",
+    "webpack-dev-server": "webpack-dev-server --port 9111"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,11 @@
   },
   "devDependencies": {
     "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
     "node-sass": "^4.5.2",
     "npm-run-all": "^4.0.2",
     "sass-mq": "^3.3.2",
