@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        mainPage: 'src/main'
+        helloWorldPage: 'pages/hello-world/helloWorld.js'
     },
 
     output: {
@@ -14,43 +14,25 @@ module.exports = {
     },
 
     resolve: {
+        alias: {
+            'react': 'preact-compat',
+            'react-dom': 'preact-compat'
+        },
         modules: [
-            path.resolve(__dirname, "assets/javascripts"),
+            path.resolve(__dirname, "assets"),
             path.resolve(__dirname, "node_modules")
         ],
-        extensions: [".js", ".jsx", ".es6"]
+        extensions: [".js"]
     },
 
     module: {
         rules: [
             {
-                test: /\.es6$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                options: {
-                    presets: ['es2015'],
-                    plugins: [
-                        'transform-object-rest-spread',
-                        'transform-object-assign',
-                        'transform-es2015-classes',
-                        'transform-runtime'
-                    ],
-                    cacheDirectory: ''
-                }
-            },
-
-            {
-                test: /\.jsx$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
                     presets: ['react', 'es2015'],
-                    plugins: [
-                        'transform-object-rest-spread',
-                        'transform-object-assign',
-                        'transform-es2015-classes',
-                        'transform-runtime'
-                    ],
                     cacheDirectory: ''
                 }
             }
@@ -63,12 +45,6 @@ module.exports = {
             "process.env": { NODE_ENV: JSON.stringify("production") }
         })
     ],
-
-    stats: {
-        modules: true,
-        reasons: true,
-        colors: true
-    },
 
     devtool: 'source-map'
 };
