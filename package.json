@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "Frontend for the supporter platform.",
   "scripts": {
-    "validate": "",
+    "lint": "echo 'Linting'",
     "build": "npm-run-all build:*",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
-    "unit": ""
+    "unit": "",
+    "clean" : "echo 'cleaning'",
+    "devrun" : "npm-run-all --serial clean lint build:** webpack-dev-server",
+    "webpack-dev-server" : "webpack-dev-server --port 9111"
   },
   "repository": {
     "type": "git",
