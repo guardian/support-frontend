@@ -3,15 +3,21 @@
   "version": "1.0.0",
   "description": "Frontend for the supporter platform.",
   "scripts": {
+    "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
     "lint": "echo 'Validating JS' && eslint assets/javascripts",
-    "build": "npm-run-all build:*",
+    "precommit": "npm-run-all --serial lint test",
+
+    "build-dev": "npm-run-all build:css 'build:js -- --config webpack.config.js'",
+    "build-prod": "npm-run-all build:css 'build:js -- --config webpack.config.prod.js'",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
+
     "watch": "npm-run-all --parallel watch:*",
     "watch:js" : "npm run build:js -- --watch",
     "watch:css" : "npm run build:css -- -w",
-    "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
-    "devrun": "npm-run-all --serial clean lint build:** webpack-dev-server",
+
+    "devrun": "npm-run-all --serial clean lint build:** --parallel watch webpack-dev-server",
+
     "webpack-dev-server": "webpack-dev-server --port 9111",
     "test": "jest"
   },
