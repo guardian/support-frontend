@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.1.0",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.11.13",
   "org.scalatest" %% "scalatest" % "2.2.5" % "test",
-  "org.mockito" % "mockito-core" % "1.9.5"
+  "org.mockito" % "mockito-core" % "1.9.5" % "test"
 )
 
 val circeVersion = "0.7.0"

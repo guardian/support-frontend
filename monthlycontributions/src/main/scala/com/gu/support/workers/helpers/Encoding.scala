@@ -1,4 +1,4 @@
-package com.gu.support.lambda.helpers
+package com.gu.support.workers.helpers
 
 import java.io.{InputStream, OutputStream}
 import cats.syntax.either._
@@ -6,7 +6,7 @@ import cats.syntax.either._
 import scala.io.Source
 import scala.util.Try
 
-private[lambda] object Encoding {
+private[workers] object Encoding {
   import io.circe._
   import io.circe.parser._
   import io.circe.syntax._

@@ -1,9 +1,10 @@
-package com.gu.support.lambda
+package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.support.lambda.model.DummyInput
+import com.gu.support.workers.lambdas.CreatePaymentMethod
+import com.gu.support.workers.model.{PaymentMethod, User}
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
@@ -20,7 +21,7 @@ class CreatePaymentMethodSpec extends FlatSpec with Matchers with MockitoSugar w
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(asInputStream(DummyInput("test_status")), outStream, mock[Context])
+    createPaymentMethod.handleRequest(asInputStream(User("123", "Test user")), outStream, mock[Context])
 
     logger.info(s"Output: ${outStream.toString}")
   }
