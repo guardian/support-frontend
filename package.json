@@ -10,7 +10,8 @@
     "unit": "",
     "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
     "devrun": "npm-run-all --serial clean lint build:** webpack-dev-server",
-    "webpack-dev-server": "webpack-dev-server --port 9111"
+    "webpack-dev-server": "webpack-dev-server --port 9111",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "jest": "^19.0.2",
     "node-sass": "^4.5.2",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
