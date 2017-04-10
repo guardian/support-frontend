@@ -3,17 +3,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import DoubleHeading from 'shared-components/doubleHeading';
+import Bundles from './components/Bundles';
 
 
 // ----- Render ----- //
 
-const content = (
-
-  <DoubleHeading
-    heading="£11.99/month"
-    subheading="Become a digital subscriber"
-  />
-);
+const content = <Bundles />;
 
 ReactDOM.render(content, document.getElementById('bundles-landing-page'));
