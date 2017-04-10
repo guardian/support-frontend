@@ -3,16 +3,13 @@ support.theguardian.com
 
 Frontend for the new supporter platform
 
-
-## Client-side
-
-### Installing dependencies
+## Installing dependencies
 
 Go to the root of the project and run
 
 `npm install`
 
-## Run
+## Runnig the project
 
 In order to run the server in your machine, you have to run the Play/Scala server and in other tab the webpack-dev-sever.
 
@@ -28,7 +25,7 @@ This commands will start two servers in your computer. The Play/Scala server wil
 
 If you access the webpack-dev-server (port 9111) you will have available a hot-reload sever for react, which is really useful for client side development.
 
-### Available npm commands
+## Available npm commands
 
 In order to run a npm command you should run:
 
