@@ -23,7 +23,7 @@ module.exports = {
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
     ],
-    extensions: ['.jsx'],
+    extensions: ['.js'],
   },
 
   module: {
