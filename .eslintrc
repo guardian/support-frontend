@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "eslint:recommended",
+		"airbnb"
+    ],
+    "env": {
+        "amd": true,
+        "browser": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "plugins" : [
+      "react"
+    ],
+    "globals"   : {
+        "guardian": true,
+        "React" : true
+    },
+    "rules": {
+        "curly": [2, "all"],
+        "no-trailing-spaces": 2,
+        "quotes": [2, "single"],
+        "wrap-iife": 2,
+        "no-console": 0,
+        // For preact-compat, delete if switching to React.
+        "import/no-duplicates": "off"
+    },
+    "settings": {
+        "import/resolver": "webpack"
+    }
+}

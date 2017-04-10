@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "description": "Frontend for the supporter platform.",
   "scripts": {
-    "validate": "",
-    "build": "npm-run-all build:*",
+    "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
+    "lint": "echo 'Validating JS' && eslint --ext .js --ext .jsx .",
+    "precommit": "npm-run-all --serial lint test",
+    "build-dev": "npm-run-all build:css 'build:js -- --config webpack.config.js'",
+    "build-prod": "npm-run-all clean lint build:css 'build:js -- --config webpack.config.prod.js'",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
-    "unit": ""
+    "watch": "npm-run-all --parallel watch:*",
+    "watch:js": "npm run build:js -- --watch",
+    "watch:css": "npm run build:css -- -w",
+    "devrun": "npm-run-all --serial clean lint build-dev --parallel watch webpack-dev-server",
+    "webpack-dev-server": "webpack-dev-server --port 9111",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,9 +25,22 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "devDependencies": {
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
     "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
+    "jest": "^19.0.2",
     "node-sass": "^4.5.2",
     "npm-run-all": "^4.0.2",
+    "preact": "^7.2.1",
+    "preact-compat": "^3.14.3",
+    "rimraf": "^2.6.1",
     "sass-mq": "^3.3.2",
     "webpack": "~2.3.3",
     "webpack-dev-server": "^2.4.2"
