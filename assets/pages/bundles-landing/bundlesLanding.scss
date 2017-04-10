@@ -1,4 +1,17 @@
 #bundles-landing-page {
 	width: 300px;
 	background-color: #1db7d7;
+
+	// ----- Page Components ----- //
+
+	.bundles {
+		padding: 8px 10px 12px;
+	}
+
+	// ----- Shared Components ----- //
+
+	.component-double-heading {
+		margin-bottom: 24px;
+	}
+
 }

@@ -4,6 +4,8 @@ import React from 'react';
 
 import DoubleHeading from 'shared-components/doubleHeading';
 import FeatureList from 'shared-components/featureList';
+import InfoText from 'shared-components/infoText';
+import CtaLink from 'shared-components/ctaLink';
 
 
 // ----- Component ----- //
@@ -17,6 +19,8 @@ export default function Bundle(props) {
           subheading={props.subheading}
         />
         <FeatureList listItems={props.listItems} />
+        {props.infoText ? <InfoText text={props.infoText} /> : ''}
+        <CtaLink text={props.ctaText} url={props.ctaLink} />
       </div>
     );
 
@@ -27,6 +31,8 @@ export default function Bundle(props) {
 
 Bundle.defaultProps = {
     subheading: '',
+    listItems: [],
+    infoText: '',
 };
 
 Bundle.propTypes = {
@@ -35,5 +41,8 @@ Bundle.propTypes = {
     listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
         heading: React.PropTypes.string,
         text: React.PropTypes.string,
-    })).isRequired,
+    })),
+    infoText: React.PropTypes.string,
+    ctaText: React.PropTypes.string.isRequired,
+    ctaLink: React.PropTypes.string.isRequired,
 };

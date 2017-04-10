@@ -25,6 +25,9 @@ const bundles = {
                 text: 'For 14 days, enjoy on up to 10 devices',
             },
         ],
+        infoText: 'Support the Guardian and enjoy a subscription to our digital Daily Edition and the premium tier of our app',
+        ctaText: 'Become a digital subscriber',
+        ctaLink: 'https://subscribe.theguardian.com/p/DXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
     },
 };
 
