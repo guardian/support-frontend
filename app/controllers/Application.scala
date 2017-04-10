@@ -1,14 +1,14 @@
 package controllers
 
-import play.api.mvc.{Controller, Action}
+import play.api.mvc.{Action, AnyContent, Controller}
 
 class Application extends Controller {
 
-	def helloWorld = Action {
-		Ok(views.html.index())
-	}
+  def helloWorld: Action[AnyContent] = Action {
+    Ok(views.html.index())
+  }
 
-	def healthcheck = Action {
-		Ok("healthy")
-	}
+  def healthcheck: Action[AnyContent] = Action {
+    Ok("healthy")
+  }
 }
