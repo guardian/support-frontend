@@ -12,9 +12,21 @@ Go to the root of the project and run
 
 `npm install`
 
-### Transpiling and watching for changes using `DEV` environment
+## Run
+
+In order to run the server in your machine, you have to run the Play/Scala server and in other tab the webpack-dev-sever.
+
+### Running Play/Scala server
+
+`sbt devrun`
+
+### Running Webpack Dev Server
 
 `npm run devrun`
+
+This commands will start two servers in your computer. The Play/Scala server will listen in port 9000 and the webpack-dev-server will listen in 9111.
+
+If you access the webpack-dev-server (port 9111) you will have available a hot-reload sever for react, which is really useful for client side development.
 
 ### Available npm commands
 
@@ -34,23 +46,6 @@ In order to run a npm command you should run:
 | `watch`              | Watch for changes in any CSS or JS files and recompiles everything. |
 | `watch:css`          | Watch for changes in any CSS file. |
 | `watch:js`           | Watch for changes in any JS file. |
-| `devrun`             | Cleans, validates and runs the webpack-dev-server. |
+| `devrun`             | Cleans, validates, transpiles, runs and watch the webpack-dev-server using `DEV` environment.|
 | `webpack-dev-server` | Runs the webpack-dev-server in port `9111` |
 | `test`               | Runs the client side tests built using Jest.  |
-
-
-## Run
-
-In order to run the server in your machine, you have to run the Play/Scala server and in other tab the webpack-dev-sever.
-
-### Running Play/Scala server
-
-`sbt devrun`
-
-### Running Webpack Dev Server
-
-`npm run devrun`
-
-This commands will start two servers in your computer. The Play/Scala server will listen in port 9000 and the webpack-dev-server will listen in 9111.
-
-If you access the webpack-dev-server (port 9111) you will have available a hot-reload sever for react, which is really useful for client side development.
