@@ -8,14 +8,14 @@ import React from 'react';
 export default function DoubleHeading(props) {
 
     const subhead = (
-      <h2 className="component-double-heading__sub-heading">
+      <h2 className="component-double-heading__subheading">
         { props.subheading }
       </h2>
     );
 
     return (
       <div className="component-double-heading">
-        <h1 className="component-double-heading__main-heading">
+        <h1 className="component-double-heading__heading">
           { props.heading }
         </h1>
         { props.subheading ? subhead : '' }

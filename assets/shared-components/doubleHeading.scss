@@ -1,0 +1,17 @@
+.component-double-heading {
+	@include gu-font(copy, 18);
+
+	font-weight: 900;
+	line-height: 27px;
+
+	.component-double-heading__heading {
+		font-size: 28px;
+		color: #000;
+		margin: 0;
+	}
+
+	.component-double-heading__subheading {
+		color: #fff;
+		margin: 0;
+	}
+}
