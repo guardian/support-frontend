@@ -104,6 +104,18 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource: arn:aws:s3:::github-public-keys/Membership-and-Subscriptions/*
+        - PolicyName: CloudwatchLogs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                - logs:DescribeLogStreams
+                Resource: arn:aws:logs:*:*:*
+
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
