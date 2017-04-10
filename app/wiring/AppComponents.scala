@@ -9,5 +9,5 @@ trait AppComponents extends PlayComponents {
   lazy val assetController = new Assets(httpErrorHandler)
   lazy val applicationController = new Application()
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, assetController, prefix = "/")
+  override lazy val router: Router = new Routes(httpErrorHandler, assetController, applicationController, prefix = "/")
 }
