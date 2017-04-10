@@ -9,9 +9,9 @@ Go to the root of the project and run
 
 `npm install`
 
-## Runnig the project
+## Running the project
 
-In order to run the server in your machine, you have to run the Play/Scala server and in other tab the webpack-dev-sever.
+In order to run the server in your machine, you have to run the Play/Scala server and in another tab the webpack-dev-sever.
 
 ### Running Play/Scala server
 
@@ -21,13 +21,13 @@ In order to run the server in your machine, you have to run the Play/Scala serve
 
 `npm run devrun`
 
-This commands will start two servers in your computer. The Play/Scala server will listen in port 9000 and the webpack-dev-server will listen in 9111.
+This commands will start two servers on your computer. The Play/Scala server will listen on port 9000 and the webpack-dev-server will listen on 9111.
 
 If you access the webpack-dev-server (port 9111) you will have available a hot-reload sever for react, which is really useful for client side development.
 
 ## Available npm commands
 
-In order to run a npm command you should run:
+In order to run an npm command you should run:
 
 `npm run [name_command]`
 
