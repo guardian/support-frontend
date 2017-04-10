@@ -54,11 +54,3 @@ In order to run the server in your machine, you have to run the Play/Scala serve
 This commands will start two servers in your computer. The Play/Scala server will listen in port 9000 and the webpack-dev-server will listen in 9111.
 
 If you access the webpack-dev-server (port 9111) you will have available a hot-reload sever for react, which is really useful for client side development.
-
-
-
-
-
-
-
-
