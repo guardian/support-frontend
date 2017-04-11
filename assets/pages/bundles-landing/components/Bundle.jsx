@@ -12,8 +12,13 @@ import CtaLink from 'components/ctaLink/ctaLink';
 
 export default function Bundle(props) {
 
+  const modifierClass = props.modifierClass ?
+    `bundles__bundle--${props.modifierClass}` : '';
+
+  const className = `bundles__bundle ${modifierClass}`;
+
   return (
-    <div className="bundles__bundle">
+    <div className={className}>
       <DoubleHeading
         heading={props.heading}
         subheading={props.subheading}
