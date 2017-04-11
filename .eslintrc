@@ -24,7 +24,6 @@
         "quotes": [2, "single"],
         "wrap-iife": 2,
         "no-console": 0,
-        "indent": ["error", 4],
         // For preact-compat, delete if switching to React.
         "import/no-duplicates": "off",
         "padded-blocks": "off",

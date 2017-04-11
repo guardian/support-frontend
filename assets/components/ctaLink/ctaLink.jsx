@@ -7,11 +7,11 @@ import React from 'react';
 
 export default function CtaLink(props) {
 
-    return (
-      <a className="component-cta-link" href={props.url}>
-        {props.text}
-      </a>
-    );
+  return (
+    <a className="component-cta-link" href={props.url}>
+      {props.text}
+    </a>
+  );
 
 }
 
@@ -19,6 +19,6 @@ export default function CtaLink(props) {
 // ----- Proptypes ----- //
 
 CtaLink.propTypes = {
-    text: React.PropTypes.string.isRequired,
-    url: React.PropTypes.string.isRequired,
+  text: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string.isRequired,
 };

@@ -7,20 +7,20 @@ import React from 'react';
 
 export default function FeatureList(props) {
 
-    const items = props.listItems.map((item) => {
+  const items = props.listItems.map((item) => {
 
-        const itemText = <p>{ item.text }</p>;
+    const itemText = <p>{ item.text }</p>;
 
-        return (
-          <li>
-            <h3>{ item.heading }</h3>
-            { item.text ? itemText : '' }
-          </li>
-        );
+    return (
+      <li>
+        <h3>{ item.heading }</h3>
+        { item.text ? itemText : '' }
+      </li>
+    );
 
-    });
+  });
 
-    return <ul className="component-feature-list">{ items }</ul>;
+  return <ul className="component-feature-list">{ items }</ul>;
 
 }
 
@@ -28,8 +28,8 @@ export default function FeatureList(props) {
 // ----- Proptypes ----- //
 
 FeatureList.propTypes = {
-    listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
-        heading: React.PropTypes.string,
-        text: React.PropTypes.string,
-    })).isRequired,
+  listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
+    heading: React.PropTypes.string,
+    text: React.PropTypes.string,
+  })).isRequired,
 };

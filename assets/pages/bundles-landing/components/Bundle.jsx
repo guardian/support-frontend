@@ -12,17 +12,17 @@ import CtaLink from 'components/ctaLink/ctaLink';
 
 export default function Bundle(props) {
 
-    return (
-      <div className="bundles__bundle">
-        <DoubleHeading
-          heading={props.heading}
-          subheading={props.subheading}
-        />
-        <FeatureList listItems={props.listItems} />
-        {props.infoText ? <InfoText text={props.infoText} /> : ''}
-        <CtaLink text={props.ctaText} url={props.ctaLink} />
-      </div>
-    );
+  return (
+    <div className="bundles__bundle">
+      <DoubleHeading
+        heading={props.heading}
+        subheading={props.subheading}
+      />
+      <FeatureList listItems={props.listItems} />
+      {props.infoText ? <InfoText text={props.infoText} /> : ''}
+      <CtaLink text={props.ctaText} url={props.ctaLink} />
+    </div>
+  );
 
 }
 
@@ -30,19 +30,19 @@ export default function Bundle(props) {
 // ----- Proptypes ----- //
 
 Bundle.defaultProps = {
-    subheading: '',
-    listItems: [],
-    infoText: '',
+  subheading: '',
+  listItems: [],
+  infoText: '',
 };
 
 Bundle.propTypes = {
-    heading: React.PropTypes.string.isRequired,
-    subheading: React.PropTypes.string,
-    listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
-        heading: React.PropTypes.string,
-        text: React.PropTypes.string,
-    })),
-    infoText: React.PropTypes.string,
-    ctaText: React.PropTypes.string.isRequired,
-    ctaLink: React.PropTypes.string.isRequired,
+  heading: React.PropTypes.string.isRequired,
+  subheading: React.PropTypes.string,
+  listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
+    heading: React.PropTypes.string,
+    text: React.PropTypes.string,
+  })),
+  infoText: React.PropTypes.string,
+  ctaText: React.PropTypes.string.isRequired,
+  ctaLink: React.PropTypes.string.isRequired,
 };
