@@ -1,30 +1,38 @@
 #bundles-landing-page {
 
-	// ----- Page Components ----- //
+  // ----- Page Components ----- //
 
-	.bundles__bundle {
-		width: 300px;
-		padding: 8px 10px 12px;
-		float: left;
-	}
+  .bundles__bundle {
+    width: 300px;
+    padding: 8px 10px 12px;
+    float: left;
+  }
 
-	.bundles__bundle--digital {
-		background-color: #1db7d7;
-	}
+  .bundles__bundle--digital {
+      background-color: #1db7d7;
+  }
 
-	.bundles__bundle--paper {
-		background-color: #58a1ce;
-	}
+  .bundles__bundle--paper {
+      background-color: #58a1ce;
+  }
 
-	// ----- Shared Components ----- //
+  .ways-of-support {
 
-	.component-double-heading {
-		margin-bottom: 24px;
-	}
+  }
 
-	input:checked+label {
-		background-color: gu-colour(guardian-brand-dark);
-		color: #fff;
-	}
+  .way-of-support {
+
+  }
+
+  // ----- Shared Components ----- //
+
+  .component-double-heading {
+      margin-bottom: 24px;
+  }
+
+  input:checked+label {
+    background-color: gu-colour(guardian-brand-dark);
+    color: #fff;
+  }
 
 }
