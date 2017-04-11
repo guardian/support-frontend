@@ -1,8 +1,12 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
+import FeatureList from 'components/featureList/featureList';
+import RadioToggle from 'components/radioToggle/radioToggle';
 import Bundle from './Bundle';
+import changePaperBundle from '../actions/bundlesLandingActions';
 
 
 // ----- Copy ----- //
@@ -30,7 +34,7 @@ const bundles = {
     ctaLink: 'https://subscribe.theguardian.com/p/DXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: 'digital',
   },
-  paper: {
+  paperDigital: {
     heading: 'From £10.79/month',
     subheading: 'Become a paper subscriber',
     listItems: [
@@ -52,18 +56,97 @@ const bundles = {
     ctaLink: 'https://subscribe.theguardian.com/p/GXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: 'paper',
   },
+  paperOnly: {
+    heading: 'From £10.79/month',
+    subheading: 'Become a paper subscriber',
+    listItems: [
+      {
+        heading: 'Newspaper',
+        text: 'Choose the package you want: Everyday+, Sixday+, Weekend+ and Sunday+',
+      },
+      {
+        heading: 'Save money',
+        text: 'Up to 36% off the retail price',
+      },
+    ],
+    infoText: 'Support the Guardian and enjoy a subscription to the Guardian and the Observer newspapers.',
+    ctaText: 'Become a paper subscriber',
+    ctaLink: 'https://subscribe.theguardian.com/p/GXX83P?INTCMP=gdnwb_copts_bundles_landing_default',
+    modifierClass: 'paper',
+  },
 };
+
+const paperToggles = {
+  name: 'paper-toggle',
+  radios: [
+    {
+      value: 'PAPER+DIGITAL',
+      text: 'Paper + digital',
+    },
+    {
+      value: 'PAPER',
+      text: 'Paper',
+    },
+  ],
+};
+
+
+// ----- Functions ----- //
+
+function getPaperAttrs(bundle) {
+
+  if (bundle === 'PAPER+DIGITAL') {
+    return bundles.paperDigital;
+  }
+
+  return bundles.paperOnly;
+
+}
 
 
 // ----- Component ----- //
 
-export default function Bundles() {
+function Bundles(props) {
+
+  const paperAttrs = getPaperAttrs(props.paperBundle);
+
+  function togglePaperBundle(bundle) {
+    return () => props.dispatch(changePaperBundle(bundle));
+  }
 
   return (
     <div className="bundles">
-      <Bundle {...bundles.digital} />
-      <Bundle {...bundles.paper} />
+      <Bundle {...bundles.digital}>
+        <FeatureList listItems={bundles.digital.listItems} />
+      </Bundle>
+      <Bundle {...paperAttrs}>
+        <RadioToggle
+          {...paperToggles}
+          toggleAction={togglePaperBundle}
+          checked={props.paperBundle}
+        />
+        <FeatureList listItems={paperAttrs.listItems} />
+      </Bundle>
     </div>
   );
 
 }
+
+
+// ----- Proptypes ----- //
+
+Bundles.propTypes = {
+  paperBundle: React.PropTypes.string.isRequired,
+};
+
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return { paperBundle: state };
+}
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(Bundles);

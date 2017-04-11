@@ -1,21 +1,22 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
-import FeatureList from 'components/featureList/featureList';
 import InfoText from 'components/infoText/infoText';
 import CtaLink from 'components/ctaLink/ctaLink';
 
 
 // ----- Component ----- //
 
-export default function Bundle(props) {
+function Bundle(props) {
 
-  const modifierClass = props.modifierClass ?
-    `bundles__bundle--${props.modifierClass}` : '';
+  let className = 'bundles__bundle';
 
-  const className = `bundles__bundle ${modifierClass}`;
+  if (props.modifierClass) {
+    className = `${className} bundles__bundle--${props.modifierClass}`;
+  }
 
   return (
     <div className={className}>
@@ -23,7 +24,7 @@ export default function Bundle(props) {
         heading={props.heading}
         subheading={props.subheading}
       />
-      <FeatureList listItems={props.listItems} />
+      {props.children}
       {props.infoText ? <InfoText text={props.infoText} /> : ''}
       <CtaLink text={props.ctaText} url={props.ctaLink} />
     </div>
@@ -36,18 +37,22 @@ export default function Bundle(props) {
 
 Bundle.defaultProps = {
   subheading: '',
-  listItems: [],
   infoText: '',
+  modifierClass: '',
+  children: null,
 };
 
 Bundle.propTypes = {
   heading: React.PropTypes.string.isRequired,
   subheading: React.PropTypes.string,
-  listItems: React.PropTypes.arrayOf(React.PropTypes.shape({
-    heading: React.PropTypes.string,
-    text: React.PropTypes.string,
-  })),
   infoText: React.PropTypes.string,
   ctaText: React.PropTypes.string.isRequired,
   ctaLink: React.PropTypes.string.isRequired,
+  modifierClass: React.PropTypes.string,
+  children: React.PropTypes.element,
 };
+
+
+// ----- Exports ----- //
+
+export default connect()(Bundle);
