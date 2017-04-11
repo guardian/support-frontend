@@ -5,6 +5,7 @@ const path = require('path');
 module.exports = {
   entry: {
     helloWorldPage: 'pages/hello-world/helloWorld.jsx',
+    bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
   },
 
   output: {
@@ -23,7 +24,7 @@ module.exports = {
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
     ],
-    extensions: ['.js'],
+    extensions: ['.js', '.jsx'],
   },
 
   module: {

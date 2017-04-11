@@ -1,3 +1,10 @@
-GET /assets/*file       controllers.Assets.at(path="/public", file)
-GET /                   controllers.Application.helloWorld
-GET /healthcheck        controllers.Application.healthcheck
+# ----- System ----- #
+
+GET /assets/*file               controllers.Assets.at(path="/public", file)
+GET /healthcheck                controllers.Application.healthcheck
+
+
+# ----- Pages ----- #
+
+GET /hello                      controllers.Application.helloWorld
+GET /                           controllers.Application.bundlesLanding

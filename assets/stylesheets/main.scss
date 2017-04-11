@@ -1,5 +1,18 @@
-// gu-sass
+// -----  gu-sass ----- //
 
 @import 'gu-sass/breakpoints';
 @import 'gu-sass/colours';
 @import 'gu-sass/typography';
+
+
+// ----- Shared Components ----- //
+
+@import '../components/doubleHeading/doubleHeading';
+@import '../components/featureList/featureList';
+@import '../components/infoText/infoText';
+@import '../components/ctaLink/ctaLink';
+
+
+// ----- Pages ----- //
+
+@import '../pages/bundles-landing/bundlesLanding';

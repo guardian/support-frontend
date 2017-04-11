@@ -8,7 +8,12 @@ class Application extends Controller {
     Ok(views.html.index())
   }
 
+  def bundlesLanding: Action[AnyContent] = Action {
+    Ok(views.html.bundlesLanding())
+  }
+
   def healthcheck: Action[AnyContent] = Action {
     Ok("healthy")
   }
+
 }

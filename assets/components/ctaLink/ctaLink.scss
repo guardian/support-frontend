@@ -1,0 +1,18 @@
+.component-cta-link {
+	border-radius: 600px;
+	border: none;
+	background-color: gu-colour(neutral-1);
+	color: #fff;
+	padding: 6px 20px;
+	margin-top: 12px;
+	text-align: left;
+	height: 36px;
+	vertical-align: bottom;
+	display: block;
+	line-height: 180%;
+	text-decoration: none;
+
+	&:hover {
+		background-color: #000;
+	}
+}
