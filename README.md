@@ -34,15 +34,14 @@ In order to run an npm command you should run:
 | Command's name       | Functionality |
 |----------------------|---------------|
 | `lint`               | Validates that the JS files follow the correct rules. |
-| `clean`              | Cleans the public folder.                |
-| `precommit`          | Command to be run by the precommit hook. It run the `test` and `lint` commands.    |
-| `build-dev`          | It builds the files for the `DEV` environment  |
-| `build-prod`         | Builds the files for the `PROD` environment              |
+| `clean`              | Cleans the `public` folder. |
+| `build-dev`          | It builds the files for the `DEV` environment |
+| `build-prod`         | Builds the files for the `PROD` environment. It runs `clean`, `lint`, `test`, `build:css` and `build:js`. |
 | `build:css`          | Build the CSS files |
-| `build:js`           | Build the JS files using `DEV` environment.|
+| `build:js`           | Build the JS files using `DEV` environment. |
 | `watch`              | Watch for changes in any CSS or JS files and recompiles everything. |
 | `watch:css`          | Watch for changes in any CSS file. |
 | `watch:js`           | Watch for changes in any JS file. |
-| `devrun`             | Cleans, validates, transpiles, runs and watch the webpack-dev-server using `DEV` environment.|
-| `webpack-dev-server` | Runs the webpack-dev-server in port `9111` |
+| `devrun`             | Cleans, transpiles, runs and watch the webpack-dev-server using `DEV` environment. |
+| `webpack-dev-server` | Runs the webpack-dev-server in port `9111`. |
 | `test`               | Runs the client side tests built using Jest.  |
