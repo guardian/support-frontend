@@ -49,7 +49,7 @@ Bundle.propTypes = {
   ctaText: React.PropTypes.string.isRequired,
   ctaLink: React.PropTypes.string.isRequired,
   modifierClass: React.PropTypes.string,
-  children: React.PropTypes.element,
+  children: React.PropTypes.elements,
 };
 
 

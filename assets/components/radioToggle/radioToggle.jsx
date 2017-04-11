@@ -12,7 +12,7 @@ export default function RadioToggle(props) {
     const radioId = `${props.name}-${idx}`;
 
     return (
-      <label htmlFor={radioId}>
+      <span>
         <input
           type="radio"
           name={props.name}
@@ -21,8 +21,8 @@ export default function RadioToggle(props) {
           onChange={props.toggleAction(radio.value)}
           checked={radio.value === props.checked}
         />
-        {radio.text}
-      </label>
+        <label htmlFor={radioId}>{radio.text}</label>
+      </span>
     );
 
   });

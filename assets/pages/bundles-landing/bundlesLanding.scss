@@ -22,4 +22,9 @@
 		margin-bottom: 24px;
 	}
 
+	input:checked+label {
+		background-color: gu-colour(guardian-brand-dark);
+		color: #fff;
+	}
+
 }
