@@ -35,7 +35,7 @@ const bundles = {
     modifierClass: 'digital',
   },
   paperDigital: {
-    heading: 'From £10.79/month',
+    heading: 'From £22.06/month',
     subheading: 'Become a paper subscriber',
     listItems: [
       {
