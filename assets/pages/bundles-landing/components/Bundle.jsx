@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import DoubleHeading from 'shared-components/doubleHeading';
-import FeatureList from 'shared-components/featureList';
-import InfoText from 'shared-components/infoText';
-import CtaLink from 'shared-components/ctaLink';
+import DoubleHeading from 'components/doubleHeading/doubleHeading';
+import FeatureList from 'components/featureList/featureList';
+import InfoText from 'components/infoText/infoText';
+import CtaLink from 'components/ctaLink/ctaLink';
 
 
 // ----- Component ----- //
