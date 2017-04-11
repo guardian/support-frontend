@@ -11,7 +11,7 @@ import reducer from './reducers/paperBundle';
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer);
+const store = createStore(reducer, 'PAPER+DIGITAL');
 
 
 // ----- Render ----- //
