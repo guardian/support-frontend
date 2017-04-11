@@ -5,8 +5,8 @@
   "scripts": {
     "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
     "lint": "echo 'Validating JS' && eslint --ext .js --ext .jsx .",
-    "build-dev": "npm-run-all build:css 'build:js -- --config webpack.config.js'",
-    "build-prod": "npm-run-all --serial clean lint test build:css 'build:js -- --config webpack.config.prod.js'",
+    "build-dev": "npm-run-all build:css 'build:js -- --config webpack.config.js --env.dev'",
+    "build-prod": "npm-run-all --serial clean lint test build:css 'build:js -- --config webpack.config.js --env.prod'",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
     "watch": "npm-run-all --parallel watch:*",
