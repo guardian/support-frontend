@@ -1,9 +1,12 @@
+@import assets.AssetsResolver
+@()(implicit assets: AssetsResolver)
+
 @styles = {
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 }
 
 @scripts = {
-	<script type="text/javascript" src="@routes.Assets.at("javascripts/helloWorldPage.js")"></script>
+	<script type="text/javascript" src="@assets("javascripts/helloWorldPage.js")"></script>
 }
 
 @main(title = "Hello World", styles, scripts) {

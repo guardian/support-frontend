@@ -2,19 +2,21 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = (env) => {
 
-  let plugins = [];
+  const plugins = [
+    new ManifestPlugin({
+      fileName: '../../conf/assets.map',
+      basePath: 'javascripts/',
+    }),
+  ];
   let devServer = {};
 
   if (env && env.prod) {
-    plugins = [
-      new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
-      new webpack.DefinePlugin({
-        'process.env': { NODE_ENV: JSON.stringify('production') },
-      }),
-    ];
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
+    plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }));
   } else {
     devServer = {
       proxy: {
@@ -33,9 +35,9 @@ module.exports = (env) => {
     },
 
     output: {
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, 'public', 'javascripts'),
       chunkFilename: 'webpack/[chunkhash].js',
-      filename: 'javascripts/[name].js',
+      filename: '[name].[chunkhash].js',
       publicPath: '/assets/',
     },
 
