@@ -14,7 +14,7 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
       mappings <- parseJson(rawResource)
     } yield mappings
   } getOrElse Map.empty
-  
+
   private def loadResource(path: String) =
     env.resourceAsStream(path).map {
       scala.io.Source.fromInputStream(_).mkString

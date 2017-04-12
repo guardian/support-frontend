@@ -6,7 +6,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = (env) => {
 
-  let plugins = [
+  const plugins = [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
       basePath: 'javascripts/',
@@ -15,12 +15,8 @@ module.exports = (env) => {
   let devServer = {};
 
   if (env && env.prod) {
-    plugins.push(
-      new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
-      new webpack.DefinePlugin({
-        'process.env': { NODE_ENV: JSON.stringify('production') },
-      })
-    );
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
+    plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }));
   } else {
     devServer = {
       proxy: {
