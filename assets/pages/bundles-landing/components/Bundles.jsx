@@ -6,12 +6,25 @@ import { connect } from 'react-redux';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import Bundle from './Bundle';
-import changePaperBundle from '../actions/bundlesLandingActions';
+import { changePaperBundle, changeContribPeriod } from '../actions/bundlesLandingActions';
 
 
 // ----- Copy ----- //
 
 const bundles = {
+  allContrib: {
+    heading: 'From £5/month',
+    subheading: 'Make a contribution',
+    infoText: 'Support the Guardian. Every penny of your contribution goes to support our fearless, quality journalism.',
+    ctaText: 'Contribute with credit/debit card',
+    modifierClass: 'contributions',
+  },
+  contribMonthly: {
+    ctaLink: '/monthly-contribution',
+  },
+  contribOneOff: {
+    ctaLink: 'https://contribute.theguardian.com/uk',
+  },
   digital: {
     heading: '£11.99/month',
     subheading: 'Become a digital subscriber',
@@ -34,9 +47,14 @@ const bundles = {
     ctaLink: 'https://subscribe.theguardian.com/p/DXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: 'digital',
   },
+  allPaper: {
+    subheading: 'Become a paper subscriber',
+    infoText: 'Support the Guardian and enjoy a subscription to the Guardian and the Observer newspapers.',
+    ctaText: 'Become a paper subscriber',
+    modifierClass: 'paper',
+  },
   paperDigital: {
     heading: 'From £22.06/month',
-    subheading: 'Become a paper subscriber',
     listItems: [
       {
         heading: 'Newspaper',
@@ -51,14 +69,10 @@ const bundles = {
         text: 'Up to 36% off the retail price',
       },
     ],
-    infoText: 'Support the Guardian and enjoy a subscription to the Guardian and the Observer newspapers.',
-    ctaText: 'Become a paper subscriber',
     ctaLink: 'https://subscribe.theguardian.com/p/GXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
-    modifierClass: 'paper',
   },
   paperOnly: {
     heading: 'From £10.79/month',
-    subheading: 'Become a paper subscriber',
     listItems: [
       {
         heading: 'Newspaper',
@@ -69,37 +83,59 @@ const bundles = {
         text: 'Up to 36% off the retail price',
       },
     ],
-    infoText: 'Support the Guardian and enjoy a subscription to the Guardian and the Observer newspapers.',
-    ctaText: 'Become a paper subscriber',
     ctaLink: 'https://subscribe.theguardian.com/p/GXX83P?INTCMP=gdnwb_copts_bundles_landing_default',
-    modifierClass: 'paper',
   },
 };
 
-const paperToggles = {
-  name: 'paper-toggle',
-  radios: [
-    {
-      value: 'PAPER+DIGITAL',
-      text: 'Paper + digital',
-    },
-    {
-      value: 'PAPER',
-      text: 'Paper',
-    },
-  ],
+const toggles = {
+  paper: {
+    name: 'paper-toggle',
+    radios: [
+      {
+        value: 'PAPER+DIGITAL',
+        text: 'Paper + digital',
+      },
+      {
+        value: 'PAPER',
+        text: 'Paper',
+      },
+    ],
+  },
+  contributions: {
+    name: 'contributions-toggle',
+    radios: [
+      {
+        value: 'MONTHLY',
+        text: 'Monthly',
+      },
+      {
+        value: 'ONE_OFF',
+        text: 'One-off',
+      },
+    ],
+  },
 };
 
 
 // ----- Functions ----- //
 
+function getContribAttrs(period) {
+
+  if (period === 'MONTHLY') {
+    return Object.assign({}, bundles.allContrib, bundles.contribMonthly);
+  }
+
+  return Object.assign({}, bundles.allContrib, bundles.contribOneOff);
+
+}
+
 function getPaperAttrs(bundle) {
 
   if (bundle === 'PAPER+DIGITAL') {
-    return bundles.paperDigital;
+    return Object.assign({}, bundles.allPaper, bundles.paperDigital);
   }
 
-  return bundles.paperOnly;
+  return Object.assign({}, bundles.allPaper, bundles.paperOnly);
 
 }
 
@@ -109,19 +145,31 @@ function getPaperAttrs(bundle) {
 function Bundles(props) {
 
   const paperAttrs = getPaperAttrs(props.paperBundle);
+  const contribAttrs = getContribAttrs(props.contribPeriod);
 
   function togglePaperBundle(bundle) {
     return () => props.dispatch(changePaperBundle(bundle));
   }
 
+  function toggleContribPeriod(period) {
+    return () => props.dispatch(changeContribPeriod(period));
+  }
+
   return (
     <div className="bundles">
+      <Bundle {...contribAttrs}>
+        <RadioToggle
+          {...toggles.contributions}
+          toggleAction={toggleContribPeriod}
+          checked={props.contribPeriod}
+        />
+      </Bundle>
       <Bundle {...bundles.digital}>
         <FeatureList listItems={bundles.digital.listItems} />
       </Bundle>
       <Bundle {...paperAttrs}>
         <RadioToggle
-          {...paperToggles}
+          {...toggles.paper}
           toggleAction={togglePaperBundle}
           checked={props.paperBundle}
         />
@@ -137,13 +185,14 @@ function Bundles(props) {
 
 Bundles.propTypes = {
   paperBundle: React.PropTypes.string.isRequired,
+  contribPeriod: React.PropTypes.string.isRequired,
 };
 
 
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  return { paperBundle: state };
+  return state;
 }
 
 
