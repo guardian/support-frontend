@@ -1,17 +1,30 @@
 #bundles-landing-page {
-	width: 300px;
-	background-color: #1db7d7;
 
 	// ----- Page Components ----- //
 
-	.bundles {
+	.bundles__bundle {
+		width: 300px;
 		padding: 8px 10px 12px;
+		float: left;
+	}
+
+	.bundles__bundle--digital {
+		background-color: #1db7d7;
+	}
+
+	.bundles__bundle--paper {
+		background-color: #58a1ce;
 	}
 
 	// ----- Shared Components ----- //
 
 	.component-double-heading {
 		margin-bottom: 24px;
+	}
+
+	input:checked+label {
+		background-color: gu-colour(guardian-brand-dark);
+		color: #fff;
 	}
 
 }
