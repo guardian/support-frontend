@@ -1,3 +1,4 @@
 .component-info-text {
-	color: #000;
+  @include gu-font(copy, 16);
+  color: gu-colour(neutral-1);
 }

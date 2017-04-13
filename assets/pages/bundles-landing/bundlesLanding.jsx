@@ -19,8 +19,11 @@ const store = createStore(reducer, 'PAPER+DIGITAL');
 
 const content = (
   <Provider store={store}>
-    <Bundles />
-    <WaysOfSupport />	
+    <div>
+      <Bundles />
+      <br style="clear:both;"/>
+      <WaysOfSupport/>
+    </div>
   </Provider>
 );
 

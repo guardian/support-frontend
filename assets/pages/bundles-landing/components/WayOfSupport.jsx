@@ -2,21 +2,30 @@
 
 import React from 'react';
 
-import SimpleHeading from 'components/simpleHeading/simpleHeading';
-import InfoText from 'components/infoText/infoText';
 import CtaCircle from 'components/ctaCircle/ctaCircle';
+import InfoText from 'components/infoText/infoText';
+import SimpleHeading from 'components/simpleHeading/simpleHeading';
 
 
 // ----- Component ----- //
 
-const WayOfSupport = props => (
+const WayOfSupport = props => {
 
-  <div className="ways-of-support__way">
-    <SimpleHeading heading={props.heading} />
-    <InfoText text={props.infoText} />
-    <CtaCircle text={props.ctaText} url={props.ctaLink} />
-  </div>
-);
+  let className = 'ways-of-support__way';
+
+  if (props.modifierClass) {
+    className = `${className} ${className}--${props.modifierClass}`;
+  }
+
+  return (
+    <div className={className}>
+      <img src="http://placehold.it/300x170"/>
+      <SimpleHeading heading={props.heading}/>
+      <InfoText text={props.infoText}/>
+      <CtaCircle text={props.ctaText} url={props.ctaLink}/>
+    </div>
+  );
+}
 
 
 // ----- Proptypes ----- //
