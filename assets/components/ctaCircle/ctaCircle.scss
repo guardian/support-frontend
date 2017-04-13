@@ -1,0 +1,40 @@
+.component-cta-circle {
+
+  display: block;
+  margin: 12px 10px;
+  text-decoration: none;
+  color: inherit;
+
+  @include mq($until: mobileLandscape) {
+    margin-bottom: 0;
+  }
+
+  button {
+    background-color: gu-colour(neutral-1);
+    border-radius: 600px;
+    border: none;
+    color: #fff;
+    padding: 7px 8px;
+    height: 36px;
+    width: 36px;
+    margin-right: 5px;
+
+    svg {
+      fill: white;
+      height: 105%;
+      width: 105%;
+    }
+  }
+
+  span {
+    font-size: 14px;
+    line-height: 20px;
+    font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    font-weight: bold;
+  }
+}
+
+.component-cta-circle:hover {
+  text-decoration: underline;
+}
+

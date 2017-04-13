@@ -1,22 +1,24 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import SVG from 'components/svg/svg';
 
 // ----- Component ----- //
 
-const CtaLink = props => (
+const CtaCircle = props => (
   <a className="component-cta-circle" href={props.url}>
-    {props.text}
+    <button><SVG svgName="arrow-right-straight" /></button>
+    <span>{props.text}</span>
   </a>
 );
 
 // ----- Proptypes ----- //
 
-CtaLink.propTypes = {
+CtaCircle.propTypes = {
   text: React.PropTypes.string.isRequired,
   url: React.PropTypes.string.isRequired,
 };
 
 // ----- Exports ----- //
 
-export default CtaLink;
+export default CtaCircle;
