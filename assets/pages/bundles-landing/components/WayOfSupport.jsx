@@ -9,7 +9,7 @@ import SimpleHeading from 'components/simpleHeading/simpleHeading';
 
 // ----- Component ----- //
 
-const WayOfSupport = props => {
+const WayOfSupport = (props) => {
 
   let className = 'ways-of-support__way';
 
@@ -19,19 +19,20 @@ const WayOfSupport = props => {
 
   return (
     <div className={className}>
-      <img src="http://placehold.it/300x170"/>
-      <SimpleHeading heading={props.heading}/>
-      <InfoText text={props.infoText}/>
-      <CtaCircle text={props.ctaText} url={props.ctaLink}/>
+      <img src="http://placehold.it/300x170" alt="Example" />
+      <SimpleHeading heading={props.heading} />
+      <InfoText text={props.infoText} />
+      <CtaCircle text={props.ctaText} url={props.ctaLink} />
     </div>
   );
-}
+};
 
 
 // ----- Proptypes ----- //
 
 WayOfSupport.defaultProps = {
   infoText: '',
+  modifierClass: '',
 };
 
 WayOfSupport.propTypes = {
@@ -39,6 +40,7 @@ WayOfSupport.propTypes = {
   infoText: React.PropTypes.string,
   ctaText: React.PropTypes.string.isRequired,
   ctaLink: React.PropTypes.string.isRequired,
+  modifierClass: React.PropTypes.string,
 };
 
 // ----- Exports ----- //

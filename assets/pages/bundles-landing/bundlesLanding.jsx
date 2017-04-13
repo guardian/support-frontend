@@ -21,8 +21,8 @@ const content = (
   <Provider store={store}>
     <div>
       <Bundles />
-      <br style="clear:both;"/>
-      <WaysOfSupport/>
+      <br style={{ clear: 'both' }} />
+      <WaysOfSupport />
     </div>
   </Provider>
 );
