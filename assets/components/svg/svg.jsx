@@ -14,11 +14,6 @@ const svgs = props => (
 );
 
 // ----- Proptypes ----- //
-
-svgs.defaultProps = {
-
-};
-
 svgs.propTypes = {
   svgName: React.PropTypes.string.isRequired,
 };
