@@ -28,3 +28,7 @@ $mq-breakpoints: (
 );
 
 @import 'node_modules/sass-mq/_mq';
+
+@function gu-breakpoint($name) {
+	@return map-get($mq-breakpoints, $name);
+}
