@@ -1,30 +1,131 @@
 #bundles-landing-page {
 
-	// ----- Page Components ----- //
+  // ----- Page Components ----- //
 
-	.bundles__bundle {
-		width: 300px;
-		padding: 8px 10px 12px;
-		float: left;
-	}
+  .bundles__bundle {
+    width: 300px;
+    padding: 8px 10px 12px;
+    float: left;
+  }
 
-	.bundles__bundle--digital {
-		background-color: #1db7d7;
-	}
+  .bundles__bundle--digital {
+      background-color: #1db7d7;
+  }
 
-	.bundles__bundle--paper {
-		background-color: #58a1ce;
-	}
+  .bundles__bundle--paper {
+      background-color: #58a1ce;
+  }
 
-	// ----- Shared Components ----- //
+  .ways-of-support {
+    max-width: gu-breakpoint(desktop);;
 
-	.component-double-heading {
-		margin-bottom: 24px;
-	}
+    > .component-simple-heading {
+      padding-top: 6px;
 
-	input:checked+label {
-		background-color: gu-colour(guardian-brand-dark);
-		color: #fff;
-	}
+      @include mq($until: mobileLandscape) {
+        border-top: 1px solid gu-colour(news-support-1);
+      }
+
+      @include mq($from: tablet) {
+        max-width: 210px;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding-top: 0;
+      }
+
+      @include mq($from: desktop) {
+        max-width: 300px;
+        text-align: center;
+        border: none;
+        float: right;
+      }
+    }
+
+    > .component-simple-heading .component-simple-heading__heading {
+      word-spacing: -0.08em;
+
+      color: gu-colour(news-support-2);
+      font-family: 'Guardian Titlepiece Web', sans-serif;
+      font-weight: 400;
+      padding-top: 2px;
+      font-size: 28px;
+      line-height: 28px;
+      width: 220px;
+      margin: 0 10px 24px;
+
+      @include mq($from: tablet) {
+        width: gs-span(3);
+        margin: 0;
+        font-size: 40px;
+        line-height: 37px;
+        text-align: center;
+      }
+
+      @include mq($from: desktop) {
+        font-size: 48px;
+        line-height: 44px;
+      }
+
+      @include mq($from: desktop) {
+        width: 100%;
+      }
+    }
+  }
+
+  .ways-of-support__way {
+    background: gu-colour(comment-support-2);
+    color: gu-colour(neutral-1);
+    float: left;
+    max-width: 300px;
+    margin: 0 0 6px;
+    padding-bottom: 12px;
+
+    @include mq($from: mobileLandscape) {
+      background-color: #fff;
+      padding-bottom: 0;
+      position: relative;
+      margin-left: 10px;
+      margin-right: 10px;
+      max-width: 210px;
+    }
+
+    @include mq($from: tablet) {
+      max-width: 220px;
+      margin-top: 12px;
+    }
+
+    @include mq($from: desktop) {
+      max-width: 300px;
+      margin-bottom: 0;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .ways-of-support__way--orange {
+    background: gu-colour(comment-main-2);
+  }
+
+  .ways-of-support__way .component-simple-heading__heading {
+    margin: 4px 10px 12px;
+  }
+
+  .ways-of-support__way .component-info-text {
+    margin: 0 10px
+  }
+
+  // ----- Shared Components ----- //
+
+  .component-double-heading {
+      margin-bottom: 24px;
+  }
+
+  input:checked+label {
+    background-color: gu-colour(guardian-brand-dark);
+    color: #fff;
+  }
 
 }

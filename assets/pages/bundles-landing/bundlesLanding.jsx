@@ -6,6 +6,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import Bundles from './components/Bundles';
+import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/paperBundle';
 
 
@@ -18,7 +19,11 @@ const store = createStore(reducer, 'PAPER+DIGITAL');
 
 const content = (
   <Provider store={store}>
-    <Bundles />
+    <div>
+      <Bundles />
+      <br style={{ clear: 'both' }} />
+      <WaysOfSupport />
+    </div>
   </Provider>
 );
 
