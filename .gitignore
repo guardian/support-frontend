@@ -17,6 +17,7 @@ logs
 out
 target
 tmp
+tools
 project/project
 project/target
 

@@ -5,9 +5,13 @@ Frontend for the new supporter platform
 
 ## Installing dependencies
 
+Install yarn in your machine, follow the correct tutorial according to your environment:
+
+[https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+
 Go to the root of the project and run
 
-`npm install`
+`yarn install`
 
 ## Running the project
 
