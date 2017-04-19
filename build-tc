@@ -5,12 +5,12 @@ YARN_VERSION="0.23.2"
 TOOLS_DIRECTORY="tools"
 
 if [ ! -d "$TOOLS_DIRECTORY" ]; then
-	mkdir -p tools
-	cd tools/
+	mkdir -p "$TOOLS_DIRECTORY"
+	cd "$TOOLS_DIRECTORY"/
 	wget https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz
 	tar zvxf yarn-v${YARN_VERSION}.tar.gz
+	cd ..
 fi
-cd ..
 
 # Installing packages via yarn
 
