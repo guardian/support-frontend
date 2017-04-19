@@ -9,8 +9,6 @@
     "build-prod": "npm-run-all --serial clean lint test build:css 'build:js -- --config webpack.config.js --env.prod'",
     "build:css": "node-sass assets/stylesheets/main.scss public/stylesheets/main.css",
     "build:js": "webpack",
-    "install:yarn" : "echo 'Installing yarn globally' && npm install -g yarn",
-    "yarn-install": "echo 'Installing packages via yarn' && yarn install", 
     "watch": "npm-run-all --parallel watch:*",
     "watch:js": "npm run build:js -- --watch",
     "watch:css": "npm run build:css -- -w",
