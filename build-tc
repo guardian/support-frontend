@@ -1,7 +1,5 @@
 #!/bin/bash
 
-node --version
-
 # Installing yarn
 
 mkdir tools
@@ -16,6 +14,6 @@ tools/dist/bin/yarn install
 
 # Building the client-side assets
 
-npm run build-prod
+yarn run build-prod
 
 
