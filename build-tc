@@ -1,0 +1,21 @@
+#!/bin/bash
+
+node --version
+
+# Installing yarn
+
+mkdir tools
+cd tools/
+wget https://yarnpkg.com/latest.tar.gz
+tar zvxf latest.tar.gz
+cd ..
+
+# Installing packages via yarn
+
+tools/dist/bin/yarn install
+
+# Building the client-side assets
+
+npm run build-prod
+
+
