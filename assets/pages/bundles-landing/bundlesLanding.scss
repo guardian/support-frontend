@@ -142,4 +142,14 @@
     color: #fff;
   }
 
+	.component-text-input--selected {
+		background-color: gu-colour(comment-main-1);
+		color: #fff;
+
+		&::placeholder {
+			color: #fff;
+			opacity: 0.4;
+		}
+	}
+
 }

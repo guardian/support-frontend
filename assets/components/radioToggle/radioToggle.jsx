@@ -34,10 +34,14 @@ export default function RadioToggle(props) {
 
 // ----- Proptypes ----- //
 
+RadioToggle.defaultProps = {
+  checked: '',
+};
+
 RadioToggle.propTypes = {
   radios: React.PropTypes.arrayOf(React.PropTypes.shape({
     value: React.PropTypes.string,
     text: React.PropTypes.string,
   })).isRequired,
-  checked: React.PropTypes.string.isRequired,
+  checked: React.PropTypes.string,
 };

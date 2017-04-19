@@ -4,12 +4,12 @@ export function changePaperBundle(bundle) {
   return { type: 'CHANGE_PAPER_BUNDLE', payload: bundle };
 }
 
-export function changeContribPeriod(period) {
-  return { type: 'CHANGE_CONTRIB_PERIOD', payload: period };
+export function changeContribType(contribType) {
+  return { type: 'CHANGE_CONTRIB_TYPE', payload: contribType };
 }
 
-export function changeContribAmountMonthly(amount) {
-  return { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', payload: amount };
+export function changeContribAmountRecurring(amount) {
+  return { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', payload: amount };
 }
 
 export function changeContribAmountOneOff(amount) {

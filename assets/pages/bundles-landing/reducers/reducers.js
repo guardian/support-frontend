@@ -3,6 +3,20 @@
 import { combineReducers } from 'redux';
 
 
+// ----- Setup ----- //
+
+const initialContribAmount = {
+  recurring: {
+    amount: '5',
+    userDefined: false,
+  },
+  oneOff: {
+    amount: '25',
+    userDefined: false,
+  },
+};
+
+
 // ----- Reducers ----- //
 
 function paperBundle(state = 'PAPER+DIGITAL', action) {
@@ -16,10 +30,10 @@ function paperBundle(state = 'PAPER+DIGITAL', action) {
 
 }
 
-function contribPeriod(state = 'MONTHLY', action) {
+function contribType(state = 'RECURRING', action) {
 
   switch (action.type) {
-    case 'CHANGE_CONTRIB_PERIOD':
+    case 'CHANGE_CONTRIB_TYPE':
       return action.payload;
     default:
       return state;
@@ -27,13 +41,13 @@ function contribPeriod(state = 'MONTHLY', action) {
 
 }
 
-function contribAmount(state = { monthly: '5', one_off: '25' }, action) {
+function contribAmount(state = initialContribAmount, action) {
 
   switch (action.type) {
-    case 'CHANGE_CONTRIB_AMOUNT_MONTHLY':
-      return Object.assign({}, state, { monthly: action.payload });
+    case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
+      return Object.assign({}, state, { recurring: action.payload });
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
-      return Object.assign({}, state, { one_off: action.payload });
+      return Object.assign({}, state, { oneOff: action.payload });
     default:
       return state;
   }
@@ -45,6 +59,6 @@ function contribAmount(state = { monthly: '5', one_off: '25' }, action) {
 
 export default combineReducers({
   paperBundle,
-  contribPeriod,
+  contribType,
   contribAmount,
 });
