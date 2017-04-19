@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # Installing yarn
+YARN_VERSION="0.23.2"
 
-mkdir tools
+mkdir -p tools
 cd tools/
-wget https://yarnpkg.com/latest.tar.gz
-tar zvxf latest.tar.gz
+wget https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz
+tar zvxf yarn-v${YARN_VERSION}.tar.gz
 cd ..
 
 # Installing packages via yarn
