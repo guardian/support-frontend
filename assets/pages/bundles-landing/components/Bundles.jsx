@@ -6,7 +6,12 @@ import { connect } from 'react-redux';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import Bundle from './Bundle';
-import { changePaperBundle, changeContribPeriod } from '../actions/bundlesLandingActions';
+import {
+  changePaperBundle,
+  changeContribPeriod,
+  changeContribAmountMonthly,
+  changeContribAmountOneOff,
+} from '../actions/bundlesLandingActions';
 
 
 // ----- Copy ----- //
@@ -101,8 +106,8 @@ const toggles = {
       },
     ],
   },
-  contributions: {
-    name: 'contributions-toggle',
+  contribPeriod: {
+    name: 'contributions-period-toggle',
     radios: [
       {
         value: 'MONTHLY',
@@ -113,6 +118,46 @@ const toggles = {
         text: 'One-off',
       },
     ],
+  },
+  contribAmount: {
+    monthly: {
+      name: 'contributions-amount-monthly-toggle',
+      radios: [
+        {
+          value: '5',
+          text: '£5',
+        },
+        {
+          value: '10',
+          text: '£10',
+        },
+        {
+          value: '20',
+          text: '£20',
+        },
+      ],
+    },
+    one_off: {
+      name: 'contributions-amount-oneoff-toggle',
+      radios: [
+        {
+          value: '25',
+          text: '£25',
+        },
+        {
+          value: '50',
+          text: '£50',
+        },
+        {
+          value: '100',
+          text: '£100',
+        },
+        {
+          value: '250',
+          text: '£250',
+        },
+      ],
+    },
   },
 };
 
@@ -146,23 +191,35 @@ function Bundles(props) {
 
   const paperAttrs = getPaperAttrs(props.paperBundle);
   const contribAttrs = getContribAttrs(props.contribPeriod);
+  let contribAmountRadios;
 
-  function togglePaperBundle(bundle) {
-    return () => props.dispatch(changePaperBundle(bundle));
-  }
-
-  function toggleContribPeriod(period) {
-    return () => props.dispatch(changeContribPeriod(period));
+  if (props.contribPeriod === 'MONTHLY') {
+    contribAmountRadios = (
+      <RadioToggle
+        {...toggles.contribAmount.monthly}
+        toggleAction={props.toggleContribAmountMonthly}
+        checked={props.contribAmount.monthly}
+      />
+    );
+  } else {
+    contribAmountRadios = (
+      <RadioToggle
+        {...toggles.contribAmount.one_off}
+        toggleAction={props.toggleContribAmountOneOff}
+        checked={props.contribAmount.one_off}
+      />
+    );
   }
 
   return (
     <div className="bundles">
       <Bundle {...contribAttrs}>
         <RadioToggle
-          {...toggles.contributions}
-          toggleAction={toggleContribPeriod}
+          {...toggles.contribPeriod}
+          toggleAction={props.toggleContribPeriod}
           checked={props.contribPeriod}
         />
+        {contribAmountRadios}
       </Bundle>
       <Bundle {...bundles.digital}>
         <FeatureList listItems={bundles.digital.listItems} />
@@ -170,7 +227,7 @@ function Bundles(props) {
       <Bundle {...paperAttrs}>
         <RadioToggle
           {...toggles.paper}
-          toggleAction={togglePaperBundle}
+          toggleAction={props.togglePaperBundle}
           checked={props.paperBundle}
         />
         <FeatureList listItems={paperAttrs.listItems} />
@@ -186,6 +243,14 @@ function Bundles(props) {
 Bundles.propTypes = {
   paperBundle: React.PropTypes.string.isRequired,
   contribPeriod: React.PropTypes.string.isRequired,
+  contribAmount: React.PropTypes.shape({
+    monthly: React.PropTypes.string.isRequired,
+    one_off: React.PropTypes.string.isRequired,
+  }).isRequired,
+  togglePaperBundle: React.PropTypes.func.isRequired,
+  toggleContribPeriod: React.PropTypes.func.isRequired,
+  toggleContribAmountMonthly: React.PropTypes.func.isRequired,
+  toggleContribAmountOneOff: React.PropTypes.func.isRequired,
 };
 
 
@@ -195,7 +260,26 @@ function mapStateToProps(state) {
   return state;
 }
 
+function mapDispatchToProps(dispatch) {
+
+  return {
+    togglePaperBundle: (bundle) => {
+      dispatch(changePaperBundle(bundle));
+    },
+    toggleContribPeriod: (period) => {
+      dispatch(changeContribPeriod(period));
+    },
+    toggleContribAmountMonthly: (amount) => {
+      dispatch(changeContribAmountMonthly(amount));
+    },
+    toggleContribAmountOneOff: (amount) => {
+      dispatch(changeContribAmountOneOff(amount));
+    },
+  };
+
+}
+
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(Bundles);
+export default connect(mapStateToProps, mapDispatchToProps)(Bundles);
