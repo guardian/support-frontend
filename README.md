@@ -1,12 +1,12 @@
 Support Workers
 ===============
 
-Scala app that polls AWS step functions for work.
+Step functions to provide the backend for support.theguardian.com
 
-Will interface with:
+Interfaces with:
 
+* Identity
 * Salesforce
 * Zuora
 * Paypal
 * Stripe
-* Dynamodb
