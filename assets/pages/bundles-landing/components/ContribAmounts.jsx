@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import TextInput from 'components/textInput/textInput';
+import InfoText from 'components/infoText/infoText';
 import {
+  changeContribAmount,
   changeContribAmountRecurring,
   changeContribAmountOneOff,
 } from '../actions/bundlesLandingActions';
@@ -54,6 +56,27 @@ const amountToggles = {
   },
 };
 
+const contribErrors = {
+  tooLittleRecurring: 'Please enter at least £5',
+  tooLittleOneOff: 'Please enter at least £1',
+  tooMuch: 'We are presently only able to accept contributions of £2000 or less',
+  badInput: 'Please enter a numeric amount',
+  noEntry: 'Please enter an amount',
+};
+
+
+// ----- Functions ----- //
+
+function errorMessage(error) {
+
+  if (error) {
+    return <InfoText text={contribErrors[error]} />;
+  }
+
+  return null;
+
+}
+
 
 // ----- Component ----- //
 
@@ -71,10 +94,11 @@ function ContribAmounts(props) {
           checked={checked}
         />
         <TextInput
-          onFocus={props.userDefinedRecurringAmount}
-          onInput={props.userDefinedRecurringAmount}
+          onFocus={props.userDefinedAmount}
+          onInput={props.userDefinedAmount}
           selected={props.contrib.recurring.userDefined}
         />
+        {errorMessage(props.contribError)}
       </div>
     );
 
@@ -90,10 +114,11 @@ function ContribAmounts(props) {
         checked={checked}
       />
       <TextInput
-        onFocus={props.userDefinedOneOffAmount}
-        onInput={props.userDefinedOneOffAmount}
+        onFocus={props.userDefinedAmount}
+        onInput={props.userDefinedAmount}
         selected={props.contrib.oneOff.userDefined}
       />
+      {errorMessage(props.contribError)}
     </div>
   );
 
@@ -104,6 +129,7 @@ function ContribAmounts(props) {
 
 ContribAmounts.propTypes = {
   contribType: React.PropTypes.string.isRequired,
+  contribError: React.PropTypes.string.isRequired,
   contrib: React.PropTypes.shape({
     recurring: React.PropTypes.shape({
       amount: React.PropTypes.string.isRequired,
@@ -116,8 +142,7 @@ ContribAmounts.propTypes = {
   }).isRequired,
   predefinedRecurringAmount: React.PropTypes.func.isRequired,
   predefinedOneOffAmount: React.PropTypes.func.isRequired,
-  userDefinedRecurringAmount: React.PropTypes.func.isRequired,
-  userDefinedOneOffAmount: React.PropTypes.func.isRequired,
+  userDefinedAmount: React.PropTypes.func.isRequired,
 };
 
 
@@ -126,8 +151,9 @@ ContribAmounts.propTypes = {
 function mapStateToProps(state) {
 
   return {
-    contrib: state.contribAmount,
-    contribType: state.contribType,
+    contrib: state.contribution.amount,
+    contribType: state.contribution.type,
+    contribError: state.contribution.error,
   };
 
 }
@@ -141,11 +167,8 @@ function mapDispatchToProps(dispatch) {
     predefinedOneOffAmount: (amount) => {
       dispatch(changeContribAmountOneOff({ amount, userDefined: false }));
     },
-    userDefinedRecurringAmount: (amount) => {
-      dispatch(changeContribAmountRecurring({ amount, userDefined: true }));
-    },
-    userDefinedOneOffAmount: (amount) => {
-      dispatch(changeContribAmountOneOff({ amount, userDefined: true }));
+    userDefinedAmount: (amount) => {
+      dispatch(changeContribAmount({ amount, userDefined: true }));
     },
   };
 

@@ -2,17 +2,23 @@
 
 import { combineReducers } from 'redux';
 
+import validateContribution from '../helpers/validation';
+
 
 // ----- Setup ----- //
 
-const initialContribAmount = {
-  recurring: {
-    amount: '5',
-    userDefined: false,
-  },
-  oneOff: {
-    amount: '25',
-    userDefined: false,
+const initialContribState = {
+  type: 'RECURRING',
+  error: '',
+  amount: {
+    recurring: {
+      amount: '5',
+      userDefined: false,
+    },
+    oneOff: {
+      amount: '25',
+      userDefined: false,
+    },
   },
 };
 
@@ -30,26 +36,46 @@ function paperBundle(state = 'PAPER+DIGITAL', action) {
 
 }
 
-function contribType(state = 'RECURRING', action) {
+function contribution(state = initialContribState, action) {
 
   switch (action.type) {
-    case 'CHANGE_CONTRIB_TYPE':
-      return action.payload;
-    default:
-      return state;
-  }
 
-}
+    case 'CHANGE_CONTRIB_TYPE': {
 
-function contribAmount(state = initialContribAmount, action) {
+      const contribType = action.payload === 'ONE_OFF' ? 'oneOff' : 'recurring';
+      const amount = state.amount[contribType].amount;
 
-  switch (action.type) {
+      return Object.assign({}, state, {
+        type: action.payload,
+        error: validateContribution(amount, action.payload),
+      });
+
+    }
+
+    case 'CHANGE_CONTRIB_AMOUNT':
+
+      return Object.assign({}, state, {
+        amount: { recurring: action.payload, oneOff: action.payload },
+        error: validateContribution(action.payload.amount, state.type),
+      });
+
     case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
-      return Object.assign({}, state, { recurring: action.payload });
+
+      return Object.assign({}, state, {
+        amount: { recurring: action.payload, oneOff: state.amount.oneOff },
+        error: validateContribution(action.payload.amount, state.type),
+      });
+
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
-      return Object.assign({}, state, { oneOff: action.payload });
+
+      return Object.assign({}, state, {
+        amount: { recurring: state.amount.recurring, oneOff: action.payload },
+        error: validateContribution(action.payload.amount, state.type),
+      });
+
     default:
       return state;
+
   }
 
 }
@@ -59,6 +85,5 @@ function contribAmount(state = initialContribAmount, action) {
 
 export default combineReducers({
   paperBundle,
-  contribType,
-  contribAmount,
+  contribution,
 });

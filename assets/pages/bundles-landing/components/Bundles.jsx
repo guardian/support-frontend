@@ -193,7 +193,13 @@ Bundles.propTypes = {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  return state;
+
+  return {
+    paperBundle: state.paperBundle,
+    contribType: state.contribution.type,
+    contribAmount: state.contribution.amount,
+  };
+
 }
 
 function mapDispatchToProps(dispatch) {
