@@ -116,6 +116,7 @@ function ContribAmounts(props) {
         onFocus={props.userDefinedAmount}
         onInput={props.userDefinedAmount}
         selected={attrs.selected}
+        placeholder="Other Amount (£)"
       />
       {errorMessage(props.contribError)}
     </div>
