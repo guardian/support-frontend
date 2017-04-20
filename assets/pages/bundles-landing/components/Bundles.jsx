@@ -115,7 +115,7 @@ function Bundles(props) {
   }
 
   return (
-    <div className="bundles">
+    <section className="bundles gu-content-margin">
       <Bundle {...bundles.digital}>
         <FeatureList listItems={bundles.digital.listItems} />
       </Bundle>
@@ -127,7 +127,7 @@ function Bundles(props) {
         />
         <FeatureList listItems={paperAttrs.listItems} />
       </Bundle>
-    </div>
+    </section>
   );
 
 }
