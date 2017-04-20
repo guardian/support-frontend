@@ -77,46 +77,45 @@ function errorMessage(error) {
 
 }
 
+function getAttrs(props) {
+
+  const contrType = props.contribType === 'RECURRING' ? 'recurring' : 'oneOff';
+  const userDefined = props.contrib.oneOff.userDefined;
+  let toggleAction;
+
+  if (props.contribType === 'RECURRING') {
+    toggleAction = props.predefinedRecurringAmount;
+  } else {
+    toggleAction = props.predefinedOneOffAmount;
+  }
+
+  return {
+    toggleAction,
+    checked: !userDefined ? props.contrib[contrType].amount : null,
+    toggles: amountToggles[contrType],
+    selected: props.contrib[contrType].userDefined,
+  };
+
+}
+
 
 // ----- Component ----- //
 
 function ContribAmounts(props) {
 
-  if (props.contribType === 'RECURRING') {
-
-    const checked = !props.contrib.recurring.userDefined ? props.contrib.recurring.amount : null;
-
-    return (
-      <div className="contrib-amounts">
-        <RadioToggle
-          {...amountToggles.recurring}
-          toggleAction={props.predefinedRecurringAmount}
-          checked={checked}
-        />
-        <NumberInput
-          onFocus={props.userDefinedAmount}
-          onInput={props.userDefinedAmount}
-          selected={props.contrib.recurring.userDefined}
-        />
-        {errorMessage(props.contribError)}
-      </div>
-    );
-
-  }
-
-  const checked = !props.contrib.oneOff.userDefined ? props.contrib.oneOff.amount : null;
+  const attrs = getAttrs(props);
 
   return (
     <div className="contrib-amounts">
       <RadioToggle
-        {...amountToggles.oneOff}
-        toggleAction={props.predefinedOneOffAmount}
-        checked={checked}
+        {...attrs.toggles}
+        toggleAction={attrs.toggleAction}
+        checked={attrs.checked}
       />
       <NumberInput
         onFocus={props.userDefinedAmount}
         onInput={props.userDefinedAmount}
-        selected={props.contrib.oneOff.userDefined}
+        selected={attrs.selected}
       />
       {errorMessage(props.contribError)}
     </div>
@@ -128,20 +127,7 @@ function ContribAmounts(props) {
 // ----- Proptypes ----- //
 
 ContribAmounts.propTypes = {
-  contribType: React.PropTypes.string.isRequired,
   contribError: React.PropTypes.string.isRequired,
-  contrib: React.PropTypes.shape({
-    recurring: React.PropTypes.shape({
-      amount: React.PropTypes.string.isRequired,
-      userDefined: React.PropTypes.bool.isRequired,
-    }).isRequired,
-    oneOff: React.PropTypes.shape({
-      amount: React.PropTypes.string.isRequired,
-      userDefined: React.PropTypes.bool.isRequired,
-    }).isRequired,
-  }).isRequired,
-  predefinedRecurringAmount: React.PropTypes.func.isRequired,
-  predefinedOneOffAmount: React.PropTypes.func.isRequired,
   userDefinedAmount: React.PropTypes.func.isRequired,
 };
 
