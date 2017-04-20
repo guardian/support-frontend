@@ -5,14 +5,14 @@ import React from 'react';
 
 // ----- Component ----- //
 
-export default function TextInput(props) {
+export default function NumberInput(props) {
 
-  const selectedClass = props.selected ? ' component-text-input--selected' : '';
+  const selectedClass = props.selected ? ' component-number-input--selected' : '';
 
   return (
     <input
-      className={`component-text-input${selectedClass}`}
-      type="text"
+      className={`component-number-input${selectedClass}`}
+      type="number"
       placeholder="Other Amount (£)"
       onFocus={e => props.onFocus(e.target.value)}
       onInput={e => props.onInput(e.target.value)}
@@ -24,13 +24,13 @@ export default function TextInput(props) {
 
 // ----- Proptypes ----- //
 
-TextInput.defaultProps = {
+NumberInput.defaultProps = {
   onFocus: () => {},
   onInput: () => {},
   selected: false,
 };
 
-TextInput.propTypes = {
+NumberInput.propTypes = {
   onFocus: React.PropTypes.func,
   onInput: React.PropTypes.func,
   selected: React.PropTypes.bool,

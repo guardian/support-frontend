@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
-import TextInput from 'components/textInput/textInput';
+import NumberInput from 'components/numberInput/numberInput';
 import InfoText from 'components/infoText/infoText';
 import {
   changeContribAmount,
@@ -93,7 +93,7 @@ function ContribAmounts(props) {
           toggleAction={props.predefinedRecurringAmount}
           checked={checked}
         />
-        <TextInput
+        <NumberInput
           onFocus={props.userDefinedAmount}
           onInput={props.userDefinedAmount}
           selected={props.contrib.recurring.userDefined}
@@ -113,7 +113,7 @@ function ContribAmounts(props) {
         toggleAction={props.predefinedOneOffAmount}
         checked={checked}
       />
-      <TextInput
+      <NumberInput
         onFocus={props.userDefinedAmount}
         onInput={props.userDefinedAmount}
         selected={props.contrib.oneOff.userDefined}
