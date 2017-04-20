@@ -60,8 +60,7 @@ const contribErrors = {
   tooLittleRecurring: 'Please enter at least £5',
   tooLittleOneOff: 'Please enter at least £1',
   tooMuch: 'We are presently only able to accept contributions of £2000 or less',
-  badInput: 'Please enter a numeric amount',
-  noEntry: 'Please enter an amount',
+  noEntry: 'Please enter a numeric amount',
 };
 
 

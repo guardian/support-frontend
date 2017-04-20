@@ -8,9 +8,7 @@ export default function validateOtherAmount(amount, contribType) {
 
   const numericAmount = Number(amount);
 
-  if (isNaN(numericAmount)) {
-    return 'badInput';
-  } else if (numericAmount < 5 && contribType === 'RECURRING') {
+  if (numericAmount < 5 && contribType === 'RECURRING') {
     return 'tooLittleRecurring';
   } else if (numericAmount < 1 && contribType === 'ONE_OFF') {
     return 'tooLittleOneOff';
