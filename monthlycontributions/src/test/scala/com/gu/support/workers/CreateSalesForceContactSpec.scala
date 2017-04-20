@@ -6,7 +6,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.lambdas.CreateSalesForceContact
 import com.gu.support.workers.model.{PaymentMethod, SalesForceContact}
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
 
