@@ -15,6 +15,11 @@ import {
 
 // ----- Copy ----- //
 
+const ctaLinks = {
+  recurring: '/monthly-contribution',
+  oneOff: 'https://contribute.theguardian.com/uk',
+};
+
 const bundles = {
   allContrib: {
     heading: 'From £5/month',
@@ -22,12 +27,6 @@ const bundles = {
     infoText: 'Support the Guardian. Every penny of your contribution goes to support our fearless, quality journalism.',
     ctaText: 'Contribute with credit/debit card',
     modifierClass: 'contributions',
-  },
-  contribRecurring: {
-    ctaLink: '/monthly-contribution',
-  },
-  contribOneOff: {
-    ctaLink: 'https://contribute.theguardian.com/uk',
   },
   digital: {
     heading: '£11.99/month',
@@ -123,13 +122,16 @@ const toggles = {
 
 // ----- Functions ----- //
 
-function getContribAttrs(contribType) {
+function getContribAttrs({ contribType, contribAmount }) {
 
-  if (contribType === 'RECURRING') {
-    return Object.assign({}, bundles.allContrib, bundles.contribRecurring);
-  }
+  const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
+  const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
 
-  return Object.assign({}, bundles.allContrib, bundles.contribOneOff);
+  const params = new URLSearchParams();
+  params.append(amountParam, contribAmount[contType].amount);
+  const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+
+  return Object.assign({}, bundles.allContrib, { ctaLink });
 
 }
 
@@ -148,8 +150,8 @@ function getPaperAttrs(bundle) {
 
 function Bundles(props) {
 
+  const contribAttrs = getContribAttrs(props);
   const paperAttrs = getPaperAttrs(props.paperBundle);
-  const contribAttrs = getContribAttrs(props.contribType);
 
   return (
     <div className="bundles">

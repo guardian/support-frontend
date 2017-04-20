@@ -72,7 +72,7 @@ function ContribAmounts(props) {
         />
         <TextInput
           onFocus={props.userDefinedRecurringAmount}
-          onChange={props.userDefinedRecurringAmount}
+          onInput={props.userDefinedRecurringAmount}
           selected={props.contrib.recurring.userDefined}
         />
       </div>
@@ -91,7 +91,7 @@ function ContribAmounts(props) {
       />
       <TextInput
         onFocus={props.userDefinedOneOffAmount}
-        onChange={props.userDefinedOneOffAmount}
+        onInput={props.userDefinedOneOffAmount}
         selected={props.contrib.oneOff.userDefined}
       />
     </div>
