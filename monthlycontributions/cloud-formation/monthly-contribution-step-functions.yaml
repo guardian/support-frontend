@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "A template for the Monthly Contribution sign up."
+Resources:
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+
+  CreatePaymentMethodLambda:
+    Type: "AWS::Lambda::Function"
+    Description: "Step 1. Initialise Payment method"
+    Properties:
+      Handler: "com.gu.support.workers.lambdas.CreatePaymentMethod::handleRequest"
+      MemorySize: 256
+      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      Code:
+                  S3Bucket: support-workers-dist
+                  S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+      Runtime: "java8"
+      Timeout: "60"
+
+  CreateSalesForceContactLambda:
+      Type: "AWS::Lambda::Function"
+      Description: "Step 2. Create SalesForce contact"
+      Properties:
+        Handler: "com.gu.support.workers.lambdas.CreateSalesForceContact::handleRequest"
+        MemorySize: 256
+        Role: !GetAtt [ LambdaExecutionRole, Arn ]
+        Code:
+                    S3Bucket: support-workers-dist
+                    S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+        Runtime: "java8"
+        Timeout: "60"
+
+  CreateZuoraSubscriptionLambda:
+        Type: "AWS::Lambda::Function"
+        Description: "Step 3. Create Zuora subscription"
+        Properties:
+          Handler: "com.gu.support.workers.lambdas.CreateZuoraSubscription::handleRequest"
+          MemorySize: 256
+          Role: !GetAtt [ LambdaExecutionRole, Arn ]
+          Code:
+                      S3Bucket: support-workers-dist
+                      S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+          Runtime: "java8"
+          Timeout: "60"
+
+  FlakeyServiceLambda:
+          Type: "AWS::Lambda::Function"
+          Description: "Step 4. Simulate trying to contact a flakey service to test retrys"
+          Properties:
+            Handler: "com.gu.support.workers.lambdas.FlakeyService::handleRequest"
+            MemorySize: 256
+            Role: !GetAtt [ LambdaExecutionRole, Arn ]
+            Code:
+                        S3Bucket: support-workers-dist
+                        S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+            Runtime: "java8"
+            Timeout: "60"
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: !Sub states.${AWS::Region}.amazonaws.com
+          Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+
+  MonthlyContributionsStateMachine:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+            {
+              "Comment": "Carries out the steps needed to create a Monthly Contributor",
+              "StartAt": "CreatePaymentMethod",
+              "States": {
+                "CreatePaymentMethod": {
+                  "Type": "Task",
+                  "Resource": "${createPaymentMethodArn}",
+                  "Next": "CreateSalesForceContact"
+                },
+                "CreateSalesForceContact": {
+                  "Type": "Task",
+                  "Resource": "${createSalesForceContactArn}",
+                  "Next": "CreateZuoraSubscription"
+                },
+                "CreateZuoraSubscription": {
+                  "Type": "Task",
+                  "Resource": "${createZuoraSubscriptionArn}",
+                  "Next": "FlakeyService"
+                },
+                "FlakeyService": {
+                  "Type": "Task",
+                  "Resource": "${flakeyServiceArn}",
+                  "Retry": [ {
+                    "ErrorEquals": ["com.gu.support.workers.exceptions.NonFatalException"],
+                    "IntervalSeconds": 1,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 2.0
+                           } ],
+                  "End": true
+                }
+              }
+            }
+          - {
+            createPaymentMethodArn: !GetAtt [ CreatePaymentMethodLambda, Arn ],
+            createSalesForceContactArn: !GetAtt [ CreateSalesForceContactLambda, Arn ],
+            createZuoraSubscriptionArn: !GetAtt [ CreateZuoraSubscriptionLambda, Arn ],
+            flakeyServiceArn: !GetAtt [ FlakeyServiceLambda, Arn ]
+          }
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
