@@ -2,9 +2,12 @@ import sbt._
 
 object Dependencies {
   val circeVersion = "0.7.0"
+
+  val config = "com.typesafe" % "config" % "1.3.1"
   val joda = "org.joda" % "joda-convert" % "1.8.1"
   val cats = "org.typelevel" %% "cats" % "0.6.1"
   val scalaLogging = "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
+  val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
   val awsS3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.13"
@@ -16,7 +19,7 @@ object Dependencies {
   val circeParser = "io.circe" %% "circe-parser" % circeVersion
 
 
-  val commonDependencies: Seq[ModuleID] = Seq(scalaLogging, awsCloudwatch, awsLambdas, okhttp, cats, circeCore, circeGeneric, circeParser)
-  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(scalaLogging, awsS3, scalaTest, mokito)
+  val commonDependencies: Seq[ModuleID] = Seq(config, scalaLogging, logback, awsCloudwatch, awsS3, awsLambdas, okhttp, cats, circeCore, circeGeneric, circeParser)
+  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(scalaTest, mokito)
 
 }
