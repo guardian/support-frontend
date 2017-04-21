@@ -1,11 +1,11 @@
 package com.gu.support.workers
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, OutputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
-import io.circe.{Decoder, Encoder}
+import cats.syntax.either._
 import io.circe.parser._
 import io.circe.syntax._
-import cats.syntax.either._
+import io.circe.{Decoder, Encoder}
 
 import scala.io.Source
 import scala.util.Try

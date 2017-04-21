@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.model.{PaymentMethod, User}
+import com.gu.support.workers.model.{PayPalPaymentFields, PaymentMethod, StripePaymentFields, User}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.DecodingFailure
 import org.scalatest.mockito.MockitoSugar
@@ -22,9 +22,9 @@ class CreatePaymentMethodSpec extends FlatSpec with Matchers with MockitoSugar w
 
     val outStream = new ByteArrayOutputStream()
 
-    val inStream = User("123", "Test user").asInputStream()
+    val inEither : Either[StripePaymentFields, PayPalPaymentFields] = Right(PayPalPaymentFields("test_baid"))
 
-    createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
+    createPaymentMethod.handleRequest(inEither.asInputStream(), outStream, mock[Context])
 
     val p = outStream.toClass[PaymentMethod]()
     logger.info(s"Output: $p")
