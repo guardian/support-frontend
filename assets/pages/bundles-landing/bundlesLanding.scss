@@ -8,12 +8,26 @@
     float: left;
   }
 
-  .bundles__bundle--digital {
-      background-color: #1db7d7;
-  }
+	.bundles__bundle--contributions {
+		background-color: gu-colour(multimedia-main-2);
+
+		input:checked+label {
+			background-color: gu-colour(comment-main-1);
+			color: #fff;
+		}
+	}
+
+	.bundles__bundle--digital {
+		background-color: #1db7d7;
+	}
 
   .bundles__bundle--paper {
-      background-color: #58a1ce;
+    background-color: #58a1ce;
+
+    input:checked+label {
+			background-color: gu-colour(guardian-brand-dark);
+			color: #fff;
+		}
   }
 
   .ways-of-support {
@@ -127,5 +141,15 @@
     background-color: gu-colour(guardian-brand-dark);
     color: #fff;
   }
+
+	.component-number-input--selected {
+		background-color: gu-colour(comment-main-1);
+		color: #fff;
+
+		&::placeholder {
+			color: #fff;
+			opacity: 0.4;
+		}
+	}
 
 }

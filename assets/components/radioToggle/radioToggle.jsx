@@ -12,13 +12,13 @@ export default function RadioToggle(props) {
     const radioId = `${props.name}-${idx}`;
 
     return (
-      <span>
+      <span key={radioId}>
         <input
           type="radio"
           name={props.name}
           value={radio.value}
           id={radioId}
-          onChange={props.toggleAction(radio.value)}
+          onChange={() => props.toggleAction(radio.value)}
           checked={radio.value === props.checked}
         />
         <label htmlFor={radioId}>{radio.text}</label>
@@ -34,10 +34,14 @@ export default function RadioToggle(props) {
 
 // ----- Proptypes ----- //
 
+RadioToggle.defaultProps = {
+  checked: '',
+};
+
 RadioToggle.propTypes = {
   radios: React.PropTypes.arrayOf(React.PropTypes.shape({
     value: React.PropTypes.string,
     text: React.PropTypes.string,
   })).isRequired,
-  checked: React.PropTypes.string.isRequired,
+  checked: React.PropTypes.string,
 };

@@ -1,0 +1,14 @@
+.component-number-input {
+	background-color: #fff;
+	border-radius: 600px;
+	border: none;
+	padding: 6px 10px;
+	margin: 3px 0;
+	height: 24px;
+	min-width: 100%;
+	text-align: center;
+
+	&:focus {
+		outline: none;
+	}
+}
