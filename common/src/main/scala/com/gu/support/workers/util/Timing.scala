@@ -22,8 +22,6 @@ object Timing extends LazyLogging {
       a
     }
 
-    val t = Test("")
-
     block.transform(recordEnd(metricName), recordEnd(s"$metricName failed"))
   }
 }
