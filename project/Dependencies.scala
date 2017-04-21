@@ -15,7 +15,8 @@ object Dependencies {
   val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
   val circeParser = "io.circe" %% "circe-parser" % circeVersion
 
-  val commonDependencies: Seq[ModuleID] = Seq(scalaLogging, awsCloudwatch, okhttp, cats)
-  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(scalaLogging, awsS3, awsLambdas, circeCore, circeGeneric, circeParser, scalaTest, mokito)
+
+  val commonDependencies: Seq[ModuleID] = Seq(scalaLogging, awsCloudwatch, awsLambdas, okhttp, cats, circeCore, circeGeneric, circeParser)
+  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(scalaLogging, awsS3, scalaTest, mokito)
 
 }

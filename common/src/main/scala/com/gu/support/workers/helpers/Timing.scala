@@ -1,4 +1,4 @@
-package com.gu.support.workers.util
+package com.gu.support.workers.helpers
 
 import com.gu.support.workers.monitoring.CloudWatch
 import com.typesafe.scalalogging.LazyLogging

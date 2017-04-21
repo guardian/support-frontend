@@ -1,4 +1,4 @@
-package main.scala.com.gu
+package com.gu
 
 import java.io.IOException
 import okhttp3.{Callback, OkHttpClient, Request, Response, Call}

@@ -2,7 +2,6 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.exceptions.NonFatalException
-import com.gu.support.workers.helpers.Handler
 import com.typesafe.scalalogging.LazyLogging
 
 class FlakeyService extends Handler[String, Unit] with LazyLogging {

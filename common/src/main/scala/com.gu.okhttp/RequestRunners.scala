@@ -1,10 +1,10 @@
-package main.scala.com.gu.okhttp
+package com.gu.okhttp
 
 import java.util.concurrent.TimeUnit
 
 import cats.data.{Kleisli, ReaderT}
+import com.gu.support.workers.helpers.Timing
 import com.gu.support.workers.monitoring.StatusMetrics
-import com.gu.support.workers.util.Timing
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{OkHttpClient, Request, Response => OkResponse}
 

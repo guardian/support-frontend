@@ -1,4 +1,4 @@
-package com.gu.support.workers.helpers
+package com.gu.support.workers.lambdas
 
 import java.io.{InputStream, OutputStream}
 import cats.syntax.either._

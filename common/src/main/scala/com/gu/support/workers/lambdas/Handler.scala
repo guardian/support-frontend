@@ -1,4 +1,4 @@
-package com.gu.support.workers.helpers
+package com.gu.support.workers.lambdas
 
 import java.io.{InputStream, OutputStream}
 
@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler with LazyLogging{
-  import com.gu.support.workers.helpers.Encoding._
+  import com.gu.support.workers.lambdas.Encoding._
 
   protected def handler(input: T, context: Context): R
   def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
