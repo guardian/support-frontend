@@ -79,7 +79,7 @@ function errorMessage(error) {
 function getAttrs(props) {
 
   const contrType = props.contribType === 'RECURRING' ? 'recurring' : 'oneOff';
-  const userDefined = props.contrib.oneOff.userDefined;
+  const userDefined = props.contrib[contrType].userDefined;
   let toggleAction;
 
   if (props.contribType === 'RECURRING') {
