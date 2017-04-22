@@ -11,7 +11,14 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: "sts:AssumeRole"
-
+      Policies:
+        - PolicyName: PrivateBucket
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource: arn:aws:s3:::support-workers-private/*
   CreatePaymentMethodLambda:
     Type: "AWS::Lambda::Function"
     Description: "Step 1. Initialise Payment method"

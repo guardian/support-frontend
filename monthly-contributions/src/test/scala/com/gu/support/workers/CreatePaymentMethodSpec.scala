@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.model.{PayPalPaymentFields, PaymentMethod, StripePaymentFields, User}
+import com.gu.support.workers.model.PaymentMethod
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.DecodingFailure
 import org.scalatest.mockito.MockitoSugar
@@ -14,7 +14,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class CreatePaymentMethodSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
 
-  import com.gu.support.workers.Conversions._
+  import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
   import io.circe.generic.auto._
 
   "CreatePaymentMethod lambda" should "accept and return valid json" in {
@@ -22,9 +22,13 @@ class CreatePaymentMethodSpec extends FlatSpec with Matchers with MockitoSugar w
 
     val outStream = new ByteArrayOutputStream()
 
-    val inEither : Either[StripePaymentFields, PayPalPaymentFields] = Right(PayPalPaymentFields("test_baid"))
+    val payPalJson = """
+                {
+                  "paypalBaid": "lsdfjsldkfjs"
+                }
+                """
 
-    createPaymentMethod.handleRequest(inEither.asInputStream(), outStream, mock[Context])
+    createPaymentMethod.handleRequest(payPalJson.asInputStream(), outStream, mock[Context])
 
     val p = outStream.toClass[PaymentMethod]()
     logger.info(s"Output: $p")

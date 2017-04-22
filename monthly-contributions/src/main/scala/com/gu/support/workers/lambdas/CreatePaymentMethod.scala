@@ -3,7 +3,8 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.model.{PayPalPaymentFields, PaymentMethod, StripePaymentFields}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
+import io.circe.generic.auto.exportEncoder
+import com.gu.support.workers.helpers.PaymentFieldsDecoder.decodePaymentFields
 
 
 class CreatePaymentMethod extends Handler[Either[StripePaymentFields, PayPalPaymentFields], PaymentMethod] with LazyLogging {
