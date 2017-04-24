@@ -5,7 +5,7 @@
 // h stands for horizontal
 // v stands for vertical
 // =============================================================================
-$gu-h-spacing: 1.25rem;
+$gu-h-spacing: 20px;
 $gu-v-spacing: 12px;
 
 
@@ -17,39 +17,39 @@ $gu-v-spacing: 12px;
 .gu-content-margin {
 
   @include mq($from: mobile) {
-    padding: 0 0.625rem;
+    padding: 0 10px;
   }
 
   @include mq($from: mobileLandscape) {
-    padding: 0 1.25rem;
+    padding: 0 20px;
   }
 
   @include mq($from: phablet) {
-    max-width: 38.75rem;
+    max-width: 660px;
     padding: 0 auto;
   }
 
   @include mq($from: tablet) {
-    max-width: 46.25rem;
+    max-width: 740px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 20px;
   }
 
   @include mq($from: desktop) {
-    max-width: 61.25rem;
+    max-width: 980px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 20px;
   }
 
   @include mq($from: leftCol) {
-    max-width: 71.25rem;
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 20px;
   }
 
   @include mq($from: wide) {
-    max-width: 81.25rem;
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 20px;
   }
 }
