@@ -2,7 +2,7 @@ import sbt._
 import Keys.{scalacOptions, _}
 
 object Settings {
-  val appVersion = "1.0"
+  val appVersion = "0.1-SNAPSHOT"
 
   val shared: Seq[Def.Setting[_]] = Seq(
     version := appVersion,

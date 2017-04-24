@@ -30,4 +30,13 @@ object Conversions {
     }
   }
 
+  implicit class StringInputStreamConversions[String](val str: String) {
+
+    def asInputStream()(implicit encoder: Encoder[String]) = {
+      val convertStream = new ByteArrayOutputStream()
+
+      convertStream.write(str.toString.getBytes("UTF-8"))
+      new ByteArrayInputStream(convertStream.toByteArray)
+    }
+  }
 }

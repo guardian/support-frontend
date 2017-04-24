@@ -19,6 +19,7 @@ lazy val `monthly-contributions` = project
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
     riffRaffPackageName := "guardian-support-monthly-contributions-lambdas",
     riffRaffPackageType := (packageBin in Universal).value,
+    assemblySettings,
     libraryDependencies ++= monthlyContributionsDependencies
   )
   .settings(Settings.shared: _*)
