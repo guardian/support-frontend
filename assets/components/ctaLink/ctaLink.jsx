@@ -1,11 +1,21 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  text: string,
+  url: string,
+};
+
+
 // ----- Component ----- //
 
-export default function CtaLink(props) {
+export default function CtaLink(props: PropTypes) {
 
   return (
     <a className="component-cta-link" href={props.url}>
@@ -14,11 +24,3 @@ export default function CtaLink(props) {
   );
 
 }
-
-
-// ----- Proptypes ----- //
-
-CtaLink.propTypes = {
-  text: React.PropTypes.string.isRequired,
-  url: React.PropTypes.string.isRequired,
-};

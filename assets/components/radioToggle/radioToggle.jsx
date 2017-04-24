@@ -1,13 +1,35 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 
+// ----- Types ----- //
+
+// Disabling the linter here because it's just buggy...
+/* eslint-disable react/no-unused-prop-types */
+
+type Radio = {
+  value: string,
+  text: string,
+};
+
+type PropTypes = {
+  name: string,
+  radios: Radio[],
+  checked: ?string,
+  toggleAction: (string) => void,
+};
+
+/* eslint-enable react/no-unused-prop-types */
+
+
 // ----- Component ----- //
 
-export default function RadioToggle(props) {
+export default function RadioToggle(props: PropTypes) {
 
-  const radioButtons = props.radios.map((radio, idx) => {
+  const radioButtons = props.radios.map((radio: Radio, idx: number) => {
 
     const radioId = `${props.name}-${idx}`;
 
@@ -36,12 +58,4 @@ export default function RadioToggle(props) {
 
 RadioToggle.defaultProps = {
   checked: '',
-};
-
-RadioToggle.propTypes = {
-  radios: React.PropTypes.arrayOf(React.PropTypes.shape({
-    value: React.PropTypes.string,
-    text: React.PropTypes.string,
-  })).isRequired,
-  checked: React.PropTypes.string,
 };
