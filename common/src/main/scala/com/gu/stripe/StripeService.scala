@@ -10,15 +10,13 @@ import okhttp3.Request
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class StripeCredentials(secretKey: String, publicKey: String)
-
-class StripeService(credentials: StripeCredentials, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[StripeObject, Stripe.Error] {
+class StripeService(config: StripeConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[StripeObject, Stripe.Error] {
   val wsUrl = "https://api.stripe.com/v1" // Stripe URL is the same in all environments
-  val publicKey = credentials.publicKey
+  val publicKey = config.publicKey
   val httpClient: FutureHttpClient = client
 
   override def wsPreExecute(req: Request.Builder): Request.Builder =
-    req.addHeader("Authorization", s"Bearer ${credentials.secretKey}")
+    req.addHeader("Authorization", s"Bearer ${config.secretKey}")
 
   object Customer {
     def create(description: String, card: String): Future[Customer] =

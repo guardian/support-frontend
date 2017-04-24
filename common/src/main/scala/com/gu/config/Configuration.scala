@@ -2,7 +2,7 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.paypal.PayPalConfig
-import com.gu.stripe.StripeCredentials
+import com.gu.stripe.StripeConfig
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 
@@ -20,10 +20,7 @@ object Configuration extends LazyLogging{
 
   logger.info(s"Config: $config")
   val backend = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
-  val stripeCredentials = StripeCredentials(
-    secretKey = backend.getString(s"stripe.api.key.secret"),
-    publicKey = backend.getString(s"stripe.api.key.public")
-  )
 
-  val payPalConfig = PayPalConfig.fromConfig(config, stage) //TODO: check this
+  val stripeConfig =  StripeConfig.fromConfig(backend)
+  val payPalConfig = PayPalConfig.fromConfig(backend, stage)
 }

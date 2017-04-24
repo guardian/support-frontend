@@ -20,7 +20,7 @@ import scala.util.Failure
 
 class CreatePaymentMethod extends FutureHandler[Either[StripePaymentFields, PayPalPaymentFields], PaymentMethod] with LazyLogging {
 
-  val stripeService = new StripeService(Configuration.stripeCredentials, RequestRunners.configurableFutureRunner(10.seconds))
+  val stripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds))
   val payPalService = new PayPalService(Configuration.payPalConfig)
 
   override protected def handlerFuture(paymentFields: Either[StripePaymentFields, PayPalPaymentFields], context: Context) = {
