@@ -7,7 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.util.Try
 
 object Configuration extends LazyLogging{
-  val local : Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOCAL")).getOrElse("FALSE").toBoolean).getOrElse(false) //Used to check if we are running locally
+  val local : Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG")).getOrElse("TRUE").toBoolean).getOrElse(true) //Should we load config from S3
   val stage = Stage(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE")).getOrElse(Stages.DEV))
   logger.info(s"local: $local, Stage: $stage")
 
