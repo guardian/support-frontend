@@ -2,9 +2,7 @@ package com.gu.okhttp
 
 import java.util.concurrent.TimeUnit
 
-import cats.data.{Kleisli, ReaderT}
-import com.gu.support.workers.helpers.Timing
-import com.gu.support.workers.monitoring.StatusMetrics
+import cats.data.ReaderT
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{OkHttpClient, Request, Response => OkResponse}
 
