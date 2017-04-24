@@ -1,21 +1,33 @@
+// @flow
+
+// ----- Imports ----- //
+
+import type { Contrib, ContribError, Amount } from '../reducers/reducers';
+
+
 // ----- Functions ----- //
 
-export default function validateOtherAmount(amount, contribType) {
+function validateOtherAmount(amount: Amount, contrib: Contrib): ?ContribError {
 
-  if (amount === '') {
+  if (amount.value === '') {
     return 'noEntry';
   }
 
-  const numericAmount = Number(amount);
+  const numericAmount = Number(amount.value);
 
-  if (numericAmount < 5 && contribType === 'RECURRING') {
+  if (numericAmount < 5 && contrib === 'RECURRING') {
     return 'tooLittleRecurring';
-  } else if (numericAmount < 1 && contribType === 'ONE_OFF') {
+  } else if (numericAmount < 1 && contrib === 'ONE_OFF') {
     return 'tooLittleOneOff';
   } else if (numericAmount > 2000) {
     return 'tooMuch';
   }
 
-  return '';
+  return null;
 
 }
+
+
+// ----- Exports ----- //
+
+export default validateOtherAmount;
