@@ -24,15 +24,17 @@ export type Amount = {
   userDefined: boolean,
 };
 
-export type PaperState = 'PAPER+DIGITAL' | 'PAPER';
+export type Amounts = {
+  recurring: Amount,
+  oneOff: Amount,
+};
+
+export type PaperBundle = 'PAPER+DIGITAL' | 'PAPER';
 
 type ContribState = {
   type: Contrib,
   error: ?ContribError,
-  amount: {
-    recurring: Amount,
-    oneOff: Amount,
-  },
+  amount: Amounts,
 };
 
 
@@ -57,8 +59,8 @@ const initialContrib: ContribState = {
 // ----- Reducers ----- //
 
 function paperBundle(
-  state: PaperState = 'PAPER+DIGITAL',
-  action: Action): PaperState {
+  state: PaperBundle = 'PAPER+DIGITAL',
+  action: Action): PaperBundle {
 
   switch (action.type) {
     case 'CHANGE_PAPER_BUNDLE':

@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import type { Contrib, Amount, PaperState } from '../reducers/reducers';
+import type { Contrib, Amount, PaperBundle } from '../reducers/reducers';
 
 
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'CHANGE_PAPER_BUNDLE', bundle: PaperState }
+  | { type: 'CHANGE_PAPER_BUNDLE', bundle: PaperBundle }
   | { type: 'CHANGE_CONTRIB_TYPE', contribType: Contrib }
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', amount: Amount }
@@ -18,7 +18,7 @@ export type Action =
 
 // ----- Actions ----- //
 
-export function changePaperBundle(bundle: PaperState): Action {
+export function changePaperBundle(bundle: PaperBundle): Action {
   return { type: 'CHANGE_PAPER_BUNDLE', bundle };
 }
 
@@ -37,4 +37,3 @@ export function changeContribAmountRecurring(amount: Amount): Action {
 export function changeContribAmountOneOff(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount };
 }
-
