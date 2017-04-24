@@ -1,3 +1,5 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
@@ -11,6 +13,8 @@ import {
   changePaperBundle,
   changeContribType,
 } from '../actions/bundlesLandingActions';
+
+import type { Contrib, Amounts, PaperBundle } from '../reducers/reducers';
 
 
 // ----- Copy ----- //
@@ -120,6 +124,17 @@ const toggles = {
 };
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  paperBundle: PaperBundle,
+  contribType: Contrib,
+  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
+  togglePaperBundle: (string) => void,
+  toggleContribType: (string) => void,
+};
+
+
 // ----- Functions ----- //
 
 function getContribAttrs({ contribType, contribAmount }) {
@@ -128,14 +143,14 @@ function getContribAttrs({ contribType, contribAmount }) {
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
 
   const params = new URLSearchParams();
-  params.append(amountParam, contribAmount[contType].amount);
+  params.append(amountParam, contribAmount[contType].value);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
   return Object.assign({}, bundles.allContrib, { ctaLink });
 
 }
 
-function getPaperAttrs(bundle) {
+function getPaperAttrs(bundle: PaperBundle) {
 
   if (bundle === 'PAPER+DIGITAL') {
     return Object.assign({}, bundles.allPaper, bundles.paperDigital);
@@ -148,7 +163,7 @@ function getPaperAttrs(bundle) {
 
 // ----- Component ----- //
 
-function Bundles(props) {
+function Bundles(props: PropTypes) {
 
   const contribAttrs = getContribAttrs(props);
   const paperAttrs = getPaperAttrs(props.paperBundle);
@@ -180,16 +195,6 @@ function Bundles(props) {
 }
 
 
-// ----- Proptypes ----- //
-
-Bundles.propTypes = {
-  paperBundle: React.PropTypes.string.isRequired,
-  contribType: React.PropTypes.string.isRequired,
-  togglePaperBundle: React.PropTypes.func.isRequired,
-  toggleContribType: React.PropTypes.func.isRequired,
-};
-
-
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
@@ -205,10 +210,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    togglePaperBundle: (bundle) => {
+    togglePaperBundle: (bundle: PaperBundle) => {
       dispatch(changePaperBundle(bundle));
     },
-    toggleContribType: (period) => {
+    toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },
   };

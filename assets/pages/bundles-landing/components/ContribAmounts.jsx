@@ -1,3 +1,5 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
@@ -11,6 +13,8 @@ import {
   changeContribAmountRecurring,
   changeContribAmountOneOff,
 } from '../actions/bundlesLandingActions';
+
+import type { Contrib, Amounts, ContribError } from '../reducers/reducers';
 
 
 // ----- Setup ----- //
@@ -64,9 +68,26 @@ const contribErrors = {
 };
 
 
+// ----- Types ----- //
+
+// Disabling the linter here because it's just buggy...
+/* eslint-disable react/no-unused-prop-types */
+
+type PropTypes = {
+  contrib: Amounts,
+  contribType: Contrib,
+  contribError: ?ContribError,
+  predefinedRecurringAmount: (string) => void,
+  predefinedOneOffAmount: (string) => void,
+  userDefinedAmount: (string) => void,
+};
+
+/* eslint-enable react/no-unused-prop-types */
+
+
 // ----- Functions ----- //
 
-function errorMessage(error) {
+function errorMessage(error: ?ContribError) {
 
   if (error) {
     return <InfoText text={contribErrors[error]} />;
@@ -76,23 +97,28 @@ function errorMessage(error) {
 
 }
 
-function getAttrs(props) {
-
-  const contrType = props.contribType === 'RECURRING' ? 'recurring' : 'oneOff';
-  const userDefined = props.contrib[contrType].userDefined;
-  let toggleAction;
+function getAttrs(props: PropTypes) {
 
   if (props.contribType === 'RECURRING') {
-    toggleAction = props.predefinedRecurringAmount;
-  } else {
-    toggleAction = props.predefinedOneOffAmount;
+
+    const userDefined = props.contrib.recurring.userDefined;
+
+    return {
+      toggleAction: props.predefinedRecurringAmount,
+      checked: !userDefined ? props.contrib.recurring.value : null,
+      toggles: amountToggles.recurring,
+      selected: props.contrib.recurring.userDefined,
+    };
+
   }
 
+  const userDefined = props.contrib.oneOff.userDefined;
+
   return {
-    toggleAction,
-    checked: !userDefined ? props.contrib[contrType].amount : null,
-    toggles: amountToggles[contrType],
-    selected: props.contrib[contrType].userDefined,
+    toggleAction: props.predefinedRecurringAmount,
+    checked: !userDefined ? props.contrib.recurring.value : null,
+    toggles: amountToggles.recurring,
+    selected: props.contrib.recurring.userDefined,
   };
 
 }
@@ -100,7 +126,7 @@ function getAttrs(props) {
 
 // ----- Component ----- //
 
-function ContribAmounts(props) {
+function ContribAmounts(props: PropTypes) {
 
   const attrs = getAttrs(props);
 
@@ -124,14 +150,6 @@ function ContribAmounts(props) {
 }
 
 
-// ----- Proptypes ----- //
-
-ContribAmounts.propTypes = {
-  contribError: React.PropTypes.string.isRequired,
-  userDefinedAmount: React.PropTypes.func.isRequired,
-};
-
-
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
@@ -147,14 +165,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    predefinedRecurringAmount: (amount) => {
-      dispatch(changeContribAmountRecurring({ amount, userDefined: false }));
+    predefinedRecurringAmount: (value: string) => {
+      dispatch(changeContribAmountRecurring({ value, userDefined: false }));
     },
-    predefinedOneOffAmount: (amount) => {
-      dispatch(changeContribAmountOneOff({ amount, userDefined: false }));
+    predefinedOneOffAmount: (value: string) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
     },
-    userDefinedAmount: (amount) => {
-      dispatch(changeContribAmount({ amount, userDefined: true }));
+    userDefinedAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
     },
   };
 
