@@ -1,0 +1,55 @@
+// This file contains variable and classes definition related to the layout of
+// the project.
+
+// Spacing variables
+// h stands for horizontal
+// v stands for vertical
+// =============================================================================
+$gu-h-spacing: 20px;
+$gu-v-spacing: 12px;
+
+
+// Margin
+// =============================================================================
+
+// Standard margin for the content
+
+.gu-content-margin {
+
+  @include mq($from: mobile) {
+    padding: 0 10px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    padding: 0 20px;
+  }
+
+  @include mq($from: phablet) {
+    max-width: 660px;
+    padding: 0 auto;
+  }
+
+  @include mq($from: tablet) {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  @include mq($from: desktop) {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  @include mq($from: leftCol) {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  @include mq($from: wide) {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+}

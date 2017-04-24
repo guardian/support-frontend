@@ -154,7 +154,7 @@ function Bundles(props) {
   const paperAttrs = getPaperAttrs(props.paperBundle);
 
   return (
-    <div className="bundles">
+    <section className="bundles gu-content-margin">
       <Bundle {...contribAttrs}>
         <RadioToggle
           {...toggles.contribType}
@@ -174,7 +174,7 @@ function Bundles(props) {
         />
         <FeatureList listItems={paperAttrs.listItems} />
       </Bundle>
-    </div>
+    </section>
   );
 
 }

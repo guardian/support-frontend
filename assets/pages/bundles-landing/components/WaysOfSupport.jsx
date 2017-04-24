@@ -33,10 +33,10 @@ const WaysOfSupport = () => {
   const waysOfSupportRendered = waysOfSupport.map(x => <WayOfSupport {...x} />);
 
   return (
-    <div className="ways-of-support">
+    <section className="ways-of-support gu-content-margin">
       <SimpleHeading heading="other ways you can support us" />
       {waysOfSupportRendered}
-    </div>
+    </section>
   );
 };
 
