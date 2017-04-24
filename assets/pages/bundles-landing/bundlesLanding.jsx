@@ -6,13 +6,14 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import Bundles from './components/Bundles';
+
 import WaysOfSupport from './components/WaysOfSupport';
-import reducer from './reducers/paperBundle';
+import reducer from './reducers/reducers';
 
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, 'PAPER+DIGITAL');
+const store = createStore(reducer);
 
 
 // ----- Render ----- //
