@@ -1,4 +1,4 @@
-package com.gu.support.workers.helpers
+package com.gu.support.workers.encoding
 
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
 import io.circe.{Decoder, DecodingFailure, HCursor}

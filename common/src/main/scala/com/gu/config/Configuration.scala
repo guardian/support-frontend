@@ -1,6 +1,8 @@
 package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
+import com.gu.paypal.PayPalConfig
+import com.gu.stripe.StripeCredentials
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 
@@ -22,4 +24,6 @@ object Configuration extends LazyLogging{
     secretKey = backend.getString(s"stripe.api.key.secret"),
     publicKey = backend.getString(s"stripe.api.key.public")
   )
+
+  val payPalConfig = PayPalConfig.fromConfig(config, stage) //TODO: check this
 }

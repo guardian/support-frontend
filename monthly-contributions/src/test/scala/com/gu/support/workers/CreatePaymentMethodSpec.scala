@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.model.PaymentMethod
+import com.gu.zuora.soap.model.PaymentMethod
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.DecodingFailure
 import org.scalatest.mockito.MockitoSugar

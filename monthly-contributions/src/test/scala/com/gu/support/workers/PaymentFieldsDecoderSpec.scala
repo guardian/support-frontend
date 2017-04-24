@@ -1,6 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.support.workers.helpers.PaymentFieldsDecoder.decodePaymentFields
+import com.gu.support.workers.encoding.PaymentFieldsDecoder.decodePaymentFields
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
