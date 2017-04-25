@@ -1,11 +1,23 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  onFocus: (string) => void,
+  onInput: (string) => void,
+  selected: ?boolean,
+  placeholder: ?string,
+};
+
+
 // ----- Component ----- //
 
-export default function NumberInput(props) {
+export default function NumberInput(props: PropTypes) {
 
   const selectedClass = props.selected ? ' component-number-input--selected' : '';
 
@@ -14,8 +26,8 @@ export default function NumberInput(props) {
       className={`component-number-input${selectedClass}`}
       type="number"
       placeholder={props.placeholder}
-      onFocus={e => props.onFocus(e.target.value)}
-      onInput={e => props.onInput(e.target.value)}
+      onFocus={e => props.onFocus(e.target.value || '')}
+      onInput={e => props.onInput(e.target.value || '')}
     />
   );
 
@@ -25,15 +37,6 @@ export default function NumberInput(props) {
 // ----- Proptypes ----- //
 
 NumberInput.defaultProps = {
-  onFocus: () => {},
-  onInput: () => {},
   selected: false,
   placeholder: null,
-};
-
-NumberInput.propTypes = {
-  onFocus: React.PropTypes.func,
-  onInput: React.PropTypes.func,
-  selected: React.PropTypes.bool,
-  placeholder: React.PropTypes.string,
 };

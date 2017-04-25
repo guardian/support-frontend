@@ -1,3 +1,5 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
@@ -7,10 +9,25 @@ import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import InfoText from 'components/infoText/infoText';
 import CtaLink from 'components/ctaLink/ctaLink';
 
+import type { Children } from 'react';
+
+
+// ----- Types ----- //
+
+type PropTypes = {
+  heading: string,
+  subheading: string,
+  infoText: string,
+  ctaText: string,
+  ctaLink: string,
+  modifierClass: string,
+  children?: Children,
+};
+
 
 // ----- Component ----- //
 
-function Bundle(props) {
+function Bundle(props: PropTypes) {
 
   let className = 'bundles__bundle';
 
@@ -40,16 +57,6 @@ Bundle.defaultProps = {
   infoText: '',
   modifierClass: '',
   children: null,
-};
-
-Bundle.propTypes = {
-  heading: React.PropTypes.string.isRequired,
-  subheading: React.PropTypes.string,
-  infoText: React.PropTypes.string,
-  ctaText: React.PropTypes.string.isRequired,
-  ctaLink: React.PropTypes.string.isRequired,
-  modifierClass: React.PropTypes.string,
-  children: React.PropTypes.elements,
 };
 
 

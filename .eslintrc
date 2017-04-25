@@ -1,22 +1,25 @@
 {
+    "parser": "babel-eslint",
     "extends": [
         "eslint:recommended",
-		"airbnb"
+		"airbnb",
+        "plugin:flowtype/recommended",
     ],
     "env": {
         "amd": true,
         "browser": true,
-        "node": true
+        "node": true,
     },
     "parserOptions": {
-        "ecmaVersion": 6
+        "ecmaVersion": 6,
     },
-    "plugins" : [
-      "react"
+    "plugins": [
+      "react",
+      "flowtype",
     ],
-    "globals"   : {
+    "globals": {
         "guardian": true,
-        "React" : true
+        "React": true,
     },
     "rules": {
         "curly": [2, "all"],
@@ -29,6 +32,9 @@
         "padded-blocks": "off",
     },
     "settings": {
-        "import/resolver": "webpack"
-    }
+        "import/resolver": "webpack",
+        "flowtype": {
+            "onlyFilesWithFlowAnnotation": true,
+        },
+    },
 }

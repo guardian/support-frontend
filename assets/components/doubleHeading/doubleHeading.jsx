@@ -1,11 +1,21 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 
+// ---- Types ----- //
+
+type PropTypes = {
+  heading: string,
+  subheading: ?string,
+};
+
+
 // ----- Component ----- //
 
-export default function DoubleHeading(props) {
+export default function DoubleHeading(props: PropTypes) {
 
   const subhead = (
     <h2 className="component-double-heading__subheading">
@@ -29,9 +39,4 @@ export default function DoubleHeading(props) {
 
 DoubleHeading.defaultProps = {
   subheading: '',
-};
-
-DoubleHeading.propTypes = {
-  heading: React.PropTypes.string.isRequired,
-  subheading: React.PropTypes.string,
 };

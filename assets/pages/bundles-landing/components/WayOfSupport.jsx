@@ -1,3 +1,5 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
@@ -7,9 +9,20 @@ import InfoText from 'components/infoText/infoText';
 import SimpleHeading from 'components/simpleHeading/simpleHeading';
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  heading: string,
+  infoText: string,
+  ctaText: string,
+  ctaLink: string,
+  modifierClass: ?string,
+};
+
+
 // ----- Component ----- //
 
-const WayOfSupport = (props) => {
+const WayOfSupport = (props: PropTypes) => {
 
   let className = 'ways-of-support__way';
 
@@ -35,13 +48,6 @@ WayOfSupport.defaultProps = {
   modifierClass: '',
 };
 
-WayOfSupport.propTypes = {
-  heading: React.PropTypes.string.isRequired,
-  infoText: React.PropTypes.string,
-  ctaText: React.PropTypes.string.isRequired,
-  ctaLink: React.PropTypes.string.isRequired,
-  modifierClass: React.PropTypes.string,
-};
 
 // ----- Exports ----- //
 

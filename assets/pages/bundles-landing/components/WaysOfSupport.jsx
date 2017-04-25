@@ -1,3 +1,5 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
@@ -41,4 +43,3 @@ const WaysOfSupport = () => {
 };
 
 export default WaysOfSupport;
-

@@ -1,11 +1,20 @@
+// @flow
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 
+// ---- Types ----- //
+
+type PropTypes = {
+  heading: string,
+};
+
+
 // ----- Component ----- //
 
-const SimpleHeading = props => (
+const SimpleHeading = (props: PropTypes) => (
   <div className="component-simple-heading">
     <h1 className="component-simple-heading__heading">
       { props.heading }
@@ -13,11 +22,6 @@ const SimpleHeading = props => (
   </div>
 );
 
-// ----- Proptypes ----- //
-
-SimpleHeading.propTypes = {
-  heading: React.PropTypes.string.isRequired,
-};
 
 // ----- Exports ----- //
 
