@@ -21,6 +21,8 @@ lazy val `monthly-contributions` = project
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
     riffRaffPackageName := "monthly-contributions",
     riffRaffManifestProjectName := s"support::monthly-contributions",
+    riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
+    riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
     riffRaffPackageType := (packageBin in Universal).value,
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblySettings,
