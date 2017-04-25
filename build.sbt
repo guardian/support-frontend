@@ -19,7 +19,7 @@ lazy val `monthly-contributions` = project
   .settings(
     name := "monthly-contributions",
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
-    riffRaffPackageType := (packageBin in Universal).value,
+    riffRaffPackageType := assembly.value,
     riffRaffManifestProjectName := s"support:${name.value}",
     riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
     riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
