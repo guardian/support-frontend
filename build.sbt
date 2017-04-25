@@ -17,9 +17,10 @@ lazy val `monthly-contributions` = project
   .in(file("monthly-contributions"))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
   .settings(
-    name := "guardian-support-monthly-contributions-lambdas",
+    name := "monthly-contributions",
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
-    riffRaffPackageName := "guardian-support-monthly-contributions-lambdas",
+    riffRaffPackageName := "monthly-contributions",
+    riffRaffManifestProjectName := s"support::monthly-contributions",
     riffRaffPackageType := (packageBin in Universal).value,
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblySettings,
