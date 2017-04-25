@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Testing step function deployment"
+Description: "Monthly contributions state machine"
 
 Parameters:
   Stage:
@@ -53,7 +53,7 @@ Resources:
 
 $lambdas
 
-  StateMachinePROD:
+  MonthlyContributionsPROD:
     Type: "AWS::StepFunctions::StateMachine"
     Condition: CreateProdResources
     Properties:
@@ -64,7 +64,7 @@ $lambdas
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
-  StateMachineCODE:
+  MonthlyContributionsCODE:
     Type: "AWS::StepFunctions::StateMachine"
     Condition: CreateCodeResources
     Properties:
