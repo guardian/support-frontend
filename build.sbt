@@ -27,7 +27,7 @@ lazy val `monthly-contributions` = project
     riffRaffUploadArtifactBucket := Option("riffraff-artifact"),
     riffRaffUploadManifestBucket := Option("riffraff-builds"),
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
-    assemblySettings,
+    assemblyJarName := s"${name.value}.jar",
     libraryDependencies ++= monthlyContributionsDependencies
   )
   .settings(Settings.shared: _*)

@@ -6,7 +6,7 @@ deployments:
     app: workers
     parameters:
       templatePath: cfn.yaml
-  guardian-support-monthly-contributions-lambdas:
+  monthly-contributions:
     type: aws-lambda
     parameters:
       bucket: support-workers-dist
@@ -15,5 +15,5 @@ deployments:
         - "-CreateSalesForceContactLambda-"
         - "-CreateZuoraSubscriptionLambda-"
         - "-FlakeyServiceLambda-"
-      fileName: guardian-support-monthly-contributions.jar
+      fileName: monthly-contributions.jar
     dependencies: [cfn]
