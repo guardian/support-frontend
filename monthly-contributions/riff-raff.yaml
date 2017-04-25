@@ -11,7 +11,7 @@ deployments:
     parameters:
       bucket: support-workers-dist
       functionNames:
-        - "-CreatePaymetMethodLambda-"
+        - "-CreatePaymentMethodLambda-"
         - "-CreateSalesForceContactLambda-"
         - "-CreateZuoraSubscriptionLambda-"
         - "-FlakeyServiceLambda-"
