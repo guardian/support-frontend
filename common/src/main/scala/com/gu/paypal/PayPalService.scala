@@ -1,11 +1,15 @@
 package com.gu.paypal
 
+import java.util.NoSuchElementException
+
 import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{FormBody, Request, Response}
+
+import scala.util.Try
 
 class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
 
@@ -64,7 +68,13 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
 
   // Takes an NVP response and retrieves a given parameter as a string.
   private def retrieveNVPParam(response: QueryString, paramName: String) =
-    response.paramMap(paramName).head
+    try {
+      response.paramMap(paramName).head
+    } catch {
+      case _: NoSuchElementException =>
+        val errorMessage = Try(response.paramMap("L_LONGMESSAGE0").head).getOrElse(response.toString)
+        throw new PayPalError(errorMessage)
+    }
 
   def retrieveEmail(baid: String) = {
     val params = Map(
@@ -76,7 +86,7 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
   }
 
   // Sets up a payment by contacting PayPal and returns the token.
-  def retrieveToken(returnUrl : String, cancelUrl : String)(billingDetails: PayPalBillingDetails) = {
+  def retrieveToken(returnUrl: String, cancelUrl: String)(billingDetails: PayPalBillingDetails) = {
     val paymentParams = Map(
       "METHOD" -> "SetExpressCheckout",
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
@@ -101,4 +111,7 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
 
     retrieveNVPParam(nvpRequest(agreementParams), "BILLINGAGREEMENTID")
   }
+
+  class PayPalError(message: String) extends Throwable
+
 }

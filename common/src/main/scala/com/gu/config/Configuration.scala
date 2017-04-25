@@ -18,7 +18,6 @@ object Configuration extends LazyLogging{
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
-  logger.info(s"Config: $config")
   val backend = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
 
   val stripeConfig =  StripeConfig.fromConfig(backend)

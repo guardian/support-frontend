@@ -6,22 +6,22 @@ import com.gu.i18n.CountryGroup
 import com.gu.okhttp.RequestRunners
 import com.gu.paypal.PayPalService
 import com.gu.stripe.StripeService
+import com.gu.support.workers.encoding.PaymentFieldsDecoder.decodePaymentFields
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
+import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto.exportEncoder
-import com.gu.support.workers.encoding.PaymentFieldsDecoder.decodePaymentFields
-import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Failure
 
 
-class CreatePaymentMethod extends FutureHandler[Either[StripePaymentFields, PayPalPaymentFields], PaymentMethod] with LazyLogging {
-
-  val stripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds))
-  val payPalService = new PayPalService(Configuration.payPalConfig)
+class CreatePaymentMethod(
+                           stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
+                           payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
+                         ) extends FutureHandler[Either[StripePaymentFields, PayPalPaymentFields], PaymentMethod] with LazyLogging {
 
   override protected def handlerFuture(paymentFields: Either[StripePaymentFields, PayPalPaymentFields], context: Context) = {
     logger.info(s"paymentFields: $paymentFields")
@@ -32,15 +32,17 @@ class CreatePaymentMethod extends FutureHandler[Either[StripePaymentFields, PayP
   }
 
   def createStripePaymentMethod(stripe: StripePaymentFields) = for {
-    stripeCustomer <- stripeService.Customer.create(stripe.userId, stripe.stripeToken).andThen {
-      case Failure(e) => logger.warn(s"Could not create Stripe customer for user ${stripe.userId}", e)
+    stripeCustomer <- stripeService.createCustomer(stripe.userId, stripe.stripeToken).andThen {
+      case Failure(e) => logger.warn(s"Could not create Stripe customer for user ${
+        stripe.userId
+      }", e)
     }
   } yield {
     val card = stripeCustomer.card
     CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4, CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
   }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields) = Future{
+  def createPayPalPaymentMethod(payPal: PayPalPaymentFields) = Future {
     val payPalEmail = payPalService.retrieveEmail(payPal.baid)
     PayPalReferenceTransaction(payPal.baid, payPalEmail)
   }

@@ -1,6 +1,6 @@
 package com.gu.config.loaders
 
-import com.gu.config.{Stage, Stages}
+import com.gu.config.Stage
 import com.typesafe.config.Config
 
 trait PrivateConfigLoader {
@@ -11,10 +11,10 @@ trait PrivateConfigLoader {
   * Loads private config from either /etc/gu or S3 depending on the environment
   */
 object PrivateConfigLoader{
-  def forEnvironment(local: Boolean) = if (local) {
-    new LocalLoader
+  def forEnvironment(loadFromS3: Boolean) = if (loadFromS3) {
+    new S3Loader
   }
   else {
-    new S3Loader
+    new LocalLoader
   }
 }

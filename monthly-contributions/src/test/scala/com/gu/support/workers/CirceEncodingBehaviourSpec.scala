@@ -3,8 +3,8 @@ package com.gu.support.workers
 import com.gu.zuora.soap.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
-import io.circe.syntax._
 import io.circe.parser._
+import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
 
 class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging {

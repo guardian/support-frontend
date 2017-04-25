@@ -1,8 +1,10 @@
 package com.gu
 
 import java.io.IOException
-import okhttp3.{Callback, OkHttpClient, Request, Response, Call}
+
 import com.typesafe.scalalogging.LazyLogging
+import okhttp3._
+
 import scala.concurrent.{Future, Promise}
 
 package object okhttp {

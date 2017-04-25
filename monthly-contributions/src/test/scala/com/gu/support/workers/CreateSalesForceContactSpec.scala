@@ -16,7 +16,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class CreateSalesForceContactSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
 
-  import com.gu.support.workers.Conversions.{InputStreamConversions, FromOutputStream}
+  import com.gu.support.workers.Conversions.{FromOutputStream, InputStreamConversions}
   import io.circe.generic.auto._
 
   "CreateSalesForceContact lambda" should "accept and return valid json" in {
