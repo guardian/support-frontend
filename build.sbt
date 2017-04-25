@@ -19,6 +19,7 @@ lazy val `monthly-contributions` = project
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
     riffRaffPackageName := "guardian-support-monthly-contributions-lambdas",
     riffRaffPackageType := (packageBin in Universal).value,
+    riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblySettings,
     libraryDependencies ++= monthlyContributionsDependencies
   )

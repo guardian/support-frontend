@@ -1,0 +1,13 @@
+CreateSalesForceContactLambda:
+  Type: "AWS::Lambda::Function"
+  Description: "Step 2. Create SalesForce contact"
+  Properties:
+    FunctionName: !Sub ${Stack}-CreateSalesForceContactLambda-${Stage}
+    Handler: "com.gu.support.workers.lambdas.CreateSalesForceContact::handleRequest"
+    MemorySize: 256
+    Role: !GetAtt [ LambdaExecutionRole, Arn ]
+    Code:
+      S3Bucket: support-workers-dist
+      S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+    Runtime: "java8"
+    Timeout: "60"

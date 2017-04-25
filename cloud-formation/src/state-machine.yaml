@@ -1,0 +1,25 @@
+Comment: Carries out the steps needed to create a Monthly Contributor
+StartAt: CreatePaymentMethod
+States:
+  CreatePaymentMethod:
+    Type: Task
+    Resource: "$${CreatePaymentMethodLambda.Arn}"
+    Next: CreateSalesForceContact
+  CreateSalesForceContact:
+    Type: Task
+    Resource: "$${CreateSalesForceContactLambda.Arn}"
+    Next: CreateZuoraSubscription
+  CreateZuoraSubscription:
+    Type: Task
+    Resource: "$${CreateZuoraSubscriptionLambda.Arn}"
+    Next: FlakeyService
+  FlakeyService:
+    Type: Task
+    Resource: "$${FlakeyServiceLambda.Arn}"
+    Retry:
+    - ErrorEquals:
+      - com.gu.support.workers.exceptions.NonFatalException
+      IntervalSeconds: 1
+      MaxAttempts: 2
+      BackoffRate: 2
+    End: true
