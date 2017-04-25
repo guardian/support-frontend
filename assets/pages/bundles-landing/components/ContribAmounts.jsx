@@ -115,10 +115,10 @@ function getAttrs(props: PropTypes) {
   const userDefined = props.contrib.oneOff.userDefined;
 
   return {
-    toggleAction: props.predefinedRecurringAmount,
-    checked: !userDefined ? props.contrib.recurring.value : null,
-    toggles: amountToggles.recurring,
-    selected: props.contrib.recurring.userDefined,
+    toggleAction: props.predefinedOneOffAmount,
+    checked: !userDefined ? props.contrib.oneOff.value : null,
+    toggles: amountToggles.oneOff,
+    selected: props.contrib.oneOff.userDefined,
   };
 
 }
