@@ -9,13 +9,13 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.util.Try
 
 object Configuration extends LazyLogging{
-  val local : Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG")).getOrElse("TRUE").toBoolean).getOrElse(true) //Should we load config from S3
+  val loadFromS3 : Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG")).getOrElse("TRUE").toBoolean).getOrElse(true) //Should we load config from S3
   val stage = Stage(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE")).getOrElse(Stages.DEV))
-  logger.info(s"local: $local, Stage: $stage")
+  logger.info(s"local: $loadFromS3, Stage: $stage")
 
 
   val config = PrivateConfigLoader
-    .forEnvironment(local)
+    .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
   logger.info(s"Config: $config")
