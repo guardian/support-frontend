@@ -24,6 +24,8 @@ lazy val `monthly-contributions` = project
     riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
     riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
     riffRaffManifestVcsUrl  := "git@github.com/guardian/support-workers.git",
+    riffRaffUploadArtifactBucket := Option("riffraff-artifact"),
+    riffRaffUploadManifestBucket := Option("riffraff-builds"),
     riffRaffPackageType := (packageBin in Universal).value,
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblySettings,
