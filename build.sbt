@@ -19,14 +19,13 @@ lazy val `monthly-contributions` = project
   .settings(
     name := "monthly-contributions",
     description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
-    riffRaffPackageName := "monthly-contributions",
-    riffRaffManifestProjectName := s"support::monthly-contributions",
+    riffRaffPackageType := (packageBin in Universal).value,
+    riffRaffManifestProjectName := s"support:${name.value}",
     riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
     riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
     riffRaffManifestVcsUrl  := "git@github.com/guardian/support-workers.git",
     riffRaffUploadArtifactBucket := Option("riffraff-artifact"),
     riffRaffUploadManifestBucket := Option("riffraff-builds"),
-    riffRaffPackageType := (packageBin in Universal).value,
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblySettings,
     libraryDependencies ++= monthlyContributionsDependencies
