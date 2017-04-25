@@ -9,6 +9,10 @@ Parameters:
         - PROD
         - CODE
     Default: CODE
+  Stack:
+    Description: Stack name
+    Type: String
+    Default: support
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
