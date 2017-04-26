@@ -141,14 +141,13 @@
     color: #fff;
   }
 
-	.component-number-input--selected {
-		background-color: gu-colour(comment-main-1);
-		color: #fff;
+  .component-number-input--selected {
+      background-color: gu-colour(comment-main-1);
+      color: #fff;
 
-		&::placeholder {
-			color: #fff;
-			opacity: 0.4;
-		}
-	}
-
+      &::placeholder {
+          color: #fff;
+          opacity: 0.4;
+      }
+  }
 }

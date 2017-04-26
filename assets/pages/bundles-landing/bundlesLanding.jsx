@@ -8,8 +8,8 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import Bundles from './components/Bundles';
-
 import WaysOfSupport from './components/WaysOfSupport';
+import SimpleFooter from '../../components/footers/simpleFooter/simpleFooter';
 import reducer from './reducers/reducers';
 
 
@@ -26,6 +26,8 @@ const content = (
       <Bundles />
       <br style={{ clear: 'both' }} />
       <WaysOfSupport />
+      <br style={{ clear: 'both' }} />
+      <SimpleFooter />
     </div>
   </Provider>
 );
