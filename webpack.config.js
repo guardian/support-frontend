@@ -3,13 +3,18 @@
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = (env) => {
 
   const plugins = [
     new ManifestPlugin({
-      fileName: '../../conf/assets.map',
-      basePath: 'javascripts/',
+      fileName: '../conf/assets.map',
+    }),
+    new ExtractTextPlugin({
+      filename: getPath => getPath('javascripts/[name].[contenthash].css')
+        .replace('javascripts', 'stylesheets'),
+      allChunks: true,
     }),
   ];
   let devServer = {};
@@ -30,14 +35,15 @@ module.exports = (env) => {
 
   return {
     entry: {
+      styles: 'stylesheets/main.scss',
       helloWorldPage: 'pages/hello-world/helloWorld.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
     },
 
     output: {
-      path: path.resolve(__dirname, 'public', 'javascripts'),
+      path: path.resolve(__dirname, 'public'),
       chunkFilename: 'webpack/[chunkhash].js',
-      filename: '[name].[chunkhash].js',
+      filename: 'javascripts/[name].[chunkhash].js',
       publicPath: '/assets/',
     },
 
@@ -63,6 +69,10 @@ module.exports = (env) => {
             presets: ['react', 'es2015'],
             cacheDirectory: '',
           },
+        },
+        {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
         },
       ],
     },
