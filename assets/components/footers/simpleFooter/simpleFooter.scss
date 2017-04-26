@@ -1,0 +1,15 @@
+.simple-footer {
+  background-color: gu-colour(multimedia-support-4);
+}
+
+.simple-footer__content {
+  padding: 2 * $gu-v-spacing;
+}
+
+.simple-footer__copyright {
+  color: gu-colour(neutral-4);
+  font-family: $gu-text-sans-web;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}
