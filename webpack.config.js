@@ -4,6 +4,8 @@ const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const pxtorem = require('postcss-pxtorem');
 
 module.exports = (env) => {
 
@@ -72,7 +74,22 @@ module.exports = (env) => {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
+          use: ExtractTextPlugin.extract({
+            use: [
+              {
+                loader: 'css-loader',
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  plugins: [pxtorem(), autoprefixer()],
+                },
+              },
+              {
+                loader: 'sass-loader',
+              },
+            ],
+          }),
         },
       ],
     },
