@@ -26,6 +26,7 @@ $gu-v-spacing: 12px;
 
   @include mq($from: phablet) {
     max-width: 660px;
+    margin: 0 auto;
     padding: 0 auto;
   }
 
