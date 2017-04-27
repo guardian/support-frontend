@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
+import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WaysOfSupport from './components/WaysOfSupport';
 import SimpleFooter from '../../components/footers/simpleFooter/simpleFooter';
@@ -23,6 +24,7 @@ const store = createStore(reducer);
 const content = (
   <Provider store={store}>
     <div>
+      <Introduction />
       <Bundles />
       <br style={{ clear: 'both' }} />
       <WaysOfSupport />
