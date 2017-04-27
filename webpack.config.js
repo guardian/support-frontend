@@ -14,6 +14,7 @@ module.exports = (env) => {
   const plugins = [
     new ManifestPlugin({
       fileName: '../conf/assets.map',
+      writeToFileEmit: true,
     }),
     new ExtractTextPlugin({
       filename: getPath => getPath(`javascripts/[name]${isProd ? '.[contenthash]' : ''}.css`)
