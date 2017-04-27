@@ -1,5 +1,9 @@
 @import assets.AssetsResolver
-@(title: String, styles: Html = Html(""), scripts: Html = Html(""))(content: Html)(implicit assets: AssetsResolver)
+@(
+	title: String,
+	styles: Html = Html(""),
+	scripts: Html = Html("")
+)(content: Html)(implicit assets: AssetsResolver)
 
 <!DOCTYPE html>
 <html>

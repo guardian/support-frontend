@@ -110,8 +110,6 @@ function contribution(
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
-      console.log(action);
-
       return Object.assign({}, state, {
         amount: { recurring: state.amount.recurring, oneOff: action.amount },
         error: validateContribution(action.amount, state.type),
