@@ -1,4 +1,9 @@
-@(title: String, styles: Html = Html(""), scripts: Html = Html(""))(content: Html)
+@import assets.AssetsResolver
+@(
+	title: String,
+	styles: Html = Html(""),
+	scripts: Html = Html("")
+)(content: Html)(implicit assets: AssetsResolver)
 
 <!DOCTYPE html>
 <html>
@@ -6,6 +11,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>@title</title>
+	<link rel="stylesheet" href="@assets("styles.css")">
 	@styles
 </head>
 <body>
