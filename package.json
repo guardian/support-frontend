@@ -3,16 +3,15 @@
   "version": "1.0.0",
   "description": "Frontend for the supporter platform.",
   "scripts": {
-    "clean": "echo 'Cleaning Public Folder' &&  rimraf public/*",
-    "validate": "echo 'Validating JS' && npm-run-all --serial lint flow",
-    "lint": "eslint --ext .js --ext .jsx .",
+    "clean": "echo 'Cleaning Public Folder' && rimraf public/*",
+    "validate": "echo 'Validating JS' && npm-run-all lint flow",
     "flow": "flow",
-    "build-dev": "npm-run-all --serial 'webpack -- --config webpack.config.js --env.dev'",
-    "build-prod": "npm-run-all --serial clean validate test 'webpack -- --config webpack.config.js --env.prod'",
+    "lint": "eslint --ext .js --ext .jsx .",
+    "build-dev": "webpack --config webpack.config.js --env.dev",
+    "build-prod": "npm-run-all clean validate test 'webpack -- --config webpack.config.js --env.prod'",
     "webpack": "webpack",
-    "watch": "npm run webpack -- --watch",
-    "devrun": "npm-run-all --serial clean build-dev --parallel watch webpack-dev-server",
     "webpack-dev-server": "webpack-dev-server --port 9111",
+    "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest"
   },
   "repository": {

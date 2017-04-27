@@ -9,19 +9,21 @@ const pxtorem = require('postcss-pxtorem');
 
 module.exports = (env) => {
 
+  const isProd = env && env.prod;
+
   const plugins = [
     new ManifestPlugin({
       fileName: '../conf/assets.map',
     }),
     new ExtractTextPlugin({
-      filename: getPath => getPath('javascripts/[name].[contenthash].css')
+      filename: getPath => getPath(`javascripts/[name]${isProd ? '.[contenthash]' : ''}.css`)
         .replace('javascripts', 'stylesheets'),
       allChunks: true,
     }),
   ];
   let devServer = {};
 
-  if (env && env.prod) {
+  if (isProd) {
     plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
     plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }));
   } else {
@@ -45,7 +47,7 @@ module.exports = (env) => {
     output: {
       path: path.resolve(__dirname, 'public'),
       chunkFilename: 'webpack/[chunkhash].js',
-      filename: 'javascripts/[name].[chunkhash].js',
+      filename: `javascripts/[name]${isProd ? '.[chunkhash]' : ''}.js`,
       publicPath: '/assets/',
     },
 
