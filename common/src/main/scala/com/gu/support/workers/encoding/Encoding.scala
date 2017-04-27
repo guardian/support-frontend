@@ -1,6 +1,7 @@
-package com.gu.support.workers.lambdas
+package com.gu.support.workers.encoding
 
 import java.io.{InputStream, OutputStream}
+
 import cats.syntax.either._
 
 import scala.io.Source

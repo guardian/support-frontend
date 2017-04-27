@@ -2,13 +2,13 @@ package com.gu.okhttp
 
 import java.util.concurrent.TimeUnit
 
-import cats.data.ReaderT
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{OkHttpClient, Request, Response => OkResponse}
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
+
 
 /**
   * These are functions from an OkHttpRequest to an M[Response] which are passed into Clients (such as SimpleClient),
@@ -17,7 +17,6 @@ import scala.language.higherKinds
 object RequestRunners extends LazyLogging {
   lazy val client = new OkHttpClient()
   type FutureHttpClient = Request => Future[OkResponse]
-  type LoggingHttpClient[A[_]] = Request => ReaderT[A, String, OkResponse]
 
   /**
     * Standard no frills run this request and return a response asynchronously

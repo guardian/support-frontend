@@ -1,5 +1,5 @@
+import sbt.Keys.{scalacOptions, _}
 import sbt._
-import Keys.{scalacOptions, _}
 
 object Settings {
   val appVersion = "0.1-SNAPSHOT"
