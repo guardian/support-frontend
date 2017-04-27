@@ -1,0 +1,19 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: workers
+    parameters:
+      templatePath: cfn.yaml
+  monthly-contributions:
+    type: aws-lambda
+    parameters:
+      bucket: support-workers-dist
+      functionNames:
+        - "-CreatePaymentMethodLambda-"
+        - "-CreateSalesForceContactLambda-"
+        - "-CreateZuoraSubscriptionLambda-"
+        - "-FlakeyServiceLambda-"
+      fileName: monthly-contributions.jar
+    dependencies: [cfn]
