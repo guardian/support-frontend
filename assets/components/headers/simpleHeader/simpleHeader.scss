@@ -1,0 +1,34 @@
+.component-simple-header {
+	background-color: gu-colour(guardian-brand);
+	height: 44px;
+
+	.svg-guardian-titlepiece {
+		display: block;
+		height: 32px;
+		float: right;
+	}
+
+	@include mq($from: mobileMedium) {
+		height: 54px;
+
+		.svg-guardian-titlepiece {
+			height: 42px;
+		}
+	}
+
+	@include mq($from: mobileLandscape) {
+		height: 73px;
+
+		.svg-guardian-titlepiece {
+			height: 49px;
+		}
+	}
+
+	@include mq($from: tablet) {
+		height: 92px;
+
+		.svg-guardian-titlepiece {
+			height: 68px;
+		}
+	}
+}
