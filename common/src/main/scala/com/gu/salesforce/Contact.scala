@@ -5,10 +5,10 @@ import com.gu.i18n.{Country, CountryGroup}
 
 import scala.language.implicitConversions
 
-trait ContactId {
-  def salesforceContactId: String
-  def salesforceAccountId: String
-}
+case class ContactId(
+  salesforceContactId: String,
+  salesforceAccountId: String
+)
 
 case class Contact(
   identityId: String,
@@ -24,6 +24,6 @@ case class Contact(
   mailingState: Option[String],
   mailingPostcode: Option[String],
   mailingCountry: Option[String]
-) extends ContactId {
+) {
   lazy val mailingCountryParsed: Option[Country] = mailingCountry.flatMap(CountryGroup.countryByName)
 }

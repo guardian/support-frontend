@@ -2,7 +2,6 @@ package com.gu.salesforce
 
 import akka.actor.Scheduler
 import akka.agent.Agent
-import cats.{Applicative, Monad}
 import com.gu.helpers.{Retry, Timing}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.typesafe.scalalogging.LazyLogging
@@ -141,8 +140,10 @@ abstract class Scalaforce(implicit ec: ExecutionContext) extends LazyLogging {
         data + (key -> JsString(value))
       }.getOrElse(data)
 
+      val json = Json.obj("newContact" -> updateData)
+      logger.info(s"Upsert json: $json")
       Timing.record(serviceName, "Upsert Contact") {
-        post("services/apexrest/RegisterCustomer/v1/", Json.obj("newContact" -> updateData))
+        post("services/apexrest/RegisterCustomer/v1/", json)
       }.map { response =>
         val rawResponse = response.body().string()
         val result = SFContactRecord.readResponse(jsonParse(rawResponse))
