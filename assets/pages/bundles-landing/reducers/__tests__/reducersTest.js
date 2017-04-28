@@ -62,4 +62,20 @@ describe('reducer tests', () => {
     expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
     expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
   });
+
+  it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
+
+    const amount: Amount = {
+      value: '45',
+      userDefined: true
+    };
+    const action = {
+      type: 'CHANGE_CONTRIB_AMOUNT_RECURRING',
+      amount,
+    };
+
+    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
+    expect(reducer(initialState, action).contribution.amount.oneOff.value).toEqual('25');
+  });
+  
 });
