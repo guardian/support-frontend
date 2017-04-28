@@ -12,45 +12,56 @@ $gu-v-spacing: 12px;
 // Margin
 // =============================================================================
 
-// Standard margin for the content
+// Standard sizes and margins for the content and headers.
+.gu-content-margin, .gu-header-margin {
+  box-sizing: border-box;
 
+  @include mq($from: phablet) {
+    width: gu-breakpoint(phablet);
+    margin: 0 auto;
+  }
+
+  @include mq($from: tablet) {
+    width: gu-breakpoint(tablet);
+  }
+
+  @include mq($from: desktop) {
+    width: gu-breakpoint(desktop);
+  }
+
+  @include mq($from: leftCol) {
+    width: gu-breakpoint(leftCol);
+  }
+
+  @include mq($from: wide) {
+    width: gu-breakpoint(wide);
+  }
+}
+
+// The paddings at different breakpoints for the content.
 .gu-content-margin {
-
   @include mq($from: mobile) {
-    padding: 0 10px;
+    padding: 0 ($gu-h-spacing / 2);
   }
 
   @include mq($from: mobileLandscape) {
-    padding: 0 20px;
+    padding: 0 $gu-h-spacing;
   }
 
   @include mq($from: phablet) {
-    max-width: 660px;
-    margin: 0 auto;
     padding: 0 auto;
   }
 
   @include mq($from: tablet) {
-    max-width: 740px;
-    margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 $gu-h-spacing;
   }
+}
 
-  @include mq($from: desktop) {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
+// The paddings at different breakpoints for the headers.
+.gu-header-margin {
+  padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2);
 
-  @include mq($from: leftCol) {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  @include mq($from: wide) {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 20px;
+  @include mq($from: mobileLandscape) {
+    padding: $gu-v-spacing $gu-h-spacing;
   }
 }
