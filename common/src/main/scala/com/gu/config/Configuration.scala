@@ -2,6 +2,7 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.paypal.PayPalConfig
+import com.gu.salesforce.SalesforceConfig
 import com.gu.stripe.StripeConfig
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
@@ -22,4 +23,5 @@ object Configuration extends LazyLogging{
 
   val stripeConfig =  StripeConfig.fromConfig(backend)
   val payPalConfig = PayPalConfig.fromConfig(backend, stage)
+  val salesforceConfig = SalesforceConfig.fromConfig(backend, stage)
 }

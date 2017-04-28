@@ -1,15 +1,14 @@
 Support Workers
 ===============
 
-Step functions to provide the backend for support.theguardian.com
+This project provides the backend checkout workflows for support.theguardian.com.
 
-Interfaces with:
+It uses [AWS Step Functions](https://aws.amazon.com/step-functions/) to coordinate the various interactions with 3rd party systems
+such as Salesforce, Zuora, Paypal and Stripe and to provide retry functionality in the event of service outages.
 
-* Identity
-* Salesforce
-* Zuora
-* Paypal
-* Stripe
+## Project structure
+The project is divided up into a common module, which contains code used by all of the step functions, and separate
+modules for each of the step functions.
 
 ## Setup
 
@@ -19,8 +18,6 @@ brew install awscli
 ```
 
 Retrieve membership developer AWS credentials from [Janus](https://github.com/guardian/janus) (you will need access to the Janus repo).
-
-
 
 ## Config
 Config for the app is split into public values in [application.conf](common/src/main/resources/application.conf)
@@ -35,8 +32,7 @@ When running locally you can avoid loading config from S3 on each run and load i
 * Set an environment variable to false by adding the following to your bashrc:
 
     `export GU_SUPPORT_WORKERS_LOAD_S3_CONFIG=false`
-    
-    
+      
 ## Json 
 This project uses [Circe](https://github.com/circe/circe) to serialise and deserialise json. 
 Circe has some rather specific behaviour when it comes to handling class hierarchies which it is important to be aware of:

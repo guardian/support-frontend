@@ -1,4 +1,4 @@
-package com.gu.support.workers.helpers
+package com.gu.helpers
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.typesafe.scalalogging.LazyLogging

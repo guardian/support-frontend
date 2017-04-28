@@ -2,7 +2,7 @@ package com.gu.stripe
 
 import com.gu.okhttp.RequestRunners._
 import com.gu.stripe.Stripe._
-import com.gu.support.workers.helpers.WebServiceHelper
+import com.gu.helpers.WebServiceHelper
 import io.circe.generic.auto._
 import okhttp3.Request
 
