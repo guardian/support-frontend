@@ -31,7 +31,7 @@ export type Amounts = {
 
 export type PaperBundle = 'PAPER+DIGITAL' | 'PAPER';
 
-type ContribState = {
+export type ContribState = {
   type: Contrib,
   error: ?ContribError,
   amount: Amounts,

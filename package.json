@@ -14,6 +14,17 @@
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest"
   },
+  "jest": {
+    "transform": {
+      ".*": "./node_modules/babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
+    "verbose": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/guardian/support-frontend.git"
@@ -28,6 +39,7 @@
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-eslint": "^7.2.2",
+    "babel-jest": "^19.0.0",
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
