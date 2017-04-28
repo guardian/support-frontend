@@ -52,7 +52,7 @@ describe('reducer tests', () => {
 
     const amount: Amount = {
       value: '45',
-      userDefined: true
+      userDefined: true,
     };
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT',
@@ -67,7 +67,7 @@ describe('reducer tests', () => {
 
     const amount: Amount = {
       value: '45',
-      userDefined: true
+      userDefined: true,
     };
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT_RECURRING',
@@ -77,5 +77,19 @@ describe('reducer tests', () => {
     expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
     expect(reducer(initialState, action).contribution.amount.oneOff.value).toEqual('25');
   });
-  
+
+  it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
+
+    const amount: Amount = {
+      value: '45',
+      userDefined: true,
+    };
+    const action = {
+      type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF',
+      amount,
+    };
+
+    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
+    expect(reducer(initialState, action).contribution.amount.recurring.value).toEqual('5');
+  });
 });
