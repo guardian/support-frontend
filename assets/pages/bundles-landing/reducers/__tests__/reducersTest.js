@@ -1,6 +1,6 @@
 // @flow
 import reducer from '../reducers';
-import type { Contrib, PaperBundle, ContribState } from '../reducers';
+import type { Contrib, PaperBundle, ContribState, Amount } from '../reducers';
 
 describe('reducer tests', () => {
 
@@ -22,6 +22,7 @@ describe('reducer tests', () => {
   const initialState = { paperBundle: initialPaperBundle, contribution: initialContrib };
 
   it('should return the initial state', () => {
+
     expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
@@ -45,5 +46,20 @@ describe('reducer tests', () => {
     };
 
     expect(reducer(initialState, action).contribution.type).toEqual(contribType);
+  });
+
+  it('should handle CHANGE_CONTRIB_AMOUNT', () => {
+
+    const amount: Amount = {
+      value: '45',
+      userDefined: true
+    };
+    const action = {
+      type: 'CHANGE_CONTRIB_AMOUNT',
+      amount,
+    };
+
+    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
+    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
   });
 });
