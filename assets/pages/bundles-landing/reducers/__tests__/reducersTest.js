@@ -1,5 +1,6 @@
-import reducer from '../reducers'
-import { changePaperBundle, changeContribType, changeContribAmountRecurring, changeContribAmountOneOff } from '../../actions/bundlesLandingActions';
+// @flow
+import reducer from '../reducers';
+import type { Contrib, PaperBundle, ContribState } from '../reducers';
 
 describe('reducer tests', () => {
 
@@ -17,13 +18,32 @@ describe('reducer tests', () => {
       },
     },
   };
-  const intialPaperBundle: PaperBundle = 'PAPER+DIGITAL';
-  const intialState = { paperBundle: intialPaperBundle, contribution: initialContrib };
+  const initialPaperBundle: PaperBundle = 'PAPER+DIGITAL';
+  const initialState = { paperBundle: initialPaperBundle, contribution: initialContrib };
 
   it('should return the initial state', () => {
-    expect(
-      reducer(undefined, {})
-    ).toMatchSnapshot();
-  })
-  
+    expect(reducer(undefined, {})).toMatchSnapshot();
+  });
+
+  it('should handle CHANGE_PAPER_BUNDLE', () => {
+
+    const paperBundle: PaperBundle = 'PAPER';
+    const action = {
+      type: 'CHANGE_PAPER_BUNDLE',
+      bundle: paperBundle,
+    };
+
+    expect(reducer(initialState, action).paperBundle).toEqual(paperBundle);
+  });
+
+  it('should handle CHANGE_CONTRIB_TYPE', () => {
+
+    const contribType: Contrib = 'ONE_OFF';
+    const action = {
+      type: 'CHANGE_CONTRIB_TYPE',
+      contribType,
+    };
+
+    expect(reducer(initialState, action).contribution.type).toEqual(contribType);
+  });
 });
