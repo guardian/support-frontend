@@ -6,6 +6,7 @@ import com.gu.config.Configuration
 import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -44,12 +45,12 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   * It also schedules a background refresh of the token every 15 minutes to avoid it becoming stale - a problem we
   * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
   */
-object AuthService {
+object AuthService extends LazyLogging {
   private val service = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
 
-  def system = ActorSystem("AuthService")
+  private def system = ActorSystem("AuthService")
 
-  val authAgent: Agent[Option[Authentication]] = Agent(None: Option[Authentication])
+  private val authAgent: Agent[Option[Authentication]] = Agent(None: Option[Authentication])
 
   // 15min -> 96 request/day. Failed auth will not override previous access_token.
   def startScheduledAuth() = system.scheduler.schedule(15.minutes, 15.minutes)(service.authorize.map(sendAuth))
@@ -62,10 +63,13 @@ object AuthService {
     })
   }
 
-  private def sendAuth(authentication: Authentication) = authAgent.send(Some(authentication))
+  private def sendAuth(authentication: Authentication) = {
+    logger.info("Successfully retrieved Salesforce authentication token")
+    authAgent.send(Some(authentication))
+  }
 }
 
-class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[Authentication, ScalaforceError] with LazyLogging {
+class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[Authentication, SalesforceErrorResponse] with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -85,24 +89,4 @@ class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit e
     }
   }
 }
-
-//The odd field names on this class are to match with the Salesforce api
-case class UpsertData(newContact: NewContact)
-
-case class NewContact(IdentityID__c: String, Email: String, FirstName: String,
-                      LastName: String,
-                      Allow_Membership_Mail__c: Boolean,
-                      Allow_3rd_Party_Mail__c: Boolean,
-                      Allow_Guardian_Related_Mail__c: Boolean)
-
-trait SalesforceResponse {
-  val Success: Boolean
-  val ErrorString: Option[String]
-}
-
-case class SalesforceContactRecord(Id: String, AccountId: String)
-
-case class SalesforceContactResponse(Success: Boolean, ErrorString: Option[String], ContactRecord: SalesforceContactRecord) extends SalesforceResponse
-
-case class  SalesforceErrorResponse(Success: Boolean, ErrorString: Option[String]) extends Throwable with SalesforceResponse
 
