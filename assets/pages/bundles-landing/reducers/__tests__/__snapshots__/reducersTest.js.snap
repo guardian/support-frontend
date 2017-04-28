@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reducer tests should return the initial state 1`] = `
+Object {
+  "contribution": Object {
+    "amount": Object {
+      "oneOff": Object {
+        "userDefined": false,
+        "value": "25",
+      },
+      "recurring": Object {
+        "userDefined": false,
+        "value": "5",
+      },
+    },
+    "error": null,
+    "type": "RECURRING",
+  },
+  "paperBundle": "PAPER+DIGITAL",
+}
+`;
