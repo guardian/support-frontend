@@ -16,6 +16,7 @@
 //
 // More information is available on the library Github page.
 
+// A map of the breakpoint for the mq mixin.
 $mq-breakpoints: (
 	mobile: 320px,
 	mobileMedium: 375px,
@@ -27,8 +28,10 @@ $mq-breakpoints: (
 	wide: 1300px
 );
 
+// The mq mixin.
 @import 'node_modules/sass-mq/_mq';
 
+// Given a breakpoint name, retrieves the width in pixels.
 @function gu-breakpoint($name) {
 	@return map-get($mq-breakpoints, $name);
 }
