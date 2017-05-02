@@ -12,6 +12,7 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
+import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
 
@@ -30,6 +31,7 @@ const content = (
       <Introduction />
       <Bundles />
       <br style={{ clear: 'both' }} />
+      <WhySupport />
       <WaysOfSupport />
       <SimpleFooter />
     </div>
