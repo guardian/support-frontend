@@ -6,8 +6,6 @@ import React from 'react';
 
 import CtaCircle from 'components/ctaCircle/ctaCircle';
 import InfoText from 'components/infoText/infoText';
-import SimpleHeading from 'components/simpleHeading/simpleHeading';
-
 
 // ----- Types ----- //
 
@@ -24,18 +22,19 @@ type PropTypes = {
 
 const WayOfSupport = (props: PropTypes) => {
 
-  let className = 'ways-of-support__way';
+  const className = 'way-of-support';
+  let rootClassName = className;
 
   if (props.modifierClass) {
-    className = `${className} ${className}--${props.modifierClass}`;
+    rootClassName = `${className} ${className}--${props.modifierClass}`;
   }
 
   return (
-    <div className={className}>
-      <img src="http://placehold.it/300x170" alt="Example" />
-      <SimpleHeading heading={props.heading} />
+    <div className={rootClassName}>
+      <img src="https://placehold.it/300x170" alt="Example" />
+      <h1 className={`${className}__heading`}>{props.heading}</h1>
       <InfoText text={props.infoText} />
-      <CtaCircle text={props.ctaText} url={props.ctaLink} />
+      <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} url={props.ctaLink} />
     </div>
   );
 };
@@ -46,6 +45,7 @@ const WayOfSupport = (props: PropTypes) => {
 WayOfSupport.defaultProps = {
   infoText: '',
   modifierClass: '',
+  ctaModifierClass: '',
 };
 
 
