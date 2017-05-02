@@ -1,19 +1,22 @@
 .component-cta-circle {
 
   display: block;
-  margin: 12px 10px;
+  margin: $gu-v-spacing ($gu-h-spacing/2);
   text-decoration: none;
   color: inherit;
+
 
   @include mq($until: mobileLandscape) {
     margin-bottom: 0;
   }
 
   button {
+
     background-color: gu-colour(neutral-1);
     border-radius: 600px;
     border: none;
     color: #fff;
+    cursor: pointer;
     padding: 7px 8px;
     height: 36px;
     width: 36px;
@@ -31,6 +34,7 @@
     line-height: 20px;
     font-family: $gu-text-sans-web;
     font-weight: bold;
+    vertical-align: super;
   }
 }
 
