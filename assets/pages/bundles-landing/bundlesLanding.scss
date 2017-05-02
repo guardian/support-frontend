@@ -2,6 +2,8 @@
 
   // ----- Page Components ----- //
 
+  // ----- Introduction
+
   .introduction {
 
     background-color: darken(gu-colour(comment-support-2), 5%);
@@ -127,44 +129,244 @@
     }
   }
 
-  .bundles__bundle {
-    width: 300px;
-    padding: 8px 10px 12px;
-    float: left;
-  }
 
-  .bundle__info-text {
-    @include gu-font(copy, 16);
-    color: gu-colour(neutral-1);
-  }
+  // ----- Bundles
 
-  .bundles__bundle--contributions {
-    background-color: gu-colour(multimedia-main-2);
+  .bundles {
 
-    input:checked+label {
-      background-color: gu-colour(comment-main-1);
-      color: #fff;
+    .bundles__bundle {
+      width: 300px;
+      padding: 8px 10px 12px;
+      float: left;
     }
 
-    .contrib-amounts__error-message {
+    .bundle__info-text {
       @include gu-font(copy, 16);
       color: gu-colour(neutral-1);
     }
+
+    .bundles__bundle--contributions {
+      background-color: gu-colour(multimedia-main-2);
+
+      input:checked+label {
+        background-color: gu-colour(comment-main-1);
+        color: #fff;
+      }
+
+      .contrib-amounts__error-message {
+        @include gu-font(copy, 16);
+        color: gu-colour(neutral-1);
+      }
+    }
+
+    .bundles__bundle--digital {
+        background-color: #1db7d7;
+    }
+
+    .bundles__bundle--paper {
+      background-color: #58a1ce;
+
+      input:checked+label {
+  			background-color: gu-colour(guardian-brand-dark);
+  			color: #fff;
+  		}
+    }
+
   }
 
-  .bundles__bundle--digital {
-      background-color: #1db7d7;
+
+  // ----- Why Support
+
+  .why-support {
+
+    background-color: darken(#fff, 5%);
+
+    .why-support__content {
+      flex-direction: row;
+      background-color: #fff;
+      padding-bottom: 8px;
+
+      @include mq($from: desktop) {
+        display: flex;
+      }
+
+      @include mq($from: mobileLandscape) {
+        padding-left: $gu-h-spacing;
+        padding-right: $gu-h-spacing;
+      }
+
+      @include mq($from: tablet) {
+        padding-top: 8px;
+      }
+
+      @include mq($from: desktop) {
+        display: flex;
+        padding: $gu-v-spacing 0 $gu-v-spacing * 2;
+      }
+    }
+
+    .why-support__heading {
+      font-family: 'Guardian Titlepiece Web', sans-serif;
+      color: gu-colour(comment-main-1);
+      font-weight: 400;
+      padding-top: $gu-v-spacing / 2;
+      font-size: 28px;
+      line-height: 28px;
+      width: 240px;
+      margin: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2) 0;
+
+      @include mq($from: tablet) {
+        width: 220px;
+        margin: 0;
+        font-size: 40px;
+        line-height: 37px;
+        text-align: center;
+        flex-basis: 220px;
+        padding-top: 0;
+      }
+
+      @include mq($from: desktop) {
+        font-size: 48px;
+        line-height: 44px;
+        flex-basis: 300px;
+      }
+    }
+
+    .component-body-copy {
+      @include mq($from: tablet) {
+        font-size: 18px;
+        line-height: 22px;
+      }
+    }
+
+    .why-support__top-content, .why-support__bottom-content {
+      flex-basis: 300px;
+      flex-grow: 1;
+    }
+
+    .why-support__top-content {
+      position: relative;
+
+      @include mq($from: desktop) {
+        max-width: 620px;
+        margin-left: 20px;
+      }
+
+      @include mq($from: leftCol) {
+        margin-left: 100px;
+      }
+
+      @include mq($from: wide) {
+        margin-left: 180px;
+      }
+    }
+
+    .why-support__bottom-content {
+      @include mq($until: mobileLandscape) {
+        padding-left: $gu-h-spacing / 2;
+        padding-right: $gu-h-spacing / 2;
+      }
+
+      @include mq($from: tablet) {
+        padding-top: $gu-v-spacing;
+        display: flex;
+      }
+
+      @include mq($from: desktop) {
+        max-width: 300px;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-left: $gu-h-spacing;
+        padding-top: 52px;
+        margin-right: 20px;
+      }
+
+      @include mq($from: leftCol) {
+        margin-right: 100px;
+      }
+
+      @include mq($from: wide) {
+        margin-right: 180px;
+      }
+
+      .component-body-copy {
+        @include mq($from: tablet, $until: desktop) {
+          flex-basis: 380px;
+          // Fix for Safari 8.
+          max-width: 380px;
+          margin-left: $gu-h-spacing;
+        }
+      }
+    }
+
+    .why-support__video-caption {
+      font-size: small;
+      margin-top: $gu-v-spacing / 2;
+      font-family: $gu-text-sans-web;
+      font-size: 12px;
+      line-height: 15px;
+
+      @include mq($from: tablet, $until: desktop) {
+        max-width: 220px;
+        margin-top: 0;
+      }
+
+      @include mq($from: desktop) {
+        order: 1;
+        margin-bottom: 0;
+      }
+
+      .svg-video {
+        height: 8px;
+        fill: gu-colour(comment-main-1);
+        margin-right: 6px;
+      }
+    }
+
+    .why-support__top-copy {
+      @include mq($until: mobileLandscape) {
+        padding-left: $gu-h-spacing / 2;
+        padding-right: $gu-h-spacing / 2;
+      }
+
+      @include mq($from: tablet) {
+        display: flex;
+      }
+
+      @include mq($from: desktop) {
+        justify-content: center;
+      }
+
+      .component-body-copy {
+        @include mq($from: tablet) {
+          flex-basis: 380px;
+          margin-left: $gu-h-spacing;
+          margin-top: $gu-v-spacing / 3;
+        }
+
+        // Fix for Safari 8.
+        @include mq($from: tablet, $until: desktop) {
+          max-width: 380px;
+        }
+
+        @include mq($from: desktop) {
+          margin-top: 52px;
+          margin-bottom: $gu-v-spacing * 3;
+        }
+      }
+
+      & > * {
+        @include mq($from: desktop) {
+          max-width: 300px;
+        }
+      }
+    }
+
   }
 
-  .bundles__bundle--paper {
-    background-color: #58a1ce;
 
-    input:checked+label {
-			background-color: gu-colour(guardian-brand-dark);
-			color: #fff;
-		}
-  }
-
+  // ----- Ways Of Support
+  
   .ways-of-support {
 
     @include mq($from: mobileLandscape) {
