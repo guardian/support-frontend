@@ -15,7 +15,6 @@ type PropTypes = {
   ctaText: string,
   ctaLink: string,
   modifierClass: ?string,
-  ctaModifierClass: ?string,
 };
 
 
@@ -33,9 +32,9 @@ const WayOfSupport = (props: PropTypes) => {
   return (
     <div className={rootClassName}>
       <img src="https://placehold.it/300x170" alt="Example" />
-      <h1 className={`${className}__heading`}>{ props.heading }</h1>
+      <h1 className={`${className}__heading`}>{props.heading}</h1>
       <InfoText text={props.infoText} />
-      <CtaCircle text={props.ctaText} modifierClass={props.ctaModifierClass} url={props.ctaLink} />
+      <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} url={props.ctaLink} />
     </div>
   );
 };

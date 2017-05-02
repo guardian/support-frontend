@@ -190,7 +190,7 @@
       padding-top: 2px;
       font-size: 28px;
       line-height: 28px;
-      width: gs-span(3) + $gu-h-spacing;
+      width: 240px;
       margin: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
 
       @include mq($until: mobileLandscape) {
@@ -259,7 +259,7 @@
       }
     }
 
-    .way-of-support--orange {
+    .way-of-support--gu-events {
       background: gu-colour(comment-main-2);
     }
 

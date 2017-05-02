@@ -5,13 +5,11 @@
   text-decoration: none;
   color: inherit;
 
-
   @include mq($until: mobileLandscape) {
     margin-bottom: 0;
   }
 
   button {
-
     background-color: gu-colour(neutral-1);
     border-radius: 600px;
     border: none;

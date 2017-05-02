@@ -15,16 +15,14 @@ const waysOfSupport = [
     infoText: 'The Patrons tier for those who care deeply about the the Guardian\'s journalism and the imact is has on th world',
     ctaText: 'Become a Patron',
     ctaLink: 'https://membership.theguardian.com/patrons?INTCMP=gdnwb_copts_bundles_landing_default',
-    modifierClass: '',
-    ctaModifierClass: 'patron',
+    modifierClass: 'patron',
   },
   {
     heading: 'Guardian Live events',
     infoText: 'Events, discussions, debates, interviews, festivals, dinners and private views exclusively for Guardian members',
     ctaText: 'Find out about events',
     ctaLink: 'https://membership.theguardian.com/events?INTCMP=gdnwb_copts_bundles_landing_default',
-    modifierClass: 'orange',
-    ctaModifierClass: '',
+    modifierClass: 'gu-events',
   },
 ];
 
