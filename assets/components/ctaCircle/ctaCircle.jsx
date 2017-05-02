@@ -26,16 +26,16 @@ const CtaCircle = (props: PropTypes) => {
   }
   return (
     <a className={className} href={props.url}>
-      <button><Svg svgName="arrow-right-straight"/></button>
+      <button><Svg svgName="arrow-right-straight" /></button>
       <span>{props.text}</span>
     </a>
   );
-}
+};
 
 
 CtaCircle.defaultProps = {
   modifierClass: '',
-}
+};
 
 
 // ----- Exports ----- //

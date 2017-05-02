@@ -4,7 +4,6 @@
 
 import React from 'react';
 
-import SimpleHeading from 'components/simpleHeading/simpleHeading';
 import WayOfSupport from './WayOfSupport';
 
 
@@ -17,6 +16,7 @@ const waysOfSupport = [
     ctaText: 'Become a Patron',
     ctaLink: 'https://membership.theguardian.com/patrons?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: '',
+    ctaModifierClass: 'patron',
   },
   {
     heading: 'Guardian Live events',
@@ -24,6 +24,7 @@ const waysOfSupport = [
     ctaText: 'Find out about events',
     ctaLink: 'https://membership.theguardian.com/events?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: 'orange',
+    ctaModifierClass: '',
   },
 ];
 
@@ -32,12 +33,15 @@ const waysOfSupport = [
 
 const WaysOfSupport = () => {
 
+  const className = 'ways-of-support';
   const waysOfSupportRendered = waysOfSupport.map(x => <WayOfSupport {...x} />);
 
   return (
-    <section className="ways-of-support gu-content-margin">
-      <SimpleHeading heading="other ways you can support us" />
-      {waysOfSupportRendered}
+    <section className={className}>
+      <div className={`${className}__content gu-content-margin`}>
+        <h1 className={`${className}__heading`}>other ways you can support us</h1>
+        {waysOfSupportRendered}
+      </div>
     </section>
   );
 };
