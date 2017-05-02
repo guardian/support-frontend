@@ -2,8 +2,8 @@ package com.gu.salesforce
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
-import com.gu.salesforce.Fixtures.{allowMail, email, idId, name}
-import com.gu.salesforce.Salesforce.{NewContact, SalesforceContactResponse, UpsertData}
+import com.gu.salesforce.Fixtures._
+import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
@@ -23,12 +23,12 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "SalesforceService" should "be able to upsert a customer" in {
     val service = new SalesforceService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
-    val upsertData = UpsertData(NewContact(idId, email, name, name, allowMail, allowMail, allowMail))
+    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
       logger.info(s"Retrieved contact id $response")
       response.Success should be(true)
-      response.ContactRecord.Id should be("003g000001UnFItAAN")
+      response.ContactRecord.Id should be(salesforceId)
     }
   }
 }

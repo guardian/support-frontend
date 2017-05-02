@@ -7,7 +7,7 @@ States:
     Next: CreateSalesForceContact
   CreateSalesForceContact:
     Type: Task
-    Resource: "$${CreateSalesForceContactLambda.Arn}"
+    Resource: "$${CreateSalesforceContactLambda.Arn}"
     Next: CreateZuoraSubscription
   CreateZuoraSubscription:
     Type: Task

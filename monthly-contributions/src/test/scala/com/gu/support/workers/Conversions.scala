@@ -24,7 +24,8 @@ object Conversions {
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
     def toClass[T]()(implicit decoder: Decoder[T]): T = {
       val is = new ByteArrayInputStream(self.toByteArray)
-      val t = Try(Source.fromInputStream(is).mkString).flatMap(decode[T](_).toTry)
+      val str = Source.fromInputStream(is).mkString
+      val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get
     }

@@ -6,11 +6,11 @@ import com.gu.i18n.CountryGroup
 import com.gu.okhttp.RequestRunners
 import com.gu.paypal.PayPalService
 import com.gu.stripe.StripeService
-import com.gu.support.workers.encoding.PaymentFieldsDecoder.decodePaymentFields
-import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
-import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.decodeCreatePaymentMethodState
+import com.gu.support.workers.model.{CreatePaymentMethodState, CreateSalesforceContactState, PayPalPaymentFields, StripePaymentFields}
+import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto.exportEncoder
+import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -21,14 +21,15 @@ import scala.util.Failure
 class CreatePaymentMethod(
                            stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
                            payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
-                         ) extends FutureHandler[Either[StripePaymentFields, PayPalPaymentFields], PaymentMethod] with LazyLogging {
+                         ) extends FutureHandler[CreatePaymentMethodState, CreateSalesforceContactState] with LazyLogging {
 
-  override protected def handlerFuture(paymentFields: Either[StripePaymentFields, PayPalPaymentFields], context: Context) = {
-    logger.info(s"paymentFields: $paymentFields")
-    paymentFields match {
+  override protected def handlerFuture(state: CreatePaymentMethodState, context: Context) = {
+    logger.debug(s"CreatePaymentMethod state: $state")
+    val paymentMethod = state.paymentFields match {
       case Left(stripe) => createStripePaymentMethod(stripe)
       case Right(payPal) => createPayPalPaymentMethod(payPal)
     }
+    paymentMethod.map(CreateSalesforceContactState(state.user, state.amount, _))
   }
 
   def createStripePaymentMethod(stripe: StripePaymentFields) = for {
