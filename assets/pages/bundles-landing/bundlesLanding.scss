@@ -125,7 +125,6 @@
         display: block;
       }
     }
-
   }
 
   .bundles__bundle {
@@ -134,14 +133,24 @@
     float: left;
   }
 
-	.bundles__bundle--contributions {
-		background-color: gu-colour(multimedia-main-2);
+  .bundles__bundle__info-text {
+    @include gu-font(copy, 16);
+    color: gu-colour(neutral-1);
+  }
 
-		input:checked+label {
-			background-color: gu-colour(comment-main-1);
-			color: #fff;
-		}
-	}
+  .bundles__bundle--contributions {
+    background-color: gu-colour(multimedia-main-2);
+
+    input:checked+label {
+      background-color: gu-colour(comment-main-1);
+      color: #fff;
+    }
+
+    .contrib-amounts__error-message {
+      @include gu-font(copy, 16);
+      color: gu-colour(neutral-1);
+    }
+  }
 
 	.bundles__bundle--digital {
 		background-color: #1db7d7;
@@ -271,10 +280,11 @@
       line-height: 26px;
     }
 
-    .way-of-support .component-info-text {
-      margin: 0 ($gu-h-spacing / 2);
+    .way-of-support__info-text {
+      color: gu-colour(neutral-1);
       font-family: $gu-egyptian-web;
       font-size: 16px;
+      margin: 0 ($gu-h-spacing / 2);
       line-height: 20px;
     }
 
@@ -283,7 +293,6 @@
       bottom: 0;
     }
   }
-
 
   // ----- Shared Components ----- //
 

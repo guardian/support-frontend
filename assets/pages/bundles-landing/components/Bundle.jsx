@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
-import InfoText from 'components/infoText/infoText';
 import CtaLink from 'components/ctaLink/ctaLink';
 
 import type { Children } from 'react';
@@ -30,9 +29,10 @@ type PropTypes = {
 function Bundle(props: PropTypes) {
 
   let className = 'bundles__bundle';
+  const infoTextElement = <p className={`${className}__info-text`}>{props.infoText}</p>;
 
   if (props.modifierClass) {
-    className = `${className} bundles__bundle--${props.modifierClass}`;
+    className = `${className} ${className}--${props.modifierClass}`;
   }
 
   return (
@@ -42,7 +42,7 @@ function Bundle(props: PropTypes) {
         subheading={props.subheading}
       />
       {props.children}
-      {props.infoText ? <InfoText text={props.infoText} /> : ''}
+      {props.infoText ? infoTextElement : ''}
       <CtaLink text={props.ctaText} url={props.ctaLink} />
     </div>
   );
