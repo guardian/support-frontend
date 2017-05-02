@@ -158,103 +158,128 @@
 
   .ways-of-support {
 
-    > .component-simple-heading {
-      padding-top: 6px;
+    @include mq($from: mobileLandscape) {
+      background-color: darken(gu-colour(comment-support-2), 5%);
+    }
 
-      @include mq($until: mobileLandscape) {
-        border-top: 1px solid gu-colour(news-support-1);
+    .ways-of-support__content {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      @include mq($from: mobileLandscape) {
+        display: flex;
+        background-color: gu-colour(comment-support-2);
+        padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
       }
 
       @include mq($from: tablet) {
-        max-width: 210px;
-        margin-left: 10px;
-        margin-right: 10px;
-        padding-top: 0;
+        padding-top: 8px;
       }
 
       @include mq($from: desktop) {
-        max-width: 300px;
-        text-align: center;
-        border: none;
-        float: right;
+        padding-top: $gu-v-spacing;
       }
     }
 
-    > .component-simple-heading .component-simple-heading__heading {
-      word-spacing: -0.08em;
-
+    .ways-of-support__heading {
+      flex-basis: 100%;
       color: gu-colour(news-support-2);
       font-family: 'Guardian Titlepiece Web', sans-serif;
       font-weight: 400;
       padding-top: 2px;
       font-size: 28px;
       line-height: 28px;
-      width: 220px;
-      margin: 0 10px 24px;
+      width: gs-span(3) + $gu-h-spacing;
+      margin: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
+
+      @include mq($until: mobileLandscape) {
+        border-top: 1px solid gu-colour(news-support-1);
+      }
 
       @include mq($from: tablet) {
-        width: gs-span(3);
         margin: 0;
         font-size: 40px;
         line-height: 37px;
         text-align: center;
+
+        flex-basis: 220px;
+        // Fix for Safari 8.
+        max-width: 220px;
+        order: 1;
+        padding-top: 0;
       }
 
       @include mq($from: desktop) {
         font-size: 48px;
         line-height: 44px;
+        flex-basis: 300px;
+        // Fix for Safari 8.
+        max-width: 300px;
+        text-align: center;
+        border: none;
+        order: 1;
+      }
+    }
+
+    .way-of-support {
+      margin: 0 0 ($gu-v-spacing / 2);
+      background-color: gu-colour(comment-support-2);
+      color: gu-colour(neutral-1);
+      padding-bottom: $gu-v-spacing;
+
+      @include mq($from: mobileLandscape) {
+        background-color: #fff;
+        padding-bottom: 0;
+        flex-basis: 210px;
+        // Fix for Safari 8.
+        max-width: 210px;
+        position: relative;
+        margin-left: $gu-h-spacing / 2;
+        margin-right: $gu-h-spacing / 2;
+      }
+
+      @include mq($from: tablet) {
+        flex-basis: 220px;
+        // Fix for Safari 8.
+        max-width: 220px;
+        margin-top: $gu-v-spacing;
       }
 
       @include mq($from: desktop) {
+        flex-basis: 300px;
+        // Fix for Safari 8.
+        max-width: 300px;
+        margin-bottom: 0;
+      }
+
+      img {
         width: 100%;
+        display: block;
       }
     }
-  }
 
-  .ways-of-support__way {
-    background: gu-colour(comment-support-2);
-    color: gu-colour(neutral-1);
-    float: left;
-    max-width: 300px;
-    margin: 0 0 6px;
-    padding-bottom: 12px;
-
-    @include mq($from: mobileLandscape) {
-      background-color: #fff;
-      padding-bottom: 0;
-      position: relative;
-      margin-left: 10px;
-      margin-right: 10px;
-      max-width: 210px;
+    .way-of-support--orange {
+      background: gu-colour(comment-main-2);
     }
 
-    @include mq($from: tablet) {
-      max-width: 220px;
-      margin-top: 12px;
+    .way-of-support__heading {
+      margin: ($gu-v-spacing / 3) ($gu-h-spacing / 2) $gu-v-spacing;
+      font-family: $gu-egyptian-web;
+      font-weight: 900;
+      font-size: 23px;
+      line-height: 26px;
     }
 
-    @include mq($from: desktop) {
-      max-width: 300px;
-      margin-bottom: 0;
+    .way-of-support .component-info-text {
+      margin: 0 ($gu-h-spacing / 2);
+      font-family: $gu-egyptian-web;
+      font-size: 16px;
+      line-height: 20px;
     }
 
-    img {
-      width: 100%;
-      display: block;
-    }
   }
 
-  .ways-of-support__way--orange {
-    background: gu-colour(comment-main-2);
-  }
-
-  .ways-of-support__way .component-simple-heading__heading {
-    margin: 4px 10px 12px;
-  }
-
-  .ways-of-support__way .component-info-text {
-    margin: 0 10px
-  }
 
   // ----- Shared Components ----- //
 
