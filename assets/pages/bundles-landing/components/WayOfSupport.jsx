@@ -5,7 +5,6 @@
 import React from 'react';
 
 import CtaCircle from 'components/ctaCircle/ctaCircle';
-import InfoText from 'components/infoText/infoText';
 
 // ----- Types ----- //
 
@@ -33,7 +32,7 @@ const WayOfSupport = (props: PropTypes) => {
     <div className={rootClassName}>
       <img src="https://placehold.it/300x170" alt="Example" />
       <h1 className={`${className}__heading`}>{props.heading}</h1>
-      <InfoText text={props.infoText} />
+      <p className={`${className}__info-text`}>{props.infoText}</p>
       <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} url={props.ctaLink} />
     </div>
   );

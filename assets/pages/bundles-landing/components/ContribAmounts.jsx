@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
-import InfoText from 'components/infoText/infoText';
 import {
   changeContribAmount,
   changeContribAmountRecurring,
@@ -90,7 +89,7 @@ type PropTypes = {
 function errorMessage(error: ?ContribError) {
 
   if (error) {
-    return <InfoText text={contribErrors[error]} />;
+    return <p className="contrib-amounts__error-message">{contribErrors[error]}</p>;
   }
 
   return null;
