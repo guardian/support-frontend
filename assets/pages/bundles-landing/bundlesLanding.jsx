@@ -31,7 +31,6 @@ const content = (
       <Bundles />
       <br style={{ clear: 'both' }} />
       <WaysOfSupport />
-      <br style={{ clear: 'both' }} />
       <SimpleFooter />
     </div>
   </Provider>
