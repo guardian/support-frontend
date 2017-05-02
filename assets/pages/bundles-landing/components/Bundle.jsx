@@ -29,7 +29,7 @@ type PropTypes = {
 function Bundle(props: PropTypes) {
 
   let className = 'bundles__bundle';
-  const infoTextElement = <p className={`${className}__info-text`}>{props.infoText}</p>;
+  const infoTextElement = <p className="bundle__info-text">{props.infoText}</p>;
 
   if (props.modifierClass) {
     className = `${className} ${className}--${props.modifierClass}`;
