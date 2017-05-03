@@ -22,6 +22,9 @@ import type { Contrib, Amounts, PaperBundle } from '../reducers/reducers';
 const ctaLinks = {
   recurring: '/monthly-contribution',
   oneOff: 'https://contribute.theguardian.com/uk',
+  paperOnly: 'https://subscribe.theguardian.com/p/GXX83P',
+  paperDigital: 'https://subscribe.theguardian.com/p/GXX83X',
+  digital: 'https://subscribe.theguardian.com/p/DXX83X',
 };
 
 const bundles = {
@@ -51,7 +54,6 @@ const bundles = {
     ],
     infoText: 'Support the Guardian and enjoy a subscription to our digital Daily Edition and the premium tier of our app.',
     ctaText: 'Become a digital subscriber',
-    ctaLink: 'https://subscribe.theguardian.com/p/DXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
     modifierClass: 'digital',
   },
   allPaper: {
@@ -76,7 +78,6 @@ const bundles = {
         text: 'Up to 36% off the retail price',
       },
     ],
-    ctaLink: 'https://subscribe.theguardian.com/p/GXX83X?INTCMP=gdnwb_copts_bundles_landing_default',
   },
   paperOnly: {
     heading: 'From £10.79/month',
@@ -90,7 +91,6 @@ const bundles = {
         text: 'Up to 36% off the retail price',
       },
     ],
-    ctaLink: 'https://subscribe.theguardian.com/p/GXX83P?INTCMP=gdnwb_copts_bundles_landing_default',
   },
 };
 
@@ -130,6 +130,7 @@ type PropTypes = {
   paperBundle: PaperBundle,
   contribType: Contrib,
   contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
+  intCmp: string, // eslint-disable-line react/no-unused-prop-types
   togglePaperBundle: (string) => void,
   toggleContribType: (string) => void,
 };
@@ -137,27 +138,46 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function getContribAttrs({ contribType, contribAmount }) {
+function getContribAttrs({ contribType, contribAmount, intCmp }) {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
-
   const params = new URLSearchParams();
+
   params.append(amountParam, contribAmount[contType].value);
+  params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
   return Object.assign({}, bundles.allContrib, { ctaLink });
 
 }
 
-function getPaperAttrs(bundle: PaperBundle) {
+function getPaperAttrs({ paperBundle, intCmp }) {
 
-  if (bundle === 'PAPER+DIGITAL') {
-    return Object.assign({}, bundles.allPaper, bundles.paperDigital);
+  let ctaLink = null;
+  let selectedBundle = null;
+  const params = new URLSearchParams();
+
+  params.append('INTCMP', intCmp);
+
+  if (paperBundle === 'PAPER+DIGITAL') {
+    ctaLink = `${ctaLinks.paperDigital}?${params.toString()}`;
+    selectedBundle = bundles.paperDigital;
+  } else {
+    ctaLink = `${ctaLinks.paperOnly}?${params.toString()}`;
+    selectedBundle = bundles.paperOnly;
   }
 
-  return Object.assign({}, bundles.allPaper, bundles.paperOnly);
+  return Object.assign({}, bundles.allPaper, selectedBundle, { ctaLink });
+}
 
+function getDigitalAttrs({ intCmp }) {
+
+  const params = new URLSearchParams();
+  params.append('INTCMP', intCmp);
+  const ctaLink = `${ctaLinks.digital}?${params.toString()}`;
+
+  return Object.assign({}, bundles.digital, { ctaLink });
 }
 
 
@@ -166,7 +186,8 @@ function getPaperAttrs(bundle: PaperBundle) {
 function Bundles(props: PropTypes) {
 
   const contribAttrs = getContribAttrs(props);
-  const paperAttrs = getPaperAttrs(props.paperBundle);
+  const paperAttrs = getPaperAttrs(props);
+  const digitalAttrs = getDigitalAttrs(props);
 
   return (
     <section className="bundles gu-content-margin">
@@ -178,7 +199,7 @@ function Bundles(props: PropTypes) {
         />
         <ContribAmounts />
       </Bundle>
-      <Bundle {...bundles.digital}>
+      <Bundle {...digitalAttrs}>
         <FeatureList listItems={bundles.digital.listItems} />
       </Bundle>
       <Bundle {...paperAttrs}>
@@ -198,13 +219,12 @@ function Bundles(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-
   return {
     paperBundle: state.paperBundle,
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
+    intCmp: state.intCmp,
   };
-
 }
 
 function mapDispatchToProps(dispatch) {
