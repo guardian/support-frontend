@@ -55,6 +55,11 @@ const initialContrib: ContribState = {
   },
 };
 
+// ----- Functions ----//
+function getQueryParameter(paramName: string, defaultValue: string): string {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(paramName) || defaultValue;
+}
 
 // ----- Reducers ----- //
 
@@ -122,10 +127,15 @@ function contribution(
 
 }
 
+function intCmp(state: string = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default')): string {
+  // Since nothing change the intcmp, this reducer does not handle any action.
+  return state;
+}
 
 // ----- Exports ----- //
 
 export default combineReducers({
   paperBundle,
   contribution,
+  intCmp,
 });
