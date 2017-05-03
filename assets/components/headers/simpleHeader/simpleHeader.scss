@@ -20,13 +20,13 @@
 			padding-right: $gu-h-spacing;
 		}
 
-		@include mq($from: tablet) {
-			height: 86px;
-		}
-
-		@include mq($from: desktop) {
+		@include mq($from: phablet) {
 			padding-left: 0;
 			padding-right: 0;
+		}
+
+		@include mq($from: tablet) {
+			height: 86px;
 		}
 	}
 }
