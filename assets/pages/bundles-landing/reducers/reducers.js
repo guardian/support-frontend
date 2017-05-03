@@ -55,7 +55,6 @@ const initialContrib: ContribState = {
   },
 };
 
-
 // ----- Reducers ----- //
 
 function paperBundle(
@@ -122,10 +121,15 @@ function contribution(
 
 }
 
+function intCmp(state: string = ''): string {
+  // Since nothing change the intcmp, this reducer does not handle any action.
+  return state;
+}
 
 // ----- Exports ----- //
 
 export default combineReducers({
   paperBundle,
   contribution,
+  intCmp,
 });
