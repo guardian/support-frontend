@@ -55,6 +55,8 @@ const initialContrib: ContribState = {
   },
 };
 
+const defaultIntCmp:string = 'gdnwb_copts_bundles_landing_default';
+
 // ----- Functions ----//
 function getQueryParameter(paramName: string, defaultValue: string): string {
   const params = new URLSearchParams(window.location.search);
@@ -127,7 +129,7 @@ function contribution(
 
 }
 
-function intCmp(state: string = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default')): string {
+function intCmp(state: string = getQueryParameter('INTCMP', defaultIntCmp)): string {
   // Since nothing change the intcmp, this reducer does not handle any action.
   return state;
 }

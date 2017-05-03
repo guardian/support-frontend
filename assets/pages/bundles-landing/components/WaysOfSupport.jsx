@@ -28,7 +28,7 @@ const waysOfSupport = [
 ];
 
 type PropTypes = {
-  intCmp: string
+  intCmp: string,
 };
 
 
@@ -41,9 +41,14 @@ const WaysOfSupport = (props: PropTypes) => {
   const params = new URLSearchParams();
   params.append('INTCMP', props.intCmp);
 
-  const waysOfSupportIntCmp = waysOfSupport.map(x => Object.assign({}, x, { ctaLink: `${x.ctaLink}?${params.toString()}` }));
-  const waysOfSupportRendered = waysOfSupportIntCmp.map(x => <WayOfSupport {...x} />);
 
+  const waysOfSupportRendered = waysOfSupport.map((way) => {
+
+    const ctaLink = `${way.ctaLink}?${params.toString()}`;
+    const attrs = Object.assign({}, way, { ctaLink });
+    return <WayOfSupport {...attrs} />;
+
+  });
 
   return (
     <section className={className}>
