@@ -8,3 +8,4 @@ assets
 
 [options]
 module.name_mapper='^components/' -> '<PROJECT_ROOT>/assets/components/'
+module.name_mapper='^helpers/' -> '<PROJECT_ROOT>/assets/helpers/'
