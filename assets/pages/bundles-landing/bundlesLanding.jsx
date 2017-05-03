@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
+import getQueryParameter from './helpers/queryParameter';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WaysOfSupport from './components/WaysOfSupport';
@@ -18,7 +19,7 @@ import reducer from './reducers/reducers';
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer);
+const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') });
 
 
 // ----- Render ----- //
