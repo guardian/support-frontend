@@ -16,6 +16,7 @@ Object {
     "error": null,
     "type": "RECURRING",
   },
+  "intCmp": "",
   "paperBundle": "PAPER+DIGITAL",
 }
 `;
