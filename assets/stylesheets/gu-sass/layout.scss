@@ -56,12 +56,3 @@ $gu-v-spacing: 12px;
     padding: 0 $gu-h-spacing;
   }
 }
-
-// The paddings at different breakpoints for the headers.
-.gu-header-margin {
-  padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2);
-
-  @include mq($from: mobileLandscape) {
-    padding: $gu-v-spacing $gu-h-spacing;
-  }
-}

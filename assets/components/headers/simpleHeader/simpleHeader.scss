@@ -1,34 +1,32 @@
 .component-simple-header {
 	background-color: gu-colour(guardian-brand);
-	height: 44px;
 
 	.svg-guardian-titlepiece {
-		display: block;
-		height: 32px;
 		float: right;
+		height: 100%;
 	}
 
-	@include mq($from: mobileMedium) {
-		height: 54px;
+	.component-simple-header__content {
+		height: 50px;
+		padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
-		.svg-guardian-titlepiece {
-			height: 42px;
+		@include mq($from: mobileMedium) {
+			height: 60px;
 		}
-	}
 
-	@include mq($from: mobileLandscape) {
-		height: 73px;
-
-		.svg-guardian-titlepiece {
-			height: 49px;
+		@include mq($from: mobileLandscape) {
+			height: 67px;
+			padding-left: $gu-h-spacing;
+			padding-right: $gu-h-spacing;
 		}
-	}
 
-	@include mq($from: tablet) {
-		height: 92px;
+		@include mq($from: tablet) {
+			height: 86px;
+		}
 
-		.svg-guardian-titlepiece {
-			height: 68px;
+		@include mq($from: desktop) {
+			padding-left: 0;
+			padding-right: 0;
 		}
 	}
 }
