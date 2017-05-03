@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import WayOfSupport from './WayOfSupport';
 
@@ -14,25 +15,35 @@ const waysOfSupport = [
     heading: 'Patrons',
     infoText: 'The Patrons tier for those who care deeply about the the Guardian\'s journalism and the imact is has on th world',
     ctaText: 'Become a Patron',
-    ctaLink: 'https://membership.theguardian.com/patrons?INTCMP=gdnwb_copts_bundles_landing_default',
+    ctaLink: 'https://membership.theguardian.com/patrons',
     modifierClass: 'patron',
   },
   {
     heading: 'Guardian Live events',
     infoText: 'Events, discussions, debates, interviews, festivals, dinners and private views exclusively for Guardian members',
     ctaText: 'Find out about events',
-    ctaLink: 'https://membership.theguardian.com/events?INTCMP=gdnwb_copts_bundles_landing_default',
+    ctaLink: 'https://membership.theguardian.com/events',
     modifierClass: 'gu-events',
   },
 ];
 
+type PropTypes = {
+  intCmp: string
+};
+
 
 // ----- Component ----- //
 
-const WaysOfSupport = () => {
+const WaysOfSupport = (props: PropTypes) => {
 
   const className = 'ways-of-support';
-  const waysOfSupportRendered = waysOfSupport.map(x => <WayOfSupport {...x} />);
+
+  const params = new URLSearchParams();
+  params.append('INTCMP', props.intCmp);
+
+  const waysOfSupportIntCmp = waysOfSupport.map(x => Object.assign({}, x, { ctaLink: `${x.ctaLink}?${params.toString()}` }));
+  const waysOfSupportRendered = waysOfSupportIntCmp.map(x => <WayOfSupport {...x} />);
+
 
   return (
     <section className={className}>
@@ -44,4 +55,14 @@ const WaysOfSupport = () => {
   );
 };
 
-export default WaysOfSupport;
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return {
+    intCmp: state.intCmp,
+  };
+}
+
+
+export default connect(mapStateToProps)(WaysOfSupport);
