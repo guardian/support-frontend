@@ -1,5 +1,7 @@
 package lib.httpheaders
 
+import org.joda.time.DateTime
+
 import scala.concurrent.duration._
 
 object CacheControl {
@@ -18,4 +20,15 @@ object CacheControl {
 
   private def standardDirectives(maxAge: FiniteDuration, staleWhileRevalidate: FiniteDuration, staleIfErrors: FiniteDuration) =
     s"max-age=${maxAge.toSeconds}, stale-while-revalidate=${staleWhileRevalidate.toSeconds}, stale-if-error=${staleIfErrors.toSeconds}"
+
+  def defaultCacheHeaders(maxAge: FiniteDuration, browserAge: FiniteDuration, now: DateTime = DateTime.now): List[(String, String)] = {
+    val expires = now.plusSeconds(browserAge.toSeconds.toInt)
+
+    List(
+      CacheControl.cdn(maxAge),
+      CacheControl.browser(browserAge),
+      "Expires" -> expires.toHttpDateTimeString,
+      "Date" -> now.toHttpDateTimeString
+    )
+  }
 }

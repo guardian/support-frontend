@@ -26,14 +26,7 @@ object CachedAction {
 
   private def cacheHeaders(maxAge: FiniteDuration, now: DateTime = DateTime.now): List[(String, String)] = {
     val browserAge = maximumBrowserAge min maxAge
-    val expires = now.plusSeconds(browserAge.toSeconds.toInt)
-
-    List(
-      CacheControl.cdn(maxAge),
-      CacheControl.browser(browserAge),
-      "Expires" -> expires.toHttpDateTimeString,
-      "Date" -> now.toHttpDateTimeString
-    )
+    CacheControl.defaultCacheHeaders(maxAge, browserAge, now)
   }
 
 }
