@@ -1,6 +1,6 @@
 package com.gu.salesforce
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Cancellable}
 import akka.agent.Agent
 import com.gu.config.Configuration
 import com.gu.helpers.{Retry, WebServiceHelper}
@@ -16,7 +16,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[SalesforceContactResponse, SalesforceErrorResponse] with LazyLogging {
+class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+  extends WebServiceHelper[SalesforceContactResponse, SalesforceErrorResponse]
+  with LazyLogging {
+
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -28,7 +31,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
         auth => addAuthenticationToRequest(auth, req)
       ), 30.seconds)
 
-  def addAuthenticationToRequest(auth: Authentication, req: Request.Builder) = {
+  def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder = {
     req.url(s"${auth.instance_url}/$upsertEndpoint") //We need to set the base url to the instance_url value returned in the authentication response
     req.addHeader("Authorization", s"Bearer ${auth.access_token}") //And also add an Authorization header
   }
@@ -39,12 +42,12 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 }
 
 /**
-  * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
-  * The first time it is asked for an authentication token it will go off and fetch one and then store the result
-  * in an Akka Agent for reuse.
-  * It also schedules a background refresh of the token every 15 minutes to avoid it becoming stale - a problem we
-  * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
-  */
+ * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
+ * The first time it is asked for an authentication token it will go off and fetch one and then store the result
+ * in an Akka Agent for reuse.
+ * It also schedules a background refresh of the token every 15 minutes to avoid it becoming stale - a problem we
+ * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
+ */
 object AuthService extends LazyLogging {
   private val service = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
 
@@ -53,7 +56,7 @@ object AuthService extends LazyLogging {
   private val authAgent: Agent[Option[Authentication]] = Agent(None: Option[Authentication])
 
   // 15min -> 96 request/day. Failed auth will not override previous access_token.
-  def startScheduledAuth() = system.scheduler.schedule(15.minutes, 15.minutes)(service.authorize.map(sendAuth))
+  def startScheduledAuth(): Cancellable = system.scheduler.schedule(15.minutes, 15.minutes)(service.authorize.map(sendAuth))
 
   def getAuth: Future[Authentication] = authAgent.get() match {
     case Some(authentication) => Future.successful(authentication)
@@ -69,7 +72,10 @@ object AuthService extends LazyLogging {
   }
 }
 
-class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[Authentication, SalesforceErrorResponse] with LazyLogging {
+class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+  extends WebServiceHelper[Authentication, SalesforceErrorResponse]
+  with LazyLogging {
+
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client

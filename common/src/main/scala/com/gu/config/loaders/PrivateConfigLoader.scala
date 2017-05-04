@@ -8,13 +8,13 @@ trait PrivateConfigLoader {
 }
 
 /**
-  * Loads private config from either /etc/gu or S3 depending on the environment
-  */
+ * Loads private config from either /etc/gu or S3 depending on the environment
+ */
+
 object PrivateConfigLoader{
-  def forEnvironment(loadFromS3: Boolean) = if (loadFromS3) {
-    new S3Loader
-  }
-  else {
-    new LocalLoader
-  }
+  def forEnvironment(loadFromS3: Boolean): PrivateConfigLoader =
+    if (loadFromS3)
+      new S3Loader
+    else
+      new LocalLoader
 }

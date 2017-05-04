@@ -11,7 +11,7 @@ case class PayPalConfig(touchpointEnvironment: String,
                         signature: String)
 
 object PayPalConfig {
-  def fromConfig(config: Config, environmentName: String) =  {
+  def fromConfig(config: Config, environmentName: String): PayPalConfig =  {
     PayPalConfig(environmentName,
       config.getString("paypal.paypal-environment"),
       config.getString("paypal.nvp-version"),

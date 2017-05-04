@@ -11,7 +11,7 @@ case class SalesforceConfig(
 )
 
 object SalesforceConfig {
-  def fromConfig(config: com.typesafe.config.Config, environmentName: String) = SalesforceConfig(
+  def fromConfig(config: com.typesafe.config.Config, environmentName: String): SalesforceConfig = SalesforceConfig(
     environmentName,
     url = config.getString("salesforce.url"),
     key = config.getString("salesforce.consumer.key"),
