@@ -1,6 +1,8 @@
 import Dependencies._
 import sbt.Keys.libraryDependencies
 
+lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+
 lazy val root =
   project.in(file("."))
     .aggregate(common, `monthly-contributions`)
@@ -31,5 +33,5 @@ lazy val `monthly-contributions` = project
     libraryDependencies ++= monthlyContributionsDependencies
   )
   .settings(Settings.shared: _*)
-  .dependsOn(common)
+  .dependsOn(common % "compile->compile;test->test")
 
