@@ -2,7 +2,9 @@
 
 // ----- Imports ----- //
 
-import { gridSrcset } from 'helpers/theGrid';
+import React from 'react';
+
+import { GRID_DOMAIN, gridSrcset } from 'helpers/theGrid';
 
 
 // ----- Types ----- //
@@ -12,6 +14,7 @@ import { gridSrcset } from 'helpers/theGrid';
 
 type Source = {
   gridId: string,
+  sizes: string,
   media: string,
   srcSizes: number[],
 };
@@ -32,16 +35,16 @@ export default function GridPicture(props: PropTypes) {
   const sources = props.sources.map((source) => {
 
     const srcSet = gridSrcset(source.gridId, source.srcSizes);
-    return <source media={source.media} srcSet={srcSet} />;
+    return <source sizes={source.sizes} media={source.media} srcSet={srcSet} />;
 
   });
 
   return (
-    <picture className="component-picture">
+    <picture className="component-grid-picture">
       {sources}
       <img
-        className="component-picture__image"
-        src={props.fallback}
+        className="component-grid-picture__image"
+        src={`${GRID_DOMAIN}/${props.fallback}`}
         alt={props.altText}
       />
     </picture>

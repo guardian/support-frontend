@@ -2,6 +2,8 @@
 
 // ----- Imports ----- //
 
+import React from 'react';
+
 import { gridUrl, gridSrcset } from 'helpers/theGrid';
 import { ascending } from 'helpers/utilities';
 
@@ -37,6 +39,7 @@ export default function GridImage(props: PropTypes) {
 
   return (
     <img
+      className="component-grid-image"
       sizes={props.sizes}
       srcSet={srcSet}
       src={fallbackSrc}

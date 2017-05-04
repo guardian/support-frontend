@@ -2,7 +2,7 @@
 
 // ----- Constants ----- //
 
-const GRID_DOMAIN = 'https://media.guim.co.uk';
+export const GRID_DOMAIN = 'https://media.guim.co.uk';
 
 
 // ----- Functions ----- //
