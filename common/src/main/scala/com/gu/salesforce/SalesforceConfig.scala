@@ -1,18 +1,16 @@
 package com.gu.salesforce
 
-case class SalesforceConfig(
-  envName: String,
-  url: String,
-  key: String,
-  secret: String,
-  username: String,
-  password: String,
-  token: String
-)
+import com.typesafe.config.Config
+
+case class SalesforceConfig(url: String,
+                            key: String,
+                            secret: String,
+                            username: String,
+                            password: String,
+                            token: String)
 
 object SalesforceConfig {
-  def fromConfig(config: com.typesafe.config.Config, environmentName: String): SalesforceConfig = SalesforceConfig(
-    environmentName,
+  def fromConfig(config: com.typesafe.config.Config): SalesforceConfig = SalesforceConfig(
     url = config.getString("salesforce.url"),
     key = config.getString("salesforce.consumer.key"),
     secret = config.getString("salesforce.consumer.secret"),
