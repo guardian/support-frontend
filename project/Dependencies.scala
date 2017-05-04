@@ -5,7 +5,7 @@ object Dependencies {
 
   val config = "com.typesafe" % "config" % "1.3.1"
   val joda = "org.joda" % "joda-convert" % "1.8.1"
-  val cats = "org.typelevel" %% "cats" % "0.6.1"
+  val cats = "org.typelevel" %% "cats" % "0.9.0"
   val scalaLogging = "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
@@ -19,9 +19,10 @@ object Dependencies {
   val circeCore = "io.circe" %% "circe-core" % circeVersion
   val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
   val circeParser = "io.circe" %% "circe-parser" % circeVersion
+  val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3" //Used for retrying http requests
+  val akkaAgent = "com.typesafe.akka" %% "akka-agent" % "2.3.4" //Used by the Salesforce code for handling auth tokens
 
-
-  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, joda, supportInternationalisation, awsCloudwatch, awsS3, awsLambdas, okhttp, scalaUri, cats, circeCore, circeGeneric, circeParser, scalaTest)
+  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, akkaAgent, joda, dispatch, supportInternationalisation, awsCloudwatch, awsS3, awsLambdas, okhttp, scalaUri, cats, circeCore, circeGeneric, circeParser, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)
 
 }

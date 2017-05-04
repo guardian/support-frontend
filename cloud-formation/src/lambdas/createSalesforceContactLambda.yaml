@@ -1,9 +1,9 @@
 CreateSalesForceContactLambda:
   Type: "AWS::Lambda::Function"
-  Description: "Step 2. Create SalesForce contact"
+  Description: "Step 2. Create Salesforce contact"
   Properties:
-    FunctionName: !Sub ${Stack}-CreateSalesForceContactLambda-${Stage}
-    Handler: "com.gu.support.workers.lambdas.CreateSalesForceContact::handleRequest"
+    FunctionName: !Sub ${Stack}-CreateSalesforceContactLambda-${Stage}
+    Handler: "com.gu.support.workers.lambdas.CreateSalesforceContact::handleRequest"
     MemorySize: 256
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
     Code:
