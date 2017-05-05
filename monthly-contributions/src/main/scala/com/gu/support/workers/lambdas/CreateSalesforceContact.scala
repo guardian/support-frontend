@@ -14,8 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 class CreateSalesforceContact(
-                               salesforceService: SalesforceService = new SalesforceService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(30.seconds))
-                             ) extends FutureHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
+  salesforceService: SalesforceService = new SalesforceService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(30.seconds))
+) extends FutureHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
 
   override protected def handlerFuture(state: CreateSalesforceContactState, context: Context) = {
     logger.debug(s"CreateSalesforceContact state: $state")

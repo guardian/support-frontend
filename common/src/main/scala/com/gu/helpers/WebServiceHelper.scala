@@ -64,12 +64,14 @@ trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
   def get[A <: T](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request(new Request.Builder().url(endpointUrl(endpoint, params)))
 
-  def post[A <: T](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def post[A <: T](endpoint: String, data: Json, params: (String, String)*)
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.noSpaces)
     request(new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }
 
-  def post[A <: T](endpoint: String, data: Map[String, Seq[String]])(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def post[A <: T](endpoint: String, data: Map[String, Seq[String]])
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) { case (params, (name, values)) =>
       val paramName = if (values.size > 1) s"$name[]" else name
       values.foldLeft(params){ case (ps, value) => ps.add(paramName, value) }
@@ -80,7 +82,7 @@ trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
 
   private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {
     val withSegments = endpoint.split("/").foldLeft(urlBuilder) { case (url, segment) =>
-        url.addEncodedPathSegment(segment)
+      url.addEncodedPathSegment(segment)
     }
     params.foldLeft(withSegments) { case (url, (k, v)) =>
       url.addQueryParameter(k, v)
