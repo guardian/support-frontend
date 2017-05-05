@@ -253,6 +253,8 @@
       }
 
       .component-grid-picture__image {
+        display: block;
+
         @include mq($from: tablet) {
           position: absolute;
           top: -100%;
