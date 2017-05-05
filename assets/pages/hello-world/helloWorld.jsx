@@ -6,7 +6,7 @@ import GridImage from 'components/gridImage/gridImage';
 const app = document.getElementById('app');
 
 const page = (
-   <div>
+  <div>
     <h1>Hello World!!!</h1>
     <GridImage
       gridId="137d6b217a27acddf85512657d04f6490b9e0bb1/1638_0_3571_2009"
