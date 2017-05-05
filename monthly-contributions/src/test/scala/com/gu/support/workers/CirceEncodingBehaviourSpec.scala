@@ -34,7 +34,15 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   "Circe" should "be able to decode PaymentMethod from PaymentMethod" in {
     val pprt : PaymentMethod = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.noSpaces)
+    logger.info(json.spaces2)
+    /*
+    {
+      "PayPalReferenceTransaction" : {
+        "baId" : "123",
+        "email" : "test@test.com"
+      }
+    }
+     */
     val pprt2  = decode[PaymentMethod](json.noSpaces)
     pprt2.isRight should be (true) //decoding succeeded
   }
@@ -42,7 +50,13 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   it should "be able to decode PayPalReferenceTransaction from PayPalReferenceTransaction" in {
     val pprt = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.noSpaces)
+    logger.info(json.spaces2)
+    /*
+    {
+      "baId" : "123",
+      "email" : "test@test.com"
+    }
+    */
     val pprt2  = decode[PayPalReferenceTransaction](json.noSpaces)
     pprt2.isRight should be (true)  //decoding succeeded
   }

@@ -3,7 +3,7 @@ package com.gu.helpers
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
-import io.circe.{Decoder, Json}
+import io.circe.{Decoder, Json, Printer}
 import okhttp3._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -64,9 +64,8 @@ trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
   def get[A <: T](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request(new Request.Builder().url(endpointUrl(endpoint, params)))
 
-  def post[A <: T](endpoint: String, data: Json, params: (String, String)*)
-    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.noSpaces)
+  def post[A <: T](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+    val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.pretty(Printer.noSpaces.copy(dropNullKeys = true)))
     request(new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }
 
