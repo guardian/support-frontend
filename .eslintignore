@@ -1,3 +1,4 @@
 public/**/*.js
 target/**/*.js
 tools/**/*.js
+coverage/

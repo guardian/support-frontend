@@ -5,6 +5,7 @@
 import React from 'react';
 
 import CtaCircle from 'components/ctaCircle/ctaCircle';
+import GridImage from 'components/gridImage/gridImage';
 
 // ----- Types ----- //
 
@@ -14,6 +15,8 @@ type PropTypes = {
   ctaText: string,
   ctaLink: string,
   modifierClass: ?string,
+  gridImg: string,
+  imgAlt: ?string,
 };
 
 
@@ -30,7 +33,12 @@ const WayOfSupport = (props: PropTypes) => {
 
   return (
     <div className={rootClassName}>
-      <img src="https://placehold.it/300x170" alt="Example" />
+      <GridImage
+        gridId={props.gridImg}
+        srcSizes={[1000, 500, 140]}
+        sizes="(max-width: 480px) 100vw, (max-width: 740px) 210px, (max-width: 980px) 220px, 300px"
+        altText={props.imgAlt}
+      />
       <h1 className={`${className}__heading`}>{props.heading}</h1>
       <p className={`${className}__info-text`}>{props.infoText}</p>
       <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} url={props.ctaLink} />
