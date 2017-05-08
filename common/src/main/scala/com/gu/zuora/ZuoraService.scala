@@ -9,17 +9,18 @@ import okhttp3.Request.Builder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[ZuoraErrorResponse] with CustomCodecs {
+class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+  extends WebServiceHelper[ZuoraErrorResponse] with CustomCodecs {
   override val wsUrl = config.url
   override val httpClient = client
 
-  override def wsPreExecute(req: Builder) = {
+  override def wsPreExecute(req: Builder): Builder = {
     req //Add authentication information
       .addHeader("apiSecretAccessKey", config.password)
       .addHeader("apiAccessKeyId", config.username)
   }
 
-  def getAccount(accountNumber: String) =
+  def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber")
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =

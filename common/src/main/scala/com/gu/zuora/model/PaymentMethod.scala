@@ -7,15 +7,15 @@ sealed trait PaymentMethod {
 }
 
 case class CreditCardReferenceTransaction(TokenId: String, //Stripe Card id
-                                          SecondTokenId: String, //Stripe Customer Id
-                                          CreditCardNumber: String,
-                                          CreditCardCountry: Option[Country],
-                                          CreditCardExpirationMonth: Int,
-                                          CreditCardExpirationYear: Int,
-                                          CreditCardType: String /*TODO: strip spaces?*/ ,
-                                          Type: String = "CreditCardReferenceTransaction") extends PaymentMethod
+  SecondTokenId: String, //Stripe Customer Id
+  CreditCardNumber: String,
+  CreditCardCountry: Option[Country],
+  CreditCardExpirationMonth: Int,
+  CreditCardExpirationYear: Int,
+  CreditCardType: String /*TODO: strip spaces?*/ ,
+  Type: String = "CreditCardReferenceTransaction") extends PaymentMethod
 
 case class PayPalPaymentMethod(PaypalBaid: String,
-                               PaypalEmail: String,
-                               PaypalType: String = "ExpressCheckout",
-                               Type: String = "PayPal") extends PaymentMethod
+  PaypalEmail: String,
+  PaypalType: String = "ExpressCheckout",
+  Type: String = "PayPal") extends PaymentMethod

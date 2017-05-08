@@ -38,8 +38,8 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   /**
    * Send a request to the web service and attempt to convert the response to an A
    *
-   * @param rb The request to send
-   * @param decoder A Decoder to convert JSON to A
+   * @param rb           The request to send
+   * @param decoder      A Decoder to convert JSON to A
    * @param errorDecoder A Decoder to convert JSON to Error
    * @tparam A The type of the object that is expected to be returned from the request
    * @return
@@ -53,7 +53,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     } yield {
       val responseBody = response.body.string()
       logger.debug(s"$responseBody")
-      decode[A](responseBody) match  {
+      decode[A](responseBody) match {
         case Left(err) => throw decode[Error](responseBody).right.getOrElse(WebServiceHelperError[A](response.code(), responseBody))
         case Right(value) => value
       }
@@ -72,7 +72,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) { case (params, (name, values)) =>
       val paramName = if (values.size > 1) s"$name[]" else name
-      values.foldLeft(params){ case (ps, value) => ps.add(paramName, value) }
+      values.foldLeft(params) { case (ps, value) => ps.add(paramName, value) }
     }.build()
 
     request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))

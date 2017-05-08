@@ -5,7 +5,7 @@ package com.gu.zuora.model
 case class SubscribeRequest(subscribes: List[SubscribeItem])
 
 case class SubscribeItem(Account: Account,
-                         BillToContact: ContactDetails,
-                         PaymentMethod: PaymentMethod,
-                         SubscriptionData: SubscriptionData,
-                         SubscribeOptions: SubscribeOptions)
+  BillToContact: ContactDetails,
+  PaymentMethod: PaymentMethod,
+  SubscriptionData: SubscriptionData,
+  SubscribeOptions: SubscribeOptions)
