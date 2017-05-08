@@ -15,12 +15,14 @@ const MIN_IMG_WIDTH = 300;
 
 // ----- Types ----- //
 
-type PropTypes = {
+export type GridImg = {
   gridId: string,
   srcSizes: number[],
   sizes: string,
   altText: ?string,
-};
+}
+
+type PropTypes = GridImg;
 
 
 // ----- Component ----- //
