@@ -19,15 +19,12 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  "ZuoraService" should "succeed" in {
+  "Subscribe request" should "succeed" in {
     val zuoraService = new ZuoraService(Configuration.zuoraConfig, RequestRunners.configurableFutureRunner(30.seconds))
     zuoraService.subscribe(subscriptionRequest).map {
       response =>
         logger.info(s"$response")
-        response.Success should be(true)
+        response.head.Success should be(true)
     }
-
-
   }
-
 }

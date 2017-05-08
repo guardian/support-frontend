@@ -11,12 +11,6 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with CustomCodecs {
 
-  "ZuoraResponse" should "deserialise from correct json" in {
-    val response = decode[SubscribeResponse]("""{"Success":"true"}""")
-    response.isRight should be (true)
-    response.right.get.Success should be (true)
-  }
-
   "Account" should "serialise to correct json" in {
     val json = account.asJson
     (json \\ "Currency").head.asString should be(Some("GBP"))
@@ -32,6 +26,11 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with Cus
     val json = subscriptionRequest.asJson
     (json \\ "GenerateInvoice").head.asBoolean should be (Some(true))
     logger.info(json.pretty(Printer.spaces2.copy(dropNullKeys = true)))
+  }
+
+  "SubscribeResponse" should "deserialise correctly" in {
+    val decodeResponse = decode[List[SubscribeResponseAccount]](subscribeResponse)
+    decodeResponse.isRight should be (true)
   }
 
   "GetAccountResponse" should "deserialise from json" in {

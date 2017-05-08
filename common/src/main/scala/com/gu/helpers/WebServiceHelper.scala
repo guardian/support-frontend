@@ -18,11 +18,10 @@ case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: S
  * A wrapper for a JSON web service. It automatically converts the response to a solid type, or
  * handles and logs the error.
  *
- * @tparam T The base type of all the objects that this WebServiceHelper can return
  * @tparam Error The type that will attempt to be extracted if extracting the expected object fails.
  *               This is useful when a web service has a standard error format
  */
-trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
+trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
   private def urlBuilder = HttpUrl.parse(wsUrl).newBuilder()
@@ -45,7 +44,7 @@ trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
    * @tparam A The type of the object that is expected to be returned from the request
    * @return
    */
-  private def request[A <: T](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
     logger.debug(s"Issuing request ${req.method} ${req.url}")
     // The string provided here sets the Custom Metric Name for the http request in CloudWatch
@@ -61,22 +60,22 @@ trait WebServiceHelper[T, Error <: Throwable] extends LazyLogging {
     }
   }
 
-  def get[A <: T](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
-    request(new Request.Builder().url(endpointUrl(endpoint, params)))
+  def get[A](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+    request[A](new Request.Builder().url(endpointUrl(endpoint, params)))
 
-  def post[A <: T](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def post[A](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.pretty(Printer.noSpaces.copy(dropNullKeys = true)))
-    request(new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
+    request[A](new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }
 
-  def post[A <: T](endpoint: String, data: Map[String, Seq[String]])
+  def post[A](endpoint: String, data: Map[String, Seq[String]])
     (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) { case (params, (name, values)) =>
       val paramName = if (values.size > 1) s"$name[]" else name
       values.foldLeft(params){ case (ps, value) => ps.add(paramName, value) }
     }.build()
 
-    request(new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
+    request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
   }
 
   private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {

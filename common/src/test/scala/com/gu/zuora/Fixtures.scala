@@ -1,5 +1,6 @@
 package com.gu.zuora
 
+import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.zuora.model._
@@ -96,8 +97,6 @@ object Fixtures {
   val cardNumber = "4242"
   val payPalBaid = "B-23637766K5365543J"
   val date = new LocalDate(2017, 5, 4)
-  val ProductRatePlanId = "2c92c0f85ab269be015acd9d014549b7"
-  val ProductRatePlanChargeId = "2c92c0f85ab2696b015acd9eeb6150ab"
 
   val account = Account(salesforceAccountId, GBP, salesforceAccountId, salesforceId, identityId, StripeGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
@@ -106,9 +105,9 @@ object Fixtures {
 
   val subscriptionData = SubscriptionData(List(
     RatePlanData(
-      RatePlan(ProductRatePlanId),
+      RatePlan(Configuration.zuoraConfig.productRatePlanId),
       List(RatePlanChargeData(
-        RatePlanCharge(ProductRatePlanChargeId, Some(5: BigDecimal))
+        RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(5: BigDecimal))
       )),
       Nil
     )),
@@ -116,6 +115,35 @@ object Fixtures {
   )
 
   val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
+
+  val subscribeResponse =
+    """
+      |[
+      |  {
+      |    "AccountNumber": "A00015771",
+      |    "SubscriptionNumber": "A-S00043097",
+      |    "GatewayResponse": "Payment complete.",
+      |    "PaymentId": "2c92c0f85be67835015be751f3286569",
+      |    "InvoiceResult": {
+      |      "Invoice": [
+      |        {
+      |          "InvoiceNumber": "INV00051836",
+      |          "Id": "2c92c0f85be67835015be751f2c6655e"
+      |        }
+      |      ]
+      |    },
+      |    "TotalTcv": 60,
+      |    "SubscriptionId": "2c92c0f85be67835015be751f24a6550",
+      |    "Success": true,
+      |    "TotalMrr": 5,
+      |    "PaymentTransactionNumber": "ch_AcMack4JjPKuw6",
+      |    "AccountId": "2c92c0f85be67835015be751f1d8654c",
+      |    "GatewayResponseCode": "Approved",
+      |    "InvoiceNumber": "INV00051836",
+      |    "InvoiceId": "2c92c0f85be67835015be751f2c6655e"
+      |  }
+      |]
+    """.stripMargin
 
 }
 

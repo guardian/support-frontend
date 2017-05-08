@@ -9,7 +9,7 @@ import okhttp3.Request.Builder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[ZuoraResponse, ZuoraErrorResponse] with CustomCodecs {
+class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[ZuoraErrorResponse] with CustomCodecs {
   override val wsUrl = config.url
   override val httpClient = client
 
@@ -22,6 +22,6 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: E
   def getAccount(accountNumber: String) =
     get[GetAccountResponse](s"accounts/$accountNumber")
 
-  def subscribe(subscribeRequest: SubscribeRequest): Future[SubscribeResponse] =
-    post[SubscribeResponse](s"action/subscribe", subscribeRequest.asJson)
+  def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
+    post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson)
 }
