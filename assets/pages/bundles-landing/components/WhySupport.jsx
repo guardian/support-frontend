@@ -8,6 +8,7 @@ import Svg from 'components/svg/svg';
 
 import BodyCopy from 'components/bodyCopy/bodyCopy';
 import GridPicture from 'components/gridPicture/gridPicture';
+import Video from 'components/video/video';
 
 
 // ----- Copy ----- //
@@ -60,7 +61,7 @@ export default function WhySupport() {
             <h1 className="why-support__heading">why do we need your support?</h1>
             <BodyCopy copy={copy.top} />
           </div>
-          <div className="why-support__video-preview">I am a video!</div>
+          <Video name="scottTrustExplained" poster={null} />
         </div>
         <div className="why-support__bottom-content">
           <p className="why-support__video-caption">
