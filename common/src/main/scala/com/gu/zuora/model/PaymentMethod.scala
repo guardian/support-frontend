@@ -3,19 +3,20 @@ package com.gu.zuora.model
 import com.gu.i18n.Country
 
 sealed trait PaymentMethod {
-  def Type: String
+  def `type`: String
 }
 
-case class CreditCardReferenceTransaction(TokenId: String, //Stripe Card id
-  SecondTokenId: String, //Stripe Customer Id
-  CreditCardNumber: String,
-  CreditCardCountry: Option[Country],
-  CreditCardExpirationMonth: Int,
-  CreditCardExpirationYear: Int,
-  CreditCardType: String /*TODO: strip spaces?*/ ,
-  Type: String = "CreditCardReferenceTransaction") extends PaymentMethod
+case class CreditCardReferenceTransaction(
+  tokenId: String, //Stripe Card id
+  secondTokenId: String, //Stripe Customer Id
+  creditCardNumber: String,
+  creditCardCountry: Option[Country],
+  creditCardExpirationMonth: Int,
+  creditCardExpirationYear: Int,
+  creditCardType: String /*TODO: strip spaces?*/ ,
+  `type`: String = "CreditCardReferenceTransaction") extends PaymentMethod
 
 case class PayPalPaymentMethod(PaypalBaid: String,
-  PaypalEmail: String,
-  PaypalType: String = "ExpressCheckout",
-  Type: String = "PayPal") extends PaymentMethod
+  paypalEmail: String,
+  paypalType: String = "ExpressCheckout",
+  `type`: String = "PayPal") extends PaymentMethod

@@ -2,12 +2,12 @@ package com.gu.zuora.model
 
 import com.gu.i18n.Country
 
-case class ContactDetails(FirstName: String,
-                          LastName: String,
-                          WorkEmail: String,
-                          Country: Country,
-                          Address1: Option[String] = None,
-                          Address2: Option[String] = None,
-                          City: Option[String] = None,
-                          PostalCode: Option[String] = None,
-                          State: Option[String] = None)
+case class ContactDetails(firstName: String,
+                          lastName: String,
+                          workEmail: String,
+                          country: Country,
+                          address1: Option[String] = None,
+                          address2: Option[String] = None,
+                          city: Option[String] = None,
+                          postalCode: Option[String] = None,
+                          state: Option[String] = None)

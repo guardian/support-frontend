@@ -1,10 +1,10 @@
 package com.gu.zuora.model
 
 sealed trait ZuoraResponse {
-  def Success: Boolean
+  def success: Boolean
 }
 
-case class ZuoraErrorResponse(Success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
 
 case class ZuoraError(Code: String, Message: String)
 
@@ -19,24 +19,24 @@ case class BasicInfo(
   invoiceTemplateId: String,
   communicationProfileId: Option[String])
 
-case class GetAccountResponse(Success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
+case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
 case class SubscribeResponseAccount(
-  AccountNumber: String,
-  SubscriptionNumber: String,
-  GatewayResponse: String,
-  PaymentId: String,
-  InvoiceResult: InvoiceResult,
-  TotalTcv: Int,
-  SubscriptionId: String,
-  TotalMrr: Int,
-  PaymentTransactionNumber: String,
-  AccountId: String,
-  GatewayResponseCode: String,
-  InvoiceNumber: String,
-  InvoiceId: String,
-  Success: Boolean) extends ZuoraResponse
+  accountNumber: String,
+  subscriptionNumber: String,
+  gatewayResponse: String,
+  paymentId: String,
+  invoiceResult: InvoiceResult,
+  totalTcv: Int,
+  subscriptionId: String,
+  totalMrr: Int,
+  paymentTransactionNumber: String,
+  accountId: String,
+  gatewayResponseCode: String,
+  invoiceNumber: String,
+  invoiceId: String,
+  success: Boolean) extends ZuoraResponse
 
-case class InvoiceResult(Invoice: List[Invoice])
+case class InvoiceResult(invoice: List[Invoice])
 
-case class Invoice(InvoiceNumber: String, Id: String)
+case class Invoice(invoiceNumber: String, id: String)

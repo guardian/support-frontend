@@ -14,7 +14,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val zuoraService = new ZuoraService(Configuration.zuoraConfig, RequestRunners.configurableFutureRunner(10.seconds))
     zuoraService.getAccount(Fixtures.accountNumber).map {
       response =>
-        response.Success should be(true)
+        response.success should be(true)
         response.basicInfo.accountNumber should be(Fixtures.accountNumber)
     }
   }
@@ -24,7 +24,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     zuoraService.subscribe(subscriptionRequest).map {
       response =>
         logger.info(s"$response")
-        response.head.Success should be(true)
+        response.head.success should be(true)
     }
   }
 }

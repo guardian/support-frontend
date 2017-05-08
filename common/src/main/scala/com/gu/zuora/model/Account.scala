@@ -2,14 +2,15 @@ package com.gu.zuora.model
 
 import com.gu.i18n.Currency
 
-case class Account(Name: String,
-  Currency: Currency,
-  CrmId: String, //Salesforce accountId
+case class Account(
+  name: String,
+  currency: Currency,
+  crmId: String, //Salesforce accountId
   sfContactId__c: String, //Salesforce contactId
-  IdentityId__c: String,
-  PaymentGateway: PaymentGateway,
-  BillCycleDay: Int = 0,
-  AutoPay: Boolean = true,
-  PaymentTerm: String = "Due Upon Receipt",
-  BcdSettingOption: String = "AutoSet",
-  Batch: String = "Batch1")
+  identityId__c: String,
+  paymentGateway: PaymentGateway,
+  billCycleDay: Int = 0,
+  autoPay: Boolean = true,
+  paymentTerm: String = "Due Upon Receipt",
+  bcdSettingOption: String = "AutoSet",
+  batch: String = "Batch1")

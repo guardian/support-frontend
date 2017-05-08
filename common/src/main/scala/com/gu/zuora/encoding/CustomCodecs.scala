@@ -1,9 +1,9 @@
-package com.gu.zuora
+package com.gu.zuora.encoding
 
 import com.gu.i18n.{Country, Currency}
-import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalPaymentMethod, PaymentGateway, PaymentMethod}
+import com.gu.zuora.encoding.CapitalizationEncoder.capitalizingEncoder
+import com.gu.zuora.model._
 import io.circe._
-import io.circe.generic.semiauto._
 import org.joda.time.LocalDate
 
 //Implementing this as a trait which can be mixed in because IntelliJ incorrectly marks the import
@@ -13,12 +13,15 @@ trait CustomCodecs {
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
   implicit val encodePaymentGateway: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
   implicit val encodeCountryAsAlpha2: Encoder[Country] = Encoder.encodeString.contramap[Country](_.alpha2)
+  implicit val encodeAccount: Encoder[Account] = capitalizingEncoder[Account]
+  implicit val encodeContact = capitalizingEncoder[ContactDetails]
+  implicit val encodeSubscribeOptions = capitalizingEncoder[SubscribeOptions]
 
   //We need to serialise PaymentMethod using the subtype to avoid nesting (see CirceEncodingBehaviourSpec)
-  implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod]{
+  implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
     override final def apply(a: PaymentMethod) = a match {
-      case p: PayPalPaymentMethod => deriveEncoder[PayPalPaymentMethod].apply(p)
-      case c: CreditCardReferenceTransaction => deriveEncoder[CreditCardReferenceTransaction].apply(c)
+      case p: PayPalPaymentMethod => capitalizingEncoder[PayPalPaymentMethod].apply(p)
+      case c: CreditCardReferenceTransaction => capitalizingEncoder[CreditCardReferenceTransaction].apply(c)
     }
   }
 
