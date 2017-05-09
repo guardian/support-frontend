@@ -6,7 +6,7 @@ case class Account(
   name: String,
   currency: Currency,
   crmId: String, //Salesforce accountId
-  sfContactId__c: String, //Salesforce contactId
+  sfContactId__c: String, //Salesforce contactId - if this field name changes then change the encoder in CustomCodecs
   identityId__c: String,
   paymentGateway: PaymentGateway,
   billCycleDay: Int = 0,

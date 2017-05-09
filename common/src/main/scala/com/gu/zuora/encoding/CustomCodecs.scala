@@ -1,5 +1,6 @@
 package com.gu.zuora.encoding
 
+import com.gu.helpers.StringExtensions._
 import com.gu.i18n.{Country, Currency}
 import com.gu.zuora.encoding.CapitalizationEncoder._
 import com.gu.zuora.model._
@@ -10,10 +11,19 @@ import org.joda.time.LocalDate
 //as unused (resulting in it getting removed when optimising imports) if we make it an object and then import it.
 trait CustomCodecs {
   //Request encoders
-  implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso) //Encodes a Currency as its iso code eg. {"Currency": "GBP"}
+  implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
+  //Encodes a Currency as its iso code eg. {"Currency": "GBP"}
   implicit val encodePaymentGateway: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
   implicit val encodeCountryAsAlpha2: Encoder[Country] = Encoder.encodeString.contramap[Country](_.alpha2)
-  implicit val encodeAccount: Encoder[Account] = capitalizingEncoder[Account]
+
+  //Account object encoding - unfortunately the custom field name of the Salesforce contact id starts with a lower case
+  //letter whereas all the other fields start with upper case so we need to set it explicitly
+  val salesforceIdCustomFieldName = "sfContactId__c"
+  private def decapitalizeSfContactId(fn: String) =
+    if (fn == salesforceIdCustomFieldName.capitalize) salesforceIdCustomFieldName.decapitalize
+    else fn
+  implicit val encodeAccount: Encoder[Account] = capitalizingEncoder[Account].mapJsonObject(modifyFields(_)(decapitalizeSfContactId))
+
   implicit val encodeSubscribeOptions: Encoder[SubscribeOptions] = capitalizingEncoder[SubscribeOptions]
   implicit val encodeSubscribeResponseAccount: Encoder[SubscribeResponseAccount] = capitalizingEncoder[SubscribeResponseAccount]
   implicit val encodeInvoice: Encoder[Invoice] = capitalizingEncoder[Invoice]

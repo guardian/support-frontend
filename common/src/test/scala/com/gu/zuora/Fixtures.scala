@@ -10,83 +10,85 @@ object Fixtures {
   val accountNumber = "A00015760"
 
   val getAccountResponse =
-    """{
-                               "basicInfo" : {
-                                 "id" : "2c92c0f85bae511e015bcf31cde61532",
-                                 "name" : "001g000001gPV73AAG",
-                                 "accountNumber" : "A00015760",
-                                 "notes" : null,
-                                 "status" : "Active",
-                                 "crmId" : "001g000001gPV73AAG",
-                                 "batch" : "Batch1",
-                                 "invoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e",
-                                 "communicationProfileId" : null,
-                                 "IdentityId__c" : "30000291",
-                                 "sfContactId__c" : "003g000001UtN1qAAF",
-                                 "CCURN__c" : null
-                               },
-                               "billingAndPayment" : {
-                                 "billCycleDay" : 3,
-                                 "currency" : "GBP",
-                                 "paymentTerm" : "Due Upon Receipt",
-                                 "paymentGateway" : "Stripe Gateway 1",
-                                 "invoiceDeliveryPrefsPrint" : false,
-                                 "invoiceDeliveryPrefsEmail" : false,
-                                 "additionalEmailAddresses" : [ ]
-                               },
-                               "metrics" : {
-                                 "balance" : 0E-9,
-                                 "totalInvoiceBalance" : 0E-9,
-                                 "creditBalance" : 0E-9,
-                                 "contractedMrr" : 4.250000000
-                               },
-                               "billToContact" : {
-                                 "address1" : "Test",
-                                 "address2" : "TEst",
-                                 "city" : "Test",
-                                 "country" : "United Kingdom",
-                                 "county" : null,
-                                 "fax" : null,
-                                 "firstName" : "Test",
-                                 "homePhone" : null,
-                                 "lastName" : "Test",
-                                 "mobilePhone" : null,
-                                 "nickname" : null,
-                                 "otherPhone" : null,
-                                 "otherPhoneType" : null,
-                                 "personalEmail" : null,
-                                 "state" : "Test",
-                                 "taxRegion" : null,
-                                 "workEmail" : "test@foo.com",
-                                 "workPhone" : null,
-                                 "zipCode" : "T223EST",
-                                 "SpecialDeliveryInstructions__c" : null
-                               },
-                               "soldToContact" : {
-                                 "address1" : "Test",
-                                 "address2" : "TEst",
-                                 "city" : "Test",
-                                 "country" : "United Kingdom",
-                                 "county" : null,
-                                 "fax" : null,
-                                 "firstName" : "Test",
-                                 "homePhone" : null,
-                                 "lastName" : "Test",
-                                 "mobilePhone" : null,
-                                 "nickname" : null,
-                                 "otherPhone" : null,
-                                 "otherPhoneType" : null,
-                                 "personalEmail" : null,
-                                 "state" : "Test",
-                                 "taxRegion" : null,
-                                 "workEmail" : "test@foo.com",
-                                 "workPhone" : null,
-                                 "zipCode" : "T223EST",
-                                 "SpecialDeliveryInstructions__c" : null
-                               },
-                               "taxInfo" : null,
-                               "success" : true
-                             }"""
+    """
+       {
+         "basicInfo" : {
+           "id" : "2c92c0f85bae511e015bcf31cde61532",
+           "name" : "001g000001gPV73AAG",
+           "accountNumber" : "A00015760",
+           "notes" : null,
+           "status" : "Active",
+           "crmId" : "001g000001gPV73AAG",
+           "batch" : "Batch1",
+           "invoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e",
+           "communicationProfileId" : null,
+           "IdentityId__c" : "30000291",
+           "sfContactId__c" : "003g000001UtN1qAAF",
+           "CCURN__c" : null
+         },
+         "billingAndPayment" : {
+           "billCycleDay" : 3,
+           "currency" : "GBP",
+           "paymentTerm" : "Due Upon Receipt",
+           "paymentGateway" : "Stripe Gateway 1",
+           "invoiceDeliveryPrefsPrint" : false,
+           "invoiceDeliveryPrefsEmail" : false,
+           "additionalEmailAddresses" : [ ]
+         },
+         "metrics" : {
+           "balance" : 0E-9,
+           "totalInvoiceBalance" : 0E-9,
+           "creditBalance" : 0E-9,
+           "contractedMrr" : 4.250000000
+         },
+         "billToContact" : {
+           "address1" : "Test",
+           "address2" : "TEst",
+           "city" : "Test",
+           "country" : "United Kingdom",
+           "county" : null,
+           "fax" : null,
+           "firstName" : "Test",
+           "homePhone" : null,
+           "lastName" : "Test",
+           "mobilePhone" : null,
+           "nickname" : null,
+           "otherPhone" : null,
+           "otherPhoneType" : null,
+           "personalEmail" : null,
+           "state" : "Test",
+           "taxRegion" : null,
+           "workEmail" : "test@foo.com",
+           "workPhone" : null,
+           "zipCode" : "T223EST",
+           "SpecialDeliveryInstructions__c" : null
+         },
+         "soldToContact" : {
+           "address1" : "Test",
+           "address2" : "TEst",
+           "city" : "Test",
+           "country" : "United Kingdom",
+           "county" : null,
+           "fax" : null,
+           "firstName" : "Test",
+           "homePhone" : null,
+           "lastName" : "Test",
+           "mobilePhone" : null,
+           "nickname" : null,
+           "otherPhone" : null,
+           "otherPhoneType" : null,
+           "personalEmail" : null,
+           "state" : "Test",
+           "taxRegion" : null,
+           "workEmail" : "test@foo.com",
+           "workPhone" : null,
+           "zipCode" : "T223EST",
+           "SpecialDeliveryInstructions__c" : null
+         },
+         "taxInfo" : null,
+         "success" : true
+       }
+    """
 
   val salesforceAccountId = "001g000001gPmXdAAK"
   val salesforceId = "003g000001UtkrEAAR"
