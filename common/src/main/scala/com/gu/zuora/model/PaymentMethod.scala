@@ -16,7 +16,8 @@ case class CreditCardReferenceTransaction(
   creditCardType: String /*TODO: strip spaces?*/ ,
   `type`: String = "CreditCardReferenceTransaction") extends PaymentMethod
 
-case class PayPalPaymentMethod(PaypalBaid: String,
+case class PayPalReferenceTransaction(
+  paypalBaid: String,
   paypalEmail: String,
   paypalType: String = "ExpressCheckout",
   `type`: String = "PayPal") extends PaymentMethod

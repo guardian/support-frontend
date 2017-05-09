@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import com.gu.support.workers.Fixtures.CreateSalesforceContactFixtures._
 import com.gu.support.workers.model.CreateSalesforceContactState
-import com.gu.zuora.soap.model.{PayPalReferenceTransaction, PaymentMethod}
+import com.gu.zuora.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -13,7 +13,7 @@ class CreateSalesforceContactDecoderSpec  extends FlatSpec with Matchers with Mo
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceContactJson)
     val result = state.right.get
-    result.amount should be (5)
+    result.amount should be (5) //scalastyle:ignore
     result.paymentMethod match{
       case payPal : PayPalReferenceTransaction => succeed
       case _ => fail()

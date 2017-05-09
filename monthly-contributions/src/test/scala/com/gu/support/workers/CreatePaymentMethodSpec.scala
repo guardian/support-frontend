@@ -10,7 +10,7 @@ import com.gu.support.workers.Fixtures.CreatePaymentMethodFixtures._
 import com.gu.support.workers.Fixtures.validBaid
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
-import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import io.circe.ParsingFailure
 import io.circe.generic.auto._
 import org.mockito.Matchers._
@@ -33,11 +33,11 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     //See CirceEncodingBehaviourSpec for more details
 
     outStream.toClass[CreateSalesforceContactState]() match {
-      case  state@CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction)  =>
+      case state@CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction) =>
         logger.info(s"$state")
-        payPal.baId should be(validBaid)
-        payPal.email should be("membership.paypal-buyer@theguardian.com")
-      case _  => fail()
+        payPal.paypalBaid should be(validBaid)
+        payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
+      case _ => fail()
     }
   }
 
@@ -54,13 +54,13 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     //See CirceEncodingBehaviourSpec for more details
     outStream.toClass[CreateSalesforceContactState]() match {
       case CreateSalesforceContactState(_, _, stripe: CreditCardReferenceTransaction) =>
-        stripe.cardId should be("1234")
-      case _  => fail()
+        stripe.tokenId should be("1234")
+      case _ => fail()
     }
   }
 
   it should "fail when passed invalid json" in {
-    a [ParsingFailure] should be thrownBy {
+    a[ParsingFailure] should be thrownBy {
       val createPaymentMethod = new CreatePaymentMethod()
 
       val outStream = new ByteArrayOutputStream()
@@ -77,7 +77,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
   lazy val mockStripeService = {
     //Mock the stripe service as we cannot actually create a customer
     val stripeMock = mock[StripeService]
-    val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB")
+    val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB") //scalastyle:ignore
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
     when(stripeMock.createCustomer(any[String], any[String])).thenReturn(Future(customer))
     stripeMock

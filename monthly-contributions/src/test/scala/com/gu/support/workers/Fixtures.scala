@@ -1,5 +1,7 @@
 package com.gu.support.workers
+
 import com.gu.salesforce.Fixtures.idId
+
 object Fixtures {
   val userJson =
     s"""
@@ -52,8 +54,10 @@ object Fixtures {
       s"""
          {
            "PayPalReferenceTransaction" : {
-              "baId": "$validBaid",
-              "email": "$payPalEmail"
+              "paypalBaid": "$validBaid",
+              "paypalEmail": "$payPalEmail",
+              "paypalType": "ExpressCheckout",
+              "type": "PayPal"
            }
          }
        """
@@ -65,4 +69,5 @@ object Fixtures {
         "paymentMethod": $payPalPaymentMethod
         }"""
   }
+
 }

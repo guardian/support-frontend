@@ -8,7 +8,7 @@ import com.gu.paypal.PayPalService
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.decodeCreatePaymentMethodState
 import com.gu.support.workers.model.{CreatePaymentMethodState, CreateSalesforceContactState, PayPalPaymentFields, StripePaymentFields}
-import com.gu.zuora.soap.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
+import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 

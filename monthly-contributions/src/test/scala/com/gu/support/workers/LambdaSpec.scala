@@ -8,6 +8,6 @@ import org.scalatest.{FlatSpec, Matchers}
 
 abstract class LambdaSpec  extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
   val context = mock[Context]
-  when(context.getRemainingTimeInMillis).thenReturn(10000)
+  when(context.getRemainingTimeInMillis).thenReturn(10000) //scalastyle:ignore
 
 }

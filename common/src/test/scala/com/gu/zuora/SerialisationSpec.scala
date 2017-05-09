@@ -1,7 +1,7 @@
 package com.gu.zuora
 
 import com.gu.zuora.Fixtures._
-import com.gu.zuora.encoding.CustomCodecs
+import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Printer
@@ -10,7 +10,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with CustomCodecs {
+class SerialisationSpec extends FlatSpec with Matchers with LazyLogging  {
 
   "Account" should "serialise to correct json" in {
     val json = account.asJson

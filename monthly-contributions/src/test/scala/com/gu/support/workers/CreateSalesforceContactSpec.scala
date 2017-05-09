@@ -9,8 +9,6 @@ import com.gu.support.workers.lambdas.CreateSalesforceContact
 import com.gu.support.workers.model.CreateZuoraSubscriptionState
 import io.circe.generic.auto._
 
-
-
 class CreateSalesforceContactSpec extends LambdaSpec {
 
   "CreateSalesForceContact lambda" should "retrieve a SalesforceContactRecord" in {
