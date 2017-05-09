@@ -2,27 +2,30 @@ package com.gu.zuora.model
 
 import org.joda.time.LocalDate
 
-case class SubscriptionData(RatePlanData: List[RatePlanData], Subscription: Subscription)
+case class SubscriptionData(ratePlanData: List[RatePlanData], subscription: Subscription)
 
-case class Subscription(ContractEffectiveDate: LocalDate,
-  ContractAcceptanceDate: LocalDate,
-  TermStartDate: LocalDate,
-  AutoRenew: Boolean = true,
+case class Subscription(
+  contractEffectiveDate: LocalDate,
+  contractAcceptanceDate: LocalDate,
+  termStartDate: LocalDate,
+  autoRenew: Boolean = true,
   //scalastyle:off magic.number
-  InitialTerm: Int = 12,
-  RenewalTerm: Int = 12,
+  initialTerm: Int = 12,
+  renewalTerm: Int = 12,
   //scalastyle:on magic.number
-  TermType: String = "TERMED")
+  termType: String = "TERMED")
 
-case class RatePlanData(RatePlan: RatePlan,
-  RatePlanChargeData: List[RatePlanChargeData],
-  SubscriptionProductFeatureList: List[SubscriptionProductFeature])
+case class RatePlanData(
+  ratePlan: RatePlan,
+  ratePlanChargeData: List[RatePlanChargeData],
+  subscriptionProductFeatureList: List[SubscriptionProductFeature])
 
-case class RatePlan(ProductRatePlanId: String)
+case class RatePlan(productRatePlanId: String)
 
-case class RatePlanChargeData(RatePlanCharge: RatePlanCharge)
+case class RatePlanChargeData(ratePlanCharge: RatePlanCharge)
 
-case class RatePlanCharge(ProductRatePlanChargeId: String,
-  Price: Option[BigDecimal])
+case class RatePlanCharge(
+  productRatePlanChargeId: String,
+  price: Option[BigDecimal])
 
-case class SubscriptionProductFeature(FeatureId: String)
+case class SubscriptionProductFeature(featureId: String)

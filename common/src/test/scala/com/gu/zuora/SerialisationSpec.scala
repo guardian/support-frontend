@@ -9,10 +9,8 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
-import com.gu.zuora.encoding.CapitalizationEncoder.capitalizingEncoder
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
-  implicit val e = capitalizingEncoder
+class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with CustomCodecs {
 
   "Account" should "serialise to correct json" in {
     val json = account.asJson
@@ -27,13 +25,23 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
   "SubscribeRequest" should "serialise to correct json" in {
     val json = subscriptionRequest.asJson
-    (json \\ "GenerateInvoice").head.asBoolean should be (Some(true))
+    (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     logger.info(json.pretty(Printer.spaces2.copy(dropNullKeys = true)))
+  }
+
+  "InvoiceResult" should "deserialise correctly" in {
+    val decodeResponse = decode[InvoiceResult](invoiceResult)
+    decodeResponse.isRight should be(true)
+  }
+
+  "SubscribeResponseAccount" should "deserialise correctly" in {
+    val decodeResponse = decode[SubscribeResponseAccount](subscribeResponseAccount)
+    decodeResponse.isRight should be(true)
   }
 
   "SubscribeResponse" should "deserialise correctly" in {
     val decodeResponse = decode[List[SubscribeResponseAccount]](subscribeResponse)
-    decodeResponse.isRight should be (true)
+    decodeResponse.isRight should be(true)
   }
 
   "GetAccountResponse" should "deserialise from json" in {

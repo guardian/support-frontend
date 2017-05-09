@@ -64,7 +64,9 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)))
 
   def post[A](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.pretty(Printer.noSpaces.copy(dropNullKeys = true)))
+    val json = data.pretty(Printer.noSpaces.copy(dropNullKeys = true))
+    logger.info(json)
+    val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }
 

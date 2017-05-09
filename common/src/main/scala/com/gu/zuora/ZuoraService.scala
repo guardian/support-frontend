@@ -7,7 +7,6 @@ import com.gu.zuora.model._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import okhttp3.Request.Builder
-import com.gu.zuora.encoding.CapitalizationEncoder.capitalizeFields
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,5 +25,5 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: E
     get[GetAccountResponse](s"accounts/$accountNumber")
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-    post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson.mapObject(capitalizeFields))
+    post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson)
 }

@@ -96,13 +96,14 @@ object Fixtures {
   val secondTokenId = "cus_AaynKIp19IIGDz"
   val cardNumber = "4242"
   val payPalBaid = "B-23637766K5365543J"
+  //scalastyle:off magic.number
   val date = new LocalDate(2017, 5, 4)
 
   val account = Account(salesforceAccountId, GBP, salesforceAccountId, salesforceId, identityId, StripeGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "Visa")
   val payPalPaymentMethod = PayPalPaymentMethod(payPalBaid, "test@paypal.com")
-
+  //scalastyle:on magic.number
   val subscriptionData = SubscriptionData(List(
     RatePlanData(
       RatePlan(Configuration.zuoraConfig.productRatePlanId),
@@ -116,34 +117,43 @@ object Fixtures {
 
   val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
 
-  val subscribeResponse =
+  val invoiceResult =
     """
-      |[
-      |  {
-      |    "AccountNumber": "A00015771",
-      |    "SubscriptionNumber": "A-S00043097",
-      |    "GatewayResponse": "Payment complete.",
-      |    "PaymentId": "2c92c0f85be67835015be751f3286569",
-      |    "InvoiceResult": {
-      |      "Invoice": [
-      |        {
-      |          "InvoiceNumber": "INV00051836",
-      |          "Id": "2c92c0f85be67835015be751f2c6655e"
-      |        }
-      |      ]
-      |    },
-      |    "TotalTcv": 60,
-      |    "SubscriptionId": "2c92c0f85be67835015be751f24a6550",
-      |    "Success": true,
-      |    "TotalMrr": 5,
-      |    "PaymentTransactionNumber": "ch_AcMack4JjPKuw6",
-      |    "AccountId": "2c92c0f85be67835015be751f1d8654c",
-      |    "GatewayResponseCode": "Approved",
-      |    "InvoiceNumber": "INV00051836",
-      |    "InvoiceId": "2c92c0f85be67835015be751f2c6655e"
-      |  }
-      |]
-    """.stripMargin
+      {
+        "Invoice": [
+          {
+            "InvoiceNumber": "INV00051836",
+            "Id": "2c92c0f85be67835015be751f2c6655e"
+          }
+        ]
+      }
+    """
+
+  val subscribeResponseAccount =
+    s"""
+        {
+          "AccountNumber": "A00015771",
+          "SubscriptionNumber": "A-S00043097",
+          "GatewayResponse": "Payment complete.",
+          "PaymentId": "2c92c0f85be67835015be751f3286569",
+          "InvoiceResult": $invoiceResult,
+          "TotalTcv": 60,
+          "SubscriptionId": "2c92c0f85be67835015be751f24a6550",
+          "Success": true,
+          "TotalMrr": 5,
+          "PaymentTransactionNumber": "ch_AcMack4JjPKuw6",
+          "AccountId": "2c92c0f85be67835015be751f1d8654c",
+          "GatewayResponseCode": "Approved",
+          "InvoiceNumber": "INV00051836",
+          "InvoiceId": "2c92c0f85be67835015be751f2c6655e"
+        }
+    """
+  val subscribeResponse =
+    s"""
+      [
+        $subscribeResponseAccount
+      ]
+    """
 
 }
 
