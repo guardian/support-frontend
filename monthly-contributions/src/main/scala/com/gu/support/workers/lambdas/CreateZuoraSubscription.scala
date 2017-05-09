@@ -26,7 +26,7 @@ class CreateZuoraSubscription(zuoraService: ZuoraService)
       state.salesForceContact.AccountId, //We store the Salesforce Account id in the name field
       GBP, //Hard coded to GBP for now
       state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
-      state.salesForceContact.AccountId, //Hello, this looks familiar
+      state.salesForceContact.Id,
       state.user.id,
       PaymentGateway.forPaymentMethod(state.paymentMethod))
 

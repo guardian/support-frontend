@@ -24,6 +24,7 @@ case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: S
 trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
+
   private def urlBuilder = HttpUrl.parse(wsUrl).newBuilder()
 
   /**
@@ -44,7 +45,8 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
    * @tparam A The type of the object that is expected to be returned from the request
    * @return
    */
-  private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  private def request[A](rb: Request.Builder)
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
     logger.debug(s"Issuing request ${req.method} ${req.url}")
     // The string provided here sets the Custom Metric Name for the http request in CloudWatch
@@ -54,18 +56,21 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
       val responseBody = response.body.string()
       logger.debug(s"$responseBody")
       decode[A](responseBody) match {
-        case Left(err) => throw decode[Error](responseBody).right.getOrElse(WebServiceHelperError[A](response.code(), responseBody))
+        case Left(err) => throw decode[Error](responseBody).right.getOrElse(
+          WebServiceHelperError[A](response.code(), responseBody)
+        )
         case Right(value) => value
       }
     }
   }
 
-  def get[A](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+  def get[A](endpoint: String, params: (String, String)*)
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)))
 
-  def post[A](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def post[A](endpoint: String, data: Json, params: (String, String)*)
+    (implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullKeys = true))
-    logger.info(json)
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }

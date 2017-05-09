@@ -71,7 +71,7 @@ object AuthService extends LazyLogging {
   }
 }
 
-class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) 
+class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[SalesforceErrorResponse]
   with LazyLogging {
   val sfConfig = config
