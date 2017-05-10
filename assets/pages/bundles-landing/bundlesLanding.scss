@@ -290,10 +290,6 @@
     }
 
     .why-support__bottom-content {
-      @include mq($until: mobileLandscape) {
-        padding-left: $gu-h-spacing / 2;
-        padding-right: $gu-h-spacing / 2;
-      }
 
       @include mq($from: tablet) {
         padding-top: $gu-v-spacing;
@@ -324,6 +320,14 @@
           max-width: 380px;
           margin-left: $gu-h-spacing;
         }
+      }
+    }
+
+    // Breaks the video out of 'gu-content-margin' to make it full width.
+    .component-video {
+      @include mq($until: mobileLandscape) {
+        width: 100vw;
+        margin-left: - $gu-h-spacing / 2;
       }
     }
 

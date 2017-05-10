@@ -40,9 +40,7 @@ $gu-v-spacing: 12px;
 
 // The paddings at different breakpoints for the content.
 .gu-content-margin {
-  @include mq($from: mobile) {
-    padding: 0 ($gu-h-spacing / 2);
-  }
+  padding: 0 ($gu-h-spacing / 2);
 
   @include mq($from: mobileLandscape) {
     padding: 0 $gu-h-spacing;
