@@ -16,5 +16,9 @@ class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
     logger.info(s"Output: $p")
     p.NVPVersion should be ("124.0")
     p.signature.length should be > 0
+
+    val e = Configuration.emailServicesConfig
+    logger.info(s"Output: $e")
+    e.thankYouEmailQueue should be ("contributions-thanks-dev")
   }
 }

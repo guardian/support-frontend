@@ -13,6 +13,7 @@ object Dependencies {
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
   val awsS3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.13"
+  val awsSQS = "com.amazonaws" % "aws-java-sdk-sqs" % "1.11.95"
   val awsCloudwatch = "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.11.95"
   val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   val mokito = "org.mockito" % "mockito-core" % "1.9.5" % "test"
@@ -22,7 +23,7 @@ object Dependencies {
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3" //Used for retrying http requests
   val akkaAgent = "com.typesafe.akka" %% "akka-agent" % "2.3.4" //Used by the Salesforce code for handling auth tokens
 
-  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, akkaAgent, joda, dispatch, supportInternationalisation, awsCloudwatch, awsS3, awsLambdas, okhttp, scalaUri, cats, circeCore, circeGeneric, circeParser, scalaTest)
+  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, akkaAgent, joda, dispatch, supportInternationalisation, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore, circeGeneric, circeParser, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)
 
 }

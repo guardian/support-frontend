@@ -8,6 +8,6 @@ import io.circe.generic.auto._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateZuoraSubscription extends FutureHandler[CreateZuoraSubscriptionState, String] with LazyLogging {
-  override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context) = Future.successful("success")
+class CreateZuoraSubscription extends FutureHandler[CreateZuoraSubscriptionState, CreateZuoraSubscriptionState] with LazyLogging {
+  override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context) = Future.successful(state)
 }

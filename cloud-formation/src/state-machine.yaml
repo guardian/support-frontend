@@ -12,6 +12,10 @@ States:
   CreateZuoraSubscription:
     Type: Task
     Resource: "$${CreateZuoraSubscriptionLambda.Arn}"
+    Next: SendThankYouEmail
+  SendThankYouEmail:
+    Type: Task
+    Resource: "$${SendThankYouEmailLambda.Arn}"
     Next: FlakeyService
   FlakeyService:
     Type: Task

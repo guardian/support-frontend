@@ -65,4 +65,20 @@ object Fixtures {
         "paymentMethod": $payPalPaymentMethod
         }"""
   }
+
+  object SendThankYouEmailFixtures {
+    import CreateSalesforceContactFixtures._
+
+    val thankYouEmailJson =
+      s"""{
+          |  $userJson,
+          |  "amount": 5,
+          |  "paymentMethod": $payPalPaymentMethod,
+          |  "salesForceContact": {
+          |    "Id": "123",
+          |    "AccountId": "123"
+          |  }
+          |}
+       """.stripMargin
+  }
 }
