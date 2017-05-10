@@ -26,17 +26,17 @@ const videoCatalogue: {
 // ----- Types ----- //
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
-export type videoName = $Keys<typeof videoCatalogue>;
+export type VideoName = $Keys<typeof videoCatalogue>;
 
 type PropTypes = {
-  name: videoName,
+  name: VideoName,
   poster: ?GridImg,
 };
 
 
 // ----- Functions ----- //
 
-function youtubeUrl(name: videoName) {
+function youtubeUrl(name: VideoName): string {
 
   const youtubeId = videoCatalogue[name];
   const url = new URL(youtubeId, YOUTUBE_BASE);

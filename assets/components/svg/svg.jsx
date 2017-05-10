@@ -71,10 +71,10 @@ const svgsCatalog: {
 // ----- Types ----- //
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
-export type svgName = $Keys<typeof svgsCatalog>;
+export type SvgName = $Keys<typeof svgsCatalog>;
 
 type PropTypes = {
-  svgName: svgName,
+  svgName: SvgName,
 };
 
 
