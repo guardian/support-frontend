@@ -16,5 +16,5 @@ trait AppComponents extends PlayComponents {
   lazy val applicationController = new Application()
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(new CheckCacheHeadersFilter())
-  override lazy val router: Router = new Routes(httpErrorHandler, assetController, applicationController, prefix = "/")
+  override lazy val router: Router = new Routes(httpErrorHandler, assetController, applicationController, controllers.Default, prefix = "/")
 }

@@ -7,4 +7,6 @@ GET /healthcheck                controllers.Application.healthcheck
 # ----- Pages ----- #
 
 GET /hello                      controllers.Application.helloWorld
-GET /                           controllers.Application.bundlesLanding
+GET /uk                         controllers.Application.bundlesLanding
+GET /                           controllers.Default.redirect(to = "/uk")
+
