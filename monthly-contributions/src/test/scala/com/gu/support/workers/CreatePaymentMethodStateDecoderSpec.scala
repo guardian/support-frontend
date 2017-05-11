@@ -1,7 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.support.workers.Fixtures.CreatePaymentMethodFixtures._
-import com.gu.support.workers.Fixtures.validBaid
+import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.{decodeCreatePaymentMethodState, decodePaymentFields}
 import com.gu.support.workers.model.{CreatePaymentMethodState, PayPalPaymentFields, StripePaymentFields}
 import com.typesafe.scalalogging.LazyLogging

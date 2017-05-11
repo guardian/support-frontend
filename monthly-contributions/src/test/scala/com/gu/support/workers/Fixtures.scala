@@ -16,42 +16,9 @@ object Fixtures {
         }
     """
   val validBaid = "B-23637766K5365543J"
-
-  object CreatePaymentMethodFixtures {
-    val payPalJson =
-      s"""
-                {
-                  "paypalBaid": "$validBaid"
-                }
-                """
-    val stripeToken = "tok_AXY4M16p60c2sg"
-    val stripeJson =
-      s"""
-                {
-                  "userId": "12345",
-                  "stripeToken": "$stripeToken"
-                }
-                """
-    val createPayPalPaymentMethodJson =
-      s"""{
-          $userJson,
-          "amount": 5,
-          "paymentFields": $payPalJson
-        }"""
-
-    val createStripePaymentMethodJson =
-      s"""{
-          $userJson,
-          "amount": 5,
-          "paymentFields": $stripeJson
-        }"""
-  }
-
-
-  object CreateSalesforceContactFixtures {
-    val payPalEmail = "test@paypal.com"
-    val payPalPaymentMethod =
-      s"""
+  val payPalEmail = "test@paypal.com"
+  val payPalPaymentMethod =
+    s"""
          {
            "PayPalReferenceTransaction" : {
               "paypalBaid": "$validBaid",
@@ -62,12 +29,57 @@ object Fixtures {
          }
        """
 
-    val createSalesForceContactJson =
-      s"""{
-        $userJson,
-        "amount": 5,
-        "paymentMethod": $payPalPaymentMethod
+  val payPalJson =
+    s"""
+                {
+                  "paypalBaid": "$validBaid"
+                }
+                """
+  val stripeToken = "tok_AXY4M16p60c2sg"
+  val stripeJson =
+    s"""
+                {
+                  "userId": "12345",
+                  "stripeToken": "$stripeToken"
+                }
+                """
+  val createPayPalPaymentMethodJson =
+    s"""{
+          $userJson,
+          "amount": 5,
+          "paymentFields": $payPalJson
         }"""
-  }
 
+  val createStripePaymentMethodJson =
+    s"""{
+          $userJson,
+          "amount": 5,
+          "paymentFields": $stripeJson
+        }"""
+
+  val createSalesForceContactJson =
+    s"""
+          {
+            $userJson,
+            "amount": 5,
+            "paymentMethod": $payPalPaymentMethod
+          }
+        """
+
+  val salesforceContactJson =
+    """
+        {
+          "Id": "003g000001UnFItAAN",
+          "AccountId": "001g000001gOR06AAG"
+        }
+      """
+  val createZuoraSubscriptionJson =
+    s"""
+          {
+            $userJson,
+            "amount": 5,
+            "paymentMethod": $payPalPaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
 }

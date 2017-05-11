@@ -1,6 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.support.workers.Fixtures.CreateSalesforceContactFixtures._
+import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.model.CreateSalesforceContactState
 import com.gu.zuora.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging

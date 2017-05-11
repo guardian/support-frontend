@@ -6,8 +6,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.Fixtures.CreatePaymentMethodFixtures._
-import com.gu.support.workers.Fixtures.validBaid
+import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
 import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
