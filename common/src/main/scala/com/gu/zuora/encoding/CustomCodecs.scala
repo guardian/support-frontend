@@ -18,10 +18,10 @@ trait CustomCodecs {
 
   //Account object encoding - unfortunately the custom field name of the Salesforce contact id starts with a lower case
   //letter whereas all the other fields start with upper case so we need to set it explicitly
-  val salesforceIdName = "sfContactId__c"
-  private def decapitalizeSfContactId(fn: String) =
-    if (fn == salesforceIdName.capitalize) salesforceIdName.decapitalize
-    else fn
+  private val salesforceIdName = "sfContactId__c"
+  private def decapitalizeSfContactId(fieldName: String) =
+    if (fieldName == salesforceIdName.capitalize) salesforceIdName.decapitalize
+    else fieldName
 
   implicit val encodeAccount: Encoder[Account] = capitalizingEncoder[Account].mapJsonObject(modifyFields(_)(decapitalizeSfContactId))
 

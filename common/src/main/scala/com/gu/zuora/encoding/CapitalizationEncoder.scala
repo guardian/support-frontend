@@ -2,16 +2,13 @@ package com.gu.zuora.encoding
 
 import cats.instances.vector._
 import com.gu.helpers.StringExtensions._
-import com.gu.i18n.Currency
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import io.circe.{Decoder, Encoder, JsonObject, ObjectEncoder}
+import io.circe.{Decoder, JsonObject, ObjectEncoder}
 import shapeless.Lazy
 
 object CapitalizationEncoder {
-  implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
-
   def decapitalizingDecoder[A](implicit decode: Lazy[DerivedDecoder[A]]): Decoder[A] =
     deriveDecoder[A].prepare(
       _.withFocus(
@@ -27,6 +24,7 @@ object CapitalizationEncoder {
     val newObject = JsonObject.from(newFields)
     newObject
   }
+
 
   def capitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.capitalize)
 
