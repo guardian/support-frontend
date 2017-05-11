@@ -39,7 +39,10 @@ module.exports = (env) => {
   }
 
   return {
+    context: path.resolve(__dirname, 'assets'),
+
     entry: {
+      favicons: 'images/favicons.js',
       styles: 'stylesheets/main.scss',
       helloWorldPage: 'pages/hello-world/helloWorld.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
@@ -70,6 +73,10 @@ module.exports = (env) => {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
+        },
+        {
+          test: /\.(png|jpg|gif|ico)$/,
+          loader: 'file-loader?name=[path][name].[hash].[ext]',
         },
         {
           test: /\.scss$/,

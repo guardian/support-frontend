@@ -67,6 +67,7 @@
     "sass-mq": "^3.3.2",
     "webpack": "~2.3.3",
     "webpack-dev-server": "^2.4.2",
-    "webpack-manifest-plugin": "^1.1.0"
+    "webpack-manifest-plugin": "^1.1.0",
+    "file-loader": "^0.11.1"
   }
 }
