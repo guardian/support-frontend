@@ -17,9 +17,8 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceContactResponse, SalesforceErrorResponse]
+  extends WebServiceHelper[SalesforceErrorResponse]
   with LazyLogging {
-
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -73,9 +72,8 @@ object AuthService extends LazyLogging {
 }
 
 class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[Authentication, SalesforceErrorResponse]
+  extends WebServiceHelper[SalesforceErrorResponse]
   with LazyLogging {
-
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client

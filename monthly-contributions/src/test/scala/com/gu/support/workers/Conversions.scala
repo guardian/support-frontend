@@ -14,7 +14,7 @@ object Conversions {
 
   implicit class InputStreamConversions[T](val self: T) {
 
-    def asInputStream()(implicit encoder: Encoder[T]) = {
+    def asInputStream()(implicit encoder: Encoder[T]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
       convertStream.write(self.asJson.noSpaces.getBytes("UTF-8"))
       new ByteArrayInputStream(convertStream.toByteArray)
@@ -33,11 +33,12 @@ object Conversions {
 
   implicit class StringInputStreamConversions[String](val str: String) {
 
-    def asInputStream()(implicit encoder: Encoder[String]) = {
+    def asInputStream()(implicit encoder: Encoder[String]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
 
       convertStream.write(str.toString.getBytes("UTF-8"))
       new ByteArrayInputStream(convertStream.toByteArray)
     }
   }
+
 }
