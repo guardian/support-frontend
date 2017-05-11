@@ -1,0 +1,255 @@
+/*
+This code is lightly modified from: https://github.com/guardian/guss-webfonts
+The main difference is that some of the font formats for older browsers have
+been dropped.
+*/
+
+
+// ----- Config ----- //
+
+$guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/' !default;
+$guss-webfonts-version: '1.0.0' !default;
+$guss-webfonts-hinting: 'off' !default;
+$guss-webfonts-kerning: 'on' !default;
+$guss-webfonts-charset: 'original' !default;
+$guss-webfonts-path: false !default;
+
+$guss-font-weights: (
+    'thin':       100,
+    'light':      200,
+    'book':       300,
+    'regular':    400,
+    'medium':     500,
+    'semibold':   600,
+    'bold':       700,
+    'black':      800,
+    'ultrablack': 900
+) !default;
+
+$guss-extras-directory: 'GuardianExtrasWeb' !default;
+
+$guss-webfonts-extras: 'Guardian Compact Web',
+                       'Guardian Titlepiece Web',
+                       'Guardian Weekend Cond Web' !default;
+
+$guss-webfonts: (
+    'Guardian Agate Sans 1 Web': (
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'bold', style: 'normal'),
+        (weight: 'bold', style: 'italic'),
+    ),
+    'Guardian Egyptian Web': (
+        (weight: 'light', style: 'normal'),
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'semibold', style: 'normal'),
+        (weight: 'semibold', style: 'italic'),
+        (weight: 'medium', style: 'normal'),
+        (weight: 'bold', style: 'normal'),
+        (weight: 'bold', style: 'italic'),
+    ),
+    'Guardian Sans Web': (
+        (weight: 'light', style: 'normal'),
+        (weight: 'regular', style: 'normal'),
+        (weight: 'semibold', style: 'normal'),
+    ),
+    'Guardian Text Egyptian Web': (
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'medium', style: 'normal'),
+        (weight: 'medium', style: 'italic'),
+        (weight: 'bold', style: 'normal'),
+        (weight: 'bold', style: 'italic'),
+        (weight: 'black', style: 'normal'),
+        (weight: 'black', style: 'italic'),
+    ),
+    'Guardian Text Sans Web': (
+        (weight: 'regular', style: 'normal'),
+        (weight: 'regular', style: 'italic'),
+        (weight: 'medium', style: 'normal'),
+        (weight: 'medium', style: 'italic'),
+        (weight: 'bold', style: 'normal'),
+        (weight: 'bold', style: 'italic'),
+        (weight: 'black', style: 'normal'),
+        (weight: 'black', style: 'italic'),
+    ),
+    'Guardian Compact Web': (
+        (weight: 'black', style: 'normal'),
+    ),
+    'Guardian Titlepiece Web': (
+        (weight: 'regular', style: 'normal'),
+    ),
+    'Guardian Weekend Cond Web': (
+        (weight: 'black', style: 'normal'),
+    )
+) !default;
+
+
+// ----- Helpers ----- //
+
+@function guss-font-weight($keyword) {
+    @return map-get($guss-font-weights, $keyword);
+}
+
+@function is-extra($font-family) {
+    @return contain($guss-webfonts-extras, $font-family);
+}
+
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @while $index {
+        $string: str-slice($string, 1, $index - 1) + $replace + str-slice($string, $index + 1);
+        $index: str-index($string, $search);
+    }
+
+    @return $string;
+}
+
+@function str-remove-white-space($string) {
+    @return str-replace($string, ' ', '');
+}
+
+@function str-capitalise($string) {
+    $string: $string + unquote(''); // Make sure $string has a type of String
+    $first-letter: to-upper-case(str-slice($string, 0, 1));
+    $rest-of-string: str-slice($string, 2);
+
+    @return $first-letter + $rest-of-string;
+}
+
+@function compose-webfont-filename($font-family, $weight, $style) {
+    $style: if($style == normal, '', str-capitalise($style));
+    $weight: str-capitalise($weight);
+    $font: str-remove-white-space($font-family);
+
+    $filename: '#{$font}-#{$weight}#{$style}';
+
+    @return $filename;
+}
+
+@function compose-webfont-path($font-family, $base-path: $guss-webfonts-path) {
+    $directory: if(is-extra($font-family), $guss-extras-directory, str-remove-white-space($font-family));
+    $path: $base-path + $directory + '/';
+
+    @return $path;
+}
+
+@function contain($haystack, $needle) {
+    @return not not index($haystack, $needle);
+}
+
+
+// ----- Mixins ----- //
+
+@mixin guss-at-font-face(
+    $family,
+    $filename,
+    $path,
+    $weight: 400,
+    $style: 'normal',
+    $url: $guss-webfonts-base-url
+) {
+    @at-root {
+        @font-face {
+            font-family: $family;
+            src: url('#{$url + $path + $filename}.woff2') format('woff2'), // Modern Browsers
+                 url('#{$url + $path + $filename}.woff') format('woff'); // All Supported Browsers
+            font-weight: $weight;
+            font-style: unquote($style);
+            font-stretch: normal;
+            font-display: fallback;
+        }
+    }
+}
+
+@mixin guss-webfonts-single-declaration(
+    $font-family,
+    $properties: (
+        weight:  'regular',
+        style:   'normal',
+        version: false,
+        hinting: false,
+        kerning: false,
+        charset: false
+    ),
+    $overrides: (weight: false, style: false)
+) {
+    $font: map-get($guss-webfonts, $font-family);
+    $font-weight-override: map-get($overrides, weight);
+    $font-style-override: map-get($overrides, style);
+
+    $version:   if(map-has-key($properties, version), map-get($properties, version), $guss-webfonts-version);
+    $hinting:   if(map-has-key($properties, hinting), map-get($properties, hinting), $guss-webfonts-hinting);
+    $kerning:   if(map-has-key($properties, kerning), map-get($properties, kerning), $guss-webfonts-kerning);
+    $charset:   if(map-has-key($properties, charset), map-get($properties, charset), $guss-webfonts-charset);
+    $base-path: if($guss-webfonts-path, $guss-webfonts-path, '#{$version}/hinting-#{$hinting}/kerning-#{$kerning}/#{$charset}/');
+
+    $font-filename: compose-webfont-filename($font-family, map-get($properties, weight), map-get($properties, style));
+    $full-path: compose-webfont-path($font-family, $base-path);
+    $font-weight: guss-font-weight(if($font-weight-override, $font-weight-override, map-get($properties, weight)));
+    $font-style: if($font-style-override, $font-style-override, map-get($properties, style));
+
+    @include guss-at-font-face(
+        $family: $font-family,
+        $filename: $font-filename,
+        $path: $full-path,
+        $weight: $font-weight,
+        $style: $font-style
+    );
+}
+
+@mixin guss-webfonts($fonts: $guss-webfonts, $registry: $guss-webfonts) {
+    @if type-of($fonts) == 'string' {
+        @each $properties in map-get($registry, $fonts) {
+            @include guss-webfonts-single-declaration($fonts, $properties);
+        }
+    } @else {
+        @if type-of($fonts) == 'list' {
+            @each $font in $fonts {
+                @include guss-webfonts($font);
+            }
+        } @else {
+            @each $font-family, $font-property-sets in $fonts {
+                @each $properties in $font-property-sets {
+                    @if map-has-key($properties, use-as) {
+                        @include guss-webfonts-single-declaration($font-family, $properties, map-get($properties, use-as));
+                    } @else {
+                        @include guss-webfonts-single-declaration($font-family, $properties);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// ----- Support Fonts ----- //
+
+@include guss-webfonts(
+    (
+        'Guardian Text Egyptian Web': (
+            (weight: 'regular', style: 'normal'),
+            (weight: 'regular', style: 'italic'),
+            (weight: 'medium', style: 'normal', use-as: (weight: 'bold', style: 'normal')),
+        ),
+        'Guardian Egyptian Web': (
+            (weight: 'light', style: 'normal'),
+            (weight: 'regular', style: 'normal'),
+            (weight: 'medium', style: 'normal'),
+            (weight: 'semibold', style: 'normal', use-as: (weight: 'ultrablack', style: 'normal')),
+        ),
+        'Guardian Text Sans Web': (
+            (weight: 'regular', style: 'normal'),
+            (weight: 'regular', style: 'italic'),
+            (weight: 'medium', style: 'normal', use-as: (weight: 'bold', style: 'normal')),
+        ),
+        'Guardian Sans Web': (
+            (weight: 'regular', style: 'normal'),
+        ),
+        'Guardian Titlepiece Web': (
+            (weight: 'regular', style: 'normal'),
+        )
+    )
+);

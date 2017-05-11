@@ -58,3 +58,16 @@ $gu-fonts: (
 	}
 
 }
+
+
+// ----- Defaults ----- //
+
+html {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    line-height: 1.5;
+}
