@@ -20,7 +20,7 @@ import type { Contrib, Amounts, PaperBundle } from '../reducers/reducers';
 // ----- Copy ----- //
 
 const ctaLinks = {
-  recurring: '/monthly-contribution',
+  recurring: 'https://membership.theguardian.com/monthly-contribution',
   oneOff: 'https://contribute.theguardian.com/uk',
   paperOnly: 'https://subscribe.theguardian.com/p/GXX83P',
   paperDigital: 'https://subscribe.theguardian.com/p/GXX83X',
