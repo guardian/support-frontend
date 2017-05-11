@@ -32,7 +32,6 @@ class CreateSalesforceContactDecoderSpec  extends FlatSpec with Matchers with Mo
 
   "Decoder" should "be able to decode PaymentMethod" in {
     val result = decode[PaymentMethod](payPalPaymentMethod)
-    logger.info(s"$result")
     result.isRight should be (true)
   }
 }

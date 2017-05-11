@@ -9,6 +9,7 @@ import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamCo
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
+import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import io.circe.ParsingFailure
 import io.circe.generic.auto._
@@ -18,6 +19,7 @@ import org.mockito.Mockito._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+@IntegrationTest
 class CreatePaymentMethodSpec extends LambdaSpec {
 
   "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" in {
@@ -33,7 +35,6 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
     outStream.toClass[CreateSalesforceContactState]() match {
       case state@CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction) =>
-        logger.info(s"$state")
         payPal.paypalBaid should be(validBaid)
         payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
       case _ => fail()
@@ -69,7 +70,6 @@ class CreatePaymentMethodSpec extends LambdaSpec {
       createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
 
       val p = outStream.toClass[PaymentMethod]()
-      logger.info(s"Output: $p")
     }
   }
 

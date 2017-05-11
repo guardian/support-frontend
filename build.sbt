@@ -13,6 +13,9 @@ lazy val scalaStyleSettings = Seq(
 
 lazy val root =
   project.in(file("."))
+    .settings(
+      name := "support-workers"
+    )
     .aggregate(common, `monthly-contributions`)
 
 lazy val common = project
