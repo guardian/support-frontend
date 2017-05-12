@@ -1,7 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.support.workers.Fixtures.CreatePaymentMethodFixtures._
-import com.gu.support.workers.Fixtures.validBaid
+import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.{decodeCreatePaymentMethodState, decodePaymentFields}
 import com.gu.support.workers.model.{CreatePaymentMethodState, PayPalPaymentFields, StripePaymentFields}
 import com.typesafe.scalalogging.LazyLogging
@@ -14,7 +13,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   "CreatePaymentMethodStateDecoder" should "be able to decode a CreatePaymentMethodStateDecoder with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson)
     val result = state.right.get
-    result.amount should be (5)
+    result.amount should be (5) //scalastyle:ignore
     result.paymentFields.isRight should be (true) //PayPal
     result.paymentFields.right.get.baid should be (validBaid)
   }
@@ -22,7 +21,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   it should "be able to decode a CreatePaymentMethodStateDecoder with Stripe payment fields" in {
     val state = decode[CreatePaymentMethodState](createStripePaymentMethodJson)
     val result = state.right.get
-    result.amount should be (5)
+    result.amount should be (5) //scalastyle:ignore
     result.paymentFields.isLeft should be (true) //Stripe
     result.paymentFields.left.get.stripeToken should be (stripeToken)
   }

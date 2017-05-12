@@ -1,7 +1,7 @@
 package com.gu.support.workers.model
 
 import com.gu.salesforce.Salesforce.SalesforceContactRecord
-import com.gu.zuora.soap.model.PaymentMethod
+import com.gu.zuora.model.PaymentMethod
 
 case class CreatePaymentMethodState(user: User, amount: BigDecimal, paymentFields: Either[StripePaymentFields, PayPalPaymentFields])
 
