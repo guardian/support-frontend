@@ -55,8 +55,9 @@ object AuthService extends LazyLogging {
   def getAuth: Future[Authentication] = authRef.single() match {
     case Some(authentication) =>
       if (authentication.isStale)
-        fetchAuth //Fetch a new auth token but return the one we currently have
-      Future.successful(authentication)
+        fetchAuth
+      else
+        Future.successful(authentication)
     case None => fetchAuth
   }
 
