@@ -22,12 +22,11 @@ object Dependencies {
   val circeGenericExtras = "io.circe" %% "circe-generic-extras" % circeVersion
   val circeParser = "io.circe" %% "circe-parser" % circeVersion
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3"
-  //Used for retrying http requests
-  val akkaAgent = "com.typesafe.akka" %% "akka-agent" % "2.3.4" //Used by the Salesforce code for handling auth tokens
+  val stm = "org.scala-stm" %% "scala-stm" % "0.8"
 
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, akkaAgent, joda, dispatch,
     supportInternationalisation, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
-    circeGeneric, circeGenericExtras, circeParser, scalaTest)
+    circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)
 
 }
