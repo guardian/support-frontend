@@ -1,10 +1,13 @@
 package com.gu.support.workers
 
 import java.io.ByteArrayOutputStream
+
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.thankYouEmailJson
 import com.gu.support.workers.lambdas.SendThankYouEmail
+import com.gu.test.tags.annotations.IntegrationTest
 
+@IntegrationTest
 class SendThankYouEmailSpec extends LambdaSpec {
 
   "SendThankYouEmail lambda" should "add message to sqs queue" in {
@@ -14,6 +17,6 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     sendThankYouEmail.handleRequest(thankYouEmailJson.asInputStream(), outStream, context)
 
-    outStream.toClass[Unit]() shouldEqual (())
+    outStream.toClass[Unit]() shouldEqual ()
   }
 }
