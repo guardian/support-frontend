@@ -66,6 +66,19 @@ object Fixtures {
           }
         """
 
+  val thankYouEmailJson =
+    s"""{
+        |  $userJson,
+        |  "amount": 5,
+        |  "paymentMethod": $payPalPaymentMethod,
+        |  "salesForceContact": {
+        |    "Id": "123",
+        |    "AccountId": "123"
+        |  },
+        |  "accountNumber": "123"
+        |}
+     """.stripMargin
+
   val salesforceContactJson =
     """
         {

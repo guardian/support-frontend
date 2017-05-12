@@ -8,3 +8,11 @@ case class CreatePaymentMethodState(user: User, amount: BigDecimal, paymentField
 case class CreateSalesforceContactState(user: User, amount: BigDecimal, paymentMethod: PaymentMethod)
 
 case class CreateZuoraSubscriptionState(user: User, amount: BigDecimal, paymentMethod: PaymentMethod, salesForceContact: SalesforceContactRecord)
+
+case class SendThankYouEmailState(
+  user: User,
+  amount: BigDecimal,
+  paymentMethod: PaymentMethod,
+  salesForceContact: SalesforceContactRecord,
+  accountNumber: String
+)

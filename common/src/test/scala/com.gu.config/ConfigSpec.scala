@@ -20,5 +20,8 @@ class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
 
     val z = Configuration.zuoraConfig
     z.url should be("https://rest.apisandbox.zuora.com/v1")
+
+    val e = Configuration.emailServicesConfig
+    e.thankYouEmailQueue should be ("contributions-thanks-dev")
   }
 }
