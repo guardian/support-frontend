@@ -34,7 +34,7 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   "Circe" should "be able to decode PaymentMethod from PaymentMethod" in {
     val pprt: PaymentMethod = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.spaces2)
+    //logger.info(json.spaces2)
     /*
     {
       "PayPalReferenceTransaction" : {
@@ -52,7 +52,7 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   it should "be able to decode PayPalReferenceTransaction from PayPalReferenceTransaction" in {
     val pprt = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.spaces2)
+    //logger.info(json.spaces2)
     /*
     {
       "baId" : "123",
@@ -66,7 +66,6 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   it should "fail to decode PayPalReferenceTransaction from PaymentMethod" in {
     val pprt: PaymentMethod = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.noSpaces)
     val pprt2 = decode[PayPalReferenceTransaction](json.noSpaces)
     pprt2.isLeft should be(true) //decoding failed
   }
@@ -74,7 +73,6 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
   it should "fail to decode PaymentMethod from PayPalReferenceTransaction" in {
     val pprt = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
-    logger.info(json.noSpaces)
     val pprt2 = decode[PaymentMethod](json.noSpaces)
     pprt2.isLeft should be(true) //decoding failed
   }

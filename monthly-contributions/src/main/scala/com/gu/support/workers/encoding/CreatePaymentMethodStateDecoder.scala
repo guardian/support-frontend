@@ -41,7 +41,6 @@ object CreatePaymentMethodStateDecoder extends LazyLogging {
           amount <- decodeBigDecimal.decodeJson(amountJson)
           paymentFields <- decodePaymentFields.decodeJson(paymentFieldsJson)
         } yield {
-          logger.info(s"$user, $amount, $paymentFields")
           CreatePaymentMethodState(user, amount, paymentFields)
         }
       }
