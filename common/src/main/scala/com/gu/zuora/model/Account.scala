@@ -13,4 +13,5 @@ case class Account(
   autoPay: Boolean = true,
   paymentTerm: String = "Due Upon Receipt",
   bcdSettingOption: String = "AutoSet",
-  batch: String = "Batch1")
+  batch: String = "Batch1"
+)

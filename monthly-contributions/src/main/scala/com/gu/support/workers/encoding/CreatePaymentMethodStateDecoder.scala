@@ -1,10 +1,10 @@
 package com.gu.support.workers.encoding
 
 import cats.syntax.either._
-import com.gu.support.workers.model.{CreatePaymentMethodState, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.{ CreatePaymentMethodState, PayPalPaymentFields, StripePaymentFields, User }
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.semiauto._
-import io.circe.{Decoder, DecodingFailure, HCursor}
+import io.circe.{ Decoder, DecodingFailure, HCursor }
 
 object CreatePaymentMethodStateDecoder extends LazyLogging {
   implicit val decodePaymentFields: Decoder[Either[StripePaymentFields, PayPalPaymentFields]] = new Decoder[Either[StripePaymentFields, PayPalPaymentFields]] {

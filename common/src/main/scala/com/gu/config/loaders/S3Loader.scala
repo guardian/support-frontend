@@ -1,13 +1,13 @@
 package com.gu.config.loaders
 
 import com.amazonaws.services.s3.model.S3Object
-import com.amazonaws.services.s3.{AmazonS3Client, AmazonS3URI}
+import com.amazonaws.services.s3.{ AmazonS3Client, AmazonS3URI }
 import com.gu.aws.CredentialsProvider
 import com.gu.config.Stage
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
 
-import scala.io.{BufferedSource, Source}
+import scala.io.{ BufferedSource, Source }
 
 class S3Loader extends PrivateConfigLoader with LazyLogging {
   override def load(stage: Stage, public: Config): Config = {

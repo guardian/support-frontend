@@ -13,12 +13,14 @@ case class Subscription(
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
   //scalastyle:on magic.number
-  termType: String = "TERMED")
+  termType: String = "TERMED"
+)
 
 case class RatePlanData(
   ratePlan: RatePlan,
   ratePlanChargeData: List[RatePlanChargeData],
-  subscriptionProductFeatureList: List[SubscriptionProductFeature])
+  subscriptionProductFeatureList: List[SubscriptionProductFeature]
+)
 
 case class RatePlan(productRatePlanId: String)
 
@@ -26,6 +28,7 @@ case class RatePlanChargeData(ratePlanCharge: RatePlanCharge)
 
 case class RatePlanCharge(
   productRatePlanChargeId: String,
-  price: Option[BigDecimal])
+  price: Option[BigDecimal]
+)
 
 case class SubscriptionProductFeature(featureId: String)

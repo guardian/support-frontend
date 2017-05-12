@@ -106,14 +106,16 @@ object Fixtures {
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "Visa")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   //scalastyle:on magic.number
-  val subscriptionData = SubscriptionData(List(
+  val subscriptionData = SubscriptionData(
+    List(
     RatePlanData(
       RatePlan(Configuration.zuoraConfig.productRatePlanId),
       List(RatePlanChargeData(
         RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(5: BigDecimal))
       )),
       Nil
-    )),
+    )
+  ),
     Subscription(date, date, date)
   )
 
@@ -158,5 +160,4 @@ object Fixtures {
     """
 
 }
-
 

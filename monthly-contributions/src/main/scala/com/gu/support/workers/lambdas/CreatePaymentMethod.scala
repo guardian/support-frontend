@@ -7,8 +7,8 @@ import com.gu.okhttp.RequestRunners
 import com.gu.paypal.PayPalService
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.decodeCreatePaymentMethodState
-import com.gu.support.workers.model.{CreatePaymentMethodState, CreateSalesforceContactState, PayPalPaymentFields, StripePaymentFields}
-import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
+import com.gu.support.workers.model.{ CreatePaymentMethodState, CreateSalesforceContactState, PayPalPaymentFields, StripePaymentFields }
+import com.gu.zuora.model.{ CreditCardReferenceTransaction, PayPalReferenceTransaction }
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 
@@ -18,8 +18,8 @@ import scala.concurrent.duration._
 import scala.util.Failure
 
 class CreatePaymentMethod(
-  stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
-  payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
+    stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
+    payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
 ) extends FutureHandler[CreatePaymentMethodState, CreateSalesforceContactState] with LazyLogging {
 
   override protected def handlerFuture(state: CreatePaymentMethodState, context: Context) = {

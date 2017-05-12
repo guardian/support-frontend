@@ -24,7 +24,7 @@ object Stripe {
   }
 
   case class Charge(id: String, amount: Int, balance_transaction: Option[String], created: Int, currency: String, livemode: Boolean,
-                    paid: Boolean, refunded: Boolean, receipt_email: String, metadata: Map[String, String], source: Source) extends StripeObject {
+      paid: Boolean, refunded: Boolean, receipt_email: String, metadata: Map[String, String], source: Source) extends StripeObject {
   }
 
   case class Source(country: String) extends StripeObject
@@ -32,5 +32,4 @@ object Stripe {
   case class BalanceTransaction(id: String, source: String, amount: Int) extends StripeObject
 
 }
-
 

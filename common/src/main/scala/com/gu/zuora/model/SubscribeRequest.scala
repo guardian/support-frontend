@@ -9,4 +9,5 @@ case class SubscribeItem(
   billToContact: ContactDetails,
   paymentMethod: PaymentMethod,
   subscriptionData: SubscriptionData,
-  subscribeOptions: SubscribeOptions)
+  subscribeOptions: SubscribeOptions
+)

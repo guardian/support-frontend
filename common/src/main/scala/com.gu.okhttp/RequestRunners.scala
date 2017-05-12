@@ -3,12 +3,11 @@ package com.gu.okhttp
 import java.util.concurrent.TimeUnit
 
 import com.typesafe.scalalogging.LazyLogging
-import okhttp3.{OkHttpClient, Request, Response => OkResponse}
+import okhttp3.{ OkHttpClient, Request, Response => OkResponse }
 
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.higherKinds
-
 
 /**
  * These are functions from an OkHttpRequest to an M[Response] which are passed into Clients (such as SimpleClient),

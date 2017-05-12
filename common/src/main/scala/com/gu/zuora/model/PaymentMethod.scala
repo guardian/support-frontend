@@ -14,10 +14,12 @@ case class CreditCardReferenceTransaction(
   creditCardExpirationMonth: Int,
   creditCardExpirationYear: Int,
   creditCardType: String /*TODO: strip spaces?*/ ,
-  `type`: String = "CreditCardReferenceTransaction") extends PaymentMethod
+  `type`: String = "CreditCardReferenceTransaction"
+) extends PaymentMethod
 
 case class PayPalReferenceTransaction(
   paypalBaid: String,
   paypalEmail: String,
   paypalType: String = "ExpressCheckout",
-  `type`: String = "PayPal") extends PaymentMethod
+  `type`: String = "PayPal"
+) extends PaymentMethod

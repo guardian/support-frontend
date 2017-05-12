@@ -1,7 +1,7 @@
 package com.gu.config
 
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{ FlatSpec, Matchers }
 
 class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
 
@@ -22,6 +22,6 @@ class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
     z.url should be("https://rest.apisandbox.zuora.com/v1")
 
     val e = Configuration.emailServicesConfig
-    e.thankYouEmailQueue should be ("contributions-thanks-dev")
+    e.thankYouEmailQueue should be("contributions-thanks-dev")
   }
 }

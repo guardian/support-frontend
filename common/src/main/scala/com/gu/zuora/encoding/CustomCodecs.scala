@@ -1,11 +1,11 @@
 package com.gu.zuora.encoding
 
 import com.gu.helpers.StringExtensions._
-import com.gu.i18n.{Country, Currency}
+import com.gu.i18n.{ Country, Currency }
 import com.gu.zuora.encoding.CapitalizationEncoder._
 import com.gu.zuora.model._
 import io.circe._
-import org.joda.time.{DateTime, LocalDate}
+import org.joda.time.{ DateTime, LocalDate }
 
 object CustomCodecs extends CustomCodecs
 

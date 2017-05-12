@@ -4,7 +4,7 @@ import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
 import com.gu.zuora.Fixtures.subscriptionRequest
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.{ AsyncFlatSpec, Matchers }
 
 import scala.concurrent.duration._
 

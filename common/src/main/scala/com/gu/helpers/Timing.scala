@@ -2,8 +2,7 @@ package com.gu.helpers
 
 import com.typesafe.scalalogging.LazyLogging
 
-import scala.concurrent.{ExecutionContext, Future}
-
+import scala.concurrent.{ ExecutionContext, Future }
 
 object Timing extends LazyLogging {
 

@@ -5,7 +5,7 @@ import com.gu.helpers.StringExtensions._
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import io.circe.{Decoder, JsonObject, ObjectEncoder}
+import io.circe.{ Decoder, JsonObject, ObjectEncoder }
 import shapeless.Lazy
 
 object CapitalizationEncoder {
@@ -24,7 +24,6 @@ object CapitalizationEncoder {
     val newObject = JsonObject.from(newFields)
     newObject
   }
-
 
   def capitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.capitalize)
 
