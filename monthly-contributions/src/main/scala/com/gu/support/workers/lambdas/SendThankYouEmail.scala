@@ -8,19 +8,19 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import com.gu.config.Configuration
 import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
-import com.gu.support.workers.model.CreateZuoraSubscriptionState
+import com.gu.support.workers.model.SendThankYouEmailState
 
 
 class SendThankYouEmail(
   thankYouEmailService: ThankYouEmailService = new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue)
-) extends FutureHandler[CreateZuoraSubscriptionState, Unit] with LazyLogging {
+) extends FutureHandler[SendThankYouEmailState, Unit] with LazyLogging {
 
-  override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context): Future[Unit] = {
+  override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {
     logger.info(s"state: $state")
     sendEmail(state)
   }
 
-  def sendEmail(state: CreateZuoraSubscriptionState): Future[Unit] = {
+  def sendEmail(state: SendThankYouEmailState): Future[Unit] = {
     thankYouEmailService.send(ThankYouFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
