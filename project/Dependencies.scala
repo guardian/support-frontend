@@ -24,7 +24,7 @@ object Dependencies {
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3"
   val stm = "org.scala-stm" %% "scala-stm" % "0.8"
 
-  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, akkaAgent, joda, dispatch,
+  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, joda, dispatch,
     supportInternationalisation, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
     circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)
