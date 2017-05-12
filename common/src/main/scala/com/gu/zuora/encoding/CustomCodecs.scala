@@ -5,7 +5,7 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.zuora.encoding.CapitalizationEncoder._
 import com.gu.zuora.model._
 import io.circe._
-import org.joda.time.LocalDate
+import org.joda.time.{DateTime, LocalDate}
 
 object CustomCodecs extends CustomCodecs
 
@@ -49,6 +49,7 @@ trait CustomCodecs {
 
   //Encode joda LocalDate to the format expected by Zuora
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap[LocalDate](_.toString("yyyy-MM-dd"))
+  implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
 
   //response decoders
   implicit val decodeInvoice: Decoder[Invoice] = decapitalizingDecoder[Invoice]

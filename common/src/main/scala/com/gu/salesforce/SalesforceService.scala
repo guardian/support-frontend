@@ -1,12 +1,11 @@
 package com.gu.salesforce
 
-import akka.actor.{ActorSystem, Cancellable}
-import akka.agent.Agent
 import com.gu.config.Configuration
 import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -14,11 +13,12 @@ import okhttp3.Request
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[SalesforceErrorResponse]
-  with LazyLogging {
+    with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -48,32 +48,32 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
  * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
  */
 object AuthService extends LazyLogging {
+
   private val service = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
+  private val authRef = Ref[Option[Authentication]](None)
 
-  private def system = ActorSystem("AuthService")
-
-  private val authAgent: Agent[Option[Authentication]] = Agent(None: Option[Authentication])
-
-  // 15min -> 96 request/day. Failed auth will not override previous access_token.
-  def startScheduledAuth(): Cancellable = system.scheduler.schedule(15.minutes, 15.minutes)(service.authorize.map(sendAuth))
-
-  def getAuth: Future[Authentication] = authAgent.get() match {
-    case Some(authentication) => Future.successful(authentication)
-    case None => service.authorize.map(authentication => {
-      sendAuth(authentication)
-      authentication
-    })
+  def getAuth: Future[Authentication] = authRef.single() match {
+    case Some(authentication) =>
+      if (authentication.isStale)
+        fetchAuth //Fetch a new auth token but return the one we currently have
+      Future.successful(authentication)
+    case None => fetchAuth
   }
 
-  private def sendAuth(authentication: Authentication) = {
+  private def fetchAuth = service.authorize.map(authentication => {
+    sendAuth(authentication)
+    authentication
+  })
+
+  private def sendAuth(authentication: Authentication) = atomic { implicit txn =>
     logger.info("Successfully retrieved Salesforce authentication token")
-    authAgent.send(Some(authentication))
+    authRef() = Some(authentication)
   }
 }
 
 class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[SalesforceErrorResponse]
-  with LazyLogging {
+    with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
