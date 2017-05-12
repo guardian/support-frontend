@@ -98,24 +98,24 @@ object Fixtures {
   val secondTokenId = "cus_AaynKIp19IIGDz"
   val cardNumber = "4242"
   val payPalBaid = "B-23637766K5365543J"
-  //scalastyle:off magic.number
+
   val date = new LocalDate(2017, 5, 4)
 
   val account = Account(salesforceAccountId, GBP, salesforceAccountId, salesforceId, identityId, StripeGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "Visa")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  //scalastyle:on magic.number
+
   val subscriptionData = SubscriptionData(
     List(
-    RatePlanData(
-      RatePlan(Configuration.zuoraConfig.productRatePlanId),
-      List(RatePlanChargeData(
-        RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(5: BigDecimal))
-      )),
-      Nil
-    )
-  ),
+      RatePlanData(
+        RatePlan(Configuration.zuoraConfig.productRatePlanId),
+        List(RatePlanChargeData(
+          RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(5: BigDecimal))
+        )),
+        Nil
+      )
+    ),
     Subscription(date, date, date)
   )
 

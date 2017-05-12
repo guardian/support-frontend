@@ -13,7 +13,7 @@ class CreateSalesforceContactDecoderSpec extends FlatSpec with Matchers with Moc
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceContactJson)
     val result = state.right.get
-    result.amount should be(5) //scalastyle:ignore
+    result.amount should be(5)
     result.paymentMethod match {
       case payPal: PayPalReferenceTransaction => succeed
       case _ => fail()

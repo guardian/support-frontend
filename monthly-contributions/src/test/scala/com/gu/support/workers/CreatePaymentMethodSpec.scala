@@ -76,7 +76,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
   lazy val mockStripeService = {
     //Mock the stripe service as we cannot actually create a customer
     val stripeMock = mock[StripeService]
-    val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB") //scalastyle:ignore
+    val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB")
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
     when(stripeMock.createCustomer(any[String], any[String])).thenReturn(Future(customer))
     stripeMock

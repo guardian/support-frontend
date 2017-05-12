@@ -13,7 +13,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   "CreatePaymentMethodStateDecoder" should "be able to decode a CreatePaymentMethodStateDecoder with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson)
     val result = state.right.get
-    result.amount should be(5) //scalastyle:ignore
+    result.amount should be(5)
     result.paymentFields.isRight should be(true) //PayPal
     result.paymentFields.right.get.baid should be(validBaid)
   }

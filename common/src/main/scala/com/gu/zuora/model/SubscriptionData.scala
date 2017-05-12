@@ -9,10 +9,8 @@ case class Subscription(
   contractAcceptanceDate: LocalDate,
   termStartDate: LocalDate,
   autoRenew: Boolean = true,
-  //scalastyle:off magic.number
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
-  //scalastyle:on magic.number
   termType: String = "TERMED"
 )
 
