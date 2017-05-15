@@ -14,7 +14,7 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription(zuoraService: ZuoraService)
-  extends FutureHandler[CreateZuoraSubscriptionState, SendThankYouEmailState] with LazyLogging {
+    extends FutureHandler[CreateZuoraSubscriptionState, SendThankYouEmailState] with LazyLogging {
 
   override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context) =
     zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
@@ -30,24 +30,28 @@ class CreateZuoraSubscription(zuoraService: ZuoraService)
       state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
       state.salesForceContact.Id,
       state.user.id,
-      PaymentGateway.forPaymentMethod(state.paymentMethod))
+      PaymentGateway.forPaymentMethod(state.paymentMethod)
+    )
 
     val contactDetails = ContactDetails(
       state.user.firstName,
       state.user.lastName,
       state.user.primaryEmailAddress,
-      Country.UK) //Country is hardcoded for now
+      Country.UK
+    ) //Country is hardcoded for now
 
     val date = LocalDate.now(DateTimeZone.UTC)
 
-    val subscriptionData = SubscriptionData(List(
-      RatePlanData(
-        RatePlan(Configuration.zuoraConfig.productRatePlanId),
-        List(RatePlanChargeData(
-          RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(state.amount)) //Pass the amount the user selected into Zuora
-        )),
-        Nil
-      )),
+    val subscriptionData = SubscriptionData(
+      List(
+        RatePlanData(
+          RatePlan(Configuration.zuoraConfig.productRatePlanId),
+          List(RatePlanChargeData(
+            RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(state.amount)) //Pass the amount the user selected into Zuora
+          )),
+          Nil
+        )
+      ),
       Subscription(date, date, date)
     )
 
@@ -57,6 +61,8 @@ class CreateZuoraSubscription(zuoraService: ZuoraService)
         contactDetails,
         state.paymentMethod,
         subscriptionData,
-        SubscribeOptions())))
+        SubscribeOptions()
+      )
+    ))
   }
 }

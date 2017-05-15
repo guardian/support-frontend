@@ -25,7 +25,6 @@ object CapitalizationEncoder {
     newObject
   }
 
-
   def capitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.capitalize)
 
   def decapitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.decapitalize)

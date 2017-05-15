@@ -13,28 +13,28 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   "CreatePaymentMethodStateDecoder" should "be able to decode a CreatePaymentMethodStateDecoder with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson)
     val result = state.right.get
-    result.amount should be (5) //scalastyle:ignore
-    result.paymentFields.isRight should be (true) //PayPal
-    result.paymentFields.right.get.baid should be (validBaid)
+    result.amount should be(5)
+    result.paymentFields.isRight should be(true) //PayPal
+    result.paymentFields.right.get.baid should be(validBaid)
   }
 
   it should "be able to decode a CreatePaymentMethodStateDecoder with Stripe payment fields" in {
     val state = decode[CreatePaymentMethodState](createStripePaymentMethodJson)
     val result = state.right.get
-    result.amount should be (5) //scalastyle:ignore
-    result.paymentFields.isLeft should be (true) //Stripe
-    result.paymentFields.left.get.stripeToken should be (stripeToken)
+    result.amount should be(5) //scalastyle:ignore
+    result.paymentFields.isLeft should be(true) //Stripe
+    result.paymentFields.left.get.stripeToken should be(stripeToken)
   }
 
   "PaymentFieldsDecoder" should "be able to decode an Either[StripePaymentFields, PayPalPaymentFields]" in {
     val stripe = decode[Either[StripePaymentFields, PayPalPaymentFields]](stripeJson)
     val stripePaymentFields = stripe.right.get.left.get
 
-    stripePaymentFields.userId should be ("12345")
-    stripePaymentFields.stripeToken should be (stripeToken)
+    stripePaymentFields.userId should be("12345")
+    stripePaymentFields.stripeToken should be(stripeToken)
 
     val payPal = decode[Either[StripePaymentFields, PayPalPaymentFields]](payPalJson)
-    payPal.right.get.right.get.baid should be (validBaid)
+    payPal.right.get.right.get.baid should be(validBaid)
   }
 
   it should "fail when given duff json" in {
@@ -44,7 +44,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
                 }
                 """
     val result = decode[Either[StripePaymentFields, PayPalPaymentFields]](duffJson)
-    result.isLeft should be (true)
+    result.isLeft should be(true)
   }
 
 }

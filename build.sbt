@@ -1,5 +1,8 @@
 import Dependencies._
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import sbt.Keys.libraryDependencies
+
+import scalariform.formatter.preferences.SpacesAroundMultiImports
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
@@ -8,7 +11,9 @@ lazy val scalaStyleSettings = Seq(
     testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
+    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
+    ScalariformKeys.preferences := ScalariformKeys.preferences.value
+      .setPreference(SpacesAroundMultiImports, false)
 )
 
 lazy val root =
@@ -47,4 +52,3 @@ lazy val `monthly-contributions` = project
   )
   .settings(Settings.shared: _*)
   .dependsOn(common % "compile->compile;test->test")
-

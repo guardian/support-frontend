@@ -45,8 +45,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
    * @tparam A The type of the object that is expected to be returned from the request
    * @return
    */
-  private def request[A](rb: Request.Builder)
-    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
     logger.debug(s"Issuing request ${req.method} ${req.url}")
     // The string provided here sets the Custom Metric Name for the http request in CloudWatch
@@ -63,33 +62,33 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     }
   }
 
-  def get[A](endpoint: String, params: (String, String)*)
-    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+  def get[A](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)))
 
-  def post[A](endpoint: String, data: Json, params: (String, String)*)
-    (implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def post[A](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullKeys = true))
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
   }
 
-  def post[A](endpoint: String, data: Map[String, Seq[String]])
-    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val postParams = data.foldLeft(new FormBody.Builder()) { case (params, (name, values)) =>
-      val paramName = if (values.size > 1) s"$name[]" else name
-      values.foldLeft(params) { case (ps, value) => ps.add(paramName, value) }
+  def post[A](endpoint: String, data: Map[String, Seq[String]])(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+    val postParams = data.foldLeft(new FormBody.Builder()) {
+      case (params, (name, values)) =>
+        val paramName = if (values.size > 1) s"$name[]" else name
+        values.foldLeft(params) { case (ps, value) => ps.add(paramName, value) }
     }.build()
 
     request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
   }
 
   private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {
-    val withSegments = endpoint.split("/").foldLeft(urlBuilder) { case (url, segment) =>
-      url.addEncodedPathSegment(segment)
+    val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
+      case (url, segment) =>
+        url.addEncodedPathSegment(segment)
     }
-    params.foldLeft(withSegments) { case (url, (k, v)) =>
-      url.addQueryParameter(k, v)
+    params.foldLeft(withSegments) {
+      case (url, (k, v)) =>
+        url.addQueryParameter(k, v)
     }.build()
   }
 

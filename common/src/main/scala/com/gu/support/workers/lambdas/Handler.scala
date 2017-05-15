@@ -9,7 +9,7 @@ import io.circe.{Decoder, Encoder}
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler with LazyLogging{
+abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler with LazyLogging {
   import com.gu.support.workers.encoding.Encoding._
 
   protected def handler(input: T, context: Context): R
@@ -18,9 +18,10 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 }
 
 abstract class FutureHandler[T, R](d: Option[Duration] = None)(
-  implicit decoder: Decoder[T],
-  encoder: Encoder[R],
-  ec: ExecutionContext
+    implicit
+    decoder: Decoder[T],
+    encoder: Encoder[R],
+    ec: ExecutionContext
 ) extends Handler[T, R] {
   protected def handlerFuture(input: T, context: Context): Future[R]
   protected def handler(input: T, context: Context): R = Await.result(

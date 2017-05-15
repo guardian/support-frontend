@@ -19,7 +19,8 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
     "USER" -> config.user,
     "PWD" -> config.password,
     "SIGNATURE" -> config.signature,
-    "VERSION" -> config.NVPVersion)
+    "VERSION" -> config.NVPVersion
+  )
 
   // Logs the result of the PayPal NVP request.
   private def logNVPResponse(response: QueryString) = {
@@ -98,7 +99,8 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
       "RETURNURL" -> returnUrl,
       "CANCELURL" -> cancelUrl,
       "BILLINGTYPE" -> "MerchantInitiatedBilling",
-      "NOSHIPPING" -> "1")
+      "NOSHIPPING" -> "1"
+    )
 
     retrieveNVPParam(nvpRequest(paymentParams), "TOKEN")
   }
@@ -107,7 +109,8 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
   def retrieveBaid(token: Token): String = {
     val agreementParams = Map(
       "METHOD" -> "CreateBillingAgreement",
-      "TOKEN" -> token.token)
+      "TOKEN" -> token.token
+    )
 
     retrieveNVPParam(nvpRequest(agreementParams), "BILLINGAGREEMENTID")
   }

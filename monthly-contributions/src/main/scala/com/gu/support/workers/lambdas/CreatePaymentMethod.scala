@@ -18,8 +18,8 @@ import scala.concurrent.duration._
 import scala.util.Failure
 
 class CreatePaymentMethod(
-  stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
-  payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
+    stripeService: StripeService = new StripeService(Configuration.stripeConfig, RequestRunners.configurableFutureRunner(10.seconds)),
+    payPalService: PayPalService = new PayPalService(Configuration.payPalConfig)
 ) extends FutureHandler[CreatePaymentMethodState, CreateSalesforceContactState] with LazyLogging {
 
   override protected def handlerFuture(state: CreatePaymentMethodState, context: Context) = {

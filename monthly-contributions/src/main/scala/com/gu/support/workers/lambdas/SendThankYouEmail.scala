@@ -10,9 +10,8 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
 import com.gu.support.workers.model.SendThankYouEmailState
 
-
 class SendThankYouEmail(
-  thankYouEmailService: ThankYouEmailService = new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue)
+    thankYouEmailService: ThankYouEmailService = new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue)
 ) extends FutureHandler[SendThankYouEmailState, Unit] with LazyLogging {
 
   override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {

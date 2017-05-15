@@ -9,13 +9,13 @@ import io.circe.parser._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
-class CreateSalesforceContactDecoderSpec  extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
+class CreateSalesforceContactDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceContactJson)
     val result = state.right.get
-    result.amount should be (5) //scalastyle:ignore
-    result.paymentMethod match{
-      case payPal : PayPalReferenceTransaction => succeed
+    result.amount should be(5)
+    result.paymentMethod match {
+      case payPal: PayPalReferenceTransaction => succeed
       case _ => fail()
     }
   }
@@ -27,11 +27,11 @@ class CreateSalesforceContactDecoderSpec  extends FlatSpec with Matchers with Mo
                 }
                 """
     val result = decode[CreateSalesforceContactState](duffJson)
-    result.isLeft should be (true)
+    result.isLeft should be(true)
   }
 
   "Decoder" should "be able to decode PaymentMethod" in {
     val result = decode[PaymentMethod](payPalPaymentMethod)
-    result.isRight should be (true)
+    result.isRight should be(true)
   }
 }

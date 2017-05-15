@@ -4,7 +4,6 @@ import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 object Timing extends LazyLogging {
 
   def record[T](service: String, metricName: String)(block: => Future[T])(implicit ec: ExecutionContext): Future[T] = {

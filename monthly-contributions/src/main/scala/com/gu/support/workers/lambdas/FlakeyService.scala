@@ -8,14 +8,14 @@ class FlakeyService extends Handler[String, Unit] with LazyLogging {
 
   override protected def handler(input: String, context: Context) = {
     logger.info("FlakeyService")
-      if (FlakeyService.invocations == 0){
-        logger.info("Throw non fatal exception")
-        FlakeyService.invocations = 1
-        throw NonFatalException("Should retry")
-      }
+    if (FlakeyService.invocations == 0) {
+      logger.info("Throw non fatal exception")
+      FlakeyService.invocations = 1
+      throw NonFatalException("Should retry")
+    }
   }
 }
 
-object FlakeyService{
+object FlakeyService {
   var invocations = 0
 }

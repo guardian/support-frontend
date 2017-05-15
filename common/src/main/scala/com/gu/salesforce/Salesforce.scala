@@ -46,7 +46,7 @@ object Salesforce {
 
   case class SalesforceErrorResponse(Success: Boolean, ErrorString: Option[String]) extends Throwable with SalesforceResponse
 
-  case class Authentication(access_token: String, instance_url: String, issued_at: DateTime){
+  case class Authentication(access_token: String, instance_url: String, issued_at: DateTime) {
     private val expiryTimeMinutes = 15
     def isStale: Boolean = issued_at.isBefore(DateTime.now().minusMinutes(expiryTimeMinutes))
   }

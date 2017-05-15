@@ -9,6 +9,6 @@ object Stages {
 
 case class Stage(name: String)
 
-object Stage{
+object Stage {
   implicit def stageToString(s: Stage): String = s.name
 }

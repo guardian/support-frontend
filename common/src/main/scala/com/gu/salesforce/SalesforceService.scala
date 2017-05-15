@@ -17,7 +17,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse]
+    extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -25,10 +25,11 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   val upsertEndpoint = "services/apexrest/RegisterCustomer/v1/"
 
   override def wsPreExecute(req: Request.Builder): Request.Builder =
-    Await.result(//We have to wait for an authentication token before we can send any requests
+    Await.result( //We have to wait for an authentication token before we can send any requests
       AuthService.getAuth.map(
         auth => addAuthenticationToRequest(auth, req)
-      ), 30.seconds)
+      ), 30.seconds
+    )
 
   def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder = {
     req.url(s"${auth.instance_url}/$upsertEndpoint") //We need to set the base url to the instance_url value returned in the authentication response
@@ -73,7 +74,7 @@ object AuthService extends LazyLogging {
 }
 
 class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse]
+    extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -83,11 +84,13 @@ class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit e
     logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
-      post[Authentication]("services/oauth2/token", Map("client_id" -> Seq(sfConfig.key),
+      post[Authentication]("services/oauth2/token", Map(
+        "client_id" -> Seq(sfConfig.key),
         "client_secret" -> Seq(sfConfig.secret),
         "username" -> Seq(sfConfig.username),
         "password" -> Seq(sfConfig.password + sfConfig.token),
-        "grant_type" -> Seq("password")))
+        "grant_type" -> Seq("password")
+      ))
 
     Retry(3) {
       postAuthRequest

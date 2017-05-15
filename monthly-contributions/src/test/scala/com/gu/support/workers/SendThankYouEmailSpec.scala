@@ -17,6 +17,6 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     sendThankYouEmail.handleRequest(thankYouEmailJson.asInputStream(), outStream, context)
 
-    outStream.toClass[Unit]() shouldEqual ()
+    outStream.toClass[Unit]() shouldEqual ((): Unit)
   }
 }

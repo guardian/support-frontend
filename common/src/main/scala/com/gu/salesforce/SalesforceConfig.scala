@@ -6,7 +6,8 @@ case class SalesforceConfig(
   secret: String,
   username: String,
   password: String,
-  token: String)
+  token: String
+)
 
 object SalesforceConfig {
   def fromConfig(config: com.typesafe.config.Config): SalesforceConfig = SalesforceConfig(

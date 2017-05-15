@@ -17,7 +17,8 @@ case class BasicInfo(
   crmId: String,
   batch: String,
   invoiceTemplateId: String,
-  communicationProfileId: Option[String])
+  communicationProfileId: Option[String]
+)
 
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
@@ -35,7 +36,8 @@ case class SubscribeResponseAccount(
   gatewayResponseCode: String,
   invoiceNumber: String,
   invoiceId: String,
-  success: Boolean) extends ZuoraResponse
+  success: Boolean
+) extends ZuoraResponse
 
 case class InvoiceResult(invoice: List[Invoice])
 

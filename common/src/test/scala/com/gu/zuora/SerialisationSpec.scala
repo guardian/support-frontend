@@ -9,7 +9,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging  {
+class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
   "Account" should "serialise to correct json" in {
     val json = account.asJson
@@ -24,7 +24,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging  {
   "SubscribeRequest" should "serialise to correct json" in {
     val json = subscriptionRequest.asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
-    (json \\ "sfContactId__c").head.asString.get should be (salesforceId)
+    (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
   }
 
   "InvoiceResult" should "deserialise correctly" in {

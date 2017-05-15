@@ -9,12 +9,12 @@ import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 
 case class ThankYouFields(
-  email: String,
-  created: DateTime,
-  amount: BigDecimal,
-  currency: String,
-  edition: String,
-  name: String
+    email: String,
+    created: DateTime,
+    amount: BigDecimal,
+    currency: String,
+    edition: String,
+    name: String
 ) {
   def payload: String =
     s"""

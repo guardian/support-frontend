@@ -9,7 +9,6 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
-
 /**
  * These are functions from an OkHttpRequest to an M[Response] which are passed into Clients (such as SimpleClient),
  * to determine how they process HTTP requests

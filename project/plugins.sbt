@@ -8,4 +8,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-s3" % "0.9")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0" excludeAll ExclusionRule(organization = "com.danieltrinh"))
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.1.7"
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")

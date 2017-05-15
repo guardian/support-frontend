@@ -5,7 +5,7 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 
 package object aws {
   val ProfileName = "membership"
-  
+
   lazy val CredentialsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false)
