@@ -10,7 +10,7 @@ import com.gu.support.workers.Fixtures.{ validBaid, _ }
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.zuora.model.{ CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod }
 import io.circe.ParsingFailure
 import io.circe.generic.auto._
 import org.mockito.Matchers._
@@ -34,7 +34,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     //See CirceEncodingBehaviourSpec for more details
 
     outStream.toClass[CreateSalesforceContactState]() match {
-      case state@CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction) =>
+      case state @ CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction) =>
         payPal.paypalBaid should be(validBaid)
         payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
       case _ => fail()
