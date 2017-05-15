@@ -65,4 +65,10 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
+import scalariform.formatter.preferences.SpacesAroundMultiImports
+
+ScalariformKeys.preferences := ScalariformKeys.preferences.value
+  .setPreference(SpacesAroundMultiImports, false)
+
 addCommandAlias("devrun", "run 9000")
