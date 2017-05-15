@@ -6,12 +6,8 @@ import play.api.mvc.{Action, AnyContent, Controller}
 
 class Application()(implicit val assets: AssetsResolver) extends Controller {
 
-  def helloWorld: Action[AnyContent] = CachedAction {
-    Ok(views.html.index())
-  }
-
-  def bundlesLanding: Action[AnyContent] = CachedAction {
-    Ok(views.html.bundlesLanding())
+  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction {
+    Ok(views.html.react(title, id, js))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
