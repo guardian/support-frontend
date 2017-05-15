@@ -36,18 +36,20 @@ class CreateZuoraSubscription(zuoraService: ZuoraService)
       state.user.lastName,
       state.user.primaryEmailAddress,
       state.user.country
-  )
+    )
 
     val date = LocalDate.now(DateTimeZone.UTC)
 
-    val subscriptionData = SubscriptionData(List(
+    val subscriptionData = SubscriptionData(
+      List(
       RatePlanData(
         RatePlan(Configuration.zuoraConfig.productRatePlanId),
         List(RatePlanChargeData(
           RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
         )),
         Nil
-      )),
+      )
+    ),
       Subscription(date, date, date)
     )
 

@@ -19,7 +19,8 @@ case class CreateZuoraSubscriptionState(
   user: User,
   contribution: Contribution,
   paymentMethod: PaymentMethod,
-  salesForceContact: SalesforceContactRecord)
+  salesForceContact: SalesforceContactRecord
+)
 
 case class SendThankYouEmailState(
   user: User,

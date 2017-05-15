@@ -52,7 +52,6 @@ trait CustomCodecs {
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap[LocalDate](_.toString("yyyy-MM-dd"))
   implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
 
-
   //response decoders
   implicit val decodeInvoice: Decoder[Invoice] = decapitalizingDecoder[Invoice]
   implicit val decodeInvoiceResult: Decoder[InvoiceResult] = decapitalizingDecoder[InvoiceResult]
