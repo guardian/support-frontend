@@ -1,9 +1,10 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.config.Configuration
+import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.services.Services.zuoraService
 import com.gu.support.workers.model.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -11,16 +12,18 @@ import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CreateZuoraSubscription(zuoraService: ZuoraService)
-    extends FutureHandler[CreateZuoraSubscriptionState, SendThankYouEmailState] with LazyLogging {
+class CreateZuoraSubscription
+    extends FutureHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
+    with LazyLogging {
 
   override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context) =
-    zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
+    zuoraService.get(state.user.isTestUser).subscribe(buildSubscribeRequest(state)).map { response =>
       SendThankYouEmailState(state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
     }
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
+    val config = zuoraConfigProvider.get(state.user.isTestUser)
 
     val account = Account(
       state.salesForceContact.AccountId, //We store the Salesforce Account id in the name field
@@ -43,9 +46,9 @@ class CreateZuoraSubscription(zuoraService: ZuoraService)
     val subscriptionData = SubscriptionData(
       List(
       RatePlanData(
-        RatePlan(Configuration.zuoraConfig.productRatePlanId),
+        RatePlan(config.productRatePlanId),
         List(RatePlanChargeData(
-          RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
+          RatePlanCharge(config.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
         )),
         Nil
       )

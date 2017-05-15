@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "AuthService" should "be able to retrieve an authtoken" in {
-    val authService = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
+    val authService = new AuthService(Configuration.salesforceConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds))
 
     authService.authorize.map { auth =>
       auth.access_token.length should be > 0
@@ -23,7 +23,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "reuse that token" in {
-    val authService = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
+    val authService = new AuthService(Configuration.salesforceConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds))
 
     val futureAuths = for {
       auth <- AuthService.getAuth
@@ -37,7 +37,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   "SalesforceService" should "be able to upsert a customer" in {
-    val service = new SalesforceService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
+    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds))
     val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>

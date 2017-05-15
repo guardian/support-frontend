@@ -4,6 +4,7 @@ import java.util.NoSuchElementException
 
 import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
+import com.gu.services.Service
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
@@ -11,7 +12,9 @@ import okhttp3.{FormBody, Request, Response}
 
 import scala.util.Try
 
-class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
+class PayPalService(apiConfig: PayPalConfig)
+    extends Service
+    with LazyLogging {
 
   val config = apiConfig
   // The parameters sent with every NVP request.

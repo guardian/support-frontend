@@ -1,5 +1,8 @@
 package com.gu.salesforce
 
+import com.gu.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
+import com.typesafe.config.Config
+
 case class SalesforceConfig(
   url: String,
   key: String,
@@ -7,9 +10,9 @@ case class SalesforceConfig(
   username: String,
   password: String,
   token: String
-)
+) extends TouchpointConfig
 
-object SalesforceConfig {
+class SalesforceConfigProvider(defaultStage: Stage, config: Config) extends TouchpointConfigProvider[SalesforceConfig](defaultStage, config) {
   def fromConfig(config: com.typesafe.config.Config): SalesforceConfig = SalesforceConfig(
     url = config.getString("salesforce.url"),
     key = config.getString("salesforce.consumer.key"),

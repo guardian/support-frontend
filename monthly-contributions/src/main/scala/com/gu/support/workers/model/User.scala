@@ -10,5 +10,6 @@ case class User(
   country: Country,
   allowMembershipMail: Boolean,
   allowThirdPartyMail: Boolean,
-  allowGURelatedMail: Boolean
+  allowGURelatedMail: Boolean,
+  isTestUser: Boolean
 )

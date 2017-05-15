@@ -2,16 +2,19 @@ package com.gu.stripe
 
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners._
+import com.gu.services.Service
 import com.gu.stripe.Stripe._
 import io.circe.generic.auto._
 import okhttp3.Request
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StripeService(config: StripeConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[Stripe.Error] {
-  val wsUrl = "https://api.stripe.com/v1"
+class StripeService(config: StripeConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+    extends WebServiceHelper[Stripe.Error]
+    with Service {
+
   // Stripe URL is the same in all environments
-  val publicKey = config.publicKey
+  val wsUrl = "https://api.stripe.com/v1"
   val httpClient: FutureHttpClient = client
 
   override def wsPreExecute(req: Request.Builder): Request.Builder =

@@ -109,9 +109,9 @@ object Fixtures {
   val subscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(Configuration.zuoraConfig.productRatePlanId),
+        RatePlan(Configuration.zuoraConfigProvider.get().productRatePlanId),
         List(RatePlanChargeData(
-          RatePlanCharge(Configuration.zuoraConfig.productRatePlanChargeId, Some(5: BigDecimal))
+          RatePlanCharge(Configuration.zuoraConfigProvider.get().productRatePlanChargeId, Some(5: BigDecimal))
         )),
         Nil
       )

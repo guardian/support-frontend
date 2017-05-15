@@ -2,6 +2,7 @@ package com.gu.zuora
 
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.services.Service
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model._
 import io.circe.generic.auto._
@@ -11,7 +12,8 @@ import okhttp3.Request.Builder
 import scala.concurrent.{ExecutionContext, Future}
 
 class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[ZuoraErrorResponse] {
+    extends WebServiceHelper[ZuoraErrorResponse]
+    with Service {
   override val wsUrl = config.url
   override val httpClient = client
 

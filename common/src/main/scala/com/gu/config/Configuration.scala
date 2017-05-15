@@ -2,11 +2,11 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
-import com.gu.paypal.PayPalConfig
-import com.gu.salesforce.SalesforceConfig
-import com.gu.stripe.StripeConfig
-import com.gu.zuora.ZuoraConfig
-import com.typesafe.config.ConfigFactory
+import com.gu.paypal.PayPalConfigProvider
+import com.gu.salesforce.SalesforceConfigProvider
+import com.gu.stripe.StripeConfigProvider
+import com.gu.zuora.{ZuoraConfig, ZuoraConfigProvider}
+import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.util.Try
@@ -23,11 +23,23 @@ object Configuration extends LazyLogging {
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
-  val backend = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
+  val stripeConfigProvider = new StripeConfigProvider(stage, config)
+  val payPalConfigProvider = new PayPalConfigProvider(stage, config)
+  val salesforceConfigProvider = new SalesforceConfigProvider(stage, config)
+  val zuoraConfigProvider = new ZuoraConfigProvider(stage, config)
+  val emailServicesConfig = EmailServicesConfig.fromConfig(config)
 
-  lazy val stripeConfig = StripeConfig.fromConfig(backend)
-  lazy val payPalConfig = PayPalConfig.fromConfig(backend)
-  lazy val salesforceConfig = SalesforceConfig.fromConfig(backend)
-  lazy val zuoraConfig = ZuoraConfig.fromConfig(backend)
-  lazy val emailServicesConfig = EmailServicesConfig.fromConfig(config)
+}
+
+trait TouchpointConfig
+
+abstract class TouchpointConfigProvider[T <: TouchpointConfig](defaultStage: Stage, config: Config) {
+  private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(defaultStage))
+  private lazy val uatConfig: T = fromConfig(getTouchpointBackend(Stages.UAT))
+
+  def get(isTestUser: Boolean = false): T =
+    if (isTestUser) uatConfig else defaultConfig
+
+  protected def fromConfig(config: Config): T
+  private def getTouchpointBackend(stage: Stage) = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
 }

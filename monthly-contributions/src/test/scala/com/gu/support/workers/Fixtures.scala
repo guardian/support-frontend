@@ -13,7 +13,8 @@ object Fixtures {
           "country": "UK",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
-          "allowGURelatedMail": false
+          "allowGURelatedMail": false,
+          "isTestUser": false
         }
     """
   val validBaid = "B-23637766K5365543J"

@@ -5,6 +5,7 @@ import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.services.Service
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -18,6 +19,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceErrorResponse]
+    with Service
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -44,13 +46,14 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 /**
  * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
  * The first time it is asked for an authentication token it will go off and fetch one and then store the result
- * in an Akka Agent for reuse.
- * It also schedules a background refresh of the token every 15 minutes to avoid it becoming stale - a problem we
- * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
+ * in authRef.
+ * It also checks the token every time it is used to see whether it has become stale - a problem we
+ * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If the token
+ * is stale a new one is fetched
  */
 object AuthService extends LazyLogging {
 
-  private val service = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
+  private val service = new AuthService(Configuration.salesforceConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds))
   private val authRef = Ref[Option[Authentication]](None)
 
   def getAuth: Future[Authentication] = authRef.single() match {

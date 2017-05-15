@@ -1,5 +1,6 @@
 package com.gu.paypal
 
+import com.gu.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
 import com.typesafe.config.Config
 
 case class PayPalConfig(
@@ -9,9 +10,9 @@ case class PayPalConfig(
   user: String,
   password: String,
   signature: String
-)
+) extends TouchpointConfig
 
-object PayPalConfig {
+class PayPalConfigProvider(defaultStage: Stage, config: Config) extends TouchpointConfigProvider[PayPalConfig](defaultStage, config) {
   def fromConfig(config: Config): PayPalConfig = {
     PayPalConfig(
       config.getString("paypal.paypal-environment"),
