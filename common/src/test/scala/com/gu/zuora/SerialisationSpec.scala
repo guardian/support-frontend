@@ -4,7 +4,6 @@ import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.Printer
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
@@ -20,14 +19,12 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
   "PaymentMethod" should "serialise to correct json" in {
     val json = creditCardPaymentMethod.asJson
-    logger.info(json.spaces2)
   }
 
   "SubscribeRequest" should "serialise to correct json" in {
     val json = subscriptionRequest.asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
-    (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
-    logger.info(json.pretty(Printer.spaces2.copy(dropNullKeys = true)))
+    (json \\ "sfContactId__c").head.asString.get should be (salesforceId)
   }
 
   "InvoiceResult" should "deserialise correctly" in {

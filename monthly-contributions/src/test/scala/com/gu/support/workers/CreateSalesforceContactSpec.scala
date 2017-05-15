@@ -7,8 +7,10 @@ import com.gu.support.workers.Conversions.{ FromOutputStream, StringInputStreamC
 import com.gu.support.workers.Fixtures.createSalesForceContactJson
 import com.gu.support.workers.lambdas.CreateSalesforceContact
 import com.gu.support.workers.model.CreateZuoraSubscriptionState
+import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
 
+@IntegrationTest
 class CreateSalesforceContactSpec extends LambdaSpec {
 
   "CreateSalesForceContact lambda" should "retrieve a SalesforceContactRecord" in {
