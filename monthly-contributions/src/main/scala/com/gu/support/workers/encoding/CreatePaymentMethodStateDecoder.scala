@@ -1,7 +1,8 @@
 package com.gu.support.workers.encoding
 
 import cats.syntax.either._
-import com.gu.support.workers.model.{CreatePaymentMethodState, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model._
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, DecodingFailure, HCursor}
@@ -21,27 +22,22 @@ object CreatePaymentMethodStateDecoder extends LazyLogging {
     }
   }
 
-  implicit val decodeBigDecimal: Decoder[BigDecimal] = new Decoder[BigDecimal] {
-    final def apply(c: HCursor): Decoder.Result[BigDecimal] = {
-      Right(BigDecimal(c.value.noSpaces))
-    }
-  }
-
   implicit val decodeCreatePaymentMethodState: Decoder[CreatePaymentMethodState] = new Decoder[CreatePaymentMethodState] {
     final def apply(c: HCursor): Decoder.Result[CreatePaymentMethodState] = {
       implicit val userDecoder: Decoder[User] = deriveDecoder
+      implicit val contributionDecoder: Decoder[Contribution] = deriveDecoder
 
       val state = for {
         userJson <- c.value \\ "user"
-        amountJson <- c.value \\ "amount"
+        contributionJson <- c.value \\ "contribution"
         paymentFieldsJson <- c.value \\ "paymentFields"
       } yield {
         for {
           user <- userDecoder.decodeJson(userJson)
-          amount <- decodeBigDecimal.decodeJson(amountJson)
+          contribution <- contributionDecoder.decodeJson(contributionJson)
           paymentFields <- decodePaymentFields.decodeJson(paymentFieldsJson)
         } yield {
-          CreatePaymentMethodState(user, amount, paymentFields)
+          CreatePaymentMethodState(user, contribution, paymentFields)
         }
       }
       state.head

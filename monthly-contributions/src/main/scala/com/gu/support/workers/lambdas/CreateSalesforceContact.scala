@@ -29,7 +29,7 @@ class CreateSalesforceContact(
       state.user.allowThirdPartyMail
     )).map(response =>
       if (response.Success) {
-        CreateZuoraSubscriptionState(state.user, state.amount, state.paymentMethod, response.ContactRecord)
+        CreateZuoraSubscriptionState(state.user, state.contribution, state.paymentMethod, response.ContactRecord)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
         logger.error(s"Error creating Salesforce contact:\n$errorMessage")

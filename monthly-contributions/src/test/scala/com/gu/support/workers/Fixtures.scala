@@ -10,6 +10,7 @@ object Fixtures {
           "primaryEmailAddress": "test@gu.com",
           "firstName": "test",
           "lastName": "user",
+          "country": "UK",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false
@@ -29,6 +30,14 @@ object Fixtures {
          }
        """
 
+  val contributionJson =
+    """
+      {
+        "amount": 5,
+        "currency": "GBP"
+      }
+    """
+
   val payPalJson =
     s"""
                 {
@@ -46,14 +55,14 @@ object Fixtures {
   val createPayPalPaymentMethodJson =
     s"""{
           $userJson,
-          "amount": 5,
+          "contribution": $contributionJson,
           "paymentFields": $payPalJson
         }"""
 
   val createStripePaymentMethodJson =
     s"""{
           $userJson,
-          "amount": 5,
+          "contribution": $contributionJson,
           "paymentFields": $stripeJson
         }"""
 
@@ -61,7 +70,7 @@ object Fixtures {
     s"""
           {
             $userJson,
-            "amount": 5,
+            "contribution": $contributionJson,
             "paymentMethod": $payPalPaymentMethod
           }
         """
@@ -69,7 +78,7 @@ object Fixtures {
   val thankYouEmailJson =
     s"""{
         |  $userJson,
-        |  "amount": 5,
+        |  "contribution": $contributionJson,
         |  "paymentMethod": $payPalPaymentMethod,
         |  "salesForceContact": {
         |    "Id": "123",
@@ -90,7 +99,7 @@ object Fixtures {
     s"""
           {
             $userJson,
-            "amount": 5,
+            "contribution": $contributionJson,
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
