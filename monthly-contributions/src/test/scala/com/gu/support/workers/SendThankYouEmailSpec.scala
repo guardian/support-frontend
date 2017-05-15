@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.support.workers.Conversions.{ FromOutputStream, StringInputStreamConversions }
+import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.thankYouEmailJson
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.test.tags.annotations.IntegrationTest

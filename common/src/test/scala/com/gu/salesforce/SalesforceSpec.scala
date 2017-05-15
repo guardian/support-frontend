@@ -3,10 +3,10 @@ package com.gu.salesforce
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{ Authentication, SalesforceContactResponse, UpsertData }
+import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, UpsertData}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{ AsyncFlatSpec, Matchers }
+import org.scalatest.{AsyncFlatSpec, Matchers}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

@@ -1,6 +1,6 @@
 package com.gu.helpers
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Failure
 import scala.concurrent.duration._
 import dispatch._

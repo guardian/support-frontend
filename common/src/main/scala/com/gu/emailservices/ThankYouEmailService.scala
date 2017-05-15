@@ -5,8 +5,8 @@ import scala.concurrent.Future
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
-import com.amazonaws.services.sqs.model.{ SendMessageRequest, SendMessageResult }
-import com.gu.aws.{ AwsAsync, CredentialsProvider }
+import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
+import com.gu.aws.{AwsAsync, CredentialsProvider}
 
 case class ThankYouFields(
     email: String,

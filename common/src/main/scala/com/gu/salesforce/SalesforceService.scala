@@ -1,10 +1,10 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.helpers.{ Retry, WebServiceHelper }
+import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.salesforce.Salesforce.{ Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData }
+import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -14,7 +14,7 @@ import okhttp3.Request
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.stm._
-import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceErrorResponse]

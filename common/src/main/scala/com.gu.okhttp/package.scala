@@ -5,7 +5,7 @@ import java.io.IOException
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
 
-import scala.concurrent.{ Future, Promise }
+import scala.concurrent.{Future, Promise}
 
 package object okhttp {
 

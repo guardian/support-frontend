@@ -2,12 +2,12 @@ package com.gu.paypal
 
 import java.util.NoSuchElementException
 
-import com.gu.config.{ Configuration, Stages }
+import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
-import okhttp3.{ FormBody, Request, Response }
+import okhttp3.{FormBody, Request, Response}
 
 import scala.util.Try
 

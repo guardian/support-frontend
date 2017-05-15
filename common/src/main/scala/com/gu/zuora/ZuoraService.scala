@@ -8,7 +8,7 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import okhttp3.Request.Builder
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[ZuoraErrorResponse] {

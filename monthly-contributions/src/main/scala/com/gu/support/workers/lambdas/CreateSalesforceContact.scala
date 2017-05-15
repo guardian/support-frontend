@@ -6,7 +6,7 @@ import com.gu.okhttp.RequestRunners
 import com.gu.salesforce.Salesforce.UpsertData
 import com.gu.salesforce.SalesforceService
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.model.{ CreateSalesforceContactState, CreateZuoraSubscriptionState }
+import com.gu.support.workers.model.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 

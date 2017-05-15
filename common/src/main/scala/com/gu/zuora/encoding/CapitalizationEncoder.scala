@@ -5,7 +5,7 @@ import com.gu.helpers.StringExtensions._
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import io.circe.{ Decoder, JsonObject, ObjectEncoder }
+import io.circe.{Decoder, JsonObject, ObjectEncoder}
 import shapeless.Lazy
 
 object CapitalizationEncoder {

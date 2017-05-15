@@ -1,6 +1,6 @@
 package com.gu.support.workers.encoding
 
-import java.io.{ InputStream, OutputStream }
+import java.io.{InputStream, OutputStream}
 
 import cats.syntax.either._
 

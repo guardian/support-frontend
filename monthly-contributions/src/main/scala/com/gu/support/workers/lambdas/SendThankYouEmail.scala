@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import com.gu.config.Configuration
-import com.gu.emailservices.{ ThankYouEmailService, ThankYouFields }
+import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
 import com.gu.support.workers.model.SendThankYouEmailState
 
 class SendThankYouEmail(

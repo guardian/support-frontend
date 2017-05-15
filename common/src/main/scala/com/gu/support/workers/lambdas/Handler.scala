@@ -1,13 +1,13 @@
 package com.gu.support.workers.lambdas
 
-import java.io.{ InputStream, OutputStream }
+import java.io.{InputStream, OutputStream}
 
-import com.amazonaws.services.lambda.runtime.{ Context, RequestStreamHandler }
+import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.{ Decoder, Encoder }
+import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler with LazyLogging {
   import com.gu.support.workers.encoding.Encoding._

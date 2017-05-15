@@ -1,11 +1,11 @@
 package com.gu.zuora
 
 import com.gu.zuora.encoding.CapitalizationEncoder._
-import com.gu.zuora.model.{ Invoice, InvoiceResult }
+import com.gu.zuora.model.{Invoice, InvoiceResult}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{ FlatSpec, Matchers }
+import org.scalatest.{FlatSpec, Matchers}
 
 class EncoderSpec extends FlatSpec with Matchers with LazyLogging {
   implicit val encoder = capitalizingEncoder[TestClass]

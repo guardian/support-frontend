@@ -2,12 +2,12 @@ package com.gu.support.workers
 
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.model.CreateSalesforceContactState
-import com.gu.zuora.model.{ PayPalReferenceTransaction, PaymentMethod }
+import com.gu.zuora.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{ FlatSpec, Matchers }
+import org.scalatest.{FlatSpec, Matchers}
 
 class CreateSalesforceContactDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {

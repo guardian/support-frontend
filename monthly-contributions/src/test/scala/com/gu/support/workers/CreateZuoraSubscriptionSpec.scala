@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
-import com.gu.support.workers.Conversions.{ FromOutputStream, StringInputStreamConversions }
+import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.SendThankYouEmailState

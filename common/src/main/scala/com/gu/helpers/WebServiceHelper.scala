@@ -3,12 +3,12 @@ package com.gu.helpers
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
-import io.circe.{ Decoder, Json, Printer }
+import io.circe.{Decoder, Json, Printer}
 import okhttp3._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.reflect.{ ClassTag, classTag }
+import scala.reflect.{ClassTag, classTag}
 
 case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
   override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"

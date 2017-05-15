@@ -6,7 +6,7 @@ import com.gu.stripe.Stripe._
 import io.circe.generic.auto._
 import okhttp3.Request
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class StripeService(config: StripeConfig, client: FutureHttpClient)(implicit ec: ExecutionContext) extends WebServiceHelper[Stripe.Error] {
   val wsUrl = "https://api.stripe.com/v1"
