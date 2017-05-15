@@ -28,7 +28,7 @@ class CreatePaymentMethod(
       case Left(stripe) => createStripePaymentMethod(stripe)
       case Right(payPal) => createPayPalPaymentMethod(payPal)
     }
-    paymentMethod.map(CreateSalesforceContactState(state.user, state.amount, _))
+    paymentMethod.map(CreateSalesforceContactState(state.user, state.contribution, _))
   }
 
   def createStripePaymentMethod(stripe: StripePaymentFields): Future[CreditCardReferenceTransaction] = for {

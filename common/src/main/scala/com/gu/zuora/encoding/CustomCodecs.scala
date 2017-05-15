@@ -1,7 +1,8 @@
 package com.gu.zuora.encoding
 
 import com.gu.helpers.StringExtensions._
-import com.gu.i18n.{Country, Currency}
+import com.gu.i18n.Currency.GBP
+import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.zuora.encoding.CapitalizationEncoder._
 import com.gu.zuora.model._
 import io.circe._
@@ -51,8 +52,11 @@ trait CustomCodecs {
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap[LocalDate](_.toString("yyyy-MM-dd"))
   implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
 
+
   //response decoders
   implicit val decodeInvoice: Decoder[Invoice] = decapitalizingDecoder[Invoice]
   implicit val decodeInvoiceResult: Decoder[InvoiceResult] = decapitalizingDecoder[InvoiceResult]
   implicit val decodeSubscribeResponseAccount: Decoder[SubscribeResponseAccount] = decapitalizingDecoder[SubscribeResponseAccount]
+  implicit val decodeCurrency: Decoder[Currency] = Decoder.decodeString.map(Currency.fromString(_).getOrElse(GBP))
+  implicit val decodeCountry: Decoder[Country] = Decoder.decodeString.map(CountryGroup.countryByCode(_).getOrElse(Country.UK))
 }
