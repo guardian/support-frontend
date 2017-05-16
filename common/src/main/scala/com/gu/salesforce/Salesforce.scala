@@ -48,7 +48,7 @@ object Salesforce {
 
   case class Authentication(access_token: String, instance_url: String, issued_at: DateTime) {
     private val expiryTimeMinutes = 15
-    def isStale: Boolean = issued_at.isBefore(DateTime.now().minusMinutes(expiryTimeMinutes))
+    def isFresh: Boolean = issued_at.isAfter(DateTime.now().minusMinutes(expiryTimeMinutes))
   }
 
 }

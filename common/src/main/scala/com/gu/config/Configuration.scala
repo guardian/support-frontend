@@ -5,7 +5,8 @@ import com.gu.emailservices.EmailServicesConfig
 import com.gu.paypal.PayPalConfigProvider
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.stripe.StripeConfigProvider
-import com.gu.zuora.{ZuoraConfig, ZuoraConfigProvider}
+import com.gu.zuora.ZuoraConfigProvider
+import com.typesafe.config.ConfigValueFactory.fromAnyRef
 import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.LazyLogging
 
@@ -41,5 +42,9 @@ abstract class TouchpointConfigProvider[T <: TouchpointConfig](defaultStage: Sta
     if (isTestUser) uatConfig else defaultConfig
 
   protected def fromConfig(config: Config): T
-  private def getTouchpointBackend(stage: Stage) = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
+
+  private def getTouchpointBackend(stage: Stage) = config
+    .getConfig(s"touchpoint.backend.environments.${stage.name}")
+    .withValue("stage", fromAnyRef(stage.name))
+
 }

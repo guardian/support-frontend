@@ -23,11 +23,11 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with Cus
     //Deserialize a fresh token
     val decodeResult = decode[Authentication](authJson.format(now.getMillis)) //issued_at time is in millis
     decodeResult.isRight should be(true)
-    decodeResult.right.get.isStale should be(false)
+    decodeResult.right.get.isFresh should be(true)
 
     //Deserialize a stale token
     val decodeResult2 = decode[Authentication](authJson.format(stale.getMillis))
     decodeResult2.isRight should be(true)
-    decodeResult2.right.get.isStale should be(true)
+    decodeResult2.right.get.isFresh should be(false)
   }
 }
