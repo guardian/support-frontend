@@ -32,6 +32,23 @@ When running locally you can avoid loading config from S3 on each run and load i
 * Set an environment variable to false by adding the following to your bashrc:
 
     `export GU_SUPPORT_WORKERS_LOAD_S3_CONFIG=false`
+    
+## Test Users
+To facilitate testing in production, this project supports the concept of test users. 
+ 
+To work with a test user in the monthly contributions step function pass in a state
+object with the user.isTestUser flag set to true. The application will then load configuration
+from the UAT configuration block rather than the default for the stage (either DEV or PROD).
+
+## Tests 
+There are a number of integration tests in the project which talk to real services, these are useful for real end to end testing, but slow to run and prone to failures if any of the services are playing up.
+
+These tests are tagged with either an @IntegrationTest annotation at the spec level or an IntegrationTest tag at the individual test level which allows us to run them selectively as follows: 
+
+`sbt test` - runs all tests including integration tests.
+
+`sbt testOnly -- -l com.gu.test.tags.annotations.IntegrationTest` - runs non-integration tests only. 
+
       
 ## Json 
 This project uses [Circe](https://github.com/circe/circe) to serialise and deserialise json. 
@@ -56,12 +73,3 @@ Whereas the same object typed as a PayPalReferenceTransaction will serialise to:
 As a result of this we need to decode back to the exact type which we encoded from or we will a get a decoding failure.
 
 This behaviour is illustrated through a number of tests in [CirceEncodingBehaviourSpec.](/monthly-contributions/src/test/scala/com/gu/support/workers/CirceEncodingBehaviourSpec.scala) 
-
-## Tests 
-There are a number of integration tests in the project which talk to real services, these are useful for real end to end testing, but slow to run and prone to failures if any of the services are playing up.
-
-These tests are tagged with either an @IntegrationTest annotation at the spec level or an IntegrationTest tag at the individual test level which allows us to run them selectively as follows: 
-
-`sbt test` - runs all tests including integration tests.
-
-`sbt testOnly -- -l com.gu.test.tags.annotations.IntegrationTest` - runs non-integration tests only. 
