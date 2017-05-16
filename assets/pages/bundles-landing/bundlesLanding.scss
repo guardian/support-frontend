@@ -524,8 +524,10 @@
     }
 
     .component-cta-circle--patron {
-      position: absolute;
-      bottom: 0;
+      @include mq($from: mobileLandscape) {
+        position: absolute;
+        bottom: 0;
+      }
     }
   }
 
