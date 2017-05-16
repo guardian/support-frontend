@@ -11,10 +11,10 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
 class CustomHttpErrorHandler(
-  env: Environment,
-  config: Configuration,
-  sourceMapper: Option[SourceMapper],
-  router: => Option[Router]
+    env: Environment,
+    config: Configuration,
+    sourceMapper: Option[SourceMapper],
+    router: => Option[Router]
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
