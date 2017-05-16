@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.StripeList
-import com.gu.stripe.{Stripe, StripeConfig, StripeService}
+import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
@@ -75,14 +75,14 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
   lazy val mockServices = {
     //Mock the stripe service as we cannot actually create a customer
+    val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val stripeServiceProvider = mock[ServiceProvider[StripeService, StripeConfig]]
-    val stripeMock = mock[StripeService]
+    val stripe = mock[StripeService]
     val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB")
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
-    when(stripeMock.createCustomer(any[String], any[String])).thenReturn(Future(customer))
-    when(stripeServiceProvider.get(any[Boolean])).thenReturn(stripeMock)
-    when(services.stripeService).thenReturn(stripeServiceProvider)
-    services
+    when(stripe.createCustomer(any[String], any[String])).thenReturn(Future(customer))
+    when(services.stripeService).thenReturn(stripe)
+    when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
+    serviceProvider
   }
 }

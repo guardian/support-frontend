@@ -5,7 +5,6 @@ import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
-import com.gu.services.Service
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -19,7 +18,6 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceErrorResponse]
-    with Service
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url

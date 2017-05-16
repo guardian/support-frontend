@@ -11,11 +11,11 @@ import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CreateSalesforceContact extends FutureHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
+class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
 
-  override protected def handlerFuture(state: CreateSalesforceContactState, context: Context) = {
+  override protected def servicesHandler(state: CreateSalesforceContactState, context: Context, services: Services) = {
     logger.debug(s"CreateSalesforceContact state: $state")
-    Services.salesforceService.get(state.user.isTestUser).upsert(UpsertData.create(
+    services.salesforceService.upsert(UpsertData.create(
       state.user.id,
       state.user.primaryEmailAddress,
       state.user.firstName,

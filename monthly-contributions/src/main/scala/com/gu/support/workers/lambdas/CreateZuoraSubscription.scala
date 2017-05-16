@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
-import com.gu.services.Services.zuoraService
+import com.gu.services.Services
 import com.gu.support.workers.model.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import com.gu.zuora.model._
@@ -13,11 +13,11 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription
-    extends FutureHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
+    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
     with LazyLogging {
 
-  override protected def handlerFuture(state: CreateZuoraSubscriptionState, context: Context) =
-    zuoraService.get(state.user.isTestUser).subscribe(buildSubscribeRequest(state)).map { response =>
+  override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
+    services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
       SendThankYouEmailState(state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
     }
 

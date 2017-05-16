@@ -2,27 +2,26 @@ package com.gu.services
 
 import com.gu.config.Configuration._
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.paypal.{PayPalConfig, PayPalService}
-import com.gu.salesforce.{SalesforceConfig, SalesforceService}
-import com.gu.stripe.{StripeConfig, StripeService}
-import com.gu.zuora.{ZuoraConfig, ZuoraService}
+import com.gu.paypal.PayPalService
+import com.gu.salesforce.SalesforceService
+import com.gu.stripe.StripeService
+import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-object Services extends Services
-
-class Services {
-  lazy val stripeService = new ServiceProvider[StripeService, StripeConfig](
-    new StripeService(_, configurableFutureRunner(10.seconds)), stripeConfigProvider
-  )
-  lazy val payPalService = new ServiceProvider[PayPalService, PayPalConfig](
-    new PayPalService(_), payPalConfigProvider
-  )
-  lazy val salesforceService = new ServiceProvider[SalesforceService, SalesforceConfig](
-    new SalesforceService(_, configurableFutureRunner(30.seconds)), salesforceConfigProvider
-  )
-  lazy val zuoraService = new ServiceProvider[ZuoraService, ZuoraConfig](
-    new ZuoraService(_, configurableFutureRunner(30.seconds)), zuoraConfigProvider
-  )
+trait ServiceProvider {
+  private lazy val defaultServices: Services = new Services(false)
+  private lazy val uatServices: Services = new Services(true)
+  def forUser(isTestUser: Boolean): Services = if (isTestUser) uatServices else defaultServices
 }
+
+object ServiceProvider extends ServiceProvider
+
+class Services(isTestUser: Boolean) {
+  lazy val stripeService: StripeService = new StripeService(stripeConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
+  lazy val payPalService: PayPalService = new PayPalService(payPalConfigProvider.get(isTestUser))
+  lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
+  lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
+}
+
