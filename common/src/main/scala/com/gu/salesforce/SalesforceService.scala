@@ -44,7 +44,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 /**
  * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
  * The first time it is asked for an authentication token it will go off and fetch one and then store the result
- * in authRef.
+ * in authRef (one auth token per stage).
  * It also checks the token every time it is used to see whether it has become stale - a problem we
  * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If the token
  * is stale a new one is fetched
@@ -66,7 +66,7 @@ object AuthService extends LazyLogging {
   })
 
   private def storeAuth(authentication: Authentication, stage: String) = atomic { implicit txn =>
-    logger.info("Successfully retrieved Salesforce authentication token")
+    logger.info(s"Successfully retrieved Salesforce authentication token for $stage")
     val newAuths = authRef().updated(stage, authentication)
     authRef() = newAuths
   }

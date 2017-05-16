@@ -106,12 +106,13 @@ object Fixtures {
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "Visa")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
 
+  val config = Configuration.zuoraConfigProvider.get()
   val subscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(Configuration.zuoraConfigProvider.get().productRatePlanId),
+        RatePlan(config.productRatePlanId),
         List(RatePlanChargeData(
-          RatePlanCharge(Configuration.zuoraConfigProvider.get().productRatePlanChargeId, Some(5: BigDecimal))
+          RatePlanCharge(config.productRatePlanChargeId, Some(5: BigDecimal))
         )),
         Nil
       )
