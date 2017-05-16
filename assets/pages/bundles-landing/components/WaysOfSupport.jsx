@@ -13,7 +13,7 @@ import WayOfSupport from './WayOfSupport';
 const waysOfSupport = [
   {
     heading: 'Patrons',
-    infoText: 'The Patrons tier for those who care deeply about the the Guardian\'s journalism and the imact is has on th world',
+    infoText: 'The Patrons tier for those who care deeply about the Guardian\'s journalism and the impact it has on the world',
     ctaText: 'Become a Patron',
     ctaLink: 'https://membership.theguardian.com/patrons',
     modifierClass: 'patron',
