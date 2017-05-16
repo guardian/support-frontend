@@ -6,7 +6,7 @@ GET /healthcheck                controllers.Application.healthcheck
 
 # ----- Pages ----- #
 
-GET /hello                      controllers.Application.helloWorld
-GET /uk                         controllers.Application.bundlesLanding
+GET /hello                      controllers.Application.reactTemplate(title="Hello World", id="app", js="helloWorldPage.js")
+GET /uk                         controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /                           controllers.Default.redirect(to = "/uk")
 
