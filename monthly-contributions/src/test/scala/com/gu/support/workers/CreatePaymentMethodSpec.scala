@@ -3,13 +3,14 @@ package com.gu.support.workers
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
-import com.gu.test.tags.annotations.IntegrationTest
+import com.gu.test.tags.objects.IntegrationTest
 import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import io.circe.ParsingFailure
 import io.circe.generic.auto._
@@ -19,10 +20,9 @@ import org.mockito.Mockito._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-@IntegrationTest
 class CreatePaymentMethodSpec extends LambdaSpec {
 
-  "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" in {
+  "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" taggedAs IntegrationTest in {
     val createPaymentMethod = new CreatePaymentMethod()
 
     val outStream = new ByteArrayOutputStream()
@@ -43,7 +43,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
   it should "retrieve a valid CreditCardReferenceTransaction when given a valid stripe token" in {
 
-    val createPaymentMethod = new CreatePaymentMethod(stripeService = mockStripeService)
+    val createPaymentMethod = new CreatePaymentMethod(mockServices)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -73,12 +73,16 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     }
   }
 
-  lazy val mockStripeService = {
+  lazy val mockServices = {
     //Mock the stripe service as we cannot actually create a customer
-    val stripeMock = mock[StripeService]
+    val serviceProvider = mock[ServiceProvider]
+    val services = mock[Services]
+    val stripe = mock[StripeService]
     val card = Stripe.Card("1234", "visa", "1234", 1, 2099, "GB")
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
-    when(stripeMock.createCustomer(any[String], any[String])).thenReturn(Future(customer))
-    stripeMock
+    when(stripe.createCustomer(any[String], any[String])).thenReturn(Future(customer))
+    when(services.stripeService).thenReturn(stripe)
+    when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
+    serviceProvider
   }
 }

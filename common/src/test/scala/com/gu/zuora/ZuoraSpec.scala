@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "ZuoraService" should "retrieve an account" in {
-    val zuoraService = new ZuoraService(Configuration.zuoraConfig, RequestRunners.configurableFutureRunner(10.seconds))
+    val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds))
     zuoraService.getAccount(Fixtures.accountNumber).map {
       response =>
         response.success should be(true)
@@ -22,7 +22,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   "Subscribe request" should "succeed" in {
-    val zuoraService = new ZuoraService(Configuration.zuoraConfig, RequestRunners.configurableFutureRunner(30.seconds))
+    val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
     zuoraService.subscribe(subscriptionRequest).map {
       response =>
         response.head.success should be(true)

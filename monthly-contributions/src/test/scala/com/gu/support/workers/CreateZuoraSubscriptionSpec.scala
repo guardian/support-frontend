@@ -19,7 +19,7 @@ import scala.concurrent.duration._
 class CreateZuoraSubscriptionSpec extends LambdaSpec {
 
   "CreateZuoraSubscription lambda" should "create a Zuora subscription" in {
-    val createZuora = new CreateZuoraSubscription(new ZuoraService(Configuration.zuoraConfig, RequestRunners.configurableFutureRunner(20.seconds)))
+    val createZuora = new CreateZuoraSubscription()
 
     val outStream = new ByteArrayOutputStream()
 

@@ -17,7 +17,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse]
+  extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -26,7 +26,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 
   override def wsPreExecute(req: Request.Builder): Request.Builder =
     Await.result( //We have to wait for an authentication token before we can send any requests
-      AuthService.getAuth.map(
+      AuthService.getAuth(config).map(
         auth => addAuthenticationToRequest(auth, req)
       ), 30.seconds
     )
@@ -44,41 +44,40 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 /**
  * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
  * The first time it is asked for an authentication token it will go off and fetch one and then store the result
- * in an Akka Agent for reuse.
- * It also schedules a background refresh of the token every 15 minutes to avoid it becoming stale - a problem we
- * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs
+ * in authRef (one auth token per stage).
+ * It also checks the token every time it is used to see whether it has become stale - a problem we
+ * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If the token
+ * is stale a new one is fetched
  */
 object AuthService extends LazyLogging {
 
-  private val service = new AuthService(Configuration.salesforceConfig, RequestRunners.configurableFutureRunner(10.seconds))
-  private val authRef = Ref[Option[Authentication]](None)
+  private val authRef = Ref[Map[String, Authentication]](Map())
 
-  def getAuth: Future[Authentication] = authRef.single() match {
-    case Some(authentication) =>
-      if (authentication.isStale)
-        fetchAuth
-      else
+  def getAuth(config: SalesforceConfig): Future[Authentication] =
+    authRef.single().get(config.stage).filter(_.isFresh) match {
+      case Some(authentication) =>
         Future.successful(authentication)
-    case None => fetchAuth
-  }
+      case None => fetchAuth(config)
+    }
 
-  private def fetchAuth = service.authorize.map(authentication => {
-    sendAuth(authentication)
+  private def fetchAuth(config: SalesforceConfig) = new AuthService(config).authorize.map(authentication => {
+    storeAuth(authentication, config.stage)
     authentication
   })
 
-  private def sendAuth(authentication: Authentication) = atomic { implicit txn =>
-    logger.info("Successfully retrieved Salesforce authentication token")
-    authRef() = Some(authentication)
+  private def storeAuth(authentication: Authentication, stage: String) = atomic { implicit txn =>
+    logger.info(s"Successfully retrieved Salesforce authentication token for $stage")
+    val newAuths = authRef().updated(stage, authentication)
+    authRef() = newAuths
   }
 }
 
-class AuthService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse]
+class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
+  extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url
-  val httpClient: FutureHttpClient = client
+  val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
   private[salesforce] def authorize: Future[Authentication] = {
     logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
