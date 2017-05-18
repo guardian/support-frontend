@@ -30,6 +30,7 @@
         "no-console": 0,
         // For preact-compat, delete if switching to React.
         "import/no-duplicates": "off",
+        "import/no-extraneous-dependencies": "off",
         "padded-blocks": "off",
     },
     "settings": {
