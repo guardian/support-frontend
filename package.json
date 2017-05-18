@@ -33,7 +33,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
-    "ophan-tracker-js": "^1.3.7",
+    "ophan-tracker-js": "^1.3.8",
     "react-redux": "^5.0.4",
     "redux": "^3.6.0"
   },
