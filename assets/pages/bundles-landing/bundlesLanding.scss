@@ -153,6 +153,10 @@
       font-weight: bold;
       font-family: $gu-text-sans-web;
 
+      .component-double-heading__heading {
+        color: gu-colour(neutral-1);
+      }
+
       input:checked+label {
         background-color: gu-colour(neutral-1);
         color: #fff;

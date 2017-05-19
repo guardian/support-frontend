@@ -7,14 +7,12 @@ import { connect } from 'react-redux';
 
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
+import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
-import {
-  changePaperBundle,
-  changeContribType,
-} from '../actions/bundlesLandingActions';
+import { changeContribType } from '../actions/bundlesLandingActions';
 
-import type { Contrib, Amounts, PaperBundle } from '../reducers/reducers';
+import type { Contrib, Amounts } from '../reducers/reducers';
 
 
 // ----- Copy ----- //
@@ -28,7 +26,7 @@ const ctaLinks = {
 };
 
 const bundles = {
-  allContrib: {
+  contrib: {
     heading: 'contribute',
     subheading: 'from £5/month',
     ctaText: 'Contribute with credit/debit card',
@@ -53,17 +51,13 @@ const bundles = {
     ctaText: 'Become a digital subscriber',
     modifierClass: 'digital',
   },
-  allPaper: {
+  paper: {
     heading: 'print subscription',
-    ctaText: 'Become a paper subscriber',
-    modifierClass: 'paper',
-  },
-  paperDigital: {
     subheading: 'from £22.06/month',
     listItems: [
       {
         heading: 'Newspaper',
-        text: 'Choose the package you want: Everyday+, Sixday+, Weekend+ and Sunday+',
+        text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
       },
       {
         heading: 'Save money off the retail price',
@@ -73,59 +67,33 @@ const bundles = {
         text: 'Avaliable with paper+digital',
       },
     ],
-  },
-  paperOnly: {
-    subheading: 'from £10.79/month',
-    listItems: [
-      {
-        heading: 'Newspaper',
-        text: 'Choose the package you want: Everyday, Sixday, Weekend or Sunday',
-      },
-      {
-        heading: 'Save money off the retail price',
-      },
-    ],
+    paperCtaText: 'Become a paper subscriber',
+    paperDigCtaText: 'Become a paper+digital subscriber',
+    modifierClass: 'paper',
   },
 };
 
-const toggles = {
-  paper: {
-    name: 'paper-toggle',
-    radios: [
-      {
-        value: 'PAPER+DIGITAL',
-        text: 'Paper + digital',
-      },
-      {
-        value: 'PAPER',
-        text: 'Paper',
-      },
-    ],
-  },
-  contribType: {
-    name: 'contributions-period-toggle',
-    radios: [
-      {
-        value: 'RECURRING',
-        text: 'Monthly',
-      },
-      {
-        value: 'ONE_OFF',
-        text: 'One-off',
-      },
-    ],
-  },
+const contribToggle = {
+  name: 'contributions-period-toggle',
+  radios: [
+    {
+      value: 'RECURRING',
+      text: 'Monthly',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+    },
+  ],
 };
 
 
 // ----- Types ----- //
 
 type PropTypes = {
-  paperBundle: PaperBundle,
   contribType: Contrib,
   contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
   intCmp: string, // eslint-disable-line react/no-unused-prop-types
-  togglePaperBundle: (string) => void,
   toggleContribType: (string) => void,
 };
 
@@ -142,27 +110,20 @@ function getContribAttrs({ contribType, contribAmount, intCmp }) {
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles.allContrib, { ctaLink });
+  return Object.assign({}, bundles.contrib, { ctaLink });
 
 }
 
-function getPaperAttrs({ paperBundle, intCmp }) {
+function getPaperAttrs({ intCmp }) {
 
-  let ctaLink = null;
-  let selectedBundle = null;
   const params = new URLSearchParams();
 
   params.append('INTCMP', intCmp);
+  const paperCtaLink = `${ctaLinks.paperOnly}?${params.toString()}`;
+  const paperDigCtaLink = `${ctaLinks.paperDigital}?${params.toString()}`;
 
-  if (paperBundle === 'PAPER+DIGITAL') {
-    ctaLink = `${ctaLinks.paperDigital}?${params.toString()}`;
-    selectedBundle = bundles.paperDigital;
-  } else {
-    ctaLink = `${ctaLinks.paperOnly}?${params.toString()}`;
-    selectedBundle = bundles.paperOnly;
-  }
+  return Object.assign({}, bundles.paper, { paperCtaLink, paperDigCtaLink });
 
-  return Object.assign({}, bundles.allPaper, selectedBundle, { ctaLink });
 }
 
 function getDigitalAttrs({ intCmp }) {
@@ -172,6 +133,7 @@ function getDigitalAttrs({ intCmp }) {
   const ctaLink = `${ctaLinks.digital}?${params.toString()}`;
 
   return Object.assign({}, bundles.digital, { ctaLink });
+
 }
 
 
@@ -188,22 +150,21 @@ function Bundles(props: PropTypes) {
       <div className="bundles__content gu-content-margin">
         <Bundle {...contribAttrs}>
           <RadioToggle
-            {...toggles.contribType}
+            {...contribToggle}
             toggleAction={props.toggleContribType}
             checked={props.contribType}
           />
           <ContribAmounts />
+          <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
         </Bundle>
         <Bundle {...digitalAttrs}>
           <FeatureList listItems={bundles.digital.listItems} />
+          <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
         </Bundle>
         <Bundle {...paperAttrs}>
-          <RadioToggle
-            {...toggles.paper}
-            toggleAction={props.togglePaperBundle}
-            checked={props.paperBundle}
-          />
           <FeatureList listItems={paperAttrs.listItems} />
+          <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
+          <CtaLink text={paperAttrs.paperDigCtaText} url={paperAttrs.paperDigCtaLink} />
         </Bundle>
       </div>
     </section>
@@ -216,7 +177,6 @@ function Bundles(props: PropTypes) {
 
 function mapStateToProps(state) {
   return {
-    paperBundle: state.paperBundle,
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     intCmp: state.intCmp,
@@ -226,9 +186,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    togglePaperBundle: (bundle: PaperBundle) => {
-      dispatch(changePaperBundle(bundle));
-    },
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },

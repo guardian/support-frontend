@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
-import CtaLink from 'components/ctaLink/ctaLink';
 
 import type { Children } from 'react';
 
@@ -16,8 +15,6 @@ import type { Children } from 'react';
 type PropTypes = {
   heading: string,
   subheading: string,
-  ctaText: string,
-  ctaLink: string,
   modifierClass: string,
   children?: Children,
 };
@@ -40,7 +37,6 @@ function Bundle(props: PropTypes) {
         subheading={props.subheading}
       />
       {props.children}
-      <CtaLink text={props.ctaText} url={props.ctaLink} />
     </div>
   );
 
