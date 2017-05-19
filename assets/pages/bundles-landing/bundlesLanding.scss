@@ -143,8 +143,18 @@
 
     .bundles__bundle {
       width: 300px;
+      height: 400px;
       padding: 8px 10px 12px;
       display: inline-block;
+      vertical-align: top;
+      position: relative;
+    }
+
+    .component-cta-link {
+      position: absolute;
+      bottom: $gu-v-spacing;
+      right: $gu-h-spacing / 2;
+      left: $gu-h-spacing / 2;
     }
 
     .bundles__bundle--contributions {
@@ -152,6 +162,45 @@
       font-size: 14px;
       font-weight: bold;
       font-family: $gu-text-sans-web;
+
+      .component-radio-toggle {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .component-radio-toggle__button {
+        flex-basis: calc(50% - 2.5px);
+        // Fix for Safari 8.
+        // min-width: 48%;
+
+        // Fix for IE10.
+        // @include mq($from: desktop) {
+        //   flex-basis: ((gs-span(4) - $gs-gutter) / 2) - 2.5px;
+        //   max-width: ((gs-span(4) - $gs-gutter) / 2) - 2.5px;
+        // }
+      }
+
+      .component-radio-toggle__label {
+        display: block;
+        height: $gu-v-spacing * 2;
+        text-align: center;
+      }
+
+      .contrib-amounts {
+        .component-radio-toggle__button {
+          flex-basis: calc(33.3% - 3.3px);
+          // Fix for Safari 8.
+          // min-width: 32%;
+
+          // Fix for IE10.
+          // @include mq($from: desktop) {
+          //   flex-basis: ((gs-span(4) - $gs-gutter) / 3) - 3.3px;
+          //   max-width: ((gs-span(4) - $gs-gutter) / 3) - 3.3px;
+          // }
+        }
+      }
 
       .component-double-heading__heading {
         color: gu-colour(neutral-1);
@@ -199,6 +248,7 @@
       .component-cta-link+.component-cta-link {
         background-color: #58a1ce;
         border: 1px solid gu-colour(guardian-brand-dark);
+        bottom: $gu-v-spacing * 5;
 
         &:hover {
           background-color: gu-colour(guardian-brand-dark);
