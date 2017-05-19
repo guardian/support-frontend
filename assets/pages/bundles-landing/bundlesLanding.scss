@@ -170,6 +170,14 @@
 
     .bundles__bundle--digital {
         background-color: #1db7d7;
+
+        .component-cta-link {
+          background-color: gu-colour(guardian-brand-dark);
+
+          &:hover {
+            background-color: darken(gu-colour(guardian-brand-dark), 5%);
+          }
+        }
     }
 
     .bundles__bundle--paper {
@@ -179,6 +187,23 @@
   			background-color: gu-colour(guardian-brand-dark);
   			color: #fff;
   		}
+
+      .component-cta-link:first-of-type {
+        background-color: gu-colour(guardian-brand-dark);
+
+        &:hover {
+          background-color: darken(gu-colour(guardian-brand-dark), 5%);
+        }
+      }
+
+      .component-cta-link+.component-cta-link {
+        background-color: #58a1ce;
+        border: 1px solid gu-colour(guardian-brand-dark);
+
+        &:hover {
+          background-color: gu-colour(guardian-brand-dark);
+        }
+      }
     }
 
   }

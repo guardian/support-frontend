@@ -48,7 +48,7 @@ const bundles = {
         heading: 'Enjoy on up to 10 devices',
       },
     ],
-    ctaText: 'Become a digital subscriber',
+    ctaText: 'Start your 14 day trial',
     modifierClass: 'digital',
   },
   paper: {
