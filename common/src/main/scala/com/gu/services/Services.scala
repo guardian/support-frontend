@@ -22,6 +22,6 @@ class Services(isTestUser: Boolean) {
   lazy val stripeService: StripeService = new StripeService(stripeConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
   lazy val payPalService: PayPalService = new PayPalService(payPalConfigProvider.get(isTestUser))
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
-  lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(10.seconds))
+  lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(20.seconds))
 }
 

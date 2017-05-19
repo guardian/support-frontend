@@ -12,7 +12,7 @@ object Dependencies {
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsSdk = "com.amazonaws" % "aws-java-sdk" % awsVersion
-  val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % awsVersion
+  val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
   val awsS3 = "com.amazonaws" % "aws-java-sdk-s3" % awsVersion
   val awsSQS = "com.amazonaws" % "aws-java-sdk-sqs" % awsVersion
   val awsCloudwatch = "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion
