@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.services.Services
 import com.gu.support.workers.model.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
