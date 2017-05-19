@@ -35,9 +35,7 @@ object Configuration extends LazyLogging {
 }
 
 /**
- * Touchpoint is
- *
- * ~to 3rd party enterprise systems which have a number of different stages or environments (DEV, UAT and PROD)
+ * Touchpoint represents 3rd party enterprise systems which have a number of different stages or environments (DEV, UAT and PROD)
  * TouchpointConfig abstracts the details of talking to the correct environment based on the user details contained in
  * the request.
  */
