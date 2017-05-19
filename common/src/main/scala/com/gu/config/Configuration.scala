@@ -1,5 +1,6 @@
 package com.gu.config
 
+import com.gu.aws.AwsConfig
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
 import com.gu.paypal.PayPalConfigProvider
@@ -24,6 +25,7 @@ object Configuration extends LazyLogging {
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
+  val awsConfig = AwsConfig.fromConfig(config)
   val stripeConfigProvider = new StripeConfigProvider(stage, config)
   val payPalConfigProvider = new PayPalConfigProvider(stage, config)
   val salesforceConfigProvider = new SalesforceConfigProvider(stage, config)
@@ -32,6 +34,13 @@ object Configuration extends LazyLogging {
 
 }
 
+/**
+ * Touchpoint is
+ *
+ * ~to 3rd party enterprise systems which have a number of different stages or environments (DEV, UAT and PROD)
+ * TouchpointConfig abstracts the details of talking to the correct environment based on the user details contained in
+ * the request.
+ */
 trait TouchpointConfig
 
 abstract class TouchpointConfigProvider[T <: TouchpointConfig](defaultStage: Stage, config: Config) {
