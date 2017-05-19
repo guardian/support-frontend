@@ -71,4 +71,10 @@ import scalariform.formatter.preferences.SpacesAroundMultiImports
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(SpacesAroundMultiImports, false)
 
+excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value ||
+  "Routes.scala" ||
+  "ReverseRoutes.scala" ||
+  "JavaScriptReverseRoutes.scala" ||
+  "RoutesPrefix.scala"
+
 addCommandAlias("devrun", "run 9000")
