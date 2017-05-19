@@ -1,19 +1,17 @@
 package com.gu.support.workers.encoding
 
-import java.io.InputStream
 import java.nio.ByteBuffer
 
 import com.amazonaws.services.kms.AWSKMSClientBuilder
-import com.amazonaws.services.kms.model.DecryptRequest
+import com.amazonaws.services.kms.model._
 import com.gu.aws.CredentialsProvider
 import com.gu.config.Configuration.awsConfig
-
-import scala.reflect.io.Streamable
+import com.gu.support.workers.exceptions.NonFatalException
 
 object Encryption {
   val encryption = if (awsConfig.useEncryption) new AwsEncryptionProvider() else new PassThroughEncryptionProvider()
 
-  def decrypt(is: InputStream): String = encryption.decrypt(Streamable.bytes(is))
+  def decrypt(data: Array[Byte]): String = encryption.decrypt(data)
 
   def encrypt(data: String): Array[Byte] = encryption.encrypt(data)
 }
@@ -32,14 +30,23 @@ class AwsEncryptionProvider extends EncryptionProvider {
     val req = new EncryptRequest()
       .withKeyId(awsConfig.encryptionKeyId)
       .withPlaintext(plainText)
-    kms.encrypt(req).getCiphertextBlob.array()
+    try {
+      kms.encrypt(req).getCiphertextBlob.array()
+    } catch {
+      case e: AWSKMSException => throw new EncryptionException("Error while encrypting data", e)
+    }
   }
 
   override def decrypt(data: Array[Byte]): String = {
     val byteBuffer = ByteBuffer.wrap(data)
     val req2 = new DecryptRequest().withCiphertextBlob(byteBuffer)
-    new String(kms.decrypt(req2).getPlaintext.array(), utf8)
+    try {
+      new String(kms.decrypt(req2).getPlaintext.array(), utf8)
+    } catch {
+      case e: AWSKMSException => throw new EncryptionException("Error while decrypting data", e)
+    }
   }
+
 }
 
 class PassThroughEncryptionProvider extends EncryptionProvider {
@@ -55,3 +62,5 @@ sealed trait EncryptionProvider {
 
   def encrypt(data: String): Array[Byte]
 }
+
+class EncryptionException(message: String = "", cause: Throwable = None.orNull) extends NonFatalException(message, cause)

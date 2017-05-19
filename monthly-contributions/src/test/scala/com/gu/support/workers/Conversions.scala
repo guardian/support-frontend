@@ -8,6 +8,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
+import scala.reflect.io.Streamable
 import scala.util.Try
 
 object Conversions {
@@ -24,7 +25,7 @@ object Conversions {
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
     def toClass[T]()(implicit decoder: Decoder[T]): T = {
       val is = new ByteArrayInputStream(self.toByteArray)
-      val str = Encryption.decrypt(is)
+      val str = Encryption.decrypt(Streamable.bytes(is))
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get

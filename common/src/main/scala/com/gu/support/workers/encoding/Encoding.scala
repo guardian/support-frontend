@@ -5,6 +5,7 @@ import java.io.{InputStream, OutputStream}
 import cats.syntax.either._
 import com.gu.support.workers.encoding.Encryption._
 
+import scala.reflect.io.Streamable
 import scala.util.Try
 
 private[workers] object Encoding {
@@ -14,7 +15,7 @@ private[workers] object Encoding {
   import io.circe.syntax._
 
   def in[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] = {
-    val t = Try(decrypt(is)).flatMap(decode[T](_).toTry)
+    val t = Try(decrypt(Streamable.bytes(is))).flatMap(decode[T](_).toTry)
     is.close()
     t
   }
