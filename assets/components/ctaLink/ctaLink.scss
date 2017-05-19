@@ -14,8 +14,17 @@
 	font-size: 14px;
 	font-weight: bold;
 	font-family: $gu-text-sans-web;
+	position: relative;
 
 	&:hover {
 		background-color: #000;
+	}
+
+	svg {
+		height: 50%;
+		position: absolute;
+		right: 8px;
+		top: 9px;
+		fill: #fff;
 	}
 }
