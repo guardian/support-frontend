@@ -16,7 +16,7 @@ import scala.concurrent.Future
 import scala.util.Failure
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")

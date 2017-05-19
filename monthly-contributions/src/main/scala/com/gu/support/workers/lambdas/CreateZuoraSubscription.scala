@@ -45,14 +45,14 @@ class CreateZuoraSubscription
 
     val subscriptionData = SubscriptionData(
       List(
-      RatePlanData(
-        RatePlan(config.productRatePlanId),
-        List(RatePlanChargeData(
-          RatePlanCharge(config.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
-        )),
-        Nil
-      )
-    ),
+        RatePlanData(
+          RatePlan(config.productRatePlanId),
+          List(RatePlanChargeData(
+            RatePlanCharge(config.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
+          )),
+          Nil
+        )
+      ),
       Subscription(date, date, date)
     )
 
