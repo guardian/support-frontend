@@ -7,8 +7,18 @@
 	height: 24px;
 	min-width: 100%;
 	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
 
 	&:focus {
 		outline: none;
+	}
+
+	// Hides the number spinners.
+	-moz-appearance: textfield;
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
 	}
 }

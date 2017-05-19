@@ -70,6 +70,7 @@ const bundles = {
       },
       {
         heading: 'All the benefits of a digital subscription',
+        text: 'Avaliable with paper+digital',
       },
     ],
   },

@@ -149,9 +149,12 @@
 
     .bundles__bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
+      font-size: 14px;
+      font-weight: bold;
+      font-family: $gu-text-sans-web;
 
       input:checked+label {
-        background-color: gu-colour(comment-main-1);
+        background-color: gu-colour(neutral-1);
         color: #fff;
       }
 
@@ -545,7 +548,7 @@
   }
 
   .component-number-input--selected {
-      background-color: gu-colour(comment-main-1);
+      background-color: gu-colour(neutral-1);
       color: #fff;
 
       &::placeholder {
