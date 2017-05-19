@@ -10,7 +10,7 @@
     "build-dev": "webpack --config webpack.config.js --env.dev",
     "build-prod": "npm-run-all clean validate test 'webpack -- --config webpack.config.js --env.prod'",
     "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server --port 9111",
+    "webpack-dev-server": "webpack-dev-server --port 9111 --public sup.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest"
   },
@@ -69,7 +69,7 @@
     "sass-loader": "^6.0.5",
     "sass-mq": "^3.3.2",
     "webpack": "^2.6.0",
-    "webpack-dev-server": "^2.4.2",
+    "webpack-dev-server": "^2.4.3",
     "webpack-manifest-plugin": "^1.1.0"
   }
 }

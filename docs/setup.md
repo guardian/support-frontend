@@ -1,0 +1,44 @@
+# Local Development Setup
+
+In local development, the base app server has two layers of proxy sitting on top it:
+
+1. Play/Scala appserver _(base server)_ - http://sup.thegulocal.com:9110/
+2. `webpack-dev-server` _(proxy providing hot-reloading of client-side code)_ - http://sup.thegulocal.com:9111/
+3. Nginx _(proxy adding HTTPS and a unified `.thegulocal.com` domain with other Guardian projects)_ - **https://sup.thegulocal.com/ ⬅ USE THIS IN YOUR WEB BROWSER**
+
+You need all 3 of these running to have a working development environment.
+
+## Starting Play
+
+Install [sbt](http://www.scala-sbt.org/download.html), and start the [Play server](https://www.playframework.com/)
+running on port 9110, hot-reloading the server-side code:
+
+```
+$ sbt devrun
+```
+
+## Starting `webpack-dev-server`
+
+Install [yarn](https://yarnpkg.com/lang/en/docs/install/) and download client-side
+dependencies with:
+
+```
+yarn install
+```
+ 
+You can then start the `webpack-dev-server` proxy on port 9111, hot-reloading the client-side code:
+
+```
+$ yarn devrun
+```
+
+If you want to serve the assets without the `webpack-dev-server` proxy (to closer match Production)
+you can run this instead:
+
+```
+$ yarn build-prod
+```
+
+## Setting up NGINX
+
+Follow the setup instructions in [`/nginx/README.md`](../nginx/README.md).

@@ -34,7 +34,7 @@ module.exports = (env) => {
     devServer = {
       proxy: {
         '**': {
-          target: 'http://localhost:9000',
+          target: 'http://sup.thegulocal.com:9110',
           secure: false,
         },
       },
