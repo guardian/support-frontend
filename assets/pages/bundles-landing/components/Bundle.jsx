@@ -16,7 +16,6 @@ import type { Children } from 'react';
 type PropTypes = {
   heading: string,
   subheading: string,
-  infoText: string,
   ctaText: string,
   ctaLink: string,
   modifierClass: string,
@@ -29,7 +28,6 @@ type PropTypes = {
 function Bundle(props: PropTypes) {
 
   let className = 'bundles__bundle';
-  const infoTextElement = <p className="bundle__info-text">{props.infoText}</p>;
 
   if (props.modifierClass) {
     className = `${className} ${className}--${props.modifierClass}`;
@@ -42,7 +40,6 @@ function Bundle(props: PropTypes) {
         subheading={props.subheading}
       />
       {props.children}
-      {props.infoText ? infoTextElement : ''}
       <CtaLink text={props.ctaText} url={props.ctaLink} />
     </div>
   );

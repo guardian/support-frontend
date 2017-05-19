@@ -6,11 +6,14 @@
 	padding: 6px 20px;
 	margin-top: 12px;
 	text-align: left;
-	height: 36px;
+	height: $gu-v-spacing * 2;
 	vertical-align: bottom;
 	display: block;
 	line-height: 180%;
 	text-decoration: none;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: $gu-text-sans-web;
 
 	&:hover {
 		background-color: #000;

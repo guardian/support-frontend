@@ -29,66 +29,59 @@ const ctaLinks = {
 
 const bundles = {
   allContrib: {
-    heading: 'From £5/month',
-    subheading: 'Make a contribution',
-    infoText: 'Support the Guardian. Every penny of your contribution goes to support our fearless, quality journalism.',
+    heading: 'contribute',
+    subheading: 'from £5/month',
     ctaText: 'Contribute with credit/debit card',
     modifierClass: 'contributions',
   },
   digital: {
-    heading: '£11.99/month',
-    subheading: 'Become a digital subscriber',
+    heading: 'digital subscription',
+    subheading: '£11.99/month',
     listItems: [
       {
         heading: 'Ad-free mobile app',
-        text: 'Faster pages and a clearer reading experience',
+        text: 'No interruptions means pages load quicker for a clearer reading experience',
       },
       {
         heading: 'Daily tablet edition',
         text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
       },
       {
-        heading: 'Free trial',
-        text: 'For 14 days, enjoy on up to 10 devices',
+        heading: 'Enjoy on up to 10 devices',
       },
     ],
-    infoText: 'Support the Guardian and enjoy a subscription to our digital Daily Edition and the premium tier of our app.',
     ctaText: 'Become a digital subscriber',
     modifierClass: 'digital',
   },
   allPaper: {
-    subheading: 'Become a paper subscriber',
-    infoText: 'Support the Guardian and enjoy a subscription to the Guardian and the Observer newspapers.',
+    heading: 'print subscription',
     ctaText: 'Become a paper subscriber',
     modifierClass: 'paper',
   },
   paperDigital: {
-    heading: 'From £22.06/month',
+    subheading: 'from £22.06/month',
     listItems: [
       {
         heading: 'Newspaper',
         text: 'Choose the package you want: Everyday+, Sixday+, Weekend+ and Sunday+',
       },
       {
-        heading: 'Digital',
-        text: 'All the benefits of the digital subscription',
+        heading: 'Save money off the retail price',
       },
       {
-        heading: 'Save money',
-        text: 'Up to 36% off the retail price',
+        heading: 'All the benefits of a digital subscription',
       },
     ],
   },
   paperOnly: {
-    heading: 'From £10.79/month',
+    subheading: 'from £10.79/month',
     listItems: [
       {
         heading: 'Newspaper',
-        text: 'Choose the package you want: Everyday+, Sixday+, Weekend+ and Sunday+',
+        text: 'Choose the package you want: Everyday, Sixday, Weekend or Sunday',
       },
       {
-        heading: 'Save money',
-        text: 'Up to 36% off the retail price',
+        heading: 'Save money off the retail price',
       },
     ],
   },
@@ -190,26 +183,28 @@ function Bundles(props: PropTypes) {
   const digitalAttrs = getDigitalAttrs(props);
 
   return (
-    <section className="bundles gu-content-margin">
-      <Bundle {...contribAttrs}>
-        <RadioToggle
-          {...toggles.contribType}
-          toggleAction={props.toggleContribType}
-          checked={props.contribType}
-        />
-        <ContribAmounts />
-      </Bundle>
-      <Bundle {...digitalAttrs}>
-        <FeatureList listItems={bundles.digital.listItems} />
-      </Bundle>
-      <Bundle {...paperAttrs}>
-        <RadioToggle
-          {...toggles.paper}
-          toggleAction={props.togglePaperBundle}
-          checked={props.paperBundle}
-        />
-        <FeatureList listItems={paperAttrs.listItems} />
-      </Bundle>
+    <section className="bundles">
+      <div className="bundles__content gu-content-margin">
+        <Bundle {...contribAttrs}>
+          <RadioToggle
+            {...toggles.contribType}
+            toggleAction={props.toggleContribType}
+            checked={props.contribType}
+          />
+          <ContribAmounts />
+        </Bundle>
+        <Bundle {...digitalAttrs}>
+          <FeatureList listItems={bundles.digital.listItems} />
+        </Bundle>
+        <Bundle {...paperAttrs}>
+          <RadioToggle
+            {...toggles.paper}
+            toggleAction={props.togglePaperBundle}
+            checked={props.paperBundle}
+          />
+          <FeatureList listItems={paperAttrs.listItems} />
+        </Bundle>
+      </div>
     </section>
   );
 

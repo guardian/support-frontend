@@ -32,7 +32,6 @@ const content = (
       <SimpleHeader />
       <Introduction />
       <Bundles />
-      <br style={{ clear: 'both' }} />
       <WhySupport />
       <WaysOfSupport />
       <SimpleFooter />

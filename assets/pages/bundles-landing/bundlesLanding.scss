@@ -134,15 +134,17 @@
 
   .bundles {
 
+    background-color: darken(gu-colour(comment-support-2), 5%);
+
+    .bundles__content {
+      background-color: gu-colour(comment-support-2);
+      padding-bottom: $gu-v-spacing * 2;
+    }
+
     .bundles__bundle {
       width: 300px;
       padding: 8px 10px 12px;
-      float: left;
-    }
-
-    .bundle__info-text {
-      @include gu-font(copy, 16);
-      color: gu-colour(neutral-1);
+      display: inline-block;
     }
 
     .bundles__bundle--contributions {
