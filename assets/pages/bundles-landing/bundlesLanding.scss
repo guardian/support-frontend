@@ -188,6 +188,23 @@
         text-align: center;
       }
 
+      .contrib-amounts {
+        display: flex;
+        flex-wrap: wrap;
+
+        .contrib-amounts__error-message {
+          font-family: $gu-text-sans-web;
+          font-size: 13px;
+          font-weight: bold;
+          line-height: 15px;
+          color: gu-colour(live-support-2);
+        }
+
+        > * {
+          flex-basis: 100%;
+        }
+      }
+
       .contrib-amounts--recurring {
         .component-radio-toggle__button {
           flex-basis: calc(33.3% - 3.3px);
