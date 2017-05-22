@@ -241,45 +241,6 @@
         text-align: center;
       }
 
-      .contrib-amounts {
-        display: flex;
-        flex-wrap: wrap;
-
-        .contrib-amounts__error-message {
-          font-family: $gu-text-sans-web;
-          font-size: 13px;
-          font-weight: bold;
-          line-height: 15px;
-          color: gu-colour(live-support-2);
-        }
-
-        > * {
-          flex-basis: 100%;
-        }
-
-        @include mq($from: desktop) {
-          .component-number-input {
-            max-width: 93%;
-          }
-        }
-      }
-
-      .contrib-amounts--recurring {
-        .component-radio-toggle__button {
-          flex-basis: calc(33.3% - 3.3px);
-          // Fix for IE10 and possibly Safari 8.
-          min-width: 32%;
-        }
-      }
-
-      .contrib-amounts--one-off {
-        .component-radio-toggle__button {
-          flex-basis: calc(25% - 4px);
-          // Fix for IE10 and possibly Safari 8.
-          min-width: 23%;
-        }
-      }
-
       .component-double-heading__heading {
         color: gu-colour(neutral-1);
       }
@@ -292,6 +253,45 @@
       .contrib-amounts__error-message {
         @include gu-font(copy, 16);
         color: gu-colour(neutral-1);
+      }
+    }
+
+    .contrib-amounts {
+      display: flex;
+      flex-wrap: wrap;
+
+      .contrib-amounts__error-message {
+        font-family: $gu-text-sans-web;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 15px;
+        color: gu-colour(live-support-2);
+      }
+
+      > * {
+        flex-basis: 100%;
+      }
+
+      @include mq($from: desktop) {
+        .component-number-input {
+          max-width: 93%;
+        }
+      }
+    }
+
+    .contrib-amounts--recurring {
+      .component-radio-toggle__button {
+        flex-basis: calc(33.3% - 3.3px);
+        // Fix for IE10 and possibly Safari 8.
+        min-width: 32%;
+      }
+    }
+
+    .contrib-amounts--one-off {
+      .component-radio-toggle__button {
+        flex-basis: calc(25% - 4px);
+        // Fix for IE10 and possibly Safari 8.
+        min-width: 23%;
       }
     }
 
