@@ -1,27 +1,13 @@
 // @flow
-import type { Contrib, PaperBundle } from '../../reducers/reducers';
-import { changePaperBundle, changeContribType, changeContribAmountRecurring, changeContribAmountOneOff } from '../bundlesLandingActions';
+import type { Contrib } from '../../reducers/reducers';
+import {
+  changeContribType,
+  changeContribAmountRecurring,
+  changeContribAmountOneOff,
+} from '../bundlesLandingActions';
 
 
 describe('actions', () => {
-
-  it('should create an action to change to paper+digital bundle', () => {
-    const paperBundle: PaperBundle = 'PAPER+DIGITAL';
-    const expectedAction = {
-      type: 'CHANGE_PAPER_BUNDLE',
-      bundle: paperBundle,
-    };
-    expect(changePaperBundle(paperBundle)).toEqual(expectedAction);
-  });
-
-  it('should create an action to change to paper bundle', () => {
-    const paperBundle: PaperBundle = 'PAPER';
-    const expectedAction = {
-      type: 'CHANGE_PAPER_BUNDLE',
-      bundle: paperBundle,
-    };
-    expect(changePaperBundle(paperBundle)).toEqual(expectedAction);
-  });
 
   it('should create an action to change to one off contribution type', () => {
 

@@ -53,6 +53,7 @@ const initialContrib: ContribState = {
   },
 };
 
+
 // ----- Reducers ----- //
 
 function contribution(
