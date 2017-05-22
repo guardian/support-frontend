@@ -31,6 +31,10 @@ class AwsEncryptionProvider extends EncryptionProvider {
       .withKeyId(awsConfig.encryptionKeyId)
       .withPlaintext(plainText)
     try {
+      //Encrypt requests work with up to 4KB of data which is plenty
+      //for our purposes here. If the amount of data increases significantly
+      //we should switch to using Envelope encryption as described here:
+      //http://docs.aws.amazon.com/kms/latest/developerguide/workflow.html
       kms.encrypt(req).getCiphertextBlob.array()
     } catch {
       case e: AWSKMSException => throw new EncryptionException("Error while encrypting data", e)
