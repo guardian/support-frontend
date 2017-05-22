@@ -287,6 +287,24 @@
       }
     }
 
+    .component-feature-list {
+      padding-left: 0;
+
+      li > * {
+        display: inline-block;
+      }
+
+      li:before {
+        content: '✔';
+        display: inline-block;
+        font-size: 20px;
+        margin-left: -19px;
+        line-height: 0;
+        width: 19px;
+        color: #fff;
+      }
+    }
+
   }
 
 
