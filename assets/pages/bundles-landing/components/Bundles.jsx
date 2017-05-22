@@ -148,24 +148,26 @@ function Bundles(props: PropTypes) {
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
-        <Bundle {...contribAttrs}>
-          <RadioToggle
-            {...contribToggle}
-            toggleAction={props.toggleContribType}
-            checked={props.contribType}
-          />
-          <ContribAmounts />
-          <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
-        </Bundle>
-        <Bundle {...digitalAttrs}>
-          <FeatureList listItems={bundles.digital.listItems} />
-          <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
-        </Bundle>
-        <Bundle {...paperAttrs}>
-          <FeatureList listItems={paperAttrs.listItems} />
-          <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
-          <CtaLink text={paperAttrs.paperDigCtaText} url={paperAttrs.paperDigCtaLink} />
-        </Bundle>
+        <div className="bundles__wrapper">
+          <Bundle {...contribAttrs}>
+            <RadioToggle
+              {...contribToggle}
+              toggleAction={props.toggleContribType}
+              checked={props.contribType}
+            />
+            <ContribAmounts />
+            <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
+          </Bundle>
+          <Bundle {...digitalAttrs}>
+            <FeatureList listItems={bundles.digital.listItems} />
+            <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
+          </Bundle>
+          <Bundle {...paperAttrs}>
+            <FeatureList listItems={paperAttrs.listItems} />
+            <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
+            <CtaLink text={paperAttrs.paperDigCtaText} url={paperAttrs.paperDigCtaLink} />
+          </Bundle>
+        </div>
       </div>
     </section>
   );
