@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
+import * as ga from 'helpers/ga';
 import getQueryParameter from './helpers/queryParameter';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -19,10 +20,14 @@ import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
 
 
+// ----- Tracking ----- //
+
+ga.init();
+ga.trackPageview();
+
 // ----- Redux Store ----- //
 
 const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') });
-
 
 // ----- Render ----- //
 
