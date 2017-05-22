@@ -36,7 +36,9 @@ function Bundle(props: PropTypes) {
         heading={props.heading}
         subheading={props.subheading}
       />
-      {props.children}
+      <div className="bundle__content">
+        {props.children}
+      </div>
     </div>
   );
 

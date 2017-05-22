@@ -158,10 +158,12 @@ function Bundles(props: PropTypes) {
             <ContribAmounts />
             <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
           </Bundle>
+          <div className="bundles__divider" />
           <Bundle {...digitalAttrs}>
             <FeatureList listItems={bundles.digital.listItems} />
             <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
           </Bundle>
+          <div className="bundles__divider" />
           <Bundle {...paperAttrs}>
             <FeatureList listItems={paperAttrs.listItems} />
             <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
