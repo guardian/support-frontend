@@ -21,6 +21,7 @@
     "globals": {
         "guardian": true,
         "React": true,
+        "ga": true,
     },
     "rules": {
         "curly": [2, "all"],
