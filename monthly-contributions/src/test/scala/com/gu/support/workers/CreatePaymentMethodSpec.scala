@@ -11,6 +11,7 @@ import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.CreateSalesforceContactState
 import com.gu.test.tags.objects.IntegrationTest
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import io.circe.ParsingFailure
 import io.circe.generic.auto._

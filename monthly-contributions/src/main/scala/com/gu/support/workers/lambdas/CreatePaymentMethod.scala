@@ -19,6 +19,8 @@ import scala.util.Failure
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
+  def this() = this(ServiceProvider)
+
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
     val paymentMethod = state.paymentFields match {

@@ -2,18 +2,13 @@ package com.gu.support.workers
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.config.Configuration
-import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.SendThankYouEmailState
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import io.circe.generic.auto._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
 
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends LambdaSpec {

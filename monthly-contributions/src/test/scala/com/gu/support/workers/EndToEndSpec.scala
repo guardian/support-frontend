@@ -10,6 +10,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 @IntegrationTest
 class EndToEndSpec extends LambdaSpec {
   "The monthly contribution lambdas" should "chain successfully" in {
+    logger.info(createPayPalPaymentMethodJson)
     val output = createPayPalPaymentMethodJson.asInputStream()
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
