@@ -9,7 +9,7 @@ import com.gu.config.Configuration.awsConfig
 import com.gu.support.workers.exceptions.NonFatalException
 
 object Encryption {
-  val encryption = if (awsConfig.useEncryption) new AwsEncryptionProvider() else new PassThroughEncryptionProvider()
+  private val encryption = if (awsConfig.useEncryption) new AwsEncryptionProvider() else new PassThroughEncryptionProvider()
 
   def decrypt(data: Array[Byte]): String = encryption.decrypt(data)
 
@@ -20,7 +20,7 @@ class AwsEncryptionProvider extends EncryptionProvider {
 
   import com.amazonaws.services.kms.model.EncryptRequest
 
-  val kms = AWSKMSClientBuilder
+  private val kms = AWSKMSClientBuilder
     .standard()
     .withCredentials(CredentialsProvider)
     .build()
