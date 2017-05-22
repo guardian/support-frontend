@@ -188,7 +188,7 @@
         text-align: center;
       }
 
-      .contrib-amounts {
+      .contrib-amounts--recurring {
         .component-radio-toggle__button {
           flex-basis: calc(33.3% - 3.3px);
           // Fix for Safari 8.
@@ -199,6 +199,14 @@
           //   flex-basis: ((gs-span(4) - $gs-gutter) / 3) - 3.3px;
           //   max-width: ((gs-span(4) - $gs-gutter) / 3) - 3.3px;
           // }
+        }
+      }
+
+      .contrib-amounts--one-off {
+        .component-radio-toggle__button {
+          flex-basis: calc(25% - 4px);
+          // Fix for Safari 8.
+          // min-width: 24%;
         }
       }
 
