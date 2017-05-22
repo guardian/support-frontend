@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription
   extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
-    with LazyLogging {
+  with LazyLogging {
 
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
     services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>

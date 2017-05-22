@@ -1,6 +1,7 @@
 package com.gu.paypal
 
 import java.util.NoSuchElementException
+import java.util.concurrent.TimeUnit.SECONDS
 
 import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
@@ -63,7 +64,7 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
       .post(reqBody.build())
       .build()
 
-    extractResponse(RequestRunners.client.readTimeoutMillis(30000).newCall(request).execute)
+    extractResponse(RequestRunners.client.newBuilder().readTimeout(30, SECONDS).build().newCall(request).execute)
 
   }
 
