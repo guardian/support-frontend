@@ -63,7 +63,7 @@ class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
       .post(reqBody.build())
       .build()
 
-    extractResponse(RequestRunners.client.newCall(request).execute)
+    extractResponse(RequestRunners.client.readTimeoutMillis(30000).newCall(request).execute)
 
   }
 
