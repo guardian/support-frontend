@@ -43,9 +43,9 @@ class AwsEncryptionProvider extends EncryptionProvider {
 
   override def decrypt(data: Array[Byte]): String = {
     val byteBuffer = ByteBuffer.wrap(data)
-    val req2 = new DecryptRequest().withCiphertextBlob(byteBuffer)
+    val req = new DecryptRequest().withCiphertextBlob(byteBuffer)
     try {
-      new String(kms.decrypt(req2).getPlaintext.array(), utf8)
+      new String(kms.decrypt(req).getPlaintext.array(), utf8)
     } catch {
       case e: AWSKMSException => throw new EncryptionException("Error while decrypting data", e)
     }
