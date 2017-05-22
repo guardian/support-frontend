@@ -7,6 +7,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.decodeCreatePaymentMethodState
 import com.gu.support.workers.model.{CreatePaymentMethodState, CreateSalesforceContactState, PayPalPaymentFields, StripePaymentFields}
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
 import com.gu.zuora.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -16,7 +17,9 @@ import scala.concurrent.Future
 import scala.util.Failure
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+
+  def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")

@@ -73,3 +73,8 @@ Whereas the same object typed as a PayPalReferenceTransaction will serialise to:
 As a result of this we need to decode back to the exact type which we encoded from or we will a get a decoding failure.
 
 This behaviour is illustrated through a number of tests in [CirceEncodingBehaviourSpec.](/monthly-contributions/src/test/scala/com/gu/support/workers/CirceEncodingBehaviourSpec.scala) 
+
+## Encryption
+To protect user data as it is passed through the various stages of the step functions we encrypt it using the [AWS KMS API](https://docs.aws.amazon.com/kms/latest/developerguide/programming-top.html).
+
+This encryption can be switched off for debugging purposes by setting the aws.useEncryption config setting to false.

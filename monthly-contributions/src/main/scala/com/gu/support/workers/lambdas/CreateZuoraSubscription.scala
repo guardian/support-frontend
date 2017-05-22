@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.services.Services
 import com.gu.support.workers.model.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
+import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
@@ -13,8 +13,8 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription
-    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
-    with LazyLogging {
+  extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
+  with LazyLogging {
 
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
     services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
@@ -45,14 +45,14 @@ class CreateZuoraSubscription
 
     val subscriptionData = SubscriptionData(
       List(
-      RatePlanData(
-        RatePlan(config.productRatePlanId),
-        List(RatePlanChargeData(
-          RatePlanCharge(config.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
-        )),
-        Nil
-      )
-    ),
+        RatePlanData(
+          RatePlan(config.productRatePlanId),
+          List(RatePlanChargeData(
+            RatePlanCharge(config.productRatePlanChargeId, Some(state.contribution.amount)) //Pass the amount the user selected into Zuora
+          )),
+          Nil
+        )
+      ),
       Subscription(date, date, date)
     )
 

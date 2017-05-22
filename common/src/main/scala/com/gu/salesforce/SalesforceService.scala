@@ -17,7 +17,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse]
+    extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -73,7 +73,7 @@ object AuthService extends LazyLogging {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse]
+    extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url

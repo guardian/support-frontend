@@ -3,11 +3,12 @@ package com.gu.support.workers
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 import cats.syntax.either._
+import com.gu.support.workers.encoding.Encryption
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-import scala.io.Source
+import scala.reflect.io.Streamable
 import scala.util.Try
 
 object Conversions {
@@ -16,7 +17,7 @@ object Conversions {
 
     def asInputStream()(implicit encoder: Encoder[T]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
-      convertStream.write(self.asJson.noSpaces.getBytes("UTF-8"))
+      convertStream.write(Encryption.encrypt(self.asJson.noSpaces))
       new ByteArrayInputStream(convertStream.toByteArray)
     }
   }
@@ -24,7 +25,7 @@ object Conversions {
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
     def toClass[T]()(implicit decoder: Decoder[T]): T = {
       val is = new ByteArrayInputStream(self.toByteArray)
-      val str = Source.fromInputStream(is).mkString
+      val str = Encryption.decrypt(Streamable.bytes(is))
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get
@@ -36,7 +37,7 @@ object Conversions {
     def asInputStream()(implicit encoder: Encoder[String]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
 
-      convertStream.write(str.toString.getBytes("UTF-8"))
+      convertStream.write(Encryption.encrypt(str.toString))
       new ByteArrayInputStream(convertStream.toByteArray)
     }
   }
