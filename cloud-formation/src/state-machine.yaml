@@ -3,17 +3,17 @@ StartAt: CreatePaymentMethod
 States:
   CreatePaymentMethod:
     Type: Task
-    Resource: "$${CreatePaymentMethodLambda.Arn}"
+    Resource: "${CreatePaymentMethodLambda.Arn}"
     Next: CreateSalesforceContact
   CreateSalesforceContact:
     Type: Task
-    Resource: "$${CreateSalesforceContactLambda.Arn}"
+    Resource: "${CreateSalesforceContactLambda.Arn}"
     Next: CreateZuoraSubscription
   CreateZuoraSubscription:
     Type: Task
-    Resource: "$${CreateZuoraSubscriptionLambda.Arn}"
+    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
     Next: SendThankYouEmail
   SendThankYouEmail:
     Type: Task
-    Resource: "$${SendThankYouEmailLambda.Arn}"
+    Resource: "${SendThankYouEmailLambda.Arn}"
     End: True
