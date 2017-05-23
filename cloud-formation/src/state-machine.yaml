@@ -3,27 +3,17 @@ StartAt: CreatePaymentMethod
 States:
   CreatePaymentMethod:
     Type: Task
-    Resource: "$${CreatePaymentMethodLambda.Arn}"
-    Next: CreateSalesForceContact
-  CreateSalesForceContact:
+    Resource: "${CreatePaymentMethodLambda.Arn}"
+    Next: CreateSalesforceContact
+  CreateSalesforceContact:
     Type: Task
-    Resource: "$${CreateSalesforceContactLambda.Arn}"
+    Resource: "${CreateSalesforceContactLambda.Arn}"
     Next: CreateZuoraSubscription
   CreateZuoraSubscription:
     Type: Task
-    Resource: "$${CreateZuoraSubscriptionLambda.Arn}"
+    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
     Next: SendThankYouEmail
   SendThankYouEmail:
     Type: Task
-    Resource: "$${SendThankYouEmailLambda.Arn}"
-    Next: FlakeyService
-  FlakeyService:
-    Type: Task
-    Resource: "$${FlakeyServiceLambda.Arn}"
-    Retry:
-    - ErrorEquals:
-      - com.gu.support.workers.exceptions.NonFatalException
-      IntervalSeconds: 1
-      MaxAttempts: 2
-      BackoffRate: 2
-    End: true
+    Resource: "${SendThankYouEmailLambda.Arn}"
+    End: True

@@ -7,13 +7,13 @@ import scalariform.formatter.preferences.SpacesAroundMultiImports
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 lazy val scalaStyleSettings = Seq(
-    scalastyleFailOnError := true,
-    testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
-    (test in Test) := ((test in Test) dependsOn testScalastyle).value,
-    (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
-    ScalariformKeys.preferences := ScalariformKeys.preferences.value
-      .setPreference(SpacesAroundMultiImports, false)
+  scalastyleFailOnError := true,
+  testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+  (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+  (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
+  (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
+  ScalariformKeys.preferences := ScalariformKeys.preferences.value
+    .setPreference(SpacesAroundMultiImports, false)
 )
 
 lazy val root =
@@ -42,11 +42,17 @@ lazy val `monthly-contributions` = project
     riffRaffManifestProjectName := s"support:${name.value}",
     riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
     riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
-    riffRaffManifestVcsUrl  := "git@github.com/guardian/support-workers.git",
+    riffRaffManifestVcsUrl := "git@github.com/guardian/support-workers.git",
     riffRaffUploadArtifactBucket := Option("riffraff-artifact"),
     riffRaffUploadManifestBucket := Option("riffraff-builds"),
     riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
     assemblyJarName := s"${name.value}.jar",
+    assemblyMergeStrategy in assembly := {
+      case PathList("models", xs @ _*) => MergeStrategy.discard
+      case x =>
+        val oldStrategy = (assemblyMergeStrategy in assembly).value
+        oldStrategy(x)
+    },
     libraryDependencies ++= monthlyContributionsDependencies,
     scalaStyleSettings
   )

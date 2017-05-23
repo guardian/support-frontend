@@ -14,7 +14,7 @@ import io.circe.generic.auto._
 @IntegrationTest
 class CreateSalesforceContactSpec extends LambdaSpec {
 
-  "CreateSalesForceContact lambda" should "retrieve a SalesforceContactRecord" in {
+  "CreateSalesforceContact lambda" should "retrieve a SalesforceContactRecord" in {
     val createContact = new CreateSalesforceContact()
 
     val outStream = new ByteArrayOutputStream()

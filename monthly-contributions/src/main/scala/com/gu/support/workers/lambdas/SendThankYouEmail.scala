@@ -12,12 +12,12 @@ import org.joda.time.DateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SendThankYouEmail(
-    thankYouEmailService: ThankYouEmailService = new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue)
-) extends FutureHandler[SendThankYouEmailState, Unit] with LazyLogging {
+class SendThankYouEmail(thankYouEmailService: ThankYouEmailService)
+    extends FutureHandler[SendThankYouEmailState, Unit]
+    with LazyLogging {
+  def this() = this(new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue))
 
   override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {
-    logger.info(s"state: $state")
     sendEmail(state)
   }
 

@@ -12,8 +12,8 @@ deployments:
       bucket: support-workers-dist
       functionNames:
         - "-CreatePaymentMethodLambda-"
-        - "-CreateSalesForceContactLambda-"
+        - "-CreateSalesforceContactLambda-"
         - "-CreateZuoraSubscriptionLambda-"
-        - "-FlakeyServiceLambda-"
+        - "-SendThankYouEmailLambda-"
       fileName: monthly-contributions.jar
     dependencies: [cfn]
