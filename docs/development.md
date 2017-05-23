@@ -1,31 +1,45 @@
 # Development in Support The Guardian frontend
 
- In this guide we will go through the elements that conform Support Frontend, how they interact 
- and 
+ Welcome to Support Frontend. In this document we will go through the elements that conform 
+ Support Frontend, how they interact and how you can start adding code to this repository.
+  
+## Table of contents
 
-## Quick Technological stack
+1. Getting Started
+2. Introduction to the technological stack
+3. Architecture
+4. Building process
+
+
+## Getting started
+
+
+## Introduction to the technological stack
+
+The pieces that make up `support-frontend` are:
 
 ### Frontend
  * autoprefixer
  * babel
+ * eslint
  * jest
  * preact
  * redux
  * flow
- * eslint
  * sass
 
 ### Backend
+
 * Play
 
 ### Tools
- * webpack
+
  * npm registry
  * npm scripts
- * yarn
  * sbt
-
-
+ * webpack
+ * yarn
+ 
 ## Architecture
 
  ### Client-side architecture 
@@ -42,6 +56,8 @@
  
  Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the 
  the presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
+ 
+ There are two type of React components, []() []().
  
  ### Data flow 
  
@@ -86,16 +102,36 @@
  ...
 ```
 
+#### Important notes:
 
-
+* The UI of the project is organized in components. The shared components are self-contained and are located in the top
+ `components` folder. The components specific to a page and which are not used in other pages are located inside the 
+ `components` folder inside a specific page.
+ 
+* The CSS for a page specific component is located inside the `page.scss` file.  
+ 
  
 ### Server side architecture
- 
+//TODO 
 
 ## Building process
 
+In order to build the project, team city runs a series of steps. The first step installs node js, the second build the 
+assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). 
+Finally, the third step builds the app by running the `compile` task define in 
+[`build.sbt`](https://github.com/guardian/support-frontend/blob/master/build.sbt).
 
+### Building assets
 
+Our building process uses `npm scripts` as a orchestrator tool for assets. The available scripts are defined in the 
+`package.json`. Those scripts, depending on what is the objective use other tools like [webpack](https://webpack.js.org/), 
+[sass](http://sass-lang.com/guide), [babel](https://babeljs.io/), [eslint](http://eslint.org/) etc.
 
-
-
+As an example, in order to build the assets for production, the step `build-prod` should be ran. This script runs:
+  1. `clean` : Deletes the previous compiled assets.
+  2. `validate` : Validates the javascript source code by running lint for style check and flow type check.
+  3. `test` : Runs the javascript tests using jest.
+  4. `webpack` : Runs webpack in production mode. Webpack runs babel, minify (uglify) the javascript, does the asset 
+  hashing and produce the source maps and the different js files for each page. 
+     
+ 
