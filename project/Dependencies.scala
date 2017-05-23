@@ -8,6 +8,7 @@ object Dependencies {
   val cats = "org.typelevel" %% "cats" % "0.9.0"
   val scalaLogging = "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
+  val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
@@ -23,8 +24,9 @@ object Dependencies {
   val circeParser = "io.circe" %% "circe-parser" % circeVersion
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3"
   val stm = "org.scala-stm" %% "scala-stm" % "0.8"
+  val sentry = "com.getsentry.raven" % "raven-logback" % "8.0.3"
 
-  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, joda, dispatch,
+  val commonDependencies: Seq[ModuleID] = Seq(config, scalaLogging, lambdaLogging, joda, dispatch,
     supportInternationalisation, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
     circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)

@@ -13,8 +13,11 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
   import com.gu.support.workers.encoding.Encoding._
 
   protected def handler(input: T, context: Context): R
-  def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
+  def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit = {
+    logger.info(s"Starting request: $context")
     in(is).flatMap(i => out(handler(i, context), os)).get
+    logger.info(s"Completed request: $context")
+  }
 }
 
 abstract class FutureHandler[T, R](d: Option[Duration] = None)(
