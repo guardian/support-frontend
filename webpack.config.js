@@ -89,7 +89,7 @@ module.exports = (env) => {
               {
                 loader: 'postcss-loader',
                 options: {
-                  plugins: [pxtorem(), autoprefixer()],
+                  plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
                 },
               },
               {
