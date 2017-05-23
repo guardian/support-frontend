@@ -17,6 +17,5 @@ Object {
     "type": "RECURRING",
   },
   "intCmp": "",
-  "paperBundle": "PAPER+DIGITAL",
 }
 `;

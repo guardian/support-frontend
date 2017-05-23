@@ -29,8 +29,6 @@ export type Amounts = {
   oneOff: Amount,
 };
 
-export type PaperBundle = 'PAPER+DIGITAL' | 'PAPER';
-
 export type ContribState = {
   type: Contrib,
   error: ?ContribError,
@@ -55,20 +53,8 @@ const initialContrib: ContribState = {
   },
 };
 
+
 // ----- Reducers ----- //
-
-function paperBundle(
-  state: PaperBundle = 'PAPER+DIGITAL',
-  action: Action): PaperBundle {
-
-  switch (action.type) {
-    case 'CHANGE_PAPER_BUNDLE':
-      return action.bundle;
-    default:
-      return state;
-  }
-
-}
 
 function contribution(
   state: ContribState = initialContrib,
@@ -129,7 +115,6 @@ function intCmp(state: string = ''): string {
 // ----- Exports ----- //
 
 export default combineReducers({
-  paperBundle,
   contribution,
   intCmp,
 });

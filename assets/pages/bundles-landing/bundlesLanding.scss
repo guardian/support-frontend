@@ -134,22 +134,119 @@
 
   .bundles {
 
-    .bundles__bundle {
-      width: 300px;
-      padding: 8px 10px 12px;
-      float: left;
+    background-color: darken(gu-colour(comment-support-2), 5%);
+
+    .bundles__content {
+      background-color: gu-colour(comment-support-2);
+      padding: 0 0;
+
+      @include mq($until: desktop) {
+        padding-bottom: $gu-v-spacing;
+      }
+
+      @include mq($from: desktop) {
+        padding-bottom: ($gu-v-spacing * 2);
+      }
     }
 
-    .bundle__info-text {
-      @include gu-font(copy, 16);
-      color: gu-colour(neutral-1);
+    .bundles__wrapper {
+      @include mq($from: mobileLandscape) {
+        width: 500px;
+        margin: 0 auto;
+      }
+
+      @include mq($from: phablet, $until: desktop) {
+        width: 100%;
+      }
+
+      @include mq($from: desktop) {
+        width: 960px;
+        margin: 0 auto;
+      }
+    }
+
+    .bundles__divider {
+      height: $gu-v-spacing;
+      width: 100%;
+
+      @include mq($from: desktop) {
+        display: none;
+      }
+    }
+
+    .bundles__bundle {
+      padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
+      margin: 0 ($gu-h-spacing / 2);
+
+      @include mq($from: mobileLandscape, $until: desktop) {
+        padding-left: $gu-h-spacing;
+        padding-right: $gu-h-spacing;
+      }
+
+      @include mq($from: desktop) {
+        width: 280px;
+        height: 400px;
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+      }
+    }
+
+    .component-cta-link {
+      @include mq($from: desktop) {
+        position: absolute;
+        bottom: $gu-v-spacing;
+        right: $gu-h-spacing / 2;
+        left: $gu-h-spacing / 2;
+      }
+    }
+
+    @include mq($from: phablet, $until: desktop) {
+      .component-double-heading {
+        width: 50%;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .bundle__content {
+        width: 50%;
+        display: inline-block;
+        vertical-align: top;
+      }
     }
 
     .bundles__bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
+      font-size: 14px;
+      font-weight: bold;
+      font-family: $gu-text-sans-web;
+
+      .component-radio-toggle {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .component-radio-toggle__button {
+        flex-basis: calc(50% - 2.5px);
+        // Fix for IE10 and possibly Safari 8.
+        display: block;
+        min-width: 49%;
+      }
+
+      .component-radio-toggle__label {
+        display: block;
+        height: $gu-v-spacing * 2;
+        text-align: center;
+      }
+
+      .component-double-heading__heading {
+        color: gu-colour(neutral-1);
+      }
 
       input:checked+label {
-        background-color: gu-colour(comment-main-1);
+        background-color: gu-colour(neutral-1);
         color: #fff;
       }
 
@@ -159,8 +256,55 @@
       }
     }
 
+    .contrib-amounts {
+      display: flex;
+      flex-wrap: wrap;
+
+      .contrib-amounts__error-message {
+        font-family: $gu-text-sans-web;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 15px;
+        color: gu-colour(live-support-2);
+      }
+
+      > * {
+        flex-basis: 100%;
+      }
+
+      @include mq($from: desktop) {
+        .component-number-input {
+          max-width: 93%;
+        }
+      }
+    }
+
+    .contrib-amounts--recurring {
+      .component-radio-toggle__button {
+        flex-basis: calc(33.3% - 3.3px);
+        // Fix for IE10 and possibly Safari 8.
+        min-width: 32%;
+      }
+    }
+
+    .contrib-amounts--one-off {
+      .component-radio-toggle__button {
+        flex-basis: calc(25% - 4px);
+        // Fix for IE10 and possibly Safari 8.
+        min-width: 23%;
+      }
+    }
+
     .bundles__bundle--digital {
         background-color: #1db7d7;
+
+        .component-cta-link {
+          background-color: gu-colour(guardian-brand-dark);
+
+          &:hover {
+            background-color: darken(gu-colour(guardian-brand-dark), 5%);
+          }
+        }
     }
 
     .bundles__bundle--paper {
@@ -170,6 +314,46 @@
   			background-color: gu-colour(guardian-brand-dark);
   			color: #fff;
   		}
+
+      .component-cta-link:first-of-type {
+        background-color: gu-colour(guardian-brand-dark);
+
+        &:hover {
+          background-color: darken(gu-colour(guardian-brand-dark), 5%);
+        }
+      }
+
+      .component-cta-link+.component-cta-link {
+        background-color: #58a1ce;
+        border: 1px solid gu-colour(guardian-brand-dark);
+
+        @include mq($from: desktop) {
+          bottom: $gu-v-spacing * 5;
+        }
+
+        &:hover {
+          background-color: gu-colour(guardian-brand-dark);
+        }
+      }
+    }
+
+    .component-feature-list {
+      padding-left: 0;
+
+      li > * {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      li:before {
+        content: '✔';
+        display: inline-block;
+        font-size: 18px;
+        margin-left: -19px;
+        width: 19px;
+        color: #fff;
+      }
     }
 
   }
@@ -543,7 +727,7 @@
   }
 
   .component-number-input--selected {
-      background-color: gu-colour(comment-main-1);
+      background-color: gu-colour(neutral-1);
       color: #fff;
 
       &::placeholder {

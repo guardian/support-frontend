@@ -2,8 +2,26 @@
 	margin: 0;
 	padding: 0;
 	padding-left: 10px;
+	font-size: 15px;
 
 	h3, p {
 		margin: 0;
+	}
+
+	h3 {
+		font-family: $gu-egyptian-web;
+		font-weight: bold;
+		line-height: 15px;
+	}
+
+	p {
+		font-family: $gu-text-sans-web;
+		font-weight: 300;
+		line-height: 20px;
+	}
+
+	li {
+		margin-bottom: $gu-v-spacing;
+		margin-left: $gu-h-spacing;
 	}
 }

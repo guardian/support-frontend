@@ -34,8 +34,9 @@ export default function RadioToggle(props: PropTypes) {
     const radioId = `${props.name}-${idx}`;
 
     return (
-      <span key={radioId}>
+      <span className="component-radio-toggle__button" key={radioId}>
         <input
+          className="component-radio-toggle__input"
           type="radio"
           name={props.name}
           value={radio.value}
@@ -43,7 +44,9 @@ export default function RadioToggle(props: PropTypes) {
           onChange={() => props.toggleAction(radio.value)}
           checked={radio.value === props.checked}
         />
-        <label htmlFor={radioId}>{radio.text}</label>
+        <label className="component-radio-toggle__label"htmlFor={radioId}>
+          {radio.text}
+        </label>
       </span>
     );
 

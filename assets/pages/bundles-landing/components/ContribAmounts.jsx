@@ -107,6 +107,7 @@ function getAttrs(props: PropTypes) {
       checked: !userDefined ? props.contrib.recurring.value : null,
       toggles: amountToggles.recurring,
       selected: props.contrib.recurring.userDefined,
+      contribType: 'recurring',
     };
 
   }
@@ -118,6 +119,7 @@ function getAttrs(props: PropTypes) {
     checked: !userDefined ? props.contrib.oneOff.value : null,
     toggles: amountToggles.oneOff,
     selected: props.contrib.oneOff.userDefined,
+    contribType: 'one-off',
   };
 
 }
@@ -128,9 +130,10 @@ function getAttrs(props: PropTypes) {
 function ContribAmounts(props: PropTypes) {
 
   const attrs = getAttrs(props);
+  const className = `contrib-amounts contrib-amounts--${attrs.contribType}`;
 
   return (
-    <div className="contrib-amounts">
+    <div className={className}>
       <RadioToggle
         {...attrs.toggles}
         toggleAction={attrs.toggleAction}
@@ -140,7 +143,7 @@ function ContribAmounts(props: PropTypes) {
         onFocus={props.userDefinedAmount}
         onInput={props.userDefinedAmount}
         selected={attrs.selected}
-        placeholder="Other Amount (£)"
+        placeholder="Other amount (£)"
       />
       {errorMessage(props.contribError)}
     </div>

@@ -1,18 +1,19 @@
 .component-double-heading {
-	@include gu-font(copy, 18);
-
-	font-weight: 900;
 	line-height: 27px;
+	font-size: 28px;
 
 	.component-double-heading__heading {
-		font-size: 28px;
-		color: #000;
+		font-weight: 900;
+		font-family: $gu-egyptian-web;
+		color: #fff;
 		margin: 0;
 	}
 
 	.component-double-heading__subheading {
-		font-size: 28px;
-		color: #fff;
+		font-weight: 300;
+		color: gu-colour(neutral-1);
 		margin: 0;
+		font-family: $gu-text-sans-web;
+
 	}
 }

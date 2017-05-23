@@ -1,6 +1,6 @@
 // @flow
 import reducer from '../reducers';
-import type { Contrib, PaperBundle, ContribState, Amount } from '../reducers';
+import type { Contrib, ContribState, Amount } from '../reducers';
 
 describe('reducer tests', () => {
 
@@ -18,23 +18,11 @@ describe('reducer tests', () => {
       },
     },
   };
-  const initialPaperBundle: PaperBundle = 'PAPER+DIGITAL';
-  const initialState = { paperBundle: initialPaperBundle, contribution: initialContrib };
+  const initialState = { contribution: initialContrib };
 
   it('should return the initial state', () => {
 
     expect(reducer(undefined, {})).toMatchSnapshot();
-  });
-
-  it('should handle CHANGE_PAPER_BUNDLE', () => {
-
-    const paperBundle: PaperBundle = 'PAPER';
-    const action = {
-      type: 'CHANGE_PAPER_BUNDLE',
-      bundle: paperBundle,
-    };
-
-    expect(reducer(initialState, action).paperBundle).toEqual(paperBundle);
   });
 
   it('should handle CHANGE_CONTRIB_TYPE', () => {
