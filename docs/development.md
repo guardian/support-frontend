@@ -5,14 +5,15 @@
   
 ## Table of contents
 
-1. Getting Started
-2. Introduction to the technological stack
-3. Architecture
-4. Building process
-
+1. [Getting started](#getting-started)
+2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
+3. [Architecture](#architecture)
+4. [Project's structure](#projects-structure) 
+5. [Building process](#building-process)
 
 ## Getting started
 
+In order to set up the project correctly, please follow the instructions of the [README file](https://github.com/guardian/support-frontend/blob/master/README.md).
 
 ## Introduction to the technological stack
 
@@ -57,9 +58,12 @@ The pieces that make up `support-frontend` are:
  Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the 
  the presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
  
- There are two type of React components, []() []().
+ There are two type of React components, [presentational and container components](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components).
+ The presentational components ***are not aware of Redux***, and its main purpose is to define how the data is showed to the 
+ end reader. Meanwhile, the container components ***are aware of Redux*** and its main purpose if to keep the state and handle 
+ the logic of the app. 
  
- ### Data flow 
+ #### Data flow 
  
  The data flows in the following way:
  
@@ -70,8 +74,12 @@ The pieces that make up `support-frontend` are:
  4. The UI is updated to reflect the last version of the state.
  
  You can find more information about the data flow [here](http://redux.js.org/docs/basics/DataFlow.html)
+ ### Server side architecture
+ //TODO 
+
  
- ### Project's structure
+## Project's structure
+
  
  The client-side javascript sits inside the assets folder and it is organized in the following way:
  
@@ -108,11 +116,8 @@ The pieces that make up `support-frontend` are:
  `components` folder. The components specific to a page and which are not used in other pages are located inside the 
  `components` folder inside a specific page.
  
-* The CSS for a page specific component is located inside the `page.scss` file.  
+* The CSS for a non-shareable component is located inside the `page.scss` file.  
  
- 
-### Server side architecture
-//TODO 
 
 ## Building process
 
