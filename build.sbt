@@ -32,7 +32,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
 
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
-  "org.mockito" % "mockito-core" % "2.7.22" % Test
+  "org.mockito" % "mockito-core" % "2.7.22" % Test,
+  "com.getsentry.raven" % "raven-logback" % "8.0.3",
+  "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
 )
 
 sources in (Compile,doc) := Seq.empty
