@@ -12,6 +12,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
 import * as ga from 'helpers/ga';
+import * as logger from 'helpers/logger';
 import getQueryParameter from './helpers/queryParameter';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -24,6 +25,10 @@ import reducer from './reducers/reducers';
 
 ga.init();
 ga.trackPageview();
+
+// ----- Logging ----- //
+
+logger.init();
 
 // ----- Redux Store ----- //
 
