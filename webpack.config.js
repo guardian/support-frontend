@@ -7,8 +7,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 
-const uglifyOpts = { compress: { warnings: false }, sourceMap: true };
-
 module.exports = (env) => {
 
   const isProd = env && env.prod;
@@ -27,6 +25,7 @@ module.exports = (env) => {
   let devServer = {};
 
   if (isProd) {
+    const uglifyOpts = { compress: { warnings: false }, sourceMap: true };
     plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyOpts));
     plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }));
   } else {
