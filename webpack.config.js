@@ -25,8 +25,11 @@ module.exports = (env) => {
   let devServer = {};
 
   if (isProd) {
-    plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
-    plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }));
+    const uglifyOpts = { compress: { warnings: false }, sourceMap: true };
+    plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyOpts));
+
+    const defineOpts = { 'process.env': { NODE_ENV: JSON.stringify('production') } };
+    plugins.push(new webpack.DefinePlugin(defineOpts));
   } else {
     devServer = {
       proxy: {
