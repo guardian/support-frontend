@@ -22,6 +22,7 @@
         "guardian": true,
         "React": true,
         "ga": true,
+        "Raven": true,
     },
     "rules": {
         "curly": [2, "all"],
