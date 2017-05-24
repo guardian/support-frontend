@@ -10,10 +10,10 @@
 	}
 
 	.component-double-heading__subheading {
-		font-weight: 300;
 		color: gu-colour(neutral-1);
 		margin: 0;
-		font-family: $gu-text-sans-web;
-
+		font-family: $gu-egyptian-web;
+		font-weight: normal;
+		line-height: 30px;
 	}
 }
