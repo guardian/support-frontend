@@ -239,7 +239,6 @@
 
       input:checked+label:before {
         content: '';
-        color: gu-colour(comment-main-1);
         width: 0;
         height: 0;
         border-style: solid;
@@ -247,6 +246,7 @@
         position: absolute;
         bottom: -10px;
         left: calc(50% - 10px);
+        border-color: gu-colour(comment-main-1) transparent;
       }
     }
 
@@ -748,7 +748,7 @@
   }
 
   .component-number-input--selected {
-      background-color: gu-colour(neutral-1);
+      background-color: gu-colour(comment-main-1);
       color: #fff;
 
       &::placeholder {
