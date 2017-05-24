@@ -1,5 +1,5 @@
 // @flow
-declare var Raven: any;
+import Raven from 'raven-js';
 
 // ----- Functions ----- //
 
