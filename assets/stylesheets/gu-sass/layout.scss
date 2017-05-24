@@ -16,6 +16,11 @@ $gu-v-spacing: 12px;
 .gu-content-margin, .gu-header-margin {
   box-sizing: border-box;
 
+  @include mq($from: mobileLandscape) {
+    width: gu-breakpoint(mobileLandscape);
+    margin: 0 auto;
+  }
+
   @include mq($from: phablet) {
     width: gu-breakpoint(phablet);
     margin: 0 auto;
