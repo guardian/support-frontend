@@ -28,6 +28,8 @@ The pieces that make up `support-frontend` are:
  * redux
  * flow
  * sass
+ * ga and ophan for tracking
+ * raven (sentry)
 
 ### Backend
 
@@ -137,7 +139,11 @@ As an example, in order to build the assets for production, the step `build-prod
   1. `clean` : Deletes the previous compiled assets.
   2. `validate` : Validates the javascript source code by running lint for style check and flow type check.
   3. `test` : Runs the javascript tests using jest.
-  4. `webpack` : Runs webpack in production mode. Webpack runs babel, minify (uglify) the javascript, does the asset 
-  hashing and produce the source maps and the different js files for each page. 
-     
+  4. `webpack` : Runs webpack in production mode. Webpack runs the following series of processes:
+   * babel: it transpile the javascript and jsx files, generating browser-compatible JavaScript.  
+   * uglify: minify and compress the javascript. Additionally, it generates the source maps that are going to be used 
+             by Sentry. 
+   * asset hashing: Additionally, since the site has a [caching layer](https://app.fastly.com) sitting in front of it, 
+   we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
+    is done [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
  
