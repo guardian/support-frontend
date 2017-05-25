@@ -398,10 +398,6 @@
       width: 240px;
       margin: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2) 0;
 
-      @include mq($until: mobileLandscape) {
-
-      }
-
       @include mq($from: tablet) {
         width: 220px;
         margin: 0;
