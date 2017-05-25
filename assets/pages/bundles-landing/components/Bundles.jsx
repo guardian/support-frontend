@@ -52,7 +52,7 @@ const bundles = {
     modifierClass: 'digital',
   },
   paper: {
-    heading: 'print subscription',
+    heading: 'paper subscription',
     subheading: 'from £22.06/month',
     listItems: [
       {
@@ -150,11 +150,13 @@ function Bundles(props: PropTypes) {
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
           <Bundle {...contribAttrs}>
-            <RadioToggle
-              {...contribToggle}
-              toggleAction={props.toggleContribType}
-              checked={props.contribType}
-            />
+            <div className="contrib-type">
+              <RadioToggle
+                {...contribToggle}
+                toggleAction={props.toggleContribType}
+                checked={props.contribType}
+              />
+            </div>
             <ContribAmounts />
             <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
           </Bundle>

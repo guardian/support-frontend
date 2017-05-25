@@ -56,7 +56,9 @@ const WaysOfSupport = (props: PropTypes) => {
   return (
     <section className={className}>
       <div className={`${className}__content gu-content-margin`}>
-        <h1 className={`${className}__heading`}>other ways you can support us</h1>
+        <div className={`${className}__heading`}>
+          <h1>other ways you can support us</h1>
+        </div>
         {waysOfSupportRendered}
       </div>
     </section>
