@@ -123,8 +123,9 @@ The pieces that make up `support-frontend` are:
 
 In order to build the project, team city runs a series of steps. The first step installs node js, the second build the 
 assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). 
-Finally, the third step builds the app by running the `compile` task define in 
-[`build.sbt`](https://github.com/guardian/support-frontend/blob/master/build.sbt).
+Finally, the third step compiles the Scala code, packages the frontend and backend, and uploads this to riff-raff ready 
+to be deployed. All this steps are defined in [`build.sbt`](https://github.com/guardian/support-frontend/blob/master/build.sbt).
+  
 
 ### Building assets
 
