@@ -55,6 +55,7 @@ export default function Video(props: PropTypes) {
   return (
     <div className="component-video">
       <iframe
+        title={props.name}
         src={youtubeUrl(props.name)}
         frameBorder="0"
         width="560"
