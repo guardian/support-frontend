@@ -34,7 +34,10 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
   "org.mockito" % "mockito-core" % "2.7.22" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
-  "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
+  "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0",
+  "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
+  "com.typesafe.akka" %% "akka-agent" % "2.4.12",
+  "org.typelevel" %% "cats" % "0.9.0"
 )
 
 sources in (Compile,doc) := Seq.empty
