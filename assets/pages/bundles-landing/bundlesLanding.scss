@@ -212,6 +212,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        flex-basis: 100%;
+        flex-grow: 1;
         justify-content: space-between;
       }
 
@@ -256,8 +258,9 @@
     }
 
     .contrib-amounts {
-      display: flex;
-      flex-wrap: wrap;
+      // display: flex;
+      // flex-wrap: wrap;
+      // width: 100%;
 
       .contrib-amounts__error-message {
         font-family: $gu-text-sans-web;
@@ -267,14 +270,23 @@
         color: gu-colour(live-support-2);
       }
 
-      > * {
-        flex-basis: 100%;
-      }
+      // > * {
+      //   flex-basis: 100%;
+      // }
 
       @include mq($from: desktop) {
         .component-number-input {
           max-width: 93%;
         }
+      }
+    }
+
+    .contrib-amounts__other-amount {
+      display: flex;
+
+      .component-number-input {
+        flex-basis: 100%;
+        flex-grow: 1;
       }
     }
 

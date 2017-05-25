@@ -139,12 +139,14 @@ function ContribAmounts(props: PropTypes) {
         toggleAction={attrs.toggleAction}
         checked={attrs.checked}
       />
-      <NumberInput
-        onFocus={props.userDefinedAmount}
-        onInput={props.userDefinedAmount}
-        selected={attrs.selected}
-        placeholder="Other amount (£)"
-      />
+      <div className="contrib-amounts__other-amount">
+        <NumberInput
+          onFocus={props.userDefinedAmount}
+          onInput={props.userDefinedAmount}
+          selected={attrs.selected}
+          placeholder="Other amount (£)"
+        />
+      </div>
       {errorMessage(props.contribError)}
     </div>
   );
