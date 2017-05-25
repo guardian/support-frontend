@@ -22,6 +22,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
+    logger.error("Error from Lambda")
     val paymentMethod = state.paymentFields match {
       case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
       case Right(payPal) => createPayPalPaymentMethod(payPal, services.payPalService)
