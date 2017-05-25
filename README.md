@@ -1,7 +1,8 @@
-support.theguardian.com
-=======================
+# support.theguardian.com
 
 Frontend for the new supporter platform
+
+You can find more details about the architecture of the project in our [**`development guide`**](https://github.com/guardian/support-frontend/blob/master/docs/development.md).
 
 ## Installing dependencies
 
