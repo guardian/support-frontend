@@ -258,10 +258,6 @@
     }
 
     .contrib-amounts {
-      // display: flex;
-      // flex-wrap: wrap;
-      // width: 100%;
-
       .contrib-amounts__error-message {
         font-family: $gu-text-sans-web;
         font-size: 13px;
@@ -269,10 +265,6 @@
         line-height: 15px;
         color: gu-colour(live-support-2);
       }
-
-      // > * {
-      //   flex-basis: 100%;
-      // }
 
       @include mq($from: desktop) {
         .component-number-input {
