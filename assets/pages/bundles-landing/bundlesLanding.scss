@@ -17,7 +17,7 @@
         padding-left: 100px;
       }
 
-      @include mq($from: leftCol) {
+      @include mq($from: wide) {
         padding-left: 180px;
       }
     }
@@ -180,6 +180,11 @@
         bottom: $gu-v-spacing;
         right: $gu-h-spacing / 2;
         left: $gu-h-spacing / 2;
+
+        // Fix for IE.
+        svg {
+          left: 250px;
+        }
       }
     }
 
@@ -207,6 +212,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        flex-basis: 100%;
+        flex-grow: 1;
         justify-content: space-between;
       }
 
@@ -251,9 +258,6 @@
     }
 
     .contrib-amounts {
-      display: flex;
-      flex-wrap: wrap;
-
       .contrib-amounts__error-message {
         font-family: $gu-text-sans-web;
         font-size: 13px;
@@ -262,14 +266,19 @@
         color: gu-colour(live-support-2);
       }
 
-      > * {
-        flex-basis: 100%;
-      }
-
       @include mq($from: desktop) {
         .component-number-input {
           max-width: 93%;
         }
+      }
+    }
+
+    .contrib-amounts__other-amount {
+      display: flex;
+
+      .component-number-input {
+        flex-basis: 100%;
+        flex-grow: 1;
       }
     }
 
