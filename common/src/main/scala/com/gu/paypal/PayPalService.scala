@@ -7,13 +7,13 @@ import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
-import com.typesafe.scalalogging.StrictLogging
 import okhttp3.{FormBody, Request, Response}
+import org.slf4j.LoggerFactory
 
 import scala.util.Try
 
-class PayPalService(apiConfig: PayPalConfig) extends StrictLogging {
-
+class PayPalService(apiConfig: PayPalConfig) {
+  val logger = LoggerFactory.getLogger(this.getClass.getSimpleName)
   val config = apiConfig
   // The parameters sent with every NVP request.
   val defaultNVPParams = Map(

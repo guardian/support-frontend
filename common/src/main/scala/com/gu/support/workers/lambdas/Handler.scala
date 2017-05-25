@@ -15,7 +15,7 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 
   protected def handler(input: T, context: Context): R
   def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit = {
-    logger.info(s"Starting request: $context")
+    logger.info(s"Starting request: ${context.getClientContext.getEnvironment}")
     in(is).flatMap(i => out(handler(i, context), os)).get
     logger.info(s"Completed request: $context")
   }
