@@ -180,6 +180,11 @@
         bottom: $gu-v-spacing;
         right: $gu-h-spacing / 2;
         left: $gu-h-spacing / 2;
+
+        // Fix for IE.
+        svg {
+          left: 250px;
+        }
       }
     }
 
