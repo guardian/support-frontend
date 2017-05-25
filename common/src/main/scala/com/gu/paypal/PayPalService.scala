@@ -7,12 +7,12 @@ import com.gu.config.{Configuration, Stages}
 import com.gu.okhttp.RequestRunners
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
-import com.typesafe.scalalogging.LazyLogging
+import com.typesafe.scalalogging.StrictLogging
 import okhttp3.{FormBody, Request, Response}
 
 import scala.util.Try
 
-class PayPalService(apiConfig: PayPalConfig) extends LazyLogging {
+class PayPalService(apiConfig: PayPalConfig) extends StrictLogging {
 
   val config = apiConfig
   // The parameters sent with every NVP request.
