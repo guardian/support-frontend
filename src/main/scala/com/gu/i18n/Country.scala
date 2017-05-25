@@ -81,17 +81,15 @@ object Country {
   val UK = Country("GB", "United Kingdom")
 
   val Australia = Country("AU", "Australia", states = List(
-    "South Australia",
-    "Tasmania",
-    "New South Wales",
-    "Victoria",
-    "Western Australia",
-    "Queensland",
-    "Australian Capital Territory",
-    "Northern Territory",
-    "Christmas Island",
-    "Cocos (Keeling) Islands",
-    "Norfolk Island"
+    "SA",
+    "TAS",
+    "NSW",
+    "VIC",
+    "WA",
+    "QLD",
+    "ACT",
+    "NT",
+    "JBT"
   ))
 
   val NewZealand = Country("NZ", "New Zealand")
