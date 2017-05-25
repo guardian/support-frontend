@@ -3,8 +3,7 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
-import com.gu.support.workers.model.SendThankYouEmailState
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
+import com.gu.support.workers.model.state.SendThankYouEmailState
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import org.joda.time.DateTime

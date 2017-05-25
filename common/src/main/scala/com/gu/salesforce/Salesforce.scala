@@ -1,5 +1,6 @@
 package com.gu.salesforce
 
+import com.gu.support.workers.model.SalesforceContactRecord
 import org.joda.time.DateTime
 
 object Salesforce {
@@ -39,8 +40,6 @@ object Salesforce {
     val Success: Boolean
     val ErrorString: Option[String]
   }
-
-  case class SalesforceContactRecord(Id: String, AccountId: String)
 
   case class SalesforceContactResponse(Success: Boolean, ErrorString: Option[String], ContactRecord: SalesforceContactRecord) extends SalesforceResponse
 

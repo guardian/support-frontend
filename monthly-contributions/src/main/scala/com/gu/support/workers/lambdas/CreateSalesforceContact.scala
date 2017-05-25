@@ -4,8 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.salesforce.Salesforce.UpsertData
 import com.gu.services.Services
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.model.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
+import com.gu.support.workers.model.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 
