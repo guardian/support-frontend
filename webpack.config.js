@@ -47,7 +47,6 @@ module.exports = (env) => {
     entry: {
       favicons: 'images/favicons.js',
       styles: 'stylesheets/main.scss',
-      helloWorldPage: 'pages/hello-world/helloWorld.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
     },
 
