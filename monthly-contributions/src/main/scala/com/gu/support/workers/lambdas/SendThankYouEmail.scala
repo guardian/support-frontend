@@ -5,7 +5,6 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
 import com.gu.support.workers.model.SendThankYouEmailState
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency, encodeCountryAsAlpha2, encodeCurrency}
-import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import org.joda.time.DateTime
 
@@ -13,8 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SendThankYouEmail(thankYouEmailService: ThankYouEmailService)
-    extends FutureHandler[SendThankYouEmailState, Unit]
-    with LazyLogging {
+  extends FutureHandler[SendThankYouEmailState, Unit] {
   def this() = this(new ThankYouEmailService(Configuration.emailServicesConfig.thankYouEmailQueue))
 
   override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {
