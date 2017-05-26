@@ -1,9 +1,9 @@
 package com.gu.support.workers
 
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.model.CreateSalesforceContactState
+import com.gu.support.workers.model.{PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.model.state.CreateSalesforceContactState
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
-import com.gu.zuora.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._

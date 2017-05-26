@@ -6,6 +6,7 @@ import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamCo
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.SendThankYouEmailState
+import com.gu.support.workers.model.state.SendThankYouEmailState
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import io.circe.generic.auto._
