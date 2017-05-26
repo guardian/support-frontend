@@ -9,7 +9,8 @@ Support Frontend, how they interact and how you can start adding code to this re
 2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
 3. [Architecture](#architecture)
 4. [Project's structure](#projects-structure) 
-5. [Building process](#building-process)
+5. [CI Build process](#ci-build-process)
+6. [Yarn commands](#yarn-commands)
 
 ## Getting started
 
@@ -148,11 +149,13 @@ As an example, in order to build the assets for production, the step `build-prod
    we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
     is done [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
 
-## Available yarn commands
+## Yarn commands
 
 In order to run a yarn command you should run:
 
-`yarn run [name_command]`
+```
+$ yarn run [name_command]
+```
 
 | Command              | Functionality |
 |----------------------|---------------|
