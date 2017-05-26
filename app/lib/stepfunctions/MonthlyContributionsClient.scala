@@ -7,6 +7,7 @@ import cats.implicits._
 import com.gu.support.workers.model.state.CreatePaymentMethodState
 import config.Stage
 import MonthlyContributionsClient._
+import io.circe.generic.auto._
 
 object MonthlyContributionsClient {
   sealed trait MonthlyContributionError
@@ -15,7 +16,7 @@ object MonthlyContributionsClient {
   type CreateMonthlyContributorRequest = CreatePaymentMethodState
 }
 
-class MonthlyContributionsClient(stage: Stage, apiBase: String)(implicit system: ActorSystem) {
+class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) {
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 

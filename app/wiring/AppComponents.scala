@@ -23,7 +23,14 @@ trait AppComponents extends PlayComponents {
   lazy val monthlyContributionsController = new MonthlyContributions(monthlyContributionsClient)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(new CheckCacheHeadersFilter())
-  override lazy val router: Router = new Routes(httpErrorHandler, assetController, applicationController, controllers.Default, monthlyContributionsController, prefix = "/")
+  override lazy val router: Router = new Routes(
+    httpErrorHandler,
+    assetController,
+    applicationController,
+    controllers.Default,
+    monthlyContributionsController,
+    prefix = "/"
+  )
 
   config.sentryDsn foreach { dsn => new SentryLogging(dsn, config.stage) }
 }
