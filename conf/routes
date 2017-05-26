@@ -9,3 +9,4 @@ GET /healthcheck                controllers.Application.healthcheck
 GET /uk                         controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /                           controllers.Default.redirect(to = "/uk")
 
+POST /monthly-contributions/create   controllers.MonthlyContributions.create
