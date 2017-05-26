@@ -1,0 +1,11 @@
+{
+    "checkpoints": {
+        "PROD": {
+            "url": "https://support.theguardian.com/uk",
+            "overdue": "14M"
+        }
+    },
+    "sentry": {
+        "projects": ["support-client-side", "support"]
+    }
+}
