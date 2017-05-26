@@ -10,7 +10,7 @@ This means that we now need to do a bit more analysis of the error conditions ou
 which are permanent failures. The rest of this document is an attempt to do that analysis for the Monthly contributions step function
 
 ## Logging
-Most errors should be logged to Sentry so they can be investigated. Errors which probably don't need to be logged in Sentry and can just be logged in Cloudwatch are transient ones such as timeouts, and Stripe card errors/
+Most errors should be logged to Sentry so they can be investigated. However transient ones such as timeouts probably don't need to be logged in Sentry and can just be logged in Cloudwatch. This is also the case for Stripe card errors.
 
 ## Types of errors
 
@@ -21,13 +21,13 @@ Most errors should be logged to Sentry so they can be investigated. Errors which
     <td>Error type</td>
     <td>Description</td>
     <td>Retry?</td>
-    <td>Max retries?</td>
+    <td>Max retries</td>
   </tr>
   <tr>
     <td>Input parsing errors</td>
     <td>Errors caused by invalid input JSON</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Service timeouts</td>
@@ -61,7 +61,7 @@ Most errors should be logged to Sentry so they can be investigated. Errors which
     <td>Error type</td>
     <td>Description</td>
     <td>Retry?</td>
-    <td>Max retries?</td>
+    <td>Max retries</td>
   </tr>
   <tr>
     <td>api_connection_error</td>
@@ -82,16 +82,16 @@ Most errors should be logged to Sentry so they can be investigated. Errors which
     <td></td>
   </tr>
   <tr>
-    <td>card_error*</td>
+    <td>card_error</td>
     <td>Card errors are the most common type of error you should expect to handle. They result when the user enters a card that can't be charged for some reason.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>invalid_request_error</td>
     <td>Invalid request errors arise when your request has invalid parameters.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>rate_limit_error</td>
@@ -103,7 +103,7 @@ Most errors should be logged to Sentry so they can be investigated. Errors which
     <td>validation_error</td>
     <td>Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete).</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </table>
 
@@ -143,13 +143,13 @@ Most errors should be logged to Sentry so they can be investigated. Errors which
     <td>InvalidKeyUsageException</td>
     <td>The request was rejected because the specified KeySpec value is not valid.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>InvalidGrantTokenException</td>
     <td>The request was rejected because the specified grant token is not valid.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>KMSInternalException</td>
@@ -189,42 +189,42 @@ It’s hard to get exact details of what errors Zuora might throw but there are 
     <td>10</td>
     <td>Permission or access denied</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>11</td>
     <td>Authentication failed</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>20</td>
     <td>Invalid format or value</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>21</td>
     <td>Unknown field in request</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>22</td>
     <td>Missing required field</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>30</td>
     <td>Rule restriction</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
@@ -259,14 +259,14 @@ It’s hard to get exact details of what errors Zuora might throw but there are 
     <td>90</td>
     <td>Malformed request</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
   <tr>
     <td>99</td>
     <td>Extension error</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </tr>
 </table>
@@ -291,7 +291,7 @@ General codes are here:
     <td>400</td>
     <td>The request couldn’t be understood, usually because the JSON or XML body contains an error.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>401</td>
@@ -303,25 +303,25 @@ General codes are here:
     <td>403</td>
     <td>The request has been refused. Verify that the logged-in user has appropriate permissions.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>404</td>
     <td>The requested resource couldn’t be found. Check the URI for errors, and verify that there are no sharing issues.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>405</td>
     <td>The method specified in the Request-Line isn’t allowed for the resource specified in the URI.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>415</td>
     <td>The entity in the request is in a format that’s not supported by the specified method.</td>
     <td>N</td>
-    <td></td>
+    <td>-</td>
   </tr>
 </table>
 
