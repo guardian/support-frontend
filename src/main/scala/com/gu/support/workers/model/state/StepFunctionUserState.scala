@@ -2,8 +2,6 @@ package com.gu.support.workers.model.state
 
 import com.gu.support.workers.model.User
 
-trait StepFunctionState
-
-trait StepFunctionUserState extends StepFunctionState {
+trait StepFunctionUserState {
   def user: User
 }
