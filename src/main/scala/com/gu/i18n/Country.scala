@@ -80,7 +80,17 @@ object Country {
 
   val UK = Country("GB", "United Kingdom")
 
-  val Australia = Country("AU", "Australia")
+  val Australia = Country("AU", "Australia", states = List(
+    "SA",
+    "TAS",
+    "NSW",
+    "VIC",
+    "WA",
+    "QLD",
+    "ACT",
+    "NT",
+    "JBT"
+  ))
 
   val NewZealand = Country("NZ", "New Zealand")
 
