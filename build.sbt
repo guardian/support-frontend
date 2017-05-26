@@ -82,4 +82,4 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "JavaScriptReverseRoutes.scala" ||
   "RoutesPrefix.scala"
 
-addCommandAlias("devrun", "run 9000")
+addCommandAlias("devrun", "run 9110") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
