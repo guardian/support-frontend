@@ -9,7 +9,7 @@ object Dependencies {
   val scalaLogging = "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
-  val supportModels = "com.gu" %% "support-models" % "0.1-SNAPSHOT"
+  val supportModels = "com.gu" %% "support-models" % "0.1"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
