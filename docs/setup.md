@@ -2,9 +2,9 @@
 
 In local development, the base app server has two layers of proxy sitting on top it:
 
-1. Play/Scala appserver _(base server)_ - http://sup.thegulocal.com:9110/
-2. `webpack-dev-server` _(proxy providing hot-reloading of client-side code)_ - http://sup.thegulocal.com:9111/
-3. Nginx _(proxy adding HTTPS and a unified `.thegulocal.com` domain with other Guardian projects)_ - **https://sup.thegulocal.com/ ⬅ USE THIS IN YOUR WEB BROWSER**
+1. Play/Scala appserver _(base server)_ - http://support.thegulocal.com:9110/
+2. `webpack-dev-server` _(proxy providing hot-reloading of client-side code)_ - http://support.thegulocal.com:9111/
+3. Nginx _(proxy adding HTTPS and a unified `.thegulocal.com` domain with other Guardian projects)_ - **https://support.thegulocal.com/ ⬅ USE THIS IN YOUR WEB BROWSER**
 
 You need all 3 of these running to have a working development environment.
 

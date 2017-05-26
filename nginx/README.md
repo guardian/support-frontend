@@ -13,7 +13,7 @@ Support™ depends on Identity, so **you'll need to perform the**
 Add the following local development domain to your hosts file in `/etc/hosts`:
 
 ```
-127.0.0.1   sup.thegulocal.com
+127.0.0.1   support.thegulocal.com
 ```
 
 #### Run Support's Nginx setup script

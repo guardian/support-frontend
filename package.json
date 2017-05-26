@@ -10,7 +10,7 @@
     "build-dev": "webpack --config webpack.config.js --env.dev",
     "build-prod": "npm-run-all clean validate test 'webpack -- --config webpack.config.js --env.prod'",
     "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server --port 9111 --public sup.thegulocal.com",
+    "webpack-dev-server": "webpack-dev-server --port 9111 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest"
   },
