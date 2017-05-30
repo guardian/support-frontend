@@ -37,7 +37,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "com.typesafe.akka" %% "akka-agent" % "2.4.12",
-  "org.typelevel" %% "cats" % "0.9.0"
+  "org.typelevel" %% "cats" % "0.9.0",
+  filters
 )
 
 sources in (Compile,doc) := Seq.empty

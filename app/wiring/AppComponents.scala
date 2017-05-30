@@ -9,6 +9,7 @@ import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
 import monitoring.SentryLogging
 import play.api.mvc.EssentialFilter
+import play.filters.gzip.GzipFilter
 
 trait AppComponents extends PlayComponents {
 
@@ -19,7 +20,10 @@ trait AppComponents extends PlayComponents {
   lazy val assetController = new Assets(httpErrorHandler)
   lazy val applicationController = new Application()
 
-  override lazy val httpFilters: Seq[EssentialFilter] = Seq(new CheckCacheHeadersFilter())
+  override lazy val httpFilters: Seq[EssentialFilter] = Seq(
+    new CheckCacheHeadersFilter(),
+    new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
+  )
   override lazy val router: Router = new Routes(httpErrorHandler, assetController, applicationController, controllers.Default, prefix = "/")
 
   config.sentryDsn foreach { dsn => new SentryLogging(dsn, config.stage) }
