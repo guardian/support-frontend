@@ -1,5 +1,7 @@
 package com.gu.zuora.model
 
+import com.gu.support.workers.model.PaymentMethod
+
 //The subscribe request documented here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
 //fields are upper case to match the expected json structure
 case class SubscribeRequest(subscribes: List[SubscribeItem])

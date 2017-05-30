@@ -1,5 +1,7 @@
 package com.gu.zuora.model
 
+import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
+
 sealed trait PaymentGateway {
   def name: String
 }

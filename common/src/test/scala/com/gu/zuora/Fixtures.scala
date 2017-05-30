@@ -3,6 +3,7 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
+import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.gu.zuora.model._
 import org.joda.time.LocalDate
 

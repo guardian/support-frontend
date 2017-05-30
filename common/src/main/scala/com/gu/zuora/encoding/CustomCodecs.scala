@@ -3,6 +3,7 @@ package com.gu.zuora.encoding
 import com.gu.helpers.StringExtensions._
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.zuora.encoding.CapitalizationEncoder._
 import com.gu.zuora.model._
 import io.circe._
