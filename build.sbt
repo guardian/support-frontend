@@ -49,7 +49,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "joda-time" % "joda-time" % "2.9.9"
+  "joda-time" % "joda-time" % "2.9.9",
+  filters
 )
 
 sources in (Compile,doc) := Seq.empty
@@ -94,4 +95,4 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "JavaScriptReverseRoutes.scala" ||
   "RoutesPrefix.scala"
 
-addCommandAlias("devrun", "run 9000")
+addCommandAlias("devrun", "run 9110") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!

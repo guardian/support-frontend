@@ -1,7 +1,7 @@
 # Development in Support The Guardian frontend
 
- Welcome to Support Frontend. In this document we will go through the elements that conform 
- Support Frontend, how they interact and how you can start adding code to this repository.
+Welcome to Support Frontend. In this document we will go through the elements that form 
+Support Frontend, how they interact and how you can start adding code to this repository.
   
 ## Table of contents
 
@@ -9,11 +9,13 @@
 2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
 3. [Architecture](#architecture)
 4. [Project's structure](#projects-structure) 
-5. [Building process](#building-process)
+5. [CI Build process](#ci-build-process)
+6. [Yarn commands](#yarn-commands)
 
 ## Getting started
 
-In order to set up the project correctly, please follow the instructions of the [README file](https://github.com/guardian/support-frontend/blob/master/README.md).
+Follow the instructions in [**setup.md**](setup.md) to setup your dev environment and
+get `support-frontend` running locally.
 
 ## Introduction to the technological stack
 
@@ -121,7 +123,7 @@ The pieces that make up `support-frontend` are:
 * The CSS for a non-shareable component is located inside the `page.scss` file.  
  
 
-## Building process
+## CI build process
 
 In order to build the project, team city runs a series of steps. The first step installs node js, the second build the 
 assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). 
@@ -146,4 +148,31 @@ As an example, in order to build the assets for production, the step `build-prod
    * asset hashing: Additionally, since the site has a [caching layer](https://app.fastly.com) sitting in front of it, 
    we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
     is done [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
- 
+
+## Yarn commands
+
+In order to run a yarn command you should run:
+
+```
+$ yarn run [name_command]
+```
+
+| Command              | Functionality |
+|----------------------|---------------|
+| `clean`              | Cleans the `public` folder. |
+| `validate`           | Validates the JS files (`.js` and `.jsx`), using eslint and flow. |
+| `lint`               | Runs eslint. |
+| `flow`               | Runs the flow type check. |
+| `build-dev`          | Builds the files for the `DEV` environment |
+| `build-prod`         | Builds the files for the `PROD` environment. It runs `clean`, `lint`, `test`, `build:css` and `build:js`. |
+| `build:css`          | Builds the CSS files. |
+| `build:css:sass`     | Builds the CSS using sass. |
+| `build:css:postcss`  | Runs the postCSS tasks (autoprefixer and pxtorem). |
+| `build:js`           | Builds the JS files using `DEV` environment. |
+| `watch`              | Watches for changes in any CSS or JS files and recompiles everything. |
+| `watch:js`           | Watches for changes in any JS file. |
+| `watch:css`          | Watches for changes in any CSS file. |
+| `watch:css:sass`     | Run watch task for sass command. |
+| `devrun`             | Cleans, transpiles, runs and watches the webpack-dev-server using `DEV` environment. |
+| `webpack-dev-server` | Runs the webpack-dev-server in port `9111`. |
+| `test`               | Runs the client side tests built using Jest.  |

@@ -10,6 +10,7 @@ import lib.CustomHttpErrorHandler
 import lib.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
 import play.api.mvc.EssentialFilter
+import play.filters.gzip.GzipFilter
 
 trait AppComponents extends PlayComponents {
 
@@ -22,7 +23,11 @@ trait AppComponents extends PlayComponents {
   lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
   lazy val monthlyContributionsController = new MonthlyContributions(monthlyContributionsClient)
 
-  override lazy val httpFilters: Seq[EssentialFilter] = Seq(new CheckCacheHeadersFilter())
+  override lazy val httpFilters: Seq[EssentialFilter] = Seq(
+    new CheckCacheHeadersFilter(),
+    new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
+  )
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     assetController,
