@@ -1,5 +1,18 @@
 // @flow
 
+// ----- Imports ----- //
+
+import * as cookie from './cookie';
+
+
+// ----- Setup ----- //
+
+const MVT_COOKIE = 'GU_mvt_id';
+const MVT_MAX = 1000000;
+
+
+// ----- Tests ----- //
+
 const tests = [
   {
     id : 'otherWaysOfContribute',
@@ -8,6 +21,22 @@ const tests = [
 ];
 
 // ----- Functions ----- //
+
+// Attempts to retrieve the MVT id from a cookie, or sets it.
+function getMvtId(): number {
+
+  let mvt_id = cookie.get(MVT_COOKIE);
+
+  if (!mvt_id) {
+
+    mvt_id = Math.random(0, MVT_MAX);
+    cookie.set(MVT_COOKIE, mvt_id);
+
+  }
+
+  return mvt_id;
+
+}
 
 export const init = () => {
 
