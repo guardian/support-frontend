@@ -29,7 +29,7 @@ function getMvtId(): number {
 
   if (!mvtId) {
 
-    mvtId = String(Math.random(0, MVT_MAX));
+    mvtId = String(Math.floor(Math.random() * (MVT_MAX)));
     cookie.set(MVT_COOKIE, mvtId);
 
   }
@@ -109,12 +109,12 @@ export const init = () => {
 
 
 export const abTestReducer = (
-  state: AbTestState,
+  state: AbTestState = {},
   action: Action): AbTestState => {
 
   switch (action.type) {
 
-    case 'SET_AB_TEST_VARIANTS': {
+    case 'SET_AB_TEST_PARTICIPATION': {
       return Object.assign({}, state, action.payload);
     }
 

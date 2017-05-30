@@ -2,6 +2,21 @@
 
 // ----- Functions ----- //
 
+// Trim subdomains for prod, code and dev.
+const getShortDomain = (): string => {
+
+  const domain = document.domain || '';
+  return domain.replace(/^(www|m\.code|dev|m|support)\./, '.');
+};
+
+const getDomainAttribute = (): string => {
+  const shortDomain = getShortDomain();
+  return shortDomain === 'localhost' ? '' : ` domain=${shortDomain};`;
+};
+
+
+// ----- Exports ----- //
+
 export function get(name: string): ?string {
 
   const cookies = document.cookie.split('; ');
@@ -30,6 +45,6 @@ export function set(name: string, value: string, daysToLive: ?number): void {
     expires.setDate(1);
   }
 
-  document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};`;
+  document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute()}`;
 
 }
