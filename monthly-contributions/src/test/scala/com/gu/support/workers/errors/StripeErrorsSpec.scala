@@ -22,7 +22,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 class StripeErrorsSpec extends LambdaSpec {
-
   "Timeouts from Stripe" should "throw a SocketTimeoutException" in {
     val createPaymentMethod = new CreatePaymentMethod(timeOutServices)
 
@@ -89,7 +88,7 @@ class StripeErrorsSpec extends LambdaSpec {
     serviceProvider
   }
 
-  private def errorServices(baseUrl : String) = {
+  private def errorServices(baseUrl: String) = {
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
     //Create a StripeService which will timeout
