@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as abTests from '../helpers/abtest';
+import otherWaysOfContribute from '../helpers/abtest';
 import WayOfSupport from './WayOfSupport';
 
 
@@ -55,7 +55,7 @@ const WaysOfSupport = (props: PropTypes) => {
 
   });
 
-  const title = abTests.otherWaysOfContribute(props.abTests);
+  const title = otherWaysOfContribute(props.abTests);
 
   return (
     <section className={className}>
