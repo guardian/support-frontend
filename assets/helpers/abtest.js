@@ -15,9 +15,9 @@ const MVT_MAX = 1000000;
 
 const tests = [
   {
-    id : 'otherWaysOfContribute',
-    variants : [ 'control', 'variantA', 'variantB']
-  }
+    id: 'otherWaysOfContribute',
+    variants: ['control', 'variantA', 'variantB'],
+  },
 ];
 
 // ----- Functions ----- //
@@ -25,36 +25,92 @@ const tests = [
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
 
-  let mvt_id = cookie.get(MVT_COOKIE);
+  let mvtId = cookie.get(MVT_COOKIE);
 
-  if (!mvt_id) {
+  if (!mvtId) {
 
-    mvt_id = Math.random(0, MVT_MAX);
-    cookie.set(MVT_COOKIE, mvt_id);
+    mvtId = String(Math.random(0, MVT_MAX));
+    cookie.set(MVT_COOKIE, mvtId);
 
   }
 
-  return mvt_id;
+  return Number(mvtId);
 
 }
 
+function getLocalStorageParticipation(): Object {
+
+  const abtests = localStorage.getItem('gu.support.abTests');
+
+  return abtests ? JSON.parse(abtests) : {};
+
+}
+
+function setLocalStorageParticipation(participation): void {
+  localStorage.setItem('gu.support.abTests', JSON.stringify(participation));
+}
+
+function getUrlParticipation(): ?Object {
+
+  const hashUrl = (new URL(document.URL)).hash;
+
+  if (hashUrl.startsWith('#ab-')) {
+
+    const [testId, variant] = hashUrl.substr(4).split('=');
+    const test = {};
+    test[testId] = variant;
+
+    return test;
+
+  }
+
+  return null;
+
+}
+
+function getParticipation(mvtId: number): Object {
+
+  const currentParticipation = getLocalStorageParticipation();
+  const participation = {};
+
+  tests.forEach((test) => {
+
+    if (test.id in currentParticipation) {
+      participation[test.id] = currentParticipation[test.id];
+    } else {
+
+      const variantIndex = mvtId % test.variants.length;
+      participation[test.id] = test.variants[variantIndex];
+
+    }
+
+  });
+
+  return participation;
+
+}
+
+
+// ----- Exports ----- //
+
 export const init = () => {
 
-  //check URL
-  //read from localstorage
-  const mvt = //read the MVT || or set the MVT
-  let response = {};
+  const mvt = getMvtId();
+  let participation = getParticipation(mvt);
 
-  for( test of tests) {
-    response[test.id] = mvt % test.variants.length;
-  }
-  return response;
+  const urlParticipation = getUrlParticipation();
+  participation = Object.assign({}, participation, urlParticipation);
+
+  setLocalStorageParticipation(participation);
+
+  return participation;
+
 };
 
 
 export const abTestReducer = (
   state: AbTestState,
-  action: Action): AbTestState  => {
+  action: Action): AbTestState => {
 
   switch (action.type) {
 
