@@ -29,7 +29,7 @@ object RequestRunners extends LazyLogging {
    * https://github.com/square/okhttp/wiki/Recipes#timeouts
    */
   def configurableFutureRunner(timeout: Duration)(implicit ec: ExecutionContext): Request => Future[OkResponse] = {
-    val seconds: Int = timeout.toSeconds.toInt
-    client.newBuilder().readTimeout(seconds, TimeUnit.SECONDS).build().execute
+    val millis: Int = timeout.toMillis.toInt
+    client.newBuilder().readTimeout(millis, TimeUnit.MILLISECONDS).build().execute
   }
 }
