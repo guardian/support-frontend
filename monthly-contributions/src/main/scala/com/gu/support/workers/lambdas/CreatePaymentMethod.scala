@@ -15,7 +15,7 @@ import scala.concurrent.Future
 import scala.util.Failure
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
@@ -37,8 +37,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4, CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
   }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] = Future {
-    val payPalEmail = payPalService.retrieveEmail(payPal.baid)
-    PayPalReferenceTransaction(payPal.baid, payPalEmail)
-  }
+  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
+    payPalService
+      .retrieveEmail(payPal.baid)
+      .map(PayPalReferenceTransaction(payPal.baid, _))
 }
