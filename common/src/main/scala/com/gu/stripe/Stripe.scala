@@ -10,8 +10,16 @@ object Stripe {
   object Error {
     implicit val codec: Codec[Error] = deriveCodec
   }
-  case class Error(`type`: String, message: String, code: String = "", decline_code: String = "") extends Throwable with StripeObject {
-    override def getMessage: String = s"message: $message; type: ${`type`}; code: $code; decline_code: $decline_code"
+
+  //See docs here: https://stripe.com/docs/api/curl#errors
+  case class Error(
+    `type`: String, //The type of error: api_connection_error, api_error, authentication_error, card_error, invalid_request_error, or rate_limit_error
+    message: String, //A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+    code: String = "", //For card errors, a short string from amongst those listed on the right describing the kind of card error that occurred.
+    decline_code: String = "", //For card errors resulting from a bank decline, a short string indicating the bank's reason for the decline.
+    param: String = "" //The parameter the error relates to if the error is parameter-specific..
+  ) extends Throwable with StripeObject {
+    override def getMessage: String = s"message: $message; type: ${`type`}; code: $code; decline_code: $decline_code; param: $param"
   }
 
   object StripeList {
@@ -47,7 +55,7 @@ object Stripe {
     implicit val codec: Codec[Charge] = deriveCodec
   }
   case class Charge(id: String, amount: Int, balance_transaction: Option[String], created: Int, currency: String, livemode: Boolean,
-      paid: Boolean, refunded: Boolean, receipt_email: String, metadata: Map[String, String], source: Source) extends StripeObject {
+    paid: Boolean, refunded: Boolean, receipt_email: String, metadata: Map[String, String], source: Source) extends StripeObject {
   }
 
   object BalanceTransaction {

@@ -19,6 +19,7 @@ object Dependencies {
   val awsCloudwatch = "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion
   val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   val mokito = "org.mockito" % "mockito-core" % "1.9.5" % "test"
+  val mockWebserver = "com.squareup.okhttp3" % "mockwebserver" % "3.4.1" % "test"
   val circeCore = "io.circe" %% "circe-core" % circeVersion
   val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
   val circeGenericExtras = "io.circe" %% "circe-generic-extras" % circeVersion
@@ -30,6 +31,6 @@ object Dependencies {
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, lambdaLogging, joda, dispatch,
     supportInternationalisation, supportModels, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
     circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
-  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest)
+  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest, mockWebserver)
 
 }
