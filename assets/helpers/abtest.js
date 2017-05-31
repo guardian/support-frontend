@@ -13,9 +13,10 @@ const MVT_MAX: number = 1000000;
 
 // ----- Types ----- //
 
+type DefaultVariants = 'control' | 'notintest';
+
 type OtherWaysOfContributeVariants =
-  | 'control'
-  | 'notintest'
+  | DefaultVariants
   | 'variantA'
   | 'variantB';
 
