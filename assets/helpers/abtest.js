@@ -23,6 +23,7 @@ const tests = [
       offset: 0.2,
       size: 0.4,
     },
+    isActive: true,
   },
 ];
 
@@ -87,6 +88,9 @@ function getParticipation(mvtId: number): Object {
   const participation = {};
 
   tests.forEach((test) => {
+    if (!test.isActive) {
+      return;
+    }
 
     if (test.id in currentParticipation) {
       participation[test.id] = currentParticipation[test.id];
