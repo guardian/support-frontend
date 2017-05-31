@@ -2,6 +2,7 @@ package com.gu.support.workers.encoding
 
 import cats.syntax.either._
 import com.gu.support.workers.model._
+import com.gu.support.workers.model.state.CreatePaymentMethodState
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.semiauto._

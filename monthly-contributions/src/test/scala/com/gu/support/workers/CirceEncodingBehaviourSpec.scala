@@ -1,6 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.zuora.model.{PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._

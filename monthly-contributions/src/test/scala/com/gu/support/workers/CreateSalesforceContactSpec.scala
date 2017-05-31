@@ -6,7 +6,7 @@ import com.gu.salesforce.Fixtures.salesforceId
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.createSalesForceContactJson
 import com.gu.support.workers.lambdas.CreateSalesforceContact
-import com.gu.support.workers.model.CreateZuoraSubscriptionState
+import com.gu.support.workers.model.state.CreateZuoraSubscriptionState
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
 import io.circe.generic.auto._
