@@ -18,13 +18,13 @@ type Audience = {
   size: number,
 };
 
-export type Participation = {
+export type Participations = {
   otherWaysOfContribute?: string,
 }
 
 type Action = {
   type: 'SET_AB_TEST_PARTICIPATION',
-  payload: Participation,
+  payload: Participations,
 };
 
 type Test = {
@@ -68,7 +68,7 @@ function getMvtId(): number {
 
 }
 
-function getLocalStorageParticipation(): Participation {
+function getLocalStorageParticipation(): Participations {
 
   const abtests = localStorage.getItem('gu.support.abTests');
 
@@ -80,7 +80,7 @@ function setLocalStorageParticipation(participation): void {
   localStorage.setItem('gu.support.abTests', JSON.stringify(participation));
 }
 
-function getUrlParticipation(): ?Participation {
+function getUrlParticipation(): ?Participations {
 
   const hashUrl = (new URL(document.URL)).hash;
 
@@ -152,8 +152,8 @@ export const init = () => {
 
 
 export const abTestReducer = (
-  state: Participation = {},
-  action: Action): Participation => {
+  state: Participations = {},
+  action: Action): Participations => {
 
   switch (action.type) {
 

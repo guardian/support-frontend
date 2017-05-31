@@ -2,12 +2,12 @@
 
 // ----- Imports ----- //
 
-import type { Participation } from 'helpers/abtest';
+import type { Participations } from 'helpers/abtest';
 
 
 // ----- Functions ----- //
 
-const otherWaysOfContribute = (participation: Participation): string => {
+const otherWaysOfContribute = (participation: Participations): string => {
 
   const variant = participation.otherWaysOfContribute;
 
