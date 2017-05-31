@@ -23,6 +23,7 @@
       "json",
       "es6"
     ],
+    "modulePaths": ["assets"],
     "verbose": true
   },
   "repository": {
