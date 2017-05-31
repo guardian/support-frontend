@@ -20,6 +20,12 @@ class EndToEndSpec extends LambdaSpec {
     output.toClass[Unit]() shouldEqual ((): Unit)
   }
 
+  "Sentry logging" should "work with tags" in {
+    logger.info(s"Sentry tags: ${System.getenv("SENTRY_ENVIRONMENT")}")
+    logger.info(s"Sentry dsn: ${System.getenv("SENTRY_DSN")}")
+    logger.error("Testing Sentry log tags", new UninitializedError())
+  }
+
   implicit class InputStreamChaining(val stream: InputStream) {
     def chain(handler: Handler[_, _]): InputStream = {
       new ByteArrayInputStream(last(handler).toByteArray)
