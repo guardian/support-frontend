@@ -7,8 +7,8 @@ import * as cookie from './cookie';
 
 // ----- Setup ----- //
 
-const MVT_COOKIE = 'GU_mvt_id';
-const MVT_MAX = 1000000;
+const MVT_COOKIE: string = 'GU_mvt_id';
+const MVT_MAX: number = 1000000;
 
 
 // ----- Tests ----- //
@@ -17,6 +17,12 @@ const tests = [
   {
     id: 'otherWaysOfContribute',
     variants: ['control', 'variantA', 'variantB'],
+    // The audience has an offset and a size. Both of them are a number
+    // between 0 and 1
+    audience: {
+      offset: 0.2,
+      size: 0.4,
+    },
   },
 ];
 
@@ -68,6 +74,13 @@ function getUrlParticipation(): ?Object {
 
 }
 
+function userInTest(audience: object, mvtId: number) {
+  const testMin: number = MVT_MAX * audience.offset;
+  const testMax: number = testMin + (MVT_MAX * audience.size);
+
+  return (mvtId > testMin) && (mvtId < testMax);
+}
+
 function getParticipation(mvtId: number): Object {
 
   const currentParticipation = getLocalStorageParticipation();
@@ -77,11 +90,11 @@ function getParticipation(mvtId: number): Object {
 
     if (test.id in currentParticipation) {
       participation[test.id] = currentParticipation[test.id];
-    } else {
-
+    } else if (userInTest(test.audience, mvtId)) {
       const variantIndex = mvtId % test.variants.length;
       participation[test.id] = test.variants[variantIndex];
-
+    } else {
+      participation[test.id] = 'notintest';
     }
 
   });
