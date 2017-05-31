@@ -1,10 +1,15 @@
 // @flow
 
+// ----- Imports ----- //
+
+import type { Participation } from 'helpers/abtest';
+
+
 // ----- Functions ----- //
 
-const otherWaysOfContribute = (participation: object): string => {
+const otherWaysOfContribute = (participation: Participation): string => {
 
-  const variant:string = participation.otherWaysOfContribute;
+  const variant = participation.otherWaysOfContribute;
 
   switch (variant) {
     case 'control' : return 'other ways you can support us';
