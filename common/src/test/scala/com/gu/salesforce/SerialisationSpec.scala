@@ -4,7 +4,6 @@ import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, NewContact, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.DateTime

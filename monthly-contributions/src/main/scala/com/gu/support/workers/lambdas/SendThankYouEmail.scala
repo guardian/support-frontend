@@ -5,11 +5,11 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{ThankYouEmailService, ThankYouFields}
 import com.gu.support.workers.model.state.SendThankYouEmailState
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import com.gu.support.workers.encoding.StateCodecs._
 
 class SendThankYouEmail(thankYouEmailService: ThankYouEmailService)
     extends FutureHandler[SendThankYouEmailState, Unit]

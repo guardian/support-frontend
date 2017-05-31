@@ -1,12 +1,30 @@
 package com.gu.zuora.model
 
+import io.circe.generic.semiauto.{deriveEncoder, deriveDecoder}
+import io.circe.{Decoder, Encoder}
+
 sealed trait ZuoraResponse {
   def success: Boolean
 }
 
-case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+object ZuoraError {
+  implicit val encoder: Encoder[ZuoraError] = deriveEncoder
+  implicit val decoder: Decoder[ZuoraError] = deriveDecoder
+}
 
 case class ZuoraError(Code: String, Message: String)
+
+object ZuoraErrorResponse {
+  implicit val encoder: Encoder[ZuoraErrorResponse] = deriveEncoder
+  implicit val decoder: Decoder[ZuoraErrorResponse] = deriveDecoder
+}
+
+case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+
+object BasicInfo {
+  implicit val encoder: Encoder[BasicInfo] = deriveEncoder
+  implicit val decoder: Decoder[BasicInfo] = deriveDecoder
+}
 
 case class BasicInfo(
   id: String,
@@ -19,6 +37,11 @@ case class BasicInfo(
   invoiceTemplateId: String,
   communicationProfileId: Option[String]
 )
+
+object GetAccountResponse {
+  implicit val encoder: Encoder[GetAccountResponse] = deriveEncoder
+  implicit val decoder: Decoder[GetAccountResponse] = deriveDecoder
+}
 
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
