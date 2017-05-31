@@ -13,20 +13,13 @@ const MVT_MAX: number = 1000000;
 
 // ----- Types ----- //
 
-type DefaultVariants = 'control' | 'notintest';
-
-type OtherWaysOfContributeVariants =
-  | DefaultVariants
-  | 'variantA'
-  | 'variantB';
-
 type Audience = {
   offset: number,
   size: number,
 };
 
 export type Participation = {
-  otherWaysOfContribute?: OtherWaysOfContributeVariants,
+  otherWaysOfContribute?: string,
 }
 
 type Action = {
@@ -34,15 +27,17 @@ type Action = {
   payload: Participation,
 };
 
+type Test = {
+  variants: string[],
+  audience: Audience,
+  isActive: boolean,
+};
+
 
 // ----- Tests ----- //
 
 const tests: {
-  otherWaysOfContribute: {
-    variants: OtherWaysOfContributeVariants[],
-    audience: Audience,
-    isActive: boolean,
-  },
+  otherWaysOfContribute: Test,
 } = {
   otherWaysOfContribute: {
     variants: ['control', 'variantA', 'variantB'],
