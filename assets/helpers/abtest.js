@@ -49,7 +49,7 @@ const tests: {
       offset: 0.2,
       size: 0.4,
     },
-    isActive: true,
+    isActive: false,
   },
 };
 
