@@ -2,6 +2,7 @@ SendThankYouEmailLambda:
   Type: "AWS::Lambda::Function"
   Description: "Send thank-you email"
   Properties:
+    $environment_variables
     FunctionName: !Sub ${Stack}-SendThankYouEmailLambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.SendThankYouEmail::handleRequest"
     MemorySize: 256

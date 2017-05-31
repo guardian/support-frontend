@@ -2,9 +2,7 @@ CreatePaymentMethodLambda:
   Type: "AWS::Lambda::Function"
   Description: "Step 1. Initialise Payment method"
   Properties:
-    Environment:
-      Variables:
-        - "SENTRY_DSN" : !If [CreateCodeResources, "https://25a9f99e8b21438a8b9022a0752d6a89:926329a2289a49c3b23b4a17c1e49253@sentry.io/172235", ""]
+    $environment_variables
     FunctionName: !Sub ${Stack}-CreatePaymentMethodLambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.CreatePaymentMethod::handleRequest"
     MemorySize: 256

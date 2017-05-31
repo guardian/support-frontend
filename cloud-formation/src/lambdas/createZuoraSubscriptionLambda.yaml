@@ -2,6 +2,7 @@ CreateZuoraSubscriptionLambda:
   Type: "AWS::Lambda::Function"
   Description: "Step 3. Create Zuora subscription"
   Properties:
+    $environment_variables
     FunctionName: !Sub ${Stack}-CreateZuoraSubscriptionLambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.CreateZuoraSubscription::handleRequest"
     MemorySize: 256
