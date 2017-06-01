@@ -18,8 +18,10 @@ type Audience = {
   size: number,
 };
 
+type TestId = 'otherWaysOfContribute';
+
 export type Participations = {
-  otherWaysOfContribute?: string,
+  [TestId]: string,
 }
 
 type Action = {
@@ -28,6 +30,7 @@ type Action = {
 };
 
 type Test = {
+  testId: TestId,
   variants: string[],
   audience: Audience,
   isActive: boolean,
@@ -36,10 +39,9 @@ type Test = {
 
 // ----- Tests ----- //
 
-const tests: {
-  otherWaysOfContribute: Test,
-} = {
-  otherWaysOfContribute: {
+const tests: Test[] = [
+  {
+    testId: 'otherWaysOfContribute',
     variants: ['control', 'variantA', 'variantB'],
     audience: {
       offset: 0.2,
@@ -47,7 +49,7 @@ const tests: {
     },
     isActive: false,
   },
-};
+];
 
 
 // ----- Functions ----- //
@@ -116,20 +118,18 @@ function getParticipation(mvtId: number): Object {
   const currentParticipation = getLocalStorageParticipation();
   const participation = {};
 
-  Object.keys(tests).forEach((testId) => {
-
-    const test = tests[testId];
+  tests.forEach((test) => {
 
     if (!test.isActive) {
       return;
     }
 
-    if (testId in currentParticipation) {
-      participation[testId] = currentParticipation[testId];
+    if (test.testId in currentParticipation) {
+      participation[test.testId] = currentParticipation[test.testId];
     } else if (userInTest(test.audience, mvtId)) {
-      participation[testId] = assignUserToVariant(mvtId, test.variants);
+      participation[test.testId] = assignUserToVariant(mvtId, test);
     } else {
-      participation[testId] = 'notintest';
+      participation[test.testId] = 'notintest';
     }
 
   });
