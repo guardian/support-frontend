@@ -1,13 +1,14 @@
 package com.gu.zuora.model
 
 import com.gu.support.workers.model.PaymentMethod
+import com.gu.zuora.encoding.CapitalizationEncoder._
 import io.circe.generic.semiauto._
 import com.gu.zuora.encoding.CustomCodecs._
 import io.circe.{Decoder, Encoder}
 
 object SubscribeItem {
-  implicit val encoder: Encoder[SubscribeItem] = deriveEncoder
-  implicit val decoder: Decoder[SubscribeItem] = deriveDecoder
+  implicit val encoder: Encoder[SubscribeItem] = capitalizingEncoder
+  implicit val decoder: Decoder[SubscribeItem] = decapitalizingDecoder
 }
 
 case class SubscribeItem(

@@ -1,6 +1,7 @@
 package com.gu.zuora.model
 
-import io.circe.generic.semiauto.{deriveEncoder, deriveDecoder}
+import com.gu.zuora.encoding.CapitalizationEncoder._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
 sealed trait ZuoraResponse {
@@ -45,6 +46,10 @@ object GetAccountResponse {
 
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
+object SubscribeResponseAccount {
+  implicit val encoder: Encoder[SubscribeResponseAccount] = capitalizingEncoder
+  implicit val decoder: Decoder[SubscribeResponseAccount] = decapitalizingDecoder
+}
 case class SubscribeResponseAccount(
   accountNumber: String,
   subscriptionNumber: String,
@@ -62,6 +67,15 @@ case class SubscribeResponseAccount(
   success: Boolean
 ) extends ZuoraResponse
 
+object InvoiceResult {
+  implicit val encoder: Encoder[InvoiceResult] = capitalizingEncoder
+  implicit val decoder: Decoder[InvoiceResult] = decapitalizingDecoder
+}
 case class InvoiceResult(invoice: List[Invoice])
+
+object Invoice {
+  implicit val encoder: Encoder[Invoice] = capitalizingEncoder
+  implicit val decoder: Decoder[Invoice] = decapitalizingDecoder
+}
 
 case class Invoice(invoiceNumber: String, id: String)
