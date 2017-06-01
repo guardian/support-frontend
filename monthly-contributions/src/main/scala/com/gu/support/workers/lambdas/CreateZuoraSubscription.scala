@@ -16,7 +16,7 @@ class CreateZuoraSubscription
 
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
     services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
-      SendThankYouEmailState(state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
+      SendThankYouEmailState(state.requestId, state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
     }
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
