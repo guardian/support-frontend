@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
+import * as ophan from 'ophan';
 import * as cookie from './cookie';
-
 
 // ----- Setup ----- //
 
@@ -34,6 +34,18 @@ type Test = {
   variants: string[],
   audience: Audience,
   isActive: boolean,
+};
+
+
+type OphanABEvent = {
+  variantName: string,
+  complete: boolean,
+  campaignCodes?: string[],
+};
+
+
+type OphanABPayload = {
+  [TestId]: OphanABEvent,
 };
 
 
@@ -163,6 +175,26 @@ export const getVariantsAsString = (participation: Participations): string => {
   });
 
   return variants.join('; ');
+};
+
+export const trackOphan = (
+  testId: TestId,
+  variant: string,
+  complete?: boolean = false,
+  campaignCodes?: string[] = []): void => {
+
+  const payload: OphanABPayload = {};
+
+  payload[testId] = {
+    variantName: variant,
+    complete,
+    campaignCodes,
+  };
+
+
+  ophan.record({
+    abTestRegister: payload,
+  });
 };
 
 export const abTestReducer = (
