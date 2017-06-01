@@ -28,7 +28,7 @@ object Dependencies {
   val stm = "org.scala-stm" %% "scala-stm" % "0.8"
   val sentry = "com.getsentry.raven" % "raven-logback" % "8.0.3"
 
-  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, lambdaLogging, joda, dispatch,
+  val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, sentry, lambdaLogging, joda, dispatch,
     supportInternationalisation, supportModels, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
     circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest, mockWebserver)
