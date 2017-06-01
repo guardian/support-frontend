@@ -1,24 +1,22 @@
 package com.gu.salesforce
 
+import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.model.SalesforceContactRecord
 import org.joda.time.DateTime
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import com.gu.zuora.encoding.CustomCodecs._
-import io.circe.{Encoder, Decoder}
+import io.circe.{Decoder, Encoder}
 
 object Salesforce {
 
-  implicit val salesforceContactRecordEncoder: Encoder[SalesforceContactRecord] = deriveEncoder
-  implicit val salesforceContactRecordDecoder: Decoder[SalesforceContactRecord] = deriveDecoder
+  implicit val salesforceContactRecordCodec: Codec[SalesforceContactRecord] = deriveCodec
 
   object NewContact {
-    implicit val encoder: Encoder[NewContact] = deriveEncoder
-    implicit val decoder: Decoder[NewContact] = deriveDecoder
+    implicit val codec: Codec[NewContact] = deriveCodec
   }
 
   object UpsertData {
-    implicit val encoder: Encoder[UpsertData] = deriveEncoder
-    implicit val decoder: Decoder[UpsertData] = deriveDecoder
+    implicit val codec: Codec[UpsertData] = deriveCodec
 
     def create(
       identityId: String,
@@ -56,21 +54,18 @@ object Salesforce {
   }
 
   object SalesforceContactResponse {
-    implicit val encoder: Encoder[SalesforceContactResponse] = deriveEncoder
-    implicit val decoder: Decoder[SalesforceContactResponse] = deriveDecoder
+    implicit val codec: Codec[SalesforceContactResponse] = deriveCodec
   }
 
   case class SalesforceContactResponse(Success: Boolean, ErrorString: Option[String], ContactRecord: SalesforceContactRecord) extends SalesforceResponse
 
   object SalesforceErrorResponse {
-    implicit val encoder: Encoder[SalesforceErrorResponse] = deriveEncoder
-    implicit val decoder: Decoder[SalesforceErrorResponse] = deriveDecoder
+    implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
   }
   case class SalesforceErrorResponse(Success: Boolean, ErrorString: Option[String]) extends Throwable with SalesforceResponse
 
   object Authentication {
-    implicit val encoder: Encoder[Authentication] = deriveEncoder
-    implicit val decoder: Decoder[Authentication] = deriveDecoder
+    implicit val codec: Codec[Authentication] = deriveCodec
   }
   case class Authentication(access_token: String, instance_url: String, issued_at: DateTime) {
     private val expiryTimeMinutes = 15

@@ -1,30 +1,27 @@
 package com.gu.zuora.model
 
-import com.gu.zuora.encoding.CapitalizationEncoder._
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
+import com.gu.support.workers.encoding.Helpers.{deriveCodec, capitalizingCodec}
+import com.gu.support.workers.encoding.Codec
 
 sealed trait ZuoraResponse {
   def success: Boolean
 }
 
 object ZuoraError {
-  implicit val encoder: Encoder[ZuoraError] = deriveEncoder
-  implicit val decoder: Decoder[ZuoraError] = deriveDecoder
+  implicit val codec: Codec[ZuoraError] = deriveCodec
 }
 
 case class ZuoraError(Code: String, Message: String)
 
 object ZuoraErrorResponse {
-  implicit val encoder: Encoder[ZuoraErrorResponse] = deriveEncoder
-  implicit val decoder: Decoder[ZuoraErrorResponse] = deriveDecoder
+  implicit val codec: Codec[ZuoraErrorResponse] = deriveCodec
 }
 
 case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
 
 object BasicInfo {
-  implicit val encoder: Encoder[BasicInfo] = deriveEncoder
-  implicit val decoder: Decoder[BasicInfo] = deriveDecoder
+  implicit val codec: Codec[BasicInfo] = deriveCodec
 }
 
 case class BasicInfo(
@@ -40,15 +37,13 @@ case class BasicInfo(
 )
 
 object GetAccountResponse {
-  implicit val encoder: Encoder[GetAccountResponse] = deriveEncoder
-  implicit val decoder: Decoder[GetAccountResponse] = deriveDecoder
+  implicit val codec: Codec[GetAccountResponse] = deriveCodec
 }
 
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
 object SubscribeResponseAccount {
-  implicit val encoder: Encoder[SubscribeResponseAccount] = capitalizingEncoder
-  implicit val decoder: Decoder[SubscribeResponseAccount] = decapitalizingDecoder
+  implicit val codec: Codec[SubscribeResponseAccount] = capitalizingCodec
 }
 case class SubscribeResponseAccount(
   accountNumber: String,
@@ -68,14 +63,12 @@ case class SubscribeResponseAccount(
 ) extends ZuoraResponse
 
 object InvoiceResult {
-  implicit val encoder: Encoder[InvoiceResult] = capitalizingEncoder
-  implicit val decoder: Decoder[InvoiceResult] = decapitalizingDecoder
+  implicit val codec: Codec[InvoiceResult] = capitalizingCodec
 }
 case class InvoiceResult(invoice: List[Invoice])
 
 object Invoice {
-  implicit val encoder: Encoder[Invoice] = capitalizingEncoder
-  implicit val decoder: Decoder[Invoice] = decapitalizingDecoder
+  implicit val codec: Codec[Invoice] = capitalizingCodec
 }
 
 case class Invoice(invoiceNumber: String, id: String)

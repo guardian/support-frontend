@@ -3,15 +3,15 @@ package com.gu.zuora.encoding
 import java.util.UUID
 
 import com.gu.helpers.StringExtensions._
-import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.model._
-import com.gu.zuora.encoding.CapitalizationEncoder._
-import com.gu.zuora.model._
 import io.circe._
 import io.circe.generic.semiauto._
 import org.joda.time.{DateTime, LocalDate}
 import cats.syntax.either._
+import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
+import com.gu.support.workers.encoding.Codec
+
 import scala.util.Try
 
 object CustomCodecs extends CustomCodecs with ModelsCodecs with InternationalisationCodecs with HelperCodecs
@@ -30,8 +30,10 @@ trait InternationalisationCodecs {
 trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with HelperCodecs =>
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
 
-  implicit val encodePayPalReferenceTransaction = capitalizingEncoder[PayPalReferenceTransaction]
-  implicit val encodeCreditCardReferenceTransaction = capitalizingEncoder[CreditCardReferenceTransaction]
+  implicit val codecPayPalReferenceTransaction: Codec[PayPalReferenceTransaction] = capitalizingCodec
+
+  implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
+
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
     override final def apply(a: PaymentMethod) = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
@@ -39,23 +41,20 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
     }
   }
 
-  implicit val decodePayPalReferenceTransaction: Decoder[PayPalReferenceTransaction] = decapitalizingDecoder[PayPalReferenceTransaction]
-  implicit val decodeCreditCardReferenceTransaction: Decoder[CreditCardReferenceTransaction] = decapitalizingDecoder[CreditCardReferenceTransaction]
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
     Decoder[PayPalReferenceTransaction].map(x => x: PaymentMethod).or(
       Decoder[CreditCardReferenceTransaction].map(x => x: PaymentMethod)
     )
+
   implicit val decodeStripeFields: Decoder[StripePaymentFields] = deriveDecoder
   implicit val decodePaymentFields: Decoder[PaymentFields] = {
     val stripeFields = deriveDecoder[StripePaymentFields].map(_.asLeft[PayPalPaymentFields])
     val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentFields])
     stripeFields or payPalFields
   }
-  implicit val userEncoder: Encoder[User] = deriveEncoder
-  implicit val userDecoder: Decoder[User] = deriveDecoder
-  implicit val contributionEncoder: Encoder[Contribution] = deriveEncoder
-  implicit val contributionDecoder: Decoder[Contribution] = deriveDecoder
 
+  implicit val codecUser: Codec[User] = deriveCodec
+  implicit val codecContribution: Codec[Contribution] = deriveCodec
 }
 
 trait HelperCodecs {

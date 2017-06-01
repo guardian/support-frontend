@@ -1,14 +1,12 @@
 package com.gu.zuora.model
 
-import com.gu.zuora.encoding.CapitalizationEncoder._
-import io.circe.generic.semiauto._
 import org.joda.time.LocalDate
-import io.circe.{Decoder, Encoder}
+import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.capitalizingCodec
 import com.gu.zuora.encoding.CustomCodecs._
 
 object RatePlanCharge {
-  implicit val decoder: Decoder[RatePlanCharge] = decapitalizingDecoder
-  implicit val encoder: Encoder[RatePlanCharge] = capitalizingEncoder
+  implicit val codec: Codec[RatePlanCharge] = capitalizingCodec
 }
 case class RatePlanCharge(
   productRatePlanChargeId: String,
@@ -16,20 +14,17 @@ case class RatePlanCharge(
 )
 
 object RatePlan {
-  implicit val decoder: Decoder[RatePlan] = decapitalizingDecoder
-  implicit val encoder: Encoder[RatePlan] = capitalizingEncoder
+  implicit val codec: Codec[RatePlan] = capitalizingCodec
 }
 case class RatePlan(productRatePlanId: String)
 
 object SubscriptionProductFeature {
-  implicit val encoder: Encoder[SubscriptionProductFeature] = capitalizingEncoder
-  implicit val decoder: Decoder[SubscriptionProductFeature] = decapitalizingDecoder
+  implicit val codec: Codec[SubscriptionProductFeature] = capitalizingCodec
 }
 case class SubscriptionProductFeature(featureId: String)
 
 object Subscription {
-  implicit val decoder: Decoder[Subscription] = decapitalizingDecoder
-  implicit val encoder: Encoder[Subscription] = capitalizingEncoder
+  implicit val codec: Codec[Subscription] = capitalizingCodec
 }
 case class Subscription(
   contractEffectiveDate: LocalDate,
@@ -42,14 +37,12 @@ case class Subscription(
 )
 
 object RatePlanChargeData {
-  implicit val decoder: Decoder[RatePlanChargeData] = decapitalizingDecoder
-  implicit val encoder: Encoder[RatePlanChargeData] = capitalizingEncoder
+  implicit val codec: Codec[RatePlanChargeData] = capitalizingCodec
 }
 case class RatePlanChargeData(ratePlanCharge: RatePlanCharge)
 
 object RatePlanData {
-  implicit val decoder: Decoder[RatePlanData] = decapitalizingDecoder
-  implicit val encoder: Encoder[RatePlanData] = capitalizingEncoder
+  implicit val codec: Codec[RatePlanData] = capitalizingCodec
 }
 case class RatePlanData(
   ratePlan: RatePlan,
@@ -58,7 +51,6 @@ case class RatePlanData(
 )
 
 object SubscriptionData {
-  implicit val decoder: Decoder[SubscriptionData] = decapitalizingDecoder
-  implicit val encoder: Encoder[SubscriptionData] = capitalizingEncoder
+  implicit val codec: Codec[SubscriptionData] = capitalizingCodec
 }
 case class SubscriptionData(ratePlanData: List[RatePlanData], subscription: Subscription)

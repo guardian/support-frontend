@@ -1,10 +1,9 @@
 package com.gu.zuora.model
 
-import com.gu.zuora.encoding.CapitalizationEncoder._
-import io.circe.{Decoder, Encoder}
+import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.capitalizingCodec
 
 object SubscribeOptions {
-  implicit val decoder: Encoder[SubscribeOptions] = capitalizingEncoder
-  implicit val encoder: Decoder[SubscribeOptions] = decapitalizingDecoder
+  implicit val codec: Codec[SubscribeOptions] = capitalizingCodec
 }
 case class SubscribeOptions(generateInvoice: Boolean = true, processPayments: Boolean = true)
