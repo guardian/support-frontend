@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import otherWaysOfContribute from '../helpers/abtest';
 import WayOfSupport from './WayOfSupport';
 
 
@@ -33,6 +34,7 @@ const waysOfSupport = [
 
 type PropTypes = {
   intCmp: string,
+  abTests: Object
 };
 
 
@@ -53,11 +55,13 @@ const WaysOfSupport = (props: PropTypes) => {
 
   });
 
+  const title = otherWaysOfContribute(props.abTests);
+
   return (
     <section className={className}>
       <div className={`${className}__content gu-content-margin`}>
         <div className={`${className}__heading`}>
-          <h1>other ways you can support us</h1>
+          <h1>{title}</h1>
         </div>
         {waysOfSupportRendered}
       </div>
@@ -71,6 +75,7 @@ const WaysOfSupport = (props: PropTypes) => {
 function mapStateToProps(state) {
   return {
     intCmp: state.intCmp,
+    abTests: state.abTests,
   };
 }
 
