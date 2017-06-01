@@ -7,12 +7,19 @@ import StateMachineContainer.{Response, convertErrors}
 import akka.actor.ActorSystem
 import scala.concurrent.ExecutionContext
 import cats.implicits._
+import com.amazonaws.regions.Regions
+import lib.aws.CredentialsProvider
+import io.circe.Encoder
+import io.circe.syntax._
 
 object Client {
   def apply(stateMachinePrefix: String, stage: String)(implicit system: ActorSystem): Client = {
     implicit val ec = system.dispatcher
 
-    val client = AWSStepFunctionsAsyncClientBuilder.defaultClient()
+    val client = AWSStepFunctionsAsyncClientBuilder.standard
+      .withCredentials(CredentialsProvider)
+      .withRegion(Regions.EU_WEST_1)
+      .build()
 
     val stateMachineLookup = StateMachineLookup(stateMachinePrefix, stage)
 
@@ -28,9 +35,9 @@ class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineCon
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
   }
 
-  def triggerExecution(input: String)(implicit ec: ExecutionContext): Response[StateMachineExecution] = { // this should probably take a [T] and a Serializer[T]
+  def triggerExecution[T](input: T)(implicit ec: ExecutionContext, encoder: Encoder[T]): Response[StateMachineExecution] = {
     stateMachineWrapper
-      .map(machine => startExecution(machine.arn, input))
+      .map(machine => startExecution(machine.arn, input.asJson.noSpaces))
       .map(StateMachineExecution.fromStartExecution)
   }
 }

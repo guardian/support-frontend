@@ -30,14 +30,26 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
 )
 
+val circeVersion = "0.7.0"
+
+resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
+
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
   "org.mockito" % "mockito-core" % "2.7.22" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
-  "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "com.typesafe.akka" %% "akka-agent" % "2.4.12",
   "org.typelevel" %% "cats" % "0.9.0",
+  "play-circe" %% "play-circe" % "2.5-0.8.0",
+  "com.gu" %% "support-models" % "0.1",
+  "com.gu" %% "support-internationalisation" % "0.2",
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion,
+  "joda-time" % "joda-time" % "2.9.9",
   filters
 )
 
