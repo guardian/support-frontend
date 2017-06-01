@@ -105,6 +105,12 @@ function userInTest(audience: Audience, mvtId: number) {
   return (mvtId > testMin) && (mvtId < testMax);
 }
 
+function assignUserToVariant(mvtId: number, test: Test): string {
+  const variantIndex = mvtId % test.variants.length;
+
+  return test.variants[variantIndex];
+}
+
 function getParticipation(mvtId: number): Object {
 
   const currentParticipation = getLocalStorageParticipation();
@@ -121,8 +127,7 @@ function getParticipation(mvtId: number): Object {
     if (testId in currentParticipation) {
       participation[testId] = currentParticipation[testId];
     } else if (userInTest(test.audience, mvtId)) {
-      const variantIndex = mvtId % test.variants.length;
-      participation[testId] = test.variants[variantIndex];
+      participation[testId] = assignUserToVariant(mvtId, test.variants);
     } else {
       participation[testId] = 'notintest';
     }
