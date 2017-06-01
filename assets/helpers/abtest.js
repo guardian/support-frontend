@@ -113,7 +113,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipation(mvtId: number): Object {
+function getParticipation(mvtId: number): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
   const participation:Participations = {};
