@@ -116,7 +116,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
 function getParticipation(mvtId: number): Object {
 
   const currentParticipation = getLocalStorageParticipation();
-  const participation = {};
+  const participation:Participations = {};
 
   tests.forEach((test) => {
 
@@ -155,6 +155,15 @@ export const init = () => {
 
 };
 
+export const getVariantsAsString = (participation: Participations): string => {
+  const variants: string[] = [];
+
+  Object.keys(participation).forEach((testId) => {
+    variants.push(`${testId}=${participation[(testId: any)]}`);
+  });
+
+  return variants.join('; ');
+};
 
 export const abTestReducer = (
   state: Participations = {},
