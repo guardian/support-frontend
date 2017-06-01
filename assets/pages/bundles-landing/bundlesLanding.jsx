@@ -28,6 +28,7 @@ const participation = abTest.init();
 // ----- Tracking ----- //
 
 ga.init();
+ga.setDimension('experience', abTest.getVariantsAsString(participation));
 ga.trackPageview();
 
 // ----- Logging ----- //

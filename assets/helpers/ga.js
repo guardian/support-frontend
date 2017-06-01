@@ -1,3 +1,6 @@
+const dimensions = {
+  experience: 'dimension16',
+};
 
 const create = () => {
 
@@ -13,6 +16,10 @@ const create = () => {
 
 export const init = () => {
   create();
+};
+
+export const setDimension = (name, value) => {
+  ga('set', dimensions[name], value);
 };
 
 export const trackPageview = () => {
