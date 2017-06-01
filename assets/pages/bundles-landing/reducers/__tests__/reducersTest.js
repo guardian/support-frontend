@@ -2,6 +2,8 @@
 import reducer from '../reducers';
 import type { Contrib, ContribState, Amount } from '../reducers';
 
+jest.mock('ophan', () => {});
+
 describe('reducer tests', () => {
 
   const initialContrib: ContribState = {

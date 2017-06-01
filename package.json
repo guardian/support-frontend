@@ -24,6 +24,9 @@
       "es6"
     ],
     "modulePaths": ["assets"],
+    "moduleNameMapper": {
+      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
+    },
     "verbose": true
   },
   "repository": {
