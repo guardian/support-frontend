@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from string import Template
-import yaml, json
+import json
+import yaml
 from os import listdir
+from string import Template
 
 
 def read_file(filename):
@@ -11,15 +12,19 @@ def read_file(filename):
     f.close()
     return cts
 
+def get_lambdas():
+    lambda_list = [read_file('src/lambdas/' + f) for f in listdir('src/lambdas/') if f.endswith('.yaml')]
+    lambda_string = '  ' + '\n'.join(lambda_list).replace('\n', '\n  ')
+    environment_variables = read_file('src/environment-variables.yaml')
+    return Template(lambda_string).safe_substitute({'environment_variables': environment_variables})
+
 template = Template(read_file('src/cfn-template.yaml'))
 
 state_machine = json.dumps(yaml.load(read_file('src/state-machine.yaml')))
 
-lambdas = [read_file('src/lambdas/' + f) for f in listdir('src/lambdas/') if f.endswith('.yaml')]
-
 params = {
     'state_machine_json': state_machine,
-    'lambdas': '  ' + '\n'.join(lambdas).replace('\n', '\n  ')
+    'lambdas': get_lambdas()
 }
 
 print template.substitute(params)

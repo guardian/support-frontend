@@ -2,6 +2,7 @@ CreateSalesforceContactLambda:
   Type: "AWS::Lambda::Function"
   Description: "Step 2. Create Salesforce contact"
   Properties:
+    $environment_variables
     FunctionName: !Sub ${Stack}-CreateSalesforceContactLambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.CreateSalesforceContact::handleRequest"
     MemorySize: 256

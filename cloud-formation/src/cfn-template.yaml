@@ -48,6 +48,16 @@ Resources:
               Resource:
               - arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
               - arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+        - PolicyName: CloudWatchLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+                - logs:Create*
+                - logs:PutLogEvents
+                - logs:DescribeLogStreams
+              Resource: arn:aws:logs:*:*:*
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
