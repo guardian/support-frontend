@@ -1,13 +1,14 @@
 package com.gu.support.workers
 
 import com.gu.support.workers.Fixtures.{validBaid, _}
-import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.{decodeCreatePaymentMethodState, decodePaymentFields}
 import com.gu.support.workers.model.state.CreatePaymentMethodState
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
+import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.zuora.encoding.CustomCodecs._
 
 class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
 

@@ -4,7 +4,6 @@ import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}

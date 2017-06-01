@@ -1,7 +1,14 @@
 package com.gu.zuora.model
 
 import com.gu.i18n.Currency
+import com.gu.zuora.encoding.CapitalizationEncoder._
+import io.circe.{Decoder, Encoder}
+import com.gu.zuora.encoding.CustomCodecs._
 
+object Account {
+  implicit val encoder: Encoder[Account] = capitalizingEncoder[Account].mapJsonObject(modifyFields(_)(decapitalizeSfContactId))
+  implicit val decoder: Decoder[Account] = decapitalizingDecoder[Account]
+}
 case class Account(
   name: String,
   currency: Currency,

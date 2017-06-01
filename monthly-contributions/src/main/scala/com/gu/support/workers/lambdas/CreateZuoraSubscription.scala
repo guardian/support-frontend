@@ -6,10 +6,9 @@ import com.gu.services.Services
 import com.gu.support.workers.model.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import org.joda.time.{DateTimeZone, LocalDate}
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import com.gu.support.workers.encoding.StateCodecs._
 
 class CreateZuoraSubscription
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]

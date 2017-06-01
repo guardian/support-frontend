@@ -5,11 +5,10 @@ import com.gu.i18n.CountryGroup
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
-import com.gu.support.workers.encoding.CreatePaymentMethodStateDecoder.decodeCreatePaymentMethodState
+import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.gu.support.workers.model._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

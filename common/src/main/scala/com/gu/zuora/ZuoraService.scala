@@ -4,7 +4,6 @@ import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model._
-import io.circe.generic.auto._
 import io.circe.syntax._
 import okhttp3.Request.Builder
 

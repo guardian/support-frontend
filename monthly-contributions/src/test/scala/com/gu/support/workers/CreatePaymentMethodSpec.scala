@@ -12,9 +12,9 @@ import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.support.workers.model.state.CreateSalesforceContactState
 import com.gu.test.tags.objects.IntegrationTest
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
+import com.gu.zuora.encoding.CustomCodecs._
+import com.gu.support.workers.encoding.StateCodecs._
 import io.circe.ParsingFailure
-import io.circe.generic.auto._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 

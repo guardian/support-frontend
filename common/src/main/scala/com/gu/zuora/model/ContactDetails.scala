@@ -1,7 +1,13 @@
 package com.gu.zuora.model
 
 import com.gu.i18n.Country
+import com.gu.zuora.encoding.CustomCodecs._
+import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.capitalizingCodec
 
+object ContactDetails {
+  implicit val codec: Codec[ContactDetails] = capitalizingCodec
+}
 case class ContactDetails(
   firstName: String,
   lastName: String,

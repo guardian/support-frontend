@@ -1,12 +1,28 @@
 package com.gu.zuora.model
 
+import io.circe.{Decoder, Encoder}
+import com.gu.support.workers.encoding.Helpers.{deriveCodec, capitalizingCodec}
+import com.gu.support.workers.encoding.Codec
+
 sealed trait ZuoraResponse {
   def success: Boolean
 }
 
-case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+object ZuoraError {
+  implicit val codec: Codec[ZuoraError] = deriveCodec
+}
 
 case class ZuoraError(Code: String, Message: String)
+
+object ZuoraErrorResponse {
+  implicit val codec: Codec[ZuoraErrorResponse] = deriveCodec
+}
+
+case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+
+object BasicInfo {
+  implicit val codec: Codec[BasicInfo] = deriveCodec
+}
 
 case class BasicInfo(
   id: String,
@@ -20,8 +36,15 @@ case class BasicInfo(
   communicationProfileId: Option[String]
 )
 
+object GetAccountResponse {
+  implicit val codec: Codec[GetAccountResponse] = deriveCodec
+}
+
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
 
+object SubscribeResponseAccount {
+  implicit val codec: Codec[SubscribeResponseAccount] = capitalizingCodec
+}
 case class SubscribeResponseAccount(
   accountNumber: String,
   subscriptionNumber: String,
@@ -39,6 +62,13 @@ case class SubscribeResponseAccount(
   success: Boolean
 ) extends ZuoraResponse
 
+object InvoiceResult {
+  implicit val codec: Codec[InvoiceResult] = capitalizingCodec
+}
 case class InvoiceResult(invoice: List[Invoice])
+
+object Invoice {
+  implicit val codec: Codec[Invoice] = capitalizingCodec
+}
 
 case class Invoice(invoiceNumber: String, id: String)

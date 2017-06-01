@@ -2,10 +2,10 @@ package com.gu.support.workers
 
 import com.gu.support.workers.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
+import com.gu.zuora.encoding.CustomCodecs._
 
 class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging {
   /**
@@ -37,12 +37,10 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
     //logger.info(json.spaces2)
     /*
     {
-      "PayPalReferenceTransaction" : {
-        "paypalBaid" : "123",
-        "paypalEmail" : "test@test.com",
-        "paypalType" : "ExpressCheckout",
-        "type" : "PayPal"
-      }
+      "PaypalBaid" : "123",
+      "PaypalEmail" : "test@test.com",
+      "PaypalType" : "ExpressCheckout",
+      "Type" : "PayPal"
     }
      */
     val pprt2 = decode[PaymentMethod](json.noSpaces)
@@ -55,25 +53,27 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
     //logger.info(json.spaces2)
     /*
     {
-      "baId" : "123",
-      "email" : "test@test.com"
+      "PaypalBaid" : "123",
+      "PaypalEmail" : "test@test.com",
+      "PaypalType" : "ExpressCheckout",
+      "Type" : "PayPal"
     }
     */
     val pprt2 = decode[PayPalReferenceTransaction](json.noSpaces)
     pprt2.isRight should be(true) //decoding succeeded
   }
 
-  it should "fail to decode PayPalReferenceTransaction from PaymentMethod" in {
+  it should "be able to decode PayPalReferenceTransaction from PaymentMethod" in {
     val pprt: PaymentMethod = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
     val pprt2 = decode[PayPalReferenceTransaction](json.noSpaces)
-    pprt2.isLeft should be(true) //decoding failed
+    pprt2.isRight should be(true) //decoding succeeded
   }
 
-  it should "fail to decode PaymentMethod from PayPalReferenceTransaction" in {
+  it should "be able to decode PaymentMethod from PayPalReferenceTransaction" in {
     val pprt = PayPalReferenceTransaction("123", "test@test.com")
     val json = pprt.asJson
     val pprt2 = decode[PaymentMethod](json.noSpaces)
-    pprt2.isLeft should be(true) //decoding failed
+    pprt2.isRight should be(true) //decoding succeeded
   }
 }

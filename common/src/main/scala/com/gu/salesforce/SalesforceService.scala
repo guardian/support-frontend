@@ -7,7 +7,6 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import io.circe.syntax._
 import okhttp3.Request
 

@@ -6,8 +6,7 @@ import com.gu.services.Services
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.model.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
-
+import com.gu.support.workers.encoding.StateCodecs._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {

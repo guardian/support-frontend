@@ -8,8 +8,7 @@ import com.gu.support.workers.Fixtures.createSalesForceContactJson
 import com.gu.support.workers.lambdas.CreateSalesforceContact
 import com.gu.support.workers.model.state.CreateZuoraSubscriptionState
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.encoding.CustomCodecs.{decodeCountry, decodeCurrency}
-import io.circe.generic.auto._
+import com.gu.support.workers.encoding.StateCodecs._
 
 @IntegrationTest
 class CreateSalesforceContactSpec extends LambdaSpec {
@@ -21,9 +20,6 @@ class CreateSalesforceContactSpec extends LambdaSpec {
 
     createContact.handleRequest(createSalesForceContactJson.asInputStream(), outStream, context)
 
-    outStream.toClass[CreateZuoraSubscriptionState]() match {
-      case CreateZuoraSubscriptionState(_, _, _, contactRecord) => contactRecord.Id should be(salesforceId)
-      case _ => fail()
-    }
+    outStream.toClass[CreateZuoraSubscriptionState]().salesForceContact.Id should be(salesforceId)
   }
 }

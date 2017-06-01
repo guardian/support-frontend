@@ -10,7 +10,7 @@ object Fixtures {
           "primaryEmailAddress": "test@gu.com",
           "firstName": "test",
           "lastName": "user",
-          "country": "UK",
+          "country": "GB",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
@@ -21,13 +21,11 @@ object Fixtures {
   val payPalEmail = "test@paypal.com"
   val payPalPaymentMethod =
     s"""
-         {
-           "PayPalReferenceTransaction" : {
-              "paypalBaid": "$validBaid",
-              "paypalEmail": "$payPalEmail",
-              "paypalType": "ExpressCheckout",
-              "type": "PayPal"
-           }
+        {
+              "PaypalBaid": "$validBaid",
+              "PaypalEmail": "$payPalEmail",
+              "PaypalType": "ExpressCheckout",
+              "Type": "PayPal"
          }
        """
 
@@ -42,7 +40,7 @@ object Fixtures {
   val payPalJson =
     s"""
                 {
-                  "paypalBaid": "$validBaid"
+                  "baid": "$validBaid"
                 }
                 """
   val stripeToken = "tok_AXY4M16p60c2sg"
