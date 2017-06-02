@@ -13,7 +13,7 @@ import lib.PlayImplicits._
 class MonthlyContributions(client: MonthlyContributionsClient)(implicit exec: ExecutionContext) extends Controller with Circe with LazyLogging {
 
   def create: Action[CreateMonthlyContributorRequest] = PrivateAction.async(circe.json[CreateMonthlyContributorRequest]) { implicit request =>
-    logger.info(s"[${request.uuid}] User ${request.body.user.id} is attempting to create a new monthly subscription")
+    logger.info(s"[${request.uuid}] User ${request.body.user.id} is attempting to create a new monthly contribution")
     client.createContributor(request.body, request.uuid).fold(
       { _ => InternalServerError },
       { _ => Accepted }

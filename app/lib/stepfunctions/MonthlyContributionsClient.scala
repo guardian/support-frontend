@@ -42,11 +42,11 @@ class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) ext
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to create monthly subscription - $error")
+        logger.error(s"[$requestId] Failed to create monthly contribution - $error")
         StateMachineFailure: MonthlyContributionError
       },
       { success =>
-        logger.error(s"[$requestId] Creating monthly subscription ($success)")
+        logger.error(s"[$requestId] Creating monthly contribution ($success)")
         ()
       }
     )
