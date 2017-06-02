@@ -13,7 +13,7 @@ type PropTypes = {
   heading: string,
   infoText: string,
   ctaText: string,
-  ctaLink: string,
+  onClick: () => void,
   modifierClass: ?string,
   gridImg: string,
   imgAlt: ?string,
@@ -41,7 +41,7 @@ const WayOfSupport = (props: PropTypes) => {
       />
       <h1 className={`${className}__heading`}>{props.heading}</h1>
       <p className={`${className}__info-text`}>{props.infoText}</p>
-      <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} url={props.ctaLink} />
+      <CtaCircle text={props.ctaText} modifierClass={props.modifierClass} onClick={props.onClick} />
     </div>
   );
 };
