@@ -15,6 +15,7 @@ import TextInput from 'components/textInput/textInput';
 import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
+import getQueryParameter from 'helpers/url';
 import reducer from './reducers/reducers';
 
 
@@ -39,6 +40,12 @@ logger.init();
 
 const store = createStore(reducer);
 
+// Retrieves the contrib amount from the url and sends it to the redux store.
+store.dispatch({
+  type: 'SET_CONTRIB_AMOUNT',
+  amount: getQueryParameter('contributionValue', '5'),
+});
+
 
 // ----- Render ----- //
 
@@ -51,6 +58,8 @@ const content = (
         <TextInput id="first-name" labelText="First name" />
         <TextInput id="last-name" labelText="Last name" />
       </form>
+      <h2>Your contribution</h2>
+      <div>{store.getState()}</div>
       <SimpleFooter />
     </div>
   </Provider>
