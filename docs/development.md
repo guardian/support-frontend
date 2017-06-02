@@ -11,13 +11,14 @@ Support Frontend, how they interact and how you can start adding code to this re
 4. [Project's structure](#projects-structure) 
 5. [CI Build process](#ci-build-process)
 6. [Yarn commands](#yarn-commands)
+7. [A/B Test framework](#ab-test-framework)
 
-## Getting started
+## 1. Getting started
 
 Follow the instructions in [**setup.md**](setup.md) to setup your dev environment and
 get `support-frontend` running locally.
 
-## Introduction to the technological stack
+## 2. Introduction to the technological stack
 
 The pieces that make up `support-frontend` are:
 
@@ -45,7 +46,7 @@ The pieces that make up `support-frontend` are:
  * webpack
  * yarn
  
-## Architecture
+## 3. Architecture
 
  ### Client-side architecture 
 
@@ -82,7 +83,7 @@ The pieces that make up `support-frontend` are:
  //TODO 
 
  
-## Project's structure
+## 4. Project's structure
 
  
  The client-side javascript sits inside the assets folder and it is organized in the following way:
@@ -123,7 +124,7 @@ The pieces that make up `support-frontend` are:
 * The CSS for a non-shareable component is located inside the `page.scss` file.  
  
 
-## CI build process
+## 5. CI build process
 
 In order to build the project, team city runs a series of steps. The first step installs node js, the second build the 
 assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). 
@@ -149,7 +150,7 @@ As an example, in order to build the assets for production, the step `build-prod
    we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
     is done [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
 
-## Yarn commands
+## 6. Yarn commands
 
 In order to run a yarn command you should run:
 
@@ -176,3 +177,117 @@ $ yarn run [name_command]
 | `devrun`             | Cleans, transpiles, runs and watches the webpack-dev-server using `DEV` environment. |
 | `webpack-dev-server` | Runs the webpack-dev-server in port `9111`. |
 | `test`               | Runs the client side tests built using Jest.  |
+
+## 7. A/B Test framework
+
+In this section we will go through the steps and considerations that you must have when you want to set up a new test.
+
+### API
+
+The AB test framework has the following methods:
+
+#### `init()`
+
+#### `getVariantsAsString()`
+
+#### `trackOphan()`
+
+#### `abTestReducer()`
+
+### Set up the AB test framework in a new page of the site
+
+#### Step 1: Initialize the AB test framework on the page you are working on
+In order to use the AB test framework you have to initialize it in your page. Therefore, you have to call the 
+`init` function of the module. That called will return a `Participation` object and you have to set that object in the 
+Redux store.
+
+
+```javascript 1.8
+
++// ----- AB Tests ----- //
+ +
+ +const participation = abTest.init();
+  
+ 
+ // ----- Redux Store ----- //
+  
+  const store = createStore(reducer);
+  
+ +store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+ 
+```
+ 
+ A real example of this you can find it [here](https://github.com/guardian/support-frontend/pull/67/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R41).
+
+#### Step 2: Add the AbTest reducer to your store
+
+In order to be able to understand Redux AB actions, you have to add the `abTestReducer` to your page's reducer as follows:
+ 
+```javascript 1.8
+export default combineReducers({
+  contribution,
+  intCmp,
+  abTests,
+});
+```
+  
+You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-c1f0bb180b22e8e0da8bde14c6b411c4R122).
+
+
+### Implementation of a test
+
+#### Step 0: Define your experiment 
+First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and n 
+amount of variants. For example:
+   
+> Hypothesis: By changing [`element_to_test`], it will `[increase|decrease]` the `[put_some_metric]` by **`number`%**
+  
+The percentage of the test defined in the hypothesis impact on the length of the test. Particularly, a smaller number 
+will make the test to run for more time and a greater number will decrease the length of the test. This is related to 
+the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical_significance).
+ 
+ 
+
+##### Step 1: Add your test to the Tests array
+
+ After your hypothesis is defined, you have to implement the test in the codebase. First, you have to define the test 
+ in the [abtest.js shared helper](/assets/helpers/abtest.js). Inside that file, under the **Tests** section you will 
+ find the definition of the tests array, you have to add a new object to this array:
+ 
+ ```javascript 1.8
+ // ----- Tests ----- //
+ 
+ const tests: Test[] = [
+   {
+     testId: 'yourTestId', 
+     variants: ['control', 'variantA'],  
+     audience: {
+       offset: 0,
+       size: 1,
+     },
+     isActive: true,
+   },
+ ];
+ ```
+  
+  Each test object has the following fields:
+  
+  * testId: name of the test, this name have to match the name of the test in Abacus. Additionally, it should be
+  * variants:
+  * audience: 
+ 
+ 
+ Since the testId has a type `TestId`, you have to add you test name to that type. The `TestId` is a [flow Union Type](https://flow.org/en/docs/types/unions/). 
+ Inside the same file look for the type definition and update it:
+ 
+ ```
+ type TestId = 'test1' | 'yourTestId';
+ ```
+ 
+ If you don't update the type definition, `flow` will throw an error in the `validation` step (`yarn validate`).
+ 
+#### Step 2: Read the variant from the state
+
+The tests and its variant, are now present in the `Participation` object. That object is being injected in the beginning
+of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)).  
+
