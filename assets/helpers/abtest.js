@@ -54,12 +54,12 @@ type OphanABPayload = {
 const tests: Test[] = [
   {
     testId: 'otherWaysOfContribute',
-    variants: ['control', 'variantA', 'variantB'],
+    variants: ['control', 'variantA'],
     audience: {
-      offset: 0.2,
-      size: 0.4,
+      offset: 0,
+      size: 1,
     },
-    isActive: false,
+    isActive: true,
   },
 ];
 
@@ -84,9 +84,9 @@ function getMvtId(): number {
 
 function getLocalStorageParticipation(): Participations {
 
-  const abtests = localStorage.getItem('gu.support.abTests');
+  const abTests = localStorage.getItem('gu.support.abTests');
 
-  return abtests ? JSON.parse(abtests) : {};
+  return abTests ? JSON.parse(abTests) : {};
 
 }
 
