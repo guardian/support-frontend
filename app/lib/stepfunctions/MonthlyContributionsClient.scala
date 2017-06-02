@@ -13,6 +13,7 @@ import com.gu.support.workers.model.{Contribution, PayPalPaymentFields, StripePa
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.Decoder
 import codecs.CirceDecoders._
+import com.typesafe.scalalogging.LazyLogging
 
 object CreateMonthlyContributorRequest {
   implicit val decoder: Decoder[CreateMonthlyContributorRequest] = deriveDecoder
@@ -28,7 +29,7 @@ object MonthlyContributionsClient {
   case object StateMachineFailure extends MonthlyContributionError
 }
 
-class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) {
+class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) extends LazyLogging {
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 
@@ -40,7 +41,14 @@ class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) {
       paymentFields = request.paymentFields
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
-      { _ => StateMachineFailure: MonthlyContributionError }, { _ => () }
+      { error =>
+        logger.error(s"[$requestId] Failed to create monthly subscription - $error")
+        StateMachineFailure: MonthlyContributionError
+      },
+      { success =>
+        logger.error(s"[$requestId] Creating monthly subscription ($success)")
+        ()
+      }
     )
   }
 }
