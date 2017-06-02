@@ -10,12 +10,13 @@ import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
-import TextInput from 'components/textInput/textInput';
 
 import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import getQueryParameter from 'helpers/url';
+import PaymentMethods from './components/paymentMethods';
+import NameForm from './components/nameForm';
 import reducer from './reducers/reducers';
 
 
@@ -54,12 +55,10 @@ const content = (
     <div>
       <SimpleHeader />
       <h1>Make a monthly contribution</h1>
-      <form>
-        <TextInput id="first-name" labelText="First name" />
-        <TextInput id="last-name" labelText="Last name" />
-      </form>
+      <NameForm />
       <h2>Your contribution</h2>
       <div>{store.getState()}</div>
+      <PaymentMethods />
       <SimpleFooter />
     </div>
   </Provider>
