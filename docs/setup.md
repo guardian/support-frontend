@@ -12,7 +12,7 @@ You need all 3 of these running to have a working development environment.
 
 Download config from S3: 
 
-```$ aws s3 cp s3://{private membership bucket}/DEV/support.private.conf /etc/gu/support.private.conf --profile membership```
+```$ aws s3 cp s3://membership-private/DEV/support.private.conf /etc/gu/support.private.conf --profile membership```
 
 Install [sbt](http://www.scala-sbt.org/download.html), and start the [Play server](https://www.playframework.com/)
 running on port 9110, hot-reloading the server-side code:
