@@ -183,12 +183,12 @@ export const trackOphan = (
   complete?: boolean = false,
   campaignCodes?: string[] = []): void => {
 
-  const payload: OphanABPayload = {};
-
-  payload[testId] = {
-    variantName: variant,
-    complete,
-    campaignCodes,
+  const payload: OphanABPayload = {
+    [testId]: {
+      variantName: variant,
+      complete,
+      campaignCodes,
+    },
   };
 
 
