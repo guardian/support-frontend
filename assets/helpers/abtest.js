@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
+import * as ophan from 'ophan';
 import * as cookie from './cookie';
-
 
 // ----- Setup ----- //
 
@@ -37,17 +37,29 @@ type Test = {
 };
 
 
+type OphanABEvent = {
+  variantName: string,
+  complete: boolean,
+  campaignCodes?: string[],
+};
+
+
+type OphanABPayload = {
+  [TestId]: OphanABEvent,
+};
+
+
 // ----- Tests ----- //
 
 const tests: Test[] = [
   {
     testId: 'otherWaysOfContribute',
-    variants: ['control', 'variantA', 'variantB'],
+    variants: ['control', 'variantA'],
     audience: {
-      offset: 0.2,
-      size: 0.4,
+      offset: 0,
+      size: 1,
     },
-    isActive: false,
+    isActive: true,
   },
 ];
 
@@ -72,9 +84,9 @@ function getMvtId(): number {
 
 function getLocalStorageParticipation(): Participations {
 
-  const abtests = localStorage.getItem('gu.support.abTests');
+  const abTests = localStorage.getItem('gu.support.abTests');
 
-  return abtests ? JSON.parse(abtests) : {};
+  return abTests ? JSON.parse(abTests) : {};
 
 }
 
@@ -143,8 +155,8 @@ function getParticipation(mvtId: number): Participations {
 
 export const init = () => {
 
-  const mvt = getMvtId();
-  let participation = getParticipation(mvt);
+  const mvt: number = getMvtId();
+  let participation: Participations = getParticipation(mvt);
 
   const urlParticipation = getUrlParticipation();
   participation = Object.assign({}, participation, urlParticipation);
@@ -163,6 +175,26 @@ export const getVariantsAsString = (participation: Participations): string => {
   });
 
   return variants.join('; ');
+};
+
+export const trackOphan = (
+  testId: TestId,
+  variant: string,
+  complete?: boolean = false,
+  campaignCodes?: string[] = []): void => {
+
+  const payload: OphanABPayload = {
+    [testId]: {
+      variantName: variant,
+      complete,
+      campaignCodes,
+    },
+  };
+
+
+  ophan.record({
+    abTestRegister: payload,
+  });
 };
 
 export const abTestReducer = (
