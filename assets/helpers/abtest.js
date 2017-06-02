@@ -155,8 +155,8 @@ function getParticipation(mvtId: number): Participations {
 
 export const init = () => {
 
-  const mvt = getMvtId();
-  let participation = getParticipation(mvt);
+  const mvt: number = getMvtId();
+  let participation: Participations = getParticipation(mvt);
 
   const urlParticipation = getUrlParticipation();
   participation = Object.assign({}, participation, urlParticipation);
