@@ -10,8 +10,8 @@ import Svg from 'components/svg/svg';
 
 type PropTypes = {
   text: string,
-  url: string,
   modifierClass: ?string,
+  onClick: () => void,
 };
 
 
@@ -25,7 +25,7 @@ const CtaCircle = (props: PropTypes) => {
     className = `${className} ${className}--${props.modifierClass}`;
   }
   return (
-    <a className={className} href={props.url}>
+    <a className={className} onClick={props.onClick} role="link" tabIndex={0}>
       <button><Svg svgName="arrow-right-straight" /></button>
       <span>{props.text}</span>
     </a>
