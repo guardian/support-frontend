@@ -182,7 +182,7 @@ $ yarn run [name_command]
 
 In this section we will go through the steps and considerations that you must have when you want to set up a new test.
 
-### API
+### 7.1 API
 
 The AB test framework has the following methods:
 
@@ -194,7 +194,7 @@ The AB test framework has the following methods:
 
 #### `abTestReducer()`
 
-### Set up the AB test framework in a new page of the site
+### 7.2 Set up the AB test framework in a new page of the site
 
 #### Step 1: Initialize the AB test framework on the page you are working on
 In order to use the AB test framework you have to initialize it in your page. Therefore, you have to call the 
@@ -234,7 +234,7 @@ export default combineReducers({
 You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-c1f0bb180b22e8e0da8bde14c6b411c4R122).
 
 
-### Implementation of a test
+### 7.3 Implementation of a test
 
 #### Step 0: Define your experiment 
 First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and n 
