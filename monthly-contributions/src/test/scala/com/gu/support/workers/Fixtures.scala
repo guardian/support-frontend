@@ -17,6 +17,7 @@ object Fixtures {
           "isTestUser": false
         }
     """
+  val requestIdJson = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
   val payPalPaymentMethod =
@@ -53,6 +54,7 @@ object Fixtures {
                 """
   val createPayPalPaymentMethodJson =
     s"""{
+          $requestIdJson,
           $userJson,
           "contribution": $contributionJson,
           "paymentFields": $payPalJson
@@ -60,6 +62,7 @@ object Fixtures {
 
   val createStripePaymentMethodJson =
     s"""{
+          $requestIdJson,
           $userJson,
           "contribution": $contributionJson,
           "paymentFields": $stripeJson
@@ -68,6 +71,7 @@ object Fixtures {
   val createSalesForceContactJson =
     s"""
           {
+            $requestIdJson,
             $userJson,
             "contribution": $contributionJson,
             "paymentMethod": $payPalPaymentMethod
@@ -76,6 +80,7 @@ object Fixtures {
 
   val thankYouEmailJson =
     s"""{
+        |  $requestIdJson,
         |  $userJson,
         |  "contribution": $contributionJson,
         |  "paymentMethod": $payPalPaymentMethod,
@@ -97,6 +102,7 @@ object Fixtures {
   val createZuoraSubscriptionJson =
     s"""
           {
+            $requestIdJson,
             $userJson,
             "contribution": $contributionJson,
             "paymentMethod": $payPalPaymentMethod,

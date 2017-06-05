@@ -35,7 +35,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     //See CirceEncodingBehaviourSpec for more details
 
     outStream.toClass[CreateSalesforceContactState]() match {
-      case state @ CreateSalesforceContactState(_, _, payPal: PayPalReferenceTransaction) =>
+      case state @ CreateSalesforceContactState(_, _, _, payPal: PayPalReferenceTransaction) =>
         payPal.paypalBaid should be(validBaid)
         payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
       case _ => fail()
@@ -54,7 +54,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     //Json produced for a PaymentMethod is different from that for a CreditCardReferenceTransaction.
     //See CirceEncodingBehaviourSpec for more details
     outStream.toClass[CreateSalesforceContactState]() match {
-      case CreateSalesforceContactState(_, _, stripe: CreditCardReferenceTransaction) =>
+      case CreateSalesforceContactState(_, _, _, stripe: CreditCardReferenceTransaction) =>
         stripe.tokenId should be("1234")
       case _ => fail()
     }
