@@ -188,19 +188,19 @@ The AB test framework has the following methods:
 
 #### `init()`
 This function initialize the AB test framework by executing the following steps:
-1. Read the MVT (multi variant) id from the cookie of the user. If the user has no mvt is his or her browser, 
+1. Read the MVT (multi variant testing) id from the cookie of the user. If the user has no mvt in his or her browser, 
 it generate a new MVTid and save it in the cookie.
 
-2. From the MVT, it generate the `Participation` object. The steps to build that object are:
-   * Read the participation from `localStorage`
-   * Check if the test is active.
-   * if the test is not in `localStorage`, it assign one variant from the `mvtId`.
-   * Finally it override the variant if the user pass the variant in the url in the way of: `#ab-[name_of_test]=[variant_name]`.
+2. From the MVT, it generates the `Participations` object. The steps to build that object are:
+   * read the participations from `localStorage`
+   * check if the test is active.
+   * if the user is not already assigned to a variant in `localStorage`, they are assigned to a variant based on the value of the `mvtId`.
+   * finally it overrides the variant if the user passes the variant in the url in the way of: `#ab-[name_of_test]=[variant_name]`.
 
-3. Save the `Participation` object in `localStorage`. 
+3. Save the `Participations` object in `localStorage`. 
      
 
-#### `getVariantsAsString(participation: Participations)`
+#### `getVariantsAsString(participations: Participations)`
 It receive the participation object and returns everything as string in the following format:
 
 `test1=variantA; test2=variantB`
@@ -217,7 +217,7 @@ Reducer function to be included in the reducer of the page that will have import
 
 #### Step 1: Initialize the AB test framework on the page you are working on
 In order to use the AB test framework you have to initialize it in your page. Therefore, you have to call the 
-`init` function of the module. That called will return a `Participation` object and you have to set that object in the 
+`init` function of the module. That called will return a `Participations` object and you have to set that object in the 
 Redux store.
 
 
@@ -236,7 +236,7 @@ Redux store.
  
 ```
  
- A real example of this you can find it [here](https://github.com/guardian/support-frontend/pull/67/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R41).
+ You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R41).
 
 #### Step 2: Add the AbTest reducer to your store
 
@@ -256,14 +256,20 @@ You can find a real example of this [here](https://github.com/guardian/support-f
 ### 7.3 Implementation of a test
 
 #### Step 0: Define your experiment 
-First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and n 
-amount of variants. For example:
+First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and and a 
+number of variants. For example:
    
-> Hypothesis: By changing [`element_to_test`], it will `[increase|decrease]` the `[put_some_metric]` by **`number`%**
-  
-The percentage of the test defined in the hypothesis impact on the length of the test. Particularly, a smaller number 
-will make the test to run for more time and a greater number will decrease the length of the test. This is related to 
-the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical_significance).
+> Hypothesis: By changing **[`element_to_test`]**, it will **`[increase|decrease]`** the **`[put_some_metric]`** by **`number`%**
+
+For example: 
+
+> By **changing the background colour to black**, it will **increase** the **conversion rate** by **5**%
+
+
+ 
+
+The amount of change you expect your test to achieve will affect the length of the test. To be detect a smaller change, 
+you need more samples and therefore a longer test. This is related to the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical_significance).
  
 [Here](http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equality) you will find a tool to 
 compute the sample size of your experiment. From the sample size, you can estimate the duration of your test.  
@@ -293,8 +299,8 @@ compute the sample size of your experiment. From the sample size, you can estima
   Each test object has the following fields:
   
   * **testId**: name of the test, this name has to match with the name of the test in Abacus. Additionally, it should be 
-  unique across all the test name in Abacus. 
-  * **variants**: This field is an array of strings, each string will be a name of a variant. One of this variant name has 
+  unique across all the test names in Abacus. 
+  * **variants**: This field is an array of strings, each string will be the name of a variant. One of these variant names has 
   to be **control**. 
   * **audience**: The audience is an object which contains two fields, `offset`, a number from 0 to 1 which indicates the 
   part of the audience that will be affected by the test. In addition, the size of the test that is a number from 0 to 1.
@@ -313,16 +319,16 @@ compute the sample size of your experiment. From the sample size, you can estima
  
 #### Step 2: Read the variant from the state
 
-The tests and its variant, are now present in the `Participation` object. That object is being injected in the redux state
+The test and its variant(s), are now present in the `Participation` object. That object is being injected in the redux state
 at beginning of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)). 
 The following step is, from a [container component](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components) 
 read the participation object from the redux state. Once the container component has the state, it will render the 
 presentational component or element corresponding with that variant. Usually this can be achieve by creating a local 
-(or global if the test is run across different pages) module that know which component or element instantiate depending 
+(or global if the test is run across different pages) module that knows which component or element instantiate depending 
 on the variant. 
 
-An example of the above can be in [this line of ways of support component](https://github.com/guardian/support-frontend/pull/67/files#diff-7e746c9576abf74fa76bbf8da11f330cR58) 
-which load the correct version of the title depending on the variant. The module that knows which version to render can 
+An example of the above can be found in [this line of ways of support component](https://github.com/guardian/support-frontend/pull/67/files#diff-7e746c9576abf74fa76bbf8da11f330cR58) 
+which loads the correct version of the title depending on the variant. The module that knows which version to render can 
 be found [here](https://github.com/guardian/support-frontend/pull/67/files#diff-cc1c686e06c814dd6c179505a6ce447dR14). 
 
 #### Step 3: Track events with GA and Ophan
