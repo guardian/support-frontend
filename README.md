@@ -4,13 +4,13 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 
 ## Table of contents
 
-1. [Getting started](#getting-started)
-2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
-3. [Architecture](#architecture)
-4. [Project's structure](#projects-structure) 
-5. [CI Build process](#ci-build-process)
-6. [Yarn commands](#yarn-commands)
-7. [A/B Test framework](#yarn-commands)
+1. [Getting started](/docs/development.md#1-getting-started)
+2. [Introduction to the technological stack](/docs/development.md#2-introduction-to-the-technological-stack)
+3. [Architecture](/docs/development.md#3-architecture)
+4. [Project's structure](/docs/development.md#4-projects-structure) 
+5. [CI Build process](/docs/development.md#5-ci-build-process)
+6. [Yarn commands](/docs/development.md#6-yarn-commands)
+7. [A/B Test framework](/docs/development.md#7-ab-test-framework)
 
 
 ## Getting started
