@@ -1,8 +1,7 @@
 package com.gu.zuora.model
 
-import io.circe.{Decoder, Encoder}
-import com.gu.support.workers.encoding.Helpers.{deriveCodec, capitalizingCodec}
 import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -15,10 +14,10 @@ object ZuoraError {
 case class ZuoraError(Code: String, Message: String)
 
 object ZuoraErrorResponse {
-  implicit val codec: Codec[ZuoraErrorResponse] = deriveCodec
+  implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
 }
 
-case class ZuoraErrorResponse(success: Boolean, Errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse
 
 object BasicInfo {
   implicit val codec: Codec[BasicInfo] = deriveCodec

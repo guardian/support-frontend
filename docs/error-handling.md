@@ -168,9 +168,13 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 
 ### Zuora
 
-[Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors)
+[Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors) - note that the error json structure described on this page is incorrect as 
+the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe) (actually this page is incorrect as well as it says that the response is a ZuoraErrorResponse whereas it is actually a list of these)
 
-It’s hard to get exact details of what errors Zuora might throw but there are general categories which we can get by taking the last 2 character of the error code
+It’s hard to get exact details of what errors the specific call we make to Zuora might throw but there are general categories which we can get by taking the last 2 character of the error code.
+
+Handling Zuoras is made more complicated because the response can return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors. Initially I am
+going to treat any fatal errors as meaning that the whole request can never succeed and fail at this point.
 
 <table>
   <tr>

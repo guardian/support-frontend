@@ -189,13 +189,13 @@ object Fixtures {
     s"""
         [
           {
-            "errors": [
+            "Errors": [
               {
                 "Code": "INVALID_VALUE",
                 "Message": "invalid value for field TermType: Monkeys"
               }
             ],
-            "success": false
+            "Success": false
           }
        ]
      """

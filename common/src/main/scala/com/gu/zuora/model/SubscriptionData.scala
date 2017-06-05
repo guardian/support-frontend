@@ -1,9 +1,8 @@
 package com.gu.zuora.model
 
-import org.joda.time.LocalDate
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.capitalizingCodec
-import com.gu.zuora.encoding.CustomCodecs._
+import org.joda.time.LocalDate
 
 object RatePlanCharge {
   implicit val codec: Codec[RatePlanCharge] = capitalizingCodec
