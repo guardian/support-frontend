@@ -30,7 +30,7 @@ object Dependencies {
 
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, sentry, lambdaLogging, joda, dispatch,
     supportInternationalisation, supportModels, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
-    circeGeneric, circeGenericExtras, circeParser, stm, scalaTest)
-  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mokito, scalaTest, mockWebserver)
+    circeGeneric, circeGenericExtras, circeParser, stm, mokito, scalaTest)
+  val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mockWebserver)
 
 }

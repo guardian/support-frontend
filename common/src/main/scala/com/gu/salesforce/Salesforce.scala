@@ -3,9 +3,8 @@ package com.gu.salesforce
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.model.SalesforceContactRecord
-import org.joda.time.DateTime
 import com.gu.zuora.encoding.CustomCodecs._
-import io.circe.{Decoder, Encoder}
+import org.joda.time.DateTime
 
 object Salesforce {
 
@@ -50,7 +49,6 @@ object Salesforce {
 
   trait SalesforceResponse {
     val Success: Boolean
-    val ErrorString: Option[String]
   }
 
   object SalesforceContactResponse {
@@ -61,8 +59,14 @@ object Salesforce {
 
   object SalesforceErrorResponse {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
+    val expiredAuthenticationCode = "INVALID_SESSION_ID"
   }
-  case class SalesforceErrorResponse(Success: Boolean, ErrorString: Option[String]) extends Throwable with SalesforceResponse
+  case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable
+
+  object SalesforceAuthenticationErrorResponse {
+    implicit val codec: Codec[SalesforceAuthenticationErrorResponse] = deriveCodec
+  }
+  case class SalesforceAuthenticationErrorResponse(error: String, error_description: String) extends Throwable
 
   object Authentication {
     implicit val codec: Codec[Authentication] = deriveCodec

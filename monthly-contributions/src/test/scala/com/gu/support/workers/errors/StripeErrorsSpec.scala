@@ -9,9 +9,8 @@ import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.Fixtures.createStripePaymentMethodJson
 import com.gu.support.workers.LambdaSpec
-import com.gu.support.workers.exceptions.NonFatalException
+import com.gu.support.workers.exceptions.{FatalException, NonFatalException}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import io.circe.generic.auto._
 import io.circe.syntax._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -30,7 +29,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
     }
   }
 
-  "500s from services" should "throw a NonFatalException" in {
+  "500s from Stripe" should "throw a NonFatalException" in {
     val server = createMockServer(500, "Uh Oh!")
     val baseUrl = server.url("/v1")
     val services = errorServices(baseUrl.toString)
@@ -39,7 +38,6 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    //A generic 500 should throw a WebServiceHelperError
     a[NonFatalException] should be thrownBy {
       createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
     }
@@ -59,7 +57,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[Stripe.Error] should be thrownBy {
+    a[FatalException] should be thrownBy {
       createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
     }
 

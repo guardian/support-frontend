@@ -40,8 +40,10 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends L
 
   // Extracts response params as a map.
   private def extractResponse(response: Response) = {
-
     val responseBody = response.body().string()
+
+    if (!response.isSuccessful)
+      throw PayPalError(response.code(), responseBody)
 
     if (Configuration.stage == Stages.DEV)
       logger.info("NVP response body = " + responseBody)
@@ -75,7 +77,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends L
     } catch {
       case _: NoSuchElementException =>
         val errorMessage = Try(response.paramMap("L_LONGMESSAGE0").head).getOrElse(response.toString)
-        throw new PayPalError(errorMessage)
+        throw PayPalError(200, errorMessage) //If we got to here the original response was successful
     }
 
   def retrieveEmail(baid: String): Future[String] = {
@@ -115,7 +117,5 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends L
 
     nvpRequest(agreementParams).map(retrieveNVPParam(_, "BILLINGAGREEMENTID"))
   }
-
-  class PayPalError(message: String) extends Throwable
 
 }

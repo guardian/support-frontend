@@ -1,16 +1,15 @@
 package com.gu.support.workers.errors
 
 import java.io.ByteArrayOutputStream
-import java.net.SocketTimeoutException
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
-import com.gu.paypal.PayPalService
+import com.gu.paypal.{PayPalConfig, PayPalService}
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.StripeService
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.Fixtures.createPayPalPaymentMethodJson
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.exceptions.NonFatalException
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -24,46 +23,28 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[SocketTimeoutException] should be thrownBy {
+    a[NonFatalException] should be thrownBy {
       createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
     }
   }
 
-//  "500s from services" should "throw a WebServiceHelperError" in {
-//    val server = getMockServer(500, "Uh Oh!")
-//    val baseUrl = server.url("/v1")
-//    val services = errorServices(baseUrl.toString)
-//
-//    val createPaymentMethod = new CreatePaymentMethod(services)
-//
-//    val outStream = new ByteArrayOutputStream()
-//
-//    //A generic 500 should throw a WebServiceHelperError
-//    a[WebServiceHelperError[Stripe.Error]] should be thrownBy {
-//      createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
-//    }
-//
-//    // Shut down the server. Instances cannot be reused.
-//    server.shutdown()
-//  }
-//
-//  "402s from Stripe" should "be parsable" in {
-//    val errorJson = Stripe.Error("card_error", "The card has expired", "expired_card").asJson.noSpaces
-//    val server = getMockServer(402, errorJson)
-//    val baseUrl = server.url("/v1")
-//
-//    val services = errorServices(baseUrl.toString)
-//
-//    val createPaymentMethod = new CreatePaymentMethod(services)
-//
-//    val outStream = new ByteArrayOutputStream()
-//
-//    a[Stripe.Error] should be thrownBy {
-//      createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
-//    }
-//
-//    server.shutdown()
-//  }
+  "500s from PayPal" should "throw a NonFatalException" in {
+    val server = createMockServer(500, "Uh Oh!")
+    val baseUrl = server.url("/v1")
+    val services = errorServices(baseUrl.toString)
+
+    val createPaymentMethod = new CreatePaymentMethod(services)
+
+    val outStream = new ByteArrayOutputStream()
+
+    //A generic 500 should throw a WebServiceHelperError
+    a[NonFatalException] should be thrownBy {
+      createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
+    }
+
+    // Shut down the server. Instances cannot be reused.
+    server.shutdown()
+  }
 
   lazy val timeOutServices = {
     val serviceProvider = mock[ServiceProvider]
@@ -78,9 +59,11 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
   private def errorServices(baseUrl: String) = {
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    //Create a StripeService which will timeout
-    val stripe = new StripeService(Configuration.stripeConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds), baseUrl)
-    when(services.stripeService).thenReturn(stripe)
+    //Create a PayPalService which will timeout
+    val conf = Configuration.payPalConfigProvider.get()
+    val mockConfig = PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user,conf.password, conf.signature)
+    val payPal = new PayPalService(mockConfig, RequestRunners.configurableFutureRunner(10.seconds))
+    when(services.payPalService).thenReturn(payPal)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }

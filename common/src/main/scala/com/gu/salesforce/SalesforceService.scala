@@ -1,12 +1,16 @@
 package com.gu.salesforce
 
+import cats.syntax.either._
 import com.gu.config.Configuration
 import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
+import io.circe
+import io.circe.Decoder
+import io.circe.parser._
 import io.circe.syntax._
 import okhttp3.Request
 
@@ -16,7 +20,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse]
+  extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -34,6 +38,10 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     req.url(s"${auth.instance_url}/$upsertEndpoint") //We need to set the base url to the instance_url value returned in the authentication response
     req.addHeader("Authorization", s"Bearer ${auth.access_token}") //And also add an Authorization header
   }
+
+  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[SalesforceErrorResponse]):
+  Either[circe.Error, SalesforceErrorResponse] =
+    decode[List[SalesforceErrorResponse]](responseBody).map(_.head) //Salesforce returns a list of error responses
 
   def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
     post[SalesforceContactResponse](upsertEndpoint, data.asJson)
@@ -72,7 +80,7 @@ object AuthService extends LazyLogging {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse]
+  extends WebServiceHelper[SalesforceAuthenticationErrorResponse]
     with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url
