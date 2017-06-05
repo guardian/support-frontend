@@ -15,11 +15,10 @@ import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import getQueryParameter from 'helpers/url';
-import Introduction from './components/Introduction';
-import Bundles from './components/Bundles';
-import WhySupport from './components/WhySupport';
-import WaysOfSupport from './components/WaysOfSupport';
+import PaymentMethods from './components/paymentMethods';
+import NameForm from './components/nameForm';
 import reducer from './reducers/reducers';
+
 
 // ----- AB Tests ----- //
 
@@ -32,15 +31,22 @@ ga.init();
 ga.setDimension('experience', abTest.getVariantsAsString(participation));
 ga.trackPageview();
 
+
 // ----- Logging ----- //
 
 logger.init();
 
+
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') });
+const store = createStore(reducer);
 
-store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+// Retrieves the contrib amount from the url and sends it to the redux store.
+store.dispatch({
+  type: 'SET_CONTRIB_AMOUNT',
+  amount: getQueryParameter('contributionValue', '5'),
+});
+
 
 // ----- Render ----- //
 
@@ -48,13 +54,14 @@ const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <Introduction />
-      <Bundles />
-      <WhySupport />
-      <WaysOfSupport />
+      <h1>Make a monthly contribution</h1>
+      <NameForm />
+      <h2>Your contribution</h2>
+      <div>{store.getState()}</div>
+      <PaymentMethods />
       <SimpleFooter />
     </div>
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('bundles-landing-page'));
+ReactDOM.render(content, document.getElementById('monthly-contributions-page'));

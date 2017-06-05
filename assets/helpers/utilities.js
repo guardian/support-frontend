@@ -11,3 +11,8 @@ export function ascending(a: number, b: number): number {
 export function descending(a: number, b: number): number {
   return a < b ? 1 : 0;
 }
+
+// Converts a number to a given number of decimal places, default two.
+export function roundDp(num: number, dps: number = 2) {
+  return Math.round(num * 10 * dps) / (10 * dps);
+}
