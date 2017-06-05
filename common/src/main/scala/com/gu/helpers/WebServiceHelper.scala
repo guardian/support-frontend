@@ -2,6 +2,7 @@ package com.gu.helpers
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.typesafe.scalalogging.LazyLogging
+import io.circe
 import io.circe.parser._
 import io.circe.{Decoder, Json, Printer}
 import okhttp3._
@@ -48,19 +49,27 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
     logger.debug(s"Issuing request ${req.method} ${req.url}")
-    // The string provided here sets the Custom Metric Name for the http request in CloudWatch
     for {
       response <- httpClient(req)
     } yield {
       val responseBody = response.body.string()
+      logger.info(responseBody)
       decode[A](responseBody) match {
-        case Left(err) => throw decode[Error](responseBody).right.getOrElse(
+        case Left(err) => throw decodeError(responseBody).right.getOrElse(
           WebServiceHelperError[A](response.code(), responseBody)
         )
         case Right(value) => value
       }
     }
   }
+
+  /**
+   * Allow subclasses to customise the way errors are decoded
+   * @param responseBody
+   * @param errorDecoder
+   * @return Either[circe.Error, Error]
+   */
+  def decodeError(responseBody: String)(implicit errorDecoder: Decoder[Error]): Either[circe.Error, Error] = decode[Error](responseBody)
 
   def get[A](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](new Request.Builder().url(endpointUrl(endpoint, params)))

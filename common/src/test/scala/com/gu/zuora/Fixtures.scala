@@ -123,6 +123,22 @@ object Fixtures {
 
   val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
 
+  val invalidSubsData = SubscriptionData(
+    List(
+      RatePlanData(
+        RatePlan(config.productRatePlanId),
+        List(RatePlanChargeData(
+          RatePlanCharge(config.productRatePlanChargeId, Some(5: BigDecimal))
+        )),
+        Nil
+      )
+    ),
+    Subscription(date, date, date, termType = "Invalid term type")
+  )
+  val invalidSubscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, invalidSubsData, SubscribeOptions())))
+
+  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account, contactDetails, payPalPaymentMethod, invalidSubsData, SubscribeOptions())))
+
   val invoiceResult =
     """
       {
@@ -160,6 +176,29 @@ object Fixtures {
         $subscribeResponseAccount
       ]
     """
+
+  val error =
+    """
+      {
+        "Code": "53100320",
+        "Message": "'termType' value should be one of: TERMED, EVERGREEN"
+      }
+    """
+
+  val errorResponse =
+    s"""
+        [
+          {
+            "errors": [
+              {
+                "Code": "INVALID_VALUE",
+                "Message": "invalid value for field TermType: Monkeys"
+              }
+            ],
+            "success": false
+          }
+       ]
+     """
 
 }
 
