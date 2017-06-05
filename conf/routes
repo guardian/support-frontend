@@ -1,6 +1,5 @@
 # ----- System ----- #
 
-GET /assets/*file               controllers.Assets.at(path="/public", file)
 GET /healthcheck                controllers.Application.healthcheck
 
 
@@ -11,3 +10,6 @@ GET /                           controllers.Default.redirect(to = "/uk")
 
 GET /monthly-contributions      controllers.Application.reactTemplate(title="Support the Guardian | Monthly Contributions", id="monthly-contributions-page", js="monthlyContributionsPage.js")
 POST /monthly-contributions/create   controllers.MonthlyContributions.create
+
+GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)
+GET /*file                      controllers.Assets.at(path="/public", file)
