@@ -46,7 +46,7 @@ class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) ext
         StateMachineFailure: MonthlyContributionError
       },
       { success =>
-        logger.error(s"[$requestId] Creating monthly contribution ($success)")
+        logger.info(s"[$requestId] Creating monthly contribution ($success)")
         ()
       }
     )
