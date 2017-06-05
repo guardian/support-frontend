@@ -246,9 +246,10 @@ The percentage of the test defined in the hypothesis impact on the length of the
 will make the test to run for more time and a greater number will decrease the length of the test. This is related to 
 the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical_significance).
  
- 
+[Here](http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equality) you will find a tool to 
+compute the sample size of your experiment. From the sample size, you can estimate the duration of your test.  
 
-##### Step 1: Add your test to the Tests array
+#### Step 1: Add your test to the Tests array
 
  After your hypothesis is defined, you have to implement the test in the codebase. First, you have to define the test 
  in the [abtest.js shared helper](/assets/helpers/abtest.js). Inside that file, under the **Tests** section you will 
@@ -272,12 +273,17 @@ the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical
   
   Each test object has the following fields:
   
-  * testId: name of the test, this name have to match the name of the test in Abacus. Additionally, it should be
-  * variants:
-  * audience: 
+  * **testId**: name of the test, this name has to match with the name of the test in Abacus. Additionally, it should be 
+  unique across all the test name in Abacus. 
+  * **variants**: This field is an array of strings, each string will be a name of a variant. One of this variant name has 
+  to be **control**. 
+  * **audience**: The audience is an object which contains two fields, `offset`, a number from 0 to 1 which indicates the 
+  part of the audience that will be affected by the test. In addition, the size of the test that is a number from 0 to 1.
+  For example a test with offset 0.2 and size 0.5 will affect the half of the audience starting from the 20%.
  
  
- Since the testId has a type `TestId`, you have to add you test name to that type. The `TestId` is a [flow Union Type](https://flow.org/en/docs/types/unions/). 
+ Since the testId has a type `TestId`, you have to add you test name to that type. The `TestId` is a 
+ [flow Union Type](https://flow.org/en/docs/types/unions/). 
  Inside the same file look for the type definition and update it:
  
  ```
@@ -288,6 +294,31 @@ the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical
  
 #### Step 2: Read the variant from the state
 
-The tests and its variant, are now present in the `Participation` object. That object is being injected in the beginning
-of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)).  
+The tests and its variant, are now present in the `Participation` object. That object is being injected in the redux state
+at beginning of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)). 
+The following step is, from a [container component](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components) 
+read the participation object from the redux state. Once the container component has the state, it will render the 
+presentational component or element corresponding with that variant. Usually this can be achieve by creating a local 
+(or global if the test is run across different pages) module that know which component or element instantiate depending 
+on the variant. 
+
+An example of the above can be in [this line of ways of support component](https://github.com/guardian/support-frontend/pull/67/files#diff-7e746c9576abf74fa76bbf8da11f330cR58) 
+which load the correct version of the title depending on the variant. The module that knows which version to render can 
+be found [here](https://github.com/guardian/support-frontend/pull/67/files#diff-cc1c686e06c814dd6c179505a6ce447dR14). 
+
+#### Step 3: Track events with GA and Ophan
+
+Now that you are rendering the correct component depending on the variant the user is, you have to track when that user 
+converts.
+*Conversion* can mean different things depending on what you are testing, it could be a click on a video, a scroll action,
+a button click, if the user writes something in a text field, etc. Basically, it can be any event that the user can produce. 
+In order to use abacus as your test tool, you have to track two events with Ophan:
+  * when the variant is displayed to the user.
+  * when the user converts.
+  
+This tracking can be done using the [`trackOphan`](#trackOphan) function from the ABtest framework. This function 
+receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
+or not.  
+
+ 
 
