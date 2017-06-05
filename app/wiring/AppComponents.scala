@@ -30,10 +30,10 @@ trait AppComponents extends PlayComponents {
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
-    assetController,
     applicationController,
     controllers.Default,
     monthlyContributionsController,
+    assetController,
     prefix = "/"
   )
 
