@@ -8,7 +8,6 @@ package object aws {
 
   lazy val CredentialsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false),
-    new EnvironmentVariableCredentialsProvider()
+    new InstanceProfileCredentialsProvider(false)
   )
 }
