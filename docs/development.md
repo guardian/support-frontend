@@ -205,6 +205,10 @@ It receive the participation object and returns everything as string in the foll
 
 `test1=variantA; test2=variantB`
 
+This method is being used mainly when the developer wants to track the variants in GA. In order to achieve this, she or 
+he has to set up the custom dimension called `experiment` with the value of the variants as a string. An example of this can be 
+found [here](https://github.com/guardian/support-frontend/pull/68/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R31).  
+
 
 #### `trackOphan( testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])`
 Track event using `tracker-js` from ophan. 
