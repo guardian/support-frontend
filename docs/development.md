@@ -335,7 +335,7 @@ In order to use abacus as your test tool, you have to track two events with Opha
   * when the variant is displayed to the user.
   * when the user converts.
   
-This tracking can be done using the [`trackOphan`](#trackOphan(testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])) function from the ABtest framework. This function 
+This tracking can be done using the [`trackOphan`](#7-1-API) function from the ABtest framework. This function 
 receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
 or not.  
 
