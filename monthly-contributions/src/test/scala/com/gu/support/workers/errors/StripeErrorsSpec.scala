@@ -46,7 +46,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
     server.shutdown()
   }
 
-  "402s from Stripe" should "be parsable" in {
+  "402s from Stripe" should "throw a FatalException" in {
     val errorJson = Stripe.Error("card_error", "The card has expired", "expired_card").asJson.noSpaces
     val server = createMockServer(402, errorJson)
     val baseUrl = server.url("/v1")

@@ -25,7 +25,7 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
     }
   }
 
-  "ErrorHandler" should "throw an NonFatalException when it handles any other Salesforce error" in {
+  "ErrorHandler" should "throw an FatalException when it handles any other Salesforce error" in {
     an[FatalException] should be thrownBy {
       ExceptionHandler.handleException(new SalesforceErrorResponse("test", "test"))
     }

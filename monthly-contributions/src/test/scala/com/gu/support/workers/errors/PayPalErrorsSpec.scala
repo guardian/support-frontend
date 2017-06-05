@@ -18,7 +18,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
-  "Timeouts from PayPal" should "throw a SocketTimeoutException" in {
+  "Timeouts from PayPal" should "throw a NonFatalException" in {
     val createPaymentMethod = new CreatePaymentMethod(timeOutServices)
 
     val outStream = new ByteArrayOutputStream()
@@ -37,7 +37,6 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    //A generic 500 should throw a WebServiceHelperError
     a[NonFatalException] should be thrownBy {
       createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
     }
