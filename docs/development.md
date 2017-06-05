@@ -11,7 +11,7 @@ Support Frontend, how they interact and how you can start adding code to this re
 4. [Project's structure](#projects-structure) 
 5. [CI Build process](#ci-build-process)
 6. [Yarn commands](#yarn-commands)
-7. [A/B Test framework](#ab-test-framework)
+7. [A/B Test framework](#a/b-test-framework)
 
 ## 1. Getting started
 
@@ -187,12 +187,31 @@ In this section we will go through the steps and considerations that you must ha
 The AB test framework has the following methods:
 
 #### `init()`
+This function initialize the AB test framework by executing the following steps:
+1. Read the MVT (multi variant) id from the cookie of the user. If the user has no mvt is his or her browser, 
+it generate a new MVTid and save it in the cookie.
 
-#### `getVariantsAsString()`
+2. From the MVT, it generate the `Participation` object. The steps to build that object are:
+   * Read the participation from `localStorage`
+   * Check if the test is active.
+   * if the test is not in `localStorage`, it assign one variant from the `mvtId`.
+   * Finally it override the variant if the user pass the variant in the url in the way of: `#ab-[name_of_test]=[variant_name]`.
 
-#### `trackOphan()`
+3. Save the `Participation` object in `localStorage`. 
+     
 
-#### `abTestReducer()`
+#### `getVariantsAsString(participation: Participations)`
+It receive the participation object and returns everything as string in the following format:
+
+`test1=variantA; test2=variantB`
+
+
+#### `trackOphan( testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])`
+Track event using `tracker-js` from ophan. 
+
+
+#### `abTestReducer(state: Participations = {}, action: Action)`
+Reducer function to be included in the reducer of the page that will have import the AB test framework.
 
 ### 7.2 Set up the AB test framework in a new page of the site
 
@@ -316,7 +335,7 @@ In order to use abacus as your test tool, you have to track two events with Opha
   * when the variant is displayed to the user.
   * when the user converts.
   
-This tracking can be done using the [`trackOphan`](#trackOphan) function from the ABtest framework. This function 
+This tracking can be done using the [`trackOphan`](#trackOphan(testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])) function from the ABtest framework. This function 
 receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
 or not.  
 
