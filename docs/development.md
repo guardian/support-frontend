@@ -5,13 +5,13 @@ Support Frontend, how they interact and how you can start adding code to this re
   
 ## Table of contents
 
-1. [Getting started](#getting-started)
-2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
-3. [Architecture](#architecture)
-4. [Project's structure](#projects-structure) 
-5. [CI Build process](#ci-build-process)
-6. [Yarn commands](#yarn-commands)
-7. [A/B Test framework](#a/b-test-framework)
+1. [Getting started](#1-getting-started)
+2. [Introduction to the technological stack](#2-introduction-to-the-technological-stack)
+3. [Architecture](#3-architecture)
+4. [Project's structure](#4-projects-structure) 
+5. [CI Build process](#5-ci-build-process)
+6. [Yarn commands](#6-yarn-commands)
+7. [A/B Test framework](#7-ab-test-framework)
 
 ## 1. Getting started
 
