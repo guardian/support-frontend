@@ -13,7 +13,7 @@ module.exports = (env) => {
 
   const plugins = [
     new ManifestPlugin({
-      fileName: '../conf/assets.map',
+      fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
     new ExtractTextPlugin({
@@ -52,7 +52,7 @@ module.exports = (env) => {
     },
 
     output: {
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, 'public/compiled-assets'),
       chunkFilename: 'webpack/[chunkhash].js',
       filename: `javascripts/[name]${isProd ? '.[chunkhash]' : ''}.js`,
       publicPath: '/assets/',
