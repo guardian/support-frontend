@@ -2,6 +2,7 @@ package com.gu.zuora.model
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
+import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -17,7 +18,9 @@ object ZuoraErrorResponse {
   implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
 }
 
-case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse
+case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse{
+  def asRetryException: RetryException = new RetryNone(cause = this) //This can be more sophisticated if we get category codes enabled (see error-handling.md)
+}
 
 object BasicInfo {
   implicit val codec: Codec[BasicInfo] = deriveCodec

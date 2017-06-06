@@ -9,7 +9,7 @@ import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.Fixtures.createStripePaymentMethodJson
 import com.gu.support.workers.LambdaSpec
-import com.gu.support.workers.exceptions.{FatalException, NonFatalException}
+import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import io.circe.syntax._
 import org.mockito.Matchers.any
@@ -24,7 +24,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[NonFatalException] should be thrownBy {
+    a[RetryUnlimited] should be thrownBy {
       createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
     }
   }
@@ -38,7 +38,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[NonFatalException] should be thrownBy {
+    a[RetryUnlimited] should be thrownBy {
       createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
     }
 
@@ -57,7 +57,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[FatalException] should be thrownBy {
+    a[RetryNone] should be thrownBy {
       createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
     }
 

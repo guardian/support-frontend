@@ -1,7 +1,9 @@
 package com.gu.salesforce
 
+import com.gu.salesforce.Salesforce.SalesforceErrorResponse.expiredAuthenticationCode
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import com.gu.support.workers.model.SalesforceContactRecord
 import com.gu.zuora.encoding.CustomCodecs._
 import org.joda.time.DateTime
@@ -61,18 +63,27 @@ object Salesforce {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
     val expiredAuthenticationCode = "INVALID_SESSION_ID"
   }
-  case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable
+
+  case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable {
+    def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode)
+      new RetryUnlimited(cause = this)
+    else
+      new RetryNone(cause = this)
+  }
 
   object SalesforceAuthenticationErrorResponse {
     implicit val codec: Codec[SalesforceAuthenticationErrorResponse] = deriveCodec
   }
+
   case class SalesforceAuthenticationErrorResponse(error: String, error_description: String) extends Throwable
 
   object Authentication {
     implicit val codec: Codec[Authentication] = deriveCodec
   }
+
   case class Authentication(access_token: String, instance_url: String, issued_at: DateTime) {
     private val expiryTimeMinutes = 15
+
     def isFresh: Boolean = issued_at.isAfter(DateTime.now().minusMinutes(expiryTimeMinutes))
   }
 

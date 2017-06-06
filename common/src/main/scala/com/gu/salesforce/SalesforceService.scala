@@ -86,7 +86,7 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
-  private[salesforce] def authorize: Future[Authentication] = {
+  def authorize: Future[Authentication] = {
     logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =

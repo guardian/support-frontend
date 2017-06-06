@@ -3,10 +3,9 @@ package com.gu.salesforce
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.salesforce.Salesforce.{Authentication, SalesforceContactResponse, UpsertData}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import okhttp3.Request
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -50,14 +49,6 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  it should "throw a SalesforceAuthenticationErrorResponse" in {
-    val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
-    val authService = new AuthService(invalidConfig)
-    recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      authService.authorize.map(auth => logger.info(s"Got an auth: $auth"))
-    }
-  }
-
   "SalesforceService" should "be able to upsert a customer" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
     val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
@@ -67,28 +58,4 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       response.ContactRecord.Id should be(salesforceId)
     }
   }
-
-  it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {
-    val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
-    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
-    val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
-
-    assertThrows[SalesforceAuthenticationErrorResponse]{
-      service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
-    }
-  }
-
-  it should "throw a SalesforceErrorResponse if authentication has expired" in {
-    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds)) {
-      //Don't add the authentication headers to simulate an expired auth token
-      override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder) =
-        req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
-    }
-    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
-
-    recoverToSucceededIf[SalesforceErrorResponse] {
-      service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
-    }
-  }
-
 }

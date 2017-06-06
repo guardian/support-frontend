@@ -9,7 +9,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.Fixtures.createPayPalPaymentMethodJson
 import com.gu.support.workers.LambdaSpec
-import com.gu.support.workers.exceptions.NonFatalException
+import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -23,7 +23,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[NonFatalException] should be thrownBy {
+    a[RetryUnlimited] should be thrownBy {
       createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
     }
   }
@@ -37,7 +37,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    a[NonFatalException] should be thrownBy {
+    a[RetryUnlimited] should be thrownBy {
       createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
     }
 
