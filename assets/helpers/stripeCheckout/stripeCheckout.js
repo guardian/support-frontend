@@ -1,74 +1,48 @@
 // @flow
 
-const stripeHandler = null;
+// ----- Setup ----- //
 
-const loadStripe = () => {
+let stripeHandler = null;
 
-  return new Promise((resolve) => {
 
-    if(! window.StripeCheckout) {
+// ----- Functions ----- //
 
-      const script = document.createElement('script');
+const loadStripe = () => new Promise((resolve) => {
 
-      script.onload = function () {
-        console.info("Stripe script loaded");
-        resolve();
-      };
+  if (!window.StripeCheckout) {
 
-      script.src = 'https://checkout.stripe.com/checkout.js';
+    const script = document.createElement('script');
+
+    script.onload = resolve;
+    script.src = 'https://checkout.stripe.com/checkout.js';
+
+    if (document.head) {
       document.head.appendChild(script);
-
-    } else {
-      resolve();
     }
 
-  );
+  } else {
+    resolve();
+  }
 
-}
+});
 
-export const setup = (token) => {
+export const setup = (token: Function, closed: Function) => loadStripe.then(() => {
 
-  return loadStripe.then(() => {
-
-    stripeHandler = window.StripeCheckout.configure({
-      key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
-      image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-      locale: 'auto',
-      token,
-    });
-
+  stripeHandler = window.StripeCheckout.configure({
+    key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
+    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+    locale: 'auto',
+    token,
+    closed,
   });
 
-};
+});
+
 
 export const openDialogBox = () => {
-  stripeHandler.open();
-}
 
-
-export const stripeCheckoutReducer = (
-  state: Participations = {},
-  action: Action): Participations => {
-
-  switch (action.type) {
-
-    case 'SETUP_STRIPE_CHECKOUT' : {
-
-    }
-
-    case 'STRIPE_CHECKOUT_LOADED': {
-      return Object.assign({}, state, action.payload);
-    }
-
-    case 'OPEN_STRIPE_OVERLAY' : {
-
-    }
-
-    default:
-      return state;
+  if (stripeHandler) {
+    stripeHandler.open();
   }
+
 };
-
-
-
-

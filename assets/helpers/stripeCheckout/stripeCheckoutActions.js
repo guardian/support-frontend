@@ -2,43 +2,59 @@
 
 // ----- Imports ----- //
 
-import * as stripeCheckout from '';
-import type { Contrib, Amount } from '../reducers/reducers';
+import * as stripeCheckout from './stripeCheckout';
 
 
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'CHANGE_CONTRIB_TYPE', contribType: Contrib }
-  | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
-  | { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', amount: Amount }
-  | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
+  | { type: 'START_STRIPE_CHECKOUT' }
+  | { type: 'STRIPE_CHECKOUT_LOADED' }
+  | { type: 'SET_STRIPE_CHECKOUT_TOKEN', token: string }
+  | { type: 'CLOSE_STRIPE_OVERLAY' }
+  | { type: 'OPEN_STRIPE_OVERLAY', amount: number }
   ;
 
 
 // ----- Actions ----- //
 
-const startStripeCheckout = () => {
-  return { type: 'START_STRIPE_CHECKOUT'};
+function startStripeCheckout(): Action {
+  return { type: 'START_STRIPE_CHECKOUT' };
 }
 
-const stripeCheckoutLoaded = () => {
-  return { type: 'STRIPE_CHECKOUT_LOADED'};
+function stripeCheckoutLoaded(): Action {
+  return { type: 'STRIPE_CHECKOUT_LOADED' };
 }
 
-export function openStripeOverlay(): Action {
-  openDialogBox();
-  return { type: 'OPEN_STRIPE_OVERLAY' };
+function setStripeCheckoutToken(token: string): Action {
+  return { type: 'SET_STRIPE_CHECKOUT_TOKEN', token };
 }
 
-export function setupStripeCheckout(): Action {
+function closeStripeOverlay(): Action {
+  return { type: 'CLOSE_STRIPE_OVERLAY' };
+}
 
-  return dispatch => {
-    dispatch(startStripeCheckout())
-    return stripeCheckout.setup().then(() => {
+export function openStripeOverlay(amount: number): Action {
+  stripeCheckout.openDialogBox();
+  return { type: 'OPEN_STRIPE_OVERLAY', amount };
+}
+
+export function setupStripeCheckout(): Function {
+
+  return (dispatch) => {
+
+    const handleToken = (token) => {
+      dispatch(setStripeCheckoutToken(token));
+    };
+
+    const handleCloseOverlay = () => dispatch(closeStripeOverlay());
+
+    dispatch(startStripeCheckout());
+
+    return stripeCheckout.setup(handleToken, handleCloseOverlay).then(() => {
       dispatch(stripeCheckoutLoaded());
-    })
+    });
 
-  }
+  };
 
 }
