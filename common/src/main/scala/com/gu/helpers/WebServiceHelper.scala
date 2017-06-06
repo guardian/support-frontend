@@ -53,7 +53,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
       response <- httpClient(req)
     } yield {
       val responseBody = response.body.string()
-      logger.info(responseBody)
+      logger.debug(responseBody)
       decode[A](responseBody) match {
         case Left(err) => throw decodeError(responseBody).right.getOrElse(
           WebServiceHelperError[A](response.code(), responseBody)
