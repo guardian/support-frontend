@@ -5,8 +5,9 @@
 import 'ophan';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -41,7 +42,7 @@ logger.init();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
@@ -56,7 +57,7 @@ const content = (
       <h1>Make a monthly contribution</h1>
       <NameForm />
       <h2>Your contribution</h2>
-      <div>{store.getState()}</div>
+      <div>{store.getState().monthlyContrib}</div>
       <PaymentMethods />
       <SimpleFooter />
     </div>

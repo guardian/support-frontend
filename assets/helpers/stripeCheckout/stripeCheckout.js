@@ -26,7 +26,7 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
-export const setup = (token: Function, closed: Function) => loadStripe.then(() => {
+export const setup = (token: Function, closed: Function) => loadStripe().then(() => {
 
   stripeHandler = window.StripeCheckout.configure({
     key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
