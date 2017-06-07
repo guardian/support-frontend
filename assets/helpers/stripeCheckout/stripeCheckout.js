@@ -29,9 +29,12 @@ const loadStripe = () => new Promise((resolve) => {
 export const setup = (token: Function, closed: Function) => loadStripe().then(() => {
 
   stripeHandler = window.StripeCheckout.configure({
+    name: 'Guardian',
+    description: 'Please enter your card details.',
     key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
-    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+    image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
+    currency: 'GBP',
     token,
     closed,
   });
@@ -39,10 +42,14 @@ export const setup = (token: Function, closed: Function) => loadStripe().then(()
 });
 
 
-export const openDialogBox = () => {
+export const openDialogBox = (amount: number, email: string) => {
 
   if (stripeHandler) {
-    stripeHandler.open();
+    stripeHandler.open({
+      // Must be passed in pence.
+      amount: amount * 100,
+      email,
+    });
   }
 
 };

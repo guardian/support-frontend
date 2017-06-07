@@ -35,8 +35,8 @@ function closeStripeOverlay(): Action {
   return { type: 'CLOSE_STRIPE_OVERLAY' };
 }
 
-export function openStripeOverlay(): Action {
-  stripeCheckout.openDialogBox();
+export function openStripeOverlay(amount: number, email: string): Action {
+  stripeCheckout.openDialogBox(amount, email);
   return { type: 'OPEN_STRIPE_OVERLAY' };
 }
 

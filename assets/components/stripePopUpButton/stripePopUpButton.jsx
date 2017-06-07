@@ -17,6 +17,8 @@ type PropTypes = {
   stripeLoaded: boolean,
   setupStripeCheckout: Function,
   onStripeClick: Function,
+  amount: number,
+  email: string,
 };
 
 
@@ -28,7 +30,9 @@ const StripePopUpButton = (props: PropTypes) => {
     props.setupStripeCheckout();
   }
 
-  return <button onClick={props.onStripeClick}>Add CC</button>;
+  const stripeClick = () => props.onStripeClick(props.amount, props.email);
+
+  return <button onClick={stripeClick}>Add CC</button>;
 
 };
 
@@ -37,6 +41,8 @@ function mapStateToProps(state) {
   return {
     overlayOpen: state.stripeCheckout.overlay,
     stripeLoaded: state.stripeCheckout.loaded,
+    amount: state.stripeCheckout.amount,
+    email: 'notarealuser@gu.com',
   };
 
 }
@@ -47,8 +53,8 @@ function mapDispatchToProps(dispatch) {
     setupStripeCheckout: () => {
       dispatch(setupStripeCheckout());
     },
-    onStripeClick: () => {
-      dispatch(openStripeOverlay());
+    onStripeClick: (amount: number, email: string) => {
+      dispatch(openStripeOverlay(amount, email));
     },
   };
 
