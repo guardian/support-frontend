@@ -1,4 +1,4 @@
-name := "frontend"
+name := "support-frontend"
 
 version := "1.0-SNAPSHOT"
 
