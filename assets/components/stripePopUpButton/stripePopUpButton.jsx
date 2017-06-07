@@ -42,6 +42,8 @@ function mapStateToProps(state) {
     overlayOpen: state.stripeCheckout.overlay,
     stripeLoaded: state.stripeCheckout.loaded,
     amount: state.stripeCheckout.amount,
+    // We need to create a User reducer to inject user data
+    // inside the Redux State.
     email: 'notarealuser@gu.com',
   };
 
