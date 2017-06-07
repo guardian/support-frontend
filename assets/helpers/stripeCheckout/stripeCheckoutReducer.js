@@ -9,7 +9,6 @@ import type { Action } from './stripeCheckoutActions';
 
 type State = {
   loaded: boolean,
-  overlay: boolean,
   amount: ?number,
   token: ?string,
 };
@@ -19,7 +18,6 @@ type State = {
 
 const initialState: State = {
   loaded: false,
-  overlay: false,
   amount: null,
   token: null,
 };
@@ -36,8 +34,8 @@ export default function stripeCheckoutReducer(
     case 'STRIPE_CHECKOUT_LOADED':
       return Object.assign({}, state, { loaded: true });
 
-    case 'OPEN_STRIPE_OVERLAY':
-      return Object.assign({}, state, { overlay: true, amount: action.amount });
+    case 'SET_STRIPE_AMOUNT':
+      return Object.assign({}, state, { amount: action.amount });
 
     default:
       return state;

@@ -11,8 +11,6 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
-import stripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
-
 import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
@@ -20,6 +18,8 @@ import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
 import reducer from './reducers/reducers';
+
+import setContribAmount from './actions/monthlyContributionsActions';
 
 
 // ----- AB Tests ----- //
@@ -44,10 +44,7 @@ logger.init();
 const store = createStore(reducer);
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
-store.dispatch({
-  type: 'SET_CONTRIB_AMOUNT',
-  amount: getQueryParameter('contributionValue', '5'),
-});
+store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
 
 
 // ----- Render ----- //

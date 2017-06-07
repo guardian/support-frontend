@@ -12,7 +12,8 @@ export type Action =
   | { type: 'STRIPE_CHECKOUT_LOADED' }
   | { type: 'SET_STRIPE_CHECKOUT_TOKEN', token: string }
   | { type: 'CLOSE_STRIPE_OVERLAY' }
-  | { type: 'OPEN_STRIPE_OVERLAY', amount: number }
+  | { type: 'OPEN_STRIPE_OVERLAY' }
+  | { type: 'SET_STRIPE_AMOUNT', amount: number }
   ;
 
 
@@ -34,9 +35,13 @@ function closeStripeOverlay(): Action {
   return { type: 'CLOSE_STRIPE_OVERLAY' };
 }
 
-export function openStripeOverlay(amount: number): Action {
+export function openStripeOverlay(): Action {
   stripeCheckout.openDialogBox();
-  return { type: 'OPEN_STRIPE_OVERLAY', amount };
+  return { type: 'OPEN_STRIPE_OVERLAY' };
+}
+
+export function setStripeAmount(amount: number): Action {
+  return { type: 'SET_STRIPE_AMOUNT', amount };
 }
 
 export function setupStripeCheckout(): Function {

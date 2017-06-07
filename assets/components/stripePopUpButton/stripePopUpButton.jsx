@@ -1,26 +1,42 @@
 // @flow
 
+// ----- Imports ----- //
+
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { openStripeOverlay, setupStripeCheckout } from 'helpers/stripeCheckout/stripeCheckoutActions';
+import {
+  openStripeOverlay,
+  setupStripeCheckout,
+} from 'helpers/stripeCheckout/stripeCheckoutActions';
+
+
+// ---- Types ----- //
+
+type PropTypes = {
+  stripeLoaded: boolean,
+  setupStripeCheckout: Function,
+  onStripeClick: Function,
+};
 
 
 // ----- Functions ----- //
 
-const StripePopUpButton = (props: Props) => {
+const StripePopUpButton = (props: PropTypes) => {
 
-  props.setupStripeCheckout();
+  if (!props.stripeLoaded) {
+    props.setupStripeCheckout();
+  }
 
-  return <button onClick={() => props.onStripeClick(props.amount)}>Add CC</button>;
+  return <button onClick={props.onStripeClick}>Add CC</button>;
 
 };
 
 function mapStateToProps(state) {
 
   return {
-    overlayOpen: state.stripe.overlay,
-    stripeLoaded: state.stripe.loaded,
+    overlayOpen: state.stripeCheckout.overlay,
+    stripeLoaded: state.stripeCheckout.loaded,
   };
 
 }
@@ -31,8 +47,8 @@ function mapDispatchToProps(dispatch) {
     setupStripeCheckout: () => {
       dispatch(setupStripeCheckout());
     },
-    onStripeClick: (amount) => {
-      dispatch(openStripeOverlay(amount));
+    onStripeClick: () => {
+      dispatch(openStripeOverlay());
     },
   };
 

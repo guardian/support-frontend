@@ -1,12 +1,17 @@
 // @flow
 
-// ----- Types ----- //
+// ----- Imports ----- //
 
-export type Action = { type: 'SET_CONTRIB_AMOUNT', amount: string };
+import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
+import validateContribution from '../helpers/validation';
 
 
 // ----- Actions ----- //
 
-export default function setContribAmount(amount: string): Action {
-  return { type: 'SET_CONTRIB_AMOUNT', amount };
+export default function setContribAmount(amount: string): Function {
+
+  return (dispatch) => {
+    dispatch(setStripeAmount(validateContribution(amount)));
+  };
+
 }

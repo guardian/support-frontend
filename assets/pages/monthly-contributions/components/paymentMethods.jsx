@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
+
 
 // ----- Setup ----- //
 
@@ -18,7 +20,7 @@ function PaymentMethods() {
   return (
     <section className="payment-methods">
       <h2>Payment methods</h2>
-      <button>Stripe</button>
+      <StripePopUpButton />
       <button>PayPal</button>
       <div>
         By proceeding, you are agreeing to our {terms} and {privacy}.
