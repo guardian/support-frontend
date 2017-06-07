@@ -61,7 +61,7 @@ The pieces that make up `support-frontend` are:
  * [**store**](http://redux.js.org/docs/basics/Store.html) holds the application state.
  
  Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the 
- the presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
+ presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
  
  There are two type of React components, [presentational and container components](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components).
  The presentational components ***are not aware of Redux***, and its main purpose is to define how the data is showed to the 
