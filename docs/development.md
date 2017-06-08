@@ -180,6 +180,13 @@ $ yarn run [name_command]
 
 ## 7. A/B Test framework
 
+
+7.1. [API](#71-api)
+
+7.2. [How to set up the AB Test framework in a new page of the site](#72-set-up-the-ab-test-framework-in-a-new-page-of-the-site)
+
+7.3. [How to implement a new test](#73-implementation-of-a-test)
+
 In this section we will go through the steps and considerations that you must have when you want to set up a new test.
 
 ### 7.1 API
@@ -281,7 +288,7 @@ compute the sample size of your experiment. From the sample size, you can estima
 #### Step 1: Add your test to the Tests array
 
  After your hypothesis is defined, you have to implement the test in the codebase. First, you have to define the test 
- in the [abtest.js shared helper](/assets/helpers/abtest.js). Inside that file, under the **Tests** section you will 
+ in the [`abtest.js` shared helper](/assets/helpers/abtest.js). Inside that file, under the **Tests** section you will 
  find the definition of the tests array, you have to add a new object to this array:
  
  ```javascript 1.8
