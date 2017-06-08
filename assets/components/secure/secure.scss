@@ -1,0 +1,16 @@
+.component-secure {
+	height: 16px;
+	font-size: 14px;
+
+	svg {
+		height: 100%;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.component-secure__text {
+		margin-left: 6px;
+		display: inline-block;
+		vertical-align: middle;
+	}
+}

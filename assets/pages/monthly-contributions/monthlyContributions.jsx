@@ -13,6 +13,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import CheckoutSection from 'components/checkoutSection/checkoutSection';
 import DisplayName from 'components/displayName/displayName';
+import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 
 import * as ga from 'helpers/ga';
@@ -60,7 +61,7 @@ const content = (
       <div className="monthly-contrib gu-content-margin">
         <CheckoutSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
-          <div className="monthly-contrib__secure">Secure</div>
+          <Secure />
         </CheckoutSection>
         <CheckoutSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
           <div className="monthly-contrib__amount">£{store.getState().monthlyContrib}</div>
