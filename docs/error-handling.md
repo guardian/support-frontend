@@ -16,33 +16,12 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 
 ### General errors
 
-<table>
-  <tr>
-    <td>Error type</td>
-    <td>Description</td>
-    <td>Retry?</td>
-  </tr>
-  <tr>
-    <td>Input parsing errors</td>
-    <td>Errors caused by invalid input JSON</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>Service timeouts</td>
-    <td>Any http timeout from a 3rd party service</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>Service 500s</td>
-    <td>Any 500 result code from a 3rd party service</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>Unknown error</td>
-    <td>Any unhandled exception thrown during execution</td>
-    <td>Limited</td>
-  </tr>
-</table>
+| Error type           | Description                                     | Retry?    |
+|----------------------|-------------------------------------------------|-----------|
+| Input parsing errors | Errors caused by invalid input JSON             | No        |
+| Service timeouts     | Any http timeout from a 3rd party service       | Unlimited |
+| Service 500s         | Any 500 result code from a 3rd party service    | Unlimited |
+| Unknown error        | Any unhandled exception thrown during execution | Limited   |
 
 
 ## Service specific errors
@@ -51,102 +30,28 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 
 [Error docs](https://stripe.com/docs/api#errors)
 
-<table>
-  <tr>
-    <td>Error type</td>
-    <td>Description</td>
-    <td>Retry?</td>
-  </tr>
-  <tr>
-    <td>api_connection_error</td>
-    <td>Failure to connect to Stripe's API.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>api_error</td>
-    <td>API errors cover any other type of problem (e.g., a temporary problem with Stripe's servers) and are extremely uncommon.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-      <td>rate_limit_error</td>
-      <td>Too many requests hit the API too quickly.</td>
-      <td>Unlimited</td>
-    </tr>
-  <tr>
-    <td>authentication_error</td>
-    <td>Failure to properly authenticate yourself in the request.</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>card_error</td>
-    <td>Card errors are the most common type of error you should expect to handle. They result when the user enters a card that can't be charged for some reason.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>invalid_request_error</td>
-    <td>Invalid request errors arise when your request has invalid parameters.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>validation_error</td>
-    <td>Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete).</td>
-    <td>No</td>
-  </tr>
-</table>
+| Error type            | Description                                                                                                                                               | Retry?    |
+|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| api_connection_error  | Failure to connect to Stripe's API.                                                                                                                       | Unlimited |
+| api_error             | API errors cover any other type of problem (e.g., a temporary problem with Stripe's servers) and are extremely uncommon.                                  | Unlimited |
+| rate_limit_error      | Too many requests hit the API too quickly.                                                                                                                | Unlimited |
+| authentication_error  | Failure to properly authenticate yourself in the request.                                                                                                 | Limited   |
+| card_error            | Card errors are the most common type of error you should expect to handle. They result when the user enters a card that can't be charged for some reason. | No        |
+| invalid_request_error | Invalid request errors arise when your request has invalid parameters.                                                                                    | No        |
+| validation_error      | Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete).     | No        |
 
 ### AWS Encryption
-<table>
-  <tr>
-    <td>Error</td>
-    <td>Description</td>
-    <td>Retry?</td>
-  </tr>
-  <tr>
-    <td>NotFoundException</td>
-    <td>The request was rejected because the specified entity or resource could not be found.</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>DisabledException</td>
-    <td>The request was rejected because the specified CMK is not enabled.</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>InvalidKeyUsageException</td>
-    <td>The request was rejected because the specified KeySpec value is not valid.</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>AWSKMSException</td>
-    <td>Any other KMS exception, for instance expired creds.</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>KeyUnavailableException</td>
-    <td>The request was rejected because the specified CMK was not available. The request can be retried.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>DependencyTimeoutException</td>
-    <td>The system timed out while trying to fulfill the request. The request can be retried.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>KMSInternalException</td>
-    <td>The request was rejected because an internal exception occurred. The request can be retried.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>KMSInvalidStateException</td>
-    <td>The request was rejected because the state of the specified resource is not valid for this request.</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>InvalidGrantTokenException</td>
-    <td>The request was rejected because the specified grant token is not valid.</td>
-    <td>No</td>
-  </tr>
-</table>
+| Error                      | Description                                                                                         | Retry?    |
+|----------------------------|-----------------------------------------------------------------------------------------------------|-----------|
+| NotFoundException          | The request was rejected because the specified entity or resource could not be found.               | Limited   |
+| DisabledException          | The request was rejected because the specified CMK is not enabled.                                  | Limited   |
+| InvalidKeyUsageException   | The request was rejected because the specified KeySpec value is not valid.                          | Limited   |
+| AWSKMSException            | Any other KMS exception, for instance expired creds.                                                | Limited   |
+| KeyUnavailableException    | The request was rejected because the specified CMK was not available. The request can be retried.   | Unlimited |
+| DependencyTimeoutException | The system timed out while trying to fulfill the request. The request can be retried.               | Unlimited |
+| KMSInternalException       | The request was rejected because an internal exception occurred. The request can be retried.        | Unlimited |
+| KMSInvalidStateException   | The request was rejected because the state of the specified resource is not valid for this request. | Unlimited |
+| InvalidGrantTokenException | The request was rejected because the specified grant token is not valid.                            | No        |
 
 
 ### Zuora
@@ -161,90 +66,21 @@ going to treat any fatal errors as meaning that the whole request can never succ
 
 _NB. Apparently the error category codes described below need to be explicitly enabled on our account. I have put in a support request for this, but until it is completed we can't implement category specific retries_
 
-<table>
-  <tr>
-    <td>Code</td>
-    <td>Category</td>
-    <td>Retry?</td>
-  </tr>
-  <tr>
-    <td>00</td>
-    <td>Unknown</td>
-    <td>Limited</td>
-  </tr>
-  <tr>
-    <td>10</td>
-    <td>Permission or access denied</td>
-    <td>Limited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>11</td>
-    <td>Authentication failed</td>
-    <td>Limited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>20</td>
-    <td>Invalid format or value</td>
-    <td>No</td>
-  </tr>
-</tr>
-  <tr>
-    <td>21</td>
-    <td>Unknown field in request</td>
-    <td>No</td>
-  </tr>
-</tr>
-  <tr>
-    <td>22</td>
-    <td>Missing required field</td>
-    <td>No</td>
-  </tr>
-</tr>
-  <tr>
-    <td>30</td>
-    <td>Rule restriction</td>
-    <td>No</td>
-  </tr>
-</tr>
-  <tr>
-    <td>40</td>
-    <td>Not found</td>
-    <td>Limited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>50</td>
-    <td>Locking contention</td>
-    <td>Unlimited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>60</td>
-    <td>Internal error</td>
-    <td>Unlimited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>70</td>
-    <td>Request exceeded limit</td>
-    <td>Unlimited</td>
-  </tr>
-</tr>
-  <tr>
-    <td>90</td>
-    <td>Malformed request</td>
-    <td>No</td>
-  </tr>
-</tr>
-  <tr>
-    <td>99</td>
-    <td>Extension error</td>
-    <td>No</td>
-  </tr>
-</tr>
-</table>
+| Code | Category                    | Retry?    |
+|------|-----------------------------|-----------|
+| 00   | Unknown                     | Limited   |
+| 10   | Permission or access denied | Limited   |
+| 11   | Authentication failed       | Limited   |
+| 20   | Invalid format or value     | No        |
+| 21   | Unknown field in request    | No        |
+| 22   | Missing required field      | No        |
+| 30   | Rule restriction            | No        |
+| 40   | Not found                   | Limited   |
+| 50   | Locking contention          | Unlimited |
+| 60   | Internal error              | Unlimited |
+| 70   | Request exceeded limit      | Unlimited |
+| 90   | Malformed request           | No        |
+| 99   | Extension error             | No        |
 
 
 ### Salesforce
@@ -255,43 +91,14 @@ Again, hard to get specific error codes for the request we are using as it seems
 
 General codes are here:
 
-<table>
-  <tr>
-    <td>HTTP Response code</td>
-    <td></td>
-    <td>Retry?</td>
-  </tr>
-  <tr>
-    <td>400</td>
-    <td>The request couldn’t be understood, usually because the JSON or XML body contains an error.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>401</td>
-    <td>The session ID or OAuth token used has expired or is invalid</td>
-    <td>Unlimited</td>
-  </tr>
-  <tr>
-    <td>403</td>
-    <td>The request has been refused. Verify that the logged-in user has appropriate permissions.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>404</td>
-    <td>The requested resource couldn’t be found. Check the URI for errors, and verify that there are no sharing issues.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>405</td>
-    <td>The method specified in the Request-Line isn’t allowed for the resource specified in the URI.</td>
-    <td>No</td>
-  </tr>
-  <tr>
-    <td>415</td>
-    <td>The entity in the request is in a format that’s not supported by the specified method.</td>
-    <td>No</td>
-  </tr>
-</table>
+| HTTP Response code |                                                                                                                  | Retry?    |
+|--------------------|------------------------------------------------------------------------------------------------------------------|-----------|
+| 400                | The request couldn’t be understood, usually because the JSON or XML body contains an error.                      | No        |
+| 401                | The session ID or OAuth token used has expired or is invalid                                                     | Unlimited |
+| 403                | The request has been refused. Verify that the logged-in user has appropriate permissions.                        | No        |
+| 404                | The requested resource couldn’t be found. Check the URI for errors, and verify that there are no sharing issues. | No        |
+| 405                | The method specified in the Request-Line isn’t allowed for the resource specified in the URI.                    | No        |
+| 415                | The entity in the request is in a format that’s not supported by the specified method.                           | No        |
 
 ### PayPal
 No request specific error codes as we are only retrieving the user's email address. Just retry on 500s.
