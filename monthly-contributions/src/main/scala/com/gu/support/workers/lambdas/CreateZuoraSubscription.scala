@@ -2,17 +2,20 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
-import com.gu.services.Services
+import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}
-import scala.concurrent.ExecutionContext.Implicits.global
-import com.gu.support.workers.encoding.StateCodecs._
 
-class CreateZuoraSubscription
-    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState]
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
+    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
     with LazyLogging {
+
+  def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
     services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>

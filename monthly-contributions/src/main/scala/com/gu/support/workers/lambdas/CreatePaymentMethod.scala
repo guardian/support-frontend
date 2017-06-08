@@ -12,10 +12,9 @@ import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Failure
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
@@ -28,17 +27,18 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     paymentMethod.map(CreateSalesforceContactState(state.requestId, state.user, state.contribution, _))
   }
 
-  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] = for {
-    stripeCustomer <- stripeService.createCustomer(stripe.userId, stripe.stripeToken).andThen {
-      case Failure(e) => logger.warn(s"Could not create Stripe customer for user ${stripe.userId}", e)
-    }
-  } yield {
-    val card = stripeCustomer.card
-    CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4, CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
-  }
+  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
+    stripeService
+      .createCustomer(stripe.userId, stripe.stripeToken)
+      .map { stripeCustomer =>
+        val card = stripeCustomer.card
+        CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
+          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`
+        )
+      }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] = Future {
-    val payPalEmail = payPalService.retrieveEmail(payPal.baid)
-    PayPalReferenceTransaction(payPal.baid, payPalEmail)
-  }
+  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
+    payPalService
+      .retrieveEmail(payPal.baid)
+      .map(PayPalReferenceTransaction(payPal.baid, _))
 }

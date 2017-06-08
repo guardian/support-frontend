@@ -3,7 +3,7 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.Fixtures.subscriptionRequest
+import com.gu.zuora.Fixtures._
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 

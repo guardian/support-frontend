@@ -4,16 +4,20 @@ States:
   CreatePaymentMethod:
     Type: Task
     Resource: "${CreatePaymentMethodLambda.Arn}"
+    $state_machine_retries
     Next: CreateSalesforceContact
   CreateSalesforceContact:
     Type: Task
     Resource: "${CreateSalesforceContactLambda.Arn}"
+    $state_machine_retries
     Next: CreateZuoraSubscription
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
+    $state_machine_retries
     Next: SendThankYouEmail
   SendThankYouEmail:
     Type: Task
     Resource: "${SendThankYouEmailLambda.Arn}"
+    $state_machine_retries
     End: True

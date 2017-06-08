@@ -8,13 +8,13 @@ import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
+import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.support.workers.model.state.CreateSalesforceContactState
+import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
-import com.gu.support.workers.encoding.StateCodecs._
-import io.circe.ParsingFailure
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
@@ -61,7 +61,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
   }
 
   it should "fail when passed invalid json" in {
-    a[ParsingFailure] should be thrownBy {
+    a[RetryNone] should be thrownBy {
       val createPaymentMethod = new CreatePaymentMethod()
 
       val outStream = new ByteArrayOutputStream()

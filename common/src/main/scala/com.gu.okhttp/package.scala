@@ -9,7 +9,7 @@ import scala.concurrent.{Future, Promise}
 
 package object okhttp {
 
-  implicit class RickOkHttpClient(client: OkHttpClient) extends LazyLogging {
+  implicit class RichOkHttpClient(client: OkHttpClient) extends LazyLogging {
 
     def execute(request: Request): Future[Response] = {
       val p = Promise[Response]()

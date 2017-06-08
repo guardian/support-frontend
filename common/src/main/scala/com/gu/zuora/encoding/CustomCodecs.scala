@@ -2,15 +2,15 @@ package com.gu.zuora.encoding
 
 import java.util.UUID
 
+import cats.syntax.either._
 import com.gu.helpers.StringExtensions._
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.model._
 import io.circe._
 import io.circe.generic.semiauto._
 import org.joda.time.{DateTime, LocalDate}
-import cats.syntax.either._
-import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
-import com.gu.support.workers.encoding.Codec
 
 import scala.util.Try
 

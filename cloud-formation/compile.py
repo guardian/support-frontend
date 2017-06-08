@@ -18,12 +18,15 @@ def get_lambdas():
     environment_variables = read_file('src/environment-variables.yaml')
     return Template(lambda_string).safe_substitute({'environment_variables': environment_variables})
 
+def get_state_machine():
+    state_machine_retries = read_file('src/state-machine-retries.yaml')
+    state_machine_template = Template(read_file('src/state-machine.yaml')).safe_substitute({'state_machine_retries': state_machine_retries})
+    return json.dumps(yaml.load(state_machine_template))
+
 template = Template(read_file('src/cfn-template.yaml'))
 
-state_machine = json.dumps(yaml.load(read_file('src/state-machine.yaml')))
-
 params = {
-    'state_machine_json': state_machine,
+    'state_machine_json': get_state_machine(),
     'lambdas': get_lambdas()
 }
 

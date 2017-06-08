@@ -109,4 +109,10 @@ object Fixtures {
             "salesForceContact": $salesforceContactJson
             }
         """
+
+  val stripeCardDeclinedErrorJson =
+    s"""
+       {
+       }
+     """
 }

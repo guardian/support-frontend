@@ -29,4 +29,14 @@ object Fixtures {
         "signature": "UK0fYmoyyuefxqsXFnovXy/RM/MleImPqZcf72ax+As="
       }
     """
+
+  val expiredTokenResponse =
+    """
+      [{"message":"Session expired or invalid","errorCode":"INVALID_SESSION_ID"}]
+    """
+
+  val authenticationErrorResponse =
+    """
+      400: {"error":"invalid_client_id","error_description":"client identifier invalid"}
+    """
 }
