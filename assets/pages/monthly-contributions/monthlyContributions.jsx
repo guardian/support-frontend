@@ -58,18 +58,18 @@ const content = (
     <div>
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
-        <section className="monthly-contrib__header">
+        <CheckoutSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
           <div className="monthly-contrib__secure">Secure</div>
-        </section>
-        <CheckoutSection heading="Your contribution" className="monthly-contrib__your-contrib">
-          <div>{store.getState().monthlyContrib}</div>
+        </CheckoutSection>
+        <CheckoutSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
+          <div className="monthly-contrib__amount">£{store.getState().monthlyContrib}</div>
         </CheckoutSection>
         <CheckoutSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName name="SignedInUser" />
           <NameForm />
         </CheckoutSection>
-        <CheckoutSection heading="Your details" className="monthly-contrib__payment-methods">
+        <CheckoutSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethods />
         </CheckoutSection>
         <CheckoutSection className="monthly-contrib__payment-methods">

@@ -1,0 +1,20 @@
+.component-checkout-section {
+	font-family: $gu-sans-web;
+	border-top: 1px dotted gu-colour(neutral-2);
+	padding-bottom: $gu-v-spacing * 2;
+
+	@include mq($from: desktop) {
+		padding-bottom: $gu-v-spacing * 2;
+
+		> * {
+			display: inline-block;
+		}
+
+		.component-checkout-section__header {
+			width: 20%;
+			vertical-align: top;
+		}
+
+	}
+
+}

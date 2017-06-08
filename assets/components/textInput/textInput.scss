@@ -1,0 +1,19 @@
+.component-text-input {
+	font-size: 14px;
+	color: gu-colour(neutral-1);
+	margin-bottom: $gu-v-spacing;
+
+	input {
+		border: none;
+		border-radius: 600px;
+		padding: $gu-v-spacing $gu-h-spacing;
+	}
+}
+
+// Sometimes in this component the input is at the top level.
+input.component-text-input {
+	display: block;
+	border: none;
+	border-radius: 600px;
+	padding: $gu-v-spacing $gu-h-spacing;
+}

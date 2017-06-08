@@ -18,12 +18,22 @@
 		.monthly-contrib__heading {
 			font-size: 30px;
 			font-weight: bold;
+			font-family: $gu-egyptian-web;
 		}
 
-		.monthly-contrib__secure {
-			font-family: $gu-sans-web;
-		}
+	}
 
+	// ----- Your contrib
+
+	.monthly-contrib__amount {
+		border-radius: 1000px;
+		font-size: 20px;
+		color: #fff;
+		width: 40px;
+		height: 40px;
+		text-align: center;
+		background-color: gu-colour(neutral-1);
+		line-height: 40px;
 	}
 
 }
