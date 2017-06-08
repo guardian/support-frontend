@@ -6,7 +6,8 @@
 	input {
 		border: none;
 		border-radius: 600px;
-		padding: $gu-v-spacing $gu-h-spacing;
+		height: $gu-v-spacing * 3;
+		padding: 0 $gu-h-spacing;
 	}
 }
 
@@ -15,5 +16,6 @@ input.component-text-input {
 	display: block;
 	border: none;
 	border-radius: 600px;
-	padding: $gu-v-spacing $gu-h-spacing;
+	height: $gu-v-spacing * 3;
+	padding: 0 $gu-h-spacing;
 }

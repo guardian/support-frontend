@@ -1,7 +1,11 @@
-.component-stripe-button {
+.component-stripe-pop-up-button {
   height: $gu-v-spacing * 3;
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
   border-radius: 600px;
   background-color: gu-colour(neutral-1);
+  padding: 0 $gu-h-spacing;
   border: none;
   color: #fff;
 }

@@ -21,6 +21,7 @@
 
 		.monthly-contrib__heading {
 			font-size: 30px;
+			line-height: 34px;
 			font-weight: bold;
 			font-family: $gu-egyptian-web;
 		}
@@ -38,6 +39,24 @@
 		text-align: center;
 		background-color: gu-colour(neutral-1);
 		line-height: 40px;
+	}
+
+	// ----- Your details
+
+	.monthly-contrib__your-details {
+		input {
+			width: 300px;
+			box-sizing: border-box;
+		}
+	}
+
+	// ----- Payment methods
+
+	.monthly-contrib__payment-methods {
+		.component-stripe-pop-up-button {
+			width: 300px;
+			box-sizing: border-box;
+		}
 	}
 
 }
