@@ -3,10 +3,11 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.salesforce.Salesforce.UpsertData
 import com.gu.services.Services
+import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.model.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
-import com.gu.support.workers.encoding.StateCodecs._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
@@ -26,7 +27,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
         CreateZuoraSubscriptionState(state.requestId, state.user, state.contribution, state.paymentMethod, response.ContactRecord)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
-        logger.error(s"Error creating Salesforce contact:\n$errorMessage")
+        logger.warn(s"Error creating Salesforce contact:\n$errorMessage")
         throw new SalesforceException(errorMessage)
       })
   }

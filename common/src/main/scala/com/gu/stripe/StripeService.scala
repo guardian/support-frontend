@@ -8,7 +8,7 @@ import okhttp3.Request
 import scala.concurrent.{ExecutionContext, Future}
 
 class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: String = "https://api.stripe.com/v1")(implicit ec: ExecutionContext)
-    extends WebServiceHelper[Stripe.Error] {
+    extends WebServiceHelper[Stripe.StripeError] {
 
   // Stripe URL is the same in all environments
   val wsUrl = baseUrl

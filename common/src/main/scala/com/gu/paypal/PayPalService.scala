@@ -32,8 +32,8 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends L
     retrieveNVPParam(response, "ACK") match {
       case "Success" => logger.info("Successful PayPal NVP request")
       case "SuccessWithWarning" => logger.warn(msg("Warning"))
-      case "Failure" => logger.error(msg("Error"))
-      case "FailureWithWarning" => logger.error(msg("Error With Warning"))
+      case "Failure" => logger.warn(msg("Error"))
+      case "FailureWithWarning" => logger.warn(msg("Error With Warning"))
     }
 
   }
