@@ -1,3 +1,29 @@
 #monthly-contributions-page {
-	background-color: gu-colour(multimedia-main-2);
+
+	// ----- General ----- //
+
+	background-color: darken(gu-colour(multimedia-main-2), 5%);
+
+	.monthly-contrib {
+		background-color: gu-colour(multimedia-main-2);
+	}
+
+
+	// ----- Sections ----- //
+
+	// ----- Header
+
+	.monthly-contrib__header {
+
+		.monthly-contrib__heading {
+			font-size: 30px;
+			font-weight: bold;
+		}
+
+		.monthly-contrib__secure {
+			font-family: $gu-sans-web;
+		}
+
+	}
+
 }

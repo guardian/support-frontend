@@ -12,7 +12,7 @@ import TextInput from 'components/textInput/textInput';
 function NameForm() {
 
   return (
-    <form>
+    <form className="monthly-contrib__name-form">
       <TextInput id="first-name" labelText="First name" />
       <TextInput id="last-name" labelText="Last name" />
     </form>
