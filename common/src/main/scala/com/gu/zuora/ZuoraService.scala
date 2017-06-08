@@ -12,10 +12,10 @@ import okhttp3.Request.Builder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ZuoraService(config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl:Option[String] = None)(implicit ec: ExecutionContext)
   extends WebServiceHelper[ZuoraErrorResponse] {
 
-  override val wsUrl = config.url
+  override val wsUrl = baseUrl.getOrElse(config.url)
   override val httpClient = client
 
   override def wsPreExecute(req: Builder): Builder =

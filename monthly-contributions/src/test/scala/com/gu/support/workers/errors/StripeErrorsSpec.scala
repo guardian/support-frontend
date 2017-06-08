@@ -3,8 +3,8 @@ package com.gu.support.workers.errors
 import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
-import com.gu.okhttp.RequestRunners
-import com.gu.services.{ServiceProvider, Services}
+import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.services.ServiceProvider
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.Fixtures.createStripePaymentMethodJson
@@ -12,15 +12,13 @@ import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import io.circe.syntax._
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
+class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator {
   "Timeouts from Stripe" should "throw a NonFatalException" in {
-    val createPaymentMethod = new CreatePaymentMethod(timeOutServices)
+    val createPaymentMethod = new CreatePaymentMethod(timeoutServices)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -64,24 +62,17 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator {
     server.shutdown()
   }
 
-  lazy val timeOutServices = {
-    val serviceProvider = mock[ServiceProvider]
-    val services = mock[Services]
-    //Create a StripeService which will timeout
-    val stripe = new StripeService(Configuration.stripeConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
-    when(services.stripeService).thenReturn(stripe)
-    when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
-    serviceProvider
-  }
+  lazy val timeoutServices = mockServices(
+    s => s.stripeService,
+    //Create a stripe service which will timeout after 1 millisecond
+    new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds))
+  )
 
-  private def errorServices(baseUrl: String) = {
-    val serviceProvider = mock[ServiceProvider]
-    val services = mock[Services]
-    //Create a StripeService which will timeout
-    val stripe = new StripeService(Configuration.stripeConfigProvider.get(), RequestRunners.configurableFutureRunner(10.seconds), baseUrl)
-    when(services.stripeService).thenReturn(stripe)
-    when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
-    serviceProvider
+  def errorServices(baseUrl: String): ServiceProvider = {
+    mockServices(
+      s => s.stripeService,
+      new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl)
+    )
   }
 
 }
