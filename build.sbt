@@ -69,6 +69,7 @@ maintainer := "Membership <membership.dev@theguardian.com>"
 
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "support:frontend"
+riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
