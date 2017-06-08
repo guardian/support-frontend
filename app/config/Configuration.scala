@@ -10,7 +10,7 @@ class Configuration {
 
   lazy val sentryDsn = config.getOptionalString("sentry.dsn")
 
-  lazy val identity = new Identity(config.atKey("identity"))
+  lazy val identity = new Identity(config.getConfig("identity"))
 
   lazy val supportUrl = config.getString("support.url")
 }
