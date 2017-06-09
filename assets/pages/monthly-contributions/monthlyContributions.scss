@@ -18,12 +18,26 @@
 	// ----- Header
 
 	.monthly-contrib__header {
+		border-top: none;
 
 		.monthly-contrib__heading {
-			font-size: 30px;
-			line-height: 34px;
+			margin-top: -3px;
+			font-size: 24px;
+			line-height: 28px;
 			font-weight: bold;
 			font-family: $gu-egyptian-web;
+
+			@include mq($from: desktop) {
+				margin-top: $gu-v-spacing;
+				font-size: 44px;
+				line-height: 44px;
+			}
+		}
+
+		.component-secure {
+			&__text {
+				margin-top: 4px;
+			}
 		}
 
 	}
@@ -31,14 +45,15 @@
 	// ----- Your contrib
 
 	.monthly-contrib__amount {
+		margin-top: $gu-v-spacing / 2;
 		border-radius: 1000px;
 		font-size: 20px;
 		color: #fff;
-		width: 40px;
-		height: 40px;
+		width: 60px;
+		height: 60px;
 		text-align: center;
 		background-color: gu-colour(neutral-1);
-		line-height: 40px;
+		line-height: 60px;
 	}
 
 	// ----- Your details
