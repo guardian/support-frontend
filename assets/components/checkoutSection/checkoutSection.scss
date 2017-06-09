@@ -1,9 +1,9 @@
 .component-checkout-section {
 	font-family: $gu-sans-web;
-	line-height: 16px;
+	line-height: 18px;
 	border-top: 1px dotted rgba(0,0,0,0.2);
 	padding-bottom: $gu-v-spacing * 3;
-	padding-top: $gu-v-spacing / 2;
+	padding-top: $gu-v-spacing / 3;
 
 	@include mq($from: desktop) {
 		padding-bottom: $gu-v-spacing * 4;

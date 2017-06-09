@@ -36,7 +36,7 @@
 
 		.component-secure {
 			&__text {
-				margin-top: 4px;
+				margin-top: $gu-v-spacing / 2;
 			}
 		}
 
@@ -47,13 +47,17 @@
 	.monthly-contrib__amount {
 		margin-top: $gu-v-spacing / 2;
 		border-radius: 1000px;
-		font-size: 20px;
+		font-size: 24px;
 		color: #fff;
 		width: 60px;
 		height: 60px;
 		text-align: center;
 		background-color: gu-colour(neutral-1);
 		line-height: 60px;
+
+		@include mq($from: desktop) {
+			margin-top: 2px;
+		}
 	}
 
 	// ----- Your details
