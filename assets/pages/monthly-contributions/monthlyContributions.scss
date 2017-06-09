@@ -15,13 +15,17 @@
 
 	// ----- Sections ----- //
 
+	h2 {
+		margin-top: -2px;
+	}
+
 	// ----- Header
 
 	.monthly-contrib__header {
 		border-top: none;
 
 		.monthly-contrib__heading {
-			margin-top: -3px;
+			margin-top: -15px; /* custom size for header at mobile because of padding */
 			font-size: 24px;
 			line-height: 28px;
 			font-weight: bold;
@@ -45,7 +49,6 @@
 	// ----- Your contrib
 
 	.monthly-contrib__amount {
-		margin-top: $gu-v-spacing / 2;
 		border-radius: 1000px;
 		font-size: 24px;
 		color: #fff;
@@ -54,18 +57,23 @@
 		text-align: center;
 		background-color: gu-colour(neutral-1);
 		line-height: 60px;
-
-		@include mq($from: desktop) {
-			margin-top: 2px;
-		}
 	}
 
 	// ----- Your details
 
 	.monthly-contrib__your-details {
+
+		#last-name {
+			margin-bottom: 0px;
+		}
+
 		input {
-			width: 300px;
+			width: 100%;
 			box-sizing: border-box;
+
+			@include mq($from: desktop) {
+				width: 304px;
+			}
 		}
 	}
 
@@ -73,8 +81,12 @@
 
 	.monthly-contrib__payment-methods {
 		.component-stripe-pop-up-button {
-			width: 300px;
 			box-sizing: border-box;
+
+			@include mq($from: desktop) {
+				width: 304px;
+			}
+
 		}
 	}
 

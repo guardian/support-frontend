@@ -3,7 +3,7 @@
 	line-height: 18px;
 	border-top: 1px dotted rgba(0,0,0,0.2);
 	padding-bottom: $gu-v-spacing * 3;
-	padding-top: $gu-v-spacing / 3;
+	padding-top: $gu-v-spacing / 2;
 
 	@include mq($from: desktop) {
 		padding-bottom: $gu-v-spacing * 4;
@@ -12,11 +12,16 @@
 			display: inline-block;
 		}
 
-		.component-checkout-section__header {
+	}
+
+	.component-checkout-section__header {
+		padding-bottom: $gu-v-spacing;
+
+		@include mq($from: desktop) {
 			width: 20%;
 			vertical-align: top;
 			font-size: 16px;
-			line-height: 16px;
+			line-height: 18px;
 		}
 
 	}
