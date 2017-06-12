@@ -52,7 +52,8 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-play-auth" % "0.22",
   "com.netaporter" %% "scala-uri" % "0.4.16",
-  filters
+  filters,
+  ws
 )
 
 sources in (Compile,doc) := Seq.empty
