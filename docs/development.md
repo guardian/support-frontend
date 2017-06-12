@@ -267,7 +267,7 @@ You can find a real example of this [here](https://github.com/guardian/support-f
 ### 7.3 Implementation of a test
 
 #### Step 0: Define your experiment 
-First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and and a 
+First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and a 
 number of variants. For example:
    
 > Hypothesis: By changing **[`element_to_test`]**, it will **`[increase|decrease]`** the **`[put_some_metric]`** by **`number`%**
