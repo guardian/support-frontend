@@ -1,5 +1,6 @@
 package com.gu.support.workers.encoding
 
+import com.gu.salesforce.Salesforce._
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.model.monthlyContributions.state._
 import com.gu.zuora.encoding.CustomCodecs._
