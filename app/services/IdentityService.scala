@@ -77,14 +77,14 @@ class IdentityService(idApiUrl: String, idApiClientToken: String)(implicit wsCli
     )(func)
   }
 
-  private def uriAsString(uri: URI) = s"${uri.getScheme}${uri.getHost}/${uri.getPath}"
+  private def uriWithoutQuery(uri: URI) = uri.toString.takeWhile(_ != '?')
 
   private def execute[A](requestHolder: WSRequest)(func: (WSResponse) => Either[String, A])(implicit ec: ExecutionContext) = {
     EitherT.right(requestHolder.execute()).subflatMap {
       case r if r.success =>
         func(r)
       case r =>
-        Left(s"Identity API error: ${requestHolder.method} ${uriAsString(requestHolder.uri)} STATUS ${r.status}")
+        Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}")
     }
   }
 }
