@@ -1,8 +1,9 @@
-package com.gu.support.workers.model.state
+package com.gu.support.workers.model.monthlyContributions.state
 
 import java.util.UUID
 
-import com.gu.support.workers.model.{Contribution, PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.workers.model.monthlyContributions.Contribution
+import com.gu.support.workers.model.{PaymentMethod, SalesforceContactRecord, User}
 
 case class CreateZuoraSubscriptionState(
   requestId: UUID,

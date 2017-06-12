@@ -1,8 +1,9 @@
-package com.gu.support.workers.model.state
+package com.gu.support.workers.model.monthlyContributions.state
 
 import java.util.UUID
 
-import com.gu.support.workers.model.{Contribution, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.monthlyContributions.Contribution
+import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
 
 case class CreatePaymentMethodState(
   requestId: UUID,
