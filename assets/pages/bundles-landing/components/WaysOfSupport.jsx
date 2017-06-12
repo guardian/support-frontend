@@ -5,22 +5,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import type { Participations } from 'helpers/abtest';
-import { trackOphan } from 'helpers/abtest';
-
-import otherWaysOfContribute from '../helpers/abtest';
 import WayOfSupport from './WayOfSupport';
 
 
 // ----- Copy ----- //
 
-const generateOnClick = (baseURL: string, intcmp: string, variant: string): () => void => {
+const generateOnClick = (baseURL: string, intcmp: string): () => void => {
   const params = new URLSearchParams();
   params.append('INTCMP', intcmp);
   const ctaLink = `${baseURL}?${params.toString()}`;
 
   return () => {
-    trackOphan('otherWaysOfContribute', variant, true);
     window.location = ctaLink;
   };
 };
@@ -49,7 +44,6 @@ const waysOfSupport = [
 
 type PropTypes = {
   intCmp: string,
-  abTests: Participations
 };
 
 
@@ -62,22 +56,20 @@ const WaysOfSupport = (props: PropTypes) => {
   const params = new URLSearchParams();
   params.append('INTCMP', props.intCmp);
 
-
   const waysOfSupportRendered = waysOfSupport.map((way) => {
 
-    const onClick = generateOnClick(way.ctaLink, props.intCmp, props.abTests.otherWaysOfContribute);
+    const onClick = generateOnClick(way.ctaLink, props.intCmp);
     const attrs = Object.assign({}, way, { onClick });
 
     return <WayOfSupport {...attrs} />;
   });
 
-  const title = otherWaysOfContribute(props.abTests);
 
   return (
     <section className={className}>
       <div className={`${className}__content gu-content-margin`}>
         <div className={`${className}__heading`}>
-          <h1>{title}</h1>
+          <h1>other ways you can support us</h1>
         </div>
         {waysOfSupportRendered}
       </div>
@@ -91,7 +83,6 @@ const WaysOfSupport = (props: PropTypes) => {
 function mapStateToProps(state) {
   return {
     intCmp: state.intCmp,
-    abTests: state.abTests,
   };
 }
 

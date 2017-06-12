@@ -5,19 +5,20 @@ Support Frontend, how they interact and how you can start adding code to this re
   
 ## Table of contents
 
-1. [Getting started](#getting-started)
-2. [Introduction to the technological stack](#introduction-to-the-technological-stack)
-3. [Architecture](#architecture)
-4. [Project's structure](#projects-structure) 
-5. [CI Build process](#ci-build-process)
-6. [Yarn commands](#yarn-commands)
+1. [Getting started](#1-getting-started)
+2. [Introduction to the technological stack](#2-introduction-to-the-technological-stack)
+3. [Architecture](#3-architecture)
+4. [Project's structure](#4-projects-structure) 
+5. [CI Build process](#5-ci-build-process)
+6. [Yarn commands](#6-yarn-commands)
+7. [A/B Test framework](#7-ab-test-framework)
 
-## Getting started
+## 1. Getting started
 
 Follow the instructions in [**setup.md**](setup.md) to setup your dev environment and
 get `support-frontend` running locally.
 
-## Introduction to the technological stack
+## 2. Introduction to the technological stack
 
 The pieces that make up `support-frontend` are:
 
@@ -45,7 +46,7 @@ The pieces that make up `support-frontend` are:
  * webpack
  * yarn
  
-## Architecture
+## 3. Architecture
 
  ### Client-side architecture 
 
@@ -60,7 +61,7 @@ The pieces that make up `support-frontend` are:
  * [**store**](http://redux.js.org/docs/basics/Store.html) holds the application state.
  
  Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the 
- the presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
+ presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
  
  There are two type of React components, [presentational and container components](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components).
  The presentational components ***are not aware of Redux***, and its main purpose is to define how the data is showed to the 
@@ -82,7 +83,7 @@ The pieces that make up `support-frontend` are:
  //TODO 
 
  
-## Project's structure
+## 4. Project's structure
 
  
  The client-side javascript sits inside the assets folder and it is organized in the following way:
@@ -123,7 +124,7 @@ The pieces that make up `support-frontend` are:
 * The CSS for a non-shareable component is located inside the `page.scss` file.  
  
 
-## CI build process
+## 5. CI build process
 
 In order to build the project, team city runs a series of steps. The first step installs node js, the second build the 
 assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). 
@@ -149,7 +150,7 @@ As an example, in order to build the assets for production, the step `build-prod
    we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
     is done [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
 
-## Yarn commands
+## 6. Yarn commands
 
 In order to run a yarn command you should run:
 
@@ -176,3 +177,184 @@ $ yarn run [name_command]
 | `devrun`             | Cleans, transpiles, runs and watches the webpack-dev-server using `DEV` environment. |
 | `webpack-dev-server` | Runs the webpack-dev-server in port `9111`. |
 | `test`               | Runs the client side tests built using Jest.  |
+
+## 7. A/B Test framework
+
+
+7.1. [API](#71-api)
+
+7.2. [How to set up the AB Test framework in a new page of the site](#72-set-up-the-ab-test-framework-in-a-new-page-of-the-site)
+
+7.3. [How to implement a new test](#73-implementation-of-a-test)
+
+In this section we will go through the steps and considerations that you must have when you want to set up a new test.
+
+### 7.1 API
+
+The AB test framework has the following methods:
+
+#### `init()`
+This function initialize the AB test framework by executing the following steps:
+1. Read the MVT (multi variant testing) id from the cookie of the user. If the user has no mvt in his or her browser, 
+it generate a new MVTid and save it in the cookie.
+
+2. From the MVT, it generates the `Participations` object. The steps to build that object are:
+   * read the participations from `localStorage`
+   * check if the test is active.
+   * if the user is not already assigned to a variant in `localStorage`, they are assigned to a variant based on the value of the `mvtId`.
+   * finally it overrides the variant if the user passes the variant in the url in the way of: `#ab-[name_of_test]=[variant_name]`.
+
+3. Save the `Participations` object in `localStorage`. 
+     
+
+#### `getVariantsAsString(participations: Participations)`
+It receive the participation object and returns everything as string in the following format:
+
+`test1=variantA; test2=variantB`
+
+This method is being used mainly when the developer wants to track the variants in GA. In order to achieve this, she or 
+he has to set up the custom dimension called `experiment` with the value of the variants as a string. An example of this can be 
+found [here](https://github.com/guardian/support-frontend/pull/68/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R31).  
+
+
+#### `trackOphan( testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])`
+Track event using `tracker-js` from ophan. 
+
+
+#### `abTestReducer(state: Participations = {}, action: Action)`
+Reducer function to be included in the reducer of the page that will have import the AB test framework.
+
+### 7.2 Set up the AB test framework in a new page of the site
+
+#### Step 1: Initialize the AB test framework on the page you are working on
+In order to use the AB test framework you have to initialize it in your page. Therefore, you have to call the 
+`init` function of the module. That called will return a `Participations` object and you have to set that object in the 
+Redux store.
+
+
+```javascript 1.8
+
++// ----- AB Tests ----- //
+ +
+ +const participation = abTest.init();
+  
+ 
+ // ----- Redux Store ----- //
+  
+  const store = createStore(reducer);
+  
+ +store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+ 
+```
+ 
+ You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R41).
+
+#### Step 2: Add the AbTest reducer to your store
+
+In order to be able to understand Redux AB actions, you have to add the `abTestReducer` to your page's reducer as follows:
+ 
+```javascript 1.8
+export default combineReducers({
+  contribution,
+  intCmp,
+  abTests,
+});
+```
+  
+You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-c1f0bb180b22e8e0da8bde14c6b411c4R122).
+
+
+### 7.3 Implementation of a test
+
+#### Step 0: Define your experiment 
+First of all you have to **design the experiment** that you want to run. The experiment consist of a hypothesis and and a 
+number of variants. For example:
+   
+> Hypothesis: By changing **[`element_to_test`]**, it will **`[increase|decrease]`** the **`[put_some_metric]`** by **`number`%**
+
+For example: 
+
+> By **changing the background colour to black**, it will **increase** the **conversion rate** by **5**%
+
+
+ 
+
+The amount of change you expect your test to achieve will affect the length of the test. To be detect a smaller change, 
+you need more samples and therefore a longer test. This is related to the [statistical significance concept](https://en.wikipedia.org/wiki/Statistical_significance).
+ 
+[Here](http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equality) you will find a tool to 
+compute the sample size of your experiment. From the sample size, you can estimate the duration of your test.  
+
+#### Step 1: Add your test to the Tests array
+
+ After your hypothesis is defined, you have to implement the test in the codebase. First, you have to define the test 
+ in the [`abtest.js` shared helper](/assets/helpers/abtest.js). Inside that file, under the **Tests** section you will 
+ find the definition of the tests array, you have to add a new object to this array:
+ 
+ ```javascript 1.8
+ // ----- Tests ----- //
+ 
+ const tests: Test[] = [
+   {
+     testId: 'yourTestId', 
+     variants: ['control', 'variantA'],  
+     audience: {
+       offset: 0,
+       size: 1,
+     },
+     isActive: true,
+   },
+ ];
+ ```
+  
+  Each test object has the following fields:
+  
+  * **testId**: name of the test, this name has to match with the name of the test in Abacus. Additionally, it should be 
+  unique across all the test names in Abacus. 
+  * **variants**: This field is an array of strings, each string will be the name of a variant. One of these variant names has 
+  to be **control**. 
+  * **audience**: The audience is an object which contains two fields, `offset`, a number from 0 to 1 which indicates the 
+  part of the audience that will be affected by the test. In addition, the size of the test that is a number from 0 to 1.
+  For example a test with offset 0.2 and size 0.5 will affect the half of the audience starting from the 20%.
+ 
+ 
+ Since the testId has a type `TestId`, you have to add you test name to that type. The `TestId` is a 
+ [flow Union Type](https://flow.org/en/docs/types/unions/). 
+ Inside the same file look for the type definition and update it:
+ 
+ ```
+ type TestId = 'test1' | 'yourTestId';
+ ```
+ 
+ If you don't update the type definition, `flow` will throw an error in the `validation` step (`yarn validate`).
+ 
+#### Step 2: Read the variant from the state
+
+The test and its variant(s), are now present in the `Participation` object. That object is being injected in the redux state
+at beginning of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)). 
+The following step is, from a [container component](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components) 
+read the participation object from the redux state. Once the container component has the state, it will render the 
+presentational component or element corresponding with that variant. Usually this can be achieve by creating a local 
+(or global if the test is run across different pages) module that knows which component or element instantiate depending 
+on the variant. 
+
+An example of the above can be found in [this line of ways of support component](https://github.com/guardian/support-frontend/pull/67/files#diff-7e746c9576abf74fa76bbf8da11f330cR58) 
+which loads the correct version of the title depending on the variant. The module that knows which version to render can 
+be found [here](https://github.com/guardian/support-frontend/pull/67/files#diff-cc1c686e06c814dd6c179505a6ce447dR14). 
+
+#### Step 3: Track events with GA and Ophan
+
+Now that you are rendering the correct component depending on the variant the user is, you have to track when that user 
+converts.
+*Conversion* can mean different things depending on what you are testing, it could be a click on a video, a scroll action,
+a button click, if the user writes something in a text field, etc. Basically, it can be any event that the user can produce. 
+In order to use abacus as your test tool, you have to track two events with Ophan:
+  * when the variant is displayed to the user.
+  * when the user converts.
+  
+This tracking can be done using the [`trackOphan`](#71-api) function from the ABtest framework. This function 
+receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
+or not.  
+
+ 
+

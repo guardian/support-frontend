@@ -46,10 +46,10 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
-    assetController,
     applicationController,
     controllers.Default,
     monthlyContributionsController,
+    assetController,
     prefix = "/"
   )
 

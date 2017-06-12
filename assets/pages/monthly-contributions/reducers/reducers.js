@@ -2,18 +2,22 @@
 
 // ----- Imports ----- //
 
-import validateContribution from '../helpers/validation';
+import { combineReducers } from 'redux';
+
+import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import type { Action } from '../actions/monthlyContributionsActions';
 
 
 // ----- Reducers ----- //
 
-export default function reducer(state: number = 5, action: Action): number {
+function monthlyContrib(
+  state: number = 5,
+  action: Action): number {
 
   switch (action.type) {
 
-    case 'SET_CONTRIB_AMOUNT':
-      return validateContribution(action.amount);
+    case 'SET_CONTRIB_VALUE':
+      return action.value;
 
     default:
       return state;
@@ -21,3 +25,11 @@ export default function reducer(state: number = 5, action: Action): number {
   }
 
 }
+
+
+// ----- Exports ----- //
+
+export default combineReducers({
+  monthlyContrib,
+  stripeCheckout,
+});

@@ -4,6 +4,7 @@ import lib.actions.ActionRefiners
 import lib.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
 import play.api.mvc.{Action, Controller}
 import play.api.libs.circe.Circe
+
 import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.gu.identity.play.IdUser
@@ -23,6 +24,8 @@ class MonthlyContributions(
   import actionRefiners._
 
   def create: Action[CreateMonthlyContributorRequest] = AuthenticatedAction.async(circe.json[CreateMonthlyContributorRequest]) { implicit request =>
+    logger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new monthly contribution")
+
     val result = for {
       user <- identityService.getUser(request.user)
       response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
