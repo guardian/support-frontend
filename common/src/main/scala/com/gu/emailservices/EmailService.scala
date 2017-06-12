@@ -1,14 +1,14 @@
 package com.gu.emailservices
 
-import org.joda.time.DateTime
-import scala.concurrent.Future
-
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
+import org.joda.time.DateTime
 
-case class ThankYouFields(
+import scala.concurrent.Future
+
+case class EmailFields(
     email: String,
     created: DateTime,
     amount: BigDecimal,
@@ -16,7 +16,7 @@ case class ThankYouFields(
     edition: String,
     name: String
 ) {
-  def payload: String =
+  def payload(dataExtensionName: String): String =
     s"""
       |{
       |  "To": {
@@ -31,21 +31,22 @@ case class ThankYouFields(
       |      "name": "$name"
       |    }
       |  },
-      |  "DataExtensionName": "contribution-thank-you"
+      |  "DataExtensionName": "$dataExtensionName"
       |}
     """.stripMargin
 }
 
-class ThankYouEmailService(thankYouEmailQueue: String) {
+class EmailService(config: EmailConfig) {
   private val sqsClient = AmazonSQSAsyncClientBuilder
     .standard
     .withCredentials(CredentialsProvider)
     .withRegion(Regions.EU_WEST_1)
     .build()
 
-  private val thankYouQueueUrl = sqsClient.getQueueUrl(thankYouEmailQueue).getQueueUrl
+  private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
 
-  def send(fields: ThankYouFields): Future[SendMessageResult] =
-    AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(thankYouQueueUrl, fields.payload))
+  def send(fields: EmailFields): Future[SendMessageResult] =
+    AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload(config.dataExtensionName)))
 
 }
+

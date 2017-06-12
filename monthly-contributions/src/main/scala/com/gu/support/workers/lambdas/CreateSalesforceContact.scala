@@ -5,7 +5,7 @@ import com.gu.salesforce.Salesforce.UpsertData
 import com.gu.services.Services
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.model.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
+import com.gu.support.workers.model.monthlyContributions.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
