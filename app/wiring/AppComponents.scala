@@ -10,15 +10,20 @@ import lib.CustomHttpErrorHandler
 import lib.actions.ActionRefiners
 import lib.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
+import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
-import services.AuthenticationService
+import services.{AuthenticationService, IdentityService}
 
-trait AppComponents extends PlayComponents {
+trait AppComponents extends PlayComponents with AhcWSComponents {
+
+  implicit val implicitWsClient = wsClient
 
   val config = new Configuration()
 
   implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
+
+  implicit lazy val identityService = new IdentityService(config.identity.apiUrl, config.identity.apiClientToken)
 
   implicit lazy val actionRefiners = new ActionRefiners(
     authenticatedIdUserProvider = new AuthenticationService(config.identity.keys).authenticatedIdUserProvider,

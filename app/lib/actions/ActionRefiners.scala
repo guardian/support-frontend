@@ -39,5 +39,5 @@ class ActionRefiners(authenticatedIdUserProvider: Provider, idWebAppUrl: String,
 
   val PrivateAction = resultModifier(_.withHeaders(CacheControl.noCache))
 
-  val AuthenticatedAction = PrivateAction andThen authenticated(_ => Ok(""))
+  val AuthenticatedAction = PrivateAction andThen authenticated()
 }
