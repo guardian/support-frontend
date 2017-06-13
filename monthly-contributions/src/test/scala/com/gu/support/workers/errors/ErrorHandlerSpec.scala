@@ -47,10 +47,10 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe
-    new Stripe.Error("card_error", "").asRetryException shouldBe a[RetryNone]
-    new Stripe.Error("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
-    new Stripe.Error("api_error", "").asRetryException shouldBe a[RetryUnlimited]
-    new Stripe.Error("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
+    new Stripe.StripeError("card_error", "").asRetryException shouldBe a[RetryNone]
+    new Stripe.StripeError("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
+    new Stripe.StripeError("api_error", "").asRetryException shouldBe a[RetryUnlimited]
+    new Stripe.StripeError("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
 
     //PayPal
     PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]

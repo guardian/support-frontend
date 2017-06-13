@@ -9,12 +9,12 @@ object Stripe {
 
   sealed trait StripeObject
 
-  object Error {
-    implicit val codec: Codec[Error] = deriveCodec
+  object StripeError {
+    implicit val codec: Codec[StripeError] = deriveCodec
   }
 
   //See docs here: https://stripe.com/docs/api/curl#errors
-  case class Error(
+  case class StripeError(
     `type`: String, //The type of error: api_connection_error, api_error, authentication_error, card_error, invalid_request_error, or rate_limit_error
     message: String, //A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
     code: String = "", //For card errors, a short string from amongst those listed on the right describing the kind of card error that occurred.
@@ -52,7 +52,7 @@ object Stripe {
   case class Customer(id: String, cards: StripeList[Card]) extends StripeObject {
     // customers should always have a card
     if (cards.total_count != 1) {
-      throw Error("internal", s"Customer $id has ${cards.total_count} cards, should have exactly one")
+      throw StripeError("internal", s"Customer $id has ${cards.total_count} cards, should have exactly one")
     }
 
     val card = cards.data.head
