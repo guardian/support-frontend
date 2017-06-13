@@ -22,6 +22,7 @@ import * as logger from 'helpers/logger';
 import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
+import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
 import setContribAmount from './actions/monthlyContributionsActions';
@@ -64,7 +65,7 @@ const content = (
           <Secure />
         </CheckoutSection>
         <CheckoutSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
-          <div className="monthly-contrib__amount">£{store.getState().monthlyContrib}</div>
+          <ContribAmount />
         </CheckoutSection>
         <CheckoutSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName name="SignedInUser" />
