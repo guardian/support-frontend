@@ -14,7 +14,6 @@ function PaymentMethods() {
   return (
     <section className="payment-methods">
       <StripePopUpButton />
-      <button>PayPal</button>
     </section>
   );
 
