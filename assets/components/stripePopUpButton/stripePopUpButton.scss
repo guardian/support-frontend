@@ -11,4 +11,9 @@
   border: none;
   color: #fff;
   width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #000;
+  }
 }
