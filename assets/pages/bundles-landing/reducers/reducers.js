@@ -49,7 +49,7 @@ const initialContrib: ContribState = {
       userDefined: false,
     },
     oneOff: {
-      value: '25',
+      value: '50',
       userDefined: false,
     },
   },
