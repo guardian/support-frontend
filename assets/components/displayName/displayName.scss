@@ -12,6 +12,8 @@
 
 	svg {
 		height: 50%;
+		// Fix for IE.
+		width: 20px;
 		border: 1px solid gu-colour(neutral-1);
 		border-radius: 1000px;
 		padding: 9px;
