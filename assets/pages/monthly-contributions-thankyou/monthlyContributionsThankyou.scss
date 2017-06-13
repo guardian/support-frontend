@@ -1,0 +1,29 @@
+#monthly-contributions-thankyou-page {
+
+	// ----- Thank You
+
+	.thankyou {
+		background-color: darken(gu-colour(multimedia-main-2), 5%);
+	}
+
+	.thankyou__content {
+		background-color: gu-colour(multimedia-main-2);
+		padding: $gu-v-spacing $gu-h-spacing;
+	}
+
+	.thankyou__heading {
+		font-family: $gu-egyptian-web;
+		color: #fff;
+		font-size: 44px;
+		line-height: 46px;
+		font-weight: bold;
+	}
+
+	.thankyou__subheading {
+		font-family: $gu-egyptian-web;
+		font-size: 44px;
+		line-height: 46px;
+		color: gu-colour(neutral-1);
+	}
+
+}
