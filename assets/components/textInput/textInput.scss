@@ -1,0 +1,23 @@
+.component-text-input {
+	font-family: $gu-sans-web;
+	font-size: 14px;
+	color: gu-colour(neutral-1);
+	margin-bottom: $gu-h-spacing;
+	margin: 0 -2px $gu-h-spacing;
+
+	input {
+		border: none;
+		border-radius: 600px;
+		height: $gu-v-spacing * 4;
+		padding: 0 $gu-h-spacing;
+	}
+}
+
+// Sometimes in this component the input is at the top level.
+input.component-text-input {
+	display: block;
+	border: none;
+	border-radius: 600px;
+	height: $gu-v-spacing * 4;
+	padding: 0 $gu-h-spacing;
+}

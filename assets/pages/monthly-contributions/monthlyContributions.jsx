@@ -11,6 +11,10 @@ import thunkMiddleware from 'redux-thunk';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import CheckoutSection from 'components/checkoutSection/checkoutSection';
+import DisplayName from 'components/displayName/displayName';
+import Secure from 'components/secure/secure';
+import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 
 import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
@@ -18,6 +22,7 @@ import * as logger from 'helpers/logger';
 import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
+import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
 import setContribAmount from './actions/monthlyContributionsActions';
@@ -54,11 +59,28 @@ const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <h1>Make a monthly contribution</h1>
-      <NameForm />
-      <h2>Your contribution</h2>
-      <div>{store.getState().monthlyContrib}</div>
-      <PaymentMethods />
+      <div className="monthly-contrib gu-content-margin">
+        <CheckoutSection className="monthly-contrib__header">
+          <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
+          <Secure />
+        </CheckoutSection>
+        <CheckoutSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
+          <ContribAmount />
+        </CheckoutSection>
+        <CheckoutSection heading="Your details" className="monthly-contrib__your-details">
+          <DisplayName name="SignedInUser" />
+          <NameForm />
+        </CheckoutSection>
+        <CheckoutSection heading="Payment methods" className="monthly-contrib__payment-methods">
+          <PaymentMethods />
+        </CheckoutSection>
+        <CheckoutSection className="monthly-contrib__payment-methods">
+          <TermsPrivacy
+            termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+            privacyLink="https://www.theguardian.com/help/privacy-policy"
+          />
+        </CheckoutSection>
+      </div>
       <SimpleFooter />
     </div>
   </Provider>

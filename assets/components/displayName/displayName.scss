@@ -1,0 +1,24 @@
+.component-display-name {
+	height: 40px;
+	margin-bottom: $gu-v-spacing;
+
+	.component-display-name__name {
+		font-family: $gu-sans-web;
+		font-weight: bold;
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: $gu-h-spacing / 2;
+	}
+
+	svg {
+		height: 50%;
+		// Fix for IE.
+		width: 20px;
+		border: 1px solid gu-colour(neutral-1);
+		border-radius: 1000px;
+		padding: 9px;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+}

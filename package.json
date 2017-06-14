@@ -39,6 +39,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
+    "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "raven-js": "^3.15.0",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0",

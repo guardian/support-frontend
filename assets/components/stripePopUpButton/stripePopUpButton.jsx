@@ -32,7 +32,12 @@ const StripePopUpButton = (props: PropTypes) => {
 
   const stripeClick = () => props.onStripeClick(props.amount, props.email);
 
-  return <button onClick={stripeClick}>Add CC</button>;
+  return (
+    <button
+      className="component-stripe-pop-up-button"
+      onClick={stripeClick}
+    >Contribute with debit/credit card</button>
+  );
 
 };
 
