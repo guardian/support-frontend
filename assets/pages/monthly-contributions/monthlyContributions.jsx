@@ -25,7 +25,7 @@ import NameForm from './components/nameForm';
 import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
-import setContribAmount from './actions/monthlyContributionsActions';
+import { setContribAmount } from './actions/monthlyContributionsActions';
 
 
 // ----- AB Tests ----- //

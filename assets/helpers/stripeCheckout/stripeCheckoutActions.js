@@ -5,6 +5,11 @@
 import * as stripeCheckout from './stripeCheckout';
 
 
+// ----- Setup ----- //
+
+const MONTHLY_CONTRIB_ENDPOINT = '/monthly-contributions/create';
+
+
 // ----- Types ----- //
 
 export type Action =
@@ -46,17 +51,44 @@ export function setStripeAmount(amount: number): Action {
 
 export function setupStripeCheckout(): Function {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
     const handleToken = (token) => {
       dispatch(setStripeCheckoutToken(token));
+
+      const state = getState();
+
+      fetch(MONTHLY_CONTRIB_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contribution: {
+            amount: state.stripeCheckout.amount,
+            currency: state.stripeCheckout.currency,
+          },
+          paymentFields: {
+            stripeToken: token,
+          },
+          country: state.monthlyContrib.country,
+          firstName: state.monthlyContrib.firstName,
+          lastName: state.monthlyContrib.lastName,
+        }),
+      }).then((response) => {
+        if (response.ok) {
+          window.location.assign('/monthly-contributions/thankyou');
+        } else {
+          console.log('horrible error');
+        }
+      });
     };
 
     const handleCloseOverlay = () => dispatch(closeStripeOverlay());
 
+    const stripeState = getState().stripeCheckout;
+
     dispatch(startStripeCheckout());
 
-    return stripeCheckout.setup(handleToken, handleCloseOverlay).then(() => {
+    return stripeCheckout.setup(stripeState, handleToken, handleCloseOverlay).then(() => {
       dispatch(stripeCheckoutLoaded());
     });
 

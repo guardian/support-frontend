@@ -11,6 +11,7 @@ type PropTypes = {
   placeholder?: string,
   labelText?: string,
   id?: string,
+  onChange?: (name: string) => void,
 };
 
 
@@ -31,14 +32,18 @@ function inputClass(hasLabel) {
 
 export default function TextInput(props: PropTypes) {
 
-  const input = (
-    <input
-      className={inputClass(!!props.labelText)}
-      id={props.id}
-      type="text"
-      placeholder={props.placeholder}
-    />
-  );
+  const attrs = {
+    className: inputClass(!!props.labelText),
+    id: props.id,
+    type: 'text',
+    placeholder: props.placeholder,
+  };
+
+  if (props.onChange) {
+    attrs.onChange = event => props.onChange(event.target.value || '');
+  }
+
+  const input = <input {...attrs} />;
 
   if (!props.labelText) {
     return input;
@@ -62,4 +67,5 @@ TextInput.defaultProps = {
   placeholder: null,
   labelText: null,
   id: null,
+  onChange: null,
 };

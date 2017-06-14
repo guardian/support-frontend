@@ -38,7 +38,7 @@ function ContribAmount(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    amount: state.monthlyContrib,
+    amount: state.monthlyContrib.amount,
   };
 
 }
