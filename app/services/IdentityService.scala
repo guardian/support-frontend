@@ -9,7 +9,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
-import lib.net.IPv4
+import com.google.common.net.InetAddresses
+import scala.util.Try
 
 object IdentityServiceEnrichers {
 
@@ -22,9 +23,12 @@ object IdentityServiceEnrichers {
   implicit class EnrichedRequest(request: RequestHeader) {
     def clientIp: Option[String] = {
       request.headers.get("X-Forwarded-For").flatMap { xForwardedFor =>
-        xForwardedFor.split(", ").find(IPv4.publicIpAddress)
+        xForwardedFor.split(", ").find(publicIpAddress)
       }
     }
+
+    private def publicIpAddress(address: String) =
+      Try { InetAddresses.forString(address) }.exists(!_.isSiteLocalAddress)
   }
 
   implicit class EnrichedResponse(response: WSResponse) {
