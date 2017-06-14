@@ -14,6 +14,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService}
+import lib.TestUsers
 
 trait AppComponents extends PlayComponents with AhcWSComponents {
 
@@ -32,6 +33,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
   )
 
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
+  implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)
 
   lazy val assetController = new Assets(httpErrorHandler)
   lazy val applicationController = new Application
