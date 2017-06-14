@@ -13,12 +13,15 @@ import services.IdentityService
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
 
+import lib.TestUsers
+
 class MonthlyContributions(
     implicit
     client: MonthlyContributionsClient,
     actionRefiners: ActionRefiners,
     exec: ExecutionContext,
-    identityService: IdentityService
+    identityService: IdentityService,
+    testUsers: TestUsers
 ) extends Controller with Circe with LazyLogging {
 
   import actionRefiners._
@@ -50,7 +53,7 @@ class MonthlyContributions(
       allowMembershipMail = true,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
-      isTestUser = false
+      isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }
 }
