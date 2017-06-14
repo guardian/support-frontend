@@ -7,7 +7,7 @@ Object {
     "amount": Object {
       "oneOff": Object {
         "userDefined": false,
-        "value": "25",
+        "value": "50",
       },
       "recurring": Object {
         "userDefined": false,
