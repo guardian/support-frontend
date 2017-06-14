@@ -51,6 +51,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-play-auth" % "1.3",
+  "com.gu" %% "identity-test-users" % "0.6",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   filters,
   ws
