@@ -20,7 +20,7 @@ States:
     Type: Task
     Resource: "${SendThankYouEmailLambda.Arn}"
     End: True
-    Retry:
+    Retry: # We don't want to invoke the failure handler for the thank you email because signup has succeeded by this point
     - ErrorEquals:
       - com.gu.support.workers.exceptions.RetryLimited
       IntervalSeconds: 1
