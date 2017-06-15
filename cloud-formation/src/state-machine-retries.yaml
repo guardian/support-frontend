@@ -9,7 +9,7 @@ Retry:
       IntervalSeconds: 1
       BackoffRate: 2
     Catch:
-      ErrorEquals:
-      - States.All
-      ResultPath: "$.error"
-      Next: FailureHandler
+      - ErrorEquals:
+        - States.All
+        ResultPath: "$.error"
+        Next: FailureHandler
