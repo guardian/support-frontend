@@ -102,3 +102,9 @@ General codes are here:
 
 ### PayPal
 No request specific error codes as we are only retrieving the user's email address. Just retry on 500s.
+
+### SQS
+|Error                     |Description                                             |Retry? |
+|--------------------------|--------------------------------------------------------|-------|
+|QueueDoesNotExistException|The queue referred to doesn't exist                     |Limited|
+|InvalidMessageContents    |The message contains characters outside the allowed set.|No     |

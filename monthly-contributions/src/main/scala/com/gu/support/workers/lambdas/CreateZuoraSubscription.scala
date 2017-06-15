@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}

@@ -6,8 +6,9 @@ import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
-abstract class LambdaSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
+abstract class LambdaSpec extends FlatSpec with Matchers with MockitoSugar with MockContext with LazyLogging
+
+trait MockContext extends MockitoSugar {
   val context = mock[Context]
   when(context.getRemainingTimeInMillis).thenReturn(60000)
-
 }

@@ -8,6 +8,7 @@ import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.model._
+import com.gu.support.workers.model.monthlyContributions.Contribution
 import io.circe._
 import io.circe.generic.semiauto._
 import org.joda.time.{DateTime, LocalDate}
@@ -55,6 +56,7 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
 
   implicit val codecUser: Codec[User] = deriveCodec
   implicit val codecContribution: Codec[Contribution] = deriveCodec
+  implicit val codecErrorState: Codec[ErrorState] = deriveCodec
 }
 
 trait HelperCodecs {

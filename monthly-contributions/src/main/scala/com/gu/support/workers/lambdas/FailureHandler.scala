@@ -4,25 +4,25 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
-import com.gu.zuora.encoding.CustomCodecs._
+import com.gu.support.workers.model.monthlyContributions.state.FailureHandlerState
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SendThankYouEmail(thankYouEmailService: EmailService)
-    extends FutureHandler[SendThankYouEmailState, Unit]
+class FailureHandler(emailService: EmailService)
+    extends FutureHandler[FailureHandlerState, Unit]
     with LazyLogging {
-  def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou))
+  def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
-  override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {
+  override protected def handlerFuture(state: FailureHandlerState, context: Context): Future[Unit] = {
+    logger.warn(s"FailureHandler called for error ${state.error.Error}")
     sendEmail(state)
   }
 
-  def sendEmail(state: SendThankYouEmailState): Future[Unit] = {
-    thankYouEmailService.send(EmailFields(
+  def sendEmail(state: FailureHandlerState): Future[Unit] = {
+    emailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
       amount = state.contribution.amount,

@@ -10,7 +10,7 @@ object Dependencies {
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
-  val supportModels = "com.gu" %% "support-models" % "0.2"
+  val supportModels = "com.gu" %% "support-models" % "0.3"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"

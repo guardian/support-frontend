@@ -3,6 +3,7 @@ package com.gu.support.workers.exceptions
 import java.net.SocketTimeoutException
 
 import com.amazonaws.services.kms.model._
+import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.helpers.WebServiceHelperError
 import io.circe.ParsingFailure
 
@@ -35,4 +36,12 @@ object RetryImplicits {
            _ => new RetryLimited(cause = throwable)
     }
   }
+
+  implicit class AwsSQSConversions(val throwable: AmazonSQSException) {
+    def asRetryException: RetryException = throwable match {
+      case _: InvalidMessageContentsException => new RetryNone(cause = throwable)
+      case _: QueueDoesNotExistException => new RetryLimited(cause = throwable)
+    }
+  }
+
 }

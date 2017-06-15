@@ -6,8 +6,8 @@ import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.gu.support.workers.model._
+import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global

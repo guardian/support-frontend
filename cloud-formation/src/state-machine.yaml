@@ -4,20 +4,33 @@ States:
   CreatePaymentMethod:
     Type: Task
     Resource: "${CreatePaymentMethodLambda.Arn}"
-    $state_machine_retries
     Next: CreateSalesforceContact
+    $state_machine_retries
   CreateSalesforceContact:
     Type: Task
     Resource: "${CreateSalesforceContactLambda.Arn}"
-    $state_machine_retries
     Next: CreateZuoraSubscription
+    $state_machine_retries
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
-    $state_machine_retries
     Next: SendThankYouEmail
+    $state_machine_retries
   SendThankYouEmail:
     Type: Task
     Resource: "${SendThankYouEmailLambda.Arn}"
-    $state_machine_retries
+    End: True
+    Retry: # We don't want to invoke the failure handler for the thank you email because signup has succeeded by this point
+    - ErrorEquals:
+      - com.gu.support.workers.exceptions.RetryLimited
+      IntervalSeconds: 1
+      MaxAttempts: 3
+      BackoffRate: 2
+    - ErrorEquals:
+      - com.gu.support.workers.exceptions.RetryUnlimited
+      IntervalSeconds: 1
+      BackoffRate: 2
+  FailureHandler:
+    Type: Task
+    Resource: "${FailureHandlerLambda.Arn}"
     End: True

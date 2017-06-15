@@ -8,3 +8,8 @@ Retry:
       - com.gu.support.workers.exceptions.RetryUnlimited
       IntervalSeconds: 1
       BackoffRate: 2
+    Catch:
+      ErrorEquals:
+      - States.All
+      ResultPath: "$.error"
+      Next: FailureHandler

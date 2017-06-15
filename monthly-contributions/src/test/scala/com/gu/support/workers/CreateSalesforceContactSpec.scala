@@ -5,10 +5,10 @@ import java.io.ByteArrayOutputStream
 import com.gu.salesforce.Fixtures.salesforceId
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.createSalesForceContactJson
-import com.gu.support.workers.lambdas.CreateSalesforceContact
-import com.gu.support.workers.model.state.CreateZuoraSubscriptionState
-import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.lambdas.CreateSalesforceContact
+import com.gu.support.workers.model.monthlyContributions.state.CreateZuoraSubscriptionState
+import com.gu.test.tags.annotations.IntegrationTest
 
 @IntegrationTest
 class CreateSalesforceContactSpec extends LambdaSpec {

@@ -115,4 +115,16 @@ object Fixtures {
        {
        }
      """
+
+  val failureJson =
+    s"""{
+       |  $requestIdJson,
+       |  $userJson,
+       |  "contribution": $contributionJson,
+       |  "error": {
+       |    "Error": "com.gu.support.workers.exceptions.ErrorHandler.logAndRethrow(ErrorHandler.scala:33)",
+       |    "Cause": "The card has expired"
+       |  }
+       |}
+     """.stripMargin
 }
