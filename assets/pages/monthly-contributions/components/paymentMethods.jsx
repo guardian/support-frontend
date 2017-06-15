@@ -7,14 +7,17 @@ import React from 'react';
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import postCheckout from '../helpers/ajax';
 
+type PropTypes = {
+    email: string,
+}
 
 // ----- Component ----- //
 
-function PaymentMethods() {
+function PaymentMethods(props: PropTypes) {
 
   return (
     <section className="payment-methods">
-      <StripePopUpButton callback={postCheckout} />
+      <StripePopUpButton email={props.email} callback={postCheckout} />
     </section>
   );
 

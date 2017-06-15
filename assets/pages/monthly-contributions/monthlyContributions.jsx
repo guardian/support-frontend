@@ -20,13 +20,13 @@ import * as ga from 'helpers/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import getQueryParameter from 'helpers/url';
+import config from 'helpers/config';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
 import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
-import { setContribAmount } from './actions/monthlyContributionsActions';
-
+import { setContribAmount, setFirstName, setLastName } from './actions/monthlyContributionsActions';
 
 // ----- AB Tests ----- //
 
@@ -51,7 +51,8 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
-
+store.dispatch(setFirstName((config.user || {}).firstName || ''));
+store.dispatch(setLastName((config.user || {}).lastName || ''));
 
 // ----- Render ----- //
 
@@ -68,11 +69,11 @@ const content = (
           <ContribAmount />
         </CheckoutSection>
         <CheckoutSection heading="Your details" className="monthly-contrib__your-details">
-          <DisplayName name="SignedInUser" />
+          <DisplayName name={(config.user || {}).displayName || 'SignedInUser'} />
           <NameForm />
         </CheckoutSection>
         <CheckoutSection heading="Payment methods" className="monthly-contrib__payment-methods">
-          <PaymentMethods />
+          <PaymentMethods email={(config.user || {}).email || ''} />
         </CheckoutSection>
         <CheckoutSection className="monthly-contrib__payment-methods">
           <TermsPrivacy

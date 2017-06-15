@@ -12,6 +12,7 @@ type PropTypes = {
   labelText?: string,
   id?: string,
   onChange?: (name: string) => void,
+  value?: string,
 };
 
 
@@ -27,19 +28,27 @@ function inputClass(hasLabel: boolean): string {
 
 }
 
-function buildInput(labelText, id, placeholder, onChange) {
+function buildInput(
+  labelText: ?string,
+  id: ?string,
+  placeholder: ?string,
+  onChange: ?Function,
+  value: ?string,
+) {
 
   const attrs: {
     className: string,
     id: ?string,
     type: string,
     placeholder: ?string,
+    value: string,
     onChange?: Function,
   } = {
     className: inputClass(!!labelText),
     id,
     type: 'text',
     placeholder,
+    value: value || '',
   };
 
   // Keeps flow happy (https://github.com/facebook/flow/issues/2819).
@@ -62,6 +71,7 @@ export default function TextInput(props: PropTypes) {
     props.id,
     props.placeholder,
     props.onChange,
+    props.value,
   );
 
   if (!props.labelText) {
@@ -87,4 +97,5 @@ TextInput.defaultProps = {
   labelText: null,
   id: null,
   onChange: null,
+  value: '',
 };

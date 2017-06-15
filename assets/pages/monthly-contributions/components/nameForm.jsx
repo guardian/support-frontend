@@ -18,6 +18,8 @@ import {
 type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
+  firstName: string,
+  lastName: string,
 };
 
 
@@ -30,11 +32,13 @@ function NameForm(props: PropTypes) {
       <TextInput
         id="first-name"
         placeholder="First name"
+        value={props.firstName}
         onChange={props.firstNameUpdate}
       />
       <TextInput
         id="last-name"
         placeholder="Last name"
+        value={props.lastName}
         onChange={props.lastNameUpdate}
       />
     </form>
@@ -44,6 +48,15 @@ function NameForm(props: PropTypes) {
 
 
 // ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+
+  return {
+    firstName: state.monthlyContrib.firstName,
+    lastName: state.monthlyContrib.lastName,
+  };
+
+}
 
 function mapDispatchToProps(dispatch) {
 
@@ -61,4 +74,4 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Exports ----- //
 
-export default connect(null, mapDispatchToProps)(NameForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NameForm);
