@@ -19,6 +19,7 @@ type PropTypes = {
   onStripeClick: Function,
   amount: number,
   email: string,
+  callback: Function,
 };
 
 
@@ -27,7 +28,7 @@ type PropTypes = {
 const StripePopUpButton = (props: PropTypes) => {
 
   if (!props.stripeLoaded) {
-    props.setupStripeCheckout();
+    props.setupStripeCheckout(props.callback);
   }
 
   const stripeClick = () => props.onStripeClick(props.amount, props.email);
@@ -57,8 +58,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    setupStripeCheckout: () => {
-      dispatch(setupStripeCheckout());
+    setupStripeCheckout: (callback: Function) => {
+      dispatch(setupStripeCheckout(callback));
     },
     onStripeClick: (amount: number, email: string) => {
       dispatch(openStripeOverlay(amount, email));

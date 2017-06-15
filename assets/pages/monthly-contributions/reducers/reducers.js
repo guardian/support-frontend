@@ -15,6 +15,7 @@ export type State = {
   country: string,
   firstName: ?string,
   lastName: ?string,
+  error: ?string,
 };
 
 
@@ -25,6 +26,7 @@ const initialState: State = {
   country: 'GB',
   firstName: null,
   lastName: null,
+  error: null,
 };
 
 
@@ -44,6 +46,9 @@ function monthlyContrib(
 
     case 'SET_LAST_NAME':
       return Object.assign({}, state, { lastName: action.name });
+
+    case 'CHECKOUT_ERROR':
+      return Object.assign({}, state, { error: action.message });
 
     default:
       return state;

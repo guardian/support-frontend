@@ -11,13 +11,19 @@ import validateContribution from '../helpers/validation';
 export type Action =
   | { type: 'SET_CONTRIB_VALUE', value: number }
   | { type: 'SET_FIRST_NAME', name: string }
-  | { type: 'SET_LAST_NAME', name: string };
+  | { type: 'SET_LAST_NAME', name: string }
+  | { type: 'CHECKOUT_ERROR', message: string }
+  ;
 
 
 // ----- Actions ----- //
 
 function setContribValue(value: number): Action {
   return { type: 'SET_CONTRIB_VALUE', value };
+}
+
+export function checkoutError(message: string): Action {
+  return { type: 'CHECKOUT_ERROR', message };
 }
 
 export function setFirstName(name: string): Action {
