@@ -11,4 +11,5 @@ Retry:
     Catch:
       ErrorEquals:
       - States.All
+      ResultPath: "$.error"
       Next: FailureHandler

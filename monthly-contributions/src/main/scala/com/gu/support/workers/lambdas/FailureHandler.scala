@@ -17,6 +17,7 @@ class FailureHandler(emailService: EmailService)
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
   override protected def handlerFuture(state: FailureHandlerState, context: Context): Future[Unit] = {
+    logger.warn(s"FailureHandler called for error ${state.error.Error}")
     sendEmail(state)
   }
 
