@@ -61,13 +61,14 @@ export function setupStripeCheckout(): Function {
       fetch(MONTHLY_CONTRIB_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({
           contribution: {
             amount: state.stripeCheckout.amount,
             currency: state.stripeCheckout.currency,
           },
           paymentFields: {
-            stripeToken: token,
+            stripeToken: token.id,
           },
           country: state.monthlyContrib.country,
           firstName: state.monthlyContrib.firstName,
@@ -77,9 +78,9 @@ export function setupStripeCheckout(): Function {
         if (response.ok) {
           window.location.assign('/monthly-contributions/thankyou');
         } else {
-          console.log('horrible error');
+          return response.text();
         }
-      });
+      }).then(console.log);
     };
 
     const handleCloseOverlay = () => dispatch(closeStripeOverlay());
