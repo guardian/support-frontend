@@ -25,7 +25,8 @@ class Application(
     Ok(views.html.authenticatedReact(title, id, js))
   }
 
-  def authenticatedFullUserReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def authenticatedFullUserReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
+
     identityService.getUser(request.user).map { user =>
       Ok(views.html.authenticatedFullUserReactTemplate(title, id, js, user))
     } getOrElse InternalServerError

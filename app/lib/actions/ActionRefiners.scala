@@ -6,6 +6,7 @@ import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc.{ActionBuilder, Request, RequestHeader, Result}
 import lib.httpheaders.CacheControl
 import com.netaporter.uri.dsl._
+import lib.TestUsers
 
 import scala.concurrent.Future
 import play.api.mvc.Results._
@@ -16,7 +17,12 @@ object ActionRefiners {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
 }
 
-class ActionRefiners(authenticatedIdUserProvider: Provider, idWebAppUrl: String, supportUrl: String)(implicit private val ec: ExecutionContext) {
+class ActionRefiners(
+    authenticatedIdUserProvider: Provider,
+    idWebAppUrl: String,
+    supportUrl: String,
+    testUsers: TestUsers
+)(implicit private val ec: ExecutionContext) {
 
   import ActionRefiners._
 
@@ -37,7 +43,16 @@ class ActionRefiners(authenticatedIdUserProvider: Provider, idWebAppUrl: String,
     new AuthenticatedBuilder(authenticatedIdUserProvider, onUnauthenticated)
   }
 
+  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] = {
+    new AuthenticatedBuilder(
+      authenticatedIdUserProvider.andThen(_.filter(user => testUsers.isTestUser(user.user.displayName))),
+      onUnauthenticated
+    )
+  }
+
   val PrivateAction = resultModifier(_.withHeaders(CacheControl.noCache))
 
   val AuthenticatedAction = PrivateAction andThen authenticated()
+
+  val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
 }

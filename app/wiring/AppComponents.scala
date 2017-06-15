@@ -29,7 +29,8 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
   implicit lazy val actionRefiners = new ActionRefiners(
     authenticatedIdUserProvider = new AuthenticationService(config.identity.keys).authenticatedIdUserProvider,
     idWebAppUrl = config.identity.webappUrl,
-    supportUrl = config.supportUrl
+    supportUrl = config.supportUrl,
+    testUsers = testUsers
   )
 
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
