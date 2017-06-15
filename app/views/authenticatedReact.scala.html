@@ -1,5 +1,5 @@
 @import assets.AssetsResolver
-@(title: String, id: String, js: String, user: com.gu.identity.play.IdMinimalUser)(implicit assets: AssetsResolver)
+@(title: String, id: String, js: String)(implicit assets: AssetsResolver)
 
 @scripts = {
     <script type="text/javascript" src="@assets(js)"></script>
