@@ -17,7 +17,7 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function inputClass(hasLabel) {
+function inputClass(hasLabel: boolean): string {
 
   if (hasLabel) {
     return 'component-text-input__input';
@@ -27,23 +27,42 @@ function inputClass(hasLabel) {
 
 }
 
+function buildInput(labelText, id, placeholder, onChange) {
+
+  const attrs: {
+    className: string,
+    id: ?string,
+    type: string,
+    placeholder: ?string,
+    onChange?: Function,
+  } = {
+    className: inputClass(!!labelText),
+    id,
+    type: 'text',
+    placeholder,
+  };
+
+  // Keeps flow happy (https://github.com/facebook/flow/issues/2819).
+  if (typeof onChange === 'function') {
+    const change = onChange;
+    attrs.onChange = event => change(event.target.value || '');
+  }
+
+  return <input {...attrs} />;
+
+}
+
 
 // ----- Component ----- //
 
 export default function TextInput(props: PropTypes) {
 
-  const attrs = {
-    className: inputClass(!!props.labelText),
-    id: props.id,
-    type: 'text',
-    placeholder: props.placeholder,
-  };
-
-  if (props.onChange) {
-    attrs.onChange = event => props.onChange(event.target.value || '');
-  }
-
-  const input = <input {...attrs} />;
+  const input = buildInput(
+    props.labelText,
+    props.id,
+    props.placeholder,
+    props.onChange,
+  );
 
   if (!props.labelText) {
     return input;
