@@ -13,7 +13,7 @@ class Application(implicit actionRefiners: ActionRefiners, val assets: AssetsRes
   }
 
   def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { request =>
-    Ok(views.html.authenticatedReact(title, id, js, request.user.user))
+    Ok(views.html.authenticatedReact(title, id, js))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
