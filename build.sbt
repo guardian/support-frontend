@@ -50,7 +50,11 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  filters
+  "com.gu.identity" %% "identity-play-auth" % "1.3",
+  "com.google.guava" % "guava" % "19.0",
+  "com.netaporter" %% "scala-uri" % "0.4.16",
+  filters,
+  ws
 )
 
 sources in (Compile,doc) := Seq.empty

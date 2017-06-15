@@ -7,21 +7,37 @@ import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
+import lib.actions.ActionRefiners
 import lib.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
+import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
+import services.{AuthenticationService, IdentityService}
 
-trait AppComponents extends PlayComponents {
+trait AppComponents extends PlayComponents with AhcWSComponents {
+
+  implicit val implicitWsClient = wsClient
 
   val config = new Configuration()
 
-  override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
   implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
+
+  implicit lazy val identityService = new IdentityService(config.identity.apiUrl, config.identity.apiClientToken)
+
+  implicit lazy val actionRefiners = new ActionRefiners(
+    authenticatedIdUserProvider = new AuthenticationService(config.identity.keys).authenticatedIdUserProvider,
+    idWebAppUrl = config.identity.webappUrl,
+    supportUrl = config.supportUrl
+  )
+
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
+
   lazy val assetController = new Assets(httpErrorHandler)
-  lazy val applicationController = new Application()
-  lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
-  lazy val monthlyContributionsController = new MonthlyContributions(monthlyContributionsClient)
+  lazy val applicationController = new Application
+  lazy val monthlyContributionsController = new MonthlyContributions
+
+  override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     new CheckCacheHeadersFilter(),

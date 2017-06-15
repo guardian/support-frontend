@@ -14,12 +14,15 @@ import io.circe.generic.semiauto.deriveDecoder
 import io.circe.Decoder
 import codecs.CirceDecoders._
 import com.typesafe.scalalogging.LazyLogging
+import com.gu.i18n.Country
 
 object CreateMonthlyContributorRequest {
   implicit val decoder: Decoder[CreateMonthlyContributorRequest] = deriveDecoder
 }
 case class CreateMonthlyContributorRequest(
-  user: User,
+  firstName: String,
+  lastName: String,
+  country: Country,
   contribution: Contribution,
   paymentFields: Either[StripePaymentFields, PayPalPaymentFields]
 )
@@ -33,10 +36,10 @@ class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) ext
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 
-  def createContributor(request: CreateMonthlyContributorRequest, requestId: UUID): EitherT[Future, MonthlyContributionError, Unit] = {
+  def createContributor(request: CreateMonthlyContributorRequest, user: User, requestId: UUID): EitherT[Future, MonthlyContributionError, Unit] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
-      user = request.user,
+      user = user,
       contribution = request.contribution,
       paymentFields = request.paymentFields
     )

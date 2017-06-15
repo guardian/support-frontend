@@ -1,0 +1,21 @@
+@import assets.AssetsResolver
+@(title: String, id: String, js: String)(implicit assets: AssetsResolver)
+
+@scripts = {
+    <script type="text/javascript" src="@assets(js)"></script>
+}
+
+@main(title = title, scripts = scripts) {
+    <main id="@id">
+        <noscript>
+            <div style="text-align: center;
+                font-size: 30px;
+                padding-left: 20px;
+                padding-right: 20px;
+                background-color: #e9e939;">
+                Please enable JavaScript - we use it to provide the best experience for Guardian&nbspSupporters.<br/>
+                <a href="http://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
+            </div>
+        </noscript>
+    </main>
+}
