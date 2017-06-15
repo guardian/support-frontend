@@ -16,6 +16,16 @@ import codecs.CirceDecoders._
 import com.typesafe.scalalogging.LazyLogging
 import com.gu.i18n.Country
 
+object StripePaymentToken {
+  implicit val decoder: Decoder[StripePaymentToken] = deriveDecoder
+}
+case class StripePaymentToken(stripeToken: String) {
+  def stripePaymentFields(userId: String): StripePaymentFields = StripePaymentFields(
+    userId = userId,
+    stripeToken = stripeToken
+  )
+}
+
 object CreateMonthlyContributorRequest {
   implicit val decoder: Decoder[CreateMonthlyContributorRequest] = deriveDecoder
 }
@@ -24,7 +34,7 @@ case class CreateMonthlyContributorRequest(
   lastName: String,
   country: Country,
   contribution: Contribution,
-  paymentFields: Either[StripePaymentFields, PayPalPaymentFields]
+  paymentFields: Either[StripePaymentToken, PayPalPaymentFields]
 )
 
 object MonthlyContributionsClient {
@@ -41,7 +51,7 @@ class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) ext
       requestId = requestId,
       user = user,
       contribution = request.contribution,
-      paymentFields = request.paymentFields
+      paymentFields = request.paymentFields.leftMap(_.stripePaymentFields(user.id))
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
       { error =>

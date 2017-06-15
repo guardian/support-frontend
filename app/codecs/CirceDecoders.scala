@@ -8,6 +8,7 @@ import com.gu.support.workers.model.state.CreatePaymentMethodState
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
+import lib.stepfunctions.StripePaymentToken
 import shapeless.Lazy
 
 object CirceDecoders {
@@ -37,6 +38,12 @@ object CirceDecoders {
   implicit val paymentFields: Decoder[PaymentFields] = {
     val stripeFields = deriveDecoder[StripePaymentFields].map(_.asLeft[PayPalPaymentFields])
     val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentFields])
+    stripeFields or payPalFields
+  }
+
+  implicit val requestPaymentFields: Decoder[Either[StripePaymentToken, PayPalPaymentFields]] = {
+    val stripeFields = deriveDecoder[StripePaymentToken].map(_.asLeft[PayPalPaymentFields])
+    val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentToken])
     stripeFields or payPalFields
   }
 
