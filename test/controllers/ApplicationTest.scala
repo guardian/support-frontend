@@ -7,6 +7,7 @@ import play.api.test.Helpers.{contentAsString, header}
 import akka.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
+import lib.TestUsers
 import lib.actions.ActionRefiners
 import org.scalatest.mockito.MockitoSugar.mock
 import services.IdentityService
@@ -19,7 +20,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
 
   implicit val timeout = Timeout(2.seconds)
 
-  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "")
+  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUsers])
 
   "/healthcheck" should {
     "return healthy" in {
