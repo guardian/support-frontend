@@ -13,7 +13,6 @@ Parameters:
     Description: Stack name
     Type: String
     Default: support
-
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]

@@ -9,6 +9,6 @@ CreateZuoraSubscriptionLambda:
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
     Code:
       S3Bucket: support-workers-dist
-      S3Key: lambdas/bin/guardian-support-monthly-contributions-lambdas-assembly-0.1-SNAPSHOT.jar
+      S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
     Runtime: "java8"
     Timeout: "60"
