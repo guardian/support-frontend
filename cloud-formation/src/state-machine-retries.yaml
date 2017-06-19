@@ -7,9 +7,10 @@ Retry:
     - ErrorEquals:
       - com.gu.support.workers.exceptions.RetryUnlimited
       IntervalSeconds: 1
+      MaxAttempts: 999999 #If we don't provide a value here it defaults to 3
       BackoffRate: 2
     Catch:
       - ErrorEquals:
-        - States.All
+        - States.TaskFailed
         ResultPath: "$.error"
         Next: FailureHandler
