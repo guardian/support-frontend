@@ -9,6 +9,7 @@ GET /uk                         controllers.Application.reactTemplate(title="Sup
 GET /                           controllers.Default.redirect(to = "/uk")
 
 GET /monthly-contributions      controllers.Application.authenticatedFullUserReactTemplate(title="Support the Guardian | Monthly Contributions", id="monthly-contributions-page", js="monthlyContributionsPage.js")
+GET /monthly-contributions/thankyou  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
 POST /monthly-contributions/create   controllers.MonthlyContributions.create
 
 GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)

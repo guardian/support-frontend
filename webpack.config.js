@@ -49,6 +49,7 @@ module.exports = (env) => {
       styles: 'stylesheets/main.scss',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
       monthlyContributionsPage: 'pages/monthly-contributions/monthlyContributions.jsx',
+      monthlyContributionsThankyouPage: 'pages/monthly-contributions-thankyou/monthlyContributionsThankyou.jsx',
     },
 
     output: {
