@@ -22,7 +22,7 @@ class Application(
   }
 
   def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { request =>
-    Ok(views.html.authenticatedReact(title, id, js))
+    Ok(views.html.react(title, id, js))
   }
 
   def authenticatedFullUserReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
