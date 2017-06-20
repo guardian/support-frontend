@@ -71,12 +71,12 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -ev
           mkdir /etc/gu
-          aws --region ${AWS::Region} s3 cp s3://membership-private/${Stage}/support.private.conf /etc/gu
+          aws --region ${AWS::Region} s3 cp s3://membership-private/${Stage}/support-frontend.private.conf /etc/gu
           aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/support-frontend_1.0-SNAPSHOT_all.deb /tmp
           dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/support-frontend/application.log
-          chown ${App} /etc/gu/support.private.conf
-          chmod 0600 /etc/gu/support.private.conf
+          chown ${App} /etc/gu/support-frontend.private.conf
+          chmod 0600 /etc/gu/support-frontend.private.conf
   AppRole:
     Type: AWS::IAM::Role
     Properties:
@@ -96,7 +96,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: s3:GetObject
-                Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support.private.conf
+                Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support-frontend.private.conf
         - PolicyName: UpdateSSHKeys
           PolicyDocument:
             Version: 2012-10-17
