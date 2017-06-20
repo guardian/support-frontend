@@ -115,6 +115,15 @@ Resources:
                 - logs:PutLogEvents
                 - logs:DescribeLogStreams
                 Resource: arn:aws:logs:*:*:*
+        - PolicyName: StateMachines
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - states:ListStateMachines
+                - states:StartExecution
+                Resource: arn:aws:states:*:*:*
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
