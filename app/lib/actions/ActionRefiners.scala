@@ -39,16 +39,14 @@ class ActionRefiners(
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = block(request).map(f)
   }
 
-  private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] = {
+  private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] =
     new AuthenticatedBuilder(authenticatedIdUserProvider, onUnauthenticated)
-  }
 
-  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] = {
+  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] =
     new AuthenticatedBuilder(
-      authenticatedIdUserProvider.andThen(_.filter(user => testUsers.isTestUser(user.user.displayName))),
-      onUnauthenticated
+      userinfo = authenticatedIdUserProvider.andThen(_.filter(user => testUsers.isTestUser(user.user.displayName))),
+      onUnauthorized = onUnauthenticated
     )
-  }
 
   val PrivateAction = resultModifier(_.withHeaders(CacheControl.noCache))
 
