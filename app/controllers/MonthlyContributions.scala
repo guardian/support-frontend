@@ -17,7 +17,7 @@ import com.typesafe.scalalogging.LazyLogging
 import lib.TestUsers
 
 class MonthlyContributions(
-   implicit
+    implicit
     client: MonthlyContributionsClient,
     actionRefiners: ActionRefiners,
     exec: ExecutionContext,

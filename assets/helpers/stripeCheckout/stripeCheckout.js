@@ -1,5 +1,10 @@
 // @flow
 
+// ----- Imports ----- //
+
+import type { State as StripeState } from './stripeCheckoutReducer';
+
+
 // ----- Setup ----- //
 
 let stripeHandler = null;
@@ -26,15 +31,20 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
-export const setup = (token: Function, closed: Function) => loadStripe().then(() => {
+export const setup = (
+  state: StripeState,
+  token: Function,
+  closed: Function,
+) => loadStripe().then(() => {
 
   stripeHandler = window.StripeCheckout.configure({
     name: 'Guardian',
     description: 'Please enter your card details.',
+    allowRememberMe: false,
     key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
     image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
-    currency: 'GBP',
+    currency: state.currency,
     token,
     closed,
   });

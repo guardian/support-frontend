@@ -1,0 +1,24 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+@(title: String, id: String, js: String, user: IdUser)(implicit assets: AssetsResolver)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        window.guardian.user = {
+            email: "@user.primaryEmailAddress",
+            @user.publicFields.displayName.map { displayName =>
+            displayName: "@displayName",
+            }
+            @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+            firstName: "@firstName",
+            lastName: "@lastName",
+            }
+        };
+    </script>
+    <script type="text/javascript" src="@assets(js)"></script>
+}
+
+@main(title = title, scripts = scripts) {
+    <main id="@id"></main>
+}

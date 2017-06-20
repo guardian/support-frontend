@@ -7,10 +7,11 @@ import type { Action } from './stripeCheckoutActions';
 
 // ----- Types ----- //
 
-type State = {
+export type State = {
   loaded: boolean,
   amount: ?number,
   token: ?string,
+  currency: string,
 };
 
 
@@ -20,6 +21,7 @@ const initialState: State = {
   loaded: false,
   amount: null,
   token: null,
+  currency: 'GBP',
 };
 
 

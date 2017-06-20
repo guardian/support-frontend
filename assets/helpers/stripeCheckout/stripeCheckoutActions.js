@@ -14,6 +14,7 @@ export type Action =
   | { type: 'CLOSE_STRIPE_OVERLAY' }
   | { type: 'OPEN_STRIPE_OVERLAY' }
   | { type: 'SET_STRIPE_AMOUNT', amount: number }
+  | { type: 'STRIPE_ERROR', message: string }
   ;
 
 
@@ -44,21 +45,24 @@ export function setStripeAmount(amount: number): Action {
   return { type: 'SET_STRIPE_AMOUNT', amount };
 }
 
-export function setupStripeCheckout(): Function {
+export function setupStripeCheckout(callback: Function): Function {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
     const handleToken = (token) => {
-      dispatch(setStripeCheckoutToken(token));
+      dispatch(setStripeCheckoutToken(token.id));
+      callback(token.id, dispatch, getState);
     };
 
     const handleCloseOverlay = () => dispatch(closeStripeOverlay());
 
     dispatch(startStripeCheckout());
 
-    return stripeCheckout.setup(handleToken, handleCloseOverlay).then(() => {
-      dispatch(stripeCheckoutLoaded());
-    });
+    return stripeCheckout.setup(
+      getState().stripeCheckout,
+      handleToken,
+      handleCloseOverlay,
+    ).then(() => dispatch(stripeCheckoutLoaded()));
 
   };
 
