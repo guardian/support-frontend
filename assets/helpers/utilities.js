@@ -25,8 +25,7 @@ export function localStorageAvailable(): boolean {
   try {
 
     localStorage.setItem('storageTest', 'testValue');
-    localStorage.getItem('storageTest');
-    return true;
+    return localStorage.getItem('storageTest') === 'testValue';
 
   } catch (e) {
     return false;
