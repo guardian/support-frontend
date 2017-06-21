@@ -2,33 +2,18 @@
 
 // ----- Imports ----- //
 
-import 'ophan';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
-import * as ga from 'helpers/ga';
-import * as abTest from 'helpers/abtest';
-import * as logger from 'helpers/logger';
+import * as pageStartup from 'helpers/pageStartup';
 
 
-// ----- AB Tests ----- //
+// ----- Page Startup ----- //
 
-const participation = abTest.init();
-
-
-// ----- Tracking ----- //
-
-ga.init();
-ga.setDimension('experience', abTest.getVariantsAsString(participation));
-ga.trackPageview();
-
-
-// ----- Logging ----- //
-
-logger.init();
+pageStartup.start();
 
 
 // ----- Render ----- //

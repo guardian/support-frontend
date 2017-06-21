@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import 'ophan';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
@@ -16,9 +15,7 @@ import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 
-import * as ga from 'helpers/ga';
-import * as abTest from 'helpers/abtest';
-import * as logger from 'helpers/logger';
+import * as pageStartup from 'helpers/pageStartup';
 import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
@@ -27,21 +24,9 @@ import reducer from './reducers/reducers';
 
 import { setContribAmount } from './actions/monthlyContributionsActions';
 
-// ----- AB Tests ----- //
+// ----- Page Startup ----- //
 
-const participation = abTest.init();
-
-
-// ----- Tracking ----- //
-
-ga.init();
-ga.setDimension('experience', abTest.getVariantsAsString(participation));
-ga.trackPageview();
-
-
-// ----- Logging ----- //
-
-logger.init();
+pageStartup.start();
 
 
 // ----- Redux Store ----- //
