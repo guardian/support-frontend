@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Svg from 'components/svg/svg';
 
@@ -16,7 +17,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function DisplayName(props: PropTypes) {
+function DisplayName(props: PropTypes) {
 
   return (
     <div className="component-display-name">
@@ -26,3 +27,19 @@ export default function DisplayName(props: PropTypes) {
   );
 
 }
+
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+
+  return {
+    name: state.user.displayName,
+  };
+
+}
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(DisplayName);
