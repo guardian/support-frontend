@@ -22,4 +22,4 @@ const start = () => {
   return participation;
 };
 
-export  { start };
+export default { start };
