@@ -3,13 +3,18 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import postCheckout from '../helpers/ajax';
 
+
+// ----- Types ----- //
+
 type PropTypes = {
-    email: string,
-}
+  email: string,
+};
+
 
 // ----- Component ----- //
 
@@ -24,6 +29,17 @@ function PaymentMethods(props: PropTypes) {
 }
 
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+
+  return {
+    email: state.user.email,
+  };
+
+}
+
+
 // ----- Exports ----- //
 
-export default PaymentMethods;
+export default connect(mapStateToProps)(PaymentMethods);

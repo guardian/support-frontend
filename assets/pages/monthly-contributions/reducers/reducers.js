@@ -5,6 +5,8 @@
 import { combineReducers } from 'redux';
 
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import user from 'helpers/user/userReducer';
+
 import type { Action } from '../actions/monthlyContributionsActions';
 
 
@@ -13,8 +15,6 @@ import type { Action } from '../actions/monthlyContributionsActions';
 export type State = {
   amount: number,
   country: string,
-  firstName: ?string,
-  lastName: ?string,
   error: ?string,
 };
 
@@ -24,8 +24,6 @@ export type State = {
 const initialState: State = {
   amount: 5,
   country: 'GB',
-  firstName: null,
-  lastName: null,
   error: null,
 };
 
@@ -40,12 +38,6 @@ function monthlyContrib(
 
     case 'SET_CONTRIB_VALUE':
       return Object.assign({}, state, { amount: action.value });
-
-    case 'SET_FIRST_NAME':
-      return Object.assign({}, state, { firstName: action.name });
-
-    case 'SET_LAST_NAME':
-      return Object.assign({}, state, { lastName: action.name });
 
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });
@@ -62,5 +54,6 @@ function monthlyContrib(
 
 export default combineReducers({
   monthlyContrib,
+  user,
   stripeCheckout,
 });

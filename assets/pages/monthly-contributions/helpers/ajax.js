@@ -42,8 +42,8 @@ function requestData(paymentToken: string, getState: Function) {
       stripeToken: paymentToken,
     },
     country: state.monthlyContrib.country,
-    firstName: state.monthlyContrib.firstName,
-    lastName: state.monthlyContrib.lastName,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
   };
 
   return {

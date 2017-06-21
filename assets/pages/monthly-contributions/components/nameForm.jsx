@@ -10,7 +10,7 @@ import TextInput from 'components/textInput/textInput';
 import {
   setFirstName,
   setLastName,
-} from '../actions/monthlyContributionsActions';
+} from 'helpers/user/userActions';
 
 
 // ----- Types ----- //
@@ -52,8 +52,8 @@ function NameForm(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    firstName: state.monthlyContrib.firstName,
-    lastName: state.monthlyContrib.lastName,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
   };
 
 }
