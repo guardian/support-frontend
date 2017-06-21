@@ -16,19 +16,3 @@ export function descending(a: number, b: number): number {
 export function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
 }
-
-// Checks if localStorage is usable. Need to do more than check if
-// 'window.localStorage' is defined, because Safari in private browsing
-// mode is weird and sets the storage size to 0.
-export function localStorageAvailable(): boolean {
-
-  try {
-
-    localStorage.setItem('storageTest', 'testValue');
-    return localStorage.getItem('storageTest') === 'testValue';
-
-  } catch (e) {
-    return false;
-  }
-
-}
