@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
-import user from 'helpers/user';
+import user from 'helpers/user/userReducer';
 
 import type { Action } from '../actions/monthlyContributionsActions';
 

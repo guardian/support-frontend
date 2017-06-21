@@ -10,7 +10,7 @@ import TextInput from 'components/textInput/textInput';
 import {
   setFirstName,
   setLastName,
-} from 'helpers/user';
+} from 'helpers/user/userActions';
 
 
 // ----- Types ----- //
