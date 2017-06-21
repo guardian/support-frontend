@@ -4,11 +4,15 @@
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
+import { localStorageAvailable } from './utilities';
+
 
 // ----- Setup ----- //
 
 const MVT_COOKIE: string = 'GU_mvt_id';
 const MVT_MAX: number = 1000000;
+
+const localStorageExists = localStorageAvailable();
 
 
 // ----- Types ----- //
@@ -89,14 +93,22 @@ function getMvtId(): number {
 
 function getLocalStorageParticipation(): Participations {
 
-  const abTests = localStorage.getItem('gu.support.abTests');
+  let abTests = null;
+
+  if (localStorageExists) {
+    abTests = localStorage.getItem('gu.support.abTests');
+  }
 
   return abTests ? JSON.parse(abTests) : {};
 
 }
 
 function setLocalStorageParticipation(participation): void {
-  localStorage.setItem('gu.support.abTests', JSON.stringify(participation));
+
+  if (localStorageExists) {
+    localStorage.setItem('gu.support.abTests', JSON.stringify(participation));
+  }
+
 }
 
 function getUrlParticipation(): ?Participations {
