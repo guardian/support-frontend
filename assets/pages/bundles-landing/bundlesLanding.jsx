@@ -9,13 +9,15 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
-import * as pageStartup from 'helpers/pageStartup'
+import pageStartup from 'helpers/pageStartup';
 import getQueryParameter from 'helpers/url';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
+
+// ----- Page Startup ----- //
 
 const participation = pageStartup.start();
 
