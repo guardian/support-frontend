@@ -23,7 +23,7 @@ type PropTypes = {
 };
 
 
-// ----- Functions ----- //
+// ----- Component ----- //
 
 const StripePopUpButton = (props: PropTypes) => {
 
@@ -41,6 +41,9 @@ const StripePopUpButton = (props: PropTypes) => {
   );
 
 };
+
+
+// ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
 
