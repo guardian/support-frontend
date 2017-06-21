@@ -15,7 +15,7 @@ import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 
-import * as pageStartup from 'helpers/pageStartup';
+import pageStartup from 'helpers/pageStartup';
 import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
