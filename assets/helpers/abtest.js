@@ -4,6 +4,8 @@
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
+import * as storage from './storage';
+
 
 // ----- Setup ----- //
 
@@ -89,14 +91,14 @@ function getMvtId(): number {
 
 function getLocalStorageParticipation(): Participations {
 
-  const abTests = localStorage.getItem('gu.support.abTests');
+  const abTests = storage.getItem('gu.support.abTests');
 
   return abTests ? JSON.parse(abTests) : {};
 
 }
 
 function setLocalStorageParticipation(participation): void {
-  localStorage.setItem('gu.support.abTests', JSON.stringify(participation));
+  storage.setItem('gu.support.abTests', JSON.stringify(participation));
 }
 
 function getUrlParticipation(): ?Participations {
