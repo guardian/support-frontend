@@ -68,7 +68,17 @@ type OphanABPayload = {
 
  */
 
-const tests: Test[] = [];
+const tests: Test[] = [
+  {
+    testId: 'SupportFrontEndContribution',
+    variants: ['control', 'variantA'],
+    audience: {
+      offset: 0,
+      size: 1,
+    },
+    isActive: true,
+  },
+];
 
 
 // ----- Functions ----- //
