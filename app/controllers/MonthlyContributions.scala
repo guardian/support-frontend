@@ -30,7 +30,7 @@ class MonthlyContributions(
 
   import actionRefiners._
 
-  def displayForm: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def displayForm: Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) => Redirect("/monthly-contributions/existing-contributor")
