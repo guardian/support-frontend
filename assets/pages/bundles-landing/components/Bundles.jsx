@@ -14,6 +14,73 @@ import { changeContribType } from '../actions/bundlesLandingActions';
 
 import type { Contrib, Amounts } from '../reducers/reducers';
 
+// ----- Types ----- //
+
+type PropTypes = {
+  contribType: Contrib,
+  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
+  intCmp: string, // eslint-disable-line react/no-unused-prop-types
+  toggleContribType: (string) => void,
+};
+
+
+const contribCopy: ContribBundle = {
+  heading: 'contribute',
+  subheading: 'from £5/month',
+  ctaText: 'Contribute with credit/debit card',
+  modifierClass: 'contributions',
+};
+
+const digitalCopy: DigitalBundle = {
+  heading: 'digital subscription',
+  subheading: '£11.99/month',
+  listItems: [
+    {
+      heading: 'Ad-free mobile app',
+      text: 'No interruptions means pages load quicker for a clearer reading experience',
+    },
+    {
+      heading: 'Daily tablet edition',
+      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
+    },
+    {
+      heading: 'Enjoy on up to 10 devices',
+    },
+  ],
+  ctaText: 'Start your 14 day trial',
+  modifierClass: 'digital',
+};
+
+const paperCopy: PaperBundle = {
+  heading: 'paper subscription',
+  subheading: 'from £22.06/month',
+  listItems: [
+    {
+      heading: 'Newspaper',
+      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
+    },
+    {
+      heading: 'Save money off the retail price',
+    },
+    {
+      heading: 'All the benefits of a digital subscription',
+      text: 'Avaliable with paper+digital',
+    },
+  ],
+  paperCtaText: 'Become a paper subscriber',
+  paperDigCtaText: 'Become a paper+digital subscriber',
+  modifierClass: 'paper',
+};
+
+const bundles: Bundles = {
+  contrib: contribCopy,
+  digital: digitalCopy,
+  paper: paperCopy,
+}
+};
+
+
+
 
 // ----- Copy ----- //
 
@@ -86,17 +153,6 @@ const contribToggle = {
     },
   ],
 };
-
-
-// ----- Types ----- //
-
-type PropTypes = {
-  contribType: Contrib,
-  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
-  intCmp: string, // eslint-disable-line react/no-unused-prop-types
-  toggleContribType: (string) => void,
-};
-
 
 // ----- Functions ----- //
 
