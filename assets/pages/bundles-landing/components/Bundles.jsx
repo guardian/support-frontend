@@ -5,15 +5,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import type { Participations } from 'helpers/abtest';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
+import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
 
 import type { Contrib, Amounts } from '../reducers/reducers';
-import type { Participations } from 'helpers/abtest';
+
 
 // ----- Types ----- //
 
@@ -22,6 +24,7 @@ type PropTypes = {
   contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
   intCmp: string, // eslint-disable-line react/no-unused-prop-types
   toggleContribType: (string) => void,
+  abTests: Object, // eslint-disable-line react/no-unused-prop-types
 };
 
 type ContribBundle = {
@@ -29,31 +32,30 @@ type ContribBundle = {
   subheading: string,
   ctaText: string,
   modifierClass: string,
+  ctaLink: string,
 }
 
 type DigitalBundle = {
   heading: string,
   subheading: string,
-  listItems: Array<BundleItem>,
+  listItems: ListItem[],
   ctaText: string,
   modifierClass: string,
-}
-
-type BundleItem = {
-  heading: string,
-  text: string,
+  ctaLink: string,
 }
 
 type PaperBundle = {
   heading: string,
   subheading: string,
-  listItems: Array<BundleItem>,
+  listItems: ListItem[],
   paperCtaText: string,
   paperDigCtaText: string,
   modifierClass: string,
+  paperDigCtaLink: string,
+  paperCtaLink: string,
 }
 
-type Bundles = {
+type BundlesType = {
   contrib: ContribBundle,
   digital: DigitalBundle,
   paper: PaperBundle
@@ -62,19 +64,12 @@ type Bundles = {
 
 // ----- Copy ----- //
 
-const ctaLinks = {
-  recurring: 'https://membership.theguardian.com/monthly-contribution',
-  oneOff: 'https://contribute.theguardian.com/uk',
-  paperOnly: 'https://subscribe.theguardian.com/p/GXX83P',
-  paperDigital: 'https://subscribe.theguardian.com/p/GXX83X',
-  digital: 'https://subscribe.theguardian.com/p/DXX83X',
-};
-
 const contribCopy: ContribBundle = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute with credit/debit card',
   modifierClass: 'contributions',
+  ctaLink: '',
 };
 
 const digitalCopy: DigitalBundle = {
@@ -95,6 +90,7 @@ const digitalCopy: DigitalBundle = {
   ],
   ctaText: 'Start your 14 day trial',
   modifierClass: 'digital',
+  ctaLink: 'https://subscribe.theguardian.com/p/DXX83X',
 };
 
 const paperCopy: PaperBundle = {
@@ -110,19 +106,26 @@ const paperCopy: PaperBundle = {
     },
     {
       heading: 'All the benefits of a digital subscription',
-      text: 'Avaliable with paper+digital',
+      text: 'Available with paper+digital',
     },
   ],
   paperCtaText: 'Become a paper subscriber',
   paperDigCtaText: 'Become a paper+digital subscriber',
   modifierClass: 'paper',
+  ctaLink: '',
+  paperDigCtaLink: 'https://subscribe.theguardian.com/p/GXX83X',
+  paperCtaLink: 'https://subscribe.theguardian.com/p/GXX83P',
 };
 
-const bundles: Bundles = {
+const bundles: BundlesType = {
   contrib: contribCopy,
   digital: digitalCopy,
   paper: paperCopy,
-  }
+};
+
+const ctaLinks = {
+  recurring: 'https://membership.theguardian.com/monthly-contribution',
+  oneOff: 'https://contribute.theguardian.com/uk',
 };
 
 const contribToggle = {
@@ -139,10 +142,9 @@ const contribToggle = {
   ],
 };
 
-
 // ----- Functions ----- //
 
-function getContribAttrs({ contribType, contribAmount, intCmp }): ContribBundle {
+const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
@@ -154,63 +156,63 @@ function getContribAttrs({ contribType, contribAmount, intCmp }): ContribBundle 
 
   return Object.assign({}, bundles.contrib, { ctaLink });
 
-}
+};
 
-function getPaperAttrs({ intCmp }): PaperBundle {
+const getPaperAttrs = ({ intCmp }): PaperBundle => {
 
   const params = new URLSearchParams();
 
   params.append('INTCMP', intCmp);
-  const paperCtaLink = `${ctaLinks.paperOnly}?${params.toString()}`;
-  const paperDigCtaLink = `${ctaLinks.paperDigital}?${params.toString()}`;
+  const paperCtaLink = `${bundles.paper.paperCtaLink}?${params.toString()}`;
+  const paperDigCtaLink = `${bundles.paper.paperDigCtaLink}?${params.toString()}`;
 
   return Object.assign({}, bundles.paper, { paperCtaLink, paperDigCtaLink });
 
-}
+};
 
-function getDigitalAttrs({ intCmp }): DigitalBundle {
+const getDigitalAttrs = ({ intCmp }): DigitalBundle => {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp);
-  const ctaLink = `${ctaLinks.digital}?${params.toString()}`;
+  const ctaLink = `${bundles.digital.ctaLink}?${params.toString()}`;
 
   return Object.assign({}, bundles.digital, { ctaLink });
 
-}
+};
 
-const getContributionComponent = (participation: Participations, contribAttrs: ContribBundle) => {
 
+const getControlVariant = (props: PropTypes, attrs: ContribBundle) => (
+  <Bundle {...attrs}>
+    <div className="contrib-type">
+      <RadioToggle
+        {...contribToggle}
+        toggleAction={props.toggleContribType}
+        checked={props.contribType}
+      />
+    </div>
+    <ContribAmounts />
+    <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
+  </Bundle>
+);
+
+const getVariantA = () => null;
+
+const getContributionComponent = (props: PropTypes,
+                                  contribAttrs: ContribBundle) => {
+
+  const participation: Participations = props.abTests;
   const variant = participation.SupportFrontEndContribution;
-
-  const getControlVariant = (attrs) => {
-    return <Bundle {...attrs}>
-      <div className="contrib-type">
-        <RadioToggle
-          {...contribToggle}
-          toggleAction={props.toggleContribType}
-          checked={props.contribType}
-        />
-      </div>
-      <ContribAmounts />
-      <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
-    </Bundle>
-  };
-
-  const getVariantA = (attrs) => {
-    return null;
-  };
-
   let response = null;
 
   switch (variant) {
     case 'control' :
-      response = getControlVariant(contribAttrs);
+      response = getControlVariant(props, contribAttrs);
       break;
 
     case 'variantA' :
-      response = getVariantA(contribAttrs);
+      response = getVariantA();
       break;
-    default : response = getControlVariant(contribAttrs);
+    default : response = getControlVariant(props, contribAttrs);
   }
 
   return response;
@@ -221,17 +223,16 @@ const getContributionComponent = (participation: Participations, contribAttrs: C
 
 function Bundles(props: PropTypes) {
 
-  const contribAttrs = getContribAttrs(props);
-  const paperAttrs = getPaperAttrs(props);
-  const digitalAttrs = getDigitalAttrs(props);
-
-  const contributionComponent = getContributionComponent(props.abTests, contribAttrs);
+  const contribAttrs: ContribBundle = getContribAttrs(props);
+  const paperAttrs: PaperBundle = getPaperAttrs(props);
+  const digitalAttrs: DigitalBundle = getDigitalAttrs(props);
+  const contributionComponent = getContributionComponent(props, contribAttrs);
 
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
-          <contributionComponent />
+          {contributionComponent}
           <div className="bundles__divider" />
           <Bundle {...digitalAttrs}>
             <FeatureList listItems={bundles.digital.listItems} />
