@@ -10,7 +10,7 @@ import React from 'react';
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type listItem =
+export type ListItem =
   | {| heading: string, text: string |}
   | {| heading: string |}
   | {| text: string |}
@@ -19,7 +19,7 @@ type listItem =
 /* eslint-enable react/no-unused-prop-types */
 
 type PropTypes = {
-  listItems: listItem[],
+  listItems: ListItem[],
 };
 
 
@@ -27,7 +27,7 @@ type PropTypes = {
 
 export default function FeatureList(props: PropTypes) {
 
-  const items = props.listItems.map((item: listItem) => {
+  const items = props.listItems.map((item: ListItem) => {
 
     const itemHeading = item.heading ? <h3>{ item.heading }</h3> : null;
     const itemText = item.text ? <p>{ item.text }</p> : null;
