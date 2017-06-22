@@ -13,6 +13,51 @@ import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
 
 import type { Contrib, Amounts } from '../reducers/reducers';
+import type { Participations } from 'helpers/abtest';
+
+// ----- Types ----- //
+
+type PropTypes = {
+  contribType: Contrib,
+  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
+  intCmp: string, // eslint-disable-line react/no-unused-prop-types
+  toggleContribType: (string) => void,
+};
+
+type ContribBundle = {
+  heading: string,
+  subheading: string,
+  ctaText: string,
+  modifierClass: string,
+}
+
+type DigitalBundle = {
+  heading: string,
+  subheading: string,
+  listItems: Array<BundleItem>,
+  ctaText: string,
+  modifierClass: string,
+}
+
+type BundleItem = {
+  heading: string,
+  text: string,
+}
+
+type PaperBundle = {
+  heading: string,
+  subheading: string,
+  listItems: Array<BundleItem>,
+  paperCtaText: string,
+  paperDigCtaText: string,
+  modifierClass: string,
+}
+
+type Bundles = {
+  contrib: ContribBundle,
+  digital: DigitalBundle,
+  paper: PaperBundle
+}
 
 
 // ----- Copy ----- //
@@ -25,52 +70,59 @@ const ctaLinks = {
   digital: 'https://subscribe.theguardian.com/p/DXX83X',
 };
 
-const bundles = {
-  contrib: {
-    heading: 'contribute',
-    subheading: 'from £5/month',
-    ctaText: 'Contribute with credit/debit card',
-    modifierClass: 'contributions',
-  },
-  digital: {
-    heading: 'digital subscription',
-    subheading: '£11.99/month',
-    listItems: [
-      {
-        heading: 'Ad-free mobile app',
-        text: 'No interruptions means pages load quicker for a clearer reading experience',
-      },
-      {
-        heading: 'Daily tablet edition',
-        text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
-      },
-      {
-        heading: 'Enjoy on up to 10 devices',
-      },
-    ],
-    ctaText: 'Start your 14 day trial',
-    modifierClass: 'digital',
-  },
-  paper: {
-    heading: 'paper subscription',
-    subheading: 'from £22.06/month',
-    listItems: [
-      {
-        heading: 'Newspaper',
-        text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
-      },
-      {
-        heading: 'Save money off the retail price',
-      },
-      {
-        heading: 'All the benefits of a digital subscription',
-        text: 'Avaliable with paper+digital',
-      },
-    ],
-    paperCtaText: 'Become a paper subscriber',
-    paperDigCtaText: 'Become a paper+digital subscriber',
-    modifierClass: 'paper',
-  },
+const contribCopy: ContribBundle = {
+  heading: 'contribute',
+  subheading: 'from £5/month',
+  ctaText: 'Contribute with credit/debit card',
+  modifierClass: 'contributions',
+};
+
+const digitalCopy: DigitalBundle = {
+  heading: 'digital subscription',
+  subheading: '£11.99/month',
+  listItems: [
+    {
+      heading: 'Ad-free mobile app',
+      text: 'No interruptions means pages load quicker for a clearer reading experience',
+    },
+    {
+      heading: 'Daily tablet edition',
+      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
+    },
+    {
+      heading: 'Enjoy on up to 10 devices',
+    },
+  ],
+  ctaText: 'Start your 14 day trial',
+  modifierClass: 'digital',
+};
+
+const paperCopy: PaperBundle = {
+  heading: 'paper subscription',
+  subheading: 'from £22.06/month',
+  listItems: [
+    {
+      heading: 'Newspaper',
+      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
+    },
+    {
+      heading: 'Save money off the retail price',
+    },
+    {
+      heading: 'All the benefits of a digital subscription',
+      text: 'Avaliable with paper+digital',
+    },
+  ],
+  paperCtaText: 'Become a paper subscriber',
+  paperDigCtaText: 'Become a paper+digital subscriber',
+  modifierClass: 'paper',
+};
+
+const bundles: Bundles = {
+  contrib: contribCopy,
+  digital: digitalCopy,
+  paper: paperCopy,
+  }
 };
 
 const contribToggle = {
@@ -88,19 +140,9 @@ const contribToggle = {
 };
 
 
-// ----- Types ----- //
-
-type PropTypes = {
-  contribType: Contrib,
-  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
-  intCmp: string, // eslint-disable-line react/no-unused-prop-types
-  toggleContribType: (string) => void,
-};
-
-
 // ----- Functions ----- //
 
-function getContribAttrs({ contribType, contribAmount, intCmp }) {
+function getContribAttrs({ contribType, contribAmount, intCmp }): ContribBundle {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
@@ -114,7 +156,7 @@ function getContribAttrs({ contribType, contribAmount, intCmp }) {
 
 }
 
-function getPaperAttrs({ intCmp }) {
+function getPaperAttrs({ intCmp }): PaperBundle {
 
   const params = new URLSearchParams();
 
@@ -126,7 +168,7 @@ function getPaperAttrs({ intCmp }) {
 
 }
 
-function getDigitalAttrs({ intCmp }) {
+function getDigitalAttrs({ intCmp }): DigitalBundle {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp);
@@ -135,6 +177,44 @@ function getDigitalAttrs({ intCmp }) {
   return Object.assign({}, bundles.digital, { ctaLink });
 
 }
+
+const getContributionComponent = (participation: Participations, contribAttrs: ContribBundle) => {
+
+  const variant = participation.SupportFrontEndContribution;
+
+  const getControlVariant = (attrs) => {
+    return <Bundle {...attrs}>
+      <div className="contrib-type">
+        <RadioToggle
+          {...contribToggle}
+          toggleAction={props.toggleContribType}
+          checked={props.contribType}
+        />
+      </div>
+      <ContribAmounts />
+      <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
+    </Bundle>
+  };
+
+  const getVariantA = (attrs) => {
+    return null;
+  };
+
+  let response = null;
+
+  switch (variant) {
+    case 'control' :
+      response = getControlVariant(contribAttrs);
+      break;
+
+    case 'variantA' :
+      response = getVariantA(contribAttrs);
+      break;
+    default : response = getControlVariant(contribAttrs);
+  }
+
+  return response;
+};
 
 
 // ----- Component ----- //
@@ -145,21 +225,13 @@ function Bundles(props: PropTypes) {
   const paperAttrs = getPaperAttrs(props);
   const digitalAttrs = getDigitalAttrs(props);
 
+  const contributionComponent = getContributionComponent(props.abTests, contribAttrs);
+
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
-          <Bundle {...contribAttrs}>
-            <div className="contrib-type">
-              <RadioToggle
-                {...contribToggle}
-                toggleAction={props.toggleContribType}
-                checked={props.contribType}
-              />
-            </div>
-            <ContribAmounts />
-            <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
-          </Bundle>
+          <contributionComponent />
           <div className="bundles__divider" />
           <Bundle {...digitalAttrs}>
             <FeatureList listItems={bundles.digital.listItems} />
@@ -175,7 +247,6 @@ function Bundles(props: PropTypes) {
       </div>
     </section>
   );
-
 }
 
 
@@ -186,6 +257,7 @@ function mapStateToProps(state) {
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     intCmp: state.intCmp,
+    abTests: state.abTests,
   };
 }
 
