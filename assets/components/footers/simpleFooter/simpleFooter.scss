@@ -3,7 +3,7 @@
 }
 
 .simple-footer__content {
-  padding: 2 * $gu-v-spacing;
+  padding: ($gu-v-spacing / 3) $gu-h-spacing ($gu-v-spacing * 1.5);
 }
 
 .simple-footer__copyright {
