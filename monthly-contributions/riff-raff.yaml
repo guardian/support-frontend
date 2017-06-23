@@ -15,5 +15,6 @@ deployments:
         - "-CreateSalesforceContactLambda-"
         - "-CreateZuoraSubscriptionLambda-"
         - "-SendThankYouEmailLambda-"
+        - "-FailureHandlerLambda-"
       fileName: monthly-contributions.jar
     dependencies: [cfn]
