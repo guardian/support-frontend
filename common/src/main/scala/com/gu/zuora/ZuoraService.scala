@@ -12,8 +12,8 @@ import okhttp3.Request.Builder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl:Option[String] = None)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[ZuoraErrorResponse] {
+class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
+    extends WebServiceHelper[ZuoraErrorResponse] {
 
   override val wsUrl = baseUrl.getOrElse(config.url)
   override val httpClient = client
@@ -29,10 +29,9 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl:Option
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson)
 
-  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]):
-  Either[circe.Error, ZuoraErrorResponse] =
-  //The Zuora api docs say that the subscribe action returns
-  //a ZuoraErrorResponse but actually it returns a list of those.
+  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
+    //The Zuora api docs say that the subscribe action returns
+    //a ZuoraErrorResponse but actually it returns a list of those.
     decode[List[ZuoraErrorResponse]](responseBody).map(_.head)
 
 }

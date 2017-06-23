@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
@@ -33,8 +33,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .map { stripeCustomer =>
         val card = stripeCustomer.card
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`
-        )
+          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
       }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =

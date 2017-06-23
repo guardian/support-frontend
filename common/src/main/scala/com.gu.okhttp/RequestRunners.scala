@@ -30,6 +30,12 @@ object RequestRunners extends LazyLogging {
    */
   def configurableFutureRunner(timeout: Duration)(implicit ec: ExecutionContext): Request => Future[OkResponse] = {
     val millis: Int = timeout.toMillis.toInt
-    client.newBuilder().readTimeout(millis, TimeUnit.MILLISECONDS).build().execute
+    client
+      .newBuilder()
+      .readTimeout(millis, TimeUnit.MILLISECONDS)
+      .writeTimeout(millis, TimeUnit.MILLISECONDS)
+      .connectTimeout(millis, TimeUnit.MILLISECONDS)
+      .build()
+      .execute
   }
 }

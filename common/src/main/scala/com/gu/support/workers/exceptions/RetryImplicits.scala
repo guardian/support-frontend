@@ -13,7 +13,7 @@ object RetryImplicits {
     def asRetryException: RetryException = throwable match {
       //timeouts and 500s
       case _: SocketTimeoutException |
-           _: WebServiceHelperError[_] => new RetryUnlimited(cause = throwable)
+        _: WebServiceHelperError[_] => new RetryUnlimited(cause = throwable)
 
       //Invalid Json
       case _: ParsingFailure => new RetryNone(cause = throwable)
@@ -26,14 +26,14 @@ object RetryImplicits {
   implicit class AwsKmsConversions(val throwable: AWSKMSException) {
     def asRetryException: RetryException = throwable match {
       case _: KeyUnavailableException |
-           _: DependencyTimeoutException |
-           _: KMSInternalException |
-           _: KMSInvalidStateException => new RetryUnlimited(cause = throwable)
+        _: DependencyTimeoutException |
+        _: KMSInternalException |
+        _: KMSInvalidStateException => new RetryUnlimited(cause = throwable)
       case _: InvalidGrantTokenException => new RetryNone(cause = throwable)
       case _: NotFoundException |
-           _: DisabledException |
-           _: InvalidKeyUsageException |
-           _ => new RetryLimited(cause = throwable)
+        _: DisabledException |
+        _: InvalidKeyUsageException |
+        _ => new RetryLimited(cause = throwable)
     }
   }
 

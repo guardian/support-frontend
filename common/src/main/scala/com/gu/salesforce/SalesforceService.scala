@@ -20,7 +20,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse]
+    extends WebServiceHelper[SalesforceErrorResponse]
     with LazyLogging {
   val sfConfig = config
   val wsUrl = sfConfig.url
@@ -39,8 +39,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     req.addHeader("Authorization", s"Bearer ${auth.access_token}") //And also add an Authorization header
   }
 
-  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[SalesforceErrorResponse]):
-  Either[circe.Error, SalesforceErrorResponse] =
+  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[SalesforceErrorResponse]): Either[circe.Error, SalesforceErrorResponse] =
     decode[List[SalesforceErrorResponse]](responseBody).map(_.head) //Salesforce returns a list of error responses
 
   def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
@@ -80,7 +79,7 @@ object AuthService extends LazyLogging {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceAuthenticationErrorResponse]
+    extends WebServiceHelper[SalesforceAuthenticationErrorResponse]
     with LazyLogging with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url

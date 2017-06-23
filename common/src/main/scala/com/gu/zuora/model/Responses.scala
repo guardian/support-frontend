@@ -18,7 +18,7 @@ object ZuoraErrorResponse {
   implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
 }
 
-case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse{
+case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse {
   def asRetryException: RetryException = new RetryNone(cause = this) //This can be more sophisticated if we get category codes enabled (see error-handling.md)
 }
 

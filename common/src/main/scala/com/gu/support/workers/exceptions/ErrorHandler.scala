@@ -15,19 +15,19 @@ import com.typesafe.scalalogging.LazyLogging
  */
 object ErrorHandler extends LazyLogging {
   val handleException: PartialFunction[Throwable, Any] = {
-      //Stripe
-      case e: Stripe.StripeError => logAndRethrow(e.asRetryException)
-      //PayPal
-      case e: PayPalError => logAndRethrow(e.asRetryException)
-      //AWS encryption SDK
-      case e: AWSKMSException => logAndRethrow(e.asRetryException)
-      //Zuora
-      case e: ZuoraErrorResponse => logAndRethrow(e.asRetryException)
-      //Salesforce
-      case e: SalesforceErrorResponse => logAndRethrow(e.asRetryException)
-      //Any Exception that we haven't specifically handled
-      case e: Throwable => logAndRethrow(e.asRetryException)
-    }
+    //Stripe
+    case e: Stripe.StripeError => logAndRethrow(e.asRetryException)
+    //PayPal
+    case e: PayPalError => logAndRethrow(e.asRetryException)
+    //AWS encryption SDK
+    case e: AWSKMSException => logAndRethrow(e.asRetryException)
+    //Zuora
+    case e: ZuoraErrorResponse => logAndRethrow(e.asRetryException)
+    //Salesforce
+    case e: SalesforceErrorResponse => logAndRethrow(e.asRetryException)
+    //Any Exception that we haven't specifically handled
+    case e: Throwable => logAndRethrow(e.asRetryException)
+  }
 
   def logAndRethrow(t: RetryException): Unit = {
     logger.error(s"${t.getMessage}", t)
