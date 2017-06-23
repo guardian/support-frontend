@@ -13,4 +13,6 @@ class Configuration {
   lazy val identity = new Identity(config.getConfig("identity"))
 
   lazy val supportUrl = config.getString("support.url")
+
+  lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 }

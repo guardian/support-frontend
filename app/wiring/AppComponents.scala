@@ -13,7 +13,7 @@ import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
-import services.{AuthenticationService, IdentityService}
+import services.{AuthenticationService, IdentityService, MembersDataService}
 import lib.TestUsers
 
 trait AppComponents extends PlayComponents with AhcWSComponents {
@@ -24,6 +24,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
 
   implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
 
+  implicit lazy val membersDataService = new MembersDataService(config.membersDataServiceApiUrl)
   implicit lazy val identityService = new IdentityService(config.identity.apiUrl, config.identity.apiClientToken)
 
   implicit lazy val actionRefiners = new ActionRefiners(
