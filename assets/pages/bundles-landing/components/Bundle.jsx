@@ -17,6 +17,7 @@ type PropTypes = {
   subheading: string,
   modifierClass: string,
   children?: Children,
+  doubleHeadingModifierClass?: string,
 };
 
 
@@ -35,6 +36,7 @@ function Bundle(props: PropTypes) {
       <DoubleHeading
         heading={props.heading}
         subheading={props.subheading}
+        modifierClass={props.doubleHeadingModifierClass}
       />
       <div className="bundle__content">
         {props.children}
