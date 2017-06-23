@@ -50,6 +50,8 @@
 
 		svg {
 			fill: gu-colour(neutral-1);
+			// Fix for IE10.
+			left: 190px;
 		}
 
 		&:hover {

@@ -4,5 +4,7 @@
 		border: 1px solid gu-colour(neutral-1);
 		border-radius: 600px;
 		padding: 10px;
+		// Fix for IE10.
+		height: 30px;
 	}
 }
