@@ -198,7 +198,7 @@ const getControlVariant = (props: PropTypes, attrs: ContribBundle) => (
 const getVariantA = (props: PropTypes, attrs: ContribBundle) => (
   <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
     <div className="contrib-type">
-      <p class="contrib-explainer">Every penny funds our fearless, quality journalism</p>
+      <p className="contrib-explainer">Every penny funds our fearless, quality journalism</p>
       <RadioToggle
         {...contribToggle}
         toggleAction={props.toggleContribType}

@@ -54,6 +54,7 @@ Bundle.defaultProps = {
   infoText: '',
   modifierClass: '',
   children: null,
+  doubleHeadingModifierClass: null,
 };
 
 
