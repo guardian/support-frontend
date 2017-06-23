@@ -195,7 +195,20 @@ const getControlVariant = (props: PropTypes, attrs: ContribBundle) => (
   </Bundle>
 );
 
-const getVariantA = () => null;
+const getVariantA = (props: PropTypes, attrs: ContribBundle) => (
+  <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
+    <div className="contrib-type">
+      <p class="contrib-explainer">Every penny funds our fearless, quality journalism</p>
+      <RadioToggle
+        {...contribToggle}
+        toggleAction={props.toggleContribType}
+        checked={props.contribType}
+      />
+    </div>
+    <ContribAmounts />
+    <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
+  </Bundle>
+);
 
 const getContributionComponent = (props: PropTypes,
                                   contribAttrs: ContribBundle) => {
@@ -210,7 +223,7 @@ const getContributionComponent = (props: PropTypes,
       break;
 
     case 'variantA' :
-      response = getVariantA();
+      response = getVariantA(props, contribAttrs);
       break;
     default : response = getControlVariant(props, contribAttrs);
   }
@@ -271,7 +284,6 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
-
 
 // ----- Exports ----- //
 
