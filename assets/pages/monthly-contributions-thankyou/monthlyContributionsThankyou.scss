@@ -1,6 +1,10 @@
 #monthly-contributions-thankyou-page {
 
-	// ----- Thank You
+	a {
+		color: gu-colour(neutral-1);
+	}
+
+	// ----- Headings
 
 	.thankyou {
 		background-color: darken(gu-colour(multimedia-main-2), 5%);
@@ -11,9 +15,17 @@
 		padding: $gu-v-spacing $gu-h-spacing;
 	}
 
+	.thankyou__wrapper {
+
+		@include mq($from: desktop) {
+			margin-left: 20%;
+			margin-right: 20%;
+		}
+	}
+
 	.thankyou__heading {
 		font-family: $gu-egyptian-web;
-		color: #fff;
+		color: gu-colour(neutral-1);
 		font-size: 44px;
 		line-height: 46px;
 		font-weight: bold;
@@ -21,9 +33,40 @@
 
 	.thankyou__subheading {
 		font-family: $gu-egyptian-web;
-		font-size: 44px;
-		line-height: 46px;
+		font-size: 40px;
+		line-height: 42px;
+		font-weight: lighter;
 		color: gu-colour(neutral-1);
 	}
 
+	.component-cta-link {
+		color: gu-colour(neutral-1);
+		background: transparent;
+		display: inline-block;
+		width: 180px;
+		border: 1px solid gu-colour(neutral-1);
+		font-weight: normal;
+		margin-bottom: $gu-v-spacing * 4;
+
+		svg {
+			fill: gu-colour(neutral-1);
+		}
+
+		&:hover {
+			border-color: #000;
+			color: #000;
+
+			svg {
+				fill: #000;
+			}
+		}
+	}
+
+	.component-social-share {
+		margin-right: $gu-h-spacing / 2;
+
+		svg {
+			margin-top: $gu-v-spacing;
+		}
+	}
 }
