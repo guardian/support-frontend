@@ -359,6 +359,10 @@
       }
     }
 
+    .contrib-explainer {
+      margin-bottom: 2 * $gu-v-spacing;
+    }
+
   }
 
 
@@ -744,9 +748,13 @@
   // ----- Shared Components ----- //
 
   .component-double-heading {
-      margin-bottom: 24px;
+      margin-bottom: (2 * $gu-v-spacing);
   }
 
+  .component-double-heading--variant-a {
+    margin-bottom: 0;
+  }
+  
   input:checked+label {
     background-color: gu-colour(guardian-brand-dark);
     color: #fff;
