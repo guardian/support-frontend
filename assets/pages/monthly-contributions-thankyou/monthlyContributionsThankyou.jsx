@@ -28,13 +28,29 @@ const content = (
       <div className="thankyou__content gu-content-margin">
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
-          <h2 className="thankyou__subheading">You&#39;re now making a vital monthly contribution that will help us maintain our independent, investigative journalism</h2>
-          <CtaLink text="Return to The Guardian" url="https://theguardian.com" />
+          <h2 className="thankyou__subheading">
+            You&#39;re now making a vital monthly contribution that will help
+            us maintain our independent, investigative journalism
+          </h2>
+          <CtaLink
+            text="Return to The Guardian"
+            url="https://theguardian.com"
+          />
           <InfoSection heading="Questions?" className="thankyou__questions">
-            <p>If you have any questions about contributing to the Guardian, please <a href="mailto:contribution.support@theguardian.com">contact us</a></p>
+            <p>
+              If you have any questions about contributing to the Guardian,
+              please <a href="mailto:contribution.support@theguardian.com">
+              contact us</a>
+            </p>
           </InfoSection>
-          <InfoSection heading="Spread the word" className="thankyou__spread-the-word">
-            <p>We report for everyone. Let your friends and followers know that you support independent journalism.</p>
+          <InfoSection
+            heading="Spread the word"
+            className="thankyou__spread-the-word"
+          >
+            <p>
+              We report for everyone. Let your friends and followers know that
+              you support independent journalism.
+            </p>
             <SocialShare name="facebook" />
             <SocialShare name="twitter" />
           </InfoSection>
@@ -45,4 +61,7 @@ const content = (
   </div>
 );
 
-ReactDOM.render(content, document.getElementById('monthly-contributions-thankyou-page'));
+ReactDOM.render(
+  content,
+  document.getElementById('monthly-contributions-thankyou-page'),
+);
