@@ -1,6 +1,10 @@
 // This file contains variable and classes definition related to the layout of
 // the project.
 
+html, body {
+  height: 100%;
+}
+
 // Spacing variables
 // h stands for horizontal
 // v stands for vertical
@@ -46,6 +50,7 @@ $gu-v-spacing: 12px;
 // The paddings at different breakpoints for the content.
 .gu-content-margin {
   padding: 0 ($gu-h-spacing / 2);
+  height: 100%;
 
   @include mq($from: mobileLandscape) {
     padding: 0 $gu-h-spacing;
@@ -57,5 +62,24 @@ $gu-v-spacing: 12px;
 
   @include mq($from: tablet) {
     padding: 0 $gu-h-spacing;
+  }
+}
+
+// The element into which React content is injected.
+.gu-content-wrapper {
+  height: 100%;
+
+  > div {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  header {
+    flex: 0 0 auto;
+  }
+
+  section {
+    flex: 1 0 auto;
   }
 }
