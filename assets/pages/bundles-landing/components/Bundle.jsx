@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
+import { generateClassName } from 'helpers/utilities';
 
 import type { Children } from 'react';
 
@@ -15,7 +16,7 @@ import type { Children } from 'react';
 type PropTypes = {
   heading: string,
   subheading: string,
-  modifierClass: string,
+  modifierClass: ?string,
   children?: Children,
   doubleHeadingModifierClass?: string,
 };
@@ -25,11 +26,7 @@ type PropTypes = {
 
 function Bundle(props: PropTypes) {
 
-  let className = 'bundles__bundle';
-
-  if (props.modifierClass) {
-    className = `${className} ${className}--${props.modifierClass}`;
-  }
+  const className = generateClassName('bundles__bundle', props.modifierClass);
 
   return (
     <div className={className}>
@@ -52,7 +49,7 @@ function Bundle(props: PropTypes) {
 Bundle.defaultProps = {
   subheading: '',
   infoText: '',
-  modifierClass: '',
+  modifierClass: null,
   children: null,
   doubleHeadingModifierClass: null,
 };
