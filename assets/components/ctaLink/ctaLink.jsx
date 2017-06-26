@@ -29,7 +29,7 @@ export default function CtaLink(props: PropTypes) {
 
 
 CtaLink.defaultProps = {
-  url: undefined,
-  onClick: undefined,
+  url: null,
+  onClick: null,
 };
 
