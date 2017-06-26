@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { generateClassName } from 'helpers/utilities';
 
 
 // ---- Types ----- //
@@ -10,12 +11,15 @@ import React from 'react';
 type PropTypes = {
   heading: string,
   subheading: ?string,
+  modifierClass?: string,
 };
 
 
 // ----- Component ----- //
 
 export default function DoubleHeading(props: PropTypes) {
+
+  const className = generateClassName('component-double-heading', props.modifierClass);
 
   const subhead = (
     <h2 className="component-double-heading__subheading">
@@ -24,7 +28,7 @@ export default function DoubleHeading(props: PropTypes) {
   );
 
   return (
-    <div className="component-double-heading">
+    <div className={className}>
       <h1 className="component-double-heading__heading">
         { props.heading }
       </h1>
@@ -39,4 +43,5 @@ export default function DoubleHeading(props: PropTypes) {
 
 DoubleHeading.defaultProps = {
   subheading: '',
+  modifierClass: null,
 };

@@ -1,30 +1,31 @@
 .component-cta-link {
-	border-radius: 600px;
-	border: none;
-	background-color: gu-colour(neutral-1);
-	color: #fff;
-	padding: 6px 20px;
-	margin-top: 12px;
-	text-align: left;
-	height: $gu-v-spacing * 2;
-	vertical-align: bottom;
-	display: block;
-	line-height: 180%;
-	text-decoration: none;
-	font-size: 14px;
-	font-weight: bold;
-	font-family: $gu-text-sans-web;
-	position: relative;
+  background-color: gu-colour(neutral-1);
+  border: none;
+  border-radius: 600px;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  height: $gu-v-spacing * 2;
+  line-height: 180%;
+  margin-top: 12px;
+  padding: 6px 20px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  vertical-align: bottom;
 
-	&:hover {
-		background-color: #000;
-	}
+  &:hover {
+    background-color: #000;
+  }
 
-	svg {
-		height: 50%;
-		position: absolute;
-		right: 8px;
-		top: 9px;
-		fill: #fff;
-	}
+  svg {
+    height: 50%;
+    position: absolute;
+    right: 8px;
+    top: 9px;
+    fill: #fff;
+  }
 }

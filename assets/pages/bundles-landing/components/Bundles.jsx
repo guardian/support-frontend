@@ -5,13 +5,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import type { Participations } from 'helpers/abtest';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
+import { trackOphan } from 'helpers/abtest';
+import { trackEvent as trackEventGA } from 'helpers/ga';
+
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
+
 
 import type { Contrib, Amounts } from '../reducers/reducers';
 
@@ -23,6 +28,7 @@ type PropTypes = {
   contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
   intCmp: string, // eslint-disable-line react/no-unused-prop-types
   toggleContribType: (string) => void,
+  abTests: Participations, // eslint-disable-line react/no-unused-prop-types
 };
 
 type ContribBundle = {
@@ -142,7 +148,7 @@ const contribToggle = {
 
 // ----- Functions ----- //
 
-function getContribAttrs({ contribType, contribAmount, intCmp }): ContribBundle {
+const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
@@ -154,9 +160,9 @@ function getContribAttrs({ contribType, contribAmount, intCmp }): ContribBundle 
 
   return Object.assign({}, bundles.contrib, { ctaLink });
 
-}
+};
 
-function getPaperAttrs({ intCmp }): PaperBundle {
+const getPaperAttrs = ({ intCmp }): PaperBundle => {
 
   const params = new URLSearchParams();
 
@@ -166,9 +172,9 @@ function getPaperAttrs({ intCmp }): PaperBundle {
 
   return Object.assign({}, bundles.paper, { paperCtaLink, paperDigCtaLink });
 
-}
+};
 
-function getDigitalAttrs({ intCmp }): DigitalBundle {
+const getDigitalAttrs = ({ intCmp }): DigitalBundle => {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp);
@@ -176,8 +182,68 @@ function getDigitalAttrs({ intCmp }): DigitalBundle {
 
   return Object.assign({}, bundles.digital, { ctaLink });
 
-}
+};
 
+// ----- A/B Test components ----- //
+
+const getControlVariant = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
+  <Bundle {...attrs}>
+    <div className="contrib-type">
+      <RadioToggle
+        {...contribToggle}
+        toggleAction={props.toggleContribType}
+        checked={props.contribType}
+      />
+    </div>
+    <ContribAmounts />
+    <CtaLink text={attrs.ctaText} onClick={onClick} />
+  </Bundle>
+);
+
+const getVariantA = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
+  <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
+    <div className="contrib-type">
+      <p className="contrib-explainer">Every penny funds our fearless, quality journalism</p>
+      <RadioToggle
+        {...contribToggle}
+        toggleAction={props.toggleContribType}
+        checked={props.contribType}
+      />
+    </div>
+    <ContribAmounts />
+    <CtaLink text={attrs.ctaText} onClick={onClick} />
+  </Bundle>
+);
+
+const getContributionComponent = (props: PropTypes,
+                                  contribAttrs: ContribBundle) => {
+
+  const participation: Participations = props.abTests;
+  const variant = participation.SupportFrontEndContribution;
+  const onClick = (url: string, testVariant: string): (() => void) =>
+    () => {
+      trackOphan('SupportFrontEndContribution', testVariant, true);
+      trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
+      window.location = url;
+    };
+
+  let response = null;
+  switch (variant) {
+    case 'control' :
+      trackOphan('SupportFrontEndContribution', variant);
+      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
+      break;
+
+    case 'variantA' :
+      trackOphan('SupportFrontEndContribution', variant);
+      response = getVariantA(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
+      break;
+    default :
+      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
+  }
+
+  return response;
+};
 
 // ----- Component ----- //
 
@@ -186,22 +252,13 @@ function Bundles(props: PropTypes) {
   const contribAttrs: ContribBundle = getContribAttrs(props);
   const paperAttrs: PaperBundle = getPaperAttrs(props);
   const digitalAttrs: DigitalBundle = getDigitalAttrs(props);
+  const contributionComponent = getContributionComponent(props, contribAttrs);
 
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
-          <Bundle {...contribAttrs}>
-            <div className="contrib-type">
-              <RadioToggle
-                {...contribToggle}
-                toggleAction={props.toggleContribType}
-                checked={props.contribType}
-              />
-            </div>
-            <ContribAmounts />
-            <CtaLink text={contribAttrs.ctaText} url={contribAttrs.ctaLink} />
-          </Bundle>
+          {contributionComponent}
           <div className="bundles__divider" />
           <Bundle {...digitalAttrs}>
             <FeatureList listItems={bundles.digital.listItems} />
@@ -217,7 +274,6 @@ function Bundles(props: PropTypes) {
       </div>
     </section>
   );
-
 }
 
 
@@ -228,6 +284,7 @@ function mapStateToProps(state) {
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     intCmp: state.intCmp,
+    abTests: state.abTests,
   };
 }
 
@@ -240,7 +297,6 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
-
 
 // ----- Exports ----- //
 
