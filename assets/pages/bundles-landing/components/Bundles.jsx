@@ -28,7 +28,7 @@ type PropTypes = {
   contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
   intCmp: string, // eslint-disable-line react/no-unused-prop-types
   toggleContribType: (string) => void,
-  abTests: Object, // eslint-disable-line react/no-unused-prop-types
+  abTests: Participations, // eslint-disable-line react/no-unused-prop-types
 };
 
 type ContribBundle = {
