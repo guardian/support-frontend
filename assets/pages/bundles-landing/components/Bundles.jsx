@@ -10,9 +10,12 @@ import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
+import { trackOphan } from 'helpers/abtest';
+
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
+
 
 import type { Contrib, Amounts } from '../reducers/reducers';
 
@@ -180,8 +183,9 @@ const getDigitalAttrs = ({ intCmp }): DigitalBundle => {
 
 };
 
+// ----- A/B Test components ----- //
 
-const getControlVariant = (props: PropTypes, attrs: ContribBundle) => (
+const getControlVariant = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
   <Bundle {...attrs}>
     <div className="contrib-type">
       <RadioToggle
@@ -191,11 +195,11 @@ const getControlVariant = (props: PropTypes, attrs: ContribBundle) => (
       />
     </div>
     <ContribAmounts />
-    <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
+    <CtaLink text={attrs.ctaText} onClick={onClick} />
   </Bundle>
 );
 
-const getVariantA = (props: PropTypes, attrs: ContribBundle) => (
+const getVariantA = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
   <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
     <div className="contrib-type">
       <p className="contrib-explainer">Every penny funds our fearless, quality journalism</p>
@@ -206,7 +210,7 @@ const getVariantA = (props: PropTypes, attrs: ContribBundle) => (
       />
     </div>
     <ContribAmounts />
-    <CtaLink text={attrs.ctaText} url={attrs.ctaLink} />
+    <CtaLink text={attrs.ctaText} onClick={onClick} />
   </Bundle>
 );
 
@@ -215,22 +219,29 @@ const getContributionComponent = (props: PropTypes,
 
   const participation: Participations = props.abTests;
   const variant = participation.SupportFrontEndContribution;
-  let response = null;
+  const onClick = (url: string, testVariant: string): (() => void) =>
+    () => {
+      trackOphan('SupportFrontEndContribution', testVariant, true);
+      window.location = url;
+    };
 
+  let response = null;
   switch (variant) {
     case 'control' :
-      response = getControlVariant(props, contribAttrs);
+      trackOphan('SupportFrontEndContribution', variant);
+      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
       break;
 
     case 'variantA' :
-      response = getVariantA(props, contribAttrs);
+      trackOphan('SupportFrontEndContribution', variant);
+      response = getVariantA(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
       break;
-    default : response = getControlVariant(props, contribAttrs);
+    default :
+      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
   }
 
   return response;
 };
-
 
 // ----- Component ----- //
 
