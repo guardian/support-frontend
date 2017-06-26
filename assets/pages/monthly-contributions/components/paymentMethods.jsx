@@ -13,6 +13,8 @@ import postCheckout from '../helpers/ajax';
 
 type PropTypes = {
   email: string,
+  firstName: string,
+  lastName: string,
 };
 
 
@@ -20,9 +22,15 @@ type PropTypes = {
 
 function PaymentMethods(props: PropTypes) {
 
+  let content = 'Please fill in all the fields above.';
+
+  if (props.firstName !== '' && props.lastName !== '') {
+    content = <StripePopUpButton email={props.email} callback={postCheckout} />;
+  }
+
   return (
     <section className="payment-methods">
-      <StripePopUpButton email={props.email} callback={postCheckout} />
+      {content}
     </section>
   );
 
@@ -35,6 +43,8 @@ function mapStateToProps(state) {
 
   return {
     email: state.user.email,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
   };
 
 }

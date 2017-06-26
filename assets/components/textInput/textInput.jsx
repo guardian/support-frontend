@@ -7,13 +7,20 @@ import React from 'react';
 
 // ----- Types ----- //
 
+// Disabling the linter here because it's just buggy...
+// It can't handle props being passed to another function.
+/* eslint-disable react/no-unused-prop-types, react/require-default-props */
+
 type PropTypes = {
   placeholder?: string,
   labelText?: string,
   id?: string,
   onChange?: (name: string) => void,
   value?: string,
+  required?: boolean,
 };
+
+/* eslint-enable react/no-unused-prop-types, react/require-default-props */
 
 
 // ----- Functions ----- //
@@ -28,33 +35,21 @@ function inputClass(hasLabel: boolean): string {
 
 }
 
-function buildInput(
-  labelText: ?string,
-  id: ?string,
-  placeholder: ?string,
-  onChange: ?Function,
-  value: ?string,
-) {
+function buildInput(props: PropTypes): React$Element<any> {
 
-  const attrs: {
-    className: string,
-    id: ?string,
-    type: string,
-    placeholder: ?string,
-    value: string,
-    onChange?: Function,
-  } = {
-    className: inputClass(!!labelText),
-    id,
+  const attrs = {
+    className: inputClass(!!props.labelText),
+    id: props.id,
     type: 'text',
-    placeholder,
-    value: value || '',
+    placeholder: props.placeholder,
+    value: props.value || '',
+    required: props.required,
   };
 
   // Keeps flow happy (https://github.com/facebook/flow/issues/2819).
-  if (typeof onChange === 'function') {
-    const change = onChange;
-    attrs.onChange = event => change(event.target.value || '');
+  if (typeof props.onChange === 'function') {
+    const change = props.onChange;
+    return <input {...attrs} onChange={event => change(event.target.value || '')} />;
   }
 
   return <input {...attrs} />;
@@ -66,13 +61,7 @@ function buildInput(
 
 export default function TextInput(props: PropTypes) {
 
-  const input = buildInput(
-    props.labelText,
-    props.id,
-    props.placeholder,
-    props.onChange,
-    props.value,
-  );
+  const input = buildInput(props);
 
   if (!props.labelText) {
     return input;
@@ -98,4 +87,5 @@ TextInput.defaultProps = {
   id: null,
   onChange: null,
   value: '',
+  required: false,
 };

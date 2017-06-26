@@ -40,6 +40,6 @@ export default function InfoSection(props: PropTypes) {
 
 InfoSection.defaultProps = {
   heading: null,
-  className: '',
+  className: null,
   children: null,
 };

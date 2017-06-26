@@ -34,12 +34,14 @@ function NameForm(props: PropTypes) {
         placeholder="First name"
         value={props.firstName}
         onChange={props.firstNameUpdate}
+        required
       />
       <TextInput
         id="last-name"
         placeholder="Last name"
         value={props.lastName}
         onChange={props.lastNameUpdate}
+        required
       />
     </form>
   );
