@@ -11,6 +11,7 @@ import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import { trackOphan } from 'helpers/abtest';
+import { trackEvent as trackEventGA } from 'helpers/ga';
 
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
@@ -222,6 +223,7 @@ const getContributionComponent = (props: PropTypes,
   const onClick = (url: string, testVariant: string): (() => void) =>
     () => {
       trackOphan('SupportFrontEndContribution', testVariant, true);
+      trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
       window.location = url;
     };
 
