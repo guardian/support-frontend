@@ -14,22 +14,44 @@ States:
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
-    Next: SendThankYouEmail
+    Next: SendThankYouEmailAndUpdateMembersDataAPI
     $state_machine_retries
-  SendThankYouEmail:
-    Type: Task
-    Resource: "${SendThankYouEmailLambda.Arn}"
+  SendThankYouEmailAndUpdateMembersDataAPI:
+    Type: Parallel
+    Branches:
+    - StartAt: SendThankYouEmail
+      States:
+        SendThankYouEmail:
+          Type: Task
+          Resource: "${SendThankYouEmailLambda.Arn}"
+          End: True
+          Retry: # We don't want to invoke the failure handler for the thank you email because signup has succeeded by this point
+          - ErrorEquals:
+            - com.gu.support.workers.exceptions.RetryLimited
+            IntervalSeconds: 1
+            MaxAttempts: 3
+            BackoffRate: 2
+          - ErrorEquals:
+            - com.gu.support.workers.exceptions.RetryUnlimited
+            IntervalSeconds: 1
+            BackoffRate: 2
+    - StartAt: UpdateMembersDataAPI
+      States:
+        UpdateMembersDataAPI:
+          Type: Task
+          Resource: "${UpdateMembersDataAPILambda.Arn}"
+          End: True
+          Retry: # We don't want to invoke the failure handler for the update members data API because signup has succeeded by this point
+          - ErrorEquals:
+            - com.gu.support.workers.exceptions.RetryLimited
+            IntervalSeconds: 1
+            MaxAttempts: 3
+            BackoffRate: 2
+          - ErrorEquals:
+            - com.gu.support.workers.exceptions.RetryUnlimited
+            IntervalSeconds: 1
+            BackoffRate: 2
     End: True
-    Retry: # We don't want to invoke the failure handler for the thank you email because signup has succeeded by this point
-    - ErrorEquals:
-      - com.gu.support.workers.exceptions.RetryLimited
-      IntervalSeconds: 1
-      MaxAttempts: 3
-      BackoffRate: 2
-    - ErrorEquals:
-      - com.gu.support.workers.exceptions.RetryUnlimited
-      IntervalSeconds: 1
-      BackoffRate: 2
   FailureHandler:
     Type: Task
     Resource: "${FailureHandlerLambda.Arn}"

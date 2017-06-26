@@ -92,6 +92,13 @@ object Fixtures {
         |}
      """.stripMargin
 
+  val updateMembersDataAPIJson =
+    s"""{
+       |  $requestIdJson,
+       |  $userJson
+       |}
+     """.stripMargin
+
   val salesforceContactJson =
     """
         {

@@ -2,4 +2,4 @@
 
 ./build-cloudformation.sh
 
-aws --region eu-west-1 cloudformation validate-template --template-body file://cloud-formation/target/cfn.yaml
+aws --region eu-west-1 cloudformation validate-template --template-body file://cloud-formation/target/cfn.yaml --profile membership
