@@ -16,3 +16,15 @@ export function descending(a: number, b: number): number {
 export function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
 }
+
+// Generates the "class modifier-class" string for HTML elements
+export function generateClassName(className: string, modifierClass: ?string): string {
+  let response = className;
+
+  if (modifierClass) {
+    response = `${className} ${className}--${modifierClass}`;
+  }
+
+  return response;
+}
+
