@@ -222,8 +222,10 @@ const getContributionComponent = (props: PropTypes,
   const variant = participation.SupportFrontEndContribution;
   const onClick = (url: string, testVariant: string): (() => void) =>
     () => {
-      trackOphan('SupportFrontEndContribution', testVariant, true);
-      trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
+      if (testVariant && testVariant !== 'notintest') {
+        trackOphan('SupportFrontEndContribution', testVariant, true);
+        trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
+      }
       window.location = url;
     };
 
