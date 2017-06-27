@@ -91,12 +91,6 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
   }
 
-  def put[A](endpoint: String, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val body = RequestBody.create(null, new Array[Byte](0)) // scalastyle:ignore
-
-    request[A](new Request.Builder().url(endpointUrl(endpoint, params)).put(body))
-  }
-
   private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {
     val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
       case (url, segment) =>

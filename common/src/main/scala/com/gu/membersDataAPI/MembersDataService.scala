@@ -7,6 +7,7 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.typesafe.config.Config
+import io.circe.Json
 import okhttp3.Request
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,5 +52,5 @@ class MembersDataService(config: MembersDataServiceConfig)(implicit ec: Executio
     req.addHeader("Authentication", s"Bearer ${config.apiKey}")
 
   def update(userId: String, isTestUser: Boolean): Future[UpdateResponse] =
-    put[UpdateResponse](s"/users-attributes/$userId", "testUser" -> isTestUser.toString)
+    post[UpdateResponse](s"/users-attributes/$userId", Json.obj(), "testUser" -> isTestUser.toString)
 }
