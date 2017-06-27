@@ -222,11 +222,14 @@ const getContributionComponent = (props: PropTypes,
   const variant = participation.SupportFrontEndContribution;
   const onClick = (url: string, testVariant: string): (() => void) =>
     () => {
-      if (testVariant && testVariant !== 'notintest') {
-        trackOphan('SupportFrontEndContribution', testVariant, true);
-        trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
+      // WARNING: Don't delete this check when removing the AB test!!!
+      if (!props.contribError) {
+        if (testVariant && testVariant !== 'notintest') {
+          trackOphan('SupportFrontEndContribution', testVariant, true);
+          trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
+        }
+        window.location = url;
       }
-      window.location = url;
     };
 
   let response = null;
@@ -285,6 +288,7 @@ function mapStateToProps(state) {
   return {
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
+    contribError: state.contribution.error,
     intCmp: state.intCmp,
     abTests: state.abTests,
   };
