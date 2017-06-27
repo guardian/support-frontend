@@ -22,7 +22,7 @@ object MembersDataServiceConfig {
 
 case class MembersDataServiceConfig(url: String, apiKey: String)
 
-case class ErrorResponse(error: String) extends Throwable
+case class ErrorResponse(message: String, details: String, statusCode: Int) extends Throwable
 
 object ErrorResponse {
   implicit val codec: Codec[ErrorResponse] = deriveCodec
