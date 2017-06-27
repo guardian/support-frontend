@@ -50,6 +50,7 @@ module.exports = (env) => {
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
       monthlyContributionsPage: 'pages/monthly-contributions/monthlyContributions.jsx',
       monthlyContributionsThankyouPage: 'pages/monthly-contributions-thankyou/monthlyContributionsThankyou.jsx',
+      monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
     },
 
     output: {

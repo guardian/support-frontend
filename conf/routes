@@ -8,9 +8,10 @@ GET /healthcheck                controllers.Application.healthcheck
 GET /uk                         controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /                           controllers.Default.redirect(to = "/uk")
 
-GET /monthly-contributions           controllers.MonthlyContributions.displayForm
-GET /monthly-contributions/thankyou  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
-POST /monthly-contributions/create   controllers.MonthlyContributions.create
+GET /monthly-contributions                         controllers.MonthlyContributions.displayForm
+GET /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
+GET /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
+POST /monthly-contributions/create                 controllers.MonthlyContributions.create
 
 GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)
 GET /*file                      controllers.Assets.at(path="/public", file)
