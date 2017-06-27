@@ -50,7 +50,6 @@ $gu-v-spacing: 12px;
 // The paddings at different breakpoints for the content.
 .gu-content-margin {
   padding: 0 ($gu-h-spacing / 2);
-  height: 100%;
 
   @include mq($from: mobileLandscape) {
     padding: 0 $gu-h-spacing;
@@ -65,21 +64,27 @@ $gu-v-spacing: 12px;
   }
 }
 
-// The element into which React content is injected.
 .gu-content-wrapper {
   height: 100%;
 
   > div {
-    display: flex;
     height: 100%;
+  }
+
+  .gu-content {
+    @supports (display: flex) {
+      display: flex;
+    }
+    // height: 100%;
     flex-direction: column;
-  }
-
-  header {
-    flex: 0 0 auto;
-  }
-
-  section {
     flex: 1 0 auto;
+
+    .gu-content-margin {
+      flex: 1 0 auto;
+    }
+
+    header, footer {
+      flex: 0 0 auto;
+    }
   }
 }

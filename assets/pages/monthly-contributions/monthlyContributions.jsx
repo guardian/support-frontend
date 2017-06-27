@@ -41,7 +41,7 @@ store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
 
 const content = (
   <Provider store={store}>
-    <div>
+    <div className="gu-content">
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
         <CheckoutSection className="monthly-contrib__header">
