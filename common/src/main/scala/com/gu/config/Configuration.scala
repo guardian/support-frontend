@@ -3,7 +3,7 @@ package com.gu.config
 import com.gu.aws.AwsConfig
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
-import com.gu.membersDataAPI.MembersDataServiceConfig
+import com.gu.membersDataAPI.{MembersDataServiceConfig, MembersDataServiceConfigProvider}
 import com.gu.paypal.PayPalConfigProvider
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.stripe.StripeConfigProvider
@@ -32,7 +32,7 @@ object Configuration extends LazyLogging {
   val salesforceConfigProvider = new SalesforceConfigProvider(stage, config)
   val zuoraConfigProvider = new ZuoraConfigProvider(stage, config)
   val emailServicesConfig = EmailServicesConfig.fromConfig(config)
-  val membersDataApiConfig = MembersDataServiceConfig.fromConfig(config)
+  val membersDataApiConfigProvider = new MembersDataServiceConfigProvider(stage, config)
 
 }
 

@@ -1,15 +1,15 @@
 package com.gu.membersDataAPI
 
+import com.gu.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.salesforce.AuthService
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.typesafe.config.Config
-import okhttp3.{Headers, Request}
+import okhttp3.Request
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
 object MembersDataServiceConfig {
@@ -20,7 +20,14 @@ object MembersDataServiceConfig {
     )
 }
 
-case class MembersDataServiceConfig(url: String, apiKey: String)
+class MembersDataServiceConfigProvider(defaultStage: Stage, config: Config) extends TouchpointConfigProvider[MembersDataServiceConfig](defaultStage, config) {
+  def fromConfig(config: com.typesafe.config.Config): MembersDataServiceConfig = MembersDataServiceConfig(
+    url = config.getString("membersDataAPI.url"),
+    apiKey = config.getString("membersDataAPI.apiKey")
+  )
+}
+
+case class MembersDataServiceConfig(url: String, apiKey: String) extends TouchpointConfig
 
 case class ErrorResponse(message: String, details: String, statusCode: Int) extends Throwable
 
@@ -43,6 +50,6 @@ class MembersDataService(config: MembersDataServiceConfig)(implicit ec: Executio
   override def wsPreExecute(req: Request.Builder): Request.Builder =
     req.addHeader("Authentication", s"Bearer ${config.apiKey}")
 
-  def update(userId: String): Future[UpdateResponse] =
-    put[UpdateResponse](s"/users-attributes/$userId")
+  def update(userId: String, isTestUser: Boolean): Future[UpdateResponse] =
+    put[UpdateResponse](s"/users-attributes/$userId", "testUser" -> isTestUser.toString)
 }

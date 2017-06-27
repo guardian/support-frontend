@@ -7,20 +7,28 @@ import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamCo
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.Fixtures.updateMembersDataAPIJson
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito.{times, when, verify}
-import org.mockito.Matchers.{eq => argEq}
+import org.mockito.Mockito.{times, verify, when}
 import com.gu.salesforce.Fixtures.idId
+import com.gu.services.{ServiceProvider, Services}
+
 import scala.concurrent.Future
 
 class UpdateMembersDataAPISpec extends LambdaSpec with MockitoSugar {
 
   "UpdateMembersDataAPI lambda" should "create put request to Members Data API" in {
-    val membersDataService = mock[MembersDataService]
 
-    when(membersDataService.update(argEq(idId)))
+    val membersDataServiceMock = mock[MembersDataService]
+
+    val serviceProvider = new ServiceProvider {
+      override def forUser(isTestUser: Boolean): Services = new Services(true) {
+        override lazy val membersDataService = membersDataServiceMock
+      }
+    }
+
+    when(membersDataServiceMock.update(idId, isTestUser = false))
       .thenReturn(Future.successful(UpdateResponse(true)))
 
-    val updateMembersDataAPI = new UpdateMembersDataAPI(membersDataService)
+    val updateMembersDataAPI = new UpdateMembersDataAPI(serviceProvider)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -28,7 +36,7 @@ class UpdateMembersDataAPISpec extends LambdaSpec with MockitoSugar {
 
     outStream.toClass[Unit]() shouldEqual ((): Unit)
 
-    verify(membersDataService, times(1)).update(argEq(idId))
+    verify(membersDataServiceMock, times(1)).update(idId, isTestUser = false)
   }
 }
 
