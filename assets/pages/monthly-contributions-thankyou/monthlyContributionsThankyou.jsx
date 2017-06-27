@@ -22,9 +22,9 @@ pageStartup.start();
 // ----- Render ----- //
 
 const content = (
-  <div>
+  <div className="gu-content">
     <SimpleHeader />
-    <section className="thankyou">
+    <section className="thankyou gu-content">
       <div className="thankyou__content gu-content-margin">
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
