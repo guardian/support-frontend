@@ -3,11 +3,13 @@ package com.gu.membersDataAPI
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.salesforce.AuthService
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.typesafe.config.Config
+import okhttp3.{Headers, Request}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 
 object MembersDataServiceConfig {
@@ -38,6 +40,9 @@ class MembersDataService(config: MembersDataServiceConfig)(implicit ec: Executio
   override val wsUrl: String = config.url
   override val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(30.seconds)
 
+  override def wsPreExecute(req: Request.Builder): Request.Builder =
+    req.addHeader("Authentication", s"Bearer ${config.apiKey}")
+
   def update(userId: String): Future[UpdateResponse] =
-    put[UpdateResponse](s"/users-attributes/$userId", headers = Map("Authentication" -> s"Bearer ${config.apiKey}"))
+    put[UpdateResponse](s"/users-attributes/$userId")
 }
