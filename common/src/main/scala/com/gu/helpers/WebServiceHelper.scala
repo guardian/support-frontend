@@ -10,6 +10,7 @@ import okhttp3._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
+import scala.collection.JavaConversions._
 
 case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
   override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"
@@ -90,9 +91,17 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
   }
 
-  def put[A](endpoint: String, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def put[A](
+    endpoint: String,
+    params: Map[String, String] = Map.empty,
+    headers: Map[String, String] = Map.empty
+  )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val body = RequestBody.create(null, new Array[Byte](0)) // scalastyle:ignore
-    request[A](new Request.Builder().url(endpointUrl(endpoint, params)).put(body))
+
+    request[A](new Request.Builder()
+      .headers(Headers.of(headers))
+      .url(endpointUrl(endpoint, params.toList))
+      .put(body))
   }
 
   private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {

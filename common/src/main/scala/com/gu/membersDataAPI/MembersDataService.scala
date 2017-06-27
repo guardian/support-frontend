@@ -5,9 +5,18 @@ import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.typesafe.config.Config
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
+
+object MembersDataServiceConfig {
+  def fromConfig(config: Config): MembersDataServiceConfig =
+    MembersDataServiceConfig(
+      url = config.getString("membersDataAPI.url"),
+      apiKey = config.getString("membersDataAPI.apiKey")
+    )
+}
 
 case class MembersDataServiceConfig(url: String, apiKey: String)
 
@@ -30,5 +39,5 @@ class MembersDataService(config: MembersDataServiceConfig)(implicit ec: Executio
   override val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(30.seconds)
 
   def update(userId: String): Future[UpdateResponse] =
-    put[UpdateResponse](s"/users-attributes/$userId")
+    put[UpdateResponse](s"/users-attributes/$userId", headers = Map("Authentication" -> s"Bearer ${config.apiKey}"))
 }
