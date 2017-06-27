@@ -74,17 +74,16 @@ $gu-v-spacing: 12px;
   .gu-content {
     @supports (display: flex) {
       display: flex;
-    }
-    // height: 100%;
-    flex-direction: column;
-    flex: 1 0 auto;
-
-    .gu-content-margin {
+      flex-direction: column;
       flex: 1 0 auto;
-    }
 
-    header, footer {
-      flex: 0 0 auto;
+      .gu-content-margin {
+        flex: 1 0 auto;
+      }
+
+      header, footer {
+        flex: 0 0 auto;
+      }
     }
   }
 }
