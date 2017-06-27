@@ -52,7 +52,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
     val decodeResult = decode[ZuoraError](Fixtures.error)
     decodeResult.isRight should be(true)
-    decodeResult.right.get.Code should be ("53100320")
+    decodeResult.right.get.Code should be("53100320")
   }
 
   "ErrorResponse" should "deserialise correctly" in {
@@ -64,8 +64,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
       case l: Left[circe.Error, List[ZuoraErrorResponse]] => logger.info("left")
     }
     decodeResult.isRight should be(true)
-    decodeResult.right.get.head.errors.size should be (1)
-    decodeResult.right.get.head.errors.head.Code should be ("INVALID_VALUE")
+    decodeResult.right.get.head.errors.size should be(1)
+    decodeResult.right.get.head.errors.head.Code should be("INVALID_VALUE")
   }
 
 }

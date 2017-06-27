@@ -1,4 +1,4 @@
-package com.gu.support.workers
+package com.gu.support.workers.lambdas
 
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.StateCodecs._

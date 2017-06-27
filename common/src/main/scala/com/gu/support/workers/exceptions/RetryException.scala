@@ -11,4 +11,3 @@ class RetryLimited(message: String = "", cause: Throwable = None.orNull)
 class RetryUnlimited(message: String = "", cause: Throwable = None.orNull)
   extends Throwable(message, cause) with RetryException
 
-

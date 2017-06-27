@@ -47,7 +47,6 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     new PayPalService(Configuration.payPalConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
   )
 
-
   private def errorServices(baseUrl: String) = {
     val conf = Configuration.payPalConfigProvider.get()
     val mockConfig = PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user, conf.password, conf.signature)

@@ -21,10 +21,10 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 }
 
 abstract class FutureHandler[T, R](d: Option[Duration] = None)(
-  implicit
-  decoder: Decoder[T],
-  encoder: Encoder[R],
-  ec: ExecutionContext
+    implicit
+    decoder: Decoder[T],
+    encoder: Encoder[R],
+    ec: ExecutionContext
 ) extends Handler[T, R] {
   protected def handlerFuture(input: T, context: Context): Future[R]
 

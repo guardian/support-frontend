@@ -10,6 +10,7 @@ import okhttp3._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
+import scala.collection.JavaConversions._
 
 case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
   override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"

@@ -1,4 +1,4 @@
-package com.gu.support.workers
+package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
 
@@ -8,9 +8,9 @@ import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
+import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
-import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.monthlyContributions.state.CreateSalesforceContactState
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.test.tags.objects.IntegrationTest

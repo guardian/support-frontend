@@ -13,7 +13,7 @@ import org.scalatest.{AsyncFlatSpec, Matchers}
 import scala.concurrent.duration._
 
 @IntegrationTest
-class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging{
+class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   "AuthService" should "throw a SalesforceAuthenticationErrorResponse" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)
@@ -27,7 +27,7 @@ class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging{
     val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
-    assertThrows[SalesforceAuthenticationErrorResponse]{
+    assertThrows[SalesforceAuthenticationErrorResponse] {
       service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
     }
   }
