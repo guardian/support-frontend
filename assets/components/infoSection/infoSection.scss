@@ -16,6 +16,7 @@
 
 	.component-info-section__header {
 		padding-bottom: $gu-v-spacing;
+		font-weight: bold;
 
 		@include mq($from: desktop) {
 			width: 20%;
