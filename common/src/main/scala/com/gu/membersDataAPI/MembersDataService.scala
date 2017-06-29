@@ -30,7 +30,7 @@ class MembersDataServiceConfigProvider(defaultStage: Stage, config: Config) exte
 
 case class MembersDataServiceConfig(url: String, apiKey: String) extends TouchpointConfig
 
-case class ErrorResponse(message: String, details: String, statusCode: Int) extends Throwable
+case class ErrorResponse(message: String, details: String, statusCode: Int) extends Throwable(s"[$statusCode] $message - $details")
 
 object ErrorResponse {
   implicit val codec: Codec[ErrorResponse] = deriveCodec
@@ -49,8 +49,8 @@ class MembersDataService(config: MembersDataServiceConfig)(implicit ec: Executio
   override val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(30.seconds)
 
   override def wsPreExecute(req: Request.Builder): Request.Builder =
-    req.addHeader("Authentication", s"Bearer ${config.apiKey}")
+    req.addHeader("Authorization", s"Bearer ${config.apiKey}")
 
   def update(userId: String, isTestUser: Boolean): Future[UpdateResponse] =
-    post[UpdateResponse](s"/users-attributes/$userId", Json.obj(), "testUser" -> isTestUser.toString)
+    post[UpdateResponse](s"/user-attributes/$userId", Json.obj(), "testUser" -> isTestUser.toString)
 }

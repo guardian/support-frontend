@@ -1,4 +1,4 @@
-package com.gu.support.workers.lambdas
+package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
@@ -7,6 +7,7 @@ import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamCo
 import com.gu.support.workers.Fixtures.createSalesForceContactJson
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.lambdas.CreateSalesforceContact
 import com.gu.support.workers.model.monthlyContributions.state.CreateZuoraSubscriptionState
 import com.gu.test.tags.annotations.IntegrationTest
 
