@@ -3,7 +3,7 @@ package controllers
 import org.scalatest.WordSpec
 import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, header}
+import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
@@ -20,7 +20,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
 
   implicit val timeout = Timeout(2.seconds)
 
-  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUsers])
+  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUsers], stubControllerComponents())
 
   "/healthcheck" should {
     "return healthy" in {

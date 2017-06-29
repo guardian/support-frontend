@@ -88,9 +88,9 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
-      private val loggedInActionRefiner = new ActionRefiners(_ => Some(authenticatedIdUser), "", "", testUsers)
+      private val loggedInActionRefiner = new ActionRefiners(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
 
-      val loggedOutActionRefiner = new ActionRefiners(_ => None, "https://identity-url.local", "", testUsers)
+      val loggedOutActionRefiner = new ActionRefiners(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
 
       def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
         val membersDataService = mock[MembersDataService]
