@@ -15,29 +15,32 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService, MembersDataService}
 import lib.TestUsers
+import play.api.BuiltInComponentsFromContext
+import controllers.AssetsComponents
 
-trait AppComponents extends PlayComponents with AhcWSComponents {
+trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
 
   implicit val implicitWsClient = wsClient
 
-  val config = new Configuration()
+  val appConfig = new Configuration()
 
   implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
 
-  implicit lazy val membersDataService = new MembersDataService(config.membersDataServiceApiUrl)
-  implicit lazy val identityService = new IdentityService(config.identity.apiUrl, config.identity.apiClientToken)
+  implicit lazy val membersDataService = new MembersDataService(appConfig.membersDataServiceApiUrl)
+  implicit lazy val identityService = new IdentityService(appConfig.identity.apiUrl, appConfig.identity.apiClientToken)
 
   implicit lazy val actionRefiners = new ActionRefiners(
-    authenticatedIdUserProvider = new AuthenticationService(config.identity.keys).authenticatedIdUserProvider,
-    idWebAppUrl = config.identity.webappUrl,
-    supportUrl = config.supportUrl,
-    testUsers = testUsers
+    authenticatedIdUserProvider = new AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider,
+    idWebAppUrl = appConfig.identity.webappUrl,
+    supportUrl = appConfig.supportUrl,
+    testUsers = testUsers,
+    cc = controllerComponents
   )
 
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
-  implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
+  implicit lazy val testUsers = new TestUsers(appConfig.identity.testUserSecret)
 
-  lazy val assetController = new Assets(httpErrorHandler)
+  lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
   lazy val applicationController = new Application
   lazy val monthlyContributionsController = new MonthlyContributions
 
@@ -53,9 +56,8 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
     applicationController,
     controllers.Default,
     monthlyContributionsController,
-    assetController,
-    prefix = "/"
+    assetController
   )
 
-  config.sentryDsn foreach { dsn => new SentryLogging(dsn, config.stage) }
+  appConfig.sentryDsn foreach { dsn => new SentryLogging(dsn, appConfig.stage) }
 }

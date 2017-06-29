@@ -3,7 +3,7 @@ package lib.actions
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
-import play.api.mvc.{ActionBuilder, Request, RequestHeader, Result}
+import play.api.mvc._
 import lib.httpheaders.CacheControl
 import com.netaporter.uri.dsl._
 import lib.TestUsers
@@ -21,7 +21,8 @@ class ActionRefiners(
     authenticatedIdUserProvider: Provider,
     idWebAppUrl: String,
     supportUrl: String,
-    testUsers: TestUsers
+    testUsers: TestUsers,
+    cc: ControllerComponents
 )(implicit private val ec: ExecutionContext) {
 
   import ActionRefiners._
@@ -35,16 +36,21 @@ class ActionRefiners(
 
   private val chooseRegister = (request: RequestHeader) => SeeOther(idWebAppRegisterUrl(request.uri))
 
-  private def resultModifier(f: Result => Result): ActionBuilder[Request] = new ActionBuilder[Request] {
+  private def resultModifier(f: Result => Result): ActionBuilder[Request, AnyContent] = new ActionBuilder[Request, AnyContent] {
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = block(request).map(f)
+
+    override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
+
+    override protected def executionContext: ExecutionContext = cc.executionContext
   }
 
-  private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] =
-    new AuthenticatedBuilder(authenticatedIdUserProvider, onUnauthenticated)
+  private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest, AnyContent] =
+    new AuthenticatedBuilder(authenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
 
-  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest] =
+  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest, AnyContent] =
     new AuthenticatedBuilder(
       userinfo = authenticatedIdUserProvider.andThen(_.filter(user => testUsers.isTestUser(user.user.displayName))),
+      defaultParser = cc.parsers.defaultBodyParser,
       onUnauthorized = onUnauthenticated
     )
 

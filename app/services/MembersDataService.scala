@@ -3,7 +3,7 @@ package services
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
-import play.api.data.validation.ValidationError
+import play.api.libs.json.{JsonValidationError => PlayJsonValidationError}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.libs.json.{JsPath, JsValue, Json, Reads}
 import play.api.http.Status
@@ -31,7 +31,7 @@ object MembersDataService {
 
   object UserNotFound extends MembersDataServiceError
 
-  case class JsonValidationError(errors: Seq[(JsPath, Seq[ValidationError])]) extends MembersDataServiceError
+  case class JsonValidationError(errors: Seq[(JsPath, Seq[PlayJsonValidationError])]) extends MembersDataServiceError
 
   case class UnexpectedResponseStatus(statusCode: Int) extends MembersDataServiceError
 

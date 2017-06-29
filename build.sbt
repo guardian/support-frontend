@@ -30,7 +30,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
 )
 
-val circeVersion = "0.7.0"
+val circeVersion = "0.8.0"
 
 resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
 
@@ -62,9 +62,9 @@ sources in (Compile,doc) := Seq.empty
 
 publishArtifact in (Compile, packageDoc) := false
 
-import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
+import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
 
-serverLoading in Debian := Systemd
+serverLoading in Debian := Some(Systemd)
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 

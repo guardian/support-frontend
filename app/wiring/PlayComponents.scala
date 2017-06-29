@@ -1,13 +1,12 @@
 package wiring
 
 import akka.actor.ActorSystem
-import play.api.BuiltInComponents
+import play.api.{ApplicationLoader, BuiltInComponents, BuiltInComponentsFromContext}
 
 import scala.concurrent.ExecutionContext
 
-trait PlayComponents extends BuiltInComponents {
+trait PlayComponents { self: BuiltInComponentsFromContext =>
 
-  implicit val ec: ExecutionContext = actorSystem.dispatcher
   implicit val as: ActorSystem = actorSystem
 
 }
