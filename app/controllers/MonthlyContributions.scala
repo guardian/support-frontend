@@ -3,8 +3,9 @@ package controllers
 import assets.AssetsResolver
 import lib.actions.ActionRefiners
 import lib.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.mvc._
 import play.api.libs.circe.Circe
+
 import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
@@ -14,6 +15,7 @@ import services.MembersDataService.UserNotFound
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
 import lib.TestUsers
+
 import scala.concurrent.Future
 import views.html.authenticatedFullUserReactTemplate
 
@@ -25,8 +27,9 @@ class MonthlyContributions(
     exec: ExecutionContext,
     membersDataService: MembersDataService,
     identityService: IdentityService,
-    testUsers: TestUsers
-) extends Controller with Circe with LazyLogging {
+    testUsers: TestUsers,
+    components: ControllerComponents
+) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionRefiners._
 

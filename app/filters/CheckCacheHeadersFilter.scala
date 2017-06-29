@@ -1,12 +1,11 @@
 package filters
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import akka.stream.Materializer
 import play.api.mvc._
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.http.Status.{MOVED_PERMANENTLY, NOT_FOUND, OK}
 
-class CheckCacheHeadersFilter(implicit val mat: Materializer) extends Filter {
+class CheckCacheHeadersFilter(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   private val cacheableStatusCodes = Seq(OK, MOVED_PERMANENTLY, NOT_FOUND)
 

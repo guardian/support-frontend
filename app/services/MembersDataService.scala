@@ -51,7 +51,7 @@ class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsCl
   private def get[T](url: String)(implicit credentials: AccessCredentials.Cookies, reader: Reads[T]): EitherT[Future, MembersDataServiceError, T] = EitherT {
     wsClient
       .url(url)
-      .withHeaders("Cookie" -> credentials.cookies.map(c => s"${c.name}=${c.value}").mkString("; "))
+      .withHttpHeaders("Cookie" -> credentials.cookies.map(c => s"${c.name}=${c.value}").mkString("; "))
       .withRequestTimeout(1.second)
       .get()
       .map(responseAsJson[T])

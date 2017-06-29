@@ -1,13 +1,15 @@
 package lib.actions
 
 import org.joda.time.DateTime
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, Result}
+
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import lib.httpheaders._
+import play.api.mvc.Request
+import scala.concurrent.ExecutionContext
 
-object CachedAction {
+class CachedAction(implicit val ec: ExecutionContext, actionBuilder: ActionBuilder[Request, AnyContent]) {
 
   val defaultMaxAge = 1.minute
   val maximumBrowserAge = 1.minute
@@ -16,11 +18,11 @@ object CachedAction {
 
   def apply[T](block: => Result): Action[AnyContent] = apply(defaultMaxAge)(block)
 
-  def async[T](maxAge: FiniteDuration)(block: => Future[Result]): Action[AnyContent] = Action.async {
+  def async[T](maxAge: FiniteDuration)(block: => Future[Result]): Action[AnyContent] = actionBuilder.async {
     block.map(_.withHeaders(cacheHeaders(maxAge): _*))
   }
 
-  def apply[T](maxAge: FiniteDuration)(block: => Result): Action[AnyContent] = Action {
+  def apply[T](maxAge: FiniteDuration)(block: => Result): Action[AnyContent] = actionBuilder {
     block.withHeaders(cacheHeaders(maxAge): _*)
   }
 

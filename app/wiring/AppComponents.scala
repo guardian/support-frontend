@@ -7,7 +7,7 @@ import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
-import lib.actions.ActionRefiners
+import lib.actions.{ActionRefiners, CachedAction}
 import lib.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -17,6 +17,7 @@ import services.{AuthenticationService, IdentityService, MembersDataService}
 import lib.TestUsers
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
+import scala.concurrent.ExecutionContext
 
 trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
 
@@ -37,6 +38,8 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
     cc = controllerComponents
   )
 
+  implicit val cachedAction = new CachedAction()(implicitly[ExecutionContext], defaultActionBuilder)
+  implicit val cc = controllerComponents
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
   implicit lazy val testUsers = new TestUsers(appConfig.identity.testUserSecret)
 
@@ -54,7 +57,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     applicationController,
-    controllers.Default,
+    new controllers.Default,
     monthlyContributionsController,
     assetController
   )
