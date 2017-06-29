@@ -42,7 +42,7 @@ object MonthlyContributionsClient {
   case object StateMachineFailure extends MonthlyContributionError
 }
 
-class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) extends LazyLogging {
+class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem, encryption: EncryptionProvider) extends LazyLogging {
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 

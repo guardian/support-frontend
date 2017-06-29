@@ -35,9 +35,14 @@ class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineCon
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
   }
 
-  def triggerExecution[T](input: T)(implicit ec: ExecutionContext, encoder: Encoder[T]): Response[StateMachineExecution] = {
+  def triggerExecution[T](input: T)(
+    implicit
+    ec: ExecutionContext,
+    encoder: Encoder[T],
+    encryptionProvider: EncryptionProvider
+  ): Response[StateMachineExecution] = {
     stateMachineWrapper
-      .map(machine => startExecution(machine.arn, input.asJson.noSpaces))
+      .map(machine => startExecution(machine.arn, encryptionProvider.encrypt(input.asJson.noSpaces)))
       .map(StateMachineExecution.fromStartExecution)
   }
 }
