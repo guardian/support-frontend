@@ -8,6 +8,12 @@ scalaVersion := "2.11.8"
 
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
 
+def commitId(): String = try {
+  "git rev-parse HEAD".!!.trim
+} catch {
+  case _: Exception => "unknown"
+}
+
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).settings(
@@ -15,11 +21,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
     name,
     BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
     BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse(try {
-      "git rev-parse HEAD".!!.trim
-    } catch {
-      case e: Exception => "unknown"
-    }))
+    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
   ),
   buildInfoPackage := "app",
   buildInfoOptions += BuildInfoOption.ToMap,
@@ -39,6 +41,7 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-core" % "2.7.22" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
+  "com.amazonaws" % "aws-java-sdk-kms" % "1.11.128",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "com.typesafe.akka" %% "akka-agent" % "2.4.12",
   "org.typelevel" %% "cats" % "0.9.0",
@@ -58,9 +61,9 @@ libraryDependencies ++= Seq(
   ws
 )
 
-sources in (Compile,doc) := Seq.empty
+sources in(Compile, doc) := Seq.empty
 
-publishArtifact in (Compile, packageDoc) := false
+publishArtifact in(Compile, packageDoc) := false
 
 import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
 
