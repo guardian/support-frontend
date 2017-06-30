@@ -29,7 +29,7 @@ class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider 
     //for our purposes here. If the amount of data increases significantly
     //we should switch to using Envelope encryption as described here:
     //http://docs.aws.amazon.com/kms/latest/developerguide/workflow.html
-    new String(kms.encrypt(req).getCiphertextBlob.asReadOnlyBuffer().array(), utf8)
+    new String(kms.encrypt(req).getCiphertextBlob.array(), utf8)
   }
 
   override def decrypt(data: Array[Byte]): String = {
