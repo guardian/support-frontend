@@ -7,8 +7,9 @@ import com.amazonaws.services.stepfunctions.model.{InvalidExecutionInputExceptio
 
 import scala.concurrent.{ExecutionContext, Future}
 import StateMachineErrors._
+import com.typesafe.scalalogging.LazyLogging
 
-object StateMachineContainer {
+object StateMachineContainer extends LazyLogging {
   type Response[T] = EitherT[Future, StateMachineError, T]
 
   def convertErrors[T](response: Future[T])(implicit ec: ExecutionContext): Response[T] = EitherT {
@@ -18,7 +19,7 @@ object StateMachineContainer {
       case _: StateMachineDeletingException => RetryWithNewMachine.asLeft
       case _: ExecutionLimitExceededException => Fail.asLeft
       case _: ExecutionAlreadyExistsException => Fail.asLeft
-      case _: InvalidExecutionInputException => Fail.asLeft
+      case e: InvalidExecutionInputException => {logger.error(s"Invalid input for execution ${e.getErrorMessage}", e); Fail.asLeft}
       case _: InvalidNameException => Fail.asLeft
     }
   }
