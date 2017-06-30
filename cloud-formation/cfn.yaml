@@ -124,6 +124,14 @@ Resources:
                 - states:ListStateMachines
                 - states:StartExecution
                 Resource: arn:aws:states:*:*:*
+        - PolicyName: KMSEncryption
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - kms:Encrypt
+                Resource: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
