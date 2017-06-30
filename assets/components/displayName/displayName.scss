@@ -8,7 +8,9 @@
 		vertical-align: middle;
 		margin-left: $gu-h-spacing / 2;
 		// Stops long names from wrapping on narrow breakpoints.
-		max-width: 80%;
+		@include mq($until: desktop) {
+			max-width: 80%;
+		}
 	}
 
 	svg {

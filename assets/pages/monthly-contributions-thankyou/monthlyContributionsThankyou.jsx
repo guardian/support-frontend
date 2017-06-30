@@ -29,12 +29,9 @@ const content = (
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 className="thankyou__subheading">
-            <p>Thank you for making a monthly contribution to the Guardian.
-            You will shortly receive an email confirming that your recurring
-            payments have been set up.</p>
-            <p>More people are reading and supporting the Guardian than ever,
-            playing a vital role in sustaining our independent, quality
-            journalism. Thank you.</p>
+            <p>You have helped to make the Guardian&#39;s future more secure.
+            Look out for an email confirming your recurring
+            payment.</p>
           </h2>
           <CtaLink
             text="Return to The Guardian"
