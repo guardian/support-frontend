@@ -120,7 +120,8 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
           global,
           membersDataService,
           identityService,
-          testUsers
+          testUsers,
+          stubControllerComponents()
         ).displayForm(FakeRequest())
       }
     }
