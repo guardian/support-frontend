@@ -7,7 +7,7 @@ import com.amazonaws.services.kms.model._
 import com.gu.aws.CredentialsProvider
 import com.gu.config.Configuration.awsConfig
 
-object Encryption {
+object  Encryption {
   private val encryption = if (awsConfig.useEncryption) new AwsEncryptionProvider() else new PassThroughEncryptionProvider()
 
   def decrypt(data: Array[Byte]): String = encryption.decrypt(data)
@@ -50,7 +50,6 @@ class PassThroughEncryptionProvider extends EncryptionProvider {
 }
 
 sealed trait EncryptionProvider {
-  val utf8 = "UTF-8"
 
   def decrypt(data: Array[Byte]): String
 
