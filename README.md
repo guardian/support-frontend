@@ -81,3 +81,7 @@ This behaviour is illustrated through a number of tests in [CirceEncodingBehavio
 To protect user data as it is passed through the various stages of the step functions we encrypt it using the [AWS KMS API](https://docs.aws.amazon.com/kms/latest/developerguide/programming-top.html).
 
 This encryption can be switched off for debugging purposes by setting the aws.useEncryption config setting to false.
+
+## TODO
+
+[List of improvements we should make](/TODO.md)
