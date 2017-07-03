@@ -7,6 +7,11 @@
 	height: 24px;
 	text-align: center;
 	font-size: 14px;
+	font-family: $gu-text-sans-web;
+
+	&::placeholder {
+		color: gu-colour(neutral-1);
+	}
 
 	&:focus {
 		outline: none;

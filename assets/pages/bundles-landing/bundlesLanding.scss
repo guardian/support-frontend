@@ -139,6 +139,7 @@
     .component-cta-link {
       padding-top: $gu-v-spacing;
       padding-bottom: $gu-v-spacing;
+      margin-top: $gu-v-spacing * 4;
 
       @include mq($from: desktop) {
         position: absolute;
@@ -305,6 +306,10 @@
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
         }
+      }
+
+      .component-cta-link:nth-of-type(2) {
+        margin-top: $gu-v-spacing;
       }
     }
 
@@ -739,7 +744,7 @@
 
       &::placeholder {
           font-weight: normal;
-          color: #fff;
+          color: #ffffff;
           opacity: 0.4;
       }
   }
