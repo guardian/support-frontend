@@ -30,7 +30,9 @@ object Wrapper {
   }
 
   def wrap[T](value: T)(implicit encoder: Encoder[T]): JsonWrapper =
-    JsonWrapper(encodeToBase64String(encrypt(value.asJson.noSpaces)))
+    wrapString(value.asJson.noSpaces)
+
+  def wrapString(string: String): JsonWrapper = JsonWrapper(encodeToBase64String(encrypt(string)))
 
   def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
 }

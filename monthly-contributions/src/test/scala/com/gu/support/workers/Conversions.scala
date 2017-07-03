@@ -18,18 +18,20 @@ object Conversions {
     def asInputStream()(implicit encoder: Encoder[T]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
       convertStream.write(Encryption.encrypt(self.asJson.noSpaces))
-      new ByteArrayInputStream(convertStream.toByteArray)
+      convertStream.toInputStream()
     }
   }
 
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
     def toClass[T]()(implicit decoder: Decoder[T]): T = {
-      val is = new ByteArrayInputStream(self.toByteArray)
+      val is = self.toInputStream()
       val str = Encryption.decrypt(Streamable.bytes(is))
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get
     }
+
+    def toInputStream(): ByteArrayInputStream = new ByteArrayInputStream(self.toByteArray)
   }
 
   implicit class StringInputStreamConversions[String](val str: String) {

@@ -1,8 +1,14 @@
 package com.gu.support.workers
 
-import com.gu.salesforce.Fixtures.idId
+import java.io.ByteArrayInputStream
 
+import com.gu.salesforce.Fixtures.idId
+import com.gu.support.workers.Conversions.StringInputStreamConversions
+import com.gu.support.workers.encoding.Wrapper
+import com.gu.support.workers.encoding.Wrapper.jsonEncoder
+import io.circe.syntax._
 object Fixtures {
+  def wrap(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
   val userJson =
     s"""
       "user":{
@@ -52,6 +58,7 @@ object Fixtures {
                   "stripeToken": "$stripeToken"
                 }
                 """
+
   val createPayPalPaymentMethodJson =
     s"""{
           $requestIdJson,

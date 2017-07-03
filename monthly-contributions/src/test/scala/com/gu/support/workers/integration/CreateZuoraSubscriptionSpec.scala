@@ -2,9 +2,10 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
+import com.gu.support.workers.Conversions.FromOutputStream
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
@@ -18,9 +19,9 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(createZuoraSubscriptionJson.asInputStream(), outStream, context)
+    createZuora.handleRequest(wrap(createZuoraSubscriptionJson), outStream, context)
 
-    val sendThankYouEmail = outStream.toClass[SendThankYouEmailState]
+    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream()).get
     sendThankYouEmail.accountNumber.length should be > 0
   }
 }

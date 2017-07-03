@@ -4,9 +4,10 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.Fixtures.failureJson
+import com.gu.support.workers.Conversions.FromOutputStream
+import com.gu.support.workers.Fixtures.{failureJson, wrap}
 import com.gu.support.workers.MockContext
+import com.gu.support.workers.encoding.Encoding
 import org.joda.time.DateTime
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
@@ -23,9 +24,9 @@ class FailureHandlerSpec extends AsyncFlatSpec with Matchers with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    failureHandler.handleRequest(failureJson.asInputStream(), outStream, context)
+    failureHandler.handleRequest(wrap(failureJson), outStream, context)
 
-    outStream.toClass[Unit]() shouldEqual ((): Unit)
+    Encoding.in[Unit](outStream.toInputStream()).isSuccess should be(true)
   }
 
 }
