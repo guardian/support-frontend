@@ -5,14 +5,14 @@
 	.component-double-heading__heading {
 		font-weight: 900;
 		font-family: $gu-egyptian-web;
-		color: #fff;
+		color: gu-colour(neutral-1);
 		margin: 0;
 	}
 
 	.component-double-heading__subheading {
-		color: #000;
+		color: gu-colour(neutral-1);
 		margin: 0;
-		font-family: $gu-egyptian-web;
+		font-family: $gu-text-sans-web;
 		font-weight: normal;
 		line-height: 30px;
 	}
