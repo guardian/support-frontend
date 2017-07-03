@@ -6,12 +6,12 @@
 
   .introduction {
 
-    background-color: darken(gu-colour(comment-support-2), 5%);
+    background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .introduction__content {
       padding-top: $gu-v-spacing;
       padding-bottom: $gu-v-spacing;
-      background-color: gu-colour(comment-support-2);
+      background-color: gu-colour(guardian-brand-dark);
 
       @include mq($from: leftCol) {
         padding-left: 100px;
@@ -90,8 +90,29 @@
 
     background-color: darken(gu-colour(comment-support-2), 5%);
 
+    .bundles__introduction-bleed, .bundles__introduction-bleed-margins {
+      height: 180px;
+      background-color: darken(gu-colour(guardian-brand-dark), 5%);
+      position: absolute;
+      left: 0;
+      width: 100%;
+
+      @include mq($from: phablet) {
+        height: 130px;
+      }
+
+      @include mq($from: desktop) {
+        height: 210px;
+      }
+    }
+
+    .bundles__introduction-bleed {
+      background-color: gu-colour(guardian-brand-dark);
+    }
+
     .bundles__content {
       background-color: gu-colour(comment-support-2);
+      position: relative;
 
       @include mq($until: desktop) {
         padding-bottom: ($gu-v-spacing * 8);
@@ -104,6 +125,8 @@
     }
 
     .bundles__wrapper {
+      position: relative;
+
       @include mq($from: phablet, $until: desktop) {
         width: 100%;
       }
