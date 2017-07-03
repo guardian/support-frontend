@@ -4,10 +4,13 @@
 
 	.component-display-name__name {
 		font-family: $gu-sans-web;
-		font-weight: bold;
 		display: inline-block;
 		vertical-align: middle;
 		margin-left: $gu-h-spacing / 2;
+		// Stops long names from wrapping on narrow breakpoints.
+		@include mq($until: desktop) {
+			max-width: 80%;
+		}
 	}
 
 	svg {

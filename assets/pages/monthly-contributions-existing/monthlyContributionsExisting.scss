@@ -26,33 +26,43 @@
 	.existing__heading {
 		font-family: $gu-egyptian-web;
 		color: gu-colour(neutral-1);
-		font-size: 44px;
-		line-height: 46px;
+		font-size: 28px;
+		line-height: 32px;
 		font-weight: bold;
+
+		@include mq($from: desktop) {
+			font-size: 36px;
+			line-height: 40px;
+		}
 	}
 
 	.existing__subheading {
 		font-family: $gu-egyptian-web;
-		font-size: 40px;
-		line-height: 42px;
+		font-size: 28px;
+		line-height: 32px;
 		font-weight: lighter;
 		color: gu-colour(neutral-1);
+
+		@include mq($from: desktop) {
+			font-size: 36px;
+			line-height: 40px;
+		}
 	}
 
 	.component-cta-link {
 		color: gu-colour(neutral-1);
 		background: transparent;
 		display: inline-block;
-		width: 180px;
+		width: 200px;
 		border: 1px solid gu-colour(neutral-1);
 		font-weight: normal;
 		margin-bottom: $gu-v-spacing * 4;
-		margin-top: 4 * $gu-v-spacing;
+		margin-top: 2 * $gu-v-spacing;
 
 		svg {
 			fill: gu-colour(neutral-1);
 			// Fix for IE10.
-			left: 190px;
+			left: 210px;
 		}
 
 		&:hover {
@@ -63,6 +73,10 @@
 				fill: #000;
 			}
 		}
+	}
+
+	.help-further {
+		margin-top: $gu-v-spacing * 4;
 	}
 
 }

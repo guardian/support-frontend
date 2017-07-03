@@ -21,28 +21,29 @@ pageStartup.start();
 // ----- Render ----- //
 
 const content = (
-  <div>
+  <div className="gu-content">
     <SimpleHeader />
-    <section className="existing">
+    <section className="existing gu-content">
       <div className="existing__content gu-content-margin">
         <div className="existing__wrapper">
-          <h1 className="existing__heading">Existing Contributor</h1>
+          <h1 className="existing__heading">Whoops!</h1>
           <h2 className="existing__subheading">
-            You&#39;re already making a vital monthly contribution that will help
-            us maintain our independent, investigative journalism
+            Looks like you are already making a regular contribution to the
+            Guardian - thank you. If you&#39;re feeling generous, there is
+            another way you can&nbsp;help.
           </h2>
           <CtaLink
-            text="One-off contribution"
+            text="Make a one-off contribution"
             url="https://contribute.theguardian.com"
           />
-          <InfoSection heading="Questions?" className="existing__questions">
-            <p>
-              If you have any questions about contributing to the Guardian,
-              please <a href="mailto:contribution.support@theguardian.com">
-              contact us</a>
-            </p>
-          </InfoSection>
         </div>
+        <InfoSection heading="Questions?" className="existing__questions">
+          <p>
+            If you have any questions about contributing to the Guardian,
+            please <a href="mailto:contribution.support@theguardian.com">
+            contact us</a>
+          </p>
+        </InfoSection>
       </div>
     </section>
     <SimpleFooter />
