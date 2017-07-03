@@ -167,7 +167,7 @@
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
         width: 280px;
-        height: 370px;
+        height: 400px;
         display: inline-block;
         vertical-align: top;
         position: relative;
@@ -175,6 +175,9 @@
     }
 
     .component-cta-link {
+      padding-top: $gu-v-spacing;
+      padding-bottom: $gu-v-spacing;
+
       @include mq($from: desktop) {
         position: absolute;
         bottom: $gu-v-spacing;
@@ -185,6 +188,12 @@
         svg {
           left: 250px;
         }
+      }
+
+      svg {
+        height: 35%;
+        top: 15px;
+        right: 12px;
       }
     }
 
@@ -205,7 +214,6 @@
     .bundles__bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
-      font-weight: bold;
       font-family: $gu-text-sans-web;
 
       .component-radio-toggle {
@@ -231,13 +239,14 @@
       }
 
       .component-double-heading__heading {
-        color: gu-colour(comment-main-1);
+        color: gu-colour(neutral-1);
       }
 
       input:checked+label {
-        background-color: gu-colour(comment-main-1);
+        background-color: gu-colour(neutral-1);
         color: #fff;
         position: relative;
+        font-weight: bold;
       }
     }
 
@@ -253,19 +262,11 @@
         position: absolute;
         bottom: -10px;
         left: calc(50% - 10px);
-        border-color: gu-colour(comment-main-1) transparent;
+        border-color: gu-colour(neutral-1) transparent;
       }
     }
 
     .contrib-amounts {
-      .contrib-amounts__error-message {
-        font-family: $gu-text-sans-web;
-        font-size: 13px;
-        font-weight: bold;
-        line-height: 15px;
-        color: gu-colour(live-support-2);
-      }
-
       @include mq($from: desktop) {
         .component-number-input {
           max-width: 93%;
@@ -299,55 +300,59 @@
     }
 
     .contrib-amounts__error-message {
-      @include gu-font(copy, 16);
+      font-family: $gu-text-sans-web;
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 15px;
       color: gu-colour(neutral-1);
     }
 
-    .bundles__bundle--digital {
-        background-color: #1db7d7;
+    .bundles__bundle--digital, .bundles__bundle--paper {
+        background-color: #fff;
+
+        @include mq($until: desktop) {
+          border-top: 1px solid gu-colour(news-support-1);
+        }
+
+        .component-double-heading__heading {
+          color: gu-colour(guardian-brand);
+        }
 
         .component-cta-link {
-          background-color: gu-colour(neutral-1);
+          background-color: #fff;
+          color: gu-colour(guardian-brand);
+          border: 1px solid gu-colour(guardian-brand);
 
           &:hover {
-            background-color: #000;
+            background-color: gu-colour(guardian-brand);
+            color: #fff;
+
+            svg {
+              fill: #fff;
+            }
+          }
+
+          svg {
+            fill: gu-colour(guardian-brand);
           }
         }
     }
 
     .bundles__bundle--paper {
-      background-color: #58a1ce;
-
       .component-cta-link:first-of-type {
-        background-color: #58a1ce;
-        color: #000;
-        border: 1px solid rgba(gu-colour(neutral-1), 0.3);
-
         @include mq($from: desktop) {
-          bottom: $gu-v-spacing * 5;
-        }
-
-        &:hover {
-          border-color: gu-colour(neutral-1);
-        }
-
-        svg {
-          fill: #000;
-        }
-      }
-
-      .component-cta-link+.component-cta-link {
-        background-color: gu-colour(neutral-1);
-
-        &:hover {
-          background-color: #000;
-        }
+          bottom: $gu-v-spacing * 6;
+        }        
       }
     }
 
     .component-feature-list {
       padding-left: 0;
-      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#fff;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#4a7801;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+
+      h3 {
+        color: gu-colour(guardian-brand);
+      }
 
       li {
         margin-left: 24px;
@@ -760,11 +765,18 @@
     color: #fff;
   }
 
+  .component-radio-toggle label, .component-number-input {
+      background-color: gu-colour(multimedia-main-2);
+      border: 1px solid gu-colour(neutral-1);
+  }
+
   .component-number-input--selected {
-      background-color: gu-colour(comment-main-1);
+      background-color: gu-colour(neutral-1);
       color: #fff;
+      font-weight: bold;
 
       &::placeholder {
+          font-weight: normal;
           color: #fff;
           opacity: 0.4;
       }

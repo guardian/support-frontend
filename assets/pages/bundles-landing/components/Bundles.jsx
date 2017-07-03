@@ -71,7 +71,7 @@ type BundlesType = {
 const contribCopy: ContribBundle = {
   heading: 'contribute',
   subheading: 'from £5/month',
-  ctaText: 'Contribute with credit/debit card',
+  ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
 };
