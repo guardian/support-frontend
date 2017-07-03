@@ -94,12 +94,12 @@
       background-color: gu-colour(comment-support-2);
 
       @include mq($until: desktop) {
-        padding-bottom: $gu-v-spacing;
+        padding-bottom: ($gu-v-spacing * 8);
       }
 
       @include mq($from: desktop) {
         padding: 0 0;
-        padding-bottom: ($gu-v-spacing * 2);
+        padding-bottom: ($gu-v-spacing * 8);
       }
     }
 
@@ -124,7 +124,7 @@
     }
 
     .bundles__bundle {
-      padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
+      padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
@@ -213,7 +213,7 @@
     }
 
     .contrib-type {
-      margin-bottom: 17px;
+      margin-bottom: 10px;
 
       input:checked+label:before {
         content: '';
@@ -263,9 +263,9 @@
 
     .contrib-amounts__error-message {
       font-family: $gu-text-sans-web;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
-      line-height: 15px;
+      line-height: 16px;
       color: gu-colour(neutral-1);
     }
 
@@ -304,13 +304,13 @@
       .component-cta-link:first-of-type {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
-        }        
+        }
       }
     }
 
     .component-feature-list {
       padding-left: 0;
-      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#4a7801;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#005689;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
 
       h3 {
         color: gu-colour(guardian-brand);
