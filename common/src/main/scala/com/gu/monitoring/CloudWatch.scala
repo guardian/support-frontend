@@ -23,16 +23,13 @@ trait CloudWatch extends LazyLogging {
         .withName("Stage").withValue(stage)
     )
 
-  def mandatoryDimensions:Seq[Dimension]
+  def mandatoryDimensions: Seq[Dimension]
 
-  trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult]
-  {
-    def onError(exception: Exception)
-    {
+  trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
+    def onError(exception: Exception) {
       logger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
     }
-    def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult )
-    {
+    def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
       logger.trace("CloudWatch PutMetricDataRequest - success")
       CloudWatchHealth.hasPushedMetricSuccessfully = true
     }
@@ -40,7 +37,6 @@ trait CloudWatch extends LazyLogging {
 
   object LoggingAsyncHandler extends LoggingAsyncHandler
 
-  
   def put(name: String, count: Double): Future[PutMetricDataResult] = {
     val metric =
       new MetricDatum()
