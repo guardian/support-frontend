@@ -9,6 +9,7 @@ import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.model.monthlyContributions.state.CreateSalesforceContactState
@@ -28,14 +29,14 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(createPayPalPaymentMethodJson.asInputStream(), outStream, context)
+    createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson), outStream, context)
 
-    //We can't convert directly to a PayPalReferenceTransaction with Circe, as the structure of the
-    //Json produced for a PaymentMethod is different from that for a PayPalReferenceTransaction.
-    //See CirceEncodingBehaviourSpec for more details
+    //Check the output
+    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
-    outStream.toClass[CreateSalesforceContactState]() match {
-      case state @ CreateSalesforceContactState(_, _, _, payPal: PayPalReferenceTransaction) =>
+    createSalesforceContactState.isSuccess should be(true)
+    createSalesforceContactState.get.paymentMethod match {
+      case payPal: PayPalReferenceTransaction =>
         payPal.paypalBaid should be(validBaid)
         payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
       case _ => fail()
@@ -48,13 +49,14 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(createStripePaymentMethodJson.asInputStream(), outStream, context)
+    createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodJson), outStream, context)
 
-    //We can't convert directly to a CreditCardReferenceTransaction with Circe, as the structure of the
-    //Json produced for a PaymentMethod is different from that for a CreditCardReferenceTransaction.
-    //See CirceEncodingBehaviourSpec for more details
-    outStream.toClass[CreateSalesforceContactState]() match {
-      case CreateSalesforceContactState(_, _, _, stripe: CreditCardReferenceTransaction) =>
+    //Check the output
+    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+
+    createSalesforceContactState.isSuccess should be(true)
+    createSalesforceContactState.get.paymentMethod match {
+      case stripe: CreditCardReferenceTransaction =>
         stripe.tokenId should be("1234")
       case _ => fail()
     }

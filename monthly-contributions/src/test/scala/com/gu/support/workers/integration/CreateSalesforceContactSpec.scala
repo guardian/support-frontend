@@ -3,9 +3,10 @@ package com.gu.support.workers.integration
 import java.io.ByteArrayOutputStream
 
 import com.gu.salesforce.Fixtures.salesforceId
-import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.Fixtures.createSalesForceContactJson
+import com.gu.support.workers.Conversions.FromOutputStream
+import com.gu.support.workers.Fixtures.{createSalesForceContactJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.lambdas.CreateSalesforceContact
 import com.gu.support.workers.model.monthlyContributions.state.CreateZuoraSubscriptionState
@@ -19,8 +20,10 @@ class CreateSalesforceContactSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createContact.handleRequest(createSalesForceContactJson.asInputStream(), outStream, context)
+    createContact.handleRequest(wrapFixture(createSalesForceContactJson), outStream, context)
 
-    outStream.toClass[CreateZuoraSubscriptionState]().salesForceContact.Id should be(salesforceId)
+    val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
+    result.isSuccess should be(true)
+    result.get.salesForceContact.Id should be(salesforceId)
   }
 }

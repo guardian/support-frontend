@@ -50,7 +50,6 @@ class PassThroughEncryptionProvider extends EncryptionProvider {
 }
 
 sealed trait EncryptionProvider {
-  val utf8 = "UTF-8"
 
   def decrypt(data: Array[Byte]): String
 

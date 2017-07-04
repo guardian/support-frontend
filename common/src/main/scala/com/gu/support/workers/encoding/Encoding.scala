@@ -1,11 +1,12 @@
 package com.gu.support.workers.encoding
 
 import java.io.{InputStream, OutputStream}
+import java.util.Base64
 
 import cats.syntax.either._
 import com.gu.support.workers.encoding.Encryption._
+import com.gu.support.workers.encoding.Wrapper._
 
-import scala.reflect.io.Streamable
 import scala.util.Try
 
 private[workers] object Encoding {
@@ -14,14 +15,16 @@ private[workers] object Encoding {
   import io.circe.parser._
   import io.circe.syntax._
 
-  def in[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] = {
-    val t = Try(decrypt(Streamable.bytes(is))).flatMap(decode[T](_).toTry)
-    is.close()
-    t
-  }
+  def in[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] =
+    for {
+      wrapper <- unWrap(is)
+      state <- Try(Base64.getDecoder.decode(wrapper.state))
+      decrypted <- Try(decrypt(state))
+      result <- decode[T](decrypted).toTry
+    } yield result
 
   def out[T](value: T, os: OutputStream)(implicit encoder: Encoder[T]): Try[Unit] = {
-    val t = Try(os.write(encrypt(value.asJson.noSpaces)))
+    val t = Try(os.write(wrap(value).asJson.noSpaces.getBytes()))
     os.close()
     t
   }

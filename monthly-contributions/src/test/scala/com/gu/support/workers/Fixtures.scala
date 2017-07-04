@@ -1,8 +1,16 @@
 package com.gu.support.workers
 
+import java.io.ByteArrayInputStream
+
 import com.gu.salesforce.Fixtures.idId
+import com.gu.support.workers.Conversions.StringInputStreamConversions
+import com.gu.support.workers.encoding.Wrapper
+import com.gu.support.workers.encoding.Wrapper.jsonCodec
+import io.circe.syntax._
 
 object Fixtures {
+  def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
+
   val userJson =
     s"""
       "user":{
@@ -52,6 +60,7 @@ object Fixtures {
                   "stripeToken": "$stripeToken"
                 }
                 """
+
   val createPayPalPaymentMethodJson =
     s"""{
           $requestIdJson,
@@ -80,16 +89,16 @@ object Fixtures {
 
   val thankYouEmailJson =
     s"""{
-        |  $requestIdJson,
-        |  $userJson,
-        |  "contribution": $contributionJson,
-        |  "paymentMethod": $payPalPaymentMethod,
-        |  "salesForceContact": {
-        |    "Id": "123",
-        |    "AccountId": "123"
-        |  },
-        |  "accountNumber": "123"
-        |}
+       |  $requestIdJson,
+       |  $userJson,
+       |  "contribution": $contributionJson,
+       |  "paymentMethod": $payPalPaymentMethod,
+       |  "salesForceContact": {
+       |    "Id": "123",
+       |    "AccountId": "123"
+       |  },
+       |  "accountNumber": "123"
+       |}
      """.stripMargin
 
   val updateMembersDataAPIJson =

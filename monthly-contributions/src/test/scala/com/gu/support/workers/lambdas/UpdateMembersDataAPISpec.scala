@@ -3,13 +3,12 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.gu.membersDataAPI.{MembersDataService, UpdateResponse}
-import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.LambdaSpec
-import com.gu.support.workers.Fixtures.updateMembersDataAPIJson
-import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito.{times, verify, when}
 import com.gu.salesforce.Fixtures.idId
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.workers.Fixtures.{updateMembersDataAPIJson, wrapFixture}
+import com.gu.support.workers.LambdaSpec
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.Future
 
@@ -32,9 +31,9 @@ class UpdateMembersDataAPISpec extends LambdaSpec with MockitoSugar {
 
     val outStream = new ByteArrayOutputStream()
 
-    updateMembersDataAPI.handleRequest(updateMembersDataAPIJson.asInputStream(), outStream, context)
+    updateMembersDataAPI.handleRequest(wrapFixture(updateMembersDataAPIJson), outStream, context)
 
-    outStream.toClass[Unit]() shouldEqual ((): Unit)
+    assertUnit(outStream)
 
     verify(membersDataServiceMock, times(1)).update(idId, isTestUser = false)
   }
