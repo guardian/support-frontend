@@ -16,10 +16,9 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import lib.TestUsers
 import lib.actions.ActionRefiners
 import lib.stepfunctions.MonthlyContributionsClient
-import services.{IdentityService, MembersDataService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 
 class MonthlyContributionsTest extends WordSpec with MustMatchers {
@@ -78,7 +77,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       val authenticatedIdUser = AuthenticatedIdUser(credentials, IdMinimalUser("123", Some("test-user")))
 
-      private val testUsers = new TestUsers("test") {
+      private val testUsers = new TestUserService("test") {
         override def isTestUser(displayName: Option[String]): Boolean = displayName.exists(_.startsWith("test"))
       }
 

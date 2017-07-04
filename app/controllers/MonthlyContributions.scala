@@ -10,11 +10,10 @@ import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
 import lib.PlayImplicits._
-import services.{IdentityService, MembersDataService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService.UserNotFound
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
-import lib.TestUsers
 
 import scala.concurrent.Future
 import views.html.authenticatedFullUserReactTemplate
@@ -27,7 +26,7 @@ class MonthlyContributions(
     exec: ExecutionContext,
     membersDataService: MembersDataService,
     identityService: IdentityService,
-    testUsers: TestUsers,
+    testUsers: TestUserService,
     components: ControllerComponents
 ) extends AbstractController(components) with Circe with LazyLogging {
 

@@ -3,7 +3,6 @@ package wiring
 import assets.AssetsResolver
 import config.Configuration
 import play.api.routing.Router
-import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
@@ -13,10 +12,10 @@ import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
-import services.{AuthenticationService, IdentityService, MembersDataService}
-import lib.TestUsers
+import services.{AuthenticationService, IdentityService, MembersDataService, TestUserService}
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
+
 import scala.concurrent.ExecutionContext
 
 trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
@@ -41,7 +40,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
   implicit val cachedAction = new CachedAction()(implicitly[ExecutionContext], defaultActionBuilder)
   implicit val cc = controllerComponents
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
-  implicit lazy val testUsers = new TestUsers(appConfig.identity.testUserSecret)
+  implicit lazy val testUsers = new TestUserService(appConfig.identity.testUserSecret)
 
   lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
   lazy val applicationController = new Application

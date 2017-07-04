@@ -1,10 +1,10 @@
-package lib
+package services
 
 import java.time.Duration.ofDays
 
 import com.gu.identity.testing.usernames.TestUsernames
 
-class TestUsers(secret: String) {
+class TestUserService(secret: String) {
 
   val ValidityPeriod = ofDays(2)
 

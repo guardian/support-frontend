@@ -7,10 +7,9 @@ import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
-import lib.TestUsers
 import lib.actions.{ActionRefiners, CachedAction}
 import org.scalatest.mockito.MockitoSugar.mock
-import services.IdentityService
+import services.{IdentityService, TestUserService}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -22,7 +21,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
 
   val cachedAction = new CachedAction()(global, stubControllerComponents().actionBuilder)
 
-  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUsers], stubControllerComponents())
+  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents())
 
   "/healthcheck" should {
     "return healthy" in {

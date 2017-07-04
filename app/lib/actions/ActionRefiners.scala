@@ -6,10 +6,10 @@ import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import lib.httpheaders.CacheControl
 import com.netaporter.uri.dsl._
-import lib.TestUsers
 
 import scala.concurrent.Future
 import play.api.mvc.Results._
+import services.TestUserService
 
 import scala.concurrent.ExecutionContext
 
@@ -21,7 +21,7 @@ class ActionRefiners(
     authenticatedIdUserProvider: Provider,
     idWebAppUrl: String,
     supportUrl: String,
-    testUsers: TestUsers,
+    testUsers: TestUserService,
     cc: ControllerComponents
 )(implicit private val ec: ExecutionContext) {
 
