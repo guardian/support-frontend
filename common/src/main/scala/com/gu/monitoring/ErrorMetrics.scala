@@ -1,12 +1,19 @@
+package com.gu.monitoring
+
 import com.amazonaws.services.cloudwatch.model.Dimension
-import com.gu.monitoring.CloudWatch
 
 trait ErrorMetrics extends CloudWatch {
 
-  lazy val errorDimension = new Dimension()
-    .withName("StepName").withValue(stepName)
-    .withName("ServiceName").withValue(serviceName)
-    .withName("ErrorCode").withValue(errorCode)
+  //Error's Dimensions
+  val stepName: String
+  val serviceName: String
+  val errorCode: String
 
-  override def mandatoryDimensions: Seq[Dimension] = super.commonDimensions ++ errorDimension
+  val errorDimension: Seq[Dimension] =
+    Seq(new Dimension()
+        .withName("StepName").withValue(stepName)
+        .withName("ServiceName").withValue(serviceName)
+        .withName("ErrorCode").withValue(errorCode))
+
+  override def mandatoryDimensions: Seq[Dimension] = commonDimensions ++ errorDimension
 }

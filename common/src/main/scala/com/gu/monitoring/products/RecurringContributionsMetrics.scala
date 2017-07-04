@@ -1,7 +1,9 @@
-import com.gu.config.Configuration
+package com.gu.monitoring.products
 
-class RecurringContributionsMetrics(val backend: String,
-                                    val paymentMethod: String,
+import com.gu.config.Configuration
+import com.gu.monitoring.ProductMetrics
+
+class RecurringContributionsMetrics(val paymentMethod: String,
                                     val subscriptionPeriod: String) extends ProductMetrics {
 
   override val productName = "RecurringContributor"

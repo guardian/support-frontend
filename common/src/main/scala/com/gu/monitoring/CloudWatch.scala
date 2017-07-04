@@ -16,11 +16,12 @@ trait CloudWatch extends LazyLogging {
 
   //Common Dimensions
   val stage: String
-  val backend: String
 
-  lazy val commonDimensions: Dimension = new Dimension()
-    .withName("Stage").withValue(stage)
-    .withName(backend).withValue(backend)
+  val commonDimensions: Seq[Dimension] =
+    Seq(
+      new Dimension()
+        .withName("Stage").withValue(stage)
+    )
 
   def mandatoryDimensions:Seq[Dimension]
 
