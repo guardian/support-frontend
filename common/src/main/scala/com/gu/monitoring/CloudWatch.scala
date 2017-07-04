@@ -11,7 +11,7 @@ import com.gu.config.Configuration
 import com.gu.monitoring.CloudWatch.cloudwatch
 import com.typesafe.scalalogging.LazyLogging
 
-trait CloudWatch extends LazyLogging {
+class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
 
   val application = "SupportWorkers"
 
@@ -19,14 +19,14 @@ trait CloudWatch extends LazyLogging {
   val commonDimensions: Seq[Dimension] =
     Seq(new Dimension().withName("Stage").withValue(Configuration.stage))
 
-  val allDimensions: Seq[Dimension]
+  val allDimensions: Seq[Dimension] = commonDimensions ++ metrics
 
   trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
     def onError(exception: Exception) {
       logger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
     }
     def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
-      logger.trace("CloudWatch PutMetricDataRequest - success")
+      logger.info("CloudWatch PutMetricDataRequest - success")
       CloudWatchHealth.hasPushedMetricSuccessfully = true
     }
   }

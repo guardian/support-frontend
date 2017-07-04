@@ -1,19 +1,21 @@
 package com.gu.monitoring.products
 
-import com.gu.config.Configuration
-import com.gu.monitoring.ProductMetrics
-
+import com.gu.monitoring._
+import Metrics._
 class RecurringContributionsMetrics(
-  override val paymentMethod: String,
-  override val subscriptionPeriod: String
-) extends ProductMetrics {
-
-  override def productName: String = "RecurringContributor"
+  val method: String,
+  val period: String
+) extends CloudWatch(Seq(
+  productName("RecurringContributor"),
+  paymentMethod(method),
+  subscriptionPeriod(period)
+)) {
 
   def putContributionSignUpStartProcess(): Unit = put(s"monthly-contributor-sign-up-start")
 
-  def putContributionSignUpSuccess(): Unit = put(s"monthly-contributor-sign-up-success")
+  def putZuoraAccountCreated(): Unit = put(s"monthly-contributor-zuora-account-created")
 
   private def put(metricName: String): Unit = put(metricName, 1)
 
 }
+

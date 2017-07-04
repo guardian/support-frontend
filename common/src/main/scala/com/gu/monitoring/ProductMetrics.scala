@@ -2,18 +2,8 @@ package com.gu.monitoring
 
 import com.amazonaws.services.cloudwatch.model.Dimension
 
-trait ProductMetrics extends CloudWatch {
-
-  //Product's Dimensions
-  def productName: String
-  val paymentMethod: String
-  val subscriptionPeriod: String
-
-  val productDimensions: Seq[Dimension] = Seq(
-    new Dimension().withName("ProductName").withValue(productName),
-    new Dimension().withName("PaymentMethod").withValue(paymentMethod),
-    new Dimension().withName("SubscriptionPeriod").withValue(subscriptionPeriod)
-  )
-
-  override val allDimensions: Seq[Dimension] = commonDimensions ++ productDimensions
+object Metrics {
+  def productName(name: String): Dimension = new Dimension().withName("ProductName").withValue(name)
+  def paymentMethod(method: String): Dimension = new Dimension().withName("PaymentMethod").withValue(method)
+  def subscriptionPeriod(period: String): Dimension = new Dimension().withName("SubscriptionPeriod").withValue(period)
 }

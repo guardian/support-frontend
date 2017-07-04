@@ -2,6 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -19,6 +20,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
     services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
+      state.paymentMethod.`type` match {
+        case "PayPal" => putCloudWatchMetrics("paypal")
+        case _ => putCloudWatchMetrics("stripe")
+      }
       SendThankYouEmailState(state.requestId, state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
     }
 
@@ -67,4 +72,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       )
     ))
   }
+
+  def putCloudWatchMetrics(paymentMethod: String): Unit =
+    new RecurringContributionsMetrics(paymentMethod, "monthly")
+      .putZuoraAccountCreated()
 }

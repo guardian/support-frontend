@@ -12,7 +12,8 @@ trait ErrorMetrics extends CloudWatch {
   val errorDimensions: Seq[Dimension] = Seq(
     new Dimension().withName("StepName").withValue(stepName),
     new Dimension().withName("ServiceName").withValue(serviceName),
-    new Dimension().withName("ErrorCode").withValue(errorCode))
+    new Dimension().withName("ErrorCode").withValue(errorCode)
+  )
 
-  override val allDimensions: Seq[Dimension] = commonDimensions ++ errorDimensions
+  override val allDimensions: Seq[Dimension] = allDimensions ++ errorDimensions
 }
