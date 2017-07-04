@@ -4,14 +4,13 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.support.workers.Conversions.FromOutputStream
 import com.gu.support.workers.Fixtures.{failureJson, wrap}
-import com.gu.support.workers.MockContext
-import com.gu.support.workers.encoding.Encoding
+import com.gu.support.workers.LambdaSpec
 import org.joda.time.DateTime
-import org.scalatest.{AsyncFlatSpec, Matchers}
 
-class FailureHandlerSpec extends AsyncFlatSpec with Matchers with MockContext {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class FailureHandlerSpec extends LambdaSpec {
 
   "EmailService" should "send a failure email" in {
     val service = new EmailService(Configuration.emailServicesConfig.failed)
@@ -26,7 +25,7 @@ class FailureHandlerSpec extends AsyncFlatSpec with Matchers with MockContext {
 
     failureHandler.handleRequest(wrap(failureJson), outStream, context)
 
-    Encoding.in[Unit](outStream.toInputStream()).isSuccess should be(true)
+    assertUnit(outStream)
   }
 
 }

@@ -12,7 +12,7 @@ import org.scalatest.{Assertion, FlatSpec, Matchers}
 
 abstract class LambdaSpec extends FlatSpec with Matchers with MockitoSugar with MockContext with LazyLogging {
   def assertUnit(output: ByteArrayOutputStream): Assertion =
-    Encoding.in[Unit](output.toInputStream()).isSuccess should be(true)
+    Encoding.in[Unit](output.toInputStream).isSuccess should be(true)
 }
 trait MockContext extends MockitoSugar {
   val context = mock[Context]

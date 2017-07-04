@@ -2,9 +2,7 @@ package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
-import com.gu.support.workers.Conversions.FromOutputStream
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrap}
-import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 
@@ -18,7 +16,7 @@ class EndToEndSpec extends LambdaSpec {
       .chain(new CreateZuoraSubscription())
       .last(new SendThankYouEmail())
 
-    Encoding.in[Unit](output.toInputStream()).isSuccess should be(true)
+    assertUnit(output)
   }
 
   implicit class InputStreamChaining(val stream: InputStream) {
