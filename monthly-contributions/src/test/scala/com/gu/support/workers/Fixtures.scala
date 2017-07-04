@@ -5,7 +5,7 @@ import java.io.ByteArrayInputStream
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import com.gu.support.workers.encoding.Wrapper.jsonEncoder
+import com.gu.support.workers.encoding.Wrapper.jsonCodec
 import io.circe.syntax._
 
 object Fixtures {

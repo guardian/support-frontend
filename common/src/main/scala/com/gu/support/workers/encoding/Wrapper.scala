@@ -5,9 +5,9 @@ import java.util.Base64
 
 import cats.syntax.either._
 import com.gu.support.workers.encoding.Encryption.encrypt
+import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.model.JsonWrapper
 import io.circe.Encoder
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.parser._
 import io.circe.syntax._
 
@@ -20,8 +20,7 @@ import scala.util.Try
  * This class helps with that
  */
 object Wrapper {
-  implicit val jsonEncoder = deriveEncoder[JsonWrapper]
-  implicit val jsonDecoder = deriveDecoder[JsonWrapper]
+  implicit val jsonCodec = deriveCodec[JsonWrapper]
 
   def unWrap(is: InputStream): Try[JsonWrapper] = {
     val t = Try(Source.fromInputStream(is).mkString).flatMap(decode[JsonWrapper](_).toTry)
