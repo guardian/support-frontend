@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsAsync
 import com.amazonaws.services.stepfunctions.model.{ListStateMachinesRequest, ListStateMachinesResult, StateMachineListItem}
-import lib.aws.AwsAsync
+import services.aws.AwsAsync
 import services.stepfunctions.StateMachineErrors.NoStateMachineFound
 
 import scala.concurrent.Future

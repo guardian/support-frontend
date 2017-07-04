@@ -2,13 +2,13 @@ package services.stepfunctions
 
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import com.amazonaws.services.stepfunctions.model._
-import lib.aws.AwsAsync
+import services.aws.AwsAsync
 import StateMachineContainer.{Response, convertErrors}
 import akka.actor.ActorSystem
 import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.amazonaws.regions.Regions
-import lib.aws.CredentialsProvider
+import services.aws.CredentialsProvider
 import io.circe.Encoder
 import io.circe.syntax._
 
