@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.support.workers.Fixtures.{failureJson, wrap}
+import com.gu.support.workers.Fixtures.{failureJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import org.joda.time.DateTime
 
@@ -23,7 +23,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    failureHandler.handleRequest(wrap(failureJson), outStream, context)
+    failureHandler.handleRequest(wrapFixture(failureJson), outStream, context)
 
     assertUnit(outStream)
   }

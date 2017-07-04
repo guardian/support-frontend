@@ -2,7 +2,7 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrap}
+import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.test.tags.annotations.IntegrationTest
@@ -15,7 +15,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendThankYouEmail.handleRequest(wrap(thankYouEmailJson), outStream, context)
+    sendThankYouEmail.handleRequest(wrapFixture(thankYouEmailJson), outStream, context)
 
     assertUnit(outStream)
   }

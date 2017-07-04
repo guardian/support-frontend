@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
-import com.gu.support.workers.Fixtures.{createZuoraSubscriptionJson, wrap}
+import com.gu.support.workers.Fixtures.{createZuoraSubscriptionJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
@@ -45,7 +45,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     val createZuoraSubscription = new CreateZuoraSubscription(timeoutServices)
     val outputStream = new ByteArrayOutputStream()
     a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrap(createZuoraSubscriptionJson), outputStream, context)
+      createZuoraSubscription.handleRequest(wrapFixture(createZuoraSubscriptionJson), outputStream, context)
     }
   }
 
@@ -59,7 +59,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrap(createZuoraSubscriptionJson), outStream, context)
+      createZuoraSubscription.handleRequest(wrapFixture(createZuoraSubscriptionJson), outStream, context)
     }
 
     server.shutdown()

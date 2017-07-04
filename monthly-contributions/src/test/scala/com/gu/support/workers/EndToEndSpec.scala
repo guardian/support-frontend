@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
-import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrap}
+import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 
@@ -10,7 +10,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 class EndToEndSpec extends LambdaSpec {
   "The monthly contribution lambdas" should "chain successfully" in {
     logger.info(createPayPalPaymentMethodJson)
-    val output = wrap(createPayPalPaymentMethodJson)
+    val output = wrapFixture(createPayPalPaymentMethodJson)
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())

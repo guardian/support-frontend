@@ -2,7 +2,7 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.support.workers.Fixtures.{updateMembersDataAPIJson, wrap}
+import com.gu.support.workers.Fixtures.{updateMembersDataAPIJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.lambdas.UpdateMembersDataAPI
 import com.gu.test.tags.annotations.IntegrationTest
@@ -16,7 +16,7 @@ class UpdateMembersDataAPISpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    updateMembersDataAPI.handleRequest(wrap(updateMembersDataAPIJson), outStream, context)
+    updateMembersDataAPI.handleRequest(wrapFixture(updateMembersDataAPIJson), outStream, context)
 
     assertUnit(outStream)
   }
