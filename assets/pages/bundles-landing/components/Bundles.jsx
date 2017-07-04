@@ -71,7 +71,7 @@ type BundlesType = {
 const contribCopy: ContribBundle = {
   heading: 'contribute',
   subheading: 'from £5/month',
-  ctaText: 'Contribute with credit/debit card',
+  ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
 };
@@ -261,7 +261,9 @@ function Bundles(props: PropTypes) {
 
   return (
     <section className="bundles">
+      <div className="bundles__introduction-bleed-margins" />
       <div className="bundles__content gu-content-margin">
+        <div className="bundles__introduction-bleed" />
         <div className="bundles__wrapper">
           {contributionComponent}
           <div className="bundles__divider" />

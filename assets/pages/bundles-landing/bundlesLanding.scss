@@ -6,12 +6,12 @@
 
   .introduction {
 
-    background-color: darken(gu-colour(comment-support-2), 5%);
+    background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .introduction__content {
-      padding-top: $gu-v-spacing / 2;
+      padding-top: $gu-v-spacing;
       padding-bottom: $gu-v-spacing;
-      background-color: gu-colour(comment-support-2);
+      background-color: gu-colour(guardian-brand-dark);
 
       @include mq($from: leftCol) {
         padding-left: 100px;
@@ -23,100 +23,62 @@
     }
 
     h1 {
-      color: gu-colour(news-support-2);
-      font-family: 'Guardian Titlepiece Web', sans-serif;
-      font-weight: 400;
-      font-size: 28px;
-      line-height: 32px;
+      color: gu-colour(news-support-1);
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+      font-size: 22px;
+      line-height: 26px;
       word-spacing: -0.08em;
 
-      @include mq($from: mobileLandscape) {
+      @include mq($from: mobileMedium) {
+        font-size: 24px;
+        line-height: 28px;
+      }
+
+      @include mq($from: phablet) {
         font-size: 36px;
         line-height: 40px;
       }
 
-      @include mq($from: phablet) {
-        font-size: 40px;
-        line-height: 44px;
-      }
-
       @include mq($from: desktop) {
-        font-size: 48px;
-        line-height: 52px;
+        font-size: 44px;
+        line-height: 48px;
       }
     }
 
     p {
       font-family: $gu-egyptian-web;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 20px;
-      color: gu-colour(neutral-1);
-
-      &:nth-of-type(1) {
-        margin-left: 80px;
-      }
+      font-weight: bold;
+      font-size: 22px;
+      line-height: 26px;
+      color: #ffffff;
+      margin-left: 40px;
 
       &:nth-of-type(2) {
-        margin-left: 120px;
+        margin-bottom: $gu-v-spacing * 2;
       }
 
-      &:nth-of-type(3) {
-        margin-left: 40px;
+      &:nth-of-type(4) {
+        margin-bottom: $gu-v-spacing * 4;
       }
 
       @include mq($from: mobileMedium) {
-        font-size: 19px;
-        line-height: 23px;
-      }
-
-      @include mq($from: mobileLandscape) {
-        font-size: 23px;
-        line-height: 27px;
+        font-size: 24px;
+        line-height: 28px;
+        margin-left: 88px;
       }
 
       @include mq($from: phablet) {
-        font-size: 28px;
-        line-height: 32px;
-
-        &:nth-of-type(1) {
-          margin-left: 240px;
-        }
-
-        &:nth-of-type(2) {
-          margin-left: 320px;
-        }
-
-        &:nth-of-type(3) {
-          margin-left: 160px;
-        }
-
-        &:nth-of-type(4) {
-          margin-left: 80px;
-        }
+        font-size: 36px;
+        line-height: 40px;
+        margin-left: 128px;
       }
 
-      @include mq($from: tablet) {
-        &:nth-of-type(1) {
-          margin-left: 320px;
-        }
-
-        &:nth-of-type(2) {
-          margin-left: 400px;
-        }
-
-        &:nth-of-type(3) {
-          margin-left: 240px;
-        }
-
-        &:nth-of-type(4) {
-          margin-left: 160px;
-        }
-      }
 
       @include mq($from: desktop) {
-        font-size: 32px;
-        line-height: 36px;
+        font-size: 44px;
+        line-height: 48px;
+        margin-left: 160px;
       }
     }
   }
@@ -128,20 +90,43 @@
 
     background-color: darken(gu-colour(comment-support-2), 5%);
 
+    .bundles__introduction-bleed, .bundles__introduction-bleed-margins {
+      height: 180px;
+      background-color: darken(gu-colour(guardian-brand-dark), 5%);
+      position: absolute;
+      left: 0;
+      width: 100%;
+
+      @include mq($from: phablet) {
+        height: 130px;
+      }
+
+      @include mq($from: desktop) {
+        height: 210px;
+      }
+    }
+
+    .bundles__introduction-bleed {
+      background-color: gu-colour(guardian-brand-dark);
+    }
+
     .bundles__content {
       background-color: gu-colour(comment-support-2);
+      position: relative;
 
       @include mq($until: desktop) {
-        padding-bottom: $gu-v-spacing;
+        padding-bottom: ($gu-v-spacing * 8);
       }
 
       @include mq($from: desktop) {
         padding: 0 0;
-        padding-bottom: ($gu-v-spacing * 2);
+        padding-bottom: ($gu-v-spacing * 8);
       }
     }
 
     .bundles__wrapper {
+      position: relative;
+
       @include mq($from: phablet, $until: desktop) {
         width: 100%;
       }
@@ -162,12 +147,12 @@
     }
 
     .bundles__bundle {
-      padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
+      padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
         width: 280px;
-        height: 370px;
+        height: 400px;
         display: inline-block;
         vertical-align: top;
         position: relative;
@@ -175,6 +160,10 @@
     }
 
     .component-cta-link {
+      padding-top: $gu-v-spacing;
+      padding-bottom: $gu-v-spacing;
+      margin-top: $gu-v-spacing * 4;
+
       @include mq($from: desktop) {
         position: absolute;
         bottom: $gu-v-spacing;
@@ -185,6 +174,12 @@
         svg {
           left: 250px;
         }
+      }
+
+      svg {
+        height: 35%;
+        top: 15px;
+        right: 12px;
       }
     }
 
@@ -205,7 +200,6 @@
     .bundles__bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
-      font-weight: bold;
       font-family: $gu-text-sans-web;
 
       .component-radio-toggle {
@@ -231,18 +225,19 @@
       }
 
       .component-double-heading__heading {
-        color: gu-colour(comment-main-1);
+        color: gu-colour(neutral-1);
       }
 
       input:checked+label {
-        background-color: gu-colour(comment-main-1);
+        background-color: gu-colour(neutral-1);
         color: #fff;
         position: relative;
+        font-weight: bold;
       }
     }
 
     .contrib-type {
-      margin-bottom: 17px;
+      margin-bottom: 10px;
 
       input:checked+label:before {
         content: '';
@@ -253,19 +248,11 @@
         position: absolute;
         bottom: -10px;
         left: calc(50% - 10px);
-        border-color: gu-colour(comment-main-1) transparent;
+        border-color: gu-colour(neutral-1) transparent;
       }
     }
 
     .contrib-amounts {
-      .contrib-amounts__error-message {
-        font-family: $gu-text-sans-web;
-        font-size: 13px;
-        font-weight: bold;
-        line-height: 15px;
-        color: gu-colour(live-support-2);
-      }
-
       @include mq($from: desktop) {
         .component-number-input {
           max-width: 93%;
@@ -299,55 +286,63 @@
     }
 
     .contrib-amounts__error-message {
-      @include gu-font(copy, 16);
+      font-family: $gu-text-sans-web;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 16px;
       color: gu-colour(neutral-1);
     }
 
-    .bundles__bundle--digital {
-        background-color: #1db7d7;
+    .bundles__bundle--digital, .bundles__bundle--paper {
+        background-color: #fff;
+
+        @include mq($until: desktop) {
+          border-top: 1px solid gu-colour(news-support-1);
+        }
+
+        .component-double-heading__heading {
+          color: gu-colour(guardian-brand);
+        }
 
         .component-cta-link {
-          background-color: gu-colour(neutral-1);
+          background-color: #fff;
+          color: gu-colour(guardian-brand);
+          border: 1px solid gu-colour(guardian-brand);
 
           &:hover {
-            background-color: #000;
+            background-color: gu-colour(guardian-brand);
+            color: #fff;
+
+            svg {
+              fill: #fff;
+            }
+          }
+
+          svg {
+            fill: gu-colour(guardian-brand);
           }
         }
     }
 
     .bundles__bundle--paper {
-      background-color: #58a1ce;
-
       .component-cta-link:first-of-type {
-        background-color: #58a1ce;
-        color: #000;
-        border: 1px solid rgba(gu-colour(neutral-1), 0.3);
-
         @include mq($from: desktop) {
-          bottom: $gu-v-spacing * 5;
-        }
-
-        &:hover {
-          border-color: gu-colour(neutral-1);
-        }
-
-        svg {
-          fill: #000;
+          bottom: $gu-v-spacing * 6;
         }
       }
 
-      .component-cta-link+.component-cta-link {
-        background-color: gu-colour(neutral-1);
-
-        &:hover {
-          background-color: #000;
-        }
+      .component-cta-link:nth-of-type(2) {
+        margin-top: $gu-v-spacing;
       }
     }
 
     .component-feature-list {
       padding-left: 0;
-      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#fff;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#005689;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+
+      h3 {
+        color: gu-colour(guardian-brand);
+      }
 
       li {
         margin-left: 24px;
@@ -601,7 +596,7 @@
 
 
   // ----- Ways Of Support
-  
+
   .ways-of-support {
 
     @include mq($from: mobileLandscape) {
@@ -642,7 +637,7 @@
       @include mq($until: tablet) {
         h1 {
           width: 240px;
-        }        
+        }
       }
 
       @include mq($until: mobileLandscape) {
@@ -754,18 +749,25 @@
   .component-double-heading--variant-a {
     margin-bottom: 0;
   }
-  
+
   input:checked+label {
     background-color: gu-colour(guardian-brand-dark);
     color: #fff;
   }
 
+  .component-radio-toggle label, .component-number-input {
+      background-color: gu-colour(multimedia-main-2);
+      border: 1px solid gu-colour(neutral-1);
+  }
+
   .component-number-input--selected {
-      background-color: gu-colour(comment-main-1);
+      background-color: gu-colour(neutral-1);
       color: #fff;
+      font-weight: bold;
 
       &::placeholder {
-          color: #fff;
+          font-weight: normal;
+          color: #ffffff;
           opacity: 0.4;
       }
   }
