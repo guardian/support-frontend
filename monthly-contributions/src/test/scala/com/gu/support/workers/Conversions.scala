@@ -3,7 +3,7 @@ package com.gu.support.workers
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 import cats.syntax.either._
-import com.gu.support.workers.encoding.Encryption
+import com.gu.support.workers.encoding.{Encryption, utf8}
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -17,21 +17,21 @@ object Conversions {
 
     def asInputStream()(implicit encoder: Encoder[T]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
-      convertStream.write(Encryption.encrypt(self.asJson.noSpaces))
-      convertStream.toInputStream()
+      convertStream.write(self.asJson.noSpaces.getBytes(utf8))
+      convertStream.toInputStream
     }
   }
 
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
     def toClass[T]()(implicit decoder: Decoder[T]): T = {
-      val is = self.toInputStream()
+      val is = self.toInputStream
       val str = Encryption.decrypt(Streamable.bytes(is))
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get
     }
 
-    def toInputStream(): ByteArrayInputStream = new ByteArrayInputStream(self.toByteArray)
+    def toInputStream: ByteArrayInputStream = new ByteArrayInputStream(self.toByteArray)
   }
 
   implicit class StringInputStreamConversions[String](val str: String) {
@@ -39,7 +39,7 @@ object Conversions {
     def asInputStream()(implicit encoder: Encoder[String]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
 
-      convertStream.write(Encryption.encrypt(str.toString))
+      convertStream.write(str.toString.getBytes(utf8))
       new ByteArrayInputStream(convertStream.toByteArray)
     }
   }
