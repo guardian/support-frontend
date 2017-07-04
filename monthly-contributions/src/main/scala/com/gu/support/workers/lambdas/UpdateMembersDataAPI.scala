@@ -17,10 +17,10 @@ class UpdateMembersDataAPI(servicesProvider: ServiceProvider = ServiceProvider)
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: UpdateMembersDataAPIState, context: Context, services: Services): Future[Unit] = {
-    services.membersDataService.update(state.user.id, state.user.isTestUser).map(_ => Unit)
+    services.membersDataService.update(state.user.id, state.user.isTestUser).map(_ => putCloudWatchMetrics)
   }
 
-  def putCloudWatchMetrics(paymentMethod: String): Unit =
+  def putCloudWatchMetrics: Unit =
     new MembersDataAPIMetrics("recurring-contribution")
       .putMembersDataAPIUpdated()
 }
