@@ -21,6 +21,7 @@ import lib.actions.ActionRefiners
 import lib.stepfunctions.MonthlyContributionsClient
 import services.{IdentityService, MembersDataService}
 import services.MembersDataService._
+import config.{StripeConfig, TouchpointConfigProvider}
 
 class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
@@ -113,6 +114,8 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {
+        val touchpointConfigProvider = mock[TouchpointConfigProvider]
+        when(touchpointConfigProvider.getStripeConfig(any[Boolean])).thenReturn(StripeConfig("test-key"))
         new MonthlyContributions()(
           mock[MonthlyContributionsClient],
           assetResolver,
@@ -120,7 +123,8 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
           global,
           membersDataService,
           identityService,
-          testUsers
+          testUsers,
+          touchpointConfigProvider
         ).displayForm(FakeRequest())
       }
     }

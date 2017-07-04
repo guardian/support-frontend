@@ -1,6 +1,13 @@
 @import assets.AssetsResolver
 @import com.gu.identity.play.IdUser
-@(title: String, id: String, js: String, user: IdUser)(implicit assets: AssetsResolver)
+@import config.StripeConfig
+@(
+  title: String,
+  id: String,
+  js: String,
+  user: IdUser,
+  stripeConfig: StripeConfig
+)(implicit assets: AssetsResolver)
 
 @scripts = {
     <script type="text/javascript">
@@ -15,6 +22,7 @@
             lastName: "@lastName",
             }
         };
+        window.guardian.stripeKey = "@stripeConfig.publicKey";
     </script>
     <script type="text/javascript" src="@assets(js)"></script>
 }

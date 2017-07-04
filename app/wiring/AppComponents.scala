@@ -15,6 +15,7 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService, MembersDataService}
 import lib.TestUsers
+import config.Stages
 
 trait AppComponents extends PlayComponents with AhcWSComponents {
 
@@ -34,8 +35,9 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
     testUsers = testUsers
   )
 
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(config.stage)
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (config.stage == Stages.DEV) Stages.CODE else config.stage)
   implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)
+  implicit lazy val touchpointConfigProvider = config.touchpointConfigProvider
 
   lazy val assetController = new Assets(httpErrorHandler)
   lazy val applicationController = new Application

@@ -15,7 +15,8 @@ import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
 import lib.TestUsers
 import scala.concurrent.Future
-import views.html.authenticatedFullUserReactTemplate
+import views.html.monthlyContributions
+import config.TouchpointConfigProvider
 
 class MonthlyContributions(
     implicit
@@ -25,7 +26,8 @@ class MonthlyContributions(
     exec: ExecutionContext,
     membersDataService: MembersDataService,
     identityService: IdentityService,
-    testUsers: TestUsers
+    testUsers: TestUsers,
+    touchpointConfigProvider: TouchpointConfigProvider
 ) extends Controller with Circe with LazyLogging {
 
   import actionRefiners._
@@ -36,11 +38,14 @@ class MonthlyContributions(
         case Some(true) => Redirect("/monthly-contributions/existing-contributor")
         case Some(false) | None =>
           Ok(
-            authenticatedFullUserReactTemplate(
+            monthlyContributions(
               title = "Support the Guardian | Monthly Contributions",
               id = "monthly-contributions-page",
               js = "monthlyContributionsPage.js",
-              user = fullUser
+              user = fullUser,
+              stripeConfig = touchpointConfigProvider.getStripeConfig(
+                testUsers.isTestUser(fullUser.publicFields.displayName)
+              )
             )
           )
       }

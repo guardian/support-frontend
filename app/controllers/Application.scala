@@ -25,13 +25,6 @@ class Application(
     Ok(views.html.react(title, id, js))
   }
 
-  def authenticatedFullUserReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
-
-    identityService.getUser(request.user).map { user =>
-      Ok(views.html.authenticatedFullUserReactTemplate(title, id, js, user))
-    } getOrElse InternalServerError
-  }
-
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
