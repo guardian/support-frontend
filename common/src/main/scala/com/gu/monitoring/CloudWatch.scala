@@ -23,7 +23,7 @@ trait CloudWatch extends LazyLogging {
         .withName("Stage").withValue(stage)
     )
 
-  def mandatoryDimensions: Seq[Dimension]
+  val allDimensions: Seq[Dimension]
 
   trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
     def onError(exception: Exception) {
@@ -43,7 +43,7 @@ trait CloudWatch extends LazyLogging {
         .withValue(count)
         .withMetricName(name)
         .withUnit("Count")
-        .withDimensions(mandatoryDimensions: _*)
+        .withDimensions(allDimensions: _*)
 
     val request =
       new PutMetricDataRequest()

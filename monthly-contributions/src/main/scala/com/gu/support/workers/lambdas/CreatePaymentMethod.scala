@@ -51,7 +51,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
-  def putCloudWatchMetrics(paymentMethod : String): Unit =
+  def putCloudWatchMetrics(paymentMethod: String): Unit =
     new RecurringContributionsMetrics(paymentMethod = paymentMethod, subscriptionPeriod = "monthly")
       .putContributionSignUpStartProcess()
 

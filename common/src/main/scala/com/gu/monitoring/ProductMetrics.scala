@@ -13,7 +13,8 @@ trait ProductMetrics extends CloudWatch {
     new Dimension()
       .withName("ProductName").withValue(productName)
       .withName("PaymentMethod").withValue(paymentMethod)
-      .withName("SubscriptionPeriod").withValue(subscriptionPeriod))
+      .withName("SubscriptionPeriod").withValue(subscriptionPeriod)
+  )
 
-  override def mandatoryDimensions: Seq[Dimension] = commonDimensions ++ productDimensions
+  override val allDimensions: Seq[Dimension] = commonDimensions ++ productDimensions
 }
