@@ -5,10 +5,8 @@ import java.io.ByteArrayOutputStream
 import com.gu.membersDataAPI.{MembersDataService, UpdateResponse}
 import com.gu.salesforce.Fixtures.idId
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.Conversions.FromOutputStream
 import com.gu.support.workers.Fixtures.{updateMembersDataAPIJson, wrap}
 import com.gu.support.workers.LambdaSpec
-import com.gu.support.workers.encoding.Encoding
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.mockito.MockitoSugar
 
@@ -35,7 +33,7 @@ class UpdateMembersDataAPISpec extends LambdaSpec with MockitoSugar {
 
     updateMembersDataAPI.handleRequest(wrap(updateMembersDataAPIJson), outStream, context)
 
-    Encoding.in[Unit](outStream.toInputStream()).isSuccess should be(true)
+    assertUnit(outStream)
 
     verify(membersDataServiceMock, times(1)).update(idId, isTestUser = false)
   }

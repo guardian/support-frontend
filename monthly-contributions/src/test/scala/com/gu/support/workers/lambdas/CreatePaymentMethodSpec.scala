@@ -32,7 +32,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     createPaymentMethod.handleRequest(wrap(createPayPalPaymentMethodJson), outStream, context)
 
     //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream())
+    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
     createSalesforceContactState.isSuccess should be(true)
     createSalesforceContactState.get.paymentMethod match {
@@ -52,7 +52,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     createPaymentMethod.handleRequest(wrap(createStripePaymentMethodJson), outStream, context)
 
     //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream())
+    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
     createSalesforceContactState.isSuccess should be(true)
     createSalesforceContactState.get.paymentMethod match {
