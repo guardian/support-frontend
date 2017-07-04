@@ -14,7 +14,7 @@ class StateWrapper(encryption: EncryptionProvider) {
     JsonWrapper(encodeState(state)).asJson.noSpaces
   }
 
-  private def encodeState[T](state: T): String = encodeToBase64String(encryption.encrypt(state.asJson.noSpaces))
+  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = encodeToBase64String(encryption.encrypt(state.asJson.noSpaces))
 
   private def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
 }
