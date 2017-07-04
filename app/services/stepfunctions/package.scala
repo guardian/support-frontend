@@ -1,4 +1,4 @@
-package lib
+package services
 
 import com.amazonaws.services.stepfunctions.model.{StartExecutionResult, StateMachineListItem}
 import org.joda.time.DateTime
