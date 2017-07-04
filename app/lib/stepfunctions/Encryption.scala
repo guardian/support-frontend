@@ -20,7 +20,7 @@ class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider 
     .withCredentials(CredentialsProvider)
     .build()
 
-  override def encrypt(data: String): String = {
+  override def encrypt(data: String): Array[Byte] = {
     val plainText = ByteBuffer.wrap(data.getBytes(utf8))
     val req = new EncryptRequest()
       .withKeyId(encryptionKeyId)
@@ -29,7 +29,7 @@ class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider 
     //for our purposes here. If the amount of data increases significantly
     //we should switch to using Envelope encryption as described here:
     //http://docs.aws.amazon.com/kms/latest/developerguide/workflow.html
-    new String(kms.encrypt(req).getCiphertextBlob.array(), utf8)
+    kms.encrypt(req).getCiphertextBlob.array()
   }
 
   override def decrypt(data: Array[Byte]): String = {
@@ -42,7 +42,7 @@ class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider 
 class PassThroughEncryptionProvider extends EncryptionProvider {
   override def decrypt(data: Array[Byte]): String = new String(data, utf8)
 
-  override def encrypt(data: String): String = data
+  override def encrypt(data: String): Array[Byte] = data.getBytes(utf8)
 }
 
 sealed trait EncryptionProvider {
@@ -50,6 +50,6 @@ sealed trait EncryptionProvider {
 
   def decrypt(data: Array[Byte]): String
 
-  def encrypt(data: String): String
+  def encrypt(data: String): Array[Byte]
 }
 
