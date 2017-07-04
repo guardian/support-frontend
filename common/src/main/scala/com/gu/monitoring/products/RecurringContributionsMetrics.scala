@@ -8,15 +8,12 @@ class RecurringContributionsMetrics(
   override val subscriptionPeriod: String
 ) extends ProductMetrics {
 
-  override val productName: String = "RecurringContributor"
-  override val stage: String = Configuration.stage
+  override def productName: String = "RecurringContributor"
 
   def putContributionSignUpStartProcess(): Unit = put(s"monthly-contributor-sign-up-start")
 
   def putContributionSignUpSuccess(): Unit = put(s"monthly-contributor-sign-up-success")
 
-  private def put(metricName: String): Unit = {
-    put(metricName, 1)
-  }
+  private def put(metricName: String): Unit = put(metricName, 1)
 
 }

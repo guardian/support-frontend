@@ -7,6 +7,7 @@ import com.amazonaws.regions.Regions.EU_WEST_1
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClient, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import com.gu.aws.CredentialsProvider
+import com.gu.config.Configuration
 import com.gu.monitoring.CloudWatch.cloudwatch
 import com.typesafe.scalalogging.LazyLogging
 
@@ -15,13 +16,8 @@ trait CloudWatch extends LazyLogging {
   val application = "SupportWorkers"
 
   //Common Dimensions
-  val stage: String
-
   val commonDimensions: Seq[Dimension] =
-    Seq(
-      new Dimension()
-        .withName("Stage").withValue(stage)
-    )
+    Seq(new Dimension().withName("Stage").withValue(Configuration.stage))
 
   val allDimensions: Seq[Dimension]
 
