@@ -6,6 +6,8 @@ organization := "com.gu"
 
 scalaVersion := "2.11.8"
 
+crossScalaVersions := Seq("2.12.2")
+
 scmInfo := Some(ScmInfo(
   url("https://github.com/guardian/support-internationalisation"),
   "scm:git:git@github.com:guardian/support-internationalisation.git"
