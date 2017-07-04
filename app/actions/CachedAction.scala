@@ -1,13 +1,11 @@
-package lib.actions
+package actions
 
-import org.joda.time.DateTime
-import play.api.mvc.{Action, ActionBuilder, AnyContent, Result}
-
-import scala.concurrent.Future
-import scala.concurrent.duration._
 import lib.httpheaders._
-import play.api.mvc.Request
-import scala.concurrent.ExecutionContext
+import org.joda.time.DateTime
+import play.api.mvc._
+
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 
 class CachedAction(actionBuilder: ActionBuilder[Request, AnyContent])(implicit val ec: ExecutionContext) {
 

@@ -1,12 +1,12 @@
 package wiring
 
+import actions.{ActionRefiners, CachedAction}
 import assets.AssetsResolver
 import config.Configuration
 import play.api.routing.Router
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
-import lib.actions.{ActionRefiners, CachedAction}
 import lib.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents

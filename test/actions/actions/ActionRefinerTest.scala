@@ -1,5 +1,6 @@
-package lib.actions
+package actions.actions
 
+import actions.ActionRefiners
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import org.scalatest.mockito.MockitoSugar._
 import org.scalatest.{MustMatchers, WordSpec}

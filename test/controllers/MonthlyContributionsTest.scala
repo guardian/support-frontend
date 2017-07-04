@@ -1,5 +1,7 @@
 package controllers
 
+import actions.ActionRefiners
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import cats.data.EitherT
@@ -16,7 +18,6 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import lib.actions.ActionRefiners
 import lib.stepfunctions.MonthlyContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._

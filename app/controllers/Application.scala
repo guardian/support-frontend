@@ -1,7 +1,7 @@
 package controllers
 
+import actions.{ActionRefiners, CachedAction}
 import assets.AssetsResolver
-import lib.actions.{ActionRefiners, CachedAction}
 import play.api.mvc._
 import services.IdentityService
 

@@ -1,4 +1,6 @@
-package lib.actions
+package actions.actions
+
+import actions.CachedAction
 
 import scala.concurrent.duration._
 import org.scalatest.{MustMatchers, WordSpec}
@@ -7,6 +9,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, Seconds}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CachedActionTest extends WordSpec with MustMatchers {

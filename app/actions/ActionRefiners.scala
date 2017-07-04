@@ -1,17 +1,15 @@
-package lib.actions
+package actions
 
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
+import com.netaporter.uri.dsl._
+import lib.httpheaders.CacheControl
+import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
-import lib.httpheaders.CacheControl
-import com.netaporter.uri.dsl._
-
-import scala.concurrent.Future
-import play.api.mvc.Results._
 import services.TestUserService
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object ActionRefiners {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]

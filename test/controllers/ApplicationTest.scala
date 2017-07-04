@@ -1,5 +1,6 @@
 package controllers
 
+import actions.{ActionRefiners, CachedAction}
 import org.scalatest.WordSpec
 import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
@@ -7,7 +8,6 @@ import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
-import lib.actions.{ActionRefiners, CachedAction}
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{IdentityService, TestUserService}
 

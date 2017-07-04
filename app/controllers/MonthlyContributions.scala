@@ -1,7 +1,7 @@
 package controllers
 
+import actions.ActionRefiners
 import assets.AssetsResolver
-import lib.actions.ActionRefiners
 import lib.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
 import play.api.mvc._
 import play.api.libs.circe.Circe
