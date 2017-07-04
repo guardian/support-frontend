@@ -7,8 +7,10 @@ import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
 import com.gu.support.workers.encoding.Wrapper.jsonEncoder
 import io.circe.syntax._
+
 object Fixtures {
-  def wrap(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
+  def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
+
   val userJson =
     s"""
       "user":{
@@ -87,16 +89,16 @@ object Fixtures {
 
   val thankYouEmailJson =
     s"""{
-        |  $requestIdJson,
-        |  $userJson,
-        |  "contribution": $contributionJson,
-        |  "paymentMethod": $payPalPaymentMethod,
-        |  "salesForceContact": {
-        |    "Id": "123",
-        |    "AccountId": "123"
-        |  },
-        |  "accountNumber": "123"
-        |}
+       |  $requestIdJson,
+       |  $userJson,
+       |  "contribution": $contributionJson,
+       |  "paymentMethod": $payPalPaymentMethod,
+       |  "salesForceContact": {
+       |    "Id": "123",
+       |    "AccountId": "123"
+       |  },
+       |  "accountNumber": "123"
+       |}
      """.stripMargin
 
   val updateMembersDataAPIJson =
