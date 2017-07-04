@@ -228,6 +228,14 @@
         color: gu-colour(neutral-1);
       }
 
+      .component-double-heading__subheading {
+        height: 24px;
+
+        @include mq($from: phablet) {
+          height: 32px;
+        }
+      }
+
       input:checked+label {
         background-color: gu-colour(neutral-1);
         color: #fff;
