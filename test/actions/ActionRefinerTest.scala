@@ -1,15 +1,13 @@
-package actions.actions
+package actions
 
-import actions.ActionRefiners
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import org.scalatest.mockito.MockitoSugar._
 import org.scalatest.{MustMatchers, WordSpec}
+import play.api.http.Status
 import play.api.mvc.Results._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.http.Status
 import services.TestUserService
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ActionRefinerTest extends WordSpec with MustMatchers {

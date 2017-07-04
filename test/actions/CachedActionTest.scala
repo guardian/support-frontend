@@ -1,20 +1,18 @@
-package actions.actions
+package actions
 
-import actions.CachedAction
-
-import scala.concurrent.duration._
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, Seconds}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Results.Ok
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.{DateTime, Seconds}
 
+import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CachedActionTest extends WordSpec with MustMatchers {
 
-  val cachedAction = new CachedAction()(global, stubControllerComponents().actionBuilder)
+  val cachedAction = new CachedAction(stubControllerComponents().actionBuilder)
 
   "with no arguments" should {
     "expire in 60 seconds" in {

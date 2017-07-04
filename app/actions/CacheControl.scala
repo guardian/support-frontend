@@ -1,8 +1,9 @@
-package lib.httpheaders
+package actions
 
 import org.joda.time.DateTime
 
 import scala.concurrent.duration._
+import HttpHeaders._
 
 object CacheControl {
 

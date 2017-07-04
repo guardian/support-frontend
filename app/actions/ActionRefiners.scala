@@ -3,7 +3,6 @@ package actions
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
 import com.netaporter.uri.dsl._
-import lib.httpheaders.CacheControl
 import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._

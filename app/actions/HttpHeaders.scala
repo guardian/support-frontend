@@ -1,9 +1,9 @@
-package lib
+package actions
 
-import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 
-package object httpheaders {
+object HttpHeaders {
 
   trait HttpHeader {
     def key: String

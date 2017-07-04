@@ -4,6 +4,7 @@ import actions.{ActionRefiners, CachedAction}
 import assets.AssetsResolver
 import config.Configuration
 import play.api.routing.Router
+import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
