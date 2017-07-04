@@ -1,4 +1,4 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import akka.actor.ActorSystem
 import cats.data.EitherT

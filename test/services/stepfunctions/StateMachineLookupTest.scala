@@ -1,11 +1,11 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import com.amazonaws.services.stepfunctions.model.StateMachineListItem
 import org.scalatest.{MustMatchers, WordSpec}
 import java.util.{Date, GregorianCalendar, UUID}
 
 import cats.syntax.either._
-import lib.stepfunctions.StateMachineErrors.NoStateMachineFound
+import services.stepfunctions.StateMachineErrors.NoStateMachineFound
 
 class StateMachineLookupTest extends WordSpec with MustMatchers {
 

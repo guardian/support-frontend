@@ -8,7 +8,7 @@ import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
-import lib.stepfunctions.MonthlyContributionsClient
+import services.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter

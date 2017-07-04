@@ -1,9 +1,9 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsAsync
 import com.amazonaws.services.stepfunctions.model.{ListStateMachinesRequest, ListStateMachinesResult, StateMachineListItem}
 import lib.aws.AwsAsync
-import lib.stepfunctions.StateMachineErrors.NoStateMachineFound
+import services.stepfunctions.StateMachineErrors.NoStateMachineFound
 
 import scala.concurrent.Future
 import scala.collection.JavaConversions._

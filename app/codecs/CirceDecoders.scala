@@ -8,7 +8,7 @@ import com.gu.support.workers.model.state.CreatePaymentMethodState
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import lib.stepfunctions.StripePaymentToken
+import services.stepfunctions.StripePaymentToken
 import shapeless.Lazy
 
 object CirceDecoders {

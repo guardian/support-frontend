@@ -1,4 +1,4 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import com.amazonaws.services.stepfunctions.model._

@@ -1,4 +1,4 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import akka.actor.ActorSystem
 import cats.data.EitherT
@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 import org.scalatest.{BeforeAndAfterAll, MustMatchers, WordSpec}
 
 import scala.concurrent.Future
-import lib.stepfunctions.StateMachineErrors.{Fail, RetryWithNewMachine}
+import services.stepfunctions.StateMachineErrors.{Fail, RetryWithNewMachine}
 import org.scalatest.concurrent.ScalaFutures
 import cats.implicits._
 
