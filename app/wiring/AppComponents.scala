@@ -4,7 +4,6 @@ import actions.{ActionRefiners, CachedAction}
 import assets.AssetsResolver
 import config.Configuration
 import play.api.routing.Router
-import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
@@ -54,7 +53,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
     new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
   )
 
-  override lazy val router: Router = new Routes(
+  override lazy val router: Router = new router.Routes(
     httpErrorHandler,
     applicationController,
     new controllers.Default,
