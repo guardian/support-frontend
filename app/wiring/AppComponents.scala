@@ -37,7 +37,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
     cc = controllerComponents
   )
 
-  implicit val cachedAction = new CachedAction()(implicitly[ExecutionContext], defaultActionBuilder)
+  implicit val cachedAction = new CachedAction(defaultActionBuilder)
   implicit val cc = controllerComponents
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
   implicit lazy val testUsers = new TestUserService(appConfig.identity.testUserSecret)

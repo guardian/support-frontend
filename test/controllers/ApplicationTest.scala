@@ -19,7 +19,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
 
   implicit val timeout = Timeout(2.seconds)
 
-  val cachedAction = new CachedAction()(global, stubControllerComponents().actionBuilder)
+  val cachedAction = new CachedAction(stubControllerComponents().actionBuilder)
 
   val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents())
 

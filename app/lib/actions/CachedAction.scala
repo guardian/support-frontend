@@ -9,7 +9,7 @@ import lib.httpheaders._
 import play.api.mvc.Request
 import scala.concurrent.ExecutionContext
 
-class CachedAction(implicit val ec: ExecutionContext, actionBuilder: ActionBuilder[Request, AnyContent]) {
+class CachedAction(actionBuilder: ActionBuilder[Request, AnyContent])(implicit val ec: ExecutionContext) {
 
   val defaultMaxAge = 1.minute
   val maximumBrowserAge = 1.minute
