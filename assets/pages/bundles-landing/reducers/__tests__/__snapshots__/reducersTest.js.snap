@@ -11,7 +11,7 @@ Object {
       },
       "recurring": Object {
         "userDefined": false,
-        "value": "5",
+        "value": "10",
       },
     },
     "error": null,

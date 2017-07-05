@@ -18,6 +18,7 @@ import lib.TestUsers
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
 import scala.concurrent.ExecutionContext
+import config.Stages
 
 trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
 
@@ -40,7 +41,8 @@ trait AppComponents extends PlayComponents with AhcWSComponents with AssetsCompo
 
   implicit val cachedAction = new CachedAction()(implicitly[ExecutionContext], defaultActionBuilder)
   implicit val cc = controllerComponents
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
+  implicit lazy val touchpointConfigProvider = appConfig.touchpointConfigProvider
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage)
   implicit lazy val testUsers = new TestUsers(appConfig.identity.testUserSecret)
 
   lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)

@@ -15,4 +15,9 @@ class Configuration {
   lazy val supportUrl = config.getString("support.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
+
+  lazy val touchpointConfigProvider = new TouchpointConfigProvider(
+    config.getConfig("touchpoint.backend.environments"),
+    stage
+  )
 }
