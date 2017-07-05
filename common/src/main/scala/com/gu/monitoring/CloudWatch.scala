@@ -16,11 +16,10 @@ class CloudWatch(metrics: Dimension*) extends LazyLogging {
 
   val application = "SupportWorkers"
 
-  //Common Dimensions
-  val commonDimensions: Seq[Dimension] =
-    Seq(new Dimension().withName("Stage").withValue(Configuration.stage))
+  //Stage Dimension
+  val stageDimension: Dimension = new Dimension().withName("Stage").withValue(Configuration.stage)
 
-  val allDimensions: Seq[Dimension] = commonDimensions ++ metrics
+  val allDimensions: Seq[Dimension] =  metrics :+ stageDimension
 
   def put(name: String, count: Double): Future[PutMetricDataResult] = {
     val metric =
