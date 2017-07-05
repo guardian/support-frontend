@@ -2,6 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -10,6 +11,7 @@ import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
@@ -17,10 +19,24 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def this() = this(ServiceProvider)
 
+  private def putMetric(paymentType: String) =
+    if (paymentType == "PayPal")
+      putCloudWatchMetrics("paypal")
+    else
+      putCloudWatchMetrics("stripe")
+
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
-    services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
-      SendThankYouEmailState(state.requestId, state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
-    }
+    for {
+      response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
+      _ <- putMetric(state.paymentMethod.`type`)
+    } yield SendThankYouEmailState(
+      state.requestId,
+      state.user,
+      state.contribution,
+      state.paymentMethod,
+      state.salesForceContact,
+      response.head.accountNumber
+    )
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
@@ -67,4 +83,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       )
     ))
   }
+
+  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
+    new RecurringContributionsMetrics(paymentMethod, "monthly")
+      .putZuoraAccountCreated().recover({ case _ => () })
 }
