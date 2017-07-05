@@ -5,7 +5,7 @@ import ProductDimensions._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
-class MembersDataAPIMetrics(val name: String) extends CloudWatch(productName(name)) {
+class MembersDataAPIMetrics(name: String) extends CloudWatch(productName(name)) {
 
   def putMembersDataAPIUpdated(): Future[Unit] = put(s"$name-members-data-api-updated")
 
