@@ -8,7 +8,7 @@ import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatc
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import com.gu.aws.CredentialsProvider
 import com.gu.config.Configuration
-import com.gu.monitoring.CloudWatch.cloudwatch
+import com.gu.monitoring.CloudWatch.client
 import com.typesafe.scalalogging.LazyLogging
 
 class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
@@ -46,13 +46,13 @@ class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
         .withNamespace(application)
         .withMetricData(metric)
 
-    cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
+    client.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 }
 
 object CloudWatch {
 
-  lazy val cloudwatch: AmazonCloudWatchAsync = AmazonCloudWatchAsyncClient.asyncBuilder
+  lazy val client: AmazonCloudWatchAsync = AmazonCloudWatchAsyncClient.asyncBuilder
     .withCredentials(CredentialsProvider)
     .withRegion(EU_WEST_1).build()
 }
