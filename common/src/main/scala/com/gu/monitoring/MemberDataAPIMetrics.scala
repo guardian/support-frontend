@@ -1,6 +1,6 @@
 package com.gu.monitoring
 
-import Metrics._
+import ProductDimensions._
 class MembersDataAPIMetrics(val name: String) extends CloudWatch(Seq(
   productName(name)
 )) {

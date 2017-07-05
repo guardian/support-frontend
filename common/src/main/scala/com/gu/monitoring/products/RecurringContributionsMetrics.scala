@@ -1,7 +1,7 @@
 package com.gu.monitoring.products
 
 import com.gu.monitoring._
-import Metrics._
+import ProductDimensions._
 class RecurringContributionsMetrics(
   val method: String,
   val period: String
