@@ -62,9 +62,7 @@ sources in (Compile,doc) := Seq.empty
 
 publishArtifact in (Compile, packageDoc) := false
 
-import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
-
-serverLoading in Debian := Some(Systemd)
+enablePlugins(SystemdPlugin)
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 
