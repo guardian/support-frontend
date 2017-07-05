@@ -10,7 +10,7 @@ import lib.CustomHttpErrorHandler
 import services.stepfunctions.MonthlyContributionsClient
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
-import play.api.mvc.EssentialFilter
+import play.api.mvc.{ControllerComponents, EssentialFilter}
 import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService, MembersDataService, TestUserService}
 import play.api.BuiltInComponentsFromContext
@@ -18,33 +18,47 @@ import controllers.AssetsComponents
 
 import scala.concurrent.ExecutionContext
 
-trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
+trait Services { self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents =>
 
-  implicit val implicitWsClient = wsClient
+  def appConfig: Configuration
+
+  implicit private val implicitWs = wsClient
+
+  implicit lazy val membersDataService = new MembersDataService(appConfig.membersDataServiceApiUrl)
+  implicit lazy val identityService: IdentityService = new IdentityService(appConfig.identity.apiUrl, appConfig.identity.apiClientToken)
+  lazy val authenticationService = new AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
+  implicit lazy val testUsers = new TestUserService(appConfig.identity.testUserSecret)
+}
+
+trait Controllers { self: AssetsComponents with Services with BuiltInComponentsFromContext =>
+
+  implicit val assetsResolver: AssetsResolver
+  implicit val actionRefiners: ActionRefiners
+  implicit val cc: ControllerComponents
+  implicit val cachedAction: CachedAction
+
+  lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
+  lazy val applicationController = new Application
+  lazy val monthlyContributionsController = new MonthlyContributions
+}
+
+trait AppComponents extends Controllers with PlayComponents with AhcWSComponents with AssetsComponents with Services { self: BuiltInComponentsFromContext =>
 
   val appConfig = new Configuration()
 
-  implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
-
-  implicit lazy val membersDataService = new MembersDataService(appConfig.membersDataServiceApiUrl)
-  implicit lazy val identityService = new IdentityService(appConfig.identity.apiUrl, appConfig.identity.apiClientToken)
+  implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)(executionContext)
 
   implicit lazy val actionRefiners = new ActionRefiners(
-    authenticatedIdUserProvider = new AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider,
+    authenticatedIdUserProvider = authenticationService,
     idWebAppUrl = appConfig.identity.webappUrl,
     supportUrl = appConfig.supportUrl,
     testUsers = testUsers,
     cc = controllerComponents
   )
 
-  implicit val cachedAction = new CachedAction(defaultActionBuilder)
+  implicit val cachedAction = new CachedAction(defaultActionBuilder)(executionContext)
   implicit val cc = controllerComponents
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
-  implicit lazy val testUsers = new TestUserService(appConfig.identity.testUserSecret)
-
-  lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
-  lazy val applicationController = new Application
-  lazy val monthlyContributionsController = new MonthlyContributions
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
 
