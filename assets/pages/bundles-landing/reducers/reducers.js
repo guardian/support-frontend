@@ -45,7 +45,7 @@ const initialContrib: ContribState = {
   error: null,
   amount: {
     recurring: {
-      value: '5',
+      value: '10',
       userDefined: false,
     },
     oneOff: {

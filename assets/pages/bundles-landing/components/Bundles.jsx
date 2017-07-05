@@ -132,6 +132,11 @@ const ctaLinks = {
   oneOff: 'https://contribute.theguardian.com/uk',
 };
 
+const contribSubheading = {
+  recurring: 'from £5/month',
+  oneOff: '',
+};
+
 const contribToggle = {
   name: 'contributions-period-toggle',
   radios: [
@@ -152,13 +157,14 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle 
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
+  const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 
   params.append(amountParam, contribAmount[contType].value);
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles.contrib, { ctaLink });
+  return Object.assign({}, bundles.contrib, { ctaLink, subheading });
 
 };
 
