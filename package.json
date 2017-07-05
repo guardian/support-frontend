@@ -42,7 +42,7 @@
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "raven-js": "^3.16.1",
     "react-redux": "^5.0.5",
-    "redux": "^3.6.0",
+    "redux": "^3.7.1",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "eslint-config-airbnb": "^15.0.2",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-import-resolver-webpack": "^0.8.3",
-    "eslint-plugin-flowtype": "^2.33.0",
+    "eslint-plugin-flowtype": "^2.34.1",
     "eslint-plugin-import": "^2.6.1",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
