@@ -24,14 +24,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     logger.debug(s"CreatePaymentMethod state: $state")
 
     val paymentMethod = state.paymentFields match {
-      case Left(stripe) => {
+      case Left(stripe) =>
         putCloudWatchMetrics("stripe")
         createStripePaymentMethod(stripe, services.stripeService)
-      }
-      case Right(payPal) => {
+      case Right(payPal) =>
         putCloudWatchMetrics("paypal")
         createPayPalPaymentMethod(payPal, services.payPalService)
-      }
     }
 
     paymentMethod.map(CreateSalesforceContactState(state.requestId, state.user, state.contribution, _))
