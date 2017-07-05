@@ -22,7 +22,7 @@ class UpdateMembersDataAPI(servicesProvider: ServiceProvider = ServiceProvider)
       .flatMap(_ => putCloudWatchMetrics)
   }
 
-  def putCloudWatchMetrics: Future[Unit] =
+  def putCloudWatchMetrics(): Future[Unit] =
     new MembersDataAPIMetrics("recurring-contribution")
       .putMembersDataAPIUpdated()
 }
