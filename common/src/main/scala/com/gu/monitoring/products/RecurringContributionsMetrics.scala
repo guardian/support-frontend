@@ -2,20 +2,24 @@ package com.gu.monitoring.products
 
 import com.gu.monitoring._
 import ProductDimensions._
+
+import scala.concurrent.Future
+
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class RecurringContributionsMetrics(
-  val method: String,
-  val period: String
-) extends CloudWatch(Seq(
+  method: String,
+  period: String
+) extends CloudWatch(
   productName("RecurringContributor"),
   paymentMethod(method),
   subscriptionPeriod(period)
-)) {
+) {
 
-  def putContributionSignUpStartProcess(): Unit = put(s"monthly-contributor-sign-up-start")
+  def putContributionSignUpStartProcess(): Future[Unit] = put(s"monthly-contributor-sign-up-start")
 
-  def putZuoraAccountCreated(): Unit = put(s"monthly-contributor-zuora-account-created")
+  def putZuoraAccountCreated(): Future[Unit] = put(s"monthly-contributor-zuora-account-created")
 
-  private def put(metricName: String): Unit = put(metricName, 1)
+  private def put(metricName: String): Future[Unit] = put(metricName, 1).map(_ => ())
 
 }
-

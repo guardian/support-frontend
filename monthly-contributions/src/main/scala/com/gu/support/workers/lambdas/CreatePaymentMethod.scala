@@ -23,17 +23,27 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
 
-    val paymentMethod = state.paymentFields match {
-      case Left(stripe) =>
-        putCloudWatchMetrics("stripe")
-        createStripePaymentMethod(stripe, services.stripeService)
-      case Right(payPal) =>
-        putCloudWatchMetrics("paypal")
-        createPayPalPaymentMethod(payPal, services.payPalService)
+    for {
+      paymentMethod <- createPaymentMethod(state.paymentFields, services)
+      _ <- putMetric(state.paymentFields)
+    } yield CreateSalesforceContactState(state.requestId, state.user, state.contribution, paymentMethod)
+
+  }
+
+  private def createPaymentMethod(
+    paymentType: Either[StripePaymentFields, PayPalPaymentFields],
+    services: Services
+  ) =
+    paymentType match {
+      case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
+      case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
     }
 
-    paymentMethod.map(CreateSalesforceContactState(state.requestId, state.user, state.contribution, _))
-  }
+  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
+    if (paymentType.isLeft)
+      putCloudWatchMetrics("stripe")
+    else
+      putCloudWatchMetrics("paypal")
 
   def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
     stripeService
@@ -49,8 +59,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
-  def putCloudWatchMetrics(paymentMethod: String): Unit =
+  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putContributionSignUpStartProcess()
+      .putContributionSignUpStartProcess().recover({ case _ => () })
 
 }

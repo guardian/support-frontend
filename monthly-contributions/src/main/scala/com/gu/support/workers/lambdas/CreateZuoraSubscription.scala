@@ -11,6 +11,7 @@ import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
@@ -18,14 +19,24 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def this() = this(ServiceProvider)
 
+  private def putMetric(paymentType: String) =
+    if (paymentType == "PayPal")
+      putCloudWatchMetrics("paypal")
+    else
+      putCloudWatchMetrics("stripe")
+
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
-    services.zuoraService.subscribe(buildSubscribeRequest(state)).map { response =>
-      state.paymentMethod.`type` match {
-        case "PayPal" => putCloudWatchMetrics("paypal")
-        case _ => putCloudWatchMetrics("stripe")
-      }
-      SendThankYouEmailState(state.requestId, state.user, state.contribution, state.paymentMethod, state.salesForceContact, response.head.accountNumber)
-    }
+    for {
+      response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
+      _ <- putMetric(state.paymentMethod.`type`)
+    } yield SendThankYouEmailState(
+      state.requestId,
+      state.user,
+      state.contribution,
+      state.paymentMethod,
+      state.salesForceContact,
+      response.head.accountNumber
+    )
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
@@ -73,7 +84,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     ))
   }
 
-  def putCloudWatchMetrics(paymentMethod: String): Unit =
+  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putZuoraAccountCreated()
+      .putZuoraAccountCreated().recover({ case _ => () })
 }

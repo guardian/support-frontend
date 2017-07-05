@@ -1,13 +1,15 @@
 package com.gu.monitoring
 
 import ProductDimensions._
-class MembersDataAPIMetrics(val name: String) extends CloudWatch(Seq(
-  productName(name)
-)) {
 
-  def putMembersDataAPIUpdated(): Unit = put(s"$name-members-data-api-updated")
+import scala.concurrent.ExecutionContext.Implicits.global
 
-  private def put(metricName: String): Unit = put(metricName, 1)
+import scala.concurrent.Future
+class MembersDataAPIMetrics(val name: String) extends CloudWatch(productName(name)) {
+
+  def putMembersDataAPIUpdated(): Future[Unit] = put(s"$name-members-data-api-updated")
+
+  private def put(metricName: String): Future[Unit] = put(metricName, 1).map(_ => ())
 
 }
 

@@ -1,17 +1,18 @@
 package com.gu.monitoring
 
-import java.util.concurrent.Future
-
-import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.Regions.EU_WEST_1
-import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClient, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
-import com.gu.aws.CredentialsProvider
+import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClient}
+import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.config.Configuration
 import com.gu.monitoring.CloudWatch.client
 import com.typesafe.scalalogging.LazyLogging
 
-class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.concurrent.Future
+
+class CloudWatch(metrics: Dimension*) extends LazyLogging {
 
   val application = "SupportWorkers"
 
@@ -20,17 +21,6 @@ class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
     Seq(new Dimension().withName("Stage").withValue(Configuration.stage))
 
   val allDimensions: Seq[Dimension] = commonDimensions ++ metrics
-
-  trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
-    def onError(exception: Exception) {
-      logger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
-    }
-    def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
-      logger.info("CloudWatch PutMetricDataRequest - success")
-    }
-  }
-
-  object LoggingAsyncHandler extends LoggingAsyncHandler
 
   def put(name: String, count: Double): Future[PutMetricDataResult] = {
     val metric =
@@ -45,7 +35,14 @@ class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
         .withNamespace(application)
         .withMetricData(metric)
 
-    client.putMetricDataAsync(request, LoggingAsyncHandler)
+    AwsAsync(client.putMetricDataAsync, request).map { response =>
+      logger.info("CloudWatch PutMetricDataRequest - success")
+      response
+    } recoverWith {
+      case exception =>
+        logger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
+        Future.failed(exception)
+    }
   }
 }
 
