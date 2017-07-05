@@ -41,7 +41,7 @@ export const setup = (
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
-    key: 'pk_test_Qm3CGRdrV4WfGYCpm0sftR0f',
+    key: window.guardian.stripeKey,
     image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
     currency: state.currency,

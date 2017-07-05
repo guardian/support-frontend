@@ -15,6 +15,8 @@ import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService, MembersDataService, TestUserService}
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
+import scala.concurrent.ExecutionContext
+import config.Stages
 
 import scala.concurrent.ExecutionContext
 
@@ -27,7 +29,8 @@ trait Services { self: BuiltInComponentsFromContext with AhcWSComponents with Pl
   implicit lazy val membersDataService = new MembersDataService(appConfig.membersDataServiceApiUrl)
   implicit lazy val identityService: IdentityService = new IdentityService(appConfig.identity.apiUrl, appConfig.identity.apiClientToken)
   lazy val authenticationService = new AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(appConfig.stage)
+  implicit lazy val touchpointConfigProvider = appConfig.touchpointConfigProvider
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage)
   implicit lazy val testUsers = new TestUserService(appConfig.identity.testUserSecret)
 }
 

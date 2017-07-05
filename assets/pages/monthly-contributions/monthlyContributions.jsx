@@ -10,7 +10,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
-import CheckoutSection from 'components/checkoutSection/checkoutSection';
+import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
@@ -44,26 +44,26 @@ const content = (
     <div className="gu-content">
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
-        <CheckoutSection className="monthly-contrib__header">
+        <InfoSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
           <Secure />
-        </CheckoutSection>
-        <CheckoutSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
+        </InfoSection>
+        <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
           <ContribAmount />
-        </CheckoutSection>
-        <CheckoutSection heading="Your details" className="monthly-contrib__your-details">
+        </InfoSection>
+        <InfoSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName />
           <NameForm />
-        </CheckoutSection>
-        <CheckoutSection heading="Payment methods" className="monthly-contrib__payment-methods">
+        </InfoSection>
+        <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethods />
-        </CheckoutSection>
-        <CheckoutSection className="monthly-contrib__payment-methods">
+        </InfoSection>
+        <InfoSection className="monthly-contrib__payment-methods">
           <TermsPrivacy
             termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
-        </CheckoutSection>
+        </InfoSection>
       </div>
       <SimpleFooter />
     </div>
