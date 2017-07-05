@@ -27,7 +27,6 @@ class CloudWatch(metrics: Seq[Dimension]) extends LazyLogging {
     }
     def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
       logger.info("CloudWatch PutMetricDataRequest - success")
-      CloudWatchHealth.hasPushedMetricSuccessfully = true
     }
   }
 
@@ -55,8 +54,4 @@ object CloudWatch {
   lazy val client: AmazonCloudWatchAsync = AmazonCloudWatchAsyncClient.asyncBuilder
     .withCredentials(CredentialsProvider)
     .withRegion(EU_WEST_1).build()
-}
-
-object CloudWatchHealth {
-  var hasPushedMetricSuccessfully = false
 }
