@@ -68,6 +68,7 @@ serverLoading in Debian := Some(Systemd)
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 
+packageName := "frontend"
 packageSummary := "Support Frontend Play App"
 packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
