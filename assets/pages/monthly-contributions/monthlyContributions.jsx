@@ -14,6 +14,7 @@ import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
+import TestUserBanner from 'components/testUserBanner/testUserBanner';
 
 import pageStartup from 'helpers/pageStartup';
 import getQueryParameter from 'helpers/url';
@@ -42,6 +43,7 @@ store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
 const content = (
   <Provider store={store}>
     <div className="gu-content">
+      <TestUserBanner />
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
         <InfoSection className="monthly-contrib__header">

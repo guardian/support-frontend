@@ -12,6 +12,7 @@ type User = {
   displayName: ?string,
   firstName: ?string,
   lastName: ?string,
+  isTestUser: ?string,
 };
 
 
@@ -22,11 +23,13 @@ const initialState: User = window.guardian && window.guardian.user ? {
   displayName: window.guardian.user.displayName,
   firstName: window.guardian.user.firstName,
   lastName: window.guardian.user.lastName,
+  isTestUser: window.guardian.user.isTestUser,
 } : {
   email: null,
   displayName: null,
   firstName: null,
   lastName: null,
+  isTestUser: null,
 };
 
 

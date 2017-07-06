@@ -6,6 +6,7 @@
   id: String,
   js: String,
   user: IdUser,
+  isTestUser: Boolean,
   stripeConfig: StripeConfig
 )(implicit assets: AssetsResolver)
 
@@ -17,9 +18,10 @@
             @user.publicFields.displayName.map { displayName =>
             displayName: "@displayName",
             }
+            isTestUser: @isTestUser,
             @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
-            firstName: "@firstName",
-            lastName: "@lastName",
+                firstName: "@firstName",
+                lastName: "@lastName",
             }
         };
         window.guardian.stripeKey = "@stripeConfig.publicKey";
