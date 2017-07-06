@@ -15,7 +15,7 @@ type PropTypes = {
 // ----- Component ----- //
 
 const TestUserBanner = (props: PropTypes) => {
-  const suffix = !props.isTestUser? '--disabled' : '';
+  const suffix = !props.isTestUser ? '--disabled' : '';
   const className = `component-test-user-banner${suffix}`;
 
   return (
@@ -24,7 +24,7 @@ const TestUserBanner = (props: PropTypes) => {
       with a valid Test Username.
     </div>
   );
-}
+};
 
 
 // ----- Map State/Props ----- //
