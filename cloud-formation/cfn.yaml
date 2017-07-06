@@ -30,11 +30,13 @@ Mappings:
       MinInstances: 1
       InstanceType: t2.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
     PROD:
       MaxInstances: 6
       MinInstances: 3
       InstanceType: t2.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
 Resources:
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -131,9 +133,7 @@ Resources:
               - Effect: Allow
                 Action:
                 - kms:Encrypt
-                Resource:
-                - arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
-                - arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
