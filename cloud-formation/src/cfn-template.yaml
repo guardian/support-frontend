@@ -16,7 +16,14 @@ Parameters:
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
-
+Mappings:
+  StageVariables:
+    CODE:
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+      EmailQueueARN: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+    PROD:
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+      EmailQueueARN: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
 Resources:
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -44,9 +51,7 @@ Resources:
               Action:
               - sqs:GetQueueUrl
               - sqs:SendMessage
-              Resource:
-              - arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
-              - arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+              Resource: !FindInMap [ StageVariables, !Ref Stage, EmailQueueARN ]
         - PolicyName: CloudWatchLogging
           PolicyDocument:
             Version: '2012-10-17'
@@ -57,6 +62,14 @@ Resources:
                 - logs:PutLogEvents
                 - logs:DescribeLogStreams
               Resource: arn:aws:logs:*:*:*
+        - PolicyName: KMSEncryption
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - kms:Encrypt
+                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
