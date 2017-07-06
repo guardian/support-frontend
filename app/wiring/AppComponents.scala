@@ -34,7 +34,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
     supportUrl = config.supportUrl,
     testUsers = testUsers
   )
-  
+
   implicit lazy val stateWrapper = new StateWrapper(Encryption.getProvider(config.aws))
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (config.stage == Stages.DEV) Stages.CODE else config.stage)
   implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)

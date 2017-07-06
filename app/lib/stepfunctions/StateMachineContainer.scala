@@ -19,7 +19,7 @@ object StateMachineContainer extends LazyLogging {
       case _: StateMachineDeletingException => RetryWithNewMachine.asLeft
       case _: ExecutionLimitExceededException => Fail.asLeft
       case _: ExecutionAlreadyExistsException => Fail.asLeft
-      case e: InvalidExecutionInputException => {logger.error(s"Invalid input for execution ${e.getErrorMessage}", e); Fail.asLeft}
+      case e: InvalidExecutionInputException => Fail.asLeft
       case _: InvalidNameException => Fail.asLeft
     }
   }
