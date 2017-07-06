@@ -57,6 +57,14 @@ Resources:
                 - logs:PutLogEvents
                 - logs:DescribeLogStreams
               Resource: arn:aws:logs:*:*:*
+        - PolicyName: KMSEncryption
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - kms:Encrypt
+                Resource: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
