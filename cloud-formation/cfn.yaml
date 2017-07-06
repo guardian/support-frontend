@@ -131,7 +131,9 @@ Resources:
               - Effect: Allow
                 Action:
                 - kms:Encrypt
-                Resource: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+                Resource:
+                - arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+                - arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
