@@ -8,7 +8,7 @@ import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
 import lib.actions.ActionRefiners
-import lib.stepfunctions.MonthlyContributionsClient
+import lib.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
@@ -35,6 +35,7 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
     testUsers = testUsers
   )
 
+  implicit lazy val stateWrapper = new StateWrapper(Encryption.getProvider(config.aws))
   implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (config.stage == Stages.DEV) Stages.CODE else config.stage)
   implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)
   implicit lazy val touchpointConfigProvider = config.touchpointConfigProvider
