@@ -17,16 +17,16 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-const onKeyPressHandler = (handler?: () => void): (event: Object) => void =>
-(event: Object) => {
-  // Check to see if space or enter were pressed
-  if (event.keyCode === 32 || event.keyCode === 13) {
-    event.preventDefault();
-    if (handler) {
+const onKeyPressHandler = (handler?: () => void = () => {}) =>
+  (event: Object) => {
+    const CarriageReturnCode = 13;
+    const SpaceCode = 32;
+
+    if ([CarriageReturnCode, SpaceCode].includes(event.keyCode)) {
+      event.preventDefault();
       handler();
     }
-  }
-};
+  };
 
 // ----- Component ----- //
 
