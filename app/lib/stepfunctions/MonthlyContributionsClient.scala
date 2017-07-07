@@ -6,15 +6,16 @@ import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.support.workers.model.state.{CreatePaymentMethodState, StepFunctionUserState}
 import config.Stage
 import MonthlyContributionsClient._
-import com.gu.support.workers.model.{Contribution, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.Decoder
 import codecs.CirceDecoders._
 import com.typesafe.scalalogging.LazyLogging
 import com.gu.i18n.Country
+import com.gu.support.workers.model.monthlyContributions.Contribution
+import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 
 object StripePaymentToken {
   implicit val decoder: Decoder[StripePaymentToken] = deriveDecoder
@@ -42,7 +43,7 @@ object MonthlyContributionsClient {
   case object StateMachineFailure extends MonthlyContributionError
 }
 
-class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) extends LazyLogging {
+class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem, stateWrapper: StateWrapper) extends LazyLogging {
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 

@@ -40,14 +40,16 @@ class MonthlyContributions(
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) => Redirect("/monthly-contributions/existing-contributor")
         case Some(false) | None =>
+          val isTestUser = testUsers.isTestUser(fullUser.publicFields.displayName)
           Ok(
             monthlyContributions(
               title = "Support the Guardian | Monthly Contributions",
               id = "monthly-contributions-page",
               js = "monthlyContributionsPage.js",
               user = fullUser,
+              isTestUser = isTestUser,
               stripeConfig = touchpointConfigProvider.getStripeConfig(
-                testUsers.isTestUser(fullUser.publicFields.displayName)
+                isTestUser
               )
             )
           )
