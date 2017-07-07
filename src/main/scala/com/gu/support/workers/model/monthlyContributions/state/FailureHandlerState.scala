@@ -8,7 +8,6 @@ import com.gu.support.workers.model.monthlyContributions.Contribution
 case class FailureHandlerState(
   requestId: UUID,
   user: User,
-  contribution: Contribution,
-  error: ErrorState
+  contribution: Contribution
 ) extends StepFunctionUserState
 
