@@ -40,6 +40,8 @@ case class CreateMonthlyContributorRequest(
 object MonthlyContributionsClient {
   sealed trait MonthlyContributionError
   case object StateMachineFailure extends MonthlyContributionError
+
+  def apply(stage: Stage)(implicit system: ActorSystem): MonthlyContributionsClient = new MonthlyContributionsClient(stage)
 }
 
 class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem) extends LazyLogging {
