@@ -4,6 +4,7 @@
 
 import React from 'react';
 import Svg from 'components/svg/svg';
+import { clickSubstitueKeyPressHandler } from 'helpers/utilities';
 
 
 // ----- Types ----- //
@@ -14,19 +15,6 @@ type PropTypes = {
   onClick?: () => void,
   tabIndex?: number,
 };
-
-// ----- Functions ----- //
-
-const clickSubstitueKeyPressHandler = (handler?: () => void = () => {}) =>
-  (event: Object) => {
-    const CarriageReturnCode = 13;
-    const SpaceCode = 32;
-
-    if (event.keyCode === CarriageReturnCode || event.keyCode === SpaceCode) {
-      event.preventDefault();
-      handler();
-    }
-  };
 
 // ----- Component ----- //
 
