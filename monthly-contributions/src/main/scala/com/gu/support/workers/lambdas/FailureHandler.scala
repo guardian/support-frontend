@@ -16,12 +16,7 @@ class FailureHandler(emailService: EmailService)
     with LazyLogging {
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
-  override protected def handlerFuture(state: FailureHandlerState, context: Context): Future[Unit] = {
-    logger.warn(s"FailureHandler called for error ${state.error.Error}")
-    sendEmail(state)
-  }
-
-  def sendEmail(state: FailureHandlerState): Future[Unit] = {
+  override protected def handlerFuture(state: FailureHandlerState, context: Context): Future[Unit] =
     emailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -30,5 +25,4 @@ class FailureHandler(emailService: EmailService)
       edition = state.user.country.alpha2,
       name = state.user.firstName
     )).map(_ => Unit)
-  }
 }
