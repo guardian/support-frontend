@@ -17,12 +17,12 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-const onKeyPressHandler = (handler?: () => void = () => {}) =>
+const clickSubstitueKeyPressHandler = (handler?: () => void = () => {}) =>
   (event: Object) => {
     const CarriageReturnCode = 13;
     const SpaceCode = 32;
 
-    if ([CarriageReturnCode, SpaceCode].includes(event.keyCode)) {
+    if (event.keyCode === CarriageReturnCode || event.keyCode === SpaceCode) {
       event.preventDefault();
       handler();
     }
@@ -32,7 +32,7 @@ const onKeyPressHandler = (handler?: () => void = () => {}) =>
 
 export default function CtaLink(props: PropTypes) {
   return (
-    <a className="component-cta-link" href={props.url} onClick={props.onClick} onKeyPress={onKeyPressHandler(props.onClick)} tabIndex={props.tabIndex}>
+    <a className="component-cta-link" href={props.url} onClick={props.onClick} onKeyPress={clickSubstitueKeyPressHandler(props.onClick)} tabIndex={props.tabIndex}>
       <span>{props.text}</span>
       <Svg svgName="arrow-right-straight" />
     </a>
