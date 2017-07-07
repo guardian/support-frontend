@@ -1,10 +1,11 @@
 package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.workers.model.{Contribution, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.{Decoder, Encoder, Json}
 import cats.implicits._
-import com.gu.support.workers.model.state.CreatePaymentMethodState
+import com.gu.support.workers.model.monthlyContributions.Contribution
+import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._

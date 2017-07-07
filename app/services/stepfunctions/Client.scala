@@ -1,16 +1,17 @@
 package services.stepfunctions
 
-import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
-import com.amazonaws.services.stepfunctions.model._
 import services.aws.AwsAsync
 import StateMachineContainer.{Response, convertErrors}
 import akka.actor.ActorSystem
-import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.amazonaws.regions.Regions
 import services.aws.CredentialsProvider
+import com.amazonaws.services.stepfunctions.model._
+import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
-import io.circe.syntax._
+import lib.stepfunctions.StateWrapper
+
+import scala.concurrent.ExecutionContext
 
 object Client {
   def apply(stateMachinePrefix: String, stage: String)(implicit system: ActorSystem): Client = {
@@ -35,9 +36,14 @@ class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineCon
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
   }
 
-  def triggerExecution[T](input: T)(implicit ec: ExecutionContext, encoder: Encoder[T]): Response[StateMachineExecution] = {
+  def triggerExecution[T](input: T)(
+    implicit
+    ec: ExecutionContext,
+    encoder: Encoder[T],
+    stateWrapper: StateWrapper
+  ): Response[StateMachineExecution] = {
     stateMachineWrapper
-      .map(machine => startExecution(machine.arn, input.asJson.noSpaces))
+      .map(machine => startExecution(machine.arn, stateWrapper.wrap(input)))
       .map(StateMachineExecution.fromStartExecution)
   }
 }

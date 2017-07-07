@@ -2,6 +2,7 @@ package config
 
 import com.typesafe.config.ConfigFactory
 import ConfigImplicits._
+import lib.aws.AwsConfig
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -11,6 +12,8 @@ class Configuration {
   lazy val sentryDsn = config.getOptionalString("sentry.dsn")
 
   lazy val identity = new Identity(config.getConfig("identity"))
+
+  lazy val aws = new AwsConfig(config.getConfig("aws"))
 
   lazy val supportUrl = config.getString("support.url")
 

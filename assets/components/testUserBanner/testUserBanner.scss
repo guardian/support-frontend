@@ -1,0 +1,15 @@
+.component-test-user-banner {
+  font-size: 24px;
+  padding: $gu-v-spacing / 2;
+  background-color: #e9e939;
+  text-align: center;
+  opacity: 0.8;
+
+  strong {
+    font-weight: 800;
+  }
+}
+
+.component-test-user-banner--disabled {
+  display: none;
+}

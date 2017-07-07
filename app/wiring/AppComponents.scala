@@ -8,6 +8,7 @@ import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
 import services.stepfunctions.MonthlyContributionsClient
+import lib.stepfunctions.{Encryption, StateWrapper}
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
@@ -27,6 +28,8 @@ trait Services {
   implicit lazy val identityService = IdentityService(appConfig.identity)
 
   implicit lazy val touchpointConfigProvider = appConfig.touchpointConfigProvider
+
+  implicit lazy val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws))
 
   implicit lazy val monthlyContributionsClient = {
     val monthlyContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
@@ -49,8 +52,9 @@ trait Controllers {
     testUsers = testUsers,
     cc = controllerComponents
   )
-  implicit private val cc = controllerComponents
+
   implicit private val cachedAction = new CachedAction(defaultActionBuilder)(executionContext)
+  implicit val cc = controllerComponents
 
   lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
   lazy val applicationController = new Application
@@ -84,5 +88,4 @@ trait AppComponents extends PlayComponents
     assetController
   )
 
-  appConfig.sentryDsn foreach { dsn => new SentryLogging(dsn, appConfig.stage) }
 }
