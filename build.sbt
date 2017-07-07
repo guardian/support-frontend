@@ -32,7 +32,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
 )
 
-val circeVersion = "0.7.0"
+val circeVersion = "0.8.0"
 
 resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
 
@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
   "org.mockito" % "mockito-core" % "2.7.22" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
   "com.amazonaws" % "aws-java-sdk-kms" % "1.11.128",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "com.typesafe.akka" %% "akka-agent" % "2.4.12",
@@ -53,9 +53,9 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-play-auth" % "1.3",
+  "com.gu.identity" %% "identity-play-auth" % "2.0",
   "com.gu" %% "identity-test-users" % "0.6",
-  "com.google.guava" % "guava" % "19.0",
+  "com.google.guava" % "guava" % "22.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   filters,
   ws
@@ -65,9 +65,7 @@ sources in(Compile, doc) := Seq.empty
 
 publishArtifact in(Compile, packageDoc) := false
 
-import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
-
-serverLoading in Debian := Systemd
+enablePlugins(SystemdPlugin)
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 

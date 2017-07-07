@@ -65,8 +65,8 @@ class IdentityService(idApiUrl: String, idApiClientToken: String)(implicit wsCli
   )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
     execute(
       wsClient.url(s"$idApiUrl/$endpoint")
-        .withHeaders(headers: _*)
-        .withQueryString(parameters: _*)
+        .withHttpHeaders(headers: _*)
+        .withQueryStringParameters(parameters: _*)
         .withRequestTimeout(1.second)
         .withMethod("GET")
     )(func)

@@ -3,7 +3,7 @@ package services
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
-import play.api.data.validation.ValidationError
+import play.api.libs.json.{JsonValidationError => PlayJsonValidationError}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.libs.json.{JsPath, JsValue, Json, Reads}
 import play.api.http.Status
@@ -31,7 +31,7 @@ object MembersDataService {
 
   object UserNotFound extends MembersDataServiceError
 
-  case class JsonValidationError(errors: Seq[(JsPath, Seq[ValidationError])]) extends MembersDataServiceError
+  case class JsonValidationError(errors: Seq[(JsPath, Seq[PlayJsonValidationError])]) extends MembersDataServiceError
 
   case class UnexpectedResponseStatus(statusCode: Int) extends MembersDataServiceError
 
@@ -51,7 +51,7 @@ class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsCl
   private def get[T](url: String)(implicit credentials: AccessCredentials.Cookies, reader: Reads[T]): EitherT[Future, MembersDataServiceError, T] = EitherT {
     wsClient
       .url(url)
-      .withHeaders("Cookie" -> credentials.cookies.map(c => s"${c.name}=${c.value}").mkString("; "))
+      .withHttpHeaders("Cookie" -> credentials.cookies.map(c => s"${c.name}=${c.value}").mkString("; "))
       .withRequestTimeout(1.second)
       .get()
       .map(responseAsJson[T])

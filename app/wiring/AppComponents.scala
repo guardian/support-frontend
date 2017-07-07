@@ -7,7 +7,7 @@ import router.Routes
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
-import lib.actions.ActionRefiners
+import lib.actions.{ActionRefiners, CachedAction}
 import lib.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
 import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -15,32 +15,38 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import services.{AuthenticationService, IdentityService, MembersDataService}
 import lib.TestUsers
+import play.api.BuiltInComponentsFromContext
+import controllers.AssetsComponents
+import scala.concurrent.ExecutionContext
 import config.Stages
 
-trait AppComponents extends PlayComponents with AhcWSComponents {
+trait AppComponents extends PlayComponents with AhcWSComponents with AssetsComponents { self: BuiltInComponentsFromContext =>
 
   implicit val implicitWsClient = wsClient
 
-  val config = new Configuration()
+  val appConfig = new Configuration()
 
   implicit lazy val assetsResolver = new AssetsResolver("/assets/", "assets.map", environment)
 
-  implicit lazy val membersDataService = new MembersDataService(config.membersDataServiceApiUrl)
-  implicit lazy val identityService = new IdentityService(config.identity.apiUrl, config.identity.apiClientToken)
+  implicit lazy val membersDataService = new MembersDataService(appConfig.membersDataServiceApiUrl)
+  implicit lazy val identityService = new IdentityService(appConfig.identity.apiUrl, appConfig.identity.apiClientToken)
 
   implicit lazy val actionRefiners = new ActionRefiners(
-    authenticatedIdUserProvider = new AuthenticationService(config.identity.keys).authenticatedIdUserProvider,
-    idWebAppUrl = config.identity.webappUrl,
-    supportUrl = config.supportUrl,
-    testUsers = testUsers
+    authenticatedIdUserProvider = new AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider,
+    idWebAppUrl = appConfig.identity.webappUrl,
+    supportUrl = appConfig.supportUrl,
+    testUsers = testUsers,
+    cc = controllerComponents
   )
 
-  implicit lazy val stateWrapper = new StateWrapper(Encryption.getProvider(config.aws))
-  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (config.stage == Stages.DEV) Stages.CODE else config.stage)
-  implicit lazy val testUsers = new TestUsers(config.identity.testUserSecret)
-  implicit lazy val touchpointConfigProvider = config.touchpointConfigProvider
+  implicit val cachedAction = new CachedAction()(implicitly[ExecutionContext], defaultActionBuilder)
+  implicit val cc = controllerComponents
+  implicit lazy val touchpointConfigProvider = appConfig.touchpointConfigProvider
+  implicit lazy val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws))
+  implicit lazy val monthlyContributionsClient = new MonthlyContributionsClient(if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage)
+  implicit lazy val testUsers = new TestUsers(appConfig.identity.testUserSecret)
 
-  lazy val assetController = new Assets(httpErrorHandler)
+  lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
   lazy val applicationController = new Application
   lazy val monthlyContributionsController = new MonthlyContributions
 
@@ -54,11 +60,9 @@ trait AppComponents extends PlayComponents with AhcWSComponents {
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     applicationController,
-    controllers.Default,
+    new controllers.Default,
     monthlyContributionsController,
-    assetController,
-    prefix = "/"
+    assetController
   )
 
-  config.sentryDsn foreach { dsn => new SentryLogging(dsn, config.stage) }
 }
