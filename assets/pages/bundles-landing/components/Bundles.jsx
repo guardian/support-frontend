@@ -16,20 +16,26 @@ import { trackEvent as trackEventGA } from 'helpers/ga';
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
-
+import getSubsLinks from '../helpers/subscriptionsLinks';
 
 import type { Contrib, Amounts } from '../reducers/reducers';
+import type { SubsUrls } from '../helpers/subscriptionsLinks';
 
 
 // ----- Types ----- //
 
+// Disabling the linter here because it's just buggy...
+/* eslint-disable react/no-unused-prop-types */
+
 type PropTypes = {
   contribType: Contrib,
-  contribAmount: Amounts, // eslint-disable-line react/no-unused-prop-types
-  intCmp: string, // eslint-disable-line react/no-unused-prop-types
+  contribAmount: Amounts,
+  intCmp: string,
   toggleContribType: (string) => void,
-  abTests: Participations, // eslint-disable-line react/no-unused-prop-types
+  abTests: Participations,
 };
+
+/* eslint-enable react/no-unused-prop-types */
 
 type ContribBundle = {
   heading: string,
@@ -55,14 +61,14 @@ type PaperBundle = {
   paperCtaText: string,
   paperDigCtaText: string,
   modifierClass: string,
-  paperDigCtaLink: string,
   paperCtaLink: string,
+  paperDigCtaLink: string,
 }
 
 type BundlesType = {
   contrib: ContribBundle,
   digital: DigitalBundle,
-  paper: PaperBundle
+  paper: PaperBundle,
 }
 
 
@@ -94,7 +100,7 @@ const digitalCopy: DigitalBundle = {
   ],
   ctaText: 'Start your 14 day trial',
   modifierClass: 'digital',
-  ctaLink: 'https://subscribe.theguardian.com/p/DXX83X',
+  ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
 
 const paperCopy: PaperBundle = {
@@ -116,9 +122,8 @@ const paperCopy: PaperBundle = {
   paperCtaText: 'Become a paper subscriber',
   paperDigCtaText: 'Become a paper+digital subscriber',
   modifierClass: 'paper',
-  ctaLink: '',
-  paperDigCtaLink: 'https://subscribe.theguardian.com/p/GXX83X',
-  paperCtaLink: 'https://subscribe.theguardian.com/p/GXX83P',
+  paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
+  paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
 };
 
 const bundles: BundlesType = {
@@ -130,6 +135,7 @@ const bundles: BundlesType = {
 const ctaLinks = {
   recurring: 'https://membership.theguardian.com/monthly-contribution',
   oneOff: 'https://contribute.theguardian.com/uk',
+  subs: 'https://subscribe.theguardian.com',
 };
 
 const contribSubheading = {
@@ -168,27 +174,18 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle 
 
 };
 
-const getPaperAttrs = ({ intCmp }): PaperBundle => {
+function getPaperAttrs(subsLinks: SubsUrls): PaperBundle {
 
-  const params = new URLSearchParams();
+  return Object.assign({}, bundles.paper, {
+    paperCtaLink: subsLinks.paper,
+    paperDigCtaLink: subsLinks.paperDig,
+  });
 
-  params.append('INTCMP', intCmp);
-  const paperCtaLink = `${bundles.paper.paperCtaLink}?${params.toString()}`;
-  const paperDigCtaLink = `${bundles.paper.paperDigCtaLink}?${params.toString()}`;
+}
 
-  return Object.assign({}, bundles.paper, { paperCtaLink, paperDigCtaLink });
-
-};
-
-const getDigitalAttrs = ({ intCmp }): DigitalBundle => {
-
-  const params = new URLSearchParams();
-  params.append('INTCMP', intCmp);
-  const ctaLink = `${bundles.digital.ctaLink}?${params.toString()}`;
-
-  return Object.assign({}, bundles.digital, { ctaLink });
-
-};
+function getDigitalAttrs(subsLinks: SubsUrls): DigitalBundle {
+  return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
+}
 
 // ----- A/B Test components ----- //
 
@@ -261,8 +258,9 @@ const getContributionComponent = (props: PropTypes,
 function Bundles(props: PropTypes) {
 
   const contribAttrs: ContribBundle = getContribAttrs(props);
-  const paperAttrs: PaperBundle = getPaperAttrs(props);
-  const digitalAttrs: DigitalBundle = getDigitalAttrs(props);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
+  const paperAttrs: PaperBundle = getPaperAttrs(subsLinks);
+  const digitalAttrs: DigitalBundle = getDigitalAttrs(subsLinks);
   const contributionComponent = getContributionComponent(props, contribAttrs);
 
   return (
