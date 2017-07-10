@@ -1,4 +1,4 @@
-package com.gu.zuora.model
+package com.gu.zuora.model.response
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}

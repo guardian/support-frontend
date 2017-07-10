@@ -4,6 +4,7 @@ import cats.syntax.either._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.zuora.model._
+import com.gu.zuora.model.response._
 import io.circe
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -25,6 +26,14 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
 
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber")
+
+  def getAccountIds(identityId: String): Future[QueryResponse] = {
+    val queryData = QueryData(s"select AccountNumber from account where IdentityId__c = '$identityId'")
+    post[QueryResponse](s"action/query", queryData.asJson)
+  }
+
+  def getSubscriptions(accountId: String): Future[SubscriptionsResponse] =
+    get[SubscriptionsResponse](s"subscriptions/accounts/$accountId")
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson)

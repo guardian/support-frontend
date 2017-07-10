@@ -12,7 +12,7 @@ import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
 import com.gu.zuora.ZuoraService
-import com.gu.zuora.model.ZuoraErrorResponse
+import com.gu.zuora.model.response.ZuoraErrorResponse
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.RecoverMethods
 

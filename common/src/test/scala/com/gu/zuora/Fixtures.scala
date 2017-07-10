@@ -8,7 +8,7 @@ import com.gu.zuora.model._
 import org.joda.time.LocalDate
 
 object Fixtures {
-  val accountNumber = "A00015760"
+  val accountNumber = "A00069567"
 
   val getAccountResponse =
     """
