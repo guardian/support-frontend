@@ -4,8 +4,7 @@ import java.nio.ByteBuffer
 
 import com.amazonaws.services.kms.AWSKMSClientBuilder
 import com.amazonaws.services.kms.model._
-import lib.aws.AwsConfig
-import services.aws.CredentialsProvider
+import services.aws.{AwsConfig, CredentialsProvider}
 
 object Encryption {
   def getProvider(config: AwsConfig): EncryptionProvider = {

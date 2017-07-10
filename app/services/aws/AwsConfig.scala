@@ -1,4 +1,4 @@
-package lib.aws
+package services.aws
 
 import com.typesafe.config.Config
 
