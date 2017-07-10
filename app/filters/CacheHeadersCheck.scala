@@ -5,7 +5,7 @@ import akka.stream.Materializer
 import play.api.mvc._
 import play.api.http.Status.{MOVED_PERMANENTLY, NOT_FOUND, OK}
 
-class CheckCacheHeadersFilter(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class CacheHeadersCheck(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   private val cacheableStatusCodes = Seq(OK, MOVED_PERMANENTLY, NOT_FOUND)
 

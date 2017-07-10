@@ -1,7 +1,7 @@
 package wiring
 
 import play.api.routing.Router
-import filters.CheckCacheHeadersFilter
+import filters.CacheHeadersCheck
 import lib.CustomHttpErrorHandler
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
@@ -21,7 +21,7 @@ trait AppComponents extends PlayComponents
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
-    new CheckCacheHeadersFilter(),
+    new CacheHeadersCheck(),
     new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
   )
 
