@@ -9,7 +9,6 @@ import services.aws.CredentialsProvider
 import com.amazonaws.services.stepfunctions.model._
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
-import lib.stepfunctions.StateWrapper
 
 import scala.concurrent.ExecutionContext
 

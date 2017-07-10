@@ -16,7 +16,6 @@ import com.typesafe.scalalogging.LazyLogging
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
-import lib.stepfunctions.StateWrapper
 
 object StripePaymentToken {
   implicit val decoder: Decoder[StripePaymentToken] = deriveDecoder

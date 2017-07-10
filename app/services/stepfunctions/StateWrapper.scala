@@ -1,4 +1,4 @@
-package lib.stepfunctions
+package services.stepfunctions
 
 import java.util.Base64
 
