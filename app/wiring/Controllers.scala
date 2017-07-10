@@ -1,13 +1,13 @@
 package wiring
 
-import controllers.{Application, Assets, MonthlyContributions}
+import controllers.{Application, MonthlyContributions}
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
 
 trait Controllers {
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets =>
 
-  lazy val assetController = new Assets(httpErrorHandler, assetsMetadata)
+  lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
 
   lazy val applicationController = new Application(
     actionRefiners,

@@ -15,7 +15,8 @@ trait AppComponents extends PlayComponents
     with Controllers
     with Services
     with ApplicationConfiguration
-    with ActionBuilders {
+    with ActionBuilders
+    with Assets {
   self: BuiltInComponentsFromContext =>
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
