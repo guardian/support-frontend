@@ -1,6 +1,6 @@
 package controllers
 
-import actions.ActionRefiners
+import actions.CustomActionBuilders
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -89,9 +89,9 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
-      private val loggedInActionRefiner = new ActionRefiners(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
+      private val loggedInActionRefiner = new CustomActionBuilders(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
 
-      val loggedOutActionRefiner = new ActionRefiners(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
+      val loggedOutActionRefiner = new CustomActionBuilders(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
 
       def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
         val membersDataService = mock[MembersDataService]
@@ -110,7 +110,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
       }
 
       def fakeRequestWith(
-        actionRefiner: ActionRefiners = loggedInActionRefiner,
+        actionRefiner: CustomActionBuilders = loggedInActionRefiner,
         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {

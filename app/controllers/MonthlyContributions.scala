@@ -1,6 +1,6 @@
 package controllers
 
-import actions.ActionRefiners
+import actions.CustomActionBuilders
 import assets.AssetsResolver
 import services.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
 import play.api.mvc._
@@ -22,7 +22,7 @@ import config.TouchpointConfigProvider
 class MonthlyContributions(
     client: MonthlyContributionsClient,
     val assets: AssetsResolver,
-    actionRefiners: ActionRefiners,
+    actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
     identityService: IdentityService,
     testUsers: TestUserService,

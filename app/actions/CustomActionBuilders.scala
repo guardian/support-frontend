@@ -10,11 +10,11 @@ import services.TestUserService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object ActionRefiners {
+object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
 }
 
-class ActionRefiners(
+class CustomActionBuilders(
     authenticatedIdUserProvider: Provider,
     idWebAppUrl: String,
     supportUrl: String,
@@ -22,7 +22,7 @@ class ActionRefiners(
     cc: ControllerComponents
 )(implicit private val ec: ExecutionContext) {
 
-  import ActionRefiners._
+  import CustomActionBuilders._
 
   private val idSkipConfirmation: (String, String) = "skipConfirmation" -> "true"
 

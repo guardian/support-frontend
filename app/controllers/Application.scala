@@ -1,6 +1,6 @@
 package controllers
 
-import actions.ActionRefiners
+import actions.CustomActionBuilders
 import assets.AssetsResolver
 import play.api.mvc._
 import services.IdentityService
@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 import cats.implicits._
 
 class Application(
-    actionRefiners: ActionRefiners,
+    actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents

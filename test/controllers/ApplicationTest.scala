@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{ActionRefiners, CachedAction}
+import actions.{CustomActionBuilders, CachedAction}
 import org.scalatest.WordSpec
 import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
@@ -21,7 +21,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
 
   val cachedAction = new CachedAction(stubControllerComponents().actionBuilder)
 
-  val actionRefiner = new ActionRefiners(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents())
+  val actionRefiner = new CustomActionBuilders(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents())
 
   "/healthcheck" should {
     "return healthy" in {
