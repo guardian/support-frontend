@@ -7,9 +7,8 @@ import play.api.routing.Router
 import controllers.{Application, Assets, MonthlyContributions}
 import filters.CheckCacheHeadersFilter
 import lib.CustomHttpErrorHandler
-import services.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
+import services.stepfunctions.{Encryption, MonthlyContributionsClient}
 import services.stepfunctions.StateWrapper
-import monitoring.SentryLogging
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter

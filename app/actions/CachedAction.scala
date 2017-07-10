@@ -1,6 +1,5 @@
 package actions
 
-import HttpHeaders._
 import org.joda.time.DateTime
 import play.api.mvc._
 
