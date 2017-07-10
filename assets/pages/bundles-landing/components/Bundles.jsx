@@ -198,7 +198,7 @@ const getControlVariant = (props: PropTypes, attrs: ContribBundle, onClick: () =
         checked={props.contribType}
       />
     </div>
-    <ContribAmounts />
+    <ContribAmounts onNumberInputKeyPress={onClick} />
     <CtaLink text={attrs.ctaText} onClick={onClick} />
   </Bundle>
 );
@@ -213,7 +213,7 @@ const getVariantA = (props: PropTypes, attrs: ContribBundle, onClick: () => void
         checked={props.contribType}
       />
     </div>
-    <ContribAmounts />
+    <ContribAmounts onNumberInputKeyPress={onClick} />
     <CtaLink text={attrs.ctaText} onClick={onClick} />
   </Bundle>
 );
