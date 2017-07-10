@@ -12,6 +12,7 @@ type PropTypes = {
   onInput: (string) => void,
   selected: ?boolean,
   placeholder: ?string,
+  onKeyPress: ?() => void,
 };
 
 
@@ -28,6 +29,7 @@ export default function NumberInput(props: PropTypes) {
       placeholder={props.placeholder}
       onFocus={e => props.onFocus(e.target.value || '')}
       onInput={e => props.onInput(e.target.value || '')}
+      onKeyPress={ props.onKeyPress }
     />
   );
 
@@ -39,4 +41,5 @@ export default function NumberInput(props: PropTypes) {
 NumberInput.defaultProps = {
   selected: false,
   placeholder: null,
+  onKeyPress: null,
 };
