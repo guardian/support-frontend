@@ -59,7 +59,10 @@ object Country {
     "Washington DC",
     "Wisconsin",
     "West Virginia",
-    "Wyoming"
+    "Wyoming",
+    "Armed Forces America",
+    "Armed Forces",
+    "Armed Forces Pacific"
   ))
 
   val Canada = Country("CA", "Canada", states = List(
