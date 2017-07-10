@@ -15,6 +15,7 @@ type PropTypes = {
   email: string,
   firstName: string,
   lastName: string,
+  error: ?string,
 };
 
 
@@ -24,8 +25,12 @@ function PaymentMethods(props: PropTypes) {
 
   let content = 'Please fill in all the fields above.';
 
-  if (props.firstName !== '' && props.lastName !== '') {
+  if (props.firstName !== '' && props.lastName !== '' && props.error === null) {
     content = <StripePopUpButton email={props.email} callback={postCheckout} />;
+  }
+
+  if (props.error !== null) {
+    content = 'There was an error processing your payment. Please try again later.';
   }
 
   return (
@@ -45,6 +50,7 @@ function mapStateToProps(state) {
     email: state.user.email,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
+    error: state.monthlyContrib.error,
   };
 
 }
