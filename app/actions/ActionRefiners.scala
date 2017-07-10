@@ -56,4 +56,6 @@ class ActionRefiners(
   val AuthenticatedAction = PrivateAction andThen authenticated()
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
+
+  val CachedAction = new CachedAction(cc.actionBuilder)
 }

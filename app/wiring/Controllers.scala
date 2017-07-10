@@ -13,8 +13,7 @@ trait Controllers {
     actionRefiners,
     assetsResolver,
     identityService,
-    controllerComponents,
-    cachedAction
+    controllerComponents
   )
 
   lazy val monthlyContributionsController = new MonthlyContributions(

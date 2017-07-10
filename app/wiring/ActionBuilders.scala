@@ -1,6 +1,6 @@
 package wiring
 
-import actions.{ActionRefiners, CachedAction}
+import actions.ActionRefiners
 import play.api.BuiltInComponentsFromContext
 
 trait ActionBuilders {
@@ -13,6 +13,4 @@ trait ActionBuilders {
     testUsers = testUsers,
     cc = controllerComponents
   )
-
-  implicit lazy val cachedAction = new CachedAction(defaultActionBuilder)(executionContext)
 }

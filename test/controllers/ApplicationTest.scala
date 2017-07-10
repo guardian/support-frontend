@@ -26,14 +26,14 @@ class ApplicationTest extends WordSpec with MustMatchers {
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), cachedAction
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents()
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), cachedAction
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents()
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("private")
     }
