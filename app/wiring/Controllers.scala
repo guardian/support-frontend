@@ -23,7 +23,7 @@ trait Controllers {
     membersDataService,
     identityService,
     testUsers,
-    touchpointConfigProvider,
+    appConfig.touchpointConfigProvider,
     controllerComponents
   )
 }

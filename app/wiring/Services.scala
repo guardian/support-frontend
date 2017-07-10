@@ -17,8 +17,6 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
-  lazy val touchpointConfigProvider = appConfig.touchpointConfigProvider
-
   lazy val monthlyContributionsClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws))
     val monthlyContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
