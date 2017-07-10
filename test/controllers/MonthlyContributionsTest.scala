@@ -116,11 +116,10 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
       ): Future[Result] = {
         val touchpointConfigProvider = mock[TouchpointConfigProvider]
         when(touchpointConfigProvider.getStripeConfig(any[Boolean])).thenReturn(StripeConfig("test-key"))
-        new MonthlyContributions()(
+        new MonthlyContributions(
           mock[MonthlyContributionsClient],
           assetResolver,
           actionRefiner,
-          global,
           membersDataService,
           identityService,
           testUsers,

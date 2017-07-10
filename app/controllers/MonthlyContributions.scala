@@ -20,19 +20,19 @@ import views.html.monthlyContributions
 import config.TouchpointConfigProvider
 
 class MonthlyContributions(
-    implicit
     client: MonthlyContributionsClient,
     val assets: AssetsResolver,
     actionRefiners: ActionRefiners,
-    exec: ExecutionContext,
     membersDataService: MembersDataService,
     identityService: IdentityService,
     testUsers: TestUserService,
     touchpointConfigProvider: TouchpointConfigProvider,
     components: ControllerComponents
-) extends AbstractController(components) with Circe with LazyLogging {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionRefiners._
+
+  implicit val ar = assets
 
   def displayForm: Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>

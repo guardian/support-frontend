@@ -9,17 +9,16 @@ import scala.concurrent.ExecutionContext
 import cats.implicits._
 
 class Application(
-    implicit
     actionRefiners: ActionRefiners,
     val assets: AssetsResolver,
     identityService: IdentityService,
-    ec: ExecutionContext,
     components: ControllerComponents,
     cachedAction: CachedAction
-) extends AbstractController(components) {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
+  implicit val ar = assets
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = cachedAction {
     Ok(views.html.react(title, id, js))
   }
