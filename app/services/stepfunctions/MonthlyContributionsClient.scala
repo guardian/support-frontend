@@ -42,10 +42,12 @@ object MonthlyContributionsClient {
   sealed trait MonthlyContributionError
   case object StateMachineFailure extends MonthlyContributionError
 
-  def apply(stage: Stage)(implicit system: ActorSystem, stateWrapper: StateWrapper): MonthlyContributionsClient = new MonthlyContributionsClient(stage)
+  def apply(stage: Stage, stateWrapper: StateWrapper)(implicit system: ActorSystem): MonthlyContributionsClient =
+    new MonthlyContributionsClient(stage, stateWrapper)
 }
 
-class MonthlyContributionsClient(stage: Stage)(implicit system: ActorSystem, stateWrapper: StateWrapper) extends LazyLogging {
+class MonthlyContributionsClient(stage: Stage, stateWrapper: StateWrapper)(implicit system: ActorSystem) extends LazyLogging {
+  private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
   private val underlying = Client("MonthlyContributions", stage.toString)
 
