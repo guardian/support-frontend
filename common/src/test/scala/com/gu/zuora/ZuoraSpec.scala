@@ -27,11 +27,11 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     uatService.getAccountIds("30000701").map {
       response =>
         logger.info(s"$response")
-        response.records.nonEmpty should be(true)
+        response.nonEmpty should be(true)
     }
   }
 
-  it should "retrieve subscriptions from and account id" in {
+  it should "retrieve subscriptions from an account id" in {
     uatService.getSubscriptions("A00069602").map {
       response =>
         logger.info(s"$response")
@@ -39,6 +39,15 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
         response.subscriptions.head.ratePlans.head.productRatePlanId should be (zuoraConfigProvider.get(true).productRatePlanId)
     }
   }
+
+//  it should "find out whether a user is a contributor" in {
+//    uatService.userIsContributor("30000701").map {
+//      response =>
+//        logger.info(s"$response")
+//        response.subscriptions.nonEmpty should be(true)
+//        response.subscriptions.head.ratePlans.head.productRatePlanId should be (zuoraConfigProvider.get(true).productRatePlanId)
+//    }
+//  }
 
   "Subscribe request" should "succeed" in {
     val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
