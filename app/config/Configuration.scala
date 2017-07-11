@@ -13,6 +13,8 @@ class Configuration {
 
   lazy val identity = new Identity(config.getConfig("identity"))
 
+  lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
+
   lazy val aws = new AwsConfig(config.getConfig("aws"))
 
   lazy val supportUrl = config.getString("support.url")

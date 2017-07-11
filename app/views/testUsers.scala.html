@@ -1,0 +1,22 @@
+@(
+        key: String
+)
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Test Users</title>
+    </head>
+    <body>
+        <h1>New Test User key: @key</h1>
+        Your user will be valid for the next 48H. When registering please populate the following fields with your new test user key.
+        <ul>
+            <li><strong>First Name:</strong> @key</li>
+            <li><strong>Username:</strong> @key</li>
+            <li><strong>Email:</strong> @{key}@@gu.com</li>
+        </ul>
+        <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+    </body>
+</html>
