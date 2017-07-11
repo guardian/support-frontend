@@ -2,7 +2,7 @@ package config
 
 import com.typesafe.config.ConfigFactory
 import ConfigImplicits._
-import lib.aws.AwsConfig
+import services.aws.AwsConfig
 
 class Configuration {
   val config = ConfigFactory.load()

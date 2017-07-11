@@ -1,5 +1,7 @@
 package controllers
 
+import actions.CustomActionBuilders
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import cats.data.EitherT
@@ -16,10 +18,8 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import lib.TestUsers
-import lib.actions.ActionRefiners
-import lib.stepfunctions.MonthlyContributionsClient
-import services.{IdentityService, MembersDataService}
+import services.stepfunctions.MonthlyContributionsClient
+import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import config.{StripeConfig, TouchpointConfigProvider}
 
@@ -79,7 +79,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       val authenticatedIdUser = AuthenticatedIdUser(credentials, IdMinimalUser("123", Some("test-user")))
 
-      private val testUsers = new TestUsers("test") {
+      private val testUsers = new TestUserService("test") {
         override def isTestUser(displayName: Option[String]): Boolean = displayName.exists(_.startsWith("test"))
       }
 
@@ -89,9 +89,9 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
-      private val loggedInActionRefiner = new ActionRefiners(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
+      private val loggedInActionRefiner = new CustomActionBuilders(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
 
-      val loggedOutActionRefiner = new ActionRefiners(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
+      val loggedOutActionRefiner = new CustomActionBuilders(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
 
       def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
         val membersDataService = mock[MembersDataService]
@@ -110,17 +110,16 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
       }
 
       def fakeRequestWith(
-        actionRefiner: ActionRefiners = loggedInActionRefiner,
+        actionRefiner: CustomActionBuilders = loggedInActionRefiner,
         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {
         val touchpointConfigProvider = mock[TouchpointConfigProvider]
         when(touchpointConfigProvider.getStripeConfig(any[Boolean])).thenReturn(StripeConfig("test-key"))
-        new MonthlyContributions()(
+        new MonthlyContributions(
           mock[MonthlyContributionsClient],
           assetResolver,
           actionRefiner,
-          global,
           membersDataService,
           identityService,
           testUsers,

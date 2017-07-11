@@ -1,8 +1,8 @@
 package controllers
 
+import actions.CustomActionBuilders
 import assets.AssetsResolver
-import lib.actions.ActionRefiners
-import lib.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
+import services.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
 import play.api.mvc._
 import play.api.libs.circe.Circe
 
@@ -10,30 +10,29 @@ import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
 import lib.PlayImplicits._
-import services.{IdentityService, MembersDataService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService.UserNotFound
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
-import lib.TestUsers
 
 import scala.concurrent.Future
 import views.html.monthlyContributions
 import config.TouchpointConfigProvider
 
 class MonthlyContributions(
-    implicit
     client: MonthlyContributionsClient,
     val assets: AssetsResolver,
-    actionRefiners: ActionRefiners,
-    exec: ExecutionContext,
+    actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
     identityService: IdentityService,
-    testUsers: TestUsers,
+    testUsers: TestUserService,
     touchpointConfigProvider: TouchpointConfigProvider,
     components: ControllerComponents
-) extends AbstractController(components) with Circe with LazyLogging {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionRefiners._
+
+  implicit val ar = assets
 
   def displayForm: Action[AnyContent] = AuthenticatedTestUserAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>

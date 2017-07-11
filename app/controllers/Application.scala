@@ -1,7 +1,7 @@
 package controllers
 
+import actions.CustomActionBuilders
 import assets.AssetsResolver
-import lib.actions.{ActionRefiners, CachedAction}
 import play.api.mvc._
 import services.IdentityService
 
@@ -9,18 +9,16 @@ import scala.concurrent.ExecutionContext
 import cats.implicits._
 
 class Application(
-    implicit
-    actionRefiners: ActionRefiners,
+    actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
     identityService: IdentityService,
-    ec: ExecutionContext,
-    components: ControllerComponents,
-    cachedAction: CachedAction
-) extends AbstractController(components) {
+    components: ControllerComponents
+)(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
-  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = cachedAction {
+  implicit val ar = assets
+  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction {
     Ok(views.html.react(title, id, js))
   }
 

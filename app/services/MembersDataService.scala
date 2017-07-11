@@ -39,6 +39,7 @@ object MembersDataService {
 
   case class WSClientError(e: Throwable) extends MembersDataServiceError
 
+  def apply(apiUrl: String)(implicit ec: ExecutionContext, wsClient: WSClient): MembersDataService = new MembersDataService(apiUrl)
 }
 
 class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsClient: WSClient) {

@@ -9,7 +9,10 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
+
 import com.google.common.net.InetAddresses
+import config.Identity
+
 import scala.util.Try
 
 object IdentityServiceEnrichers {
@@ -36,12 +39,18 @@ object IdentityServiceEnrichers {
   }
 }
 
-class IdentityService(idApiUrl: String, idApiClientToken: String)(implicit wsClient: WSClient) {
+object IdentityService {
+  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = new IdentityService(
+    apiUrl = config.apiUrl,
+    apiClientToken = config.apiClientToken
+  )
+}
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
 
   import IdentityServiceEnrichers._
 
   private def headers(request: RequestHeader): List[(String, String)] = List(
-    "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $idApiClientToken"),
+    "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
     "X-GU-ID-FOWARDED-SC-GU-U" -> request.cookies.get("SC_GU_U").map(_.value),
     "Authorization" -> request.headers.get("GU-IdentityToken")
   ).flattenValues
@@ -64,7 +73,7 @@ class IdentityService(idApiUrl: String, idApiClientToken: String)(implicit wsCli
     parameters: List[(String, String)]
   )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
     execute(
-      wsClient.url(s"$idApiUrl/$endpoint")
+      wsClient.url(s"$apiUrl/$endpoint")
         .withHttpHeaders(headers: _*)
         .withQueryStringParameters(parameters: _*)
         .withRequestTimeout(1.second)

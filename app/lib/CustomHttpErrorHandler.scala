@@ -1,6 +1,6 @@
 package lib
 
-import lib.httpheaders.CacheControl
+import actions.CacheControl
 import play.api.{Configuration, Environment, UsefulException}
 import play.api.http.DefaultHttpErrorHandler
 import play.api.routing.Router
