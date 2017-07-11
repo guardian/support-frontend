@@ -1,0 +1,32 @@
+.component-error-message {
+  border: none;
+  border-radius: 600px;
+  height: $gu-v-spacing * 5;
+  padding: 0 $gu-h-spacing;
+  color: #fff;
+  background-color: gu-colour(error);
+  position: relative;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 20px;
+
+  @include mq($from: mobileLandscape) {
+    height: $gu-v-spacing * 4;
+  }
+
+  @include mq($from: desktop) {
+    width: 404px;
+  }
+
+  span {
+    top: 25%;
+    position: absolute;
+
+    @include mq($until: mobileLandscape) {
+      top: 15%;
+    }
+
+  }
+}
