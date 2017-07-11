@@ -30,7 +30,7 @@ export function generateClassName(className: string, modifierClass: ?string): st
 
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
-export function clickSubstitueKeyPressHandler(handler?: () => void = () => {}) {
+export function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
   return (event: Object) => {
     const CarriageReturnCode = 13;
     const SpaceCode = 32;

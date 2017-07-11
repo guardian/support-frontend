@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Svg from 'components/svg/svg';
-import { clickSubstitueKeyPressHandler } from 'helpers/utilities';
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
 
 // ----- Types ----- //
@@ -20,7 +20,7 @@ type PropTypes = {
 
 export default function CtaLink(props: PropTypes) {
   return (
-    <a className="component-cta-link" href={props.url} onClick={props.onClick} onKeyPress={clickSubstitueKeyPressHandler(props.onClick)} tabIndex={props.tabIndex}>
+    <a className="component-cta-link" href={props.url} onClick={props.onClick} onKeyPress={clickSubstituteKeyPressHandler(props.onClick)} tabIndex={props.tabIndex}>
       <span>{props.text}</span>
       <Svg svgName="arrow-right-straight" />
     </a>

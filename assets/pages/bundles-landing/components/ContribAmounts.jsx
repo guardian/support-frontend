@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import {
   changeContribAmount,
   changeContribAmountRecurring,
@@ -79,6 +80,7 @@ type PropTypes = {
   predefinedRecurringAmount: (string) => void,
   predefinedOneOffAmount: (string) => void,
   userDefinedAmount: (string) => void,
+  onNumberInputKeyPress: () => void,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -128,7 +130,6 @@ function getAttrs(props: PropTypes) {
 // ----- Component ----- //
 
 function ContribAmounts(props: PropTypes) {
-
   const attrs = getAttrs(props);
   const className = `contrib-amounts contrib-amounts--${attrs.contribType}`;
 
@@ -145,6 +146,7 @@ function ContribAmounts(props: PropTypes) {
           onInput={props.userDefinedAmount}
           selected={attrs.selected}
           placeholder="Other amount (£)"
+          onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
         />
       </div>
       {errorMessage(props.contribError)}
