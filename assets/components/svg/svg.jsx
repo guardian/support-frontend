@@ -19,6 +19,7 @@ type svg = {
 
 const svgsCatalog: {
   'arrow-right-straight': svg,
+  'credit-card': svg,
   facebook: svg,
   'guardian-titlepiece': svg,
   lock: svg,
@@ -31,6 +32,15 @@ const svgsCatalog: {
     paths: [
       {
         d: 'M20 9.35l-9.08 8.54-.86-.81 6.54-7.31H0V8.12h16.6L10.06.81l.86-.81L20 8.51v.84z',
+        class: null,
+      },
+    ],
+  },
+  'credit-card': {
+    viewBox: '0 0 44 28.1',
+    paths: [
+      {
+        d: 'M0 10.1v15l3 3h38.1l2.9-3.2V10.1M44 6.1V3l-2.9-3H3L0 3v3.1',
         class: null,
       },
     ],
