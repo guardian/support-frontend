@@ -4,7 +4,7 @@ Internationalisation classes for use by the various supporter sites such as [mem
 Releasing to local repo
 ==================
 
-Run `sbt publishLocal`.
+Run `sbt +publishLocal`.
 
 
 Releasing to maven
