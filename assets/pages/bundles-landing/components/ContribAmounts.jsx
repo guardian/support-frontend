@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
-import { clickSubstitueKeyPressHandler } from 'helpers/utilities';
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import {
   changeContribAmount,
   changeContribAmountRecurring,
@@ -146,7 +146,7 @@ function ContribAmounts(props: PropTypes) {
           onInput={props.userDefinedAmount}
           selected={attrs.selected}
           placeholder="Other amount (£)"
-          onKeyPress={clickSubstitueKeyPressHandler(props.onNumberInputKeyPress)}
+          onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
         />
       </div>
       {errorMessage(props.contribError)}
