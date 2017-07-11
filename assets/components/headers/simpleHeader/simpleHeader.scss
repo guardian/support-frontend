@@ -1,8 +1,12 @@
 .component-simple-header {
 	background-color: gu-colour(guardian-brand);
 
-	.svg-guardian-titlepiece {
+	.component-simple-header__link {
 		float: right;
+		height: 100%;
+	}
+
+	.svg-guardian-titlepiece {
 		height: 100%;
 	}
 
