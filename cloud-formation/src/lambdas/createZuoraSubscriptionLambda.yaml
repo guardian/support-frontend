@@ -11,4 +11,4 @@ CreateZuoraSubscriptionLambda:
       S3Bucket: support-workers-dist
       S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
     Runtime: "java8"
-    Timeout: "60"
+    Timeout: "240"
