@@ -4,6 +4,7 @@ import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.okhttp.RequestRunners
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
+import com.gu.zuora.model.response.Subscription
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
@@ -40,11 +41,12 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  it should "find out whether a user is a contributor" in {
-    uatService.userIsContributor("30000701").map {
-      response : Boolean =>
+  it should "be able to find a monthly recurring subscription" in {
+    uatService.getMonthlyRecurringSubscription("30000701").map {
+      response : Option[Subscription] =>
         logger.info(s"$response")
-        response should be(true)
+        response.isDefined should be(true)
+        response.get.ratePlans.head.productName should be("Contributor")
     }
   }
 

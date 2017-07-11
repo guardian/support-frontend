@@ -7,6 +7,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
+import com.gu.zuora.model.response.{Subscription => SubscriptionResponse}
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -14,28 +15,37 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
+  extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
     with LazyLogging {
 
   def this() = this(ServiceProvider)
 
-  private def putMetric(paymentType: String) =
-    if (paymentType == "PayPal")
-      putCloudWatchMetrics("paypal")
-    else
-      putCloudWatchMetrics("stripe")
-
   override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
+    services.zuoraService.getMonthlyRecurringSubscription(state.user.id).flatMap {
+      case Some(sub) => skipSubscribe(state, sub)
+      case None => subscribe(state, services)
+    }
+
+  def skipSubscribe(state: CreateZuoraSubscriptionState, subscription: SubscriptionResponse): Future[SendThankYouEmailState] = {
+    logger.debug(s"Skipping subscribe for user ${state.user.id} because they are already a contributor " +
+      s"with account number ${subscription.accountNumber}")
+    Future.successful(getEmailState(state, subscription.accountNumber))
+  }
+
+  def subscribe(state: CreateZuoraSubscriptionState, services: Services): Future[SendThankYouEmailState] =
     for {
       response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
       _ <- putMetric(state.paymentMethod.`type`)
-    } yield SendThankYouEmailState(
+    } yield getEmailState(state, response.head.accountNumber)
+
+  private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
+    SendThankYouEmailState(
       state.requestId,
       state.user,
       state.contribution,
       state.paymentMethod,
       state.salesForceContact,
-      response.head.accountNumber
+      accountNumber
     )
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
@@ -83,6 +93,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       )
     ))
   }
+
+  private def putMetric(paymentType: String) =
+    if (paymentType == "PayPal")
+      putCloudWatchMetrics("paypal")
+    else
+      putCloudWatchMetrics("stripe")
 
   def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")

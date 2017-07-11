@@ -39,13 +39,11 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     post[List[SubscribeResponseAccount]](s"action/subscribe", subscribeRequest.asJson)
 
-  def userIsContributor(identityId: String): Future[Boolean] =
+  def getMonthlyRecurringSubscription(identityId: String): Future[Option[Subscription]] =
     for {
-      subs <- getAccountIds(identityId).flatMap(x => Future(x.map(getSubscriptions)))
-      flattened <- subs.combineAll
-      productRatePlanIds <- Future(flattened.flatMap(_.ratePlans.map(_.productRatePlanId)))
-    } yield productRatePlanIds.contains(config.productRatePlanId)
-
+      accountIds <- getAccountIds(identityId)
+      subscriptions <- accountIds.map(getSubscriptions).combineAll
+    } yield subscriptions.find(_.ratePlans.exists(_.productRatePlanId == config.productRatePlanId))
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
   //The Zuora api docs say that the subscribe action returns

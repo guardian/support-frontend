@@ -17,7 +17,7 @@ object RatePlan {
 
 case class SubscriptionsResponse(subscriptions: List[Subscription])
 
-case class Subscription(ratePlans: List[RatePlan])
+case class Subscription(accountNumber: String, ratePlans: List[RatePlan])
 
 case class RatePlan(productId: String, productName: String, productRatePlanId: String)
 
