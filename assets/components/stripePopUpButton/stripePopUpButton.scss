@@ -7,11 +7,27 @@
   border-radius: 600px;
   height: $gu-v-spacing * 4;
   background-color: gu-colour(neutral-1);
-  padding: 0 $gu-h-spacing;
+  padding-left: $gu-h-spacing;
   border: none;
   color: #fff;
   width: 100%;
+
+  @include mq($from: mobileMedium) {
+    width: 304px;
+  }
+
   cursor: pointer;
+
+  svg {
+    width: 24px;
+    fill: #fff;
+    vertical-align: middle;
+    margin-left: 50px;
+
+    @include mq($from:mobileMedium) {
+      margin-left: 55px;
+    }
+  }
 
   &:hover {
     background-color: #000;
