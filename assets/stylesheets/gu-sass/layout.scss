@@ -1,10 +1,6 @@
 // This file contains variable and classes definition related to the layout of
 // the project.
 
-html, body {
-  height: 100%;
-}
-
 // Spacing variables
 // h stands for horizontal
 // v stands for vertical
@@ -65,17 +61,13 @@ $gu-v-spacing: 12px;
 }
 
 .gu-content-wrapper {
-  height: 100%;
-
-  > div {
-    height: 100%;
-  }
 
   .gu-content {
     @supports (display: flex) {
       display: flex;
       flex-direction: column;
       flex: 1 0 auto;
+      min-height: 100vh;
 
       .gu-content-margin {
         flex: 1 0 auto;
