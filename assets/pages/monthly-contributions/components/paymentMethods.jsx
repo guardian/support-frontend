@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import postCheckout from '../helpers/ajax';
 
 
@@ -23,19 +24,19 @@ type PropTypes = {
 
 function PaymentMethods(props: PropTypes) {
 
-  let content = 'Please fill in all the fields above.';
-
-  if (props.firstName !== '' && props.lastName !== '' && props.error === null) {
-    content = <StripePopUpButton email={props.email} callback={postCheckout} />;
+  let errorMessage = '';
+  if ((props.firstName === '' || props.lastName === '') && props.error === null) {
+    errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
   }
 
   if (props.error !== null) {
-    content = 'There was an error processing your payment. Please try again later.';
+    errorMessage = <ErrorMessage message={'There was an error processing your payment. Please try again later.'} />;
   }
 
   return (
     <section className="payment-methods">
-      {content}
+      {errorMessage}
+      <StripePopUpButton email={props.email} callback={postCheckout} />
     </section>
   );
 
