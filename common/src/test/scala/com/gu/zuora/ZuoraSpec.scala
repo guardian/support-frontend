@@ -30,17 +30,21 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
+  it should "be resistant to 'ZOQL injection'" in {
+    a[NumberFormatException] should  be thrownBy uatService.getAccountIds("30000701' or status = 'Active")
+  }
+
   it should "retrieve subscriptions from an account id" in {
     uatService.getSubscriptions("A00069602").map {
       response =>
         response.nonEmpty should be(true)
-        response.head.ratePlans.head.productRatePlanId should be (zuoraConfigProvider.get(true).productRatePlanId)
+        response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).productRatePlanId)
     }
   }
 
   it should "be able to find a monthly recurring subscription" in {
     uatService.getMonthlyRecurringSubscription("30000701").map {
-      response : Option[Subscription] =>
+      response: Option[Subscription] =>
         response.isDefined should be(true)
         response.get.ratePlans.head.productName should be("Contributor")
     }
