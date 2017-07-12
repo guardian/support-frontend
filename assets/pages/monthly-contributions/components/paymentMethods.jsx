@@ -32,7 +32,7 @@ function PaymentMethods(props: PropTypes) {
   }
 
   if (props.error !== null) {
-    errorMessage = <ErrorMessage message={'There was an error processing your payment. Please try again later.'} />;
+    errorMessage = <ErrorMessage message={'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'} />;
   }
 
   return (
