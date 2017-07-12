@@ -25,8 +25,10 @@ type PropTypes = {
 function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
+  let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout} />;
   if ((props.firstName === '' || props.lastName === '') && props.error === null) {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
+    stripeButton = '';
   }
 
   if (props.error !== null) {
@@ -36,7 +38,7 @@ function PaymentMethods(props: PropTypes) {
   return (
     <section className="payment-methods">
       {errorMessage}
-      <StripePopUpButton email={props.email} callback={postCheckout} />
+      {stripeButton}
     </section>
   );
 
