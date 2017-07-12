@@ -2,7 +2,7 @@ package com.gu.zuora
 
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
-import com.gu.zuora.model._
+import com.gu.zuora.model.response._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe
 import io.circe.parser._
