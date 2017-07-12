@@ -1,5 +1,6 @@
 package controllers
 
+import actions.CacheControl
 import com.gu.googleauth.{GoogleAuthConfig, LoginSupport}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
@@ -17,7 +18,7 @@ class Login(
    */
   def login: Action[AnyContent] = Action { request =>
     val error = request.flash.get("error")
-    Ok(views.html.login(error))
+    Ok(views.html.login(error)).withHeaders(CacheControl.noCache)
   }
 
   /*
