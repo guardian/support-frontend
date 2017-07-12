@@ -2,27 +2,27 @@
   position: relative;
   border: none;
   border-radius: 600px;
-  height: $gu-v-spacing * 5;
+  height: 60px;
   padding: 0 $gu-h-spacing;
   color: #fff;
   background-color: gu-colour(error);
   font-family: $gu-sans-web;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 400;
   text-align: left;
   margin-bottom: 20px;
 
   @include mq($from: mobileLandscape) {
-    height: $gu-v-spacing * 4;
+    height: 32px;
   }
 
-  @include mq($from: desktop) {
+  @include mq($from: tablet) {
     width: 404px;
   }
 
   svg {
     position: absolute;
-    height: 18px;
+    height: 16px;
     fill: #fff;
     top: 50%;
     transform: translateY(-50%);
