@@ -18,7 +18,6 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   "ZuoraService" should "retrieve an account" in {
     uatService.getAccount(Fixtures.accountNumber).map {
       response =>
-        logger.info(s"$response")
         response.success should be(true)
         response.basicInfo.accountNumber should be(Fixtures.accountNumber)
     }
@@ -27,7 +26,6 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   it should "retrieve account ids from an Identity id" in {
     uatService.getAccountIds("30000701").map {
       response =>
-        logger.info(s"$response")
         response.nonEmpty should be(true)
     }
   }
@@ -35,7 +33,6 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   it should "retrieve subscriptions from an account id" in {
     uatService.getSubscriptions("A00069602").map {
       response =>
-        logger.info(s"$response")
         response.nonEmpty should be(true)
         response.head.ratePlans.head.productRatePlanId should be (zuoraConfigProvider.get(true).productRatePlanId)
     }
@@ -44,7 +41,6 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   it should "be able to find a monthly recurring subscription" in {
     uatService.getMonthlyRecurringSubscription("30000701").map {
       response : Option[Subscription] =>
-        logger.info(s"$response")
         response.isDefined should be(true)
         response.get.ratePlans.head.productName should be("Contributor")
     }
