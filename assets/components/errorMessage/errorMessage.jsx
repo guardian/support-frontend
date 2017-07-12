@@ -19,9 +19,7 @@ type PropTypes = {
 export default function ErrorMessage(props: PropTypes) {
   return (
     <div className="component-error-message">
-      <span>{props.message}</span>
+      <Svg svgName="exclamation" /><span>{props.message}</span>
     </div>
   );
 }
-
-
