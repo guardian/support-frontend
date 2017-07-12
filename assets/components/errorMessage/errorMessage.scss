@@ -1,11 +1,11 @@
 .component-error-message {
+  position: relative;
   border: none;
   border-radius: 600px;
   height: $gu-v-spacing * 5;
   padding: 0 $gu-h-spacing;
   color: #fff;
   background-color: gu-colour(error);
-  position: relative;
   font-family: $gu-sans-web;
   font-size: 14px;
   font-weight: bold;
@@ -21,25 +21,19 @@
   }
 
   svg {
-    top: 28%;
     position: absolute;
     height: 18px;
     fill: #fff;
+    top: 50%;
+    transform: translateY(-50%);
 
-    @include mq($from: mobileLandscape) {
-      top: 25%;
-    }
+
   }
 
   span {
     position: absolute;
-    top: 16%;
-    left: 15%;
-
-    @include mq($from: mobileLandscape) {
-      top: 25%;
-      left: 8%;
-    }
-
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10%;
   }
 }
