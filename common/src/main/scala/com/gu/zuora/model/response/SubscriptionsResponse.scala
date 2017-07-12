@@ -21,4 +21,3 @@ case class Subscription(accountNumber: String, ratePlans: List[RatePlan])
 
 case class RatePlan(productId: String, productName: String, productRatePlanId: String)
 
-

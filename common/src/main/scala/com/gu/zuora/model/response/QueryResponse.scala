@@ -11,6 +11,6 @@ object AccountRecord {
   implicit val codec: Codec[AccountRecord] = deriveCodec
 }
 
-case class QueryResponse(records : List[AccountRecord])
+case class QueryResponse(records: List[AccountRecord])
 
 case class AccountRecord(AccountNumber: String)

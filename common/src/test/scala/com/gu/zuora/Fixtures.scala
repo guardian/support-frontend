@@ -11,12 +11,12 @@ object Fixtures {
   val accountNumber = "A00069567"
 
   val getAccountResponse =
-    """
+    s"""
        {
          "basicInfo" : {
            "id" : "2c92c0f85bae511e015bcf31cde61532",
            "name" : "001g000001gPV73AAG",
-           "accountNumber" : "A00015760",
+           "accountNumber" : "$accountNumber",
            "notes" : null,
            "status" : "Active",
            "crmId" : "001g000001gPV73AAG",
