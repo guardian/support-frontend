@@ -20,6 +20,7 @@ type svg = {
 const svgsCatalog: {
   'arrow-right-straight': svg,
   'credit-card': svg,
+  'exclamation': svg,
   facebook: svg,
   'guardian-titlepiece': svg,
   lock: svg,
@@ -41,6 +42,15 @@ const svgsCatalog: {
     paths: [
       {
         d: 'M0 10.1v15l3 3h38.1l2.9-3.2V10.1M44 6.1V3l-2.9-3H3L0 3v3.1',
+        class: null,
+      },
+    ],
+  },
+  exclamation: {
+    viewBox: '0 0 2.2 8.9',
+    paths: [
+      {
+        d: 'M1.1 8.9C.5 8.9 0 8.4 0 7.8c0-.6.5-1.1 1.1-1.1.6 0 1.1.5 1.1 1.1 0 .6-.5 1.1-1.1 1.1zM.6 0h1.1l.4.4-.4 5.2H.6L.2.4.6 0z',
         class: null,
       },
     ],
