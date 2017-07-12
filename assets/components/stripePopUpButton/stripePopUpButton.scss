@@ -1,32 +1,30 @@
 .component-stripe-pop-up-button {
+  background-color: gu-colour(neutral-1);
+  border: none;
+  border-radius: 600px;
+  color: #fff;
+  cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
   font-size: 14px;
   font-weight: bold;
-  text-align: left;
-  border-radius: 600px;
   height: $gu-v-spacing * 4;
-  background-color: gu-colour(neutral-1);
   padding-left: $gu-h-spacing;
-  border: none;
-  color: #fff;
+  position: relative;
+  text-align: left;
   width: 100%;
 
   @include mq($from: mobileMedium) {
     width: 304px;
   }
 
-  cursor: pointer;
-
   svg {
     width: 24px;
     fill: #fff;
-    vertical-align: middle;
-    margin-left: 50px;
-
-    @include mq($from:mobileMedium) {
-      margin-left: 55px;
-    }
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   &:hover {
