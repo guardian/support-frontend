@@ -17,7 +17,7 @@ object CacheControl {
     "Surrogate-Control" -> standardDirectives(maxAge, 1.second max (maxAge / 10), defaultStaleIfErrors)
   }
 
-  val noCache: (String, String) = "Cache-Control" -> "private"
+  val noCache: (String, String) = "Cache-Control" -> "no-cache, private"
 
   private def standardDirectives(maxAge: FiniteDuration, staleWhileRevalidate: FiniteDuration, staleIfErrors: FiniteDuration) =
     s"max-age=${maxAge.toSeconds}, stale-while-revalidate=${staleWhileRevalidate.toSeconds}, stale-if-error=${staleIfErrors.toSeconds}"

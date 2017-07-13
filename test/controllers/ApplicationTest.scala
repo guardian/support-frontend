@@ -35,7 +35,7 @@ class ApplicationTest extends WordSpec with MustMatchers {
       val result = new Application(
         actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents()
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
-      header("Cache-Control", result) mustBe Some("private")
+      header("Cache-Control", result) mustBe Some("no-cache, private")
     }
   }
 }

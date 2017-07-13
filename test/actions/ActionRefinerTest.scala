@@ -22,7 +22,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers {
     "include Cache-control: private" in {
       val actionRefiner = new CustomActionBuilders(_ => None, "", "", mock[TestUserService], stubControllerComponents())
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
-      header("Cache-Control", result) mustBe Some("private")
+      header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
   }
@@ -54,13 +54,13 @@ class ActionRefinerTest extends WordSpec with MustMatchers {
     "return a private cache header if user is authenticated" in {
       val actionRefiner = new CustomActionBuilders(_ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents())
       val result = actionRefiner.AuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
-      header("Cache-Control", result) mustBe Some("private")
+      header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
     "return a private cache header if user is not authenticated" in {
       val actionRefiner = new CustomActionBuilders(_ => None, idApiUrl, supportUrl, mock[TestUserService], stubControllerComponents())
       val result = actionRefiner.AuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
-      header("Cache-Control", result) mustBe Some("private")
+      header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
   }
@@ -100,7 +100,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers {
     "return a private cache header if user is an authenticated test user" in {
       val actionRefiner = new CustomActionBuilders(_ => Some(testUser), "", "", testUsers, stubControllerComponents())
       val result = actionRefiner.AuthenticatedTestUserAction(Ok("authentication-test")).apply(fakeRequest)
-      header("Cache-Control", result) mustBe Some("private")
+      header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
   }
