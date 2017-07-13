@@ -15,26 +15,26 @@ type Csrf = {
 // ----- Setup ----- //
 
 const initialState: Csrf = window.guardian && window.guardian.csrf ? {
-    token: window.guardian.csrf.token,
+  token: window.guardian.csrf.token,
 } : {
-    token: null,
+  token: null,
 };
 
 
 // ----- Reducer ----- //
 
 export default function csrfReducer(
-    state: Csrf = initialState,
-    action: Action): Csrf {
+  state: Csrf = initialState,
+  action: Action): Csrf {
 
-    switch (action.type) {
+  switch (action.type) {
 
-        case 'SET_TOKEN':
-            return Object.assign({}, state, { token: action.name });
-        
-        default:
-            return state;
+    case 'SET_TOKEN':
+      return Object.assign({}, state, { token: action.name });
 
-    }
+    default:
+      return state;
+
+  }
 
 }

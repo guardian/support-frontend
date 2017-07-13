@@ -57,5 +57,5 @@ export default combineReducers({
   monthlyContrib,
   user,
   stripeCheckout,
-  csrf
+  csrf,
 });
