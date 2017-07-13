@@ -1,11 +1,13 @@
 package fixtures
 
 import play.api._
-import wiring.AppComponents
 import java.io.File
 
 import play.api.inject.DefaultApplicationLifecycle
+import play.api.mvc.EssentialFilter
+import play.api.routing.Router
 import play.core.DefaultWebCommands
+import play.filters.csrf.CSRFComponents
 
 trait TestCSRFComponents {
 
@@ -19,7 +21,11 @@ trait TestCSRFComponents {
       initialConfiguration = configuration,
       lifecycle = new DefaultApplicationLifecycle()
     )
-    new BuiltInComponentsFromContext(context) with AppComponents
+    new BuiltInComponentsFromContext(context) with CSRFComponents {
+      override def router: Router = ???
+
+      override def httpFilters: Seq[EssentialFilter] = ???
+    }
   }
 
   lazy val csrfConfig = appComponents.csrfConfig
