@@ -14,7 +14,7 @@ export default function SimpleHeader() {
   return (
     <header className="component-simple-header">
       <div className="component-simple-header__content gu-header-margin">
-        <a href="https://www.theguardian.com">
+        <a className="component-simple-header__link" href="https://www.theguardian.com">
           <Svg svgName="guardian-titlepiece" />
         </a>
       </div>

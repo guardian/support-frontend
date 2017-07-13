@@ -5,7 +5,7 @@
 import React from 'react';
 import Svg from 'components/svg/svg';
 import { generateClassName } from 'helpers/utilities';
-import { clickSubstitueKeyPressHandler } from 'helpers/utilities';
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
 // ----- Types ----- //
 
@@ -30,7 +30,7 @@ const CtaCircle = (props: PropTypes) => {
       className={className}
       onClick={props.onClick}
       href={props.url}
-      onKeyPress={clickSubstitueKeyPressHandler(props.onClick)}
+      onKeyPress={clickSubstituteKeyPressHandler(props.onClick)}
       tabIndex={props.tabIndex}
     >
 
