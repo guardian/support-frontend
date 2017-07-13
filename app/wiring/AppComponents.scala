@@ -27,7 +27,6 @@ trait AppComponents extends PlayComponents
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     new SetCookiesCheck(),
     securityHeadersFilter,
-    allowedHostsFilter,
     new CacheHeadersCheck(),
     new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
   )
