@@ -22,8 +22,9 @@ import services.stepfunctions.MonthlyContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import config.{StripeConfig, TouchpointConfigProvider}
+import fixtures.TestCSRFComponents
 
-class MonthlyContributionsTest extends WordSpec with MustMatchers {
+class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   "GET /monthly-contributors" should {
 
@@ -89,9 +90,27 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
-      private val loggedInActionRefiner = new CustomActionBuilders(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
+      private val loggedInActionRefiner = new CustomActionBuilders(
+        authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+        idWebAppUrl = "",
+        supportUrl = "",
+        testUsers = testUsers,
+        cc = stubControllerComponents(),
+        addToken = csrfAddToken,
+        checkToken = csrfCheck,
+        csrfConfig = csrfConfig
+      )
 
-      val loggedOutActionRefiner = new CustomActionBuilders(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
+      val loggedOutActionRefiner = new CustomActionBuilders(
+        authenticatedIdUserProvider = _ => None,
+        idWebAppUrl = "https://identity-url.local",
+        supportUrl = "",
+        testUsers = testUsers,
+        cc = stubControllerComponents(),
+        addToken = csrfAddToken,
+        checkToken = csrfCheck,
+        csrfConfig = csrfConfig
+      )
 
       def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
         val membersDataService = mock[MembersDataService]
