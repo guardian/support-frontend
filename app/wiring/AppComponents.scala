@@ -8,6 +8,7 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
+import play.filters.HttpFiltersComponents
 
 trait AppComponents extends PlayComponents
     with AhcWSComponents
@@ -16,7 +17,9 @@ trait AppComponents extends PlayComponents
     with Services
     with ApplicationConfiguration
     with ActionBuilders
-    with Assets {
+    with Assets
+    with GoogleAuth
+    with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
@@ -31,6 +34,8 @@ trait AppComponents extends PlayComponents
     applicationController,
     new controllers.Default,
     monthlyContributionsController,
+    loginController,
+    testUsersContoller,
     assetController
   )
 

@@ -13,5 +13,12 @@ GET /monthly-contributions/thankyou                controllers.Application.react
 GET /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /monthly-contributions/create                 controllers.MonthlyContributions.create
 
+GET /login                 controllers.Login.login
+GET /loginAction           controllers.Login.loginAction
+GET /oauth2callback        controllers.Login.oauth2Callback
+GET /logout                controllers.Login.logout
+
+GET /test-users            controllers.TestUsersManagement.createTestUser
+
 GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)
 GET /*file                      controllers.Assets.at(path="/public", file)
