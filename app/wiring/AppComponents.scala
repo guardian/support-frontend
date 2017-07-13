@@ -24,7 +24,7 @@ trait AppComponents extends PlayComponents
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
 
-  override lazy val httpFilters: Seq[EssentialFilter] = super.httpFilters ++ Seq(
+  override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     new CacheHeadersCheck(),
     new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
   )
