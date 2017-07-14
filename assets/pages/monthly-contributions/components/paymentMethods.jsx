@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
+import PaypalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import postCheckout from '../helpers/ajax';
 
@@ -26,6 +27,8 @@ function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout} />;
+  const payPalButton = <PaypalExpressButton />;
+
   if (props.firstName === '' || props.lastName === '') {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
@@ -37,6 +40,7 @@ function PaymentMethods(props: PropTypes) {
     <section className="payment-methods">
       {errorMessage}
       {stripeButton}
+      {payPalButton}
     </section>
   );
 
