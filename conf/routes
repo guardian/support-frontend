@@ -22,3 +22,9 @@ GET /test-users            controllers.TestUsersManagement.createTestUser
 
 GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)
 GET /*file                      controllers.Assets.at(path="/public", file)
+
+# Paypal NVP endpoints.
+# POST           /payPal/setup-payment                  controllers.PayPal.setupPayment
+# POST           /payPal/create-agreement               controllers.PayPal.createAgreement
+# GET            /payPal/return                         controllers.PayPal.returnUrl
+# GET            /payPal/cancel                         controllers.PayPal.cancelUrl
