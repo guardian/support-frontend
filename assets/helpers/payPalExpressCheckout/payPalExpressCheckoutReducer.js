@@ -12,16 +12,18 @@ export type State = {
   amount: ?number,
   baId: ?string,
   currency: string,
+  billingPeriod: string,
 };
 
 
 // ----- Setup ----- //
 
 const initialState: State = {
-  loaded: false,
   amount: null,
-  token: null,
+  baid: null,
+  billingPeriod: 'monthly',
   currency: 'GBP',
+  loaded: false,
 };
 
 
