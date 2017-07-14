@@ -69,27 +69,18 @@ function setupPayment(dispatch, state: PaypalState) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
-    })
-      .then(handleSetupResponse)
-      .then(({token}) => {
-
+    }).then(handleSetupResponse)
+      .then(token => {
         if (token) {
           resolve(token);
         } else {
-          paypalError('PayPal token came back blank.');
+          dispatch(payPalExpressError('PayPal token came back blank.'));
         }
-
-      })
-      .catch(err => {
-
-        payment.fail({
-          type: 'PayPal',
-          code: 'PaymentError',
-          additional: err.message
-        });
+      }).catch(err => {
+        dispatch(payPalExpressError(err.message);
         reject(err);
-
-      });
+      })
+    });
   };
 }
 
