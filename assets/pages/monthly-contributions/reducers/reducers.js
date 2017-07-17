@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import user from 'helpers/user/userReducer';
+import csrf from 'helpers/csrf/csrfReducer';
 
 import type { Action } from '../actions/monthlyContributionsActions';
 
@@ -56,4 +57,5 @@ export default combineReducers({
   monthlyContrib,
   user,
   stripeCheckout,
+  csrf,
 });

@@ -48,7 +48,7 @@ function requestData(paymentToken: string, getState: Function) {
 
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
     credentials: 'same-origin',
     body: JSON.stringify(monthlyContribFields),
   };
