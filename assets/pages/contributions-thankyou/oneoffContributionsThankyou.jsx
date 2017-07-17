@@ -30,7 +30,8 @@ const content = (
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 className="thankyou__subheading">
             <p>
-              You have helped to make the Guardian&#39;s future more secure
+              You&#39;ve made a vital contribution that will help us maintain
+              our independent, investigative journalism
             </p>
           </h2>
           <CtaLink
