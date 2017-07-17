@@ -21,6 +21,8 @@ class Configuration {
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
+  lazy val payPal = PayPalConfig.fromConfig(config)
+
   lazy val touchpointConfigProvider = new TouchpointConfigProvider(
     config.getConfig("touchpoint.backend.environments"),
     stage

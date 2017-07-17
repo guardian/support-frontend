@@ -1,6 +1,6 @@
 package wiring
 
-import controllers.{Application, AssetsComponents, MonthlyContributions, TestUsersManagement}
+import controllers._
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
@@ -23,6 +23,13 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.touchpointConfigProvider,
+    controllerComponents
+  )
+
+  lazy val payPalController = new PayPal(
+    actionRefiners,
+    assetsResolver,
+    payPalService,
     controllerComponents
   )
 

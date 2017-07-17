@@ -21,10 +21,10 @@ GET  /logout                   controllers.Login.logout
 GET  /test-users               controllers.TestUsersManagement.createTestUser
 
 # Paypal NVP endpoints.
-#POST /payPal/setup-payment     controllers.PayPal.setupPayment
-#POST /payPal/create-agreement  controllers.PayPal.createAgreement
-GET  /payPal/return            controllers.Application.reactTemplate(title="Support the Guardian | PayPal Error", id="paypal-error-page", js="payPalErrorPage.js")
-GET  /payPal/cancel            controllers.Application.reactTemplate(title="Support the Guardian | PayPal Error", id="paypal-error-page", js="payPalErrorPage.js")
+POST /paypal/setup-payment     controllers.PayPal.setupPayment
+POST /paypal/create-agreement  controllers.PayPal.createAgreement
+GET  /paypal/return            controllers.PayPal.returnUrl
+GET  /paypal/cancel            controllers.PayPal.cancelUrl
 
 # Assets
 GET  /assets/*file             controllers.Assets.at(path="/public/compiled-assets", file)

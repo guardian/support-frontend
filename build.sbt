@@ -58,6 +58,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "22.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.0",
+  "com.squareup.okhttp3" % "okhttp" % "3.4.1",
   filters,
   ws
 )

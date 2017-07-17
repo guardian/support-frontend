@@ -36,6 +36,7 @@ trait AppComponents extends PlayComponents
     monthlyContributionsController,
     loginController,
     testUsersContoller,
+    payPalController,
     assetController
   )
 

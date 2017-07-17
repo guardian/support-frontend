@@ -4,9 +4,11 @@ import assets.AssetsResolver
 import services.stepfunctions.{Encryption, MonthlyContributionsClient}
 import services.stepfunctions.StateWrapper
 import play.api.libs.ws.ahc.AhcWSComponents
-import services.{AuthenticationService, IdentityService, MembersDataService, TestUserService}
+import services._
 import play.api.BuiltInComponentsFromContext
 import config.Stages
+import lib.okhttp.RequestRunners
+import scala.concurrent.duration._
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -14,6 +16,8 @@ trait Services {
   implicit private val implicitWs = wsClient
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
+
+  lazy val payPalService = new PayPalService(appConfig.payPal, RequestRunners.configurableFutureRunner(30.seconds))
 
   lazy val identityService = IdentityService(appConfig.identity)
 
