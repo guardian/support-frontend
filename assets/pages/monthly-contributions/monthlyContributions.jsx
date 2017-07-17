@@ -15,12 +15,12 @@ import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
+import PaymentAmount from 'components/paymentAmount/paymentAmount';
 
 import pageStartup from 'helpers/pageStartup';
 import getQueryParameter from 'helpers/url';
 import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
-import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
 import { setContribAmount } from './actions/monthlyContributionsActions';
@@ -51,7 +51,7 @@ const content = (
           <Secure />
         </InfoSection>
         <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
-          <ContribAmount />
+          <PaymentAmount amount={store.getState().monthlyContrib.amount} />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName />
