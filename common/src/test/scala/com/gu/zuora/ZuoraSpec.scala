@@ -4,6 +4,7 @@ import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.okhttp.RequestRunners
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
+import com.gu.zuora.model.response.ZuoraErrorResponse
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
@@ -54,6 +55,16 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     zuoraService.subscribe(subscriptionRequest).map {
       response =>
         response.head.success should be(true)
+    }
+  }
+
+  it should "work for $USD contributions" in {
+    val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
+    zuoraService.subscribe(usSubscriptionRequest).map {
+      response =>
+        response.head.success should be(true)
+    }.recover {
+      case e: ZuoraErrorResponse => logger.error(s"Zuora error: $e", e); fail()
     }
   }
 }

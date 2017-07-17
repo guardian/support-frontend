@@ -19,7 +19,9 @@ object ZuoraErrorResponse {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse {
-  def asRetryException: RetryException = new RetryNone(cause = this) //This can be more sophisticated if we get category codes enabled (see error-handling.md)
+  def asRetryException: RetryException = new RetryNone(cause = this)
+
+  override def toString: String = this.errors.toString()
 }
 
 object BasicInfo {
