@@ -8,8 +8,8 @@ import services.touchpoint.TouchpointServiceProvider
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class PayPalServiceProvider(configProvider: PayPalConfigProvider)(implicit executionContext: ExecutionContext) extends
-  TouchpointServiceProvider[PayPalService, PayPalConfig](configProvider) {
+class PayPalServiceProvider(configProvider: PayPalConfigProvider)(implicit executionContext: ExecutionContext)
+    extends TouchpointServiceProvider[PayPalService, PayPalConfig](configProvider) {
   override protected def createService(config: PayPalConfig) =
     new PayPalService(config, RequestRunners.configurableFutureRunner(40.seconds))
 }
