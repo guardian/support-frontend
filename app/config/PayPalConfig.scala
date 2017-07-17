@@ -2,16 +2,8 @@ package config
 
 import com.typesafe.config.Config
 
-case class PayPalConfig(
-  payPalEnvironment: String,
-  NVPVersion: String,
-  url: String,
-  user: String,
-  password: String,
-  signature: String
-)
-
-object PayPalConfig {
+class PayPalConfigProvider(config: Config, defaultStage: Stage) extends
+  TouchpointConfigProvider[PayPalConfig](config, defaultStage) {
   def fromConfig(config: Config): PayPalConfig = {
     PayPalConfig(
       config.getString("paypal.paypal-environment"),
@@ -23,3 +15,12 @@ object PayPalConfig {
     )
   }
 }
+
+case class PayPalConfig(
+  payPalEnvironment: String,
+  NVPVersion: String,
+  url: String,
+  user: String,
+  password: String,
+  signature: String
+) extends TouchpointConfig

@@ -1,33 +1,25 @@
 package config
 
 import com.typesafe.config.Config
+import config.TouchPointEnvironments.{UAT, fromStage}
+import services.touchpoint.TouchpointService
 
-case class StripeConfig(publicKey: String)
+trait TouchpointConfig
 
-object StripeConfig {
+abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, defaultStage: Stage) {
 
-  def fromConfig(config: Config): StripeConfig = {
-    StripeConfig(config.getString("api.key.public"))
-  }
+  private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(fromStage(defaultStage)))
+  private lazy val uatConfig: T = fromConfig(getTouchpointBackend(UAT))
 
+  def get(isTestUser: Boolean = false): T =
+    if (isTestUser) uatConfig else defaultConfig
+
+  protected def fromConfig(config: Config): T
+
+  private def getTouchpointBackend(environment: TouchPointEnvironment) =
+    config.getConfig(s"${environment.toString}")
 }
 
-class TouchpointConfigProvider(config: Config, defaultStage: Stage) {
 
-  lazy val defaultStripeConfig = StripeConfig.fromConfig(
-    config.getConfig(s"${defaultStage.toString}.stripe")
-  )
 
-  lazy val uatStripeConfig = StripeConfig.fromConfig(
-    config.getConfig("UAT.stripe")
-  )
 
-  def getStripeConfig(isTestUser: Boolean): StripeConfig = {
-    if (isTestUser) {
-      uatStripeConfig
-    } else {
-      defaultStripeConfig
-    }
-  }
-
-}

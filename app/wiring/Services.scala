@@ -1,14 +1,12 @@
 package wiring
 
-import assets.AssetsResolver
-import services.stepfunctions.{Encryption, MonthlyContributionsClient}
-import services.stepfunctions.StateWrapper
+import config.Stages
+import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import play.api.BuiltInComponentsFromContext
-import config.Stages
-import lib.okhttp.RequestRunners
-import scala.concurrent.duration._
+import services.paypal.PayPalServiceProvider
+import services.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
+
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -17,7 +15,7 @@ trait Services {
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
 
-  lazy val payPalService = new PayPalService(appConfig.payPal, RequestRunners.configurableFutureRunner(30.seconds))
+  lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider)
 
   lazy val identityService = IdentityService(appConfig.identity)
 

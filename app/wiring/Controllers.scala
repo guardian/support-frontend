@@ -22,14 +22,15 @@ trait Controllers {
     membersDataService,
     identityService,
     testUsers,
-    appConfig.touchpointConfigProvider,
+    appConfig.stripeConfigProvider,
     controllerComponents
   )
 
   lazy val payPalController = new PayPal(
     actionRefiners,
     assetsResolver,
-    payPalService,
+    payPalServiceProvider,
+    testUsers,
     controllerComponents
   )
 

@@ -17,7 +17,7 @@ import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.Future
 import views.html.monthlyContributions
-import config.TouchpointConfigProvider
+import config.StripeConfigProvider
 
 class MonthlyContributions(
     client: MonthlyContributionsClient,
@@ -26,7 +26,7 @@ class MonthlyContributions(
     membersDataService: MembersDataService,
     identityService: IdentityService,
     testUsers: TestUserService,
-    touchpointConfigProvider: TouchpointConfigProvider,
+    stripeConfigProvider: StripeConfigProvider,
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
@@ -47,9 +47,7 @@ class MonthlyContributions(
               js = "monthlyContributionsPage.js",
               user = fullUser,
               isTestUser = isTestUser,
-              stripeConfig = touchpointConfigProvider.getStripeConfig(
-                isTestUser
-              )
+              stripeConfig = stripeConfigProvider.get(isTestUser)
             )
           )
       }

@@ -8,12 +8,13 @@ import config.PayPalConfig
 import lib.okhttp.RequestRunners.FutureHttpClient
 import okhttp3.{FormBody, Request, Response}
 import services.paypal.{PayPalBillingDetails, Token}
+import services.touchpoint.TouchpointService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends LazyLogging {
+class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends TouchpointService with LazyLogging {
 
   val config = apiConfig
   // The parameters sent with every NVP request.

@@ -2,24 +2,26 @@
 package controllers
 
 import actions.CustomActionBuilders
+import actions.CustomActionBuilders.AuthRequest
 import assets.AssetsResolver
 import com.typesafe.scalalogging.LazyLogging
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import play.api.mvc._
-import services.{IdentityService, PayPalService}
+import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
+import services.{PayPalService, TestUserService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
-import actions.CustomActionBuilders
-import services.paypal.{PayPalBillingDetails, Token}
 
 class PayPal(
-    actionBuilders: CustomActionBuilders,
-    val assets: AssetsResolver,
-    payPalService: PayPalService,
-    components: ControllerComponents
+  actionBuilders: CustomActionBuilders,
+  assets: AssetsResolver,
+  payPalServiceProvider: PayPalServiceProvider,
+  testUsers: TestUserService,
+  components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+
   import actionBuilders._
 
   // Json readers & writers.
@@ -27,7 +29,7 @@ class PayPal(
   implicit val readsBillingDetails = Json.reads[PayPalBillingDetails]
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = PrivateAction.async(parse.json[PayPalBillingDetails]) { implicit request =>
+  def setupPayment: Action[PayPalBillingDetails] = AuthenticatedAction.async(parse.json[PayPalBillingDetails]) { implicit request =>
     readRequestAndRunServiceCall(_.retrieveToken(
       returnUrl = routes.PayPal.returnUrl().absoluteURL(secure = true),
       cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
@@ -35,14 +37,14 @@ class PayPal(
   }
 
   // Creates a billing agreement using a payment token.
-  def createAgreement: Action[Token] = PrivateAction.async(parse.json[Token]) { implicit request =>
+  def createAgreement: Action[Token] = AuthenticatedAction.async(parse.json[Token]) { implicit request =>
     readRequestAndRunServiceCall(_.retrieveBaid)
   }
 
   //Takes a request with a body of type [T], then passes T to the payPal call 'exec' to retrieve a token and returns this as json
-  private def readRequestAndRunServiceCall[T](exec: (PayPalService) => ((T) => Future[String]))(implicit request: Request[T]) = {
+  private def readRequestAndRunServiceCall[T](exec: (PayPalService) => ((T) => Future[String]))(implicit request: AuthRequest[T]) = {
     for {
-      token <- exec(payPalService)(request.body)
+      token <- exec(payPalServiceProvider.forUser(testUsers.isTestUser))(request.body)
     } yield Ok(toJson(Token(token)))
   }
 
