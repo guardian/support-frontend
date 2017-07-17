@@ -13,6 +13,8 @@ type User = {
   firstName: ?string,
   lastName: ?string,
   isTestUser: ?string,
+  fullName?: string,
+  postcode?: string,
 };
 
 
@@ -46,6 +48,15 @@ export default function userReducer(
 
     case 'SET_LAST_NAME':
       return Object.assign({}, state, { lastName: action.name });
+
+    case 'SET_FULL_NAME':
+      return Object.assign({}, state, { fullName: action.name });
+
+    case 'SET_EMAIL':
+      return Object.assign({}, state, { email: action.email });
+
+    case 'SET_POSTCODE':
+      return Object.assign({}, state, { postcode: action.postcode });
 
     default:
       return state;
