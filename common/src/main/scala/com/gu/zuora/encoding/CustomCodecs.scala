@@ -56,7 +56,6 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
 
   implicit val codecUser: Codec[User] = deriveCodec
   implicit val codecContribution: Codec[Contribution] = deriveCodec
-  implicit val codecErrorState: Codec[ErrorState] = deriveCodec
 }
 
 trait HelperCodecs {
