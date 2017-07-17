@@ -15,11 +15,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class PayPal(
-  actionBuilders: CustomActionBuilders,
-  assets: AssetsResolver,
-  payPalServiceProvider: PayPalServiceProvider,
-  testUsers: TestUserService,
-  components: ControllerComponents
+    actionBuilders: CustomActionBuilders,
+    assets: AssetsResolver,
+    payPalServiceProvider: PayPalServiceProvider,
+    testUsers: TestUserService,
+    components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   import actionBuilders._

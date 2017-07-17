@@ -77,12 +77,11 @@ function setupPayment(dispatch, state: PaypalState) {
           dispatch(payPalExpressError('PayPal token came back blank.'));
         }
       }).catch(err => {
-        dispatch(payPalExpressError(err.message);
+        dispatch(payPalExpressError(err.message));
         reject(err);
       })
-    });
-  };
-}
+    }
+  }
 
 
 

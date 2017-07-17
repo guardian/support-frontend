@@ -20,6 +20,3 @@ abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, d
     config.getConfig(s"${environment.toString}")
 }
 
-
-
-

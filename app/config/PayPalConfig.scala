@@ -2,8 +2,7 @@ package config
 
 import com.typesafe.config.Config
 
-class PayPalConfigProvider(config: Config, defaultStage: Stage) extends
-  TouchpointConfigProvider[PayPalConfig](config, defaultStage) {
+class PayPalConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[PayPalConfig](config, defaultStage) {
   def fromConfig(config: Config): PayPalConfig = {
     PayPalConfig(
       config.getString("paypal.paypal-environment"),

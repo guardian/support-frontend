@@ -7,7 +7,6 @@ import services._
 import services.paypal.PayPalServiceProvider
 import services.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
 
-
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
 
