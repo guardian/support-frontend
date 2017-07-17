@@ -47,29 +47,41 @@ export function setPayPalExpressAmount(amount: number): Action {
 }
 
 export function payPalExpressError(message: string): Action {
-  return { type: 'PAYPAL_EXPRESS_ERROR', amount };
+  return { type: 'PAYPAL_EXPRESS_ERROR', message };
+}
+
+
+function handleSetupResponse(dispatch): Function {
+  return (response) => {
+    let resp = null;
+    if (response.status === 200) {
+      resp = response.json();
+    }
+
+    return resp;
+  };
 }
 
 
 // Sends request to server to setup payment, and returns Paypal token.
-function setupPayment(dispatch, state: PaypalState) {
+function setupPayment(dispatch, state: Object) {
 
   return (resolve, reject) => {
 
     const requestBody = {
-      amount: state.amount,
-      billingPeriod: state.billingPeriod,
-      currency: state.currency,
+      amount: state.payPalExpressCheckout.amount,
+      billingPeriod: state.payPalExpressCheckout.billingPeriod,
+      currency: state.payPalExpressCheckout.currency,
     };
 
-    const SETUP_PAYMENT_URL = '/payPal/setup-payment';
+    const SETUP_PAYMENT_URL = '/paypal/setup-payment';
 
     fetch(SETUP_PAYMENT_URL, {
       credentials: 'include',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
-    }).then(handleSetupResponse)
+    }).then(handleSetupResponse(dispatch))
       .then(token => {
         if (token) {
           resolve(token);
@@ -83,14 +95,9 @@ function setupPayment(dispatch, state: PaypalState) {
     }
   }
 
-
-
 export function setupPayPalExpressCheckout(callback: Function): Function {
 
   return (dispatch, getState) => {
-
-
-
     const onAuthorize = (data, actions) => {
       createAgreement(data).then(postForm)
         .catch(err => {
@@ -112,7 +119,7 @@ export function setupPayPalExpressCheckout(callback: Function): Function {
 
 function createAgreement(payPalData) {
 
-  const CREATE_AGREEMENT_URL = '/payPal/create-agreement';
+  const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
   return fetch(CREATE_AGREEMENT_URL, {
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
