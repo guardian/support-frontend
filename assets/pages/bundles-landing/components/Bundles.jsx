@@ -5,13 +5,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import type { Participations } from 'helpers/abtest';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
-import { trackOphan } from 'helpers/abtest';
-import { trackEvent as trackEventGA } from 'helpers/ga';
 
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
@@ -30,9 +27,9 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
+  contribError: string,
   intCmp: string,
   toggleContribType: (string) => void,
-  abTests: Participations,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -157,6 +154,7 @@ const contribToggle = {
   ],
 };
 
+
 // ----- Functions ----- //
 
 const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle => {
@@ -187,70 +185,27 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalBundle {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
-// ----- A/B Test components ----- //
+const getContributionComponent = (props: PropTypes, attrs: ContribBundle) => {
 
-const getControlVariant = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
-  <Bundle {...attrs}>
-    <div className="contrib-type">
-      <RadioToggle
-        {...contribToggle}
-        toggleAction={props.toggleContribType}
-        checked={props.contribType}
-      />
-    </div>
-    <ContribAmounts onNumberInputKeyPress={onClick} />
-    <CtaLink text={attrs.ctaText} onClick={onClick} />
-  </Bundle>
-);
+  const onClick = () => {
+    if (!props.contribError) {
+      window.location = attrs.ctaLink;
+    }
+  };
 
-const getVariantA = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
-  <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
-    <div className="contrib-type">
-      <p className="contrib-explainer">Every penny funds our fearless, quality journalism</p>
-      <RadioToggle
-        {...contribToggle}
-        toggleAction={props.toggleContribType}
-        checked={props.contribType}
-      />
-    </div>
-    <ContribAmounts onNumberInputKeyPress={onClick} />
-    <CtaLink text={attrs.ctaText} onClick={onClick} />
-  </Bundle>
-);
-
-const getContributionComponent = (props: PropTypes,
-                                  contribAttrs: ContribBundle) => {
-
-  const participation: Participations = props.abTests;
-  const variant = participation.SupportFrontEndContribution;
-  const onClick = (url: string, testVariant: string): (() => void) =>
-    () => {
-      // WARNING: Don't delete this check when removing the AB test!!!
-      if (!props.contribError) {
-        if (testVariant && testVariant !== 'notintest') {
-          trackOphan('SupportFrontEndContribution', testVariant, true);
-          trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
-        }
-        window.location = url;
-      }
-    };
-
-  let response = null;
-  switch (variant) {
-    case 'control' :
-      trackOphan('SupportFrontEndContribution', variant);
-      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-      break;
-
-    case 'variantA' :
-      trackOphan('SupportFrontEndContribution', variant);
-      response = getVariantA(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-      break;
-    default :
-      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-  }
-
-  return response;
+  return (
+    <Bundle {...attrs}>
+      <div className="contrib-type">
+        <RadioToggle
+          {...contribToggle}
+          toggleAction={props.toggleContribType}
+          checked={props.contribType}
+        />
+      </div>
+      <ContribAmounts onNumberInputKeyPress={onClick} />
+      <CtaLink text={attrs.ctaText} onClick={onClick} />
+    </Bundle>
+  );
 };
 
 // ----- Component ----- //
@@ -296,7 +251,6 @@ function mapStateToProps(state) {
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
-    abTests: state.abTests,
   };
 }
 
