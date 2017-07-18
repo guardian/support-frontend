@@ -1,6 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
@@ -17,14 +18,18 @@ import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
 
+
 // ----- Page Startup ----- //
 
 const participation = pageStartup.start();
 
+
 // ----- Redux Store ----- //
+
 const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+
 
 // ----- Render ----- //
 
