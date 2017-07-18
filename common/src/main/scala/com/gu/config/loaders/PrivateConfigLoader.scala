@@ -1,6 +1,6 @@
 package com.gu.config.loaders
 
-import com.gu.config.Stage
+import com.gu.support.config.Stage
 import com.typesafe.config.Config
 
 trait PrivateConfigLoader {

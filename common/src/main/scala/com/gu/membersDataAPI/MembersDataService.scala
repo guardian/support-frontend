@@ -1,17 +1,17 @@
 package com.gu.membersDataAPI
 
-import com.gu.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.support.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.typesafe.config.Config
 import io.circe.Json
 import okhttp3.Request
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 
 object MembersDataServiceConfig {
   def fromConfig(config: Config): MembersDataServiceConfig =
@@ -21,7 +21,7 @@ object MembersDataServiceConfig {
     )
 }
 
-class MembersDataServiceConfigProvider(defaultStage: Stage, config: Config) extends TouchpointConfigProvider[MembersDataServiceConfig](defaultStage, config) {
+class MembersDataServiceConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[MembersDataServiceConfig](config, defaultStage) {
   def fromConfig(config: com.typesafe.config.Config): MembersDataServiceConfig = MembersDataServiceConfig(
     url = config.getString("membersDataAPI.url"),
     apiKey = config.getString("membersDataAPI.apiKey")

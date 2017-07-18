@@ -2,8 +2,9 @@ package com.gu.paypal
 
 import java.util.NoSuchElementException
 
-import com.gu.config.{Configuration, Stages}
+import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.support.config.{PayPalConfig, Stages}
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
