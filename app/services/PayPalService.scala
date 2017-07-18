@@ -91,6 +91,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends T
     val paymentParams = Map(
       "METHOD" -> "SetExpressCheckout",
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
+      "L_PAYMENTREQUEST_0_NAME0" -> "Guardian Recurring Contribution",
       "L_PAYMENTREQUEST_0_DESC0" -> s"You have chosen the ${billingDetails.billingPeriod} payment option",
       "L_PAYMENTREQUEST_0_AMT0" -> s"${billingDetails.amount}",
       "PAYMENTREQUEST_0_AMT" -> s"${billingDetails.amount}",
