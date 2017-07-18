@@ -4,7 +4,6 @@ GET /healthcheck                controllers.Application.healthcheck
 
 
 # ----- Pages ----- #
-
 GET /uk                        controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /                          controllers.Default.redirect(to = "/uk")
 
@@ -12,6 +11,8 @@ GET  /monthly-contributions                         controllers.MonthlyContribut
 GET  /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
 GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /monthly-contributions/create                  controllers.MonthlyContributions.create
+
+GET /oneoff-contributions/thankyou                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 
 GET  /login                    controllers.Login.login
 GET  /loginAction              controllers.Login.loginAction

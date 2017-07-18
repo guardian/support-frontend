@@ -6,6 +6,7 @@ import com.netaporter.uri.dsl._
 import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
+import play.filters.csrf._
 import services.TestUserService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -19,7 +20,10 @@ class CustomActionBuilders(
     idWebAppUrl: String,
     supportUrl: String,
     testUsers: TestUserService,
-    cc: ControllerComponents
+    cc: ControllerComponents,
+    addToken: CSRFAddToken,
+    checkToken: CSRFCheck,
+    csrfConfig: CSRFConfig
 )(implicit private val ec: ExecutionContext) {
 
   import CustomActionBuilders._
@@ -33,14 +37,6 @@ class CustomActionBuilders(
 
   private val chooseRegister = (request: RequestHeader) => SeeOther(idWebAppRegisterUrl(request.uri))
 
-  private def resultModifier(f: Result => Result): ActionBuilder[Request, AnyContent] = new ActionBuilder[Request, AnyContent] {
-    def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = block(request).map(f)
-
-    override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
-
-    override protected def executionContext: ExecutionContext = cc.executionContext
-  }
-
   private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest, AnyContent] =
     new AuthenticatedBuilder(authenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
 
@@ -51,7 +47,16 @@ class CustomActionBuilders(
       onUnauthorized = onUnauthenticated
     )
 
-  val PrivateAction = resultModifier(_.withHeaders(CacheControl.noCache))
+  val PrivateAction = new ActionBuilder[Request, AnyContent] {
+
+    override def composeAction[A](action: Action[A]) = new CSRFAction(action, csrfConfig, addToken, checkToken)
+
+    override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = block(request).map(_.withHeaders(CacheControl.noCache))
+
+    override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
+
+    override protected def executionContext: ExecutionContext = cc.executionContext
+  }
 
   val AuthenticatedAction = PrivateAction andThen authenticated()
 

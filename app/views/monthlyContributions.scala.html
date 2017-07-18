@@ -2,6 +2,8 @@
 @import com.gu.identity.play.IdUser
 @import config.StripeConfig
 @import config.PayPalConfig
+@import helper.CSRF
+
 @(
   title: String,
   id: String,
@@ -11,7 +13,7 @@
   payPalButton: Boolean,
   stripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
-)(implicit assets: AssetsResolver)
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">
@@ -30,7 +32,7 @@
         window.guardian.payPalButton = @payPalButton;
         window.guardian.stripeKey = "@stripeConfig.publicKey";
         window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
-
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>
     <script type="text/javascript" src="@assets(js)"></script>
 }

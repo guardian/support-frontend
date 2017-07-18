@@ -21,9 +21,10 @@ import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUs
 import services.stepfunctions.MonthlyContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
-import config.{StripeConfig, StripeConfigProvider, TouchpointConfigProvider}
+import config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
+import fixtures.TestCSRFComponents
 
-class MonthlyContributionsTest extends WordSpec with MustMatchers {
+class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   "GET /monthly-contributors" should {
 
@@ -89,9 +90,27 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
 
       private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
-      private val loggedInActionRefiner = new CustomActionBuilders(_ => Some(authenticatedIdUser), "", "", testUsers, stubControllerComponents())
+      private val loggedInActionRefiner = new CustomActionBuilders(
+        authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+        idWebAppUrl = "",
+        supportUrl = "",
+        testUsers = testUsers,
+        cc = stubControllerComponents(),
+        addToken = csrfAddToken,
+        checkToken = csrfCheck,
+        csrfConfig = csrfConfig
+      )
 
-      val loggedOutActionRefiner = new CustomActionBuilders(_ => None, "https://identity-url.local", "", testUsers, stubControllerComponents())
+      val loggedOutActionRefiner = new CustomActionBuilders(
+        authenticatedIdUserProvider = _ => None,
+        idWebAppUrl = "https://identity-url.local",
+        supportUrl = "",
+        testUsers = testUsers,
+        cc = stubControllerComponents(),
+        addToken = csrfAddToken,
+        checkToken = csrfCheck,
+        csrfConfig = csrfConfig
+      )
 
       def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
         val membersDataService = mock[MembersDataService]
@@ -115,7 +134,17 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {
         val stripeConfigProvider = mock[StripeConfigProvider]
+        val payPalConfigProvider = mock[PayPalConfigProvider]
         when(stripeConfigProvider.get(any[Boolean])).thenReturn(StripeConfig("test-key"))
+        when(payPalConfigProvider.get(any[Boolean])).thenReturn(PayPalConfig(
+          payPalEnvironment = "",
+          NVPVersion = "",
+          url = "",
+          user = "",
+          password = "",
+          signature = ""
+        ))
+
         new MonthlyContributions(
           mock[MonthlyContributionsClient],
           assetResolver,
@@ -124,8 +153,9 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers {
           identityService,
           testUsers,
           stripeConfigProvider,
+          payPalConfigProvider,
           stubControllerComponents()
-        ).displayForm(FakeRequest())
+        ).displayForm()(FakeRequest())
       }
     }
   }
