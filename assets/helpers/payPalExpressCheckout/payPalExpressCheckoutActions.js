@@ -61,7 +61,7 @@ function setupPayment(dispatch, state: Object) {
     fetch(SETUP_PAYMENT_URL, {
       credentials: 'include',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
       body: JSON.stringify(requestBody),
     }).then(handleSetupResponse)
       .then((token) => {
@@ -78,11 +78,11 @@ function setupPayment(dispatch, state: Object) {
 }
 
 // Second step: createAgreement
-function createAgreement(payPalData) {
+function createAgreement(payPalData, state: Object) {
   const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
   return fetch(CREATE_AGREEMENT_URL, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
     method: 'POST',
     body: JSON.stringify({ token: payPalData.paymentToken }),
   }).then(response => response.json());
@@ -108,7 +108,7 @@ function requestData(baid: string, getState: Function) {
 
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token  },
     credentials: 'same-origin',
     body: JSON.stringify(monthlyContribFields),
   };
@@ -142,7 +142,7 @@ export function setupPayPalExpressCheckout(): Function {
     };
 
     const onAuthorize = (data) => {
-      createAgreement(data)
+      createAgreement(data, getState())
         .then(handleBaId)
         .catch((err) => {
           dispatch(payPalExpressError(err));
