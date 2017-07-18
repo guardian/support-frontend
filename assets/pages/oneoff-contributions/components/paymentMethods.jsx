@@ -52,7 +52,7 @@ function mapStateToProps(state) {
   return {
     email: state.user.email,
     name: state.user.fullName,
-    error: state.monthlyContrib.error,
+    error: state.oneoffContrib.error,
   };
 
 }

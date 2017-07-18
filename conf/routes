@@ -13,6 +13,7 @@ GET /monthly-contributions/thankyou                controllers.Application.react
 GET /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /monthly-contributions/create                 controllers.MonthlyContributions.create
 
+GET /oneoff-contributions                         controllers.Application.reactTemplate(title="Support the Guardian | One-off Contribution", id="oneoff-contributions-page", js="oneoffContributionsPage.js")
 GET /oneoff-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 
 GET /login                 controllers.Login.login

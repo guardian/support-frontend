@@ -35,7 +35,7 @@ pageStartup.start();
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
-store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
+store.dispatch(setContribAmount(getQueryParameter('contributionValue', '50')));
 
 
 // ----- Render ----- //
@@ -50,11 +50,10 @@ const content = (
           <h1 className="oneoff-contrib__heading">Make a one-off contribution</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading="Your oneoff contribution" className="oneoff-contrib__your-contrib">
+        <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
           <PaymentAmount amount={store.getState().oneoffContrib.amount} />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
-          <DisplayName />
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">

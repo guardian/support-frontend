@@ -48,7 +48,7 @@ function FormFields(props: PropTypes) {
       />
       <TextInput
         id="postcode"
-        placeholder="Postcode"
+        placeholder="Postcode (optional)"
         value={props.postcode || ''}
         onChange={props.postcodeUpdate}
         required

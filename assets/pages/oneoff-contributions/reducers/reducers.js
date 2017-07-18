@@ -23,7 +23,7 @@ export type State = {
 // ----- Setup ----- //
 
 const initialState: State = {
-  amount: 5,
+  amount: 50,
   country: 'GB',
   error: null,
 };
