@@ -32,9 +32,7 @@ type PropTypes = {
   toggleContribType: (string) => void,
 };
 
-/* eslint-enable react/no-unused-prop-types */
-
-type ContribBundle = {
+type ContribAttrs = {
   heading: string,
   subheading: string,
   ctaText: string,
@@ -42,7 +40,7 @@ type ContribBundle = {
   ctaLink: string,
 }
 
-type DigitalBundle = {
+type DigitalAttrs = {
   heading: string,
   subheading: string,
   listItems: ListItem[],
@@ -51,7 +49,7 @@ type DigitalBundle = {
   ctaLink: string,
 }
 
-type PaperBundle = {
+type PaperAttrs = {
   heading: string,
   subheading: string,
   listItems: ListItem[],
@@ -62,16 +60,18 @@ type PaperBundle = {
   paperDigCtaLink: string,
 }
 
+/* eslint-enable react/no-unused-prop-types */
+
 type BundlesType = {
-  contrib: ContribBundle,
-  digital: DigitalBundle,
-  paper: PaperBundle,
+  contrib: ContribAttrs,
+  digital: DigitalAttrs,
+  paper: PaperAttrs,
 }
 
 
 // ----- Copy ----- //
 
-const contribCopy: ContribBundle = {
+const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute',
@@ -79,7 +79,7 @@ const contribCopy: ContribBundle = {
   ctaLink: '',
 };
 
-const digitalCopy: DigitalBundle = {
+const digitalCopy: DigitalAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
   listItems: [
@@ -100,7 +100,7 @@ const digitalCopy: DigitalBundle = {
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
 
-const paperCopy: PaperBundle = {
+const paperCopy: PaperAttrs = {
   heading: 'paper subscription',
   subheading: 'from £22.06/month',
   listItems: [
@@ -157,7 +157,7 @@ const contribToggle = {
 
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle => {
+const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
@@ -172,7 +172,7 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle 
 
 };
 
-function getPaperAttrs(subsLinks: SubsUrls): PaperBundle {
+function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
   return Object.assign({}, bundles.paper, {
     paperCtaLink: subsLinks.paper,
@@ -181,20 +181,22 @@ function getPaperAttrs(subsLinks: SubsUrls): PaperBundle {
 
 }
 
-function getDigitalAttrs(subsLinks: SubsUrls): DigitalBundle {
+function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
-const getContributionComponent = (props: PropTypes, attrs: ContribBundle) => {
+function ContributionBundle(props: PropTypes) {
+
+  const contribAttrs: ContribAttrs = getContribAttrs(props);
 
   const onClick = () => {
     if (!props.contribError) {
-      window.location = attrs.ctaLink;
+      window.location = contribAttrs.ctaLink;
     }
   };
 
   return (
-    <Bundle {...attrs}>
+    <Bundle {...contribAttrs}>
       <div className="contrib-type">
         <RadioToggle
           {...contribToggle}
@@ -203,20 +205,43 @@ const getContributionComponent = (props: PropTypes, attrs: ContribBundle) => {
         />
       </div>
       <ContribAmounts onNumberInputKeyPress={onClick} />
-      <CtaLink text={attrs.ctaText} onClick={onClick} />
+      <CtaLink text={contribAttrs.ctaText} onClick={onClick} />
     </Bundle>
   );
-};
+
+}
+
+function DigitalBundle(props: DigitalAttrs) {
+
+  return (
+    <Bundle {...props}>
+      <FeatureList listItems={bundles.digital.listItems} />
+      <CtaLink text={props.ctaText} url={props.ctaLink} />
+    </Bundle>
+  );
+
+}
+
+function PaperBundle(props: PaperAttrs) {
+
+  return (
+    <Bundle {...props}>
+      <FeatureList listItems={props.listItems} />
+      <CtaLink text={props.paperCtaText} url={props.paperCtaLink} />
+      <CtaLink text={props.paperDigCtaText} url={props.paperDigCtaLink} />
+    </Bundle>
+  );
+
+}
+
 
 // ----- Component ----- //
 
 function Bundles(props: PropTypes) {
 
-  const contribAttrs: ContribBundle = getContribAttrs(props);
   const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
-  const paperAttrs: PaperBundle = getPaperAttrs(subsLinks);
-  const digitalAttrs: DigitalBundle = getDigitalAttrs(subsLinks);
-  const contributionComponent = getContributionComponent(props, contribAttrs);
+  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
+  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
   return (
     <section className="bundles">
@@ -224,18 +249,11 @@ function Bundles(props: PropTypes) {
       <div className="bundles__content gu-content-margin">
         <div className="bundles__introduction-bleed" />
         <div className="bundles__wrapper">
-          {contributionComponent}
+          <ContributionBundle {...props} />
           <div className="bundles__divider" />
-          <Bundle {...digitalAttrs}>
-            <FeatureList listItems={bundles.digital.listItems} />
-            <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
-          </Bundle>
+          <DigitalBundle {...digitalAttrs} />
           <div className="bundles__divider" />
-          <Bundle {...paperAttrs}>
-            <FeatureList listItems={paperAttrs.listItems} />
-            <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
-            <CtaLink text={paperAttrs.paperDigCtaText} url={paperAttrs.paperDigCtaLink} />
-          </Bundle>
+          <PaperBundle {...paperAttrs} />
         </div>
       </div>
     </section>
@@ -263,6 +281,7 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
+
 
 // ----- Exports ----- //
 
