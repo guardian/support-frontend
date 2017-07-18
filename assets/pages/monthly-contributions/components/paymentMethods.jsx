@@ -18,6 +18,7 @@ type PropTypes = {
   firstName: string,
   lastName: string,
   error: ?string,
+  payPalButton: boolean,
 };
 
 
@@ -27,11 +28,16 @@ function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout} />;
-  const payPalButton = <PaypalExpressButton />;
+  let payPalButton = '';
+
+  if (props.payPalButton) {
+    payPalButton = <PaypalExpressButton />;
+  }
 
   if (props.firstName === '' || props.lastName === '') {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
+    payPalButton = '';
   } else if (props.error !== null) {
     errorMessage = <ErrorMessage message={'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'} />;
   }
@@ -56,6 +62,7 @@ function mapStateToProps(state) {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     error: state.monthlyContrib.error,
+    payPalButton: state.monthlyContrib.payPalButton,
   };
 
 }

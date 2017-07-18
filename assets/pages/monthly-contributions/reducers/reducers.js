@@ -17,6 +17,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
+  payPalButton: boolean,
 };
 
 
@@ -26,6 +27,7 @@ const initialState: State = {
   amount: 5,
   country: 'GB',
   error: null,
+  payPalButton: false,
 };
 
 
@@ -42,6 +44,9 @@ function monthlyContrib(
 
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });
+
+    case 'SET_PAYPAL_BUTTON' :
+      return Object.assign({}, state, { payPalButton: action.value });
 
     default:
       return state;

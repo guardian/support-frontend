@@ -7,6 +7,7 @@
   js: String,
   user: IdUser,
   isTestUser: Boolean,
+  payPalButton: Boolean,
   stripeConfig: StripeConfig
 )(implicit assets: AssetsResolver)
 
@@ -24,6 +25,7 @@
                 lastName: "@lastName",
             }
         };
+        window.guardian.payPalButton = @payPalButton;
         window.guardian.stripeKey = "@stripeConfig.publicKey";
     </script>
     <script type="text/javascript" src="@assets(js)"></script>

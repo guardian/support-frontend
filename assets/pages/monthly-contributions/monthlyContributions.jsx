@@ -23,7 +23,7 @@ import NameForm from './components/nameForm';
 import ContribAmount from './components/contribAmount';
 import reducer from './reducers/reducers';
 
-import { setContribAmount } from './actions/monthlyContributionsActions';
+import { setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
 
 // ----- Page Startup ----- //
 
@@ -36,6 +36,8 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
+
+store.dispatch(setPayPalButton(window.guardian.payPalButton));
 
 
 // ----- Render ----- //
