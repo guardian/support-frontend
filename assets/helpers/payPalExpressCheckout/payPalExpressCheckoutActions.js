@@ -108,7 +108,7 @@ function requestData(baid: string, getState: Function) {
 
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token  },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
     credentials: 'same-origin',
     body: JSON.stringify(monthlyContribFields),
   };
