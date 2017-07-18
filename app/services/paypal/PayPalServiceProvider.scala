@@ -1,7 +1,7 @@
 package services.paypal
 
-import config.{PayPalConfig, PayPalConfigProvider}
-import play.api.libs.ws.WSClient
+import com.gu.support.config.{PayPalConfig, PayPalConfigProvider}
+import lib.okhttp.RequestRunners
 import services.PayPalService
 import services.touchpoint.TouchpointServiceProvider
 

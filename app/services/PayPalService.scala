@@ -4,7 +4,8 @@ import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
 import config.PayPalConfig
-import play.api.libs.ws.{WSClient, WSResponse}
+import lib.okhttp.RequestRunners.FutureHttpClient
+import okhttp3.{FormBody, Request, Response}
 import services.paypal.{PayPalBillingDetails, Token}
 import services.touchpoint.TouchpointService
 

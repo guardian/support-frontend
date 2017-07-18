@@ -1,6 +1,6 @@
 package services.touchpoint
 
-import config.{TouchpointConfig, TouchpointConfigProvider}
+import com.gu.support.config.{TouchpointConfig, TouchpointConfigProvider}
 
 trait TouchpointService
 

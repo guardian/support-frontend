@@ -4,9 +4,9 @@ import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
-import config.{PayPalConfigProvider, StripeConfigProvider}
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
