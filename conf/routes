@@ -8,7 +8,7 @@ GET /healthcheck                controllers.Application.healthcheck
 GET /uk                        controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /                          controllers.Default.redirect(to = "/uk")
 
-GET  /monthly-contributions                         controllers.MonthlyContributions.displayForm
+GET  /monthly-contributions                         controllers.MonthlyContributions.displayForm(paypal : Option[Boolean])
 GET  /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
 GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /monthly-contributions/create                  controllers.MonthlyContributions.create
