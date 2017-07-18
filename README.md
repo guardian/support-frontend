@@ -10,14 +10,14 @@ This works regardless of the runtime environment in which the test user is creat
 checkout flows in the production environment without having to use real payment methods and without cluttering up
 production systems with test data.
 
-In order to support this we have two closely related concepts Stage and TouchpointEnvironment which are described below.
+In order to support this we have two closely related concepts Stage and Touchpoint Environment which are described below.
 
 ### Stage
 Stage represents a runtime environment for the applications which use this library,
  either on a local machine (DEV) or in AWS (CODE or PROD)
 
 ### Touchpoint Environment
-TouchpointEnvironment represents a logical environment for our backend systems, mainly Zuora and Salesforce.
+Touchpoint Environment represents a logical environment for our backend systems, mainly Zuora and Salesforce.
 Environments are: SANDBOX, UAT or PROD
 
 Any environment *could* be used by any stage however in practice they are restricted to the following:
@@ -41,8 +41,8 @@ PROD stage uses the PROD environment for non test users and UAT for test users. 
 
 
 ## Public settings
-Any public config settings can be put in the application.conf file,
+Any public config settings can be put in the [application.conf](application.conf) file,
 private settings should go in a separate private conf file as described in
-the main project repos
+the main project repos.
 
 
