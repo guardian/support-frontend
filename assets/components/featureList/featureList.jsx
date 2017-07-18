@@ -7,16 +7,11 @@ import React from 'react';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-/* eslint-disable react/no-unused-prop-types */
-
 export type ListItem =
-  | {| heading: string, text: string |}
-  | {| heading: string |}
-  | {| text: string |}
+    $Exact<{ heading: string, text: string }>
+  | $Exact<{ heading: string }>
+  | $Exact<{ text: string }>
   ;
-
-/* eslint-enable react/no-unused-prop-types */
 
 type PropTypes = {
   listItems: ListItem[],

@@ -3,7 +3,7 @@
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'SET_FIRST_NAME', name: string }
+    { type: 'SET_FIRST_NAME', name: string }
   | { type: 'SET_LAST_NAME', name: string }
   ;
 

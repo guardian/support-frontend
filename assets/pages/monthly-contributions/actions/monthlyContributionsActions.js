@@ -9,7 +9,7 @@ import validateContribution from '../helpers/validation';
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'SET_CONTRIB_VALUE', value: number }
+    { type: 'SET_CONTRIB_VALUE', value: number }
   | { type: 'CHECKOUT_ERROR', message: string }
   ;
 

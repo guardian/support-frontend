@@ -8,7 +8,7 @@ import type { Contrib, Amount } from '../reducers/reducers';
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'CHANGE_CONTRIB_TYPE', contribType: Contrib }
+    { type: 'CHANGE_CONTRIB_TYPE', contribType: Contrib }
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }

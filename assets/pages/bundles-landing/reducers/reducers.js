@@ -15,7 +15,7 @@ import type { Action } from '../actions/bundlesLandingActions';
 export type Contrib = 'RECURRING' | 'ONE_OFF';
 
 export type ContribError =
-  | 'tooLittleRecurring'
+    'tooLittleRecurring'
   | 'tooLittleOneOff'
   | 'tooMuch'
   | 'noEntry'
