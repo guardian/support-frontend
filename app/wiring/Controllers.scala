@@ -23,6 +23,7 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.stripeConfigProvider,
+    appConfig.payPalConfigProvider,
     controllerComponents
   )
 

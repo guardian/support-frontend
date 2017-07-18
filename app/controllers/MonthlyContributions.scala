@@ -2,22 +2,20 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import services.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
-import play.api.mvc._
-import play.api.libs.circe.Circe
-
-import scala.concurrent.ExecutionContext
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
-import lib.PlayImplicits._
-import services.{IdentityService, MembersDataService, TestUserService}
-import services.MembersDataService.UserNotFound
 import com.gu.support.workers.model.User
 import com.typesafe.scalalogging.LazyLogging
-
-import scala.concurrent.Future
+import config.{PayPalConfigProvider, StripeConfigProvider}
+import lib.PlayImplicits._
+import play.api.libs.circe.Circe
+import play.api.mvc._
+import services.MembersDataService.UserNotFound
+import services.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
+import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
-import config.StripeConfigProvider
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class MonthlyContributions(
     client: MonthlyContributionsClient,
@@ -27,6 +25,7 @@ class MonthlyContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
@@ -48,7 +47,8 @@ class MonthlyContributions(
               user = fullUser,
               isTestUser = isTestUser,
               payPalButton = paypal.getOrElse(false),
-              stripeConfig = stripeConfigProvider.get(isTestUser)
+              stripeConfig = stripeConfigProvider.get(isTestUser),
+              payPalConfig = payPalConfigProvider.get(isTestUser)
             )
           )
       }

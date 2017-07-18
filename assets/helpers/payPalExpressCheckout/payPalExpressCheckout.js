@@ -35,7 +35,7 @@ export const setup = (
 
   const payPalOptions: Object = {
     // Sets the environment.
-    env: 'sandbox',
+    env: window.guardian.payPalEnvironment,
     // Styles the button.
     style: {color: 'blue', size: 'responsive'},
     // Defines whether user sees 'continue' or 'pay now' in overlay.

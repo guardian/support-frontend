@@ -1,6 +1,7 @@
 @import assets.AssetsResolver
 @import com.gu.identity.play.IdUser
 @import config.StripeConfig
+@import config.PayPalConfig
 @(
   title: String,
   id: String,
@@ -8,7 +9,8 @@
   user: IdUser,
   isTestUser: Boolean,
   payPalButton: Boolean,
-  stripeConfig: StripeConfig
+  stripeConfig: StripeConfig,
+  payPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver)
 
 @scripts = {
@@ -27,6 +29,8 @@
         };
         window.guardian.payPalButton = @payPalButton;
         window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
+
     </script>
     <script type="text/javascript" src="@assets(js)"></script>
 }
