@@ -38,7 +38,6 @@ function closePayPalExpressOverlay(): Action {
 }
 
 export function openPayPalExpressOverlay(amount: number, email: string): Action {
-  stripeCheckout.openDialogBox(amount, email);
   return { type: 'OPEN_PAYPAL_EXPRESS_OVERLAY' };
 }
 
@@ -51,29 +50,25 @@ export function payPalExpressError(message: string): Action {
 }
 
 
-function handleSetupResponse(dispatch): Function {
-  return (response) => {
-    let resp = null;
-    if (response.status === 200) {
-      resp = response.json();
-    }
+function handleSetupResponse(response: Object) {
+  let resp = null;
+  if (response.status === 200) {
+    resp = response.json();
+  }
 
-    return resp;
-  };
+  return resp;
 }
 
-
+// First Step: setupPayment
 // Sends request to server to setup payment, and returns Paypal token.
 function setupPayment(dispatch, state: Object) {
 
   return (resolve, reject) => {
-
     const requestBody = {
       amount: state.payPalExpressCheckout.amount,
       billingPeriod: state.payPalExpressCheckout.billingPeriod,
       currency: state.payPalExpressCheckout.currency,
     };
-
     const SETUP_PAYMENT_URL = '/paypal/setup-payment';
 
     fetch(SETUP_PAYMENT_URL, {
@@ -81,26 +76,88 @@ function setupPayment(dispatch, state: Object) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
-    }).then(handleSetupResponse(dispatch))
-      .then(token => {
+    }).then(handleSetupResponse)
+      .then((token) => {
         if (token) {
-          resolve(token);
+          resolve(token.token);
         } else {
           dispatch(payPalExpressError('PayPal token came back blank.'));
         }
-      }).catch(err => {
+      }).catch((err) => {
         dispatch(payPalExpressError(err.message));
         reject(err);
-      })
-    }
-  }
+      });
+  };
+}
 
-export function setupPayPalExpressCheckout(callback: Function): Function {
+// Second step: createAgreement
+function createAgreement(payPalData) {
+  const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
+  return fetch(CREATE_AGREEMENT_URL, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify({ token: payPalData.paymentToken }),
+  }).then(response => response.json());
+}
+
+// Third Step: postForm with baid
+function requestData(baid: string, getState: Function) {
+
+  const state = getState();
+
+  const monthlyContribFields = {
+    contribution: {
+      amount: state.stripeCheckout.amount,
+      currency: state.stripeCheckout.currency,
+    },
+    paymentFields: {
+      baid,
+    },
+    country: state.monthlyContrib.country,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+  };
+
+  return {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify(monthlyContribFields),
+  };
+}
+
+// Creates the new member by posting the form data with the BAID.
+function postForm(baid: string, dispatch: Function, getState: Function) {
+  const MONTHLY_CONTRIB_ENDPOINT = '/monthly-contributions/create';
+  const MONTHLY_CONTRIB_THANKYOU = '/monthly-contributions/thankyou';
+
+  const request = requestData(baid, getState);
+
+  return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
+
+    if (response.ok) {
+      window.location.assign(MONTHLY_CONTRIB_THANKYOU);
+    }
+
+    response.text().then(err => dispatch(payPalExpressError(err)));
+
+  });
+}
+
+// SetupPaypalExpressCheckout
+export function setupPayPalExpressCheckout(): Function {
 
   return (dispatch, getState) => {
-    const onAuthorize = (data, actions) => {
-      createAgreement(data).then(postForm)
-        .catch(err => {
+
+    const handleBaId = (baid: Object) => {
+      postForm(baid.token, dispatch, getState);
+    };
+
+    const onAuthorize = (data) => {
+      createAgreement(data)
+        .then(handleBaId)
+        .catch((err) => {
           dispatch(payPalExpressError(err));
         });
     };
@@ -113,39 +170,4 @@ export function setupPayPalExpressCheckout(callback: Function): Function {
       onAuthorize,
     ).then(() => dispatch(payPalExpressCheckoutLoaded()));
   };
-
 }
-
-
-function createAgreement(payPalData) {
-
-  const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
-  return fetch(CREATE_AGREEMENT_URL, {
-    headers: { 'Content-Type': 'application/json' },
-    method: 'POST',
-    body: JSON.stringify({ token: payPalData.paymentToken }),
-  }).then(response => response.json());
-}
-
-
-// Creates the new member by posting the form data with the BAID.
-function postForm(baid) {
-  let data = serializer(utilsHelper.toArray(form.elem.elements), { 'payment.payPalBaid': baid.token });
-
-   	/*
-   	  ajax({
-
-     //  		url: form.elem.action,
-    	// 	method: 'post',
-    	// 	data: data,
-    	// 	success: function (successData) {
-    	// 		window.location.assign(successData.redirect);
-    	// 	},
-  	// 	error: function (errData) {
-    	// 		alert(err);
-    	// 	}
-  	// });
-     */
-}
-
-
