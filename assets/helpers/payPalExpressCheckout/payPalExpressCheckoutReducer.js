@@ -8,11 +8,10 @@ import type { Action } from './payPalExpressCheckoutActions';
 // ----- Types ----- //
 
 export type State = {
-  loaded: boolean,
   amount: ?number,
-  baId: ?string,
-  currency: string,
   billingPeriod: string,
+  currency: string,
+  loaded: boolean,
 };
 
 
@@ -20,7 +19,6 @@ export type State = {
 
 const initialState: State = {
   amount: null,
-  baid: null,
   billingPeriod: 'monthly',
   currency: 'GBP',
   loaded: false,

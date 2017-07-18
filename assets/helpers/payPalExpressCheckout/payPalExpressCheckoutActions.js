@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import * as payPalExpressCheckout from './payPalExpressCheckout';
-import type { State as PaypalState } from './payPalExpressCheckoutReducer';
 
 
 // ----- Types ----- //
@@ -29,24 +28,12 @@ function payPalExpressCheckoutLoaded(): Action {
   return { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' };
 }
 
-function setPayPalExpressCheckoutBaId(token: string): Action {
-  return { type: 'SET_PAYPAL_EXPRESS_CHECKOUT_BAID', token };
-}
-
-function closePayPalExpressOverlay(): Action {
-  return { type: 'CLOSE_PAYPAL_EXPRESS_OVERLAY' };
-}
-
-export function openPayPalExpressOverlay(amount: number, email: string): Action {
-  return { type: 'OPEN_PAYPAL_EXPRESS_OVERLAY' };
+export function payPalExpressError(message: string): Action {
+  return { type: 'PAYPAL_EXPRESS_ERROR', message };
 }
 
 export function setPayPalExpressAmount(amount: number): Action {
   return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
-}
-
-export function payPalExpressError(message: string): Action {
-  return { type: 'PAYPAL_EXPRESS_ERROR', message };
 }
 
 

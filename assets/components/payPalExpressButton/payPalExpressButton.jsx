@@ -15,8 +15,6 @@ import {
 type PropTypes = {
   payPalLoaded: boolean,
   setupPayPalCheckout: Function,
-  amount: number,
-  email: string,
   callback: Function,
 };
 
@@ -39,7 +37,6 @@ function mapStateToProps(state) {
   return {
     // overlayOpen: state.stripeCheckout.overlay,
     payPalLoaded: state.payPalExpressCheckout.loaded,
-    amount: state.payPalExpressCheckout.amount,
   };
 
 }
@@ -47,8 +44,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    setupPayPalCheckout: (callback: Function) => {
-      dispatch(setupPayPalExpressCheckout(callback));
+    setupPayPalCheckout: () => {
+      dispatch(setupPayPalExpressCheckout());
     },
   };
 

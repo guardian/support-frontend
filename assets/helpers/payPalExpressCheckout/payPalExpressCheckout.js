@@ -7,7 +7,7 @@ import type { State as PaypalState } from './payPalExpressCheckoutReducer';
 
 // ----- Functions ----- //
 
-const loadPaypalExpress = () => new Promise((resolve) => {
+const loadPayPalExpress = () => new Promise((resolve) => {
 
   if (!window.paypal) {
 
@@ -26,18 +26,18 @@ const loadPaypalExpress = () => new Promise((resolve) => {
 
 });
 
-export const setup = (
+const setup = (
   state: PaypalState,
   setupPayment: Function,
   onAuthorize: Function,
-) => loadPaypalExpress().then(() => {
+) => loadPayPalExpress().then(() => {
 
 
   const payPalOptions: Object = {
     // Sets the environment.
     env: window.guardian.payPalEnvironment,
     // Styles the button.
-    style: {color: 'blue', size: 'responsive'},
+    style: { color: 'blue', size: 'responsive' },
     // Defines whether user sees 'continue' or 'pay now' in overlay.
     commit: true,
 
@@ -50,3 +50,8 @@ export const setup = (
 
   window.paypal.Button.render(payPalOptions, '#component-paypal-button-checkout');
 });
+
+
+export {
+  setup, // eslint-disable-line import/prefer-default-export
+};
