@@ -8,4 +8,18 @@
 		background-color: gu-colour(multimedia-main-2);
 	}
 
+	// ----- Introduction ----- //
+
+	.component-introduction-text {
+		background-color: darken(gu-colour(multimedia-main-2), 5%);
+
+		.component-introduction-text__content {
+			background-color: gu-colour(multimedia-main-2);
+		}
+
+		h1 {
+			color: gu-colour(neutral-1);
+		}
+	}
+
 }

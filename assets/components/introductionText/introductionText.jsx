@@ -34,14 +34,14 @@ function messageCopy(copy: string[]) {
 export default function IntroductionText(props: PropTypes) {
 
   const messages = props.messages.map((message: Message) => (
-    <div className="component-introduction__content gu-content-margin">
-      <h1 className="component-introduction__heading">{message.heading}</h1>
+    <div className="component-introduction-text__content gu-content-margin">
+      <h1 className="component-introduction-text__heading">{message.heading}</h1>
       {messageCopy(message.copy)}
     </div>
   ));
 
   return (
-    <section className="component-introduction">
+    <section className="component-introduction-text">
       {messages}
     </section>
   );
