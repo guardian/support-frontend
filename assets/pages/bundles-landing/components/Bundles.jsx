@@ -9,8 +9,9 @@ import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
+import Bundle from 'components/bundle/bundle';
 
-import Bundle from './Bundle';
+
 import ContribAmounts from './ContribAmounts';
 import { changeContribType } from '../actions/bundlesLandingActions';
 import getSubsLinks from '../helpers/subscriptionsLinks';

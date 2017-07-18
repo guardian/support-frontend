@@ -64,7 +64,7 @@
       }
     }
 
-    .bundles__bundle {
+    .component-bundle {
       padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
       @include mq($from: desktop) {
@@ -108,14 +108,14 @@
         vertical-align: top;
       }
 
-      .bundle__content {
+      .component-bundle__content {
         width: 50%;
         display: inline-block;
         vertical-align: top;
       }
     }
 
-    .bundles__bundle--contributions {
+    .component-bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
       font-family: $gu-text-sans-web;
@@ -224,7 +224,7 @@
       color: gu-colour(neutral-1);
     }
 
-    .bundles__bundle--digital, .bundles__bundle--paper {
+    .component-bundle--digital, .component-bundle--paper {
         background-color: #fff;
 
         @include mq($until: desktop) {
@@ -255,7 +255,7 @@
         }
     }
 
-    .bundles__bundle--paper {
+    .component-bundle--paper {
       .component-cta-link:first-of-type {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
