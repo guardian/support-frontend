@@ -9,11 +9,8 @@ import * as payPalExpressCheckout from './payPalExpressCheckout';
 
 export type Action =
   | { type: 'START_PAYPAL_EXPRESS_CHECKOUT' }
-  | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
-  | { type: 'SET_PAYPAL_EXPRESS_CHECKOUT_BAID', baid: string }
-  | { type: 'CLOSE_PAYPAL_EXPRESS_OVERLAY' }
-  | { type: 'OPEN_PAYPAL_EXPRESS_OVERLAY' }
   | { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount: number }
+  | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
   | { type: 'PAYPAL_EXPRESS_ERROR', message: string }
   ;
 
@@ -24,6 +21,10 @@ function startPayPalExpressCheckout(): Action {
   return { type: 'START_PAYPAL_EXPRESS_CHECKOUT' };
 }
 
+export function setPayPalExpressAmount(amount: number): Action {
+  return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
+}
+
 function payPalExpressCheckoutLoaded(): Action {
   return { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' };
 }
@@ -31,11 +32,6 @@ function payPalExpressCheckoutLoaded(): Action {
 export function payPalExpressError(message: string): Action {
   return { type: 'PAYPAL_EXPRESS_ERROR', message };
 }
-
-export function setPayPalExpressAmount(amount: number): Action {
-  return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
-}
-
 
 function handleSetupResponse(response: Object) {
   let resp = null;
