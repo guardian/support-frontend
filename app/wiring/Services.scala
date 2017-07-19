@@ -14,7 +14,7 @@ trait Services {
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
 
-  lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider)
+  lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider, wsClient)
 
   lazy val identityService = IdentityService(appConfig.identity)
 

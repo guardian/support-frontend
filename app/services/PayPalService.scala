@@ -1,20 +1,17 @@
 package services
 
-import lib.okhttp.RequestRunners
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
 import config.PayPalConfig
-import lib.okhttp.RequestRunners.FutureHttpClient
-import okhttp3.{FormBody, Request, Response}
+import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
 import services.touchpoint.TouchpointService
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
+import scala.concurrent.Future
 
-class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends TouchpointService with LazyLogging {
+class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService with LazyLogging {
 
   // The parameters sent with every NVP request.
   val defaultNVPParams = Map(
@@ -39,9 +36,9 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends T
   }
 
   // Extracts response params as a map.
-  private def extractResponse(response: Response) = {
+  private def extractResponse(response: WSResponse) = {
 
-    val responseBody = response.body().string()
+    val responseBody = response.body
     val parsedResponse = parseQuery(responseBody)
 
     logNVPResponse(parsedResponse)
@@ -52,16 +49,12 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends T
   // Takes a series of parameters, send a request to PayPal, returns response.
   private def nvpRequest(params: Map[String, String]) = {
 
-    val reqBody = new FormBody.Builder()
-    for ((param, value) <- defaultNVPParams) reqBody.add(param, value)
-    for ((param, value) <- params) reqBody.add(param, value)
+    val allParams = (params ++ defaultNVPParams).mapValues(b => Seq(b))
 
-    val request = new Request.Builder()
+    wsClient
       .url(apiConfig.url)
-      .post(reqBody.build())
-      .build()
-
-    client(request).map(extractResponse)
+      .post(allParams)
+      .map(extractResponse)
 
   }
 
