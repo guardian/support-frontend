@@ -34,17 +34,16 @@ const setup = (
 
 
   const payPalOptions: Object = {
-    // Sets the environment.
     env: window.guardian.payPalEnvironment,
-    // Styles the button.
     style: { color: 'blue', size: 'responsive' },
+
     // Defines whether user sees 'continue' or 'pay now' in overlay.
     commit: true,
 
-    // Called when user clicks Paypal button.
+    // This function is called when user clicks the PayPal button.
     payment: setupPayment,
 
-    // Called when user finishes with Paypal interface (approves payment).
+    // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
   };
 
