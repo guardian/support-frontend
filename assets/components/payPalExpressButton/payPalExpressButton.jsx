@@ -35,7 +35,6 @@ const PayPalExpressButton = (props: PropTypes) => {
 function mapStateToProps(state) {
 
   return {
-    // overlayOpen: state.stripeCheckout.overlay,
     payPalLoaded: state.payPalExpressCheckout.loaded,
   };
 
