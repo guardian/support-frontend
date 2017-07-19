@@ -4,6 +4,7 @@ package controllers
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
 import assets.AssetsResolver
+import com.gu.identity.play.AuthenticatedIdUser
 import com.typesafe.scalalogging.LazyLogging
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
@@ -30,22 +31,27 @@ class PayPal(
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = AuthenticatedAction.async(parse.json[PayPalBillingDetails]) { implicit request =>
-    readRequestAndRunServiceCall(_.retrieveToken(
-      returnUrl = routes.PayPal.returnUrl().absoluteURL(secure = true),
-      cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
-    ))
+    val paypalBillingDetails = request.body
+
+    withPaypalServiceForUser(request.user) { service =>
+      service.retrieveToken(
+        returnUrl = routes.PayPal.returnUrl().absoluteURL(secure = true),
+        cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
+      )(paypalBillingDetails)
+    }.map { response =>
+      Ok(toJson(Token(response)))
+    }
   }
 
-  // Creates a billing agreement using a payment token.
   def createAgreement: Action[Token] = AuthenticatedAction.async(parse.json[Token]) { implicit request =>
-    readRequestAndRunServiceCall(_.retrieveBaid)
+    withPaypalServiceForUser(request.user) { service =>
+      service.retrieveBaid(request.body)
+    }.map(token => Ok(toJson(Token(token))))
   }
 
-  //Takes a request with a body of type [T], then passes T to the payPal call 'exec' to retrieve a token and returns this as json
-  private def readRequestAndRunServiceCall[T](exec: (PayPalService) => ((T) => Future[String]))(implicit request: AuthRequest[T]) = {
-    for {
-      token <- exec(payPalServiceProvider.forUser(testUsers.isTestUser))(request.body)
-    } yield Ok(toJson(Token(token)))
+  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {
+    val service = payPalServiceProvider.forUser(testUsers.isTestUser(user))
+    fn(service)
   }
 
   // The endpoint corresponding to the PayPal return url, hit if the user is
