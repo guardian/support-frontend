@@ -26,7 +26,7 @@ const PayPalExpressButton = (props: PropTypes) => {
   if (!props.payPalLoaded) {
     props.setupPayPalCheckout(props.callback);
   }
-  return (<div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />);
+  return <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />;
 };
 
 
