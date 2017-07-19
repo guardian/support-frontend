@@ -13,7 +13,6 @@ import scala.concurrent.Future
 
 class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService with LazyLogging {
 
-  // The parameters sent with every NVP request.
   val defaultNVPParams = Map(
     "USER" -> apiConfig.user,
     "PWD" -> apiConfig.password,
@@ -21,7 +20,6 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
     "VERSION" -> apiConfig.NVPVersion
   )
 
-  // Logs the result of the PayPal NVP request.
   private def logNVPResponse(response: QueryString) = {
 
     def msg(status: String) = s"PayPal: $status (NVPResponse: $response)"
@@ -35,15 +33,13 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
 
   }
 
-  // Extracts response params as a map.
-  private def extractResponse(response: WSResponse) = {
+  private def extractResponse(response: WSResponse): QueryString = {
 
     val responseBody = response.body
     val parsedResponse = parseQuery(responseBody)
 
     logNVPResponse(parsedResponse)
     parsedResponse
-
   }
 
   // Takes a series of parameters, send a request to PayPal, returns response.
@@ -80,9 +76,9 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
       "L_PAYMENTREQUEST_0_NAME0" -> s"Guardian ${billingDetails.billingPeriod.capitalize} Contributor",
       "L_PAYMENTREQUEST_0_DESC0" -> s"You have chosen to pay ${billingDetails.billingPeriod}",
-      "L_PAYMENTREQUEST_0_AMT0" -> s"${billingDetails.amount}",
-      "PAYMENTREQUEST_0_AMT" -> s"${billingDetails.amount}",
-      "PAYMENTREQUEST_0_CURRENCYCODE" -> s"${billingDetails.currency}",
+      "L_PAYMENTREQUEST_0_AMT0" -> billingDetails.amount.toString,
+      "PAYMENTREQUEST_0_AMT" -> billingDetails.amount.toString,
+      "PAYMENTREQUEST_0_CURRENCYCODE" -> billingDetails.currency.toString,
       "RETURNURL" -> returnUrl,
       "CANCELURL" -> cancelUrl,
       "BILLINGTYPE" -> "MerchantInitiatedBilling",
