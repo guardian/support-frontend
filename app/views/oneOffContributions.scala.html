@@ -1,0 +1,38 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+@import config.StripeConfig
+@import helper.CSRF
+@(
+        title: String,
+        id: String,
+        js: String,
+        optUser: Option[IdUser],
+        isTestUser: Boolean,
+        stripeConfig: StripeConfig
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        @optUser.foreach { user =>
+            window.guardian.user = {
+                email: "@user.primaryEmailAddress",
+                @user.publicFields.displayName.map { displayName =>
+                displayName: "@displayName",
+                }
+                isTestUser: @isTestUser,
+                @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+                    firstName: "@firstName",
+                    lastName: "@lastName",
+                }
+            };
+        }
+        window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
+    </script>
+    <script type="text/javascript" src="@assets(js)"></script>
+}
+
+@main(title = title, scripts = scripts) {
+    <main id="@id" class="gu-content-wrapper"></main>
+}

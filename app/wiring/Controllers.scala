@@ -1,7 +1,12 @@
 package wiring
 
-import controllers.{Application, AssetsComponents, MonthlyContributions, TestUsersManagement}
+import actions.CustomActionBuilders
+import assets.AssetsResolver
+import config.TouchpointConfigProvider
+import controllers._
 import play.api.BuiltInComponentsFromContext
+import play.api.mvc.ControllerComponents
+import services.{IdentityService, TestUserService}
 
 trait Controllers {
   self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth =>
@@ -20,6 +25,15 @@ trait Controllers {
     assetsResolver,
     actionRefiners,
     membersDataService,
+    identityService,
+    testUsers,
+    appConfig.touchpointConfigProvider,
+    controllerComponents
+  )
+
+  lazy val oneOffContributions = new OneOffContributions(
+    assetsResolver,
+    actionRefiners,
     identityService,
     testUsers,
     appConfig.touchpointConfigProvider,

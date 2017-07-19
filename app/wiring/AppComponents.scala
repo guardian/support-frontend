@@ -36,6 +36,7 @@ trait AppComponents extends PlayComponents
     applicationController,
     new controllers.Default,
     monthlyContributionsController,
+    oneOffContributions,
     loginController,
     testUsersContoller,
     assetController
