@@ -6,16 +6,16 @@
 
   // ----- Headings
 
-  .payPal-error {
+  .paypal-error {
     background-color: darken(gu-colour(multimedia-main-2), 5%);
   }
 
-  .payPal-error__content {
+  .paypal-error__content {
     background-color: gu-colour(multimedia-main-2);
     padding: $gu-v-spacing $gu-h-spacing;
   }
 
-  .payPal-error__wrapper {
+  .paypal-error__wrapper {
 
     @include mq($from: desktop) {
       margin-left: 20%;
@@ -23,7 +23,7 @@
     }
   }
 
-  .payPal-error__heading {
+  .paypal-error__heading {
     font-family: $gu-egyptian-web;
     color: gu-colour(neutral-1);
     font-size: 28px;
@@ -36,7 +36,7 @@
     }
   }
 
-  .payPal-error__subheading {
+  .paypal-error__subheading {
     font-family: $gu-egyptian-web;
     font-size: 28px;
     line-height: 32px;
@@ -50,8 +50,8 @@
   }
 
   .component-cta-link {
-    color: gu-colour(neutral-1);
-    background: transparent;
+    color: #fff;
+    background: gu-colour(neutral-1);
     display: inline-block;
     width: 180px;
     border: 1px solid gu-colour(neutral-1);
@@ -59,7 +59,7 @@
     margin-bottom: $gu-v-spacing * 4;
 
     svg {
-      fill: gu-colour(neutral-1);
+      fill: #fff;
       // Fix for IE10.
       left: 190px;
     }

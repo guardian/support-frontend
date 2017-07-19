@@ -18,17 +18,16 @@ import pageStartup from 'helpers/pageStartup';
 
 pageStartup.start();
 
-
 // ----- Render ----- //
 
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <section className="payPal-error gu-content">
-      <div className="payPal-error__content gu-content-margin">
-        <div className="payPal-error__wrapper">
-          <h1 className="payPal-error__heading">PayPal Error! :-(</h1>
-          <h2 className="payPal-error__subheading">
+    <section className="paypal-error gu-content">
+      <div className="paypal-error__content gu-content-margin">
+        <div className="paypal-error__wrapper">
+          <h1 className="paypal-error__heading">PayPal Error!</h1>
+          <h2 className="paypal-error__subheading">
             <p>Sorry, there was a problem completing your PayPal payment. Please try again:</p>
           </h2>
           <CtaLink
@@ -36,7 +35,7 @@ const content = (
             url="https://support.theguardian.com/uk"
           />
         </div>
-        <InfoSection heading="Questions?" className="payPal-error__questions">
+        <InfoSection heading="Questions?" className="paypal-error__questions">
           <p>
             If you have any questions about contributing to the Guardian,
             please <a href="mailto:contribution.support@theguardian.com">
