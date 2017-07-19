@@ -6,9 +6,9 @@ import services.touchpoint.TouchpointService
 
 trait TouchpointConfig
 
-abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, defaultStage: Stage) {
+abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, defaultEnvironment: TouchPointEnvironment) {
 
-  private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(fromStage(defaultStage)))
+  private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(defaultEnvironment))
   private lazy val uatConfig: T = fromConfig(getTouchpointBackend(UAT))
 
   def get(isTestUser: Boolean = false): T =
