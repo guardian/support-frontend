@@ -18,7 +18,7 @@ type PropTypes = {
   firstName: string,
   lastName: string,
   error: ?string,
-  payPalButton: boolean,
+  payPalButtonExists: boolean,
 };
 
 
@@ -30,7 +30,7 @@ function PaymentMethods(props: PropTypes) {
   let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout} />;
   let payPalButton = '';
 
-  if (props.payPalButton) {
+  if (props.payPalButtonExists) {
     payPalButton = <PaypalExpressButton />;
   }
 
@@ -62,7 +62,7 @@ function mapStateToProps(state) {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     error: state.monthlyContrib.error,
-    payPalButton: state.monthlyContrib.payPalButton,
+    payPalButtonExists: state.monthlyContrib.payPalButtonExists,
   };
 
 }

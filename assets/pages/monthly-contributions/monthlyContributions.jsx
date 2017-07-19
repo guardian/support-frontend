@@ -37,7 +37,7 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
 
-store.dispatch(setPayPalButton(window.guardian.payPalButton));
+store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
 
 
 // ----- Render ----- //
