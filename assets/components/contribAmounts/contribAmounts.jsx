@@ -98,7 +98,7 @@ type PropTypes = {
 function errorMessage(error: ?ContribError) {
 
   if (error) {
-    return <p className="contrib-amounts__error-message">{contribErrors[error]}</p>;
+    return <p className="component-contrib-amounts__error-message">{contribErrors[error]}</p>;
   }
 
   return null;
@@ -138,10 +138,10 @@ function getAttrs(props: PropTypes) {
 
 export default function ContribAmounts(props: PropTypes) {
   const attrs = getAttrs(props);
-  const className = `contrib-amounts contrib-amounts--${attrs.contribType}`;
+  const className = `component-contrib-amounts__amounts component-contrib-amounts__amounts--${attrs.contribType}`;
 
   return (
-    <div>
+    <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
           {...contribToggle}
@@ -155,7 +155,7 @@ export default function ContribAmounts(props: PropTypes) {
           toggleAction={attrs.toggleAction}
           checked={attrs.checked}
         />
-        <div className="contrib-amounts__other-amount">
+        <div className="component-contrib-amounts__other-amount">
           <NumberInput
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
