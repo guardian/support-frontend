@@ -5,13 +5,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import type { Participations } from 'helpers/abtest';
 import FeatureList from 'components/featureList/featureList';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
-import { trackOphan } from 'helpers/abtest';
-import { trackEvent as trackEventGA } from 'helpers/ga';
 
 import Bundle from './Bundle';
 import ContribAmounts from './ContribAmounts';
@@ -30,14 +27,12 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
+  contribError: string,
   intCmp: string,
   toggleContribType: (string) => void,
-  abTests: Participations,
 };
 
-/* eslint-enable react/no-unused-prop-types */
-
-type ContribBundle = {
+type ContribAttrs = {
   heading: string,
   subheading: string,
   ctaText: string,
@@ -45,7 +40,7 @@ type ContribBundle = {
   ctaLink: string,
 }
 
-type DigitalBundle = {
+type DigitalAttrs = {
   heading: string,
   subheading: string,
   listItems: ListItem[],
@@ -54,7 +49,7 @@ type DigitalBundle = {
   ctaLink: string,
 }
 
-type PaperBundle = {
+type PaperAttrs = {
   heading: string,
   subheading: string,
   listItems: ListItem[],
@@ -65,16 +60,18 @@ type PaperBundle = {
   paperDigCtaLink: string,
 }
 
+/* eslint-enable react/no-unused-prop-types */
+
 type BundlesType = {
-  contrib: ContribBundle,
-  digital: DigitalBundle,
-  paper: PaperBundle,
+  contrib: ContribAttrs,
+  digital: DigitalAttrs,
+  paper: PaperAttrs,
 }
 
 
 // ----- Copy ----- //
 
-const contribCopy: ContribBundle = {
+const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute',
@@ -82,7 +79,7 @@ const contribCopy: ContribBundle = {
   ctaLink: '',
 };
 
-const digitalCopy: DigitalBundle = {
+const digitalCopy: DigitalAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
   listItems: [
@@ -103,7 +100,7 @@ const digitalCopy: DigitalBundle = {
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
 
-const paperCopy: PaperBundle = {
+const paperCopy: PaperAttrs = {
   heading: 'paper subscription',
   subheading: 'from £22.06/month',
   listItems: [
@@ -157,9 +154,10 @@ const contribToggle = {
   ],
 };
 
+
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle => {
+const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
@@ -174,7 +172,7 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribBundle 
 
 };
 
-function getPaperAttrs(subsLinks: SubsUrls): PaperBundle {
+function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
   return Object.assign({}, bundles.paper, {
     paperCtaLink: subsLinks.paper,
@@ -183,85 +181,67 @@ function getPaperAttrs(subsLinks: SubsUrls): PaperBundle {
 
 }
 
-function getDigitalAttrs(subsLinks: SubsUrls): DigitalBundle {
+function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
-// ----- A/B Test components ----- //
+function ContributionBundle(props: PropTypes) {
 
-const getControlVariant = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
-  <Bundle {...attrs}>
-    <div className="contrib-type">
-      <RadioToggle
-        {...contribToggle}
-        toggleAction={props.toggleContribType}
-        checked={props.contribType}
-      />
-    </div>
-    <ContribAmounts onNumberInputKeyPress={onClick} />
-    <CtaLink text={attrs.ctaText} onClick={onClick} />
-  </Bundle>
-);
+  const contribAttrs: ContribAttrs = getContribAttrs(props);
 
-const getVariantA = (props: PropTypes, attrs: ContribBundle, onClick: () => void) => (
-  <Bundle {...attrs} doubleHeadingModifierClass="variant-a">
-    <div className="contrib-type">
-      <p className="contrib-explainer">Every penny funds our fearless, quality journalism</p>
-      <RadioToggle
-        {...contribToggle}
-        toggleAction={props.toggleContribType}
-        checked={props.contribType}
-      />
-    </div>
-    <ContribAmounts onNumberInputKeyPress={onClick} />
-    <CtaLink text={attrs.ctaText} onClick={onClick} />
-  </Bundle>
-);
+  const onClick = () => {
+    if (!props.contribError) {
+      window.location = contribAttrs.ctaLink;
+    }
+  };
 
-const getContributionComponent = (props: PropTypes,
-                                  contribAttrs: ContribBundle) => {
+  return (
+    <Bundle {...contribAttrs}>
+      <div className="contrib-type">
+        <RadioToggle
+          {...contribToggle}
+          toggleAction={props.toggleContribType}
+          checked={props.contribType}
+        />
+      </div>
+      <ContribAmounts onNumberInputKeyPress={onClick} />
+      <CtaLink text={contribAttrs.ctaText} onClick={onClick} />
+    </Bundle>
+  );
 
-  const participation: Participations = props.abTests;
-  const variant = participation.SupportFrontEndContribution;
-  const onClick = (url: string, testVariant: string): (() => void) =>
-    () => {
-      // WARNING: Don't delete this check when removing the AB test!!!
-      if (!props.contribError) {
-        if (testVariant && testVariant !== 'notintest') {
-          trackOphan('SupportFrontEndContribution', testVariant, true);
-          trackEventGA('SupportFrontEndContribution', 'clicked', testVariant);
-        }
-        window.location = url;
-      }
-    };
+}
 
-  let response = null;
-  switch (variant) {
-    case 'control' :
-      trackOphan('SupportFrontEndContribution', variant);
-      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-      break;
+function DigitalBundle(props: DigitalAttrs) {
 
-    case 'variantA' :
-      trackOphan('SupportFrontEndContribution', variant);
-      response = getVariantA(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-      break;
-    default :
-      response = getControlVariant(props, contribAttrs, onClick(contribAttrs.ctaLink, variant));
-  }
+  return (
+    <Bundle {...props}>
+      <FeatureList listItems={bundles.digital.listItems} />
+      <CtaLink text={props.ctaText} url={props.ctaLink} />
+    </Bundle>
+  );
 
-  return response;
-};
+}
+
+function PaperBundle(props: PaperAttrs) {
+
+  return (
+    <Bundle {...props}>
+      <FeatureList listItems={props.listItems} />
+      <CtaLink text={props.paperCtaText} url={props.paperCtaLink} />
+      <CtaLink text={props.paperDigCtaText} url={props.paperDigCtaLink} />
+    </Bundle>
+  );
+
+}
+
 
 // ----- Component ----- //
 
 function Bundles(props: PropTypes) {
 
-  const contribAttrs: ContribBundle = getContribAttrs(props);
   const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
-  const paperAttrs: PaperBundle = getPaperAttrs(subsLinks);
-  const digitalAttrs: DigitalBundle = getDigitalAttrs(subsLinks);
-  const contributionComponent = getContributionComponent(props, contribAttrs);
+  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
+  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
   return (
     <section className="bundles">
@@ -269,18 +249,11 @@ function Bundles(props: PropTypes) {
       <div className="bundles__content gu-content-margin">
         <div className="bundles__introduction-bleed" />
         <div className="bundles__wrapper">
-          {contributionComponent}
+          <ContributionBundle {...props} />
           <div className="bundles__divider" />
-          <Bundle {...digitalAttrs}>
-            <FeatureList listItems={bundles.digital.listItems} />
-            <CtaLink text={digitalAttrs.ctaText} url={digitalAttrs.ctaLink} />
-          </Bundle>
+          <DigitalBundle {...digitalAttrs} />
           <div className="bundles__divider" />
-          <Bundle {...paperAttrs}>
-            <FeatureList listItems={paperAttrs.listItems} />
-            <CtaLink text={paperAttrs.paperCtaText} url={paperAttrs.paperCtaLink} />
-            <CtaLink text={paperAttrs.paperDigCtaText} url={paperAttrs.paperDigCtaLink} />
-          </Bundle>
+          <PaperBundle {...paperAttrs} />
         </div>
       </div>
     </section>
@@ -296,7 +269,6 @@ function mapStateToProps(state) {
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
-    abTests: state.abTests,
   };
 }
 
@@ -309,6 +281,7 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
+
 
 // ----- Exports ----- //
 
