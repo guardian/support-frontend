@@ -44,7 +44,7 @@ const content = (
         </InfoSection>
         <InfoSection
           heading="Spread the word"
-          className="payPal-error__spread-the-word"
+          className="paypal-error__spread-the-word"
         >
           <p>
             We report for everyone. Let your friends and followers know that
