@@ -16,13 +16,12 @@ import scala.concurrent.duration._
 
 class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends TouchpointService with LazyLogging {
 
-  val config = apiConfig
   // The parameters sent with every NVP request.
   val defaultNVPParams = Map(
-    "USER" -> config.user,
-    "PWD" -> config.password,
-    "SIGNATURE" -> config.signature,
-    "VERSION" -> config.NVPVersion
+    "USER" -> apiConfig.user,
+    "PWD" -> apiConfig.password,
+    "SIGNATURE" -> apiConfig.signature,
+    "VERSION" -> apiConfig.NVPVersion
   )
 
   // Logs the result of the PayPal NVP request.
@@ -43,10 +42,6 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends T
   private def extractResponse(response: Response) = {
 
     val responseBody = response.body().string()
-
-    //    if (Config.stageDev)
-    //      logger.info("NVP response body = " + responseBody)
-
     val parsedResponse = parseQuery(responseBody)
 
     logNVPResponse(parsedResponse)
@@ -62,13 +57,12 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends T
     for ((param, value) <- params) reqBody.add(param, value)
 
     val request = new Request.Builder()
-      .url(config.url)
+      .url(apiConfig.url)
       .post(reqBody.build())
       .build()
 
-    for {
-      response <- client(request)
-    } yield extractResponse(response)
+    client(request).map(extractResponse)
+
   }
 
   // Takes an NVP response and retrieves a given parameter as a string.
