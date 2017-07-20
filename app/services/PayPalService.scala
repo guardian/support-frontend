@@ -85,21 +85,21 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
       "NOSHIPPING" -> "1"
     )
 
-    for {
-      resp <- nvpRequest(paymentParams)
-    } yield retrieveNVPParam(resp, "TOKEN")
+    nvpRequest(paymentParams).map { resp =>
+      retrieveNVPParam(resp, "TOKEN")
+    }
   }
 
   // Sends a request to PayPal to create billing agreement and returns BAID.
-  def retrieveBaid(token: Token): Future[String] = {
+  def createBillingAgreement(token: Token): Future[String] = {
     val agreementParams = Map(
       "METHOD" -> "CreateBillingAgreement",
       "TOKEN" -> token.token
     )
 
-    for {
-      resp <- nvpRequest(agreementParams)
-    } yield retrieveNVPParam(resp, "BILLINGAGREEMENTID")
+    nvpRequest(agreementParams).map { resp =>
+      retrieveNVPParam(resp, "BILLINGAGREEMENTID")
+    }
   }
 }
 

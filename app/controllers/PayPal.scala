@@ -47,7 +47,7 @@ class PayPal(
 
   def createAgreement: Action[Token] = AuthenticatedAction.async(parse.json[Token]) { implicit request =>
     withPaypalServiceForUser(request.user) { service =>
-      service.retrieveBaid(request.body)
+      service.createBillingAgreement(request.body)
     }.map(token => Ok(toJson(Token(token))))
   }
 
