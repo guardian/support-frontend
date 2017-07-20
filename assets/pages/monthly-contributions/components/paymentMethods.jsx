@@ -27,11 +27,11 @@ type PropTypes = {
 function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
-  let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout} />;
+  let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout('stripeToken')} />;
   let payPalButton = '';
 
   if (props.payPalButtonExists) {
-    payPalButton = <PaypalExpressButton />;
+    payPalButton = <PaypalExpressButton callback={postCheckout('baid')} />;
   }
 
   if (props.firstName === '' || props.lastName === '') {
