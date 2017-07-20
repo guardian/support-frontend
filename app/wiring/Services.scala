@@ -1,12 +1,11 @@
 package wiring
 
-import assets.AssetsResolver
-import services.stepfunctions.{Encryption, MonthlyContributionsClient}
-import services.stepfunctions.StateWrapper
-import play.api.libs.ws.ahc.AhcWSComponents
-import services.{AuthenticationService, IdentityService, MembersDataService, TestUserService}
-import play.api.BuiltInComponentsFromContext
 import config.Stages
+import play.api.BuiltInComponentsFromContext
+import play.api.libs.ws.ahc.AhcWSComponents
+import services._
+import services.paypal.PayPalServiceProvider
+import services.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -14,6 +13,8 @@ trait Services {
   implicit private val implicitWs = wsClient
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
+
+  lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider, wsClient)
 
   lazy val identityService = IdentityService(appConfig.identity)
 

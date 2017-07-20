@@ -21,7 +21,7 @@ import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUs
 import services.stepfunctions.MonthlyContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
-import config.{StripeConfig, TouchpointConfigProvider}
+import config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
 import fixtures.TestCSRFComponents
 
 class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
@@ -133,8 +133,18 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {
-        val touchpointConfigProvider = mock[TouchpointConfigProvider]
-        when(touchpointConfigProvider.getStripeConfig(any[Boolean])).thenReturn(StripeConfig("test-key"))
+        val stripeConfigProvider = mock[StripeConfigProvider]
+        val payPalConfigProvider = mock[PayPalConfigProvider]
+        when(stripeConfigProvider.get(any[Boolean])).thenReturn(StripeConfig("test-key"))
+        when(payPalConfigProvider.get(any[Boolean])).thenReturn(PayPalConfig(
+          payPalEnvironment = "",
+          NVPVersion = "",
+          url = "",
+          user = "",
+          password = "",
+          signature = ""
+        ))
+
         new MonthlyContributions(
           mock[MonthlyContributionsClient],
           assetResolver,
@@ -142,9 +152,10 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           membersDataService,
           identityService,
           testUsers,
-          touchpointConfigProvider,
+          stripeConfigProvider,
+          payPalConfigProvider,
           stubControllerComponents()
-        ).displayForm(FakeRequest())
+        ).displayForm()(FakeRequest())
       }
     }
   }

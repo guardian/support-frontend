@@ -4,23 +4,29 @@ GET /healthcheck                controllers.Application.healthcheck
 
 
 # ----- Pages ----- #
+GET /uk                        controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
+GET /                          controllers.Default.redirect(to = "/uk")
 
-GET /uk                         controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
-GET /                           controllers.Default.redirect(to = "/uk")
+GET  /monthly-contributions                         controllers.MonthlyContributions.displayForm(paypal : Option[Boolean])
+GET  /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
+GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
+POST /monthly-contributions/create                  controllers.MonthlyContributions.create
 
-GET /monthly-contributions                         controllers.MonthlyContributions.displayForm
-GET /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
-GET /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
-POST /monthly-contributions/create                 controllers.MonthlyContributions.create
+GET /oneoff-contributions/thankyou                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 
-GET /oneoff-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
+GET  /login                    controllers.Login.login
+GET  /loginAction              controllers.Login.loginAction
+GET  /oauth2callback           controllers.Login.oauth2Callback
+GET  /logout                   controllers.Login.logout
 
-GET /login                 controllers.Login.login
-GET /loginAction           controllers.Login.loginAction
-GET /oauth2callback        controllers.Login.oauth2Callback
-GET /logout                controllers.Login.logout
+GET  /test-users               controllers.TestUsersManagement.createTestUser
 
-GET /test-users            controllers.TestUsersManagement.createTestUser
+# Paypal NVP endpoints.
+POST /paypal/setup-payment     controllers.PayPal.setupPayment
+POST /paypal/create-agreement  controllers.PayPal.createAgreement
+GET  /paypal/return            controllers.PayPal.returnUrl
+GET  /paypal/cancel            controllers.PayPal.cancelUrl
 
-GET /assets/*file               controllers.Assets.at(path="/public/compiled-assets", file)
-GET /*file                      controllers.Assets.at(path="/public", file)
+# Assets
+GET  /assets/*file             controllers.Assets.at(path="/public/compiled-assets", file)
+GET  /*file                    controllers.Assets.at(path="/public", file)

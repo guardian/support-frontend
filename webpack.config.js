@@ -52,6 +52,7 @@ module.exports = (env) => {
       monthlyContributionsThankyouPage: 'pages/contributions-thankyou/monthlyContributionsThankyou.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
+      payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     },
 
     output: {

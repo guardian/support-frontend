@@ -2,6 +2,8 @@ package services
 
 import java.time.Duration.ofDays
 
+import actions.CustomActionBuilders.AuthRequest
+import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.testing.usernames.TestUsernames
 
 object TestUserService {
@@ -18,4 +20,8 @@ class TestUserService(secret: String) {
 
   def isTestUser(displayName: Option[String]): Boolean =
     displayName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
+
+  def isTestUser(implicit request: AuthRequest[_]): Boolean = isTestUser(request.user.user.displayName)
+
+  def isTestUser(user: AuthenticatedIdUser): Boolean = isTestUser(user.displayName)
 }

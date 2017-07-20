@@ -2,6 +2,7 @@ package config
 
 import com.typesafe.config.ConfigFactory
 import ConfigImplicits._
+import config.TouchPointEnvironments.fromStage
 import services.aws.AwsConfig
 
 class Configuration {
@@ -21,8 +22,9 @@ class Configuration {
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
-  lazy val touchpointConfigProvider = new TouchpointConfigProvider(
-    config.getConfig("touchpoint.backend.environments"),
-    stage
-  )
+  private val touchpoint = config.getConfig("touchpoint.backend.environments")
+
+  lazy val payPalConfigProvider = new PayPalConfigProvider(touchpoint, fromStage(stage))
+
+  lazy val stripeConfigProvider = new StripeConfigProvider(touchpoint, fromStage(stage))
 }
