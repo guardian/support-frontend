@@ -20,13 +20,7 @@ type User = {
 
 // ----- Setup ----- //
 
-const initialState: User = window.guardian && window.guardian.user ? {
-  email: window.guardian.user.email,
-  displayName: window.guardian.user.displayName,
-  firstName: window.guardian.user.firstName,
-  lastName: window.guardian.user.lastName,
-  isTestUser: window.guardian.user.isTestUser,
-} : {
+const initialState: User = {
   email: null,
   displayName: null,
   firstName: null,
@@ -42,6 +36,9 @@ export default function userReducer(
   action: Action): User {
 
   switch (action.type) {
+
+    case 'SET_DISPLAY_NAME':
+      return Object.assign({}, state, { displayName: action.name });
 
     case 'SET_FIRST_NAME':
       return Object.assign({}, state, { firstName: action.name });

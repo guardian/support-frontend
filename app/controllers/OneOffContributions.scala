@@ -2,19 +2,18 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import cats.data.OptionT
 import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.ExecutionContext
-import cats.implicits._
-import com.gu.identity.play.IdUser
 import services.{IdentityService, TestUserService}
 import com.typesafe.scalalogging.LazyLogging
 import views.html.oneOffContributions
 import config.TouchpointConfigProvider
-
-import scala.concurrent.Future
+import cats.implicits._
+import com.gu.identity.play.IdUser
+import models.Autofill
+import io.circe.syntax._
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -29,26 +28,31 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm: Action[AnyContent] = MaybeAuthenticated.async { implicit request =>
-    request.user
-      .map(identityService.getUser(_))
-      .fold(OptionT.none[Future, IdUser])(_.toOption)
-      .value.map { optUser =>
+  def displayForm: Action[AnyContent] = CachedAction.varyByHeader("X-GU-Test-User") { header =>
+    val isTestUser = header.contains("true")
+    Ok(
+      oneOffContributions(
+        title = "Support the Guardian | One-off Contribution",
+        id = "oneoff-contributions-page",
+        js = "oneoffContributionsPage.js",
+        isTestUser = isTestUser,
+        stripeConfig = touchpointConfigProvider.getStripeConfig(isTestUser)
+      )
+    )
+  }
 
-        val isTestUser = optUser.exists { user =>
-          testUsers.isTestUser(user.publicFields.displayName)
-        }
+  def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+    identityService.getUser(request.user).fold(
+      _ => Ok(Autofill.empty.asJson),
+      user => Ok(Autofill(fullNameFor(user), Some(user.primaryEmailAddress)).asJson)
+    )
+  }
 
-        Ok(
-          oneOffContributions(
-            title = "Support the Guardian | One-off Contribution",
-            id = "oneoff-contributions-page",
-            js = "oneoffContributionsPage.js",
-            optUser = optUser,
-            isTestUser = isTestUser,
-            stripeConfig = touchpointConfigProvider.getStripeConfig(isTestUser)
-          )
-        )
-      }
+  private def fullNameFor(user: IdUser) = {
+    for {
+      privateFields <- user.privateFields
+      firstName <- privateFields.firstName
+      lastName <- privateFields.firstName
+    } yield s"$firstName $lastName"
   }
 }

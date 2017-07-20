@@ -14,12 +14,12 @@
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
+        window.guardian.isTestUser = @isTestUser;
         window.guardian.user = {
             email: "@user.primaryEmailAddress",
             @user.publicFields.displayName.map { displayName =>
             displayName: "@displayName",
             }
-            isTestUser: @isTestUser,
             @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
                 firstName: "@firstName",
                 lastName: "@lastName",

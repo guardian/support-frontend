@@ -19,6 +19,13 @@ class CachedAction(actionBuilder: ActionBuilder[Request, AnyContent])(implicit v
     block.map(_.withHeaders(cacheHeaders(maxAge): _*))
   }
 
+  def varyByHeader[T](headerName: String, maxAge: FiniteDuration = defaultMaxAge)(block: Option[String] => Result): Action[AnyContent] =
+    actionBuilder { request =>
+      block(request.headers.get(headerName))
+        .withHeaders(cacheHeaders(maxAge): _*)
+        .withHeaders("Vary" -> headerName)
+    }
+
   def apply[T](maxAge: FiniteDuration)(block: => Result): Action[AnyContent] = actionBuilder {
     block.withHeaders(cacheHeaders(maxAge): _*)
   }
