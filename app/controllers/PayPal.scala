@@ -2,18 +2,18 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.AuthRequest
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
 import com.typesafe.scalalogging.LazyLogging
-import play.api.libs.json.Json.toJson
-import play.api.libs.json._
+import io.circe.syntax._
+import play.api.libs.circe.Circe
 import play.api.mvc._
+import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
 import services.{PayPalService, TestUserService}
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
 
 class PayPal(
     actionBuilders: CustomActionBuilders,
@@ -21,18 +21,14 @@ class PayPal(
     payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionBuilders._
 
   implicit val assetsResolver = assets
 
-  // Json readers & writers.
-  implicit val formatsToken = Json.format[Token]
-  implicit val readsBillingDetails = Json.reads[PayPalBillingDetails]
-
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = AuthenticatedAction.async(parse.json[PayPalBillingDetails]) { implicit request =>
+  def setupPayment: Action[PayPalBillingDetails] = AuthenticatedAction.async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
 
     withPaypalServiceForUser(request.user) { service =>
@@ -41,14 +37,14 @@ class PayPal(
         cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
-      Ok(toJson(Token(response)))
+      Ok(Token(response).asJson)
     }
   }
 
-  def createAgreement: Action[Token] = AuthenticatedAction.async(parse.json[Token]) { implicit request =>
+  def createAgreement: Action[Token] = AuthenticatedAction.async(circe.json[Token]) { implicit request =>
     withPaypalServiceForUser(request.user) { service =>
       service.createBillingAgreement(request.body)
-    }.map(token => Ok(toJson(Token(token))))
+    }.map(token => Ok(Token(token).asJson))
   }
 
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {
