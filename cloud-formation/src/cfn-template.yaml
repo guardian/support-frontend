@@ -61,6 +61,7 @@ Resources:
                 - logs:Create*
                 - logs:PutLogEvents
                 - logs:DescribeLogStreams
+                - cloudwatch:putMetricData
               Resource: arn:aws:logs:*:*:*
         - PolicyName: KMSEncryption
           PolicyDocument:
