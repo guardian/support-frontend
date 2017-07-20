@@ -2,11 +2,8 @@
 
 	// ----- General ----- //
 
-	background-color: darken(gu-colour(multimedia-main-2), 5%);
+	background-color: darken(#fff, 5%);
 
-	.contributions-landing {
-		background-color: gu-colour(multimedia-main-2);
-	}
 
 	// ----- Introduction ----- //
 
@@ -24,7 +21,30 @@
 
 	// ----- Bundle ----- //
 
+	.contributions-bundle__content {
+		background-color: #fff;
+		position: relative;
+	}
+
+	.introduction-bleed, .introduction-bleed-margins {
+      height: 180px;
+      background-color: darken(gu-colour(multimedia-main-2), 5%);
+      position: absolute;
+      left: 0;
+      width: 100%;
+
+      @include mq($from: phablet) {
+        height: 130px;
+      }
+
+    }
+
+    .introduction-bleed {
+      background-color: gu-colour(multimedia-main-2);
+    }
+
 	.component-bundle {
+		position: relative;
 		padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 		border-top: 1px solid gu-colour(neutral-1);
 		background-color: gu-colour(comment-support-3);
@@ -58,6 +78,35 @@
 	        top: 15px;
 	        right: 12px;
 	    }
+	}
+
+	// ----- Legal Copy ----- //
+
+	.contributions-legal {
+		background-color: darken(#fff, 5%);
+		font-family: $gu-text-sans-web;
+		font-size: 12px;
+		color: gu-colour(neutral-1);
+	}
+
+	.contributions-legal__content {
+		background-color: #fff;
+		padding-top: $gu-v-spacing * 2;
+		padding-bottom: $gu-v-spacing * 4;
+
+		@include mq($until: phablet) {
+			padding: $gu-v-spacing $gu-h-spacing;
+		}
+	}
+
+	.contributions-legal__segment {
+		@include mq($from: phablet) {
+			display: inline;
+		}
+
+		@include mq($until: phablet) {
+			padding-bottom: $gu-v-spacing;
+		}
 	}
 
 }
