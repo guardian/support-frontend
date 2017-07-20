@@ -22,13 +22,13 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
 
   private def logNVPResponse(response: QueryString) = {
 
-    def msg(status: String) = s"PayPal: $status (NVPResponse: $response)"
+    val msg = s"NVPResponse: $response"
 
     retrieveNVPParam(response, "ACK") match {
       case "Success" => logger.info("Successful PayPal NVP request")
-      case "SuccessWithWarning" => logger.warn(msg("Warning"))
-      case "Failure" => logger.error(msg("Error"))
-      case "FailureWithWarning" => logger.error(msg("Error With Warning"))
+      case "SuccessWithWarning" => logger.warn(msg)
+      case "Failure" => logger.error(msg)
+      case "FailureWithWarning" => logger.error(msg)
     }
 
   }
