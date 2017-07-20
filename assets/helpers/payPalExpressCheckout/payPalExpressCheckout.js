@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { State as PaypalState } from './payPalExpressCheckoutReducer';
+import type { State as PayPalState } from './payPalExpressCheckoutReducer';
 
 
 // ----- Functions ----- //
@@ -27,7 +27,7 @@ const loadPayPalExpress = () => new Promise((resolve) => {
 });
 
 const setup = (
-  state: PaypalState,
+  state: PayPalState,
   setupPayment: Function,
   onAuthorize: Function,
 ) => loadPayPalExpress().then(() => {
