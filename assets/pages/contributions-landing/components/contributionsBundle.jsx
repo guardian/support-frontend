@@ -21,6 +21,9 @@ import type { Contrib, Amounts } from '../reducers/reducers';
 
 // ----- Types ----- //
 
+// Disabling the linter here because it's just buggy...
+/* eslint-disable react/no-unused-prop-types */
+
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
@@ -31,6 +34,8 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
 };
+
+/* eslint-enable react/no-unused-prop-types */
 
 type ContribAttrs = {
   heading: string,
@@ -45,7 +50,8 @@ type ContribAttrs = {
 
 const contribAttrs: ContribAttrs = {
   heading: 'contribute',
-  subheading: 'Support the Guardian’s editorial operations by making a (monthly or one-off) contribution today',
+  subheading: `Support the Guardian’s editorial operations by making a
+    (monthly or one-off) contribution today`,
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',

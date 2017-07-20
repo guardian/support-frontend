@@ -26,7 +26,9 @@ const participation = pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') });
+const store = createStore(reducer, {
+  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+});
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 
