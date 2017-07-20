@@ -2,7 +2,7 @@ package config
 
 import com.typesafe.config.ConfigFactory
 import ConfigImplicits._
-import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider, TouchPointEnvironments}
 import services.aws.AwsConfig
 
 class Configuration {
