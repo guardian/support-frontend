@@ -2,7 +2,7 @@ package com.gu.zuora
 
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.i18n.Currency.GBP
+import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.gu.zuora.model._
 import org.joda.time.LocalDate
@@ -111,9 +111,9 @@ object Fixtures {
   val subscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(config.productRatePlanId),
+        RatePlan(config.productRatePlanId), //Contribution product
         List(RatePlanChargeData(
-          RatePlanCharge(config.productRatePlanChargeId, Some(5: BigDecimal))
+          RatePlanCharge(config.productRatePlanChargeId, Some(25: BigDecimal))
         )),
         Nil
       )
@@ -122,6 +122,10 @@ object Fixtures {
   )
 
   val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
+
+  val usAccount = Account(salesforceAccountId, USD, salesforceAccountId, salesforceId, identityId, StripeGateway)
+
+  val usSubscriptionRequest = SubscribeRequest(List(SubscribeItem(usAccount, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
 
   val invalidSubsData = SubscriptionData(
     List(
@@ -191,13 +195,13 @@ object Fixtures {
           {
             "Errors": [
               {
-                "Code": "INVALID_VALUE",
-                "Message": "invalid value for field TermType: Monkeys"
+                "Code": "MISSING_REQUIRED_VALUE",
+                "Message": "SubscriptionData.SubscriptionRatePlanData[0].ProductRatePlanId is invalid."
               }
             ],
             "Success": false
           }
-       ]
+        ]
      """
 
 }

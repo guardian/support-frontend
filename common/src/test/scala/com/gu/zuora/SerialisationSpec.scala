@@ -65,7 +65,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     }
     decodeResult.isRight should be(true)
     decodeResult.right.get.head.errors.size should be(1)
-    decodeResult.right.get.head.errors.head.Code should be("INVALID_VALUE")
+    decodeResult.right.get.head.errors.head.Code should be("MISSING_REQUIRED_VALUE")
   }
 
 }
