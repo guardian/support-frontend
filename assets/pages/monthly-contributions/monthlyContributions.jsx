@@ -69,6 +69,9 @@ const content = (
           />
         </InfoSection>
       </div>
+      <section className="gu-content-filler">
+        <div className="gu-content-filler__inner" />
+      </section>
       <SimpleFooter />
     </div>
   </Provider>

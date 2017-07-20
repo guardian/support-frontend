@@ -49,6 +49,8 @@
 		}
 	}
 
+	// ----- Main Content
+
 	.component-cta-link {
 		color: gu-colour(neutral-1);
 		background: transparent;
@@ -81,4 +83,15 @@
 			margin-top: $gu-v-spacing;
 		}
 	}
+
+	// ----- Filler
+
+	.gu-content-filler {
+		background-color: darken(gu-colour(multimedia-main-2), 5%);
+	}
+
+	.gu-content-filler__inner {
+		background-color: gu-colour(multimedia-main-2);
+	}
+
 }
