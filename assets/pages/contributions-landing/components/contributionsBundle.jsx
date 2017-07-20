@@ -40,17 +40,12 @@ type ContribAttrs = {
   ctaLink: string,
 }
 
-const contribSubheading = {
-  recurring: 'from £5/month',
-  oneOff: '',
-};
-
 
 // ----- Copy ----- //
 
 const contribAttrs: ContribAttrs = {
   heading: 'contribute',
-  subheading: 'from £5/month',
+  subheading: 'Support the Guardian’s editorial operations by making a (monthly or one-off) contribution today',
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
@@ -68,14 +63,13 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
-  const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 
   params.append(amountParam, contribAmount[contType].value);
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs, { ctaLink, subheading });
+  return Object.assign({}, contribAttrs, { ctaLink });
 
 };
 
