@@ -131,6 +131,12 @@
           height: 32px;
         }
       }
+
+      @include mq($from: desktop) {
+        .component-number-input {
+          max-width: 93%;
+        }
+      }
     }
 
     .component-bundle--digital, .component-bundle--paper {
@@ -598,10 +604,6 @@
 
   .component-double-heading--variant-a {
     margin-bottom: 0;
-  }
-
-  .component-radio-toggle label, .component-number-input {
-    border: 1px solid gu-colour(neutral-1);
   }
 
   .component-radio-toggle input:not(:checked)+label, .component-number-input {

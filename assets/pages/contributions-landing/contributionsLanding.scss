@@ -22,4 +22,42 @@
 		}
 	}
 
+	// ----- Bundle ----- //
+
+	.component-bundle {
+		padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
+		border-top: 1px solid gu-colour(neutral-1);
+		background-color: gu-colour(comment-support-3);
+		font-family: $gu-text-sans-web;
+
+		.component-double-heading, .component-bundle__content {
+
+			@include mq($from: phablet) {
+				display: inline-block;
+				width: 50%;
+				vertical-align: top;
+			}
+		}
+	}
+
+	.component-double-heading {
+    	margin-bottom: (2 * $gu-v-spacing);
+	}
+
+	.component-radio-toggle input:not(:checked)+label, .component-number-input {
+        background-color: gu-colour(comment-support-3);
+	}
+
+	.component-cta-link {
+		padding-top: $gu-v-spacing;
+		padding-bottom: $gu-v-spacing;
+		margin-top: $gu-v-spacing * 4;
+
+		svg {
+	        height: 35%;
+	        top: 15px;
+	        right: 12px;
+	    }
+	}
+
 }

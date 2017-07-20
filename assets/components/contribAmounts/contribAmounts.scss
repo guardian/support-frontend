@@ -1,5 +1,7 @@
 .component-contrib-amounts {
 
+    font-size: 14px;
+
     .component-radio-toggle {
         display: flex;
         flex-direction: row;
@@ -20,6 +22,7 @@
         display: block;
         height: $gu-v-spacing * 2;
         text-align: center;
+        border: 1px solid gu-colour(neutral-1);
     }
 
     input:checked+label {
@@ -46,12 +49,6 @@
     }
 
     .component-contrib-amounts__amounts {
-      @include mq($from: desktop) {
-        .component-number-input {
-          max-width: 93%;
-        }
-      }
-
       .component-radio-toggle__input {
         display: none;
       }
@@ -64,6 +61,7 @@
       .component-number-input {
         flex-basis: 100%;
         flex-grow: 1;
+        border: 1px solid gu-colour(neutral-1);
       }
     }
 
