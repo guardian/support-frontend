@@ -4,7 +4,6 @@
 
 import * as payPalExpressCheckout from './payPalExpressCheckout';
 
-
 // ----- Types ----- //
 
 export type Action =
@@ -13,6 +12,11 @@ export type Action =
   | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
   | { type: 'PAYPAL_EXPRESS_ERROR', message: string }
   ;
+
+// ----- Setup ----- //
+
+const SETUP_PAYMENT_URL = '/paypal/setup-payment';
+const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
 
 
 // ----- Actions ----- //
@@ -33,6 +37,8 @@ export function payPalExpressError(message: string): Action {
   return { type: 'PAYPAL_EXPRESS_ERROR', message };
 }
 
+// ----- Auxiliary Functions -----//
+
 function handleSetupResponse(response: Object) {
   let resp = null;
   if (response.status === 200) {
@@ -42,24 +48,32 @@ function handleSetupResponse(response: Object) {
   return resp;
 }
 
-// First Step: setupPayment
-// Sends request to server to setup payment, and returns Paypal token.
-function setupPayment(dispatch, state: Object) {
+function payPalRequestData(bodyObj: Object, state: Object) {
+
+  const body = JSON.stringify(bodyObj);
+
+  return {
+    credentials: 'include',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    body,
+  };
+}
+
+function setupPayment(dispatch, state) {
+
+  const payPalState = state.payPalExpressCheckout;
 
   return (resolve, reject) => {
-    const requestBody = {
-      amount: state.payPalExpressCheckout.amount,
-      billingPeriod: state.payPalExpressCheckout.billingPeriod,
-      currency: state.payPalExpressCheckout.currency,
-    };
-    const SETUP_PAYMENT_URL = '/paypal/setup-payment';
 
-    fetch(SETUP_PAYMENT_URL, {
-      credentials: 'include',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
-      body: JSON.stringify(requestBody),
-    }).then(handleSetupResponse)
+    const requestBody = {
+      amount: payPalState.amount,
+      billingPeriod: payPalState.billingPeriod,
+      currency: payPalState.currency,
+    };
+
+    fetch(SETUP_PAYMENT_URL, payPalRequestData(requestBody, state))
+      .then(handleSetupResponse)
       .then((token) => {
         if (token) {
           resolve(token.token);
@@ -73,68 +87,24 @@ function setupPayment(dispatch, state: Object) {
   };
 }
 
-// Second step: createAgreement
 function createAgreement(payPalData, state: Object) {
-  const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
-  return fetch(CREATE_AGREEMENT_URL, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
-    method: 'POST',
-    body: JSON.stringify({ token: payPalData.paymentToken }),
-  }).then(response => response.json());
+  const body = { token: payPalData.paymentToken };
+
+  return fetch(CREATE_AGREEMENT_URL, payPalRequestData(body, state))
+    .then(response => response.json());
 }
 
-// Third Step: postForm with baid
-function requestData(baid: string, getState: Function) {
+// ----- Functions -----//
 
-  const state = getState();
-
-  const monthlyContribFields = {
-    contribution: {
-      amount: state.stripeCheckout.amount,
-      currency: state.stripeCheckout.currency,
-    },
-    paymentFields: {
-      baid,
-    },
-    country: state.monthlyContrib.country,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-  };
-
-  return {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
-    credentials: 'same-origin',
-    body: JSON.stringify(monthlyContribFields),
-  };
-}
-
-// Creates the new member by posting the form data with the BAID.
-function postForm(baid: string, dispatch: Function, getState: Function) {
-  const MONTHLY_CONTRIB_ENDPOINT = '/monthly-contributions/create';
-  const MONTHLY_CONTRIB_THANKYOU = '/monthly-contributions/thankyou';
-
-  const request = requestData(baid, getState);
-
-  return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
-
-    if (response.ok) {
-      window.location.assign(MONTHLY_CONTRIB_THANKYOU);
-    }
-
-    response.text().then(err => dispatch(payPalExpressError(err)));
-
-  });
-}
-
-// SetupPaypalExpressCheckout
-export function setupPayPalExpressCheckout(): Function {
+export function setupPayPalExpressCheckout(callback: Function): Function {
 
   return (dispatch, getState) => {
 
+    const state = getState();
+    const payPalState = state.payPalExpressCheckout;
+
     const handleBaId = (baid: Object) => {
-      postForm(baid.token, dispatch, getState);
+      callback(baid.token, dispatch, getState);
     };
 
     const onAuthorize = (data) => {
@@ -147,10 +117,8 @@ export function setupPayPalExpressCheckout(): Function {
 
     dispatch(startPayPalExpressCheckout());
 
-    return payPalExpressCheckout.setup(
-      getState().payPalExpressCheckout,
-      setupPayment(dispatch, getState()),
-      onAuthorize,
-    ).then(() => dispatch(payPalExpressCheckoutLoaded()));
+    return payPalExpressCheckout
+      .setup(payPalState, setupPayment(dispatch, state), onAuthorize)
+      .then(() => dispatch(payPalExpressCheckoutLoaded()));
   };
 }
