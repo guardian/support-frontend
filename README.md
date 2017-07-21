@@ -27,7 +27,7 @@ When running locally you can avoid loading config from S3 on each run and load i
 
 * Retrieve credentials from S3 with the command:
 
-    `sudo aws s3 cp s3://support-workers-private/DEV/support-workers.private.conf /etc/gu/support-workers.private.conf --profile membership`
+    `sudo aws s3 cp s3://support-workers-private/CODE/support-workers.private.conf /etc/gu/support-workers.private.conf --profile membership`
 
 * Set an environment variable to false by adding the following to your bashrc:
 
