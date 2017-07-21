@@ -50,6 +50,16 @@
 		background-color: gu-colour(comment-support-3);
 		font-family: $gu-text-sans-web;
 
+		@include mq($from: leftCol) {
+	      margin-left: 80px;
+	      margin-right: 80px;
+	    }
+
+	    @include mq($from: wide) {
+	      margin-left: 160px;
+	      margin-right: 160px;
+	    }
+
 		.component-double-heading, .component-bundle__content {
 
 			@include mq($from: phablet) {
@@ -62,6 +72,12 @@
 
 	.component-double-heading {
     	margin-bottom: (2 * $gu-v-spacing);
+	}
+
+	.component-double-heading__subheading {
+		font-size: 16px;
+		line-height: 20px;
+		padding-right: 18%;
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
@@ -97,6 +113,18 @@
 		@include mq($until: phablet) {
 			padding: $gu-v-spacing $gu-h-spacing;
 		}
+	}
+
+	.contributions-legal__copy {
+		@include mq($from: leftCol) {
+	      margin-left: 80px;
+	      margin-right: 80px;
+	    }
+
+	    @include mq($from: wide) {
+	      margin-left: 160px;
+	      margin-right: 160px;
+	    }
 	}
 
 	.contributions-legal__segment {
