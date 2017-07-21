@@ -7,11 +7,13 @@ import com.gu.salesforce.Fixtures.idId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.Fixtures.{updateMembersDataAPIJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.test.tags.annotations.IntegrationTest
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.Future
 
+@IntegrationTest
 class UpdateMembersDataAPISpec extends LambdaSpec with MockitoSugar {
 
   "UpdateMembersDataAPI lambda" should "create put request to Members Data API" in {
