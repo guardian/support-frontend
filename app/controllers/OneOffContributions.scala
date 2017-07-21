@@ -1,6 +1,6 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CacheControl, CustomActionBuilders}
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe
@@ -34,8 +34,8 @@ class OneOffContributions(
     oneOffContributionForm(isTestUser = false)
   }
 
-  def displayFormTestUser: Action[AnyContent] = CachedAction() {
-    oneOffContributionForm(isTestUser = true)
+  def displayFormTestUser: Action[AnyContent] = authAction {
+    oneOffContributionForm(isTestUser = true).withHeaders(CacheControl.noCache)
   }
 
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
