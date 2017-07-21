@@ -24,8 +24,8 @@ pageStartup.start();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <section className="thankyou">
-      <div className="thankyou__content gu-content-margin">
+    <section className="thankyou gu-content-filler">
+      <div className="thankyou__content gu-content-filler__inner">
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 className="thankyou__subheading">
@@ -57,9 +57,6 @@ const content = (
           <SocialShare name="twitter" />
         </InfoSection>
       </div>
-    </section>
-    <section className="gu-content-filler">
-      <div className="gu-content-filler__inner" />
     </section>
     <SimpleFooter />
   </div>

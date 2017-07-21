@@ -44,10 +44,10 @@ store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
 
 const content = (
   <Provider store={store}>
-    <div className="gu-content">
+    <div className="gu-content gu-content-filler">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="monthly-contrib gu-content-margin">
+      <div className="monthly-contrib gu-content-filler__inner">
         <InfoSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
           <Secure />
@@ -69,9 +69,6 @@ const content = (
           />
         </InfoSection>
       </div>
-      <section className="gu-content-filler">
-        <div className="gu-content-filler__inner" />
-      </section>
       <SimpleFooter />
     </div>
   </Provider>

@@ -23,8 +23,8 @@ pageStartup.start();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <section className="existing">
-      <div className="existing__content gu-content-margin">
+    <section className="existing gu-content-filler">
+      <div className="existing__content gu-content-filler__inner">
         <div className="existing__wrapper">
           <h1 className="existing__heading">Whoops!</h1>
           <h2 className="existing__subheading">
@@ -45,9 +45,6 @@ const content = (
           </p>
         </InfoSection>
       </div>
-    </section>
-    <section className="gu-content-filler">
-      <div className="gu-content-filler__inner" />
     </section>
     <SimpleFooter />
   </div>
