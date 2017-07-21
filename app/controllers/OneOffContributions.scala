@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 import services.{IdentityService, TestUserService}
 import com.typesafe.scalalogging.LazyLogging
 import views.html.oneOffContributions
-import config.TouchpointConfigProvider
+import config.{StripeConfigProvider, TouchpointConfigProvider}
 import cats.implicits._
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.IdUser
@@ -21,7 +21,7 @@ class OneOffContributions(
     actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     testUsers: TestUserService,
-    touchpointConfigProvider: TouchpointConfigProvider,
+    touchpointConfigProvider: StripeConfigProvider,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
@@ -51,7 +51,7 @@ class OneOffContributions(
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       isTestUser = isTestUser,
-      stripeConfig = touchpointConfigProvider.getStripeConfig(isTestUser)
+      stripeConfig = touchpointConfigProvider.get(isTestUser)
     )
   )
 
