@@ -19,7 +19,11 @@ describe('reducer tests', () => {
       contribType,
     };
 
-    expect(reducer(undefined, action).contribution.type).toEqual(contribType);
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toEqual(contribType);
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT', () => {
@@ -33,8 +37,12 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(undefined, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(undefined, action).contribution.amount.oneOff).toEqual(amount);
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.oneOff).toEqual(amount);
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
@@ -48,8 +56,12 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(undefined, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(undefined, action).contribution.amount.oneOff.value).toMatchSnapshot();
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.oneOff).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
@@ -63,7 +75,11 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(undefined, action).contribution.amount.oneOff).toEqual(amount);
-    expect(reducer(undefined, action).contribution.amount.recurring.value).toMatchSnapshot();
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.oneOff).toEqual(amount);
+    expect(newState.contribution.amount.recurring).toMatchSnapshot();
   });
 });

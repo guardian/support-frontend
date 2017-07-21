@@ -1,8 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"10"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"RECURRING"`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 1`] = `"50"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"RECURRING"`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 3`] = `
+Object {
+  "userDefined": false,
+  "value": "10",
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 1`] = `"RECURRING"`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 3`] = `
+Object {
+  "userDefined": false,
+  "value": "50",
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 2`] = `
+Object {
+  "oneOff": Object {
+    "userDefined": false,
+    "value": "50",
+  },
+  "recurring": Object {
+    "userDefined": false,
+    "value": "10",
+  },
+}
+`;
 
 exports[`reducer tests should return the initial state 1`] = `
 Object {
