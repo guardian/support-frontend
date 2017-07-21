@@ -40,7 +40,7 @@ trait Controllers {
     actionRefiners,
     identityService,
     testUsers,
-    appConfig.stripeConfigProvider,
+    appConfig.oneOffStripeConfigProvider,
     authAction,
     controllerComponents
   )
