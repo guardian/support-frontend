@@ -62,5 +62,5 @@ class CustomActionBuilders(
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
 
-  val CachedAction = new CachedAction(cc.actionBuilder)
+  val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 }
