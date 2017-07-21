@@ -7,9 +7,9 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
 class CachedActionBuilder(
-  val parser: BodyParser[AnyContent],
-  val executionContext: ExecutionContext,
-  val maxAge: FiniteDuration
+    val parser: BodyParser[AnyContent],
+    val executionContext: ExecutionContext,
+    val maxAge: FiniteDuration
 ) extends ActionBuilder[Request, AnyContent] {
 
   implicit private val ec = executionContext
