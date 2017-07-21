@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{CachedActionBuilder, MultiplexedActionBuilder, CustomActionBuilders}
+import actions.CustomActionBuilders
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe

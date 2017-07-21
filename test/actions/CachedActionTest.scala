@@ -12,23 +12,24 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class CachedActionTest extends WordSpec with MustMatchers {
 
-  val cachedAction = new CachedAction(stubControllerComponents().actionBuilder)
+  val cc = stubControllerComponents()
+  val cachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
   "with no arguments" should {
     "expire in 60 seconds" in {
-      val result = cachedAction(Ok("")).apply(FakeRequest())
+      val result = cachedAction()(Ok("")).apply(FakeRequest())
       val Some(date) = header("Date", result)
       val Some(expiry) = header("Expires", result)
       Seconds.secondsBetween(parseHttpDate(date), parseHttpDate(expiry)).getSeconds mustEqual 60
     }
 
     "browser cache control max-age of 60 seconds with 10% time for revalidation and 10 days stale on error" in {
-      val result = cachedAction(Ok("")).apply(FakeRequest())
+      val result = cachedAction()(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustEqual Some("max-age=60, stale-while-revalidate=6, stale-if-error=864000")
     }
 
     "cdn cache control max-age of 60 seconds with 10% time for revalidation and 10 days stale on error" in {
-      val result = cachedAction(Ok("")).apply(FakeRequest())
+      val result = cachedAction()(Ok("")).apply(FakeRequest())
       header("Surrogate-Control", result) mustEqual Some("max-age=60, stale-while-revalidate=6, stale-if-error=864000")
     }
   }

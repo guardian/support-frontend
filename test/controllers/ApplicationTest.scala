@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{CachedAction, CustomActionBuilders}
+import actions.CustomActionBuilders
 import org.scalatest.WordSpec
 import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
@@ -19,8 +19,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   implicit val timeout = Timeout(2.seconds)
-
-  val cachedAction = new CachedAction(stubControllerComponents().actionBuilder)
 
   val actionRefiner = new CustomActionBuilders(
     authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
