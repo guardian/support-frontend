@@ -24,7 +24,7 @@ object Configuration extends LazyLogging {
   logger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
   val config = PrivateConfigLoader
-    .forEnvironment(true)
+    .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
   val awsConfig = AwsConfig.fromConfig(config)
