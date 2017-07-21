@@ -77,7 +77,18 @@
 	.component-double-heading__subheading {
 		font-size: 16px;
 		line-height: 20px;
-		padding-right: 18%;
+
+		@include mq($from: phablet) {
+			padding-right: 20%;
+		}
+
+		@include mq($from: tablet) {
+			padding-right: 30%;
+		}
+
+		@include mq($from: desktop) {
+			padding-right: 20%;
+		}
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
