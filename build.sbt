@@ -4,6 +4,8 @@ import sbt.Keys.libraryDependencies
 
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
+resolvers += Resolver.sonatypeRepo("releases")
+
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 lazy val scalaStyleSettings = Seq(
