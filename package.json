@@ -12,7 +12,8 @@
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server --port 9111 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
-    "test": "echo 'Running JS tests' && jest"
+    "test": "echo 'Running JS tests' && jest",
+    "jest-update-snapshot" : "echo 'Updating JS tests' && jest -u"
   },
   "jest": {
     "transform": {
