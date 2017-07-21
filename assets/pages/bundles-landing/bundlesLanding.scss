@@ -134,7 +134,7 @@
 
       @include mq($from: desktop) {
         .component-number-input {
-          max-width: 93%;
+          // max-width: 93%;
         }
       }
     }

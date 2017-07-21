@@ -21,6 +21,10 @@
 
 	// ----- Bundle ----- //
 
+	.contributions-bundle {
+		background-color: darken(#fff, 5%);
+	}
+
 	.contributions-bundle__content {
 		background-color: #fff;
 		position: relative;
@@ -99,6 +103,27 @@
 		padding-top: $gu-v-spacing;
 		padding-bottom: $gu-v-spacing;
 		margin-top: $gu-v-spacing * 4;
+
+		@include mq($from: phablet) {
+			// Fix for IE.
+	        svg {
+	          left: 270px;
+	        }
+		}
+
+		@include mq($from: tablet) {
+			// Fix for IE.
+	        svg {
+	          left: 310px;
+	        }
+		}
+
+		@include mq($from: desktop) {
+			// Fix for IE.
+	        svg {
+	          left: 430px;
+	        }
+		}
 
 		svg {
 	        height: 35%;
