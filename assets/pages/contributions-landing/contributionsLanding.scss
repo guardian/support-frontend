@@ -99,6 +99,11 @@
         background-color: gu-colour(comment-support-3);
 	}
 
+	.component-number-input--selected {
+		background-color: gu-colour(neutral-1);
+		color: #fff;
+	}
+
 	.component-cta-link {
 		padding-top: $gu-v-spacing;
 		padding-bottom: $gu-v-spacing;
