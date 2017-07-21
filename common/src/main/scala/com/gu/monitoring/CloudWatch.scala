@@ -9,13 +9,12 @@ import com.gu.monitoring.CloudWatch.client
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 class CloudWatch(metrics: Dimension*) extends LazyLogging {
 
   val application = "SupportWorkers"
-  val stageDimension: Dimension = new Dimension().withName("Stage").withValue(Configuration.stage)
+  val stageDimension: Dimension = new Dimension().withName("Stage").withValue(Configuration.stage.toString)
   val allDimensions: Seq[Dimension] = metrics :+ stageDimension
 
   def put(name: String, count: Double): Future[PutMetricDataResult] = {

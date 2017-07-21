@@ -4,7 +4,8 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
-import com.gu.paypal.{PayPalConfig, PayPalService}
+import com.gu.paypal.PayPalService
+import com.gu.support.config.PayPalConfig
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.exceptions.RetryUnlimited

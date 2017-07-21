@@ -3,6 +3,7 @@ package com.gu.stripe
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners._
 import com.gu.stripe.Stripe._
+import com.gu.support.config.StripeConfig
 import okhttp3.Request
 
 import scala.concurrent.{ExecutionContext, Future}

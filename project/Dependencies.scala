@@ -11,6 +11,7 @@ object Dependencies {
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
   val supportModels = "com.gu" %% "support-models" % "0.6"
+  val supportConfig = "com.gu" %% "support-config" % "0.1"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
@@ -29,7 +30,7 @@ object Dependencies {
   val sentry = "com.getsentry.raven" % "raven-logback" % "8.0.3"
 
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, sentry, lambdaLogging, joda, dispatch,
-    supportInternationalisation, supportModels, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
+    supportInternationalisation, supportModels, supportConfig, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
     circeGeneric, circeGenericExtras, circeParser, stm, mokito, scalaTest)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mockWebserver)
 

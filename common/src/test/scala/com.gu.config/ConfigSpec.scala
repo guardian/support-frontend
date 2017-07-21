@@ -1,5 +1,6 @@
 package com.gu.config
 
+import com.gu.support.config.Stages
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{FlatSpec, Matchers}
 

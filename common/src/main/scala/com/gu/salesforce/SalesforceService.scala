@@ -60,14 +60,14 @@ object AuthService extends LazyLogging {
   private val authRef = Ref[Map[String, Authentication]](Map())
 
   def getAuth(config: SalesforceConfig): Future[Authentication] =
-    authRef.single().get(config.stage).filter(_.isFresh) match {
+    authRef.single().get(config.environment).filter(_.isFresh) match {
       case Some(authentication) =>
         Future.successful(authentication)
       case None => fetchAuth(config)
     }
 
   private def fetchAuth(config: SalesforceConfig) = new AuthService(config).authorize.map(authentication => {
-    storeAuth(authentication, config.stage)
+    storeAuth(authentication, config.environment)
     authentication
   })
 
