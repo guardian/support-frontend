@@ -26,10 +26,12 @@ type MonthlyContribFields = {
   lastName: string,
 };
 
+type PaymentField = 'baid' | 'stripeToken';
+
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: Function) {
+function requestData(paymentFieldName: PaymentField, token: string, getState: Function) {
 
   const state = getState();
 
@@ -39,7 +41,7 @@ function requestData(paymentToken: string, getState: Function) {
       currency: state.stripeCheckout.currency,
     },
     paymentFields: {
-      stripeToken: paymentToken,
+      [paymentFieldName]: token,
     },
     country: state.monthlyContrib.country,
     firstName: state.user.firstName,
@@ -55,22 +57,19 @@ function requestData(paymentToken: string, getState: Function) {
 
 }
 
-export default function postCheckout(
-  paymentToken: string,
-  dispatch: Function,
-  getState: Function,
-) {
+export default function postCheckout(paymentFieldName: PaymentField): Function {
+  return (token: string, dispatch: Function, getState: Function) => {
 
-  const request = requestData(paymentToken, getState);
+    const request = requestData(paymentFieldName, token, getState);
 
-  return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
+    return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
 
-    if (response.ok) {
-      window.location.assign(MONTHLY_CONTRIB_THANKYOU);
-    }
+      if (response.ok) {
+        window.location.assign(MONTHLY_CONTRIB_THANKYOU);
+      }
 
-    response.text().then(err => dispatch(checkoutError(err)));
+      response.text().then(err => dispatch(checkoutError(err)));
 
-  });
-
+    });
+  };
 }
