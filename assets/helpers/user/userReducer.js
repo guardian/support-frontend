@@ -49,6 +49,9 @@ export default function userReducer(
     case 'SET_FULL_NAME':
       return Object.assign({}, state, { fullName: action.name });
 
+    case 'SET_TEST_USER':
+      return Object.assign({}, state, { isTestUser: action.testUser });
+
     case 'SET_EMAIL':
       return Object.assign({}, state, { email: action.email });
 
