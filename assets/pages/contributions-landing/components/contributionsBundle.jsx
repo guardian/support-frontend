@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
+import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 
 import {
   changeContribType,
@@ -15,8 +16,6 @@ import {
   changeContribAmountRecurring,
   changeContribAmountOneOff,
 } from '../actions/contributionsLandingActions';
-
-import type { Contrib, Amounts } from '../reducers/reducers';
 
 
 // ----- Types ----- //
@@ -27,7 +26,7 @@ import type { Contrib, Amounts } from '../reducers/reducers';
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
-  contribError: string,
+  contribError: ContribError,
   intCmp: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,

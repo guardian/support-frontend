@@ -10,6 +10,7 @@ import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
+import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 
 import {
   changeContribType,
@@ -19,7 +20,6 @@ import {
 } from '../actions/bundlesLandingActions';
 import getSubsLinks from '../helpers/subscriptionsLinks';
 
-import type { Contrib, Amounts } from '../reducers/reducers';
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
 
 
@@ -31,7 +31,7 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
-  contribError: string,
+  contribError: ContribError,
   intCmp: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,

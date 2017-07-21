@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Contrib, ContribError, Amount } from '../reducers/reducers';
+import type { Contrib, ContribError, Amount } from 'helpers/contributions';
 
 
 // ----- Functions ----- //

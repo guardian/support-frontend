@@ -5,31 +5,13 @@
 import { combineReducers } from 'redux';
 
 import { abTestReducer as abTests } from 'helpers/abtest';
+import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import validateContribution from '../helpers/validation';
 import type { Action } from '../actions/bundlesLandingActions';
 
 
 // ----- Types ----- //
-
-export type Contrib = 'RECURRING' | 'ONE_OFF';
-
-export type ContribError =
-  | 'tooLittleRecurring'
-  | 'tooLittleOneOff'
-  | 'tooMuch'
-  | 'noEntry'
-  ;
-
-export type Amount = {
-  value: string,
-  userDefined: boolean,
-};
-
-export type Amounts = {
-  recurring: Amount,
-  oneOff: Amount,
-};
 
 export type ContribState = {
   type: Contrib,

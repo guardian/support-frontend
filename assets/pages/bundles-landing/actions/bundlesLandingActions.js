@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Contrib, Amount } from '../reducers/reducers';
+import type { Contrib, Amount } from 'helpers/contributions';
 
 
 // ----- Types ----- //

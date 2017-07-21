@@ -7,6 +7,7 @@ import React from 'react';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
+import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 
 // ----- Setup ----- //
