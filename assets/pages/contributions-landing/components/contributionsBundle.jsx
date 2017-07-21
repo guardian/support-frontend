@@ -58,8 +58,8 @@ const contribAttrs: ContribAttrs = {
 };
 
 const ctaLinks = {
-  recurring: 'https://membership.theguardian.com/monthly-contribution',
-  oneOff: 'https://contribute.theguardian.com/uk',
+  recurring: '/monthly-contributions',
+  oneOff: '/oneoff-contributions',
 };
 
 
@@ -68,11 +68,14 @@ const ctaLinks = {
 const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
-  const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
   const params = new URLSearchParams();
 
-  params.append(amountParam, contribAmount[contType].value);
-  params.append('INTCMP', intCmp);
+  params.append('contributionValue', contribAmount[contType].value);
+
+  if (intCmp) {
+    params.append('INTCMP', intCmp);
+  }
+
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
   return Object.assign({}, contribAttrs, { ctaLink });
@@ -88,7 +91,7 @@ function ContributionsBundle(props: PropTypes) {
 
   const onClick = () => {
     if (!props.contribError) {
-      window.location = contribAttrs.ctaLink;
+      window.location = attrs.ctaLink;
     }
   };
 
