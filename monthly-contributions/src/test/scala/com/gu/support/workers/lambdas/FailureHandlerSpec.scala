@@ -1,4 +1,4 @@
-package com.gu.support.workers.lambdas
+  package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
 
@@ -6,10 +6,12 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.support.workers.Fixtures.{failureJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.test.tags.annotations.IntegrationTest
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+@IntegrationTest
 class FailureHandlerSpec extends LambdaSpec {
 
   "EmailService" should "send a failure email" in {
