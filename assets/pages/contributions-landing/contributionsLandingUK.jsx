@@ -58,8 +58,8 @@ const content = (
           <ContributionsBundle />
         </div>
       </section>
-      <section className="contributions-legal">
-        <div className="contributions-legal__content gu-content-margin">
+      <section className="contributions-legal gu-content-filler">
+        <div className="contributions-legal__content gu-content-filler__inner">
           <p className="contributions-legal__segment">
             The ultimate owner of the Guardian is The Scott Trust Limited,
             whose role it is to secure the editorial and financial independence
