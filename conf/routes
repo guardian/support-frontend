@@ -14,6 +14,7 @@ GET /monthly-contributions/existing-contributor    controllers.Application.react
 POST /monthly-contributions/create                 controllers.MonthlyContributions.create
 
 GET /oneoff-contributions                         controllers.OneOffContributions.displayForm
+GET /oneoff-contributions/test-user               controllers.OneOffContributions.displayFormTestUser
 GET /oneoff-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 GET /oneoff-contributions/autofill                controllers.OneOffContributions.autofill
 

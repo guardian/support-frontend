@@ -37,6 +37,7 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.touchpointConfigProvider,
+    authAction,
     controllerComponents
   )
 
