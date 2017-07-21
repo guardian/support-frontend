@@ -14,7 +14,6 @@ export type Action =
   | { type: 'CLOSE_STRIPE_OVERLAY' }
   | { type: 'OPEN_STRIPE_OVERLAY' }
   | { type: 'SET_STRIPE_AMOUNT', amount: number }
-  | { type: 'STRIPE_ERROR', message: string }
   ;
 
 

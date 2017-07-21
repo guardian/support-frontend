@@ -43,8 +43,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    setupPayPalCheckout: () => {
-      dispatch(setupPayPalExpressCheckout());
+    setupPayPalCheckout: (callback: Function) => {
+      dispatch(setupPayPalExpressCheckout(callback));
     },
   };
 
