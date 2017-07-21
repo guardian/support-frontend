@@ -17,11 +17,14 @@ object Configuration extends LazyLogging {
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
 
-  val stage = Stage.fromString(System.getenv("GU_SUPPORT_WORKERS_STAGE")).getOrElse(Stages.DEV)
+  val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
+    .getOrElse("DEV"))
+    .getOrElse(Stages.DEV)
+
   logger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
   val config = PrivateConfigLoader
-    .forEnvironment(loadFromS3)
+    .forEnvironment(true)
     .load(stage, ConfigFactory.load())
 
   val awsConfig = AwsConfig.fromConfig(config)
