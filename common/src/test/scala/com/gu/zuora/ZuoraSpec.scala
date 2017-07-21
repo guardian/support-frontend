@@ -31,7 +31,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be resistant to 'ZOQL injection'" in {
-    a[NumberFormatException] should  be thrownBy uatService.getAccountIds("30000701' or status = 'Active")
+    a[NumberFormatException] should be thrownBy uatService.getAccountIds("30000701' or status = 'Active")
   }
 
   it should "retrieve subscriptions from an account id" in {

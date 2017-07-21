@@ -1,11 +1,10 @@
 package com.gu.config
 
-import com.gu.aws.AwsConfig
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
 import com.gu.membersDataAPI.MembersDataServiceConfigProvider
 import com.gu.salesforce.SalesforceConfigProvider
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config._
 import com.gu.zuora.ZuoraConfigProvider
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
