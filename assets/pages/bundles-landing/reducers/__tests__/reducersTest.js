@@ -1,6 +1,6 @@
 // @flow
 import reducer from '../reducers';
-import type { Contrib, ContribState, Amount } from '../reducers';
+import type { Contrib, Amount } from '../reducers';
 
 jest.mock('ophan', () => {});
 
