@@ -18,28 +18,24 @@ import pageStartup from 'helpers/pageStartup';
 
 pageStartup.start();
 
-
 // ----- Render ----- //
 
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <section className="thankyou gu-content-filler">
-      <div className="thankyou__content gu-content-filler__inner">
-        <div className="thankyou__wrapper">
-          <h1 className="thankyou__heading">Thank you!</h1>
-          <h2 className="thankyou__subheading">
-            <p>
-              You&#39;ve made a vital contribution that will help us maintain
-              our independent, investigative journalism
-            </p>
+    <section className="paypal-error gu-content">
+      <div className="paypal-error__content gu-content-margin">
+        <div className="paypal-error__wrapper">
+          <h1 className="paypal-error__heading">PayPal Error!</h1>
+          <h2 className="paypal-error__subheading">
+            <p>Sorry, there was a problem completing your PayPal payment. Please try again:</p>
           </h2>
           <CtaLink
-            text="Return to The Guardian"
-            url="https://theguardian.com"
+            text="Become a Supporter"
+            url="https://support.theguardian.com/uk"
           />
         </div>
-        <InfoSection heading="Questions?" className="thankyou__questions">
+        <InfoSection heading="Questions?" className="paypal-error__questions">
           <p>
             If you have any questions about contributing to the Guardian,
             please <a href="mailto:contribution.support@theguardian.com">
@@ -48,7 +44,7 @@ const content = (
         </InfoSection>
         <InfoSection
           heading="Spread the word"
-          className="thankyou__spread-the-word"
+          className="paypal-error__spread-the-word"
         >
           <p>
             We report for everyone. Let your friends and followers know that
@@ -65,5 +61,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('oneoff-contributions-thankyou-page'),
+  document.getElementById('paypal-error-page'),
 );

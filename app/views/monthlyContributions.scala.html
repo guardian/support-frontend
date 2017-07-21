@@ -1,14 +1,18 @@
 @import assets.AssetsResolver
 @import com.gu.identity.play.IdUser
 @import config.StripeConfig
+@import config.PayPalConfig
 @import helper.CSRF
+
 @(
   title: String,
   id: String,
   js: String,
   user: IdUser,
   isTestUser: Boolean,
-  stripeConfig: StripeConfig
+  payPalButton: Boolean,
+  stripeConfig: StripeConfig,
+  payPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader)
 
 @scripts = {
@@ -25,7 +29,9 @@
                 lastName: "@lastName",
             }
         };
+        window.guardian.payPalButtonExists = @payPalButton;
         window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>
     <script type="text/javascript" src="@assets(js)"></script>

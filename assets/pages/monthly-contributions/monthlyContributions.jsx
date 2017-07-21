@@ -24,7 +24,7 @@ import PaymentMethods from './components/paymentMethods';
 import NameForm from './components/nameForm';
 import reducer from './reducers/reducers';
 
-import { setContribAmount } from './actions/monthlyContributionsActions';
+import { setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
 
 // ----- Page Startup ----- //
 
@@ -37,16 +37,18 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
+
 loadUser(store.dispatch);
+store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
-    <div className="gu-content">
+    <div className="gu-content gu-content-filler">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="monthly-contrib gu-content-margin">
+      <div className="monthly-contrib gu-content-filler__inner">
         <InfoSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
           <Secure />

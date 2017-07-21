@@ -1,0 +1,14 @@
+package services.paypal
+
+import config.{PayPalConfig, PayPalConfigProvider}
+import play.api.libs.ws.WSClient
+import services.PayPalService
+import services.touchpoint.TouchpointServiceProvider
+
+import scala.concurrent.ExecutionContext
+
+class PayPalServiceProvider(configProvider: PayPalConfigProvider, wsClient: WSClient)(implicit executionContext: ExecutionContext)
+    extends TouchpointServiceProvider[PayPalService, PayPalConfig](configProvider) {
+  override protected def createService(config: PayPalConfig) =
+    new PayPalService(config, wsClient)
+}

@@ -53,6 +53,7 @@ module.exports = (env) => {
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
+      payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     },
 
     output: {

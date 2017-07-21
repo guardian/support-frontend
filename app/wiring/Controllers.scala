@@ -1,12 +1,7 @@
 package wiring
 
-import actions.CustomActionBuilders
-import assets.AssetsResolver
-import config.TouchpointConfigProvider
 import controllers._
 import play.api.BuiltInComponentsFromContext
-import play.api.mvc.ControllerComponents
-import services.{IdentityService, TestUserService}
 
 trait Controllers {
   self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth =>
@@ -27,7 +22,16 @@ trait Controllers {
     membersDataService,
     identityService,
     testUsers,
-    appConfig.touchpointConfigProvider,
+    appConfig.stripeConfigProvider,
+    appConfig.payPalConfigProvider,
+    controllerComponents
+  )
+
+  lazy val payPalController = new PayPal(
+    actionRefiners,
+    assetsResolver,
+    payPalServiceProvider,
+    testUsers,
     controllerComponents
   )
 
@@ -36,7 +40,7 @@ trait Controllers {
     actionRefiners,
     identityService,
     testUsers,
-    appConfig.touchpointConfigProvider,
+    appConfig.stripeConfigProvider,
     authAction,
     controllerComponents
   )

@@ -5,6 +5,7 @@
 import { combineReducers } from 'redux';
 
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
@@ -17,6 +18,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
+  payPalButtonExists: boolean,
 };
 
 
@@ -26,6 +28,7 @@ const initialState: State = {
   amount: 5,
   country: 'GB',
   error: null,
+  payPalButtonExists: false,
 };
 
 
@@ -43,6 +46,9 @@ function monthlyContrib(
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });
 
+    case 'SET_PAYPAL_BUTTON' :
+      return Object.assign({}, state, { payPalButtonExists: action.value });
+
     default:
       return state;
 
@@ -57,5 +63,6 @@ export default combineReducers({
   monthlyContrib,
   user,
   stripeCheckout,
+  payPalExpressCheckout,
   csrf,
 });

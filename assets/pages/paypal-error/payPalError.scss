@@ -1,0 +1,84 @@
+#paypal-error-page {
+
+  a {
+    color: gu-colour(neutral-1);
+  }
+
+  // ----- Headings
+
+  .paypal-error {
+    background-color: darken(gu-colour(multimedia-main-2), 5%);
+  }
+
+  .paypal-error__content {
+    background-color: gu-colour(multimedia-main-2);
+    padding: $gu-v-spacing $gu-h-spacing;
+  }
+
+  .paypal-error__wrapper {
+
+    @include mq($from: desktop) {
+      margin-left: 20%;
+      margin-right: 20%;
+    }
+  }
+
+  .paypal-error__heading {
+    font-family: $gu-egyptian-web;
+    color: gu-colour(neutral-1);
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: bold;
+
+    @include mq($from: desktop) {
+      font-size: 36px;
+      line-height: 40px;
+    }
+  }
+
+  .paypal-error__subheading {
+    font-family: $gu-egyptian-web;
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: lighter;
+    color: gu-colour(neutral-1);
+
+    @include mq($from: desktop) {
+      font-size: 36px;
+      line-height: 40px;
+    }
+  }
+
+  .component-cta-link {
+    color: #fff;
+    background: gu-colour(neutral-1);
+    display: inline-block;
+    width: 180px;
+    border: 1px solid gu-colour(neutral-1);
+    font-weight: normal;
+    margin-bottom: $gu-v-spacing * 4;
+
+    svg {
+      fill: #fff;
+      // Fix for IE10.
+      left: 190px;
+    }
+
+    &:hover {
+      border-color: #000;
+      color: #000;
+
+      svg {
+        fill: #000;
+      }
+    }
+  }
+
+  .component-social-share {
+    margin-right: $gu-h-spacing / 2;
+
+    svg {
+      margin-top: $gu-v-spacing;
+    }
+  }
+}

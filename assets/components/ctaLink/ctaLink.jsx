@@ -29,6 +29,8 @@ export default function CtaLink(props: PropTypes) {
 }
 
 
+// ----- Default Props ----- //
+
 CtaLink.defaultProps = {
   url: null,
   onClick: null,
