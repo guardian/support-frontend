@@ -6,22 +6,6 @@ jest.mock('ophan', () => {});
 
 describe('reducer tests', () => {
 
-  const initialContrib: ContribState = {
-    type: 'RECURRING',
-    error: null,
-    amount: {
-      recurring: {
-        value: '5',
-        userDefined: false,
-      },
-      oneOff: {
-        value: '25',
-        userDefined: false,
-      },
-    },
-  };
-  const initialState = { contribution: initialContrib };
-
   it('should return the initial state', () => {
 
     expect(reducer(undefined, {})).toMatchSnapshot();
@@ -35,7 +19,7 @@ describe('reducer tests', () => {
       contribType,
     };
 
-    expect(reducer(initialState, action).contribution.type).toEqual(contribType);
+    expect(reducer(undefined, action).contribution.type).toEqual(contribType);
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT', () => {
@@ -49,8 +33,8 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
+    expect(reducer(undefined, action).contribution.amount.recurring).toEqual(amount);
+    expect(reducer(undefined, action).contribution.amount.oneOff).toEqual(amount);
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
@@ -64,8 +48,8 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.oneOff.value).toEqual('25');
+    expect(reducer(undefined, action).contribution.amount.recurring).toEqual(amount);
+    expect(reducer(undefined, action).contribution.amount.oneOff.value).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
@@ -79,7 +63,7 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.recurring.value).toEqual('5');
+    expect(reducer(undefined, action).contribution.amount.oneOff).toEqual(amount);
+    expect(reducer(undefined, action).contribution.amount.recurring.value).toMatchSnapshot();
   });
 });

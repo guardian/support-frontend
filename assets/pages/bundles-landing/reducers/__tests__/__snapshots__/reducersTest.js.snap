@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"10"`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 1`] = `"50"`;
+
 exports[`reducer tests should return the initial state 1`] = `
 Object {
   "abTests": Object {},
