@@ -9,7 +9,7 @@
   id: String,
   js: String,
   user: IdUser,
-  isTestUser: Boolean,
+  uatMode: Boolean,
   payPalButton: Boolean,
   stripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
@@ -18,7 +18,7 @@
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
-        window.guardian.isTestUser = @isTestUser;
+        window.guardian.uatMode = @uatMode;
         window.guardian.user = {
             email: "@user.primaryEmailAddress",
             @user.publicFields.displayName.map { displayName =>

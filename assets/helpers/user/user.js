@@ -12,7 +12,7 @@ export default function (dispatch: Function) {
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
 
-  if (window.guardian && window.guardian.isTestUser) {
+  if (window.guardian && window.guardian.uatMode) {
     dispatch(setTestUser(true));
   }
   if (windowHasUser) {
