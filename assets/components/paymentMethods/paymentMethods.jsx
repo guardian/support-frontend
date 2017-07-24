@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PaypalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
@@ -24,7 +25,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function PaymentMethods(props: PropTypes) {
+function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
@@ -64,3 +65,8 @@ function mapStateToProps(state) {
   };
 
 }
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(PaymentMethods);
