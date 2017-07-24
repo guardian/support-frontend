@@ -51,6 +51,7 @@ module.exports = (env) => {
       contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',
       monthlyContributionsPage: 'pages/monthly-contributions/monthlyContributions.jsx',
       monthlyContributionsThankyouPage: 'pages/contributions-thankyou/monthlyContributionsThankyou.jsx',
+      oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
       payPalErrorPage: 'pages/paypal-error/payPalError.jsx',

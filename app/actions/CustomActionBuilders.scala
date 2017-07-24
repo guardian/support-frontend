@@ -8,7 +8,7 @@ import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
 import services.TestUserService
-
+import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 object CustomActionBuilders {
@@ -62,5 +62,5 @@ class CustomActionBuilders(
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
 
-  val CachedAction = new CachedAction(cc.actionBuilder)
+  val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 }

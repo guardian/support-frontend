@@ -20,6 +20,8 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
+  lazy val contributionsEndpoint = config.getString("contributions.stripe.url")
+
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
   private val touchpoint = config.getConfig("touchpoint.backend.environments")
@@ -27,4 +29,6 @@ class Configuration {
   lazy val payPalConfigProvider = new PayPalConfigProvider(touchpoint, fromStage(stage))
 
   lazy val stripeConfigProvider = new StripeConfigProvider(touchpoint, fromStage(stage))
+
+  lazy val oneOffStripeConfigProvider = new StripeConfigProvider(touchpoint, fromStage(stage), "oneOffStripe")
 }

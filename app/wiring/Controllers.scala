@@ -35,6 +35,17 @@ trait Controllers {
     controllerComponents
   )
 
+  lazy val oneOffContributions = new OneOffContributions(
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    appConfig.oneOffStripeConfigProvider,
+    appConfig.contributionsEndpoint,
+    authAction,
+    controllerComponents
+  )
+
   lazy val testUsersContoller = new TestUsersManagement(
     authAction,
     controllerComponents,

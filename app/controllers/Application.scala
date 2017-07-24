@@ -18,7 +18,7 @@ class Application(
   import actionRefiners._
 
   implicit val ar = assets
-  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction {
+  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() {
     Ok(views.html.react(title, id, js))
   }
 

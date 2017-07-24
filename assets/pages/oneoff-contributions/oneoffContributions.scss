@@ -1,0 +1,90 @@
+#oneoff-contributions-page {
+
+	// ----- General ----- //
+
+	background-color: darken(gu-colour(multimedia-main-2), 5%);
+
+	// Fix for IE.
+	& > div {
+		background-color: darken(gu-colour(multimedia-main-2), 5%);
+	}
+
+	.oneoff-contrib {
+		background-color: gu-colour(multimedia-main-2);
+	}
+
+	a {
+		color: gu-colour(neutral-1);
+	}
+
+
+	// ----- Sections ----- //
+
+	h2 {
+		margin-top: -2px;
+	}
+
+	// ----- Header
+
+	.oneoff-contrib__header {
+		border-top: none;
+
+		.oneoff-contrib__heading {
+			margin-top: -15px; /* custom size for header at mobile because of padding */
+			font-size: 24px;
+			line-height: 28px;
+			font-weight: bold;
+			font-family: $gu-egyptian-web;
+
+			@include mq($from: desktop) {
+				margin-top: $gu-v-spacing;
+				font-size: 44px;
+				line-height: 44px;
+			}
+		}
+
+		.component-secure {
+			&__text {
+				margin-top: $gu-v-spacing / 2;
+			}
+
+			// Fix for IE.
+			svg {
+				width: 13px;
+			}
+		}
+
+	}
+
+	// ----- Your details
+
+	.oneoff-contrib__your-details {
+
+		#last-name {
+			margin-bottom: 0px;
+		}
+
+		input {
+			width: 100%;
+			box-sizing: border-box;
+
+			@include mq($from: desktop) {
+				width: 304px;
+			}
+		}
+	}
+
+	// ----- Payment methods
+
+	.oneoff-contrib__payment-methods {
+		.component-stripe-pop-up-button {
+			box-sizing: border-box;
+
+			@include mq($from: desktop) {
+				width: 304px;
+			}
+
+		}
+	}
+
+}

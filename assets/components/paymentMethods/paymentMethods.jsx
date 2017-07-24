@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PaypalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
-import postCheckout from '../helpers/ajax';
 
 
 // ----- Types ----- //
@@ -19,6 +18,8 @@ type PropTypes = {
   lastName: string,
   error: ?string,
   payPalButtonExists: boolean,
+  stripeCallback: Function,
+  paypalCallback: Function,
 };
 
 
@@ -27,11 +28,11 @@ type PropTypes = {
 function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
-  let stripeButton = <StripePopUpButton email={props.email} callback={postCheckout('stripeToken')} />;
+  let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
   if (props.payPalButtonExists) {
-    payPalButton = <PaypalExpressButton callback={postCheckout('baid')} />;
+    payPalButton = <PaypalExpressButton callback={props.paypalCallback} />;
   }
 
   if (props.firstName === '' || props.lastName === '') {
@@ -61,8 +62,6 @@ function mapStateToProps(state) {
     email: state.user.email,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
-    error: state.monthlyContrib.error,
-    payPalButtonExists: state.monthlyContrib.payPalButtonExists,
   };
 
 }

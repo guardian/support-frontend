@@ -1,0 +1,26 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+@import config.StripeConfig
+@import helper.CSRF
+@(
+        title: String,
+        id: String,
+        js: String,
+        uatMode: Boolean,
+        stripeConfig: StripeConfig,
+        contributionsEnpoint: String
+)(implicit assets: AssetsResolver)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.contributionsStripeEndpoint = "@contributionsEnpoint";
+        window.guardian.uatMode = @uatMode;
+    </script>
+    <script type="text/javascript" src="@assets(js)"></script>
+}
+
+@main(title = title, scripts = scripts) {
+    <main id="@id" class="gu-content-wrapper"></main>
+}
