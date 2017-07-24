@@ -131,12 +131,6 @@
           height: 32px;
         }
       }
-
-      @include mq($from: desktop) {
-        .component-number-input {
-          // max-width: 93%;
-        }
-      }
     }
 
     .component-bundle--digital, .component-bundle--paper {

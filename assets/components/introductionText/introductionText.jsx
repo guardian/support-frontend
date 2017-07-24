@@ -25,7 +25,7 @@ type PropTypes = {
 // ----- Functions ----- //
 
 function messageCopy(copy: string[]) {
-  return copy.map(para => <p>{para}</p>);
+  return copy.map(paragraph => <p>{paragraph}</p>);
 }
 
 
