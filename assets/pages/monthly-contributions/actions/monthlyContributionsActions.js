@@ -32,7 +32,7 @@ export function setPayPalButton(value: boolean): Action {
 
 export function setContribAmount(amount: string): Function {
   const lowBound: number = 5;
-  const upperBound: number = 200;
+  const upperBound: number = 2000;
   const defaultValue: number = 5;
   const value = validateContribution(amount, lowBound, upperBound, defaultValue);
 
