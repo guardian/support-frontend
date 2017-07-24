@@ -77,8 +77,6 @@ Resources:
           aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/support-frontend_1.0-SNAPSHOT_all.deb /tmp
           dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/support-frontend/application.log
-          chown ${App} /etc/gu/support-frontend.private.conf
-          chmod 0600 /etc/gu/support-frontend.private.conf
   AppRole:
     Type: AWS::IAM::Role
     Properties:
