@@ -10,7 +10,7 @@ import React from 'react';
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type Radio = {
+export type Radio = {
   value: string,
   text: string,
 };

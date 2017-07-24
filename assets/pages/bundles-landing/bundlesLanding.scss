@@ -2,88 +2,6 @@
 
   // ----- Page Components ----- //
 
-  // ----- Introduction
-
-  .introduction {
-
-    background-color: darken(gu-colour(guardian-brand-dark), 5%);
-
-    .introduction__content {
-      padding-top: $gu-v-spacing;
-      padding-bottom: $gu-v-spacing;
-      background-color: gu-colour(guardian-brand-dark);
-
-      @include mq($from: leftCol) {
-        padding-left: 100px;
-      }
-
-      @include mq($from: wide) {
-        padding-left: 180px;
-      }
-    }
-
-    h1 {
-      color: gu-colour(news-support-1);
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-      font-size: 22px;
-      line-height: 26px;
-      word-spacing: -0.08em;
-
-      @include mq($from: mobileMedium) {
-        font-size: 24px;
-        line-height: 28px;
-      }
-
-      @include mq($from: phablet) {
-        font-size: 36px;
-        line-height: 40px;
-      }
-
-      @include mq($from: desktop) {
-        font-size: 44px;
-        line-height: 48px;
-      }
-    }
-
-    p {
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-      font-size: 22px;
-      line-height: 26px;
-      color: #ffffff;
-      margin-left: 40px;
-
-      &:nth-of-type(2) {
-        margin-bottom: $gu-v-spacing * 2;
-      }
-
-      &:nth-of-type(4) {
-        margin-bottom: $gu-v-spacing * 4;
-      }
-
-      @include mq($from: mobileMedium) {
-        font-size: 24px;
-        line-height: 28px;
-        margin-left: 88px;
-      }
-
-      @include mq($from: phablet) {
-        font-size: 36px;
-        line-height: 40px;
-        margin-left: 128px;
-      }
-
-
-      @include mq($from: desktop) {
-        font-size: 44px;
-        line-height: 48px;
-        margin-left: 160px;
-      }
-    }
-  }
-
-
   // ----- Bundles
 
   .bundles {
@@ -146,7 +64,7 @@
       }
     }
 
-    .bundles__bundle {
+    .component-bundle {
       padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
       @include mq($from: desktop) {
@@ -190,39 +108,17 @@
         vertical-align: top;
       }
 
-      .bundle__content {
+      .component-bundle__content {
         width: 50%;
         display: inline-block;
         vertical-align: top;
       }
     }
 
-    .bundles__bundle--contributions {
+    .component-bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
       font-family: $gu-text-sans-web;
-
-      .component-radio-toggle {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        flex-basis: 100%;
-        flex-grow: 1;
-        justify-content: space-between;
-      }
-
-      .component-radio-toggle__button {
-        flex-basis: calc(50% - 2.5px);
-        // Fix for IE10 and possibly Safari 8.
-        display: block;
-        min-width: 49%;
-      }
-
-      .component-radio-toggle__label {
-        display: block;
-        height: $gu-v-spacing * 2;
-        text-align: center;
-      }
 
       .component-double-heading__heading {
         color: gu-colour(neutral-1);
@@ -235,78 +131,9 @@
           height: 32px;
         }
       }
-
-      input:checked+label {
-        background-color: gu-colour(neutral-1);
-        color: #fff;
-        position: relative;
-        font-weight: bold;
-      }
     }
 
-    .contrib-type {
-      margin-bottom: 10px;
-
-      input:checked+label:before {
-        content: '';
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 10px 10px 0;
-        position: absolute;
-        bottom: -10px;
-        left: calc(50% - 10px);
-        border-color: gu-colour(neutral-1) transparent;
-      }
-    }
-
-    .contrib-amounts {
-      @include mq($from: desktop) {
-        .component-number-input {
-          max-width: 93%;
-        }
-      }
-
-      .component-radio-toggle__input {
-        display: none;
-      }
-
-    }
-
-    .contrib-amounts__other-amount {
-      display: flex;
-
-      .component-number-input {
-        flex-basis: 100%;
-        flex-grow: 1;
-      }
-    }
-
-    .contrib-amounts--recurring {
-      .component-radio-toggle__button {
-        flex-basis: calc(33.3% - 3.3px);
-        // Fix for IE10 and possibly Safari 8.
-        min-width: 32%;
-      }
-    }
-
-    .contrib-amounts--one-off {
-      .component-radio-toggle__button {
-        flex-basis: calc(25% - 4px);
-        // Fix for IE10 and possibly Safari 8.
-        min-width: 23%;
-      }
-    }
-
-    .contrib-amounts__error-message {
-      font-family: $gu-text-sans-web;
-      font-size: 14px;
-      font-weight: bold;
-      line-height: 16px;
-      color: gu-colour(neutral-1);
-    }
-
-    .bundles__bundle--digital, .bundles__bundle--paper {
+    .component-bundle--digital, .component-bundle--paper {
         background-color: #fff;
 
         @include mq($until: desktop) {
@@ -337,7 +164,7 @@
         }
     }
 
-    .bundles__bundle--paper {
+    .component-bundle--paper {
       .component-cta-link:first-of-type {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
@@ -773,14 +600,8 @@
     margin-bottom: 0;
   }
 
-  input:checked+label {
-    background-color: gu-colour(guardian-brand-dark);
-    color: #fff;
-  }
-
-  .component-radio-toggle label, .component-number-input {
+  .component-radio-toggle input:not(:checked)+label, .component-number-input {
       background-color: gu-colour(multimedia-main-2);
-      border: 1px solid gu-colour(neutral-1);
   }
 
   .component-number-input--selected {

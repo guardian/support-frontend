@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import { generateClassName } from 'helpers/utilities';
@@ -24,9 +23,9 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function Bundle(props: PropTypes) {
+export default function Bundle(props: PropTypes) {
 
-  const className = generateClassName('bundles__bundle', props.modifierClass);
+  const className = generateClassName('component-bundle', props.modifierClass);
 
   return (
     <div className={className}>
@@ -35,7 +34,7 @@ function Bundle(props: PropTypes) {
         subheading={props.subheading}
         modifierClass={props.doubleHeadingModifierClass}
       />
-      <div className="bundle__content">
+      <div className="component-bundle__content">
         {props.children}
       </div>
     </div>
@@ -53,8 +52,3 @@ Bundle.defaultProps = {
   children: null,
   doubleHeadingModifierClass: null,
 };
-
-
-// ----- Exports ----- //
-
-export default connect()(Bundle);

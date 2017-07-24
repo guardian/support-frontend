@@ -48,6 +48,7 @@ module.exports = (env) => {
       favicons: 'images/favicons.js',
       styles: 'stylesheets/main.scss',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
+      contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',
       monthlyContributionsPage: 'pages/monthly-contributions/monthlyContributions.jsx',
       monthlyContributionsThankyouPage: 'pages/contributions-thankyou/monthlyContributionsThankyou.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',

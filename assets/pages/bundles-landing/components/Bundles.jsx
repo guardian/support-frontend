@@ -6,16 +6,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FeatureList from 'components/featureList/featureList';
-import RadioToggle from 'components/radioToggle/radioToggle';
 import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
+import Bundle from 'components/bundle/bundle';
+import ContribAmounts from 'components/contribAmounts/contribAmounts';
+import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 
-import Bundle from './Bundle';
-import ContribAmounts from './ContribAmounts';
-import { changeContribType } from '../actions/bundlesLandingActions';
+import {
+  changeContribType,
+  changeContribAmount,
+  changeContribAmountRecurring,
+  changeContribAmountOneOff,
+} from '../actions/bundlesLandingActions';
 import getSubsLinks from '../helpers/subscriptionsLinks';
 
-import type { Contrib, Amounts } from '../reducers/reducers';
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
 
 
@@ -27,9 +31,12 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
-  contribError: string,
+  contribError: ContribError,
   intCmp: string,
   toggleContribType: (string) => void,
+  changeContribRecurringAmount: (string) => void,
+  changeContribOneOffAmount: (string) => void,
+  changeContribAmount: (string) => void,
 };
 
 type ContribAttrs = {
@@ -140,20 +147,6 @@ const contribSubheading = {
   oneOff: '',
 };
 
-const contribToggle = {
-  name: 'contributions-period-toggle',
-  radios: [
-    {
-      value: 'RECURRING',
-      text: 'Monthly',
-    },
-    {
-      value: 'ONE_OFF',
-      text: 'One-off',
-    },
-  ],
-};
-
 
 // ----- Functions ----- //
 
@@ -197,14 +190,10 @@ function ContributionBundle(props: PropTypes) {
 
   return (
     <Bundle {...contribAttrs}>
-      <div className="contrib-type">
-        <RadioToggle
-          {...contribToggle}
-          toggleAction={props.toggleContribType}
-          checked={props.contribType}
-        />
-      </div>
-      <ContribAmounts onNumberInputKeyPress={onClick} />
+      <ContribAmounts
+        onNumberInputKeyPress={onClick}
+        {...props}
+      />
       <CtaLink text={contribAttrs.ctaText} onClick={onClick} />
     </Bundle>
   );
@@ -277,6 +266,15 @@ function mapDispatchToProps(dispatch) {
   return {
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
+    },
+    changeContribRecurringAmount: (value: string) => {
+      dispatch(changeContribAmountRecurring({ value, userDefined: false }));
+    },
+    changeContribOneOffAmount: (value: string) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    },
+    changeContribAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
     },
   };
 

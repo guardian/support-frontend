@@ -4,11 +4,10 @@
 
 import { combineReducers } from 'redux';
 
-import { abTestReducer as abTests } from 'helpers/abtest';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import validateContribution from 'helpers/contributions';
-import type { Action } from '../actions/bundlesLandingActions';
+import type { Action } from '../actions/contributionsLandingActions';
 
 
 // ----- Types ----- //
@@ -101,5 +100,4 @@ function intCmp(state: string = ''): string {
 export default combineReducers({
   contribution,
   intCmp,
-  abTests,
 });
