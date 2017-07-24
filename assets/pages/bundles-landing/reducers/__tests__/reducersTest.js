@@ -1,26 +1,10 @@
 // @flow
 import reducer from '../reducers';
-import type { Contrib, ContribState, Amount } from '../reducers';
+import type { Contrib, Amount } from '../reducers';
 
 jest.mock('ophan', () => {});
 
 describe('reducer tests', () => {
-
-  const initialContrib: ContribState = {
-    type: 'RECURRING',
-    error: null,
-    amount: {
-      recurring: {
-        value: '5',
-        userDefined: false,
-      },
-      oneOff: {
-        value: '25',
-        userDefined: false,
-      },
-    },
-  };
-  const initialState = { contribution: initialContrib };
 
   it('should return the initial state', () => {
 
@@ -35,7 +19,11 @@ describe('reducer tests', () => {
       contribType,
     };
 
-    expect(reducer(initialState, action).contribution.type).toEqual(contribType);
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toEqual(contribType);
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT', () => {
@@ -49,8 +37,12 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.oneOff).toEqual(amount);
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
@@ -64,8 +56,12 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.recurring).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.oneOff.value).toEqual('25');
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.oneOff).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
@@ -79,7 +75,11 @@ describe('reducer tests', () => {
       amount,
     };
 
-    expect(reducer(initialState, action).contribution.amount.oneOff).toEqual(amount);
-    expect(reducer(initialState, action).contribution.amount.recurring.value).toEqual('5');
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.oneOff).toEqual(amount);
+    expect(newState.contribution.amount.recurring).toMatchSnapshot();
   });
 });
