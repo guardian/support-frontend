@@ -11,7 +11,6 @@ import thunkMiddleware from 'redux-thunk';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import InfoSection from 'components/infoSection/infoSection';
-import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';

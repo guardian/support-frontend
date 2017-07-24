@@ -40,5 +40,5 @@ export function setPostcode(postcode: string): Action {
 }
 
 export function setTestUser(testUser: boolean): Action {
-  return { type: 'SET_TEST_USER', testUser }
+  return { type: 'SET_TEST_USER', testUser };
 }
