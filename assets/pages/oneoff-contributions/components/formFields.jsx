@@ -51,7 +51,6 @@ function FormFields(props: PropTypes) {
         placeholder="Postcode (optional)"
         value={props.postcode || ''}
         onChange={props.postcodeUpdate}
-        required
       />
     </form>
   );
