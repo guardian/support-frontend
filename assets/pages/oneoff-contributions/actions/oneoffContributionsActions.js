@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
-import validateContribution from '../helpers/validation';
+import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
+import validateContribution from 'helpers/validation';
 
 
 // ----- Types ----- //
@@ -25,12 +26,15 @@ export function checkoutError(message: string): Action {
 }
 
 export function setContribAmount(amount: string): Function {
-
-  const value = validateContribution(amount);
+  const lowerBound: number = 1;
+  const upperBound: number = 2000;
+  const defaultValue: number = 50;
+  const value = validateContribution(amount, lowerBound, upperBound, defaultValue);
 
   return (dispatch) => {
     dispatch(setContribValue(value));
     dispatch(setStripeAmount(value));
+    dispatch(setPayPalExpressAmount(value));
   };
 
 }
