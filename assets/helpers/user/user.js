@@ -5,7 +5,7 @@
 import { setDisplayName, setEmail, setFirstName, setLastName, setTestUser, setFullName } from './userActions';
 import * as cookie from './../cookie';
 
-export default function (dispatch: Function) {
+const init = (dispatch: Function) => {
 
   const AUTOFILL_ENDPOINT = '/oneoff-contributions/autofill';
 
@@ -35,4 +35,8 @@ export default function (dispatch: Function) {
       }
     });
   }
-}
+};
+
+export {
+  init, // eslint-disable-line import/prefer-default-export
+};
