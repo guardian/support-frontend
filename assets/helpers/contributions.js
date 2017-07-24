@@ -26,59 +26,46 @@ export type Amounts = {
   oneOff: Amount,
 };
 
+export type validatedContrib = {
+  amount: number,
+  error: ContribError,
+};
+
 
 // ----- Setup ----- //
 
-const limits = {
+const LIMITS = {
   max: 2000,
   min: {
-    monthly: 5,
-    oneOff: 1,
+    RECURRING: 5,
+    ONE_OFF: 1,
   },
+};
+
+const DEFAULT_AMOUNTS = {
+  RECURRING: 5,
+  ONE_OFF: 50,
 };
 
 
 // ----- Functions ----- //
 
-export function checkError(amount: Amount, contrib: Contrib): ?ContribError {
+export default function validate(input: string, contrib: Contrib) {
 
-  if (amount.value === '') {
-    return 'invalidEntry';
+  let error = null;
+
+  const numericAmount = Number(input);
+
+  if (input === '' || isNaN(numericAmount)) {
+    error = 'invalidEntry';
+  } else if (numericAmount < LIMITS.min[contrib]) {
+    error = contrib === 'RECURRING' ? 'tooLittleRecurring' : 'tooLittleOneOff';
+  } else if (numericAmount > LIMITS.max) {
+    error = 'tooMuch';
   }
 
-  const numericAmount = Number(amount.value);
+  const amount = error ? DEFAULT_AMOUNTS[contrib] : roundDp(numericAmount);
 
-  if (isNaN(numericAmount)) {
-    return 'invalidEntry';
-  } else if (numericAmount < limits.min.monthly && contrib === 'RECURRING') {
-    return 'tooLittleRecurring';
-  } else if (numericAmount < limits.min.oneOff && contrib === 'ONE_OFF') {
-    return 'tooLittleOneOff';
-  } else if (numericAmount > limits.max) {
-    return 'tooMuch';
-  }
-
-  return null;
-
-}
-
-export function validate(
-  amount: string,
-  lowBound: number,
-  upperBound: number,
-  defaultValue: number,
-): number {
-  const numericAmount = Number(amount);
-
-  if (
-    isNaN(numericAmount) ||
-    numericAmount < lowBound ||
-    numericAmount > upperBound
-  ) {
-    return defaultValue;
-  }
-
-  // Converts to 2.d.p.
-  return roundDp(numericAmount);
+  return { error, amount };
 
 }
