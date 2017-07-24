@@ -1,5 +1,7 @@
 User-agent: *
 
 Disallow: /monthly-contributions
+Disallow: /oneoff-contributions
+Disallow: /uk/contribute
 
 Allow: /
