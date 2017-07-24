@@ -22,6 +22,7 @@ class OneOffContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
+    contributionsEndpoint: String,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
@@ -51,7 +52,8 @@ class OneOffContributions(
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       uatMode = uatMode,
-      stripeConfig = stripeConfigProvider.get(uatMode)
+      stripeConfig = stripeConfigProvider.get(uatMode),
+      contributionsEnpoint = contributionsEndpoint
     )
   )
 

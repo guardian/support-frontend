@@ -41,6 +41,7 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.oneOffStripeConfigProvider,
+    appConfig.contributionsEndpoint,
     authAction,
     controllerComponents
   )

@@ -7,7 +7,7 @@ import { checkoutError } from '../actions/oneoffContributionsActions';
 
 // ----- Setup ----- //
 
-const ONEOFF_CONTRIB_ENDPOINT = 'https://contribute.thegulocal.com/stripe/pay'; // todo: this should support DEV/CODE
+const ONEOFF_CONTRIB_ENDPOINT = window.guardian.contributionsStripeEndpoint;
 const ONEOFF_CONTRIB_THANKYOU = '/oneoff-contributions/thankyou';
 
 
