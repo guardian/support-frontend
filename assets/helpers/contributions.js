@@ -1,5 +1,10 @@
 // @flow
 
+// ----- Imports ----- //
+
+import { roundDp } from 'helpers/utilities';
+
+
 // ----- Types ----- //
 
 export type Contrib = 'RECURRING' | 'ONE_OFF';
@@ -35,7 +40,7 @@ const limits = {
 
 // ----- Functions ----- //
 
-function validate(amount: Amount, contrib: Contrib): ?ContribError {
+export function checkError(amount: Amount, contrib: Contrib): ?ContribError {
 
   if (amount.value === '') {
     return 'invalidEntry';
@@ -57,7 +62,23 @@ function validate(amount: Amount, contrib: Contrib): ?ContribError {
 
 }
 
+export function validate(
+  amount: string,
+  lowBound: number,
+  upperBound: number,
+  defaultValue: number,
+): number {
+  const numericAmount = Number(amount);
 
-// ----- Exports ----- //
+  if (
+    isNaN(numericAmount) ||
+    numericAmount < lowBound ||
+    numericAmount > upperBound
+  ) {
+    return defaultValue;
+  }
 
-export default validate;
+  // Converts to 2.d.p.
+  return roundDp(numericAmount);
+
+}

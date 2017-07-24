@@ -6,7 +6,7 @@ import { combineReducers } from 'redux';
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
-import validateContribution from 'helpers/contributions';
+import { checkError as checkContribError } from 'helpers/contributions';
 import type { Action } from '../actions/contributionsLandingActions';
 
 
@@ -57,7 +57,7 @@ function contribution(
 
       return Object.assign({}, state, {
         type: action.contribType,
-        error: validateContribution(amount, action.contribType),
+        error: checkContribError(amount, action.contribType),
       });
 
     }
@@ -66,21 +66,21 @@ function contribution(
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: action.amount },
-        error: validateContribution(action.amount, state.type),
+        error: checkContribError(action.amount, state.type),
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: state.amount.oneOff },
-        error: validateContribution(action.amount, state.type),
+        error: checkContribError(action.amount, state.type),
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
       return Object.assign({}, state, {
         amount: { recurring: state.amount.recurring, oneOff: action.amount },
-        error: validateContribution(action.amount, state.type),
+        error: checkContribError(action.amount, state.type),
       });
 
     default:

@@ -3,8 +3,10 @@
 // ----- Imports ----- //
 
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
-import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import validateContribution from 'helpers/validation';
+import {
+  setPayPalExpressAmount,
+} from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
+import { validate as validateContribution } from 'helpers/contributions';
 
 
 // ----- Types ----- //
