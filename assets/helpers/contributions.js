@@ -43,7 +43,7 @@ const LIMITS = {
 };
 
 const DEFAULT_AMOUNTS = {
-  RECURRING: 5,
+  RECURRING: 10,
   ONE_OFF: 50,
 };
 
@@ -53,7 +53,6 @@ const DEFAULT_AMOUNTS = {
 export default function validate(input: string, contrib: Contrib) {
 
   let error = null;
-
   const numericAmount = Number(input);
 
   if (input === '' || isNaN(numericAmount)) {
