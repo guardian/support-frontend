@@ -31,11 +31,11 @@ class OneOffContributions(
   implicit val ar = assets
 
   def displayForm: Action[AnyContent] = CachedAction() {
-    oneOffContributionForm(isTestUser = false)
+    form(isTestUser = false)
   }
 
   def displayFormTestUser: Action[AnyContent] = authAction {
-    oneOffContributionForm(isTestUser = true).withHeaders(CacheControl.noCache)
+    form(isTestUser = true).withHeaders(CacheControl.noCache)
   }
 
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
@@ -45,7 +45,7 @@ class OneOffContributions(
     )
   }
 
-  private def oneOffContributionForm(isTestUser: Boolean) = Ok(
+  private def form(isTestUser: Boolean): Result = Ok(
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
@@ -55,7 +55,7 @@ class OneOffContributions(
     )
   )
 
-  private def fullNameFor(user: IdUser) = {
+  private def fullNameFor(user: IdUser): Option[String] = {
     for {
       privateFields <- user.privateFields
       firstName <- privateFields.firstName
