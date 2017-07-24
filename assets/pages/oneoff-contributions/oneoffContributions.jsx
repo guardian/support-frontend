@@ -18,7 +18,7 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 
 import pageStartup from 'helpers/pageStartup';
-import loadUser from 'helpers/user/user';
+import * as user from 'helpers/user/user';
 import getQueryParameter from 'helpers/url';
 
 import FormFields from './components/formFields';
@@ -38,7 +38,7 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '50')));
-loadUser(store.dispatch);
+user.init(store.dispatch);
 
 // ----- Render ----- //
 

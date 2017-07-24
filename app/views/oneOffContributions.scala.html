@@ -6,7 +6,7 @@
         title: String,
         id: String,
         js: String,
-        isTestUser: Boolean,
+        uatMode: Boolean,
         stripeConfig: StripeConfig
 )(implicit assets: AssetsResolver)
 
@@ -14,7 +14,7 @@
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.stripeKey = "@stripeConfig.publicKey";
-        window.guardian.isTestUser = @isTestUser;
+        window.guardian.uatMode = @uatMode;
     </script>
     <script type="text/javascript" src="@assets(js)"></script>
 }

@@ -5,14 +5,14 @@
 import { setDisplayName, setEmail, setFirstName, setLastName, setTestUser, setFullName } from './userActions';
 import * as cookie from './../cookie';
 
-export default function (dispatch: Function) {
+const init = (dispatch: Function) => {
 
   const AUTOFILL_ENDPOINT = '/oneoff-contributions/autofill';
 
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
 
-  if (window.guardian && window.guardian.isTestUser) {
+  if (window.guardian && window.guardian.uatMode) {
     dispatch(setTestUser(true));
   }
   if (windowHasUser) {
@@ -35,4 +35,8 @@ export default function (dispatch: Function) {
       }
     });
   }
-}
+};
+
+export {
+  init, // eslint-disable-line import/prefer-default-export
+};

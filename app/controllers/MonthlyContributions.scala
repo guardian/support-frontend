@@ -38,17 +38,17 @@ class MonthlyContributions(
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) => Redirect("/monthly-contributions/existing-contributor")
         case Some(false) | None =>
-          val isTestUser = testUsers.isTestUser(fullUser.publicFields.displayName)
+          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
           Ok(
             monthlyContributions(
               title = "Support the Guardian | Monthly Contributions",
               id = "monthly-contributions-page",
               js = "monthlyContributionsPage.js",
               user = fullUser,
-              isTestUser = isTestUser,
+              uatMode = uatMode,
               payPalButton = paypal.getOrElse(false),
-              stripeConfig = stripeConfigProvider.get(isTestUser),
-              payPalConfig = payPalConfigProvider.get(isTestUser)
+              stripeConfig = stripeConfigProvider.get(uatMode),
+              payPalConfig = payPalConfigProvider.get(uatMode)
             )
           )
       }

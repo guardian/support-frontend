@@ -11,8 +11,8 @@ abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, d
   private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(defaultEnvironment))
   private lazy val uatConfig: T = fromConfig(getTouchpointBackend(UAT))
 
-  def get(isTestUser: Boolean = false): T =
-    if (isTestUser) uatConfig else defaultConfig
+  def get(uatMode: Boolean = false): T =
+    if (uatMode) uatConfig else defaultConfig
 
   protected def fromConfig(config: Config): T
 
