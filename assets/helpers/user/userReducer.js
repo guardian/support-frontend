@@ -12,7 +12,7 @@ type User = {
   displayName: ?string,
   firstName: ?string,
   lastName: ?string,
-  isTestUser: ?string,
+  isTestUser: ?boolean,
   fullName?: string,
   postcode?: string,
 };

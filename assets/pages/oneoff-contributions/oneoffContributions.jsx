@@ -36,9 +36,11 @@ pageStartup.start();
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
+user.init(store.dispatch);
+
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '50')));
-user.init(store.dispatch);
+
 
 // ----- Render ----- //
 

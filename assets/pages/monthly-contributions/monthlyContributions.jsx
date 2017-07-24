@@ -69,7 +69,7 @@ const content = (
             paypalCallback={postCheckout('baid')}
             payPalButtonExists={store.getState().monthlyContrib.payPalButtonExists}
             error={store.getState().monthlyContrib.error}
-            />
+          />
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">
           <TermsPrivacy

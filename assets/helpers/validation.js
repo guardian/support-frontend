@@ -7,8 +7,12 @@ import { roundDp } from 'helpers/utilities';
 
 // ----- Functions ----- //
 
-function validateContribution(amount: string, lowBound: number, upperBound: number, defaultValue: number): number {
-
+function validateContribution(
+  amount: string,
+  lowBound: number,
+  upperBound: number,
+  defaultValue: number,
+): number {
   const numericAmount = Number(amount);
 
   if (
