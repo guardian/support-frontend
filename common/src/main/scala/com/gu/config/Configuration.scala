@@ -1,11 +1,10 @@
 package com.gu.config
 
-import com.gu.aws.AwsConfig
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
 import com.gu.membersDataAPI.MembersDataServiceConfigProvider
 import com.gu.salesforce.SalesforceConfigProvider
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config._
 import com.gu.zuora.ZuoraConfigProvider
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
@@ -17,7 +16,10 @@ object Configuration extends LazyLogging {
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
 
-  val stage = Stage.fromString(System.getenv("GU_SUPPORT_WORKERS_STAGE")).getOrElse(Stages.DEV)
+  val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
+    .getOrElse("DEV"))
+    .getOrElse(Stages.DEV)
+
   logger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
   val config = PrivateConfigLoader

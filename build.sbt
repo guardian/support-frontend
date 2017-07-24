@@ -1,6 +1,6 @@
 import Dependencies._
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import sbt.Keys.libraryDependencies
+import sbt.Keys.{libraryDependencies, resolvers}
 
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
@@ -21,6 +21,7 @@ lazy val root =
   project.in(file("."))
     .settings(
       name := "support-workers"
+
     )
     .aggregate(common, `monthly-contributions`)
 
@@ -55,6 +56,7 @@ lazy val `monthly-contributions` = project
         oldStrategy(x)
     },
     libraryDependencies ++= monthlyContributionsDependencies,
+    resolvers += Resolver.sonatypeRepo("releases"),
     scalaStyleSettings
   )
   .settings(Settings.shared: _*)
