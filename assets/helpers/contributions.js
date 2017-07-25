@@ -31,20 +31,28 @@ export type validatedContrib = {
   error: ContribError,
 };
 
+type Config = {
+  [Contrib]: {
+    min: number,
+    max: number,
+    default: number,
+  }
+}
+
 
 // ----- Setup ----- //
 
-const LIMITS = {
-  max: 2000,
-  min: {
-    RECURRING: 5,
-    ONE_OFF: 1,
+const CONFIG: Config = {
+  RECURRING: {
+    min: 5,
+    max: 2000,
+    default: 10,
   },
-};
-
-const DEFAULT_AMOUNTS = {
-  RECURRING: 10,
-  ONE_OFF: 50,
+  ONE_OFF: {
+    min: 1,
+    max: 2000,
+    default: 50,
+  },
 };
 
 
@@ -57,13 +65,13 @@ export default function validate(input: string, contrib: Contrib) {
 
   if (input === '' || isNaN(numericAmount)) {
     error = 'invalidEntry';
-  } else if (numericAmount < LIMITS.min[contrib]) {
+  } else if (numericAmount < CONFIG[contrib].min) {
     error = contrib === 'RECURRING' ? 'tooLittleRecurring' : 'tooLittleOneOff';
-  } else if (numericAmount > LIMITS.max) {
+  } else if (numericAmount > CONFIG[contrib].max) {
     error = 'tooMuch';
   }
 
-  const amount = error ? DEFAULT_AMOUNTS[contrib] : roundDp(numericAmount);
+  const amount = error ? CONFIG[contrib].default : roundDp(numericAmount);
 
   return { error, amount };
 
