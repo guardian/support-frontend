@@ -20,7 +20,7 @@ type Audience = {
   size: number,
 };
 
-type TestId = 'noTestDefined' | 'contributionsLandingAddingMonthly';
+type TestId = 'contributionsLandingAddingMonthly';
 
 export type Participations = {
   [TestId]: string,
