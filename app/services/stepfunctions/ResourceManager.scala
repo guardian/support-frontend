@@ -5,8 +5,6 @@ import akka.actor.{Actor, ActorSystem, Props}
 import scala.concurrent.{Future, Promise}
 import scala.util.{Failure, Success, Try}
 import akka.pattern.ask
-import akka.util.Timeout
-import scala.concurrent.duration._
 import com.typesafe.scalalogging.LazyLogging
 
 case class ResourceRequest(refresh: Boolean)
@@ -47,7 +45,6 @@ class ResourceManagerActor[T](getResource: () => Future[T]) extends Actor with L
 
 class ResourceManager[T](getResource: () => Future[T])(implicit val system: ActorSystem) {
 
-  implicit val timeout = Timeout(30.seconds)
 
   implicit val ec = system.dispatcher
 
