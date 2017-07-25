@@ -165,18 +165,11 @@ $ yarn run [name_command]
 | `lint`               | Runs eslint. |
 | `flow`               | Runs the flow type check. |
 | `build-dev`          | Builds the files for the `DEV` environment |
-| `build-prod`         | Builds the files for the `PROD` environment. It runs `clean`, `lint`, `test`, `build:css` and `build:js`. |
-| `build:css`          | Builds the CSS files. |
-| `build:css:sass`     | Builds the CSS using sass. |
-| `build:css:postcss`  | Runs the postCSS tasks (autoprefixer and pxtorem). |
-| `build:js`           | Builds the JS files using `DEV` environment. |
-| `watch`              | Watches for changes in any CSS or JS files and recompiles everything. |
-| `watch:js`           | Watches for changes in any JS file. |
-| `watch:css`          | Watches for changes in any CSS file. |
-| `watch:css:sass`     | Run watch task for sass command. |
+| `build-prod`         | Builds the files for the `PROD` environment. It runs `clean`, `lint`, `test`, `build:css` and `build:js`. |                
 | `devrun`             | Cleans, transpiles, runs and watches the webpack-dev-server using `DEV` environment. |
 | `webpack-dev-server` | Runs the webpack-dev-server in port `9111`. |
-| `test`               | Runs the client side tests built using Jest.  |
+| `test or jest`        | Runs the client side tests built using Jest.  |
+| `jest-update-snapshot`| Update [jest's snapshots](https://facebook.github.io/jest/docs/snapshot-testing.html)   |
 
 ## 7. A/B Test framework
 

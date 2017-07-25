@@ -13,7 +13,7 @@
     "webpack-dev-server": "webpack-dev-server --port 9211 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
-    "jest-update-snapshot" : "echo 'Updating JS tests' && jest -u"
+    "jest-update-snapshot": "echo 'Updating JS tests' && jest -u"
   },
   "jest": {
     "transform": {
@@ -74,6 +74,7 @@
     "postcss-pxtorem": "^4.0.1",
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
+    "redux-mock-store": "^1.2.3",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
     "sass-mq": "^3.3.2",

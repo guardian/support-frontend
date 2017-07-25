@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
-import PaypalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
+import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 
@@ -32,7 +32,7 @@ function PaymentMethods(props: PropTypes) {
   let payPalButton = '';
 
   if (props.payPalButtonExists) {
-    payPalButton = <PaypalExpressButton callback={props.paypalCallback} />;
+    payPalButton = <PayPalExpressButton callback={props.paypalCallback} />;
   }
 
   if (props.firstName === '' || props.lastName === '') {

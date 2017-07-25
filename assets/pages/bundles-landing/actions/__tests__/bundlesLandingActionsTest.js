@@ -1,5 +1,4 @@
 // @flow
-import type { Contrib } from '../../reducers/reducers';
 import {
   changeContribType,
   changeContribAmountRecurring,

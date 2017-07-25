@@ -15,7 +15,7 @@ export type Action =
 
 // ----- Actions ----- //
 
-function startPayPalExpressCheckout(): Action {
+export function startPayPalExpressCheckout(): Action {
   return { type: 'START_PAYPAL_EXPRESS_CHECKOUT' };
 }
 
@@ -23,7 +23,7 @@ export function setPayPalExpressAmount(amount: number): Action {
   return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
 }
 
-function payPalExpressCheckoutLoaded(): Action {
+export function payPalExpressCheckoutLoaded(): Action {
   return { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' };
 }
 
