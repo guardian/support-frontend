@@ -20,7 +20,7 @@ type Audience = {
   size: number,
 };
 
-type TestId = 'noTestDefined';
+type TestId = 'noTestDefined' | 'contributionsLandingAddingMonthly';
 
 export type Participations = {
   [TestId]: string,
@@ -68,7 +68,17 @@ type OphanABPayload = {
 
  */
 
-const tests: Test[] = [];
+const tests: Test[] = [
+  {
+    testId: 'contributionsLandingAddingMonthly',
+    variants: ['control', 'oneoffAndMonthly'],
+    audience: {
+      offset: 0,
+      size: 1,
+    },
+    isActive: false,
+  },
+];
 
 
 // ----- Functions ----- //
