@@ -6,7 +6,7 @@ import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
 import {
   setPayPalExpressAmount,
 } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import validateContribution from 'helpers/contributions';
+import parseContribution from 'helpers/contributions';
 
 
 // ----- Types ----- //
@@ -34,7 +34,7 @@ export function setPayPalButton(value: boolean): Action {
 
 export function setContribAmount(amount: string): Function {
 
-  const value = validateContribution(amount, 'RECURRING').amount;
+  const value = parseContribution(amount, 'RECURRING').amount;
 
   return (dispatch) => {
     dispatch(setContribValue(value));

@@ -26,9 +26,9 @@ export type Amounts = {
   oneOff: Amount,
 };
 
-export type validatedContrib = {
+export type ParsedContrib = {
   amount: number,
-  error: ContribError,
+  error: ?ContribError,
 };
 
 type Config = {
@@ -58,7 +58,7 @@ const CONFIG: Config = {
 
 // ----- Functions ----- //
 
-export default function validate(input: string, contrib: Contrib) {
+export default function parse(input: string, contrib: Contrib): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);

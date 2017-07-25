@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import { abTestReducer as abTests } from 'helpers/abtest';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
-import validateContribution from 'helpers/contributions';
+import parseContribution from 'helpers/contributions';
 import type { Action } from '../actions/bundlesLandingActions';
 
 
@@ -58,7 +58,7 @@ function contribution(
 
       return Object.assign({}, state, {
         type: action.contribType,
-        error: validateContribution(amount, action.contribType).error,
+        error: parseContribution(amount, action.contribType).error,
       });
 
     }
@@ -67,21 +67,21 @@ function contribution(
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: action.amount },
-        error: validateContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: state.amount.oneOff },
-        error: validateContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
       return Object.assign({}, state, {
         amount: { recurring: state.amount.recurring, oneOff: action.amount },
-        error: validateContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     default:
