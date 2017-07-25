@@ -10,8 +10,7 @@ import { roundDp } from 'helpers/utilities';
 export type Contrib = 'RECURRING' | 'ONE_OFF';
 
 export type ContribError =
-  | 'tooLittleRecurring'
-  | 'tooLittleOneOff'
+  | 'tooLittle'
   | 'tooMuch'
   | 'invalidEntry'
   ;
@@ -42,7 +41,7 @@ type Config = {
 
 // ----- Setup ----- //
 
-const CONFIG: Config = {
+export const CONFIG: Config = {
   RECURRING: {
     min: 5,
     max: 2000,
@@ -58,7 +57,7 @@ const CONFIG: Config = {
 
 // ----- Functions ----- //
 
-export default function parse(input: string, contrib: Contrib): ParsedContrib {
+export function parse(input: string, contrib: Contrib): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);
@@ -66,7 +65,7 @@ export default function parse(input: string, contrib: Contrib): ParsedContrib {
   if (input === '' || isNaN(numericAmount)) {
     error = 'invalidEntry';
   } else if (numericAmount < CONFIG[contrib].min) {
-    error = contrib === 'RECURRING' ? 'tooLittleRecurring' : 'tooLittleOneOff';
+    error = 'tooLittle';
   } else if (numericAmount > CONFIG[contrib].max) {
     error = 'tooMuch';
   }

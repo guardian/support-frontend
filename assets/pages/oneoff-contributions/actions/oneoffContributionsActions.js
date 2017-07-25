@@ -4,7 +4,7 @@
 
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
 import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import parseContribution from 'helpers/contributions';
+import { parse as parseContribution } from 'helpers/contributions';
 
 
 // ----- Types ----- //

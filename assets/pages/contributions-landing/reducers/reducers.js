@@ -6,7 +6,7 @@ import { combineReducers } from 'redux';
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
-import parseContribution from 'helpers/contributions';
+import { parse as parseContribution } from 'helpers/contributions';
 import type { Action } from '../actions/contributionsLandingActions';
 
 

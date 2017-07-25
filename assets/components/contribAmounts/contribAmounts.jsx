@@ -10,6 +10,7 @@ import {
   generateClassName,
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
+import { CONFIG as contribConfig } from 'helpers/contributions';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 
@@ -105,19 +106,23 @@ const contribToggle: Toggle = {
   ],
 };
 
-const contribErrors: {
-  [ContribError]: string,
-} = {
-  tooLittleRecurring: 'Please enter at least £5',
-  tooLittleOneOff: 'Please enter at least £1',
-  tooMuch: 'We are presently only able to accept contributions of £2000 or less',
-  invalidEntry: 'Please enter a numeric amount',
-};
-
 
 // ----- Functions ----- //
 
-function errorMessage(error: ?ContribError): ?React$Element<any> {
+function errorMessage(
+  error: ?ContribError,
+  contribType: Contrib,
+): ?React$Element<any> {
+
+  const config = contribConfig[contribType];
+
+  const contribErrors: {
+    [ContribError]: string,
+  } = {
+    tooLittle: `Please enter at least £${config.min}`,
+    tooMuch: `We are presently only able to accept contributions of £${config.max} or less`,
+    invalidEntry: 'Please enter a numeric amount',
+  };
 
   if (error) {
     return <p className="component-contrib-amounts__error-message">{contribErrors[error]}</p>;
@@ -190,7 +195,7 @@ export default function ContribAmounts(props: PropTypes) {
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
           />
         </div>
-        {errorMessage(props.contribError)}
+        {errorMessage(props.contribError, attrs.contribType)}
       </div>
     </div>
   );
