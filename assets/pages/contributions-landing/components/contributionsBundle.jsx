@@ -121,13 +121,14 @@ function ContributionsBundle(props: PropTypes) {
 
 function mapStateToProps(state) {
 
-  const inVariant = state.abTests.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
+  const oneoffAndMonthlyVariant =
+    state.abTests.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
 
   return {
-    contribType: inVariant ? state.contribution.type : 'ONE_OFF',
+    contribType: oneoffAndMonthlyVariant ? state.contribution.type : 'ONE_OFF',
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
-    oneoffAndMonthlyVariant: inVariant,
+    oneoffAndMonthlyVariant,
   };
 }
 
