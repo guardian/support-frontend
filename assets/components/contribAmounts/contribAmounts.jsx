@@ -114,13 +114,13 @@ function errorMessage(
   contribType: Contrib,
 ): ?React$Element<any> {
 
-  const config = contribConfig[contribType];
+  const limits = contribConfig[contribType];
 
   const contribErrors: {
     [ContribError]: string,
   } = {
-    tooLittle: `Please enter at least £${config.min}`,
-    tooMuch: `We are presently only able to accept contributions of £${config.max} or less`,
+    tooLittle: `Please enter at least £${limits.min}`,
+    tooMuch: `We are presently only able to accept contributions of £${limits.max} or less`,
     invalidEntry: 'Please enter a numeric amount',
   };
 
