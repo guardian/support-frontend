@@ -29,8 +29,8 @@ object CirceDecoders {
     Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
-    val stripeEncoder = deriveEncoder[StripePaymentFields]
-    val paypalEncoder = deriveEncoder[PayPalPaymentFields]
+    private val stripeEncoder = deriveEncoder[StripePaymentFields]
+    private val paypalEncoder = deriveEncoder[PayPalPaymentFields]
     override def apply(a: PaymentFields): Json = {
       a.fold(stripeEncoder.apply, paypalEncoder.apply)
     }
