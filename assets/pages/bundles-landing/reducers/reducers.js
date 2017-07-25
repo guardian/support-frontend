@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import { abTestReducer as abTests } from 'helpers/abtest';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
-import validateContribution from 'helpers/contributions';
+import { parse as parseContribution } from 'helpers/contributions';
 import type { Action } from '../actions/bundlesLandingActions';
 
 
@@ -51,14 +51,14 @@ function contribution(
       let amount;
 
       if (action.contribType === 'ONE_OFF') {
-        amount = state.amount.oneOff;
+        amount = state.amount.oneOff.value;
       } else {
-        amount = state.amount.recurring;
+        amount = state.amount.recurring.value;
       }
 
       return Object.assign({}, state, {
         type: action.contribType,
-        error: validateContribution(amount, action.contribType),
+        error: parseContribution(amount, action.contribType).error,
       });
 
     }
@@ -67,21 +67,21 @@ function contribution(
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: action.amount },
-        error: validateContribution(action.amount, state.type),
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
 
       return Object.assign({}, state, {
         amount: { recurring: action.amount, oneOff: state.amount.oneOff },
-        error: validateContribution(action.amount, state.type),
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
       return Object.assign({}, state, {
         amount: { recurring: state.amount.recurring, oneOff: action.amount },
-        error: validateContribution(action.amount, state.type),
+        error: parseContribution(action.amount.value, state.type).error,
       });
 
     default:

@@ -1,12 +1,16 @@
 // @flow
 
+// ----- Imports ----- //
+
+import { roundDp } from 'helpers/utilities';
+
+
 // ----- Types ----- //
 
 export type Contrib = 'RECURRING' | 'ONE_OFF';
 
 export type ContribError =
-  | 'tooLittleRecurring'
-  | 'tooLittleOneOff'
+  | 'tooLittle'
   | 'tooMuch'
   | 'invalidEntry'
   ;
@@ -21,43 +25,53 @@ export type Amounts = {
   oneOff: Amount,
 };
 
+export type ParsedContrib = {
+  amount: number,
+  error: ?ContribError,
+};
+
+type Config = {
+  [Contrib]: {
+    min: number,
+    max: number,
+    default: number,
+  }
+}
+
 
 // ----- Setup ----- //
 
-const limits = {
-  max: 2000,
-  min: {
-    monthly: 5,
-    oneOff: 1,
+export const CONFIG: Config = {
+  RECURRING: {
+    min: 5,
+    max: 2000,
+    default: 10,
+  },
+  ONE_OFF: {
+    min: 1,
+    max: 2000,
+    default: 50,
   },
 };
 
 
 // ----- Functions ----- //
 
-function validate(amount: Amount, contrib: Contrib): ?ContribError {
+export function parse(input: string, contrib: Contrib): ParsedContrib {
 
-  if (amount.value === '') {
-    return 'invalidEntry';
+  let error = null;
+  const numericAmount = Number(input);
+
+  if (input === '' || isNaN(numericAmount)) {
+    error = 'invalidEntry';
+  } else if (numericAmount < CONFIG[contrib].min) {
+    error = 'tooLittle';
+  } else if (numericAmount > CONFIG[contrib].max) {
+    error = 'tooMuch';
   }
 
-  const numericAmount = Number(amount.value);
+  const amount = error ? CONFIG[contrib].default : roundDp(numericAmount);
 
-  if (isNaN(numericAmount)) {
-    return 'invalidEntry';
-  } else if (numericAmount < limits.min.monthly && contrib === 'RECURRING') {
-    return 'tooLittleRecurring';
-  } else if (numericAmount < limits.min.oneOff && contrib === 'ONE_OFF') {
-    return 'tooLittleOneOff';
-  } else if (numericAmount > limits.max) {
-    return 'tooMuch';
-  }
-
-  return null;
+  return { error, amount };
 
 }
-
-
-// ----- Exports ----- //
-
-export default validate;

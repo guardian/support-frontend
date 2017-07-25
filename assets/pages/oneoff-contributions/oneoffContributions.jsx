@@ -49,7 +49,7 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="oneoff-contrib gu-content-margin">
+      <div className="oneoff-contrib gu-content-filler__inner">
         <InfoSection className="oneoff-contrib__header">
           <h1 className="oneoff-contrib__heading">Make a one-off contribution</h1>
           <Secure />
