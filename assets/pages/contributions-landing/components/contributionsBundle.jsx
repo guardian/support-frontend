@@ -27,6 +27,7 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
+  oneoffAndMonthlyVariant: boolean,
   intCmp: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,
@@ -64,7 +65,9 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
+const getContribAttrs = ({
+  contribType, contribAmount, intCmp, oneoffAndMonthlyVariant,
+}): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const params = new URLSearchParams();
@@ -76,6 +79,13 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
   }
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+
+  if (!oneoffAndMonthlyVariant) {
+
+    const subheading = 'Support the Guardian’s editorial operations by making a one-off contribution today';
+    return Object.assign({}, contribAttrs, { ctaLink, subheading });
+
+  }
 
   return Object.assign({}, contribAttrs, { ctaLink });
 
@@ -110,10 +120,15 @@ function ContributionsBundle(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+
+  const oneoffAndMonthlyVariant =
+    state.abTests.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
+
   return {
-    contribType: state.contribution.type,
+    contribType: oneoffAndMonthlyVariant ? state.contribution.type : 'ONE_OFF',
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
+    oneoffAndMonthlyVariant,
   };
 }
 
