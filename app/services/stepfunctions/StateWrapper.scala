@@ -8,7 +8,7 @@ import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 
 class StateWrapper(encryption: EncryptionProvider) {
-  implicit val wrapperEncoder = deriveEncoder[JsonWrapper]
+  implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
 
   def wrap[T](state: T)(implicit encoder: Encoder[T]): String = {
     JsonWrapper(encodeState(state)).asJson.noSpaces
