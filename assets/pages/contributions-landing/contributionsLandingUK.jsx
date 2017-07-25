@@ -20,7 +20,7 @@ import ContributionsBundle from './components/contributionsBundle';
 
 // ----- Page Startup ----- //
 
-pageStartup.start();
+const participation = pageStartup.start();
 
 
 // ----- Redux Store ----- //
@@ -28,6 +28,13 @@ pageStartup.start();
 const store = createStore(reducer, {
   intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
 });
+
+store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+
+
+// ----- AB Test ----- //
+
+const inTest = participation.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
 
 
 // ----- Copy ----- //
@@ -53,7 +60,7 @@ const content = (
       <IntroductionText messages={introductionCopy} />
       <section className="contributions-bundle">
         <div className="introduction-bleed-margins" />
-        <div className="contributions-bundle__content gu-content-margin">
+        <div className={`contributions-bundle__content gu-content-margin ${inTest ? '' : 'hide-monthly'}`}>
           <div className="introduction-bleed" />
           <ContributionsBundle />
         </div>
