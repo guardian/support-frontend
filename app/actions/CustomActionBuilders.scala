@@ -47,16 +47,7 @@ class CustomActionBuilders(
       onUnauthorized = onUnauthenticated
     )
 
-  val PrivateAction = new ActionBuilder[Request, AnyContent] {
-
-    override def composeAction[A](action: Action[A]) = new CSRFAction(action, csrfConfig, addToken, checkToken)
-
-    override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = block(request).map(_.withHeaders(CacheControl.noCache))
-
-    override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
-
-    override protected def executionContext: ExecutionContext = cc.executionContext
-  }
+  val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   val AuthenticatedAction = PrivateAction andThen authenticated()
 
