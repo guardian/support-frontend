@@ -13,7 +13,6 @@ import {
 // ---- Types ----- //
 
 type PropTypes = {
-  payPalLoaded: boolean,
   setupPayPalCheckout: Function,
   callback: Function,
 };
@@ -29,14 +28,6 @@ const PayPalExpressButton = (props: PropTypes) => {
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
-
-  return {
-    payPalLoaded: state.payPalExpressCheckout.loaded,
-  };
-
-}
-
 function mapDispatchToProps(dispatch) {
 
   return {
@@ -50,4 +41,4 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(PayPalExpressButton);
+export default connect(undefined, mapDispatchToProps)(PayPalExpressButton);

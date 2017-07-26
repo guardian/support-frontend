@@ -2,23 +2,8 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
 import { connect } from 'react-redux';
 import PaymentMethods from 'components/paymentMethods/paymentMethods';
-
-
-// ----- Types ----- //
-
-type PropTypes = {
-  email: string,
-  firstName: string,
-  lastName: string,
-  error: ?string,
-  payPalButtonExists: boolean,
-  stripeCallback: Function,
-  payPalCallback: Function,
-};
-
 
 // ----- Map State/Props ----- //
 
