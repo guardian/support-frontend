@@ -22,12 +22,13 @@ object Stripe {
   case class StripeError(
       `type`: String, //The type of error: api_connection_error, api_error, authentication_error, card_error, invalid_request_error, or rate_limit_error
       message: String, //A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
-      code: String = "", //For card errors, a short string from amongst those listed on the right describing the kind of card error that occurred.
-      decline_code: String = "", //For card errors resulting from a bank decline, a short string indicating the bank's reason for the decline.
-      param: String = "" //The parameter the error relates to if the error is parameter-specific..
+      code: Option[String] = None, //For card errors, a short string from amongst those listed on the right describing the kind of card error that occurred.
+      decline_code: Option[String] = None, //For card errors resulting from a bank decline, a short string indicating the bank's reason for the decline.
+      param: Option[String] = None //The parameter the error relates to if the error is parameter-specific..
   ) extends Throwable with StripeObject {
 
-    override def getMessage: String = s"message: $message; type: ${`type`}; code: $code; decline_code: $decline_code; param: $param"
+    override def getMessage: String =
+      s"message: $message; type: ${`type`}; code: ${code.getOrElse("")}; decline_code: ${decline_code.getOrElse("")}; param: ${param.getOrElse("")}"
 
     def asRetryException: RetryException = `type` match {
       case "api_connection_error" | "api_error" | "rate_limit_error" => new RetryUnlimited(cause = this)
