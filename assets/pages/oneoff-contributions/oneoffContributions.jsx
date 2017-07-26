@@ -11,7 +11,6 @@ import thunkMiddleware from 'redux-thunk';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import InfoSection from 'components/infoSection/infoSection';
-import PaymentMethods from 'components/paymentMethods/paymentMethods';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
@@ -21,6 +20,7 @@ import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
 import getQueryParameter from 'helpers/url';
 
+import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
 import postCheckout from './helpers/ajax';
@@ -61,11 +61,10 @@ const content = (
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
-          <PaymentMethods
+          <PaymentMethodsContainer
             stripeCallback={postCheckout}
-            paypalCallback={postCheckout}
+            payPalCallback={postCheckout}
             payPalButtonExists={false}
-            error={store.getState().oneoffContrib.error}
           />
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">

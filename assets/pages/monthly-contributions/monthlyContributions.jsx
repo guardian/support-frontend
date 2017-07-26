@@ -16,14 +16,13 @@ import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
-import PaymentMethods from 'components/paymentMethods/paymentMethods';
-
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
 import getQueryParameter from 'helpers/url';
 
 import postCheckout from './helpers/ajax';
 import NameForm from './components/nameForm';
+import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
 
 import { setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
@@ -64,11 +63,10 @@ const content = (
           <NameForm />
         </InfoSection>
         <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
-          <PaymentMethods
+          <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken')}
-            paypalCallback={postCheckout('baid')}
+            payPalCallback={postCheckout('baid')}
             payPalButtonExists={store.getState().monthlyContrib.payPalButtonExists}
-            error={store.getState().monthlyContrib.error}
           />
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">

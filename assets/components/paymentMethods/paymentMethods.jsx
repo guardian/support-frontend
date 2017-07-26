@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
@@ -19,20 +18,20 @@ type PropTypes = {
   error: ?string,
   payPalButtonExists: boolean,
   stripeCallback: Function,
-  paypalCallback: Function,
+  payPalCallback: Function,
 };
 
 
 // ----- Component ----- //
 
-function PaymentMethods(props: PropTypes) {
+export default function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
   if (props.payPalButtonExists) {
-    payPalButton = <PayPalExpressButton callback={props.paypalCallback} />;
+    payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
   }
 
   if (props.firstName === '' || props.lastName === '') {
@@ -50,23 +49,4 @@ function PaymentMethods(props: PropTypes) {
       {payPalButton}
     </section>
   );
-
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    email: state.user.email,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-  };
-
-}
-
-
-// ----- Exports ----- //
-
-export default connect(mapStateToProps)(PaymentMethods);

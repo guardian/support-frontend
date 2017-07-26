@@ -120,8 +120,14 @@ function setup(dispatch: Function, getState: Function, callback: Function) {
         // This function is called when the user finishes with PayPal interface (approves payment).
         onAuthorize,
       };
+      const payPalId = 'component-paypal-button-checkout';
+      const htmlElement = document.getElementById(payPalId);
+      const elementCount: ?number = htmlElement ? htmlElement.childElementCount : null;
 
-      window.paypal.Button.render(payPalOptions, '#component-paypal-button-checkout');
+      if (elementCount === 0) {
+        window.paypal.Button.render(payPalOptions, `#${payPalId}`);
+      }
+
     });
 }
 
