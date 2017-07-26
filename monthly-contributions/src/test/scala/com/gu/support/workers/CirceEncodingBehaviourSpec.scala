@@ -1,5 +1,6 @@
 package com.gu.support.workers
 
+import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.model.{PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
@@ -75,5 +76,18 @@ class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging
     val json = pprt.asJson
     val pprt2 = decode[PaymentMethod](json.noSpaces)
     pprt2.isRight should be(true) //decoding succeeded
+  }
+
+  it should "be able to decode a stripe error" in {
+    val json = """
+      |{
+      |  "error": {
+      |    "type": "invalid_request_error",
+      |    "message": "You cannot use a Stripe token more than once: tok_IRqAu50hjXnumI."
+      |  }
+      |}""".stripMargin
+    val decoded = decode[StripeError](json)
+    decoded.isRight should be(true)
+    decoded.right.map(_.`type`) should be(Right("invalid_request_error"))
   }
 }

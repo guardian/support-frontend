@@ -2,15 +2,20 @@ package com.gu.stripe
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json}
 
 object Stripe {
 
   sealed trait StripeObject
 
   object StripeError {
-    implicit val codec: Codec[StripeError] = deriveCodec
+    private val encoder = deriveEncoder[StripeError].mapJson { json => Json.fromFields(List("error" -> json)) }
+    
+    private val decoder = deriveDecoder[StripeError].prepare { _.downField("error") }
+
+    implicit val codec: Codec[StripeError] = new Codec[StripeError](encoder, decoder)
   }
 
   //See docs here: https://stripe.com/docs/api/curl#errors
