@@ -22,10 +22,7 @@ type PropTypes = {
 // ----- Component ----- //
 
 const PayPalExpressButton = (props: PropTypes) => {
-
-  if (!props.payPalLoaded) {
-    props.setupPayPalCheckout(props.callback);
-  }
+  props.setupPayPalCheckout(props.callback);
   return <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />;
 };
 
