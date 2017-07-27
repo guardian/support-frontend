@@ -1,4 +1,4 @@
-ContributionCompleted:
+ContributionCompletedLambda:
   Type: "AWS::Lambda::Function"
   Description: "Completed contribution successfully"
   Properties:
