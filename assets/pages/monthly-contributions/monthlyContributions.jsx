@@ -35,7 +35,10 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, {
+  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+}, applyMiddleware(thunkMiddleware));
+
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
