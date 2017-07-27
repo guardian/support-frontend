@@ -6,7 +6,7 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import com.gu.support.workers.model.monthlyContributions.Status
 import com.typesafe.scalalogging.LazyLogging
 
-class ContributionCompleted()
+class ContributionCompleted
     extends Handler[SendThankYouEmailState, CompletedState]
     with LazyLogging {
 

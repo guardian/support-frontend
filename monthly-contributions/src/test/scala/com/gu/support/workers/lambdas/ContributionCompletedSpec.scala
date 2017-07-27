@@ -13,7 +13,7 @@ import com.gu.support.workers.encoding.StateCodecs._
 class ContributionCompletedSpec extends LambdaSpec {
 
   "ContributionCompleted lambda" should "return a successful completed state" in {
-    val flowCompleted = new ContributionCompleted()
+    val flowCompleted = new ContributionCompleted
 
     val outStream = new ByteArrayOutputStream()
 
