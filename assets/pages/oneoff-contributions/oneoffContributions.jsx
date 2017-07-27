@@ -35,7 +35,7 @@ pageStartup.start();
 // ----- Redux Store ----- //
 
 const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+  intCmp: getQueryParameter('INTCMP', 'gdnwb_oneoff_contributions_bundles_landing_default'),
 }, applyMiddleware(thunkMiddleware));
 
 user.init(store.dispatch);
