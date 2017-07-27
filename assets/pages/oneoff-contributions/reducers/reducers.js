@@ -4,6 +4,7 @@
 
 import { combineReducers } from 'redux';
 
+import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -55,6 +56,7 @@ function oneoffContrib(
 
 export default combineReducers({
   oneoffContrib,
+  intCmp,
   user,
   stripeCheckout,
   csrf,

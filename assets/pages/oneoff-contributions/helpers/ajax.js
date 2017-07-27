@@ -67,8 +67,9 @@ export default function postCheckout(
 
   return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
 
+    const url: string = `${ONEOFF_CONTRIB_THANKYOU}?INTCMP=${getState().intCmp}`;
     if (response.ok) {
-      window.location.assign(ONEOFF_CONTRIB_THANKYOU);
+      window.location.assign(url);
     }
 
     response.text().then(err => dispatch(checkoutError(err)));
