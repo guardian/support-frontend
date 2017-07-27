@@ -36,7 +36,7 @@ pageStartup.start();
 // ----- Redux Store ----- //
 
 const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_recurring_contributions_landing_default'),
+  intCmp: getQueryParameter('INTCMP'),
 }, applyMiddleware(thunkMiddleware));
 
 
