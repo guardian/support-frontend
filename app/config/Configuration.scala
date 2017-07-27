@@ -1,8 +1,8 @@
 package config
 
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
-import ConfigImplicits._
-import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider, TouchPointEnvironments}
+import config.ConfigImplicits._
 import services.aws.AwsConfig
 
 class Configuration {
@@ -27,5 +27,6 @@ class Configuration {
   lazy val payPalConfigProvider = new PayPalConfigProvider(config, stage)
 
   lazy val stripeConfigProvider = new StripeConfigProvider(config, stage)
-lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, fromStage(stage), "oneOffStripe")
+
+  lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 }

@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats" % "0.9.0",
   "play-circe" %% "play-circe" % "2.6-0.8.0",
   "com.gu" %% "support-models" % "0.5",
-  "com.gu" %% "support-config" % "0.1",
+  "com.gu" %% "support-config" % "0.7-SNAPSHOT",
   "com.gu" %% "support-internationalisation" % "0.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
