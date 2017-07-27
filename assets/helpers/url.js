@@ -23,7 +23,7 @@ const addQueryParamToURL = (str: string, paramsKey: string, paramsValue: ?string
   strParts.splice(0, 1);
 
   // I concatenate the rest of the array's values since all of them are query params.
-  const params = strParts.reduce((a,b) => `${a}?${b}`, '');
+  const params = strParts.reduce((a, b) => `${a}?${b}`, '');
 
   // Add the new param to the list of params.
   const paramsObj = new URLSearchParams(params);
