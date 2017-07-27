@@ -17,5 +17,6 @@ deployments:
         - "-SendThankYouEmailLambda-"
         - "-UpdateMembersDataAPILambda-"
         - "-FailureHandlerLambda-"
+        - "-ContributionCompletedLambda-"
       fileName: monthly-contributions.jar
     dependencies: [cfn]
