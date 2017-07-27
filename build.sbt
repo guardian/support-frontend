@@ -18,7 +18,7 @@ description := "Scala library to provide shared step-function models to Guardian
 licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "support-internationalisation" % "0.4" % "provided"
+  "com.gu" %% "support-internationalisation" % "0.5" % "provided"
 )
 
 releaseCrossBuild := true
