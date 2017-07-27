@@ -70,6 +70,7 @@ export default function postCheckout(
   return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
 
     const url: string = addQueryParamToURL(ONEOFF_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp);
+
     if (response.ok) {
       window.location.assign(url);
     }
