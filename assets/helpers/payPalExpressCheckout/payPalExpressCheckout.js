@@ -132,5 +132,5 @@ function setup(dispatch: Function, getState: Function, callback: Function) {
 }
 
 export {
-  setup, // eslint-disable-line import/prefer-default-export
+  setup,
 };
