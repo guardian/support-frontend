@@ -2,6 +2,8 @@
 
 // ----- Imports ----- //
 
+import { addQueryParamToURL } from 'helpers/url';
+
 import { checkoutError } from '../actions/monthlyContributionsActions';
 
 
@@ -64,8 +66,10 @@ export default function postCheckout(paymentFieldName: PaymentField): Function {
 
     return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
 
+      const url: string = addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp);
+
       if (response.ok) {
-        window.location.assign(MONTHLY_CONTRIB_THANKYOU);
+        window.location.assign(url);
       }
 
       response.text().then(err => dispatch(checkoutError(err)));

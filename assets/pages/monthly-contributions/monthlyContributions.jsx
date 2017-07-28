@@ -18,7 +18,7 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
-import getQueryParameter from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 
 import postCheckout from './helpers/ajax';
 import NameForm from './components/nameForm';
@@ -35,10 +35,18 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, {
+  intCmp: getQueryParameter('INTCMP'),
+}, applyMiddleware(thunkMiddleware));
+
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
-store.dispatch(setContribAmount(getQueryParameter('contributionValue', '5')));
+const contributionAmount = getQueryParameter('contributionValue', '5');
+
+if (contributionAmount !== undefined && contributionAmount !== null) {
+  store.dispatch(setContribAmount(contributionAmount));
+}
+
 
 user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));

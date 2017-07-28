@@ -12,7 +12,7 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import IntroductionText from 'components/introductionText/introductionText';
 
 import pageStartup from 'helpers/pageStartup';
-import getQueryParameter from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 
 import reducer from './reducers/reducers';
 import ContributionsBundle from './components/contributionsBundle';
@@ -26,7 +26,7 @@ const participation = pageStartup.start();
 // ----- Redux Store ----- //
 
 const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+  intCmp: getQueryParameter('INTCMP'),
 });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });

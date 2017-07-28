@@ -18,7 +18,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
-import getQueryParameter from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
@@ -34,12 +34,18 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, {
+  intCmp: getQueryParameter('INTCMP'),
+}, applyMiddleware(thunkMiddleware));
 
 user.init(store.dispatch);
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
-store.dispatch(setContribAmount(getQueryParameter('contributionValue', '50')));
+const contributionAmount = getQueryParameter('contributionValue', '50');
+
+if (contributionAmount !== undefined && contributionAmount !== null) {
+  store.dispatch(setContribAmount(contributionAmount));
+}
 
 
 // ----- Render ----- //

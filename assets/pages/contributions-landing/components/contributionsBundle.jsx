@@ -128,6 +128,7 @@ function mapStateToProps(state) {
     contribType: showMonthly ? state.contribution.type : 'ONE_OFF',
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
+    intCmp: state.intCmp,
     showMonthly,
   };
 }
