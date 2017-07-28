@@ -34,7 +34,7 @@ store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 
 // ----- AB Test ----- //
 
-const inVariant = participation.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
+const showMonthly = participation.contributionsLandingAddingMonthly !== 'control';
 
 
 // ----- Copy ----- //
@@ -60,7 +60,7 @@ const content = (
       <IntroductionText messages={introductionCopy} />
       <section className="contributions-bundle">
         <div className="introduction-bleed-margins" />
-        <div className={`contributions-bundle__content gu-content-margin ${inVariant ? '' : 'hide-monthly'}`}>
+        <div className={`contributions-bundle__content gu-content-margin ${showMonthly ? '' : 'hide-monthly'}`}>
           <div className="introduction-bleed" />
           <ContributionsBundle />
         </div>
