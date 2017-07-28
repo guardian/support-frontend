@@ -16,11 +16,8 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
   // We are interested in the query params i.e. the part after the '?'
   const strParts = urlOrPath.split('?');
 
-  // Save the first part of the str since is my protocol://host:port or path.
-  const strInit = strParts[0];
-
-  // Drop the URL.
-  strParts.splice(0, 1);
+  // Save the first part of the urlOrPath and drop it from the strParts array.
+  const strInit = strParts.shift();
 
   // I concatenate the rest of the array's values since all of them are query params.
   const params = strParts.reduce((a, b) => `${a}?${b}`, '');
