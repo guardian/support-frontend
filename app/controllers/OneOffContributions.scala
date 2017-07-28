@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 import services.{IdentityService, TestUserService}
 import com.typesafe.scalalogging.LazyLogging
 import views.html.oneOffContributions
-import config.StripeConfigProvider
+import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.IdUser

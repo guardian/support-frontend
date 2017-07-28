@@ -1,8 +1,8 @@
 package config
 
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
-import ConfigImplicits._
-import config.TouchPointEnvironments.fromStage
+import config.ConfigImplicits._
 import services.aws.AwsConfig
 
 class Configuration {
@@ -24,11 +24,9 @@ class Configuration {
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
-  private val touchpoint = config.getConfig("touchpoint.backend.environments")
+  lazy val payPalConfigProvider = new PayPalConfigProvider(config, stage)
 
-  lazy val payPalConfigProvider = new PayPalConfigProvider(touchpoint, fromStage(stage))
+  lazy val stripeConfigProvider = new StripeConfigProvider(config, stage)
 
-  lazy val stripeConfigProvider = new StripeConfigProvider(touchpoint, fromStage(stage))
-
-  lazy val oneOffStripeConfigProvider = new StripeConfigProvider(touchpoint, fromStage(stage), "oneOffStripe")
+  lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 }
