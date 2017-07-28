@@ -7,7 +7,11 @@ import { routes } from 'helpers/routes';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
 
-import { checkoutError } from '../actions/monthlyContributionsActions';
+import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount } from '../actions/monthlyContributionsActions';
+
+// ----- Setup ----- //
+
+const POLLING_INTERVAL = 1000;
 
 
 // ----- Types ----- //
@@ -69,26 +73,71 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
   });
 }
 
+function statusPoll(dispatch: Function, getState: Function) {
+  const state = getState();
+
+  if (state.monthlyContrib.pollCount > 10) {
+    window.location.assign(routes.recurringContribPending);
+  }
+
+  dispatch(incrementPollCount());
+
+  const request = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    credentials: 'same-origin',
+  };
+
+  return fetch(state.monthlyContrib.trackingUri, request).then((response) => {
+    handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
+  });
+}
+
+function delayedStatusPoll(dispatch: Function, getState: Function) {
+  setTimeout(() => statusPoll(dispatch, getState), POLLING_INTERVAL);
+}
+
+function handleStatus(response: Response, dispatch: Function, getState: Function) {
+  const state = getState();
+  if (response.ok) {
+    response.json().then((status) => {
+      dispatch(setTrackingUri(status.trackingUri));
+      switch (status.status) {
+        case 'pending':
+          delayedStatusPoll(dispatch, getState);
+          break;
+        case 'failure':
+          dispatch(checkoutError(status.message));
+          break;
+        case 'success':
+          const url: string = addQueryParamToURL(
+            routes.recurringContribThankyou,
+            'INTCMP',
+            getState().intCmp,
+          );
+          window.location.assign(url);
+          break;
+        default:
+          delayedStatusPoll(dispatch, getState);
+      }
+    });
+  } else if (state.monthlyContrib.trackingUri) {
+    delayedStatusPoll(dispatch, getState);
+  } else {
+    response.text().then(err => dispatch(checkoutError(err)));
+  }
+}
+
+
 export default function postCheckout(paymentFieldName: PaymentField): Function {
   return (token: string, dispatch: Function, getState: () => CombinedState) => {
+
+    dispatch(resetPollCount());
 
     const request = requestData(paymentFieldName, token, getState);
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
-
-      const url: string = addQueryParamToURL(
-        routes.recurringContribThankyou,
-        'INTCMP',
-        getState().intCmp,
-      );
-
-      if (response.ok) {
-        window.location.assign(url);
-        return;
-      }
-
-      response.text().then(err => dispatch(checkoutError(err)));
-
+      handleStatus(response, dispatch, getState);
     });
   };
 }

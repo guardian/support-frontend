@@ -18,6 +18,7 @@ GET  /contribute/recurring                          controllers.MonthlyContribut
 GET  /contribute/recurring/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.MonthlyContributions.create
+GET  /contribute/recurring/status                   controllers.MonthlyContributions.status(jobId: String)
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/one-off/thankyou                   controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")

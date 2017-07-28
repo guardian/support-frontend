@@ -47,6 +47,8 @@ libraryDependencies ++= Seq(
   "play-circe" %% "play-circe" % "2.6-0.8.0",
   "com.gu" %% "support-models" % "0.9",
   "com.gu" %% "support-config" % "0.7",
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.128",
+  "com.typesafe.akka" %% "akka-agent" % "2.4.12",
   "com.gu" %% "support-internationalisation" % "0.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
