@@ -21,7 +21,12 @@ trait Services {
   lazy val monthlyContributionsClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws))
     val monthlyContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
-    MonthlyContributionsClient(monthlyContributionsStage, stateWrapper)
+    MonthlyContributionsClient(
+      monthlyContributionsStage,
+      stateWrapper,
+      appConfig.supportUrl,
+      controllers.routes.MonthlyContributions.status
+    )
   }
 
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)

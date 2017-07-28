@@ -30,4 +30,13 @@ package object stepfunctions {
     def fromStartExecution(result: StartExecutionResult): StateMachineExecution =
       StateMachineExecution(result.getExecutionArn, new DateTime(result.getStartDate))
   }
+
+  case class StateMachineExecutionStatus(
+    input: String,
+    output: String,
+    startDate: DateTime,
+    stopDate: Option[DateTime],
+    status: String
+  )
+
 }
