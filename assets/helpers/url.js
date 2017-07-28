@@ -11,10 +11,10 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 };
 
 
-const addQueryParamToURL = (str: string, paramsKey: string, paramsValue: ?string): string => {
-  // str can be a full URL (i.e. https://...?q1=a) or a path (i.e. '/...?q1=a).
-  // Whatever is the case, I am interested in the query params i.e. the part after the '?'
-  const strParts = str.split('?');
+const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?string): string => {
+
+  // We are interested in the query params i.e. the part after the '?'
+  const strParts = urlOrPath.split('?');
 
   // Save the first part of the str since is my protocol://host:port or path.
   const strInit = strParts[0];
