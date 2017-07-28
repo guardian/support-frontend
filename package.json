@@ -6,7 +6,7 @@
     "clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
     "validate": "echo 'Validating JS' && npm-run-all lint flow",
     "flow": "flow",
-    "lint": "eslint --ext .js --ext .jsx .",
+    "lint": "eslint --ext .js --ext .jsx --rulesdir eslint_rules .",
     "build-dev": "webpack --config webpack.config.js --env.dev",
     "build-prod": "npm-run-all clean validate test 'webpack -- --config webpack.config.js --env.prod'",
     "webpack": "webpack",
