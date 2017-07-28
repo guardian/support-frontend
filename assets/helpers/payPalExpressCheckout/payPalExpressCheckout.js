@@ -87,7 +87,7 @@ function createAgreement(payPalData: Object, state: Object) {
   const csrfToken = state.csrf.token;
 
   return fetch(CREATE_AGREEMENT_URL, payPalRequestData(body, csrfToken))
-            .then(response => response.json());
+    .then(response => response.json());
 }
 
 function setup(dispatch: Function, getState: Function, callback: Function) {
