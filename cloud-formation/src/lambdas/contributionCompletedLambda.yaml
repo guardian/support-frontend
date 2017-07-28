@@ -3,7 +3,7 @@ ContributionCompletedLambda:
   Description: "Completed contribution successfully"
   Properties:
     $environment_variables
-    FunctionName: !Sub ${Stack}-ContributionCompleted-${Stage}
+    FunctionName: !Sub ${Stack}-ContributionCompletedLambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.ContributionCompleted::handleRequest"
     MemorySize: 256
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
