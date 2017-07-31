@@ -73,6 +73,7 @@ export default function postCheckout(
 
     if (response.ok) {
       window.location.assign(url);
+      return;
     }
 
     response.text().then(err => dispatch(checkoutError(err)));
