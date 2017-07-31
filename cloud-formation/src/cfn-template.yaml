@@ -56,13 +56,13 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-            - Effect: Allow
-              Action:
-                - logs:Create*
-                - logs:PutLogEvents
-                - logs:DescribeLogStreams
-                - cloudwatch:putMetricData
-              Resource: arn:aws:logs:*:*:*
+            - Action:
+              - logs:Create*
+              - logs:PutLogEvents
+              - logs:DescribeLogStreams
+              - cloudwatch:putMetricData
+              Resource: "*"
+              Effect: Allow
         - PolicyName: KMSEncryption
           PolicyDocument:
             Version: 2012-10-17
@@ -70,6 +70,7 @@ Resources:
               - Effect: Allow
                 Action:
                 - kms:Encrypt
+                - kms:Decrypt
                 Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
 
   StatesExecutionRole:
