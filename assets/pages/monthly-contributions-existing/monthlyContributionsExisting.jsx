@@ -34,7 +34,7 @@ const content = (
           </h2>
           <CtaLink
             text="Make a one-off contribution"
-            url="https://contribute.theguardian.com"
+            url="/oneoff-contributions"
           />
         </div>
         <InfoSection heading="Questions?" className="existing__questions">
