@@ -38,7 +38,7 @@ const StripePopUpButton = (props: PropTypes) => {
     <button
       className="component-stripe-pop-up-button"
       onClick={stripeClick}
-    >Contribute with debit/credit card <Svg svgName="credit-card" /></button>
+    >Pay with debit/credit card <Svg svgName="credit-card" /></button>
   );
 
 };
