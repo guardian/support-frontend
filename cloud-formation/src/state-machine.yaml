@@ -14,11 +14,17 @@ States:
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
-    Next: SendThankYouEmailAndUpdateMembersDataAPI
+    Next: ParallelTasks
     $state_machine_retries
-  SendThankYouEmailAndUpdateMembersDataAPI:
+  ParallelTasks:
     Type: Parallel
     Branches:
+    - StartAt: ContributionCompleted
+      States:
+        ContributionCompleted:
+          Type: Task
+          Resource: "${ContributionCompletedLambda.Arn}"
+          End: True
     - StartAt: SendThankYouEmail
       States:
         SendThankYouEmail:
