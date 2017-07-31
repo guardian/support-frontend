@@ -6,8 +6,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CSRFAction[A](underlying: Action[A], config: CSRFConfig, addToken: CSRFAddToken, checkToken: CSRFCheck) extends Action[A] {
 
-  val wrapped = addToken(underlying)
-  val wrappedWithCheck = checkToken(wrapped)
+  private val wrapped = addToken(underlying)
+  private val wrappedWithCheck = checkToken(wrapped)
 
   def parser: BodyParser[A] = underlying.parser
 
