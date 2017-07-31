@@ -24,7 +24,8 @@ export default function ContribLegal() {
       </p>
       <p className="component-contrib-legal__text">
         If you have any questions about contributing to the Guardian,
-        please contact us here.&nbsp;
+        please <a href="mailto:contribution.support@theguardian.com">
+        contact us here</a>.&nbsp;
       </p>
     </div>
   );
