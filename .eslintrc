@@ -16,7 +16,7 @@
   },
   "plugins": [
     "react",
-    "flowtype",
+    "flowtype"
   ],
   "globals": {
     "guardian": true,
