@@ -52,6 +52,7 @@ module.exports = (env) => {
       contributionsLandingPageUS: 'pages/contributions-landing/contributionsLandingUS.jsx',
       monthlyContributionsPage: 'pages/monthly-contributions/monthlyContributions.jsx',
       monthlyContributionsThankyouPage: 'pages/contributions-thankyou/monthlyContributionsThankyou.jsx',
+      monthlyContributionsPendingPage: 'pages/contributions-thankyou/monthlyContributionsPending.jsx',
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
