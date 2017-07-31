@@ -56,15 +56,13 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-            - Effect: Allow
-              Action:
-                - logs:Create*
-                - logs:PutLogEvents
-                - logs:DescribeLogStreams
-                - cloudwatch:putMetricData
-              Resource:
-                - arn:aws:logs:*:*:*
-                - arn:aws:cloudwatch:*:*:*
+            - Action:
+              - logs:Create*
+              - logs:PutLogEvents
+              - logs:DescribeLogStreams
+              - cloudwatch:putMetricData
+              Resource: "*"
+              Effect: Allow
         - PolicyName: KMSEncryption
           PolicyDocument:
             Version: 2012-10-17
