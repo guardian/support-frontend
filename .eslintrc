@@ -34,8 +34,6 @@
     "import/no-duplicates": "off",
     "import/no-extraneous-dependencies": "off",
     "padded-blocks": "off",
-    // We don't prefer export default
-    "no-default-export": "warn",
     "import/prefer-default-export": "off"
   },
   "settings": {
