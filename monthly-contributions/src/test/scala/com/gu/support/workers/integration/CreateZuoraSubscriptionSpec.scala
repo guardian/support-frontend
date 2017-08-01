@@ -22,6 +22,6 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec {
     createZuora.handleRequest(wrapFixture(createZuoraSubscriptionJson), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail.accountNumber.length should be > 0
+    sendThankYouEmail._1.accountNumber.length should be > 0
   }
 }

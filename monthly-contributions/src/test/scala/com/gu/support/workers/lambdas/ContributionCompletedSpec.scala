@@ -22,7 +22,7 @@ class ContributionCompletedSpec extends LambdaSpec {
     val completedState = Encoding.in[CompletedState](outStream.toInputStream)
 
     completedState.isSuccess should be(true)
-    completedState.get.status should be(Status.Success)
-    completedState.get.message should be(None)
+    completedState.get._1.status should be(Status.Success)
+    completedState.get._1.message should be(None)
   }
 }
