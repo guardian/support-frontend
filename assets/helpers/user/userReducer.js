@@ -21,10 +21,10 @@ type User = {
 // ----- Setup ----- //
 
 const initialState: User = {
-  email: null,
-  displayName: null,
-  firstName: null,
-  lastName: null,
+  email: '',
+  displayName: '',
+  firstName: '',
+  lastName: '',
   isTestUser: null,
 };
 
