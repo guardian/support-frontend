@@ -12,7 +12,7 @@ object Stripe {
 
   object StripeError {
     private val encoder = deriveEncoder[StripeError].mapJson { json => Json.fromFields(List("error" -> json)) }
-    
+
     private val decoder = deriveDecoder[StripeError].prepare { _.downField("error") }
 
     implicit val codec: Codec[StripeError] = new Codec[StripeError](encoder, decoder)
@@ -31,9 +31,9 @@ object Stripe {
       s"message: $message; type: ${`type`}; code: ${code.getOrElse("")}; decline_code: ${decline_code.getOrElse("")}; param: ${param.getOrElse("")}"
 
     def asRetryException: RetryException = `type` match {
-      case "api_connection_error" | "api_error" | "rate_limit_error" => new RetryUnlimited(cause = this)
-      case "authentication_error" => new RetryLimited(cause = this)
-      case "card_error" | "invalid_request_error" | "validation_error" => new RetryNone(cause = this)
+      case message @ ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(message, cause = this)
+      case message @ "authentication_error" => new RetryLimited(message, cause = this)
+      case message @ ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(message, cause = this)
     }
   }
 

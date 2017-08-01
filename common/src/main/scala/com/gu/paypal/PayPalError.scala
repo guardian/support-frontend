@@ -5,7 +5,7 @@ import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimi
 case class PayPalError(httpCode: Int, message: String) extends Throwable {
   def asRetryException: RetryException =
     if (httpCode == 500)
-      new RetryUnlimited(cause = this)
+      new RetryUnlimited(message, cause = this)
     else
-      new RetryNone(cause = this)
+      new RetryNone(message, cause = this)
 }
