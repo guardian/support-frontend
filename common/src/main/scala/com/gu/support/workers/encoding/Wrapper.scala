@@ -6,7 +6,7 @@ import java.util.Base64
 import cats.syntax.either._
 import com.gu.support.workers.encoding.Encryption.encrypt
 import com.gu.support.workers.encoding.Helpers.deriveCodec
-import com.gu.support.workers.model.JsonWrapper
+import com.gu.support.workers.model.{ExecutionError, JsonWrapper}
 import io.circe.Encoder
 import io.circe.parser._
 import io.circe.syntax._
@@ -20,7 +20,8 @@ import scala.util.Try
  * This class helps with that
  */
 object Wrapper {
-  implicit val jsonCodec = deriveCodec[JsonWrapper]
+  implicit val executionErrorCodec: Codec[ExecutionError] = deriveCodec
+  implicit val jsonCodec: Codec[JsonWrapper] = deriveCodec
 
   def unWrap(is: InputStream): Try[JsonWrapper] = {
     val t = Try(Source.fromInputStream(is).mkString).flatMap(decode[JsonWrapper](_).toTry)
@@ -31,7 +32,7 @@ object Wrapper {
   def wrap[T](value: T)(implicit encoder: Encoder[T]): JsonWrapper =
     wrapString(value.asJson.noSpaces)
 
-  def wrapString(string: String): JsonWrapper = JsonWrapper(encodeToBase64String(encrypt(string)))
+  def wrapString(string: String): JsonWrapper = JsonWrapper(encodeToBase64String(encrypt(string)), None)
 
   def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
 }
