@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import IntroductionText from 'components/introductionText/introductionText';
-import ContribLegal from 'components/contribLegal/contribLegal';
+import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';

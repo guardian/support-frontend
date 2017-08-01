@@ -13,10 +13,10 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
-import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
-import ContribLegal from 'components/contribLegal/contribLegal';
+import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
