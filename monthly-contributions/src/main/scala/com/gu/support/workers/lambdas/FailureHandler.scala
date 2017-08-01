@@ -37,6 +37,7 @@ class FailureHandler(emailService: EmailService)
       edition = state.user.country.alpha2,
       name = state.user.firstName
     )).whenFinished {
+      logger.info(s"Error=$error")
       CompletedState(
         requestId = state.requestId,
         user = state.user,
@@ -51,6 +52,10 @@ class FailureHandler(emailService: EmailService)
     "An error occurred while processing your contribution. Please try again later."
 
   private def messageFromExecutionError(error: ExecutionError): Option[String] = {
+    decode[ErrorJson](error.Cause) match {
+      case Left(l) => logger.error("Failed to parse error", l)
+      case Right(r) => logger.info(s"Parsed error as $r")
+    }
     decode[ErrorJson](error.Cause).right.toOption.collect {
       case cause if cause.errorMessage.contains("TRANSACTION_FAILED") =>
         "Your payment failed. Please try again or use another payment method."
