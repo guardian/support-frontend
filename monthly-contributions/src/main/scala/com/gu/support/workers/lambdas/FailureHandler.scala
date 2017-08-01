@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
-import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.{Codec, ErrorJson}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.ExecutionError
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
@@ -15,13 +15,8 @@ import org.joda.time.DateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.gu.zuora.model.response.ZuoraErrorResponse
 import io.circe.parser._
-
-case class ErrorJson(errorMessage: String, errorType: String, stackTrace: String, cause: Option[ErrorJson])
-
-object ErrorJson {
-  implicit val codec: Codec[ErrorJson] = deriveCodec
-}
 
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState]
@@ -56,8 +51,13 @@ class FailureHandler(emailService: EmailService)
       case Left(l) => logger.error("Failed to parse error", l)
       case Right(r) => logger.info(s"Parsed error as $r")
     }
-    decode[ErrorJson](error.Cause).right.toOption.collect {
-      case cause if cause.errorMessage.contains("TRANSACTION_FAILED") =>
+
+    val zuoraError = decode[ErrorJson](error.Cause).right.toOption.flatMap { cause =>
+      cause.cause.flatMap(ZuoraErrorResponse.fromErrorJson)
+    }
+
+    zuoraError.collect {
+      case e if e.errors.exists(_.Code == "TRANSACTION_FAILED") =>
         "Your payment failed. Please try again or use another payment method."
     }
   }
