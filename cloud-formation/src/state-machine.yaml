@@ -57,8 +57,18 @@ States:
             - com.gu.support.workers.exceptions.RetryUnlimited
             IntervalSeconds: 1
             BackoffRate: 2
+    Next: WaitForBrowserPoll
+
+  WaitForBrowserPoll:
+    Type: Wait
+    Seconds: 30
+    Comment: |
+      This state exists to avoid the situation where the state machine is terminated before the client's polling
+      detects that the execution is complete.  This could happen during a deployment when a new state machine
+      is created and the old is terminated.
     End: True
+
   FailureHandler:
     Type: Task
     Resource: "${FailureHandlerLambda.Arn}"
-    End: True
+    Next: WaitForBrowserPoll
