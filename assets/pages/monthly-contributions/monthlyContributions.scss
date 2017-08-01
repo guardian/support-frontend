@@ -3,6 +3,7 @@
 	// ----- General ----- //
 
 	background-color: darken(gu-colour(multimedia-main-2), 5%);
+	color: gu-colour(neutral-1);
 
 	// Fix for IE.
 	& > div {
@@ -104,6 +105,12 @@
 			}
 
 		}
+	}
+
+	// ----- Legal ----- //
+
+	.component-contrib-legal {
+		padding-top: $gu-v-spacing;
 	}
 
 }

@@ -35,7 +35,7 @@ const content = (
             </p>
           </h2>
           <CtaLink
-            text="Return to The Guardian"
+            text="Return to the Guardian"
             url="https://theguardian.com"
           />
         </div>

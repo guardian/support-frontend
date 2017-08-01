@@ -1,0 +1,21 @@
+.component-contrib-legal {
+
+	font-family: $gu-text-sans-web;
+	font-size: 12px;
+	color: gu-colour(neutral-1);
+
+	.component-contrib-legal__text {
+		@include mq($from: phablet) {
+			display: inline;
+		}
+
+		@include mq($until: phablet) {
+			padding-bottom: $gu-v-spacing;
+		}
+	}
+
+	a {
+		color: inherit;
+	}
+
+}

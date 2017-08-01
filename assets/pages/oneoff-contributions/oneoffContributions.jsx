@@ -12,9 +12,10 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import InfoSection from 'components/infoSection/infoSection';
 import Secure from 'components/secure/secure';
-import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
+import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
@@ -26,6 +27,7 @@ import reducer from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
 import { setContribAmount } from './actions/oneoffContributionsActions';
+
 
 // ----- Page Startup ----- //
 
@@ -78,6 +80,7 @@ const content = (
             termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
+          <ContribLegal />
         </InfoSection>
       </div>
       <SimpleFooter />
