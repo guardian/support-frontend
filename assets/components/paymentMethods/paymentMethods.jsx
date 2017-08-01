@@ -13,8 +13,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 type PropTypes = {
   email: string,
-  firstName: string,
-  lastName: string,
+  hide: boolean,
   error: ?string,
   payPalButtonExists: boolean,
   stripeCallback: Function,
@@ -34,7 +33,7 @@ export default function PaymentMethods(props: PropTypes) {
     payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
   }
 
-  if (props.firstName === '' || props.lastName === '') {
+  if (props.hide) {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';

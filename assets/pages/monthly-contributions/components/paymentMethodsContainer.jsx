@@ -12,9 +12,8 @@ function mapStateToProps(state) {
 
   return {
     email: state.user.email,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
     error: state.monthlyContrib.error,
+    hide: state.user.firstName === '' || state.user.lastName === '',
   };
 
 }
