@@ -28,6 +28,7 @@ export type State = {
   currency: Currency,
   country: IsoCountry,
   error: ?string,
+  processing: boolean,
   payPalType: PayPalButtonType,
   trackingUri: ?string,
   pollCount: number,
@@ -51,7 +52,7 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
     currency,
     country,
     error: null,
-    payPalButtonExists: false,
+    processing: false,
     payPalType: 'NotSet',
     trackingUri: null,
     pollCount: 0,
@@ -63,7 +64,10 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
 
-      case 'SET_PAYPAL_BUTTON' :
+      case 'CREATING_CONTRIBUTOR':
+        return Object.assign({}, state, { processing: true });
+
+      case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
 
       case 'SET_TRACKING_URI' :

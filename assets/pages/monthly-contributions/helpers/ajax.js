@@ -7,11 +7,12 @@ import { routes } from 'helpers/routes';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
 
-import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount } from '../actions/monthlyContributionsActions';
+import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 
 // ----- Setup ----- //
 
-const POLLING_INTERVAL = 1000;
+const POLLING_INTERVAL = 3000;
+const MAX_POLLS = 20;
 
 
 // ----- Types ----- //
@@ -76,8 +77,9 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount > 10) {
-    window.location.assign(routes.recurringContribPending);
+  if (state.monthlyContrib.pollCount > MAX_POLLS) {
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', getState().intCmp);
+    window.location.assign(url);
   }
 
   dispatch(incrementPollCount());
@@ -124,7 +126,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
   } else if (state.monthlyContrib.trackingUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
-    response.text().then(err => dispatch(checkoutError(err)));
+    response.text().then(() => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));
   }
 }
 
@@ -133,6 +135,7 @@ export default function postCheckout(paymentFieldName: PaymentField): Function {
   return (token: string, dispatch: Function, getState: () => CombinedState) => {
 
     dispatch(resetPollCount());
+    dispatch(creatingContributor());
 
     const request = requestData(paymentFieldName, token, getState);
 

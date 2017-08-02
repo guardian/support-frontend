@@ -8,6 +8,7 @@ import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 
 // ----- Types ----- //
@@ -25,6 +26,7 @@ type PropTypes = {
   payPalType: PayPalButtonType,
   stripeCallback: Function,
   payPalCallback: Function,
+  processing: boolean,
 };
 
 
@@ -32,7 +34,7 @@ type PropTypes = {
 
 export default function PaymentMethods(props: PropTypes) {
 
-  let errorMessage = '';
+  let statusMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
@@ -49,16 +51,18 @@ export default function PaymentMethods(props: PropTypes) {
   }
 
   if (props.hide) {
-    errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
+    statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
   } else if (props.error != null) {
-    errorMessage = <ErrorMessage message={props.error} />;
+    statusMessage = <ErrorMessage message={props.error} />;
+  } else if (props.processing) {
+    statusMessage = <ProgressMessage message={'Processing transaction...'} />;
   }
 
   return (
     <section className="payment-methods">
-      {errorMessage}
+      {statusMessage}
       {stripeButton}
       {payPalButton}
     </section>
