@@ -52,8 +52,8 @@ export default function PaymentMethods(props: PropTypes) {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
-  } else if (props.error !== null) {
-    errorMessage = <ErrorMessage message={'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'} />;
+  } else if (props.error != null) {
+    errorMessage = <ErrorMessage message={props.error} />;
   }
 
   return (
