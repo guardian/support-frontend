@@ -23,7 +23,7 @@ class FailureHandler(emailService: EmailService)
     with LazyLogging {
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
-  override protected def handlerFuture(state: FailureHandlerState, error: Option[ExecutionError], context: Context): Future[CompletedState] = {
+  override protected def handlerFuture(state: FailureHandlerState, error: Option[ExecutionError], context: Context): Future[CompletedState] =
     emailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -41,7 +41,6 @@ class FailureHandler(emailService: EmailService)
         message = Some(error.flatMap(messageFromExecutionError).getOrElse(defaultErrorMessage))
       )
     }
-  }
 
   private val defaultErrorMessage =
     "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
