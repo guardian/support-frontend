@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd cloud-formation
+cd ../cloud-formation
 
 [ -d target ] && rm -rf target
 
