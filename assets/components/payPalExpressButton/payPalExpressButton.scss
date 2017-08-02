@@ -1,3 +1,7 @@
 .component-paypal-button-checkout {
   margin-top: 20px;
+
+  @include mq($from: mobileMedium) {
+    width: 304px;
+  }
 }

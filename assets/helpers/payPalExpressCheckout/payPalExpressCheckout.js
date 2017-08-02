@@ -111,7 +111,7 @@ function setup(dispatch: Function, getState: Function, callback: Function) {
         env: window.guardian.payPalEnvironment,
         style: { color: 'blue', size: 'responsive' },
 
-        // Defines whether user sees 'continue' or 'pay now' in overlay.
+        // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
         commit: true,
 
         // This function is called when user clicks the PayPal button.
