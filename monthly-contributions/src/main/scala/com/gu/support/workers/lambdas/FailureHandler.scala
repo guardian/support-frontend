@@ -44,7 +44,7 @@ class FailureHandler(emailService: EmailService)
   }
 
   private val defaultErrorMessage =
-    "An error occurred while processing your contribution. Please try again later."
+    "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
 
   private def messageFromExecutionError(error: ExecutionError): Option[String] = {
     decode[ErrorJson](error.Cause) match {
@@ -58,7 +58,7 @@ class FailureHandler(emailService: EmailService)
 
     zuoraError.collect {
       case e if e.errors.exists(_.Code == "TRANSACTION_FAILED") =>
-        "Your payment failed. Please try again or use another payment method."
+        "There was an error processing your payment. Please\u00a0try\u00a0again."
     }
   }
 }
