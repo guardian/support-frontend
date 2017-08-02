@@ -6,7 +6,6 @@ import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import io.circe.syntax._
 import io.circe.parser._
 import cats.implicits._
-import com.typesafe.scalalogging.LazyLogging
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -18,7 +17,7 @@ object ZuoraError {
 
 case class ZuoraError(Code: String, Message: String)
 
-object ZuoraErrorResponse extends LazyLogging {
+object ZuoraErrorResponse {
   implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
 
   def fromErrorJson(error: ErrorJson): Option[ZuoraErrorResponse] = {
@@ -33,7 +32,7 @@ object ZuoraErrorResponse extends LazyLogging {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
-    extends Throwable(errors.asJson.noSpaces) with ZuoraResponse {
+    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
   def asRetryException: RetryException = new RetryNone(message = toString, cause = this)
 
