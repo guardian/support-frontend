@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -37,10 +37,8 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP'),
-}, applyMiddleware(thunkMiddleware));
-
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP'), }, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 const contributionAmount = getQueryParameter('contributionValue', '5');
