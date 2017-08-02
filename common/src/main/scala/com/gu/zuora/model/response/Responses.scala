@@ -23,14 +23,9 @@ object ZuoraErrorResponse extends LazyLogging {
 
   def fromErrorJson(error: ErrorJson): Option[ZuoraErrorResponse] = {
     if (error.errorType == "com.gu.zuora.model.response.ZuoraErrorResponse") {
-      val result = decode[List[ZuoraError]](error.errorMessage).map { errors =>
+      decode[List[ZuoraError]](error.errorMessage).map { errors =>
         ZuoraErrorResponse(success = false, errors)
-      }
-      result match {
-        case Left(l) => logger.error("Failed to parse error", l)
-        case Right(r) => logger.info(s"Parsed error as $r")
-      }
-      result.toOption
+      }.toOption
     } else {
       None
     }

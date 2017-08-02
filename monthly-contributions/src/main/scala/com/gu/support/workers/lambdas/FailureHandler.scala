@@ -14,9 +14,9 @@ import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.zuora.model.response.ZuoraErrorResponse
 import io.circe.parser._
+import cats.implicits._
 
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState]
@@ -47,16 +47,13 @@ class FailureHandler(emailService: EmailService)
     "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
 
   private def messageFromExecutionError(error: ExecutionError): Option[String] = {
-    decode[ErrorJson](error.Cause) match {
-      case Left(l) => logger.error("Failed to parse error", l)
-      case Right(r) => logger.info(s"Parsed error as $r")
-    }
+    val maybeZuoraError = for {
+      retryException <- decode[ErrorJson](error.Cause).toOption
+      underlyingException <- retryException.cause
+      zuoraError <- ZuoraErrorResponse.fromErrorJson(underlyingException)
+    } yield zuoraError
 
-    val zuoraError = decode[ErrorJson](error.Cause).right.toOption.flatMap { cause =>
-      cause.cause.flatMap(ZuoraErrorResponse.fromErrorJson)
-    }
-
-    zuoraError.collect {
+    maybeZuoraError.collect {
       case e if e.errors.exists(_.Code == "TRANSACTION_FAILED") =>
         "There was an error processing your payment. Please\u00a0try\u00a0again."
     }
