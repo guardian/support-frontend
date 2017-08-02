@@ -4,14 +4,15 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 
-import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount } from '../actions/monthlyContributionsActions';
+import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 
 // ----- Setup ----- //
 
 const MONTHLY_CONTRIB_ENDPOINT = '/monthly-contributions/create';
 const MONTHLY_CONTRIB_THANKYOU = '/monthly-contributions/thankyou';
 const MONTHLY_CONTRIB_PENDING = '/monthly-contributions/pending';
-const POLLING_INTERVAL = 1000;
+const POLLING_INTERVAL = 3000;
+const MAX_POLLS = 20;
 
 
 // ----- Types ----- //
@@ -63,7 +64,7 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: Fu
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount > 10) {
+  if (state.monthlyContrib.pollCount > MAX_POLLS) {
     const url: string = addQueryParamToURL(MONTHLY_CONTRIB_PENDING, 'INTCMP', getState().intCmp);
     window.location.assign(url);
   }
@@ -98,8 +99,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          const url: string = addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp);
-          window.location.assign(url);
+          window.location.assign(addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp));
           break;
         default:
           delayedStatusPoll(dispatch, getState);
@@ -108,7 +108,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
   } else if (state.monthlyContrib.trackingUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
-    response.text().then(_ => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));
+    response.text().then(() => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));
   }
 }
 
@@ -117,6 +117,7 @@ export default function postCheckout(paymentFieldName: PaymentField): Function {
   return (token: string, dispatch: Function, getState: Function) => {
 
     dispatch(resetPollCount());
+    dispatch(creatingContributor());
 
     const request = requestData(paymentFieldName, token, getState);
 

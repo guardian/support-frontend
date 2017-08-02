@@ -19,6 +19,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
+  processing: boolean,
   payPalButtonExists: boolean,
   trackingUri: ?string,
   pollCount: number,
@@ -31,6 +32,7 @@ const initialState: State = {
   amount: 5,
   country: 'GB',
   error: null,
+  processing: false,
   payPalButtonExists: false,
   trackingUri: null,
   pollCount: 0,
@@ -50,6 +52,9 @@ function monthlyContrib(
 
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });
+
+    case 'CREATING_CONTRIBUTOR':
+      return Object.assign({}, state, { processing: true });
 
     case 'SET_PAYPAL_BUTTON' :
       return Object.assign({}, state, { payPalButtonExists: action.value });

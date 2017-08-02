@@ -37,8 +37,14 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
+/* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducer, { intCmp: getQueryParameter('INTCMP'), }, composeEnhancers(applyMiddleware(thunkMiddleware)));
+/* eslint-enable */
+const store = createStore(
+  reducer,
+  { intCmp: getQueryParameter('INTCMP') },
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
+);
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 const contributionAmount = getQueryParameter('contributionValue', '5');

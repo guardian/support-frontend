@@ -18,6 +18,7 @@ export type Action =
   | { type: 'SET_TRACKING_URI', uri: string }
   | { type: 'INCREMENT_POLL_COUNT' }
   | { type: 'RESET_POLL_COUNT' }
+  | { type: 'CREATING_CONTRIBUTOR' }
   ;
 
 
@@ -45,6 +46,10 @@ export function incrementPollCount(): Action {
 
 export function resetPollCount(): Action {
   return { type: 'RESET_POLL_COUNT' };
+}
+
+export function creatingContributor(): Action {
+  return { type: 'CREATING_CONTRIBUTOR' };
 }
 
 export function setContribAmount(amount: string): Function {

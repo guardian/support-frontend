@@ -76,7 +76,7 @@ export default function postCheckout(
       return;
     }
 
-    response.text().then(_ => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));
+    response.text().then(() => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));
 
   });
 
