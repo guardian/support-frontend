@@ -1,8 +1,11 @@
 package com.gu.zuora.model.response
 
-import com.gu.support.workers.encoding.Codec
+import com.gu.support.workers.encoding.{Codec, ErrorJson}
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.exceptions.{RetryException, RetryNone}
+import io.circe.syntax._
+import io.circe.parser._
+import cats.implicits._
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -16,10 +19,22 @@ case class ZuoraError(Code: String, Message: String)
 
 object ZuoraErrorResponse {
   implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
+
+  def fromErrorJson(error: ErrorJson): Option[ZuoraErrorResponse] = {
+    if (error.errorType == "com.gu.zuora.model.response.ZuoraErrorResponse") {
+      decode[List[ZuoraError]](error.errorMessage).map { errors =>
+        ZuoraErrorResponse(success = false, errors)
+      }.toOption
+    } else {
+      None
+    }
+  }
 }
 
-case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError]) extends Throwable with ZuoraResponse {
-  def asRetryException: RetryException = new RetryNone(cause = this)
+case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
+    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
+
+  def asRetryException: RetryException = new RetryNone(message = toString, cause = this)
 
   override def toString: String = this.errors.toString()
 }

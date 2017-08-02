@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.ExecutionError
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
@@ -17,7 +18,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
     with LazyLogging {
   def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou))
 
-  override protected def handlerFuture(state: SendThankYouEmailState, context: Context): Future[Unit] = {
+  override protected def handlerFuture(state: SendThankYouEmailState, error: Option[ExecutionError], context: Context): Future[Unit] = {
     sendEmail(state)
   }
 

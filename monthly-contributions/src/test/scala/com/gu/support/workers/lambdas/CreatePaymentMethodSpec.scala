@@ -35,7 +35,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
     createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get.paymentMethod match {
+    createSalesforceContactState.get._1.paymentMethod match {
       case payPal: PayPalReferenceTransaction =>
         payPal.paypalBaid should be(validBaid)
         payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
@@ -55,7 +55,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
     val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
     createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get.paymentMethod match {
+    createSalesforceContactState.get._1.paymentMethod match {
       case stripe: CreditCardReferenceTransaction =>
         stripe.tokenId should be("1234")
       case _ => fail()

@@ -12,35 +12,35 @@ object RetryImplicits {
   implicit class RetryConversions(val throwable: Throwable) {
     def asRetryException: RetryException = throwable match {
       //timeouts and 500s
-      case _: SocketTimeoutException |
-        _: WebServiceHelperError[_] => new RetryUnlimited(cause = throwable)
+      case e @ (_: SocketTimeoutException |
+        _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //Invalid Json
-      case _: ParsingFailure => new RetryNone(cause = throwable)
+      case e: ParsingFailure => new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
-      case _: Throwable => new RetryLimited(cause = throwable)
+      case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 
   implicit class AwsKmsConversions(val throwable: AWSKMSException) {
     def asRetryException: RetryException = throwable match {
-      case _: KeyUnavailableException |
+      case e @ (_: KeyUnavailableException |
         _: DependencyTimeoutException |
         _: KMSInternalException |
-        _: KMSInvalidStateException => new RetryUnlimited(cause = throwable)
-      case _: InvalidGrantTokenException => new RetryNone(cause = throwable)
-      case _: NotFoundException |
+        _: KMSInvalidStateException) => new RetryUnlimited(message = e.getMessage, cause = throwable)
+      case e: InvalidGrantTokenException => new RetryNone(message = e.getMessage, cause = throwable)
+      case e @ (_: NotFoundException |
         _: DisabledException |
         _: InvalidKeyUsageException |
-        _ => new RetryLimited(cause = throwable)
+        _: Throwable) => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 
   implicit class AwsSQSConversions(val throwable: AmazonSQSException) {
     def asRetryException: RetryException = throwable match {
-      case _: InvalidMessageContentsException => new RetryNone(cause = throwable)
-      case _: QueueDoesNotExistException => new RetryLimited(cause = throwable)
+      case e: InvalidMessageContentsException => new RetryNone(message = e.getMessage, cause = throwable)
+      case e: QueueDoesNotExistException => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 

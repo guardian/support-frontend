@@ -66,9 +66,9 @@ object Salesforce {
 
   case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable {
     def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode)
-      new RetryUnlimited(cause = this)
+      new RetryUnlimited(message, cause = this)
     else
-      new RetryNone(cause = this)
+      new RetryNone(message, cause = this)
   }
 
   object SalesforceAuthenticationErrorResponse {
