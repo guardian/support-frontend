@@ -11,21 +11,23 @@ import thunkMiddleware from 'redux-thunk';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import InfoSection from 'components/infoSection/infoSection';
-import PaymentMethods from 'components/paymentMethods/paymentMethods';
 import Secure from 'components/secure/secure';
-import TermsPrivacy from 'components/termsPrivacy/termsPrivacy';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
+import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import * as user from 'helpers/user/user';
-import getQueryParameter from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 
+import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
 import { setContribAmount } from './actions/oneoffContributionsActions';
+
 
 // ----- Page Startup ----- //
 
@@ -34,12 +36,18 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, {
+  intCmp: getQueryParameter('INTCMP'),
+}, applyMiddleware(thunkMiddleware));
 
 user.init(store.dispatch);
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
-store.dispatch(setContribAmount(getQueryParameter('contributionValue', '50')));
+const contributionAmount = getQueryParameter('contributionValue', '50');
+
+if (contributionAmount !== undefined && contributionAmount !== null) {
+  store.dispatch(setContribAmount(contributionAmount));
+}
 
 
 // ----- Render ----- //
@@ -49,7 +57,7 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="oneoff-contrib gu-content-margin">
+      <div className="oneoff-contrib gu-content-filler__inner">
         <InfoSection className="oneoff-contrib__header">
           <h1 className="oneoff-contrib__heading">Make a one-off contribution</h1>
           <Secure />
@@ -61,11 +69,10 @@ const content = (
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
-          <PaymentMethods
+          <PaymentMethodsContainer
             stripeCallback={postCheckout}
-            paypalCallback={postCheckout}
+            payPalCallback={postCheckout}
             payPalButtonExists={false}
-            error={store.getState().oneoffContrib.error}
           />
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">
@@ -73,6 +80,7 @@ const content = (
             termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
+          <ContribLegal />
         </InfoSection>
       </div>
       <SimpleFooter />

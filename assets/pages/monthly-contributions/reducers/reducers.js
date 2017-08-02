@@ -4,6 +4,7 @@
 
 import { combineReducers } from 'redux';
 
+import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
@@ -74,6 +75,7 @@ function monthlyContrib(
 
 export default combineReducers({
   monthlyContrib,
+  intCmp,
   user,
   stripeCheckout,
   payPalExpressCheckout,

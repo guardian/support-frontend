@@ -43,6 +43,7 @@ Object {
 
 exports[`reducer tests should return the initial state 1`] = `
 Object {
+  "abTests": Object {},
   "contribution": Object {
     "amount": Object {
       "oneOff": Object {
@@ -57,6 +58,6 @@ Object {
     "error": null,
     "type": "RECURRING",
   },
-  "intCmp": "",
+  "intCmp": null,
 }
 `;

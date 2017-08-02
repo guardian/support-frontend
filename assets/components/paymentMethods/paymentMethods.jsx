@@ -3,10 +3,9 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
-import PaypalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
+import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 
@@ -14,28 +13,27 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 type PropTypes = {
   email: string,
-  firstName: string,
-  lastName: string,
+  hide: boolean,
   error: ?string,
   payPalButtonExists: boolean,
   stripeCallback: Function,
-  paypalCallback: Function,
+  payPalCallback: Function,
 };
 
 
 // ----- Component ----- //
 
-function PaymentMethods(props: PropTypes) {
+export default function PaymentMethods(props: PropTypes) {
 
   let errorMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
   if (props.payPalButtonExists) {
-    payPalButton = <PaypalExpressButton callback={props.paypalCallback} />;
+    payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
   }
 
-  if (props.firstName === '' || props.lastName === '') {
+  if (props.hide) {
     errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
@@ -50,23 +48,4 @@ function PaymentMethods(props: PropTypes) {
       {payPalButton}
     </section>
   );
-
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    email: state.user.email,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-  };
-
-}
-
-
-// ----- Exports ----- //
-
-export default connect(mapStateToProps)(PaymentMethods);

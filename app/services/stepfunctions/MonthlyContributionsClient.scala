@@ -6,7 +6,7 @@ import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import config.Stage
+import com.gu.support.config.Stage
 import MonthlyContributionsClient._
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}

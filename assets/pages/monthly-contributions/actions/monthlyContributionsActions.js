@@ -3,8 +3,10 @@
 // ----- Imports ----- //
 
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
-import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import validateContribution from 'helpers/validation';
+import {
+  setPayPalExpressAmount,
+} from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
+import { parse as parseContribution } from 'helpers/contributions';
 
 
 // ----- Types ----- //
@@ -46,10 +48,8 @@ export function resetPollCount(): Action {
 }
 
 export function setContribAmount(amount: string): Function {
-  const lowBound: number = 5;
-  const upperBound: number = 2000;
-  const defaultValue: number = 5;
-  const value = validateContribution(amount, lowBound, upperBound, defaultValue);
+
+  const value = parseContribution(amount, 'RECURRING').amount;
 
   return (dispatch) => {
     dispatch(setContribValue(value));
