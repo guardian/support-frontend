@@ -112,12 +112,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          const url: string = addQueryParamToURL(
-            routes.recurringContribThankyou,
-            'INTCMP',
-            getState().intCmp,
-          );
-          window.location.assign(url);
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.intCmp));
           break;
         default:
           delayedStatusPoll(dispatch, getState);
