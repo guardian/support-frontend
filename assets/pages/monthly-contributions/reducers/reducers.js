@@ -9,6 +9,7 @@ import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
 import type { Action } from '../actions/monthlyContributionsActions';
 
@@ -19,7 +20,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
-  processing: boolean,
+  paymentStatus: PaymentStatus,
   payPalButtonExists: boolean,
   statusUri: ?string,
   pollCount: number,
@@ -32,7 +33,7 @@ const initialState: State = {
   amount: 5,
   country: 'GB',
   error: null,
-  processing: false,
+  paymentStatus: 'NotStarted',
   payPalButtonExists: false,
   statusUri: null,
   pollCount: 0,
@@ -54,7 +55,7 @@ function monthlyContrib(
       return Object.assign({}, state, { error: action.message });
 
     case 'CREATING_CONTRIBUTOR':
-      return Object.assign({}, state, { processing: true });
+      return Object.assign({}, state, { paymentStatus: 'Pending' });
 
     case 'SET_PAYPAL_BUTTON' :
       return Object.assign({}, state, { payPalButtonExists: action.value });
