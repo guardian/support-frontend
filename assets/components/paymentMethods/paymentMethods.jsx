@@ -39,7 +39,7 @@ export default function PaymentMethods(props: PropTypes) {
     statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
-  } else if (props.error != null) {
+  } else if (props.error !== null && props.error !== undefined) {
     statusMessage = <ErrorMessage message={props.error} />;
   } else if (props.processing) {
     statusMessage = <ProgressMessage message={'Processing transaction...'} />;

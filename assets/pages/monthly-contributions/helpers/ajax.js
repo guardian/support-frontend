@@ -64,8 +64,8 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: Fu
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount > MAX_POLLS) {
-    const url: string = addQueryParamToURL(MONTHLY_CONTRIB_PENDING, 'INTCMP', getState().intCmp);
+  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
+    const url: string = addQueryParamToURL(MONTHLY_CONTRIB_PENDING, 'INTCMP', state.intCmp);
     window.location.assign(url);
   }
 
