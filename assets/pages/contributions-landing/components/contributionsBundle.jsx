@@ -49,7 +49,7 @@ type ContribAttrs = {
 // ----- Copy ----- //
 
 const contribAttrs: ContribAttrs = {
-  heading: 'Contribute',
+  heading: 'contribute',
   subheading: `Support the Guardian’s editorial operations by making a
     monthly, or one-off contribution today`,
   ctaText: 'Contribute',
