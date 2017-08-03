@@ -25,24 +25,21 @@ class StateMachineLookupTest extends WordSpec with MustMatchers {
   "Find a state machine matching the prefix" in {
     StateMachineLookup.findMachine(
       items = List(someMachineListItem, contributionsMachineListItem),
-      stateMachinePrefix = "MonthlyContributions",
-      stage = "PROD"
+      stateMachinePrefix = "MonthlyContributionsPROD-"
     ) mustEqual contributionsMachine.asRight
   }
 
   "Find the newest matching state machine" in {
     StateMachineLookup.findMachine(
       items = List(someMachineListItem, contributionsMachineListItem, newerContributionsMachineListItem),
-      stateMachinePrefix = "MonthlyContributions",
-      stage = "PROD"
+      stateMachinePrefix = "MonthlyContributionsPROD-"
     ) mustEqual newerContributionsMachine.asRight
   }
 
   "Return NoStateMachineFound if there is no available state machine" in {
     StateMachineLookup.findMachine(
       items = List(someMachineListItem, contributionsMachineCODEListItem),
-      stateMachinePrefix = "MonthlyContributions",
-      stage = "PROD"
+      stateMachinePrefix = "MonthlyContributionsPROD-"
     ) mustEqual NoStateMachineFound.asLeft
   }
 
