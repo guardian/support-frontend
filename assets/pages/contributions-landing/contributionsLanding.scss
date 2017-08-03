@@ -49,6 +49,16 @@
 				margin-left: 60px;
 			}
 		}
+
+		@include mq($from: leftCol) {
+			h1:nth-child(2) {
+				margin-left: 267px;
+			}
+
+			h1:nth-child(3) {
+				margin-left: 116px;
+			}
+		}
 	}
 
 	.contributions-introduction__secondary {
@@ -61,6 +71,16 @@
 
 			h1:nth-child(2) {
 				margin-left: 187px;
+			}
+		}
+
+		@include mq($from: leftCol) {
+			h1:nth-child(1) {
+				margin-left: 254px;
+			}
+
+			h1:nth-child(2) {
+				margin-left: 319px;
 			}
 		}
 	}
@@ -94,6 +114,27 @@
 			width: 280px;
 			margin-top: 80px;
 			margin-left: 92px;
+		}
+
+		@include mq($from: wide) {
+			width: 360px;
+			margin-left: 120px;
+		}
+
+		label, .component-number-input {
+			margin-top: 5px;
+			margin-bottom: 5px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+
+		.component-cta-link {
+			padding-top: 17px;
+			padding-bottom: 17px;
+
+			svg {
+				top: 18px;
+			}
 		}
 	}
 
@@ -130,7 +171,14 @@
 		@include mq($from: desktop) {
 			// Fix for IE.
 	        svg {
-	          left: 248px;
+	          left: 245px;
+	        }
+		}
+
+		@include mq($from: wide) {
+			// Fix for IE.
+	        svg {
+	          left: 325px;
 	        }
 		}
 
@@ -160,6 +208,14 @@
 	.component-contrib-legal {
 		@include mq($from: desktop) {
 			width: 540px;
+		}
+
+		@include mq($from: leftCol) {
+			width: 670px;
+		}
+
+		@include mq($from: wide) {
+			width: 700px;
 		}
 	}
 
