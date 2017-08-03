@@ -7,6 +7,7 @@
         id: String,
         js: String,
         uatMode: Boolean,
+        payPalButton: Boolean,
         stripeConfig: StripeConfig,
         contributionsEnpoint: String
 )(implicit assets: AssetsResolver)
@@ -16,6 +17,7 @@
         window.guardian = window.guardian || {};
         window.guardian.stripeKey = "@stripeConfig.publicKey";
         window.guardian.contributionsStripeEndpoint = "@contributionsEnpoint";
+        window.guardian.payPalType = @payPalButton ? 'ExpressCheckout' : 'NotSet';
         window.guardian.uatMode = @uatMode;
     </script>
     <script type="text/javascript" src="@assets(js)"></script>

@@ -51,7 +51,7 @@ if (contributionAmount !== undefined && contributionAmount !== null) {
 
 
 user.init(store.dispatch);
-store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
+store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 // ----- Render ----- //
 
@@ -76,7 +76,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken')}
             payPalCallback={postCheckout('baid')}
-            payPalButtonExists={store.getState().monthlyContrib.payPalButtonExists}
+            payPalType={store.getState().monthlyContrib.payPalType}
           />
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">

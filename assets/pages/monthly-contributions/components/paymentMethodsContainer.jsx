@@ -5,7 +5,6 @@
 import { connect } from 'react-redux';
 import PaymentMethods from 'components/paymentMethods/paymentMethods';
 
-
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
