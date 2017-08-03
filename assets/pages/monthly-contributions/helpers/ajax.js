@@ -4,7 +4,7 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 
-import { checkoutError, setTrackingUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
+import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 
 // ----- Setup ----- //
 
@@ -77,7 +77,7 @@ function statusPoll(dispatch: Function, getState: Function) {
     credentials: 'same-origin',
   };
 
-  return fetch(state.monthlyContrib.trackingUri, request).then((response) => {
+  return fetch(state.monthlyContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -90,7 +90,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
   const state = getState();
   if (response.ok) {
     response.json().then((status) => {
-      dispatch(setTrackingUri(status.trackingUri));
+      dispatch(setStatusUri(status.trackingUri));
       switch (status.status) {
         case 'pending':
           delayedStatusPoll(dispatch, getState);
@@ -105,7 +105,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.monthlyContrib.trackingUri) {
+  } else if (state.monthlyContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     response.text().then(() => dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.')));

@@ -21,7 +21,7 @@ export type State = {
   error: ?string,
   processing: boolean,
   payPalButtonExists: boolean,
-  trackingUri: ?string,
+  statusUri: ?string,
   pollCount: number,
 };
 
@@ -34,7 +34,7 @@ const initialState: State = {
   error: null,
   processing: false,
   payPalButtonExists: false,
-  trackingUri: null,
+  statusUri: null,
   pollCount: 0,
 };
 
@@ -59,8 +59,8 @@ function monthlyContrib(
     case 'SET_PAYPAL_BUTTON' :
       return Object.assign({}, state, { payPalButtonExists: action.value });
 
-    case 'SET_TRACKING_URI' :
-      return Object.assign({}, state, { trackingUri: action.uri });
+    case 'SET_STATUS_URI' :
+      return Object.assign({}, state, { statusUri: action.uri });
 
     case 'INCREMENT_POLL_COUNT':
       return Object.assign({}, state, { pollCount: state.pollCount + 1 });
