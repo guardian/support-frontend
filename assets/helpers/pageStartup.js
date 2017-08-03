@@ -15,7 +15,7 @@ const start = () => {
   ga.setDimension('experience', abTest.getVariantsAsString(participation));
   ga.trackPageview();
 
-// ----- Logging ----- //
+  // ----- Logging ----- //
 
   logger.init();
 

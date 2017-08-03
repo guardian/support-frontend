@@ -6,5 +6,5 @@
 const intCmpReducer = (state: ?string = null): ?string => state;
 
 export {
-  intCmpReducer, // eslint-disable-line import/prefer-default-export
+  intCmpReducer,
 };
