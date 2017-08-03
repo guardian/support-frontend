@@ -99,7 +99,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp));
+          window.location.assign(addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', state.intCmp));
           break;
         default:
           delayedStatusPoll(dispatch, getState);
