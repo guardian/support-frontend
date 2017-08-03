@@ -16,6 +16,7 @@ import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/monthlyContributionsActions';
@@ -28,7 +29,7 @@ export type State = {
   currency: Currency,
   country: IsoCountry,
   error: ?string,
-  processing: boolean,
+  paymentStatus: PaymentStatus,
   payPalType: PayPalButtonType,
   statusUri: ?string,
   pollCount: number,
@@ -52,7 +53,7 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
     currency,
     country,
     error: null,
-    processing: false,
+    paymentStatus: 'NotStarted',
     payPalType: 'NotSet',
     statusUri: null,
     pollCount: 0,
@@ -65,7 +66,7 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
         return Object.assign({}, state, { error: action.message });
 
       case 'CREATING_CONTRIBUTOR':
-        return Object.assign({}, state, { processing: true });
+        return Object.assign({}, state, { paymentStatus: 'Pending' });
 
       case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
