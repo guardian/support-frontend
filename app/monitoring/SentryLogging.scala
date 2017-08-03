@@ -7,7 +7,7 @@ import com.getsentry.raven.dsn.Dsn
 import com.getsentry.raven.logback.SentryAppender
 import org.slf4j.Logger.ROOT_LOGGER_NAME
 import org.slf4j.LoggerFactory
-import config.Stage
+import com.gu.support.config.Stage
 import app.BuildInfo
 import com.typesafe.scalalogging.LazyLogging
 

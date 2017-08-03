@@ -3,9 +3,8 @@ package services
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
-import play.api.libs.json.{JsonValidationError => PlayJsonValidationError}
+import play.api.libs.json.{JsPath, JsValue, Json, OFormat, Reads, JsonValidationError => PlayJsonValidationError}
 import play.api.libs.ws.{WSClient, WSResponse}
-import play.api.libs.json.{JsPath, JsValue, Json, Reads}
 import play.api.http.Status
 import cats.data.EitherT
 import cats.syntax.either._
@@ -16,13 +15,13 @@ import scala.util.{Failure, Success, Try}
 object MembersDataService {
 
   object ContentAccess {
-    implicit val jf = Json.format[ContentAccess]
+    implicit val jf: OFormat[ContentAccess] = Json.format[ContentAccess]
   }
 
   case class ContentAccess(recurringContributor: Boolean)
 
   object UserAttributes {
-    implicit val jf = Json.format[UserAttributes]
+    implicit val jf: OFormat[UserAttributes] = Json.format[UserAttributes]
   }
 
   case class UserAttributes(userId: String, contentAccess: ContentAccess)

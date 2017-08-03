@@ -5,6 +5,7 @@
 import { combineReducers } from 'redux';
 
 import { abTestReducer as abTests } from 'helpers/abtest';
+import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
@@ -89,11 +90,6 @@ function contribution(
 
   }
 
-}
-
-function intCmp(state: string = ''): string {
-  // Since nothing change the intcmp, this reducer does not handle any action.
-  return state;
 }
 
 // ----- Exports ----- //

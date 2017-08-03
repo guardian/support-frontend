@@ -27,7 +27,7 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  oneoffAndMonthlyVariant: boolean,
+  showMonthly: boolean,
   intCmp: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,
@@ -66,7 +66,7 @@ const ctaLinks = {
 // ----- Functions ----- //
 
 const getContribAttrs = ({
-  contribType, contribAmount, intCmp, oneoffAndMonthlyVariant,
+  contribType, contribAmount, intCmp, showMonthly,
 }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
@@ -80,7 +80,7 @@ const getContribAttrs = ({
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  if (!oneoffAndMonthlyVariant) {
+  if (!showMonthly) {
 
     const subheading = 'Support the Guardian’s editorial operations by making a one-off contribution today';
     return Object.assign({}, contribAttrs, { ctaLink, subheading });
@@ -121,14 +121,15 @@ function ContributionsBundle(props: PropTypes) {
 
 function mapStateToProps(state) {
 
-  const oneoffAndMonthlyVariant =
-    state.abTests.contributionsLandingAddingMonthly === 'oneoffAndMonthly';
+  const showMonthly =
+    state.abTests.contributionsLandingAddingMonthly !== 'control';
 
   return {
-    contribType: oneoffAndMonthlyVariant ? state.contribution.type : 'ONE_OFF',
+    contribType: showMonthly ? state.contribution.type : 'ONE_OFF',
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
-    oneoffAndMonthlyVariant,
+    intCmp: state.intCmp,
+    showMonthly,
   };
 }
 

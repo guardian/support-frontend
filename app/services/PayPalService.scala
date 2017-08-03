@@ -3,7 +3,7 @@ package services
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.typesafe.scalalogging.LazyLogging
-import config.PayPalConfig
+import com.gu.support.config.PayPalConfig
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
 import services.touchpoint.TouchpointService

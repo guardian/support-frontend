@@ -27,4 +27,10 @@
 
 	}
 
+	.component-info-section__content {
+		@include mq($from: desktop) {
+			width: 80%;
+		}
+	}
+
 }

@@ -15,7 +15,7 @@ class ResourceManagerActor[T](getResource: () => Future[T]) extends Actor with L
 
   implicit val ec = context.dispatcher
 
-  var promise = Promise.failed[T](new Exception())
+  private var promise = Promise.failed[T](new Exception())
 
   override def receive: Receive = {
     case _: ResourceRequest =>
@@ -49,9 +49,9 @@ class ResourceManager[T](getResource: () => Future[T])(implicit val system: Acto
 
   implicit val timeout = Timeout(30.seconds)
 
-  implicit val ec = system.dispatcher
+  implicit private val ec = system.dispatcher
 
-  val resourceManager = system.actorOf(Props(classOf[ResourceManagerActor[T]], getResource))
+  private val resourceManager = system.actorOf(Props(classOf[ResourceManagerActor[T]], getResource))
 
   def get(refresh: Boolean): Future[T] =
     (resourceManager ? ResourceRequest(refresh)).mapTo[Future[T]].flatMap(identity)

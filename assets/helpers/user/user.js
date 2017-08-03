@@ -38,5 +38,5 @@ const init = (dispatch: Function) => {
 };
 
 export {
-  init, // eslint-disable-line import/prefer-default-export
+  init,
 };

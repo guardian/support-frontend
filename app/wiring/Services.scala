@@ -1,6 +1,6 @@
 package wiring
 
-import config.Stages
+import com.gu.support.config.Stages
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
