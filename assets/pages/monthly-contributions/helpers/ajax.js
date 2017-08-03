@@ -77,8 +77,8 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount > MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', getState().intCmp);
+  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.intCmp);
     window.location.assign(url);
   }
 
