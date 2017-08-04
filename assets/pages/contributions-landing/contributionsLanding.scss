@@ -18,13 +18,18 @@
 	}
 
 	.contributions-introduction__primary, .contributions-introduction__secondary {
-		font-size: 36px;
-		line-height: 40px;
+		font-size: 32px;
+		line-height: 36px;
 		color: #fff;
 		font-family: $gu-egyptian-web;
 		font-weight: 600;
 		padding-left: $gu-h-spacing / 2;
 		padding-right: $gu-h-spacing / 2;
+
+		@include mq($from: mobileMedium) {
+			font-size: 36px;
+			line-height: 40px;
+		}
 
 		@include mq($from: desktop) {
 			padding: 0;
