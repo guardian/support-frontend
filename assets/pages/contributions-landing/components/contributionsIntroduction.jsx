@@ -17,7 +17,7 @@ export default function ContributionsIntroduction() {
         <h1>and independent voice</h1>
       </div>
       <div className="contributions-introduction__secondary">
-        <h1>make a one-off</h1>
+        <h1>make a </h1>
         <h1>contribution <span className="contributions-introduction__indent">today</span></h1>
       </div>
     </div>

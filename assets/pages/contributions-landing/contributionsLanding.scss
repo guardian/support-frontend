@@ -82,10 +82,12 @@
 		@include mq($from: desktop) {
 			h1:nth-child(1) {
 				margin-left: 147px;
+				display: inline;
 			}
 
 			h1:nth-child(2) {
-				margin-left: 187px;
+				margin-left: 0;
+				display: inline;
 			}
 		}
 
@@ -95,7 +97,7 @@
 			}
 
 			h1:nth-child(2) {
-				margin-left: 319px;
+				margin-left: 0;
 			}
 		}
 	}
@@ -103,6 +105,15 @@
 	.contributions-introduction__indent {
 		@include mq($from: phablet, $until: desktop) {
 			margin-left: 85px;
+		}
+
+		@include mq($from: desktop) {
+			display: block;
+			margin-left: 420px;
+		}
+
+		@include mq($from: leftCol) {
+			margin-left: 525px;
 		}
 	}
 
@@ -117,6 +128,10 @@
 
 		@include mq($from: phablet) {
 			height: 420px;
+		}
+
+		@include mq($from: desktop) {
+			height: 450px;
 		}
 	}
 
@@ -271,6 +286,19 @@
 	.hide-monthly {
 		.contrib-type {
 			display: none;
+		}
+
+		.component-double-heading__subheading {
+			margin-bottom: $gu-v-spacing * 3;
+
+			@include mq($from: mobileLandscape) {
+				margin-bottom: 100px;
+			}
+		}
+
+		.component-contrib-amounts {
+			border-top: 1px dotted gu-colour(neutral-1);
+			padding-top: 7px;
 		}
 	}
 
