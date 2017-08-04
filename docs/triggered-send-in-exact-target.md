@@ -45,11 +45,17 @@ In the image below you can see that the 'Contributor Thank You - All regions' tr
 ![](hover-for-id.png "Getting the id for a triggered send")
 
 ## Membership workflow
-* New triggered send id in private.conf (exact-target.triggered-send-keys.my-key)
-* New DataExtension in membership-common (DataExtension.scala)
+To configure membership-workflow to work with your new email you need to:
+* Add a new key to the private configuration (membership-workflow.private.conf) at the location `exact-target.triggered-send-keys.my-key`. This should have the id value that you copied from Exact target, make sure that you also add a dummy value for this key into application.conf to keep the CI box happy.
+* Add a new DataExtension case object in membership-common ([DataExtension.scala](https://github.com/guardian/membership-common/blob/90e4ccd0c91215ea12997480feceff0da759d96c/src/main/scala/com/gu/exacttarget/DataExtension.scala)). The name of this DataExtension will be used by the client app to specify which email it wants to send and the `getTSKey` parameter should point to the config key you just added.
 
 ## Client app
-* Stick a message on the SQS queue with the following payload:
+To trigger an email send from your client application you need to put a message onto one of the SQS queues in the membership account which are polled by membership-workflow.
+
+It doesn't actually matter which queue you use (support-workers uses contribution-thanks for everything) just remember to give your app permission to access this queue if you are using CloudFormation (`GetQueueUrl` &
+`SendMessage`).
+
+The message should have a body similar to the following:
 
         {
           "To": {
@@ -66,3 +72,5 @@ In the image below you can see that the 'Contributor Thank You - All regions' tr
           },
           "DataExtensionName": "$dataExtensionName"
         }
+This example is from the 'Contributor Thank You' email, I think the only mandatory fields are `To->Address` and `DataExtensionName`, these should be set to the address of the email recipient and the name of the DataExtension which you added to membership-workflow.
+An example of sending these messages can be found in [EmailService](/common/src/main/scala/com/gu/emailservices/EmailService.scala).
