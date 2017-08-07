@@ -82,6 +82,9 @@ To protect user data as it is passed through the various stages of the step func
 
 This encryption can be switched off for debugging purposes by setting the aws.useEncryption config setting to false.
 
+## Emails
+Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md)
+
 ## TODO
 
-[List of improvements we should make](/TODO.md)
+[List of improvements we should make](/docs/TODO.md)

@@ -1,22 +1,22 @@
 package com.gu.support.workers.lambdas
 
+import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
-import com.gu.support.workers.encoding.{Codec, ErrorJson}
+import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.ExecutionError
-import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
 import com.gu.support.workers.model.monthlyContributions.Status
+import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
+import com.gu.zuora.model.response.ZuoraErrorResponse
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.parser._
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import com.gu.zuora.model.response.ZuoraErrorResponse
-import io.circe.parser._
-import cats.implicits._
 
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState]
@@ -30,7 +30,8 @@ class FailureHandler(emailService: EmailService)
       amount = state.contribution.amount,
       currency = state.contribution.currency.iso,
       edition = state.user.country.alpha2,
-      name = state.user.firstName
+      name = state.user.firstName,
+      product = "monthly-contribution"
     )).whenFinished {
       logger.info(s"Error=$error")
       CompletedState(
