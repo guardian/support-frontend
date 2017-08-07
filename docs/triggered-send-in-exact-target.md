@@ -35,6 +35,7 @@ Create a new Triggered send by clicking on the _Create_ button and selecting _Cr
 
 Set up the triggered send by giving it a name, setting the 'Send classification' to 'Default transactional' and then picking the email you have just created in the  Content pane (see screenshot)
 ![](content-pane.png)
+Once this is done, you need to click on 'Publish Changes' and then at the folder level (at the list of triggered sends) select your new triggered send and click 'Start/Restart'.
 
 Finally, in order to trigger an email using membership workflow you will need to know the external id of the triggered send that you have just created.
 
