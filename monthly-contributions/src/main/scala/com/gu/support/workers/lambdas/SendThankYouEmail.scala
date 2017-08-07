@@ -29,7 +29,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
       amount = state.contribution.amount,
       currency = state.contribution.currency.iso,
       edition = state.user.country.alpha2,
-      name = state.user.firstName
+      name = state.user.firstName,
+      product = "monthly-contribution"
     )).map(_ => Unit)
   }
 }

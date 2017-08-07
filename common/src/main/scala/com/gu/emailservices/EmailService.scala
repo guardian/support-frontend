@@ -9,12 +9,13 @@ import org.joda.time.DateTime
 import scala.concurrent.Future
 
 case class EmailFields(
-    email: String,
-    created: DateTime,
-    amount: BigDecimal,
-    currency: String,
-    edition: String,
-    name: String
+  email: String,
+  created: DateTime,
+  amount: BigDecimal,
+  currency: String,
+  edition: String,
+  name: String,
+  product: String
 ) {
   def payload(dataExtensionName: String): String =
     s"""
@@ -28,7 +29,8 @@ case class EmailFields(
        |      "amount": $amount,
        |      "currency": "$currency",
        |      "edition": "$edition",
-       |      "name": "$name"
+       |      "name": "$name",
+       |      "product": "$product"
        |    }
        |  },
        |  "DataExtensionName": "$dataExtensionName"

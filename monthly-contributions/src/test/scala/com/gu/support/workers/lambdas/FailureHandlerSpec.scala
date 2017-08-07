@@ -17,7 +17,7 @@ class FailureHandlerSpec extends LambdaSpec {
   "EmailService" should "send a failure email" in {
     val service = new EmailService(Configuration.emailServicesConfig.failed)
     val email = "rupert.bates@theguardian.com"
-    service.send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "")).map(result => result.getMessageId should not be "")
+    service.send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "", "monthly-contribution")).map(result => result.getMessageId should not be "")
   }
 
   "FailureHandler lambda" should "add message to sqs queue" in {
