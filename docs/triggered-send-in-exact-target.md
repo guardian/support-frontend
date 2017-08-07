@@ -1,5 +1,5 @@
 # Sending emails using Exact target and membership workflow
-A number of projects such as contributions and support-workers use exact target to send emails. Document describes end to end how the systems work.
+A number of projects such as contributions and support-workers use exact target to send emails. This document describes end to end how the systems work.
 
 There are a number of elements involved:
 * [Exact target](https://mc.s4.exacttarget.com/cloud/#app/Email) - Hosted service to create and send templated emails
