@@ -61,7 +61,7 @@ class OneOffContributions(
     for {
       privateFields <- user.privateFields
       firstName <- privateFields.firstName
-      lastName <- privateFields.firstName
-    } yield s"$firstName $lastName"
+      secondName <- privateFields.secondName
+    } yield s"$firstName $secondName"
   }
 }
