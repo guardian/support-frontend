@@ -9,7 +9,7 @@ import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
-import { GBP } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import type { Action } from '../actions/oneoffContributionsActions';
 
@@ -18,8 +18,8 @@ import type { Action } from '../actions/oneoffContributionsActions';
 
 export type State = {
   amount: number,
-  currency: Currency,
-  country: string,
+  currency: ?Currency,
+  country: ?IsoCountry,
   error: ?string,
 };
 
@@ -28,8 +28,8 @@ export type State = {
 
 const initialState: State = {
   amount: 50,
-  currency: GBP,
-  country: 'GB',
+  currency: null,
+  country: null,
   error: null,
 };
 
@@ -42,8 +42,11 @@ function oneoffContrib(
 
   switch (action.type) {
 
+    case 'SET_COUNTRY':
+      return Object.assign({}, state, { country: action.value });
+
     case 'SET_CONTRIB_VALUE':
-      return Object.assign({}, state, { amount: action.value });
+      return Object.assign({}, state, { amount: action.value, currency: action.currency });
 
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });

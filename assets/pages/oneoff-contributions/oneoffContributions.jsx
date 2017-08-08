@@ -18,7 +18,8 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
-import { GBP } from 'helpers/internationalisation/currency';
+import * as Currency from 'helpers/internationalisation/currency';
+import * as Country from 'helpers/internationalisation/country';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 
@@ -27,7 +28,7 @@ import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
-import { setContribAmount } from './actions/oneoffContributionsActions';
+import { setContribAmount, setCountry } from './actions/oneoffContributionsActions';
 
 
 // ----- Page Startup ----- //
@@ -43,13 +44,12 @@ const store = createStore(reducer, {
 
 user.init(store.dispatch);
 
-// Retrieves the contrib amount from the url and sends it to the redux store.
-const contributionAmount = getQueryParameter('contributionValue', '50');
+const contributionAmount = getQueryParameter('contributionValue') || '50';
+const country = Country.detect();
+const currency = Currency.forCountry(country);
 
-if (contributionAmount !== undefined && contributionAmount !== null) {
-  store.dispatch(setContribAmount(contributionAmount, GBP.iso));
-}
-
+store.dispatch(setCountry(country));
+store.dispatch(setContribAmount(contributionAmount, currency));
 
 // ----- Render ----- //
 
@@ -66,7 +66,7 @@ const content = (
         <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={store.getState().oneoffContrib.amount}
-            currency={store.getState().oneOffContrib.currency}
+            currency={store.getState().oneoffContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
