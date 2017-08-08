@@ -17,7 +17,6 @@ function fromString(s: string): ?IsoCountry {
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
-  console.log('path' + path);
   if (path.startsWith('/uk/')) {
     return 'GB';
   } else if (path.startsWith('/us/')) {
@@ -28,7 +27,6 @@ function fromPath(path: string = window.location.pathname): ?IsoCountry {
 
 function fromQueryParameter(): ?IsoCountry {
   const country = getQueryParameter('country');
-  console.log('qp:' + country);
   if (country) {
     return fromString(country);
   }
@@ -37,7 +35,6 @@ function fromQueryParameter(): ?IsoCountry {
 
 function fromCookie(): ?IsoCountry {
   const country = cookie.get('GU_country');
-  console.log('cookie:' + country);
   if (country) {
     return fromString(country);
   }

@@ -22,10 +22,9 @@ export const USD: Currency = {
 };
 
 export function forCountry(country: IsoCountry): Currency {
-  console.log('detecting currency for ' + country);
   switch (country) {
-    case 'US': console.log('USD'); return USD;
-    case 'GB': console.log('GBP'); return GBP;
+    case 'US': return USD;
+    case 'GB': return GBP;
     default: return GBP;
   }
 }
