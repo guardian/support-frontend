@@ -70,9 +70,8 @@ export function paypalContributionsRedirect(): Function {
       .then((response) => {
         if (response.ok) {
           return response.json();
-        } else {
-          throw response;
         }
+        throw response;
       })
       .then((res) => { window.location = res.approvalUrl; })
       .catch(() => dispatch(payPalContributionsError('Sorry, an error occurred, please try again or use another payment method.')));

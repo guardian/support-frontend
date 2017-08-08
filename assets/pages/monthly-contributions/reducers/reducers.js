@@ -49,8 +49,7 @@ function monthlyContrib(
       return Object.assign({}, state, { error: action.message });
 
     case 'SET_PAYPAL_BUTTON' :
-      const a = Object.assign({}, state, { payPalType: action.value });
-      return a;
+      return Object.assign({}, state, { payPalType: action.value });
 
     default:
       return state;
