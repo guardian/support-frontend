@@ -4,6 +4,7 @@
 
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
 import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
+import { setPayPalContributionsAmount } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutActions';
 import { parse as parseContribution } from 'helpers/contributions';
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 
@@ -38,6 +39,7 @@ export function setContribAmount(amount: string): Function {
     dispatch(setContribValue(value));
     dispatch(setStripeAmount(value));
     dispatch(setPayPalExpressAmount(value));
+    dispatch(setPayPalContributionsAmount(value));
   };
 
 }
