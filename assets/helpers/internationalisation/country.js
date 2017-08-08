@@ -41,9 +41,16 @@ function fromCookie(): ?IsoCountry {
   return null;
 }
 
+function fromGeolocation(): ?IsoCountry {
+  const country = cookie.get('GU_geo_country');
+  if (country) {
+    return fromString(country);
+  }
+  return null;
+}
+
 export function detect(): IsoCountry {
-  const country = fromPath() || fromQueryParameter() || fromCookie() || 'GB';
-  console.log('detect:' + country);
+  const country = fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
   cookie.set('GU_country', country, 7);
   return country;
 }
