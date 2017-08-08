@@ -77,8 +77,9 @@ export default function postCheckout(
       return;
     }
 
-    response.text().then(err => dispatch(checkoutError(err)));
-
+    dispatch(checkoutError('Error'));
+  }).catch(() => {
+    dispatch(checkoutError('Error'));
   });
 
 }
