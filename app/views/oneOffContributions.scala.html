@@ -9,15 +9,17 @@
         uatMode: Boolean,
         payPalButton: Boolean,
         stripeConfig: StripeConfig,
-        contributionsEnpoint: String
+        contributionsStripeEndpoint: String,
+        contributionsPayPalEndpoint: String
 )(implicit assets: AssetsResolver)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.stripeKey = "@stripeConfig.publicKey";
-        window.guardian.contributionsStripeEndpoint = "@contributionsEnpoint";
-        window.guardian.payPalType = @payPalButton ? 'ExpressCheckout' : 'NotSet';
+        window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
+        window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
+        window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
         window.guardian.uatMode = @uatMode;
     </script>
     <script type="text/javascript" src="@assets(js)"></script>

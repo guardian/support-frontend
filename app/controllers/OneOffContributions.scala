@@ -22,7 +22,8 @@ class OneOffContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
-    contributionsEndpoint: String,
+    contributionsStripeEndpoint: String,
+    contributionsPayPalEndpoint: String,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
@@ -54,7 +55,8 @@ class OneOffContributions(
       uatMode = uatMode,
       payPalButton = paypal.getOrElse(false),
       stripeConfig = stripeConfigProvider.get(uatMode),
-      contributionsEnpoint = contributionsEndpoint
+      contributionsStripeEndpoint = contributionsStripeEndpoint,
+      contributionsPayPalEndpoint = contributionsPayPalEndpoint
     )
   )
 
