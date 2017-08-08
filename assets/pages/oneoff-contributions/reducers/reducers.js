@@ -8,6 +8,8 @@ import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { Currency } from 'helpers/internationalisation/currency';
+import { GBP } from 'helpers/internationalisation/currency';
 
 import type { Action } from '../actions/oneoffContributionsActions';
 
@@ -16,6 +18,7 @@ import type { Action } from '../actions/oneoffContributionsActions';
 
 export type State = {
   amount: number,
+  currency: Currency,
   country: string,
   error: ?string,
 };
@@ -25,6 +28,7 @@ export type State = {
 
 const initialState: State = {
   amount: 50,
+  currency: GBP,
   country: 'GB',
   error: null,
 };

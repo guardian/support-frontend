@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './stripeCheckoutActions';
 
 
@@ -11,7 +12,7 @@ export type State = {
   loaded: boolean,
   amount: ?number,
   token: ?string,
-  currency: string,
+  currency: ?IsoCurrency,
 };
 
 
@@ -21,7 +22,7 @@ const initialState: State = {
   loaded: false,
   amount: null,
   token: null,
-  currency: 'GBP',
+  currency: null,
 };
 
 
@@ -37,7 +38,7 @@ export default function stripeCheckoutReducer(
       return Object.assign({}, state, { loaded: true });
 
     case 'SET_STRIPE_AMOUNT':
-      return Object.assign({}, state, { amount: action.amount });
+      return Object.assign({}, state, { amount: action.amount, currency: action.currency.iso });
 
     default:
       return state;

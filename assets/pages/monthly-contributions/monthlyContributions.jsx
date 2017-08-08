@@ -19,6 +19,8 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
+import * as Currency from 'helpers/internationalisation/currency';
+import * as Country from 'helpers/internationalisation/country';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 
@@ -27,7 +29,7 @@ import NameForm from './components/nameForm';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
 
-import { setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
+import { setCountry, setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
 
 
 // ----- Page Startup ----- //
@@ -42,13 +44,12 @@ const store = createStore(reducer, {
 }, applyMiddleware(thunkMiddleware));
 
 
-// Retrieves the contrib amount from the url and sends it to the redux store.
-const contributionAmount = getQueryParameter('contributionValue', '5');
+const contributionAmount = getQueryParameter('contributionValue') || '5';
+const country = Country.detect();
+const currency = Currency.forCountry(country);
 
-if (contributionAmount !== undefined && contributionAmount !== null) {
-  store.dispatch(setContribAmount(contributionAmount));
-}
-
+store.dispatch(setCountry(country));
+store.dispatch(setContribAmount(contributionAmount, currency));
 
 user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
@@ -66,7 +67,10 @@ const content = (
           <Secure />
         </InfoSection>
         <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
-          <PaymentAmount amount={store.getState().monthlyContrib.amount} />
+          <PaymentAmount
+            amount={store.getState().monthlyContrib.amount}
+            currency={store.getState().monthlyContrib.currency}
+          />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName />

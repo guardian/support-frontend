@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './payPalExpressCheckoutActions';
 
 
@@ -10,7 +11,7 @@ import type { Action } from './payPalExpressCheckoutActions';
 export type State = {
   amount: ?number,
   billingPeriod: string,
-  currency: string,
+  currency: ?IsoCurrency,
   loaded: boolean,
 };
 
@@ -20,7 +21,7 @@ export type State = {
 const initialState: State = {
   amount: null,
   billingPeriod: 'monthly',
-  currency: 'GBP',
+  currency: null,
   loaded: false,
 };
 
@@ -37,7 +38,7 @@ export default function payPalExpressCheckoutReducer(
       return Object.assign({}, state, { loaded: true });
 
     case 'SET_PAYPAL_EXPRESS_AMOUNT':
-      return Object.assign({}, state, { amount: action.amount });
+      return Object.assign({}, state, { amount: action.amount, currency: action.currency.iso });
 
     default:
       return state;

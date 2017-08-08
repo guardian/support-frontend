@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setStripeAmount } from 'helpers/stripeCheckout/stripeCheckoutActions';
 import { setPayPalExpressAmount } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
 import { parse as parseContribution } from 'helpers/contributions';
@@ -25,14 +26,14 @@ export function checkoutError(message: string): Action {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
-export function setContribAmount(amount: string): Function {
+export function setContribAmount(amount: string, currency: IsoCurrency): Function {
 
   const value = parseContribution(amount, 'ONE_OFF').amount;
 
   return (dispatch) => {
     dispatch(setContribValue(value));
-    dispatch(setStripeAmount(value));
-    dispatch(setPayPalExpressAmount(value));
+    dispatch(setStripeAmount(value, currency));
+    dispatch(setPayPalExpressAmount(value, currency));
   };
 
 }

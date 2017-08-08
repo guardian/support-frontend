@@ -2,13 +2,14 @@
 
 // ----- Imports ----- //
 
+import type { Currency } from 'helpers/internationalisation/currency';
 import * as payPalExpressCheckout from './payPalExpressCheckout';
 
 // ----- Types ----- //
 
 export type Action =
   | { type: 'START_PAYPAL_EXPRESS_CHECKOUT' }
-  | { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount: number }
+  | { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount: number, currency: Currency }
   | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
   | { type: 'PAYPAL_EXPRESS_ERROR', message: string }
   ;
@@ -19,8 +20,8 @@ export function startPayPalExpressCheckout(): Action {
   return { type: 'START_PAYPAL_EXPRESS_CHECKOUT' };
 }
 
-export function setPayPalExpressAmount(amount: number): Action {
-  return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
+export function setPayPalExpressAmount(amount: number, currency: Currency): Action {
+  return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount, currency };
 }
 
 export function payPalExpressCheckoutLoaded(): Action {

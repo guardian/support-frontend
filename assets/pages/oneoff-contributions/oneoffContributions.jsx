@@ -18,6 +18,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
+import { GBP } from 'helpers/internationalisation/currency';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 
@@ -46,7 +47,7 @@ user.init(store.dispatch);
 const contributionAmount = getQueryParameter('contributionValue', '50');
 
 if (contributionAmount !== undefined && contributionAmount !== null) {
-  store.dispatch(setContribAmount(contributionAmount));
+  store.dispatch(setContribAmount(contributionAmount, GBP.iso));
 }
 
 
@@ -63,7 +64,10 @@ const content = (
           <Secure />
         </InfoSection>
         <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
-          <PaymentAmount amount={store.getState().oneoffContrib.amount} />
+          <PaymentAmount
+            amount={store.getState().oneoffContrib.amount}
+            currency={store.getState().oneOffContrib.currency}
+          />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
           <FormFields />

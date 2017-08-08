@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
+import type { Currency } from 'helpers/internationalisation/currency';
 
 // ----- Setup ----- //
 
@@ -14,6 +14,7 @@ const wideClass = 'component-payment-amount--wide-value';
 
 type PropTypes = {
   amount: number,
+  currency: Currency,
 };
 
 
@@ -26,7 +27,7 @@ export default function PaymentAmount(props: PropTypes) {
   const printedAmount = wideValue ? props.amount.toFixed(2) : props.amount;
 
   return (
-    <div className={className}>£{printedAmount}</div>
+    <div className={className}>{props.currency.glyph}{printedAmount}</div>
   );
 
 }

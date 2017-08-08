@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
+import type { Currency } from 'helpers/internationalisation/currency';
 import * as stripeCheckout from './stripeCheckout';
-
 
 // ----- Types ----- //
 
@@ -13,7 +13,7 @@ export type Action =
   | { type: 'SET_STRIPE_CHECKOUT_TOKEN', token: string }
   | { type: 'CLOSE_STRIPE_OVERLAY' }
   | { type: 'OPEN_STRIPE_OVERLAY' }
-  | { type: 'SET_STRIPE_AMOUNT', amount: number }
+  | { type: 'SET_STRIPE_AMOUNT', amount: number, currency: Currency }
   ;
 
 
@@ -40,8 +40,8 @@ export function openStripeOverlay(amount: number, email: string): Action {
   return { type: 'OPEN_STRIPE_OVERLAY' };
 }
 
-export function setStripeAmount(amount: number): Action {
-  return { type: 'SET_STRIPE_AMOUNT', amount };
+export function setStripeAmount(amount: number, currency: Currency): Action {
+  return { type: 'SET_STRIPE_AMOUNT', amount, currency };
 }
 
 export function setupStripeCheckout(callback: Function): Function {
