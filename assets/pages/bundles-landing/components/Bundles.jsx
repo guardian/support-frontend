@@ -11,8 +11,10 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
+import type IsoCountry from 'helpers/internationalisation/country';
 
 import {
+  setCountryFromDetect,
   changeContribType,
   changeContribAmount,
   changeContribAmountRecurring,
@@ -29,6 +31,7 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 /* eslint-disable react/no-unused-prop-types */
 
 type PropTypes = {
+  isoCountry: IsoCountry,
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
@@ -78,7 +81,7 @@ type BundlesType = {
 
 // ----- Copy ----- //
 
-const contribCopy: ContribAttrs = {
+const contribCopyUk: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute',
@@ -86,7 +89,7 @@ const contribCopy: ContribAttrs = {
   ctaLink: '',
 };
 
-const digitalCopy: DigitalAttrs = {
+const digitalCopyUk: DigitalAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
   listItems: [
@@ -107,7 +110,7 @@ const digitalCopy: DigitalAttrs = {
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
 
-const paperCopy: PaperAttrs = {
+const paperCopyUk: PaperAttrs = {
   heading: 'paper subscription',
   subheading: 'from £22.06/month',
   listItems: [
@@ -131,51 +134,57 @@ const paperCopy: PaperAttrs = {
 };
 
 const bundles: BundlesType = {
-  contrib: contribCopy,
-  digital: digitalCopy,
-  paper: paperCopy,
+  GB: {
+    contrib: contribCopyUk,
+    digital: digitalCopyUk,
+    paper: paperCopyUk,
+  },
 };
 
 const ctaLinks = {
-  recurring: 'https://membership.theguardian.com/monthly-contribution',
-  oneOff: 'https://contribute.theguardian.com/uk',
-  subs: 'https://subscribe.theguardian.com',
+  GB: {
+      recurring: 'https://membership.theguardian.com/monthly-contribution',
+      oneOff: 'https://contribute.theguardian.com/uk',
+      subs: 'https://subscribe.theguardian.com',
+  },
 };
 
 const contribSubheading = {
-  recurring: 'from £5/month',
-  oneOff: '',
+  GB: {
+      recurring: 'from £5/month',
+      oneOff: '',
+  },
 };
 
 
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
+const getContribAttrs = ({ contribType, contribAmount, intCmp, isoCountry }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
-  const subheading = contribSubheading[contType];
+  const subheading = contribSubheading[isoCountry][contType];
   const params = new URLSearchParams();
 
   params.append(amountParam, contribAmount[contType].value);
   params.append('INTCMP', intCmp);
-  const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+  const ctaLink = `${ctaLinks[isoCountry][contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles.contrib, { ctaLink, subheading });
+  return Object.assign({}, bundles[isoCountry].contrib, { ctaLink, subheading });
 
 };
 
-function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
+function getPaperAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): PaperAttrs {
 
-  return Object.assign({}, bundles.paper, {
+  return Object.assign({}, bundles[isoCountry].paper, {
     paperCtaLink: subsLinks.paper,
     paperDigCtaLink: subsLinks.paperDig,
   });
 
 }
 
-function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
-  return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
+function getDigitalAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): DigitalAttrs {
+  return Object.assign({}, bundles[isoCountry].digital, { ctaLink: subsLinks.digital });
 }
 
 function ContributionBundle(props: PropTypes) {
@@ -229,8 +238,8 @@ function PaperBundle(props: PaperAttrs) {
 function Bundles(props: PropTypes) {
 
   const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
-  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
-  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
+  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks, props.isoCountry);
+  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks, props.isoCountry);
 
   return (
     <section className="bundles">
@@ -254,6 +263,7 @@ function Bundles(props: PropTypes) {
 
 function mapStateToProps(state) {
   return {
+    isoCountry: state.isoCountry,
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
@@ -264,6 +274,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
+    setCountryFromDetect: () => {
+      dispatch(setCountryFromDetect());
+    },
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },

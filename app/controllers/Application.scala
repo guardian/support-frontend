@@ -18,12 +18,12 @@ class Application(
   import actionRefiners._
 
   implicit val ar = assets
-  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() {
-    Ok(views.html.react(title, id, js))
+  def reactTemplate(title: String, id: String, js: String, country: String = "uk"): Action[AnyContent] = CachedAction() {
+    Ok(views.html.react(title, id, js, country))
   }
 
-  def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { request =>
-    Ok(views.html.react(title, id, js))
+  def authenticatedReactTemplate(title: String, id: String, js: String, country: String = "uk"): Action[AnyContent] = AuthenticatedAction { request =>
+    Ok(views.html.react(title, id, js, country))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
