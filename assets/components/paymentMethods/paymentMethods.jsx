@@ -14,7 +14,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 export type PayPalButtonType =
   'ExpressCheckout' |
-  'ContributionsIntegration' |
+  'ContributionsCheckout' |
   'NotSet';
 
 
@@ -37,10 +37,10 @@ export default function PaymentMethods(props: PropTypes) {
   let payPalButton = '';
 
   switch (props.payPalType) {
-    case 'ExpressCheckout' :
+    case 'ExpressCheckout':
       payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
       break;
-    case 'ContributionsIntegration' :
+    case 'ContributionsCheckout':
       payPalButton = <PayPalContributionButton callback={props.payPalCallback} />;
       break;
     default:

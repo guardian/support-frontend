@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
@@ -67,5 +68,6 @@ export default combineReducers({
   user,
   stripeCheckout,
   payPalExpressCheckout,
+  payPalContributionsCheckout,
   csrf,
 });
