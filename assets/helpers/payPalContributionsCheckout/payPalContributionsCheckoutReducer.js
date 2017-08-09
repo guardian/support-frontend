@@ -8,10 +8,9 @@ import type { Action } from './payPalContributionsCheckoutActions';
 // ----- Types ----- //
 
 export type State = {
-  payPalPayClicked: boolean,
   amount: ?number,
-
   currency: string,
+  payPalPayClicked: boolean,
 };
 
 
