@@ -1,11 +1,11 @@
-  FailureHandlerLambda:
+  {{name}}:
     Type: "AWS::Lambda::Function"
-    Description: "Failure handler"
+    Description: "{{description}}"
     Properties:
       {{> environmentVariables}}
 
-      FunctionName: !Sub ${Stack}-FailureHandlerLambda-${Stage}
-      Handler: "com.gu.support.workers.lambdas.FailureHandler::handleRequest"
+      FunctionName: !Sub ${Stack}-ContributionCompletedLambda-${Stage}
+      Handler: "com.gu.support.workers.lambdas.ContributionCompleted::handleRequest"
       MemorySize: 256
       Role: !GetAtt [ LambdaExecutionRole, Arn ]
       Code:

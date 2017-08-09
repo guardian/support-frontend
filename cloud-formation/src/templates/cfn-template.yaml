@@ -94,20 +94,10 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-          {{> contributionCompletedLambda}}
+          {{#lambdas}}
+            {{> lambda}}
 
-          {{> createPaymentMethodLambda}}
-
-          {{> createSalesforceContactLambda}}
-
-          {{> createZuoraSubscriptionLambda}}
-
-          {{> failureHandlerLambda}}
-
-          {{> sendThankYouEmailLambda}}
-
-          {{> updateMembersDataAPILambda}}
-
+          {{/lambdas}}
 
   MonthlyContributionsPROD:
     Type: "AWS::StepFunctions::StateMachine"
