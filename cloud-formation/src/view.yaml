@@ -15,4 +15,4 @@ lambdas:
 - name: SendThankYouEmail
   description: Send thank-you email
 - name: UpdateMembersDataAPI
-  description: Request members data api sync with Zuora/SalesForce
+  description: Request members data api sync with Zuora and SalesForce
