@@ -29,7 +29,7 @@ import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
-import { setContribAmount, setPayPalButton } from './actions/oneoffContributionsActions';
+import { setPayPalButton } from './actions/oneoffContributionsActions';
 
 // ----- Page Startup ----- //
 
