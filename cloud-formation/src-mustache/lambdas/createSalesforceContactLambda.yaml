@@ -1,0 +1,15 @@
+  CreateSalesforceContactLambda:
+    Type: "AWS::Lambda::Function"
+    Description: "Step 2. Create Salesforce contact"
+    Properties:
+      {{> environmentVariables}}
+
+      FunctionName: !Sub ${Stack}-CreateSalesforceContactLambda-${Stage}
+      Handler: "com.gu.support.workers.lambdas.CreateSalesforceContact::handleRequest"
+      MemorySize: 256
+      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      Code:
+        S3Bucket: support-workers-dist
+        S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
+      Runtime: "java8"
+      Timeout: "60"

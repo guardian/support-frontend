@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Monthly contributions state machine"
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+        - PROD
+        - CODE
+    Default: CODE
+  Stack:
+    Description: Stack name
+    Type: String
+    Default: support
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+  CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
+Mappings:
+  StageVariables:
+    CODE:
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+      EmailQueueARN: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+    PROD:
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+      EmailQueueARN: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
+Resources:
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: PrivateBucket
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource: arn:aws:s3:::support-workers-private/*
+        - PolicyName: SqsMessages
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:GetQueueUrl
+              - sqs:SendMessage
+              Resource: !FindInMap [ StageVariables, !Ref Stage, EmailQueueARN ]
+        - PolicyName: CloudWatchLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - logs:Create*
+              - logs:PutLogEvents
+              - logs:DescribeLogStreams
+              - cloudwatch:putMetricData
+              Resource: "*"
+              Effect: Allow
+        - PolicyName: KMSEncryption
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - kms:Encrypt
+                - kms:Decrypt
+                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: !Sub states.${AWS::Region}.amazonaws.com
+          Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+
+          {{> contributionCompletedLambda}}
+
+          {{> createPaymentMethodLambda}}
+
+          {{> createSalesforceContactLambda}}
+
+          {{> createZuoraSubscriptionLambda}}
+
+          {{> failureHandlerLambda}}
+
+          {{> sendThankYouEmailLambda}}
+
+          {{> updateMembersDataAPILambda}}
+
+
+  MonthlyContributionsPROD:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateProdResources
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+            {{> stateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
+  MonthlyContributionsCODE:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateCodeResources
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+                        {{> stateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
