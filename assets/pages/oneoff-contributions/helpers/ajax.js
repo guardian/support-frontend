@@ -40,24 +40,33 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
 
   const state = getState();
 
-  const oneoffContribFields: OneoffContribFields = {
-    name: state.user.fullName || '',
-    currency: state.stripeCheckout.currency || '',
-    amount: state.stripeCheckout.amount || 0,
-    email: state.user.email || '',
-    token: paymentToken || '',
-    marketing: false, // todo: collect marketing preference
-    postcode: state.user.postcode || '',
-    ophanPageviewId: 'dummy', // todo: correct ophan pageview id
-  };
+  if (state.user.fullName !== null && state.user.fullName !== undefined
+    && state.stripeCheckout.currency !== null && state.stripeCheckout.currency !== undefined
+    && state.stripeCheckout.amount !== null && state.stripeCheckout.amount !== undefined
+    && state.user.email !== null && state.user.email !== undefined) {
+    const oneoffContribFields: OneoffContribFields = {
+      name: state.user.fullName,
+      currency: state.stripeCheckout.currency,
+      amount: state.stripeCheckout.amount,
+      email: state.user.email,
+      token: paymentToken,
+      marketing: false, // todo: collect marketing preference
+      postcode: state.user.postcode,
+      ophanPageviewId: 'dummy', // todo: correct ophan pageview id
+    };
 
-  return {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(oneoffContribFields),
-    credentials: 'include',
-  };
+    return {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(oneoffContribFields),
+      credentials: 'include',
+    };
+  }
 
+  return Promise.resolve({
+    ok: false,
+    text: () => 'Failed to process payment - missing fields',
+  });
 }
 
 export default function postCheckout(
