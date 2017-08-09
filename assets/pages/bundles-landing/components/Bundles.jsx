@@ -78,67 +78,92 @@ type BundlesType = {
   paper: PaperAttrs,
 }
 
-
 // ----- Copy ----- //
 
-const contribCopyUk: ContribAttrs = {
-  heading: 'contribute',
-  subheading: 'from £5/month',
-  ctaText: 'Contribute',
-  modifierClass: 'contributions',
-  ctaLink: '',
+const contribSubHeadingText = {
+    GB: 'from £5/month',
+    US: 'from $6.50/month',
 };
 
-const digitalCopyUk: DigitalAttrs = {
-  heading: 'digital subscription',
-  subheading: '£11.99/month',
-  listItems: [
-    {
-      heading: 'Ad-free mobile app',
-      text: 'No interruptions means pages load quicker for a clearer reading experience',
-    },
-    {
-      heading: 'Daily tablet edition',
-      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
-    },
-    {
-      heading: 'Enjoy on up to 10 devices',
-    },
-  ],
-  ctaText: 'Start your 14 day trial',
-  modifierClass: 'digital',
-  ctaLink: 'https://subscribe.theguardian.com/uk/digital',
+const digitalSubHeading = {
+  GB: '£11.99/month',
+  US: '$19.99/month', // source: https://subscribe.theguardian.com/us/digital
 };
 
-const paperCopyUk: PaperAttrs = {
-  heading: 'paper subscription',
-  subheading: 'from £22.06/month',
-  listItems: [
-    {
-      heading: 'Newspaper',
-      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
-    },
-    {
-      heading: 'Save money off the retail price',
-    },
-    {
-      heading: 'All the benefits of a digital subscription',
-      text: 'Available with paper+digital',
-    },
-  ],
-  paperCtaText: 'Become a paper subscriber',
-  paperDigCtaText: 'Become a paper+digital subscriber',
-  modifierClass: 'paper',
-  paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
-  paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
+const paperSubHeading = {
+  GB: 'from £22.06/month',
+  US: 'from $28.70/month'
 };
 
-const bundles: BundlesType = {
-  GB: {
-    contrib: contribCopyUk,
-    digital: digitalCopyUk,
-    paper: paperCopyUk,
-  },
+const digitalCtaLink = {
+  GB: 'https://subscribe.theguardian.com/uk/digital',
+  US: 'https://subscribe.theguardian.com/us/digital',
+};
+
+const contribCopy: ContribAttrs = (isoCountry) => {
+    return {
+      heading: 'contribute',
+      subheading: contribSubHeading[isoCountry],
+      ctaText: 'Contribute',
+      modifierClass: 'contributions',
+      ctaLink: '',
+    };
+};
+
+const digitalCopy: DigitalAttrs = (isoCountry) => {
+  return {
+    heading: 'digital subscription',
+    subheading: digitalSubHeading[isoCountry],
+    listItems: [
+        {
+            heading: 'Ad-free mobile app',
+            text: 'No interruptions means pages load quicker for a clearer reading experience',
+        },
+        {
+            heading: 'Daily tablet edition',
+            text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
+        },
+        {
+            heading: 'Enjoy on up to 10 devices',
+        },
+    ],
+    ctaText: 'Start your 14 day trial',
+    modifierClass: 'digital',
+    ctaLink: digitalCtaLink[isoCountry],
+  };
+};
+
+const paperCopy: PaperAttrs = (isoCountry) => {
+  return {
+    heading: 'paper subscription',
+    subheading: paperSubHeading[isoCountry],
+    listItems: [
+        {
+            heading: 'Newspaper',
+            text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
+        },
+        {
+            heading: 'Save money off the retail price',
+        },
+        {
+            heading: 'All the benefits of a digital subscription',
+            text: 'Available with paper+digital',
+        },
+    ],
+    paperCtaText: 'Become a paper subscriber',
+    paperDigCtaText: 'Become a paper+digital subscriber',
+    modifierClass: 'paper',
+    paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
+    paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
+  };
+};
+
+const bundles: BundlesType = (isoCountry) => {
+  return {
+    contrib: contribCopy(isoCountry),
+    digital: digitalCopy(isoCountry),
+    paper: paperCopy(isoCountry),
+  };
 };
 
 const ctaLinks = {
@@ -147,36 +172,40 @@ const ctaLinks = {
       oneOff: 'https://contribute.theguardian.com/uk',
       subs: 'https://subscribe.theguardian.com',
   },
-};
-
-const contribSubheading = {
-  GB: {
-      recurring: 'from £5/month',
-      oneOff: '',
+  US: {
+      recurring: 'https://membership.theguardian.com/monthly-contribution',
+      oneOff: 'https://contribute.theguardian.com/us',
+      subs: 'https://subscribe.theguardian.com',
   },
 };
 
+const contribSubheading = (isoCountry) => {
+  return {
+    recurring: contribSubHeadingText[isoCountry],
+    oneOff: '',
+  };
+};
 
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp, isoCountry }): ContribAttrs => {
+const getContribAttrs = ({ isoCountry, contribType, contribAmount, intCmp }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
-  const subheading = contribSubheading[isoCountry][contType];
+  const subheading = contribSubheading(isoCountry)[contType];
   const params = new URLSearchParams();
 
   params.append(amountParam, contribAmount[contType].value);
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[isoCountry][contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles[isoCountry].contrib, { ctaLink, subheading });
+  return Object.assign({}, bundles(isoCountry).contrib, { ctaLink, subheading });
 
 };
 
 function getPaperAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): PaperAttrs {
 
-  return Object.assign({}, bundles[isoCountry].paper, {
+  return Object.assign({}, bundles(isoCountry).paper, {
     paperCtaLink: subsLinks.paper,
     paperDigCtaLink: subsLinks.paperDig,
   });
@@ -184,7 +213,7 @@ function getPaperAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): PaperAttrs 
 }
 
 function getDigitalAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): DigitalAttrs {
-  return Object.assign({}, bundles[isoCountry].digital, { ctaLink: subsLinks.digital });
+  return Object.assign({}, bundles(isoCountry).digital, { ctaLink: subsLinks.digital });
 }
 
 function ContributionBundle(props: PropTypes) {
