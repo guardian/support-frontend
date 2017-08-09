@@ -1,0 +1,18 @@
+lambdas:
+  #Name is the main class which implements the lambda.
+  #By convention the lambda created will be this name + Lambda eg. ContributionCompletedLambda
+- name: ContributionCompleted
+  description: Completed contribution successfully
+- name: CreatePaymentMethod
+  description: Step 1. Initialise Payment method
+- name: CreateSalesforceContact
+  description: Step 2. Create Salesforce contact
+- name: CreateZuoraSubscription
+  description: Step 3. Create Zuora subscription
+  memorySize: 512
+- name: FailureHandler
+  description: Failure handler
+- name: SendThankYouEmail
+  description: Send thank-you email
+- name: UpdateMembersDataAPI
+  description: Request members data api sync with Zuora and SalesForce

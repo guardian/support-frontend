@@ -5,17 +5,20 @@ States:
     Type: Task
     Resource: "${CreatePaymentMethodLambda.Arn}"
     Next: CreateSalesforceContact
-    $state_machine_retries
+    {{> stateMachineRetries}}
+
   CreateSalesforceContact:
     Type: Task
     Resource: "${CreateSalesforceContactLambda.Arn}"
     Next: CreateZuoraSubscription
-    $state_machine_retries
+    {{> stateMachineRetries}}
+
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
     Next: ParallelTasks
-    $state_machine_retries
+    {{> stateMachineRetries}}
+
   ParallelTasks:
     Type: Parallel
     Branches:

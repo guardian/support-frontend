@@ -6,4 +6,8 @@ cd ../cloud-formation
 
 mkdir target
 
-./compile.py > target/cfn.yaml
+cd src
+rm -rf node_modules
+yarn install
+
+yarn run build-cfn
