@@ -16,4 +16,7 @@ cd cloud-formation/src
 
 ../../${YARN_LOCATION}/dist/bin/yarn install
 
+#Build CloudFormation
+../../${YARN_LOCATION}/dist/bin/run build-cfn
+
 
