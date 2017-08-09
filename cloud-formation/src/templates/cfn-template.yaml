@@ -118,7 +118,7 @@ Resources:
       DefinitionString:
         !Sub
           - |-
-                        {{> stateMachine}}
+            {{> stateMachine}}
 
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
