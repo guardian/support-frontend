@@ -1,11 +1,11 @@
-  {{name}}:
+  {{name}}Lambda:
     Type: "AWS::Lambda::Function"
     Description: "{{description}}"
     Properties:
       {{> environmentVariables}}
 
-      FunctionName: !Sub ${Stack}-{{name}}-${Stage}
-      Handler: "com.gu.support.workers.lambdas.ContributionCompleted::handleRequest"
+      FunctionName: !Sub ${Stack}-{{name}}Lambda-${Stage}
+      Handler: "com.gu.support.workers.lambdas.{{name}}::handleRequest"
       MemorySize: {{memorySize}}{{^memorySize}}256{{/memorySize}}
       Role: !GetAtt [ LambdaExecutionRole, Arn ]
       Code:
