@@ -1,0 +1,16 @@
+lambdas:
+- name: ContributionCompletedLambda
+  description: Completed contribution successfully
+- name: CreatePaymentMethodLambda
+  description: Step 1. Initialise Payment method
+- name: CreateSalesforceContactLambda
+  description: Step 2. Create Salesforce contact
+- name: CreateZuoraSubscriptionLambda
+  description: Step 3. Create Zuora subscription
+  memorySize: 512
+- name: FailureHandlerLambda
+  description: Failure handler
+- name: SendThankYouEmailLambda
+  description: Send thank-you email
+- name: UpdateMembersDataAPILambda
+  description: Request members data api sync with Zuora/SalesForce
