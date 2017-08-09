@@ -14,7 +14,8 @@
         },
         {
             "name": "CreateZuoraSubscriptionLambda",
-            "description": "Step 3. Create Zuora subscription"
+            "description": "Step 3. Create Zuora subscription",
+            "memorySize": 512
         },{
             "name": "FailureHandlerLambda",
             "description": "Failure handler"

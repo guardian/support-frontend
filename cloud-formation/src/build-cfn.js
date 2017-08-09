@@ -19,14 +19,12 @@ const main = loadTemplate('cfn-template.yaml');
 const output = Mustache.render(main, JSON.parse(readFile('cfn.json')), partials);
 fs.writeFileSync('../target/cfn.yaml', output, 'utf-8');
 
-
 function loadTemplate(filename) {
-    return readFile('template/' + filename);
+    return readFile('templates/' + filename);
 }
 function readFile(filename) {
     return fs.readFileSync(filename, 'utf-8');
 }
-
 function indent(number, text) {
     return ' '.repeat(number) + text;
 }

@@ -6,7 +6,7 @@
 
       FunctionName: !Sub ${Stack}-ContributionCompletedLambda-${Stage}
       Handler: "com.gu.support.workers.lambdas.ContributionCompleted::handleRequest"
-      MemorySize: 256
+      MemorySize: {{memorySize}}{{^memorySize}}256{{/memorySize}}
       Role: !GetAtt [ LambdaExecutionRole, Arn ]
       Code:
         S3Bucket: support-workers-dist
