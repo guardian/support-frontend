@@ -6,4 +6,6 @@ cd ../cloud-formation
 
 mkdir target
 
-./compile.py > target/cfn.yaml
+cd src-mustache
+
+yarn run build-cfn

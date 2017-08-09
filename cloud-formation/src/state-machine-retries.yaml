@@ -1,4 +1,4 @@
-Retry:
+    Retry:
     - ErrorEquals:
       - com.gu.support.workers.exceptions.RetryLimited
       IntervalSeconds: 1

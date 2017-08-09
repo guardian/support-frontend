@@ -1,14 +1,15 @@
-FailureHandlerLambda:
-  Type: "AWS::Lambda::Function"
-  Description: "Failure handler"
-  Properties:
-    $environment_variables
-    FunctionName: !Sub ${Stack}-FailureHandlerLambda-${Stage}
-    Handler: "com.gu.support.workers.lambdas.FailureHandler::handleRequest"
-    MemorySize: 256
-    Role: !GetAtt [ LambdaExecutionRole, Arn ]
-    Code:
-      S3Bucket: support-workers-dist
-      S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
-    Runtime: "java8"
-    Timeout: "60"
+  FailureHandlerLambda:
+    Type: "AWS::Lambda::Function"
+    Description: "Failure handler"
+    Properties:
+      {{> environmentVariables}}
+
+      FunctionName: !Sub ${Stack}-FailureHandlerLambda-${Stage}
+      Handler: "com.gu.support.workers.lambdas.FailureHandler::handleRequest"
+      MemorySize: 256
+      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      Code:
+        S3Bucket: support-workers-dist
+        S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
+      Runtime: "java8"
+      Timeout: "60"

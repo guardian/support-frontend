@@ -1,14 +1,15 @@
-SendThankYouEmailLambda:
-  Type: "AWS::Lambda::Function"
-  Description: "Send thank-you email"
-  Properties:
-    $environment_variables
-    FunctionName: !Sub ${Stack}-SendThankYouEmailLambda-${Stage}
-    Handler: "com.gu.support.workers.lambdas.SendThankYouEmail::handleRequest"
-    MemorySize: 256
-    Role: !GetAtt [ LambdaExecutionRole, Arn ]
-    Code:
-      S3Bucket: support-workers-dist
-      S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
-    Runtime: "java8"
-    Timeout: "60"
+  SendThankYouEmailLambda:
+    Type: "AWS::Lambda::Function"
+    Description: "Send thank-you email"
+    Properties:
+      {{> environmentVariables}}
+
+      FunctionName: !Sub ${Stack}-SendThankYouEmailLambda-${Stage}
+      Handler: "com.gu.support.workers.lambdas.SendThankYouEmail::handleRequest"
+      MemorySize: 256
+      Role: !GetAtt [ LambdaExecutionRole, Arn ]
+      Code:
+        S3Bucket: support-workers-dist
+        S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
+      Runtime: "java8"
+      Timeout: "60"

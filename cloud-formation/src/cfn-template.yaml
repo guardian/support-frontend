@@ -81,7 +81,7 @@ Resources:
         Statement:
           Effect: "Allow"
           Principal:
-            Service: !Sub states.$${AWS::Region}.amazonaws.com
+            Service: !Sub states.${AWS::Region}.amazonaws.com
           Action: "sts:AssumeRole"
       Path: "/"
       Policies:
@@ -94,7 +94,20 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-$lambdas
+          {{> contributionCompletedLambda}}
+
+          {{> createPaymentMethodLambda}}
+
+          {{> createSalesforceContactLambda}}
+
+          {{> createZuoraSubscriptionLambda}}
+
+          {{> failureHandlerLambda}}
+
+          {{> sendThankYouEmailLambda}}
+
+          {{> updateMembersDataAPILambda}}
+
 
   MonthlyContributionsPROD:
     Type: "AWS::StepFunctions::StateMachine"
@@ -103,7 +116,8 @@ $lambdas
       DefinitionString:
         !Sub
           - |-
-            $state_machine_json
+            {{> stateMachine}}
+
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
@@ -114,6 +128,7 @@ $lambdas
       DefinitionString:
         !Sub
           - |-
-            $state_machine_json
+                        {{> stateMachine}}
+
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]

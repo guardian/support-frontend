@@ -1,0 +1,13 @@
+{
+    "name": "src-mustache",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "build-cfn": "node build-cfn.js"
+    },
+    "dependencies": {
+        "fs": "^0.0.1-security",
+        "mustache": "^2.3.0"
+    }
+}

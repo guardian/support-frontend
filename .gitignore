@@ -1,3 +1,4 @@
 *.log
 .idea/
 target/
+cloud-formation/src/node_modules/
