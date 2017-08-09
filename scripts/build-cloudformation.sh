@@ -7,7 +7,7 @@ cd ../cloud-formation
 mkdir target
 
 cd src
-rm -rg node_modules
+rm -rf node_modules
 yarn install
 
 yarn run build-cfn
