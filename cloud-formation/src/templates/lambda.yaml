@@ -4,7 +4,7 @@
     Properties:
       {{> environmentVariables}}
 
-      FunctionName: !Sub ${Stack}-ContributionCompletedLambda-${Stage}
+      FunctionName: !Sub ${Stack}-{{name}}-${Stage}
       Handler: "com.gu.support.workers.lambdas.ContributionCompleted::handleRequest"
       MemorySize: {{memorySize}}{{^memorySize}}256{{/memorySize}}
       Role: !GetAtt [ LambdaExecutionRole, Arn ]
