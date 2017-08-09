@@ -32,7 +32,7 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean] = Some(false)): Action[AnyContent] = CachedAction() {
+  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() {
     form(uatMode = false, paypal)
   }
 
