@@ -29,7 +29,7 @@ const PayPalContributionButton = (props: PropTypes) => {
   return (
     <button className={'component-paypal-contribution-button'} onClick={props.payWithPayPal}>
       <Svg svgName="paypal-p-logo" />
-      <span>PayPal checkout</span>
+      <span>contribute with PayPal</span>
       <Svg svgName="arrow-right-straight" />
     </button>);
 };

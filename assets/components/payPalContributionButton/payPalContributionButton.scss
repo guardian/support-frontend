@@ -1,8 +1,8 @@
 .component-paypal-contribution-button {
-  background-color: gu-colour(neutral-1);
-  border: none;
+  background-color: transparent;
+  border: solid 1px gu-colour(neutral-1);
   border-radius: 600px;
-  color: #fff;
+  color: gu-colour(neutral-1);
   cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
@@ -25,7 +25,7 @@
 
   .svg-arrow-right-straight {
     width: 24px;
-    fill: #fff;
+    fill: gu-colour(neutral-1);
     position: absolute;
     right: 15px;
     top: 50%;
@@ -37,9 +37,5 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-  }
-
-  &:hover {
-    background-color: #000;
   }
 }
