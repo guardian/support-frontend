@@ -15,15 +15,26 @@
   width: 100%;
   margin-top: 20px;
 
+  span {
+    padding-left: $gu-h-spacing * 2;
+  }
+
   @include mq($from: mobileMedium) {
     width: 304px;
   }
 
-  svg {
+  .svg-arrow-right-straight {
     width: 24px;
     fill: #fff;
     position: absolute;
     right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .svg-paypal-p-logo {
+    width: 24px;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
   }
