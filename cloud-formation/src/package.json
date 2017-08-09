@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "fs": "^0.0.1-security",
+        "js-yaml": "^3.9.1",
         "mustache": "^2.3.0"
     }
 }

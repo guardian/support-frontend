@@ -6,6 +6,8 @@ cd ../cloud-formation
 
 mkdir target
 
-cd src-mustache
+cd src
+rm -rg node_modules
+yarn install
 
 yarn run build-cfn
