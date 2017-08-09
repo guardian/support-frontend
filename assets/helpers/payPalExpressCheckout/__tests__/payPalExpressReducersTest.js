@@ -11,7 +11,7 @@ describe('PayPal Reducer Tests', () => {
 
   it('should return the initial state', () => {
 
-    expect(reducer(undefined, {})).toMatchSnapshot();
+    expect(reducer(13, 'GBP')(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle PAYPAL_EXPRESS_CHECKOUT_LOADED', () => {
@@ -21,7 +21,7 @@ describe('PayPal Reducer Tests', () => {
       loaded: true,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = reducer(13, 'GBP')(undefined, action);
 
     expect(newState.loaded).toEqual(true);
     expect(newState.billingPeriod).toMatchSnapshot();
