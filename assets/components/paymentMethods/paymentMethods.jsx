@@ -6,16 +6,23 @@ import React from 'react';
 
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
+import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 
 // ----- Types ----- //
 
+export type PayPalButtonType =
+  'ExpressCheckout' |
+  'ContributionsCheckout' |
+  'NotSet';
+
+
 type PropTypes = {
   email: string,
   hide: boolean,
   error: ?string,
-  payPalButtonExists: boolean,
+  payPalType: PayPalButtonType,
   stripeCallback: Function,
   payPalCallback: Function,
 };
@@ -29,8 +36,16 @@ export default function PaymentMethods(props: PropTypes) {
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
-  if (props.payPalButtonExists) {
-    payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
+  switch (props.payPalType) {
+    case 'ExpressCheckout':
+      payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
+      break;
+    case 'ContributionsCheckout':
+      payPalButton = <PayPalContributionButton callback={props.payPalCallback} />;
+      break;
+    default:
+      payPalButton = '';
+      break;
   }
 
   if (props.hide) {

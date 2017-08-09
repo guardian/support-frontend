@@ -17,6 +17,7 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/monthlyContributionsActions';
 
 
@@ -27,7 +28,7 @@ export type State = {
   currency: Currency,
   country: IsoCountry,
   error: ?string,
-  payPalButtonExists: boolean,
+  payPalType: PayPalButtonType,
 };
 
 export type CombinedState = {
@@ -49,6 +50,7 @@ function monthlyContrib(amount: number, currency: Currency, country: IsoCountry)
     country,
     error: null,
     payPalButtonExists: false,
+    payPalType: 'NotSet',
   };
 
   return (state: State = initialState, action: Action): State => {
@@ -58,7 +60,7 @@ function monthlyContrib(amount: number, currency: Currency, country: IsoCountry)
         return Object.assign({}, state, { error: action.message });
 
       case 'SET_PAYPAL_BUTTON' :
-        return Object.assign({}, state, { payPalButtonExists: action.value });
+        return Object.assign({}, state, { payPalType: action.value });
 
       default:
         return state;

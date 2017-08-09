@@ -9,11 +9,13 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
 
 
@@ -24,6 +26,7 @@ export type State = {
   currency: Currency,
   country: IsoCountry,
   error: ?string,
+  payPalType: PayPalButtonType,
 };
 
 export type CombinedState = {
@@ -43,6 +46,7 @@ function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) 
     currency,
     country,
     error: null,
+    payPalType: 'NotSet',
   };
 
   return (state: State = initialState, action: Action): State => {
@@ -54,6 +58,9 @@ function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) 
 
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
+
+      case 'SET_PAYPAL_BUTTON' :
+        return Object.assign({}, state, { payPalType: action.value });
 
       default:
         return state;
@@ -71,5 +78,6 @@ export default (amount: number, currency: Currency, country: IsoCountry) =>
     intCmp,
     user,
     stripeCheckout: stripeCheckout(amount, currency.iso),
+    payPalContributionsCheckout,
     csrf,
   });

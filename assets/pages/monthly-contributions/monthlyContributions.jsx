@@ -53,7 +53,7 @@ const store = createStore(reducer(contributionAmount, currency, country), {
 }, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
-store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
+store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const state: CombinedState = store.getState();
 
@@ -83,7 +83,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken')}
             payPalCallback={postCheckout('baid')}
-            payPalButtonExists={state.monthlyContrib.payPalButtonExists}
+            payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">

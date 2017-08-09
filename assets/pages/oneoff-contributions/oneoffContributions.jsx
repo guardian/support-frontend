@@ -29,6 +29,7 @@ import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
+import { setContribAmount, setPayPalButton } from './actions/oneoffContributionsActions';
 
 // ----- Page Startup ----- //
 
@@ -50,6 +51,8 @@ const store = createStore(reducer(contributionAmount, currency, country), {
 }, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
+
+store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const state: CombinedState = store.getState();
 
@@ -78,7 +81,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalButtonExists={false}
+            payPalType={store.getState().oneoffContrib.payPalType}
           />
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">

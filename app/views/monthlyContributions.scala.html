@@ -28,7 +28,7 @@
                 lastName: "@lastName",
             }
         };
-        window.guardian.payPalButtonExists = @payPalButton;
+        window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
         window.guardian.stripeKey = "@stripeConfig.publicKey";
         window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
