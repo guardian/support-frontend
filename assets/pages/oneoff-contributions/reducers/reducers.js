@@ -21,8 +21,8 @@ import type { Action } from '../actions/oneoffContributionsActions';
 
 export type State = {
   amount: number,
-  currency: ?Currency,
-  country: ?IsoCountry,
+  currency: Currency,
+  country: IsoCountry,
   error: ?string,
 };
 
@@ -34,47 +34,42 @@ export type CombinedState = {
   csrf: CsrfState,
 };
 
-// ----- Setup ----- //
-
-const initialState: State = {
-  amount: 50,
-  currency: null,
-  country: null,
-  error: null,
-};
-
-
 // ----- Reducers ----- //
 
-function oneoffContrib(
-  state: State = initialState,
-  action: Action): State {
+function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) {
 
-  switch (action.type) {
+  const initialState: State = {
+    amount,
+    currency,
+    country,
+    error: null,
+  };
 
-    case 'SET_COUNTRY':
-      return Object.assign({}, state, { country: action.value });
+  return (state: State = initialState, action: Action): State => {
 
-    case 'SET_CONTRIB_VALUE':
-      return Object.assign({}, state, { amount: action.value, currency: action.currency });
+    switch (action.type) {
 
-    case 'CHECKOUT_ERROR':
-      return Object.assign({}, state, { error: action.message });
+      case 'SET_CONTRIB_VALUE':
+        return Object.assign({}, state, { amount: action.value });
 
-    default:
-      return state;
+      case 'CHECKOUT_ERROR':
+        return Object.assign({}, state, { error: action.message });
 
-  }
+      default:
+        return state;
 
+    }
+  };
 }
 
 
 // ----- Exports ----- //
 
-export default combineReducers({
-  oneoffContrib,
-  intCmp,
-  user,
-  stripeCheckout,
-  csrf,
-});
+export default (amount: number, currency: Currency, country: IsoCountry) =>
+  combineReducers({
+    oneoffContrib: oneoffContrib(amount, currency, country),
+    intCmp,
+    user,
+    stripeCheckout: stripeCheckout(amount, currency.iso),
+    csrf,
+  });

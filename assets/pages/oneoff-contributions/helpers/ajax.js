@@ -41,8 +41,6 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
   const state = getState();
 
   if (state.user.fullName !== null && state.user.fullName !== undefined
-    && state.stripeCheckout.currency !== null && state.stripeCheckout.currency !== undefined
-    && state.stripeCheckout.amount !== null && state.stripeCheckout.amount !== undefined
     && state.user.email !== null && state.user.email !== undefined) {
     const oneoffContribFields: OneoffContribFields = {
       name: state.user.fullName,

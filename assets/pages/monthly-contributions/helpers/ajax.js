@@ -40,9 +40,6 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
 
   if (state.user.firstName !== null && state.user.firstName !== undefined
     && state.user.lastName !== null && state.user.lastName !== undefined
-    && state.monthlyContrib.country !== null && state.monthlyContrib.country !== undefined
-    && state.stripeCheckout.currency !== null && state.stripeCheckout.currency !== undefined
-    && state.stripeCheckout.amount !== null && state.stripeCheckout.amount !== undefined
     && state.user.email !== null && state.user.email !== undefined) {
     const monthlyContribFields: MonthlyContribFields = {
       contribution: {

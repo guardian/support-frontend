@@ -29,19 +29,4 @@ describe('PayPal Reducer Tests', () => {
     expect(newState.amount).toMatchSnapshot();
   });
 
-  it('should handle SET_PAYPAL_EXPRESS_AMOUNT', () => {
-
-    const action = {
-      type: 'SET_PAYPAL_EXPRESS_AMOUNT',
-      amount: 33.34,
-    };
-
-    const newState = reducer(undefined, action);
-
-    expect(newState.amount).toEqual(33.34);
-    expect(newState.billingPeriod).toMatchSnapshot();
-    expect(newState.currency).toMatchSnapshot();
-    expect(newState.loaded).toMatchSnapshot();
-  });
-
 });

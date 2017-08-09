@@ -24,8 +24,8 @@ import type { Action } from '../actions/monthlyContributionsActions';
 
 export type State = {
   amount: number,
-  currency: ?Currency,
-  country: ?IsoCountry,
+  currency: Currency,
+  country: IsoCountry,
   error: ?string,
   payPalButtonExists: boolean,
 };
@@ -39,52 +39,43 @@ export type CombinedState = {
   csrf: CsrfState,
 };
 
-// ----- Setup ----- //
-
-const initialState: State = {
-  amount: 5,
-  currency: GBP,
-  country: 'GB',
-  error: null,
-  payPalButtonExists: false,
-};
-
-
 // ----- Reducers ----- //
 
-function monthlyContrib(
-  state: State = initialState,
-  action: Action): State {
+function monthlyContrib(amount: number, currency: Currency, country: IsoCountry) {
 
-  switch (action.type) {
+  const initialState: State = {
+    amount,
+    currency,
+    country,
+    error: null,
+    payPalButtonExists: false,
+  };
 
-    case 'SET_COUNTRY':
-      return Object.assign({}, state, { country: action.value });
+  return (state: State = initialState, action: Action): State => {
+    switch (action.type) {
 
-    case 'SET_CONTRIB_VALUE':
-      return Object.assign({}, state, { amount: action.value, currency: action.currency });
+      case 'CHECKOUT_ERROR':
+        return Object.assign({}, state, { error: action.message });
 
-    case 'CHECKOUT_ERROR':
-      return Object.assign({}, state, { error: action.message });
+      case 'SET_PAYPAL_BUTTON' :
+        return Object.assign({}, state, { payPalButtonExists: action.value });
 
-    case 'SET_PAYPAL_BUTTON' :
-      return Object.assign({}, state, { payPalButtonExists: action.value });
+      default:
+        return state;
 
-    default:
-      return state;
-
-  }
-
+    }
+  };
 }
 
 
 // ----- Exports ----- //
 
-export default combineReducers({
-  monthlyContrib,
-  intCmp,
-  user,
-  stripeCheckout,
-  payPalExpressCheckout,
-  csrf,
-});
+export default (amount: number, currency: Currency, country: IsoCountry) =>
+  combineReducers({
+    monthlyContrib: monthlyContrib(amount, currency, country),
+    intCmp,
+    user,
+    stripeCheckout: stripeCheckout(amount, currency.iso),
+    payPalExpressCheckout: payPalExpressCheckout(amount, currency.iso),
+    csrf,
+  });

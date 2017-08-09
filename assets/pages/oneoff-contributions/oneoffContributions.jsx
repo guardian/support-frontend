@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -29,8 +29,6 @@ import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
-import { setContribAmount, setCountry } from './actions/oneoffContributionsActions';
-
 
 // ----- Page Startup ----- //
 
@@ -39,18 +37,19 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP'),
-}, applyMiddleware(thunkMiddleware));
-
-user.init(store.dispatch);
-
-const contributionAmount = getQueryParameter('contributionValue') || '50';
+const contributionAmount = Number(getQueryParameter('contributionValue')) || 5;
 const country = Country.detect();
 const currency = Currency.forCountry(country);
 
-store.dispatch(setCountry(country));
-store.dispatch(setContribAmount(contributionAmount, currency));
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+
+const store = createStore(reducer(contributionAmount, currency, country), {
+  intCmp: getQueryParameter('INTCMP'),
+}, composeEnhancers(applyMiddleware(thunkMiddleware)));
+
+user.init(store.dispatch);
 
 const state: CombinedState = store.getState();
 
@@ -69,7 +68,7 @@ const content = (
         <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={state.oneoffContrib.amount}
-            currency={state.oneoffContrib.currency || Currency.GBP}
+            currency={state.oneoffContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">

@@ -10,39 +10,33 @@ import type { Action } from './stripeCheckoutActions';
 
 export type State = {
   loaded: boolean,
-  amount: ?number,
+  amount: number,
   token: ?string,
-  currency: ?IsoCurrency,
-};
-
-
-// ----- Setup ----- //
-
-const initialState: State = {
-  loaded: false,
-  amount: null,
-  token: null,
-  currency: null,
+  currency: IsoCurrency,
 };
 
 
 // ----- Exports ----- //
 
-export default function stripeCheckoutReducer(
-  state: State = initialState,
-  action: Action): State {
+export default function stripeCheckoutReducer(amount: number, currency: IsoCurrency) {
 
-  switch (action.type) {
+  const initialState: State = {
+    loaded: false,
+    amount,
+    token: null,
+    currency,
+  };
 
-    case 'STRIPE_CHECKOUT_LOADED':
-      return Object.assign({}, state, { loaded: true });
+  return (state: State = initialState, action: Action): State => {
 
-    case 'SET_STRIPE_AMOUNT':
-      return Object.assign({}, state, { amount: action.amount, currency: action.currency.iso });
+    switch (action.type) {
 
-    default:
-      return state;
+      case 'STRIPE_CHECKOUT_LOADED':
+        return Object.assign({}, state, { loaded: true });
 
-  }
+      default:
+        return state;
 
+    }
+  };
 }

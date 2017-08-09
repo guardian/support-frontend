@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -30,7 +30,7 @@ import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 
-import { setCountry, setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
+import { setPayPalButton } from './actions/monthlyContributionsActions';
 
 
 // ----- Page Startup ----- //
@@ -40,17 +40,17 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP'),
-}, applyMiddleware(thunkMiddleware));
-
-
-const contributionAmount = getQueryParameter('contributionValue') || '5';
+const contributionAmount = Number(getQueryParameter('contributionValue')) || 5;
 const country = Country.detect();
 const currency = Currency.forCountry(country);
 
-store.dispatch(setCountry(country));
-store.dispatch(setContribAmount(contributionAmount, currency));
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+
+const store = createStore(reducer(contributionAmount, currency, country), {
+  intCmp: getQueryParameter('INTCMP'),
+}, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
@@ -72,7 +72,7 @@ const content = (
         <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
           <PaymentAmount
             amount={state.monthlyContrib.amount}
-            currency={state.monthlyContrib.currency || Currency.GBP}
+            currency={state.monthlyContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
