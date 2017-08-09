@@ -4,6 +4,11 @@
 
 import { combineReducers } from 'redux';
 
+import type { User as UserState } from 'helpers/user/userReducer';
+import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
@@ -11,7 +16,6 @@ import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { GBP } from 'helpers/internationalisation/currency';
 
 import type { Action } from '../actions/monthlyContributionsActions';
 
@@ -20,12 +24,20 @@ import type { Action } from '../actions/monthlyContributionsActions';
 
 export type State = {
   amount: number,
-  currency: Currency,
-  country: IsoCountry,
+  currency: ?Currency,
+  country: ?IsoCountry,
   error: ?string,
   payPalButtonExists: boolean,
 };
 
+export type CombinedState = {
+  monthlyContrib: State,
+  intCmp: string,
+  user: UserState,
+  stripeCheckout: StripeCheckoutState,
+  payPalExpressCheckout: PayPalExpressCheckoutState,
+  csrf: CsrfState,
+};
 
 // ----- Setup ----- //
 

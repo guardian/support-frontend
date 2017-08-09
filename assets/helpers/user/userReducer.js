@@ -7,7 +7,7 @@ import type { Action } from './userActions';
 
 // ----- Types ----- //
 
-type User = {
+export type User = {
   email: ?string,
   displayName: ?string,
   firstName: ?string,

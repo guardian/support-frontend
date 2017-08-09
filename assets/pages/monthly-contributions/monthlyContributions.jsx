@@ -28,6 +28,7 @@ import postCheckout from './helpers/ajax';
 import NameForm from './components/nameForm';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
+import type { CombinedState } from './reducers/reducers';
 
 import { setCountry, setContribAmount, setPayPalButton } from './actions/monthlyContributionsActions';
 
@@ -54,6 +55,8 @@ store.dispatch(setContribAmount(contributionAmount, currency));
 user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalButtonExists));
 
+const state: CombinedState = store.getState();
+
 // ----- Render ----- //
 
 const content = (
@@ -68,8 +71,8 @@ const content = (
         </InfoSection>
         <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
           <PaymentAmount
-            amount={store.getState().monthlyContrib.amount}
-            currency={store.getState().monthlyContrib.currency}
+            amount={state.monthlyContrib.amount}
+            currency={state.monthlyContrib.currency || Currency.GBP}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
@@ -80,7 +83,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken')}
             payPalCallback={postCheckout('baid')}
-            payPalButtonExists={store.getState().monthlyContrib.payPalButtonExists}
+            payPalButtonExists={state.monthlyContrib.payPalButtonExists}
           />
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">

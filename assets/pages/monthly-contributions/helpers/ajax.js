@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { addQueryParamToURL } from 'helpers/url';
+import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
 
@@ -33,26 +34,26 @@ type PaymentField = 'baid' | 'stripeToken';
 
 // ----- Functions ----- //
 
-function requestData(paymentFieldName: PaymentField, token: string, getState: Function) {
+function requestData(paymentFieldName: PaymentField, token: string, getState: () => CombinedState) {
 
   const state = getState();
 
   const monthlyContribFields: MonthlyContribFields = {
     contribution: {
-      amount: state.stripeCheckout.amount,
-      currency: state.stripeCheckout.currency,
+      amount: state.stripeCheckout.amount || 0,
+      currency: state.stripeCheckout.currency || '',
     },
     paymentFields: {
-      [paymentFieldName]: token,
+      [paymentFieldName]: token || '',
     },
-    country: state.monthlyContrib.country,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
+    country: state.monthlyContrib.country || '',
+    firstName: state.user.firstName || '',
+    lastName: state.user.lastName || '',
   };
 
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
     credentials: 'same-origin',
     body: JSON.stringify(monthlyContribFields),
   };
@@ -60,7 +61,7 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: Fu
 }
 
 export default function postCheckout(paymentFieldName: PaymentField): Function {
-  return (token: string, dispatch: Function, getState: Function) => {
+  return (token: string, dispatch: Function, getState: () => CombinedState) => {
 
     const request = requestData(paymentFieldName, token, getState);
 

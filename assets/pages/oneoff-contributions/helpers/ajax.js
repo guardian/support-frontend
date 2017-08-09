@@ -5,7 +5,7 @@
 import { addQueryParamToURL } from 'helpers/url';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
-
+import type { CombinedState } from '../reducers/reducers';
 
 // ----- Setup ----- //
 
@@ -36,18 +36,18 @@ type OneoffContribFields = {
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: Function) {
+function requestData(paymentToken: string, getState: () => CombinedState) {
 
   const state = getState();
 
   const oneoffContribFields: OneoffContribFields = {
-    name: state.user.fullName,
-    currency: state.stripeCheckout.currency,
-    amount: state.stripeCheckout.amount,
-    email: state.user.email,
-    token: paymentToken,
+    name: state.user.fullName || '',
+    currency: state.stripeCheckout.currency || '',
+    amount: state.stripeCheckout.amount || 0,
+    email: state.user.email || '',
+    token: paymentToken || '',
     marketing: false, // todo: collect marketing preference
-    postcode: state.user.postcode,
+    postcode: state.user.postcode || '',
     ophanPageviewId: 'dummy', // todo: correct ophan pageview id
   };
 
@@ -63,7 +63,7 @@ function requestData(paymentToken: string, getState: Function) {
 export default function postCheckout(
   paymentToken: string,
   dispatch: Function,
-  getState: Function,
+  getState: () => CombinedState,
 ) {
 
   const request = requestData(paymentToken, getState);

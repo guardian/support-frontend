@@ -7,7 +7,7 @@ import type { Action } from './csrfActions';
 
 // ----- Types ----- //
 
-type Csrf = {
+export type Csrf = {
     token: ?string,
 };
 

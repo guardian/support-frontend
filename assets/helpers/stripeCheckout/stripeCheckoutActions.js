@@ -4,6 +4,7 @@
 
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as stripeCheckout from './stripeCheckout';
+import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -16,6 +17,9 @@ export type Action =
   | { type: 'SET_STRIPE_AMOUNT', amount: number, currency: Currency }
   ;
 
+type CombinedState = {
+  stripeCheckout: StripeCheckoutState,
+};
 
 // ----- Actions ----- //
 
@@ -46,7 +50,7 @@ export function setStripeAmount(amount: number, currency: Currency): Action {
 
 export function setupStripeCheckout(callback: Function): Function {
 
-  return (dispatch, getState) => {
+  return (dispatch, getState: () => CombinedState) => {
 
     const handleToken = (token) => {
       dispatch(setStripeCheckoutToken(token.id));

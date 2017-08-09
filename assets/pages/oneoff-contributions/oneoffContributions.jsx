@@ -26,6 +26,7 @@ import { getQueryParameter } from 'helpers/url';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
+import type { CombinedState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
 import { setContribAmount, setCountry } from './actions/oneoffContributionsActions';
@@ -51,6 +52,8 @@ const currency = Currency.forCountry(country);
 store.dispatch(setCountry(country));
 store.dispatch(setContribAmount(contributionAmount, currency));
 
+const state: CombinedState = store.getState();
+
 // ----- Render ----- //
 
 const content = (
@@ -65,8 +68,8 @@ const content = (
         </InfoSection>
         <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
           <PaymentAmount
-            amount={store.getState().oneoffContrib.amount}
-            currency={store.getState().oneoffContrib.currency}
+            amount={state.oneoffContrib.amount}
+            currency={state.oneoffContrib.currency || Currency.GBP}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
