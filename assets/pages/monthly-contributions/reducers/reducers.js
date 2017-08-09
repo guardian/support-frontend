@@ -10,6 +10,7 @@ import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCh
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/monthlyContributionsActions';
 
 
@@ -19,7 +20,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
-  payPalButtonExists: boolean,
+  payPalType: PayPalButtonType,
 };
 
 
@@ -29,7 +30,7 @@ const initialState: State = {
   amount: 5,
   country: 'GB',
   error: null,
-  payPalButtonExists: false,
+  payPalType: 'NotSet',
 };
 
 
@@ -48,7 +49,7 @@ function monthlyContrib(
       return Object.assign({}, state, { error: action.message });
 
     case 'SET_PAYPAL_BUTTON' :
-      return Object.assign({}, state, { payPalButtonExists: action.value });
+      return Object.assign({}, state, { payPalType: action.value });
 
     default:
       return state;

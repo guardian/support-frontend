@@ -26,7 +26,7 @@ import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
-import { setContribAmount } from './actions/oneoffContributionsActions';
+import { setContribAmount, setPayPalButton } from './actions/oneoffContributionsActions';
 
 
 // ----- Page Startup ----- //
@@ -49,6 +49,7 @@ if (contributionAmount !== undefined && contributionAmount !== null) {
   store.dispatch(setContribAmount(contributionAmount));
 }
 
+store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 // ----- Render ----- //
 
@@ -72,7 +73,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalButtonExists={false}
+            payPalType={store.getState().oneoffContrib.payPalType}
           />
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">

@@ -6,9 +6,12 @@ import { combineReducers } from 'redux';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
 
 
@@ -18,6 +21,7 @@ export type State = {
   amount: number,
   country: string,
   error: ?string,
+  payPalType: PayPalButtonType,
 };
 
 
@@ -27,6 +31,7 @@ const initialState: State = {
   amount: 50,
   country: 'GB',
   error: null,
+  payPalType: 'NotSet',
 };
 
 
@@ -44,6 +49,9 @@ function oneoffContrib(
     case 'CHECKOUT_ERROR':
       return Object.assign({}, state, { error: action.message });
 
+    case 'SET_PAYPAL_BUTTON' :
+      return Object.assign({}, state, { payPalType: action.value });
+
     default:
       return state;
 
@@ -59,5 +67,7 @@ export default combineReducers({
   intCmp,
   user,
   stripeCheckout,
+  payPalExpressCheckout,
+  payPalContributionsCheckout,
   csrf,
 });
