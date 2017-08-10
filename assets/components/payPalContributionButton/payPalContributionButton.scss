@@ -1,0 +1,50 @@
+.component-paypal-contribution-button {
+  background-color: transparent;
+  border: solid 1px gu-colour(neutral-1);
+  border-radius: 600px;
+  color: gu-colour(neutral-1);
+  cursor: pointer;
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  height: $gu-v-spacing * 4;
+  padding-left: $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  margin-top: 20px;
+
+  span {
+    padding-left: $gu-h-spacing * 2;
+  }
+
+  @include mq($from: mobileMedium) {
+    width: 304px;
+  }
+
+  .svg-arrow-right-straight {
+    width: 24px;
+    fill: gu-colour(neutral-1);
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .svg-paypal-p-logo {
+    width: 24px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    border-color: #000;
+    color: #000;
+    
+    .svg-arrow-right-straight {
+      fill: #000;
+    }
+  }
+}
