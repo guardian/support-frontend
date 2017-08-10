@@ -11,7 +11,8 @@
   uatMode: Boolean,
   payPalButton: Boolean,
   stripeConfig: StripeConfig,
-  payPalConfig: PayPalConfig
+  payPalConfig: PayPalConfig,
+  country: String
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader)
 
 @scripts = {
@@ -36,6 +37,6 @@
     <script type="text/javascript" src="@assets(js)"></script>
 }
 
-@main(title = title, scripts = scripts) {
+@main(title = title, scripts = scripts, country = country) {
     <main id="@id" class="gu-content-wrapper"></main>
 }

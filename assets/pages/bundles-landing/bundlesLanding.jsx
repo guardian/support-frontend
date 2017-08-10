@@ -17,7 +17,7 @@ import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
-
+import detect from 'helpers/internationalisation/country';
 
 // ----- Page Startup ----- //
 
@@ -27,7 +27,8 @@ const participation = pageStartup.start();
 // ----- Redux Store ----- //
 
 const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+    intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+    isoCountry: detect(),
 });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
