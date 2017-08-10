@@ -10,7 +10,7 @@ import Svg from 'components/svg/svg';
 export default function InlinePaymentLogos() {
 
   return (
-    <div className={'inline-payment-logos'}>
+    <div className={'component-inline-payment-logos'}>
       <Svg svgName="visa-logo" />
       <Svg svgName="mastercard-logo" />
       <Svg svgName="paypal-logo" />
