@@ -4,7 +4,6 @@ import thunk from 'redux-thunk';
 
 import {
   startPayPalExpressCheckout,
-  setPayPalExpressAmount,
   payPalExpressCheckoutLoaded,
   payPalExpressError,
   setupPayPalExpressCheckout,
@@ -18,15 +17,6 @@ describe('PayPal Express Checkout\'s actions', () => {
       type: 'START_PAYPAL_EXPRESS_CHECKOUT',
     };
     expect(startPayPalExpressCheckout()).toEqual(expectedAction);
-  });
-
-  it('should create SET_PAYPAL_EXPRESS_AMOUNT action', () => {
-    const amount: number = 6;
-    const expectedAction = {
-      type: 'SET_PAYPAL_EXPRESS_AMOUNT',
-      amount,
-    };
-    expect(setPayPalExpressAmount(amount)).toEqual(expectedAction);
   });
 
   it('should create PAYPAL_EXPRESS_CHECKOUT_LOADED action', () => {

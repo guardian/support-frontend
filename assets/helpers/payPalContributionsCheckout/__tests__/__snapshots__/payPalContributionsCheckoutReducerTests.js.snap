@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PayPal Contribution Reducer Tests should handle PAYPAL_PAY_CONTRIBUTIONS_CLICKED 1`] = `null`;
+
+exports[`PayPal Contribution Reducer Tests should handle PAYPAL_PAY_CONTRIBUTIONS_CLICKED 2`] = `"GBP"`;
+
+exports[`PayPal Contribution Reducer Tests should handle SET_PAYPAL_CONTRIBUTIONS_AMOUNT 1`] = `"GBP"`;
+
+exports[`PayPal Contribution Reducer Tests should handle SET_PAYPAL_CONTRIBUTIONS_AMOUNT 2`] = `false`;
+
+exports[`PayPal Contribution Reducer Tests should return the initial state 1`] = `
+Object {
+  "amount": null,
+  "currency": "GBP",
+  "payPalPayClicked": false,
+}
+`;

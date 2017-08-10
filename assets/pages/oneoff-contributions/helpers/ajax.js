@@ -5,7 +5,7 @@
 import { addQueryParamToURL } from 'helpers/url';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
-
+import type { CombinedState } from '../reducers/reducers';
 
 // ----- Setup ----- //
 
@@ -36,33 +36,41 @@ type OneoffContribFields = {
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: Function) {
+function requestData(paymentToken: string, getState: () => CombinedState) {
 
   const state = getState();
 
-  const oneoffContribFields: OneoffContribFields = {
-    name: state.user.fullName,
-    currency: state.stripeCheckout.currency,
-    amount: state.stripeCheckout.amount,
-    email: state.user.email,
-    token: paymentToken,
-    marketing: false, // todo: collect marketing preference
-    postcode: state.user.postcode,
-    ophanPageviewId: 'dummy', // todo: correct ophan pageview id
-  };
+  if (state.user.fullName !== null && state.user.fullName !== undefined
+    && state.user.email !== null && state.user.email !== undefined) {
+    const oneoffContribFields: OneoffContribFields = {
+      name: state.user.fullName,
+      currency: state.stripeCheckout.currency,
+      amount: state.stripeCheckout.amount,
+      email: state.user.email,
+      token: paymentToken,
+      marketing: false, // todo: collect marketing preference
+      postcode: state.user.postcode,
+      ophanPageviewId: 'dummy', // todo: correct ophan pageview id
+    };
 
-  return {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(oneoffContribFields),
-  };
+    return {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(oneoffContribFields),
+      credentials: 'include',
+    };
+  }
 
+  return Promise.resolve({
+    ok: false,
+    text: () => 'Failed to process payment - missing fields',
+  });
 }
 
 export default function postCheckout(
   paymentToken: string,
   dispatch: Function,
-  getState: Function,
+  getState: () => CombinedState,
 ) {
 
   const request = requestData(paymentToken, getState);
@@ -76,8 +84,9 @@ export default function postCheckout(
       return;
     }
 
-    response.text().then(err => dispatch(checkoutError(err)));
-
+    dispatch(checkoutError('Error'));
+  }).catch(() => {
+    dispatch(checkoutError('Error'));
   });
 
 }

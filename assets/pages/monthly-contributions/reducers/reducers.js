@@ -4,12 +4,20 @@
 
 import { combineReducers } from 'redux';
 
+import type { User as UserState } from 'helpers/user/userReducer';
+import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/monthlyContributionsActions';
 
 
@@ -17,54 +25,59 @@ import type { Action } from '../actions/monthlyContributionsActions';
 
 export type State = {
   amount: number,
-  country: string,
+  currency: Currency,
+  country: IsoCountry,
   error: ?string,
-  payPalButtonExists: boolean,
+  payPalType: PayPalButtonType,
 };
 
-
-// ----- Setup ----- //
-
-const initialState: State = {
-  amount: 5,
-  country: 'GB',
-  error: null,
-  payPalButtonExists: false,
+export type CombinedState = {
+  monthlyContrib: State,
+  intCmp: string,
+  user: UserState,
+  stripeCheckout: StripeCheckoutState,
+  payPalExpressCheckout: PayPalExpressCheckoutState,
+  csrf: CsrfState,
 };
-
 
 // ----- Reducers ----- //
 
-function monthlyContrib(
-  state: State = initialState,
-  action: Action): State {
+function monthlyContrib(amount: number, currency: Currency, country: IsoCountry) {
 
-  switch (action.type) {
+  const initialState: State = {
+    amount,
+    currency,
+    country,
+    error: null,
+    payPalButtonExists: false,
+    payPalType: 'NotSet',
+  };
 
-    case 'SET_CONTRIB_VALUE':
-      return Object.assign({}, state, { amount: action.value });
+  return (state: State = initialState, action: Action): State => {
+    switch (action.type) {
 
-    case 'CHECKOUT_ERROR':
-      return Object.assign({}, state, { error: action.message });
+      case 'CHECKOUT_ERROR':
+        return Object.assign({}, state, { error: action.message });
 
-    case 'SET_PAYPAL_BUTTON' :
-      return Object.assign({}, state, { payPalButtonExists: action.value });
+      case 'SET_PAYPAL_BUTTON' :
+        return Object.assign({}, state, { payPalType: action.value });
 
-    default:
-      return state;
+      default:
+        return state;
 
-  }
-
+    }
+  };
 }
 
 
 // ----- Exports ----- //
 
-export default combineReducers({
-  monthlyContrib,
-  intCmp,
-  user,
-  stripeCheckout,
-  payPalExpressCheckout,
-  csrf,
-});
+export default (amount: number, currency: Currency, country: IsoCountry) =>
+  combineReducers({
+    monthlyContrib: monthlyContrib(amount, currency, country),
+    intCmp,
+    user,
+    stripeCheckout: stripeCheckout(amount, currency.iso),
+    payPalExpressCheckout: payPalExpressCheckout(amount, currency.iso),
+    csrf,
+  });

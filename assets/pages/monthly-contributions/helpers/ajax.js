@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { addQueryParamToURL } from 'helpers/url';
+import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
 
@@ -33,34 +34,42 @@ type PaymentField = 'baid' | 'stripeToken';
 
 // ----- Functions ----- //
 
-function requestData(paymentFieldName: PaymentField, token: string, getState: Function) {
+function requestData(paymentFieldName: PaymentField, token: string, getState: () => CombinedState) {
 
   const state = getState();
 
-  const monthlyContribFields: MonthlyContribFields = {
-    contribution: {
-      amount: state.stripeCheckout.amount,
-      currency: state.stripeCheckout.currency,
-    },
-    paymentFields: {
-      [paymentFieldName]: token,
-    },
-    country: state.monthlyContrib.country,
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-  };
+  if (state.user.firstName !== null && state.user.firstName !== undefined
+    && state.user.lastName !== null && state.user.lastName !== undefined
+    && state.user.email !== null && state.user.email !== undefined) {
+    const monthlyContribFields: MonthlyContribFields = {
+      contribution: {
+        amount: state.stripeCheckout.amount,
+        currency: state.stripeCheckout.currency,
+      },
+      paymentFields: {
+        [paymentFieldName]: token,
+      },
+      country: state.monthlyContrib.country,
+      firstName: state.user.firstName,
+      lastName: state.user.lastName,
+    };
 
-  return {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
-    credentials: 'same-origin',
-    body: JSON.stringify(monthlyContribFields),
-  };
+    return {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
+      credentials: 'same-origin',
+      body: JSON.stringify(monthlyContribFields),
+    };
+  }
 
+  return Promise.resolve({
+    ok: false,
+    text: () => 'Failed to process payment - missing fields',
+  });
 }
 
 export default function postCheckout(paymentFieldName: PaymentField): Function {
-  return (token: string, dispatch: Function, getState: Function) => {
+  return (token: string, dispatch: Function, getState: () => CombinedState) => {
 
     const request = requestData(paymentFieldName, token, getState);
 

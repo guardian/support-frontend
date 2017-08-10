@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -18,16 +18,18 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
+import * as Currency from 'helpers/internationalisation/currency';
+import * as Country from 'helpers/internationalisation/country';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
+import type { CombinedState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
-import { setContribAmount } from './actions/oneoffContributionsActions';
-
+import { setPayPalButton } from './actions/oneoffContributionsActions';
 
 // ----- Page Startup ----- //
 
@@ -36,19 +38,23 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const store = createStore(reducer, {
+const contributionAmount = Number(getQueryParameter('contributionValue')) || 5;
+const country = Country.detect();
+const currency = Currency.forCountry(country);
+
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+
+const store = createStore(reducer(contributionAmount, currency, country), {
   intCmp: getQueryParameter('INTCMP'),
-}, applyMiddleware(thunkMiddleware));
+}, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
 
-// Retrieves the contrib amount from the url and sends it to the redux store.
-const contributionAmount = getQueryParameter('contributionValue', '50');
+store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-if (contributionAmount !== undefined && contributionAmount !== null) {
-  store.dispatch(setContribAmount(contributionAmount));
-}
-
+const state: CombinedState = store.getState();
 
 // ----- Render ----- //
 
@@ -63,7 +69,10 @@ const content = (
           <Secure />
         </InfoSection>
         <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
-          <PaymentAmount amount={store.getState().oneoffContrib.amount} />
+          <PaymentAmount
+            amount={state.oneoffContrib.amount}
+            currency={state.oneoffContrib.currency}
+          />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
           <FormFields />
@@ -72,7 +81,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalButtonExists={false}
+            payPalType={store.getState().oneoffContrib.payPalType}
           />
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">

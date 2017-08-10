@@ -3,12 +3,19 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
+import type { User as UserState } from 'helpers/user/userReducer';
+import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
 
 
@@ -16,48 +23,61 @@ import type { Action } from '../actions/oneoffContributionsActions';
 
 export type State = {
   amount: number,
-  country: string,
+  currency: Currency,
+  country: IsoCountry,
   error: ?string,
+  payPalType: PayPalButtonType,
 };
 
-
-// ----- Setup ----- //
-
-const initialState: State = {
-  amount: 50,
-  country: 'GB',
-  error: null,
+export type CombinedState = {
+  oneoffContrib: State,
+  intCmp: string,
+  user: UserState,
+  stripeCheckout: StripeCheckoutState,
+  csrf: CsrfState,
 };
-
 
 // ----- Reducers ----- //
 
-function oneoffContrib(
-  state: State = initialState,
-  action: Action): State {
+function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) {
 
-  switch (action.type) {
+  const initialState: State = {
+    amount,
+    currency,
+    country,
+    error: null,
+    payPalType: 'NotSet',
+  };
 
-    case 'SET_CONTRIB_VALUE':
-      return Object.assign({}, state, { amount: action.value });
+  return (state: State = initialState, action: Action): State => {
 
-    case 'CHECKOUT_ERROR':
-      return Object.assign({}, state, { error: action.message });
+    switch (action.type) {
 
-    default:
-      return state;
+      case 'SET_CONTRIB_VALUE':
+        return Object.assign({}, state, { amount: action.value });
 
-  }
+      case 'CHECKOUT_ERROR':
+        return Object.assign({}, state, { error: action.message });
 
+      case 'SET_PAYPAL_BUTTON' :
+        return Object.assign({}, state, { payPalType: action.value });
+
+      default:
+        return state;
+
+    }
+  };
 }
 
 
 // ----- Exports ----- //
 
-export default combineReducers({
-  oneoffContrib,
-  intCmp,
-  user,
-  stripeCheckout,
-  csrf,
-});
+export default (amount: number, currency: Currency, country: IsoCountry) =>
+  combineReducers({
+    oneoffContrib: oneoffContrib(amount, currency, country),
+    intCmp,
+    user,
+    stripeCheckout: stripeCheckout(amount, currency.iso),
+    payPalContributionsCheckout,
+    csrf,
+  });

@@ -18,8 +18,8 @@ POST /monthly-contributions/create                  controllers.MonthlyContribut
 GET /oneoff-contributions/thankyou                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 GET /uk/contribute              controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
 
-GET /oneoff-contributions                         controllers.OneOffContributions.displayForm
-GET /oneoff-contributions/test-user               controllers.OneOffContributions.displayFormTestUser
+GET /oneoff-contributions                         controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
+GET /oneoff-contributions/test-user               controllers.OneOffContributions.displayFormTestUser(paypal: Option[Boolean])
 GET /oneoff-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 GET /oneoff-contributions/autofill                controllers.OneOffContributions.autofill
 
