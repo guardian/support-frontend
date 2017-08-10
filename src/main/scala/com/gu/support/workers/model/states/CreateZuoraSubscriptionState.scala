@@ -8,7 +8,7 @@ import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, SalesforceC
 case class CreateZuoraSubscriptionState(
   requestId: UUID,
   user: User,
-  product: Product,
+  product: ProductType,
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
   acquisitionData: Option[AcquisitionData]

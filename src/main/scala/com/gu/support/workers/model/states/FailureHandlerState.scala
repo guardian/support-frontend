@@ -7,6 +7,6 @@ import com.gu.support.workers.model._
 case class FailureHandlerState(
   requestId: UUID,
   user: User,
-  product: Product
+  product: ProductType
 ) extends StepFunctionUserState
 
