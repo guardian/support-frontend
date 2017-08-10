@@ -31,12 +31,12 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm: Action[AnyContent] = CachedAction() {
-    form(uatMode = false)
+  def displayForm(country: String): Action[AnyContent] = CachedAction() {
+    form(uatMode = false, country)
   }
 
-  def displayFormTestUser: Action[AnyContent] = authAction {
-    form(uatMode = true).withHeaders(CacheControl.noCache)
+  def displayFormTestUser(country: String): Action[AnyContent] = authAction {
+    form(uatMode = true, country).withHeaders(CacheControl.noCache)
   }
 
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
@@ -46,14 +46,15 @@ class OneOffContributions(
     )
   }
 
-  private def form(uatMode: Boolean): Result = Ok(
+  private def form(uatMode: Boolean, country: String = "uk"): Result = Ok(
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       uatMode = uatMode,
       stripeConfig = stripeConfigProvider.get(uatMode),
-      contributionsEnpoint = contributionsEndpoint
+      contributionsEnpoint = contributionsEndpoint,
+      country = country
     )
   )
 
