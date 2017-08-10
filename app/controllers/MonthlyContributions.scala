@@ -33,7 +33,7 @@ class MonthlyContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean] = Some(false)): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) => Redirect("/monthly-contributions/existing-contributor")
@@ -46,7 +46,7 @@ class MonthlyContributions(
               js = "monthlyContributionsPage.js",
               user = fullUser,
               uatMode = uatMode,
-              payPalButton = paypal.getOrElse(false),
+              payPalButton = paypal.getOrElse(true),
               stripeConfig = stripeConfigProvider.get(uatMode),
               payPalConfig = payPalConfigProvider.get(uatMode)
             )
