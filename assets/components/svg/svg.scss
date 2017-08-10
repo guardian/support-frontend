@@ -62,21 +62,34 @@
 
 .svg-visa-logo {
   .visa-logo-0 {
-    fill: #193065;
+    fill: #faa336;
+  }
+
+  .visa-logo-1 {
+    fill: #213265;
+  }
+
+  .visa-logo-3 {
+    fill: #213265;
+    fill-rule:evenodd;
   }
 }
 
 .svg-mastercard-logo {
 
   .mastercard-logo-0 {
-    fill: #333333;
+    fill: #f69e1e;
   }
 
   .mastercard-logo-1 {
-    fill: #EB001B;
+    fill: #ea1d25;
   }
 
   .mastercard-logo-2 {
-    fill: #F79E1B;
+    fill: #f26122;
+  }
+
+  .mastercard-logo-3 {
+    fill: #333;
   }
 }
