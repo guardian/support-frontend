@@ -32,12 +32,12 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() {
-    form(uatMode = false, paypal)
+  def displayForm(paypal: Option[Boolean], country: String): Action[AnyContent] = CachedAction() {
+    form(uatMode = false, paypal, country)
   }
 
-  def displayFormTestUser(paypal: Option[Boolean]): Action[AnyContent] = authAction {
-    form(uatMode = true, paypal).withHeaders(CacheControl.noCache)
+  def displayFormTestUser(paypal: Option[Boolean], country: String): Action[AnyContent] = authAction {
+    form(uatMode = true, paypal, country).withHeaders(CacheControl.noCache)
   }
 
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
@@ -47,7 +47,7 @@ class OneOffContributions(
     )
   }
 
-  private def form(uatMode: Boolean, paypal: Option[Boolean]): Result = Ok(
+  private def form(uatMode: Boolean, paypal: Option[Boolean], country: String = "uk"): Result = Ok(
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
@@ -56,7 +56,8 @@ class OneOffContributions(
       payPalButton = paypal.getOrElse(false),
       stripeConfig = stripeConfigProvider.get(uatMode),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = contributionsPayPalEndpoint
+      contributionsPayPalEndpoint = contributionsPayPalEndpoint,
+      country = country
     )
   )
 
