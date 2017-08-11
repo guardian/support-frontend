@@ -1,16 +1,41 @@
 .component-payment-amount {
-	border-radius: 1000px;
-	font-size: 24px;
-	color: #fff;
-	width: 60px;
-	height: 60px;
-	text-align: center;
-	background-color: gu-colour(neutral-1);
-	line-height: 60px;
+  border-radius: 1000px;
+  font-size: 24px;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background-color: gu-colour(neutral-1);
+  line-height: 60px;
+}
+
+.component-payment-amount--wide {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.component-payment-amount--wide-value-3 {
+  padding-right: 1.3em;
+  width: 50px;
+}
+
+.component-payment-amount--wide-value-4 {
+  padding-right: 1.3em;
+  width: 60px;
+}
+
+.component-payment-amount--wide-value-5 {
+  width: 70px;
+}
+
+.component-payment-amount--wide-value-6 {
+  width: 80px;
+}
+
+.component-payment-amount--wide-value-7 {
+  width: 90px;
 }
 
 .component-payment-amount--wide-value {
-	padding-left: 1em;
-	padding-right: 1em;
-	width: unset;
+  width: unset;
 }

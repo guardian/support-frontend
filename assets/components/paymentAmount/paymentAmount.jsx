@@ -7,6 +7,8 @@ import React from 'react';
 
 // ----- Setup ----- //
 
+const baseClass = 'component-payment-amount';
+const wideModifier = 'component-payment-amount--wide';
 const wideClass = 'component-payment-amount--wide-value';
 
 
@@ -21,9 +23,19 @@ type PropTypes = {
 
 export default function PaymentAmount(props: PropTypes) {
 
-  const wideValue = props.amount.toString().length > 2;
-  const className = `component-payment-amount ${wideValue ? wideClass : ''}`;
-  const printedAmount = wideValue ? props.amount.toFixed(2) : props.amount;
+  const addDecimal = props.amount % 1 > 0;
+  const printedAmount = addDecimal ? props.amount.toFixed(2) : props.amount;
+  const printedLength = printedAmount.toString().length;
+
+  let className = '';
+
+  if (printedLength <= 2) {
+    className = baseClass;
+  } else if (printedLength > 2 && printedLength < 8) {
+    className = `${baseClass} ${wideModifier} ${wideClass}-${printedLength}`;
+  } else {
+    className = `${baseClass} ${wideModifier} ${wideClass}`;
+  }
 
   return (
     <div className={className}>£{printedAmount}</div>

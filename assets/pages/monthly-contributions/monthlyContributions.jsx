@@ -44,7 +44,7 @@ const store = createStore(reducer, {
 
 // Retrieves the contrib amount from the url and sends it to the redux store.
 const contributionAmount = getQueryParameter('contributionValue', '5');
-
+console.log(contributionAmount);
 if (contributionAmount !== undefined && contributionAmount !== null) {
   store.dispatch(setContribAmount(contributionAmount));
 }
