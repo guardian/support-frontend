@@ -14,7 +14,7 @@ import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type IsoCountry from 'helpers/internationalisation/country';
 
 import {
-  setCountryFromDetect,
+  changeCountry,
   changeContribType,
   changeContribAmount,
   changeContribAmountRecurring,
@@ -103,7 +103,7 @@ const digitalCtaLink = {
 const contribCopy: ContribAttrs = (isoCountry) => {
     return {
       heading: 'contribute',
-      subheading: contribSubHeading[isoCountry],
+      subheading: contribSubheading(isoCountry),
       ctaText: 'Contribute',
       modifierClass: 'contributions',
       ctaLink: '',
@@ -242,7 +242,7 @@ function DigitalBundle(props: DigitalAttrs) {
 
   return (
     <Bundle {...props}>
-      <FeatureList listItems={bundles.digital.listItems} />
+      <FeatureList listItems={props.listItems} />
       <CtaLink text={props.ctaText} url={props.ctaLink} />
     </Bundle>
   );
@@ -303,8 +303,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    setCountryFromDetect: () => {
-      dispatch(setCountryFromDetect());
+    setCountryFromDetect: (isoCountry: IsoCountry) => {
+      dispatch(changeCountry(isoCountry));
     },
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));

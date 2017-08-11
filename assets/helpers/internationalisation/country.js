@@ -17,9 +17,9 @@ function fromString(s: string): ?IsoCountry {
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
-  if (path.startsWith('/uk/')) {
+  if (path.startsWith('/s/uk')) {
     return 'GB';
-  } else if (path.startsWith('/us/')) {
+  } else if (path.startsWith('/s/us')) {
     return 'US';
   }
   return null;

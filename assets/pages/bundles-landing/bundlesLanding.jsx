@@ -17,7 +17,7 @@ import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
-import detect from 'helpers/internationalisation/country';
+import { detect } from 'helpers/internationalisation/country';
 
 // ----- Page Startup ----- //
 

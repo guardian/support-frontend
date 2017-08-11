@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 

@@ -13,7 +13,7 @@ import {
 import { CONFIG as contribConfig } from 'helpers/contributions';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -51,58 +51,116 @@ type ContribAttrs = {
 
 const amountToggles: {
   [Contrib]: Toggle,
-} = {
-  RECURRING: {
-    name: 'contributions-amount-recurring-toggle',
-    radios: [
-      {
-        value: '5',
-        text: '£5',
+} = (isoCountry: IsoCountry) => {
+  return {
+      RECURRING: {
+          name: 'contributions-amount-recurring-toggle',
+          radios: amountRadiosRecurring[isoCountry]
       },
-      {
-        value: '10',
-        text: '£10',
+      ONE_OFF: {
+          name: 'contributions-amount-oneoff-toggle',
+          radios: amountRadiosOneOff[isoCountry]
       },
-      {
-        value: '20',
-        text: '£20',
-      },
-    ],
-  },
-  ONE_OFF: {
-    name: 'contributions-amount-oneoff-toggle',
-    radios: [
-      {
-        value: '25',
-        text: '£25',
-      },
-      {
-        value: '50',
-        text: '£50',
-      },
-      {
-        value: '100',
-        text: '£100',
-      },
-      {
-        value: '250',
-        text: '£250',
-      },
-    ],
-  },
+  };
 };
 
-const contribToggle: Toggle = {
-  name: 'contributions-period-toggle',
-  radios: [
-    {
-      value: 'RECURRING',
-      text: 'Monthly',
-    },
-    {
-      value: 'ONE_OFF',
-      text: 'One-off',
-    },
+const amountRadiosRecurring = {
+    GB: [
+        {
+            value: '5',
+            text: '£5',
+        },
+        {
+            value: '10',
+            text: '£10',
+        },
+        {
+            value: '20',
+            text: '£20',
+        },
+    ],
+    US: [
+        {
+            value: '5',
+            text: '$5',
+        },
+        {
+            value: '10',
+            text: '$10',
+        },
+        {
+            value: '20',
+            text: '$20',
+        },
+    ],
+};
+
+const amountRadiosOneOff = {
+    GB: [
+        {
+            value: '25',
+            text: '£25',
+        },
+        {
+            value: '50',
+            text: '£50',
+        },
+        {
+            value: '100',
+            text: '£100',
+        },
+        {
+            value: '250',
+            text: '£250',
+        },
+    ],
+    US: [
+        {
+            value: '25',
+            text: '$25',
+        },
+        {
+            value: '50',
+            text: '$50',
+        },
+        {
+            value: '100',
+            text: '$100',
+        },
+        {
+            value: '250',
+            text: '$250',
+        },
+    ],
+};
+
+const contribToggle: Toggle = (isoCountry: IsoCountry) => {
+  return {
+      name: 'contributions-period-toggle',
+      radios: contribCaptionRadios[isoCountry]
+  };
+};
+
+const contribCaptionRadios = {
+  GB: [
+      {
+          value: 'RECURRING',
+          text: 'Monthly',
+      },
+      {
+          value: 'ONE_OFF',
+          text: 'One-off',
+      },
+  ],
+  US: [
+      {
+          value: 'RECURRING',
+          text: 'Monthly',
+      },
+      {
+          value: 'ONE_OFF',
+          text: 'One-time',
+      },
   ],
 };
 
@@ -119,8 +177,8 @@ function errorMessage(
   const contribErrors: {
     [ContribError]: string,
   } = {
-    tooLittle: `Please enter at least £${limits.min}`,
-    tooMuch: `We are presently only able to accept contributions of £${limits.max} or less`,
+    tooLittle: `Please enter at least £${limits.min}`,  // <-- TODO: $
+    tooMuch: `We are presently only able to accept contributions of £${limits.max} or less`,  // <-- TODO: $
     invalidEntry: 'Please enter a numeric amount',
   };
 
@@ -141,7 +199,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribRecurringAmount,
       checked: !userDefined ? props.contribAmount.recurring.value : null,
-      toggles: amountToggles.RECURRING,
+      toggles: amountToggles(props.isoCountry).RECURRING,
       selected: props.contribAmount.recurring.userDefined,
       contribType: props.contribType,
     };
@@ -153,7 +211,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
-    toggles: amountToggles.ONE_OFF,
+    toggles: amountToggles(props.isoCountry).ONE_OFF,
     selected: props.contribAmount.oneOff.userDefined,
     contribType: props.contribType,
   };
@@ -175,7 +233,7 @@ export default function ContribAmounts(props: PropTypes) {
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle}
+          {...contribToggle(props.isoCountry)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
         />
