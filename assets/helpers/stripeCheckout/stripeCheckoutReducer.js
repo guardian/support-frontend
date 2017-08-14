@@ -4,7 +4,7 @@
 
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './stripeCheckoutActions';
-
+import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -15,6 +15,9 @@ export type State = {
   currency: IsoCurrency,
 };
 
+export type CombinedState = {
+  stripeCheckout: StripeCheckoutState,
+};
 
 // ----- Exports ----- //
 
