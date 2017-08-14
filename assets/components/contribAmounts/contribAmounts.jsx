@@ -14,6 +14,8 @@ import { CONFIG as contribConfig } from 'helpers/contributions';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { forCountry } from 'helpers/internationalisation/currency';
+import type {Currency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -249,7 +251,7 @@ export default function ContribAmounts(props: PropTypes) {
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
             selected={attrs.selected}
-            placeholder="Other amount (£)"
+            placeholder={"Other amount (" + forCountry(props.isoCountry).glyph + ")"}
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
           />
         </div>
