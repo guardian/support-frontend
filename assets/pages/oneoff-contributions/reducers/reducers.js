@@ -8,7 +8,7 @@ import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripe
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
-import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -77,7 +77,7 @@ export default (amount: number, currency: Currency, country: IsoCountry) =>
     oneoffContrib: oneoffContrib(amount, currency, country),
     intCmp,
     user,
-    stripeCheckout: stripeCheckout(amount, currency.iso),
+    stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalContributionsCheckout,
     csrf,
   });

@@ -21,7 +21,7 @@ export type CombinedState = {
 
 // ----- Exports ----- //
 
-export default function stripeCheckoutReducer(amount: number, currency: IsoCurrency) {
+export default function createStripeCheckoutReducer(amount: number, currency: IsoCurrency) {
 
   const initialState: State = {
     loaded: false,
@@ -30,7 +30,7 @@ export default function stripeCheckoutReducer(amount: number, currency: IsoCurre
     currency,
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function stripeCheckoutReducer(state: State = initialState, action: Action): State {
 
     switch (action.type) {
 

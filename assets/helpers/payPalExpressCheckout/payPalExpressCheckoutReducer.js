@@ -23,7 +23,7 @@ export type CombinedState = {
 
 // ----- Exports ----- //
 
-export default function payPalExpressCheckoutReducer(amount: number, currency: IsoCurrency) {
+export default function createPayPalExpressCheckoutReducer(amount: number, currency: IsoCurrency) {
 
   const initialState: State = {
     amount,
@@ -32,7 +32,7 @@ export default function payPalExpressCheckoutReducer(amount: number, currency: I
     loaded: false,
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function payPalExpressCheckoutReducer(state: State = initialState, action: Action): State {
 
     switch (action.type) {
 
