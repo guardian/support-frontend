@@ -39,8 +39,8 @@
 	}
 
 	.contributions-introduction__primary {
-		margin-bottom: 111px;
-		margin-top: $gu-v-spacing;
+		margin-bottom: 36px;
+		margin-top: $gu-v-spacing/2;
 
 		@include mq($from: phablet) {
 			margin-bottom: $gu-v-spacing;
