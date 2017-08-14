@@ -40,11 +40,11 @@ GET  /oneoff-contributions/autofill                 controllers.OneOffContributi
 
 # ----- Authentication ----- #
 
-GET  /test-users                                    controllers.TestUsersManagement.createTestUser
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
+GET  /test-users                                    controllers.TestUsersManagement.createTestUser
 
 
 # ----- PayPal (NVP Endpoints) ----- #
