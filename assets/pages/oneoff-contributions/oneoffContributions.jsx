@@ -22,6 +22,7 @@ import * as Currency from 'helpers/internationalisation/currency';
 import * as Country from 'helpers/internationalisation/country';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
+import { parse as parseContrib } from 'helpers/contributions';
 
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
@@ -38,7 +39,7 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionAmount = Number(getQueryParameter('contributionValue')) || 5;
+const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
 const country = Country.detect();
 const currency = Currency.forCountry(country);
 
