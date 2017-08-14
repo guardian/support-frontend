@@ -11,20 +11,19 @@
 
 .component-payment-amount--wide {
   padding-left: 1em;
-  padding-right: 1em;
+  padding-right: 1.3em;
 }
 
 .component-payment-amount--wide-value-3 {
-  padding-right: 1.3em;
   width: 50px;
 }
 
 .component-payment-amount--wide-value-4 {
-  padding-right: 1.3em;
   width: 60px;
 }
 
 .component-payment-amount--wide-value-5 {
+  padding-right: 1em;
   width: 70px;
 }
 
@@ -37,5 +36,6 @@
 }
 
 .component-payment-amount--wide-value {
+  padding-right: 1em;
   width: unset;
 }
