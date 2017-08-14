@@ -15,7 +15,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
-import type {Currency } from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -172,15 +172,17 @@ const contribCaptionRadios = {
 function errorMessage(
   error: ?ContribError,
   contribType: Contrib,
+  isoCountry: IsoCountry
 ): ?React$Element<any> {
 
   const limits = contribConfig[contribType];
+  const currencyGlyph = forCountry(isoCountry).glyph;
 
   const contribErrors: {
     [ContribError]: string,
   } = {
-    tooLittle: `Please enter at least £${limits.min}`,  // <-- TODO: $
-    tooMuch: `We are presently only able to accept contributions of £${limits.max} or less`,  // <-- TODO: $
+    tooLittle: `Please enter at least ${currencyGlyph}${limits.min}`,
+    tooMuch: `We are presently only able to accept contributions of ${currencyGlyph}${limits.max} or less`,
     invalidEntry: 'Please enter a numeric amount',
   };
 
@@ -255,7 +257,7 @@ export default function ContribAmounts(props: PropTypes) {
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
           />
         </div>
-        {errorMessage(props.contribError, attrs.contribType)}
+        {errorMessage(props.contribError, attrs.contribType, props.isoCountry)}
       </div>
     </div>
   );
