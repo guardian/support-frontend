@@ -19,10 +19,11 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
-import * as Currency from 'helpers/internationalisation/currency';
-import * as Country from 'helpers/internationalisation/country';
+import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
+import { parse as parseContrib } from 'helpers/contributions';
 
 import postCheckout from './helpers/ajax';
 import NameForm from './components/nameForm';
@@ -40,9 +41,9 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionAmount = Number(getQueryParameter('contributionValue')) || 5;
-const country = Country.detect();
-const currency = Currency.forCountry(country);
+const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'RECURRING').amount;
+const country = detectCountry();
+const currency = currencyForCountry(country);
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

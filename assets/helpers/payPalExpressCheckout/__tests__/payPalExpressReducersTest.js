@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import reducer from '../payPalExpressCheckoutReducer';
+import createReducer from '../payPalExpressCheckoutReducer';
 
 
 // ----- Tests ----- //
@@ -10,8 +10,8 @@ import reducer from '../payPalExpressCheckoutReducer';
 describe('PayPal Reducer Tests', () => {
 
   it('should return the initial state', () => {
-
-    expect(reducer(13, 'GBP')(undefined, {})).toMatchSnapshot();
+    const reducer = createReducer(13, 'GBP');
+    expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle PAYPAL_EXPRESS_CHECKOUT_LOADED', () => {
@@ -21,7 +21,8 @@ describe('PayPal Reducer Tests', () => {
       loaded: true,
     };
 
-    const newState = reducer(13, 'GBP')(undefined, action);
+    const reducer = createReducer(13, 'GBP');
+    const newState = reducer(undefined, action);
 
     expect(newState.loaded).toEqual(true);
     expect(newState.billingPeriod).toMatchSnapshot();

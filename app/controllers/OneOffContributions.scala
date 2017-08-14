@@ -53,7 +53,7 @@ class OneOffContributions(
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       uatMode = uatMode,
-      payPalButton = paypal.getOrElse(false),
+      payPalButton = paypal.getOrElse(true),
       stripeConfig = stripeConfigProvider.get(uatMode),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
       contributionsPayPalEndpoint = contributionsPayPalEndpoint,

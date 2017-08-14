@@ -2,9 +2,10 @@
 
 // ----- Imports ----- //
 
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './payPalExpressCheckoutActions';
-
 
 // ----- Types ----- //
 
@@ -15,10 +16,14 @@ export type State = {
   loaded: boolean,
 };
 
+export type CombinedState = {
+  csrf: CsrfState,
+  payPalExpressCheckout: PayPalExpressCheckoutState,
+};
 
 // ----- Exports ----- //
 
-export default function payPalExpressCheckoutReducer(amount: number, currency: IsoCurrency) {
+export default function createPayPalExpressCheckoutReducer(amount: number, currency: IsoCurrency) {
 
   const initialState: State = {
     amount,
@@ -27,7 +32,7 @@ export default function payPalExpressCheckoutReducer(amount: number, currency: I
     loaded: false,
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function payPalExpressCheckoutReducer(state: State = initialState, action: Action): State {
 
     switch (action.type) {
 

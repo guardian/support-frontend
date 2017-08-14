@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import * as stripeCheckout from './stripeCheckout';
-import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
+import type { CombinedState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -14,10 +14,6 @@ export type Action =
   | { type: 'CLOSE_STRIPE_OVERLAY' }
   | { type: 'OPEN_STRIPE_OVERLAY' }
   ;
-
-type CombinedState = {
-  stripeCheckout: StripeCheckoutState,
-};
 
 // ----- Actions ----- //
 

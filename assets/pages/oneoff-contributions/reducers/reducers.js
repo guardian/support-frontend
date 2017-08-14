@@ -8,7 +8,7 @@ import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripe
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
-import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -39,7 +39,7 @@ export type CombinedState = {
 
 // ----- Reducers ----- //
 
-function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) {
+function createOneOffContribReducer(amount: number, currency: Currency, country: IsoCountry) {
 
   const initialState: State = {
     amount,
@@ -49,7 +49,7 @@ function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) 
     payPalType: 'NotSet',
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function oneOffContribReducer(state: State = initialState, action: Action): State {
 
     switch (action.type) {
 
@@ -72,12 +72,17 @@ function oneoffContrib(amount: number, currency: Currency, country: IsoCountry) 
 
 // ----- Exports ----- //
 
-export default (amount: number, currency: Currency, country: IsoCountry) =>
-  combineReducers({
-    oneoffContrib: oneoffContrib(amount, currency, country),
+export default function createRootOneOffContribReducer(
+  amount: number,
+  currency: Currency,
+  country: IsoCountry,
+) {
+  return combineReducers({
+    oneoffContrib: createOneOffContribReducer(amount, currency, country),
     intCmp,
     user,
-    stripeCheckout: stripeCheckout(amount, currency.iso),
+    stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalContributionsCheckout,
     csrf,
   });
+}

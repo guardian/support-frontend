@@ -43,6 +43,7 @@ type ContribAttrs = {
   ctaText: string,
   modifierClass: string,
   ctaLink: string,
+  showPaymentLogos: boolean,
 }
 
 
@@ -55,6 +56,7 @@ const contribAttrs: ContribAttrs = {
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
+  showPaymentLogos: false,
 };
 
 const ctaLinks = {
@@ -97,6 +99,8 @@ const getContribAttrs = ({
 function ContributionsBundle(props: PropTypes) {
 
   const attrs: ContribAttrs = getContribAttrs(props);
+
+  attrs.showPaymentLogos = true;
 
   const onClick = () => {
     if (!props.contribError) {

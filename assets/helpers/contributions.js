@@ -57,12 +57,12 @@ export const CONFIG: Config = {
 
 // ----- Functions ----- //
 
-export function parse(input: string, contrib: Contrib): ParsedContrib {
+export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);
 
-  if (input === '' || isNaN(numericAmount)) {
+  if (input === undefined || input === null || input === '' || isNaN(numericAmount)) {
     error = 'invalidEntry';
   } else if (numericAmount < CONFIG[contrib].min) {
     error = 'tooLittle';

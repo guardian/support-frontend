@@ -10,8 +10,8 @@ import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressC
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
-import stripeCheckout from 'helpers/stripeCheckout/stripeCheckoutReducer';
-import payPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
+import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -42,7 +42,7 @@ export type CombinedState = {
 
 // ----- Reducers ----- //
 
-function monthlyContrib(amount: number, currency: Currency, country: IsoCountry) {
+function createMonthlyContribReducer(amount: number, currency: Currency, country: IsoCountry) {
 
   const initialState: State = {
     amount,
@@ -53,7 +53,7 @@ function monthlyContrib(amount: number, currency: Currency, country: IsoCountry)
     payPalType: 'NotSet',
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function monthlyContrib(state: State = initialState, action: Action): State {
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
@@ -72,12 +72,17 @@ function monthlyContrib(amount: number, currency: Currency, country: IsoCountry)
 
 // ----- Exports ----- //
 
-export default (amount: number, currency: Currency, country: IsoCountry) =>
-  combineReducers({
-    monthlyContrib: monthlyContrib(amount, currency, country),
+export default function createRootMonthlyContributionsReducer(
+  amount: number,
+  currency: Currency,
+  country: IsoCountry,
+) {
+  return combineReducers({
+    monthlyContrib: createMonthlyContribReducer(amount, currency, country),
     intCmp,
     user,
-    stripeCheckout: stripeCheckout(amount, currency.iso),
-    payPalExpressCheckout: payPalExpressCheckout(amount, currency.iso),
+    stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
+    payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),
     csrf,
   });
+}

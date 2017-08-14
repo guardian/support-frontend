@@ -4,7 +4,7 @@
 
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './stripeCheckoutActions';
-
+import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -15,10 +15,13 @@ export type State = {
   currency: IsoCurrency,
 };
 
+export type CombinedState = {
+  stripeCheckout: StripeCheckoutState,
+};
 
 // ----- Exports ----- //
 
-export default function stripeCheckoutReducer(amount: number, currency: IsoCurrency) {
+export default function createStripeCheckoutReducer(amount: number, currency: IsoCurrency) {
 
   const initialState: State = {
     loaded: false,
@@ -27,7 +30,7 @@ export default function stripeCheckoutReducer(amount: number, currency: IsoCurre
     currency,
   };
 
-  return (state: State = initialState, action: Action): State => {
+  return function stripeCheckoutReducer(state: State = initialState, action: Action): State {
 
     switch (action.type) {
 
