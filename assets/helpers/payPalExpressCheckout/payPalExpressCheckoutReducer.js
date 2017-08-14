@@ -2,9 +2,10 @@
 
 // ----- Imports ----- //
 
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './payPalExpressCheckoutActions';
-
 
 // ----- Types ----- //
 
@@ -15,6 +16,10 @@ export type State = {
   loaded: boolean,
 };
 
+export type CombinedState = {
+  csrf: CsrfState,
+  payPalExpressCheckout: PayPalExpressCheckoutState,
+};
 
 // ----- Exports ----- //
 

@@ -3,19 +3,13 @@
 // ----- Imports ----- //
 
 import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import type { CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 
 // ----- Setup ----- //
 
 const SETUP_PAYMENT_URL = '/paypal/setup-payment';
 const CREATE_AGREEMENT_URL = '/paypal/create-agreement';
 
-
-type CombinedState = {
-  csrf: CsrfState,
-  payPalExpressCheckout: PayPalExpressCheckoutState,
-};
 
 // ----- Functions ----- //
 
