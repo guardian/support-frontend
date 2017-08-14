@@ -17,7 +17,6 @@ GET  /monthly-contributions/thankyou                controllers.Application.reac
 GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
 POST /monthly-contributions/create                  controllers.MonthlyContributions.create
 
-GET  /oneoff-contributions/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
 GET  /uk/contribute                                 controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
 
 GET  /oneoff-contributions                          controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
