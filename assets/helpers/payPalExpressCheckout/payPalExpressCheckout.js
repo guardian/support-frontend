@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
+import type { CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 
 // ----- Setup ----- //
 
@@ -54,7 +55,7 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
-function setupPayment(dispatch: Function, state: Object) {
+function setupPayment(dispatch: Function, state: CombinedState) {
 
   const payPalState = state.payPalExpressCheckout;
   const csrfToken = state.csrf.token;
@@ -67,7 +68,7 @@ function setupPayment(dispatch: Function, state: Object) {
       currency: payPalState.currency,
     };
 
-    fetch(SETUP_PAYMENT_URL, payPalRequestData(requestBody, csrfToken))
+    fetch(SETUP_PAYMENT_URL, payPalRequestData(requestBody, csrfToken || ''))
       .then(handleSetupResponse)
       .then((token) => {
         if (token) {
@@ -82,15 +83,15 @@ function setupPayment(dispatch: Function, state: Object) {
   };
 }
 
-function createAgreement(payPalData: Object, state: Object) {
+function createAgreement(payPalData: Object, state: CombinedState) {
   const body = { token: payPalData.paymentToken };
   const csrfToken = state.csrf.token;
 
-  return fetch(CREATE_AGREEMENT_URL, payPalRequestData(body, csrfToken))
+  return fetch(CREATE_AGREEMENT_URL, payPalRequestData(body, csrfToken || ''))
     .then(response => response.json());
 }
 
-function setup(dispatch: Function, getState: Function, callback: Function) {
+function setup(dispatch: Function, getState: () => CombinedState, callback: Function) {
 
   return loadPayPalExpress()
     .then(() => {

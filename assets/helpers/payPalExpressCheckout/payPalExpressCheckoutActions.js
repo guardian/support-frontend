@@ -8,7 +8,6 @@ import * as payPalExpressCheckout from './payPalExpressCheckout';
 
 export type Action =
   | { type: 'START_PAYPAL_EXPRESS_CHECKOUT' }
-  | { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount: number }
   | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
   | { type: 'PAYPAL_EXPRESS_ERROR', message: string }
   ;
@@ -17,10 +16,6 @@ export type Action =
 
 export function startPayPalExpressCheckout(): Action {
   return { type: 'START_PAYPAL_EXPRESS_CHECKOUT' };
-}
-
-export function setPayPalExpressAmount(amount: number): Action {
-  return { type: 'SET_PAYPAL_EXPRESS_AMOUNT', amount };
 }
 
 export function payPalExpressCheckoutLoaded(): Action {

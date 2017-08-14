@@ -4,17 +4,11 @@ exports[`PayPal Reducer Tests should handle PAYPAL_EXPRESS_CHECKOUT_LOADED 1`] =
 
 exports[`PayPal Reducer Tests should handle PAYPAL_EXPRESS_CHECKOUT_LOADED 2`] = `"GBP"`;
 
-exports[`PayPal Reducer Tests should handle PAYPAL_EXPRESS_CHECKOUT_LOADED 3`] = `null`;
-
-exports[`PayPal Reducer Tests should handle SET_PAYPAL_EXPRESS_AMOUNT 1`] = `"monthly"`;
-
-exports[`PayPal Reducer Tests should handle SET_PAYPAL_EXPRESS_AMOUNT 2`] = `"GBP"`;
-
-exports[`PayPal Reducer Tests should handle SET_PAYPAL_EXPRESS_AMOUNT 3`] = `false`;
+exports[`PayPal Reducer Tests should handle PAYPAL_EXPRESS_CHECKOUT_LOADED 3`] = `13`;
 
 exports[`PayPal Reducer Tests should return the initial state 1`] = `
 Object {
-  "amount": null,
+  "amount": 13,
   "billingPeriod": "monthly",
   "currency": "GBP",
   "loaded": false,

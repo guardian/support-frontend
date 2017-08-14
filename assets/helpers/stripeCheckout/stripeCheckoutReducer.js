@@ -2,46 +2,44 @@
 
 // ----- Imports ----- //
 
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './stripeCheckoutActions';
-
+import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
 export type State = {
   loaded: boolean,
-  amount: ?number,
+  amount: number,
   token: ?string,
-  currency: string,
+  currency: IsoCurrency,
 };
 
-
-// ----- Setup ----- //
-
-const initialState: State = {
-  loaded: false,
-  amount: null,
-  token: null,
-  currency: 'GBP',
+export type CombinedState = {
+  stripeCheckout: StripeCheckoutState,
 };
-
 
 // ----- Exports ----- //
 
-export default function stripeCheckoutReducer(
-  state: State = initialState,
-  action: Action): State {
+export default function createStripeCheckoutReducer(amount: number, currency: IsoCurrency) {
 
-  switch (action.type) {
+  const initialState: State = {
+    loaded: false,
+    amount,
+    token: null,
+    currency,
+  };
 
-    case 'STRIPE_CHECKOUT_LOADED':
-      return Object.assign({}, state, { loaded: true });
+  return function stripeCheckoutReducer(state: State = initialState, action: Action): State {
 
-    case 'SET_STRIPE_AMOUNT':
-      return Object.assign({}, state, { amount: action.amount });
+    switch (action.type) {
 
-    default:
-      return state;
+      case 'STRIPE_CHECKOUT_LOADED':
+        return Object.assign({}, state, { loaded: true });
 
-  }
+      default:
+        return state;
 
+    }
+  };
 }

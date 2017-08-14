@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import * as stripeCheckout from './stripeCheckout';
-
+import type { CombinedState } from './stripeCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -13,9 +13,7 @@ export type Action =
   | { type: 'SET_STRIPE_CHECKOUT_TOKEN', token: string }
   | { type: 'CLOSE_STRIPE_OVERLAY' }
   | { type: 'OPEN_STRIPE_OVERLAY' }
-  | { type: 'SET_STRIPE_AMOUNT', amount: number }
   ;
-
 
 // ----- Actions ----- //
 
@@ -40,13 +38,9 @@ export function openStripeOverlay(amount: number, email: string): Action {
   return { type: 'OPEN_STRIPE_OVERLAY' };
 }
 
-export function setStripeAmount(amount: number): Action {
-  return { type: 'SET_STRIPE_AMOUNT', amount };
-}
-
 export function setupStripeCheckout(callback: Function): Function {
 
-  return (dispatch, getState) => {
+  return (dispatch, getState: () => CombinedState) => {
 
     const handleToken = (token) => {
       dispatch(setStripeCheckoutToken(token.id));
