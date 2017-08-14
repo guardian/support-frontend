@@ -77,7 +77,7 @@ export default function createRootMonthlyContributionsReducer(
   currency: Currency,
   country: IsoCountry,
 ) {
-  combineReducers({
+  return combineReducers({
     monthlyContrib: createMonthlyContribReducer(amount, currency, country),
     intCmp,
     user,
