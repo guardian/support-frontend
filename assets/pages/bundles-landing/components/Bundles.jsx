@@ -82,7 +82,7 @@ type BundlesType = {
 
 const contribSubHeadingText = {
     GB: 'from £5/month',
-    US: 'from $6.50/month',
+    US: 'from $5/month',
 };
 
 const digitalSubHeading = {
@@ -92,7 +92,7 @@ const digitalSubHeading = {
 
 const paperSubHeading = {
   GB: 'from £22.06/month',
-  US: 'from $28.70/month'
+  US: 'from $28.60/month' // source: xe.com
 };
 
 const digitalCtaLink = {
