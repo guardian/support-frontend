@@ -2,7 +2,6 @@
 import {
   payPalContributionsButtonClicked,
   payPalContributionsSubmitPayment,
-  setPayPalContributionsAmount,
   payPalContributionsError,
 } from '../payPalContributionsCheckoutActions';
 
