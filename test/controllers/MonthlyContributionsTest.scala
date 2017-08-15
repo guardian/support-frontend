@@ -47,7 +47,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
       status(result) mustBe 303
-      header("Location", result) mustBe Some("/monthly-contributions/existing-contributor")
+      header("Location", result) mustBe Some("/contribute/recurring/existing")
     }
 
     "return form if user is not in members api" in new DisplayForm {
