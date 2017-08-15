@@ -25,14 +25,16 @@ const defaultPromos: PromoCodes = {
 
 const tests = [
   {
-    name: 'rebaseline',
+    name: 'baseline',
     intCmps: [
-      'gdnwb_copts_memco_sandc_epic_rebaseline_support_proposition_support_proposition',
+      'gdnwb_copts_memco_sandc_epic_baseline_support_proposition',
+      'gdnwb_copts_memco_sandc_header_baseline_support_proposition',
+      'gdnwb_copts_memco_sandc_engagement_banner_baseline_support_proposition',
     ],
     promoCodes: {
-      digital: 'p/DP83X',
-      paper: 'p/VHD83P',
-      paperDig: 'p/VHD83X',
+      digital: 'p/DJ6CCJZLL',
+      paper: 'p/NJ6CCQLD4',
+      paperDig: 'p/NJ6CCSVMC',
     },
   },
 ];
