@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
-import { routes } from 'helpers/url';
+import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 
@@ -62,7 +62,7 @@ const contribAttrs: ContribAttrs = {
 
 const ctaLinks = {
   recurring: routes.recurringContribCheckout,
-  oneOff: routes.oneoffContribCheckout,
+  oneOff: routes.oneOffContribCheckout,
 };
 
 

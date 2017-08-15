@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import { routes, addQueryParamToURL } from 'helpers/url';
+import { addQueryParamToURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
 import type { CombinedState } from '../reducers/reducers';
@@ -31,7 +32,7 @@ type OneoffContribFields = {
   refererUrl?: string,
   idUser?: string,
   platform?: string,
-  ophanVisitId?: string
+  ophanVisitId?: string,
 };
 
 
@@ -79,7 +80,7 @@ export default function postCheckout(
   return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
 
     const url: string = addQueryParamToURL(
-      routes.oneoffContribThankyou,
+      routes.oneOffContribThankyou,
       'INTCMP',
       getState().intCmp,
     );

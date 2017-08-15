@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { routes } from 'helpers/url';
+import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 
 import {
@@ -32,7 +32,7 @@ const init = (dispatch: Function) => {
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
   } else if (userAppearsLoggedIn) {
-    fetch(routes.oneoffContribAutofill, { credentials: 'include' }).then((response) => {
+    fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
           if (data.name) {

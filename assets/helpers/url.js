@@ -1,19 +1,5 @@
 // @flow
 
-// ----- Routes ----- //
-
-const routes = {
-  recurringContribCheckout: '/contribute/recurring',
-  recurringContribThankyou: '/contribute/recurring/thankyou',
-  recurringContribCreate: '/contribute/recurring/create',
-  oneoffContribCheckout: '/contribute/one-off',
-  oneoffContribThankyou: '/contribute/one-off/thankyou',
-  oneoffContribAutofill: '/contribute/one-off/autofill',
-  payPalSetupPayment: '/paypal/setup-payment',
-  payPalCreateAgreement: '/paypal/create-agreement',
-};
-
-
 // ----- Functions ----- //
 
 const getQueryParameter = (paramName: string, defaultValue?: string): ?string => {
@@ -49,7 +35,6 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
 // ----- Exports ----- //
 
 export {
-  routes,
   getQueryParameter,
   addQueryParamToURL,
 };

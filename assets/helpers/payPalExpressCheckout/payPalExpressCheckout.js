@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-import { routes } from 'helpers/url';
+import { routes } from 'helpers/routes';
 import type { CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 
 

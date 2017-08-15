@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import { routes, addQueryParamToURL } from 'helpers/url';
+import { addQueryParamToURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
