@@ -21,14 +21,6 @@ describe('PayPal Contributions Checkout\'s actions', () => {
     };
     expect(payPalContributionsSubmitPayment()).toEqual(expectedAction);
   });
-  it('should create SET_PAYPAL_CONTRIBUTIONS_AMOUNT action', () => {
-    const amount: number = 6;
-    const expectedAction = {
-      type: 'SET_PAYPAL_CONTRIBUTIONS_AMOUNT',
-      amount,
-    };
-    expect(setPayPalContributionsAmount(amount)).toEqual(expectedAction);
-  });
   it('should create PAYPAL_CONTRIBUTIONS_ERROR action', () => {
     const message: string = 'This is an error';
     const expectedAction = {

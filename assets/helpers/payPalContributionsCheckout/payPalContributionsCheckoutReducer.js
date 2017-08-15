@@ -2,43 +2,47 @@
 
 // ----- Imports ----- //
 
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './payPalContributionsCheckoutActions';
-
 
 // ----- Types ----- //
 
 export type State = {
-  amount: ?number,
+  amount: number,
   currency: string,
   payPalPayClicked: boolean,
 };
 
-
-// ----- Setup ----- //
-
-const initialState: State = {
-  payPalPayClicked: false,
-  currency: 'GBP',
-  amount: null,
+export type CombinedState = {
+  payPalContributionsCheckout: State,
+  intCmp: ?string,
 };
-
 
 // ----- Exports ----- //
 
-export default function payPalContributionsCheckoutReducer(
-  state: State = initialState,
-  action: Action): State {
+export default function createPayPalContributionsCheckoutReducer(
+  amount: number,
+  currency: IsoCurrency,
+) {
 
-  switch (action.type) {
+  const initialState: State = {
+    payPalPayClicked: false,
+    currency,
+    amount,
+  };
 
-    case 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED':
-      return Object.assign({}, state, { payPalPayClicked: true });
+  return function payPalContributionsCheckoutReducer(
+    state: State = initialState,
+    action: Action,
+  ): State {
+    switch (action.type) {
 
-    case 'SET_PAYPAL_CONTRIBUTIONS_AMOUNT':
-      return Object.assign({}, state, { amount: action.amount });
+      case 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED':
+        return Object.assign({}, state, { payPalPayClicked: true });
 
-    default:
-      return state;
+      default:
+        return state;
 
-  }
+    }
+  };
 }
