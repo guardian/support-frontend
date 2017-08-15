@@ -2,16 +2,10 @@
 
 // ----- Imports ----- //
 
-import { addQueryParamToURL } from 'helpers/url';
+import { routes, addQueryParamToURL } from 'helpers/url';
 import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
-
-
-// ----- Setup ----- //
-
-const MONTHLY_CONTRIB_ENDPOINT = '/monthly-contributions/create';
-const MONTHLY_CONTRIB_THANKYOU = '/monthly-contributions/thankyou';
 
 
 // ----- Types ----- //
@@ -73,9 +67,13 @@ export default function postCheckout(paymentFieldName: PaymentField): Function {
 
     const request = requestData(paymentFieldName, token, getState);
 
-    return fetch(MONTHLY_CONTRIB_ENDPOINT, request).then((response) => {
+    return fetch(routes.recurringContribCreate, request).then((response) => {
 
-      const url: string = addQueryParamToURL(MONTHLY_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp);
+      const url: string = addQueryParamToURL(
+        routes.recurringContribThankyou,
+        'INTCMP',
+        getState().intCmp,
+      );
 
       if (response.ok) {
         window.location.assign(url);
