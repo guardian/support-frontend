@@ -1,13 +1,21 @@
 // @flow
 
+import type { CombinedState } from './payPalContributionsCheckoutReducer';
+
 // ----- Types ----- //
 
 export type Action =
   | { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' }
-  | { type: 'SET_PAYPAL_CONTRIBUTIONS_AMOUNT', amount: number }
   | { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message: string }
   | { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' }
   ;
+
+type PayPalPostData = {
+  countryGroup: string,
+  amount: number,
+  intCmp: ?string,
+  supportRedirect: boolean,
+}
 
 // ----- Actions ----- //
 
@@ -24,21 +32,19 @@ export function payPalContributionsError(message: string): Action {
   return { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message };
 }
 
-export function setPayPalContributionsAmount(amount: number): Action {
-  return { type: 'SET_PAYPAL_CONTRIBUTIONS_AMOUNT', amount };
-}
 
 export function paypalContributionsRedirect(): Function {
 
   const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 
-  return (dispatch, getState) => {
+  return (dispatch, getState: () => CombinedState) => {
 
     const state = getState();
 
     dispatch(payPalContributionsSubmitPayment());
 
-    const postData: Object = {
+
+    const postData: PayPalPostData = {
       countryGroup: 'uk',
       amount: state.payPalContributionsCheckout.amount,
       intCmp: state.intCmp,

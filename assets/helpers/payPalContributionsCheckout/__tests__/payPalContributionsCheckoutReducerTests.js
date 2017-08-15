@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import reducer from '../payPalContributionsCheckoutReducer';
+import createReducer from '../payPalContributionsCheckoutReducer';
 
 
 // ----- Tests ----- //
@@ -10,11 +10,12 @@ import reducer from '../payPalContributionsCheckoutReducer';
 describe('PayPal Contribution Reducer Tests', () => {
 
   it('should return the initial state', () => {
+    const reducer = createReducer(5, 'GBP');
     expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle PAYPAL_PAY_CONTRIBUTIONS_CLICKED', () => {
-
+    const reducer = createReducer(5, 'GBP');
     const action = {
       type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED',
       payPalPayClicked: true,
@@ -24,20 +25,6 @@ describe('PayPal Contribution Reducer Tests', () => {
     expect(newState.payPalPayClicked).toEqual(true);
     expect(newState.amount).toMatchSnapshot();
     expect(newState.currency).toMatchSnapshot();
-  });
-
-  it('should handle SET_PAYPAL_CONTRIBUTIONS_AMOUNT', () => {
-
-    const action = {
-      type: 'SET_PAYPAL_CONTRIBUTIONS_AMOUNT',
-      amount: 33.34,
-    };
-
-    const newState = reducer(undefined, action);
-
-    expect(newState.amount).toEqual(33.34);
-    expect(newState.currency).toMatchSnapshot();
-    expect(newState.payPalPayClicked).toMatchSnapshot();
   });
 
 });
