@@ -9,7 +9,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
   changeContribType,
   changeContribAmount,
@@ -33,6 +33,7 @@ type PropTypes = {
   changeContribRecurringAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
+  isoCountry: IsoCountry,
 };
 
 /* eslint-enable react/no-unused-prop-types */

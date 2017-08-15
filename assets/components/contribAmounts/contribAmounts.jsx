@@ -30,7 +30,7 @@ type PropTypes = {
   changeContribAmount: (string) => void,
   toggleContribType: (string) => void,
   onNumberInputKeyPress: () => void,
-  isoCountry: IsoCountry
+  isoCountry: IsoCountry,
 };
 
 /* eslint-enable react/no-unused-prop-types */

@@ -17,7 +17,7 @@ export type Action =
 
 // ----- Actions ----- //
 export function changeCountry(isoCountry: IsoCountry): Action {
-    return { type: 'CHANGE_COUNTRY', isoCountry };
+  return { type: 'CHANGE_COUNTRY', isoCountry };
 }
 
 export function changeContribType(contribType: Contrib): Action {

@@ -51,8 +51,10 @@ function fromGeolocation(): ?IsoCountry {
 
 export function detect(): IsoCountry {
   const country = fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+  // TODO: Danger, Will Robinson! This may return non-UK things!
   // cookie.set('GU_country', country, 7);
   // Always return GB because we aren't ready to support US quite yet
-  return 'GB' || country;
+  // return 'GB' || country;
+  return country;
 }
 

@@ -6,5 +6,5 @@
 const isoCountryReducer = (state: ?string = null): ?string => state;
 
 export {
-    isoCountryReducer,
+  isoCountryReducer,
 };
