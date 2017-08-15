@@ -3,14 +3,15 @@
 // ----- Imports ----- //
 
 import { addQueryParamToURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
 import type { CombinedState } from '../reducers/reducers';
 
+
 // ----- Setup ----- //
 
 const ONEOFF_CONTRIB_ENDPOINT = window.guardian.contributionsStripeEndpoint;
-const ONEOFF_CONTRIB_THANKYOU = '/oneoff-contributions/thankyou';
 
 
 // ----- Types ----- //
@@ -31,8 +32,9 @@ type OneoffContribFields = {
   refererUrl?: string,
   idUser?: string,
   platform?: string,
-  ophanVisitId?: string
+  ophanVisitId?: string,
 };
+
 
 // ----- Functions ----- //
 
@@ -77,7 +79,11 @@ export default function postCheckout(
 
   return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
 
-    const url: string = addQueryParamToURL(ONEOFF_CONTRIB_THANKYOU, 'INTCMP', getState().intCmp);
+    const url: string = addQueryParamToURL(
+      routes.oneOffContribThankyou,
+      'INTCMP',
+      getState().intCmp,
+    );
 
     if (response.ok) {
       window.location.assign(url);

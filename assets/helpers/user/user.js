@@ -2,12 +2,22 @@
 
 // ----- Imports ----- //
 
-import { setDisplayName, setEmail, setFirstName, setLastName, setTestUser, setFullName } from './userActions';
-import * as cookie from './../cookie';
+import { routes } from 'helpers/routes';
+import * as cookie from 'helpers/cookie';
+
+import {
+  setDisplayName,
+  setEmail,
+  setFirstName,
+  setLastName,
+  setTestUser,
+  setFullName,
+} from './userActions';
+
+
+// ----- Functions ----- //
 
 const init = (dispatch: Function) => {
-
-  const AUTOFILL_ENDPOINT = '/oneoff-contributions/autofill';
 
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
@@ -22,7 +32,7 @@ const init = (dispatch: Function) => {
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
   } else if (userAppearsLoggedIn) {
-    fetch(AUTOFILL_ENDPOINT, { credentials: 'include' }).then((response) => {
+    fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
           if (data.name) {
@@ -36,6 +46,9 @@ const init = (dispatch: Function) => {
     });
   }
 };
+
+
+// ----- Exports ----- //
 
 export {
   init,

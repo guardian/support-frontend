@@ -10,7 +10,6 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 
 };
 
-
 const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?string): string => {
 
   // We are interested in the query params i.e. the part after the '?'
@@ -32,7 +31,9 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
   return `${strInit}?${paramsObj.toString()}`;
 };
 
+
 // ----- Exports ----- //
+
 export {
   getQueryParameter,
   addQueryParamToURL,
