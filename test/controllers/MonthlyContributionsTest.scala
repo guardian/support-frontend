@@ -26,7 +26,7 @@ import fixtures.TestCSRFComponents
 
 class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
-  "GET /monthly-contributors" should {
+  "GET /contribute/recurring" should {
 
     "redirect unauthenticated user to signup page" in new DisplayForm {
       val result = fakeRequestWith(actionRefiner = loggedOutActionRefiner)
