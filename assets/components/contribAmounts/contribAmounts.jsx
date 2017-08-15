@@ -15,7 +15,6 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
-import type { Currency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -31,9 +30,17 @@ type PropTypes = {
   changeContribAmount: (string) => void,
   toggleContribType: (string) => void,
   onNumberInputKeyPress: () => void,
+  isoCountry: IsoCountry
 };
 
 /* eslint-enable react/no-unused-prop-types */
+
+type AmountToggle = {
+  [Contrib]: {
+    name: string,
+    radios: Radio[],
+  },
+};
 
 type Toggle = {
   name: string,
@@ -48,131 +55,127 @@ type ContribAttrs = {
   contribType: Contrib,
 };
 
-
 // ----- Setup ----- //
 
-const amountToggles: {
-  [Contrib]: Toggle,
-} = (isoCountry: IsoCountry) => {
-  return {
-      RECURRING: {
-          name: 'contributions-amount-recurring-toggle',
-          radios: amountRadiosRecurring[isoCountry]
-      },
-      ONE_OFF: {
-          name: 'contributions-amount-oneoff-toggle',
-          radios: amountRadiosOneOff[isoCountry]
-      },
-  };
-};
-
 const amountRadiosRecurring = {
-    GB: [
-        {
-            value: '5',
-            text: '£5',
-        },
-        {
-            value: '10',
-            text: '£10',
-        },
-        {
-            value: '20',
-            text: '£20',
-        },
-    ],
-    US: [
-        {
-            value: '5',
-            text: '$5',
-        },
-        {
-            value: '10',
-            text: '$10',
-        },
-        {
-            value: '20',
-            text: '$20',
-        },
-    ],
+  GB: [
+    {
+      value: '5',
+      text: '£5',
+    },
+    {
+      value: '10',
+      text: '£10',
+    },
+    {
+      value: '20',
+      text: '£20',
+    },
+  ],
+  US: [
+    {
+      value: '5',
+      text: '$5',
+    },
+    {
+      value: '10',
+      text: '$10',
+    },
+    {
+      value: '20',
+      text: '$20',
+    },
+  ],
 };
 
 const amountRadiosOneOff = {
-    GB: [
-        {
-            value: '25',
-            text: '£25',
-        },
-        {
-            value: '50',
-            text: '£50',
-        },
-        {
-            value: '100',
-            text: '£100',
-        },
-        {
-            value: '250',
-            text: '£250',
-        },
-    ],
-    US: [
-        {
-            value: '25',
-            text: '$25',
-        },
-        {
-            value: '50',
-            text: '$50',
-        },
-        {
-            value: '100',
-            text: '$100',
-        },
-        {
-            value: '250',
-            text: '$250',
-        },
-    ],
-};
-
-const contribToggle: Toggle = (isoCountry: IsoCountry) => {
-  return {
-      name: 'contributions-period-toggle',
-      radios: contribCaptionRadios[isoCountry]
-  };
+  GB: [
+    {
+      value: '25',
+      text: '£25',
+    },
+    {
+      value: '50',
+      text: '£50',
+    },
+    {
+      value: '100',
+      text: '£100',
+    },
+    {
+      value: '250',
+      text: '£250',
+    },
+  ],
+  US: [
+    {
+      value: '25',
+      text: '$25',
+    },
+    {
+      value: '50',
+      text: '$50',
+    },
+    {
+      value: '100',
+      text: '$100',
+    },
+    {
+      value: '250',
+      text: '$250',
+    },
+  ],
 };
 
 const contribCaptionRadios = {
   GB: [
-      {
-          value: 'RECURRING',
-          text: 'Monthly',
-      },
-      {
-          value: 'ONE_OFF',
-          text: 'One-off',
-      },
+    {
+      value: 'RECURRING',
+      text: 'Monthly',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+    },
   ],
   US: [
-      {
-          value: 'RECURRING',
-          text: 'Monthly',
-      },
-      {
-          value: 'ONE_OFF',
-          text: 'One-time',
-      },
+    {
+      value: 'RECURRING',
+      text: 'Monthly',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-time',
+    },
   ],
 };
 
-
 // ----- Functions ----- //
+
+function amountToggles(isoCountry: IsoCountry): AmountToggle {
+  return {
+    RECURRING: {
+      name: 'contributions-amount-recurring-toggle',
+      radios: amountRadiosRecurring[isoCountry],
+    },
+    ONE_OFF: {
+      name: 'contributions-amount-oneoff-toggle',
+      radios: amountRadiosOneOff[isoCountry],
+    },
+  };
+}
+
+function contribToggle(isoCountry: IsoCountry): Toggle {
+  return {
+    name: 'contributions-period-toggle',
+    radios: contribCaptionRadios[isoCountry],
+  };
+}
 
 function errorMessage(
   error: ?ContribError,
   contribType: Contrib,
-  isoCountry: IsoCountry
+  isoCountry: IsoCountry,
 ): ?React$Element<any> {
 
   const limits = contribConfig[contribType];
@@ -253,7 +256,7 @@ export default function ContribAmounts(props: PropTypes) {
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
             selected={attrs.selected}
-            placeholder={"Other amount (" + forCountry(props.isoCountry).glyph + ")"}
+            placeholder={`Other amount (${forCountry(props.isoCountry).glyph})`}
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
           />
         </div>
