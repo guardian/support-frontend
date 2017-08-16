@@ -17,6 +17,7 @@ const partials = {
 
 const main = loadTemplate('cfn-template.yaml');
 const output = Mustache.render(main, yaml.load(readFile('view.yaml')), partials);
+try { fs.mkdirSync('../target'); } catch(err) { }
 fs.writeFileSync('../target/cfn.yaml', output, 'utf-8');
 
 function loadTemplate(filename) {
