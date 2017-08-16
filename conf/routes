@@ -23,20 +23,6 @@ GET  /contribute/one-off/thankyou                   controllers.Application.reac
 GET  /contribute/one-off/test-user                  controllers.OneOffContributions.displayFormTestUser(paypal: Option[Boolean])
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
-# DEPRECATED ROUTES (START)
-
-GET  /monthly-contributions                         controllers.MonthlyContributions.displayForm(paypal : Option[Boolean])
-GET  /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
-GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
-POST /monthly-contributions/create                  controllers.MonthlyContributions.create
-
-GET  /oneoff-contributions                          controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
-GET  /oneoff-contributions/test-user                controllers.OneOffContributions.displayFormTestUser(paypal: Option[Boolean])
-GET  /oneoff-contributions/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
-GET  /oneoff-contributions/autofill                 controllers.OneOffContributions.autofill
-
-# DEPRECATED ROUTES (END)
-
 
 # ----- Authentication ----- #
 

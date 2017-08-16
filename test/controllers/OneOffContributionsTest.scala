@@ -25,7 +25,7 @@ import play.api.libs.json.JsString
 
 class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
-  "GET /oneoff-contributions" should {
+  "GET /contribute/one-off" should {
 
     "return email address" in new AutoFillScope {
       val result = fakeRequest()
