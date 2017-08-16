@@ -12,6 +12,15 @@ class ContributionCompleted
     with LazyLogging {
 
   override protected def handler(state: SendThankYouEmailState, error: Option[ExecutionError], context: Context): CompletedState = {
+    val fields = List(
+      "contribution_amount" -> state.contribution.amount.toString,
+      "contribution_currency" -> state.contribution.currency.iso.toString,
+      "test_user" -> state.user.isTestUser.toString,
+      "payment_method" -> state.paymentMethod.`type`
+    )
+
+    logger.info(fields.map({ case (k, v) => s"$k: $v" }).mkString("SUCCESS ", " ", ""))
+
     CompletedState(
       requestId = state.requestId,
       user = state.user,
