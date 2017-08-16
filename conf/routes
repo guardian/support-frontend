@@ -1,44 +1,47 @@
 # ----- System ----- #
 
-GET /healthcheck                controllers.Application.healthcheck
+GET /healthcheck                                    controllers.Application.healthcheck
 
 
-# ----- Pages ----- #
-GET /uk                        controllers.Default.redirect(to = "/s/uk")
-GET /                          controllers.Default.redirect(to = "/s/uk")
+# ----- Bundles Landing Page ----- #
 
-# ---- editionalised ---- #
-GET /s/*country                controllers.Application.reactTemplateEdition(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", country)
+GET /uk                                             controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
+GET /                                               controllers.Default.redirect(to = "/uk")
 
-GET  /monthly-contributions                         controllers.Default.redirect(to = "/monthly-contributions/uk")
-GET  /monthly-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
-GET  /monthly-contributions/existing-contributor    controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
-GET  /monthly-contributions/*country                controllers.MonthlyContributions.displayForm(paypal : Option[Boolean], country)
-POST /monthly-contributions/create                  controllers.MonthlyContributions.create
 
-GET /oneoff-contributions/thankyou                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
-GET /uk/contribute              controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
+# ----- Contributions ----- #
 
-GET /oneoff-contributions                         controllers.Default.redirect(to = "/oneoff-contributions/uk")
-GET /oneoff-contributions/test-user               controllers.Default.redirect(to = "/oneoff-contributions/test-user/uk")
-GET /oneoff-contributions/thankyou                controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
-GET /oneoff-contributions/autofill                controllers.OneOffContributions.autofill
-GET /oneoff-contributions/*country                controllers.OneOffContributions.displayForm(paypal: Option[Boolean], country)
-GET /oneoff-contributions/test-user/*country      controllers.OneOffContributions.displayFormTestUser(paypal: Option[Boolean], country)
+GET  /uk/contribute                                 controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
 
-GET  /login                    controllers.Login.login
-GET  /loginAction              controllers.Login.loginAction
-GET  /oauth2callback           controllers.Login.oauth2Callback
-GET  /logout                   controllers.Login.logout
+GET  /contribute/recurring                          controllers.MonthlyContributions.displayForm(paypal : Option[Boolean])
+GET  /contribute/recurring/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")
+GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="monthly-contributions-existing-page", js="monthlyContributionsExistingPage.js")
+POST /contribute/recurring/create                   controllers.MonthlyContributions.create
 
-GET  /test-users               controllers.TestUsersManagement.createTestUser
+GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/one-off/thankyou                   controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
+GET  /contribute/one-off/test-user                  controllers.OneOffContributions.displayFormTestUser(paypal: Option[Boolean])
+GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
-# Paypal NVP endpoints.
-POST /paypal/setup-payment     controllers.PayPal.setupPayment
-POST /paypal/create-agreement  controllers.PayPal.createAgreement
-GET  /paypal/return            controllers.PayPal.returnUrl
-GET  /paypal/cancel            controllers.PayPal.cancelUrl
 
-# Assets
-GET  /assets/*file             controllers.Assets.at(path="/public/compiled-assets", file)
-GET  /*file                    controllers.Assets.at(path="/public", file)
+# ----- Authentication ----- #
+
+GET  /login                                         controllers.Login.login
+GET  /loginAction                                   controllers.Login.loginAction
+GET  /oauth2callback                                controllers.Login.oauth2Callback
+GET  /logout                                        controllers.Login.logout
+GET  /test-users                                    controllers.TestUsersManagement.createTestUser
+
+
+# ----- PayPal (NVP Endpoints) ----- #
+
+POST /paypal/setup-payment                          controllers.PayPal.setupPayment
+POST /paypal/create-agreement                       controllers.PayPal.createAgreement
+GET  /paypal/return                                 controllers.PayPal.returnUrl
+GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
+
+
+# ----- Assets ----- #
+
+GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
+GET  /*file                                         controllers.Assets.at(path="/public", file)

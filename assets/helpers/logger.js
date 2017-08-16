@@ -5,9 +5,11 @@ import Raven from 'raven-js';
 
 export const init = () => {
   const dsn: string = 'https://dc13eb8698614a8081ce6a139d9f4aab@sentry.io/171710';
+  const gitCommitId = window.guardian.gitCommitId;
 
   Raven.config(dsn, {
     whitelistUrls: ['support.theguardian.com', 'localhost'],
+    release: gitCommitId,
   }).install();
 };
 
