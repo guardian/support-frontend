@@ -1,10 +1,10 @@
 @import assets.AssetsResolver
-@(title: String, id: String, js: String, country: String = "uk")(implicit assets: AssetsResolver)
+@(title: String, id: String, js: String)(implicit assets: AssetsResolver)
 
 @scripts = {
     <script type="text/javascript" src="@assets(js)"></script>
 }
 
-@main(title = title, scripts = scripts, country = country) {
+@main(title = title, scripts = scripts) {
     <main id="@id" class="gu-content-wrapper"></main>
 }

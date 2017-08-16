@@ -48,8 +48,7 @@ class MonthlyContributions(
               uatMode = uatMode,
               payPalButton = paypal.getOrElse(true),
               stripeConfig = stripeConfigProvider.get(uatMode),
-              payPalConfig = payPalConfigProvider.get(uatMode),
-              country = country
+              payPalConfig = payPalConfigProvider.get(uatMode)
             )
           )
       }

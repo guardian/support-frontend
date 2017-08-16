@@ -21,15 +21,9 @@ class Application(
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() {
     Ok(views.html.react(title, id, js))
   }
-  def reactTemplateEdition(title: String, id: String, js: String, country: String): Action[AnyContent] = CachedAction() {
-    Ok(views.html.react(title, id, js, country))
-  }
 
   def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { request =>
     Ok(views.html.react(title, id, js))
-  }
-  def authenticatedReactTemplateEdition(title: String, id: String, js: String, country: String): Action[AnyContent] = AuthenticatedAction { request =>
-    Ok(views.html.react(title, id, js, country))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
