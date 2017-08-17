@@ -11,7 +11,6 @@ import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { forCountry } from 'helpers/internationalisation/currency';
 
 import {
   changeContribType,
@@ -92,7 +91,7 @@ const getContribAttrs = ({
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
-  params.append('currency', forCountry(isoCountry).iso);
+  params.append('country', isoCountry);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
