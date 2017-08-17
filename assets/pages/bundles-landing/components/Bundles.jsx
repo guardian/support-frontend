@@ -11,8 +11,10 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import {
+  changeCountry,
   changeContribType,
   changeContribAmount,
   changeContribAmountRecurring,
@@ -29,6 +31,7 @@ import type { SubsUrls } from '../helpers/subscriptionsLinks';
 /* eslint-disable react/no-unused-prop-types */
 
 type PropTypes = {
+  isoCountry: IsoCountry,
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
@@ -75,12 +78,32 @@ type BundlesType = {
   paper: PaperAttrs,
 }
 
-
 // ----- Copy ----- //
+const contribSubHeadingText = {
+  GB: 'from £5/month',
+  US: 'from $5/month',
+};
+
+const digitalSubHeading = {
+  GB: '£11.99/month',
+  US: '$19.99/month', // source: https://subscribe.theguardian.com/us/digital
+};
+
+const paperSubHeading = {
+  GB: 'from £22.06/month',
+  US: 'from $28.60/month', // source: xe.com
+};
+
+function contribSubheading(isoCountry: IsoCountry) {
+  return {
+    recurring: contribSubHeadingText[isoCountry],
+    oneOff: '',
+  };
+}
 
 const contribCopy: ContribAttrs = {
   heading: 'contribute',
-  subheading: 'from £5/month',
+  subheading: '',
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
@@ -88,7 +111,7 @@ const contribCopy: ContribAttrs = {
 
 const digitalCopy: DigitalAttrs = {
   heading: 'digital subscription',
-  subheading: '£11.99/month',
+  subheading: '',
   listItems: [
     {
       heading: 'Ad-free mobile app',
@@ -104,12 +127,12 @@ const digitalCopy: DigitalAttrs = {
   ],
   ctaText: 'Start your 14 day trial',
   modifierClass: 'digital',
-  ctaLink: 'https://subscribe.theguardian.com/uk/digital',
+  ctaLink: '',
 };
 
 const paperCopy: PaperAttrs = {
   heading: 'paper subscription',
-  subheading: 'from £22.06/month',
+  subheading: '',
   listItems: [
     {
       heading: 'Newspaper',
@@ -137,51 +160,54 @@ const bundles: BundlesType = {
 };
 
 const ctaLinks = {
-  recurring: 'https://membership.theguardian.com/monthly-contribution',
-  oneOff: 'https://contribute.theguardian.com/uk',
-  subs: 'https://subscribe.theguardian.com',
+  GB: {
+    recurring: 'https://membership.theguardian.com/monthly-contribution',
+    oneOff: 'https://contribute.theguardian.com/uk',
+    subs: 'https://subscribe.theguardian.com',
+  },
+  US: {
+    recurring: 'https://membership.theguardian.com/monthly-contribution',
+    oneOff: 'https://contribute.theguardian.com/us',
+    subs: 'https://subscribe.theguardian.com',
+  },
 };
-
-const contribSubheading = {
-  recurring: 'from £5/month',
-  oneOff: '',
-};
-
 
 // ----- Functions ----- //
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
-
+const getContribAttrs = ({ isoCountry, contribType, contribAmount, intCmp }): ContribAttrs => {
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
-  const subheading = contribSubheading[contType];
+  const subHead = contribSubheading(isoCountry)[contType];
   const params = new URLSearchParams();
 
   params.append(amountParam, contribAmount[contType].value);
   params.append('INTCMP', intCmp);
-  const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+  const cta = `${ctaLinks[isoCountry][contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles.contrib, { ctaLink, subheading });
-
+  return Object.assign({}, bundles.contrib, { ctaLink: cta, subheading: subHead });
 };
 
-function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
+function getPaperAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): PaperAttrs {
+  const subHead = paperSubHeading[isoCountry];
 
   return Object.assign({}, bundles.paper, {
+    subheading: subHead,
     paperCtaLink: subsLinks.paper,
     paperDigCtaLink: subsLinks.paperDig,
   });
 
 }
 
-function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
-  return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
+function getDigitalAttrs(subsLinks: SubsUrls, isoCountry: IsoCountry): DigitalAttrs {
+  const subHead = digitalSubHeading[isoCountry];
+  const cta = subsLinks.digital; // digitalCtaLink[isoCountry];
+
+  return Object.assign({}, bundles.digital, { ctaLink: cta, subheading: subHead });
+
 }
 
 function ContributionBundle(props: PropTypes) {
-
   const contribAttrs: ContribAttrs = getContribAttrs(props);
-
   const onClick = () => {
     if (!props.contribError) {
       window.location = contribAttrs.ctaLink;
@@ -204,7 +230,7 @@ function DigitalBundle(props: DigitalAttrs) {
 
   return (
     <Bundle {...props}>
-      <FeatureList listItems={bundles.digital.listItems} />
+      <FeatureList listItems={props.listItems} />
       <CtaLink text={props.ctaText} url={props.ctaLink} />
     </Bundle>
   );
@@ -228,9 +254,9 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
-  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
-  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.isoCountry);
+  const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks, props.isoCountry);
+  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks, props.isoCountry);
 
   return (
     <section className="bundles">
@@ -254,6 +280,7 @@ function Bundles(props: PropTypes) {
 
 function mapStateToProps(state) {
   return {
+    isoCountry: state.isoCountry,
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
@@ -264,6 +291,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
+    setCountryFromDetect: (isoCountry: IsoCountry) => {
+      dispatch(changeCountry(isoCountry));
+    },
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },

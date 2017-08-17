@@ -33,7 +33,7 @@ class MonthlyContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def displayForm(paypal: Option[Boolean], country: String = "uk"): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) => Redirect("/contribute/recurring/existing")

@@ -3,14 +3,12 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-
 import { abTestReducer as abTests } from 'helpers/abtest';
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
+import { isoCountryReducer as isoCountry } from 'helpers/isoCountry';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
-
 import { parse as parseContribution } from 'helpers/contributions';
 import type { Action } from '../actions/bundlesLandingActions';
-
 
 // ----- Types ----- //
 
@@ -98,4 +96,5 @@ export default combineReducers({
   contribution,
   intCmp,
   abTests,
+  isoCountry,
 });

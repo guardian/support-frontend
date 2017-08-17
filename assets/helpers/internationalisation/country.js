@@ -17,9 +17,9 @@ function fromString(s: string): ?IsoCountry {
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
-  if (path.startsWith('/uk/')) {
+  if (path.startsWith('/s/uk')) {
     return 'GB';
-  } else if (path.startsWith('/us/')) {
+  } else if (path.startsWith('/s/us')) {
     return 'US';
   }
   return null;
@@ -51,8 +51,10 @@ function fromGeolocation(): ?IsoCountry {
 
 export function detect(): IsoCountry {
   const country = fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
-  // cookie.set('GU_country', country, 7);
+  // TODO: Danger, Will Robinson! This may return non-UK things!
+  cookie.set('GU_country', country, 7);
   // Always return GB because we aren't ready to support US quite yet
-  return 'GB' || country;
+  // return 'GB' || country;
+  return country;
 }
 

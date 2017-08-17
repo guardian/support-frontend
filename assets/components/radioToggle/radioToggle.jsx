@@ -4,7 +4,6 @@
 
 import React from 'react';
 
-
 // ----- Types ----- //
 
 // Disabling the linter here because it's just buggy...
