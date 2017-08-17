@@ -28,7 +28,6 @@ type PropTypes = {
 // ----- Component ----- //
 
 export default function RadioToggle(props: PropTypes) {
-
   const radioButtons = props.radios.map((radio: Radio, idx: number) => {
 
     const radioId = `${props.name}-${idx}`;

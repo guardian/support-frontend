@@ -59,5 +59,6 @@ Object {
     "type": "RECURRING",
   },
   "intCmp": null,
+  "isoCountry": null,
 }
 `;

@@ -28,7 +28,7 @@ const participation = pageStartup.start();
 
 const store = createStore(reducer, {
   intCmp: getQueryParameter('INTCMP'),
-  isoCountry: 'GB',
+  isoCountry: 'US',
 });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
@@ -61,4 +61,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('contributions-landing-page-uk'));
+ReactDOM.render(content, document.getElementById('contributions-landing-page-us'));

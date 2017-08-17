@@ -11,6 +11,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import {
   changeContribType,
@@ -37,6 +38,7 @@ type PropTypes = {
   changeContribRecurringAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
+  isoCountry: IsoCountry
 };
 
 type ContribAttrs = {
@@ -258,6 +260,7 @@ function mapStateToProps(state) {
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
+    isoCountry: state.isoCountry,
   };
 }
 

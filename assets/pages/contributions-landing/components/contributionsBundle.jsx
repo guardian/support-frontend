@@ -10,6 +10,7 @@ import Bundle from 'components/bundle/bundle';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import {
   changeContribType,
@@ -34,6 +35,7 @@ type PropTypes = {
   changeContribRecurringAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
+  isoCountry: IsoCountry,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -50,15 +52,28 @@ type ContribAttrs = {
 
 // ----- Copy ----- //
 
-const contribAttrs: ContribAttrs = {
-  heading: 'contribute',
-  subheading: `Support the Guardian’s editorial operations by making a
+const subHeadingText = {
+  GB: `Support the Guardian’s editorial operations by making a
     monthly or one-off contribution today`,
-  ctaText: 'Contribute',
-  modifierClass: 'contributions',
-  ctaLink: '',
-  showPaymentLogos: false,
+  US: `Support the Guardian’s editorial operations by making a
+    regular or one-time contribution today`,
 };
+
+const oneOffSubHeadingText = {
+  GB: 'Support the Guardian’s editorial operations by making a one-off contribution today',
+  US: 'Support the Guardian’s editorial operations by making a one-time contribution today',
+};
+
+function contribAttrs(isoCountry: IsoCountry): ContribAttrs {
+  return {
+    heading: 'contribute',
+    subheading: subHeadingText[isoCountry],
+    ctaText: 'Contribute',
+    modifierClass: 'contributions',
+    ctaLink: '',
+    showPaymentLogos: false,
+  };
+}
 
 const ctaLinks = {
   recurring: routes.recurringContribCheckout,
@@ -69,7 +84,7 @@ const ctaLinks = {
 // ----- Functions ----- //
 
 const getContribAttrs = ({
-  contribType, contribAmount, intCmp, showMonthly,
+  contribType, contribAmount, intCmp, showMonthly, isoCountry,
 }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
@@ -85,12 +100,12 @@ const getContribAttrs = ({
 
   if (!showMonthly) {
 
-    const subheading = 'Support the Guardian’s editorial operations by making a one-off contribution today';
-    return Object.assign({}, contribAttrs, { ctaLink, subheading });
+    const subheading = oneOffSubHeadingText[isoCountry];
+    return Object.assign({}, contribAttrs(isoCountry), { ctaLink, subheading });
 
   }
 
-  return Object.assign({}, contribAttrs, { ctaLink });
+  return Object.assign({}, contribAttrs(isoCountry), { ctaLink });
 
 };
 
@@ -135,6 +150,7 @@ function mapStateToProps(state) {
     contribError: state.contribution.error,
     intCmp: state.intCmp,
     showMonthly,
+    isoCountry: state.isoCountry,
   };
 }
 
