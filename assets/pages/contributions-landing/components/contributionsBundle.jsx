@@ -114,7 +114,7 @@ function ContributionsBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-      <CtaLink text={attrs.ctaText} onClick={onClick} />
+      <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button"/>
     </Bundle>
   );
 
