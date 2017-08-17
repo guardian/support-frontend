@@ -27,8 +27,8 @@ const tests = [
   {
     name: 'baseline',
     intCmps: [
-      'gdnwb_copts_memco_sandc_epic_baseline_support_proposition',
-      'gdnwb_copts_memco_sandc_header_baseline_support_proposition',
+      'gdnwb_copts_memco_sandc_support_baseline_support_epic',
+      'gdnwb_copts_memco_sandc_support_baseline_support_header',
       'gdnwb_copts_memco_sandc_engagement_banner_baseline_support_proposition',
     ],
     promoCodes: {
