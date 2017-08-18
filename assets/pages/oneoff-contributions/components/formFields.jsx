@@ -31,34 +31,6 @@ type PropTypes = {
 };
 
 
-// ----- Functions ----- //
-
-function postcodeFieldFor(props: PropTypes) {
-  return (
-    <TextInput
-      id="postcode"
-      placeholder={props.isoCountry === 'US' ? 'Zip' : 'Postcode (optional)'}
-      value={props.postcode || ''}
-      onChange={props.postcodeUpdate}
-    />
-  );
-}
-
-function stateFieldIfRequiredFor(props: PropTypes) {
-  if (props.isoCountry === 'US') {
-    return (
-      <TextInput
-        id="state"
-        placeholder="State"
-        value={props.stateField || ''}
-        onChange={props.stateFieldUpdate}
-        required
-      />
-    );
-  }
-  return null;
-}
-
 // ----- Component ----- //
 
 function FormFields(props: PropTypes) {
@@ -79,8 +51,21 @@ function FormFields(props: PropTypes) {
         onChange={props.emailUpdate}
         required
       />
-      {stateFieldIfRequiredFor(props)}
-      {postcodeFieldFor(props)}
+      {props.isoCountry === 'US' ?
+        <TextInput
+          id="state"
+          placeholder="State"
+          value={props.stateField || ''}
+          onChange={props.stateFieldUpdate}
+          required
+        /> : null
+      }
+      <TextInput
+        id="postcode"
+        placeholder={`${props.isoCountry === 'US' ? 'Zip' : 'Postcode'} (optional)`}
+        value={props.postcode || ''}
+        onChange={props.postcodeUpdate}
+      />
     </form>
   );
 
@@ -96,7 +81,7 @@ function mapStateToProps(state) {
     email: state.user.email,
     stateField: state.user.stateField,
     postcode: state.user.postcode,
-    isoCountry: detectCountry(),
+    isoCountry: state.isoCountry || detectCountry(),
   };
 
 }

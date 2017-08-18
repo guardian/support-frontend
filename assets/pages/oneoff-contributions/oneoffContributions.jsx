@@ -57,6 +57,8 @@ store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const state: CombinedState = store.getState();
 
+const contribDescription: string = (country === 'US' ? 'one-time' : 'one-off');
+
 // ----- Render ----- //
 
 const content = (
@@ -66,10 +68,10 @@ const content = (
       <SimpleHeader />
       <div className="oneoff-contrib gu-content-filler__inner">
         <InfoSection className="oneoff-contrib__header">
-          <h1 className="oneoff-contrib__heading">Make a one-off contribution</h1>
+          <h1 className="oneoff-contrib__heading">{`Make a ${contribDescription} contribution`}</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading="Your one-off contribution" className="oneoff-contrib__your-contrib">
+        <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={state.oneoffContrib.amount}
             currency={state.oneoffContrib.currency}
