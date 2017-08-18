@@ -8,7 +8,7 @@ object Selenium extends Tag("Selenium")
 
 class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with BeforeAndAfterAll {
 
-  def prepareForSeleniumTest: Unit = {
+  override def beforeAll: Unit = {
     Driver.reset()
     dependencyCheck
   }
@@ -29,8 +29,6 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
   feature("Sign up for a Monthly Contribution") {
 
     scenario("Monthly contribution sign-up with Stripe", Selenium) {
-
-      prepareForSeleniumTest
 
       Given("that a test user goes to the contributions landing page")
       val testUser = new TestUser
