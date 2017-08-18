@@ -5,7 +5,7 @@ import selenium.util.{Browser, Config}
 
 object MonthlyContribution extends Page with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/monthly-contributions"
+  val url = s"${Config.supportFrontendUrl}/contribute/recurring"
 
   private val stripeButton = id("qa-pay-with-card")
 

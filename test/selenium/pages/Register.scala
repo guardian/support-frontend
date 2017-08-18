@@ -5,7 +5,7 @@ import java.net.URLEncoder
 import selenium.util.{Browser, TestUser, Config}
 
 case class Register(testUser: TestUser, amount: Int) extends Page with Browser {
-  private val returnUrlParam = URLEncoder.encode(s"${Config.supportFrontendUrl}/monthly-contributions?contributionValue%3D${amount}", "UTF-8")
+  private val returnUrlParam = URLEncoder.encode(s"${Config.supportFrontendUrl}/contribute/recurring?contributionValue%3D${amount}", "UTF-8")
   val url = s"${Config.identityFrontendUrl}/register?returnUrl=${returnUrlParam}&skipConfirmation=true&clientId=members"
 
   def fillInPersonalDetails() { RegisterFields.fillIn() }
