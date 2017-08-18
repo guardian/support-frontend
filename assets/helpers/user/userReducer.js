@@ -14,6 +14,7 @@ export type User = {
   lastName: ?string,
   isTestUser: ?boolean,
   fullName?: string,
+  stateField?: string,
   postcode?: string,
 };
 
@@ -54,6 +55,9 @@ export default function userReducer(
 
     case 'SET_EMAIL':
       return Object.assign({}, state, { email: action.email });
+
+    case 'SET-STATEFIELD':
+      return Object.assign({}, state, { stateField: action.stateField });
 
     case 'SET_POSTCODE':
       return Object.assign({}, state, { postcode: action.postcode });

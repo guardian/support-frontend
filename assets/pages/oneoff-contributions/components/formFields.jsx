@@ -4,13 +4,15 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import TextInput from 'components/textInput/textInput';
 
 import {
   setFullName,
   setEmail,
   setPostcode,
+  setStateField,
 } from 'helpers/user/userActions';
 
 
@@ -20,11 +22,42 @@ type PropTypes = {
   nameUpdate: (name: string) => void,
   emailUpdate: (email: string) => void,
   postcodeUpdate: (postcode: string) => void,
+  stateFieldUpdate: (stateField: string) => void,
   name: string,
   email: string,
   postcode: ?string,
+  stateField: string,
+  isoCountry: IsoCountry,
 };
 
+
+// ----- Functions ----- //
+
+function postcodeFieldFor(props: PropTypes) {
+  return (
+    <TextInput
+      id="postcode"
+      placeholder={props.isoCountry === 'US' ? 'Zip' : 'Postcode (optional)'}
+      value={props.postcode || ''}
+      onChange={props.postcodeUpdate}
+    />
+  );
+}
+
+function stateFieldIfRequiredFor(props: PropTypes) {
+  if (props.isoCountry === 'US') {
+    return (
+      <TextInput
+        id="state"
+        placeholder="State"
+        value={props.stateField || ''}
+        onChange={props.stateFieldUpdate}
+        required
+      />
+    );
+  }
+  return null;
+}
 
 // ----- Component ----- //
 
@@ -46,12 +79,8 @@ function FormFields(props: PropTypes) {
         onChange={props.emailUpdate}
         required
       />
-      <TextInput
-        id="postcode"
-        placeholder="Postcode (optional)"
-        value={props.postcode || ''}
-        onChange={props.postcodeUpdate}
-      />
+      {stateFieldIfRequiredFor(props)}
+      {postcodeFieldFor(props)}
     </form>
   );
 
@@ -65,7 +94,9 @@ function mapStateToProps(state) {
   return {
     name: state.user.fullName,
     email: state.user.email,
+    stateField: state.user.stateField,
     postcode: state.user.postcode,
+    isoCountry: detectCountry(),
   };
 
 }
@@ -78,6 +109,9 @@ function mapDispatchToProps(dispatch) {
     },
     emailUpdate: (email: string) => {
       dispatch(setEmail(email));
+    },
+    stateFieldUpdate: (stateField: string) => {
+      dispatch(setStateField(stateField));
     },
     postcodeUpdate: (postcode: string) => {
       dispatch(setPostcode(postcode));

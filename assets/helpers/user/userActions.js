@@ -8,6 +8,7 @@ export type Action =
   | { type: 'SET_LAST_NAME', name: string }
   | { type: 'SET_FULL_NAME', name: string }
   | { type: 'SET_EMAIL', email: string }
+  | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
   ;
@@ -33,6 +34,10 @@ export function setFullName(name: string): Action {
 
 export function setEmail(email: string): Action {
   return { type: 'SET_EMAIL', email };
+}
+
+export function setStateField(stateField: string): Action {
+  return { type: 'SET_STATEFIELD', stateField };
 }
 
 export function setPostcode(postcode: string): Action {
