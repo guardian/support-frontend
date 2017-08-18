@@ -56,7 +56,7 @@ export default function userReducer(
     case 'SET_EMAIL':
       return Object.assign({}, state, { email: action.email });
 
-    case 'SET-STATEFIELD':
+    case 'SET_STATEFIELD':
       return Object.assign({}, state, { stateField: action.stateField });
 
     case 'SET_POSTCODE':
