@@ -22,8 +22,8 @@ class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
 
     val e = Configuration.emailServicesConfig
     e.thankYou.queueName should be("contributions-thanks-dev")
-    e.thankYou.dataExtensionName should be("contribution-thank-you")
-    e.failed.queueName should be("subs-welcome-email")
+    e.thankYou.dataExtensionName should be("regular-contribution-thank-you")
+    e.failed.queueName should be("contributions-thanks-dev")
     e.failed.dataExtensionName should be("contribution-failed")
   }
 }
