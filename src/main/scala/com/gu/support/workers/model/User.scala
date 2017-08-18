@@ -8,6 +8,7 @@ case class User(
   firstName: String,
   lastName: String,
   country: Country,
+  state: Option[String],
   allowMembershipMail: Boolean,
   allowThirdPartyMail: Boolean,
   allowGURelatedMail: Boolean,
