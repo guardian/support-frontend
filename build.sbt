@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "org.typelevel" %% "cats" % "0.9.0",
   "play-circe" %% "play-circe" % "2.6-0.8.0",
-  "com.gu" %% "support-models" % "0.5",
+  "com.gu" %% "support-models" % "0.9",
   "com.gu" %% "support-config" % "0.7",
   "com.gu" %% "support-internationalisation" % "0.2",
   "io.circe" %% "circe-core" % circeVersion,
