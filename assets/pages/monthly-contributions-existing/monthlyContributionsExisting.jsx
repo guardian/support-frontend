@@ -11,6 +11,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 
 import pageStartup from 'helpers/pageStartup';
+import { routes } from 'helpers/routes';
 
 
 // ----- Page Startup ----- //
@@ -34,7 +35,7 @@ const content = (
           </h2>
           <CtaLink
             text="Make a one-off contribution"
-            url="/oneoff-contributions"
+            url={routes.oneOffContribCheckout}
           />
         </div>
         <InfoSection heading="Questions?" className="existing__questions">

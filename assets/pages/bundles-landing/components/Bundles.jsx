@@ -11,6 +11,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
+import { routes } from 'helpers/routes';
 
 import {
   changeContribType,
@@ -137,8 +138,8 @@ const bundles: BundlesType = {
 };
 
 const ctaLinks = {
-  recurring: 'https://membership.theguardian.com/monthly-contribution',
-  oneOff: 'https://contribute.theguardian.com/uk',
+  recurring: routes.recurringContribCheckout,
+  oneOff: routes.oneOffContribCheckout,
   subs: 'https://subscribe.theguardian.com',
 };
 
@@ -153,11 +154,10 @@ const contribSubheading = {
 const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
-  const amountParam = contType === 'recurring' ? 'contributionValue' : 'amount';
   const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 
-  params.append(amountParam, contribAmount[contType].value);
+  params.append('contributionValue', contribAmount[contType].value);
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 

@@ -9,7 +9,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
-import payPalContributionsCheckout from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
+import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -53,9 +53,6 @@ function createOneOffContribReducer(amount: number, currency: Currency, country:
 
     switch (action.type) {
 
-      case 'SET_CONTRIB_VALUE':
-        return Object.assign({}, state, { amount: action.value });
-
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
 
@@ -82,7 +79,7 @@ export default function createRootOneOffContribReducer(
     intCmp,
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
-    payPalContributionsCheckout,
+    payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),
     csrf,
   });
 }
