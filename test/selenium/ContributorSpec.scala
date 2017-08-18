@@ -1,17 +1,19 @@
 package selenium
 
-import org.scalatest.{FeatureSpec, GivenWhenThen, Tag}
+import org.scalatest.{BeforeAndAfterAll, FeatureSpec, GivenWhenThen, Tag}
 import _root_.selenium.pages.{ContributionsLanding, MonthlyContribution, Register, ThankYou}
 import _root_.selenium.util._
 
 object Selenium extends Tag("Selenium")
 
-class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen {
+class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with BeforeAndAfterAll {
 
   def prepareForSeleniumTest: Unit = {
     Driver.reset()
     dependencyCheck
   }
+
+  override def afterAll(): Unit = { Driver.quit() }
 
   def dependencyCheck: Unit = {
     assume(
@@ -23,8 +25,6 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen {
       s"- ${Dependencies.IdentityFrontend.url} is unavailable! Please run identity-frontend locally before running these tests."
     )
   }
-
-  def cleanUp: Unit = Driver.quit()
 
   feature("Sign up for a Monthly Contribution") {
 
@@ -77,8 +77,6 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen {
       Then("the thankyou page should display")
       ThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed
       assert(ThankYou.pageHasLoaded)
-
-      cleanUp
 
     }
 
