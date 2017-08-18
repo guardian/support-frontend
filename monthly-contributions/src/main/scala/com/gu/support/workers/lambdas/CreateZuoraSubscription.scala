@@ -62,10 +62,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     )
 
     val contactDetails = ContactDetails(
-      state.user.firstName,
-      state.user.lastName,
-      state.user.primaryEmailAddress,
-      state.user.country
+      firstName = state.user.firstName,
+      lastName = state.user.lastName,
+      workEmail = state.user.primaryEmailAddress,
+      country = state.user.country,
+      state = state.user.state
     )
 
     val date = LocalDate.now(DateTimeZone.UTC)
