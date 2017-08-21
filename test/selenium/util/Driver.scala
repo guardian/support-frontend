@@ -16,7 +16,7 @@ object Driver {
     else
       instantiateRemoteBrowser()
 
-  // Used by dev environments to run tests locally
+  // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
     ChromeDriverManager.getInstance().setup()
     new ChromeDriver()
