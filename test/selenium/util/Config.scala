@@ -16,8 +16,6 @@ object Config {
 
   val testUsersSecret = conf.getString("identity.test.users.secret")
 
-  val waitTimeout = conf.getInt("selenium.wait.timeout")
-
   val webDriverRemoteUrl = Try(conf.getString("web.driver.remote.url")) match {
     case Success(url) => url
     case Failure(_) => ""
