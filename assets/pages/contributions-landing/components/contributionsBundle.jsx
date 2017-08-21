@@ -11,6 +11,7 @@ import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 
 import {
   changeContribType,
@@ -64,15 +65,31 @@ const oneOffSubHeadingText = {
   US: 'Support the Guardian’s editorial operations by making a one-time contribution today',
 };
 
-function contribAttrs(isoCountry: IsoCountry): ContribAttrs {
+function contribCtaText(contribType: Contrib): string {
+  switch (contribType) {
+    case 'RECURRING':
+      return 'Contribute with card or PayPal';
+    default:
+      return 'Contribute with credit/debit card';
+  }
+}
+
+function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttrs {
   return {
     heading: 'contribute',
     subheading: subHeadingText[isoCountry],
-    ctaText: 'Contribute',
+    ctaText: contribCtaText(contribType),
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
   };
+}
+
+function showPayPal(props: PropTypes) {
+  switch (props.contribType) {
+    case 'ONE_OFF': return <PayPalContributionButton />;
+    default: return null;
+  }
 }
 
 const ctaLinks = {
@@ -103,11 +120,11 @@ const getContribAttrs = ({
   if (!showMonthly) {
 
     const subheading = oneOffSubHeadingText[isoCountry];
-    return Object.assign({}, contribAttrs(isoCountry), { ctaLink, subheading });
+    return Object.assign({}, contribAttrs(isoCountry, contribType), { ctaLink, subheading });
 
   }
 
-  return Object.assign({}, contribAttrs(isoCountry), { ctaLink });
+  return Object.assign({}, contribAttrs(isoCountry, contribType), { ctaLink });
 
 };
 
@@ -125,7 +142,6 @@ function ContributionsBundle(props: PropTypes) {
       window.location = attrs.ctaLink;
     }
   };
-
   return (
     <Bundle {...attrs}>
       <ContribAmounts
@@ -133,6 +149,7 @@ function ContributionsBundle(props: PropTypes) {
         {...props}
       />
       <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
+      {showPayPal(props)}
     </Bundle>
   );
 
