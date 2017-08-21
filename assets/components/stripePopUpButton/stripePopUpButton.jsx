@@ -36,6 +36,7 @@ const StripePopUpButton = (props: PropTypes) => {
 
   return (
     <button
+      id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
       onClick={stripeClick}
     >Pay with debit/credit card <Svg svgName="credit-card" /></button>

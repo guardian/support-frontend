@@ -58,6 +58,9 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "22.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.0",
+  "io.github.bonigarcia" % "webdrivermanager" % "1.4.10" % "test",
+  "org.seleniumhq.selenium" % "selenium-java" % "3.0.1" % "test",
+  "com.squareup.okhttp3" % "okhttp" % "3.8.1",
   filters,
   ws
 )
@@ -104,3 +107,5 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
+addCommandAlias("fast-test", "test-only -- -l Selenium")
+addCommandAlias("selenium-test", "test-only -- -n Selenium")
