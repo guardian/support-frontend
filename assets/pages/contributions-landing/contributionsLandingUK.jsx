@@ -34,11 +34,6 @@ const store = createStore(reducer, {
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 
 
-// ----- AB Test ----- //
-
-const showMonthly = participation.contributionsLandingAddingMonthly !== 'control';
-
-
 // ----- Render ----- //
 
 const content = (
@@ -46,7 +41,7 @@ const content = (
     <div className="gu-content">
       <SimpleHeader />
       <section className="contributions-bundle">
-        <div className={`contributions-bundle__content gu-content-margin ${showMonthly ? '' : 'hide-monthly'}`}>
+        <div className="contributions-bundle__content gu-content-margin">
           <ContributionsIntroduction />
           <ContributionsBundle />
         </div>

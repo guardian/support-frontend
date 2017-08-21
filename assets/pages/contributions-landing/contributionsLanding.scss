@@ -287,25 +287,4 @@
 		}
 	}
 
-	// ----- AB Test ----- //
-
-	.hide-monthly {
-		.contrib-type {
-			display: none;
-		}
-
-		.component-double-heading__subheading {
-			margin-bottom: $gu-v-spacing * 3;
-
-			@include mq($from: mobileLandscape) {
-				margin-bottom: 100px;
-			}
-		}
-
-		.component-contrib-amounts {
-			border-top: 1px dotted gu-colour(neutral-1);
-			padding-top: 7px;
-		}
-	}
-
 }
