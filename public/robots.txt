@@ -2,5 +2,6 @@ User-agent: *
 
 Disallow: /uk/contribute
 Disallow: /contribute
+Disallow: /us/contribute
 
 Allow: /
