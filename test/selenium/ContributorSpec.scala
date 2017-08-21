@@ -10,6 +10,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
 
   override def beforeAll: Unit = {
     Driver.reset()
+    Config.printSummary()
     dependencyCheck
   }
 
