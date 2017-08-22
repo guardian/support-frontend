@@ -94,6 +94,8 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
+javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
+
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
