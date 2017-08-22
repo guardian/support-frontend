@@ -19,21 +19,24 @@ type PropTypes = {
 
 function payWithPayPal(props: PropTypes) {
   return () => {
-    paypalContributionsRedirect(Number(props.amount), props.intCmp, props.isoCountry, props.errorHandler);
-  }
+    paypalContributionsRedirect(
+      Number(props.amount),
+      props.intCmp,
+      props.isoCountry,
+      props.errorHandler);
+  };
 }
 
 // ----- Component ----- //
 
-const PayPalContributionButton = (props: PropTypes) => {
-
-  return (
+const PayPalContributionButton = (props: PropTypes) =>
+  (
     <button className={'component-paypal-contribution-button'} onClick={payWithPayPal(props)}>
       <Svg svgName="paypal-p-logo" />
       <span>contribute with PayPal</span>
       <Svg svgName="arrow-right-straight" />
-    </button>);
-};
+    </button>
+  );
 
 
 // ----- Defaults ----- //
