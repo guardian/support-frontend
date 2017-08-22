@@ -29,7 +29,6 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  showMonthly: boolean,
   intCmp: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,
@@ -56,12 +55,7 @@ const subHeadingText = {
   GB: `Support the Guardian’s editorial operations by making a
     monthly or one-off contribution today`,
   US: `Support the Guardian’s editorial operations by making a
-    regular or one-time contribution today`,
-};
-
-const oneOffSubHeadingText = {
-  GB: 'Support the Guardian’s editorial operations by making a one-off contribution today',
-  US: 'Support the Guardian’s editorial operations by making a one-time contribution today',
+    monthly or one-time contribution today`,
 };
 
 function contribAttrs(isoCountry: IsoCountry): ContribAttrs {
@@ -84,7 +78,7 @@ const ctaLinks = {
 // ----- Functions ----- //
 
 const getContribAttrs = ({
-  contribType, contribAmount, intCmp, showMonthly, isoCountry,
+  contribType, contribAmount, intCmp, isoCountry,
 }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
@@ -99,13 +93,6 @@ const getContribAttrs = ({
   }
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
-
-  if (!showMonthly) {
-
-    const subheading = oneOffSubHeadingText[isoCountry];
-    return Object.assign({}, contribAttrs(isoCountry), { ctaLink, subheading });
-
-  }
 
   return Object.assign({}, contribAttrs(isoCountry), { ctaLink });
 
@@ -143,15 +130,11 @@ function ContributionsBundle(props: PropTypes) {
 
 function mapStateToProps(state) {
 
-  const showMonthly =
-    state.abTests.contributionsLandingAddingMonthly !== 'control';
-
   return {
-    contribType: showMonthly ? state.contribution.type : 'ONE_OFF',
+    contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
-    showMonthly,
     isoCountry: state.isoCountry,
   };
 }
