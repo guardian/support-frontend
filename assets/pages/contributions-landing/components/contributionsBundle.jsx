@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
@@ -18,6 +19,7 @@ import {
   changeContribAmount,
   changeContribAmountRecurring,
   changeContribAmountOneOff,
+  payPalError,
 } from '../actions/contributionsLandingActions';
 
 
@@ -36,6 +38,8 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  payPalErrorHandler: (string) => void,
+  payPalError: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -81,7 +85,12 @@ function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttr
 
 function showPayPal(props: PropTypes) {
   switch (props.contribType) {
-    case 'ONE_OFF': return <PayPalContributionButton />;
+    case 'ONE_OFF': return (<PayPalContributionButton
+      amount={props.contribAmount.oneOff.value}
+      intCmp={props.intCmp}
+      isoCountry={props.isoCountry}
+      errorHandler={props.payPalErrorHandler}
+    />);
     default: return null;
   }
 }
@@ -138,6 +147,7 @@ function ContributionsBundle(props: PropTypes) {
       />
       <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
       {showPayPal(props)}
+      {props.payPalError ? <ErrorMessage message={props.payPalError} /> : null}
     </Bundle>
   );
 
@@ -154,6 +164,7 @@ function mapStateToProps(state) {
     contribError: state.contribution.error,
     intCmp: state.intCmp,
     isoCountry: state.isoCountry,
+    payPalError: state.contribution.payPalError,
   };
 }
 
@@ -171,6 +182,9 @@ function mapDispatchToProps(dispatch) {
     },
     changeContribAmount: (value: string) => {
       dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+    payPalErrorHandler: (message: string) => {
+      dispatch(payPalError(message));
     },
   };
 
