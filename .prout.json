@@ -3,6 +3,13 @@
         "PROD": {
             "url": "https://support.theguardian.com/uk",
             "overdue": "14M"
+            "afterSeen": {
+                "travis": {
+                    "config": {
+                        "script": "sbt ++$TRAVIS_SCALA_VERSION selenium-test"
+                    }
+                }
+            }
         }
     },
     "sentry": {
