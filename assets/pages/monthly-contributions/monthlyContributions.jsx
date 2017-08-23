@@ -26,7 +26,7 @@ import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
 
 import postCheckout from './helpers/ajax';
-import NameForm from './components/nameForm';
+import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
@@ -78,7 +78,7 @@ const content = (
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName />
-          <NameForm />
+          <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethodsContainer
