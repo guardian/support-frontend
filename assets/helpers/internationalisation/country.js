@@ -11,9 +11,6 @@ import * as cookie from './../cookie';
 const usStates: {
   [string]: string,
 } = {
-  AA: 'Armed Forces America',
-  AE: 'Armed Forces',
-  AP: 'Armed Forces Pacific',
   AK: 'Alaska',
   AL: 'Alabama',
   AR: 'Arkansas',
@@ -68,6 +65,9 @@ const usStates: {
   WI: 'Wisconsin',
   WV: 'West Virginia',
   WY: 'Wyoming',
+  AA: 'Armed Forces America',
+  AE: 'Armed Forces',
+  AP: 'Armed Forces Pacific',
 };
 
 
