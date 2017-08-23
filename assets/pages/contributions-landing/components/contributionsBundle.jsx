@@ -97,6 +97,14 @@ function showPayPal(props: PropTypes) {
   }
 }
 
+function showPayPalError(props: PropTypes) {
+  switch (props.contribType) {
+    case 'ONE_OFF':
+      return (props.payPalError ? <ErrorMessage message={props.payPalError} /> : null);
+    default: return null;
+  }
+}
+
 const ctaLinks = {
   recurring: routes.recurringContribCheckout,
   oneOff: routes.oneOffContribCheckout,
@@ -149,7 +157,7 @@ function ContributionsBundle(props: PropTypes) {
       />
       <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
       {showPayPal(props)}
-      {props.payPalError ? <ErrorMessage message={props.payPalError} /> : null}
+      {showPayPalError(props)}
     </Bundle>
   );
 
