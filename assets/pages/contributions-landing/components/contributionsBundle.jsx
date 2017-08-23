@@ -63,20 +63,16 @@ const subHeadingText = {
     monthly or one-time contribution today`,
 };
 
-function contribCtaText(contribType: Contrib): string {
-  switch (contribType) {
-    case 'RECURRING':
-      return 'Contribute with card or PayPal';
-    default:
-      return 'Contribute with credit/debit card';
-  }
-}
+const contribCtaText = {
+  RECURRING: 'Contribute with card or PayPal',
+  ONE_OFF: 'Contribute with debit/credit card',
+};
 
 function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttrs {
   return {
     heading: 'contribute',
     subheading: subHeadingText[isoCountry],
-    ctaText: contribCtaText(contribType),
+    ctaText: contribCtaText[contribType],
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
