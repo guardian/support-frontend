@@ -20,6 +20,7 @@ type MonthlyContribFields = {
     stripeToken: string,
   },
   country: string,
+  state?: string,
   firstName: string,
   lastName: string,
 };
@@ -48,6 +49,10 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
       firstName: state.user.firstName,
       lastName: state.user.lastName,
     };
+
+    if (state.user.stateField) {
+      monthlyContribFields.state = state.user.stateField;
+    }
 
     return {
       method: 'POST',
