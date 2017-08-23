@@ -15,7 +15,7 @@ import {
 } from 'helpers/user/userActions';
 import { usStates } from 'helpers/internationalisation/country';
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 
 
@@ -24,7 +24,7 @@ import type { SelectOption } from 'components/selectInput/selectInput';
 type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
-  stateUpdate: (value: string) => void,
+  stateUpdate: (value: UsState) => void,
   firstName: string,
   lastName: string,
   country: IsoCountry,
@@ -33,13 +33,16 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function stateDropdown(country: IsoCountry, stateUpdate: string => void) {
+function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
 
   if (country === 'US') {
 
-    const options: SelectOption[] = usStates.map(usState =>
-      ({ value: usState.code, text: usState.name }),
+    const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
+      ({ value: stateCode, text: usStates[stateCode] }),
     );
+
+    // Sets the initial state to the first in the dropdown.
+    stateUpdate(options[0].value);
 
     return <SelectInput onChange={stateUpdate} options={options} />;
 
@@ -98,7 +101,7 @@ function mapDispatchToProps(dispatch) {
     lastNameUpdate: (name: string) => {
       dispatch(setLastName(name));
     },
-    stateUpdate: (value: string) => {
+    stateUpdate: (value: UsState) => {
       dispatch(setStateField(value));
     },
   };

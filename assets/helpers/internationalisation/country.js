@@ -6,79 +6,78 @@ import { getQueryParameter } from 'helpers/url';
 import * as cookie from './../cookie';
 
 
+// ----- Setup ----- //
+
+const usStates: {
+  [string]: string,
+} = {
+  AA: 'Armed Forces America',
+  AE: 'Armed Forces',
+  AP: 'Armed Forces Pacific',
+  AK: 'Alaska',
+  AL: 'Alabama',
+  AR: 'Arkansas',
+  AZ: 'Arizona',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DC: 'Washington DC (District of Columbia)',
+  DE: 'Delaware',
+  FL: 'Florida',
+  GA: 'Georgia',
+  GU: 'Guam',
+  HI: 'Hawaii',
+  IA: 'Iowa',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  MA: 'Massachusetts',
+  MD: 'Maryland',
+  ME: 'Maine',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MO: 'Missouri',
+  MS: 'Mississippi',
+  MT: 'Montana',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  NE: 'Nebraska',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NV: 'Nevada',
+  NY: 'New York',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  PR: 'Puerto Rico',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VA: 'Virginia',
+  VI: 'Virgin Islands',
+  VT: 'Vermont',
+  WA: 'Washington',
+  WI: 'Wisconsin',
+  WV: 'West Virginia',
+  WY: 'Wyoming',
+};
+
+
 // ----- Types ----- //
 
 export type IsoCountry =
   | 'GB'
   | 'US';
 
-type usState = {
-  code: string,
-  name: string,
-};
-
-
-// ----- Setup ----- //
-
-const usStates: usState[] = [
-  { code: 'AA', name: 'Armed Forces America' },
-  { code: 'AE', name: 'Armed Forces' },
-  { code: 'AP', name: 'Armed Forces Pacific' },
-  { code: 'AK', name: 'Alaska' },
-  { code: 'AL', name: 'Alabama' },
-  { code: 'AR', name: 'Arkansas' },
-  { code: 'AZ', name: 'Arizona' },
-  { code: 'CA', name: 'California' },
-  { code: 'CO', name: 'Colorado' },
-  { code: 'CT', name: 'Connecticut' },
-  { code: 'DC', name: 'Washington DC (District of Columbia)' },
-  { code: 'DE', name: 'Delaware' },
-  { code: 'FL', name: 'Florida' },
-  { code: 'GA', name: 'Georgia' },
-  { code: 'GU', name: 'Guam' },
-  { code: 'HI', name: 'Hawaii' },
-  { code: 'IA', name: 'Iowa' },
-  { code: 'ID', name: 'Idaho' },
-  { code: 'IL', name: 'Illinois' },
-  { code: 'IN', name: 'Indiana' },
-  { code: 'KS', name: 'Kansas' },
-  { code: 'KY', name: 'Kentucky' },
-  { code: 'LA', name: 'Louisiana' },
-  { code: 'MA', name: 'Massachusetts' },
-  { code: 'MD', name: 'Maryland' },
-  { code: 'ME', name: 'Maine' },
-  { code: 'MI', name: 'Michigan' },
-  { code: 'MN', name: 'Minnesota' },
-  { code: 'MO', name: 'Missouri' },
-  { code: 'MS', name: 'Mississippi' },
-  { code: 'MT', name: 'Montana' },
-  { code: 'NC', name: 'North Carolina' },
-  { code: 'ND', name: 'North Dakota' },
-  { code: 'NE', name: 'Nebraska' },
-  { code: 'NH', name: 'New Hampshire' },
-  { code: 'NJ', name: 'New Jersey' },
-  { code: 'NM', name: 'New Mexico' },
-  { code: 'NV', name: 'Nevada' },
-  { code: 'NY', name: 'New York' },
-  { code: 'OH', name: 'Ohio' },
-  { code: 'OK', name: 'Oklahoma' },
-  { code: 'OR', name: 'Oregon' },
-  { code: 'PA', name: 'Pennsylvania' },
-  { code: 'PR', name: 'Puerto Rico' },
-  { code: 'RI', name: 'Rhode Island' },
-  { code: 'SC', name: 'South Carolina' },
-  { code: 'SD', name: 'South Dakota' },
-  { code: 'TN', name: 'Tennessee' },
-  { code: 'TX', name: 'Texas' },
-  { code: 'UT', name: 'Utah' },
-  { code: 'VA', name: 'Virginia' },
-  { code: 'VI', name: 'Virgin Islands' },
-  { code: 'VT', name: 'Vermont' },
-  { code: 'WA', name: 'Washington' },
-  { code: 'WI', name: 'Wisconsin' },
-  { code: 'WV', name: 'West Virginia' },
-  { code: 'WY', name: 'Wyoming' },
-];
+export type UsState = $Keys<typeof usStates>;
 
 
 // ----- Functions ----- /

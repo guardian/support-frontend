@@ -4,6 +4,7 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
@@ -19,8 +20,8 @@ type MonthlyContribFields = {
   paymentFields: {
     stripeToken: string,
   },
-  country: string,
-  state?: string,
+  country: IsoCountry,
+  state?: UsState,
   firstName: string,
   lastName: string,
 };
