@@ -66,7 +66,7 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="oneoff-contrib gu-content-filler__inner">
+      <div className="oneoff-contrib gu-content-margin">
         <InfoSection className="oneoff-contrib__header">
           <h1 className="oneoff-contrib__heading">{`Make a ${contribDescription} contribution`}</h1>
           <Secure />
@@ -87,7 +87,9 @@ const content = (
             payPalType={store.getState().oneoffContrib.payPalType}
           />
         </InfoSection>
-        <InfoSection className="oneoff-contrib__payment-methods">
+      </div>
+      <div className="terms-privacy gu-content-filler">
+        <InfoSection className="terms-privacy__content gu-content-filler__inner">
           <TermsPrivacy
             termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
             privacyLink="https://www.theguardian.com/help/privacy-policy"
