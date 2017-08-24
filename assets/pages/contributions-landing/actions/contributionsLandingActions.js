@@ -13,6 +13,7 @@ export type Action =
   | { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
   | { type: 'PAYPAL_ERROR', message: string }
+  | { type: 'SET_CONTEXT', context: boolean }
   ;
 
 
@@ -36,4 +37,8 @@ export function changeContribAmountOneOff(amount: Amount): Action {
 
 export function payPalError(message: string): Action {
   return { type: 'PAYPAL_ERROR', message };
+}
+
+export function setContext(context: boolean) {
+  return { type: 'SET_CONTEXT', context };
 }
