@@ -23,9 +23,15 @@ export default function ContributionsContext() {
         If everyone who reads our reporting, who likes it, helps to support it,
         our future would be much more secure.
       </p>
-      <h1 className="contributions-context__subheading">support the Guardian&#39;s</h1>
-      <h1 className="contributions-context__subheading">quality and independent voice</h1>
-      <h1 className="contributions-context__subheading">make a contribution today</h1>
+      <h1 className="contributions-context__subheading">
+        support the Guardian&#39;s quality journalism
+      </h1>
+      <h1 className="contributions-context__subheading">
+        and independent voice
+      </h1>
+      <h1 className="contributions-context__subheading">
+        make a contribution today
+      </h1>
     </div>
   );
 
