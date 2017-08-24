@@ -6,11 +6,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import TextInput from 'components/textInput/textInput';
+import SelectInput from 'components/selectInput/selectInput';
 
 import {
   setFirstName,
   setLastName,
+  setStateField,
 } from 'helpers/user/userActions';
+import { usStates } from 'helpers/internationalisation/country';
+
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
+import type { SelectOption } from 'components/selectInput/selectInput';
 
 
 // ----- Types ----- //
@@ -18,9 +24,33 @@ import {
 type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
+  stateUpdate: (value: UsState) => void,
   firstName: string,
   lastName: string,
+  country: IsoCountry,
 };
+
+
+// ----- Functions ----- //
+
+function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
+
+  if (country === 'US') {
+
+    const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
+      ({ value: stateCode, text: usStates[stateCode] }),
+    );
+
+    // Sets the initial state to the first in the dropdown.
+    stateUpdate(options[0].value);
+
+    return <SelectInput onChange={stateUpdate} options={options} />;
+
+  }
+
+  return null;
+
+}
 
 
 // ----- Component ----- //
@@ -43,6 +73,7 @@ function NameForm(props: PropTypes) {
         onChange={props.lastNameUpdate}
         required
       />
+      {stateDropdown(props.country, props.stateUpdate)}
     </form>
   );
 
@@ -56,6 +87,7 @@ function mapStateToProps(state) {
   return {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
+    country: state.monthlyContrib.country,
   };
 
 }
@@ -68,6 +100,9 @@ function mapDispatchToProps(dispatch) {
     },
     lastNameUpdate: (name: string) => {
       dispatch(setLastName(name));
+    },
+    stateUpdate: (value: UsState) => {
+      dispatch(setStateField(value));
     },
   };
 
