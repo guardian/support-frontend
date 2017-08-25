@@ -120,8 +120,24 @@
 
 	// ----- Legal ----- //
 
+	.terms-privacy {
+		background-color: darken(#fff, 5%);
+
+		.component-info-section__content {
+			@include mq($from: desktop) {
+				width: 550px;
+			}
+		}
+	}
+
+	.terms-privacy__content {
+		background-color: #fff;
+		padding-top: $gu-v-spacing;
+	}
+
 	.component-contrib-legal {
 		padding-top: $gu-v-spacing;
+		padding-bottom: $gu-v-spacing * 2;
 	}
 
 }

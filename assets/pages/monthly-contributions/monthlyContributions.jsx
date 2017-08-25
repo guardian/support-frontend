@@ -63,10 +63,10 @@ const state: CombinedState = store.getState();
 
 const content = (
   <Provider store={store}>
-    <div className="gu-content gu-content-filler">
+    <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="monthly-contrib gu-content-filler__inner">
+      <div className="monthly-contrib gu-content-margin">
         <InfoSection className="monthly-contrib__header">
           <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
           <Secure />
@@ -88,7 +88,9 @@ const content = (
             payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>
-        <InfoSection className="monthly-contrib__payment-methods">
+      </div>
+      <div className="terms-privacy gu-content-filler">
+        <InfoSection className="terms-privacy__content gu-content-filler__inner">
           <TermsPrivacy
             termsLink={termsLinks[country]}
             privacyLink="https://www.theguardian.com/help/privacy-policy"
