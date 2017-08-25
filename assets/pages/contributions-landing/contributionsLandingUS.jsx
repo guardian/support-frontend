@@ -14,7 +14,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
-import { parseBoolean } from 'helpers/utilities';
+import { parseBoolean, generateClassName } from 'helpers/utilities';
 
 import reducer from './reducers/reducers';
 import ContributionsIntroduction from './components/contributionsIntroduction';
@@ -44,7 +44,7 @@ const content = (
   <Provider store={store}>
     <div className="gu-content">
       <SimpleHeader />
-      <section className="contributions-bundle">
+      <section className={generateClassName('contributions-bundle', store.getState().contribution.context ? 'context' : null)}>
         <div className="contributions-bundle__content gu-content-margin">
           {store.getState().contribution.context
             ? <ContributionsContext />

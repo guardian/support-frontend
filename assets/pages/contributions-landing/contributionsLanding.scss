@@ -212,7 +212,7 @@
 		background-color: darken(gu-colour(multimedia-main-2), 5%);
 
 		@include mq($from: mobileLandscape) {
-			height: 700px;
+			height: 620px;
 		}
 
 		@include mq($from: phablet) {
@@ -221,6 +221,16 @@
 
 		@include mq($from: desktop) {
 			height: 450px;
+		}
+	}
+
+	.contributions-bundle--context {
+		@include mq($from: mobileLandscape, $until: phablet) {
+			height: 840px;
+		}
+
+		@include mq($from: phablet, $until: desktop) {
+			height: auto;
 		}
 	}
 
