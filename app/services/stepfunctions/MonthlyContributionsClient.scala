@@ -34,6 +34,7 @@ case class CreateMonthlyContributorRequest(
   firstName: String,
   lastName: String,
   country: Country,
+  state: Option[String],
   contribution: Contribution,
   paymentFields: Either[StripePaymentToken, PayPalPaymentFields]
 )

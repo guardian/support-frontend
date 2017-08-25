@@ -21,12 +21,13 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import pageStartup from 'helpers/pageStartup';
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
 
 import postCheckout from './helpers/ajax';
-import NameForm from './components/nameForm';
+import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
@@ -78,7 +79,7 @@ const content = (
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
           <DisplayName />
-          <NameForm />
+          <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethodsContainer
@@ -89,7 +90,7 @@ const content = (
         </InfoSection>
         <InfoSection className="monthly-contrib__payment-methods">
           <TermsPrivacy
-            termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+            termsLink={termsLinks[country]}
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
           <ContribLegal />

@@ -4,6 +4,7 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
 
 import { checkoutError } from '../actions/monthlyContributionsActions';
@@ -19,7 +20,8 @@ type MonthlyContribFields = {
   paymentFields: {
     stripeToken: string,
   },
-  country: string,
+  country: IsoCountry,
+  state?: UsState,
   firstName: string,
   lastName: string,
 };
@@ -48,6 +50,10 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
       firstName: state.user.firstName,
       lastName: state.user.lastName,
     };
+
+    if (state.user.stateField) {
+      monthlyContribFields.state = state.user.stateField;
+    }
 
     return {
       method: 'POST',

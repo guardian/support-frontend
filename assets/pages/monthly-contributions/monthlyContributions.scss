@@ -92,6 +92,17 @@
 				width: 304px;
 			}
 		}
+
+		.component-select-input {
+			width: 100%;
+			margin-top: 20px;
+			margin-bottom: 0;
+
+			@include mq($from: desktop) {
+				width: 304px;
+			}
+		}
+
 	}
 
 	// ----- Payment methods

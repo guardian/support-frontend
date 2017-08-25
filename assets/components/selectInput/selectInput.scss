@@ -1,0 +1,23 @@
+.component-select-input {
+	font-family: $gu-sans-web;
+	font-size: 14px;
+	color: gu-colour(neutral-1);
+	margin: 0 -2px 20px;
+	border: none;
+	border-radius: 600px;
+	height: $gu-v-spacing * 4;
+	padding: 0 $gu-h-spacing;
+	appearance: none;
+	background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 14.13"><style>.st0{fill:#333333;}</style><path class="st0" d="M.55 3.84L0 3.29 3.28 0h.45L7 3.29l-.55.55-2.31-1.77v3.71H2.86V2.07L.55 3.84zM7 10.85l-3.28 3.28h-.44L0 10.85l.55-.58 2.31 1.77V8.35h1.28v3.69l2.31-1.77.55.58z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 20px top 15px;
+    background-size: 9px;
+    // Fix for Safari 8.
+    background-color: #fff;
+
+	// Fix for IE.
+    &::-ms-expand {
+	    border: none;
+	    background-color: #fff;
+	}
+}

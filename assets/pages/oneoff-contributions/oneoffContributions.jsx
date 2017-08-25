@@ -20,6 +20,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import pageStartup from 'helpers/pageStartup';
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
@@ -89,7 +90,7 @@ const content = (
         </InfoSection>
         <InfoSection className="oneoff-contrib__payment-methods">
           <TermsPrivacy
-            termsLink="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+            termsLink={termsLinks[country]}
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
           <ContribLegal />
