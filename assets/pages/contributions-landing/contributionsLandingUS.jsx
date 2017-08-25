@@ -14,11 +14,12 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
-import { parseBoolean, generateClassName } from 'helpers/utilities';
+import { parseBoolean } from 'helpers/utilities';
 
 import reducer from './reducers/reducers';
 import ContributionsIntroduction from './components/contributionsIntroduction';
 import ContributionsContext from './components/contributionsContext';
+import ContributionsContextIntro from './components/contributionsContextIntro';
 import ContributionsBundle from './components/contributionsBundle';
 
 
@@ -35,7 +36,10 @@ const store = createStore(reducer, {
 }, applyMiddleware(thunkMiddleware));
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
-store.dispatch({ type: 'SET_CONTEXT', context: parseBoolean(getQueryParameter('context', 'false')) });
+store.dispatch({
+  type: 'SET_CONTEXT',
+  context: parseBoolean(getQueryParameter('context', 'false')),
+});
 
 
 // ----- Render ----- //
@@ -44,12 +48,13 @@ const content = (
   <Provider store={store}>
     <div className="gu-content">
       <SimpleHeader />
-      <section className={generateClassName('contributions-bundle', store.getState().contribution.context ? 'context' : null)}>
+      <section className="contributions-bundle">
         <div className="contributions-bundle__content gu-content-margin">
           {store.getState().contribution.context
             ? <ContributionsContext />
             : <ContributionsIntroduction />
           }
+          {store.getState().contribution.context ? <ContributionsContextIntro /> : null}
           <ContributionsBundle />
         </div>
       </section>
