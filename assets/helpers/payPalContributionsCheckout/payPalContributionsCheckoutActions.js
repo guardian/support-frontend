@@ -1,7 +1,7 @@
 // @flow
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { toGuCountryCode } from 'helpers/internationalisation/country';
+import { toCountryGroup } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -42,9 +42,9 @@ export function paypalContributionsRedirect(
 
   const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 
-  const guCountry = toGuCountryCode(isoCountry);
+  const country = toCountryGroup(isoCountry);
   const postData: PayPalPostData = {
-    countryGroup: guCountry,
+    countryGroup: country,
     amount,
     intCmp,
     supportRedirect: true,

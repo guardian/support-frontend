@@ -91,7 +91,7 @@ function fromString(s: string): ?IsoCountry {
   }
 }
 
-export function toGuCountryCode(isoCountry: IsoCountry): string {
+export function toCountryGroup(isoCountry: IsoCountry): string {
   switch (isoCountry) {
     case 'US': return 'us';
     default: return 'uk';
