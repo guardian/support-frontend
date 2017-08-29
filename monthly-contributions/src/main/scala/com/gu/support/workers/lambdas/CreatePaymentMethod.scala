@@ -51,7 +51,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .map { stripeCustomer =>
         val card = stripeCustomer.card
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
+          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
       }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =

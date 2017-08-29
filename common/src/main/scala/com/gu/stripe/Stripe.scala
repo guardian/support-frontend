@@ -49,6 +49,9 @@ object Stripe {
 
   case class Card(id: String, `type`: String, last4: String, exp_month: Int, exp_year: Int, country: String) extends StripeObject {
     val issuer = `type`.toLowerCase
+    // Zuora requires 'AmericanExpress' not 'American Express'
+    // See CreditCardType at https://www.zuora.com/developer/api-reference/#operation/Object_POSTPaymentMethod
+    val zuoraCardType = `type`.replaceAll(" ", "")
   }
 
   object Customer {
