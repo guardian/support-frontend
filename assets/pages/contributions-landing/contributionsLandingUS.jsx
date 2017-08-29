@@ -17,10 +17,7 @@ import { getQueryParameter } from 'helpers/url';
 import { parseBoolean } from 'helpers/utilities';
 
 import reducer from './reducers/reducers';
-import ContributionsIntroduction from './components/contributionsIntroduction';
-import ContributionsContext from './components/contributionsContext';
-import ContributionsContextIntro from './components/contributionsContextIntro';
-import ContributionsBundle from './components/contributionsBundle';
+import ContributionsBundleContent from './components/contributionsBundleContent';
 
 
 // ----- Page Startup ----- //
@@ -49,14 +46,7 @@ const content = (
     <div className="gu-content">
       <SimpleHeader />
       <section className="contributions-bundle">
-        <div className="contributions-bundle__content gu-content-margin">
-          {store.getState().contribution.context
-            ? <ContributionsContext />
-            : <ContributionsIntroduction />
-          }
-          {store.getState().contribution.context ? <ContributionsContextIntro /> : null}
-          <ContributionsBundle />
-        </div>
+        <ContributionsBundleContent />
       </section>
       <section className="contributions-legal gu-content-filler">
         <div className="contributions-legal__content gu-content-filler__inner">
