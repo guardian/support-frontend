@@ -12,7 +12,8 @@ trait Controllers {
     actionRefiners,
     assetsResolver,
     identityService,
-    controllerComponents
+    controllerComponents,
+    appConfig.contributionsPayPalEndpoint
   )
 
   lazy val monthlyContributionsController = new MonthlyContributions(
