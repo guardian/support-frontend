@@ -104,7 +104,7 @@ object Fixtures {
 
   val account = Account(salesforceAccountId, GBP, salesforceAccountId, salesforceId, identityId, StripeGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
-  val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "Visa")
+  val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
 
   val config = Configuration.zuoraConfigProvider.get()

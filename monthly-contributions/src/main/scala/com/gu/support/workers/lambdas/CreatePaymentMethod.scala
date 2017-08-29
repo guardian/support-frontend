@@ -50,8 +50,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .createCustomer(stripe.userId, stripe.stripeToken)
       .map { stripeCustomer =>
         val card = stripeCustomer.card
+        val zuoraCardType = card.`type`.replaceAll(" ", "") // Zuora requires 'AmericanExpress' not 'American Express'
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.`type`)
+          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, zuoraCardType)
       }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
