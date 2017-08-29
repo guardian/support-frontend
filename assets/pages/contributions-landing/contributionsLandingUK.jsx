@@ -14,9 +14,9 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
-import { parseBoolean } from 'helpers/utilities';
 
 import reducer from './reducers/reducers';
+import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
 
@@ -33,10 +33,7 @@ const store = createStore(reducer, {
 }, applyMiddleware(thunkMiddleware));
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
-store.dispatch({
-  type: 'SET_CONTEXT',
-  context: parseBoolean(getQueryParameter('context', 'false')),
-});
+saveContext(store.dispatch);
 
 
 // ----- Render ----- //

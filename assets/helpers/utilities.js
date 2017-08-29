@@ -43,7 +43,7 @@ export function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) 
 }
 
 // Attempts to parse a boolean from a string.
-export function parseBoolean(boolString: ?string): ?boolean {
+export function parseBoolean(boolString: string, fallback: boolean): boolean {
 
   switch (boolString) {
     case 'true':
@@ -51,7 +51,7 @@ export function parseBoolean(boolString: ?string): ?boolean {
     case 'false':
       return false;
     default:
-      return null;
+      return fallback;
   }
 
 }
