@@ -80,25 +80,23 @@ function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttr
 }
 
 function showPayPal(props: PropTypes) {
-  switch (props.contribType) {
-    case 'ONE_OFF':
-      return (<PayPalContributionButton
-        amount={props.contribAmount.oneOff.value}
-        intCmp={props.intCmp}
-        isoCountry={props.isoCountry}
-        errorHandler={props.payPalErrorHandler}
-        canClick={!props.contribError}
-      />);
-    default: return null;
+  if (props.contribType === 'ONE_OFF') {
+    return (<PayPalContributionButton
+      amount={props.contribAmount.oneOff.value}
+      intCmp={props.intCmp}
+      isoCountry={props.isoCountry}
+      errorHandler={props.payPalErrorHandler}
+      canClick={!props.contribError}
+    />);
   }
+  return null;
 }
 
 function showPayPalError(props: PropTypes) {
-  switch (props.contribType) {
-    case 'ONE_OFF':
-      return (props.payPalError ? <ErrorMessage message={props.payPalError} /> : null);
-    default: return null;
+  if (props.contribType === 'ONE_OFF') {
+    return (props.payPalError ? <ErrorMessage message={props.payPalError} /> : null);
   }
+  return null;
 }
 
 const ctaLinks = {
