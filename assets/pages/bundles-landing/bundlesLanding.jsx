@@ -17,6 +17,7 @@ import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
+import { belongToTest } from './helpers/subscriptionsLinks';
 
 
 // ----- Page Startup ----- //
@@ -25,12 +26,14 @@ const participation = pageStartup.start();
 
 
 // ----- Redux Store ----- //
+const intCmp = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') || '';
 
 const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default'),
+  intCmp,
 });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
+const waysOfSupport = belongToTest(intCmp, 'baseline') ? '' : <WaysOfSupport />;
 
 
 // ----- Render ----- //
@@ -42,7 +45,7 @@ const content = (
       <Introduction />
       <Bundles />
       <WhySupport />
-      <WaysOfSupport />
+      {waysOfSupport}
       <SimpleFooter />
     </div>
   </Provider>
