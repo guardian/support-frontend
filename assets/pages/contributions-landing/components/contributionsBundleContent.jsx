@@ -14,7 +14,7 @@ import ContributionsBundle from './contributionsBundle';
 // ----- Types ----- //
 
 type PropTypes = {
-  context: ?boolean,
+  context: boolean,
 };
 
 
