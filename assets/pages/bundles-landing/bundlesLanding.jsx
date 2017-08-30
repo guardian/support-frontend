@@ -26,15 +26,18 @@ const participation = pageStartup.start();
 
 
 // ----- Redux Store ----- //
-const intCmp = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default') || '';
+const intCmp = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default');
 
 const store = createStore(reducer, {
   intCmp,
 });
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
-const waysOfSupport = belongToTest(intCmp, 'baseline') ? '' : <WaysOfSupport />;
+let waysOfSupport = <WaysOfSupport />;
 
+if (intCmp && belongToTest(intCmp, 'baseline'){
+  waysOfSupport = '';
+}
 
 // ----- Render ----- //
 
