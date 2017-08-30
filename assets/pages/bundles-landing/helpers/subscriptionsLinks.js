@@ -62,7 +62,7 @@ function buildUrls(promoCodes: PromoCodes, intCmp: string): SubsUrls {
 // ----- Exports ----- //
 
 export function belongToTest(intCmp: string, nameOfTest: string): boolean {
-  const test = tests.find(test => test.name === nameOfTest);
+  const test = tests.find(t => t.name === nameOfTest);
   return test !== undefined && test.intCmps.includes(intCmp);
 
 }
