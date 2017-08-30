@@ -91,6 +91,13 @@ function fromString(s: string): ?IsoCountry {
   }
 }
 
+export function toCountryGroup(isoCountry: IsoCountry): string {
+  switch (isoCountry) {
+    case 'US': return 'us';
+    default: return 'uk';
+  }
+}
+
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
   if (path.startsWith('/uk/')) {
     return 'GB';

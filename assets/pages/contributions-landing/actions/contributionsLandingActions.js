@@ -12,6 +12,7 @@ export type Action =
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_RECURRING', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
+  | { type: 'PAYPAL_ERROR', message: string }
   ;
 
 
@@ -31,4 +32,8 @@ export function changeContribAmountRecurring(amount: Amount): Action {
 
 export function changeContribAmountOneOff(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount };
+}
+
+export function payPalError(message: string): Action {
+  return { type: 'PAYPAL_ERROR', message };
 }

@@ -4,7 +4,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
@@ -29,7 +30,7 @@ const participation = pageStartup.start();
 const store = createStore(reducer, {
   intCmp: getQueryParameter('INTCMP'),
   isoCountry: 'GB',
-});
+}, applyMiddleware(thunkMiddleware));
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 

@@ -11,8 +11,8 @@ GET /                                               controllers.Default.redirect
 
 # ----- Contributions ----- #
 
-GET  /uk/contribute                                 controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
-GET  /us/contribute                                 controllers.Application.reactTemplate(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
+GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
+GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
 
 GET  /contribute/recurring                          controllers.MonthlyContributions.displayForm(paypal : Option[Boolean])
 GET  /contribute/recurring/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="monthly-contributions-thankyou-page", js="monthlyContributionsThankyouPage.js")

@@ -31,17 +31,19 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
     csrfConfig = csrfConfig
   )
 
+  val contributionsPayPalEndpoint = ""
+
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents()
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents()
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

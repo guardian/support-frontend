@@ -1,15 +1,12 @@
 // @flow
 
+// ----- Imports ----- //
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { toCountryGroup } from 'helpers/internationalisation/country';
 
-// ----- Types ----- //
 
-export type Action =
-  | { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' }
-  | { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message: string }
-  | { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' }
-  ;
+// ----- Types ----- //
 
 type PayPalPostData = {
   countryGroup: string,
@@ -18,21 +15,8 @@ type PayPalPostData = {
   supportRedirect: boolean,
 }
 
-// ----- Actions ----- //
 
-export function payPalContributionsButtonClicked(): Action {
-  return { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' };
-}
-
-export function payPalContributionsSubmitPayment(): Action {
-  return { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' };
-}
-
-
-export function payPalContributionsError(message: string): Action {
-  return { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message };
-}
-
+// ----- Functions ----- //
 
 export function paypalContributionsRedirect(
   amount: number,
@@ -58,7 +42,7 @@ export function paypalContributionsRedirect(
      ophanPageviewId: state.data.ophan.pageviewId,
      ophanBrowserId: state.data.ophan.browserId,
      ophanVisitId: state.data.ophan.visitId
-    */
+     */
   };
 
   const fetchOptions: Object = {

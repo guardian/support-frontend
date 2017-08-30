@@ -3,62 +3,53 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 import Svg from 'components/svg/svg';
-
-import { payPalContributionsButtonClicked, paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutActions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 
 
 // ---- Types ----- //
 
 type PropTypes = {
-  payWithPayPal: Function,
-  payPalPayClicked: boolean,
-  paypalContributionsRedirect: Function,
+  amount: string,
+  intCmp?: string,
+  isoCountry: IsoCountry,
+  errorHandler: (string) => void,
+  canClick?: boolean,
 };
 
+function payWithPayPal(props: PropTypes) {
+  return () => {
+    if (props.canClick) {
+      paypalContributionsRedirect(
+        Number(props.amount),
+        props.intCmp,
+        props.isoCountry,
+        props.errorHandler);
+    }
+  };
+}
 
 // ----- Component ----- //
 
-const PayPalContributionButton = (props: PropTypes) => {
-
-  if (props.payPalPayClicked) {
-    props.paypalContributionsRedirect();
-  }
-
-  return (
-    <button className={'component-paypal-contribution-button'} onClick={props.payWithPayPal}>
+const PayPalContributionButton = (props: PropTypes) =>
+  (
+    <button className={'component-paypal-contribution-button'} onClick={payWithPayPal(props)}>
       <Svg svgName="paypal-p-logo" />
       <span>contribute with PayPal</span>
       <Svg svgName="arrow-right-straight" />
-    </button>);
+    </button>
+  );
+
+
+// ----- Defaults ----- //
+
+PayPalContributionButton.defaultProps = {
+  intCmp: null,
+  canClick: true,
 };
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    payPalPayClicked: state.payPalContributionsCheckout.payPalPayClicked,
-  };
-
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    payWithPayPal: () => {
-      dispatch(payPalContributionsButtonClicked());
-    },
-    paypalContributionsRedirect: () => {
-      dispatch(paypalContributionsRedirect());
-    },
-  };
-
-}
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(PayPalContributionButton);
+export default PayPalContributionButton;
