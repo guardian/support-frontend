@@ -115,8 +115,7 @@ const getContribAttrs = ({
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
-  // TODO: uncomment when ready for US traffic
-  // params.append('country', isoCountry);
+  params.append('country', isoCountry);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
