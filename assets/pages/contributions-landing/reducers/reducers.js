@@ -20,6 +20,7 @@ export type ContribState = {
   error: ?ContribError,
   amount: Amounts,
   payPalError: ?string,
+  context: ?boolean,
 };
 
 
@@ -39,6 +40,7 @@ const initialContrib: ContribState = {
     },
   },
   payPalError: null,
+  context: false,
 };
 
 
@@ -93,6 +95,10 @@ function contribution(
       return Object.assign({}, state, {
         payPalError: action.message,
       });
+
+    case 'SET_CONTEXT':
+
+      return Object.assign({}, state, { context: action.context });
 
     default:
       return state;

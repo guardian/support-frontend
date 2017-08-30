@@ -55,6 +55,7 @@ Object {
         "value": "10",
       },
     },
+    "context": false,
     "error": null,
     "payPalError": null,
     "type": "RECURRING",

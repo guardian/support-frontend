@@ -42,3 +42,16 @@ export function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) 
   };
 }
 
+// Attempts to parse a boolean from a string.
+export function parseBoolean(boolString: string, fallback: boolean): boolean {
+
+  switch (boolString.toLowerCase()) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      return fallback;
+  }
+
+}
