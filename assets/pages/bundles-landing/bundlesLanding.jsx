@@ -35,7 +35,7 @@ const store = createStore(reducer, {
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 let waysOfSupport = <WaysOfSupport />;
 
-if (intCmp && belongToTest(intCmp, 'baseline'){
+if (intCmp && belongToTest(intCmp, 'baseline')){
   waysOfSupport = '';
 }
 
