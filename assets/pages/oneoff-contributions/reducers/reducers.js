@@ -8,6 +8,7 @@ import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripe
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
+import { refpvidReducer as refpvid } from 'helpers/refpvid';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
@@ -32,6 +33,7 @@ export type State = {
 export type CombinedState = {
   oneoffContrib: State,
   intCmp: string,
+  refpvid: string,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
   csrf: CsrfState,
@@ -77,6 +79,7 @@ export default function createRootOneOffContribReducer(
   return combineReducers({
     oneoffContrib: createOneOffContribReducer(amount, currency, country),
     intCmp,
+    refpvid,
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),

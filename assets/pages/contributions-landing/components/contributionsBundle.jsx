@@ -85,6 +85,7 @@ function showPayPal(props: PropTypes) {
     return (<PayPalContributionButton
       amount={props.contribAmount.oneOff.value}
       intCmp={props.intCmp}
+      refpvid={props.refpvid}
       isoCountry={props.isoCountry}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}

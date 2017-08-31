@@ -17,6 +17,7 @@ function mapStateToProps(state) {
     hide: state.user.email === '' || state.user.fullName === '',
     amount: state.oneoffContrib.amount,
     intCmp: state.intCmp,
+    refpvid: state.refpvid,
     isoCountry: state.oneoffContrib.country,
   };
 

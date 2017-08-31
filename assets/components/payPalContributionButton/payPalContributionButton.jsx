@@ -13,6 +13,7 @@ import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout
 type PropTypes = {
   amount: string,
   intCmp?: string,
+  refpvid?: string,
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
   canClick?: boolean,
@@ -24,6 +25,7 @@ function payWithPayPal(props: PropTypes) {
       paypalContributionsRedirect(
         Number(props.amount),
         props.intCmp,
+        props.refpvid,
         props.isoCountry,
         props.errorHandler);
     }
@@ -46,6 +48,7 @@ const PayPalContributionButton = (props: PropTypes) =>
 
 PayPalContributionButton.defaultProps = {
   intCmp: null,
+  refpvid: null,
   canClick: true,
 };
 
