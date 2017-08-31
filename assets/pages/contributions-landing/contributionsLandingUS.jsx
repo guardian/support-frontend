@@ -33,6 +33,7 @@ setCountry(country);
 const store = createStore(reducer, {
   intCmp: getQueryParameter('INTCMP'),
   isoCountry: country,
+  refpvid: getQueryParameter('REFPVID'),
 }, applyMiddleware(thunkMiddleware));
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
