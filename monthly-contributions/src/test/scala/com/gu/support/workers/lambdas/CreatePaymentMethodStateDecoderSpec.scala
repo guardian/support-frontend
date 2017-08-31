@@ -32,7 +32,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   it should "be able to decode an annual contribution with Stripe payment fields" in {
     val state = decode[CreatePaymentMethodState](createAnnualStripeJson)
     val result = state.right.get
-    result.contribution.amount should be(60)
+    result.contribution.amount should be(150)
     result.contribution.billingPeriod should be(Annual)
     result.paymentFields.isLeft should be(true) //Stripe
     result.paymentFields.left.get.stripeToken should be(stripeToken)
