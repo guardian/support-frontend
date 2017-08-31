@@ -8,6 +8,7 @@ import com.gu.support.workers.encoding.Wrapper
 import com.gu.support.workers.encoding.Wrapper.jsonCodec
 import io.circe.syntax._
 
+//noinspection TypeAnnotation
 object Fixtures {
   def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
 
@@ -42,7 +43,8 @@ object Fixtures {
     """
       {
         "amount": 5,
-        "currency": "GBP"
+        "currency": "GBP",
+        "billingPeriod": "Monthly"
       }
     """
 

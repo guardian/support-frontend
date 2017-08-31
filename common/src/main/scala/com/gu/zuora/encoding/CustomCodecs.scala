@@ -36,7 +36,7 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
   implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
 
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
-    override final def apply(a: PaymentMethod) = a match {
+    override final def apply(a: PaymentMethod): Json = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
       case c: CreditCardReferenceTransaction => Encoder[CreditCardReferenceTransaction].apply(c)
     }
@@ -54,6 +54,12 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
     stripeFields or payPalFields
   }
 
+  implicit val decodePeriod: Decoder[BillingPeriod] =
+    Decoder.decodeString.emap{code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'")}
+
+  implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
+
+
   implicit val codecUser: Codec[User] = deriveCodec
   implicit val codecContribution: Codec[Contribution] = deriveCodec
 }
@@ -63,7 +69,7 @@ trait HelperCodecs {
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
   implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
   implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
-  implicit val uuidDecoder =
+  implicit val uuidDecoder: Decoder[UUID] =
     Decoder.decodeString.emap { code => Try { UUID.fromString(code) }.toOption.toRight(s"Invalid UUID '$code'") }
 
   implicit val uuidEnecoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
