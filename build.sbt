@@ -21,5 +21,5 @@ libraryDependencies ++= Seq(
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 organization := "com.gu"
 bintrayOrganization := Some("guardian")
-bintrayRepository := "frontend"
+bintrayRepository := "ophan"
 publishMavenStyle := true
