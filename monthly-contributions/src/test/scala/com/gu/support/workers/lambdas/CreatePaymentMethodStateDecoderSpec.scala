@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
-import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields}
+import com.gu.support.workers.model.{Annual, Monthly, PayPalPaymentFields, StripePaymentFields}
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
@@ -12,7 +12,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
 
-  "CreatePaymentMethodStateDecoder" should "be able to decode a CreatePaymentMethodStateDecoder with PayPal payment fields" in {
+  "CreatePaymentMethodStateDecoder" should "be able to decode a monthly contribution with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson)
     val result = state.right.get
     result.contribution.amount should be(5)
@@ -20,10 +20,20 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     result.paymentFields.right.get.baid should be(validBaid)
   }
 
-  it should "be able to decode a CreatePaymentMethodStateDecoder with Stripe payment fields" in {
-    val state = decode[CreatePaymentMethodState](createStripePaymentMethodJson)
+  it should "be able to decode a monthly contribution with Stripe payment fields" in {
+    val state = decode[CreatePaymentMethodState](createMonthlyStripeJson)
     val result = state.right.get
     result.contribution.amount should be(5)
+    result.contribution.billingPeriod should be(Monthly)
+    result.paymentFields.isLeft should be(true) //Stripe
+    result.paymentFields.left.get.stripeToken should be(stripeToken)
+  }
+
+  it should "be able to decode an annual contribution with Stripe payment fields" in {
+    val state = decode[CreatePaymentMethodState](createAnnualStripeJson)
+    val result = state.right.get
+    result.contribution.amount should be(60)
+    result.contribution.billingPeriod should be(Annual)
     result.paymentFields.isLeft should be(true) //Stripe
     result.paymentFields.left.get.stripeToken should be(stripeToken)
   }

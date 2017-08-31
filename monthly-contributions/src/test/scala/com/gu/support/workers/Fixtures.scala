@@ -39,7 +39,16 @@ object Fixtures {
          }
        """
 
-  val contributionJson =
+  val annualContributionJson =
+    """
+      {
+        "amount": 60,
+        "currency": "GBP",
+        "billingPeriod": "Annual"
+      }
+    """
+
+  val monthlyContributionJson =
     """
       {
         "amount": 5,
@@ -67,15 +76,23 @@ object Fixtures {
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $contributionJson,
+          "contribution": $monthlyContributionJson,
           "paymentFields": $payPalJson
         }"""
 
-  val createStripePaymentMethodJson =
+  val createMonthlyStripeJson =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $contributionJson,
+          "contribution": $monthlyContributionJson,
+          "paymentFields": $stripeJson
+        }"""
+
+  val createAnnualStripeJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          "contribution": $annualContributionJson,
           "paymentFields": $stripeJson
         }"""
 
@@ -84,7 +101,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": $contributionJson,
+            "contribution": $monthlyContributionJson,
             "paymentMethod": $payPalPaymentMethod
           }
         """
@@ -93,7 +110,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $contributionJson,
+       |  "contribution": $monthlyContributionJson,
        |  "paymentMethod": $payPalPaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
@@ -122,7 +139,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": $contributionJson,
+            "contribution": $monthlyContributionJson,
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
@@ -138,7 +155,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $contributionJson,
+       |  "contribution": $monthlyContributionJson,
        |  "error": {
        |    "Error": "com.gu.support.workers.exceptions.ErrorHandler.logAndRethrow(ErrorHandler.scala:33)",
        |    "Cause": "The card has expired"
