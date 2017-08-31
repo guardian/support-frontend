@@ -42,7 +42,7 @@ object Fixtures {
   val annualContributionJson =
     """
       {
-        "amount": 60,
+        "amount": 150,
         "currency": "GBP",
         "billingPeriod": "Annual"
       }
@@ -134,12 +134,23 @@ object Fixtures {
           "AccountId": "001g000001gOR06AAG"
         }
       """
-  val createZuoraSubscriptionJson =
+  val createMonthlyZuoraSubscriptionJson =
     s"""
           {
             $requestIdJson,
             $userJson,
             "contribution": $monthlyContributionJson,
+            "paymentMethod": $payPalPaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
+
+  val createAnnualZuoraSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "contribution": $annualContributionJson,
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }

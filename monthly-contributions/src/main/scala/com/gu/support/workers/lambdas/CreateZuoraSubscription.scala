@@ -20,14 +20,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services) =
-    services.zuoraService.getMonthlyRecurringSubscription(state.user.id).flatMap {
+  override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services): Future[SendThankYouEmailState] =
+    services.zuoraService.getRecurringSubscription(state.user.id, state.contribution.billingPeriod).flatMap {
       case Some(sub) => skipSubscribe(state, sub)
       case None => subscribe(state, services)
     }
 
   def skipSubscribe(state: CreateZuoraSubscriptionState, subscription: SubscriptionResponse): Future[SendThankYouEmailState] = {
-    logger.debug(s"Skipping subscribe for user ${state.user.id} because they are already a contributor " +
+    logger.info(s"Skipping subscribe for user ${state.user.id} because they are already a contributor " +
       s"with account number ${subscription.accountNumber}")
     Future.successful(getEmailState(state, subscription.accountNumber))
   }
@@ -50,7 +50,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
-    val config = zuoraConfigProvider.get(state.user.isTestUser)
+    val config = zuoraConfigProvider.get(state.user.isTestUser).configForBillingPeriod(state.contribution.billingPeriod)
 
     val account = Account(
       state.salesForceContact.AccountId, //We store the Salesforce Account id in the name field

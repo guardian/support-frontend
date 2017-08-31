@@ -38,7 +38,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "SubscribeResponse" should "deserialise correctly" in {
-    val decodeResponse = decode[List[SubscribeResponseAccount]](subscribeResponse)
+    val decodeResponse = decode[List[SubscribeResponseAccount]](subscribeResponseAnnual)
     decodeResponse.isRight should be(true)
   }
 

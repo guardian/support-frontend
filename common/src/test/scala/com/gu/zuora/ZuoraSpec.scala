@@ -2,6 +2,7 @@ package com.gu.zuora
 
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.okhttp.RequestRunners
+import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.model.response.ZuoraErrorResponse
@@ -38,12 +39,12 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     uatService.getSubscriptions("A00069602").map {
       response =>
         response.nonEmpty should be(true)
-        response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).productRatePlanId)
+        response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
     }
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    uatService.getMonthlyRecurringSubscription("30000701").map {
+    uatService.getRecurringSubscription("30000701", Monthly).map {
       response =>
         response.isDefined should be(true)
         response.get.ratePlans.head.productName should be("Contributor")
