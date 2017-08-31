@@ -115,7 +115,6 @@ const getContribAttrs = ({
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
-  params.append('country', isoCountry);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);

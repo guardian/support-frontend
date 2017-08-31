@@ -12,6 +12,7 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
+import { setCountry } from 'helpers/internationalisation/country';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
@@ -23,9 +24,11 @@ import { belongToTest } from './helpers/subscriptionsLinks';
 // ----- Page Startup ----- //
 
 const participation = pageStartup.start();
+setCountry('GB');
 
 
 // ----- Redux Store ----- //
+
 const intCmp = getQueryParameter('INTCMP', 'gdnwb_copts_bundles_landing_default');
 
 const store = createStore(reducer, {
@@ -38,6 +41,7 @@ let waysOfSupport = <WaysOfSupport />;
 if (intCmp && belongToTest(intCmp, 'baseline')) {
   waysOfSupport = '';
 }
+
 
 // ----- Render ----- //
 

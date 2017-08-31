@@ -14,6 +14,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
+import { setCountry } from 'helpers/internationalisation/country';
 
 import reducer from './reducers/reducers';
 import { saveContext } from './helpers/context';
@@ -27,9 +28,12 @@ const participation = pageStartup.start();
 
 // ----- Redux Store ----- //
 
+const country = 'GB';
+setCountry(country);
+
 const store = createStore(reducer, {
   intCmp: getQueryParameter('INTCMP'),
-  isoCountry: 'GB',
+  isoCountry: country,
 }, applyMiddleware(thunkMiddleware));
 
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });

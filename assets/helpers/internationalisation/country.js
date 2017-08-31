@@ -131,11 +131,14 @@ function fromGeolocation(): ?IsoCountry {
   return null;
 }
 
+function setCountry(country: IsoCountry) {
+  cookie.set('GU_country', country, 7);
+}
+
 function detect(): IsoCountry {
   const country = fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
-  // cookie.set('GU_country', country, 7);
-  // Always return GB because we aren't ready to support US quite yet
-  return 'GB' || country;
+  setCountry(country);
+  return country;
 }
 
 
@@ -143,5 +146,6 @@ function detect(): IsoCountry {
 
 export {
   detect,
+  setCountry,
   usStates,
 };
