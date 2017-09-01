@@ -18,7 +18,8 @@ type PropTypes = {
 export default function ProgressMessage(props: PropTypes) {
   return (
     <div className="component-progress-message">
-      <span>{props.message}</span>
+      <div className="component-progress-message__message">{props.message}</div>
+      <div className="component-progress-message__background" />
     </div>
   );
 }
