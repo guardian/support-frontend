@@ -52,8 +52,7 @@ object Fixtures {
     """
       {
         "amount": 5,
-        "currency": "GBP",
-        "billingPeriod": "Monthly"
+        "currency": "GBP"
       }
     """
 
