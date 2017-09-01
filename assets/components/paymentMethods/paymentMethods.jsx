@@ -9,6 +9,7 @@ import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressBut
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -28,6 +29,11 @@ type PropTypes = {
   stripeCallback: Function,
   payPalCallback: Function,
   paymentStatus: PaymentStatus,
+  amount: string,
+  intCmp?: string,
+  refpvid?: string,
+  isoCountry: IsoCountry,
+  payPalErrorHandler: (string) => void,
 };
 
 
@@ -44,7 +50,13 @@ export default function PaymentMethods(props: PropTypes) {
       payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
       break;
     case 'ContributionsCheckout':
-      payPalButton = <PayPalContributionButton callback={props.payPalCallback} />;
+      payPalButton = (<PayPalContributionButton
+        amount={props.amount}
+        intCmp={props.intCmp}
+        refpvid={props.refpvid}
+        isoCountry={props.isoCountry}
+        errorHandler={props.payPalErrorHandler}
+      />);
       break;
     default:
       payPalButton = '';
@@ -69,3 +81,8 @@ export default function PaymentMethods(props: PropTypes) {
     </section>
   );
 }
+
+PaymentMethods.defaultProps = {
+  intCmp: null,
+  refpvid: null,
+};

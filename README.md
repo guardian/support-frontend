@@ -9,8 +9,9 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 3. [Architecture](/docs/development.md#3-architecture)
 4. [Project's structure](/docs/development.md#4-projects-structure) 
 5. [CI Build process](/docs/development.md#5-ci-build-process)
-6. [Yarn commands](/docs/development.md#6-yarn-commands)
-7. [A/B Test framework](/docs/development.md#7-ab-test-framework)
+6. [Testing](/docs/development.md#6-testing)
+7. [Yarn commands](/docs/development.md#7-yarn-commands)
+8. [A/B Test framework](/docs/development.md#8-ab-test-framework)
 
 
 ## Getting started

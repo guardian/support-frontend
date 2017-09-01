@@ -50,6 +50,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducer(contributionAmount, currency, country), {
   intCmp: getQueryParameter('INTCMP'),
+  refpvid: getQueryParameter('REFPVID'),
 }, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);

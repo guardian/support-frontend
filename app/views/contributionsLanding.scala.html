@@ -1,0 +1,14 @@
+@import assets.AssetsResolver
+@(title: String, id: String, js: String, contributionsPayPalEndpoint: String)(implicit assets: AssetsResolver)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
+    </script>
+    <script type="text/javascript" src="@assets(js)"></script>
+}
+
+@main(title = title, scripts = scripts) {
+    <main id="@id" class="gu-content-wrapper"></main>
+}

@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import { intCmpReducer as intCmp } from 'helpers/intCmp';
+import { refpvidReducer as refpvid } from 'helpers/refpvid';
 import { isoCountryReducer as isoCountry } from 'helpers/isoCountry';
 
 import { parse as parseContribution } from 'helpers/contributions';
@@ -19,6 +20,8 @@ export type ContribState = {
   type: Contrib,
   error: ?ContribError,
   amount: Amounts,
+  payPalError: ?string,
+  context: ?boolean,
 };
 
 
@@ -37,6 +40,8 @@ const initialContrib: ContribState = {
       userDefined: false,
     },
   },
+  payPalError: null,
+  context: false,
 };
 
 
@@ -86,6 +91,16 @@ function contribution(
         error: parseContribution(action.amount.value, state.type).error,
       });
 
+    case 'PAYPAL_ERROR':
+
+      return Object.assign({}, state, {
+        payPalError: action.message,
+      });
+
+    case 'SET_CONTEXT':
+
+      return Object.assign({}, state, { context: action.context });
+
     default:
       return state;
 
@@ -98,6 +113,7 @@ function contribution(
 export default combineReducers({
   contribution,
   intCmp,
+  refpvid,
   abTests,
   isoCountry,
 });

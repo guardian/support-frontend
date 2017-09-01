@@ -55,6 +55,10 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
     };
 
+    if (state.refpvid) {
+      oneoffContribFields.refererPageviewId = state.refpvid;
+    }
+
     return {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

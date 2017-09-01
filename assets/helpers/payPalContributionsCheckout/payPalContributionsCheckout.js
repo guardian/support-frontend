@@ -1,15 +1,12 @@
 // @flow
 
+// ----- Imports ----- //
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { toCountryGroup } from 'helpers/internationalisation/country';
 
-// ----- Types ----- //
 
-export type Action =
-  | { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' }
-  | { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message: string }
-  | { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' }
-  ;
+// ----- Types ----- //
 
 type PayPalPostData = {
   countryGroup: string,
@@ -18,25 +15,13 @@ type PayPalPostData = {
   supportRedirect: boolean,
 }
 
-// ----- Actions ----- //
 
-export function payPalContributionsButtonClicked(): Action {
-  return { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' };
-}
-
-export function payPalContributionsSubmitPayment(): Action {
-  return { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' };
-}
-
-
-export function payPalContributionsError(message: string): Action {
-  return { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message };
-}
-
+// ----- Functions ----- //
 
 export function paypalContributionsRedirect(
   amount: number,
   intCmp: ?string,
+  refpvid: ?string,
   isoCountry: IsoCountry,
   errorHandler: (string) => void): void {
 
@@ -47,18 +32,18 @@ export function paypalContributionsRedirect(
     countryGroup: country,
     amount,
     intCmp,
+    refererPageviewId: refpvid,
     supportRedirect: true,
     /*
      TODO: pass these argument to contributions in order to improve
      the tracking of one-off contributions.
 
      cmp: state.data.cmpCode,
-     refererPageviewId: state.data.refererPageviewId,
      refererUrl: state.data.refererUrl,
      ophanPageviewId: state.data.ophan.pageviewId,
      ophanBrowserId: state.data.ophan.browserId,
      ophanVisitId: state.data.ophan.visitId
-    */
+     */
   };
 
   const fetchOptions: Object = {

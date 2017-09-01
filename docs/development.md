@@ -10,8 +10,9 @@ Support Frontend, how they interact and how you can start adding code to this re
 3. [Architecture](#3-architecture)
 4. [Project's structure](#4-projects-structure) 
 5. [CI Build process](#5-ci-build-process)
-6. [Yarn commands](#6-yarn-commands)
-7. [A/B Test framework](#7-ab-test-framework)
+6. [Testing](#6-testing)
+7. [Yarn commands](#7-yarn-commands)
+8. [A/B Test framework](#8-ab-test-framework)
 
 ## 1. Getting started
 
@@ -149,8 +150,28 @@ As an example, in order to build the assets for production, the step `build-prod
    * asset hashing: Since the site has a [caching layer](https://app.fastly.com) sitting in front of it, 
    we append a hash to the name of the asset in order to invalidate the cache every time we make a release of the site. The configuration 
     is [here](https://github.com/guardian/support-frontend/blob/master/webpack.config.js#L56). 
+    
+## 6. Testing
 
-## 6. Yarn commands
+To run client-side tests:
+```
+yarn run test
+```
+
+To run server-side unit tests:
+```
+sbt fast-test
+```
+
+To run end-to-end browser-driven tests:
+
+```
+sbt selenium-test
+```
+
+*Note that you need to run identity-frontend and support-frontend locally before running the end-to-end tests.*
+
+## 7. Yarn commands
 
 In order to run a yarn command you should run:
 
@@ -171,18 +192,18 @@ $ yarn run [name_command]
 | `test or jest`        | Runs the client side tests built using Jest.  |
 | `jest-update-snapshot`| Update [jest's snapshots](https://facebook.github.io/jest/docs/snapshot-testing.html)   |
 
-## 7. A/B Test framework
+## 8. A/B Test framework
 
 
-7.1. [API](#71-api)
+8.1. [API](#71-api)
 
-7.2. [How to set up the AB Test framework in a new page of the site](#72-set-up-the-ab-test-framework-in-a-new-page-of-the-site)
+8.2. [How to set up the AB Test framework in a new page of the site](#72-set-up-the-ab-test-framework-in-a-new-page-of-the-site)
 
-7.3. [How to implement a new test](#73-implementation-of-a-test)
+8.3. [How to implement a new test](#73-implementation-of-a-test)
 
 In this section we will go through the steps and considerations that you must have when you want to set up a new test.
 
-### 7.1 API
+### 8.1 API
 
 The AB test framework has the following methods:
 
@@ -217,7 +238,7 @@ Track event using `tracker-js` from Ophan.
 #### `abTestReducer(state: Participations = {}, action: Action)`
 Reducer function to be included in the reducer of pages which import the AB test framework.
 
-### 7.2 Set up the AB test framework in a new page of the site
+### 8.2 Set up the AB test framework in a new page of the site
 
 #### Step 1: Initialize the AB test framework on the page you are working on
 In order to use the AB test framework you have to initialize it in your page. To do this call the 
@@ -256,7 +277,7 @@ export default combineReducers({
 You can find a real example of this [here](https://github.com/guardian/support-frontend/pull/67/files#diff-c1f0bb180b22e8e0da8bde14c6b411c4R122).
 
 
-### 7.3 Implementation of a test
+### 8.3 Implementation of a test
 
 #### Step 0: Define your experiment 
 First **design the experiment** that you want to run. The experiment consist of a hypothesis and a 
@@ -344,6 +365,5 @@ In order to use abacus as your test tool, you have to track two events with Opha
 This tracking can be done using the [`trackOphan`](#71-api) function from the ABtest framework. This function 
 receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
 or not.  
-
  
 

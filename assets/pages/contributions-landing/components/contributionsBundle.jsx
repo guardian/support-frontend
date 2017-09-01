@@ -7,16 +7,19 @@ import { connect } from 'react-redux';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 
 import {
   changeContribType,
   changeContribAmount,
   changeContribAmountRecurring,
   changeContribAmountOneOff,
+  payPalError,
 } from '../actions/contributionsLandingActions';
 
 
@@ -30,11 +33,14 @@ type PropTypes = {
   contribAmount: Amounts,
   contribError: ContribError,
   intCmp: string,
+  refpvid: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  payPalErrorHandler: (string) => void,
+  payPalError: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -58,15 +64,41 @@ const subHeadingText = {
     monthly or one-time contribution today`,
 };
 
-function contribAttrs(isoCountry: IsoCountry): ContribAttrs {
+const contribCtaText = {
+  RECURRING: 'Contribute with card or PayPal',
+  ONE_OFF: 'Contribute with debit/credit card',
+};
+
+function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttrs {
   return {
     heading: 'contribute',
     subheading: subHeadingText[isoCountry],
-    ctaText: 'Contribute',
+    ctaText: contribCtaText[contribType],
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
   };
+}
+
+function showPayPal(props: PropTypes) {
+  if (props.contribType === 'ONE_OFF') {
+    return (<PayPalContributionButton
+      amount={props.contribAmount.oneOff.value}
+      intCmp={props.intCmp}
+      refpvid={props.refpvid}
+      isoCountry={props.isoCountry}
+      errorHandler={props.payPalErrorHandler}
+      canClick={!props.contribError}
+    />);
+  }
+  return null;
+}
+
+function showPayPalError(props: PropTypes) {
+  if (props.contribType === 'ONE_OFF') {
+    return (props.payPalError ? <ErrorMessage message={props.payPalError} /> : null);
+  }
+  return null;
 }
 
 const ctaLinks = {
@@ -78,23 +110,25 @@ const ctaLinks = {
 // ----- Functions ----- //
 
 const getContribAttrs = ({
-  contribType, contribAmount, intCmp, isoCountry,
+  contribType, contribAmount, intCmp, refpvid, isoCountry,
 }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
-  // TODO: uncomment when ready for US traffic
-  // params.append('country', isoCountry);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
   }
 
+  if (refpvid) {
+    params.append('REFPVID', refpvid);
+  }
+
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs(isoCountry), { ctaLink });
+  return Object.assign({}, contribAttrs(isoCountry, contribType), { ctaLink });
 
 };
 
@@ -120,6 +154,8 @@ function ContributionsBundle(props: PropTypes) {
         {...props}
       />
       <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
+      {showPayPal(props)}
+      {showPayPalError(props)}
     </Bundle>
   );
 
@@ -135,7 +171,9 @@ function mapStateToProps(state) {
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
+    refpvid: state.refpvid,
     isoCountry: state.isoCountry,
+    payPalError: state.contribution.payPalError,
   };
 }
 
@@ -153,6 +191,9 @@ function mapDispatchToProps(dispatch) {
     },
     changeContribAmount: (value: string) => {
       dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+    payPalErrorHandler: (message: string) => {
+      dispatch(payPalError(message));
     },
   };
 
