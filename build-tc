@@ -15,6 +15,12 @@ fi
 
 ${YARN_LOCATION}/dist/bin/yarn install
 
+# Stop and starts flow daemon
+
+${YARN_LOCATION}/dist/bin/yarn flow stop
+
+${YARN_LOCATION}/dist/bin/yarn flow start
+
 # Building the client-side assets
 
 ${YARN_LOCATION}/dist/bin/yarn run build-prod
