@@ -7,6 +7,8 @@ scalaVersion := "2.11.11"
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
+resolvers += Resolver.bintrayRepo("guardian", "ophan")
+
 libraryDependencies ++= Seq(
   "com.github.mpilquist" %% "simulacrum" % "0.10.0",
   "com.gu" %% "ophan-event-model" % "1.0.0",
