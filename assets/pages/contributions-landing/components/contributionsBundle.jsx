@@ -33,6 +33,7 @@ type PropTypes = {
   contribAmount: Amounts,
   contribError: ContribError,
   intCmp: string,
+  refpvid: string,
   toggleContribType: (string) => void,
   changeContribRecurringAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
@@ -84,6 +85,7 @@ function showPayPal(props: PropTypes) {
     return (<PayPalContributionButton
       amount={props.contribAmount.oneOff.value}
       intCmp={props.intCmp}
+      refpvid={props.refpvid}
       isoCountry={props.isoCountry}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
@@ -108,7 +110,7 @@ const ctaLinks = {
 // ----- Functions ----- //
 
 const getContribAttrs = ({
-  contribType, contribAmount, intCmp, isoCountry,
+  contribType, contribAmount, intCmp, refpvid, isoCountry,
 }): ContribAttrs => {
 
   const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
@@ -118,6 +120,10 @@ const getContribAttrs = ({
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
+  }
+
+  if (refpvid) {
+    params.append('REFPVID', refpvid);
   }
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
@@ -165,6 +171,7 @@ function mapStateToProps(state) {
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
     intCmp: state.intCmp,
+    refpvid: state.refpvid,
     isoCountry: state.isoCountry,
     payPalError: state.contribution.payPalError,
   };

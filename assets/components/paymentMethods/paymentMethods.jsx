@@ -28,6 +28,7 @@ type PropTypes = {
   payPalCallback: Function,
   amount: string,
   intCmp?: string,
+  refpvid?: string,
   isoCountry: IsoCountry,
   payPalErrorHandler: (string) => void,
 };
@@ -49,6 +50,7 @@ export default function PaymentMethods(props: PropTypes) {
       payPalButton = (<PayPalContributionButton
         amount={props.amount}
         intCmp={props.intCmp}
+        refpvid={props.refpvid}
         isoCountry={props.isoCountry}
         errorHandler={props.payPalErrorHandler}
       />);
@@ -77,4 +79,5 @@ export default function PaymentMethods(props: PropTypes) {
 
 PaymentMethods.defaultProps = {
   intCmp: null,
+  refpvid: null,
 };
