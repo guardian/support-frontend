@@ -67,7 +67,7 @@ function mapStateToProps(state) {
     name: state.user.fullName,
     email: state.user.email,
     postcode: state.user.postcode,
-    isoCountry: state.isoCountry,
+    isoCountry: state.oneoffContrib.country,
   };
 
 }
