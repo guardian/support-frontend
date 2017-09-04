@@ -70,7 +70,7 @@ export default function PaymentMethods(props: PropTypes) {
   } else if (props.error !== null && props.error !== undefined) {
     statusMessage = <ErrorMessage message={props.error} />;
   } else if (props.paymentStatus === 'Pending') {
-    statusMessage = <ProgressMessage message={'Processing transaction...'} />;
+    statusMessage = <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
 
   return (
