@@ -15,7 +15,7 @@ case class ZuoraConfig(
   extends TouchpointConfig {
   def configForBillingPeriod(billingPeriod: BillingPeriod): ZuoraContributionConfig =
     billingPeriod match {
-      case _: Annual.type => annualContribution
+      case Annual => annualContribution
       case _ => monthlyContribution
     }
 }
