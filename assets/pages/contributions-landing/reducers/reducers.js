@@ -5,8 +5,8 @@
 import { combineReducers } from 'redux';
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
-import { intCmpReducer as intCmp } from 'helpers/intCmp';
-import { refpvidReducer as refpvid } from 'helpers/refpvid';
+import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
+import { refpvidReducer as refpvid } from 'helpers/tracking/guTracking';
 import { isoCountryReducer as isoCountry } from 'helpers/isoCountry';
 
 import { parse as parseContribution } from 'helpers/contributions';

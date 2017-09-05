@@ -7,8 +7,8 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { intCmpReducer as intCmp } from 'helpers/intCmp';
-import { refpvidReducer as refpvid } from 'helpers/refpvid';
+import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
+import { refpvidReducer as refpvid } from 'helpers/tracking/guTracking';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';

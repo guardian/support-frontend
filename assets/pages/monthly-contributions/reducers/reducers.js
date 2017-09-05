@@ -9,7 +9,7 @@ import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripe
 import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { intCmpReducer as intCmp } from 'helpers/intCmp';
+import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';

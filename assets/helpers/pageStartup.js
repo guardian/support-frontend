@@ -1,5 +1,5 @@
 import 'ophan';
-import * as ga from 'helpers/ga';
+import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 
