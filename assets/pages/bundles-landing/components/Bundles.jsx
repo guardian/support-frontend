@@ -20,7 +20,7 @@ import {
   changeContribAmountRecurring,
   changeContribAmountOneOff,
 } from '../actions/bundlesLandingActions';
-import getSubsLinks from '../helpers/subscriptionsLinks';
+import { getSubsLinks } from '../helpers/subscriptionsLinks';
 
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
 
