@@ -7,6 +7,7 @@ import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalRefer
 import com.gu.zuora.model._
 import org.joda.time.LocalDate
 
+//noinspection TypeAnnotation
 object Fixtures {
   val accountNumber = "A00069567"
 
@@ -108,12 +109,12 @@ object Fixtures {
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
 
   val config = Configuration.zuoraConfigProvider.get()
-  val subscriptionData = SubscriptionData(
+  val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(config.productRatePlanId), //Contribution product
+        RatePlan(config.monthlyContribution.productRatePlanId), //Contribution product
         List(RatePlanChargeData(
-          RatePlanCharge(config.productRatePlanChargeId, Some(25: BigDecimal))
+          RatePlanCharge(config.monthlyContribution.productRatePlanChargeId, Some(25: BigDecimal))
         )),
         Nil
       )
@@ -121,27 +122,31 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
-  val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
+  val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
 
   val usAccount = Account(salesforceAccountId, USD, salesforceAccountId, salesforceId, identityId, StripeGateway)
 
-  val usSubscriptionRequest = SubscribeRequest(List(SubscribeItem(usAccount, contactDetails, creditCardPaymentMethod, subscriptionData, SubscribeOptions())))
+  val usSubscriptionRequest = SubscribeRequest(List(
+    SubscribeItem(usAccount, contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+  ))
 
-  val invalidSubsData = SubscriptionData(
+  val invalidMonthlySubsData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(config.productRatePlanId),
+        RatePlan(config.monthlyContribution.productRatePlanId),
         List(RatePlanChargeData(
-          RatePlanCharge(config.productRatePlanChargeId, Some(5: BigDecimal))
+          RatePlanCharge(config.monthlyContribution.productRatePlanChargeId, Some(5: BigDecimal))
         )),
         Nil
       )
     ),
     Subscription(date, date, date, termType = "Invalid term type")
   )
-  val invalidSubscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, invalidSubsData, SubscribeOptions())))
+  val invalidSubscriptionRequest = SubscribeRequest(List(
+    SubscribeItem(account, contactDetails, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+  ))
 
-  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account, contactDetails, payPalPaymentMethod, invalidSubsData, SubscribeOptions())))
+  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account, contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
 
   val invoiceResult =
     """
@@ -180,7 +185,34 @@ object Fixtures {
         $subscribeResponseAccount
       ]
     """
-
+ val subscribeResponseAnnual =
+   """
+     [
+        {
+          "AccountNumber": "A00016540",
+          "SubscriptionNumber": "A-S00043802",
+          "GatewayResponse": "Approved",
+          "PaymentId": "2c92c0f95e1d5ca3015e38e585f339dc",
+          "InvoiceResult": {
+            "Invoice": [
+              {
+                "InvoiceNumber": "INV00052447",
+                "Id": "2c92c0f95e1d5ca3015e38e585b539d1"
+              }
+            ]
+          },
+          "TotalTcv": 150,
+          "SubscriptionId": "2c92c0f95e1d5ca3015e38e5854739c3",
+          "Success": true,
+          "TotalMrr": 12.5,
+          "PaymentTransactionNumber": "18X93788F8464761C",
+          "AccountId": "2c92c0f95e1d5ca3015e38e583c739bd",
+          "GatewayResponseCode": "Approved",
+          "InvoiceNumber": "INV00052447",
+          "InvoiceId": "2c92c0f95e1d5ca3015e38e585b539d1"
+        }
+      ]
+   """
   val error =
     """
       {

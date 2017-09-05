@@ -4,8 +4,12 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.support.workers.Conversions.FromOutputStream
 import com.gu.support.workers.Fixtures.{failureJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Encoding
+import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
+import com.gu.support.workers.model.monthlyContributions.state.CompletedState
 import com.gu.test.tags.annotations.IntegrationTest
 import org.joda.time.DateTime
 
@@ -27,7 +31,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(wrapFixture(failureJson), outStream, context)
 
-    assertUnit(outStream)
+    Encoding.in[CompletedState](outStream.toInputStream).isSuccess should be(true)
   }
 
 }

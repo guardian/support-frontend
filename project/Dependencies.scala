@@ -1,5 +1,6 @@
 import sbt._
 
+//noinspection TypeAnnotation
 object Dependencies {
   val circeVersion = "0.7.0"
   val awsVersion = "1.11.131"
@@ -10,7 +11,7 @@ object Dependencies {
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
-  val supportModels = "com.gu" %% "support-models" % "0.9"
+  val supportModels = "com.gu" %% "support-models" % "0.10"
   val supportConfig = "com.gu" %% "support-config" % "0.6"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"

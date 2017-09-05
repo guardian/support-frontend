@@ -4,6 +4,7 @@ import cats.implicits._
 import cats.syntax.either._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.support.workers.model.BillingPeriod
 import com.gu.zuora.model.response._
 import com.gu.zuora.model.{QueryData, SubscribeRequest}
 import io.circe
@@ -17,8 +18,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
     extends WebServiceHelper[ZuoraErrorResponse] {
 
-  override val wsUrl = baseUrl.getOrElse(config.url)
-  override val httpClient = client
+  override val wsUrl: String = baseUrl.getOrElse(config.url)
+  override val httpClient: FutureHttpClient = client
 
   override def wsPreExecute(req: Builder): Builder =
     req //Add authentication information
@@ -39,11 +40,11 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     post[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson)
 
-  def getMonthlyRecurringSubscription(identityId: String): Future[Option[Subscription]] =
+  def getRecurringSubscription(identityId: String, billingPeriod: BillingPeriod): Future[Option[Subscription]] =
     for {
       accountIds <- getAccountIds(identityId)
       subscriptions <- accountIds.map(getSubscriptions).combineAll
-    } yield subscriptions.find(_.ratePlans.exists(_.productRatePlanId == config.productRatePlanId))
+    } yield subscriptions.find(_.ratePlans.exists(_.productRatePlanId == config.configForBillingPeriod(billingPeriod).productRatePlanId))
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
     //The Zuora api docs say that the subscribe action returns

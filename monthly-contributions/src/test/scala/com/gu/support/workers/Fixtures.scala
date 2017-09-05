@@ -8,6 +8,7 @@ import com.gu.support.workers.encoding.Wrapper
 import com.gu.support.workers.encoding.Wrapper.jsonCodec
 import io.circe.syntax._
 
+//noinspection TypeAnnotation
 object Fixtures {
   def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
 
@@ -38,7 +39,16 @@ object Fixtures {
          }
        """
 
-  val contributionJson =
+  val annualContributionJson =
+    """
+      {
+        "amount": 150,
+        "currency": "GBP",
+        "billingPeriod": "Annual"
+      }
+    """
+
+  val monthlyContributionJson =
     """
       {
         "amount": 5,
@@ -65,15 +75,23 @@ object Fixtures {
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $contributionJson,
+          "contribution": $monthlyContributionJson,
           "paymentFields": $payPalJson
         }"""
 
-  val createStripePaymentMethodJson =
+  val createMonthlyStripeJson =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $contributionJson,
+          "contribution": $monthlyContributionJson,
+          "paymentFields": $stripeJson
+        }"""
+
+  val createAnnualStripeJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          "contribution": $annualContributionJson,
           "paymentFields": $stripeJson
         }"""
 
@@ -82,7 +100,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": $contributionJson,
+            "contribution": $monthlyContributionJson,
             "paymentMethod": $payPalPaymentMethod
           }
         """
@@ -91,7 +109,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $contributionJson,
+       |  "contribution": $monthlyContributionJson,
        |  "paymentMethod": $payPalPaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
@@ -115,12 +133,23 @@ object Fixtures {
           "AccountId": "001g000001gOR06AAG"
         }
       """
-  val createZuoraSubscriptionJson =
+  val createMonthlyZuoraSubscriptionJson =
     s"""
           {
             $requestIdJson,
             $userJson,
-            "contribution": $contributionJson,
+            "contribution": $monthlyContributionJson,
+            "paymentMethod": $payPalPaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
+
+  val createAnnualZuoraSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "contribution": $annualContributionJson,
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
@@ -136,7 +165,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $contributionJson,
+       |  "contribution": $monthlyContributionJson,
        |  "error": {
        |    "Error": "com.gu.support.workers.exceptions.ErrorHandler.logAndRethrow(ErrorHandler.scala:33)",
        |    "Cause": "The card has expired"

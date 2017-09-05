@@ -1,11 +1,11 @@
 package com.gu.zuora.model.response
 
-import com.gu.support.workers.encoding.{Codec, ErrorJson}
-import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
-import com.gu.support.workers.exceptions.{RetryException, RetryNone}
-import io.circe.syntax._
-import io.circe.parser._
 import cats.implicits._
+import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
+import com.gu.support.workers.encoding.{Codec, ErrorJson}
+import com.gu.support.workers.exceptions.{RetryException, RetryNone}
+import io.circe.parser._
+import io.circe.syntax._
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -72,7 +72,7 @@ case class SubscribeResponseAccount(
   invoiceResult: InvoiceResult,
   totalTcv: Int,
   subscriptionId: String,
-  totalMrr: Int,
+  totalMrr: Float,
   paymentTransactionNumber: String,
   accountId: String,
   gatewayResponseCode: String,

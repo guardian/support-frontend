@@ -14,12 +14,23 @@ import com.gu.test.tags.annotations.IntegrationTest
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends LambdaSpec {
 
-  "CreateZuoraSubscription lambda" should "create a Zuora subscription" in {
+  "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
     val createZuora = new CreateZuoraSubscription()
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(wrapFixture(createZuoraSubscriptionJson), outStream, context)
+    createZuora.handleRequest(wrapFixture(createMonthlyZuoraSubscriptionJson), outStream, context)
+
+    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+    sendThankYouEmail._1.accountNumber.length should be > 0
+  }
+
+  "CreateZuoraSubscription lambda" should "create an annual Zuora subscription" in {
+    val createZuora = new CreateZuoraSubscription()
+
+    val outStream = new ByteArrayOutputStream()
+
+    createZuora.handleRequest(wrapFixture(createAnnualZuoraSubscriptionJson), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.accountNumber.length should be > 0

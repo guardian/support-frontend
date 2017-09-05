@@ -15,7 +15,8 @@ import org.joda.time.{DateTime, LocalDate}
 
 import scala.util.Try
 
-object CustomCodecs extends CustomCodecs with ModelsCodecs with InternationalisationCodecs with HelperCodecs
+
+object CustomCodecs extends CustomCodecs with InternationalisationCodecs with ModelsCodecs with HelperCodecs
 
 trait InternationalisationCodecs {
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
@@ -28,7 +29,8 @@ trait InternationalisationCodecs {
     Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
 }
 
-trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with HelperCodecs =>
+trait ModelsCodecs {
+  self: CustomCodecs with InternationalisationCodecs with HelperCodecs =>
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
 
   implicit val codecPayPalReferenceTransaction: Codec[PayPalReferenceTransaction] = capitalizingCodec
@@ -36,7 +38,7 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
   implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
 
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
-    override final def apply(a: PaymentMethod) = a match {
+    override final def apply(a: PaymentMethod): Json = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
       case c: CreditCardReferenceTransaction => Encoder[CreditCardReferenceTransaction].apply(c)
     }
@@ -54,8 +56,18 @@ trait ModelsCodecs { self: CustomCodecs with InternationalisationCodecs with Hel
     stripeFields or payPalFields
   }
 
+  implicit val decodePeriod: Decoder[BillingPeriod] =
+    Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
+  implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
+
   implicit val codecUser: Codec[User] = deriveCodec
-  implicit val codecContribution: Codec[Contribution] = deriveCodec
+
+  //There is a configuration option in Circe to allow the use of Scala default parameters, but unfortunately
+  //it doesn't seem to work in version 0.8.0 so we'll have to use this more verbose approach
+  implicit val decodeContribution: Decoder[Contribution] = Decoder
+    .forProduct3("amount", "currency", "billingPeriod")(Contribution.apply)
+    .or(Decoder.forProduct2("amount", "currency")((a: BigDecimal, c: Currency) => Contribution(a, c)))
+  implicit val encodeContribution: Encoder[Contribution] = deriveEncoder
 }
 
 trait HelperCodecs {
@@ -63,10 +75,8 @@ trait HelperCodecs {
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
   implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
   implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
-  implicit val uuidDecoder =
-    Decoder.decodeString.emap { code => Try { UUID.fromString(code) }.toOption.toRight(s"Invalid UUID '$code'") }
-
-  implicit val uuidEnecoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
+  implicit val uuidDecoder: Decoder[UUID] = Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
+  implicit val uuidEncoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
 }
 
 trait CustomCodecs {
