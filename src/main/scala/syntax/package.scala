@@ -1,3 +1,5 @@
+package com.gu.acquisition
+
 import ophan.thrift.event.AbTestInfo
 import utils.AbTestConverter
 

@@ -1,3 +1,4 @@
+package com.gu.acquisition
 package fixtures
 
 import ophan.thrift.event.AbTest

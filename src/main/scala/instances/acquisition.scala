@@ -1,3 +1,4 @@
+package com.gu.acquisition
 package instances
 
 import io.circe.{Encoder, Json}

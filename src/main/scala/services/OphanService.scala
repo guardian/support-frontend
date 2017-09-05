@@ -1,3 +1,4 @@
+package com.gu.acquisition
 package services
 
 import cats.data.EitherT

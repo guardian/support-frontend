@@ -1,3 +1,4 @@
+package com.gu.acquisition
 package utils
 
 import ophan.thrift.event.AbTest
