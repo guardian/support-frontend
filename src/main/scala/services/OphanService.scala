@@ -1,10 +1,15 @@
 package services
 
 import cats.data.EitherT
-import com.netaporter.uri.Uri
 import ophan.thrift.event.Acquisition
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.Uri.Query
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
+import akka.http.scaladsl.unmarshalling.Unmarshal
+import akka.stream.ActorMaterializer
 
-import scalaj.http._
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait OphanServiceError extends Throwable
@@ -18,31 +23,37 @@ object OphanServiceError {
 
 object OphanService {
 
-  private val endpoint = Uri.parse("https://ophan.theguardian.com/a.gif")
+  private val endpoint = Uri.parseAbsolute("https://ophan.theguardian.com/a.gif")
 
   private def buildRequest(acquisition: Acquisition, browserId: String, viewId: String, visitId: Option[String]): HttpRequest = {
     import instances.acquisition._
     import io.circe.syntax._
+    import scala.collection.immutable.Seq
 
-    val cookies = Seq("bwid" -> Some(browserId), "vsid" -> visitId)
-      .collect { case (k, Some(v)) => s"$k=$v" }
-      .mkString(";")
+    val params = Query("viewId" -> viewId, "acquisition" -> acquisition.asJson.noSpaces)
 
-    val params = Seq("viewId" -> viewId, "acquisition" -> acquisition.asJson.noSpaces)
+    val cookies: Seq[HttpCookiePair] = Seq("bwid" -> Some(browserId), "vsid" -> visitId)
+      .collect { case (name, Some(value)) => HttpCookiePair(name, value) }
 
-    Http(endpoint.addParams(params).toString).header("Cookie", cookies)
+    HttpRequest(
+      uri = endpoint.withQuery(params),
+      headers = Seq(Cookie(cookies))
+    )
   }
 
-  private def executeRequest(request: HttpRequest)(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse[String]] = {
+  private def executeRequest(
+    request: HttpRequest
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
-    import cats.syntax.either._
 
-    Future(request.asString).attemptT
+    Http().singleRequest(request).attemptT
       .leftMap(OphanServiceError.Generic)
-      .subflatMap {
-        case response if response.isSuccess => Either.right(response)
-        case response => Either.left(OphanServiceError.ResponseUnsuccessful(response.code, response.body))
+      .flatMap { res =>
+        if (res.status.isSuccess) EitherT.pure(res)
+        else EitherT.left(Unmarshal(res.entity).to[String].map { body =>
+          OphanServiceError.ResponseUnsuccessful(res.status.intValue, body)
+        })
       }
   }
 
@@ -51,7 +62,7 @@ object OphanService {
       browserId: String,
       viewId: String,
       visitId: Option[String]
-  )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse[String]] = {
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     val request = buildRequest(acquisition, browserId, viewId, visitId)
     executeRequest(request)
   }
