@@ -14,7 +14,6 @@ libraryDependencies ++= Seq(
   "com.github.mpilquist" %% "simulacrum" % "0.10.0",
   "com.gu" %% "ophan-event-model" % "1.0.0",
   "io.circe" %% "circe-core" % "0.8.0",
-  "io.lemonlabs" %% "scala-uri" % "0.5.0",
   "org.scalatest" %% "scalatest" % "3.0.1" % "test",
   "org.scalactic" %% "scalactic" % "3.0.1",
   "org.typelevel" %% "cats" % "0.9.0"

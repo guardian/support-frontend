@@ -7,7 +7,6 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
-import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,7 +15,7 @@ sealed trait OphanServiceError extends Throwable
 
 object OphanServiceError {
 
-  case class ResponseUnsuccessful(code: Int, body: String) extends OphanServiceError
+  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError
 
   case class Generic(underlying: Throwable) extends OphanServiceError
 }
@@ -46,14 +45,13 @@ object OphanService {
   )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
+    import cats.syntax.either._
 
     Http().singleRequest(request).attemptT
       .leftMap(OphanServiceError.Generic)
-      .flatMap { res =>
-        if (res.status.isSuccess) EitherT.pure(res)
-        else EitherT.left(Unmarshal(res.entity).to[String].map { body =>
-          OphanServiceError.ResponseUnsuccessful(res.status.intValue, body)
-        })
+      .subflatMap { res =>
+        if (res.status.isSuccess) Either.right(res)
+        else Either.left(OphanServiceError.ResponseUnsuccessful(res))
       }
   }
 
