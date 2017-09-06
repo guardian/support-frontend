@@ -31,15 +31,9 @@ function inCampaign(campaign: Campaign, intCmp: string): boolean {
 // Retrieves the user's campaign, if known, from the intCmp.
 function getCampaign(intCmp: string): ?Campaign {
 
-  let campaignName = null;
-
-  Object.keys(campaigns).forEach((campaign) => {
-    if (campaigns[campaign].includes(intCmp)) {
-      campaignName = campaign;
-    }
-  });
-
-  return campaignName;
+  return Object.keys(campaigns).find(campaign =>
+    campaigns[campaign].includes(intCmp),
+  ) || null;
 
 }
 
