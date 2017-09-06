@@ -9,9 +9,14 @@ GET /uk                                             controllers.Application.reac
 GET /                                               controllers.Default.redirect(to = "/uk")
 
 
-# ----- Contributions ----- #
+
+# This is a temporary client-side redirect based on geo-location
+# Once we have a separate payment failure email for US and UK we can consider removing it
 
 GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
+
+# ----- Contributions ----- #
+
 GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
 GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
 
