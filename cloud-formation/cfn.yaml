@@ -123,6 +123,7 @@ Resources:
                 Action:
                 - states:ListStateMachines
                 - states:StartExecution
+                - states:GetExecutionHistory
                 Resource: arn:aws:states:*:*:*
         - PolicyName: KMSEncryption
           PolicyDocument:
