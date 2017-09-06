@@ -2,17 +2,19 @@
 
 // ----- Campaigns ----- //
 
+const baselineTestPrefix = 'gdnwb_copts_memco_sandc_support_baseline_support';
+
 const campaigns : {
   [string]: string[],
 } = {
   baseline_test: [
-    'gdnwb_copts_memco_sandc_support_baseline_support_banner',
-    'gdnwb_copts_memco_sandc_support_baseline_support_epic',
-    'gdnwb_copts_memco_sandc_support_baseline_support_liveblog',
-    'gdnwb_copts_memco_sandc_support_baseline_support_header_become_supporter',
-    'gdnwb_copts_memco_sandc_support_baseline_support_header_subscribe',
-    'gdnwb_copts_memco_sandc_support_baseline_support_side_menu_become_supporter',
-    'gdnwb_copts_memco_sandc_support_baseline_support_side_menu_subscribe',
+    `${baselineTestPrefix}_banner`,
+    `${baselineTestPrefix}_epic`,
+    `${baselineTestPrefix}_liveblog`,
+    `${baselineTestPrefix}_header_become_supporter`,
+    `${baselineTestPrefix}_header_subscribe`,
+    `${baselineTestPrefix}_side_menu_become_supporter`,
+    `${baselineTestPrefix}_side_menu_subscribe`,
   ],
 };
 
