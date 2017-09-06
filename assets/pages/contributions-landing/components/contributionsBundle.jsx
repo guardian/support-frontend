@@ -109,11 +109,19 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
+function getContribKey (contribType) {
+  switch (contribType){
+    case 'ANNUAL': return 'annual';
+    case 'MONTHLY': return 'monthly';
+    case 'ONE_OFF': return 'oneOff';
+  }
+}
+
 const getContribAttrs = ({
   contribType, contribAmount, intCmp, refpvid, isoCountry,
 }): ContribAttrs => {
 
-  const contType = contribType === 'MONTHLY' ? 'monthly' : 'oneOff';
+  const contType = getContribKey(contribType);
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
@@ -183,7 +191,7 @@ function mapDispatchToProps(dispatch) {
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },
-    changeContribRecurringAmount: (value: string) => {
+    changeContribRecurringAmount: (value: string) => { //TODO: this
       dispatch(changeContribAmountRecurring({ value, userDefined: false }));
     },
     changeContribOneOffAmount: (value: string) => {

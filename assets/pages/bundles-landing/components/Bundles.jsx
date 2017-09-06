@@ -146,6 +146,7 @@ const ctaLinks = {
 };
 
 const contribSubheading = {
+  annual: 'from £50/year',
   monthly: 'from £5/month',
   oneOff: '',
 };
@@ -153,9 +154,17 @@ const contribSubheading = {
 
 // ----- Functions ----- //
 
+function getContribKey (contribType) {
+  switch (contribType){
+    case 'ANNUAL': return 'annual';
+    case 'MONTHLY': return 'monthly';
+    case 'ONE_OFF': return 'oneOff';
+  }
+}
+
 const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
-  const contType = contribType === 'MONTHLY' ? 'monthly' : 'oneOff';
+  const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 

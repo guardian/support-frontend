@@ -195,7 +195,7 @@ function amountToggles (isoCountry: IsoCountry = 'GB'): AmountToggle {
   return {
     ANNUAL: {
       name: 'contributions-amount-annual-toggle',
-      radios: amountRadiosMonthly[isoCountry],
+      radios: amountRadiosAnnual[isoCountry],
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
