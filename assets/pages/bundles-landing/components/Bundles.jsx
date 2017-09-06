@@ -17,7 +17,8 @@ import { routes } from 'helpers/routes';
 import {
   changeContribType,
   changeContribAmount,
-  changeContribAmountRecurring,
+  changeContribAmountAnnual,
+  changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../actions/bundlesLandingActions';
 import { getSubsLinks } from '../helpers/subscriptionsLinks';
@@ -36,7 +37,8 @@ type PropTypes = {
   contribError: ContribError,
   intCmp: string,
   toggleContribType: (string) => void,
-  changeContribRecurringAmount: (string) => void,
+  changeContribAnnualAmount: (string) => void,
+  changeContribMonthlyAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry
@@ -279,8 +281,11 @@ function mapDispatchToProps(dispatch) {
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },
-    changeContribRecurringAmount: (value: string) => {
-      dispatch(changeContribAmountRecurring({ value, userDefined: false }));
+    changeContribAnnualAmount: (value: string) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    },
+    changeContribMonthlyAmount: (value: string) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
     },
     changeContribOneOffAmount: (value: string) => {
       dispatch(changeContribAmountOneOff({ value, userDefined: false }));

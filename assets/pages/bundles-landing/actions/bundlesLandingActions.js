@@ -10,6 +10,7 @@ import type { Contrib, Amount } from 'helpers/contributions';
 export type Action =
   | { type: 'CHANGE_CONTRIB_TYPE', contribType: Contrib }
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
+  | { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
   ;
@@ -25,7 +26,11 @@ export function changeContribAmount(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT', amount };
 }
 
-export function changeContribAmountRecurring(amount: Amount): Action {
+export function changeContribAmountAnnual(amount: Amount): Action {
+  return { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount };
+}
+
+export function changeContribAmountMonthly(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount };
 }
 

@@ -17,7 +17,8 @@ import PayPalContributionButton from 'components/payPalContributionButton/payPal
 import {
   changeContribType,
   changeContribAmount,
-  changeContribAmountRecurring,
+  changeContribAmountAnnual,
+  changeContribAmountMonthly,
   changeContribAmountOneOff,
   payPalError,
 } from '../actions/contributionsLandingActions';
@@ -35,7 +36,8 @@ type PropTypes = {
   intCmp: string,
   refpvid: string,
   toggleContribType: (string) => void,
-  changeContribRecurringAmount: (string) => void,
+  changeContribAnnualAmount: (string) => void,
+  changeContribMonthlyAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
@@ -65,6 +67,7 @@ const subHeadingText = {
 };
 
 const contribCtaText = {
+  ANNUAL: 'Contribute with card or PayPal',
   MONTHLY: 'Contribute with card or PayPal',
   ONE_OFF: 'Contribute with debit/credit card',
 };
@@ -191,8 +194,11 @@ function mapDispatchToProps(dispatch) {
     toggleContribType: (period: Contrib) => {
       dispatch(changeContribType(period));
     },
-    changeContribRecurringAmount: (value: string) => { //TODO: this
-      dispatch(changeContribAmountRecurring({ value, userDefined: false }));
+    changeContribAnnualAmount: (value: string) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    },
+    changeContribMonthlyAmount: (value: string) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
     },
     changeContribOneOffAmount: (value: string) => {
       dispatch(changeContribAmountOneOff({ value, userDefined: false }));

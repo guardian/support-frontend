@@ -27,7 +27,11 @@ export function changeContribAmount(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT', amount };
 }
 
-export function changeContribAmountRecurring(amount: Amount): Action {
+export function changeContribAmountAnnual(amount: Amount): Action {
+  return { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount };
+}
+
+export function changeContribAmountMonthly(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount };
 }
 
