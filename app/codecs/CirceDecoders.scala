@@ -1,7 +1,7 @@
 package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.{BillingPeriod, PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.{Decoder, Encoder, Json}
 import cats.implicits._
 import com.gu.support.workers.model.monthlyContributions.Contribution
@@ -53,6 +53,10 @@ object CirceDecoders {
     val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentToken])
     stripeFields or payPalFields
   }
+
+  implicit val decodePeriod: Decoder[BillingPeriod] =
+    Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
+  implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val contributionCodec: Codec[Contribution] = deriveCodec

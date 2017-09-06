@@ -4,8 +4,10 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import { titleCase } from '../../../helpers/utilities'
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
+import type { Contrib } from '../../../helpers/contributions'
 
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 
@@ -36,7 +38,7 @@ type PaymentField = 'baid' | 'stripeToken';
 
 // ----- Functions ----- //
 
-function requestData(paymentFieldName: PaymentField, token: string, getState: () => CombinedState) {
+function requestData(paymentFieldName: PaymentField, token: string, contributionType: Contrib, getState: () => CombinedState) {
 
   const state = getState();
 
@@ -47,6 +49,7 @@ function requestData(paymentFieldName: PaymentField, token: string, getState: ()
       contribution: {
         amount: state.stripeCheckout.amount,
         currency: state.stripeCheckout.currency,
+        billingPeriod: titleCase(contributionType)
       },
       paymentFields: {
         [paymentFieldName]: token,
@@ -126,13 +129,13 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
 }
 
 
-export default function postCheckout(paymentFieldName: PaymentField): Function {
+export default function postCheckout(paymentFieldName: PaymentField, contributionType: Contrib): Function {
   return (token: string, dispatch: Function, getState: () => CombinedState) => {
 
     dispatch(resetPollCount());
     dispatch(creatingContributor());
 
-    const request = requestData(paymentFieldName, token, getState);
+    const request = requestData(paymentFieldName, token, contributionType, getState);
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
       handleStatus(response, dispatch, getState);

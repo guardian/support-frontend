@@ -42,9 +42,15 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'MONTHLY').amount;
+const contributionType = getQueryParameter('contribType', 'MONTHLY').toUpperCase();
+const contributionAmount = parseContrib(getQueryParameter('contributionValue'), contributionType).amount;
 const country = detectCountry();
 const currency = currencyForCountry(country);
+
+const title = {
+  annual: "Make an annual contribution",
+  monthly: "Make a monthly contribution"
+};
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -68,10 +74,10 @@ const content = (
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
         <InfoSection className="monthly-contrib__header">
-          <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
+          <h1 className="monthly-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
+        <InfoSection heading={"Your " + contributionType.toLowerCase() + " contribution"} className="monthly-contrib__your-contrib">
           <PaymentAmount
             amount={state.monthlyContrib.amount}
             currency={state.monthlyContrib.currency}
@@ -83,8 +89,8 @@ const content = (
         </InfoSection>
         <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethodsContainer
-            stripeCallback={postCheckout('stripeToken')}
-            payPalCallback={postCheckout('baid')}
+            stripeCallback={postCheckout('stripeToken', contributionType)}
+            payPalCallback={postCheckout('baid', contributionType)}
             payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>
