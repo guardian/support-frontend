@@ -146,7 +146,7 @@ const ctaLinks = {
 };
 
 const contribSubheading = {
-  recurring: 'from £5/month',
+  monthly: 'from £5/month',
   oneOff: '',
 };
 
@@ -155,7 +155,7 @@ const contribSubheading = {
 
 const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
 
-  const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
+  const contType = contribType === 'MONTHLY' ? 'monthly' : 'oneOff';
   const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 

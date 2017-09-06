@@ -7,7 +7,7 @@ import { roundDp } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-export type Contrib = 'RECURRING' | 'ONE_OFF';
+export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
 
 export type ContribError =
   | 'tooLittle'
@@ -21,7 +21,8 @@ export type Amount = {
 };
 
 export type Amounts = {
-  recurring: Amount,
+  annual: Amount,
+  monthly: Amount,
   oneOff: Amount,
 };
 
@@ -42,7 +43,12 @@ type Config = {
 // ----- Setup ----- //
 
 export const CONFIG: Config = {
-  RECURRING: {
+  ANNUAL: {
+    min: 50,
+    max: 5000,
+    default: 75,
+  },
+  MONTHLY: {
     min: 5,
     max: 2000,
     default: 10,

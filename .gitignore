@@ -1,9 +1,7 @@
 .DS_Store
-.history
 .bundle
 .idea
 .idea_modules
-*.iml
 *.sublime-project
 *.sublime-workspace
 
@@ -13,14 +11,9 @@ app/npm-debug.log
 coverage/
 
 dev
-dist
 logs
-out
 target
-tmp
-tools
 project/project
-project/target
 
 bower_components
 public/stylesheets
@@ -38,3 +31,4 @@ assets/images/inline-svgs/*.svg
 /public/**/*.js
 /public/**/*.js.map
 /assets/javascripts/lib/bower-components/
+.yarnclean

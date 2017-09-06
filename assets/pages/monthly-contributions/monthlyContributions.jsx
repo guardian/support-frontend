@@ -42,7 +42,7 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'RECURRING').amount;
+const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'MONTHLY').amount;
 const country = detectCountry();
 const currency = currencyForCountry(country);
 

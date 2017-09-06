@@ -28,7 +28,7 @@ export type ContribState = {
 // ----- Setup ----- //
 
 const initialContrib: ContribState = {
-  type: 'RECURRING',
+  type: 'MONTHLY',
   error: null,
   amount: {
     recurring: {
@@ -60,7 +60,7 @@ function contribution(
       if (action.contribType === 'ONE_OFF') {
         amount = state.amount.oneOff.value;
       } else {
-        amount = state.amount.recurring.value;
+        amount = state.amount.monthly.value;
       }
 
       return Object.assign({}, state, {
@@ -77,17 +77,17 @@ function contribution(
         error: parseContribution(action.amount.value, state.type).error,
       });
 
-    case 'CHANGE_CONTRIB_AMOUNT_RECURRING':
+    case 'CHANGE_CONTRIB_AMOUNT_MONTHLY':
 
       return Object.assign({}, state, {
-        amount: { recurring: action.amount, oneOff: state.amount.oneOff },
+        amount: { monthly: action.amount, oneOff: state.amount.oneOff },
         error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
       return Object.assign({}, state, {
-        amount: { recurring: state.amount.recurring, oneOff: action.amount },
+        amount: { recurring: state.amount.monthly, oneOff: action.amount },
         error: parseContribution(action.amount.value, state.type).error,
       });
 

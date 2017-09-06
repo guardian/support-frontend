@@ -65,7 +65,7 @@ const subHeadingText = {
 };
 
 const contribCtaText = {
-  RECURRING: 'Contribute with card or PayPal',
+  MONTHLY: 'Contribute with card or PayPal',
   ONE_OFF: 'Contribute with debit/credit card',
 };
 
@@ -113,7 +113,7 @@ const getContribAttrs = ({
   contribType, contribAmount, intCmp, refpvid, isoCountry,
 }): ContribAttrs => {
 
-  const contType = contribType === 'RECURRING' ? 'recurring' : 'oneOff';
+  const contType = contribType === 'MONTHLY' ? 'monthly' : 'oneOff';
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);

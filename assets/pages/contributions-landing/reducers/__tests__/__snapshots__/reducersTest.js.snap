@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"MONTHLY"`;
 
 exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 2`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"MONTHLY"`;
 
 exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 2`] = `null`;
 
@@ -15,11 +15,11 @@ Object {
 }
 `;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 1`] = `"MONTHLY"`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 2`] = `null`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 2`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 3`] = `
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 3`] = `
 Object {
   "userDefined": false,
   "value": "50",
@@ -58,7 +58,7 @@ Object {
     "context": false,
     "error": null,
     "payPalError": null,
-    "type": "RECURRING",
+    "type": "MONTHLY",
   },
   "intCmp": null,
   "isoCountry": null,

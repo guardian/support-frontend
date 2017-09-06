@@ -19,7 +19,7 @@ describe('actions', () => {
   });
 
   it('should create an action to change to recurring contribution type', () => {
-    const contribType: Contrib = 'RECURRING';
+    const contribType: Contrib = 'MONTHLY';
     const expectedAction = {
       type: 'CHANGE_CONTRIB_TYPE',
       contribType,
@@ -33,7 +33,7 @@ describe('actions', () => {
       userDefined: false,
     };
     const expectedAction = {
-      type: 'CHANGE_CONTRIB_AMOUNT_RECURRING',
+      type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY',
       amount: contribAmount,
     };
     expect(changeContribAmountRecurring(contribAmount)).toEqual(expectedAction);

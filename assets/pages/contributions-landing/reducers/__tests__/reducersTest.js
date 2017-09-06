@@ -48,18 +48,18 @@ describe('reducer tests', () => {
 
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.monthly).toEqual(amount);
     expect(newState.contribution.amount.oneOff).toEqual(amount);
   });
 
-  it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
+  it('should handle CHANGE_CONTRIB_AMOUNT_MONTHLY', () => {
 
     const amount: Amount = {
       value: '45',
       userDefined: true,
     };
     const action = {
-      type: 'CHANGE_CONTRIB_AMOUNT_RECURRING',
+      type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY',
       amount,
     };
 
@@ -67,7 +67,7 @@ describe('reducer tests', () => {
 
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.monthly).toEqual(amount);
     expect(newState.contribution.amount.oneOff).toMatchSnapshot();
   });
 
@@ -87,6 +87,6 @@ describe('reducer tests', () => {
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
     expect(newState.contribution.amount.oneOff).toEqual(amount);
-    expect(newState.contribution.amount.recurring).toMatchSnapshot();
+    expect(newState.contribution.amount.monthly).toMatchSnapshot();
   });
 });

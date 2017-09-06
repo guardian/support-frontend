@@ -12,10 +12,10 @@
     }
 
     .component-radio-toggle__button {
-        flex-basis: calc(50% - 2.5px);
+        flex-basis: calc(33.3% - 2.5px);
         // Fix for IE10 and possibly Safari 8.
         display: block;
-        min-width: 49%;
+        min-width: 32%;
     }
 
     .component-radio-toggle__label {
@@ -65,7 +65,15 @@
       }
     }
 
-    .component-contrib-amounts__amounts--recurring {
+    .component-contrib-amounts__amounts--annual {
+      .component-radio-toggle__button {
+        flex-basis: calc(33.3% - 3.3px);
+        // Fix for IE10 and possibly Safari 8.
+        min-width: 32%;
+      }
+    }
+
+    .component-contrib-amounts__amounts--monthly {
       .component-radio-toggle__button {
         flex-basis: calc(33.3% - 3.3px);
         // Fix for IE10 and possibly Safari 8.
