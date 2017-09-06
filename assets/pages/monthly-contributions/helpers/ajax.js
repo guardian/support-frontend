@@ -12,7 +12,7 @@ import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creati
 // ----- Setup ----- //
 
 const POLLING_INTERVAL = 3000;
-const MAX_POLLS = 20;
+const MAX_POLLS = 10;
 
 
 // ----- Types ----- //
