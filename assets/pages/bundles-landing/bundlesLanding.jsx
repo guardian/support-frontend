@@ -13,12 +13,13 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import pageStartup from 'helpers/pageStartup';
 import { getQueryParameter } from 'helpers/url';
 import { setCountry } from 'helpers/internationalisation/country';
+import { inCampaign } from 'helpers/tracking/guTracking';
+
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
-import { belongToTest } from './helpers/subscriptionsLinks';
 
 
 // ----- Page Startup ----- //
@@ -38,7 +39,7 @@ const store = createStore(reducer, {
 store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 let waysOfSupport = <WaysOfSupport />;
 
-if (intCmp && belongToTest(intCmp, 'baseline')) {
+if (intCmp && inCampaign('baseline_test', intCmp)) {
   waysOfSupport = '';
 }
 
