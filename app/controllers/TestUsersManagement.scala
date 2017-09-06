@@ -18,6 +18,6 @@ class TestUsersManagement(
     val testUser = testUsers.testUsers.generate()
     Ok(testUsersView(testUser))
       .withHeaders(CacheControl.noCache)
-      .withCookies(Cookie("_test_username", testUser))
+      .withCookies(Cookie("_test_username", testUser, httpOnly = false))
   }
 }
