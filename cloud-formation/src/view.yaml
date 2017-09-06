@@ -12,6 +12,7 @@ lambdas:
   memorySize: 512
 - name: FailureHandler
   description: Failure handler
+  memorySize: 512
 - name: SendThankYouEmail
   description: Send thank-you email
 - name: UpdateMembersDataAPI
