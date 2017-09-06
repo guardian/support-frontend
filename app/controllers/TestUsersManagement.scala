@@ -15,6 +15,9 @@ class TestUsersManagement(
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   def createTestUser: Action[AnyContent] = authAction {
-    Ok(testUsersView(testUsers.testUsers.generate())).withHeaders(CacheControl.noCache)
+    val testUser = testUsers.testUsers.generate()
+    Ok(testUsersView(testUser))
+      .withHeaders(CacheControl.noCache)
+      .withCookies(Cookie("_test_username", testUser))
   }
 }

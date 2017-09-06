@@ -4,7 +4,8 @@
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { toCountryGroup } from 'helpers/internationalisation/country';
-
+import * as cookie from 'helpers/cookie';
+import { addQueryParamToURL } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -18,14 +19,24 @@ type PayPalPostData = {
 
 // ----- Functions ----- //
 
+function payalContributionEndpoint(testUser) {
+  if (testUser) {
+    return addQueryParamToURL(
+      window.guardian.contributionsPayPalEndpoint,
+      '_test_username',
+      testUser,
+    );
+  }
+
+  return window.guardian.contributionsPayPalEndpoint;
+}
+
 export function paypalContributionsRedirect(
   amount: number,
   intCmp: ?string,
   refpvid: ?string,
   isoCountry: IsoCountry,
   errorHandler: (string) => void): void {
-
-  const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 
   const country = toCountryGroup(isoCountry);
   const postData: PayPalPostData = {
@@ -56,7 +67,7 @@ export function paypalContributionsRedirect(
     body: JSON.stringify(postData),
   };
 
-  fetch(PAYPAL_CONTRIBUTION_ENDPOINT, fetchOptions)
+  fetch(payalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
     .then((response) => {
       if (response.ok) {
         return response.json();
