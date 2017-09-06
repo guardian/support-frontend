@@ -13,6 +13,7 @@ function mapStateToProps(state) {
     email: state.user.email,
     error: state.monthlyContrib.error,
     hide: state.user.firstName === '' || state.user.lastName === '',
+    paymentStatus: state.monthlyContrib.paymentStatus,
   };
 
 }

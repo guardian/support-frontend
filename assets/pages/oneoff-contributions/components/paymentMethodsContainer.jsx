@@ -15,6 +15,7 @@ function mapStateToProps(state) {
     email: state.user.email,
     error: state.oneoffContrib.error,
     hide: state.user.email === '' || state.user.fullName === '',
+    paymentStatus: 'NotStarted',
     amount: state.oneoffContrib.amount,
     intCmp: state.intCmp,
     refpvid: state.refpvid,

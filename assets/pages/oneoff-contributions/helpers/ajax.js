@@ -94,9 +94,9 @@ export default function postCheckout(
       return;
     }
 
-    dispatch(checkoutError('Error'));
+    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
   }).catch(() => {
-    dispatch(checkoutError('Error'));
+    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
   });
 
 }

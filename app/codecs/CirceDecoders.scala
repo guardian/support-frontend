@@ -5,18 +5,24 @@ import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, U
 import io.circe.{Decoder, Encoder, Json}
 import cats.implicits._
 import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
+import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState, FailureHandlerState}
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
 import services.stepfunctions.StripePaymentToken
 import shapeless.Lazy
+import com.gu.support.workers.model.monthlyContributions.Status
 
 object CirceDecoders {
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
 
   def deriveCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedObjectEncoder[A]]): Codec[A] =
     new Codec(deriveEncoder, deriveDecoder)
+
+  implicit val encodeStatus: Encoder[Status] = Encoder.encodeString.contramap[Status](_.asString)
+
+  implicit val decodeStatus: Decoder[Status] =
+    Decoder.decodeString.emap { status => Status.fromString(status).toRight(s"Unrecognised status '$status'") }
 
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
 
@@ -51,4 +57,6 @@ object CirceDecoders {
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val contributionCodec: Codec[Contribution] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
+  implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
+  implicit val completedStateCodec: Codec[CompletedState] = deriveCodec
 }

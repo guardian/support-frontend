@@ -8,6 +8,7 @@ import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
@@ -18,6 +19,7 @@ export type PayPalButtonType =
   'ContributionsCheckout' |
   'NotSet';
 
+export type PaymentStatus = 'NotStarted' | 'Pending';
 
 type PropTypes = {
   email: string,
@@ -26,6 +28,7 @@ type PropTypes = {
   payPalType: PayPalButtonType,
   stripeCallback: Function,
   payPalCallback: Function,
+  paymentStatus: PaymentStatus,
   amount: string,
   intCmp?: string,
   refpvid?: string,
@@ -38,7 +41,7 @@ type PropTypes = {
 
 export default function PaymentMethods(props: PropTypes) {
 
-  let errorMessage = '';
+  let statusMessage = '';
   let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
   let payPalButton = '';
 
@@ -61,16 +64,18 @@ export default function PaymentMethods(props: PropTypes) {
   }
 
   if (props.hide) {
-    errorMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
+    statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
-  } else if (props.error !== null) {
-    errorMessage = <ErrorMessage message={'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'} />;
+  } else if (props.error !== null && props.error !== undefined) {
+    statusMessage = <ErrorMessage message={props.error} />;
+  } else if (props.paymentStatus === 'Pending') {
+    statusMessage = <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
 
   return (
     <section className="payment-methods">
-      {errorMessage}
+      {statusMessage}
       {stripeButton}
       {payPalButton}
     </section>
