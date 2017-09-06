@@ -19,7 +19,7 @@ export type PayPalButtonType =
   'ContributionsCheckout' |
   'NotSet';
 
-export type PaymentStatus = 'NotStarted' | 'Pending';
+export type PaymentStatus = 'NotStarted' | 'Pending' | 'Failed';
 
 type PropTypes = {
   email: string,
@@ -63,14 +63,14 @@ export default function PaymentMethods(props: PropTypes) {
       break;
   }
 
-  if (props.hide) {
+  if (props.paymentStatus === 'Pending') {
+    statusMessage = <ProgressMessage message={['Processing transaction', 'Please wait']} />;
+  } else if (props.hide) {
     statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
     stripeButton = '';
     payPalButton = '';
   } else if (props.error !== null && props.error !== undefined) {
     statusMessage = <ErrorMessage message={props.error} />;
-  } else if (props.paymentStatus === 'Pending') {
-    statusMessage = <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
 
   return (

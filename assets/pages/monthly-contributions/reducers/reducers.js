@@ -63,7 +63,7 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
-        return Object.assign({}, state, { error: action.message });
+        return Object.assign({}, state, { paymentStatus: 'Failed', error: action.message });
 
       case 'CREATING_CONTRIBUTOR':
         return Object.assign({}, state, { paymentStatus: 'Pending' });
