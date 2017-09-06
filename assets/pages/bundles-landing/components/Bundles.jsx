@@ -142,7 +142,8 @@ const bundles: BundlesType = {
 };
 
 const ctaLinks = {
-  recurring: routes.recurringContribCheckout,
+  annual: routes.recurringContribCheckout,
+  monthly: routes.recurringContribCheckout,
   oneOff: routes.oneOffContribCheckout,
   subs: 'https://subscribe.theguardian.com',
 };
@@ -171,6 +172,7 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
+  params.append('contribType', contribType);
   params.append('INTCMP', intCmp);
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 

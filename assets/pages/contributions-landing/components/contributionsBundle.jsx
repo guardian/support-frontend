@@ -105,7 +105,8 @@ function showPayPalError(props: PropTypes) {
 }
 
 const ctaLinks = {
-  recurring: routes.recurringContribCheckout,
+  annual: routes.recurringContribCheckout,
+  monthly: routes.recurringContribCheckout,
   oneOff: routes.oneOffContribCheckout,
 };
 
@@ -128,6 +129,7 @@ const getContribAttrs = ({
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
+  params.append('contribType', contribType);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
