@@ -1,7 +1,9 @@
 package selenium.util
 
+import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatest.selenium.WebBrowser
+import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
 
 trait Browser extends WebBrowser {
@@ -11,8 +13,14 @@ trait Browser extends WebBrowser {
   // Stores a handle to the first window opened by the driver.
   lazy val parentWindow = webDriver.getWindowHandle
 
+  def elementHasText(q: Query, text: String): Boolean =
+    waitUntil(ExpectedConditions.textToBePresentInElementLocated(q.by, text))
+
   def pageHasElement(q: Query): Boolean =
     waitUntil(ExpectedConditions.visibilityOfElementLocated(q.by))
+
+  def pageDoesNotHaveElement(q: Query): Boolean =
+    waitUntil(ExpectedConditions.not(ExpectedConditions.presenceOfAllElementsLocatedBy(q.by)))
 
   def pageHasUrl(urlFraction: String): Boolean =
     waitUntil(ExpectedConditions.urlContains(urlFraction))
@@ -44,6 +52,13 @@ trait Browser extends WebBrowser {
     }
   }
 
+  def setSingleSelectionValue(q: Query, value: String) {
+    if (pageHasElement(q))
+      singleSel(q).value = value
+    else
+      throw new MissingPageElementException(q)
+  }
+
   // Switches to a new iframe specified by the Query, q.
   def switchFrame(q: Query) {
     if (pageHasElement(q))
@@ -53,6 +68,17 @@ trait Browser extends WebBrowser {
   }
 
   def revertToDefaultFrame: Unit = webDriver.switchTo().defaultContent()
+
+  // Switches to the first window in the list of windows that doesn't match the parent window.
+  def switchWindow(): Unit = {
+    waitUntil(numberOfWindowsToBe(2))
+    for {
+      winHandle <- webDriver.getWindowHandles.asScala
+      if winHandle != parentWindow
+    } webDriver.switchTo().window(winHandle)
+  }
+
+  def switchToParentWindow(): Unit = webDriver.switchTo().window(parentWindow)
 
   private def waitUntil[T](pred: ExpectedCondition[T]): Boolean =
     Try(new WebDriverWait(webDriver, 30).until(pred)).isSuccess

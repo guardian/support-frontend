@@ -1,15 +1,16 @@
 package selenium
 
-import org.scalatest.{BeforeAndAfterAll, FeatureSpec, GivenWhenThen, Tag}
-import _root_.selenium.pages.{ContributionsLanding, MonthlyContribution, Register, ThankYou}
+import org.scalatest._
+import _root_.selenium.pages._
 import _root_.selenium.util._
 
 object Selenium extends Tag("Selenium")
 
-class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with BeforeAndAfterAll {
+class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll {
 
-  override def beforeAll: Unit = {
-    Driver.reset()
+  before { Driver.reset() }
+
+  override def beforeAll(): Unit = {
     Config.printSummary()
     dependencyCheck
   }
@@ -29,18 +30,20 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
 
   feature("Sign up for a Monthly Contribution") {
 
-    scenario("Monthly contribution sign-up with Stripe", Selenium) {
+    scenario("Monthly contribution sign-up with Stripe - GBP", Selenium) {
+
+      val landingPage = ContributionsLanding("uk")
 
       Given("that a test user goes to the contributions landing page")
       val testUser = new TestUser
-      goTo(ContributionsLanding)
-      assert(ContributionsLanding.pageHasLoaded)
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
 
       When("they select to contribute the default amount")
-      ContributionsLanding.clickContribute
+      landingPage.clickContribute
 
       Then("they should be redirected to register as an Identity user")
-      val register = Register(testUser, 5)
+      val register = Register(testUser, 10)
       assert(register.pageHasLoaded)
 
       Given("that the user fills in their personal details correctly")
@@ -68,13 +71,71 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       assert(MonthlyContribution.stripeCheckoutHasSubmitButton)
 
       When("they fill in valid credit card payment details")
-      MonthlyContribution.fillInCreditCardPaymentDetailsStripe
+      MonthlyContribution.fillInCreditCardDetails()
 
       And("they click on the pay button")
       MonthlyContribution.clickStripePayButton()
 
       Then("the thankyou page should display")
       ThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed
+      assert(ThankYou.pageHasLoaded)
+
+    }
+
+    scenario("Monthly contribution sign-up with PayPal - USD", Selenium) {
+
+      val landingPage = ContributionsLanding("us")
+      val expectedPayment = "10.00"
+
+      Given("that a test user goes to the contributions landing page")
+      val testUser = new TestUser
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
+
+      When("they select to contribute the default amount")
+      landingPage.clickContribute
+
+      Then("they should be redirected to register as an Identity user")
+      val register = Register(testUser, 10)
+      assert(register.pageHasLoaded)
+
+      Given("that the user fills in their personal details correctly")
+      register.fillInPersonalDetails()
+
+      When("they submit the form to create their Identity account")
+      register.submit()
+
+      Then("they should be redirected to the Monthly Contributions page")
+      assert(MonthlyContribution.pageHasLoaded)
+
+      Given("that the user sets their state correctly")
+      MonthlyContribution.selectState
+
+      And("they select to pay with PayPal")
+
+      When("they press the PayPal payment button")
+      MonthlyContribution.selectPayPalPayment()
+
+      Then("the PayPal Express Checkout mini-browser should display")
+      MonthlyContribution.switchToPayPal
+      assert(MonthlyContribution.payPalCheckoutHasLoaded)
+
+      Given("that the user fills in their PayPal credentials correctly")
+      MonthlyContribution.fillInPayPalDetails()
+
+      When("the user clicks 'Log In'")
+      MonthlyContribution.payPalLogin
+
+      Then("the payment summary appears")
+      assert(MonthlyContribution.payPalHasPaymentSummary)
+
+      Given("that the summary displays the correct details")
+      assert(MonthlyContribution.payPalSummaryHasCorrectDetails(expectedPayment))
+
+      When("that the user agrees to payment")
+      MonthlyContribution.acceptPayPalPayment
+
+      Then("the thankyou page should display")
       assert(ThankYou.pageHasLoaded)
 
     }

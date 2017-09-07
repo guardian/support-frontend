@@ -21,6 +21,10 @@ object Config {
     case Failure(_) => ""
   }
 
+  val paypalBuyerEmail = conf.getString("paypal.sandbox.buyer.email")
+
+  val paypalBuyerPassword = conf.getString("paypal.sandbox.buyer.password")
+
   def printSummary(): Unit = {
     logger.info("Selenium Test Configuration")
     logger.info("=============================")

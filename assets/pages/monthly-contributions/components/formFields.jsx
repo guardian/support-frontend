@@ -44,7 +44,7 @@ function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
     // Sets the initial state to the first in the dropdown.
     stateUpdate(options[0].value);
 
-    return <SelectInput onChange={stateUpdate} options={options} />;
+    return <SelectInput id={'qa-state-dropdown'} onChange={stateUpdate} options={options} />;
 
   }
 

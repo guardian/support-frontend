@@ -9,9 +9,17 @@ object MonthlyContribution extends Page with Browser {
 
   private val stripeButton = id("qa-pay-with-card")
 
-  def pageHasLoaded: Boolean = pageHasElement(stripeButton)
+  private val payPalButton = id("component-paypal-button-checkout")
+
+  private val stateSelector = id("qa-state-dropdown")
+
+  def pageHasLoaded: Boolean = pageHasElement(stripeButton) && pageHasElement(payPalButton)
+
+  def selectState: Unit = setSingleSelectionValue(stateSelector, "NY")
 
   // ----- Stripe ----- //
+
+  def selectStripePayment(): Unit = clickOn(stripeButton)
 
   def stripeCheckoutHasLoaded: Boolean = pageHasElement(StripeCheckout.container)
 
@@ -25,11 +33,34 @@ object MonthlyContribution extends Page with Browser {
 
   def switchToStripe(): Unit = switchFrame(StripeCheckout.container)
 
-  def fillInCreditCardPaymentDetailsStripe(): Unit = StripeCheckout.fillIn
-
-  def selectStripePayment(): Unit = clickOn(stripeButton)
+  def fillInCreditCardDetails(): Unit = StripeCheckout.fillIn
 
   def clickStripePayButton(): Unit = StripeCheckout.acceptPayment
+
+  // ----- PayPal ----- //
+
+  def selectPayPalPayment(): Unit = clickOn(payPalButton)
+
+  def switchToPayPal(): Unit = {
+    switchWindow
+    switchFrame(PayPalCheckout.container)
+  }
+
+  def payPalCheckoutHasLoaded: Boolean = pageHasElement(PayPalCheckout.loginButton)
+
+  def fillInPayPalDetails(): Unit = PayPalCheckout.fillIn
+
+  def payPalLogin(): Unit = PayPalCheckout.logIn
+
+  def payPalHasPaymentSummary(): Boolean = pageHasElement(PayPalCheckout.agreeAndPay)
+
+  def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(PayPalCheckout.paymentAmount, expectedCurrencyAndAmount)
+
+  def acceptPayPalPayment(): Unit = {
+    pageDoesNotHaveElement(id("spinner"))
+    PayPalCheckout.acceptPayment
+    switchToParentWindow
+  }
 
   // Handles interaction with the Stripe Checkout iFrame.
   private object StripeCheckout {
@@ -49,6 +80,27 @@ object MonthlyContribution extends Page with Browser {
     }
 
     def acceptPayment(): Unit = clickOn(submitButton)
+
+  }
+
+  // Handles interaction with the PayPal Express Checkout overlay.
+  private object PayPalCheckout {
+
+    val container = name("injectedUl")
+    val loginButton = name("btnLogin")
+    val emailInput = name("login_email")
+    val passwordInput = name("login_password")
+    val agreeAndPay = id("confirmButtonTop")
+    val paymentAmount = className("formatCurrency")
+
+    def fillIn(): Unit = {
+      setValueSlowly(emailInput, Config.paypalBuyerEmail)
+      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
+    }
+
+    def logIn(): Unit = clickOn(loginButton)
+
+    def acceptPayment(): Unit = clickOn(agreeAndPay)
 
   }
 
