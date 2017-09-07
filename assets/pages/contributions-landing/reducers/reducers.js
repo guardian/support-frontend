@@ -26,7 +26,8 @@ export type ContribState = {
 
 
 // ----- Setup ----- //
-//TODO: This file is basically a copy and past of bundles-landing/reducers.js we should refactor them to remove duplication
+// TODO: This file is basically a copy and past of bundles-landing/reducers.js
+// we should refactor them to remove duplication
 const initialContrib: ContribState = {
   type: 'ANNUAL',
   error: null,
@@ -63,7 +64,7 @@ function contribution(
 
       if (action.contribType === 'ONE_OFF') {
         amount = state.amount.oneOff.value;
-      } else if (action.contribType === 'ANNUAL'){
+      } else if (action.contribType === 'ANNUAL') {
         amount = state.amount.annual.value;
       } else {
         amount = state.amount.monthly.value;
@@ -86,21 +87,33 @@ function contribution(
     case 'CHANGE_CONTRIB_AMOUNT_ANNUAL':
 
       return Object.assign({}, state, {
-        amount: { annual: action.amount, monthly: state.amount.monthly, oneOff: state.amount.oneOff },
+        amount: {
+          annual: action.amount,
+          monthly: state.amount.monthly,
+          oneOff: state.amount.oneOff,
+        },
         error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_MONTHLY':
 
       return Object.assign({}, state, {
-        amount: { annual: state.amount.annual, monthly: action.amount, oneOff: state.amount.oneOff },
+        amount: {
+          annual: state.amount.annual,
+          monthly: action.amount,
+          oneOff: state.amount.oneOff,
+        },
         error: parseContribution(action.amount.value, state.type).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
 
       return Object.assign({}, state, {
-        amount: { annual: state.amount.annual, monthly: state.amount.monthly, oneOff: action.amount },
+        amount: {
+          annual: state.amount.annual,
+          monthly: state.amount.monthly,
+          oneOff: action.amount,
+        },
         error: parseContribution(action.amount.value, state.type).error,
       });
 

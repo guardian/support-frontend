@@ -113,11 +113,11 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
-function getContribKey (contribType) {
-  switch (contribType){
+function getContribKey(contribType) {
+  switch (contribType) {
     case 'ANNUAL': return 'annual';
     case 'MONTHLY': return 'monthly';
-    case 'ONE_OFF': return 'oneOff';
+    default: return 'oneOff';
   }
 }
 

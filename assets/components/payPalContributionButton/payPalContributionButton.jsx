@@ -10,6 +10,7 @@ import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout
 
 // ---- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: string,
   intCmp?: string,
@@ -18,6 +19,7 @@ type PropTypes = {
   errorHandler: (string) => void,
   canClick?: boolean,
 };
+/* eslint-enable react/no-unused-prop-types */
 
 function payWithPayPal(props: PropTypes) {
   return () => {

@@ -48,8 +48,8 @@ const country = detectCountry();
 const currency = currencyForCountry(country);
 
 const title = {
-  annual: "Make an annual contribution",
-  monthly: "Make a monthly contribution"
+  annual: 'Make an annual contribution',
+  monthly: 'Make a monthly contribution',
 };
 
 /* eslint-disable no-underscore-dangle */
@@ -77,7 +77,7 @@ const content = (
           <h1 className="monthly-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading={"Your " + contributionType.toLowerCase() + " contribution"} className="monthly-contrib__your-contrib">
+        <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
           <PaymentAmount
             amount={state.monthlyContrib.amount}
             currency={state.monthlyContrib.currency}
