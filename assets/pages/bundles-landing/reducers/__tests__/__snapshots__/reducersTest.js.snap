@@ -4,14 +4,14 @@ exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"MONTHLY"`;
 
 exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 2`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"MONTHLY"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 1`] = `"MONTHLY"`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 2`] = `null`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 2`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 3`] = `
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 3`] = `
 Object {
   "userDefined": false,
-  "value": "10",
+  "value": "50",
 }
 `;
 
@@ -26,17 +26,70 @@ Object {
 }
 `;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 1`] = `null`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"MONTHLY"`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 2`] = `
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 3`] = `
 Object {
+  "userDefined": false,
+  "value": "10",
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ANNUAL 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ANNUAL 2`] = `
+Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
+    "userDefined": false,
+    "value": "10",
+  },
   "oneOff": Object {
     "userDefined": false,
     "value": "50",
   },
-  "recurring": Object {
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to MONTHLY 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to MONTHLY 2`] = `
+Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
     "userDefined": false,
     "value": "10",
+  },
+  "oneOff": Object {
+    "userDefined": false,
+    "value": "50",
+  },
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ONE_OFF 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ONE_OFF 2`] = `
+Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
+    "userDefined": false,
+    "value": "10",
+  },
+  "oneOff": Object {
+    "userDefined": false,
+    "value": "50",
   },
 }
 `;
@@ -46,13 +99,17 @@ Object {
   "abTests": Object {},
   "contribution": Object {
     "amount": Object {
+      "annual": Object {
+        "userDefined": false,
+        "value": "75",
+      },
+      "monthly": Object {
+        "userDefined": false,
+        "value": "10",
+      },
       "oneOff": Object {
         "userDefined": false,
         "value": "50",
-      },
-      "recurring": Object {
-        "userDefined": false,
-        "value": "10",
       },
     },
     "error": null,

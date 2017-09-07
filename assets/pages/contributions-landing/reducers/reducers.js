@@ -29,7 +29,7 @@ export type ContribState = {
 // TODO: This file is basically a copy and past of bundles-landing/reducers.js
 // we should refactor them to remove duplication
 const initialContrib: ContribState = {
-  type: 'ANNUAL',
+  type: 'MONTHLY',
   error: null,
   amount: {
     annual: {

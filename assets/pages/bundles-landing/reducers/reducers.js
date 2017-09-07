@@ -24,7 +24,7 @@ export type ContribState = {
 // ----- Setup ----- //
 
 const initialContrib: ContribState = {
-  type: 'ANNUAL',
+  type: 'MONTHLY',
   error: null,
   amount: {
     annual: {
