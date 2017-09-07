@@ -3,9 +3,9 @@ package selenium.pages
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config}
 
-object ContributionsLanding extends Page with Browser {
+case class ContributionsLanding(region: String) extends Page with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/uk/contribute"
+  val url = s"${Config.supportFrontendUrl}/$region/contribute"
 
   private val contributeButton = id("qa-contribute-button")
 
