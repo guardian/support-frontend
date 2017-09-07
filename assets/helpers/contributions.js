@@ -4,10 +4,11 @@
 
 import { roundDp } from 'helpers/utilities';
 
-
 // ----- Types ----- //
 
 export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
+
+export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type ContribError =
   | 'tooLittle'
@@ -80,4 +81,20 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   return { error, amount };
 
+}
+
+export function parseContrib(s: ?string, contrib: Contrib): Contrib {
+  switch (s) {
+    case 'ANNUAL': return 'ANNUAL';
+    case 'MONTHLY': return 'MONTHLY';
+    case 'ONE_OFF': return 'ONE_OFF';
+    default: return contrib;
+  }
+}
+
+export function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
+  switch (contrib) {
+    case 'ANNUAL': return 'Annual';
+    default: return 'Monthly';
+  }
 }

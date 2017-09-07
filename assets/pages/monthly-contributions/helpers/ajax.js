@@ -6,10 +6,10 @@ import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { CombinedState } from '../reducers/reducers';
-import type { Contrib } from '../../../helpers/contributions';
-import { titleCase } from '../../../helpers/utilities';
+import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
+import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
 // ----- Setup ----- //
 
@@ -23,14 +23,15 @@ type MonthlyContribFields = {
   contribution: {
     amount: number,
     currency: string,
+    billingPeriod: BillingPeriod,
   },
   paymentFields: {
     stripeToken: string,
   },
   country: IsoCountry,
   state?: UsState,
-  firstName: string,
-  lastName: string,
+  firstName: ?string,
+  lastName: ?string,
 };
 
 type PaymentField = 'baid' | 'stripeToken';
@@ -52,7 +53,7 @@ function requestData(paymentFieldName: PaymentField,
       contribution: {
         amount: state.stripeCheckout.amount,
         currency: state.stripeCheckout.currency,
-        billingPeriod: titleCase(contributionType),
+        billingPeriod: billingPeriodFromContrib(contributionType),
       },
       paymentFields: {
         [paymentFieldName]: token,

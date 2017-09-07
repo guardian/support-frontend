@@ -24,7 +24,7 @@ import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
-import { parse as parseContrib } from 'helpers/contributions';
+import { parse as parseAmount } from 'helpers/contributions';
 
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
@@ -33,6 +33,7 @@ import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 
 import { setPayPalButton } from './actions/monthlyContributionsActions';
+import { parseContrib } from '../../helpers/contributions';
 
 
 // ----- Page Startup ----- //
@@ -42,8 +43,8 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionType = getQueryParameter('contribType', 'MONTHLY').toUpperCase();
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), contributionType).amount;
+const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
+const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
 const country = detectCountry();
 const currency = currencyForCountry(country);
 
