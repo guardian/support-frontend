@@ -99,9 +99,9 @@ export function toCountryGroup(isoCountry: IsoCountry): string {
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
-  if (path.startsWith('/uk/')) {
+  if (path === '/uk' || path.startsWith('/uk/')) {
     return 'GB';
-  } else if (path.startsWith('/us/')) {
+  } else if (path === '/us' || path.startsWith('/us/')) {
     return 'US';
   }
   return null;
