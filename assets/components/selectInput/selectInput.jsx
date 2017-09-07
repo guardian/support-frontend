@@ -52,4 +52,5 @@ export default function SelectInput(props: PropTypes) {
 
 SelectInput.defaultProps = {
   required: false,
+  id: null,
 };
