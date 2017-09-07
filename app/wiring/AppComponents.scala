@@ -8,6 +8,7 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
+import monitoring.SentryLogging
 import play.filters.HttpFiltersComponents
 
 trait AppComponents extends PlayComponents
@@ -42,5 +43,7 @@ trait AppComponents extends PlayComponents
     payPalController,
     assetController
   )
+
+  appConfig.sentryDsn foreach { dsn => new SentryLogging(dsn, appConfig.stage) }
 
 }
