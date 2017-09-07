@@ -46,12 +46,12 @@ type Config = {
 export const CONFIG: Config = {
   ANNUAL: {
     min: 50,
-    max: 5000,
+    max: 2000,
     default: 75,
   },
   MONTHLY: {
     min: 5,
-    max: 2000,
+    max: 166,
     default: 10,
   },
   ONE_OFF: {
