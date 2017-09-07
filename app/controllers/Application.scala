@@ -19,6 +19,10 @@ class Application(
   import actionRefiners._
 
   implicit val ar = assets
+  def contributionsRedirect(): Action[AnyContent] = CachedAction() {
+    Ok(views.html.contributionsRedirect())
+  }
+
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsLanding(title, id, js, contributionsPayPalEndpoint))
   }

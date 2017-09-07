@@ -1,0 +1,50 @@
+@import assets.AssetsResolver
+@()(implicit assets: AssetsResolver)
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Support the Guardian</title>
+        <link rel="stylesheet" href="@assets("styles.css")">
+        <link rel="shortcut icon" type="image/png" href="@assets("images/favicons/32x32.ico")">
+        <link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
+        <link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
+        <link rel="apple-touch-icon" sizes="120x120" href="@assets("images/favicons/120x120.png")">
+        <link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
+        <link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
+        <link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
+    </head>
+    <body>
+        <noscript>
+            <div style="text-align: center;
+                font-size: 30px;
+                padding-left: 20px;
+                padding-right: 20px;
+                background-color: #e9e939;">
+                Please enable JavaScript - we use it to provide the best experience for Guardian&nbsp;Supporters.<br/>
+                <a href="http://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
+            </div>
+        </noscript>
+        <script type="text/javascript">
+        function getCookie(name) {
+            var cookies = document.cookie.split('; ');
+            for (var i = cookies.length - 1; i >= 0; i -= 1) {
+                if (cookies[i].indexOf(name) === 0) {
+                    return cookies[i].substr(cookies[i].indexOf('=') + 1);
+                }
+            }
+            return null;
+        }
+
+        if (getCookie('GU_geo_country') === 'US') {
+          window.location.href = '/us/contribute'
+        } else {
+          window.location.href = '/uk/contribute'
+        }
+        </script>
+        <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+    </body>
+</html>
