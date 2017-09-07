@@ -272,8 +272,8 @@ function mapStateToProps(state) {
     contribType: state.contribution.type,
     contribAmount: state.contribution.amount,
     contribError: state.contribution.error,
-    intCmp: state.intCmp,
-    isoCountry: state.isoCountry,
+    intCmp: state.page.intCmp,
+    isoCountry: state.page.country,
   };
 }
 

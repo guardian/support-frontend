@@ -2,10 +2,6 @@
 
 // ----- Imports ----- //
 
-import { combineReducers } from 'redux';
-
-import { abTestReducer as abTests } from 'helpers/abtest';
-import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
@@ -45,7 +41,7 @@ const initialContrib: ContribState = {
 
 // ----- Reducers ----- //
 
-function contribution(
+function contributionReducer(
   state: ContribState = initialContrib,
   action: Action): ContribState {
 
@@ -117,10 +113,7 @@ function contribution(
 
 }
 
+
 // ----- Exports ----- //
 
-export default combineReducers({
-  contribution,
-  intCmp,
-  abTests,
-});
+export default { contribution: contributionReducer };
