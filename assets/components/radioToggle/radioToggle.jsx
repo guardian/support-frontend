@@ -36,7 +36,7 @@ export default function RadioToggle(props: PropTypes) {
     const className = showAnnual === 'true' ? 'component-radio-toggle__button--with-annual' : 'component-radio-toggle__button--without-annual';
 
     return (
-      <span className={className} key={radioId}>
+      <span className={`component-radio-toggle__button ${className}`} key={radioId}>
         <input
           className="component-radio-toggle__input"
           type="radio"

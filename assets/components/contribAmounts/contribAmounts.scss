@@ -73,7 +73,7 @@
     }
 
     .component-contrib-amounts__amounts--recurring {
-      .component-radio-toggle__button--with-annual, .component-radio-toggle__button--without-annual {
+      .component-radio-toggle__button {
         flex-basis: calc(33.3% - 3.3px);
         // Fix for IE10 and possibly Safari 8.
         min-width: 32%;
@@ -81,7 +81,7 @@
     }
 
     .component-contrib-amounts__amounts--one-off {
-      .component-radio-toggle__button--with-annual, .component-radio-toggle__button--without-annual {
+      .component-radio-toggle__button {
         flex-basis: calc(25% - 4px);
         // Fix for IE10 and possibly Safari 8.
         min-width: 23%;
