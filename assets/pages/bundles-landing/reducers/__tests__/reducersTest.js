@@ -28,9 +28,9 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.contribution.type).toEqual(contribType);
-    expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount).toMatchSnapshot();
+    expect(newState.type).toEqual(contribType);
+    expect(newState.error).toMatchSnapshot();
+    expect(newState.amount).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_TYPE to MONTHLY', () => {
@@ -76,10 +76,10 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.contribution.type).toMatchSnapshot();
-    expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.monthly).toEqual(amount);
-    expect(newState.contribution.amount.oneOff).toEqual(amount);
+    expect(newState.type).toMatchSnapshot();
+    expect(newState.error).toMatchSnapshot();
+    expect(newState.amount.monthly).toEqual(amount);
+    expect(newState.amount.oneOff).toEqual(amount);
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_MONTHLY', () => {
@@ -114,10 +114,10 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.contribution.type).toMatchSnapshot();
-    expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.annual).toEqual(amount);
-    expect(newState.contribution.amount.oneOff).toMatchSnapshot();
+    expect(newState.type).toMatchSnapshot();
+    expect(newState.error).toMatchSnapshot();
+    expect(newState.amount.annual).toEqual(amount);
+    expect(newState.amount.oneOff).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
@@ -133,9 +133,9 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.contribution.type).toMatchSnapshot();
-    expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.oneOff).toEqual(amount);
-    expect(newState.contribution.amount.monthly).toMatchSnapshot();
+    expect(newState.type).toMatchSnapshot();
+    expect(newState.error).toMatchSnapshot();
+    expect(newState.amount.oneOff).toEqual(amount);
+    expect(newState.amount.monthly).toMatchSnapshot();
   });
 });

@@ -96,25 +96,21 @@ Object {
 
 exports[`reducer tests should return the initial state 1`] = `
 Object {
-  "abTests": Object {},
-  "contribution": Object {
-    "amount": Object {
-      "annual": Object {
-        "userDefined": false,
-        "value": "75",
-      },
-      "monthly": Object {
-        "userDefined": false,
-        "value": "10",
-      },
-      "oneOff": Object {
-        "userDefined": false,
-        "value": "50",
-      },
+  "amount": Object {
+    "annual": Object {
+      "userDefined": false,
+      "value": "75",
     },
-    "error": null,
-    "type": "MONTHLY",
+    "monthly": Object {
+      "userDefined": false,
+      "value": "10",
+    },
+    "oneOff": Object {
+      "userDefined": false,
+      "value": "50",
+    },
   },
-  "intCmp": null,
+  "error": null,
+  "type": "MONTHLY",
 }
 `;
