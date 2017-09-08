@@ -24,7 +24,7 @@ import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
-import { parse as parseContrib } from 'helpers/contributions';
+import { parse as parseAmount } from 'helpers/contributions';
 
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
@@ -33,6 +33,7 @@ import reducer from './reducers/reducers';
 import type { CombinedState } from './reducers/reducers';
 
 import { setPayPalButton } from './actions/monthlyContributionsActions';
+import { parseContrib } from '../../helpers/contributions';
 
 
 // ----- Page Startup ----- //
@@ -42,9 +43,15 @@ pageStartup.start();
 
 // ----- Redux Store ----- //
 
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'RECURRING').amount;
+const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
+const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
 const country = detectCountry();
 const currency = currencyForCountry(country);
+
+const title = {
+  annual: 'Make an annual contribution',
+  monthly: 'Make a monthly contribution',
+};
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -68,10 +75,10 @@ const content = (
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
         <InfoSection className="monthly-contrib__header">
-          <h1 className="monthly-contrib__heading">Make a monthly contribution</h1>
+          <h1 className="monthly-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading="Your monthly contribution" className="monthly-contrib__your-contrib">
+        <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
           <PaymentAmount
             amount={state.monthlyContrib.amount}
             currency={state.monthlyContrib.currency}
@@ -83,8 +90,8 @@ const content = (
         </InfoSection>
         <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
           <PaymentMethodsContainer
-            stripeCallback={postCheckout('stripeToken')}
-            payPalCallback={postCheckout('baid')}
+            stripeCallback={postCheckout('stripeToken', contributionType)}
+            payPalCallback={postCheckout('baid', contributionType)}
             payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>

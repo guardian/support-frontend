@@ -15,6 +15,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
+import { getQueryParameter } from '../../helpers/url';
 
 
 // ----- Types ----- //
@@ -26,7 +27,8 @@ type PropTypes = {
   contribAmount: Amounts,
   contribType: Contrib,
   contribError: ?ContribError,
-  changeContribRecurringAmount: (string) => void,
+  changeContribAnnualAmount: (string) => void,
+  changeContribMonthlyAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   toggleContribType: (string) => void,
@@ -56,9 +58,39 @@ type ContribAttrs = {
   contribType: Contrib,
 };
 
-
 // ----- Setup ----- //
-const amountRadiosRecurring = {
+const amountRadiosAnnual = {
+  GB: [
+    {
+      value: '50',
+      text: '£50',
+    },
+    {
+      value: '75',
+      text: '£75',
+    },
+    {
+      value: '100',
+      text: '£100',
+    },
+  ],
+  US: [
+    {
+      value: '50',
+      text: '$50',
+    },
+    {
+      value: '75',
+      text: '$75',
+    },
+    {
+      value: '100',
+      text: '$100',
+    },
+  ],
+};
+
+const amountRadiosMonthly = {
   GB: [
     {
       value: '5',
@@ -131,7 +163,7 @@ const amountRadiosOneOff = {
 const contribCaptionRadios = {
   GB: [
     {
-      value: 'RECURRING',
+      value: 'MONTHLY',
       text: 'Monthly',
     },
     {
@@ -141,7 +173,7 @@ const contribCaptionRadios = {
   ],
   US: [
     {
-      value: 'RECURRING',
+      value: 'MONTHLY',
       text: 'Monthly',
     },
     {
@@ -151,14 +183,29 @@ const contribCaptionRadios = {
   ],
 };
 
+const showAnnual = getQueryParameter('showAnnual', 'false');
+if (showAnnual === 'true') {
+  contribCaptionRadios.GB.unshift({
+    value: 'ANNUAL',
+    text: 'Annual',
+  });
+  contribCaptionRadios.US.unshift({
+    value: 'ANNUAL',
+    text: 'Annual',
+  });
+}
 
 // ----- Functions ----- //
 
 function amountToggles(isoCountry: IsoCountry = 'GB'): AmountToggle {
   return {
-    RECURRING: {
-      name: 'contributions-amount-recurring-toggle',
-      radios: amountRadiosRecurring[isoCountry],
+    ANNUAL: {
+      name: 'contributions-amount-annual-toggle',
+      radios: amountRadiosAnnual[isoCountry],
+    },
+    MONTHLY: {
+      name: 'contributions-amount-monthly-toggle',
+      radios: amountRadiosMonthly[isoCountry],
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
@@ -174,11 +221,9 @@ function contribToggle(isoCountry: IsoCountry = 'GB'): Toggle {
   };
 }
 
-function errorMessage(
-  error: ?ContribError,
+function errorMessage(error: ?ContribError,
   contribType: Contrib,
-  isoCountry: IsoCountry,
-): ?React$Element<any> {
+  isoCountry: IsoCountry): ?React$Element<any> {
 
   const limits = contribConfig[contribType];
   const currencyGlyph = forCountry(isoCountry).glyph;
@@ -201,41 +246,56 @@ function errorMessage(
 
 function getAttrs(props: PropTypes): ContribAttrs {
 
-  if (props.contribType === 'RECURRING') {
-    const userDefined = props.contribAmount.recurring.userDefined;
+  if (props.contribType === 'ANNUAL') {
 
+    const userDefined = props.contribAmount.annual.userDefined;
     return {
-      toggleAction: props.changeContribRecurringAmount,
-      checked: !userDefined ? props.contribAmount.recurring.value : null,
-      toggles: amountToggles(props.isoCountry).RECURRING,
-      selected: props.contribAmount.recurring.userDefined,
+      toggleAction: props.changeContribAnnualAmount,
+      checked: !userDefined ? props.contribAmount.annual.value : null,
+      toggles: amountToggles(props.isoCountry).ANNUAL,
+      selected: userDefined,
+      contribType: props.contribType,
+    };
+  } else if (props.contribType === 'MONTHLY') {
+
+    const userDefined = props.contribAmount.monthly.userDefined;
+    return {
+      toggleAction: props.changeContribMonthlyAmount,
+      checked: !userDefined ? props.contribAmount.monthly.value : null,
+      toggles: amountToggles(props.isoCountry).MONTHLY,
+      selected: userDefined,
       contribType: props.contribType,
     };
 
   }
 
   const userDefined = props.contribAmount.oneOff.userDefined;
-
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
     toggles: amountToggles(props.isoCountry).ONE_OFF,
-    selected: props.contribAmount.oneOff.userDefined,
+    selected: userDefined,
     contribType: props.contribType,
   };
 
 }
 
+function getClassName(contribType: Contrib): string {
+  switch (contribType) {
+    case 'ANNUAL':
+    case 'MONTHLY':
+      return generateClassName('component-contrib-amounts__amounts', 'recurring');
+    default:
+      return generateClassName('component-contrib-amounts__amounts', 'one-off');
+  }
+}
 
 // ----- Component ----- //
 
 export default function ContribAmounts(props: PropTypes) {
 
   const attrs = getAttrs(props);
-  const className = generateClassName(
-    'component-contrib-amounts__amounts',
-    attrs.contribType === 'ONE_OFF' ? 'one-off' : 'recurring',
-  );
+  const className = getClassName(attrs.contribType);
 
   return (
     <div className="component-contrib-amounts">

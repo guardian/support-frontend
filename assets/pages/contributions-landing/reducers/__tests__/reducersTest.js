@@ -18,9 +18,39 @@ describe('reducer tests', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
-  it('should handle CHANGE_CONTRIB_TYPE', () => {
+  it('should handle CHANGE_CONTRIB_TYPE to ONE_OFF', () => {
 
     const contribType: Contrib = 'ONE_OFF';
+    const action = {
+      type: 'CHANGE_CONTRIB_TYPE',
+      contribType,
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toEqual(contribType);
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount).toMatchSnapshot();
+  });
+
+  it('should handle CHANGE_CONTRIB_TYPE to MONTHLY', () => {
+
+    const contribType: Contrib = 'MONTHLY';
+    const action = {
+      type: 'CHANGE_CONTRIB_TYPE',
+      contribType,
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toEqual(contribType);
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount).toMatchSnapshot();
+  });
+
+  it('should handle CHANGE_CONTRIB_TYPE to ANNUAL', () => {
+
+    const contribType: Contrib = 'ANNUAL';
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
       contribType,
@@ -36,7 +66,7 @@ describe('reducer tests', () => {
   it('should handle CHANGE_CONTRIB_AMOUNT', () => {
 
     const amount: Amount = {
-      value: '45',
+      value: '50',
       userDefined: true,
     };
     const action = {
@@ -48,18 +78,18 @@ describe('reducer tests', () => {
 
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.monthly).toEqual(amount);
     expect(newState.contribution.amount.oneOff).toEqual(amount);
   });
 
-  it('should handle CHANGE_CONTRIB_AMOUNT_RECURRING', () => {
+  it('should handle CHANGE_CONTRIB_AMOUNT_MONTHLY', () => {
 
     const amount: Amount = {
       value: '45',
       userDefined: true,
     };
     const action = {
-      type: 'CHANGE_CONTRIB_AMOUNT_RECURRING',
+      type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY',
       amount,
     };
 
@@ -67,7 +97,26 @@ describe('reducer tests', () => {
 
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
-    expect(newState.contribution.amount.recurring).toEqual(amount);
+    expect(newState.contribution.amount.monthly).toEqual(amount);
+    expect(newState.contribution.amount.oneOff).toMatchSnapshot();
+  });
+
+  it('should handle CHANGE_CONTRIB_AMOUNT_ANNUAL', () => {
+
+    const amount: Amount = {
+      value: '50',
+      userDefined: false,
+    };
+    const action = {
+      type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL',
+      amount,
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.contribution.type).toMatchSnapshot();
+    expect(newState.contribution.error).toMatchSnapshot();
+    expect(newState.contribution.amount.annual).toEqual(amount);
     expect(newState.contribution.amount.oneOff).toMatchSnapshot();
   });
 
@@ -87,6 +136,6 @@ describe('reducer tests', () => {
     expect(newState.contribution.type).toMatchSnapshot();
     expect(newState.contribution.error).toMatchSnapshot();
     expect(newState.contribution.amount.oneOff).toEqual(amount);
-    expect(newState.contribution.amount.recurring).toMatchSnapshot();
+    expect(newState.contribution.amount.monthly).toMatchSnapshot();
   });
 });

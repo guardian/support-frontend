@@ -1,10 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 1`] = `"MONTHLY"`;
 
 exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT 2`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 1`] = `"MONTHLY"`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ANNUAL 3`] = `
+Object {
+  "userDefined": false,
+  "value": "50",
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 1`] = `"MONTHLY"`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 2`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_MONTHLY 3`] = `
+Object {
+  "userDefined": false,
+  "value": "50",
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 1`] = `"MONTHLY"`;
 
 exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_ONEOFF 2`] = `null`;
 
@@ -15,28 +37,59 @@ Object {
 }
 `;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 1`] = `"RECURRING"`;
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ANNUAL 1`] = `null`;
 
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 2`] = `null`;
-
-exports[`reducer tests should handle CHANGE_CONTRIB_AMOUNT_RECURRING 3`] = `
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ANNUAL 2`] = `
 Object {
-  "userDefined": false,
-  "value": "50",
-}
-`;
-
-exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 1`] = `null`;
-
-exports[`reducer tests should handle CHANGE_CONTRIB_TYPE 2`] = `
-Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
+    "userDefined": false,
+    "value": "10",
+  },
   "oneOff": Object {
     "userDefined": false,
     "value": "50",
   },
-  "recurring": Object {
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to MONTHLY 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to MONTHLY 2`] = `
+Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
     "userDefined": false,
     "value": "10",
+  },
+  "oneOff": Object {
+    "userDefined": false,
+    "value": "50",
+  },
+}
+`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ONE_OFF 1`] = `null`;
+
+exports[`reducer tests should handle CHANGE_CONTRIB_TYPE to ONE_OFF 2`] = `
+Object {
+  "annual": Object {
+    "userDefined": false,
+    "value": "75",
+  },
+  "monthly": Object {
+    "userDefined": false,
+    "value": "10",
+  },
+  "oneOff": Object {
+    "userDefined": false,
+    "value": "50",
   },
 }
 `;
@@ -46,19 +99,23 @@ Object {
   "abTests": Object {},
   "contribution": Object {
     "amount": Object {
+      "annual": Object {
+        "userDefined": false,
+        "value": "75",
+      },
+      "monthly": Object {
+        "userDefined": false,
+        "value": "10",
+      },
       "oneOff": Object {
         "userDefined": false,
         "value": "50",
-      },
-      "recurring": Object {
-        "userDefined": false,
-        "value": "10",
       },
     },
     "context": false,
     "error": null,
     "payPalError": null,
-    "type": "RECURRING",
+    "type": "MONTHLY",
   },
   "intCmp": null,
   "isoCountry": null,

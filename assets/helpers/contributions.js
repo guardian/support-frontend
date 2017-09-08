@@ -4,10 +4,11 @@
 
 import { roundDp } from 'helpers/utilities';
 
-
 // ----- Types ----- //
 
-export type Contrib = 'RECURRING' | 'ONE_OFF';
+export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
+
+export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type ContribError =
   | 'tooLittle'
@@ -21,7 +22,8 @@ export type Amount = {
 };
 
 export type Amounts = {
-  recurring: Amount,
+  annual: Amount,
+  monthly: Amount,
   oneOff: Amount,
 };
 
@@ -42,9 +44,14 @@ type Config = {
 // ----- Setup ----- //
 
 export const CONFIG: Config = {
-  RECURRING: {
-    min: 5,
+  ANNUAL: {
+    min: 50,
     max: 2000,
+    default: 75,
+  },
+  MONTHLY: {
+    min: 5,
+    max: 166,
     default: 10,
   },
   ONE_OFF: {
@@ -74,4 +81,20 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   return { error, amount };
 
+}
+
+export function parseContrib(s: ?string, contrib: Contrib): Contrib {
+  switch ((s || contrib).toUpperCase()) {
+    case 'ANNUAL': return 'ANNUAL';
+    case 'MONTHLY': return 'MONTHLY';
+    case 'ONE_OFF': return 'ONE_OFF';
+    default: return contrib;
+  }
+}
+
+export function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
+  switch (contrib) {
+    case 'ANNUAL': return 'Annual';
+    default: return 'Monthly';
+  }
 }

@@ -67,7 +67,7 @@ class MonthlyContributions(
   }
 
   def create: Action[CreateMonthlyContributorRequest] = AuthenticatedAction.async(circe.json[CreateMonthlyContributorRequest]) { implicit request =>
-    logger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new monthly contribution")
+    logger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
     val result = for {
       user <- identityService.getUser(request.user)
