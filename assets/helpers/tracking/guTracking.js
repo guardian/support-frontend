@@ -3,6 +3,7 @@
 // ----- Campaigns ----- //
 
 const baselineTestPrefix = 'gdnwb_copts_memco_sandc_support_baseline_support';
+const annualTestPrefix = 'gdnwb_copts_memco_sandc_support_annual';
 
 const campaigns : {
   [string]: string[],
@@ -15,6 +16,10 @@ const campaigns : {
     `${baselineTestPrefix}_header_subscribe`,
     `${baselineTestPrefix}_side_menu_become_supporter`,
     `${baselineTestPrefix}_side_menu_subscribe`,
+  ],
+  annual_test: [
+    `${annualTestPrefix}_show_annual`,
+    `${annualTestPrefix}_hide_annual`,
   ],
 };
 

@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { getQueryParameter } from '../../helpers/url';
 
 
 // ----- Types ----- //
@@ -31,9 +32,11 @@ export default function RadioToggle(props: PropTypes) {
   const radioButtons = props.radios.map((radio: Radio, idx: number) => {
 
     const radioId = `${props.name}-${idx}`;
+    const showAnnual = getQueryParameter('showAnnual', 'false');
+    const className = showAnnual === 'true' ? 'component-radio-toggle__button--with-annual' : 'component-radio-toggle__button--without-annual';
 
     return (
-      <span className="component-radio-toggle__button" key={radioId}>
+      <span className={className} key={radioId}>
         <input
           className="component-radio-toggle__input"
           type="radio"

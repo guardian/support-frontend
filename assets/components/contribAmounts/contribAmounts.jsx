@@ -15,6 +15,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
+import { getQueryParameter } from '../../helpers/url'
 
 
 // ----- Types ----- //
@@ -162,10 +163,6 @@ const amountRadiosOneOff = {
 const contribCaptionRadios = {
   GB: [
     {
-      value: 'ANNUAL',
-      text: 'Annual',
-    },
-    {
       value: 'MONTHLY',
       text: 'Monthly',
     },
@@ -176,10 +173,6 @@ const contribCaptionRadios = {
   ],
   US: [
     {
-      value: 'ANNUAL',
-      text: 'Annual',
-    },
-    {
       value: 'MONTHLY',
       text: 'Monthly',
     },
@@ -189,6 +182,18 @@ const contribCaptionRadios = {
     },
   ],
 };
+
+const showAnnual = getQueryParameter('showAnnual', false);
+if (showAnnual === 'true') {
+  contribCaptionRadios.GB.unshift({
+    value: 'ANNUAL',
+    text: 'Annual',
+  });
+  contribCaptionRadios.US.unshift({
+    value: 'ANNUAL',
+    text: 'Annual',
+  });
+}
 
 // ----- Functions ----- //
 
@@ -278,9 +283,8 @@ function getAttrs(props: PropTypes): ContribAttrs {
 function getClassName(contribType: Contrib): string {
   switch (contribType) {
     case 'ANNUAL':
-      return generateClassName('component-contrib-amounts__amounts', 'annual');
     case 'MONTHLY':
-      return generateClassName('component-contrib-amounts__amounts', 'monthly');
+      return generateClassName('component-contrib-amounts__amounts', 'recurring');
     default:
       return generateClassName('component-contrib-amounts__amounts', 'one-off');
   }
