@@ -21,7 +21,7 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
-type PageState = {
+type CommonState = {
   intCmp: ?string,
   campaign: ?Campaign,
   refpvid: ?string,
@@ -49,11 +49,11 @@ function pageInitialisation() {
 
 }
 
-function createPageReducer(abParticipations: Participations) {
+function createCommonReducer(abParticipations: Participations) {
 
   const intCmp = getQueryParameter('INTCMP');
 
-  const initialState: PageState = {
+  const initialState: CommonState = {
     intCmp,
     campaign: intCmp ? getCampaign(intCmp) : null,
     refpvid: getQueryParameter('REFPVID'),
@@ -61,9 +61,9 @@ function createPageReducer(abParticipations: Participations) {
     abParticipations,
   };
 
-  function pageReducer(
-    state: PageState = initialState,
-    action: Action): PageState {
+  function commonReducer(
+    state: CommonState = initialState,
+    action: Action): CommonState {
 
     switch (action.type) {
 
@@ -80,17 +80,17 @@ function createPageReducer(abParticipations: Participations) {
 
   }
 
-  return pageReducer;
+  return commonReducer;
 
 }
 
-function init(reducers: Object, preloadedState: ?Object, middleware: ?Function) {
+function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Function) {
 
   const abParticipations = pageInitialisation();
-  const pageReducer = createPageReducer(abParticipations);
+  const commonReducer = createCommonReducer(abParticipations);
 
   return createStore(
-    combineReducers(Object.assign(reducers, { page: pageReducer })),
+    combineReducers({ page: pageReducer, common: commonReducer }),
     preloadedState,
     middleware,
   );

@@ -17,17 +17,17 @@ import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
-import reducers from './reducers/reducers';
+import reducer from './reducers/reducers';
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducers);
+const store = pageInit(reducer);
 
 
 // ----- Setup ----- //
 
-let intCmp = store.getState().page.intCmp;
+let intCmp = store.getState().common.intCmp;
 
 if (!intCmp) {
   intCmp = 'gdnwb_copts_bundles_landing_default';

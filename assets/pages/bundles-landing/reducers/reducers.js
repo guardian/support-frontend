@@ -116,4 +116,4 @@ function contributionReducer(
 
 // ----- Exports ----- //
 
-export default { contribution: contributionReducer };
+export default contributionReducer;

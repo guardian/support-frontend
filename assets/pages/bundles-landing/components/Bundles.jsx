@@ -269,11 +269,11 @@ function Bundles(props: PropTypes) {
 
 function mapStateToProps(state) {
   return {
-    contribType: state.contribution.type,
-    contribAmount: state.contribution.amount,
-    contribError: state.contribution.error,
-    intCmp: state.page.intCmp,
-    isoCountry: state.page.country,
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
+    intCmp: state.common.intCmp,
+    isoCountry: state.common.country,
   };
 }
 
