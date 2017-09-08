@@ -15,7 +15,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
-import { getQueryParameter } from '../../helpers/url'
+import { getQueryParameter } from '../../helpers/url';
 
 
 // ----- Types ----- //
@@ -183,7 +183,7 @@ const contribCaptionRadios = {
   ],
 };
 
-const showAnnual = getQueryParameter('showAnnual', false);
+const showAnnual = getQueryParameter('showAnnual', 'false');
 if (showAnnual === 'true') {
   contribCaptionRadios.GB.unshift({
     value: 'ANNUAL',
