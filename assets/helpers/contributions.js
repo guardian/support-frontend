@@ -84,7 +84,7 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 }
 
 export function parseContrib(s: ?string, contrib: Contrib): Contrib {
-  switch (s.toUpperCase()) {
+  switch ((s || contrib).toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
     case 'MONTHLY': return 'MONTHLY';
     case 'ONE_OFF': return 'ONE_OFF';
