@@ -61,7 +61,7 @@ const tests: Test[] = [
       offset: 0,
       size: 1,
     },
-    isActive: true,
+    isActive: false,
   },
 ];
 
