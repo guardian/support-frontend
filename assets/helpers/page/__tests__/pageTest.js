@@ -19,7 +19,7 @@ describe('reducer tests', () => {
 
     const initialState = {
       intCmp: null,
-      campaign: null,
+      campaign: 'dummy_campaign',
       refpvid: null,
       country: 'GB',
       abParticipations: {},

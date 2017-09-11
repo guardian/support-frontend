@@ -2,7 +2,7 @@
 
 exports[`reducer tests should handle SET_COUNTRY to US 1`] = `null`;
 
-exports[`reducer tests should handle SET_COUNTRY to US 2`] = `null`;
+exports[`reducer tests should handle SET_COUNTRY to US 2`] = `"dummy_campaign"`;
 
 exports[`reducer tests should handle SET_COUNTRY to US 3`] = `null`;
 
@@ -17,7 +17,7 @@ exports[`reducer tests should handle SET_INTCMP to "dummy_intcmp" 3`] = `Object 
 exports[`reducer tests should return the initial state 1`] = `
 Object {
   "abParticipations": Object {},
-  "campaign": null,
+  "campaign": "dummy_campaign",
   "country": "GB",
   "intCmp": null,
   "refpvid": null,
