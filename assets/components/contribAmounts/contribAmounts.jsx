@@ -15,7 +15,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
-import { getQueryParameter } from '../../helpers/url';
+import type { Participations } from '../../helpers/abtest';
 
 
 // ----- Types ----- //
@@ -34,6 +34,7 @@ type PropTypes = {
   toggleContribType: (string) => void,
   onNumberInputKeyPress: () => void,
   isoCountry: IsoCountry,
+  abTests: Participations,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -161,6 +162,20 @@ const amountRadiosOneOff = {
 };
 
 const contribCaptionRadios = {
+  GB_WITH_ANNUAL: [
+    {
+      value: 'ANNUAL',
+      text: 'Annual',
+    },
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+    },
+  ],
   GB: [
     {
       value: 'MONTHLY',
@@ -183,18 +198,6 @@ const contribCaptionRadios = {
   ],
 };
 
-const showAnnual = getQueryParameter('showAnnual', 'false');
-if (showAnnual === 'true') {
-  contribCaptionRadios.GB.unshift({
-    value: 'ANNUAL',
-    text: 'Annual',
-  });
-  contribCaptionRadios.US.unshift({
-    value: 'ANNUAL',
-    text: 'Annual',
-  });
-}
-
 // ----- Functions ----- //
 
 function amountToggles(isoCountry: IsoCountry = 'GB'): AmountToggle {
@@ -214,10 +217,10 @@ function amountToggles(isoCountry: IsoCountry = 'GB'): AmountToggle {
   };
 }
 
-function contribToggle(isoCountry: IsoCountry = 'GB'): Toggle {
+function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean): Toggle {
   return {
     name: 'contributions-period-toggle',
-    radios: contribCaptionRadios[isoCountry],
+    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCountry],
   };
 }
 
@@ -245,6 +248,7 @@ function errorMessage(error: ?ContribError,
 }
 
 function getAttrs(props: PropTypes): ContribAttrs {
+
 
   if (props.contribType === 'ANNUAL') {
 
@@ -294,6 +298,7 @@ function getClassName(contribType: Contrib): string {
 
 export default function ContribAmounts(props: PropTypes) {
 
+  const showAnnual = props.abTests && props.abTests.annualContributions && props.abTests.annualContributions === 'variant';
   const attrs = getAttrs(props);
   const className = getClassName(attrs.contribType);
 
@@ -301,9 +306,10 @@ export default function ContribAmounts(props: PropTypes) {
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle(props.isoCountry)}
+          {...contribToggle(props.isoCountry, showAnnual)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
+          showAnnual={showAnnual}
         />
       </div>
       <div className={className}>
@@ -311,6 +317,7 @@ export default function ContribAmounts(props: PropTypes) {
           {...attrs.toggles}
           toggleAction={attrs.toggleAction}
           checked={attrs.checked}
+          showAnnual={showAnnual}
         />
         <div className="component-contrib-amounts__other-amount">
           <NumberInput
