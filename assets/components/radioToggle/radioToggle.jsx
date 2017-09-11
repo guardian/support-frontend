@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { Participations } from '../../helpers/abtest';
-
 
 // ----- Types ----- //
 

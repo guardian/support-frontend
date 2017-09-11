@@ -17,7 +17,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { forCountry } from 'helpers/internationalisation/currency';
 import type { Participations } from '../../helpers/abtest';
 
-
 // ----- Types ----- //
 
 // Disabling the linter here because it's just buggy...
@@ -249,7 +248,6 @@ function errorMessage(error: ?ContribError,
 
 function getAttrs(props: PropTypes): ContribAttrs {
 
-
   if (props.contribType === 'ANNUAL') {
 
     const userDefined = props.contribAmount.annual.userDefined;
@@ -296,9 +294,15 @@ function getClassName(contribType: Contrib): string {
 
 // ----- Component ----- //
 
+function getShowAnnual(props): boolean {
+  return props.abTests !== undefined &&
+    props.abTests.annualContributions !== undefined &&
+    props.abTests.annualContributions === 'variant';
+}
+
 export default function ContribAmounts(props: PropTypes) {
 
-  const showAnnual = props.abTests && props.abTests.annualContributions && props.abTests.annualContributions === 'variant';
+  const showAnnual: boolean = getShowAnnual(props);
   const attrs = getAttrs(props);
   const className = getClassName(attrs.contribType);
 

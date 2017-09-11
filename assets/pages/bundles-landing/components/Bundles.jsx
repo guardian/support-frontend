@@ -45,7 +45,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
-  abTests: Participations
+  abTests: Participations,
 };
 
 type ContribAttrs = {
@@ -279,7 +279,7 @@ function mapStateToProps(state) {
     intCmp: state.common.intCmp,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
-    abTests: state.abTests,
+    abTests: state.common.abParticipations,
   };
 }
 

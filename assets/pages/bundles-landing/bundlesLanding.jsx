@@ -20,12 +20,6 @@ import reducer from './reducers/reducers';
 import { trackOphan } from '../../helpers/abtest';
 
 
-// ----- Page Startup ----- //
-
-const participation = pageStartup.start();
-setCountry('GB');
-
-
 // ----- Redux Store ----- //
 
 const store = pageInit(reducer);
@@ -40,7 +34,7 @@ if (!intCmp) {
   store.dispatch(setIntCmp(intCmp));
 }
 
-let participations = store.getState().common.abParticipations;
+const participations = store.getState().common.abParticipations;
 if (participations.annualContributions) {
   trackOphan('annualContributions', participations.annualContributions);
 }
