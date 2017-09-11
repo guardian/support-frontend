@@ -17,6 +17,13 @@ import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './reducers/reducers';
+import { trackOphan } from '../../helpers/abtest';
+
+
+// ----- Page Startup ----- //
+
+const participation = pageStartup.start();
+setCountry('GB');
 
 
 // ----- Redux Store ----- //
@@ -31,6 +38,11 @@ let intCmp = store.getState().common.intCmp;
 if (!intCmp) {
   intCmp = 'gdnwb_copts_bundles_landing_default';
   store.dispatch(setIntCmp(intCmp));
+}
+
+let participations = store.getState().common.abParticipations;
+if (participations.annualContributions) {
+  trackOphan('annualContributions', participations.annualContributions);
 }
 
 
