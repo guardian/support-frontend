@@ -23,13 +23,6 @@ export type Campaign = $Keys<typeof campaigns>;
 
 // ----- Functions ----- //
 
-// Checks if a user is in a known campaign based upon their intCmp.
-function inCampaign(campaign: Campaign, intCmp: string): boolean {
-
-  return campaigns[campaign] && campaigns[campaign].includes(intCmp);
-
-}
-
 // Retrieves the user's campaign, if known, from the intCmp.
 function getCampaign(intCmp: string): ?Campaign {
 
@@ -53,7 +46,6 @@ const refpvidReducer = (state: ?string = null): ?string => state;
 export {
   intCmpReducer,
   refpvidReducer,
-  inCampaign,
   getCampaign,
 };
 

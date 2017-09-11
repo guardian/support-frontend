@@ -11,7 +11,6 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
 import { init as pageInit } from 'helpers/page/page';
 import { setIntCmp } from 'helpers/page/pageActions';
-import { inCampaign } from 'helpers/tracking/guTracking';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -44,7 +43,7 @@ const content = (
       <Introduction />
       <Bundles />
       <WhySupport />
-      {inCampaign('baseline_test', intCmp) ? '' : <WaysOfSupport />}
+      {store.getState().common.campaign === 'baseline_test' ? '' : <WaysOfSupport />}
       <SimpleFooter />
     </div>
   </Provider>

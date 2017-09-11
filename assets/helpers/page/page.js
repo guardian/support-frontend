@@ -68,7 +68,10 @@ function createCommonReducer(abParticipations: Participations) {
     switch (action.type) {
 
       case 'SET_INTCMP':
-        return Object.assign({}, state, { intCmp: action.intCmp });
+        return Object.assign({}, state, {
+          intCmp: action.intCmp,
+          campaign: getCampaign(action.intCmp),
+        });
 
       case 'SET_COUNTRY':
         return Object.assign({}, state, { country: action.country });
