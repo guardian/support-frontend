@@ -11,13 +11,16 @@ import views.html.{testUsers => testUsersView}
 class TestUsersManagement(
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    testUsers: TestUserService
+    testUsers: TestUserService,
+    supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
+
+  private val cookieDomain = supportUrl.stripPrefix("https://").stripPrefix("support")
 
   def createTestUser: Action[AnyContent] = authAction {
     val testUser = testUsers.testUsers.generate()
     Ok(testUsersView(testUser))
       .withHeaders(CacheControl.noCache)
-      .withCookies(Cookie("_test_username", testUser, httpOnly = false))
+      .withCookies(Cookie("_test_username", testUser, httpOnly = false, domain = Some(cookieDomain)))
   }
 }

@@ -51,6 +51,7 @@ trait Controllers {
   lazy val testUsersContoller = new TestUsersManagement(
     authAction,
     controllerComponents,
-    testUsers
+    testUsers,
+    appConfig.supportUrl
   )
 }
