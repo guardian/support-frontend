@@ -60,7 +60,7 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.country).toEqual('US');
+    expect(newState.country).toEqual(country);
     expect(newState.intCmp).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
     expect(newState.refpvid).toMatchSnapshot();
