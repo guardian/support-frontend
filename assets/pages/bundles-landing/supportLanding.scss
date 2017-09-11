@@ -1,0 +1,125 @@
+#bundles-landing-page {
+
+  .support-landing {
+
+    // ----- General
+
+    .component-info-section__heading {
+      font-family: $gu-egyptian-web;
+      font-weight: 100;
+      font-size: 36px;
+      line-height: 40px;
+      color: gu-colour(neutral-1);
+    }
+
+    // ----- Contribute
+
+    .contribute-new-design {
+      background-color: darken(gu-colour(multimedia-main-2), 5%);
+    }
+
+    .contribute-new-design__content {
+      background-color: gu-colour(multimedia-main-2);
+    }
+
+    // ----- Subscribe
+
+    .subscribe-new-design {
+      background-color: darken(#fff, 5%);
+    }
+
+    .subscribe-new-design__content {
+      background-color: #fff;
+    }
+
+    // ----- Why Support
+
+    .why-support-new-design {
+      background-color: darken(#fff, 5%);
+
+      .component-cta-circle {
+        margin-left: 0;
+
+        button {
+          vertical-align: middle;
+          background-color: #fff;
+          border: 1px solid gu-colour(neutral-1);
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+
+          svg {
+            fill: gu-colour(neutral-1);
+          }
+        }
+
+        span {
+          vertical-align: middle;
+          font-weight: normal;
+        }
+
+        &::before {
+          content: " ";
+          border-top: 1px solid gu-colour(multimedia-main-2);
+          width: 65px;
+          display: block;
+          padding-bottom: $gu-v-spacing;
+        }
+      }
+    }
+
+    .why-support-new-design__content {
+      background-color: #fff;
+    }
+
+    .why-support-new-design__wrapper {
+      @include mq($from: desktop) {
+        width: 700px;
+      }
+    }
+
+    .why-support-new-design__heading {
+      font-family: $gu-egyptian-web;
+      font-size: 60px;
+      line-height: 60px;
+      font-weight: bold;
+
+      span {
+        display: block;
+      }
+    }
+
+    .why-support-new-design__heading--edits {
+      span:nth-of-type(2) {
+        margin-left: 95px;
+      }
+    }
+
+    .why-support-new-design__heading--advertising {
+      span:nth-of-type(2) {
+        margin-left: 235px;
+      }
+    }
+
+    .why-support-new-design__heading--paywall {
+      span:nth-of-type(2) {
+        margin-left: 60px;
+      }
+    }
+
+    .why-support-new-design__copy {
+      font-family: $gu-text-egyptian-web;
+      font-size: 18px;
+      line-height: 24px;
+      color: gu-colour(neutral-1);
+      border-top: 1px dotted gu-colour(multimedia-main-2);
+    }
+
+    .why-support-new-design__copy--no-border {
+      border: none;
+      padding-top: $gu-v-spacing;
+    }
+
+  }
+
+}
