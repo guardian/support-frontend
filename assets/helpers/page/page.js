@@ -32,10 +32,7 @@ type CommonState = {
 
 // ----- Functions ----- //
 
-function pageInitialisation() {
-
-  // AB tests.
-  const participations = abTest.init();
+function analyticsInitialisation(participations: Participations): void {
 
   // Google analytics.
   ga.init();
@@ -45,11 +42,10 @@ function pageInitialisation() {
   // Logging.
   logger.init();
 
-  return participations;
-
 }
 
-function createCommonReducer(abParticipations: Participations) {
+function createCommonReducer(
+  abParticipations: Participations): (CommonState, Action) => CommonState {
 
   const intCmp = getQueryParameter('INTCMP');
 
@@ -89,8 +85,9 @@ function createCommonReducer(abParticipations: Participations) {
 
 function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Function) {
 
-  const abParticipations = pageInitialisation();
-  const commonReducer = createCommonReducer(abParticipations);
+  const participations = abTest.init();
+  analyticsInitialisation(participations);
+  const commonReducer = createCommonReducer(participations);
 
   return createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
