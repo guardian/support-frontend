@@ -4,6 +4,10 @@
 
     // ----- General
 
+    .component-info-section {
+      border-top: 2px solid gu-colour(light-blue);
+    }
+
     .component-info-section__heading {
       font-family: $gu-egyptian-web;
       font-weight: 100;
@@ -90,21 +94,31 @@
     }
 
     .why-support-new-design__heading--edits {
+      padding: 60px 0 60px 160px;
+
       span:nth-of-type(2) {
         margin-left: 95px;
       }
     }
 
     .why-support-new-design__heading--advertising {
+      padding: $gu-v-spacing 0 160px 80px;
+
       span:nth-of-type(2) {
         margin-left: 235px;
       }
     }
 
     .why-support-new-design__heading--paywall {
+      padding: 80px 0 80px 80px;
+
       span:nth-of-type(2) {
         margin-left: 60px;
       }
+    }
+
+    .why-support-new-design__heading--perspective {
+      padding: 70px 0;
     }
 
     .why-support-new-design__copy {
@@ -120,6 +134,36 @@
       padding-top: $gu-v-spacing;
     }
 
+  }
+
+  // ----- Ready?
+
+  .ready-new-design {
+    background-color: darken(#fff, 5%);
+
+    .component-cta-link {
+      background-color: gu-colour(guardian-brand-dark);
+      padding-top: $gu-v-spacing;
+      padding-bottom: $gu-v-spacing;
+      width: 220px;
+
+      &:hover {
+        background-color: darken(gu-colour(guardian-brand-dark), 10%);
+      }
+    }
+  }
+
+  .ready-new-design__content {
+    background-color: #fff;
+    padding-bottom: $gu-v-spacing * 3;
+  }
+
+  .ready-new-design__heading {
+    font-family: $gu-egyptian-web;
+    color: gu-colour(guardian-brand);
+    font-size: 36px;
+    line-height: 40px;
+    font-weight: 100;
   }
 
 }
