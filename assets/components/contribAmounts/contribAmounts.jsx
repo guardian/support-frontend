@@ -295,9 +295,10 @@ function getClassName(contribType: Contrib): string {
 // ----- Component ----- //
 
 function getShowAnnual(props): boolean {
-  return props.abTests !== undefined &&
-    props.abTests.annualContributions !== undefined &&
-    props.abTests.annualContributions === 'variant';
+  return props.isoCountry === 'GB' &&
+    props.abTests !== undefined &&
+    props.abTests.addAnnualContributions !== undefined &&
+    props.abTests.addAnnualContributions === 'variant';
 }
 
 export default function ContribAmounts(props: PropTypes) {

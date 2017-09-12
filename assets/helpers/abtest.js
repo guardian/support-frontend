@@ -20,7 +20,7 @@ type Audience = {
   size: number,
 };
 
-type TestId = 'annualContributions';
+type TestId = 'addAnnualContributions';
 
 export type Participations = {
   [TestId]: string,
@@ -55,7 +55,7 @@ type OphanABPayload = {
 
 const tests: Test[] = [
   {
-    testId: 'annualContributions',
+    testId: 'addAnnualContributions',
     variants: ['control', 'variant'],
     audience: {
       offset: 0,

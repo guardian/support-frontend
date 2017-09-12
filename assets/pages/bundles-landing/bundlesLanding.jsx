@@ -35,8 +35,8 @@ if (!intCmp) {
 }
 
 const participations = store.getState().common.abParticipations;
-if (participations.annualContributions) {
-  trackOphan('annualContributions', participations.annualContributions);
+if (participations.addAnnualContributions) {
+  trackOphan('addAnnualContributions', participations.addAnnualContributions);
 }
 
 
