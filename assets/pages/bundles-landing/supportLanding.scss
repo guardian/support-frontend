@@ -62,6 +62,20 @@
           font-weight: normal;
         }
 
+        &:hover {
+          cursor: pointer;
+          text-decoration: none;
+
+          button {
+            background-color: gu-colour(guardian-brand-dark);
+            border-color: gu-colour(guardian-brand-dark);
+
+            svg {
+              fill: #fff;
+            }
+          }
+        }
+
         &::before {
           content: " ";
           border-top: 1px solid gu-colour(multimedia-main-2);
@@ -84,9 +98,15 @@
 
     .why-support-new-design__heading {
       font-family: $gu-egyptian-web;
-      font-size: 60px;
-      line-height: 60px;
       font-weight: bold;
+      font-size: 36px;
+      line-height: 36px;
+      color: gu-colour(neutral-1);
+
+      @include mq($from: tablet) {
+        font-size: 60px;
+        line-height: 60px;
+      }
 
       span {
         display: block;
@@ -94,31 +114,64 @@
     }
 
     .why-support-new-design__heading--edits {
-      padding: 60px 0 60px 160px;
+      padding: 60px 0 60px 50px;
 
       span:nth-of-type(2) {
-        margin-left: 95px;
+        margin-left: 50px;
+      }
+
+      @include mq($from: phablet) {
+        padding-left: 180px;
+      }
+
+      @include mq($from: tablet) {
+        padding-left: 160px;
+
+        span:nth-of-type(2) {
+          margin-left: 95px;
+        }
       }
     }
 
     .why-support-new-design__heading--advertising {
-      padding: $gu-v-spacing 0 160px 80px;
+      padding: $gu-v-spacing 0 160px;
 
       span:nth-of-type(2) {
-        margin-left: 235px;
+        margin-left: 140px;
+      }
+
+      @include mq($from: phablet) {
+        padding: $gu-v-spacing 0 160px 80px;
+      }
+
+      @include mq($from: tablet) {
+        span:nth-of-type(2) {
+          margin-left: 235px;
+        }
       }
     }
 
     .why-support-new-design__heading--paywall {
-      padding: 80px 0 80px 80px;
+      padding: 80px 0;
+      width: 300px;
+      margin: 0 auto;
 
       span:nth-of-type(2) {
         margin-left: 60px;
       }
+
+      @include mq($from: phablet) {
+        padding-left: 140px;
+        margin: 0;
+      }
     }
 
     .why-support-new-design__heading--perspective {
-      padding: 70px 0;
+      padding: ($gu-v-spacing * 2) 0;
+
+      @include mq($from: tablet) {
+        padding: 70px 0;
+      }
     }
 
     .why-support-new-design__copy {
