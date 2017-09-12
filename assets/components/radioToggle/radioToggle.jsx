@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { getQueryParameter } from '../../helpers/url';
-
 
 // ----- Types ----- //
 
@@ -21,19 +19,21 @@ type PropTypes = {
   radios: Radio[],
   checked: ?string,
   toggleAction: (string) => void,
+  showAnnual: boolean,
 };
 
 /* eslint-enable react/no-unused-prop-types */
 
-
+function getClassName(props: PropTypes) {
+  return props.showAnnual === true ? 'component-radio-toggle__button--with-annual' : 'component-radio-toggle__button--without-annual';
+}
 // ----- Component ----- //
 
 export default function RadioToggle(props: PropTypes) {
   const radioButtons = props.radios.map((radio: Radio, idx: number) => {
 
     const radioId = `${props.name}-${idx}`;
-    const showAnnual = getQueryParameter('showAnnual', 'false');
-    const className = showAnnual === 'true' ? 'component-radio-toggle__button--with-annual' : 'component-radio-toggle__button--without-annual';
+    const className = getClassName(props);
 
     return (
       <span className={`component-radio-toggle__button ${className}`} key={radioId}>

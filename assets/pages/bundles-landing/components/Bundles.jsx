@@ -25,6 +25,7 @@ import {
 import { getSubsLinks } from '../helpers/subscriptionsLinks';
 
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
+import type { Participations } from '../../../helpers/abtest';
 
 
 // ----- Types ----- //
@@ -43,7 +44,8 @@ type PropTypes = {
   changeContribMonthlyAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
-  isoCountry: IsoCountry
+  isoCountry: IsoCountry,
+  abTests: Participations,
 };
 
 type ContribAttrs = {
@@ -277,6 +279,7 @@ function mapStateToProps(state) {
     intCmp: state.common.intCmp,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
+    abTests: state.common.abParticipations,
   };
 }
 

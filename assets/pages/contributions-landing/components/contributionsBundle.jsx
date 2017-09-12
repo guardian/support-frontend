@@ -22,6 +22,7 @@ import {
   changeContribAmountOneOff,
   payPalError,
 } from '../actions/contributionsLandingActions';
+import type { Participations } from '../../../helpers/abtest';
 
 
 // ----- Types ----- //
@@ -43,6 +44,7 @@ type PropTypes = {
   isoCountry: IsoCountry,
   payPalErrorHandler: (string) => void,
   payPalError: ?string,
+  abTests: Participations,
 };
 
 /* eslint-enable react/no-unused-prop-types */
