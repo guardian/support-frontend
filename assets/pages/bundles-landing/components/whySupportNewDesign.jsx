@@ -40,7 +40,7 @@ export default function WhySupport() {
           </p>
           <CtaCircle text="Find out more about the Scott Trust" />
           <h1 className="why-support-new-design__heading why-support-new-design__heading--paywall">
-            <span>we haven&#39;t put up</span>
+            <span>we haven&#39;t put up </span>
             <span>a paywall</span>
           </h1>
           <p className="why-support-new-design__copy">
