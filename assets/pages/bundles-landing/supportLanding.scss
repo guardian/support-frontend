@@ -196,9 +196,16 @@
 
     .component-cta-link {
       background-color: gu-colour(guardian-brand-dark);
-      padding-top: $gu-v-spacing;
-      padding-bottom: $gu-v-spacing;
-      width: 220px;
+      width: 250px;
+      padding: 18px 24px;
+      padding-top: 18px;
+      padding-bottom: 18px;
+
+      svg {
+        right: 12px;
+        top: 12px;
+        height: 60%;
+      }
 
       &:hover {
         background-color: darken(gu-colour(guardian-brand-dark), 10%);
