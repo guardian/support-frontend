@@ -11,9 +11,14 @@
     .component-info-section__heading {
       font-family: $gu-egyptian-web;
       font-weight: 100;
-      font-size: 36px;
-      line-height: 40px;
+      font-size: 48px;
+      line-height: 48px;
       color: gu-colour(neutral-1);
+
+      @include mq($from: tablet) {
+        font-size: 36px;
+        line-height: 40px;
+      }
     }
 
     // ----- Contribute
@@ -34,6 +39,98 @@
 
     .subscribe-new-design__content {
       background-color: #fff;
+      border-color: gu-colour(light-yellow);
+    }
+
+    .subscribe-new-design__bundles-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .subscription-bundle {
+      display: flex;
+      flex-direction: column;
+      padding: 0 ($gu-h-spacing / 2);
+      box-sizing: border-box;
+
+      @include mq($from: tablet) {
+        flex-basis: 33.3%;
+      }
+
+      .component-cta-circle {
+        margin: 0;
+        padding-top: $gu-v-spacing * 2;
+
+        span {
+          font-size: 18px;
+          line-height: 24px;
+          font-weight: bold;
+          vertical-align: middle;
+        }
+
+        button {
+          background-color: gu-colour(neutral-6);
+          vertical-align: middle;
+
+          svg {
+            fill: gu-colour(neutral-1);
+            height: 100%;
+            width: 100%;
+          }
+        }
+
+        &:hover {
+          cursor: pointer;
+          text-decoration: none;
+
+          button {
+            // width: 60px;
+            // height: 60px;
+            background-color: gu-colour(multimedia-main-2);
+
+            svg {
+              // height: 80%;
+              // width: 80%;
+            }
+          }
+        }
+      }
+    }
+
+    .subscription-bundle__heading {
+      font-family: $gu-egyptian-web;
+      font-weight: 100;
+      font-size: 48px;
+      line-height: 48px;
+      color: gu-colour(neutral-1);
+      border-top: 2px solid gu-colour(light-yellow);
+
+      @include mq($from: tablet) {
+        font-size: 36px;
+        line-height: 40px;
+      }
+    }
+
+    .subscription-bundle__price {
+      font-family: $gu-text-sans-web;
+      font-size: 24px;
+      line-height: 28px;
+      padding: $gu-v-spacing 0;
+      flex-grow: 1;
+    }
+
+    .subscription-bundle__price-amount {
+      font-size: 36px;
+      line-height: 28px;
+      font-weight: bold;
+    }
+
+    .subscription-bundle__copy {
+      font-family: $gu-text-egyptian-web;
+      font-size: 18px;
+      line-height: 24px;
+      color: gu-colour(neutral-2);
+      flex-grow: 1;
     }
 
     // ----- Why Support
@@ -162,6 +259,7 @@
 
       @include mq($from: phablet) {
         padding-left: 140px;
+        width: auto;
         margin: 0;
       }
     }
@@ -221,9 +319,14 @@
   .ready-new-design__heading {
     font-family: $gu-egyptian-web;
     color: gu-colour(guardian-brand);
-    font-size: 36px;
-    line-height: 40px;
+    font-size: 48px;
+    line-height: 48px;
     font-weight: 100;
+
+    @include mq($from: tablet) {
+      font-size: 36px;
+      line-height: 40px;
+    }
   }
 
 }
