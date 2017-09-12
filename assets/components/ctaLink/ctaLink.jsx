@@ -6,6 +6,8 @@ import React from 'react';
 import Svg from 'components/svg/svg';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
+import type { SvgName } from 'components/svg/svg';
+
 
 // ----- Types ----- //
 
@@ -15,6 +17,7 @@ type PropTypes = {
   onClick?: ?Function,
   tabIndex?: number,
   id?: ?string,
+  svgName?: SvgName,
 };
 
 // ----- Component ----- //
@@ -30,7 +33,7 @@ export default function CtaLink(props: PropTypes) {
       tabIndex={props.tabIndex}
     >
       <span>{props.text}</span>
-      <Svg svgName="arrow-right-straight" />
+      <Svg svgName={props.svgName} />
     </a>
   );
 
@@ -44,4 +47,5 @@ CtaLink.defaultProps = {
   onClick: null,
   tabIndex: 0,
   id: null,
+  svgName: 'arrow-right-straight',
 };
