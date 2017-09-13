@@ -86,7 +86,6 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalType={store.getState().oneoffContrib.payPalType}
           />
         </InfoSection>
       </div>

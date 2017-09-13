@@ -34,6 +34,7 @@ type PropTypes = {
   refpvid?: string,
   isoCountry: IsoCountry,
   payPalErrorHandler: (string) => void,
+  csrfToken: string,
 };
 
 
@@ -47,7 +48,13 @@ export default function PaymentMethods(props: PropTypes) {
 
   switch (props.payPalType) {
     case 'ExpressCheckout':
-      payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
+      payPalButton = (<PayPalExpressButton
+        callback={props.payPalCallback}
+        csrfToken={props.csrfToken} // todo
+        amount={Number(props.amount)}
+        billingPeriod="monthly"
+        currency="GBP"
+      />);
       break;
     case 'ContributionsCheckout':
       payPalButton = (<PayPalContributionButton
