@@ -33,6 +33,8 @@ const svgsCatalog: {
   video: svg,
   'visa-logo': svg,
   'chevron-up': svg,
+  'graph-line': svg,
+  'graph-line-mobile': svg,
 } = {
   'amex-logo': {
     viewBox: '0 0 19.72 19.94',
@@ -282,6 +284,24 @@ const svgsCatalog: {
       {
         d: 'M25.8999253 18.4499643 15.4499609 8 14.4499643 8 4 18.4499643 4.97499667 19.3999611 14.9499626 10.9999898 24.9249286 19.3999611Z',
         class: null,
+      },
+    ],
+  },
+  'graph-line': {
+    viewBox: '0 0 658 215',
+    paths: [
+      {
+        d: 'M0 4l62.996 61 110 24 99 63.996 87-18.996L468 172.996l86.996-20L649.5 210.25',
+        class: 'graph-line',
+      },
+    ],
+  },
+  'graph-line-mobile': {
+    viewBox: '0 0 348 199',
+    paths: [
+      {
+        d: 'M0 3l14.502 37.002 49.5 9.5L98.51 109.5l34.492 12.502 45 22 45.996-22 19.004 29 58.008-11.004 40.992 56.004',
+        class: 'graph-line-mobile',
       },
     ],
   },

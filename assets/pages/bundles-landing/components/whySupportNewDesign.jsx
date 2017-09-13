@@ -6,6 +6,7 @@ import React from 'react';
 
 import InfoSection from 'components/infoSection/infoSection';
 import CtaCircle from 'components/ctaCircle/ctaCircle';
+import Svg from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -28,6 +29,8 @@ export default function WhySupport() {
           <h1 className="why-support-new-design__heading why-support-new-design__heading--advertising">
             <span>advertising revenues</span>
             <span>are falling</span>
+            <Svg svgName="graph-line" />
+            <Svg svgName="graph-line-mobile" />
           </h1>
           <p className="why-support-new-design__copy">
             Our quality, investigative journalism takes a lot of time and money
