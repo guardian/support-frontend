@@ -177,6 +177,7 @@ const contribCaptionRadios = {
       text: 'Monthly',
     },
     {
+      id: 'qa-one-off-toggle',
       value: 'ONE_OFF',
       text: 'One-time',
     },
