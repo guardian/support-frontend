@@ -33,9 +33,6 @@ object Driver {
   }
 
   def reset(): Unit = {
-    driver.get(Config.supportFrontendUrl)
-    driver.manage.deleteAllCookies()
-
     driver.get(Config.paypalSandbox)
     driver.manage.deleteAllCookies()
 
