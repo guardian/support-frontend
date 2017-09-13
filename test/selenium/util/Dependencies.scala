@@ -23,4 +23,7 @@ object Dependencies {
     val url = s"${Config.identityFrontendUrl}/signin"
   }
 
+  object ContributionFrontend extends Availability {
+    val url = s"${Config.contributionFrontend}"
+  }
 }
