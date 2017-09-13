@@ -43,7 +43,11 @@ type PropTypes = {
 export default function PaymentMethods(props: PropTypes) {
 
   let statusMessage = '';
-  let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
+  let stripeButton = (<StripePopUpButton
+    email={props.email}
+    amount={Number(props.amount)}
+    callback={props.stripeCallback}
+  />);
   let payPalButton = '';
 
   switch (props.payPalType) {
