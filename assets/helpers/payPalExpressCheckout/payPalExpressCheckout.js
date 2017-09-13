@@ -147,7 +147,7 @@ function setup(
       const elementCount: ?number = htmlElement ? htmlElement.childElementCount : null;
 
       if (htmlElement) {
-        htmlElement.dataset.amount = String(amount); // needs polyfill for ie10
+        htmlElement.dataset.amount = String(amount);
         htmlElement.dataset.currency = String(currency);
         htmlElement.dataset.billingPeriod = billingPeriod;
         htmlElement.dataset.csrfToken = csrfToken;
