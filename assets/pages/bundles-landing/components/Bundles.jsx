@@ -12,6 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Campaign } from 'helpers/tracking/guTracking';
 import { routes } from 'helpers/routes';
 
 import {
@@ -24,6 +25,7 @@ import {
 import { getSubsLinks } from '../helpers/subscriptionsLinks';
 
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
+import type { Participations } from '../../../helpers/abtest';
 
 
 // ----- Types ----- //
@@ -36,12 +38,14 @@ type PropTypes = {
   contribAmount: Amounts,
   contribError: ContribError,
   intCmp: string,
+  campaign: ?Campaign,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
-  isoCountry: IsoCountry
+  isoCountry: IsoCountry,
+  abTests: Participations,
 };
 
 type ContribAttrs = {
@@ -243,7 +247,7 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
@@ -269,11 +273,13 @@ function Bundles(props: PropTypes) {
 
 function mapStateToProps(state) {
   return {
-    contribType: state.contribution.type,
-    contribAmount: state.contribution.amount,
-    contribError: state.contribution.error,
-    intCmp: state.intCmp,
-    isoCountry: state.isoCountry,
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
+    intCmp: state.common.intCmp,
+    campaign: state.common.campaign,
+    isoCountry: state.common.country,
+    abTests: state.common.abParticipations,
   };
 }
 

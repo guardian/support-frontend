@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { getCampaign } from 'helpers/tracking/guTracking';
 import type { Campaign } from 'helpers/tracking/guTracking';
 
 
@@ -57,9 +56,7 @@ function buildUrls(promoCodes: PromoCodes, intCmp: string): SubsUrls {
 }
 
 // Creates links to subscriptions, tailored to the user's campaign.
-function getSubsLinks(intCmp: string): SubsUrls {
-
-  const campaign = getCampaign(intCmp);
+function getSubsLinks(intCmp: string, campaign: ?Campaign): SubsUrls {
 
   if (campaign && customPromos[campaign]) {
     return buildUrls(customPromos[campaign], intCmp);
