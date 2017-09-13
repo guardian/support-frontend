@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
@@ -12,34 +12,17 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import pageStartup from 'helpers/pageStartup';
-import { getQueryParameter } from 'helpers/url';
-import { setCountry } from 'helpers/internationalisation/country';
+import { init as pageInit } from 'helpers/page/page';
 
 import reducer from './reducers/reducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
 
-// ----- Page Startup ----- //
-
-const participation = pageStartup.start();
-
-
 // ----- Redux Store ----- //
+const store = pageInit(reducer, {}, applyMiddleware(thunkMiddleware));
 
-const country = 'GB';
-setCountry(country);
-
-const store = createStore(reducer, {
-  intCmp: getQueryParameter('INTCMP'),
-  isoCountry: country,
-  refpvid: getQueryParameter('REFPVID'),
-}, applyMiddleware(thunkMiddleware));
-
-store.dispatch({ type: 'SET_AB_TEST_PARTICIPATION', payload: participation });
 saveContext(store.dispatch);
-
 
 // ----- Render ----- //
 
