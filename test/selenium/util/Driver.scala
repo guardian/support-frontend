@@ -10,7 +10,9 @@ object Driver {
 
   def apply(): WebDriver = driver
 
-  private lazy val driver: WebDriver =
+  private lazy val driver: WebDriver = createDriver
+
+  def createDriver: WebDriver =
     if (Config.webDriverRemoteUrl.isEmpty)
       instantiateLocalBrowser()
     else
@@ -31,8 +33,20 @@ object Driver {
   }
 
   def reset(): Unit = {
-    driver.manage.deleteAllCookies()
     driver.get(Config.supportFrontendUrl)
+    driver.manage.deleteAllCookies()
+
+    driver.get(Config.paypalSandbox)
+    driver.manage.deleteAllCookies()
+
+    driver.get(Config.contributionFrontend)
+    driver.manage.deleteAllCookies()
+
+    driver.get(Config.identityFrontendUrl)
+    driver.manage.deleteAllCookies()
+
+    driver.get(Config.supportFrontendUrl)
+    driver.manage.deleteAllCookies()
   }
 
   def quit(): Unit = driver.quit()
