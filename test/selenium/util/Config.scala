@@ -14,6 +14,10 @@ object Config {
 
   val identityFrontendUrl = conf.getString("identity.webapp.url")
 
+  val contributionFrontend = conf.getString("contribution.url")
+
+  val paypalSandbox = conf.getString("paypal.sandbox.url")
+
   val testUsersSecret = conf.getString("identity.test.users.secret")
 
   val webDriverRemoteUrl = Try(conf.getString("web.driver.remote.url")) match {
