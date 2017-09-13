@@ -40,7 +40,7 @@ const PayPalContributionButton = (props: PropTypes) =>
   (
     <button
       id="qa-contribute-paypal-button"
-      className={'component-paypal-contribution-button'}
+      className="component-paypal-contribution-button"
       onClick={payWithPayPal(props)}
     >
 
