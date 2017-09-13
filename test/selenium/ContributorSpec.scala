@@ -26,7 +26,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
     )
     assume(
       Dependencies.ContributionFrontend.isAvailable,
-      s"${Dependencies.ContributionFrontend.url} is unavailable! Please run support-frontend locally before running these tests."
+      s"${Dependencies.ContributionFrontend.url} is unavailable! Please run contribution-frontend locally before running these tests."
     )
   }
 
