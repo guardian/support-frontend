@@ -14,6 +14,7 @@ type PropTypes = {
   price: string,
   from: boolean,
   copy: string,
+  ctaText: string,
 };
 
 
@@ -31,7 +32,7 @@ export default function SubscriptionBundle(props: PropTypes) {
         <span className="subscription-bundle__price-period"> /&nbsp;month</span>
       </h4>
       <p className="subscription-bundle__copy">{props.copy}</p>
-      <CtaCircle text="Find out more" />
+      <CtaCircle text={props.ctaText} />
     </div>
   );
 

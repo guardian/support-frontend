@@ -19,21 +19,24 @@ export default function Subscribe() {
         <div className="subscribe-new-design__bundles-wrapper">
           <SubscriptionBundle
             heading="digital"
-            price="14.99"
+            price="11.99"
             from={false}
             copy="Get our journalism across up to 10 devices, to enjoy wherever you go"
+            ctaText="Start 14-day trial"
           />
           <SubscriptionBundle
             heading="paper"
-            price="19.99"
+            price="10.79"
             from={true}
             copy="With six day, weekend and everyday options, you can choose the package that suits you"
+            ctaText="Choose paper"
           />
           <SubscriptionBundle
             heading="paper & digital"
-            price="27.99"
+            price="22.06"
             from={true}
             copy="Enjoy the Guardian at your leisure, whether it's on your tablet on the go, or reading the paper at home"
+            ctaText="Choose paper & digital"
           />
         </div>
       </InfoSection>
