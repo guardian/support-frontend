@@ -10,6 +10,7 @@ import React from 'react';
 /* eslint-disable react/no-unused-prop-types */
 
 export type Radio = {
+  id?: string,
   value: string,
   text: string,
 };
@@ -36,7 +37,7 @@ export default function RadioToggle(props: PropTypes) {
     const className = getClassName(props);
 
     return (
-      <span className={`component-radio-toggle__button ${className}`} key={radioId}>
+      <span id={radio.id} className={`component-radio-toggle__button ${className}`} key={radioId}>
         <input
           className="component-radio-toggle__input"
           type="radio"
@@ -63,4 +64,5 @@ export default function RadioToggle(props: PropTypes) {
 
 RadioToggle.defaultProps = {
   checked: '',
+  id: null,
 };

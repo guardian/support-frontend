@@ -3,7 +3,7 @@ package selenium.pages
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config}
 
-object ThankYou extends Page with Browser {
+object RecurringContributionThankYou extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring/thankyou"
 

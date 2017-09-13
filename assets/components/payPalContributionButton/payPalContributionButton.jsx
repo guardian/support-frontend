@@ -38,7 +38,12 @@ function payWithPayPal(props: PropTypes) {
 
 const PayPalContributionButton = (props: PropTypes) =>
   (
-    <button className={'component-paypal-contribution-button'} onClick={payWithPayPal(props)}>
+    <button
+      id="qa-contribute-paypal-button"
+      className="component-paypal-contribution-button"
+      onClick={payWithPayPal(props)}
+    >
+
       <Svg svgName="paypal-p-logo" />
       <span>contribute with PayPal</span>
       <Svg svgName="arrow-right-straight" />
