@@ -9,8 +9,16 @@ case class ContributionsLanding(region: String) extends Page with Browser {
 
   private val contributeButton = id("qa-contribute-button")
 
+  private val contributePayPalButton = id("qa-contribute-paypal-button")
+
+  private val oneOffButton = id("qa-one-off-toggle")
+
   def pageHasLoaded: Boolean = pageHasElement(contributeButton)
 
   def clickContribute: Unit = clickOn(contributeButton)
+
+  def clickOneOff: Unit = clickOn(oneOffButton)
+
+  def clickContributePayPalButton: Unit = clickOn(contributePayPalButton)
 
 }

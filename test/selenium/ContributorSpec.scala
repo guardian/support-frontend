@@ -4,8 +4,6 @@ import org.scalatest._
 import _root_.selenium.pages._
 import _root_.selenium.util._
 
-object Selenium extends Tag("Selenium")
-
 class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll {
 
   before { Driver.reset() }
@@ -26,11 +24,15 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       Dependencies.IdentityFrontend.isAvailable,
       s"- ${Dependencies.IdentityFrontend.url} is unavailable! Please run identity-frontend locally before running these tests."
     )
+    assume(
+      Dependencies.ContributionFrontend.isAvailable,
+      s"${Dependencies.ContributionFrontend.url} is unavailable! Please run support-frontend locally before running these tests."
+    )
   }
 
   feature("Sign up for a Monthly Contribution") {
 
-    scenario("Monthly contribution sign-up with Stripe - GBP", Selenium) {
+    scenario("Monthly contribution sign-up with Stripe - GBP", SeleniumTag) {
 
       val landingPage = ContributionsLanding("uk")
 
@@ -77,12 +79,12 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       MonthlyContribution.clickStripePayButton()
 
       Then("the thankyou page should display")
-      ThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed
-      assert(ThankYou.pageHasLoaded)
+      RecurringContributionThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed
+      assert(RecurringContributionThankYou.pageHasLoaded)
 
     }
 
-    scenario("Monthly contribution sign-up with PayPal - USD", Selenium) {
+    scenario("Monthly contribution sign-up with PayPal - USD", SeleniumTag) {
 
       val landingPage = ContributionsLanding("us")
       val expectedPayment = "10.00"
@@ -100,10 +102,10 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       assert(register.pageHasLoaded)
 
       Given("that the user fills in their personal details correctly")
-      register.fillInPersonalDetails()
+      register.fillInPersonalDetails
 
       When("they submit the form to create their Identity account")
-      register.submit()
+      register.submit
 
       Then("they should be redirected to the Monthly Contributions page")
       assert(MonthlyContribution.pageHasLoaded)
@@ -114,32 +116,75 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       And("they select to pay with PayPal")
 
       When("they press the PayPal payment button")
-      MonthlyContribution.selectPayPalPayment()
+      MonthlyContribution.selectPayPalPayment
 
       Then("the PayPal Express Checkout mini-browser should display")
-      MonthlyContribution.switchToPayPal
-      assert(MonthlyContribution.payPalCheckoutHasLoaded)
+      PayPalCheckout.switchToPayPalPopUp
+      assert(PayPalCheckout.hasLoaded)
 
       Given("that the user fills in their PayPal credentials correctly")
       MonthlyContribution.fillInPayPalDetails()
 
       When("the user clicks 'Log In'")
-      MonthlyContribution.payPalLogin
+      PayPalCheckout.logIn
 
       Then("the payment summary appears")
-      assert(MonthlyContribution.payPalHasPaymentSummary)
+      assert(PayPalCheckout.payPalHasPaymentSummary)
 
       Given("that the summary displays the correct details")
-      assert(MonthlyContribution.payPalSummaryHasCorrectDetails(expectedPayment))
+      assert(PayPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
 
       When("that the user agrees to payment")
-      MonthlyContribution.acceptPayPalPayment
+      PayPalCheckout.acceptPayPalPaymentPopUp
 
       Then("the thankyou page should display")
-      assert(ThankYou.pageHasLoaded)
+      assert(RecurringContributionThankYou.pageHasLoaded)
 
     }
 
+  }
+
+  feature("Perform a one-off contribution") {
+
+    scenario("One-off contribution with PayPal - USD", SeleniumTag) {
+
+      val testUser = new TestUser
+      val landingPage = ContributionsLanding("us")
+      val expectedPayment = "50.00"
+
+      Given("that a test user goes to the contributions landing page")
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
+
+      When("he/she selects to make a one-time contribution")
+      landingPage.clickOneOff
+
+      And("he/she selects to contribute via PayPal")
+      landingPage.clickContributePayPalButton
+
+      Then("they should be redirected to PayPal Checkout")
+      PayPalCheckout.switchToPayPalPage()
+      assert(PayPalCheckout.hasLoaded)
+
+      Given("that the user fills in their PayPal credentials correctly")
+      PayPalCheckout.fillIn()
+
+      When("the user clicks 'Log In'")
+      PayPalCheckout.logIn
+
+      Then("the payment summary appears")
+      assert(PayPalCheckout.payPalHasPaymentSummary)
+
+      Given("that the summary displays the correct details")
+      assert(PayPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
+
+      When("that the user agrees to payment")
+      PayPalCheckout.acceptPayPalPaymentPage
+
+      Then("the thankyou page should display")
+      assert(OneOffContributionThankYou.pageHasLoaded)
+
+    }
   }
 
 }

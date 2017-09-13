@@ -1,7 +1,7 @@
 package selenium.pages
 
 import org.scalatest.selenium.Page
-import selenium.util.{Browser, Config}
+import selenium.util.{Browser, Config, PayPalCheckout}
 
 object MonthlyContribution extends Page with Browser {
 
@@ -41,26 +41,7 @@ object MonthlyContribution extends Page with Browser {
 
   def selectPayPalPayment(): Unit = clickOn(payPalButton)
 
-  def switchToPayPal(): Unit = {
-    switchWindow
-    switchFrame(PayPalCheckout.container)
-  }
-
-  def payPalCheckoutHasLoaded: Boolean = pageHasElement(PayPalCheckout.loginButton)
-
   def fillInPayPalDetails(): Unit = PayPalCheckout.fillIn
-
-  def payPalLogin(): Unit = PayPalCheckout.logIn
-
-  def payPalHasPaymentSummary(): Boolean = pageHasElement(PayPalCheckout.agreeAndPay)
-
-  def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(PayPalCheckout.paymentAmount, expectedCurrencyAndAmount)
-
-  def acceptPayPalPayment(): Unit = {
-    pageDoesNotHaveElement(id("spinner"))
-    PayPalCheckout.acceptPayment
-    switchToParentWindow
-  }
 
   // Handles interaction with the Stripe Checkout iFrame.
   private object StripeCheckout {
@@ -82,26 +63,4 @@ object MonthlyContribution extends Page with Browser {
     def acceptPayment(): Unit = clickOn(submitButton)
 
   }
-
-  // Handles interaction with the PayPal Express Checkout overlay.
-  private object PayPalCheckout {
-
-    val container = name("injectedUl")
-    val loginButton = name("btnLogin")
-    val emailInput = name("login_email")
-    val passwordInput = name("login_password")
-    val agreeAndPay = id("confirmButtonTop")
-    val paymentAmount = className("formatCurrency")
-
-    def fillIn(): Unit = {
-      setValueSlowly(emailInput, Config.paypalBuyerEmail)
-      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
-    }
-
-    def logIn(): Unit = clickOn(loginButton)
-
-    def acceptPayment(): Unit = clickOn(agreeAndPay)
-
-  }
-
 }
