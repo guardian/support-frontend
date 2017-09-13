@@ -66,6 +66,7 @@
           line-height: 24px;
           font-weight: bold;
           vertical-align: middle;
+          color: gu-colour(neutral-1);
         }
 
         button {
@@ -100,8 +101,8 @@
     .subscription-bundle__heading {
       font-family: $gu-egyptian-web;
       font-weight: 100;
-      font-size: 48px;
-      line-height: 48px;
+      font-size: 36px;
+      line-height: 28px;
       color: gu-colour(neutral-1);
       border-top: 2px solid gu-colour(light-yellow);
 
@@ -117,6 +118,7 @@
       line-height: 28px;
       padding: $gu-v-spacing 0;
       flex-grow: 1;
+      color: gu-colour(neutral-1);
     }
 
     .subscription-bundle__price-amount {
