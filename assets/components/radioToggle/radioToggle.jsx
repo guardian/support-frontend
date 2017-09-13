@@ -12,7 +12,7 @@ import { getQueryParameter } from '../../helpers/url';
 /* eslint-disable react/no-unused-prop-types */
 
 export type Radio = {
-  id: ?string,
+  id?: string,
   value: string,
   text: string,
 };
