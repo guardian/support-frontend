@@ -85,9 +85,9 @@ function NameForm(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-    country: state.monthlyContrib.country,
+    firstName: state.page.user.firstName,
+    lastName: state.page.user.lastName,
+    country: state.page.monthlyContrib.country,
   };
 
 }

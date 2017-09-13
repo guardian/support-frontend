@@ -42,21 +42,21 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
 
   const state = getState();
 
-  if (state.user.fullName !== null && state.user.fullName !== undefined
-    && state.user.email !== null && state.user.email !== undefined) {
+  if (state.page.user.fullName !== null && state.page.user.fullName !== undefined
+    && state.page.user.email !== null && state.page.user.email !== undefined) {
     const oneoffContribFields: OneoffContribFields = {
-      name: state.user.fullName,
-      currency: state.stripeCheckout.currency,
-      amount: state.stripeCheckout.amount,
-      email: state.user.email,
+      name: state.page.user.fullName,
+      currency: state.page.stripeCheckout.currency,
+      amount: state.page.stripeCheckout.amount,
+      email: state.page.user.email,
       token: paymentToken,
       marketing: false, // todo: collect marketing preference
-      postcode: state.user.postcode,
+      postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
     };
 
-    if (state.refpvid) {
-      oneoffContribFields.refererPageviewId = state.refpvid;
+    if (state.common.refpvid) {
+      oneoffContribFields.refererPageviewId = state.common.refpvid;
     }
 
     return {

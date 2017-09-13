@@ -50,9 +50,9 @@ const StripePopUpButton = (props: PropTypes) => {
 function mapStateToProps(state) {
 
   return {
-    overlayOpen: state.stripeCheckout.overlay,
-    stripeLoaded: state.stripeCheckout.loaded,
-    amount: state.stripeCheckout.amount,
+    overlayOpen: state.page.stripeCheckout.overlay,
+    stripeLoaded: state.page.stripeCheckout.loaded,
+    amount: state.page.stripeCheckout.amount,
   };
 
 }

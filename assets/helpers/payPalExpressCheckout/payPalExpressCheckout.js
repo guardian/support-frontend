@@ -54,8 +54,8 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 
 function setupPayment(dispatch: Function, state: CombinedState) {
 
-  const payPalState = state.payPalExpressCheckout;
-  const csrfToken = state.csrf.token;
+  const payPalState = state.page.payPalExpressCheckout;
+  const csrfToken = state.page.csrf.token;
 
   return (resolve, reject) => {
 

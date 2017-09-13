@@ -46,30 +46,30 @@ function requestData(paymentFieldName: PaymentField,
 
   const state = getState();
 
-  if (state.user.firstName !== null && state.user.firstName !== undefined
-    && state.user.lastName !== null && state.user.lastName !== undefined
-    && state.user.email !== null && state.user.email !== undefined) {
+  if (state.page.user.firstName !== null && state.page.user.firstName !== undefined
+    && state.page.user.lastName !== null && state.page.user.lastName !== undefined
+    && state.page.user.email !== null && state.page.user.email !== undefined) {
     const monthlyContribFields: MonthlyContribFields = {
       contribution: {
-        amount: state.stripeCheckout.amount,
-        currency: state.stripeCheckout.currency,
+        amount: state.page.stripeCheckout.amount,
+        currency: state.page.stripeCheckout.currency,
         billingPeriod: billingPeriodFromContrib(contributionType),
       },
       paymentFields: {
         [paymentFieldName]: token,
       },
-      country: state.monthlyContrib.country,
-      firstName: state.user.firstName,
-      lastName: state.user.lastName,
+      country: state.page.monthlyContrib.country,
+      firstName: state.page.user.firstName,
+      lastName: state.page.user.lastName,
     };
 
-    if (state.user.stateField) {
-      monthlyContribFields.state = state.user.stateField;
+    if (state.page.user.stateField) {
+      monthlyContribFields.state = state.page.user.stateField;
     }
 
     return {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
+      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token || '' },
       credentials: 'same-origin',
       body: JSON.stringify(monthlyContribFields),
     };
@@ -84,8 +84,8 @@ function requestData(paymentFieldName: PaymentField,
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.intCmp);
+  if (state.page.monthlyContrib.pollCount >= MAX_POLLS) {
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
     window.location.assign(url);
   }
 
@@ -93,11 +93,11 @@ function statusPoll(dispatch: Function, getState: Function) {
 
   const request = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token },
     credentials: 'same-origin',
   };
 
-  return fetch(state.monthlyContrib.statusUri, request).then((response) => {
+  return fetch(state.page.monthlyContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -119,13 +119,13 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.intCmp));
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.common.intCmp));
           break;
         default:
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.monthlyContrib.statusUri) {
+  } else if (state.page.monthlyContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
