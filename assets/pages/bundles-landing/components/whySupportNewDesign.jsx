@@ -18,8 +18,11 @@ export default function WhySupport() {
       <InfoSection heading="why support?" className="why-support-new-design__content gu-content-margin">
         <div className="why-support-new-design__wrapper">
           <h1 className="why-support-new-design__heading why-support-new-design__heading--edits">
-            <span>no one edits</span>
-            <span>our editor</span>
+            <Svg svgName="scribble" />
+            <div className="why-support-new-design__heading-text-wrapper">
+              <span>no one edits</span>
+              <span>our editor</span>
+            </div>
           </h1>
           <p className="why-support-new-design__copy">
             With no billionaire owner pulling our strings, nobody, be they
