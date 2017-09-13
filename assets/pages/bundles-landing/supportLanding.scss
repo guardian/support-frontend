@@ -21,6 +21,18 @@
       }
     }
 
+    .floating-circle {
+      border-radius: 600px;
+      background-color: gu-colour(multimedia-main-2);
+      width: 50px;
+      height: 50px;
+
+      @include mq($from: tablet) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
     // ----- Contribute
 
     .contribute-new-design {
@@ -85,14 +97,7 @@
           text-decoration: none;
 
           button {
-            // width: 60px;
-            // height: 60px;
             background-color: gu-colour(multimedia-main-2);
-
-            svg {
-              // height: 80%;
-              // width: 80%;
-            }
           }
         }
       }
@@ -214,6 +219,7 @@
 
     .why-support-new-design__heading--edits {
       padding: 60px 0 60px 50px;
+      position: relative;
 
       span:nth-of-type(2) {
         margin-left: 50px;
@@ -228,6 +234,19 @@
 
         span:nth-of-type(2) {
           margin-left: 95px;
+        }
+      }
+
+      &::before {
+        @extend .floating-circle;
+        content: " ";
+        position: absolute;
+        left: 185px;
+        bottom: $gu-v-spacing;
+
+        @include mq($from: phablet) {
+          left: 170px;
+          bottom: $gu-v-spacing * 3;
         }
       }
     }
@@ -268,9 +287,26 @@
 
     .why-support-new-design__heading--perspective {
       padding: ($gu-v-spacing * 2) 0;
+      position: relative;
 
       @include mq($from: tablet) {
         padding: 70px 0;
+      }
+
+      &::before {
+        @extend .floating-circle;
+        content: " ";
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        @include mq($from: tablet) {
+          top: 70px;
+        }
+
+        @include mq($from: desktop) {
+          left: -80px;
+        }
       }
     }
 
