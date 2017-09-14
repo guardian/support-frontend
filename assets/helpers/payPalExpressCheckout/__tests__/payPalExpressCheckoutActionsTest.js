@@ -50,7 +50,7 @@ describe('Async PayPal Express Checkout\'s actions', () => {
       { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' },
     ];
 
-    const store = mockStore({ payPalExpressCheckout: { loaded: false }, csrf: { token: 'example' } });
+    const store = mockStore({ page: { payPalExpressCheckout: { loaded: false }, csrf: { token: 'example' } } });
 
     return store.dispatch(setupPayPalExpressCheckout()).then(() => {
       // return of async actions
