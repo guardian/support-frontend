@@ -8,7 +8,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
-import akka.stream.ActorMaterializer
+import akka.stream.Materializer
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +43,7 @@ object OphanService {
 
   private def executeRequest(
     request: HttpRequest
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
     import cats.syntax.either._
@@ -61,7 +61,7 @@ object OphanService {
       browserId: String,
       viewId: String,
       visitId: Option[String]
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     val request = buildRequest(acquisition, browserId, viewId, visitId)
     executeRequest(request)
   }
