@@ -10,6 +10,7 @@ import PayPalContributionButton from 'components/payPalContributionButton/payPal
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { forCountry } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -54,10 +55,10 @@ export default function PaymentMethods(props: PropTypes) {
     case 'ExpressCheckout':
       payPalButton = (<PayPalExpressButton
         callback={props.payPalCallback}
-        csrfToken={props.csrfToken} // todo
+        csrfToken={props.csrfToken}
         amount={Number(props.amount)}
         billingPeriod="monthly"
-        currency="GBP"
+        currency={forCountry(props.isoCountry)}
       />);
       break;
     case 'ContributionsCheckout':
