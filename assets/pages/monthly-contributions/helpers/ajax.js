@@ -5,7 +5,7 @@
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
-import type { CombinedState } from '../reducers/reducers';
+import type { PageState } from '../reducers/reducers';
 import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
@@ -42,34 +42,34 @@ type PaymentField = 'baid' | 'stripeToken';
 function requestData(paymentFieldName: PaymentField,
   token: string,
   contributionType: Contrib,
-  getState: () => CombinedState) {
+  getState: () => PageState) {
 
-  const state = getState();
+  const state = getState().page;
 
-  if (state.page.user.firstName !== null && state.page.user.firstName !== undefined
-    && state.page.user.lastName !== null && state.page.user.lastName !== undefined
-    && state.page.user.email !== null && state.page.user.email !== undefined) {
+  if (state.user.firstName !== null && state.user.firstName !== undefined
+    && state.user.lastName !== null && state.user.lastName !== undefined
+    && state.user.email !== null && state.user.email !== undefined) {
     const monthlyContribFields: MonthlyContribFields = {
       contribution: {
-        amount: state.page.stripeCheckout.amount,
-        currency: state.page.stripeCheckout.currency,
+        amount: state.stripeCheckout.amount,
+        currency: state.stripeCheckout.currency,
         billingPeriod: billingPeriodFromContrib(contributionType),
       },
       paymentFields: {
         [paymentFieldName]: token,
       },
-      country: state.page.monthlyContrib.country,
-      firstName: state.page.user.firstName,
-      lastName: state.page.user.lastName,
+      country: state.monthlyContrib.country,
+      firstName: state.user.firstName,
+      lastName: state.user.lastName,
     };
 
-    if (state.page.user.stateField) {
-      monthlyContribFields.state = state.page.user.stateField;
+    if (state.user.stateField) {
+      monthlyContribFields.state = state.user.stateField;
     }
 
     return {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token || '' },
+      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
       credentials: 'same-origin',
       body: JSON.stringify(monthlyContribFields),
     };
@@ -84,7 +84,7 @@ function requestData(paymentFieldName: PaymentField,
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.page.monthlyContrib.pollCount >= MAX_POLLS) {
+  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
     const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
     window.location.assign(url);
   }
@@ -93,11 +93,11 @@ function statusPoll(dispatch: Function, getState: Function) {
 
   const request = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
     credentials: 'same-origin',
   };
 
-  return fetch(state.page.monthlyContrib.statusUri, request).then((response) => {
+  return fetch(state.monthlyContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -125,7 +125,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.page.monthlyContrib.statusUri) {
+  } else if (state.monthlyContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
@@ -136,7 +136,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
 export default function postCheckout(
   paymentFieldName: PaymentField,
   contributionType: Contrib): Function {
-  return (token: string, dispatch: Function, getState: () => CombinedState) => {
+  return (token: string, dispatch: Function, getState: () => PageState) => {
 
     dispatch(resetPollCount());
     dispatch(creatingContributor());

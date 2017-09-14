@@ -14,6 +14,7 @@ import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutRe
 import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
@@ -43,6 +44,11 @@ export type CombinedState = {
   payPalExpressCheckout: PayPalExpressCheckoutState,
   csrf: CsrfState,
 };
+
+export type PageState = {
+  common: CommonState,
+  page: CombinedState,
+}
 
 // ----- Reducers ----- //
 

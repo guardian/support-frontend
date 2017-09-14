@@ -6,7 +6,7 @@ import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
-import type { CombinedState } from '../reducers/reducers';
+import type { PageState, CombinedState } from '../reducers/reducers';
 
 
 // ----- Setup ----- //
@@ -38,7 +38,7 @@ type OneoffContribFields = {
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: () => CombinedState) {
+function requestData(paymentToken: string, getState: () => PageState) {
 
   const state = getState();
 
@@ -76,7 +76,7 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
 export default function postCheckout(
   paymentToken: string,
   dispatch: Function,
-  getState: () => CombinedState,
+  getState: () => PageState,
 ) {
 
   const request = requestData(paymentToken, getState);
@@ -86,7 +86,7 @@ export default function postCheckout(
     const url: string = addQueryParamToURL(
       routes.oneOffContribThankyou,
       'INTCMP',
-      getState().intCmp,
+      getState().common.intCmp,
     );
 
     if (response.ok) {

@@ -28,7 +28,7 @@ import { init as pageInit } from 'helpers/page/page';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
-import type { CombinedState } from './reducers/reducers';
+import type { PageState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
 import { setPayPalButton } from './actions/oneoffContributionsActions';
@@ -53,7 +53,7 @@ user.init(store.dispatch);
 
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: CombinedState = store.getState();
+const state: PageState = store.getState();
 
 const contribDescription: string = (country === 'US' ? 'one-time' : 'one-off');
 

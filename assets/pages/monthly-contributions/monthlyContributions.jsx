@@ -59,7 +59,7 @@ user.init(store.dispatch);
 
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: CombinedState = store.getState();
+const state: CombinedState = store.getState().page;
 
 // ----- Render ----- //
 
@@ -75,8 +75,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
           <PaymentAmount
-            amount={state.page.monthlyContrib.amount}
-            currency={state.page.monthlyContrib.currency}
+            amount={state.monthlyContrib.amount}
+            currency={state.monthlyContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
@@ -87,7 +87,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.page.monthlyContrib.payPalType}
+            payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>
       </div>

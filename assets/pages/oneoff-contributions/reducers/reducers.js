@@ -13,11 +13,14 @@ import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutRe
 import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+
+import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
+
 
 
 // ----- Types ----- //
@@ -38,6 +41,11 @@ export type CombinedState = {
   stripeCheckout: StripeCheckoutState,
   csrf: CsrfState,
 };
+
+export type PageState = {
+  common: CommonState,
+  page: CombinedState,
+}
 
 // ----- Reducers ----- //
 

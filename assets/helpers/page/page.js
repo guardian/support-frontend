@@ -21,14 +21,13 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
-type CommonState = {
+export type CommonState = {
   intCmp: ?string,
   campaign: ?Campaign,
   refpvid: ?string,
   country: IsoCountry,
   abParticipations: Participations,
 };
-
 
 // ----- Functions ----- //
 

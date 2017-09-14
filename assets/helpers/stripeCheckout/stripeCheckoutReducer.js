@@ -19,6 +19,10 @@ export type CombinedState = {
   stripeCheckout: StripeCheckoutState,
 };
 
+export type PageState = {
+  page: CombinedState,
+}
+
 // ----- Exports ----- //
 
 export default function createStripeCheckoutReducer(amount: number, currency: IsoCurrency) {
