@@ -9,10 +9,11 @@ import com.gu.support.workers.model.monthlyContributions.state.{CreateSalesforce
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
 
-  override protected def servicesHandler(state: CreateSalesforceContactState, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreateSalesforceContactState, context: Context, services: Services): Future[CreateZuoraSubscriptionState] = {
     logger.debug(s"CreateSalesforceContact state: $state")
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
@@ -21,7 +22,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.lastName,
       state.user.allowMembershipMail,
       state.user.allowThirdPartyMail,
-      state.user.allowThirdPartyMail
+      state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
         CreateZuoraSubscriptionState(state.requestId, state.user, state.contribution, state.paymentMethod, response.ContactRecord)
