@@ -20,12 +20,8 @@ object OphanServiceError {
     override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
   }
 
-  case class Generic(underlying: Throwable) extends OphanServiceError {
+  case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
     override def getMessage: String = underlying.getMessage
-  }
-
-  object Generic {
-    def apply(message: String): Generic = new Generic(new RuntimeException(message))
   }
 
 }
@@ -58,7 +54,7 @@ object OphanService {
     import cats.syntax.either._
 
     Http().singleRequest(request).attemptT
-      .leftMap(e => OphanServiceError.Generic(e))
+      .leftMap(OphanServiceError.NetworkFailure)
       .subflatMap { res =>
         if (res.status.isSuccess) Either.right(res)
         else Either.left(OphanServiceError.ResponseUnsuccessful(res))
