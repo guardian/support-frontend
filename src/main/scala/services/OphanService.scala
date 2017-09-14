@@ -16,9 +16,18 @@ sealed trait OphanServiceError extends Throwable
 
 object OphanServiceError {
 
-  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError
+  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError {
+    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
+  }
 
-  case class Generic(underlying: Throwable) extends OphanServiceError
+  case class Generic(underlying: Throwable) extends OphanServiceError {
+    override def getMessage: String = underlying.getMessage
+  }
+
+  object Generic {
+    def apply(message: String): Generic = new Generic(new RuntimeException(message))
+  }
+
 }
 
 object OphanService {
@@ -49,7 +58,7 @@ object OphanService {
     import cats.syntax.either._
 
     Http().singleRequest(request).attemptT
-      .leftMap(OphanServiceError.Generic)
+      .leftMap(e => OphanServiceError.Generic(e))
       .subflatMap { res =>
         if (res.status.isSuccess) Either.right(res)
         else Either.left(OphanServiceError.ResponseUnsuccessful(res))
