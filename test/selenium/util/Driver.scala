@@ -51,10 +51,10 @@ object Driver {
 
   def quit(): Unit = driver.quit()
 
-  def addCookie(name: String, value: String, domain: Option[String] = None): Unit = {
-    driver.manage.addCookie(new Cookie(name, value, domain.getOrElse(null), "/", null.asInstanceOf[Date]))
+  def addCookie(name: String, value: String, domain: Option[String] = None, path: String = "/", date: Option[Date] = None): Unit = {
+    driver.manage.addCookie(new Cookie(name, value, domain.orNull, path, date.orNull))
   }
-  
+
   val sessionId = driver.asInstanceOf[RemoteWebDriver].getSessionId.toString
 
 }
