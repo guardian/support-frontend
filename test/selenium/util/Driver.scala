@@ -1,6 +1,9 @@
 package selenium.util
 
 import java.net.URL
+import java.util
+import java.util.{Date, Set}
+
 import io.github.bonigarcia.wdm.ChromeDriverManager
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
@@ -48,8 +51,10 @@ object Driver {
 
   def quit(): Unit = driver.quit()
 
-  def addCookie(name: String, value: String): Unit = driver.manage.addCookie(new Cookie(name, value))
-
+  def addCookie(name: String, value: String, domain: Option[String] = None): Unit = {
+    driver.manage.addCookie(new Cookie(name, value, domain.getOrElse(null), "/", null.asInstanceOf[Date]))
+  }
+  
   val sessionId = driver.asInstanceOf[RemoteWebDriver].getSessionId.toString
 
 }
