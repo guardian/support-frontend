@@ -10,6 +10,8 @@ object Config {
 
   private val conf = ConfigFactory.load()
 
+  val guDomain = conf.getString("guDomain")
+
   val supportFrontendUrl = conf.getString("support.url")
 
   val identityFrontendUrl = conf.getString("identity.webapp.url")
