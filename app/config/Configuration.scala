@@ -18,6 +18,8 @@ class Configuration {
 
   lazy val aws = new AwsConfig(config.getConfig("aws"))
 
+  lazy val guardianDomain = config.getString("guardianDomain")
+
   lazy val supportUrl = config.getString("support.url")
 
   lazy val contributionsStripeEndpoint = config.getString("contributions.stripe.url")

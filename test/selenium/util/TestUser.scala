@@ -12,8 +12,8 @@ class TestUser {
   )
 
   private def addTestUserCookies(testUsername: String) = {
-    Driver.addCookie("pre-signin-test-user", testUsername)
-    Driver.addCookie("_test_username", testUsername)
+    Driver.addCookie(name = "pre-signin-test-user", value = testUsername)
+    Driver.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
   }
 
   val username = testUsers.generate()

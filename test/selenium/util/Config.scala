@@ -10,11 +10,15 @@ object Config {
 
   private val conf = ConfigFactory.load()
 
+  val guardianDomain = conf.getString("guardianDomain")
+
   val supportFrontendUrl = conf.getString("support.url")
 
   val identityFrontendUrl = conf.getString("identity.webapp.url")
 
   val contributionFrontend = conf.getString("contribution.url")
+
+  val waitTimeout = 40
 
   val paypalSandbox = conf.getString("paypal.sandbox.url")
 

@@ -81,7 +81,7 @@ trait Browser extends WebBrowser {
   def switchToParentWindow(): Unit = webDriver.switchTo().window(parentWindow)
 
   private def waitUntil[T](pred: ExpectedCondition[T]): Boolean =
-    Try(new WebDriverWait(webDriver, 30).until(pred)).isSuccess
+    Try(new WebDriverWait(webDriver, Config.waitTimeout).until(pred)).isSuccess
 
   private case class MissingPageElementException(q: Query)
     extends Exception(s"Could not find WebElement with locator: ${q.queryString}")
