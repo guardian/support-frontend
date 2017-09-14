@@ -58,7 +58,7 @@ export default function PaymentMethods(props: PropTypes) {
         csrfToken={props.csrfToken}
         amount={Number(props.amount)}
         billingPeriod="monthly"
-        currency={forCountry(props.isoCountry)}
+        currency={forCountry(props.isoCountry).iso}
       />);
       break;
     case 'ContributionsCheckout':
