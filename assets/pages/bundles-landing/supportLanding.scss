@@ -463,45 +463,45 @@
           background-color: darken(gu-colour(guardian-brand-dark), 10%);
         }
       }
+
+      .component-info-section__header {
+        position: relative;
+
+        &::before {
+          @extend .floating-semicircle;
+          content: " ";
+          position: absolute;
+          top: -27px;
+          right: 0;
+
+          @include mq($from: tablet) {
+            top: -32px;
+          }
+
+          @include mq($from: desktop) {
+            right: $gu-h-spacing;
+          }
+        }
+
+        &::after {
+          @extend .floating-semicircle;
+          background-color: gu-colour(guardian-brand-dark);
+          content: " ";
+          position: absolute;
+          transform: rotateZ(180deg);
+          top: 0;
+          right: 0;
+
+          @include mq($from: desktop) {
+            right: $gu-h-spacing;
+          }
+        }
+      }
     }
 
     .ready-new-design__content {
       background-color: #fff;
       padding-bottom: $gu-v-spacing * 3;
-    }
-
-    .component-info-section__header {
-      position: relative;
-
-      &::before {
-        @extend .floating-semicircle;
-        content: " ";
-        position: absolute;
-        top: -27px;
-        right: 0;
-
-        @include mq($from: tablet) {
-          top: -32px;
-        }
-
-        @include mq($from: desktop) {
-          right: $gu-h-spacing;
-        }
-      }
-
-      &::after {
-        @extend .floating-semicircle;
-        background-color: gu-colour(guardian-brand-dark);
-        content: " ";
-        position: absolute;
-        transform: rotateZ(180deg);
-        top: 0;
-        right: 0;
-
-        @include mq($from: desktop) {
-          right: $gu-h-spacing;
-        }
-      }
     }
 
     .ready-new-design__heading {
