@@ -8,7 +8,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
-import akka.stream.ActorMaterializer
+import akka.stream.Materializer
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,9 +16,14 @@ sealed trait OphanServiceError extends Throwable
 
 object OphanServiceError {
 
-  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError
+  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError {
+    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
+  }
 
-  case class Generic(underlying: Throwable) extends OphanServiceError
+  case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
+    override def getMessage: String = underlying.getMessage
+  }
+
 }
 
 object OphanService {
@@ -43,13 +48,13 @@ object OphanService {
 
   private def executeRequest(
     request: HttpRequest
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
     import cats.syntax.either._
 
     Http().singleRequest(request).attemptT
-      .leftMap(OphanServiceError.Generic)
+      .leftMap(OphanServiceError.NetworkFailure)
       .subflatMap { res =>
         if (res.status.isSuccess) Either.right(res)
         else Either.left(OphanServiceError.ResponseUnsuccessful(res))
@@ -61,7 +66,7 @@ object OphanService {
       browserId: String,
       viewId: String,
       visitId: Option[String]
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: ActorMaterializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
     val request = buildRequest(acquisition, browserId, viewId, visitId)
     executeRequest(request)
   }
