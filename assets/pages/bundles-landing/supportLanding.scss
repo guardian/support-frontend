@@ -69,16 +69,16 @@
     .subscribe-new-design__bundles-wrapper {
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
     }
 
     .subscription-bundle {
       display: flex;
       flex-direction: column;
-      padding: 0 ($gu-h-spacing / 2);
       box-sizing: border-box;
 
       @include mq($from: tablet) {
-        flex-basis: 33.3%;
+        flex-basis: 32%;
       }
 
       .component-cta-circle {
