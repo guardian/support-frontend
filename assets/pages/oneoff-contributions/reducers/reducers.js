@@ -21,8 +21,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
 
-
-
 // ----- Types ----- //
 
 export type State = {

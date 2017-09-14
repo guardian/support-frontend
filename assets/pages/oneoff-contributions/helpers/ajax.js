@@ -6,7 +6,7 @@ import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
-import type { PageState, CombinedState } from '../reducers/reducers';
+import type { PageState } from '../reducers/reducers';
 
 
 // ----- Setup ----- //
