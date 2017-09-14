@@ -1,10 +1,8 @@
 package selenium.util
 
 import java.net.URL
-import java.util
-import java.util.{Date, Set}
+import java.util.{Date}
 
-import io.github.bonigarcia.wdm.ChromeDriverManager
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 import org.openqa.selenium.{Cookie, WebDriver}

@@ -10,7 +10,7 @@ object Config {
 
   private val conf = ConfigFactory.load()
 
-  val guDomain = conf.getString("guDomain")
+  val guardianDomain = conf.getString("guardianDomain")
 
   val supportFrontendUrl = conf.getString("support.url")
 

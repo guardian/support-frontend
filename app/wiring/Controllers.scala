@@ -52,6 +52,7 @@ trait Controllers {
     authAction,
     controllerComponents,
     testUsers,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    appConfig.guardianDomain
   )
 }

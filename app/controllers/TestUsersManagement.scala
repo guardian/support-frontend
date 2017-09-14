@@ -12,10 +12,11 @@ class TestUsersManagement(
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
     testUsers: TestUserService,
-    supportUrl: String
+    supportUrl: String,
+    guardianDomain: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
-  private val cookieDomain = supportUrl.stripPrefix("https://").stripPrefix("support")
+  private val cookieDomain = guardianDomain
 
   def createTestUser: Action[AnyContent] = authAction {
     val testUser = testUsers.testUsers.generate()
