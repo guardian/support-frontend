@@ -102,7 +102,7 @@ function setupPayment(
       currency: config.currency,
     };
 
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, config.csrfToken))
+    return fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, config.csrfToken))
       .then(handleSetupResponse)
       .then((token) => {
         if (token) {
@@ -130,9 +130,9 @@ function onAuthorize(
 ) {
   return (data) => {
     const currentCsrfToken = retrieveConfiguration(payPalId, fallbackConfig).csrfToken;
-    createAgreement(data, currentCsrfToken)
+    return createAgreement(data, currentCsrfToken)
       .then((baid: Object) => {
-        callback(baid.token);
+        return callback(baid.token);
       })
       .catch(() => { });
   };
