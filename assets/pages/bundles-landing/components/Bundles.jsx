@@ -118,7 +118,7 @@ const digitalCopy: DigitalAttrs = {
 
 const paperCopy: PaperAttrs = {
   heading: 'paper subscription',
-  subheading: 'from £22.06/month',
+  subheading: 'from £10.79/month',
   listItems: [
     {
       heading: 'Newspaper',
