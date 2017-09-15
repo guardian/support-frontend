@@ -87,7 +87,7 @@ function mapStateToProps(state) {
   return {
     firstName: state.page.user.firstName,
     lastName: state.page.user.lastName,
-    country: state.page.monthlyContrib.country,
+    country: state.common.country,
   };
 
 }
