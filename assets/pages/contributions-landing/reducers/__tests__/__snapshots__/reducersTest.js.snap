@@ -117,8 +117,5 @@ Object {
     "payPalError": null,
     "type": "MONTHLY",
   },
-  "intCmp": null,
-  "isoCountry": null,
-  "refpvid": null,
 }
 `;
