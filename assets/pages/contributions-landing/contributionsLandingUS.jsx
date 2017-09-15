@@ -20,9 +20,7 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 
 
 // ----- Redux Store ----- //
-const store = pageInit(reducer, {
-  common: { isoCountry: 'US' },
-}, applyMiddleware(thunkMiddleware));
+const store = pageInit(reducer, {}, applyMiddleware(thunkMiddleware));
 
 saveContext(store.dispatch);
 

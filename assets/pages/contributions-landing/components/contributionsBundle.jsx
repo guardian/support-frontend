@@ -187,7 +187,7 @@ function mapStateToProps(state) {
     contribError: state.page.contribution.error,
     intCmp: state.common.intCmp,
     refpvid: state.common.refpvid,
-    isoCountry: state.common.isoCountry,
+    isoCountry: state.common.country,
     payPalError: state.page.contribution.payPalError,
   };
 }
