@@ -13,10 +13,10 @@ function mapStateToProps(state) {
 
   return {
     email: state.page.user.email,
-    error: state.page.oneOffContrib.error,
+    error: state.page.oneoffContrib.error,
     hide: state.page.user.email === '' || state.page.user.fullName === '',
     paymentStatus: 'NotStarted',
-    amount: state.page.oneOffContrib.amount,
+    amount: state.page.oneoffContrib.amount,
     intCmp: state.common.intCmp,
     refpvid: state.common.refpvid,
     isoCountry: state.common.country,

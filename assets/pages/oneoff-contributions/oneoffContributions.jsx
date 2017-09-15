@@ -71,8 +71,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
-            amount={state.page.oneOffContrib.amount}
-            currency={state.page.oneOffContrib.currency}
+            amount={state.page.oneoffContrib.amount}
+            currency={state.page.oneoffContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
@@ -82,7 +82,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalType={store.getState().page.oneOffContrib.payPalType}
+            payPalType={store.getState().page.oneoffContrib.payPalType}
           />
         </InfoSection>
       </div>

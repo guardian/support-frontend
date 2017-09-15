@@ -28,7 +28,7 @@ export type State = {
 };
 
 export type CombinedState = {
-  oneOffContrib: State,
+  oneoffContrib: State,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
   csrf: CsrfState,
@@ -72,7 +72,7 @@ function createOneOffContribReducer(amount: number, currency: Currency) {
 
 export default function createRootOneOffContribReducer(amount: number, currency: Currency) {
   return combineReducers({
-    oneOffContrib: createOneOffContribReducer(amount, currency),
+    oneoffContrib: createOneOffContribReducer(amount, currency),
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),
