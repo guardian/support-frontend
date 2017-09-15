@@ -11,6 +11,6 @@ object RecurringContributionThankYou extends Page with Browser {
 
   def focusOnDefaultFrame: Unit = revertToDefaultFrame
 
-  def pageHasLoaded: Boolean = pageHasElement(thankYouHeader) && pageHasUrl("/contribute/recurring/thankyou")
+  def pageHasLoaded: Boolean = pageHasElement(thankYouHeader) && (pageHasUrl("/contribute/recurring/thankyou") || pageHasUrl("/contribute/recurring/pending"))
 
 }
