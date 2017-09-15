@@ -46,7 +46,7 @@ const currency = currencyForCountry(country);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer(contributionAmount, currency, country), {},
+const store = pageInit(reducer(contributionAmount, currency), {},
   composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
@@ -71,8 +71,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
-            amount={state.page.oneoffContrib.amount}
-            currency={state.page.oneoffContrib.currency}
+            amount={state.page.oneOffContrib.amount}
+            currency={state.page.oneOffContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
@@ -82,7 +82,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalType={store.getState().page.oneoffContrib.payPalType}
+            payPalType={store.getState().page.oneOffContrib.payPalType}
           />
         </InfoSection>
       </div>

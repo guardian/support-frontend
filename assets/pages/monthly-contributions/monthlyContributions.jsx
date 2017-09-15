@@ -30,7 +30,7 @@ import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
-import type { CombinedState } from './reducers/reducers';
+import type { PageState } from './reducers/reducers';
 
 import { setPayPalButton } from './actions/monthlyContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
@@ -52,14 +52,14 @@ const title = {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer(contributionAmount, currency, country), {},
+const store = pageInit(reducer(contributionAmount, currency), {},
   composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
 
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: CombinedState = store.getState().page;
+const state: PageState = store.getState();
 
 // ----- Render ----- //
 
@@ -75,8 +75,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
           <PaymentAmount
-            amount={state.monthlyContrib.amount}
-            currency={state.monthlyContrib.currency}
+            amount={state.page.monthlyContrib.amount}
+            currency={state.page.monthlyContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
@@ -87,14 +87,14 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.monthlyContrib.payPalType}
+            payPalType={state.page.monthlyContrib.payPalType}
           />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">
         <InfoSection className="terms-privacy__content gu-content-filler__inner">
           <TermsPrivacy
-            termsLink={termsLinks[country]}
+            termsLink={termsLinks[state.common.country]}
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
           <ContribLegal />

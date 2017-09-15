@@ -7,8 +7,6 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
-import { refpvidReducer as refpvid } from 'helpers/tracking/guTracking';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import user from 'helpers/user/userReducer';
@@ -16,7 +14,6 @@ import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from '../actions/oneoffContributionsActions';
@@ -26,15 +23,12 @@ import type { Action } from '../actions/oneoffContributionsActions';
 export type State = {
   amount: number,
   currency: Currency,
-  country: IsoCountry,
   error: ?string,
   payPalType: PayPalButtonType,
 };
 
 export type CombinedState = {
-  oneoffContrib: State,
-  intCmp: string,
-  refpvid: string,
+  oneOffContrib: State,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
   csrf: CsrfState,
@@ -47,12 +41,11 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createOneOffContribReducer(amount: number, currency: Currency, country: IsoCountry) {
+function createOneOffContribReducer(amount: number, currency: Currency) {
 
   const initialState: State = {
     amount,
     currency,
-    country,
     error: null,
     payPalType: 'NotSet',
   };
@@ -77,15 +70,9 @@ function createOneOffContribReducer(amount: number, currency: Currency, country:
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(
-  amount: number,
-  currency: Currency,
-  country: IsoCountry,
-) {
+export default function createRootOneOffContribReducer(amount: number, currency: Currency) {
   return combineReducers({
-    oneoffContrib: createOneOffContribReducer(amount, currency, country),
-    intCmp,
-    refpvid,
+    oneOffContrib: createOneOffContribReducer(amount, currency),
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),

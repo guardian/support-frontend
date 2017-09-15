@@ -44,7 +44,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
 
   if (state.page.user.fullName !== null && state.page.user.fullName !== undefined
     && state.page.user.email !== null && state.page.user.email !== undefined) {
-    const oneoffContribFields: OneoffContribFields = {
+    const oneOffContribFields: OneoffContribFields = {
       name: state.page.user.fullName,
       currency: state.page.stripeCheckout.currency,
       amount: state.page.stripeCheckout.amount,
@@ -56,13 +56,13 @@ function requestData(paymentToken: string, getState: () => PageState) {
     };
 
     if (state.common.refpvid) {
-      oneoffContribFields.refererPageviewId = state.common.refpvid;
+      oneOffContribFields.refererPageviewId = state.common.refpvid;
     }
 
     return {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(oneoffContribFields),
+      body: JSON.stringify(oneOffContribFields),
       credentials: 'include',
     };
   }

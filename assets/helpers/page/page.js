@@ -49,15 +49,13 @@ function buildInitialState(abParticipations: Participations) {
 
   const intCmp = getQueryParameter('INTCMP');
 
-  const initialState: CommonState = {
+  return {
     intCmp,
     campaign: intCmp ? getCampaign(intCmp) : null,
     refpvid: getQueryParameter('REFPVID'),
     country: detect(),
     abParticipations,
   };
-
-  return initialState;
 
 }
 

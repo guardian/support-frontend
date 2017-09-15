@@ -4,12 +4,13 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
+import type { UsState } from 'helpers/internationalisation/country';
 import type { PageState } from '../reducers/reducers';
 import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
+
 
 // ----- Setup ----- //
 
@@ -28,7 +29,6 @@ type MonthlyContribFields = {
   paymentFields: {
     stripeToken: string,
   },
-  country: IsoCountry,
   state?: UsState,
   firstName: ?string,
   lastName: ?string,
@@ -58,7 +58,6 @@ function requestData(paymentFieldName: PaymentField,
       paymentFields: {
         [paymentFieldName]: token,
       },
-      country: state.monthlyContrib.country,
       firstName: state.user.firstName,
       lastName: state.user.lastName,
     };
@@ -84,7 +83,7 @@ function requestData(paymentFieldName: PaymentField,
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
+  if (state.page.monthlyContrib.pollCount >= MAX_POLLS) {
     const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
     window.location.assign(url);
   }
@@ -93,11 +92,11 @@ function statusPoll(dispatch: Function, getState: Function) {
 
   const request = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token },
     credentials: 'same-origin',
   };
 
-  return fetch(state.monthlyContrib.statusUri, request).then((response) => {
+  return fetch(state.page.monthlyContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -125,7 +124,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.monthlyContrib.statusUri) {
+  } else if (state.page.monthlyContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
