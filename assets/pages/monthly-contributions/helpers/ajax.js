@@ -45,6 +45,7 @@ function requestData(paymentFieldName: PaymentField,
   getState: () => PageState) {
 
   const state = getState().page;
+  const country = getState().common.country;
 
   if (state.user.firstName !== null && state.user.firstName !== undefined
     && state.user.lastName !== null && state.user.lastName !== undefined
@@ -58,6 +59,7 @@ function requestData(paymentFieldName: PaymentField,
       paymentFields: {
         [paymentFieldName]: token,
       },
+      country,
       firstName: state.user.firstName,
       lastName: state.user.lastName,
     };
