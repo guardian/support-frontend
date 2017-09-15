@@ -28,7 +28,7 @@ const content = (
       <div className="thankyou__content gu-content-filler__inner">
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
-          <h2 className="thankyou__subheading">
+          <h2 id="qa-thank-you-message" className="thankyou__subheading">
             <p>You have helped to make the Guardian&#39;s future more secure.
               Look out for an email confirming your recurring
               payment.</p>
