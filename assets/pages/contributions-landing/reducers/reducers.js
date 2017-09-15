@@ -5,9 +5,6 @@
 import { combineReducers } from 'redux';
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
-import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
-import { refpvidReducer as refpvid } from 'helpers/tracking/guTracking';
-import { isoCountryReducer as isoCountry } from 'helpers/isoCountry';
 
 import { parse as parseContribution } from 'helpers/contributions';
 import { abTestReducer as abTests } from 'helpers/abtest';
@@ -138,8 +135,5 @@ function contribution(
 
 export default combineReducers({
   contribution,
-  intCmp,
-  refpvid,
   abTests,
-  isoCountry,
 });
