@@ -14,6 +14,9 @@ function mapStateToProps(state) {
     error: state.monthlyContrib.error,
     hide: state.user.firstName === '' || state.user.lastName === '',
     paymentStatus: state.monthlyContrib.paymentStatus,
+    amount: state.monthlyContrib.amount,
+    payPalType: state.monthlyContrib.payPalType,
+    csrfToken: state.csrf.token,
   };
 
 }

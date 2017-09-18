@@ -92,7 +92,6 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.monthlyContrib.payPalType}
           />
         </InfoSection>
       </div>

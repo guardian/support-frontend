@@ -10,6 +10,7 @@ import PayPalContributionButton from 'components/payPalContributionButton/payPal
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { forCountry } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -34,6 +35,7 @@ type PropTypes = {
   refpvid?: string,
   isoCountry: IsoCountry,
   payPalErrorHandler: (string) => void,
+  csrfToken: string,
 };
 
 
@@ -42,12 +44,22 @@ type PropTypes = {
 export default function PaymentMethods(props: PropTypes) {
 
   let statusMessage = '';
-  let stripeButton = <StripePopUpButton email={props.email} callback={props.stripeCallback} />;
+  let stripeButton = (<StripePopUpButton
+    email={props.email}
+    amount={Number(props.amount)}
+    callback={props.stripeCallback}
+  />);
   let payPalButton = '';
 
   switch (props.payPalType) {
     case 'ExpressCheckout':
-      payPalButton = <PayPalExpressButton callback={props.payPalCallback} />;
+      payPalButton = (<PayPalExpressButton
+        callback={props.payPalCallback}
+        csrfToken={props.csrfToken}
+        amount={Number(props.amount)}
+        billingPeriod="monthly"
+        currency={forCountry(props.isoCountry).iso}
+      />);
       break;
     case 'ContributionsCheckout':
       payPalButton = (<PayPalContributionButton

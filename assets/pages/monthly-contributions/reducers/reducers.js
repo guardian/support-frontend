@@ -6,12 +6,10 @@ import { combineReducers } from 'redux';
 
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
-import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
-import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -40,7 +38,6 @@ export type CombinedState = {
   intCmp: string,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
-  payPalExpressCheckout: PayPalExpressCheckoutState,
   csrf: CsrfState,
 };
 
@@ -100,7 +97,6 @@ export default function createRootMonthlyContributionsReducer(
     intCmp,
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
-    payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),
     csrf,
   });
 }

@@ -42,21 +42,24 @@ export function setupStripeCheckout(callback: Function): Function {
 
   return (dispatch, getState: () => CombinedState) => {
 
-    const handleToken = (token) => {
-      dispatch(setStripeCheckoutToken(token.id));
-      callback(token.id, dispatch, getState);
-    };
+    if (!getState().stripeCheckout.loaded) {
+      const handleToken = (token) => {
+        dispatch(setStripeCheckoutToken(token.id));
+        callback(token.id, dispatch, getState);
+      };
 
-    const handleCloseOverlay = () => dispatch(closeStripeOverlay());
+      const handleCloseOverlay = () => dispatch(closeStripeOverlay());
 
-    dispatch(startStripeCheckout());
+      dispatch(startStripeCheckout());
 
-    return stripeCheckout.setup(
-      getState().stripeCheckout,
-      handleToken,
-      handleCloseOverlay,
-    ).then(() => dispatch(stripeCheckoutLoaded()));
+      return stripeCheckout.setup(
+        getState().stripeCheckout,
+        handleToken,
+        handleCloseOverlay,
+      ).then(() => dispatch(stripeCheckoutLoaded()));
+    }
 
+    return null;
   };
 
 }

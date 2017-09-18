@@ -2,10 +2,15 @@
 
 // ----- Imports ----- //
 
-import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
 import { routes } from 'helpers/routes';
-import type { CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
+type PayPalExpressCheckoutConfig = {
+  amount: number,
+  currency: IsoCurrency,
+  billingPeriod: string,
+  csrfToken: string,
+};
 
 // ----- Functions ----- //
 
@@ -52,58 +57,106 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
-function setupPayment(dispatch: Function, state: CombinedState) {
+function storeConfiguration(
+  payPalId: string,
+  config: PayPalExpressCheckoutConfig,
+) {
+  const htmlElement = document.getElementById(payPalId);
 
-  const payPalState = state.payPalExpressCheckout;
-  const csrfToken = state.csrf.token;
+  if (htmlElement) {
+    htmlElement.dataset.amount = String(config.amount);
+    htmlElement.dataset.currency = String(config.currency);
+    htmlElement.dataset.billingPeriod = config.billingPeriod;
+    htmlElement.dataset.csrfToken = config.csrfToken;
+  }
+}
 
-  return (resolve, reject) => {
+function retrieveConfiguration(
+  payPalId: string,
+  fallbackConfig: PayPalExpressCheckoutConfig,
+): PayPalExpressCheckoutConfig {
+  const htmlElement = document.getElementById(payPalId);
+
+  const dataset = htmlElement ? htmlElement.dataset : {};
+
+  return {
+    amount: Number(dataset.amount) || fallbackConfig.amount,
+    currency: ((dataset.currency: any): IsoCurrency) || fallbackConfig.currency,
+    billingPeriod: dataset.billingPeriod || fallbackConfig.billingPeriod,
+    csrfToken: dataset.csrfToken || fallbackConfig.csrfToken,
+  };
+}
+
+function setupPayment(
+  payPalId: string,
+  fallbackConfig: PayPalExpressCheckoutConfig,
+  failureCallback: Function,
+) {
+
+  return () => {
+    const config = retrieveConfiguration(payPalId, fallbackConfig);
 
     const requestBody = {
-      amount: payPalState.amount,
-      billingPeriod: payPalState.billingPeriod,
-      currency: payPalState.currency,
+      amount: config.amount,
+      billingPeriod: config.billingPeriod,
+      currency: config.currency,
     };
 
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+    return fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, config.csrfToken))
       .then(handleSetupResponse)
       .then((token) => {
         if (token) {
-          resolve(token.token);
-        } else {
-          dispatch(payPalExpressError('PayPal token came back blank.'));
+          return token.token;
         }
+        throw new Error('Invalid token');
       }).catch((err) => {
-        dispatch(payPalExpressError(err.message));
-        reject(err);
+        failureCallback(err);
+        throw err;
       });
   };
 }
 
-function createAgreement(payPalData: Object, state: CombinedState) {
+function createAgreement(payPalData: Object, csrfToken: string) {
   const body = { token: payPalData.paymentToken };
-  const csrfToken = state.csrf.token;
 
-  return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken || ''))
+  return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken))
     .then(response => response.json());
 }
 
-function setup(dispatch: Function, getState: () => CombinedState, callback: Function) {
+function onAuthorize(
+  payPalId: string,
+  fallbackConfig: PayPalExpressCheckoutConfig,
+  callback: Function,
+) {
+  return (data) => {
+    const currentCsrfToken = retrieveConfiguration(payPalId, fallbackConfig).csrfToken;
+    return createAgreement(data, currentCsrfToken)
+      .then((baid: Object) => {
+        return callback(baid.token);
+      })
+      .catch(() => { });
+  };
+}
+
+function setup(
+  csrfToken: string,
+  amount: number,
+  billingPeriod: string,
+  currency: IsoCurrency,
+  successCallback: Function,
+  failureCallback: (string) => void,
+  payPalId: string,
+) {
+
+  const fallbackConfig: PayPalExpressCheckoutConfig = {
+    csrfToken,
+    billingPeriod,
+    currency,
+    amount,
+  };
 
   return loadPayPalExpress()
     .then(() => {
-
-      const handleBaId = (baid: Object) => {
-        callback(baid.token, dispatch, getState);
-      };
-
-      const onAuthorize = (data) => {
-        createAgreement(data, getState())
-          .then(handleBaId)
-          .catch((err) => {
-            dispatch(payPalExpressError(err));
-          });
-      };
 
       const payPalOptions: Object = {
         env: window.guardian.payPalEnvironment,
@@ -113,14 +166,17 @@ function setup(dispatch: Function, getState: () => CombinedState, callback: Func
         commit: true,
 
         // This function is called when user clicks the PayPal button.
-        payment: setupPayment(dispatch, getState()),
+        // See https://github.com/paypal/paypal-checkout/blob/master/docs/button.md#advanced-integration
+        payment: setupPayment(payPalId, fallbackConfig, failureCallback),
 
         // This function is called when the user finishes with PayPal interface (approves payment).
-        onAuthorize,
+        onAuthorize: onAuthorize(payPalId, fallbackConfig, successCallback),
       };
-      const payPalId = 'component-paypal-button-checkout';
+
+      storeConfiguration(payPalId, fallbackConfig);
+
       const htmlElement = document.getElementById(payPalId);
-      const elementCount: ?number = htmlElement ? htmlElement.childElementCount : null;
+      const elementCount = htmlElement ? htmlElement.childElementCount : null;
 
       if (elementCount === 0) {
         window.paypal.Button.render(payPalOptions, `#${payPalId}`);

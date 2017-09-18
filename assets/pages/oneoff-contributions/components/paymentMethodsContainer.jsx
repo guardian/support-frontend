@@ -20,6 +20,8 @@ function mapStateToProps(state) {
     intCmp: state.intCmp,
     refpvid: state.refpvid,
     isoCountry: state.oneoffContrib.country,
+    payPalType: state.oneoffContrib.payPalType,
+    csrfToken: state.csrf.token,
   };
 
 }
