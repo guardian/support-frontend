@@ -18,7 +18,7 @@ object Config {
 
   val contributionFrontend = conf.getString("contribution.url")
 
-  val waitTimeout = 40
+  val waitTimeout = 45
 
   val paypalSandbox = conf.getString("paypal.sandbox.url")
 
