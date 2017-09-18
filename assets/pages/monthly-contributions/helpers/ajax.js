@@ -5,10 +5,10 @@
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import type { UsState } from 'helpers/internationalisation/country';
-import type { PageState } from '../reducers/reducers';
+import type { PageState } from '../monthlyContributionsReducers';
 import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
-import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
+import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../monthlyContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
 

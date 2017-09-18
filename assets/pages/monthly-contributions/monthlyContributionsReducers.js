@@ -18,7 +18,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
-import type { Action } from '../actions/monthlyContributionsActions';
+import type { Action } from './monthlyContributionsActions';
 
 
 // ----- Types ----- //

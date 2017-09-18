@@ -16,7 +16,7 @@ import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
-import reducer from './reducers/reducers';
+import reducer from './bundlesLandingReducers';
 import { trackOphan } from '../../helpers/abtest';
 
 

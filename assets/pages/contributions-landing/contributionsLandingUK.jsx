@@ -14,7 +14,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import { init as pageInit } from 'helpers/page/page';
 
-import reducer from './reducers/reducers';
+import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 

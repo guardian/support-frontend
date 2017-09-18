@@ -29,10 +29,10 @@ import { init as pageInit } from 'helpers/page/page';
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
-import reducer from './reducers/reducers';
-import type { PageState } from './reducers/reducers';
+import reducer from './monthlyContributionsReducers';
+import type { PageState } from './monthlyContributionsReducers';
 
-import { setPayPalButton } from './actions/monthlyContributionsActions';
+import { setPayPalButton } from './monthlyContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
 
 

@@ -8,7 +8,7 @@ import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
 import { abTestReducer as abTests } from 'helpers/abtest';
-import type { Action } from '../actions/contributionsLandingActions';
+import type { Action } from './contributionsLandingActions';
 
 
 // ----- Types ----- //
@@ -23,7 +23,7 @@ export type ContribState = {
 
 
 // ----- Setup ----- //
-// TODO: This file is basically a copy and past of bundles-landing/reducers.js
+// TODO: This file is basically a copy and past of bundles-landing/bundleLandingReducers.js
 // we should refactor them to remove duplication
 const initialContrib: ContribState = {
   type: 'MONTHLY',

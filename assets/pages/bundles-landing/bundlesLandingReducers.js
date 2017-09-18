@@ -5,7 +5,7 @@
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
-import type { Action } from '../actions/bundlesLandingActions';
+import type { Action } from './bundlesLandingActions';
 
 
 // ----- Types ----- //
