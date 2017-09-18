@@ -4,7 +4,7 @@
 
 import type { Contrib, Amount } from 'helpers/contributions';
 
-import reducer from '../reducers';
+import reducer from '../bundlesLandingReducers';
 
 
 // ----- Tests ----- //

@@ -21,7 +21,7 @@ import {
   changeContribAmountAnnual,
   changeContribAmountMonthly,
   changeContribAmountOneOff,
-} from '../actions/bundlesLandingActions';
+} from '../bundlesLandingActions';
 import { getSubsLinks } from '../helpers/subscriptionsLinks';
 
 import type { SubsUrls } from '../helpers/subscriptionsLinks';
