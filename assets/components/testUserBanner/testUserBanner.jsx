@@ -32,7 +32,7 @@ const TestUserBanner = (props: PropTypes) => {
 function mapStateToProps(state) {
 
   return {
-    isTestUser: state.user.isTestUser,
+    isTestUser: state.page.user.isTestUser,
   };
 
 }

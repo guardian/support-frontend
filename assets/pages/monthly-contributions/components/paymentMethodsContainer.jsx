@@ -10,10 +10,10 @@ import PaymentMethods from 'components/paymentMethods/paymentMethods';
 function mapStateToProps(state) {
 
   return {
-    email: state.user.email,
-    error: state.monthlyContrib.error,
-    hide: state.user.firstName === '' || state.user.lastName === '',
-    paymentStatus: state.monthlyContrib.paymentStatus,
+    email: state.page.user.email,
+    error: state.page.monthlyContrib.error,
+    hide: state.page.user.firstName === '' || state.page.user.lastName === '',
+    paymentStatus: state.page.monthlyContrib.paymentStatus,
   };
 
 }

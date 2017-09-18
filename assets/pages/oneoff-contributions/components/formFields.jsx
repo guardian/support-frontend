@@ -64,10 +64,10 @@ function FormFields(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    name: state.user.fullName,
-    email: state.user.email,
-    postcode: state.user.postcode,
-    isoCountry: state.oneoffContrib.country,
+    name: state.page.user.fullName,
+    email: state.page.user.email,
+    postcode: state.page.user.postcode,
+    isoCountry: state.common.country,
   };
 
 }

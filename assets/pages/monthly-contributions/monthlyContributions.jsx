@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -18,27 +18,22 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import pageStartup from 'helpers/pageStartup';
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
+import { init as pageInit } from 'helpers/page/page';
 
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import reducer from './reducers/reducers';
-import type { CombinedState } from './reducers/reducers';
+import type { PageState } from './reducers/reducers';
 
 import { setPayPalButton } from './actions/monthlyContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
-
-
-// ----- Page Startup ----- //
-
-pageStartup.start();
 
 
 // ----- Redux Store ----- //
@@ -57,14 +52,14 @@ const title = {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = createStore(reducer(contributionAmount, currency, country), {
-  intCmp: getQueryParameter('INTCMP'),
-}, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(reducer(contributionAmount, currency), {},
+  composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
+
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: CombinedState = store.getState();
+const state: PageState = store.getState();
 
 // ----- Render ----- //
 
@@ -80,8 +75,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
           <PaymentAmount
-            amount={state.monthlyContrib.amount}
-            currency={state.monthlyContrib.currency}
+            amount={state.page.monthlyContrib.amount}
+            currency={state.page.monthlyContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="monthly-contrib__your-details">
@@ -92,14 +87,14 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.monthlyContrib.payPalType}
+            payPalType={state.page.monthlyContrib.payPalType}
           />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">
         <InfoSection className="terms-privacy__content gu-content-filler__inner">
           <TermsPrivacy
-            termsLink={termsLinks[country]}
+            termsLink={termsLinks[state.common.country]}
             privacyLink="https://www.theguardian.com/help/privacy-policy"
           />
           <ContribLegal />

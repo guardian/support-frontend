@@ -21,6 +21,10 @@ export type CombinedState = {
   payPalExpressCheckout: PayPalExpressCheckoutState,
 };
 
+export type PageState = {
+  page: CombinedState
+}
+
 // ----- Exports ----- //
 
 export default function createPayPalExpressCheckoutReducer(amount: number, currency: IsoCurrency) {

@@ -4,7 +4,7 @@
 
 import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
 import { routes } from 'helpers/routes';
-import type { CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
+import type { PageState, CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 
 
 // ----- Functions ----- //
@@ -88,7 +88,7 @@ function createAgreement(payPalData: Object, state: CombinedState) {
     .then(response => response.json());
 }
 
-function setup(dispatch: Function, getState: () => CombinedState, callback: Function) {
+function setup(dispatch: Function, getState: () => PageState, callback: Function) {
 
   return loadPayPalExpress()
     .then(() => {
@@ -98,7 +98,7 @@ function setup(dispatch: Function, getState: () => CombinedState, callback: Func
       };
 
       const onAuthorize = (data) => {
-        createAgreement(data, getState())
+        createAgreement(data, getState().page)
           .then(handleBaId)
           .catch((err) => {
             dispatch(payPalExpressError(err));
@@ -113,7 +113,7 @@ function setup(dispatch: Function, getState: () => CombinedState, callback: Func
         commit: true,
 
         // This function is called when user clicks the PayPal button.
-        payment: setupPayment(dispatch, getState()),
+        payment: setupPayment(dispatch, getState().page),
 
         // This function is called when the user finishes with PayPal interface (approves payment).
         onAuthorize,

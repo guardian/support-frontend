@@ -34,7 +34,7 @@ function DisplayName(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    name: state.user.displayName,
+    name: state.page.user.displayName,
   };
 
 }

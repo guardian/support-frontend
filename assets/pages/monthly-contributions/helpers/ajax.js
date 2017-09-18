@@ -4,12 +4,13 @@
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
-import type { CombinedState } from '../reducers/reducers';
+import type { UsState } from 'helpers/internationalisation/country';
+import type { PageState } from '../reducers/reducers';
 import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../actions/monthlyContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
+
 
 // ----- Setup ----- //
 
@@ -28,7 +29,6 @@ type MonthlyContribFields = {
   paymentFields: {
     stripeToken: string,
   },
-  country: IsoCountry,
   state?: UsState,
   firstName: ?string,
   lastName: ?string,
@@ -42,9 +42,10 @@ type PaymentField = 'baid' | 'stripeToken';
 function requestData(paymentFieldName: PaymentField,
   token: string,
   contributionType: Contrib,
-  getState: () => CombinedState) {
+  getState: () => PageState) {
 
-  const state = getState();
+  const state = getState().page;
+  const country = getState().common.country;
 
   if (state.user.firstName !== null && state.user.firstName !== undefined
     && state.user.lastName !== null && state.user.lastName !== undefined
@@ -58,7 +59,7 @@ function requestData(paymentFieldName: PaymentField,
       paymentFields: {
         [paymentFieldName]: token,
       },
-      country: state.monthlyContrib.country,
+      country,
       firstName: state.user.firstName,
       lastName: state.user.lastName,
     };
@@ -84,8 +85,8 @@ function requestData(paymentFieldName: PaymentField,
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.monthlyContrib.pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.intCmp);
+  if (state.page.monthlyContrib.pollCount >= MAX_POLLS) {
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
     window.location.assign(url);
   }
 
@@ -93,11 +94,11 @@ function statusPoll(dispatch: Function, getState: Function) {
 
   const request = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token },
     credentials: 'same-origin',
   };
 
-  return fetch(state.monthlyContrib.statusUri, request).then((response) => {
+  return fetch(state.page.monthlyContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -119,13 +120,13 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.intCmp));
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.common.intCmp));
           break;
         default:
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.monthlyContrib.statusUri) {
+  } else if (state.page.monthlyContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
@@ -136,7 +137,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
 export default function postCheckout(
   paymentFieldName: PaymentField,
   contributionType: Contrib): Function {
-  return (token: string, dispatch: Function, getState: () => CombinedState) => {
+  return (token: string, dispatch: Function, getState: () => PageState) => {
 
     dispatch(resetPollCount());
     dispatch(creatingContributor());

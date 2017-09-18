@@ -9,13 +9,12 @@ import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripe
 import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { intCmpReducer as intCmp } from 'helpers/tracking/guTracking';
 import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import user from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
+import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
@@ -27,7 +26,6 @@ import type { Action } from '../actions/monthlyContributionsActions';
 export type State = {
   amount: number,
   currency: Currency,
-  country: IsoCountry,
   error: ?string,
   paymentStatus: PaymentStatus,
   payPalType: PayPalButtonType,
@@ -37,21 +35,24 @@ export type State = {
 
 export type CombinedState = {
   monthlyContrib: State,
-  intCmp: string,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
   payPalExpressCheckout: PayPalExpressCheckoutState,
   csrf: CsrfState,
 };
 
+export type PageState = {
+  common: CommonState,
+  page: CombinedState,
+}
+
 // ----- Reducers ----- //
 
-function createMonthlyContribReducer(amount: number, currency: Currency, country: IsoCountry) {
+function createMonthlyContribReducer(amount: number, currency: Currency) {
 
   const initialState: State = {
     amount,
     currency,
-    country,
     error: null,
     paymentStatus: 'NotStarted',
     payPalType: 'NotSet',
@@ -90,14 +91,9 @@ function createMonthlyContribReducer(amount: number, currency: Currency, country
 
 // ----- Exports ----- //
 
-export default function createRootMonthlyContributionsReducer(
-  amount: number,
-  currency: Currency,
-  country: IsoCountry,
-) {
+export default function createRootMonthlyContributionsReducer(amount: number, currency: Currency) {
   return combineReducers({
-    monthlyContrib: createMonthlyContribReducer(amount, currency, country),
-    intCmp,
+    monthlyContrib: createMonthlyContribReducer(amount, currency),
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),

@@ -21,14 +21,13 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
-type CommonState = {
+export type CommonState = {
   intCmp: ?string,
   campaign: ?Campaign,
   refpvid: ?string,
   country: IsoCountry,
   abParticipations: Participations,
 };
-
 
 // ----- Functions ----- //
 
@@ -50,15 +49,13 @@ function buildInitialState(abParticipations: Participations) {
 
   const intCmp = getQueryParameter('INTCMP');
 
-  const initialState: CommonState = {
+  return {
     intCmp,
     campaign: intCmp ? getCampaign(intCmp) : null,
     refpvid: getQueryParameter('REFPVID'),
     country: detect(),
     abParticipations,
   };
-
-  return initialState;
 
 }
 

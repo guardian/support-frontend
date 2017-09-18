@@ -6,7 +6,7 @@ import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 
 import { checkoutError } from '../actions/oneoffContributionsActions';
-import type { CombinedState } from '../reducers/reducers';
+import type { PageState } from '../reducers/reducers';
 
 
 // ----- Setup ----- //
@@ -38,31 +38,31 @@ type OneoffContribFields = {
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: () => CombinedState) {
+function requestData(paymentToken: string, getState: () => PageState) {
 
   const state = getState();
 
-  if (state.user.fullName !== null && state.user.fullName !== undefined
-    && state.user.email !== null && state.user.email !== undefined) {
-    const oneoffContribFields: OneoffContribFields = {
-      name: state.user.fullName,
-      currency: state.stripeCheckout.currency,
-      amount: state.stripeCheckout.amount,
-      email: state.user.email,
+  if (state.page.user.fullName !== null && state.page.user.fullName !== undefined
+    && state.page.user.email !== null && state.page.user.email !== undefined) {
+    const oneOffContribFields: OneoffContribFields = {
+      name: state.page.user.fullName,
+      currency: state.page.stripeCheckout.currency,
+      amount: state.page.stripeCheckout.amount,
+      email: state.page.user.email,
       token: paymentToken,
       marketing: false, // todo: collect marketing preference
-      postcode: state.user.postcode,
+      postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
     };
 
-    if (state.refpvid) {
-      oneoffContribFields.refererPageviewId = state.refpvid;
+    if (state.common.refpvid) {
+      oneOffContribFields.refererPageviewId = state.common.refpvid;
     }
 
     return {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(oneoffContribFields),
+      body: JSON.stringify(oneOffContribFields),
       credentials: 'include',
     };
   }
@@ -76,7 +76,7 @@ function requestData(paymentToken: string, getState: () => CombinedState) {
 export default function postCheckout(
   paymentToken: string,
   dispatch: Function,
-  getState: () => CombinedState,
+  getState: () => PageState,
 ) {
 
   const request = requestData(paymentToken, getState);
@@ -86,7 +86,7 @@ export default function postCheckout(
     const url: string = addQueryParamToURL(
       routes.oneOffContribThankyou,
       'INTCMP',
-      getState().intCmp,
+      getState().common.intCmp,
     );
 
     if (response.ok) {

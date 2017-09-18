@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -17,25 +17,23 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import pageStartup from 'helpers/pageStartup';
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
+import { init as pageInit } from 'helpers/page/page';
 
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
 import FormFields from './components/formFields';
 import reducer from './reducers/reducers';
-import type { CombinedState } from './reducers/reducers';
+import type { PageState } from './reducers/reducers';
 import postCheckout from './helpers/ajax';
 
 import { setPayPalButton } from './actions/oneoffContributionsActions';
 
 // ----- Page Startup ----- //
-
-pageStartup.start();
 
 
 // ----- Redux Store ----- //
@@ -48,16 +46,14 @@ const currency = currencyForCountry(country);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = createStore(reducer(contributionAmount, currency, country), {
-  intCmp: getQueryParameter('INTCMP'),
-  refpvid: getQueryParameter('REFPVID'),
-}, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(reducer(contributionAmount, currency), {},
+  composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 user.init(store.dispatch);
 
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: CombinedState = store.getState();
+const state: PageState = store.getState();
 
 const contribDescription: string = (country === 'US' ? 'one-time' : 'one-off');
 
@@ -75,8 +71,8 @@ const content = (
         </InfoSection>
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
-            amount={state.oneoffContrib.amount}
-            currency={state.oneoffContrib.currency}
+            amount={state.page.oneoffContrib.amount}
+            currency={state.page.oneoffContrib.currency}
           />
         </InfoSection>
         <InfoSection heading="Your details" className="oneoff-contrib__your-details">
@@ -86,7 +82,7 @@ const content = (
           <PaymentMethodsContainer
             stripeCallback={postCheckout}
             payPalCallback={postCheckout}
-            payPalType={store.getState().oneoffContrib.payPalType}
+            payPalType={store.getState().page.oneoffContrib.payPalType}
           />
         </InfoSection>
       </div>
