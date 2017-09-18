@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 import PaymentMethods from 'components/paymentMethods/paymentMethods';
-import { checkoutError } from '../actions/oneoffContributionsActions';
+import { checkoutError } from '../oneoffContributionsActions';
 
 
 // ----- Map State/Props ----- //

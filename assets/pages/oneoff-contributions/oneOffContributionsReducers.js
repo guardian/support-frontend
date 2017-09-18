@@ -16,7 +16,7 @@ import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
-import type { Action } from '../actions/oneoffContributionsActions';
+import type { Action } from './oneoffContributionsActions';
 
 // ----- Types ----- //
 
