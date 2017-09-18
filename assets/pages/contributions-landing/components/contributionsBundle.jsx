@@ -21,7 +21,7 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
   payPalError,
-} from '../actions/contributionsLandingActions';
+} from '../contributionsLandingActions';
 import type { Participations } from '../../../helpers/abtest';
 
 

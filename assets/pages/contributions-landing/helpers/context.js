@@ -5,8 +5,8 @@
 import { getQueryParameter } from 'helpers/url';
 import { parseBoolean } from 'helpers/utilities';
 
-import { setContext } from '../actions/contributionsLandingActions';
-import type { Action } from '../actions/contributionsLandingActions';
+import { setContext } from '../contributionsLandingActions';
+import type { Action } from '../contributionsLandingActions';
 
 
 // ----- Functions ----- //
