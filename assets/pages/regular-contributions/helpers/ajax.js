@@ -5,10 +5,10 @@
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import type { UsState } from 'helpers/internationalisation/country';
-import type { PageState } from '../monthlyContributionsReducers';
+import type { PageState } from '../regularContributionsReducers';
 import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
 
-import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../monthlyContributionsActions';
+import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
 
@@ -50,7 +50,7 @@ function requestData(paymentFieldName: PaymentField,
   if (state.user.firstName !== null && state.user.firstName !== undefined
     && state.user.lastName !== null && state.user.lastName !== undefined
     && state.user.email !== null && state.user.email !== undefined) {
-    const monthlyContribFields: MonthlyContribFields = {
+    const regularContribFields: MonthlyContribFields = {
       contribution: {
         amount: state.stripeCheckout.amount,
         currency: state.stripeCheckout.currency,
@@ -65,14 +65,14 @@ function requestData(paymentFieldName: PaymentField,
     };
 
     if (state.user.stateField) {
-      monthlyContribFields.state = state.user.stateField;
+      regularContribFields.state = state.user.stateField;
     }
 
     return {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
       credentials: 'same-origin',
-      body: JSON.stringify(monthlyContribFields),
+      body: JSON.stringify(regularContribFields),
     };
   }
 
@@ -85,7 +85,7 @@ function requestData(paymentFieldName: PaymentField,
 function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
-  if (state.page.monthlyContrib.pollCount >= MAX_POLLS) {
+  if (state.page.regularContrib.pollCount >= MAX_POLLS) {
     const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
     window.location.assign(url);
   }
@@ -98,7 +98,7 @@ function statusPoll(dispatch: Function, getState: Function) {
     credentials: 'same-origin',
   };
 
-  return fetch(state.page.monthlyContrib.statusUri, request).then((response) => {
+  return fetch(state.page.regularContrib.statusUri, request).then((response) => {
     handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
   });
 }
@@ -126,7 +126,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           delayedStatusPoll(dispatch, getState);
       }
     });
-  } else if (state.page.monthlyContrib.statusUri) {
+  } else if (state.page.regularContrib.statusUri) {
     delayedStatusPoll(dispatch, getState);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));

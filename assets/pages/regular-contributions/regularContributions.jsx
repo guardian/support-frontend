@@ -29,10 +29,10 @@ import { init as pageInit } from 'helpers/page/page';
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
 import PaymentMethodsContainer from './components/paymentMethodsContainer';
-import reducer from './monthlyContributionsReducers';
-import type { PageState } from './monthlyContributionsReducers';
+import reducer from './regularContributionsReducers';
+import type { PageState } from './regularContributionsReducers';
 
-import { setPayPalButton } from './monthlyContributionsActions';
+import { setPayPalButton } from './regularContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
 
 
@@ -70,24 +70,24 @@ const content = (
       <SimpleHeader />
       <div className="monthly-contrib gu-content-margin">
         <InfoSection className="monthly-contrib__header">
-          <h1 className="monthly-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
+          <h1 className="regular-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
           <Secure />
         </InfoSection>
-        <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="monthly-contrib__your-contrib">
+        <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
           <PaymentAmount
-            amount={state.page.monthlyContrib.amount}
-            currency={state.page.monthlyContrib.currency}
+            amount={state.page.regularContrib.amount}
+            currency={state.page.regularContrib.currency}
           />
         </InfoSection>
-        <InfoSection heading="Your details" className="monthly-contrib__your-details">
+        <InfoSection heading="Your details" className="regular-contrib__your-details">
           <DisplayName />
           <FormFields />
         </InfoSection>
-        <InfoSection heading="Payment methods" className="monthly-contrib__payment-methods">
+        <InfoSection heading="Payment methods" className="regular-contrib__payment-methods">
           <PaymentMethodsContainer
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.page.monthlyContrib.payPalType}
+            payPalType={state.page.regularContrib.payPalType}
           />
         </InfoSection>
       </div>
@@ -105,4 +105,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('monthly-contributions-page'));
+ReactDOM.render(content, document.getElementById('regular-contributions-page'));

@@ -64,5 +64,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('monthly-contributions-pending-page'),
+  document.getElementById('regular-contributions-pending-page'),
 );

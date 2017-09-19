@@ -58,7 +58,7 @@ function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
 function NameForm(props: PropTypes) {
 
   return (
-    <form className="monthly-contrib__name-form">
+    <form className="regular-contrib__name-form">
       <TextInput
         id="first-name"
         placeholder="First name"
