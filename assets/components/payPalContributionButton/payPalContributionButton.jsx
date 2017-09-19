@@ -13,8 +13,8 @@ import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: string,
-  intCmp?: string,
-  refpvid?: string,
+  intCmp?: ?string,
+  refpvid?: ?string,
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
   canClick?: boolean,

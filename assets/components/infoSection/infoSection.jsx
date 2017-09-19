@@ -4,15 +4,15 @@
 
 import React from 'react';
 
-import type { Children } from 'react';
+import type { Node } from 'react';
 
 
 // ---- Types ----- //
 
 type PropTypes = {
-  heading?: string,
+  heading?: ?string,
   className?: string,
-  children?: Children,
+  children?: Node,
 };
 
 
