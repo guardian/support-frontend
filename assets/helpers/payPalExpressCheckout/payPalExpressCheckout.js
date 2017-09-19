@@ -88,7 +88,9 @@ function createAgreement(payPalData: Object, state: CombinedState) {
     .then(response => response.json());
 }
 
-function setup(dispatch: Function, getState: () => PageState, callback: Function) {
+function setup(
+  dispatch: Function,
+  getState: () => PageState, callback: Function): Promise<void> {
 
   return loadPayPalExpress()
     .then(() => {

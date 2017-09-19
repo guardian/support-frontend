@@ -35,7 +35,7 @@ export const setup = (
   state: StripeState,
   token: Function,
   closed: Function,
-) => loadStripe().then(() => {
+): Promise<void> => loadStripe().then(() => {
 
   stripeHandler = window.StripeCheckout.configure({
     name: 'Guardian',
