@@ -7,7 +7,7 @@ import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.config.Stage
-import MonthlyContributionsClient._
+import RegularContributionsClient._
 import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
@@ -41,7 +41,7 @@ case class CreateMonthlyContributorRequest(
   paymentFields: Either[StripePaymentToken, PayPalPaymentFields]
 )
 
-object MonthlyContributionsClient {
+object RegularContributionsClient {
   sealed trait MonthlyContributionError
   case object StateMachineFailure extends MonthlyContributionError
 

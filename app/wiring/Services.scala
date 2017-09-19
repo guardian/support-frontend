@@ -5,7 +5,7 @@ import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
 import services.paypal.PayPalServiceProvider
-import services.stepfunctions.{Encryption, MonthlyContributionsClient, StateWrapper}
+import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -18,14 +18,14 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
-  lazy val monthlyContributionsClient = {
+  lazy val regularContributionsClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws))
-    val monthlyContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
-    MonthlyContributionsClient(
-      monthlyContributionsStage,
+    val regularContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
+    RegularContributionsClient(
+      regularContributionsStage,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.MonthlyContributions.status
+      controllers.routes.RegularContributions.status
     )
   }
 
