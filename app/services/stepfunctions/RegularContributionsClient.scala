@@ -29,10 +29,10 @@ case class StripePaymentToken(stripeToken: String) {
   )
 }
 
-object CreateMonthlyContributorRequest {
-  implicit val decoder: Decoder[CreateMonthlyContributorRequest] = deriveDecoder
+object CreateRegularContributorRequest {
+  implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
 }
-case class CreateMonthlyContributorRequest(
+case class CreateRegularContributorRequest(
   firstName: String,
   lastName: String,
   country: Country,
@@ -42,11 +42,11 @@ case class CreateMonthlyContributorRequest(
 )
 
 object RegularContributionsClient {
-  sealed trait MonthlyContributionError
-  case object StateMachineFailure extends MonthlyContributionError
+  sealed trait RegularContributionError
+  case object StateMachineFailure extends RegularContributionError
 
-  def apply(stage: Stage, stateWrapper: StateWrapper, supportUrl: String, call: String => Call)(implicit system: ActorSystem): MonthlyContributionsClient =
-    new MonthlyContributionsClient(stage, stateWrapper, supportUrl, call)
+  def apply(stage: Stage, stateWrapper: StateWrapper, supportUrl: String, call: String => Call)(implicit system: ActorSystem): RegularContributionsClient =
+    new RegularContributionsClient(stage, stateWrapper, supportUrl, call)
 }
 
 case class StatusResponse(status: Status, trackingUri: String, message: Option[String] = None)
@@ -54,7 +54,7 @@ object StatusResponse {
   implicit val encoder: Encoder[StatusResponse] = deriveEncoder
 }
 
-class MonthlyContributionsClient(
+class RegularContributionsClient(
     stage: Stage,
     stateWrapper: StateWrapper,
     supportUrl: String,
@@ -62,9 +62,9 @@ class MonthlyContributionsClient(
 )(implicit system: ActorSystem) extends LazyLogging {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
-  private val underlying = Client(s"MonthlyContributions${stage.toString}-")
+  private val underlying = Client(s"RegularContributions${stage.toString}-")
 
-  def createContributor(request: CreateMonthlyContributorRequest, user: User, requestId: UUID): EitherT[Future, MonthlyContributionError, StatusResponse] = {
+  def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
@@ -73,18 +73,18 @@ class MonthlyContributionsClient(
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to create monthly contribution - $error")
-        StateMachineFailure: MonthlyContributionError
+        logger.error(s"[$requestId] Failed to create regular contribution - $error")
+        StateMachineFailure: RegularContributionError
       },
       { success =>
-        logger.info(s"[$requestId] Creating monthly contribution ($success)")
+        logger.info(s"[$requestId] Creating regular contribution ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
             trackingUri = supportUrl + statusCall(jobId).url
           )
         } getOrElse {
-          logger.error(s"Failed to parse ${success.arn} to a jobId when creating new monthly contribution $request")
+          logger.error(s"Failed to parse ${success.arn} to a jobId when creating new regular contribution $request")
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
@@ -96,11 +96,11 @@ class MonthlyContributionsClient(
     )
   }
 
-  def status(jobId: String, requestId: UUID): EitherT[Future, MonthlyContributionError, StatusResponse] = {
+  def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     underlying.history(jobId).bimap(
       { error =>
         logger.error(s"[$requestId] Failed to get execution status of $jobId - $error")
-        StateMachineFailure: MonthlyContributionError
+        StateMachineFailure: RegularContributionError
       },
       { events =>
         val executionStatus = underlying.statusFromEvents(events)
