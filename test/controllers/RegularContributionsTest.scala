@@ -18,13 +18,13 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import services.stepfunctions.MonthlyContributionsClient
+import services.stepfunctions.RegularContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
 import fixtures.TestCSRFComponents
 
-class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
+class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   "GET /contribute/recurring" should {
 
@@ -55,7 +55,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> (UserNotFound: MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     "return form if members api fails" in new DisplayForm {
@@ -63,7 +63,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> (UnexpectedResponseStatus(100): MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     "return form if user is not a recurring contributor" in new DisplayForm {
@@ -72,7 +72,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     trait DisplayForm {
@@ -145,8 +145,8 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           signature = ""
         ))
 
-        new MonthlyContributions(
-          mock[MonthlyContributionsClient],
+        new RegularContributions(
+          mock[RegularContributionsClient],
           assetResolver,
           actionRefiner,
           membersDataService,

@@ -11,15 +11,15 @@ import lib.PlayImplicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
-import services.stepfunctions.{CreateMonthlyContributorRequest, MonthlyContributionsClient}
+import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
 import io.circe.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MonthlyContributions(
-    client: MonthlyContributionsClient,
+class RegularContributions(
+    client: RegularContributionsClient,
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
@@ -43,8 +43,8 @@ class MonthlyContributions(
           Ok(
             monthlyContributions(
               title = "Support the Guardian | Monthly Contributions",
-              id = "monthly-contributions-page",
-              js = "monthlyContributionsPage.js",
+              id = "regular-contributions-page",
+              js = "regularContributionsPage.js",
               user = fullUser,
               uatMode = uatMode,
               payPalButton = paypal.getOrElse(true),
@@ -66,7 +66,7 @@ class MonthlyContributions(
     )
   }
 
-  def create: Action[CreateMonthlyContributorRequest] = AuthenticatedAction.async(circe.json[CreateMonthlyContributorRequest]) { implicit request =>
+  def create: Action[CreateRegularContributorRequest] = AuthenticatedAction.async(circe.json[CreateRegularContributorRequest]) { implicit request =>
     logger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
     val result = for {
@@ -83,7 +83,7 @@ class MonthlyContributions(
     )
   }
 
-  private def contributor(user: IdUser, request: CreateMonthlyContributorRequest) = {
+  private def contributor(user: IdUser, request: CreateRegularContributorRequest) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,

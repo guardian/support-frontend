@@ -30,8 +30,8 @@ const content = (
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 id="qa-thank-you-message" className="thankyou__subheading">
             <p>You have helped to make the Guardian&#39;s future more secure.
-              Look out for an email confirming your recurring
-              payment.</p>
+            Look out for an email confirming your recurring
+            payment.</p>
           </h2>
           <CtaLink
             text="Return to the Guardian"
@@ -64,5 +64,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('monthly-contributions-pending-page'),
+  document.getElementById('regular-contributions-thankyou-page'),
 );

@@ -1,4 +1,4 @@
-#monthly-contributions-page {
+#regular-contributions-page {
 
 	// ----- General ----- //
 
@@ -10,7 +10,7 @@
 		background-color: darken(gu-colour(multimedia-main-2), 5%);
 	}
 
-	.monthly-contrib {
+	.regular-contrib {
 		background-color: gu-colour(multimedia-main-2);
 	}
 
@@ -27,10 +27,10 @@
 
 	// ----- Header
 
-	.monthly-contrib__header {
+	.regular-contrib__header {
 		border-top: none;
 
-		.monthly-contrib__heading {
+		.regular-contrib__heading {
 			margin-top: -15px; /* custom size for header at mobile because of padding */
 			font-size: 24px;
 			line-height: 28px;
@@ -59,7 +59,7 @@
 
 	// ----- Your contrib
 
-	.monthly-contrib__amount {
+	.regular-contrib__amount {
 		border-radius: 1000px;
 		font-size: 24px;
 		color: #fff;
@@ -70,7 +70,7 @@
 		line-height: 60px;
 	}
 
-	.monthly-contrib__amount--wide-value {
+	.regular-contrib__amount--wide-value {
 		padding-left: 1em;
 		padding-right: 1em;
 		width: unset;
@@ -78,7 +78,7 @@
 
 	// ----- Your details
 
-	.monthly-contrib__your-details {
+	.regular-contrib__your-details {
 
 		#last-name {
 			margin-bottom: 0px;
@@ -107,7 +107,7 @@
 
 	// ----- Payment methods
 
-	.monthly-contrib__payment-methods {
+	.regular-contrib__payment-methods {
 		.component-stripe-pop-up-button {
 			box-sizing: border-box;
 
