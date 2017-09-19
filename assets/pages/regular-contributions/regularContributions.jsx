@@ -68,8 +68,8 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <div className="monthly-contrib gu-content-margin">
-        <InfoSection className="monthly-contrib__header">
+      <div className="regular-contrib gu-content-margin">
+        <InfoSection className="regular-contrib__header">
           <h1 className="regular-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
           <Secure />
         </InfoSection>
