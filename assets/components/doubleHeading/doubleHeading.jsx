@@ -10,7 +10,7 @@ import { generateClassName } from 'helpers/utilities';
 
 type PropTypes = {
   heading: string,
-  subheading: ?string,
+  subheading?: string,
   modifierClass?: string,
 };
 
@@ -39,5 +39,5 @@ export default function DoubleHeading(props: PropTypes) {
 
 DoubleHeading.defaultProps = {
   subheading: '',
-  modifierClass: null,
+  modifierClass: '',
 };

@@ -83,7 +83,7 @@ export default function TextInput(props: PropTypes) {
 
 TextInput.defaultProps = {
   placeholder: null,
-  labelText: null,
+  labelText: '',
   id: null,
   onChange: null,
   value: '',
