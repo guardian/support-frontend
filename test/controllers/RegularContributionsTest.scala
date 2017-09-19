@@ -63,7 +63,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> (UnexpectedResponseStatus(100): MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     "return form if user is not a recurring contributor" in new DisplayForm {
@@ -72,7 +72,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     trait DisplayForm {
