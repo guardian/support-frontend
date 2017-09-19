@@ -62,7 +62,7 @@ class RegularContributionsClient(
 )(implicit system: ActorSystem) extends LazyLogging {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
-  private val underlying = Client(s"RegularContributions${stage.toString}-")
+  private val underlying = Client(s"MonthlyContributions${stage.toString}-")
 
   def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(

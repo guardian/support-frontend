@@ -53,5 +53,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('monthly-contributions-existing-page'),
+  document.getElementById('regular-contributions-existing-page'),
 );
