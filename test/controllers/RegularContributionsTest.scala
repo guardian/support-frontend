@@ -18,7 +18,7 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import services.stepfunctions.MonthlyContributionsClient
+import services.stepfunctions.RegularContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
@@ -146,7 +146,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         ))
 
         new RegularContributions(
-          mock[MonthlyContributionsClient],
+          mock[RegularContributionsClient],
           assetResolver,
           actionRefiner,
           membersDataService,
