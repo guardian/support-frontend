@@ -20,7 +20,7 @@ const MAX_POLLS = 10;
 
 // ----- Types ----- //
 
-type MonthlyContribFields = {
+type RegularContribFields = {
   contribution: {
     amount: number,
     currency: string,
@@ -50,7 +50,7 @@ function requestData(paymentFieldName: PaymentField,
   if (state.user.firstName !== null && state.user.firstName !== undefined
     && state.user.lastName !== null && state.user.lastName !== undefined
     && state.user.email !== null && state.user.email !== undefined) {
-    const regularContribFields: MonthlyContribFields = {
+    const regularContribFields: RegularContribFields = {
       contribution: {
         amount: state.stripeCheckout.amount,
         currency: state.stripeCheckout.currency,
