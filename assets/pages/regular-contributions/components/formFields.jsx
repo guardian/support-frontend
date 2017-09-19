@@ -2,16 +2,16 @@
 
 // ----- Imports ----- //
 
-import React from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 
-import TextInput from 'components/textInput/textInput'
-import type { SelectOption } from 'components/selectInput/selectInput'
-import SelectInput from 'components/selectInput/selectInput'
+import TextInput from 'components/textInput/textInput';
+import type { SelectOption } from 'components/selectInput/selectInput';
+import SelectInput from 'components/selectInput/selectInput';
 
-import { setFirstName, setLastName, setStateField } from 'helpers/user/userActions'
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country'
-import { usStates } from 'helpers/internationalisation/country'
+import { setFirstName, setLastName, setStateField } from 'helpers/user/userActions';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
+import { usStates } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 

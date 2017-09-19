@@ -1,12 +1,11 @@
 // @flow
 
 // ----- Imports ----- //
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
-
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Setup ----- //
 
@@ -17,7 +16,7 @@ const MVT_MAX: number = 1000000;
 // ----- Types ----- //
 
 type Audiences = {
-  [IsoCountry] :{
+  [IsoCountry]: {
     offset: number,
     size: number,
   }
@@ -60,14 +59,14 @@ const tests: Test[] = [
   {
     testId: 'addAnnualContributions',
     variants: ['control', 'variant'],
-    audiences: [{
-      country: 'GB',
-      offset: 0,
-      size: 1,
-    }],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
     isActive: false,
-  },
-];
+  }];
 
 
 // ----- Functions ----- //
