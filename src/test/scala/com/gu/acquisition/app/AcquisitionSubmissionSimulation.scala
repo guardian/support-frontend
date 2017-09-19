@@ -1,4 +1,4 @@
-package app
+package com.gu.acquisition.app
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri

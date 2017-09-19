@@ -1,5 +1,4 @@
-package com.gu.acquisition
-package services
+package com.gu.acquisition.services
 
 import cats.data.EitherT
 import ophan.thrift.event.Acquisition
@@ -23,7 +22,6 @@ object OphanServiceError {
   case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
     override def getMessage: String = underlying.getMessage
   }
-
 }
 
 class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
@@ -31,7 +29,7 @@ class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Ma
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
   private def buildRequest(acquisition: Acquisition, browserId: String, viewId: String, visitId: Option[String]): HttpRequest = {
-    import instances.acquisition._
+    import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
     import scala.collection.immutable.Seq
 

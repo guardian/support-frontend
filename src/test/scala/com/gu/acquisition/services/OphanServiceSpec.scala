@@ -1,7 +1,6 @@
-package com.gu.acquisition
-package services
+package com.gu.acquisition.services
 
-import fixtures.ExampleABTest
+import com.gu.acquisition.fixtures.ExampleABTest
 import org.scalatest.{MustMatchers, WordSpec}
 
 class OphanServiceSpec extends WordSpec with MustMatchers {
@@ -10,8 +9,8 @@ class OphanServiceSpec extends WordSpec with MustMatchers {
 
   "OphanService" must {
     import io.circe.syntax._
-    import instances.abTestInfo._
-    import syntax._
+    import com.gu.acquisition.instances.abTestInfo._
+    import com.gu.acquisition.syntax._
 
     "extract correct A/B test data" in {
 
