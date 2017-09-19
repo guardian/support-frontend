@@ -24,7 +24,7 @@ import services.MembersDataService._
 import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
 import fixtures.TestCSRFComponents
 
-class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
+class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   "GET /contribute/recurring" should {
 
@@ -55,7 +55,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService = mockedMembersDataService(credentials -> (UserNotFound: MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
-      contentAsString(result) must include("monthlyContributionsPage.js")
+      contentAsString(result) must include("regularContributionsPage.js")
     }
 
     "return form if members api fails" in new DisplayForm {
@@ -145,7 +145,7 @@ class MonthlyContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           signature = ""
         ))
 
-        new MonthlyContributions(
+        new RegularContributions(
           mock[MonthlyContributionsClient],
           assetResolver,
           actionRefiner,

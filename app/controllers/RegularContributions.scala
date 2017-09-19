@@ -18,7 +18,7 @@ import io.circe.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MonthlyContributions(
+class RegularContributions(
     client: MonthlyContributionsClient,
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
@@ -43,8 +43,8 @@ class MonthlyContributions(
           Ok(
             monthlyContributions(
               title = "Support the Guardian | Monthly Contributions",
-              id = "monthly-contributions-page",
-              js = "monthlyContributionsPage.js",
+              id = "regular-contributions-page",
+              js = "regularContributionsPage.js",
               user = fullUser,
               uatMode = uatMode,
               payPalButton = paypal.getOrElse(true),
