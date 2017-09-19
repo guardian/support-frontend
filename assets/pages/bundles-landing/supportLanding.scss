@@ -76,6 +76,12 @@
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      padding-top: $gu-v-spacing;
+
+      .component-grid-image {
+        width: 90%;
+        margin: 0 auto;
+      }
 
       @include mq($from: tablet) {
         flex-basis: 32%;

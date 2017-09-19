@@ -23,6 +23,7 @@ export default function Subscribe() {
             from={false}
             copy="Get our journalism across up to 10 devices, to enjoy wherever you go"
             ctaText="Start 14-day trial"
+            image="7c7b9580924281914e82dc163bf716ede52daa8b/0_0_600_360"
           />
           <SubscriptionBundle
             heading="paper"
@@ -30,6 +31,7 @@ export default function Subscribe() {
             from={true}
             copy="With six day, weekend and everyday options, you can choose the package that suits you"
             ctaText="Choose paper"
+            image="4d0851394ce3c100649800733f230a78c0d38555/0_0_600_360"
           />
           <SubscriptionBundle
             heading="paper & digital"
@@ -37,6 +39,7 @@ export default function Subscribe() {
             from={true}
             copy="Enjoy the Guardian at your leisure, whether it's on your tablet on the go, or reading the paper at home"
             ctaText="Choose paper & digital"
+            image="1199912112859eecf3f2d94edc6fdd73843d10e9/0_0_600_360"
           />
         </div>
       </InfoSection>
