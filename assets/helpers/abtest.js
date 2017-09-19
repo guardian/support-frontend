@@ -6,6 +6,7 @@ import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
 
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Setup ----- //
 
@@ -15,9 +16,11 @@ const MVT_MAX: number = 1000000;
 
 // ----- Types ----- //
 
-type Audience = {
-  offset: number,
-  size: number,
+type Audiences = {
+  [IsoCountry] :{
+    offset: number,
+    size: number,
+  }
 };
 
 type TestId = 'addAnnualContributions';
@@ -34,7 +37,7 @@ type Action = {
 type Test = {
   testId: TestId,
   variants: string[],
-  audience: Audience,
+  audiences: Audiences,
   isActive: boolean,
 };
 
@@ -57,10 +60,11 @@ const tests: Test[] = [
   {
     testId: 'addAnnualContributions',
     variants: ['control', 'variant'],
-    audience: {
+    audiences: [{
+      country: 'GB',
       offset: 0,
       size: 1,
-    },
+    }],
     isActive: false,
   },
 ];
@@ -114,7 +118,14 @@ function getUrlParticipation(): ?Participations {
 
 }
 
-function userInTest(audience: Audience, mvtId: number) {
+function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
+
+  const audience = audiences[country];
+
+  if (!audience) {
+    return false;
+  }
+
   const testMin: number = MVT_MAX * audience.offset;
   const testMax: number = testMin + (MVT_MAX * audience.size);
 
@@ -127,7 +138,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipation(mvtId: number): Participations {
+function getParticipation(mvtId: number, country: IsoCountry): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
   const participation:Participations = {};
@@ -140,7 +151,7 @@ function getParticipation(mvtId: number): Participations {
 
     if (test.testId in currentParticipation) {
       participation[test.testId] = currentParticipation[test.testId];
-    } else if (userInTest(test.audience, mvtId)) {
+    } else if (userInTest(test.audiences, mvtId, country)) {
       participation[test.testId] = assignUserToVariant(mvtId, test);
     } else {
       participation[test.testId] = 'notintest';
@@ -155,10 +166,12 @@ function getParticipation(mvtId: number): Participations {
 
 // ----- Exports ----- //
 
-export const init = () => {
+export const init = (country: IsoCountry) => {
 
   const mvt: number = getMvtId();
-  let participation: Participations = getParticipation(mvt);
+
+
+  let participation: Participations = getParticipation(mvt, country);
 
   const urlParticipation = getUrlParticipation();
   participation = Object.assign({}, participation, urlParticipation);

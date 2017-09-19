@@ -45,7 +45,7 @@ function analyticsInitialisation(participations: Participations): void {
 }
 
 // Creates the initial state for the common reducer.
-function buildInitialState(abParticipations: Participations) {
+function buildInitialState(abParticipations: Participations, country: IsoCountry) {
 
   const intCmp = getQueryParameter('INTCMP');
 
@@ -53,7 +53,7 @@ function buildInitialState(abParticipations: Participations) {
     intCmp,
     campaign: intCmp ? getCampaign(intCmp) : null,
     refpvid: getQueryParameter('REFPVID'),
-    country: detect(),
+    country,
     abParticipations,
   };
 
@@ -99,10 +99,10 @@ function statelessInit() {
 
 // Initialises the page.
 function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Function) {
-
-  const participations: Participations = abTest.init();
+  const country: IsoCountry = detect();
+  const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  const initialState: CommonState = buildInitialState(participations);
+  const initialState: CommonState = buildInitialState(participations, country);
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(
