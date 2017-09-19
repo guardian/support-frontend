@@ -51,11 +51,11 @@ module.exports = (env) => {
       contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',
       contributionsLandingPageUS: 'pages/contributions-landing/contributionsLandingUS.jsx',
       regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
-      monthlyContributionsThankyouPage: 'pages/contributions-thankyou/monthlyContributionsThankyou.jsx',
+      regularContributionsThankyouPage: 'pages/contributions-thankyou/regularContributionsThankyou.jsx',
       regularContributionsPendingPage: 'pages/contributions-thankyou/regularContributionsPending.jsx',
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
-      monthlyContributionsExistingPage: 'pages/monthly-contributions-existing/monthlyContributionsExisting.jsx',
+      regularContributionsExistingPage: 'pages/monthly-contributions-existing/regularContributionsExisting.jsx',
       payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     },
 

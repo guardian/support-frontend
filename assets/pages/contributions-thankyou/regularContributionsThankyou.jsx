@@ -64,5 +64,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('monthly-contributions-thankyou-page'),
+  document.getElementById('regular-contributions-thankyou-page'),
 );
