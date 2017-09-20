@@ -2,12 +2,9 @@
 
 // ----- Imports ----- //
 
-import { combineReducers } from 'redux';
-
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
-import { abTestReducer as abTests } from 'helpers/abtest';
 import type { Action } from './contributionsLandingActions';
 
 
@@ -133,7 +130,4 @@ function contribution(
 
 // ----- Exports ----- //
 
-export default combineReducers({
-  contribution,
-  abTests,
-});
+export default contribution;
