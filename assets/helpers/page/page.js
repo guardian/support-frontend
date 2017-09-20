@@ -89,6 +89,14 @@ function createCommonReducer(
 
 }
 
+// For pages that don't need Redux.
+function statelessInit() {
+
+  const participations: Participations = abTest.init();
+  analyticsInitialisation(participations);
+
+}
+
 // Initialises the page.
 function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Function) {
 
@@ -111,4 +119,5 @@ function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Functio
 export {
   createCommonReducer,
   init,
+  statelessInit,
 };
