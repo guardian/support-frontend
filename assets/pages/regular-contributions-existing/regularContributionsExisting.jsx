@@ -10,13 +10,13 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 
-import pageStartup from 'helpers/pageStartup';
 import { routes } from 'helpers/routes';
+import { statelessInit as pageInit } from 'helpers/page/page';
 
 
 // ----- Page Startup ----- //
 
-pageStartup.start();
+pageInit();
 
 
 // ----- Render ----- //
