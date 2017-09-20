@@ -65,12 +65,7 @@
     }
 
     &:hover {
-      border-color: #000;
-      color: #000;
-
-      svg {
-        fill: #000;
-      }
+      background: darken(gu-colour(neutral-1), 10%);
     }
   }
 
