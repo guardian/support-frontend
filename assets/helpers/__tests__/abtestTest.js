@@ -124,7 +124,7 @@ describe('Correct allocation in a multi test environment', () => {
     },
   ];
 
-  it('It correctly segment the user a user who has a cookie in the top 80% in GB', () => {
+  it('It correctly segments a user who has a cookie in the top 80% in GB', () => {
 
     document.cookie = 'GU_mvt_id=810000';
     const country = 'GB';
@@ -134,7 +134,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
-  it('It correctly segment the user a user who has a cookie above 80% in US', () => {
+  it('It correctly segments a user who has a cookie above 80% in US', () => {
 
     document.cookie = 'GU_mvt_id=810000';
     const country = 'US';
@@ -144,7 +144,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
-  it('It correctly segment the user a user who has a cookie between 20% and 80% in GB', () => {
+  it('It correctly segments a user who has a cookie between 20% and 80% in GB', () => {
 
     document.cookie = 'GU_mvt_id=510000';
     const country = 'GB';
@@ -159,7 +159,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
-  it('It correctly segment the user a user who has a cookie between 20% and 80% in US', () => {
+  it('It correctly segments a user who has a cookie between 20% and 80% in US', () => {
 
     document.cookie = 'GU_mvt_id=510000';
     const country = 'US';
@@ -175,7 +175,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(getVariantsAsString(participations)).toEqual('mockTest=notintest; mockTest2=variant');
   });
 
-  it('It correctly segment the user a user who has a cookie between 0 and 20% in GB', () => {
+  it('It correctly segments a user who has a cookie between 0 and 20% in GB', () => {
 
     document.cookie = 'GU_mvt_id=150000';
     const country = 'GB';
