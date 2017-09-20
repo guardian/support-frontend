@@ -13,13 +13,12 @@ type PropTypes = {
   text: string,
   modifierClass: ?string,
   url?: ?string,
-  onClick?: ?() => void,
+  onClick?: ?Function,
   tabIndex?: number,
 };
 
 
 // ----- Component ----- //
-
 
 const CtaCircle = (props: PropTypes) => {
 
