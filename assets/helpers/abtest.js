@@ -19,7 +19,7 @@ type Audiences = {
   [IsoCountry]: {
     offset: number,
     size: number,
-  }
+  },
 };
 
 type TestId = 'addAnnualContributions';
