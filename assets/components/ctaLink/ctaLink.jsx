@@ -17,12 +17,13 @@ type PropTypes = {
   onClick?: ?Function,
   tabIndex?: number,
   id?: ?string,
-  svgName?: SvgName,
+  svgName: SvgName,
 };
 
 // ----- Component ----- //
 
 export default function CtaLink(props: PropTypes) {
+
   return (
     <a
       id={props.id}

@@ -28,7 +28,7 @@ export default function Subscribe() {
           <SubscriptionBundle
             heading="paper"
             price="10.79"
-            from={true}
+            from
             copy="With six day, weekend and everyday options, you can choose the package that suits you"
             ctaText="Choose paper"
             image="4d0851394ce3c100649800733f230a78c0d38555/0_0_600_360"
@@ -36,7 +36,7 @@ export default function Subscribe() {
           <SubscriptionBundle
             heading="paper & digital"
             price="22.06"
-            from={true}
+            from
             copy="Enjoy the Guardian at your leisure, whether it's on your tablet on the go, or reading the paper at home"
             ctaText="Choose paper & digital"
             image="1199912112859eecf3f2d94edc6fdd73843d10e9/0_0_600_360"

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
+import type { Store } from 'redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -16,7 +17,7 @@ import Ready from './components/readyNewDesign';
 
 // ----- Render ----- //
 
-export default function supportLanding(store) {
+export default function supportLanding(store: Store) {
 
   return (
     <Provider store={store}>
