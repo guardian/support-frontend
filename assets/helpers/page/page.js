@@ -91,8 +91,8 @@ function createCommonReducer(
 
 // For pages that don't need Redux.
 function statelessInit() {
-
-  const participations: Participations = abTest.init();
+  const country: IsoCountry = detect();
+  const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
 
 }
