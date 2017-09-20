@@ -7,7 +7,7 @@ import React from 'react';
 import { gridUrl, gridSrcset } from 'helpers/theGrid';
 import { ascending } from 'helpers/utilities';
 
-import type { ImageType } from 'helpers/theGrid';
+import type { ImageType, ImageId } from 'helpers/theGrid';
 
 
 // ----- Constants ----- //
@@ -18,7 +18,7 @@ const MIN_IMG_WIDTH = 300;
 // ----- Types ----- //
 
 export type GridImg = {
-  gridId: string,
+  gridId: ImageId,
   srcSizes: number[],
   sizes: string,
   altText: ?string,

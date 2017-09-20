@@ -28,7 +28,7 @@ const waysOfSupport = [
     ctaText: 'Become a Patron',
     ctaLink: 'https://membership.theguardian.com/patrons',
     modifierClass: 'patron',
-    gridImg: '137d6b217a27acddf85512657d04f6490b9e0bb1/1638_0_3571_2009',
+    gridImg: 'guardianObserverOffice',
     imgAlt: 'the Guardian and the Observer',
   },
   {
@@ -37,7 +37,7 @@ const waysOfSupport = [
     ctaText: 'Find out about events',
     ctaLink: 'https://membership.theguardian.com/events',
     modifierClass: 'gu-events',
-    gridImg: '5f18c6428e9f31394b14215fe3c395b8f7b4238a/500_386_2373_1335',
+    gridImg: 'liveEvent',
     imgAlt: 'live event',
   },
 ];

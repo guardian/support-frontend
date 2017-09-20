@@ -16,19 +16,20 @@ import Video from 'components/video/video';
 const heroImage = {
   sources: [
     {
-      gridId: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720',
+      gridId: 'protestorsWide',
       srcSizes: [2000, 1000],
       media: '(min-width: 740px)',
       sizes: '(max-width: 980px) 1734px, 2600px',
     },
     {
-      gridId: 'd1a7088f8f2a367b0321528f081777c9b5618412/0_0_3578_2013',
+      gridId: 'protestorsNarrow',
       srcSizes: [2000, 1000, 500],
       media: '(max-width: 740px)',
       sizes: '100vw',
     },
   ],
-  fallback: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720/1000.jpg',
+  fallback: 'protestorsWide',
+  fallbackSize: 1000,
   altText: 'Guardian supporters',
 };
 

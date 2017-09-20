@@ -4,7 +4,9 @@
 
 import React from 'react';
 
-import { GRID_DOMAIN, gridSrcset } from 'helpers/theGrid';
+import { gridSrcset, gridUrl } from 'helpers/theGrid';
+
+import type { ImageId } from 'helpers/theGrid';
 
 
 // ----- Types ----- //
@@ -13,7 +15,7 @@ import { GRID_DOMAIN, gridSrcset } from 'helpers/theGrid';
 /* eslint-disable react/no-unused-prop-types */
 
 type Source = {
-  gridId: string,
+  gridId: ImageId,
   sizes: string,
   media: string,
   srcSizes: number[],
@@ -24,6 +26,7 @@ type Source = {
 type PropTypes = {
   sources: Source[],
   fallback: string,
+  fallbackSize: number,
   altText: ?string,
 };
 
@@ -44,7 +47,7 @@ export default function GridPicture(props: PropTypes) {
       {sources}
       <img
         className="component-grid-picture__image"
-        src={`${GRID_DOMAIN}/${props.fallback}`}
+        src={gridUrl(props.fallback, props.fallbackSize)}
         alt={props.altText}
       />
     </picture>
