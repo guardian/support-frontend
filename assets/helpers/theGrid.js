@@ -7,9 +7,9 @@ export type ImageType = 'jpg' | 'png';
 
 // ----- Setup ----- //
 
-const GRID_DOMAIN = 'https://media.guim.co.uk';
+export const GRID_DOMAIN = 'https://media.guim.co.uk';
 
-const imageCatalogue: {
+export const imageCatalogue: {
   [string]: string,
 } = {
   guardianObserverOffice: '137d6b217a27acddf85512657d04f6490b9e0bb1/1638_0_3571_2009',
