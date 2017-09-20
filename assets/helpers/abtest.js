@@ -28,10 +28,6 @@ export type Participations = {
   [TestId]: string,
 }
 
-type Action = {
-  type: 'SET_AB_TEST_PARTICIPATION',
-  payload: Participations,
-};
 
 type Test = {
   testId: TestId,
@@ -84,7 +80,6 @@ function getMvtId(): number {
   }
 
   return Number(mvtId);
-
 }
 
 function getLocalStorageParticipation(): Participations {
@@ -110,11 +105,9 @@ function getUrlParticipation(): ?Participations {
     test[testId] = variant;
 
     return test;
-
   }
 
   return null;
-
 }
 
 function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
@@ -137,12 +130,12 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipation(mvtId: number, country: IsoCountry): Participations {
+function getParticipation(abTests: Test[], mvtId: number, country: IsoCountry): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
   const participation:Participations = {};
 
-  tests.forEach((test) => {
+  abTests.forEach((test) => {
 
     if (!test.isActive) {
       return;
@@ -165,12 +158,10 @@ function getParticipation(mvtId: number, country: IsoCountry): Participations {
 
 // ----- Exports ----- //
 
-export const init = (country: IsoCountry) => {
+export const init = (country: IsoCountry, abTests: Test[] = tests): Participations => {
 
   const mvt: number = getMvtId();
-
-
-  let participation: Participations = getParticipation(mvt, country);
+  let participation: Participations = getParticipation(abTests, mvt, country);
 
   const urlParticipation = getUrlParticipation();
   participation = Object.assign({}, participation, urlParticipation);
@@ -205,24 +196,7 @@ export const trackOphan = (
     },
   };
 
-
   ophan.record({
     abTestRegister: payload,
   });
 };
-
-export const abTestReducer = (
-  state: Participations = {},
-  action: Action): Participations => {
-
-  switch (action.type) {
-
-    case 'SET_AB_TEST_PARTICIPATION': {
-      return Object.assign({}, state, action.payload);
-    }
-
-    default:
-      return state;
-  }
-};
-
