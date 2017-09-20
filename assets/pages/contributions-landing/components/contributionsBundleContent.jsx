@@ -41,7 +41,7 @@ function ContributionsBundleContent(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    context: state.page.contribution.context,
+    context: state.page.context,
   };
 
 }

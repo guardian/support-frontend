@@ -182,13 +182,13 @@ function ContributionsBundle(props: PropTypes) {
 function mapStateToProps(state) {
 
   return {
-    contribType: state.page.contribution.type,
-    contribAmount: state.page.contribution.amount,
-    contribError: state.page.contribution.error,
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
     intCmp: state.common.intCmp,
     refpvid: state.common.refpvid,
     isoCountry: state.common.country,
-    payPalError: state.page.contribution.payPalError,
+    payPalError: state.page.payPalError,
   };
 }
 
