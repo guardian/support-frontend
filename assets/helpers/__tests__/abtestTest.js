@@ -190,7 +190,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
-  it('It correctly segment the user a user who has a cookie between 0 and 20% in US', () => {
+  it('It correctly segments the user a user who has a cookie between 0 and 20% in US', () => {
 
     document.cookie = 'GU_mvt_id=150000';
     const country = 'US';
