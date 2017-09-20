@@ -33,10 +33,8 @@ import postCheckout from './helpers/ajax';
 
 import { setPayPalButton } from './oneoffContributionsActions';
 
+
 // ----- Page Startup ----- //
-
-
-// ----- Redux Store ----- //
 
 const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
 const country = detectCountry();
@@ -46,16 +44,18 @@ const currency = currencyForCountry(country);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer(contributionAmount, currency), {},
-  composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(
+  reducer(contributionAmount, currency),
+  undefined,
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
+);
 
 user.init(store.dispatch);
-
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const state: PageState = store.getState();
-
 const contribDescription: string = (country === 'US' ? 'one-time' : 'one-off');
+
 
 // ----- Render ----- //
 

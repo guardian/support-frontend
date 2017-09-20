@@ -36,7 +36,7 @@ import { setPayPalButton } from './regularContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
 
 
-// ----- Redux Store ----- //
+// ----- Page Startup ----- //
 
 const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
@@ -52,14 +52,17 @@ const title = {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer(contributionAmount, currency), {},
-  composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(
+  reducer(contributionAmount, currency),
+  undefined,
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
+);
 
 user.init(store.dispatch);
-
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const state: PageState = store.getState();
+
 
 // ----- Render ----- //
 
