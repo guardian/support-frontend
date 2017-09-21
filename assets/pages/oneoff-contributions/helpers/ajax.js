@@ -50,7 +50,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
       amount: state.page.stripeCheckout.amount,
       email: state.page.user.email,
       token: paymentToken,
-      marketing: false, // todo: collect marketing preference
+      marketing: state.page.user.gnmMarketing,
       postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
     };
