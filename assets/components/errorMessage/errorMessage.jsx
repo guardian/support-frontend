@@ -10,7 +10,7 @@ import Svg from 'components/svg/svg';
 
 type PropTypes = {
   message: string,
-  id?: string,
+  id: ?string,
 };
 
 
@@ -18,7 +18,7 @@ type PropTypes = {
 
 export default function ErrorMessage(props: PropTypes) {
   return (
-    <div id={props.id || 'validation-error'} className="component-error-message">
+    <div id={props.id} className="component-error-message">
       <Svg svgName="exclamation" /><span>{props.message}</span>
     </div>
   );
@@ -28,6 +28,5 @@ export default function ErrorMessage(props: PropTypes) {
 // ----- Default Props ----- //
 
 ErrorMessage.defaultProps = {
-  message: null,
   id: null,
 };
