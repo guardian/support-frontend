@@ -12,7 +12,7 @@ import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 type PropTypes = {
   text: string,
   modifierClass: ?string,
-  url?: string,
+  url?: ?string,
   onClick?: () => void,
   tabIndex?: number,
 };

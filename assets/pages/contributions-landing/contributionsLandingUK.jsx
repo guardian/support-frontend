@@ -19,10 +19,12 @@ import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
 
-// ----- Redux Store ----- //
-const store = pageInit(reducer, {}, applyMiddleware(thunkMiddleware));
+// ----- Page Startup ----- //
+
+const store = pageInit(reducer, undefined, applyMiddleware(thunkMiddleware));
 
 saveContext(store.dispatch);
+
 
 // ----- Render ----- //
 

@@ -1,11 +1,11 @@
 // @flow
 
 // ----- Imports ----- //
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
-
 
 // ----- Setup ----- //
 
@@ -15,9 +15,11 @@ const MVT_MAX: number = 1000000;
 
 // ----- Types ----- //
 
-type Audience = {
-  offset: number,
-  size: number,
+type Audiences = {
+  [IsoCountry]: {
+    offset: number,
+    size: number,
+  },
 };
 
 type TestId = 'addAnnualContributions';
@@ -26,15 +28,11 @@ export type Participations = {
   [TestId]: string,
 }
 
-type Action = {
-  type: 'SET_AB_TEST_PARTICIPATION',
-  payload: Participations,
-};
 
 type Test = {
   testId: TestId,
   variants: string[],
-  audience: Audience,
+  audiences: Audiences,
   isActive: boolean,
 };
 
@@ -57,13 +55,14 @@ const tests: Test[] = [
   {
     testId: 'addAnnualContributions',
     variants: ['control', 'variant'],
-    audience: {
-      offset: 0,
-      size: 1,
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
     },
     isActive: false,
-  },
-];
+  }];
 
 
 // ----- Functions ----- //
@@ -81,7 +80,6 @@ function getMvtId(): number {
   }
 
   return Number(mvtId);
-
 }
 
 function getLocalStorageParticipation(): Participations {
@@ -107,14 +105,19 @@ function getUrlParticipation(): ?Participations {
     test[testId] = variant;
 
     return test;
-
   }
 
   return null;
-
 }
 
-function userInTest(audience: Audience, mvtId: number) {
+function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
+
+  const audience = audiences[country];
+
+  if (!audience) {
+    return false;
+  }
+
   const testMin: number = MVT_MAX * audience.offset;
   const testMax: number = testMin + (MVT_MAX * audience.size);
 
@@ -127,12 +130,12 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipation(mvtId: number): Participations {
+function getParticipation(abTests: Test[], mvtId: number, country: IsoCountry): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
   const participation:Participations = {};
 
-  tests.forEach((test) => {
+  abTests.forEach((test) => {
 
     if (!test.isActive) {
       return;
@@ -140,7 +143,7 @@ function getParticipation(mvtId: number): Participations {
 
     if (test.testId in currentParticipation) {
       participation[test.testId] = currentParticipation[test.testId];
-    } else if (userInTest(test.audience, mvtId)) {
+    } else if (userInTest(test.audiences, mvtId, country)) {
       participation[test.testId] = assignUserToVariant(mvtId, test);
     } else {
       participation[test.testId] = 'notintest';
@@ -155,10 +158,10 @@ function getParticipation(mvtId: number): Participations {
 
 // ----- Exports ----- //
 
-export const init = () => {
+export const init = (country: IsoCountry, abTests: Test[] = tests): Participations => {
 
   const mvt: number = getMvtId();
-  let participation: Participations = getParticipation(mvt);
+  let participation: Participations = getParticipation(abTests, mvt, country);
 
   const urlParticipation = getUrlParticipation();
   participation = Object.assign({}, participation, urlParticipation);
@@ -193,24 +196,7 @@ export const trackOphan = (
     },
   };
 
-
   ophan.record({
     abTestRegister: payload,
   });
 };
-
-export const abTestReducer = (
-  state: Participations = {},
-  action: Action): Participations => {
-
-  switch (action.type) {
-
-    case 'SET_AB_TEST_PARTICIPATION': {
-      return Object.assign({}, state, action.payload);
-    }
-
-    default:
-      return state;
-  }
-};
-

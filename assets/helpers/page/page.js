@@ -29,6 +29,15 @@ export type CommonState = {
   abParticipations: Participations,
 };
 
+export type PreloadedState = {
+  intCmp?: $PropertyType<CommonState, 'intCmp'>,
+  campaign?: $PropertyType<CommonState, 'campaign'>,
+  refpvid?: $PropertyType<CommonState, 'refpvid'>,
+  country?: $PropertyType<CommonState, 'country'>,
+  abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
+};
+
+
 // ----- Functions ----- //
 
 // Sets up GA and logging.
@@ -45,17 +54,21 @@ function analyticsInitialisation(participations: Participations): void {
 }
 
 // Creates the initial state for the common reducer.
-function buildInitialState(abParticipations: Participations) {
+function buildInitialState(
+  abParticipations: Participations,
+  preloadedState: PreloadedState = {},
+  country: IsoCountry,
+) {
 
   const intCmp = getQueryParameter('INTCMP');
 
-  return {
+  return Object.assign({}, {
     intCmp,
     campaign: intCmp ? getCampaign(intCmp) : null,
     refpvid: getQueryParameter('REFPVID'),
-    country: detect(),
+    country,
     abParticipations,
-  };
+  }, preloadedState);
 
 }
 
@@ -89,17 +102,30 @@ function createCommonReducer(
 
 }
 
-// Initialises the page.
-function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Function) {
-
-  const participations: Participations = abTest.init();
+// For pages that don't need Redux.
+function statelessInit() {
+  const country: IsoCountry = detect();
+  const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  const initialState: CommonState = buildInitialState(participations);
+
+}
+
+// Initialises the page.
+function init(
+  pageReducer: Object,
+  preloadedState?: PreloadedState,
+  middleware: ?Function,
+) {
+
+  const country: IsoCountry = detect();
+  const participations: Participations = abTest.init(country);
+  analyticsInitialisation(participations);
+  const initialState: CommonState = buildInitialState(participations, preloadedState, country);
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
-    preloadedState,
+    undefined,
     middleware,
   );
 
@@ -111,4 +137,5 @@ function init(pageReducer: Object, preloadedState: ?Object, middleware: ?Functio
 export {
   createCommonReducer,
   init,
+  statelessInit,
 };

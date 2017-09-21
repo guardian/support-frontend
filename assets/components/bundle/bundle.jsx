@@ -8,7 +8,7 @@ import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import { generateClassName } from 'helpers/utilities';
 
-import type { Children } from 'react';
+import type { Node } from 'react';
 
 
 // ----- Types ----- //
@@ -17,7 +17,7 @@ type PropTypes = {
   heading: string,
   subheading: string,
   modifierClass: ?string,
-  children?: Children,
+  children?: Node,
   doubleHeadingModifierClass?: string,
   showPaymentLogos?: boolean,
 };
@@ -58,6 +58,6 @@ Bundle.defaultProps = {
   infoText: '',
   modifierClass: null,
   children: null,
-  doubleHeadingModifierClass: null,
+  doubleHeadingModifierClass: '',
   showPaymentLogos: false,
 };

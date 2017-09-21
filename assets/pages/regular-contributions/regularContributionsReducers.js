@@ -18,7 +18,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
 import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
-import type { Action } from './monthlyContributionsActions';
+import type { Action } from './regularContributionsActions';
 
 
 // ----- Types ----- //
@@ -34,7 +34,7 @@ export type State = {
 };
 
 export type CombinedState = {
-  monthlyContrib: State,
+  regularContrib: State,
   user: UserState,
   stripeCheckout: StripeCheckoutState,
   payPalExpressCheckout: PayPalExpressCheckoutState,
@@ -48,7 +48,7 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createMonthlyContribReducer(amount: number, currency: Currency) {
+function createRegularContribReducer(amount: number, currency: Currency) {
 
   const initialState: State = {
     amount,
@@ -60,7 +60,7 @@ function createMonthlyContribReducer(amount: number, currency: Currency) {
     pollCount: 0,
   };
 
-  return function monthlyContrib(state: State = initialState, action: Action): State {
+  return function regularContrib(state: State = initialState, action: Action): State {
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
@@ -91,9 +91,9 @@ function createMonthlyContribReducer(amount: number, currency: Currency) {
 
 // ----- Exports ----- //
 
-export default function createRootMonthlyContributionsReducer(amount: number, currency: Currency) {
+export default function createRootRegularContributionsReducer(amount: number, currency: Currency) {
   return combineReducers({
-    monthlyContrib: createMonthlyContribReducer(amount, currency),
+    regularContrib: createRegularContribReducer(amount, currency),
     user,
     stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),

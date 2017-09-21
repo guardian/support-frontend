@@ -11,17 +11,24 @@ import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
 type PropTypes = {
   text: string,
-  url?: string,
-  onClick?: () => void,
+  url?: ?string,
+  onClick?: ?Function,
   tabIndex?: number,
-  id?: string,
+  id?: ?string,
 };
 
 // ----- Component ----- //
 
 export default function CtaLink(props: PropTypes) {
   return (
-    <a id={props.id} className="component-cta-link" href={props.url} onClick={props.onClick} onKeyPress={clickSubstituteKeyPressHandler(props.onClick)} tabIndex={props.tabIndex}>
+    <a
+      id={props.id}
+      className="component-cta-link"
+      href={props.url}
+      onClick={props.onClick}
+      onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
+      tabIndex={props.tabIndex}
+    >
       <span>{props.text}</span>
       <Svg svgName="arrow-right-straight" />
     </a>
@@ -38,4 +45,3 @@ CtaLink.defaultProps = {
   tabIndex: 0,
   id: null,
 };
-

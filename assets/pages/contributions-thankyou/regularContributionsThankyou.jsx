@@ -11,12 +11,12 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
 
-import pageStartup from 'helpers/pageStartup';
+import { statelessInit as pageInit } from 'helpers/page/page';
 
 
 // ----- Page Startup ----- //
 
-pageStartup.start();
+pageInit();
 
 
 // ----- Render ----- //
@@ -64,5 +64,5 @@ const content = (
 
 ReactDOM.render(
   content,
-  document.getElementById('monthly-contributions-thankyou-page'),
+  document.getElementById('regular-contributions-thankyou-page'),
 );
