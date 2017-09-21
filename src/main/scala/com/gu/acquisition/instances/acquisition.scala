@@ -15,7 +15,7 @@ trait AcquisitionInstances {
       "paymentFrequency" -> paymentFrequency.name.asJson,
       "currency" -> currency.asJson,
       "amount" -> amount.asJson,
-      "amountInGBP" -> amount.asJson,
+      "amountInGBP" -> amountInGBP.asJson,
       "paymentProvider" -> paymentProvider.map(_.name).asJson,
       "campaignCode" -> campaignCode.asJson,
       "abTests" -> abTests.asJson,
