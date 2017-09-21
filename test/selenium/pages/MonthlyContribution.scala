@@ -3,7 +3,7 @@ package selenium.pages
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config, PayPalCheckout}
 
-object MonthlyContribution extends Page with Browser {
+object MonthlyContribution extends Page with Browser with StripeCheckout {
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring"
 
@@ -21,21 +21,21 @@ object MonthlyContribution extends Page with Browser {
 
   def selectStripePayment(): Unit = clickOn(stripeButton)
 
-  def stripeCheckoutHasLoaded: Boolean = pageHasElement(StripeCheckout.container)
+  def stripeCheckoutHasLoaded: Boolean = pageHasElement(stripeContainer)
 
-  def stripeCheckoutHasCardNumberField: Boolean = pageHasElement(StripeCheckout.cardNumber)
+  def stripeCheckoutHasCardNumberField: Boolean = pageHasElement(stripeCardNumber)
 
-  def stripeCheckoutHasCvcField: Boolean = pageHasElement(StripeCheckout.cardCvc)
+  def stripeCheckoutHasCvcField: Boolean = pageHasElement(stripeCardCvc)
 
-  def stripeCheckoutHasExpiryField: Boolean = pageHasElement(StripeCheckout.cardExp)
+  def stripeCheckoutHasExpiryField: Boolean = pageHasElement(stripeCardExp)
 
-  def stripeCheckoutHasSubmitButton: Boolean = pageHasElement(StripeCheckout.submitButton)
+  def stripeCheckoutHasSubmitButton: Boolean = pageHasElement(stripeSubmitButton)
 
-  def switchToStripe(): Unit = switchFrame(StripeCheckout.container)
+  def switchToStripe(): Unit = switchFrame(stripeContainer)
 
-  def fillInCreditCardDetails(): Unit = StripeCheckout.fillIn
+  def fillInCreditCardDetails(): Unit = stripeFillIn()
 
-  def clickStripePayButton(): Unit = StripeCheckout.acceptPayment
+  def clickStripePayButton(): Unit = stripeAcceptPayment()
 
   // ----- PayPal ----- //
 
@@ -43,24 +43,4 @@ object MonthlyContribution extends Page with Browser {
 
   def fillInPayPalDetails(): Unit = PayPalCheckout.fillIn
 
-  // Handles interaction with the Stripe Checkout iFrame.
-  private object StripeCheckout {
-
-    val container = name("stripe_checkout_app")
-
-    // Unfortunately Stripe do not expose reliable ids on Checkout, so we currently use the following xpath:
-    val cardNumber = xpath("//div[label/text() = \"Card number\"]/input")
-    val cardExp = xpath("//div[label/text() = \"Expiry\"]/input")
-    val cardCvc = xpath("//div[label/text() = \"CVC\"]/input")
-    val submitButton = xpath("//div[button]")
-
-    def fillIn(): Unit = {
-      setValueSlowly(cardNumber, "4242 4242 4242 4242")
-      setValueSlowly(cardExp, "1021")
-      setValueSlowly(cardCvc, "111")
-    }
-
-    def acceptPayment(): Unit = clickOn(submitButton)
-
-  }
 }
