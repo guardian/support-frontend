@@ -48,6 +48,7 @@ function createOneOffContribReducer(amount: number, currency: Currency) {
     currency,
     error: null,
     payPalType: 'NotSet',
+    marketingPreference: false,
   };
 
   return function oneOffContribReducer(state: State = initialState, action: Action): State {
