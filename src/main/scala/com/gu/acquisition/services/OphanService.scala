@@ -24,7 +24,7 @@ object OphanServiceError {
   }
 }
 
-class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
+class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
 
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
