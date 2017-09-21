@@ -9,7 +9,7 @@ import React from 'react';
 
 type PropTypes = {
   id: string,
-  onChange: (event: Object) => void,
+  onChange: (preference: boolean) => void,
   labelText?: string,
 };
 
@@ -27,7 +27,7 @@ export default function CheckboxInput(props: PropTypes) {
       <input
         id={props.id}
         type="checkbox"
-        onChange={e => props.onChange(e.target.value)}
+        onChange={e => props.onChange(e.target.checked)}
       />
       {label}
     </div>

@@ -16,7 +16,7 @@ export type User = {
   fullName?: string,
   stateField?: string,
   postcode?: string,
-  gnmMarketing?: boolean,
+  gnmMarketing: boolean,
 };
 
 
