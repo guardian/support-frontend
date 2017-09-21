@@ -1,5 +1,4 @@
-package com.gu.acquisition
-package instances
+package com.gu.acquisition.instances
 
 import io.circe.{Encoder, Json}
 import ophan.thrift.event.Acquisition

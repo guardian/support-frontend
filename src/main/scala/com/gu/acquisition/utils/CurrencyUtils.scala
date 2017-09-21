@@ -1,5 +1,4 @@
-package com.gu.acquisition
-package utils
+package com.gu.acquisition.utils
 
 object CurrencyUtils {
   def formatAmount(amount: Double, currencyCode: String): Double =

@@ -1,5 +1,4 @@
-package com.gu.acquisition
-package utils
+package com.gu.acquisition.utils
 
 import ophan.thrift.event.AbTest
 import simulacrum._

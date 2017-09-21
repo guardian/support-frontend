@@ -1,5 +1,4 @@
-package com.gu.acquisition
-package services
+package com.gu.acquisition.services
 
 import cats.data.EitherT
 import ophan.thrift.event.Acquisition
@@ -23,15 +22,14 @@ object OphanServiceError {
   case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
     override def getMessage: String = underlying.getMessage
   }
-
 }
 
-object OphanService {
+class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
 
-  private val endpoint = Uri.parseAbsolute("https://ophan.theguardian.com/a.gif")
+  private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
   private def buildRequest(acquisition: Acquisition, browserId: String, viewId: String, visitId: Option[String]): HttpRequest = {
-    import instances.acquisition._
+    import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
     import scala.collection.immutable.Seq
 
@@ -41,14 +39,14 @@ object OphanService {
       .collect { case (name, Some(value)) => HttpCookiePair(name, value) }
 
     HttpRequest(
-      uri = endpoint.withQuery(params),
+      uri = additionalEndpoint.withQuery(params),
       headers = Seq(Cookie(cookies))
     )
   }
 
   private def executeRequest(
     request: HttpRequest
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
     import cats.syntax.either._
@@ -66,8 +64,14 @@ object OphanService {
       browserId: String,
       viewId: String,
       visitId: Option[String]
-  )(implicit ec: ExecutionContext, system: ActorSystem, materializer: Materializer): EitherT[Future, OphanServiceError, HttpResponse] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
     val request = buildRequest(acquisition, browserId, viewId, visitId)
     executeRequest(request)
   }
+}
+
+object OphanService {
+
+  def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
+    new OphanService(Uri.parseAbsolute("https://ophan.theguardian.com"))
 }

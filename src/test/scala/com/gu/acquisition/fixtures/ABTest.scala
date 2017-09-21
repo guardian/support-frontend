@@ -1,8 +1,7 @@
-package com.gu.acquisition
-package fixtures
+package com.gu.acquisition.fixtures
 
 import ophan.thrift.event.AbTest
-import utils.AbTestConverter
+import com.gu.acquisition.utils.AbTestConverter
 
 case class ExampleABTest(testName: String, variantName: String)
 
