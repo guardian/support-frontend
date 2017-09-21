@@ -24,8 +24,8 @@ pageInit();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <section className="paypal-error gu-content">
-      <div className="paypal-error__content gu-content-margin">
+    <section className="paypal-error gu-content-filler">
+      <div className="paypal-error__content gu-content-filler__inner">
         <div className="paypal-error__wrapper">
           <h1 className="paypal-error__heading">PayPal Error!</h1>
           <h2 className="paypal-error__subheading">
