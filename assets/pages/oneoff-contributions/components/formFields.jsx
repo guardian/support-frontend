@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { User } from 'helpers/user/userReducer';
 import TextInput from 'components/textInput/textInput';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 
@@ -59,7 +60,7 @@ function FormFields(props: PropTypes) {
       />
       <CheckboxInput
         id="gnm-marketing-preference"
-        value={props.gnmMarketingPreference || false}
+        checked={props.gnmMarketingPreference || false}
         onChange={props.gnmMarketingPreferenceUpdate}
         labelText="Keep me up to date with offers from the Guardian"
       />
@@ -72,12 +73,13 @@ function FormFields(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+  const user: User = state.page.user;
 
   return {
-    name: state.page.user.fullName,
-    email: state.page.user.email,
-    postcode: state.page.user.postcode,
-    marketingPreferenceUpdate: state.page.user.marketingPreferenceUpdate,
+    name: user.fullName,
+    email: user.email,
+    postcode: user.postcode,
+    gnmMarketingPreference: user.gnmMarketing,
     isoCountry: state.common.country,
   };
 
