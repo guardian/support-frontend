@@ -49,6 +49,6 @@ export function setTestUser(testUser: boolean): Action {
   return { type: 'SET_TEST_USER', testUser };
 }
 
-export function setGNMmarketing(preference: boolean): Action {
+export function setGnmMarketing(preference: boolean): Action {
   return { type: 'SET_GNM_MARKETING', preference };
 }

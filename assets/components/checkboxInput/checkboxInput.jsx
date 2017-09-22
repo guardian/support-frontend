@@ -8,7 +8,7 @@ import React from 'react';
 // ----- Types ----- //
 
 type PropTypes = {
-  id: string,
+  id: ?string,
   onChange: (preference: boolean) => void,
   checked: boolean,
   labelText?: string,
@@ -20,7 +20,7 @@ type PropTypes = {
 export default function CheckboxInput(props: PropTypes) {
   let label = '';
 
-  if (props.labelText) {
+  if (props.labelText && props.id) {
     label = <label htmlFor={props.id}>{props.labelText}</label>;
   }
   return (
@@ -37,5 +37,6 @@ export default function CheckboxInput(props: PropTypes) {
 }
 
 CheckboxInput.defaultProps = {
+  id: null,
   labelText: '',
 };

@@ -13,7 +13,7 @@ import {
   setFullName,
   setEmail,
   setPostcode,
-  setGNMmarketing,
+  setGnmMarketing,
 } from 'helpers/user/userActions';
 
 
@@ -98,7 +98,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(setPostcode(postcode));
     },
     gnmMarketingPreferenceUpdate: (preference: boolean) => {
-      dispatch(setGNMmarketing(preference));
+      dispatch(setGnmMarketing(preference));
     },
   };
 
