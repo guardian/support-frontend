@@ -91,8 +91,10 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
 
 object OphanService {
 
+  val prodEndpoint: Uri = "https://ophan.theguardian.com"
+
   def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
-    new OphanService(Uri.parseAbsolute("https://ophan.theguardian.com"))
+    new OphanService(prodEndpoint)
 
   val UNKNOWN_ID = "UNKNOWN_ID"
 }

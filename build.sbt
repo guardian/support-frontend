@@ -1,7 +1,7 @@
 
 name := "acquisition-event-producer"
 
-version := "2.0.0"
+version := "2.0.0-rc.1"
 
 scalaVersion := "2.11.11"
 
