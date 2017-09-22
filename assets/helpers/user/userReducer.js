@@ -75,5 +75,5 @@ function userReducer(
 }
 
 export {
-  userReducer
-}
+  userReducer,
+};

@@ -1,7 +1,7 @@
 // @flow
 import {
   checkoutError,
-  setPayPalButton
+  setPayPalButton,
 } from '../oneoffContributionsActions';
 
 
