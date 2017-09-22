@@ -102,14 +102,14 @@ The pieces that make up `support-frontend` are:
  |   +-- images      
  |   +-- pages       // Support's pages
  |   |   +-- page1   // A specific page.    
- |   |   |   +-- actions    // Actions of a certain page/redux app.
  |   |   |   +-- components // Components of a certain page/redux app.
  |   |   |   |   +-- component1.jsx
  |   |   |   |   +-- component2.jsx
  |   |   |   +-- helpers    // Helpers of a certain page/redux app.
- |   |   |   +-- reducers   // Reducers of a certain page/redux app. 
  |   |   |   +-- page1.jsx  // Root component of a page.
  |   |   |   +-- page1.scss // Stylesheet containing all the style of this page's components.
+ |   |   |   +-- page1Actions.js    // Actions of a certain page/redux app.
+ |   |   |   +-- page1Reducers.js   // Reducers of a certain page/redux app.
  |   |   +-- page2
  |   +-- stylesheets // Shared stylesheets
  |       +-- main.scss //Entry point of the scss files.
