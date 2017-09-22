@@ -310,9 +310,11 @@ compute the sample size of your experiment, from the sample size, you can then e
    {
      testId: 'yourTestId', 
      variants: ['control', 'variantA'],  
-     audience: {
-       offset: 0,
-       size: 1,
+     audiences: {
+       GB :{
+          offset: 0,
+          size: 1,
+        }
      },
      isActive: true,
    },
@@ -325,7 +327,7 @@ compute the sample size of your experiment, from the sample size, you can then e
   unique across all the test names in Abacus. 
   * **variants**: This field is an array of strings, each string will be the name of a variant. One of these variant names has 
   to be **control**. 
-  * **audience**: The audience is an object which contains two fields: `offset`, a number from 0 to 1 which indicates the 
+  * **audiences**: The *audiences* object contains a field for every country where the test will run. Then each audience object has two fields: `offset`, a number from 0 to 1 which indicates the 
   part of the audience that will be affected by the test, and `size` a number from 0 to 1 which specifies the percentage of the audience to be included in the test.
   For example a test with offset 0.2 and size 0.5 will affect 50% of the audience starting from the 20%.
  
