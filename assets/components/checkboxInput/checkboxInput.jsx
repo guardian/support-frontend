@@ -10,6 +10,7 @@ import React from 'react';
 type PropTypes = {
   id: string,
   onChange: (preference: boolean) => void,
+  checked: boolean,
   labelText?: string,
 };
 
@@ -28,6 +29,7 @@ export default function CheckboxInput(props: PropTypes) {
         id={props.id}
         type="checkbox"
         onChange={e => props.onChange(e.target.checked)}
+        checked={props.checked}
       />
       {label}
     </div>
