@@ -28,7 +28,7 @@ import { init as pageInit } from 'helpers/page/page';
 
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
-import PaymentMethodsContainer from './components/paymentMethodsContainer';
+import RegularContributionPayment from './components/paymentMethodsContainer';
 import reducer from './regularContributionsReducers';
 import type { PageState } from './regularContributionsReducers';
 
@@ -87,10 +87,9 @@ const content = (
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="regular-contrib__payment-methods">
-          <PaymentMethodsContainer
+          <RegularContributionPayment
             stripeCallback={postCheckout('stripeToken', contributionType)}
             payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.page.regularContrib.payPalType}
           />
         </InfoSection>
       </div>
