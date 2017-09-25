@@ -34,7 +34,7 @@ const initialState: User = {
 
 // ----- Reducer ----- //
 
-export default function userReducer(
+function userReducer(
   state: User = initialState,
   action: Action): User {
 
@@ -73,3 +73,7 @@ export default function userReducer(
   }
 
 }
+
+export {
+  userReducer,
+};
