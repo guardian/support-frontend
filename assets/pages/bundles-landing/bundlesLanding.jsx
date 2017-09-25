@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { init as pageInit } from 'helpers/page/page';
 import { setIntCmp } from 'helpers/page/pageActions';
@@ -50,7 +50,7 @@ const content = (
       <Bundles />
       <WhySupport />
       {store.getState().common.campaign === 'baseline_test' ? '' : <WaysOfSupport />}
-      <SimpleFooter />
+      <LinksFooter />
     </div>
   </Provider>
 );
