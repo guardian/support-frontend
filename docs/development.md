@@ -119,7 +119,8 @@ The pieces that make up `support-frontend` are:
 #### Important notes:
 
 * The UI of the project is organized in components. The shared components are self-contained and are located in the top
- `components` folder. The components specific to a page (which are not used in other pages) are located inside the 
+ `components` folder. Additionally, in order to keep the components as simple as possible, the **shared components are presentational components**. 
+ The components specific to a page (which are not used in other pages) are located inside the 
  `components` folder inside a specific page.
  
 * The CSS for a non-shareable component is located inside the `page.scss` file.  
@@ -169,7 +170,7 @@ To run end-to-end browser-driven tests:
 sbt selenium-test
 ```
 
-*Note that you need to run identity-frontend and support-frontend locally before running the end-to-end tests.*
+**Note** that you need to run *identity-frontend*, *contributions-frontend* and *support-frontend* locally before running the end-to-end tests.
 
 ## 7. Yarn commands
 
