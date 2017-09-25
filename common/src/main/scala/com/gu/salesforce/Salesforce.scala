@@ -19,20 +19,24 @@ object Salesforce {
   object UpsertData {
     implicit val codec: Codec[UpsertData] = deriveCodec
 
+    // scalastyle:off parameter.number
     def create(
       identityId: String,
       email: String,
       firstName: String,
       lastName: String,
+      mailingState: Option[String],
+      mailingCountry: String,
       allowMembershipMail: Boolean,
       allow3rdPartyMail: Boolean,
       allowGuardianRelatedMail: Boolean
     ): UpsertData =
       UpsertData(
         NewContact(
-          identityId, email, firstName, lastName, allowMembershipMail, allow3rdPartyMail, allowGuardianRelatedMail
+          identityId, email, firstName, lastName, mailingState, mailingCountry, allowMembershipMail, allow3rdPartyMail, allowGuardianRelatedMail
         )
       )
+    // scalastyle:on parameter.number
   }
 
   //The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
@@ -44,6 +48,8 @@ object Salesforce {
     Email: String,
     FirstName: String,
     LastName: String,
+    MailingState: Option[String],
+    MailingCountry: String,
     Allow_Membership_Mail__c: Boolean,
     Allow_3rd_Party_Mail__c: Boolean,
     Allow_Guardian_Related_Mail__c: Boolean

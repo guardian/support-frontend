@@ -2,7 +2,7 @@ package com.gu.support.workers.errors
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.salesforce.Fixtures.{allowMail, email, idId, name}
+import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -24,7 +24,7 @@ class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging 
 
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
-    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(idId, email, name, name, None, dummyValue, allowMail, allowMail, allowMail)
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
     assertThrows[SalesforceAuthenticationErrorResponse] {
@@ -38,7 +38,7 @@ class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging 
       override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder) =
         req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
     }
-    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(idId, email, name, name, None, dummyValue, allowMail, allowMail, allowMail)
 
     recoverToSucceededIf[SalesforceErrorResponse] {
       service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
