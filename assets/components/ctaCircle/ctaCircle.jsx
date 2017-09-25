@@ -13,13 +13,12 @@ type PropTypes = {
   text: string,
   modifierClass: ?string,
   url?: ?string,
-  onClick?: () => void,
+  onClick?: ?Function,
   tabIndex?: number,
 };
 
 
 // ----- Component ----- //
-
 
 const CtaCircle = (props: PropTypes) => {
 
@@ -30,7 +29,7 @@ const CtaCircle = (props: PropTypes) => {
       className={className}
       onClick={props.onClick}
       href={props.url}
-      onKeyPress={clickSubstituteKeyPressHandler(props.onClick)}
+      onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
       tabIndex={props.tabIndex}
     >
 
@@ -42,7 +41,7 @@ const CtaCircle = (props: PropTypes) => {
 
 
 CtaCircle.defaultProps = {
-  modifierClass: '',
+  modifierClass: null,
   url: null,
   onClick: null,
   tabIndex: 0,
