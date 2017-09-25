@@ -16,6 +16,7 @@ export type User = {
   fullName?: string,
   stateField?: string,
   postcode?: string,
+  gnmMarketing: boolean,
 };
 
 
@@ -27,12 +28,13 @@ const initialState: User = {
   firstName: '',
   lastName: '',
   isTestUser: null,
+  gnmMarketing: false,
 };
 
 
 // ----- Reducer ----- //
 
-export default function userReducer(
+function userReducer(
   state: User = initialState,
   action: Action): User {
 
@@ -62,9 +64,16 @@ export default function userReducer(
     case 'SET_POSTCODE':
       return Object.assign({}, state, { postcode: action.postcode });
 
+    case 'SET_GNM_MARKETING':
+      return Object.assign({}, state, { gnmMarketing: action.preference });
+
     default:
       return state;
 
   }
 
 }
+
+export {
+  userReducer,
+};
