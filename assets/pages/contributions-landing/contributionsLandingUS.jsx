@@ -9,7 +9,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import { init as pageInit } from 'helpers/page/page';
@@ -40,7 +40,7 @@ const content = (
           <ContribLegal />
         </div>
       </section>
-      <SimpleFooter />
+      <LinksFooter />
     </div>
   </Provider>
 );

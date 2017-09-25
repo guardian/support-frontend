@@ -2,11 +2,18 @@
   background-color: gu-colour(multimedia-support-4);
 }
 
-.links-footer__content {
-  padding: ($gu-v-spacing / 3) $gu-h-spacing ($gu-v-spacing * 1.5);
+.links-footer__privacy {
+  a {
+    color: gu-colour(neutral-4);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
-.links-footer__privacy .links-footer__copyright {
+.links-footer__privacy,
+.links-footer__copyright {
   color: gu-colour(neutral-4);
   font-family: $gu-text-sans-web;
   font-weight: 400;
