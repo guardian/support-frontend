@@ -66,11 +66,11 @@ export default function PaymentMethods(props: PropTypes) {
   if (props.paymentStatus === 'Pending') {
     statusMessage = <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   } else if (props.hide) {
-    statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} />;
+    statusMessage = <ErrorMessage message={'Please fill in all the fields above.'} id="qa-payment-fields-error" />;
     stripeButton = '';
     payPalButton = '';
   } else if (props.error !== null && props.error !== undefined) {
-    statusMessage = <ErrorMessage message={props.error} />;
+    statusMessage = <ErrorMessage message={props.error} id="qa-payment-fields-error" />;
   }
 
   return (
