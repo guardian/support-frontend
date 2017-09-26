@@ -11,9 +11,14 @@ import org.joda.time.DateTime
 import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with CustomCodecs {
-  "UpsertData" should "serialise to correct json" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, None, dummyValue, allowMail, allowMail, allowMail))
+  "UpsertData" should "serialise to correct UK json" in {
+    val upsertData = UpsertData(NewContact(idId, email, name, name, None, uk, allowMail, allowMail, allowMail))
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullKeys = true)) should be(parse(upsertJson).right.get.noSpaces)
+  }
+
+  "UpsertData" should "serialise to correct US json" in {
+    val upsertData = UpsertData(NewContact(idId, email, name, name, Some(state), us, allowMail, allowMail, allowMail))
+    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullKeys = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
   }
 
   "Authentication" should "deserialize correctly" in {
