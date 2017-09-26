@@ -4,15 +4,21 @@ import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, NewContact, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.Printer
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.DateTime
 import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging with CustomCodecs {
-  "UpsertData" should "serialise to correct json" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, allowMail, allowMail, allowMail))
-    upsertData.asJson should be(parse(upsertJson).right.get)
+  "UpsertData" should "serialise to correct UK json" in {
+    val upsertData = UpsertData(NewContact(idId, email, name, name, None, uk, allowMail, allowMail, allowMail))
+    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullKeys = true)) should be(parse(upsertJson).right.get.noSpaces)
+  }
+
+  "UpsertData" should "serialise to correct US json" in {
+    val upsertData = UpsertData(NewContact(idId, email, name, name, Some(state), us, allowMail, allowMail, allowMail))
+    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullKeys = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
   }
 
   "Authentication" should "deserialize correctly" in {

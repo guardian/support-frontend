@@ -51,7 +51,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "SalesforceService" should "be able to upsert a customer" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
-    val upsertData = UpsertData.create(idId, email, name, name, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(idId, email, name, name, None, uk, allowMail, allowMail, allowMail)
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
       response.Success should be(true)
