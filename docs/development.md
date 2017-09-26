@@ -369,7 +369,7 @@ receives the name of the test and the name of the variant and an optional flag i
 or not.  
 
 
-#9 Test Environments
+# 9 Test Environments
 
 | Support |   Is test user?   | Stripe | PayPal | Support Workers | Zuora |
 |:-------:|:-----------------:|:------:|:------:|:---------------:|:-----:|
