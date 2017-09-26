@@ -22,9 +22,9 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../bundlesLandingActions';
-import { getSubsLinks } from '../helpers/subscriptionsLinks';
+import { getSubsLinks } from '../helpers/externalLinks';
 
-import type { SubsUrls } from '../helpers/subscriptionsLinks';
+import type { SubsUrls } from '../helpers/externalLinks';
 import type { Participations } from '../../../helpers/abtest';
 
 

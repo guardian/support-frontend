@@ -7,20 +7,29 @@ import type { Campaign } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
-type Product = 'paper' | 'digital' | 'paperDig';
+type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
-  [Product]: string,
+  [SubsProduct]: string,
 };
 
 export type SubsUrls = {
-  [Product]: string,
+  [SubsProduct]: string,
 };
 
 
 // ----- Setup ----- //
 
 const subsUrl = 'https://subscribe.theguardian.com';
+const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
+
+const memUrls: {
+  [MemProduct]: string,
+} = {
+  patrons: 'https://membership.theguardian.com/patrons',
+  events: 'https://membership.theguardian.com/events',
+};
 
 const defaultPromos: PromoCodes = {
   digital: 'p/DXX83X',
@@ -41,11 +50,21 @@ const customPromos : {
 
 // ----- Functions ----- //
 
-// Creates URLs for the subs site from promo codes and intCmp.
-function buildUrls(promoCodes: PromoCodes, intCmp: string): SubsUrls {
+// Creates URLs for the membership site from promo codes and intCmp.
+function getMemLink(product: MemProduct, intCmp: ?string): string {
 
   const params = new URLSearchParams();
-  params.append('INTCMP', intCmp);
+  params.append('INTCMP', intCmp || defaultIntCmp);
+
+  return `${memUrls[product]}?${params.toString()}`;
+
+}
+
+// Creates URLs for the subs site from promo codes and intCmp.
+function buildSubsUrls(promoCodes: PromoCodes, intCmp: ?string): SubsUrls {
+
+  const params = new URLSearchParams();
+  params.append('INTCMP', intCmp || defaultIntCmp);
 
   return {
     digital: `${subsUrl}/${promoCodes.digital}?${params.toString()}`,
@@ -56,13 +75,13 @@ function buildUrls(promoCodes: PromoCodes, intCmp: string): SubsUrls {
 }
 
 // Creates links to subscriptions, tailored to the user's campaign.
-function getSubsLinks(intCmp: string, campaign: ?Campaign): SubsUrls {
+function getSubsLinks(intCmp: ?string, campaign: ?Campaign): SubsUrls {
 
   if (campaign && customPromos[campaign]) {
-    return buildUrls(customPromos[campaign], intCmp);
+    return buildSubsUrls(customPromos[campaign], intCmp);
   }
 
-  return buildUrls(defaultPromos, intCmp);
+  return buildSubsUrls(defaultPromos, intCmp);
 
 }
 
@@ -71,4 +90,5 @@ function getSubsLinks(intCmp: string, campaign: ?Campaign): SubsUrls {
 
 export {
   getSubsLinks,
+  getMemLink,
 };
