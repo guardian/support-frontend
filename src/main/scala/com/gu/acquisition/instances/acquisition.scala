@@ -10,12 +10,13 @@ trait AcquisitionInstances {
     import io.circe.syntax._
     import acquisition._
 
+    // Amount in GBP not serialised.
+    // This is calculated consistently across all products at the sinks of the Ophan stream.
     Json.obj(
       "product" -> product.name.asJson,
       "paymentFrequency" -> paymentFrequency.name.asJson,
       "currency" -> currency.asJson,
       "amount" -> amount.asJson,
-      "amountInGBP" -> amountInGBP.asJson,
       "paymentProvider" -> paymentProvider.map(_.name).asJson,
       "campaignCode" -> campaignCode.asJson,
       "abTests" -> abTests.asJson,
