@@ -15,7 +15,7 @@ type AcquisitionABTest = {
   variant: string,
 };
 
-type Acquisition = {|
+export type Acquisition = {|
   referrerPageViewId: ?string,
   campaignCode: ?string,
   referrerUrl: ?string,
@@ -168,7 +168,6 @@ function getAcquisition(participations: Participations): Acquisition {
 
   // Read from sessionStorage.
   const acquisition = readAcquisition();
-  // Either return sessionStorage data, or create from scratch if missing.
   return buildAndStore(acquisition || undefined, participations);
 
 }

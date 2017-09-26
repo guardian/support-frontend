@@ -9,10 +9,9 @@ import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { getQueryParameter } from 'helpers/url';
 import { detect } from 'helpers/internationalisation/country';
 
-import type { Campaign } from 'helpers/tracking/acquisitions';
+import type { Campaign, Acquisition } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
 
@@ -22,17 +21,15 @@ import type { Action } from './pageActions';
 // ----- Types ----- //
 
 export type CommonState = {
-  intCmp: ?string,
   campaign: ?Campaign,
-  refpvid: ?string,
+  acquisition: Acquisition,
   country: IsoCountry,
   abParticipations: Participations,
 };
 
 export type PreloadedState = {
-  intCmp?: $PropertyType<CommonState, 'intCmp'>,
   campaign?: $PropertyType<CommonState, 'campaign'>,
-  refpvid?: $PropertyType<CommonState, 'refpvid'>,
+  acquisition?: $PropertyType<CommonState, 'acquisition'>,
   country?: $PropertyType<CommonState, 'country'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
@@ -58,7 +55,7 @@ function buildInitialState(
   abParticipations: Participations,
   preloadedState: PreloadedState = {},
   country: IsoCountry,
-) {
+): CommonState {
 
   const acquisition = getAcquisition(abParticipations);
 
