@@ -8,11 +8,11 @@ import 'ophan';
 import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
-import { getCampaign } from 'helpers/tracking/guTracking';
+import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getQueryParameter } from 'helpers/url';
 import { detect } from 'helpers/internationalisation/country';
 
-import type { Campaign } from 'helpers/tracking/guTracking';
+import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
 

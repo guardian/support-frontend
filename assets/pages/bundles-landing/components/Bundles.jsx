@@ -12,7 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Campaign } from 'helpers/tracking/guTracking';
+import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
 import {

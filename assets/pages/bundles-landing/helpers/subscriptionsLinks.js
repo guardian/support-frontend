@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Campaign } from 'helpers/tracking/guTracking';
+import type { Campaign } from 'helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
