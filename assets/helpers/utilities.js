@@ -1,23 +1,25 @@
 // @flow
 // A series of general purpose helper functions.
 
+// ----- Functions ----- //
+
 // Ascending comparison function for use with Array.prototype.sort.
-export function ascending(a: number, b: number): number {
+function ascending(a: number, b: number): number {
   return a > b ? 1 : 0;
 }
 
 // Descending comparison function for use with Array.prototype.sort.
-export function descending(a: number, b: number): number {
+function descending(a: number, b: number): number {
   return a < b ? 1 : 0;
 }
 
 // Converts a number to a given number of decimal places, default two.
-export function roundDp(num: number, dps: number = 2) {
+function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
 }
 
 // Generates the "class modifier-class" string for HTML elements
-export function generateClassName(className: string, modifierClass: ?string): string {
+function generateClassName(className: string, modifierClass: ?string): string {
   let response = className;
 
   if (modifierClass) {
@@ -29,7 +31,7 @@ export function generateClassName(className: string, modifierClass: ?string): st
 
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
-export function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
+function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
   return (event: Object) => {
     const CarriageReturnCode = 13;
     const SpaceCode = 32;
@@ -42,7 +44,7 @@ export function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) 
 }
 
 // Attempts to parse a boolean from a string.
-export function parseBoolean(boolString: string, fallback: boolean): boolean {
+function parseBoolean(boolString: string, fallback: boolean): boolean {
 
   switch (boolString.toLowerCase()) {
     case 'true':
@@ -55,6 +57,42 @@ export function parseBoolean(boolString: string, fallback: boolean): boolean {
 
 }
 
-export function titleCase(s: string) {
+function titleCase(s: string) {
   return s.charAt(0).toUpperCase() + s.toLowerCase().substring(1);
 }
+
+// Deserialises a JSON object from a string.
+function deserialiseJsonObject(serialised: string): ?Object {
+
+  try {
+
+    const deserialised = JSON.parse(serialised);
+
+    if (deserialised && typeof deserialised === 'object') {
+      return deserialised;
+    }
+
+    return null;
+
+  } catch (err) {
+
+    console.log(err);
+    return null;
+
+  }
+
+}
+
+
+// ----- Exports ----- //
+
+export {
+  ascending,
+  descending,
+  roundDp,
+  generateClassName,
+  clickSubstituteKeyPressHandler,
+  parseBoolean,
+  titleCase,
+  deserialiseJsonObject,
+};

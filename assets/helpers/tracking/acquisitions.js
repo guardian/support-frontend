@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
+import { deserialiseJsonObject } from 'helpers/utilities';
 
 import type { Participations } from 'helpers/abtest';
 
@@ -63,28 +64,6 @@ function getCampaign(intCmp: string): ?Campaign {
 
 }
 
-// Deserialises a JSON object from a string.
-function deserialise(serialised: string): ?Object {
-
-  try {
-
-    const deserialised = JSON.parse(serialised);
-
-    if (deserialised && typeof deserialised === 'object') {
-      return deserialised;
-    }
-
-    return null;
-
-  } catch (err) {
-
-    console.log(err);
-    return null;
-
-  }
-
-}
-
 // Stores the acquisition data in sessionStorage.
 function storeAcquisition(acquisition: Acquisition): boolean {
 
@@ -106,7 +85,7 @@ function storeAcquisition(acquisition: Acquisition): boolean {
 function readAcquisition(): ?Acquisition {
 
   const stored = window.sessionStorage.getItem(ACQUISITIONS_STORAGE_KEY);
-  return stored ? deserialise(stored) : null;
+  return stored ? deserialiseJsonObject(stored) : null;
 
 }
 
@@ -166,7 +145,7 @@ function buildAndStore(
 // Also stores in sessionStorage if not present or new from param.
 function retrieveAcquisition(participations: Participations) {
 
-  const paramData = deserialise(getQueryParameter(ACQUISITIONS_PARAM) || '');
+  const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Create from the query param data.
   if (paramData) {
