@@ -107,9 +107,6 @@ const digitalCopy: DigitalAttrs = {
       heading: 'Daily tablet edition',
       text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
     },
-    {
-      heading: 'Enjoy on up to 10 devices',
-    },
   ],
   ctaText: 'Start your 14 day trial',
   modifierClass: 'digital',
