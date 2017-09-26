@@ -13,6 +13,7 @@ Support Frontend, how they interact and how you can start adding code to this re
 6. [Testing](#6-testing)
 7. [Yarn commands](#7-yarn-commands)
 8. [A/B Test framework](#8-ab-test-framework)
+9. [Test environments](#9-test-environments)
 
 ## 1. Getting started
 
@@ -345,16 +346,14 @@ compute the sample size of your experiment, from the sample size, you can then e
  
 #### Step 2: Read the variant from the state
 
-The test and its variant(s), are now present in the `Participation` object and that object is being injected in the redux state at beginning of your page (see [step 1](#step-1:-Initialize-the-ab-test-framework-on-the-page-you-are-working-on)). 
-The next step is, from a [container component](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components), 
-read the participation object from the redux state. Once the container component has the state, it will render the 
-presentational component or element corresponding to that variant. Usually this can be achieved by creating a local 
-(or global if the test is run across different pages) module that knows which component or element to instantiate depending 
+The test and its variant(s), are now present in the `abParticipations` object. You can find that object inside the `common` object which is in every state of every page. 
+Once the container knows which variant is on, it will render the presentational component or element corresponding to that variant. 
+Usually this can be achieved by creating a local (or global if the test is run across different pages) module that knows which component or element to instantiate depending 
 on the variant. 
 
-An example of the above can be found on [this line of the 'ways of support' component](https://github.com/guardian/support-frontend/pull/67/files#diff-7e746c9576abf74fa76bbf8da11f330cR58) 
-which loads the correct version of the title depending on the variant. The module that knows which version to render can 
-be found [here](https://github.com/guardian/support-frontend/pull/67/files#diff-cc1c686e06c814dd6c179505a6ce447dR14). 
+An example of the above can be found on [this line of the 'bundle landing' page](https://github.com/guardian/support-frontend/pull/217/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R37) 
+which reads the variant and then pass the variant to the sub-components which will load the correct version on the variant. The module that knows which version to render can 
+be found [here](https://github.com/guardian/support-frontend/commit/b73794ca3a24745c03a7f5df91e18bcef2a77f07#diff-4880b6e463a4ef5417549ccc19c9ef38R76). 
 
 #### Step 3: Track events with GA and Ophan
 
@@ -368,5 +367,17 @@ In order to use abacus as your test tool, you have to track two events with Opha
 This tracking can be done using the [`trackOphan`](#71-api) function from the ABtest framework. This function 
 receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
 or not.  
+
+
+#9 Test Environments
+
+| Support |   Is test user?   | Stripe | PayPal | Support Workers | Zuora |
+|:-------:|:-----------------:|:------:|:------:|:---------------:|:-----:|
+|   `Dev`   |        `true`       |   `Dev`  | `Dev`    |       `Code`      | `UAT`   |
+|   `Dev`   |       `false`       |   `Dev`  | `Dev`    |       `Code`      | `Dev`   |
+|   `Code`  |        `true`       |   `Dev`  | `Dev`    |       `Code`      | `UAT`   |
+|   `Code`  |       `false`       |   `Dev`  | `Dev`    |       `Code`      | `Dev`   |
+|   `Prod`  |        `true`       |   `Dev`  | `Dev`    |       `Prod`      | `UAT`   |
+|   `Prod`  | `false` (real user) |  `Prod`  | `Prod`   |       `Prod`      | `Prod`  |
  
 
