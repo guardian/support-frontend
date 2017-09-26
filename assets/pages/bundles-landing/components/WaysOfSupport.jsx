@@ -82,7 +82,7 @@ const WaysOfSupport = (props: PropTypes) => {
 
 function mapStateToProps(state) {
   return {
-    intCmp: state.intCmp,
+    intCmp: state.common.intCmp,
   };
 }
 
