@@ -273,7 +273,7 @@ function mapStateToProps(state) {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
-    intCmp: state.common.intCmp,
+    intCmp: state.common.acquisition.intCmp,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,

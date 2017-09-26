@@ -55,11 +55,17 @@ export type Campaign = $Keys<typeof campaigns>;
 
 // ----- Functions ----- //
 
-// Retrieves the user's campaign, if known, from the intCmp.
-function getCampaign(intCmp: string): ?Campaign {
+// Retrieves the user's campaign, if known, from the campaign code.
+function getCampaign(acquisition: Acquisition): ?Campaign {
+
+  const campaignCode = acquisition.campaignCode;
+
+  if (!campaignCode) {
+    return null;
+  }
 
   return Object.keys(campaigns).find(campaign =>
-    campaigns[campaign].includes(intCmp),
+    campaigns[campaign].includes(campaignCode),
   ) || null;
 
 }
@@ -89,13 +95,21 @@ function readAcquisition(): ?Acquisition {
 
 }
 
-// Converts ab tests in participations format to acquisition format.
-function convertABTests(participations: Participations): AcquisitionABTest[] {
+// Adds all participations to the acquisition ab tests, if they are not already there.
+function addABTests(abTests: AcquisitionABTest[], participations: Participations) {
 
-  return Object.keys(participations).map(participation => ({
-    name: participation,
-    variant: participations[(participation: any)],
-  }));
+  Object.keys(participations).forEach((participation) => {
+
+    if (!abTests.find(abTest => abTest.name === participation)) {
+
+      abTests.push({
+        name: participation,
+        variant: participations[(participation: any)],
+      });
+
+    }
+
+  });
 
 }
 
@@ -113,8 +127,8 @@ function buildAcquisition(
     getQueryParameter('INTCMP') ||
     null;
 
-  let abTests = acquisitionData.abTests || [];
-  abTests = abTests.concat(convertABTests(participations));
+  const abTests = acquisitionData.abTests || [];
+  addABTests(abTests, participations);
 
   return {
     referrerPageViewId,
@@ -143,7 +157,7 @@ function buildAndStore(
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function retrieveAcquisition(participations: Participations) {
+function getAcquisition(participations: Participations): Acquisition {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
@@ -155,7 +169,7 @@ function retrieveAcquisition(participations: Participations) {
   // Read from sessionStorage.
   const acquisition = readAcquisition();
   // Either return sessionStorage data, or create from scratch if missing.
-  return acquisition || buildAndStore(undefined, participations);
+  return buildAndStore(acquisition || undefined, participations);
 
 }
 
@@ -164,5 +178,5 @@ function retrieveAcquisition(participations: Participations) {
 
 export {
   getCampaign,
-  retrieveAcquisition,
+  getAcquisition,
 };

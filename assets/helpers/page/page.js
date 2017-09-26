@@ -8,7 +8,7 @@ import 'ophan';
 import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
-import { getCampaign } from 'helpers/tracking/acquisitions';
+import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { getQueryParameter } from 'helpers/url';
 import { detect } from 'helpers/internationalisation/country';
 
@@ -60,12 +60,11 @@ function buildInitialState(
   country: IsoCountry,
 ) {
 
-  const intCmp = getQueryParameter('INTCMP');
+  const acquisition = getAcquisition(abParticipations);
 
   return Object.assign({}, {
-    intCmp,
-    campaign: intCmp ? getCampaign(intCmp) : null,
-    refpvid: getQueryParameter('REFPVID'),
+    campaign: acquisition ? getCampaign(acquisition) : null,
+    acquisition,
     country,
     abParticipations,
   }, preloadedState);
@@ -81,12 +80,6 @@ function createCommonReducer(
     action: Action): CommonState {
 
     switch (action.type) {
-
-      case 'SET_INTCMP':
-        return Object.assign({}, state, {
-          intCmp: action.intCmp,
-          campaign: getCampaign(action.intCmp),
-        });
 
       case 'SET_COUNTRY':
         return Object.assign({}, state, { country: action.country });

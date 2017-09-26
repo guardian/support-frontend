@@ -75,10 +75,7 @@ function deserialiseJsonObject(serialised: string): ?Object {
     return null;
 
   } catch (err) {
-
-    console.log(err);
     return null;
-
   }
 
 }
