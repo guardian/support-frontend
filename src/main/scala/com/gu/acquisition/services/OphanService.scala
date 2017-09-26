@@ -32,26 +32,23 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
 
   private def buildRequest(
       acquisition: Acquisition,
+      viewId: String,
       browserId: Option[String],
-      viewId: Option[String],
       visitId: Option[String]
   ): HttpRequest = {
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
 
     val params = Query(
-      "viewId" -> viewId.getOrElse(UNKNOWN_ID),
+      "viewId" -> viewId,
       "acquisition" -> acquisition.asJson.noSpaces
     )
 
-    val cookieHeader = Cookie(
-      HttpCookiePair("bwid", browserId.getOrElse(UNKNOWN_ID)),
-      HttpCookiePair("vsid", visitId.getOrElse(UNKNOWN_ID))
-    )
+    val cookies = List(browserId.map(HttpCookiePair("bwid", _)), visitId.map(HttpCookiePair("vsid", _))).flatten
 
     HttpRequest(
       uri = additionalEndpoint.withQuery(params),
-      headers = Seq(cookieHeader)
+      headers = Seq(Cookie(cookies))
     )
   }
 
@@ -80,11 +77,11 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
     */
   def submit(
       acquisition: Acquisition,
+      viewId: String,
       browserId: Option[String],
-      viewId: Option[String],
       visitId: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
-    val request = buildRequest(acquisition, browserId, viewId, visitId)
+    val request = buildRequest(acquisition, viewId, browserId, visitId)
     executeRequest(request)
   }
 }
@@ -95,6 +92,4 @@ object OphanService {
 
   def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
     new OphanService(prodEndpoint)
-
-  val UNKNOWN_ID = "UNKNOWN_ID"
 }
