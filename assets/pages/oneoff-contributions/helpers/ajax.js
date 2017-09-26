@@ -27,7 +27,7 @@ type OneoffContribFields = {
   ophanPageviewId: string,
   ophanBrowserId?: string,
   cmp?: string,
-  intcmp?: string,
+  intcmp: ?string,
   refererPageviewId?: string,
   refererUrl?: string,
   idUser?: string,
@@ -53,6 +53,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
       marketing: state.page.user.gnmMarketing,
       postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
+      intcmp: state.common.intCmp,
     };
 
     if (state.common.refpvid) {
