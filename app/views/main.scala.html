@@ -20,6 +20,7 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
 	<link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
 	@styles
+	@fragments.tagging.googleTagManager()
 </head>
 <body>
 	<noscript>
@@ -32,6 +33,7 @@
             <a href="http://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
         </div>
     </noscript>
+	@fragments.tagging.googleTagManagerNoScript()
 	@content
 	<script src="https://polyfill.guim.co.uk/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes"></script>
 	<script defer src="https://js.stripe.com/v3/"></script>
