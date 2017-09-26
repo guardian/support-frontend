@@ -39,10 +39,7 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
 
-    val params = Query(
-      "viewId" -> viewId,
-      "acquisition" -> acquisition.asJson.noSpaces
-    )
+    val params = Query("viewId" -> viewId, "acquisition" -> acquisition.asJson.noSpaces)
 
     val cookies = List(browserId.map(HttpCookiePair("bwid", _)), visitId.map(HttpCookiePair("vsid", _))).flatten
 
