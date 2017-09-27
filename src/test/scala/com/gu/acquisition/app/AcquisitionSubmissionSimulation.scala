@@ -17,7 +17,7 @@ trait MockDataGenerator {
 
   def generateViewId: String
 
-  def generateVisitId: Option[String]
+  def generateVisitId: String
 }
 
 object BasicMockDataGenerator extends MockDataGenerator {
@@ -43,7 +43,7 @@ object BasicMockDataGenerator extends MockDataGenerator {
 
   override def generateViewId: String = "viewId"
 
-  override def generateVisitId: Option[String] = Some("visitId")
+  override def generateVisitId: String = "visitId"
 }
 
 class AcquisitionSubmissionSimulator(service: OphanService, generator: MockDataGenerator)(implicit ec: ExecutionContext)
@@ -54,7 +54,7 @@ class AcquisitionSubmissionSimulator(service: OphanService, generator: MockDataG
 
   def submit(): Future[Unit] = {
     logger.info("submitting acquisition event to Ophan")
-    service.submit(generateAcquisition, generateBrowserId, generateViewId, generateVisitId)
+    service.submit(generateAcquisition, generateViewId, Some(generateBrowserId),  Some(generateVisitId))
       .fold(
         err => logger.error(s"failed to send acquisition to Ophan", err),
         _ => logger.info("successfully submitted acquisition to Ophan")

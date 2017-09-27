@@ -1,31 +1,14 @@
 package com.gu.acquisition.instances
 
-import io.circe.{Encoder, Json}
+import com.gu.fezziwig.CirceScroogeMacros._
+import io.circe.{Decoder, Encoder}
 import ophan.thrift.event.Acquisition
 
 trait AcquisitionInstances {
+  // Ignore IntelliJ - these imports are used!
+  import cats.syntax.either._
 
-  implicit val acquisitionEncoder: Encoder[Acquisition] = Encoder.instance { acquisition =>
-    import abTestInfo._
-    import io.circe.syntax._
-    import acquisition._
+  implicit val acquisitionDecoder: Decoder[Acquisition] = decodeThriftStruct[Acquisition]
 
-    // Amount in GBP not serialised.
-    // This is calculated consistently across all products at the sinks of the Ophan stream.
-    Json.obj(
-      "product" -> product.name.asJson,
-      "paymentFrequency" -> paymentFrequency.name.asJson,
-      "currency" -> currency.asJson,
-      "amount" -> amount.asJson,
-      "paymentProvider" -> paymentProvider.map(_.name).asJson,
-      "campaignCode" -> campaignCode.asJson,
-      "abTests" -> abTests.asJson,
-      "countryCode" -> countryCode.asJson,
-      "referrerPageViewId" -> referrerPageViewId.asJson,
-      "referrerUrl" -> referrerUrl.asJson,
-      "componentId" -> componentId.asJson,
-      "componentType" -> acquisition.componentTypeV2.map(_.name).asJson,
-      "source" -> acquisition.source.map(_.name).asJson
-    )
-  }
+  implicit val acquisitionEncoder: Encoder[Acquisition] = encodeThriftStruct[Acquisition]
 }
