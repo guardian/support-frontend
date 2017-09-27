@@ -9,6 +9,7 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
 import akka.stream.Materializer
 
+import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait OphanServiceError extends Throwable
@@ -24,19 +25,22 @@ object OphanServiceError {
   }
 }
 
-class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
+class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
 
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
-  private def buildRequest(acquisition: Acquisition, browserId: String, viewId: String, visitId: Option[String]): HttpRequest = {
+  private def buildRequest(
+      acquisition: Acquisition,
+      viewId: String,
+      browserId: Option[String],
+      visitId: Option[String]
+  ): HttpRequest = {
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
-    import scala.collection.immutable.Seq
 
     val params = Query("viewId" -> viewId, "acquisition" -> acquisition.asJson.noSpaces)
 
-    val cookies: Seq[HttpCookiePair] = Seq("bwid" -> Some(browserId), "vsid" -> visitId)
-      .collect { case (name, Some(value)) => HttpCookiePair(name, value) }
+    val cookies = List(browserId.map(HttpCookiePair("bwid", _)), visitId.map(HttpCookiePair("vsid", _))).flatten
 
     HttpRequest(
       uri = additionalEndpoint.withQuery(params),
@@ -45,7 +49,7 @@ class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Ma
   }
 
   private def executeRequest(
-    request: HttpRequest
+      request: HttpRequest
   )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
     import cats.instances.future._
     import cats.syntax.applicativeError._
@@ -59,19 +63,29 @@ class OphanService(endpoint: Uri)(implicit system: ActorSystem, materializer: Ma
       }
   }
 
+  /**
+    * Submit an acquisition to Ophan.
+    *
+    * If browserId or viewId are missing, then it is not guaranteed they will be available
+    * for the respective acquisition in the data lake table: acquisitions.
+    * This will make certain reporting and analysis harder.
+    * If possible they should be included.
+    */
   def submit(
       acquisition: Acquisition,
-      browserId: String,
       viewId: String,
+      browserId: Option[String],
       visitId: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
-    val request = buildRequest(acquisition, browserId, viewId, visitId)
+    val request = buildRequest(acquisition, viewId, browserId, visitId)
     executeRequest(request)
   }
 }
 
 object OphanService {
 
+  val prodEndpoint: Uri = "https://ophan.theguardian.com"
+
   def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
-    new OphanService(Uri.parseAbsolute("https://ophan.theguardian.com"))
+    new OphanService(prodEndpoint)
 }
