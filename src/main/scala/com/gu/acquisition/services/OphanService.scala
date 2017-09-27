@@ -9,6 +9,7 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
 import akka.stream.Materializer
 
+import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait OphanServiceError extends Throwable
@@ -25,8 +26,6 @@ object OphanServiceError {
 }
 
 class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
-  import scala.collection.immutable.Seq
-  import OphanService._
 
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
