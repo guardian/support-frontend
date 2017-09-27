@@ -15,7 +15,7 @@ import {
 describe('actions', () => {
 
   it('should create SET_DISPLAY_NAME action', () => {
-    const name:string = 'My Name';
+    const name: string = 'My Name';
     const expectedAction = {
       type: 'SET_DISPLAY_NAME',
       name,
@@ -24,7 +24,7 @@ describe('actions', () => {
   });
 
   it('should create SET_FIRST_NAME action', () => {
-    const name:string = 'John';
+    const name: string = 'John';
     const expectedAction = {
       type: 'SET_FIRST_NAME',
       name,
@@ -33,7 +33,7 @@ describe('actions', () => {
   });
 
   it('should create SET_LAST_NAME action', () => {
-    const name:string = 'Doe';
+    const name: string = 'Doe';
     const expectedAction = {
       type: 'SET_LAST_NAME',
       name,
@@ -42,7 +42,7 @@ describe('actions', () => {
   });
 
   it('should create SET_FULL_NAME action', () => {
-    const name:string = 'John Doe';
+    const name: string = 'John Doe';
     const expectedAction = {
       type: 'SET_FULL_NAME',
       name,
@@ -51,7 +51,7 @@ describe('actions', () => {
   });
 
   it('should create SET_EMAIL action', () => {
-    const email:string = 'johndoe@example.com';
+    const email: string = 'johndoe@example.com';
     const expectedAction = {
       type: 'SET_EMAIL',
       email,
@@ -60,7 +60,7 @@ describe('actions', () => {
   });
 
   it('should create SET_STATEFIELD action', () => {
-    const stateField:string = 'CA';
+    const stateField: string = 'CA';
     const expectedAction = {
       type: 'SET_STATEFIELD',
       stateField,
@@ -69,7 +69,7 @@ describe('actions', () => {
   });
 
   it('should create SET_POSTCODE action', () => {
-    const postcode:string = 'N123';
+    const postcode: string = 'N123';
     const expectedAction = {
       type: 'SET_POSTCODE',
       postcode,
@@ -78,7 +78,7 @@ describe('actions', () => {
   });
 
   it('should create SET_TEST_USER action', () => {
-    const testUser:boolean = true;
+    const testUser: boolean = true;
     const expectedAction = {
       type: 'SET_TEST_USER',
       testUser,
@@ -87,7 +87,7 @@ describe('actions', () => {
   });
 
   it('should create SET_GNM_MARKETING action', () => {
-    const preference:boolean = false;
+    const preference: boolean = false;
     const expectedAction = {
       type: 'SET_GNM_MARKETING',
       preference,
