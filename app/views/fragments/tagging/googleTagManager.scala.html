@@ -1,5 +1,22 @@
 @()
-
+<script>
+  dataLayer = [{
+    'orderId': getOrderId(),
+  }];
+  //Generates a uuid to anonymously identify this user in this session.
+  //We need this to prevent page refreshes on conversion pages being
+  //treated as new conversions
+  function getOrderId() {
+    let orderId = sessionStorage.getItem('orderId');
+    if (orderId === null){
+      orderId = uuid();
+      sessionStorage.setItem('orderId', orderId);
+    }
+    return orderId;
+  }
+  //see: https://gist.github.com/LeverOne/1308368
+  uuid = function(a,b){for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');return b}
+</script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
