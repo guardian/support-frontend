@@ -1,13 +1,13 @@
 package com.gu.acquisition.services
 
 import cats.data.EitherT
-import ophan.thrift.event.Acquisition
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
 import akka.stream.Materializer
+import com.gu.acquisition.model.{AcquisitionSubmission, AcquisitionSubmissionBuilder}
 
 import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,31 +16,35 @@ sealed trait OphanServiceError extends Throwable
 
 object OphanServiceError {
 
-  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError {
-    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
+  case class SubmissionBuildError(message: String) extends OphanServiceError {
+    override def getMessage: String = message
   }
 
   case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
     override def getMessage: String = underlying.getMessage
   }
+
+  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError {
+    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
+  }
+
 }
 
 class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
 
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
-  private def buildRequest(
-      acquisition: Acquisition,
-      viewId: String,
-      browserId: Option[String],
-      visitId: Option[String]
-  ): HttpRequest = {
+  private def buildRequest(submission: AcquisitionSubmission): HttpRequest = {
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
+    import submission._
 
-    val params = Query("viewId" -> viewId, "acquisition" -> acquisition.asJson.noSpaces)
+    val params = Query("viewId" -> ophanIds.pageviewId, "acquisition" -> acquisition.asJson.noSpaces)
 
-    val cookies = List(browserId.map(HttpCookiePair("bwid", _)), visitId.map(HttpCookiePair("vsid", _))).flatten
+    val cookies = List(
+      ophanIds.browserId.map(HttpCookiePair("bwid", _)),
+      ophanIds.visitId.map(HttpCookiePair("vsid", _))
+    ).flatten
 
     HttpRequest(
       uri = additionalEndpoint.withQuery(params),
@@ -71,14 +75,15 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
     * This will make certain reporting and analysis harder.
     * If possible they should be included.
     */
-  def submit(
-      acquisition: Acquisition,
-      viewId: String,
-      browserId: Option[String],
-      visitId: Option[String]
-  )(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
-    val request = buildRequest(acquisition, viewId, browserId, visitId)
-    executeRequest(request)
+  def submit[A : AcquisitionSubmissionBuilder](a: A)
+    (implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
+    import cats.instances.future._
+    import cats.syntax.either._
+    import com.gu.acquisition.model.AcquisitionSubmissionBuilder.ops._
+
+    a.asAcquisitionSubmission.toEitherT
+      .map(buildRequest)
+      .flatMap(executeRequest)
   }
 }
 

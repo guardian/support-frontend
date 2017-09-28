@@ -1,11 +1,12 @@
 package com.gu.acquisition.model
 
-import io.circe.Json
+import io.circe.{Json => CJson}
+import play.api.libs.json.{JsObject, Json => PJson}
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource}
-import org.scalatest.{Matchers, WordSpecLike}
+import org.scalatest.{EitherValues, Matchers, WordSpecLike}
 
-class ReferrerAcquisitionSpec extends WordSpecLike with Matchers {
+class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValues {
 
   val referrerAcquisitionData = ReferrerAcquisitionData(
     campaignCode = Some("campaign_code"),
@@ -17,29 +18,53 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers {
     abTest = Some(AbTest("test_name", "variant_name"))
   )
 
-  val referrerAcquisitionJson = Json.obj(
-    "campaignCode" -> Json.fromString("campaign_code"),
-    "referrerPageviewId" -> Json.fromString("referrer_pageview_id"),
-    "referrerUrl" -> Json.fromString("referrer_url"),
-    "componentId" -> Json.fromString("component_id"),
-    "componentType" -> Json.fromString("ACQUISITIONS_EPIC"),
-    "source" -> Json.fromString("GUARDIAN_WEB"),
-    "abTest" -> Json.obj(
-      "name" -> Json.fromString("test_name"),
-      "variant" -> Json.fromString("variant_name")
+  val referrerAcquisitionCJson: CJson = CJson.obj(
+    "campaignCode" -> CJson.fromString("campaign_code"),
+    "referrerPageviewId" -> CJson.fromString("referrer_pageview_id"),
+    "referrerUrl" -> CJson.fromString("referrer_url"),
+    "componentId" -> CJson.fromString("component_id"),
+    "componentType" -> CJson.fromString("ACQUISITIONS_EPIC"),
+    "source" -> CJson.fromString("GUARDIAN_WEB"),
+    "abTest" -> CJson.obj(
+      "name" -> CJson.fromString("test_name"),
+      "variant" -> CJson.fromString("variant_name")
+    )
+  )
+
+  val referrerAcquisitionPJson: JsObject = PJson.obj(
+    "campaignCode" -> "campaign_code",
+    "referrerPageviewId" -> "referrer_pageview_id",
+    "referrerUrl" -> "referrer_url",
+    "componentId" -> "component_id",
+    "componentType" -> "ACQUISITIONS_EPIC",
+    "source" -> "GUARDIAN_WEB",
+    "abTest" -> PJson.obj(
+      "name" -> "test_name",
+      "variant" -> "variant_name"
     )
   )
 
   "Referrer acquisition data" should {
 
-    "be able to be encoded as JSON" in {
+    "be able to be encoded as JSON using circe" in {
       import io.circe.syntax._
 
-      referrerAcquisitionData.asJson shouldEqual referrerAcquisitionJson
+      referrerAcquisitionData.asJson shouldEqual referrerAcquisitionCJson
     }
 
-    "be able to be decoded from JSON" in {
-      referrerAcquisitionJson.as[ReferrerAcquisitionData] shouldEqual Right(referrerAcquisitionData)
+    "be able to be decoded from JSON using circe" in {
+
+      referrerAcquisitionCJson.as[ReferrerAcquisitionData].right.value shouldEqual referrerAcquisitionData
+    }
+
+    "be able to be encoded as JSON using Play" in {
+
+      PJson.toJson(referrerAcquisitionData) shouldEqual referrerAcquisitionPJson
+    }
+
+    "be able to be decoded from JSON using Play" in {
+
+      referrerAcquisitionPJson.validate[ReferrerAcquisitionData].asEither.right.value shouldEqual referrerAcquisitionData
     }
   }
 }

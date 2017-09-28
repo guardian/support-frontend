@@ -1,3 +1,8 @@
+# v2.0.0-rc2
+* add `AcquisitionSubmission` to represent a combination of an `Acquisition` and `OphanIds`
+* add the `AcquisitionSubmissionBuilder` type class for generating acquisition submissions
+* add `ReferrerAcquisitionData` to model acquisition data sent from the referring page 
+
 # v2.0.0-rc1
 * make all browser id optional solving issue #5 - this is compatible with the Tracker. So far, the only acquisition events that have failed to be submitted from contributions frontend are ones where browser id was missing, so hopefully after this release, all will be submitted successfully
 * make Ophan endpoint publicly available - useful (for e.g. logging) when the Ophan service is being used by other applications
