@@ -7,10 +7,10 @@
 @import 'gu-sass/webfonts';
 @import 'gu-sass/typography';
 @import 'gu-sass/helpers';
+@import 'gu-sass/accessibility';
 
 // ----- Shared Components ----- //
 
-@import '../components/accessibility/accessibility';
 @import '../components/bodyCopy/bodyCopy';
 @import '../components/checkboxInput/checkboxInput';
 @import '../components/contribAmounts/contribAmounts';
