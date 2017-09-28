@@ -16,7 +16,7 @@
     }
   }
 
-  h1 {
+  .component-introduction-text__heading {
     color: gu-colour(news-support-1);
     font-family: $gu-egyptian-web;
     font-weight: bold;
@@ -40,7 +40,7 @@
     }
   }
 
-  p {
+  .component-introduction-text__sub-heading {
     font-family: $gu-egyptian-web;
     font-weight: bold;
     font-size: 22px;
@@ -48,7 +48,7 @@
     color: #ffffff;
     margin-left: 40px;
 
-    &:nth-of-type(2) {
+    &:nth-of-type(3) {
       margin-bottom: $gu-v-spacing * 2;
     }
 
