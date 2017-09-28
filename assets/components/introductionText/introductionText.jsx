@@ -25,7 +25,7 @@ type PropTypes = {
 // ----- Functions ----- //
 
 function messageCopy(copy: string[]) {
-  return copy.map(paragraph => <h2>{paragraph}</h2>);
+  return copy.map(paragraph => <p className="component-introduction-text__sub-heading">{paragraph}</p>);
 }
 
 
@@ -35,7 +35,7 @@ export default function IntroductionText(props: PropTypes) {
 
   const messages = props.messages.map((message: Message) => (
     <div>
-      <h1 className="component-introduction-text__heading">{message.heading}</h1>
+      <p className="component-introduction-text__heading">{message.heading}</p>
       {messageCopy(message.copy)}
     </div>
   ));
