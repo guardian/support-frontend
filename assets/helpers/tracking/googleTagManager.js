@@ -1,7 +1,7 @@
 import uuidv4 from 'uuid';
 import { forCountry } from '../internationalisation/currency';
-import { get as getCookie } from '../cookie';
 import { getQueryParameter } from '../url';
+import { detect as detectCountry } from '../internationalisation/country';
 
 function getDataValue(name, generator) {
   let value = sessionStorage.getItem(name);
@@ -13,8 +13,7 @@ function getDataValue(name, generator) {
 }
 
 function getCurrency() {
-  const country = getCookie('GU_country');
-  return forCountry(country).iso;
+  return forCountry(detectCountry()).iso;
 }
 
 function getContributionValue() {
