@@ -20,11 +20,11 @@ describe('reducer tests', () => {
     const initialState = {
       campaign: 'dummy_campaign',
       acquisition: {
-        referrerPageViewId: null,
+        referrerPageviewId: null,
         campaignCode: null,
         referrerUrl: null,
         componentId: null,
-        componentTypeV2: null,
+        componentType: null,
         source: null,
         abTests: [],
       },

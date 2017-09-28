@@ -111,6 +111,7 @@ function init(
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
   const initialState: CommonState = buildInitialState(participations, preloadedState, country);
+  console.log(initialState);
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(

@@ -16,11 +16,11 @@ type AcquisitionABTest = {
 };
 
 export type Acquisition = {|
-  referrerPageViewId: ?string,
+  referrerPageviewId: ?string,
   campaignCode: ?string,
   referrerUrl: ?string,
   componentId: ?string,
-  componentTypeV2: ?string,
+  componentType: ?string,
   source: ?string,
   abTests: AcquisitionABTest[],
 |};
@@ -119,7 +119,7 @@ function buildAcquisition(
   participations: Participations = {},
 ): Acquisition {
 
-  const referrerPageViewId = acquisitionData.referrerPageViewId ||
+  const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID') ||
     null;
 
@@ -131,11 +131,11 @@ function buildAcquisition(
   addABTests(abTests, participations);
 
   return {
-    referrerPageViewId,
+    referrerPageviewId,
     campaignCode,
     referrerUrl: acquisitionData.referrerUrl || null,
     componentId: acquisitionData.componentId || null,
-    componentTypeV2: acquisitionData.componentTypeV2 || null,
+    componentType: acquisitionData.componentType || null,
     source: acquisitionData.source || null,
     abTests,
   };

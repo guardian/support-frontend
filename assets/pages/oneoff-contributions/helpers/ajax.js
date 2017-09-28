@@ -54,7 +54,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
       postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
       intcmp: state.common.acquisition.campaignCode,
-      refererPageviewId: state.common.acquisition.referrerPageViewId,
+      refererPageviewId: state.common.acquisition.referrerPageviewId,
     };
 
     return {

@@ -186,7 +186,7 @@ function mapStateToProps(state) {
     contribAmount: state.page.amount,
     contribError: state.page.error,
     intCmp: state.common.acquisition.campaignCode,
-    refpvid: state.common.acquisition.referrerPageViewId,
+    refpvid: state.common.acquisition.referrerPageviewId,
     isoCountry: state.common.country,
     payPalError: state.page.payPalError,
   };
