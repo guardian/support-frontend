@@ -8,9 +8,11 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
 import akka.stream.Materializer
 import com.gu.acquisition.model.{AcquisitionSubmission, AcquisitionSubmissionBuilder}
+import com.gu.acquisition.services.OphanServiceError.NetworkFailure
 
 import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
+import scala.reflect.ClassTag
 
 sealed trait OphanServiceError extends Throwable
 
@@ -30,7 +32,49 @@ object OphanServiceError {
 
 }
 
-class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer) {
+
+sealed trait ProcessError extends Exception
+
+case class BuildError(message: String) extends ProcessError {
+  override def getMessage: String = s"Acquisition submission build error: $message"
+}
+
+case class CustomError[E <: Exception : ClassTag](error: E) extends ProcessError {
+  override def getMessage: String = s"Custom acquisition submission error: ${error.getMessage} ${classOf[error]}"
+}
+
+trait AcquisitionSubmissionProcessor {
+
+  def process[A : AcquisitionSubmissionBuilder](a: A)
+    (implicit ec: ExecutionContext): EitherT[Future, ProcessError, AcquisitionSubmission]
+}
+
+object OphanService {
+
+  val prodEndpoint: Uri = "https://ophan.theguardian.com"
+
+  def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
+    new HttpOphanService(prodEndpoint)
+
+  def apply(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer): OphanService =
+    new HttpOphanService(endpoint)
+}
+
+class OphanSubmission extends AcquisitionSubmissionProcessor[OphanServiceError] {
+  /**
+    * Submit an acquisition to Ophan.
+    *
+    * If browserId or viewId are missing, then it is not guaranteed they will be available
+    * for the respective acquisition in the data lake table: acquisitions.
+    * This will make certain reporting and analysis harder.
+    * If possible they should be included.
+    */
+  override def process[A: AcquisitionSubmissionBuilder](a: A)(implicit ec: ExecutionContext) = ???
+}
+
+
+private class HttpOphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer)
+  extends OphanService {
 
   private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
 
@@ -76,7 +120,7 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
     * If possible they should be included.
     */
   def submit[A : AcquisitionSubmissionBuilder](a: A)
-    (implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, HttpResponse] = {
+    (implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
     import cats.instances.future._
     import cats.syntax.either._
     import com.gu.acquisition.model.AcquisitionSubmissionBuilder.ops._
@@ -85,12 +129,4 @@ class OphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer
       .map(buildRequest)
       .flatMap(executeRequest)
   }
-}
-
-object OphanService {
-
-  val prodEndpoint: Uri = "https://ophan.theguardian.com"
-
-  def prod(implicit system: ActorSystem, materializer: Materializer): OphanService =
-    new OphanService(prodEndpoint)
 }

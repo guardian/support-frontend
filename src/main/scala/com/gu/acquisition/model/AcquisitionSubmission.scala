@@ -1,6 +1,6 @@
 package com.gu.acquisition.model
 
-import com.gu.acquisition.services.OphanServiceError
+import com.gu.acquisition.services.{AcquisitionSubmissionProcessor, BuildError, OphanServiceError, ProcessError}
 import com.gu.acquisition.services.OphanServiceError.SubmissionBuildError
 import ophan.thrift.event.Acquisition
 import play.api.libs.json.{Reads, Writes, Json => PlayJson}
@@ -45,13 +45,13 @@ object AcquisitionSubmission {
 
   import cats.syntax.either._
 
-  def buildOphanIds(a: A): Either[String, OphanIds]
+  def buildOphanIds(a: A): Either[BuildError, OphanIds]
 
-  def buildAcquisition(a: A): Either[String, Acquisition]
+  def buildAcquisition(a: A): Either[BuildError, Acquisition]
 
-  def asAcquisitionSubmission(a: A): Either[OphanServiceError, AcquisitionSubmission] =
+  def asAcquisitionSubmission(a: A): Either[BuildError, AcquisitionSubmission] =
     (for {
       ophanIds <- buildOphanIds(a)
       acquisition <- buildAcquisition(a)
-    } yield AcquisitionSubmission(ophanIds, acquisition)).leftMap(SubmissionBuildError)
+    } yield AcquisitionSubmission(ophanIds, acquisition))
 }
