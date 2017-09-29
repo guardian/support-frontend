@@ -2,7 +2,11 @@
 
 // ----- Imports ----- //
 
-import { ascending, descending } from '../utilities';
+import {
+  ascending,
+  descending,
+  roundDp,
+} from '../utilities';
 
 
 // ----- Tests ----- //
@@ -55,6 +59,23 @@ describe('utilities', () => {
 
       expect(unsorted.sort(descending)).toEqual(sorted);
 
+    });
+
+  });
+
+  describe('roundDp', () => {
+
+    it('should by default round to two decimal places', () => {
+      expect(roundDp(1234.5678)).toEqual(1234.57);
+    });
+
+    it('should round, not floor or ceil', () => {
+      expect(roundDp(12.345)).toEqual(12.35);
+      expect(roundDp(12.344)).toEqual(12.34);
+    });
+
+    it('should round to a given number of decimal places', () => {
+      expect(roundDp(12.3456789, 5)).toEqual(12.34568);
     });
 
   });
