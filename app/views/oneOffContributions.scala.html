@@ -11,7 +11,7 @@
         stripeConfig: StripeConfig,
         contributionsStripeEndpoint: String,
         contributionsPayPalEndpoint: String
-)(implicit assets: AssetsResolver)
+)(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">

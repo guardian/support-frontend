@@ -32,11 +32,11 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() {
+  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() { implicit request =>
     form(uatMode = false, paypal)
   }
 
-  def displayFormTestUser(paypal: Option[Boolean]): Action[AnyContent] = authAction {
+  def displayFormTestUser(paypal: Option[Boolean]): Action[AnyContent] = authAction { implicit request =>
     form(uatMode = true, paypal).withHeaders(CacheControl.noCache)
   }
 
@@ -47,7 +47,7 @@ class OneOffContributions(
     )
   }
 
-  private def form(uatMode: Boolean, paypal: Option[Boolean]): Result = Ok(
+  private def form(uatMode: Boolean, paypal: Option[Boolean])(implicit request: RequestHeader): Result = Ok(
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
