@@ -79,7 +79,6 @@ function storeAcquisition(acquisition: Acquisition): boolean {
     return true;
 
   } catch (err) {
-    console.log(err);
     return false;
   }
 
