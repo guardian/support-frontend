@@ -1,9 +1,10 @@
 @import assets.AssetsResolver
+@import views.ViewHelpers._
 @(
 	title: String,
 	styles: Html = Html(""),
 	scripts: Html = Html("")
-)(content: Html)(implicit assets: AssetsResolver)
+)(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +20,9 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
 	<link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
 	<link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
-	<script async type="text/javascript" src="@assets("googleTagManager.js")"></script>
+	@if(!doNotTrack) {
+		<script async type="text/javascript" src="@assets("googleTagManager.js")"></script>
+	}
 	@styles
 </head>
 <body>
@@ -34,7 +37,7 @@
         </div>
     </noscript>
 	@content
-	<script src="https://polyfill.guim.co.uk/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes"></script>
+	<script src="https://polyfill.guim.co.uk/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,URL"></script>
 	<script defer src="https://js.stripe.com/v3/"></script>
 	<script type="text/javascript">
 		window.guardian = window.guardian || {};
