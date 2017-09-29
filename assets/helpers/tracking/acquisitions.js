@@ -5,8 +5,6 @@
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 
-import type { Participations } from 'helpers/abtest';
-
 
 // ----- Types ----- //
 
@@ -95,29 +93,8 @@ function readAcquisition(): ?Acquisition {
 
 }
 
-// Adds all participations to the acquisition ab tests, if they are not already there.
-function addABTests(abTests: AcquisitionABTest[], participations: Participations) {
-
-  Object.keys(participations).forEach((participation) => {
-
-    if (!abTests.find(abTest => abTest.name === participation)) {
-
-      abTests.push({
-        name: participation,
-        variant: participations[(participation: any)],
-      });
-
-    }
-
-  });
-
-}
-
 // Builds the acquisition object from data and other sources.
-function buildAcquisition(
-  acquisitionData: Object = {},
-  participations: Participations = {},
-): Acquisition {
+function buildAcquisition(acquisitionData: Object = {}): Acquisition {
 
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID') ||
@@ -127,9 +104,6 @@ function buildAcquisition(
     getQueryParameter('INTCMP') ||
     null;
 
-  const abTests = acquisitionData.abTests || [];
-  addABTests(abTests, participations);
-
   return {
     referrerPageviewId,
     campaignCode,
@@ -137,18 +111,15 @@ function buildAcquisition(
     componentId: acquisitionData.componentId || null,
     componentType: acquisitionData.componentType || null,
     source: acquisitionData.source || null,
-    abTests,
+    abTests: acquisitionData.abTests || [],
   };
 
 }
 
 // Builds the acquisition object, and stores in sessionStorage.
-function buildAndStore(
-  acquisitionData?: Object,
-  participations: Participations,
-): Acquisition {
+function buildAndStore(acquisitionData?: Object): Acquisition {
 
-  const acquisition = buildAcquisition(acquisitionData, participations);
+  const acquisition = buildAcquisition(acquisitionData);
   storeAcquisition(acquisition);
 
   return acquisition;
@@ -157,18 +128,18 @@ function buildAndStore(
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function getAcquisition(participations: Participations): Acquisition {
+function getAcquisition(): Acquisition {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Create from the query param data.
   if (paramData) {
-    return buildAndStore(paramData, participations);
+    return buildAndStore(paramData);
   }
 
   // Read from sessionStorage.
   const acquisition = readAcquisition();
-  return buildAndStore(acquisition || undefined, participations);
+  return buildAndStore(acquisition || undefined);
 
 }
 

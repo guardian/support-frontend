@@ -57,7 +57,7 @@ function buildInitialState(
   country: IsoCountry,
 ): CommonState {
 
-  const acquisition = getAcquisition(abParticipations);
+  const acquisition = getAcquisition();
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
