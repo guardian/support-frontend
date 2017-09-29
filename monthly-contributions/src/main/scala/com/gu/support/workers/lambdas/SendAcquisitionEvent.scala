@@ -62,8 +62,7 @@ object SendAcquisitionEvent {
             abTests = Some(thrift.AbTestInfo(
               state.supportAbTests ++ Set(state.referrerAcquisitionData.abTest).flatten)
             ),
-            // FIXME: currently not passing through country code
-            countryCode = None,
+            countryCode = Some(state.user.country.alpha2),
             referrerPageViewId = state.referrerAcquisitionData.referrerPageviewId,
             referrerUrl = state.referrerAcquisitionData.referrerUrl,
             componentId = state.referrerAcquisitionData.componentId,
