@@ -4,6 +4,7 @@
 
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
+import * as storage from 'helpers/storage';
 
 
 // ----- Types ----- //
@@ -74,7 +75,7 @@ function storeAcquisition(acquisition: Acquisition): boolean {
   try {
 
     const serialised = JSON.stringify(acquisition);
-    window.sessionStorage.setItem(ACQUISITIONS_STORAGE_KEY, serialised);
+    storage.setSession(ACQUISITIONS_STORAGE_KEY, serialised);
 
     return true;
 
@@ -87,7 +88,7 @@ function storeAcquisition(acquisition: Acquisition): boolean {
 // Reads the acquisition data from sessionStorage.
 function readAcquisition(): ?Acquisition {
 
-  const stored = window.sessionStorage.getItem(ACQUISITIONS_STORAGE_KEY);
+  const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
   return stored ? deserialiseJsonObject(stored) : null;
 
 }
