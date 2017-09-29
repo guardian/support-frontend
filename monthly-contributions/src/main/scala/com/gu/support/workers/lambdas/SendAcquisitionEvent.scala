@@ -59,8 +59,9 @@ object SendAcquisitionEvent {
             paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
             // Currently only passing through at most one campaign code
             campaignCode = state.referrerAcquisitionData.campaignCode.map(Set(_)),
-            // Currently only passing through at most one AB test
-            abTests = state.referrerAcquisitionData.abTest.map(test => thrift.AbTestInfo(Set(test))),
+            abTests = Some(thrift.AbTestInfo(
+              state.supportAbTests ++ Set(state.referrerAcquisitionData.abTest).flatten)
+            ),
             // FIXME: currently not passing through country code
             countryCode = None,
             referrerPageViewId = state.referrerAcquisitionData.referrerPageviewId,
