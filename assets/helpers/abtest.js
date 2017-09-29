@@ -1,11 +1,13 @@
 // @flow
 
 // ----- Imports ----- //
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
+
 
 // ----- Setup ----- //
 
@@ -84,14 +86,14 @@ function getMvtId(): number {
 
 function getLocalStorageParticipation(): Participations {
 
-  const abTests = storage.getItem('gu.support.abTests');
+  const abTests = storage.getLocal('gu.support.abTests');
 
   return abTests ? JSON.parse(abTests) : {};
 
 }
 
 function setLocalStorageParticipation(participation): void {
-  storage.setItem('gu.support.abTests', JSON.stringify(participation));
+  storage.setLocal('gu.support.abTests', JSON.stringify(participation));
 }
 
 function getUrlParticipation(): ?Participations {
