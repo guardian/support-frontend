@@ -4,9 +4,12 @@
 
 const getQueryParameter = (paramName: string, defaultValue?: string): ?string => {
 
-  const params = new URLSearchParams(window.location.search.toLowerCase());
+  const params = new URLSearchParams(window.location.search);
 
-  return params.get(paramName.toLowerCase()) || defaultValue;
+  return params.get(paramName) ||
+    params.get(paramName.toLowerCase()) ||
+    params.get(paramName.toUpperCase()) ||
+    defaultValue;
 
 };
 
