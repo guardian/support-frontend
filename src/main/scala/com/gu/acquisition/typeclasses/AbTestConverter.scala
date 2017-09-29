@@ -1,7 +1,7 @@
-package com.gu.acquisition.utils
+package com.gu.acquisition.typeclasses
 
 import ophan.thrift.event.AbTest
-import simulacrum._
+import simulacrum.typeclass
 
 @typeclass trait AbTestConverter[A] {
   def asAbTest(a: A): AbTest

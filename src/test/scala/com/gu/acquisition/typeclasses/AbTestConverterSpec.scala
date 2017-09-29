@@ -1,9 +1,9 @@
-package com.gu.acquisition.utils
+package com.gu.acquisition.typeclasses
 
 import ophan.thrift.event.{AbTest, AbTestInfo}
 import org.scalatest.{Matchers, WordSpecLike}
 
-class AbTestConvertorSpec extends WordSpecLike with Matchers {
+class AbTestConverterSpec extends WordSpecLike with Matchers {
 
   case class ExampleABTest(testName: String, variantName: String)
 
@@ -16,7 +16,7 @@ class AbTestConvertorSpec extends WordSpecLike with Matchers {
   "An AB test info instance" should {
 
     "be able to be created from a collection of a class with an implicit AB test converter in scope" in {
-      import com.gu.acquisition.syntax._
+      import com.gu.acquisition.syntax.iterable._
 
       val tests = List(
         ExampleABTest("test1", "control1"),
