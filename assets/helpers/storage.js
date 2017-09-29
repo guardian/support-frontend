@@ -2,37 +2,75 @@
 
 // ----- Setup ----- //
 
-// Checks if localStorage is usable. Need to do more than check if
+// Checks if local/sessionStorage is usable. Need to do more than check if
 // 'window.localStorage' is defined, because Safari in private browsing
 // mode is weird and sets the storage size to 0.
-let localStorageAvailable = false;
+let localAvailable = false;
+let sessionAvailable = false;
 
 try {
 
   localStorage.setItem('storageTest', 'testValue');
-  localStorageAvailable = localStorage.getItem('storageTest') === 'testValue';
+  localAvailable = localStorage.getItem('storageTest') === 'testValue';
 
 } catch (e) {
-  localStorageAvailable = false;
+  localAvailable = false;
+}
+
+try {
+
+  sessionStorage.setItem('storageTest', 'testValue');
+  sessionAvailable = sessionStorage.getItem('storageTest') === 'testValue';
+
+} catch (e) {
+  sessionAvailable = false;
 }
 
 
 // ----- Exports ----- //
 
-export function setItem(key: string, item: string): void {
+function setLocal(key: string, item: string): void {
 
-  if (localStorageAvailable) {
+  if (localAvailable) {
     localStorage.setItem(key, item);
   }
 
 }
 
-export function getItem(key: string): ?string {
+function getLocal(key: string): ?string {
 
-  if (localStorageAvailable) {
+  if (localAvailable) {
     return localStorage.getItem(key);
   }
 
   return null;
 
 }
+
+function setSession(key: string, item: string): void {
+
+  if (sessionAvailable) {
+    sessionStorage.setItem(key, item);
+  }
+
+}
+
+function getSession(key: string): ?string {
+
+  if (sessionAvailable) {
+    return sessionStorage.getItem(key);
+  }
+
+  return null;
+
+}
+
+
+// ----- Exports ----- //
+
+export {
+  setLocal,
+  getLocal,
+  setSession,
+  getSession,
+};
