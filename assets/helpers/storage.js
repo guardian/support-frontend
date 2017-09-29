@@ -24,8 +24,8 @@ function isStorageAvailable(storage): boolean {
 
 }
 
-const SESSION_AVAILABLE = isStorageAvailable(sessionStorage);
-const LOCAL_AVAILABLE = isStorageAvailable(localStorage);
+const SESSION_AVAILABLE = isStorageAvailable(window.sessionStorage);
+const LOCAL_AVAILABLE = isStorageAvailable(window.localStorage);
 
 
 // ----- Functions ----- //
