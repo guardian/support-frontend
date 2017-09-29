@@ -22,4 +22,5 @@ object StateCodecs {
   implicit val updateMembersDataApiStateCodec: Codec[UpdateMembersDataAPIState] = deriveCodec
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec[CompletedState]
+  implicit val sendAcquisitionEventStateDecoder: Decoder[SendAcquisitionEventState] = deriveDecoder
 }

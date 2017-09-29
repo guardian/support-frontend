@@ -1,6 +1,7 @@
 package com.gu.support.workers.exceptions
 
 import com.amazonaws.services.kms.model.AWSKMSException
+import com.gu.acquisition.model.errors.OphanServiceError
 import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.Stripe
@@ -25,6 +26,8 @@ object ErrorHandler extends LazyLogging {
     case e: ZuoraErrorResponse => logAndRethrow(e.asRetryException)
     //Salesforce
     case e: SalesforceErrorResponse => logAndRethrow(e.asRetryException)
+    // Ophan
+    case e: OphanServiceError => logAndRethrow(e.asRetryException)
     //Any Exception that we haven't specifically handled
     case e: Throwable => logAndRethrow(e.asRetryException)
   }
