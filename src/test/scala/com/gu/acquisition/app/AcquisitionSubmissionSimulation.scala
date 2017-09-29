@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
 import akka.stream.{ActorMaterializer, Materializer}
 import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
-import com.gu.acquisition.services.OphanService
+import com.gu.acquisition.services.DefaultOphanService
 import com.typesafe.scalalogging.StrictLogging
 import ophan.thrift.event.{Acquisition, PaymentFrequency, PaymentProvider}
 
@@ -39,8 +39,9 @@ object BasicMockDataGenerator extends MockDataGenerator {
     )
 }
 
-class AcquisitionSubmissionSimulator(service: OphanService, generator: MockDataGenerator)(implicit ec: ExecutionContext)
-  extends StrictLogging {
+class AcquisitionSubmissionSimulator(service: DefaultOphanService, generator: MockDataGenerator)(
+  implicit ec: ExecutionContext) extends StrictLogging {
+
   import cats.instances.future._
 
   def submit(): Future[Unit] = {
@@ -61,7 +62,7 @@ object AcquisitionSubmissionSimulator {
     materializer: Materializer
   ): AcquisitionSubmissionSimulator = {
 
-    val service = new OphanService(endpoint)
+    val service = new DefaultOphanService(endpoint)
     new AcquisitionSubmissionSimulator(service, generator)
   }
 }
