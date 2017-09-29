@@ -115,30 +115,17 @@ function buildAcquisition(acquisitionData: Object = {}): Acquisition {
 
 }
 
-// Builds the acquisition object, and stores in sessionStorage.
-function buildAndStore(acquisitionData?: Object): Acquisition {
-
-  const acquisition = buildAcquisition(acquisitionData);
-  storeAcquisition(acquisition);
-
-  return acquisition;
-
-}
-
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
 function getAcquisition(): Acquisition {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
-  // Create from the query param data.
-  if (paramData) {
-    return buildAndStore(paramData);
-  }
+  // Read from param, or read from sessionStorage, or build minimal version.
+  const acquisition = buildAcquisition(paramData || readAcquisition() || undefined);
+  storeAcquisition(acquisition);
 
-  // Read from sessionStorage.
-  const acquisition = readAcquisition();
-  return buildAndStore(acquisition || undefined);
+  return acquisition;
 
 }
 
