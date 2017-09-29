@@ -58,3 +58,17 @@ export function parseBoolean(boolString: string, fallback: boolean): boolean {
 export function titleCase(s: string) {
   return s.charAt(0).toUpperCase() + s.toLowerCase().substring(1);
 }
+
+/* eslint-disable no-bitwise, no-mixed-operators */
+
+export function UUID(mask: string = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx') {
+  const replacer = (c) => {
+    let d = new Date().getTime();
+    const r = (d + (Math.random() * 16)) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  };
+  return mask.replace(/[xy]/g, replacer);
+}
+
+/* eslint-enable no-bitwise, no-mixed-operators */

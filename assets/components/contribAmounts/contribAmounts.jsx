@@ -34,6 +34,7 @@ type PropTypes = {
   onNumberInputKeyPress: () => void,
   isoCountry: IsoCountry,
   abTests: Participations,
+  accessibilityHint: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -64,28 +65,34 @@ const amountRadiosAnnual = {
     {
       value: '50',
       text: '£50',
+      accessibilityHint: 'contribute fifty pounds annually',
     },
     {
       value: '75',
       text: '£75',
+      accessibilityHint: 'contribute seventy five pounds annually',
     },
     {
       value: '100',
       text: '£100',
+      accessibilityHint: 'contribute one hundred pounds annually',
     },
   ],
   US: [
     {
       value: '50',
       text: '$50',
+      accessibilityHint: 'contribute fifty dollars annually',
     },
     {
       value: '75',
       text: '$75',
+      accessibilityHint: 'contribute seventy five dollars annually',
     },
     {
       value: '100',
       text: '$100',
+      accessibilityHint: 'contribute one hundred dollars annually',
     },
   ],
 };
@@ -95,28 +102,34 @@ const amountRadiosMonthly = {
     {
       value: '5',
       text: '£5',
+      accessibilityHint: 'contribute five pounds per month',
     },
     {
       value: '10',
       text: '£10',
+      accessibilityHint: 'contribute ten pounds per month',
     },
     {
       value: '20',
       text: '£20',
+      accessibilityHint: 'contribute twenty pounds per month',
     },
   ],
   US: [
     {
       value: '5',
       text: '$5',
+      accessibilityHint: 'contribute five dollars per month',
     },
     {
       value: '10',
       text: '$10',
+      accessibilityHint: 'contribute ten dollars per month',
     },
     {
       value: '20',
       text: '$20',
+      accessibilityHint: 'contribute twenty dollars per month',
     },
   ],
 };
@@ -126,36 +139,44 @@ const amountRadiosOneOff = {
     {
       value: '25',
       text: '£25',
+      accessibilityHint: 'make a one-off contribution of twenty five pounds',
     },
     {
       value: '50',
       text: '£50',
+      accessibilityHint: 'make a one-off contribution of fifty pounds',
     },
     {
       value: '100',
       text: '£100',
+      accessibilityHint: 'make a one-off contribution of one hundred pounds',
     },
     {
       value: '250',
       text: '£250',
+      accessibilityHint: 'make a one-off contribution of two hundred and fifty pounds',
     },
   ],
   US: [
     {
       value: '25',
       text: '$25',
+      accessibilityHint: 'make a one-time contribution of twenty five dollars',
     },
     {
       value: '50',
       text: '$50',
+      accessibilityHint: 'make a one-time contribution of fifty dollars',
     },
     {
       value: '100',
       text: '$100',
+      accessibilityHint: 'make a one-time contribution of one hundred dollars',
     },
     {
       value: '250',
       text: '$250',
+      accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
     },
   ],
 };
@@ -165,35 +186,42 @@ const contribCaptionRadios = {
     {
       value: 'ANNUAL',
       text: 'Annual',
+      accessibilityHint: 'Make a regular annual contribution',
     },
     {
       value: 'MONTHLY',
       text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
     },
     {
       value: 'ONE_OFF',
       text: 'One-off',
+      accessibilityHint: 'Make a one-off contribution',
     },
   ],
   GB: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
     },
     {
       value: 'ONE_OFF',
       text: 'One-off',
+      accessibilityHint: 'Make a one-off contribution',
     },
   ],
   US: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
     },
     {
       id: 'qa-one-off-toggle',
       value: 'ONE_OFF',
       text: 'One-time',
+      accessibilityHint: 'Make a one-time contribution',
     },
   ],
 };
@@ -217,10 +245,11 @@ function amountToggles(isoCountry: IsoCountry = 'GB'): AmountToggle {
   };
 }
 
-function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean): Toggle {
+function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean, accessibilityHint: ?string): Toggle {
   return {
     name: 'contributions-period-toggle',
     radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCountry],
+    accessibilityHint,
   };
 }
 
@@ -258,6 +287,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
+      accessibilityHint: props.accessibilityHint,
     };
   } else if (props.contribType === 'MONTHLY') {
 
@@ -268,6 +298,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
+      accessibilityHint: props.accessibilityHint,
     };
 
   }
@@ -279,6 +310,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     toggles: amountToggles(props.isoCountry).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
+    accessibilityHint: props.accessibilityHint,
   };
 
 }
@@ -307,12 +339,13 @@ export default function ContribAmounts(props: PropTypes) {
   const showAnnual: boolean = getShowAnnual(props);
   const attrs = getAttrs(props);
   const className = getClassName(attrs.contribType);
+  const contribGroupAccessibilityHint = `Choose a monthly or ${props.isoCountry === 'US' ? 'one time' : 'one-off'} contribution option`;
 
   return (
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle(props.isoCountry, showAnnual)}
+          {...contribToggle(props.isoCountry, showAnnual, contribGroupAccessibilityHint)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           showAnnual={showAnnual}
