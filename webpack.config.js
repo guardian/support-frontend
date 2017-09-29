@@ -57,6 +57,7 @@ module.exports = (env) => {
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
       payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
+      googleTagManager: 'helpers/tracking/googleTagManager.js',
     },
 
     output: {
