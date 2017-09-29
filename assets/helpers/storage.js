@@ -3,35 +3,30 @@
 // ----- Setup ----- //
 
 // Checks if local/sessionStorage is usable. Need to do more than check if
-// 'window.localStorage' is defined, because Safari in private browsing
+// 'window.localStorage' is defined, because Safari <11 in private browsing
 // mode is weird and sets the storage size to 0.
-let localAvailable = false;
-let sessionAvailable = false;
+function isStorageAvailable(storage) {
 
-try {
+  try {
 
-  localStorage.setItem('storageTest', 'testValue');
-  localAvailable = localStorage.getItem('storageTest') === 'testValue';
+    storage.setItem('storageTest', 'testValue');
+    return storage.getItem('storageTest') === 'testValue';
 
-} catch (e) {
-  localAvailable = false;
+  } catch (e) {
+    return false;
+  }
+
 }
 
-try {
-
-  sessionStorage.setItem('storageTest', 'testValue');
-  sessionAvailable = sessionStorage.getItem('storageTest') === 'testValue';
-
-} catch (e) {
-  sessionAvailable = false;
-}
+const SESSION_AVAILABLE = isStorageAvailable(sessionStorage);
+const LOCAL_AVAILABLE = isStorageAvailable(localStorage);
 
 
-// ----- Exports ----- //
+// ----- Functions ----- //
 
 function setLocal(key: string, item: string): void {
 
-  if (localAvailable) {
+  if (LOCAL_AVAILABLE) {
     localStorage.setItem(key, item);
   }
 
@@ -39,7 +34,7 @@ function setLocal(key: string, item: string): void {
 
 function getLocal(key: string): ?string {
 
-  if (localAvailable) {
+  if (LOCAL_AVAILABLE) {
     return localStorage.getItem(key);
   }
 
@@ -49,7 +44,7 @@ function getLocal(key: string): ?string {
 
 function setSession(key: string, item: string): void {
 
-  if (sessionAvailable) {
+  if (SESSION_AVAILABLE) {
     sessionStorage.setItem(key, item);
   }
 
@@ -57,7 +52,7 @@ function setSession(key: string, item: string): void {
 
 function getSession(key: string): ?string {
 
-  if (sessionAvailable) {
+  if (SESSION_AVAILABLE) {
     return sessionStorage.getItem(key);
   }
 
