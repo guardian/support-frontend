@@ -12,6 +12,8 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import { checkoutError } from '../oneoffContributionsActions';
+
 
 // ----- Types ----- //
 
@@ -25,6 +27,7 @@ type PropTypes = {
   refpvid?: string,
   isoCountry: IsoCountry,
   payPalErrorHandler: (string) => void,
+  checkoutError: (?string) => void,
 };
 
 
@@ -41,15 +44,34 @@ function getStatusMessage(formEmpty: boolean, error: ?string): Node {
 
 }
 
+function formValidation(formEmpty, error) {
+
+  return (callback: Function) => {
+
+    if (!formEmpty) {
+      error(null);
+      callback();
+    } else {
+      error('Please fill in all the fields above.');
+    }
+
+  };
+
+}
+
 
 // ----- Component ----- //
 
 function OneoffContributionsPayment(props: PropTypes) {
 
   return (
-    <section className="regular-contribution-payment">
+    <section className="oneoff-contribution-payment">
       {getStatusMessage(props.formEmpty, props.error)}
-      <StripePopUpButton email={props.email} callback={props.stripeCallback} />
+      <StripePopUpButton
+        email={props.email}
+        callback={props.stripeCallback}
+        onClick={formValidation(props.formEmpty, props.checkoutError)}
+      />
       <PayPalContributionButton
         amount={props.amount}
         intCmp={props.intCmp}
@@ -79,6 +101,16 @@ function mapStateToProps(state) {
 
 }
 
+function mapDispatchToProps(dispatch) {
+
+  return {
+    checkoutError: (message: ?string) => {
+      dispatch(checkoutError(message));
+    },
+  };
+
+}
+
 
 // ----- Default Props ----- //
 
@@ -90,4 +122,4 @@ OneoffContributionsPayment.defaultProps = {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(OneoffContributionsPayment);
+export default connect(mapStateToProps, mapDispatchToProps)(OneoffContributionsPayment);
