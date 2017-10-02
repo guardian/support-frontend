@@ -3,8 +3,12 @@ package com.gu.support.workers
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrapFixture}
+import com.gu.support.workers.encoding.Wrapper.jsonCodec
 import com.gu.support.workers.lambdas._
+import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
+import io.circe.parser._
+
 import scala.io.Source
 
 @IntegrationTest
@@ -15,18 +19,20 @@ class EndToEndSpec extends LambdaSpec {
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())
-      .parallel(new ContributionCompleted, new SendThankYouEmail(), new UpdateMembersDataAPI())
+      .parallel(new ContributionCompleted, new SendThankYouEmail())
       .last()
 
-    assertUnit(output)
+    val decoded = decode[List[JsonWrapper]](output.toString("utf-8"))
+    decoded.isRight should be(true)
+    decoded.right.get.size should be (2)
   }
 
   implicit class InputStreamChaining(val stream: InputStream) {
 
     def parallel(handlers: Handler[_, _]*): InputStream = {
       val listStartMarker = Array[Byte]('[')
-      val listEndMarker = Array[Byte](',')
-      val listSeparator = Array[Byte](']')
+      val listEndMarker = Array[Byte](']')
+      val listSeparator = Array[Byte](',')
 
       val output = new ByteArrayOutputStream()
 
