@@ -7,6 +7,7 @@ import {
   descending,
   roundDp,
   generateClassName,
+  parseBoolean,
 } from '../utilities';
 
 
@@ -83,13 +84,34 @@ describe('utilities', () => {
 
   describe('generateClassName', () => {
 
-    it('create the same classname if no modifier is passed', () => {
+    it('should create the same classname if no modifier is passed', () => {
       expect(generateClassName('made-up-class')).toEqual('made-up-class');
     });
 
-    it('return a classname with a modifier attached', () => {
+    it('should return a classname with a modifier attached', () => {
       expect(generateClassName('made-up-class', 'fake-modifier'))
         .toEqual('made-up-class made-up-class--fake-modifier');
+    });
+
+  });
+
+  describe('parseBoolean', () => {
+
+    it('should parse all variations of true', () => {
+      expect(parseBoolean('true', false)).toBe(true);
+      expect(parseBoolean('TRUE', false)).toBe(true);
+      expect(parseBoolean('True', false)).toBe(true);
+    });
+
+    it('should parse all variations of false', () => {
+      expect(parseBoolean('false', true)).toBe(false);
+      expect(parseBoolean('FALSE', true)).toBe(false);
+      expect(parseBoolean('False', true)).toBe(false);
+    });
+
+    it('should produce the correct fallbacks on failure to parse', () => {
+      expect(parseBoolean('notaboolean', true)).toBe(true);
+      expect(parseBoolean('notaboolean', false)).toBe(false);
     });
 
   });
