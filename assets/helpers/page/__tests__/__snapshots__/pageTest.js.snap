@@ -8,18 +8,19 @@ exports[`reducer tests should handle SET_COUNTRY to US 3`] = `null`;
 
 exports[`reducer tests should handle SET_COUNTRY to US 4`] = `Object {}`;
 
-exports[`reducer tests should handle SET_INTCMP to "dummy_intcmp" 1`] = `null`;
-
-exports[`reducer tests should handle SET_INTCMP to "dummy_intcmp" 2`] = `"GB"`;
-
-exports[`reducer tests should handle SET_INTCMP to "dummy_intcmp" 3`] = `Object {}`;
-
 exports[`reducer tests should return the initial state 1`] = `
 Object {
   "abParticipations": Object {},
+  "acquisition": Object {
+    "abTests": Array [],
+    "campaignCode": null,
+    "componentId": null,
+    "componentType": null,
+    "referrerPageviewId": null,
+    "referrerUrl": null,
+    "source": null,
+  },
   "campaign": "dummy_campaign",
   "country": "GB",
-  "intCmp": null,
-  "refpvid": null,
 }
 `;

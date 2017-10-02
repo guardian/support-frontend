@@ -18,9 +18,16 @@ describe('reducer tests', () => {
   beforeEach(() => {
 
     const initialState = {
-      intCmp: null,
       campaign: 'dummy_campaign',
-      refpvid: null,
+      acquisition: {
+        referrerPageviewId: null,
+        campaignCode: null,
+        referrerUrl: null,
+        componentId: null,
+        componentType: null,
+        source: null,
+        abTests: [],
+      },
       country: 'GB',
       abParticipations: {},
     };
@@ -31,23 +38,6 @@ describe('reducer tests', () => {
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
-  });
-
-  it('should handle SET_INTCMP to "dummy_intcmp"', () => {
-
-    const intCmp = 'dummy_intcmp';
-    const action = {
-      type: 'SET_INTCMP',
-      intCmp,
-    };
-
-    const newState = reducer(undefined, action);
-
-    expect(newState.intCmp).toEqual(intCmp);
-    expect(newState.campaign).toBeNull();
-    expect(newState.refpvid).toMatchSnapshot();
-    expect(newState.country).toMatchSnapshot();
-    expect(newState.abParticipations).toMatchSnapshot();
   });
 
   it('should handle SET_COUNTRY to US', () => {
@@ -61,9 +51,9 @@ describe('reducer tests', () => {
     const newState = reducer(undefined, action);
 
     expect(newState.country).toEqual(country);
-    expect(newState.intCmp).toMatchSnapshot();
+    expect(newState.acquisition.campaignCode).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
-    expect(newState.refpvid).toMatchSnapshot();
+    expect(newState.acquisition.campaignCode).toMatchSnapshot();
     expect(newState.abParticipations).toMatchSnapshot();
   });
 

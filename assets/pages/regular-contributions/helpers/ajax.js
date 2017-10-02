@@ -86,7 +86,7 @@ function statusPoll(dispatch: Function, getState: Function) {
   const state = getState();
 
   if (state.page.regularContrib.pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.intCmp);
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.acquisition.campaignCode);
     window.location.assign(url);
   }
 
@@ -120,7 +120,7 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.common.intCmp));
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.common.acquisition.campaignCode));
           break;
         default:
           delayedStatusPoll(dispatch, getState);

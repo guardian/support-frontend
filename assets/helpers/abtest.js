@@ -30,7 +30,6 @@ export type Participations = {
   [TestId]: string,
 }
 
-
 type Test = {
   testId: TestId,
   variants: string[],

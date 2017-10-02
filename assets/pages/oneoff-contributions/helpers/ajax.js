@@ -28,7 +28,7 @@ type OneoffContribFields = {
   ophanBrowserId?: string,
   cmp?: string,
   intcmp: ?string,
-  refererPageviewId?: string,
+  refererPageviewId: ?string,
   refererUrl?: string,
   idUser?: string,
   platform?: string,
@@ -53,12 +53,9 @@ function requestData(paymentToken: string, getState: () => PageState) {
       marketing: state.page.user.gnmMarketing,
       postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
-      intcmp: state.common.intCmp,
+      intcmp: state.common.acquisition.campaignCode,
+      refererPageviewId: state.common.acquisition.referrerPageviewId,
     };
-
-    if (state.common.refpvid) {
-      oneOffContribFields.refererPageviewId = state.common.refpvid;
-    }
 
     return {
       method: 'POST',
@@ -87,7 +84,7 @@ export default function postCheckout(
     const url: string = addQueryParamToURL(
       routes.oneOffContribThankyou,
       'INTCMP',
-      getState().common.intCmp,
+      getState().common.acquisition.campaignCode,
     );
 
     if (response.ok) {
