@@ -77,16 +77,16 @@ describe('utilities', () => {
   describe('roundDp', () => {
 
     it('should by default round to two decimal places', () => {
-      expect(roundDp(1234.5678)).toEqual(1234.57);
+      expect(roundDp(1234.5678)).toBe(1234.57);
     });
 
     it('should round, not floor or ceil', () => {
-      expect(roundDp(12.345)).toEqual(12.35);
-      expect(roundDp(12.344)).toEqual(12.34);
+      expect(roundDp(12.345)).toBe(12.35);
+      expect(roundDp(12.344)).toBe(12.34);
     });
 
     it('should round to a given number of decimal places', () => {
-      expect(roundDp(12.3456789, 5)).toEqual(12.34568);
+      expect(roundDp(12.3456789, 5)).toBe(12.34568);
     });
 
   });
@@ -94,12 +94,12 @@ describe('utilities', () => {
   describe('generateClassName', () => {
 
     it('should create the same classname if no modifier is passed', () => {
-      expect(generateClassName('made-up-class')).toEqual('made-up-class');
+      expect(generateClassName('made-up-class')).toBe('made-up-class');
     });
 
     it('should return a classname with a modifier attached', () => {
       expect(generateClassName('made-up-class', 'fake-modifier'))
-        .toEqual('made-up-class made-up-class--fake-modifier');
+        .toBe('made-up-class made-up-class--fake-modifier');
     });
 
   });
