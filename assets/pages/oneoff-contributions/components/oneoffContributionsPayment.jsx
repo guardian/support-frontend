@@ -26,7 +26,6 @@ type PropTypes = {
   intCmp?: string,
   refpvid?: string,
   isoCountry: IsoCountry,
-  payPalErrorHandler: (string) => void,
   checkoutError: (?string) => void,
 };
 
@@ -44,6 +43,7 @@ function getStatusMessage(formEmpty: boolean, error: ?string): Node {
 
 }
 
+// If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(formEmpty, error) {
 
   return (callback: Function) => {
