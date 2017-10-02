@@ -6,6 +6,7 @@ import {
   ascending,
   descending,
   roundDp,
+  generateClassName,
 } from '../utilities';
 
 
@@ -76,6 +77,19 @@ describe('utilities', () => {
 
     it('should round to a given number of decimal places', () => {
       expect(roundDp(12.3456789, 5)).toEqual(12.34568);
+    });
+
+  });
+
+  describe('generateClassName', () => {
+
+    it('create the same classname if no modifier is passed', () => {
+      expect(generateClassName('made-up-class')).toEqual('made-up-class');
+    });
+
+    it('return a classname with a modifier attached', () => {
+      expect(generateClassName('made-up-class', 'fake-modifier'))
+        .toEqual('made-up-class made-up-class--fake-modifier');
     });
 
   });
