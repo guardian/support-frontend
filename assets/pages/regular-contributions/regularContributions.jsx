@@ -28,7 +28,7 @@ import { init as pageInit } from 'helpers/page/page';
 
 import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
-import RegularContributionPayment from './components/paymentMethodsContainer';
+import RegularContributionPayment from './components/regularContributionPayment';
 import reducer from './regularContributionsReducers';
 import type { PageState } from './regularContributionsReducers';
 
