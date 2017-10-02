@@ -153,7 +153,7 @@ describe('utilities', () => {
 
       const serialised = '[1, 2, 3]';
 
-      expect(deserialiseJsonObject(serialised)).toBeNull;
+      expect(deserialiseJsonObject(serialised)).toBeNull();
 
     });
 
@@ -161,7 +161,7 @@ describe('utilities', () => {
 
       const serialised = '{{notvalidJSON';
 
-      expect(deserialiseJsonObject(serialised)).toBeNull;
+      expect(deserialiseJsonObject(serialised)).toBeNull();
 
     });
 
