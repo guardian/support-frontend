@@ -15,10 +15,9 @@ import { userReducer as user } from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { PaymentStatus } from 'components/paymentMethods/paymentMethods';
 
-import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
 import type { Action } from './regularContributionsActions';
+import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
 
 
 // ----- Types ----- //

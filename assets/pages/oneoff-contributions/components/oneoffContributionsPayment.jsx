@@ -18,6 +18,8 @@ import postCheckout from '../helpers/ajax';
 
 // ----- Types ----- //
 
+export type PayPalButtonType = 'ContributionsCheckout' | 'NotSet';
+
 type PropTypes = {
   email: string,
   error: ?string,

@@ -20,6 +20,8 @@ import postCheckout from '../helpers/ajax';
 
 export type PaymentStatus = 'NotStarted' | 'Pending' | 'Failed';
 
+export type PayPalButtonType = 'ExpressCheckout' | 'NotSet';
+
 type PropTypes = {
   email: string,
   hide: boolean,

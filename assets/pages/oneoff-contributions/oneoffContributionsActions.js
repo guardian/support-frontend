@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
+import type { PayPalButtonType } from './components/oneoffContributionsPayment';
+
 
 // ----- Types ----- //
 
