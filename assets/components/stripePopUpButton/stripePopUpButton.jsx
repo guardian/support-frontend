@@ -14,6 +14,7 @@ import {
 
 // ---- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   stripeLoaded: boolean,
   setupStripeCheckout: Function,
@@ -23,6 +24,7 @@ type PropTypes = {
   email: string,
   callback: Function,
 };
+/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Component ----- //
