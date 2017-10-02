@@ -29,7 +29,6 @@ import OneoffContributionsPayment from './components/oneoffContributionsPayment'
 import FormFields from './components/formFields';
 import reducer from './oneOffContributionsReducers';
 import type { PageState } from './oneOffContributionsReducers';
-import postCheckout from './helpers/ajax';
 
 import { setPayPalButton } from './oneoffContributionsActions';
 
@@ -79,9 +78,7 @@ const content = (
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
-          <OneoffContributionsPayment
-            stripeCallback={postCheckout}
-          />
+          <OneoffContributionsPayment />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">

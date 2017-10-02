@@ -11,6 +11,9 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import type { Node } from 'react';
+import type { Contrib } from 'helpers/contributions';
+
+import postCheckout from '../helpers/ajax';
 
 
 // ----- Types ----- //
@@ -21,8 +24,7 @@ type PropTypes = {
   email: string,
   hide: boolean,
   error: ?string,
-  stripeCallback: Function,
-  payPalCallback: Function,
+  contributionType: Contrib,
   paymentStatus: PaymentStatus,
 };
 
@@ -49,24 +51,29 @@ function getStatusMessage(
 }
 
 // Provides the Stripe button component.
-function getStripeButton(hide: boolean, email: string, callback: Function): Node {
+function getStripeButton(hide: boolean, email: string, contribType: Contrib): Node {
 
   if (hide) {
     return null;
   }
 
-  return <StripePopUpButton email={email} callback={callback} />;
+  return (
+    <StripePopUpButton
+      email={email}
+      callback={postCheckout('stripeToken', contribType)}
+    />
+  );
 
 }
 
 // Provides the PayPal Express Checkout button component.
-function getPayPalButton(hide: boolean, callback: Function): Node {
+function getPayPalButton(hide: boolean, contribType: Contrib): Node {
 
   if (hide) {
     return null;
   }
 
-  return <PayPalExpressButton callback={callback} />;
+  return <PayPalExpressButton callback={postCheckout('baid', contribType)} />;
 
 }
 
@@ -78,8 +85,8 @@ function RegularContributionsPayment(props: PropTypes) {
   return (
     <section className="regular-contribution-payment">
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
-      {getStripeButton(props.hide, props.email, props.stripeCallback)}
-      {getPayPalButton(props.hide, props.payPalCallback)}
+      {getStripeButton(props.hide, props.email, props.contributionType)}
+      {getPayPalButton(props.hide, props.contributionType)}
     </section>
   );
 

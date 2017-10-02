@@ -13,6 +13,7 @@ import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import { checkoutError } from '../oneoffContributionsActions';
+import postCheckout from '../helpers/ajax';
 
 
 // ----- Types ----- //
@@ -21,7 +22,6 @@ type PropTypes = {
   email: string,
   error: ?string,
   formEmpty: boolean,
-  stripeCallback: Function,
   amount: string,
   intCmp?: string,
   refpvid?: string,
@@ -69,7 +69,7 @@ function OneoffContributionsPayment(props: PropTypes) {
       {getStatusMessage(props.formEmpty, props.error)}
       <StripePopUpButton
         email={props.email}
-        callback={props.stripeCallback}
+        callback={postCheckout}
         onClick={formValidation(props.formEmpty, props.checkoutError)}
       />
       <PayPalContributionButton
