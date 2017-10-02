@@ -49,7 +49,7 @@ function getStatusMessage(
 }
 
 // Provides the Stripe button component.
-function getStripeButton(hide: boolean, email: string, callback: Function) {
+function getStripeButton(hide: boolean, email: string, callback: Function): Node {
 
   if (hide) {
     return null;
@@ -60,7 +60,7 @@ function getStripeButton(hide: boolean, email: string, callback: Function) {
 }
 
 // Provides the PayPal Express Checkout button component.
-function getPayPalButton(hide: boolean, callback: Function) {
+function getPayPalButton(hide: boolean, callback: Function): Node {
 
   if (hide) {
     return null;
