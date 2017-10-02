@@ -73,7 +73,7 @@ function getPayPalButton(hide: boolean, callback: Function): Node {
 
 // ----- Component ----- //
 
-function RegularContributionPayment(props: PropTypes) {
+function RegularContributionsPayment(props: PropTypes) {
 
   return (
     <section className="regular-contribution-payment">
@@ -102,4 +102,4 @@ function mapStateToProps(state) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(RegularContributionPayment);
+export default connect(mapStateToProps)(RegularContributionsPayment);
