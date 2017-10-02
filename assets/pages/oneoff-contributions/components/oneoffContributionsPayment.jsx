@@ -77,7 +77,7 @@ function OneoffContributionsPayment(props: PropTypes) {
         intCmp={props.intCmp}
         refpvid={props.refpvid}
         isoCountry={props.isoCountry}
-        errorHandler={props.payPalErrorHandler}
+        errorHandler={props.checkoutError}
       />
     </section>
   );
