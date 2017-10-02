@@ -9,6 +9,7 @@ import {
   generateClassName,
   clickSubstituteKeyPressHandler,
   parseBoolean,
+  deserialiseJsonObject,
 } from '../utilities';
 
 
@@ -133,6 +134,35 @@ describe('utilities', () => {
     it('should produce the correct fallbacks on failure to parse', () => {
       expect(parseBoolean('notaboolean', true)).toBe(true);
       expect(parseBoolean('notaboolean', false)).toBe(false);
+    });
+
+  });
+
+  describe('deserialiseJsonObject', () => {
+
+    it('should deserialise a valid JSON object', () => {
+
+      const serialised = '{"a": 1, "b": "hello world"}';
+      const deserialised = { a: 1, b: 'hello world' };
+
+      expect(deserialiseJsonObject(serialised)).toEqual(deserialised);
+
+    });
+
+    it('should return null for JSON that is not an object', () => {
+
+      const serialised = '[1, 2, 3]';
+
+      expect(deserialiseJsonObject(serialised)).toBeNull;
+
+    });
+
+    it('should return null for JSON that is malformed', () => {
+
+      const serialised = '{{notvalidJSON';
+
+      expect(deserialiseJsonObject(serialised)).toBeNull;
+
     });
 
   });
