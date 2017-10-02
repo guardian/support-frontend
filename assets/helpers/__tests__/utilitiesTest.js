@@ -7,8 +7,17 @@ import {
   descending,
   roundDp,
   generateClassName,
+  clickSubstituteKeyPressHandler,
   parseBoolean,
 } from '../utilities';
+
+
+// ----- Functions ----- //
+
+// Returns a mocked keypress event.
+function getMockedKeypress(key: number) {
+  return { keyCode: key, preventDefault: () => {} };
+}
 
 
 // ----- Tests ----- //
@@ -91,6 +100,18 @@ describe('utilities', () => {
     it('should return a classname with a modifier attached', () => {
       expect(generateClassName('made-up-class', 'fake-modifier'))
         .toEqual('made-up-class made-up-class--fake-modifier');
+    });
+
+  });
+
+  describe('clickSubstituteKeyPressHandler', () => {
+
+    it('should call callback if return is pressed', (done) => {
+      clickSubstituteKeyPressHandler(done)(getMockedKeypress(13));
+    });
+
+    it('should call callback if space is pressed', (done) => {
+      clickSubstituteKeyPressHandler(done)(getMockedKeypress(32));
     });
 
   });
