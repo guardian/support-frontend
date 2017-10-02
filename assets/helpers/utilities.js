@@ -57,10 +57,6 @@ function parseBoolean(boolString: string, fallback: boolean): boolean {
 
 }
 
-function titleCase(s: string) {
-  return s.charAt(0).toUpperCase() + s.toLowerCase().substring(1);
-}
-
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(serialised: string): ?Object {
 
@@ -90,6 +86,5 @@ export {
   generateClassName,
   clickSubstituteKeyPressHandler,
   parseBoolean,
-  titleCase,
   deserialiseJsonObject,
 };
