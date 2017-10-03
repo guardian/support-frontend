@@ -4,11 +4,11 @@ import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.gu.support.workers.exceptions.ErrorHandler
+import com.gu.support.workers.model.ExecutionError
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
-import com.gu.support.workers.model.ExecutionError
 
 abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler {
   import com.gu.support.workers.encoding.Encoding._
@@ -17,7 +17,7 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 
   def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     try {
-      in(is).flatMap({ case (i, error) => out(handler(i, error, context), os) }).get
+      in(is).flatMap({ case (i, encrypted, error) => out(handler(i, error, context), encrypted, os) }).get
     } catch ErrorHandler.handleException
 }
 

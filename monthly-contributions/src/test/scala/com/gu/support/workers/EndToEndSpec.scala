@@ -3,10 +3,10 @@ package com.gu.support.workers
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrapFixture}
-import com.gu.support.workers.encoding.Wrapper.jsonCodec
 import com.gu.support.workers.lambdas._
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
+import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncoder}
 import io.circe.parser._
 
 import scala.io.Source

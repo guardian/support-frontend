@@ -23,9 +23,9 @@ object Conversions {
   }
 
   implicit class FromOutputStream(val self: ByteArrayOutputStream) {
-    def toClass[T]()(implicit decoder: Decoder[T]): T = {
+    def toClass[T](encrypted: Boolean)(implicit decoder: Decoder[T]): T = {
       val is = self.toInputStream
-      val str = Encryption.decrypt(Streamable.bytes(is))
+      val str = Encryption.decrypt(Streamable.bytes(is), encrypted)
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get

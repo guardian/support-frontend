@@ -1,5 +1,6 @@
 package com.gu.encryption
 
+import com.gu.config.Configuration
 import com.gu.support.workers.encoding.AwsEncryptionProvider
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
@@ -12,7 +13,7 @@ class EncryptionSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
     val text = "Some test text"
 
-    val encryption = new AwsEncryptionProvider()
+    val encryption = new AwsEncryptionProvider(Configuration.awsConfig)
 
     val encrypted = encryption.encrypt(text)
 
