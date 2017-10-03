@@ -23,7 +23,7 @@ export type PayPalButtonType = 'ContributionsCheckout' | 'NotSet';
 type PropTypes = {
   email: string,
   error: ?string,
-  formEmpty: boolean,
+  isFormEmpty: boolean,
   amount: string,
   intCmp?: string,
   refpvid?: string,
@@ -35,7 +35,7 @@ type PropTypes = {
 // ----- Functions ----- //
 
 // Shows a message about the status of the form or the payment.
-function getStatusMessage(formEmpty: boolean, error: ?string): Node {
+function getStatusMessage(isFormEmpty: boolean, error: ?string): Node {
 
   if (error !== null && error !== undefined) {
     return <ErrorMessage message={error} />;
@@ -46,11 +46,14 @@ function getStatusMessage(formEmpty: boolean, error: ?string): Node {
 }
 
 // If the form is valid, calls the given callback, otherwise sets an error.
-function formValidation(formEmpty, error) {
+function formValidation(
+  isFormEmpty: boolean,
+  error: ?string => void,
+): Function => void {
 
   return (callback: Function) => {
 
-    if (!formEmpty) {
+    if (!isFormEmpty) {
       error(null);
       callback();
     } else {
@@ -68,11 +71,11 @@ function OneoffContributionsPayment(props: PropTypes) {
 
   return (
     <section className="oneoff-contribution-payment">
-      {getStatusMessage(props.formEmpty, props.error)}
+      {getStatusMessage(props.isFormEmpty, props.error)}
       <StripePopUpButton
         email={props.email}
         callback={postCheckout}
-        onClick={formValidation(props.formEmpty, props.checkoutError)}
+        onClick={formValidation(props.isFormEmpty, props.checkoutError)}
       />
       <PayPalContributionButton
         amount={props.amount}
@@ -94,7 +97,7 @@ function mapStateToProps(state) {
   return {
     email: state.page.user.email,
     error: state.page.oneoffContrib.error,
-    formEmpty: state.page.user.email === '' || state.page.user.fullName === '',
+    isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
     amount: state.page.oneoffContrib.amount,
     intCmp: state.common.intCmp,
     refpvid: state.common.refpvid,
