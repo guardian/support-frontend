@@ -58,7 +58,7 @@ function parseBoolean(boolString: string, fallback: boolean): boolean {
 }
 
 // Deserialises a JSON object from a string.
-function deserialiseJsonObject(serialised: string): any {
+function deserialiseJsonObject(serialised: string): ?Object {
 
   try {
 
