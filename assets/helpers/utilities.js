@@ -58,13 +58,13 @@ function parseBoolean(boolString: string, fallback: boolean): boolean {
 }
 
 // Deserialises a JSON object from a string.
-function deserialiseJsonObject(serialised: string): ?Object {
+function deserialiseJsonObject(serialised: string): any {
 
   try {
 
     const deserialised = JSON.parse(serialised);
 
-    if (deserialised && typeof deserialised === 'object') {
+    if (deserialised instanceof Object && !(deserialised instanceof Array)) {
       return deserialised;
     }
 
