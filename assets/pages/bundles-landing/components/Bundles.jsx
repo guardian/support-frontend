@@ -54,6 +54,7 @@ type ContribAttrs = {
   ctaText: string,
   modifierClass: string,
   ctaLink: string,
+  ctaAccessibilityHint: string,
 }
 
 type DigitalAttrs = {
@@ -63,6 +64,7 @@ type DigitalAttrs = {
   ctaText: string,
   modifierClass: string,
   ctaLink: string,
+  ctaAccessibilityHint: string,
 }
 
 type PaperAttrs = {
@@ -73,7 +75,9 @@ type PaperAttrs = {
   paperDigCtaText: string,
   modifierClass: string,
   paperCtaLink: string,
+  paperCtaAccessibilityHint: string,
   paperDigCtaLink: string,
+  paperDigCtaAccessibilityHint: string,
 }
 
 /* eslint-enable react/no-unused-prop-types */
@@ -93,6 +97,7 @@ const contribCopy: ContribAttrs = {
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
+  ctaAccessibilityHint: 'Proceed to make your chosen contribution',
 };
 
 const digitalCopy: DigitalAttrs = {
@@ -111,6 +116,7 @@ const digitalCopy: DigitalAttrs = {
   ctaText: 'Start your 14 day trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
+  ctaAccessibilityHint: 'Proceed to begin a fourteen day trial of a digital subscription to the guardian. After fourteen days you will be charged eleven pounds and ninety nine pence per month.',
 };
 
 const paperCopy: PaperAttrs = {
@@ -133,7 +139,9 @@ const paperCopy: PaperAttrs = {
   paperDigCtaText: 'Become a paper+digital subscriber',
   modifierClass: 'paper',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
+  paperDigCtaAccessibilityHint: 'Proceed to choose which paper you would like to receive regularly in conjunction with a digital subscription',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
+  paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
 
 const bundles: BundlesType = {
@@ -210,7 +218,11 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-      <CtaLink text={contribAttrs.ctaText} onClick={onClick} />
+      <CtaLink
+        text={contribAttrs.ctaText}
+        accessibilityHint={contribAttrs.ctaAccessibilityHint}
+        onClick={onClick}
+      />
     </Bundle>
   );
 
@@ -221,7 +233,11 @@ function DigitalBundle(props: DigitalAttrs) {
   return (
     <Bundle {...props}>
       <FeatureList listItems={bundles.digital.listItems} />
-      <CtaLink text={props.ctaText} url={props.ctaLink} />
+      <CtaLink
+        text={props.ctaText}
+        accessibilityHint={props.ctaAccessibilityHint}
+        url={props.ctaLink}
+      />
     </Bundle>
   );
 
@@ -232,8 +248,16 @@ function PaperBundle(props: PaperAttrs) {
   return (
     <Bundle {...props}>
       <FeatureList listItems={props.listItems} />
-      <CtaLink text={props.paperCtaText} url={props.paperCtaLink} />
-      <CtaLink text={props.paperDigCtaText} url={props.paperDigCtaLink} />
+      <CtaLink
+        text={props.paperCtaText}
+        accessibilityHint={props.paperCtaAccessibilityHint}
+        url={props.paperCtaLink}
+      />
+      <CtaLink
+        text={props.paperDigCtaText}
+        accessibilityHint={props.paperDigCtaAccessibilityHint}
+        url={props.paperDigCtaLink}
+      />
     </Bundle>
   );
 

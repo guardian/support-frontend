@@ -34,7 +34,6 @@ type PropTypes = {
   onNumberInputKeyPress: () => void,
   isoCountry: IsoCountry,
   abTests: Participations,
-  accessibilityHint: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -287,7 +286,6 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
-      accessibilityHint: props.accessibilityHint,
     };
   } else if (props.contribType === 'MONTHLY') {
 
@@ -298,7 +296,6 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
-      accessibilityHint: props.accessibilityHint,
     };
 
   }
@@ -310,7 +307,6 @@ function getAttrs(props: PropTypes): ContribAttrs {
     toggles: amountToggles(props.isoCountry).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
-    accessibilityHint: props.accessibilityHint,
   };
 
 }
