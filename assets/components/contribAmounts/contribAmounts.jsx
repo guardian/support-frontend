@@ -339,8 +339,13 @@ export default function ContribAmounts(props: PropTypes) {
   const showAnnual: boolean = getShowAnnual(props);
   const attrs = getAttrs(props);
   const className = getClassName(attrs.contribType);
-  const contribGroupAccessibilityHint = `Choose a monthly or ${props.isoCountry === 'US' ? 'one time' : 'one-off'} contribution option`;
-
+  const contribTypeTermHint = props.isoCountry === 'US' ? 'one time' : 'one-off';
+  const contribTypeDescription = props.contribType === 'MONTHLY' ? 'monthly' : contribTypeTermHint;
+  const contribMinMonthlyAmountHint = props.isoCountry === 'US' ? 'five dollars or more' : 'five pounds or more';
+  const contribGroupAccessibilityHint = `Choose a monthly or ${contribTypeTermHint} contribution option`;
+  const contribAmountHint = `Enter an amount of ${props.contribType === 'MONTHLY' ? contribMinMonthlyAmountHint : 'your choice'}`;
+  const contribOtherAmountAccessibilityHintId = `accessibility-hint-other-amount-${props.contribType.toLowerCase()}`;
+  const contribOtherAmountAccessibilityHint = `${contribAmountHint} for your ${contribTypeDescription} contribution.`;
   return (
     <div className="component-contrib-amounts">
       <div className="contrib-type">
@@ -365,7 +370,12 @@ export default function ContribAmounts(props: PropTypes) {
             selected={attrs.selected}
             placeholder={`Other amount (${forCountry(props.isoCountry).glyph})`}
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
+            ariaDescribedBy={contribOtherAmountAccessibilityHintId}
           />
+
+          <div className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
+            {contribOtherAmountAccessibilityHint}
+          </div>
         </div>
         {errorMessage(props.contribError, attrs.contribType, props.isoCountry)}
       </div>

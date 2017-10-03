@@ -13,6 +13,7 @@ type PropTypes = {
   selected: ?boolean,
   placeholder: ?string,
   onKeyPress: ?(event: Object) => void,
+  ariaDescribedBy: ?string,
 };
 
 
@@ -30,6 +31,7 @@ export default function NumberInput(props: PropTypes) {
       onFocus={e => props.onFocus(e.target.value || '')}
       onInput={e => props.onInput(e.target.value || '')}
       onKeyPress={props.onKeyPress}
+      aria-describedby={props.ariaDescribedBy}
     />
   );
 
@@ -42,4 +44,5 @@ NumberInput.defaultProps = {
   selected: false,
   placeholder: null,
   onKeyPress: null,
+  ariaDescribedBy: null,
 };
