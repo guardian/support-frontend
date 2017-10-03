@@ -7,7 +7,7 @@ Shared models used to interact with support step-functions.  Used by [support-wo
 Releasing to local repo
 ==================
 
-Run `sbt +publishLocal`.
+Run `sbt publishLocal`.
 
 
 Releasing to maven
