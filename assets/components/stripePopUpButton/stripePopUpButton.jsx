@@ -19,7 +19,7 @@ type PropTypes = {
   stripeLoaded: boolean,
   setupStripeCheckout: Function,
   openStripeOverlay: Function,
-  onClick: Function,
+  stripeClick: Function,
   amount: number,
   email: string,
   callback: Function,
@@ -35,14 +35,14 @@ const StripePopUpButton = (props: PropTypes) => {
     props.setupStripeCheckout(props.callback);
   }
 
-  const stripeClick = () =>
-    props.onClick(() => props.openStripeOverlay(props.amount, props.email));
+  const onClick = () =>
+    props.stripeClick(() => props.openStripeOverlay(props.amount, props.email));
 
   return (
     <button
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
-      onClick={stripeClick}
+      onClick={onClick}
     >Pay with debit/credit card <Svg svgName="credit-card" /></button>
   );
 
@@ -78,7 +78,7 @@ function mapDispatchToProps(dispatch) {
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
-  onClick: callback => callback(),
+  stripeClick: callback => callback(),
 };
 
 

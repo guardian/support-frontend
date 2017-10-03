@@ -75,7 +75,7 @@ function OneoffContributionsPayment(props: PropTypes) {
       <StripePopUpButton
         email={props.email}
         callback={postCheckout}
-        onClick={formValidation(props.isFormEmpty, props.checkoutError)}
+        stripeClick={formValidation(props.isFormEmpty, props.checkoutError)}
       />
       <PayPalContributionButton
         amount={props.amount}
