@@ -1,5 +1,27 @@
 // @flow
 
+// ----- Types ----- //
+
+export type Domain
+  = 'thegulocal.com'
+  | 'code.dev-theguardian.com'
+  | 'theguardian.com'
+  ;
+
+export type Env = 'DEV' | 'CODE' | 'PROD';
+
+
+// ----- Setup ----- //
+
+const DOMAINS: {
+  [Env]: Domain,
+} = {
+  DEV: 'thegulocal.com',
+  CODE: 'code.dev-theguardian.com',
+  PROD: 'theguardian.com',
+};
+
+
 // ----- Functions ----- //
 
 const getQueryParameter = (paramName: string, defaultValue?: string): ?string => {
@@ -34,10 +56,25 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
   return `${strInit}?${paramsObj.toString()}`;
 };
 
+function getDomain(): Domain {
+
+  const origin = window.location.origin;
+
+  if (origin.includes(DOMAINS.DEV)) {
+    return DOMAINS.DEV;
+  } else if (origin.includes(DOMAINS.CODE)) {
+    return DOMAINS.CODE;
+  }
+
+  return DOMAINS.PROD;
+
+}
+
 
 // ----- Exports ----- //
 
 export {
   getQueryParameter,
   addQueryParamToURL,
+  getDomain,
 };
