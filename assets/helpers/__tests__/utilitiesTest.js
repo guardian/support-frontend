@@ -88,6 +88,7 @@ describe('utilities', () => {
 
     it('should round to a given number of decimal places', () => {
       expect(roundDp(12.3456789, 5)).toBe(12.34568);
+      expect(roundDp(12.34, 5)).toBe(12.34);
     });
 
   });
