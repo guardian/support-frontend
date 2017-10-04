@@ -21,7 +21,7 @@ function buildUrl(returnUrl: ?string): string {
 
   const encodedReturn = encodeURIComponent(returnUrl || window.location);
 
-  return `https://profile.${getDomain()}?returnUrl=${encodedReturn}`;
+  return `https://profile.${getDomain()}/signout?returnUrl=${encodedReturn}`;
 
 }
 
