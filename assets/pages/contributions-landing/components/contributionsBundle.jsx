@@ -162,13 +162,21 @@ function ContributionsBundle(props: PropTypes) {
     }
   };
 
+  const accessibilityHint = `Make your ${props.contribType.toLowerCase()} contribution`;
+
   return (
     <Bundle {...attrs}>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
       />
-      <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
+      <CtaLink
+        ctaId="contribute"
+        text={attrs.ctaText}
+        onClick={onClick}
+        id="qa-contribute-button"
+        accessibilityHint={accessibilityHint}
+      />
       {showPayPal(props)}
       {showPayPalError(props)}
     </Bundle>

@@ -34,8 +34,10 @@ const content = (
               payment.</p>
           </h2>
           <CtaLink
+            ctaId="return-to-the-guardian"
             text="Return to the Guardian"
             url="https://theguardian.com"
+            accessibilityHint="return to the guardian dot com"
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">

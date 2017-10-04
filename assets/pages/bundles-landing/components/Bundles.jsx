@@ -182,7 +182,7 @@ function getContribKey(contribType) {
   }
 }
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
+const getContribAttrs = ({ contribType, contribAmount, intCmp, isoCountry }): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -193,8 +193,9 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
   params.append('INTCMP', intCmp);
   const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
-
-  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading });
+  const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
+  const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
+  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading, ctaAccessibilityHint });
 
 };
 
@@ -230,7 +231,7 @@ function ContributionBundle(props: PropTypes) {
         {...props}
       />
       <CtaLink
-        ctaId={contribAttrs.ctaId}
+        ctaId={contribAttrs.ctaId.toLowerCase()}
         text={contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}

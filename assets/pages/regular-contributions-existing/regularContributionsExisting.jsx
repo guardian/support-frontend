@@ -34,8 +34,10 @@ const content = (
             another way you can&nbsp;help.
           </h2>
           <CtaLink
+            ctaId="contribute-one-off-again"
             text="Make a one-off contribution"
             url={routes.oneOffContribCheckout}
+            accessibilityHint="Make a one-off contribution"
           />
         </div>
         <InfoSection heading="Questions?" className="existing__questions">
