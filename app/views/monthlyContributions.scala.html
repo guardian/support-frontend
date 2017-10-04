@@ -10,7 +10,8 @@
   user: IdUser,
   uatMode: Boolean,
   payPalButton: Boolean,
-  stripeConfig: StripeConfig,
+  defaultStripeConfig: StripeConfig,
+  uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader)
 
@@ -29,7 +30,10 @@
             }
         };
         window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
-        window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.stripeKey = {
+          default: "@defaultStripeConfig.publicKey",
+          uat: "@uatStripeConfig.publicKey"
+        };
         window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>

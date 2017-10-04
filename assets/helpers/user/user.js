@@ -22,9 +22,14 @@ const init = (dispatch: Function) => {
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
 
-  if (window.guardian && window.guardian.uatMode) {
+  if (window.guardian && window.guardian.uatMode != null) {
+    if (window.guardian.uatMode) {
+      dispatch(setTestUser(true));
+    }
+  } else if (cookie.get('_test_username')) {
     dispatch(setTestUser(true));
   }
+
   if (windowHasUser) {
     dispatch(setEmail(window.guardian.user.email));
     dispatch(setDisplayName(window.guardian.user.displayName));
