@@ -18,7 +18,7 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "acquisition-event-producer" % "2.0.0-rc.3",
+  "com.gu" %% "acquisition-event-producer" % "2.0.0-rc.4",
   "com.gu" %% "support-internationalisation" % "0.5" % "provided"
 )
 
