@@ -94,6 +94,7 @@ function showPayPal(props: PropTypes) {
       isoCountry={props.isoCountry}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
+      copy="Contribute with PayPal"
     />);
   }
   return null;
