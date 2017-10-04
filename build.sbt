@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "org.typelevel" %% "cats" % "0.9.0",
   "play-circe" %% "play-circe" % "2.6-0.8.0",
-  "com.gu" %% "support-models" % "0.10",
+  "com.gu" %% "support-models" % "0.11-SNAPSHOT",
   "com.gu" %% "support-config" % "0.7",
   "com.amazonaws" % "aws-java-sdk-sts" % "1.11.128",
   "com.typesafe.akka" %% "akka-agent" % "2.4.12",
