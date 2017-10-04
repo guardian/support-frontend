@@ -1,5 +1,6 @@
 package com.gu.support.workers.encoding
 
+import com.gu.acquisition.instances.abTest._
 import com.gu.salesforce.Salesforce._
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.model.monthlyContributions.state._

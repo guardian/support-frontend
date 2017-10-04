@@ -60,8 +60,8 @@ object SendAcquisitionEvent {
             // Currently only passing through at most one campaign code
             campaignCode = state.referrerAcquisitionData.campaignCode.map(Set(_)),
             abTests = Some(thrift.AbTestInfo(
-              state.supportAbTests ++ Set(state.referrerAcquisitionData.abTest).flatten)
-            ),
+              state.supportAbTests ++ Set(state.referrerAcquisitionData.abTest).flatten
+            )),
             countryCode = Some(state.user.country.alpha2),
             referrerPageViewId = state.referrerAcquisitionData.referrerPageviewId,
             referrerUrl = state.referrerAcquisitionData.referrerUrl,

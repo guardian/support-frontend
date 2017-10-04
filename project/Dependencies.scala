@@ -29,10 +29,11 @@ object Dependencies {
   val dispatch = "net.databinder.dispatch" %% "dispatch-core" % "0.11.3"
   val stm = "org.scala-stm" %% "scala-stm" % "0.8"
   val sentry = "com.getsentry.raven" % "raven-logback" % "8.0.3"
+  val findBugs = "com.google.code.findbugs" % "jsr305" % "1.3.+"
 
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, sentry, lambdaLogging, joda, dispatch,
     supportInternationalisation, supportModels, supportConfig, awsCloudwatch, awsS3, awsSQS, awsLambdas, okhttp, scalaUri, cats, circeCore,
-    circeGeneric, circeGenericExtras, circeParser, stm, mokito, scalaTest)
+    circeGeneric, circeGenericExtras, circeParser, stm, mokito, scalaTest, findBugs)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mockWebserver)
 
 }
