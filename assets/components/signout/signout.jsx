@@ -10,7 +10,7 @@ import { getDomain } from 'helpers/url';
 // ---- Types ----- //
 
 type PropTypes = {
-  returnUrl: ?string,
+  returnUrl?: string,
 };
 
 
@@ -37,3 +37,10 @@ export default function Signout(props: PropTypes) {
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+Signout.defaultProps = {
+  returnUrl: '',
+};
