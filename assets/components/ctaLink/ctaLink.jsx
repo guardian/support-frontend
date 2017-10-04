@@ -12,6 +12,7 @@ import { clickSubstituteKeyPressHandler, UUID } from 'helpers/utilities';
 type PropTypes = {
   text: string,
   accessibilityHint: string,
+  ctaId: string,
   url?: ?string,
   onClick?: ?Function,
   tabIndex?: number,
@@ -22,11 +23,12 @@ type PropTypes = {
 
 export default function CtaLink(props: PropTypes) {
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : UUID();
+  const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
   return (
     <span>
       <a
         id={props.id}
-        className="component-cta-link"
+        className={ctaUniqueClassName}
         href={props.url}
         onClick={props.onClick}
         onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}

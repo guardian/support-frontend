@@ -165,13 +165,13 @@
     }
 
     .component-bundle--paper {
-      .component-cta-link:first-of-type {
+      .component-cta-link.paper-sub {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
         }
       }
 
-      .component-cta-link:nth-of-type(2) {
+      .component-cta-link.paper-digital-sub {
         margin-top: $gu-v-spacing;
         background-color: gu-colour(guardian-brand);
         color: #fff;

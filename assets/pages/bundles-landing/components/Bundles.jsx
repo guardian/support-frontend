@@ -53,6 +53,7 @@ type ContribAttrs = {
   subheading: string,
   ctaText: string,
   modifierClass: string,
+  ctaId: string,
   ctaLink: string,
   ctaAccessibilityHint: string,
 }
@@ -63,6 +64,7 @@ type DigitalAttrs = {
   listItems: ListItem[],
   ctaText: string,
   modifierClass: string,
+  ctaId: string,
   ctaLink: string,
   ctaAccessibilityHint: string,
 }
@@ -74,8 +76,10 @@ type PaperAttrs = {
   paperCtaText: string,
   paperDigCtaText: string,
   modifierClass: string,
+  paperCtaId: string,
   paperCtaLink: string,
   paperCtaAccessibilityHint: string,
+  paperDigCtaId: string,
   paperDigCtaLink: string,
   paperDigCtaAccessibilityHint: string,
 }
@@ -94,6 +98,7 @@ type BundlesType = {
 const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
+  ctaId: 'contribute',
   ctaText: 'Contribute',
   modifierClass: 'contributions',
   ctaLink: '',
@@ -114,6 +119,7 @@ const digitalCopy: DigitalAttrs = {
     },
   ],
   ctaText: 'Start your 14 day trial',
+  ctaId: 'start-digi-trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
   ctaAccessibilityHint: 'Proceed to begin a fourteen day trial of a digital subscription to the guardian. After fourteen days you will be charged eleven pounds and ninety nine pence per month.',
@@ -138,8 +144,10 @@ const paperCopy: PaperAttrs = {
   paperCtaText: 'Become a paper subscriber',
   paperDigCtaText: 'Become a paper+digital subscriber',
   modifierClass: 'paper',
+  paperDigCtaId: 'paper-digi-sub',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   paperDigCtaAccessibilityHint: 'Proceed to choose which paper you would like to receive regularly in conjunction with a digital subscription',
+  paperCtaId: 'paper-sub',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
   paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
@@ -183,16 +191,19 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
   params.append('INTCMP', intCmp);
+  const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, bundles.contrib, { ctaLink, subheading });
+  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading });
 
 };
 
 function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
   return Object.assign({}, bundles.paper, {
+    paperCtaId: 'paper-sub',
     paperCtaLink: subsLinks.paper,
+    paperDigCtaId: 'paper-digital-sub',
     paperDigCtaLink: subsLinks.paperDig,
   });
 
@@ -219,6 +230,7 @@ function ContributionBundle(props: PropTypes) {
         {...props}
       />
       <CtaLink
+        ctaId={contribAttrs.ctaId}
         text={contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}
@@ -234,6 +246,7 @@ function DigitalBundle(props: DigitalAttrs) {
     <Bundle {...props}>
       <FeatureList listItems={bundles.digital.listItems} />
       <CtaLink
+        ctaId={props.ctaId}
         text={props.ctaText}
         accessibilityHint={props.ctaAccessibilityHint}
         url={props.ctaLink}
@@ -249,11 +262,13 @@ function PaperBundle(props: PaperAttrs) {
     <Bundle {...props}>
       <FeatureList listItems={props.listItems} />
       <CtaLink
+        ctaId={props.paperCtaId}
         text={props.paperCtaText}
         accessibilityHint={props.paperCtaAccessibilityHint}
         url={props.paperCtaLink}
       />
       <CtaLink
+        ctaId={props.paperDigCtaId}
         text={props.paperDigCtaText}
         accessibilityHint={props.paperDigCtaAccessibilityHint}
         url={props.paperDigCtaLink}
