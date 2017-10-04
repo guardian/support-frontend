@@ -1,5 +1,4 @@
 .component-display-name {
-	height: 40px;
 	margin-bottom: $gu-v-spacing;
 
 	.component-display-name__name {
@@ -14,7 +13,7 @@
 	}
 
 	svg {
-		height: 50%;
+		height: 20px;
 		// Fix for IE.
 		width: 20px;
 		fill: gu-colour(neutral-1);

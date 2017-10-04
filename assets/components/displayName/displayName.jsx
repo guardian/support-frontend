@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Svg from 'components/svg/svg';
+import Signout from 'components/signout/signout';
 
 
 // ---- Types ----- //
@@ -23,6 +24,7 @@ function DisplayName(props: PropTypes) {
     <div className="component-display-name">
       <Svg svgName="user" />
       <span className="component-display-name__name">{props.name}</span>
+      <Signout />
     </div>
   );
 
