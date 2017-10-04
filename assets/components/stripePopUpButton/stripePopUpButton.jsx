@@ -14,14 +14,17 @@ import {
 
 // ---- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   stripeLoaded: boolean,
   setupStripeCheckout: Function,
-  onStripeClick: Function,
+  openStripeOverlay: Function,
+  stripeClick: Function,
   amount: number,
   email: string,
   callback: Function,
 };
+/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Component ----- //
@@ -32,13 +35,14 @@ const StripePopUpButton = (props: PropTypes) => {
     props.setupStripeCheckout(props.callback);
   }
 
-  const stripeClick = () => props.onStripeClick(props.amount, props.email);
+  const onClick = () =>
+    props.stripeClick(() => props.openStripeOverlay(props.amount, props.email));
 
   return (
     <button
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
-      onClick={stripeClick}
+      onClick={onClick}
     >Pay with debit/credit card <Svg svgName="credit-card" /></button>
   );
 
@@ -63,12 +67,19 @@ function mapDispatchToProps(dispatch) {
     setupStripeCheckout: (callback: Function) => {
       dispatch(setupStripeCheckout(callback));
     },
-    onStripeClick: (amount: number, email: string) => {
+    openStripeOverlay: (amount: number, email: string) => {
       dispatch(openStripeOverlay(amount, email));
     },
   };
 
 }
+
+
+// ----- Default Props ----- //
+
+StripePopUpButton.defaultProps = {
+  stripeClick: callback => callback(),
+};
 
 
 // ----- Exports ----- //
