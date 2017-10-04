@@ -17,6 +17,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
+import Signout from 'components/signout/signout';
 
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -81,7 +82,7 @@ const content = (
             currency={state.page.regularContrib.currency}
           />
         </InfoSection>
-        <InfoSection heading="Your details" className="regular-contrib__your-details">
+        <InfoSection heading="Your details" headingContent={<Signout />} className="regular-contrib__your-details">
           <DisplayName />
           <FormFields />
         </InfoSection>

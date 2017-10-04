@@ -32,7 +32,7 @@ export default function Signout(props: PropTypes) {
 
   return (
     <a className="component-signout" href={buildUrl(props.returnUrl)}>
-      Sign out
+      Not you?
     </a>
   );
 
