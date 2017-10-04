@@ -1,14 +1,13 @@
 package com.gu.acquisition.app
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.Uri
-import akka.stream.{ActorMaterializer, Materializer}
 import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
 import com.gu.acquisition.services.DefaultOphanService
 import com.typesafe.scalalogging.StrictLogging
+import okhttp3.{HttpUrl, OkHttpClient}
 import ophan.thrift.event.{Acquisition, PaymentFrequency, PaymentProvider}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration._
 
 trait MockDataGenerator {
 
@@ -56,12 +55,9 @@ class AcquisitionSubmissionSimulator(service: DefaultOphanService, generator: Mo
 
 object AcquisitionSubmissionSimulator {
 
-  def apply(endpoint: Uri, generator: MockDataGenerator)(
-    implicit ec: ExecutionContext,
-    system: ActorSystem,
-    materializer: Materializer
+  def apply(endpoint: HttpUrl, generator: MockDataGenerator)(
+    implicit ec: ExecutionContext, client: OkHttpClient
   ): AcquisitionSubmissionSimulator = {
-
     val service = new DefaultOphanService(endpoint)
     new AcquisitionSubmissionSimulator(service, generator)
   }
@@ -69,15 +65,11 @@ object AcquisitionSubmissionSimulator {
 
 object Main extends App {
 
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
-  implicit val materializer = ActorMaterializer()
+  import scala.concurrent.ExecutionContext.Implicits.global
+  implicit val client = new OkHttpClient()
 
-  val endpoint = args.headOption.getOrElse("http://localhost:9000")
+  val endpoint = HttpUrl.parse(args.headOption.getOrElse("http://localhost:9000"))
   val simulator = AcquisitionSubmissionSimulator(endpoint, BasicMockDataGenerator)
 
-  simulator.submit().onComplete { _ =>
-    materializer.shutdown()
-    system.terminate()
-  }
+  Await.ready(simulator.submit(), 10.seconds)
 }

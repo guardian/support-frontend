@@ -1,12 +1,10 @@
 package com.gu.acquisition.services
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.Uri
-import akka.stream.Materializer
 import cats.data.EitherT
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import okhttp3.{HttpUrl, OkHttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -21,11 +19,18 @@ trait OphanService {
 
 object OphanService {
 
-  val prodEndpoint: Uri = "https://ophan.theguardian.com"
+  val prodEndpoint: HttpUrl = HttpUrl.parse("https://ophan.theguardian.com")
 
-  def prod(implicit system: ActorSystem, materializer: Materializer): DefaultOphanService =
+  def prod(implicit client: OkHttpClient): DefaultOphanService =
     new DefaultOphanService(prodEndpoint)
 
-  def apply(endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer): DefaultOphanService =
+  def apply(endpoint: HttpUrl)(implicit client: OkHttpClient): DefaultOphanService =
     new DefaultOphanService(endpoint)
+
+  def apply(endpoint: String)(implicit client: OkHttpClient): Either[InvalidUrl, DefaultOphanService] = {
+    val parsedEndpoint = HttpUrl.parse(endpoint)
+    if (parsedEndpoint == null) Left(InvalidUrl(endpoint)) else Right(OphanService(parsedEndpoint))
+  }
+
+  case class InvalidUrl(url: String) extends Exception
 }

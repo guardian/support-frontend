@@ -1,63 +1,64 @@
 package com.gu.acquisition.services
 
+import java.io.IOException
+
 import cats.data.EitherT
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.Uri.Query
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.headers.{Cookie, HttpCookiePair}
-import akka.stream.Materializer
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import okhttp3._
 
-import scala.collection.immutable.Seq
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 /**
   * Build an acquisition submission, and submit it to the Ophan endpoint specified in the class constructor.
-  * Uses Akka Http for executing the Http request.
+  * Uses OkHttp for executing the Http request.
   */
-class DefaultOphanService(val endpoint: Uri)(implicit system: ActorSystem, materializer: Materializer)
+class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
   extends OphanService {
   import DefaultOphanService._
   import OphanServiceError._
 
-  private val additionalEndpoint = endpoint.copy(path = Uri.Path("/a.gif"))
+  private val additionalEndpointBuilder = endpoint.newBuilder().addPathSegment("a.gif")
 
-  private def buildRequest(submission: AcquisitionSubmission): RequestData = {
+  private def cookieValue(visitId: Option[String], browserId: Option[String]): String =
+    List(visitId.map(("vsid", _)), browserId.map(("bwid", _))).flatten
+      .map { case (name, value) => name + "=" + value }
+      .mkString(";")
+
+  // Exposed for unit testing
+  private[services] def buildRequest(submission: AcquisitionSubmission): RequestData = {
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
     import submission._
 
-    val params = Query("viewId" -> ophanIds.pageviewId, "acquisition" -> acquisition.asJson.noSpaces)
+    val url = additionalEndpointBuilder
+      .addQueryParameter("viewId", ophanIds.pageviewId)
+      .addQueryParameter("acquisition" , acquisition.asJson.noSpaces)
+      .build()
 
-    val cookies = List(
-      ophanIds.browserId.map(HttpCookiePair("bwid", _)),
-      ophanIds.visitId.map(HttpCookiePair("vsid", _))
-    ).flatten
+    val request = new Request.Builder()
+      .url(url)
+      .addHeader("Cookie", cookieValue(ophanIds.visitId, ophanIds.browserId))
+      .build()
 
-    RequestData(
-      HttpRequest(
-        uri = additionalEndpoint.withQuery(params),
-        headers = Seq(Cookie(cookies))
-      ),
-      submission
-    )
+    RequestData(request, submission)
   }
 
-  private def executeRequest(data: RequestData)(
-    implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
+  private def executeRequest(data: RequestData): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
 
-    import cats.instances.future._
-    import cats.syntax.applicativeError._
+    val p = Promise[Either[OphanServiceError, AcquisitionSubmission]]
 
-    Http().singleRequest(data.request).attemptT
-      .leftMap(NetworkFailure)
-      .subflatMap { response =>
-        if (response.status.isSuccess) Right(data.submission)
-        else Left(ResponseUnsuccessful(response))
-      }
+    client.newCall(data.request).enqueue(new Callback {
+
+      override def onFailure(call: Call, e: IOException): Unit =
+        p.success(Left(NetworkFailure(e)))
+
+      override def onResponse(call: Call, response: Response): Unit =
+        if (response.isSuccessful) p.success(Right(data.submission)) else p.success(Left(ResponseUnsuccessful(response)))
+    })
+
+    EitherT(p.future)
   }
 
   override def submit[A : AcquisitionSubmissionBuilder](a: A)(
@@ -73,6 +74,6 @@ class DefaultOphanService(val endpoint: Uri)(implicit system: ActorSystem, mater
 
 object DefaultOphanService {
 
-  private case class RequestData(request: HttpRequest, submission: AcquisitionSubmission)
+  private[services] case class RequestData(request: Request, submission: AcquisitionSubmission)
 }
 

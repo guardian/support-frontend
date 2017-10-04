@@ -1,6 +1,8 @@
 package com.gu.acquisition.model.errors
 
-import akka.http.scaladsl.model.HttpResponse
+import java.io.IOException
+
+import okhttp3.Response
 
 sealed trait OphanServiceError extends Throwable
 
@@ -10,12 +12,12 @@ object OphanServiceError {
     override def getMessage: String = s"Acquisition submission build error: $message"
   }
 
-  case class NetworkFailure(underlying: Throwable) extends OphanServiceError {
+  case class NetworkFailure(underlying: IOException) extends OphanServiceError {
     override def getMessage: String = s"Ophan network failure: ${underlying.getMessage}"
   }
 
-  case class ResponseUnsuccessful(failedResponse: HttpResponse) extends OphanServiceError {
-    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.status}"
+  case class ResponseUnsuccessful(failedResponse: Response) extends OphanServiceError {
+    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.code}"
   }
 }
 
