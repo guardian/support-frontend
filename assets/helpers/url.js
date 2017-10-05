@@ -56,7 +56,8 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
   return `${strInit}?${paramsObj.toString()}`;
 };
 
-function getDomain(): Domain {
+// Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
+function getBaseDomain(): Domain {
 
   const origin = window.location.origin;
 
@@ -76,5 +77,5 @@ function getDomain(): Domain {
 export {
   getQueryParameter,
   addQueryParamToURL,
-  getDomain,
+  getBaseDomain,
 };

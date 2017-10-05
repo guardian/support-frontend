@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { getDomain } from 'helpers/url';
+import { getBaseDomain } from 'helpers/url';
 
 
 // ---- Types ----- //
@@ -21,7 +21,7 @@ function buildUrl(returnUrl: ?string): string {
 
   const encodedReturn = encodeURIComponent(returnUrl || window.location);
 
-  return `https://profile.${getDomain()}/signout?returnUrl=${encodedReturn}`;
+  return `https://profile.${getBaseDomain()}/signout?returnUrl=${encodedReturn}`;
 
 }
 
