@@ -131,6 +131,12 @@
           height: 32px;
         }
       }
+
+      p {
+        font-size: 16px;
+        line-height: 20px;
+        margin-bottom: $gu-v-spacing;
+      }
     }
 
     .component-bundle--digital, .component-bundle--paper {
