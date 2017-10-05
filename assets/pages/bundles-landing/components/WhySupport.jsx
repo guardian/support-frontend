@@ -34,13 +34,12 @@ const heroImage = {
 
 const copy = {
   top: [
-    'Like many other media organisations, the Guardian is operating in an incredibly challenging financial climate. Our advertising revenues are falling fast. We have huge numbers of readers, and we are increasingly reliant upon their financial support.',
-    'We don’t have a wealthy owner pulling the strings. No shareholders, advertisers or billionaire owners can edit our editor.',
+    'With no billionaire owner pulling our strings, nobody, be they shareholders or advertisers, can tell us to censor or drop a story.',
+    'Our quality investigative journalism takes a lot of time and money to produce. And while the Scott Trust safeguards our independence, its funds are limited.',
   ],
   bottom: [
-    'Our owner, the Scott Trust, safeguards our editorial independence from commercial or political interference. It reinvests revenue into our journalism, as opposed to into shareholders\' pockets.',
-    'But while the Scott Trust ensures our independence, we need our readers, now more than ever before, to help secure our future.',
-    'We know that not everyone is in a position to fund our journalism. But if you can, you’ll be an integral part of our mission to make the world a better, fairer place, for everyone.',
+    'With ad revenues falling across the media, we need our readers\' support to secure our future and help hold power to account.',
+    'Independent, progressive journalism benefits everyone. And if that\'s a view you share, join us today and help ensure our voice continues to be heard.',
   ],
   videoCaption: 'Katharine Viner, editor-in-chief, explains the Guardian\'s unique ownership model',
 };
