@@ -8,11 +8,10 @@ import 'ophan';
 import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
-import { getCampaign } from 'helpers/tracking/guTracking';
-import { getQueryParameter } from 'helpers/url';
+import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { detect } from 'helpers/internationalisation/country';
 
-import type { Campaign } from 'helpers/tracking/guTracking';
+import type { Campaign, Acquisition } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
 
@@ -22,17 +21,15 @@ import type { Action } from './pageActions';
 // ----- Types ----- //
 
 export type CommonState = {
-  intCmp: ?string,
   campaign: ?Campaign,
-  refpvid: ?string,
+  acquisition: Acquisition,
   country: IsoCountry,
   abParticipations: Participations,
 };
 
 export type PreloadedState = {
-  intCmp?: $PropertyType<CommonState, 'intCmp'>,
   campaign?: $PropertyType<CommonState, 'campaign'>,
-  refpvid?: $PropertyType<CommonState, 'refpvid'>,
+  acquisition?: $PropertyType<CommonState, 'acquisition'>,
   country?: $PropertyType<CommonState, 'country'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
@@ -58,14 +55,13 @@ function buildInitialState(
   abParticipations: Participations,
   preloadedState: PreloadedState = {},
   country: IsoCountry,
-) {
+): CommonState {
 
-  const intCmp = getQueryParameter('INTCMP');
+  const acquisition = getAcquisition();
 
   return Object.assign({}, {
-    intCmp,
-    campaign: intCmp ? getCampaign(intCmp) : null,
-    refpvid: getQueryParameter('REFPVID'),
+    campaign: acquisition ? getCampaign(acquisition) : null,
+    acquisition,
     country,
     abParticipations,
   }, preloadedState);
@@ -81,12 +77,6 @@ function createCommonReducer(
     action: Action): CommonState {
 
     switch (action.type) {
-
-      case 'SET_INTCMP':
-        return Object.assign({}, state, {
-          intCmp: action.intCmp,
-          campaign: getCampaign(action.intCmp),
-        });
 
       case 'SET_COUNTRY':
         return Object.assign({}, state, { country: action.country });

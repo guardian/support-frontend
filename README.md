@@ -12,7 +12,7 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 6. [Testing](/docs/development.md#6-testing)
 7. [Yarn commands](/docs/development.md#7-yarn-commands)
 8. [A/B Test framework](/docs/development.md#8-ab-test-framework)
-
+9. [Test environments](/docs/development.md#9-test-environments)
 
 ## Getting started
 

@@ -10,7 +10,6 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { init as pageInit } from 'helpers/page/page';
-import { setIntCmp } from 'helpers/page/pageActions';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -26,13 +25,6 @@ const store = pageInit(reducer);
 
 
 // ----- Setup ----- //
-
-let intCmp = store.getState().common.intCmp;
-
-if (!intCmp) {
-  intCmp = 'gdnwb_copts_bundles_landing_default';
-  store.dispatch(setIntCmp(intCmp));
-}
 
 const participations = store.getState().common.abParticipations;
 if (participations.addAnnualContributions) {

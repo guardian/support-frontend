@@ -12,7 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Campaign } from 'helpers/tracking/guTracking';
+import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
 import {
@@ -22,9 +22,9 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../bundlesLandingActions';
-import { getSubsLinks } from '../helpers/subscriptionsLinks';
+import { getSubsLinks } from '../helpers/externalLinks';
 
-import type { SubsUrls } from '../helpers/subscriptionsLinks';
+import type { SubsUrls } from '../helpers/externalLinks';
 import type { Participations } from '../../../helpers/abtest';
 
 
@@ -313,7 +313,7 @@ function mapStateToProps(state) {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
-    intCmp: state.common.intCmp,
+    intCmp: state.common.acquisition.campaignCode,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,

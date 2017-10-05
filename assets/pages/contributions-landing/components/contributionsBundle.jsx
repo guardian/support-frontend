@@ -193,8 +193,8 @@ function mapStateToProps(state) {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
-    intCmp: state.common.intCmp,
-    refpvid: state.common.refpvid,
+    intCmp: state.common.acquisition.campaignCode,
+    refpvid: state.common.acquisition.referrerPageviewId,
     isoCountry: state.common.country,
     payPalError: state.page.payPalError,
   };
