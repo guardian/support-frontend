@@ -51,6 +51,7 @@ type PropTypes = {
 type ContribAttrs = {
   heading: string,
   subheading: string,
+  tagline: string,
   ctaText: string,
   modifierClass: string,
   ctaLink: string,
@@ -90,6 +91,7 @@ type BundlesType = {
 const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
+  tagline: 'Your contribution directly funds our journalism',
   ctaText: 'Contribute with card or PayPal',
   modifierClass: 'contributions',
   ctaLink: '',
@@ -205,6 +207,7 @@ function ContributionBundle(props: PropTypes) {
 
   return (
     <Bundle {...contribAttrs}>
+      <p>{bundles.contrib.tagline}</p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
