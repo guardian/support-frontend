@@ -12,12 +12,14 @@ import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, U
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
+import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.typesafe.scalalogging.LazyLogging
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState}
 import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
+import ophan.thrift.event.AbTest
 
 object StripePaymentToken {
   implicit val decoder: Decoder[StripePaymentToken] = deriveDecoder
@@ -38,7 +40,10 @@ case class CreateRegularContributorRequest(
   country: Country,
   state: Option[String],
   contribution: Contribution,
-  paymentFields: Either[StripePaymentToken, PayPalPaymentFields]
+  paymentFields: Either[StripePaymentToken, PayPalPaymentFields],
+  ophanIds: OphanIds,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  supportAbTests: Set[AbTest]
 )
 
 object RegularContributionsClient {
@@ -69,7 +74,10 @@ class RegularContributionsClient(
       requestId = requestId,
       user = user,
       contribution = request.contribution,
-      paymentFields = request.paymentFields.leftMap(_.stripePaymentFields(user.id))
+      paymentFields = request.paymentFields.leftMap(_.stripePaymentFields(user.id)),
+      ophanIds = request.ophanIds,
+      referrerAcquisitionData = request.referrerAcquisitionData,
+      supportAbTests = request.supportAbTests
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
       { error =>
