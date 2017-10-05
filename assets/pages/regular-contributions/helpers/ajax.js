@@ -2,12 +2,16 @@
 
 // ----- Imports ----- //
 
+import * as ophan from 'ophan';
+
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import type { UsState } from 'helpers/internationalisation/country';
+import { get as getCookie } from 'helpers/cookie';
+import type { BillingPeriod, Contrib } from 'helpers/contributions';
+import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
+import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import type { PageState } from '../regularContributionsReducers';
-import type { BillingPeriod, Contrib } from '../../../helpers/contributions';
-
+import { participationsToAcquisitionABTest } from '../../../helpers/tracking/acquisitions';
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
@@ -20,24 +24,49 @@ const MAX_POLLS = 10;
 
 // ----- Types ----- //
 
-type RegularContribFields = {
-  contribution: {
-    amount: number,
-    currency: string,
-    billingPeriod: BillingPeriod,
-  },
+type ContributionRequest = {
+  amount: number,
+  currency: string,
+  billingPeriod: BillingPeriod,
+};
+
+type RegularContribFields = {|
+  firstName: ?string,
+  lastName: ?string,
+  country: IsoCountry,
+  state?: UsState,
+  contribution: ContributionRequest,
   paymentFields: {
     stripeToken: string,
   },
-  state?: UsState,
-  firstName: ?string,
-  lastName: ?string,
-};
+  ophanIds: OphanIds,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  supportAbTests: AcquisitionABTest[],
+|};
 
 type PaymentField = 'baid' | 'stripeToken';
 
 
 // ----- Functions ----- //
+
+const isStateValid = (inputState: Object) => {
+  const user = inputState.user;
+
+  return user.firstName !== null && user.firstName !== undefined &&
+         user.lastName !== null && user.lastName !== undefined &&
+         user.email !== null && user.email !== undefined;
+};
+
+function removeNullFields(obj: Object): Object {
+
+  const response = obj;
+  Object.keys(response).forEach((key) => {
+    if (response[key] === null || response[key] === undefined) {
+      delete response[key];
+    }
+  });
+  return response;
+}
 
 function requestData(paymentFieldName: PaymentField,
   token: string,
@@ -47,39 +76,51 @@ function requestData(paymentFieldName: PaymentField,
   const state = getState().page;
   const country = getState().common.country;
 
-  if (state.user.firstName !== null && state.user.firstName !== undefined
-    && state.user.lastName !== null && state.user.lastName !== undefined
-    && state.user.email !== null && state.user.email !== undefined) {
-    const regularContribFields: RegularContribFields = {
-      contribution: {
-        amount: state.stripeCheckout.amount,
-        currency: state.stripeCheckout.currency,
-        billingPeriod: billingPeriodFromContrib(contributionType),
-      },
-      paymentFields: {
-        [paymentFieldName]: token,
-      },
-      country,
-      firstName: state.user.firstName,
-      lastName: state.user.lastName,
-    };
-
-    if (state.user.stateField) {
-      regularContribFields.state = state.user.stateField;
-    }
-
-    return {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
-      credentials: 'same-origin',
-      body: JSON.stringify(regularContribFields),
-    };
+  if (!isStateValid(state)) {
+    return Promise.resolve({
+      ok: false,
+      text: () => 'Failed to process payment - missing fields',
+    });
   }
 
-  return Promise.resolve({
-    ok: false,
-    text: () => 'Failed to process payment - missing fields',
-  });
+  const ophanIds: OphanIds = {
+    pageviewId: ophan.viewId,
+    visitId: getCookie('vsid'),
+    browserId: getCookie('bwid'),
+  };
+
+  const referrerAcquisitionData: ReferrerAcquisitionData =
+    removeNullFields(getState().common.referrerAcquisitionData);
+
+  const supportAbTests = participationsToAcquisitionABTest(getState().common.abParticipations);
+
+  const regularContribFields: RegularContribFields = {
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+    country,
+    contribution: {
+      amount: state.stripeCheckout.amount,
+      currency: state.stripeCheckout.currency,
+      billingPeriod: billingPeriodFromContrib(contributionType),
+    },
+    paymentFields: {
+      [paymentFieldName]: token,
+    },
+    ophanIds,
+    referrerAcquisitionData,
+    supportAbTests,
+  };
+
+  if (state.user.stateField) {
+    regularContribFields.state = state.user.stateField;
+  }
+
+  return {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
+    credentials: 'same-origin',
+    body: JSON.stringify(regularContribFields),
+  };
 }
 
 function statusPoll(dispatch: Function, getState: Function) {

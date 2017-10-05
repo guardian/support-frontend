@@ -53,8 +53,8 @@ function requestData(paymentToken: string, getState: () => PageState) {
       marketing: state.page.user.gnmMarketing,
       postcode: state.page.user.postcode,
       ophanPageviewId: 'dummy', // todo: correct ophan pageview id
-      intcmp: state.common.acquisition.campaignCode,
-      refererPageviewId: state.common.acquisition.referrerPageviewId,
+      intcmp: state.common.referrerAcquisitionData.campaignCode,
+      refererPageviewId: state.common.referrerAcquisitionData.referrerPageviewId,
     };
 
     return {
@@ -84,7 +84,7 @@ export default function postCheckout(
     const url: string = addQueryParamToURL(
       routes.oneOffContribThankyou,
       'INTCMP',
-      getState().common.acquisition.campaignCode,
+      getState().common.referrerAcquisitionData.campaignCode,
     );
 
     if (response.ok) {
