@@ -11,7 +11,9 @@ exports[`reducer tests should handle SET_COUNTRY to US 4`] = `Object {}`;
 exports[`reducer tests should return the initial state 1`] = `
 Object {
   "abParticipations": Object {},
-  "acquisition": Object {
+  "campaign": "dummy_campaign",
+  "country": "GB",
+  "referrerAcquisitionData": Object {
     "abTests": Array [],
     "campaignCode": null,
     "componentId": null,
@@ -20,7 +22,5 @@ Object {
     "referrerUrl": null,
     "source": null,
   },
-  "campaign": "dummy_campaign",
-  "country": "GB",
 }
 `;

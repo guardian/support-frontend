@@ -53,7 +53,7 @@ describe('reducer tests', () => {
     expect(newState.country).toEqual(country);
     expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
-    expect(newState.acquisition.campaignCode).toMatchSnapshot();
+    expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.abParticipations).toMatchSnapshot();
   });
 
