@@ -24,7 +24,7 @@ class EndToEndSpec extends LambdaSpec {
 
     val decoded = decode[List[JsonWrapper]](output.toString("utf-8"))
     decoded.isRight should be(true)
-    decoded.right.get.size should be (2)
+    decoded.right.get.size should be(2)
   }
 
   implicit class InputStreamChaining(val stream: InputStream) {

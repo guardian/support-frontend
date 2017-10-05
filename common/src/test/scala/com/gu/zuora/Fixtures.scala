@@ -185,8 +185,8 @@ object Fixtures {
         $subscribeResponseAccount
       ]
     """
- val subscribeResponseAnnual =
-   """
+  val subscribeResponseAnnual =
+    """
      [
         {
           "AccountNumber": "A00016540",
