@@ -22,11 +22,11 @@ const init = (dispatch: Function) => {
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
 
-  if (window.guardian && window.guardian.uatMode != null) {
-    if (window.guardian.uatMode) {
-      dispatch(setTestUser(true));
-    }
-  } else if (cookie.get('_test_username')) {
+  const uatMode = window.guardian && window.guardian.uatMode;
+
+  const isUndefinedOrNull = x => x === null || x === undefined;
+
+  if ((isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode) {
     dispatch(setTestUser(true));
   }
 
