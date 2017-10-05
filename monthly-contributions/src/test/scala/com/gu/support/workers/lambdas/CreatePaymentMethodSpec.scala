@@ -72,7 +72,7 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
       createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
 
-      val p = outStream.toClass[PaymentMethod]()
+      val p = outStream.toClass[PaymentMethod](encrypted = false)
     }
   }
 

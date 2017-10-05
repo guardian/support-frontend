@@ -5,12 +5,19 @@ import java.io.ByteArrayInputStream
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import com.gu.support.workers.encoding.Wrapper.jsonCodec
+import com.gu.zuora.encoding.CustomCodecs.jsonWrapperEncoder
 import io.circe.syntax._
 
 //noinspection TypeAnnotation
 object Fixtures {
-  def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string).asJson.noSpaces.asInputStream
+  val useEncryption = false
+
+  def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string, useEncryption).asJson.noSpaces.asInputStream
+
+  val oldJsonWrapper =
+    """
+      {"state":"CiAgICAgIHsKICAgICAgICAiYW1vdW50IjogNSwKICAgICAgICAiY3VycmVuY3kiOiAiR0JQIgogICAgICB9CiAgICA=","error":null}
+    """.asInputStream
 
   val userJson =
     s"""

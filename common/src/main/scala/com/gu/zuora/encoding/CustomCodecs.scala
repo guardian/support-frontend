@@ -15,7 +15,6 @@ import org.joda.time.{DateTime, LocalDate}
 
 import scala.util.Try
 
-
 object CustomCodecs extends CustomCodecs with InternationalisationCodecs with ModelsCodecs with HelperCodecs
 
 trait InternationalisationCodecs {
@@ -68,6 +67,13 @@ trait ModelsCodecs {
     .forProduct3("amount", "currency", "billingPeriod")(Contribution.apply)
     .or(Decoder.forProduct2("amount", "currency")((a: BigDecimal, c: Currency) => Contribution(a, c)))
   implicit val encodeContribution: Encoder[Contribution] = deriveEncoder
+
+  implicit val executionErrorCodec: Codec[ExecutionError] = deriveCodec
+  implicit val jsonWrapperDecoder: Decoder[JsonWrapper] = Decoder
+    .forProduct3("state", "error", "encrypted")(JsonWrapper.apply)
+    .or(Decoder.forProduct2("state", "error")((s: String, e: Option[ExecutionError]) => JsonWrapper(s, e, encrypted = false)))
+  implicit val jsonWrapperEncoder: Encoder[JsonWrapper] = deriveEncoder
+
 }
 
 trait HelperCodecs {
