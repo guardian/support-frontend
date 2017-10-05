@@ -90,7 +90,7 @@ type BundlesType = {
 const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
-  ctaText: 'Contribute',
+  ctaText: 'Contribute with card or PayPal',
   modifierClass: 'contributions',
   ctaLink: '',
 };
@@ -100,12 +100,12 @@ const digitalCopy: DigitalAttrs = {
   subheading: '£11.99/month',
   listItems: [
     {
-      heading: 'Ad-free mobile app',
-      text: 'No interruptions means pages load quicker for a clearer reading experience',
+      heading: 'Premium experience on the Guardian app',
+      text: 'Get faster loading pages and a clearer reading experience without adverts. Play our daily crosswords offline wherever you are',
     },
     {
-      heading: 'Daily tablet edition',
-      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
+      heading: 'Daily Tablet Edition app',
+      text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad, Android and Kindle Fire tablets',
     },
   ],
   ctaText: 'Start your 14 day trial',
@@ -118,19 +118,18 @@ const paperCopy: PaperAttrs = {
   subheading: 'from £10.79/month',
   listItems: [
     {
-      heading: 'Newspaper',
-      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
+      heading: 'Choose your package and delivery method',
+      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
       heading: 'Save money off the retail price',
     },
     {
-      heading: 'All the benefits of a digital subscription',
-      text: 'Available with paper+digital',
+      heading: 'Get all the benefits of a digital subscription with a paper+digital subscription',
     },
   ],
-  paperCtaText: 'Become a paper subscriber',
-  paperDigCtaText: 'Become a paper+digital subscriber',
+  paperCtaText: 'Get a paper subscription',
+  paperDigCtaText: 'Get a paper+digital subscription',
   modifierClass: 'paper',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
