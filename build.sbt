@@ -7,35 +7,7 @@ scalaVersion := "2.11.11"
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
-
-scmInfo := Some(ScmInfo(
-  url("https://github.com/guardian/acquisition-event-producer"),
-  "scm:git:git@github.com:guardian/acquisition-event-producer.git"
-))
-
-
-sonatypeProfileName := "com.gu"
-
-pomExtra := (
-  <url>https://github.com/guardian/acquisition-event-producer</url>
-    <developers>
-      <developer>
-        <id>desbo</id>
-        <name>Sam Desborough</name>
-        <url>https://github.com/desbo</url>
-      </developer>
-    </developers>
-  )
-
-licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -52,4 +24,6 @@ libraryDependencies ++= Seq(
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 organization := "com.gu"
+bintrayOrganization := Some("guardian")
+bintrayRepository := "ophan"
 publishMavenStyle := true
