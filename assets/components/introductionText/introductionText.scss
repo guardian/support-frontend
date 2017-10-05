@@ -22,7 +22,6 @@
     font-weight: bold;
     font-size: 22px;
     line-height: 26px;
-    word-spacing: -0.08em;
 
     @include mq($from: mobileMedium) {
       font-size: 24px;
