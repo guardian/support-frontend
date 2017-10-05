@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { User as UserState } from 'helpers/user/userReducer';
 import type { Action } from './stripeCheckoutActions';
 import type { State as StripeCheckoutState } from './stripeCheckoutReducer';
 
@@ -17,6 +18,7 @@ export type State = {
 
 export type CombinedState = {
   stripeCheckout: StripeCheckoutState,
+  user: UserState,
 };
 
 export type PageState = {

@@ -22,6 +22,7 @@ type PropTypes = {
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
   canClick?: boolean,
+  buttonText?: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -53,7 +54,7 @@ const PayPalContributionButton = (props: PropTypes) =>
     >
 
       <Svg svgName="paypal-p-logo" />
-      <span>contribute with PayPal</span>
+      <span>{props.buttonText}</span>
       <Svg svgName="arrow-right-straight" />
     </button>
   );
@@ -65,6 +66,7 @@ PayPalContributionButton.defaultProps = {
   intCmp: null,
   refpvid: null,
   canClick: true,
+  buttonText: 'Pay with PayPal',
 };
 
 

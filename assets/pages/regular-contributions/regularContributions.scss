@@ -79,6 +79,15 @@
 	// ----- Your details
 
 	.regular-contrib__your-details {
+		position: relative;
+
+		@include mq($until: desktop) {
+			.component-signout {
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+		}
 
 		#last-name {
 			margin-bottom: 0px;

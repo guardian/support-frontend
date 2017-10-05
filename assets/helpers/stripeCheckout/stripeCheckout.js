@@ -33,6 +33,7 @@ const loadStripe = () => new Promise((resolve) => {
 
 export const setup = (
   state: StripeState,
+  isTestUser: boolean,
   token: Function,
   closed: Function,
 ): Promise<void> => loadStripe().then(() => {
@@ -41,7 +42,7 @@ export const setup = (
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
-    key: window.guardian.stripeKey,
+    key: isTestUser ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
     image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
     currency: state.currency,
