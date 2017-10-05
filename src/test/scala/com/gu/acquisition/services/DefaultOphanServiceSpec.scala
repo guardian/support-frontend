@@ -20,7 +20,7 @@ class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
       amount = 20d,
       amountInGBP = None,
       paymentProvider = Some(PaymentProvider.Stripe),
-      campaignCode = None,
+      campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
       abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name")))),
       countryCode = Some("US"),
       referrerPageViewId = None,
@@ -35,14 +35,23 @@ class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
 
     "build a correct request" in {
 
-      val request = service.buildRequest(submission).request
+      def checkRequest() = {
 
-      request.method shouldEqual "GET"
-      request.header("Cookie") shouldEqual "vsid=visitId;bwid=browserId"
+        val request = service.buildRequest(submission).request
 
-      // TODO: check non-strict encoding is OK
-      request.url().url().toString shouldEqual
-        "https://ophan.theguardian.com/a.gif?viewId=pageviewId&acquisition={%22product%22:%22CONTRIBUTION%22,%22paymentFrequency%22:%22ONE_OFF%22,%22currency%22:%22GBP%22,%22amount%22:20.0,%22paymentProvider%22:%22STRIPE%22,%22abTests%22:{%22tests%22:[{%22name%22:%22test_name%22,%22variant%22:%22variant_name%22}]},%22countryCode%22:%22US%22}"
+        request.method shouldEqual "GET"
+        request.header("Cookie") shouldEqual "vsid=visitId;bwid=browserId"
+
+        request.url().url().toString shouldEqual
+          "https://ophan.theguardian.com/a.gif?viewId=pageviewId&acquisition={%22product%22:%22CONTRIBUTION%22,%22paymentFrequency%22:%22ONE_OFF%22,%22currency%22:%22GBP%22,%22amount%22:20.0,%22paymentProvider%22:%22STRIPE%22,%22campaignCode%22:[%22FAKE_ACQUISITION_EVENT%22],%22abTests%22:{%22tests%22:[{%22name%22:%22test_name%22,%22variant%22:%22variant_name%22}]},%22countryCode%22:%22US%22}"
+      }
+
+      // Check request is as expected
+      checkRequest()
+
+      // Check idempotency of request builder.
+      // Previously a mutable request builder was accumulating state over multiple requests!
+      checkRequest()
     }
   }
 }

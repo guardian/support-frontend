@@ -9,6 +9,7 @@ import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import okhttp3._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.util.control.NonFatal
 
 /**
   * Build an acquisition submission, and submit it to the Ophan endpoint specified in the class constructor.
@@ -18,8 +19,6 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
   extends OphanService {
   import DefaultOphanService._
   import OphanServiceError._
-
-  private val additionalEndpointBuilder = endpoint.newBuilder().addPathSegment("a.gif")
 
   private def cookieValue(visitId: Option[String], browserId: Option[String]): String =
     List(visitId.map(("vsid", _)), browserId.map(("bwid", _))).flatten
@@ -32,7 +31,8 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
     import io.circe.syntax._
     import submission._
 
-    val url = additionalEndpointBuilder
+    val url = endpoint.newBuilder()
+      .addPathSegment("a.gif")
       .addQueryParameter("viewId", ophanIds.pageviewId)
       .addQueryParameter("acquisition" , acquisition.asJson.noSpaces)
       .build()
@@ -54,8 +54,20 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
       override def onFailure(call: Call, e: IOException): Unit =
         p.success(Left(NetworkFailure(e)))
 
+      private def close(response: Response): Unit =
+        try {
+          response.close()
+        } catch {
+          case NonFatal(_) =>
+        }
+
       override def onResponse(call: Call, response: Response): Unit =
-        if (response.isSuccessful) p.success(Right(data.submission)) else p.success(Left(ResponseUnsuccessful(response)))
+        try {
+          if (response.isSuccessful) p.success(Right(data.submission))
+          else p.success(Left(ResponseUnsuccessful(data.request, response)))
+        } finally {
+          close(response)
+        }
     })
 
     EitherT(p.future)

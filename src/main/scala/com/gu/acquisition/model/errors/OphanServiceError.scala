@@ -2,7 +2,7 @@ package com.gu.acquisition.model.errors
 
 import java.io.IOException
 
-import okhttp3.Response
+import okhttp3.{Request, Response}
 
 sealed trait OphanServiceError extends Throwable
 
@@ -16,8 +16,10 @@ object OphanServiceError {
     override def getMessage: String = s"Ophan network failure: ${underlying.getMessage}"
   }
 
-  case class ResponseUnsuccessful(failedResponse: Response) extends OphanServiceError {
-    override def getMessage: String = s"Ophan HTTP request failed: ${failedResponse.code}"
+  case class ResponseUnsuccessful(request: Request, failedResponse: Response) extends OphanServiceError {
+    override def getMessage: String = {
+      s"Ophan HTTP request failed: ${failedResponse.code}"
+    }
   }
 }
 
