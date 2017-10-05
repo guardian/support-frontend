@@ -17,8 +17,8 @@ function mapStateToProps(state) {
     hide: state.page.user.email === '' || state.page.user.fullName === '',
     paymentStatus: 'NotStarted',
     amount: state.page.oneoffContrib.amount,
-    intCmp: state.common.acquisition.campaignCode,
-    refpvid: state.common.acquisition.referrerPageviewId,
+    intCmp: state.common.referrerAcquisitionData.campaignCode,
+    refpvid: state.common.referrerAcquisitionData.referrerPageviewId,
     isoCountry: state.common.country,
   };
 
