@@ -56,6 +56,7 @@ type ContribAttrs = {
   toggles: Toggle,
   selected: boolean,
   contribType: Contrib,
+  accessibilityHint: string,
 };
 
 // ----- Setup ----- //
@@ -286,6 +287,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
+      accessibilityHint: 'Annual contribution',
     };
   } else if (props.contribType === 'MONTHLY') {
 
@@ -296,6 +298,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
       toggles: amountToggles(props.isoCountry).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
+      accessibilityHint: 'Monthly contribution',
     };
 
   }
@@ -307,6 +310,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     toggles: amountToggles(props.isoCountry).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
+    accessibilityHint: `${props.isoCountry === 'us' ? 'one time' : 'one-off'} contribution`,
   };
 
 }
@@ -369,9 +373,9 @@ export default function ContribAmounts(props: PropTypes) {
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
           />
 
-          <div className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
+          <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
             {contribOtherAmountAccessibilityHint}
-          </div>
+          </p>
         </div>
         {errorMessage(props.contribError, attrs.contribType, props.isoCountry)}
       </div>

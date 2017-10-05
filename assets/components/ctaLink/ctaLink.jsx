@@ -25,7 +25,7 @@ export default function CtaLink(props: PropTypes) {
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : UUID();
   const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
   return (
-    <span>
+    <div>
       <a
         id={props.id}
         className={ctaUniqueClassName}
@@ -38,8 +38,8 @@ export default function CtaLink(props: PropTypes) {
         <span>{props.text}</span>
         <Svg svgName="arrow-right-straight" />
       </a>
-      <div id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</div>
-    </span>
+      <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
+    </div>
   );
 
 }

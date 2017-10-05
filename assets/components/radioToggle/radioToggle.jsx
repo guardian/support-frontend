@@ -14,7 +14,7 @@ export type Radio = {
   id?: string,
   value: string,
   text: string,
-  accessibilityHint?: string,
+  accessibilityHint?: ?string,
 };
 
 type PropTypes = {
@@ -23,7 +23,7 @@ type PropTypes = {
   checked: ?string,
   toggleAction: (string) => void,
   showAnnual: boolean,
-  accessibilityHint: ?string,
+  accessibilityHint?: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -39,7 +39,7 @@ export default function RadioToggle(props: PropTypes) {
     const radioId = `${props.name}-${idx}`;
     const className = getClassName(props);
     const accessibilityHintId = `accessibility-hint-${radioId}`;
-    const accessibilityHint = <div id={accessibilityHintId} className="accessibility-hint">{radio.accessibilityHint}</div>;
+    const accessibilityHint = <p id={accessibilityHintId} className="accessibility-hint">{radio.accessibilityHint}</p>;
     return (
       <span id={radio.id} className={`component-radio-toggle__button ${className}`} key={radioId}>
         {accessibilityHint}
@@ -65,10 +65,10 @@ export default function RadioToggle(props: PropTypes) {
   const radioGroupId = UUID();
 
   return (
-    <span>
+    <div>
       <div className="component-radio-toggle" aria-describedby={radioGroupId}>{radioButtons}</div>
-      <div id={radioGroupId} className="accessibility-hint">{props.accessibilityHint}</div>
-    </span>
+      <p id={radioGroupId} className="accessibility-hint">{props.accessibilityHint}</p>
+    </div>
   );
 
 }
@@ -79,5 +79,5 @@ export default function RadioToggle(props: PropTypes) {
 RadioToggle.defaultProps = {
   checked: '',
   id: null,
-  accessibilityHint: null,
+  accessibilityHint: '',
 };
