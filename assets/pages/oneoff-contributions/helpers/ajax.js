@@ -2,10 +2,11 @@
 
 // ----- Imports ----- //
 
-import { get as getCookie } from 'helpers/cookie';
-import * as ophan from 'ophan';
+import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+
+import type { OphanIds } from 'helpers/tracking/acquisitions';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import type { PageState } from '../oneOffContributionsReducers';
@@ -27,14 +28,14 @@ type OneoffContribFields = {
   marketing: boolean,
   postcode?: string,
   ophanPageviewId: string,
-  ophanBrowserId?: string,
+  ophanBrowserId: ?string,
   cmp?: string,
   intcmp: ?string,
   refererPageviewId: ?string,
-  refererUrl?: string,
+  refererUrl: ?string,
   idUser?: string,
   platform?: string,
-  ophanVisitId?: string,
+  ophanVisitId: ?string,
 };
 
 
@@ -43,23 +44,27 @@ type OneoffContribFields = {
 function requestData(paymentToken: string, getState: () => PageState) {
 
   const state = getState();
+  const user = state.page.user;
+  const ophanIds: OphanIds = getOphanIds();
 
-  if (state.page.user.fullName !== null && state.page.user.fullName !== undefined
-    && state.page.user.email !== null && state.page.user.email !== undefined) {
+  if (user.fullName !== null && user.fullName !== undefined &&
+    user.email !== null && user.email !== undefined) {
+    const referrerAcquisitionData = state.common.referrerAcquisitionData;
+
     const oneOffContribFields: OneoffContribFields = {
-      name: state.page.user.fullName,
+      name: user.fullName,
       currency: state.page.stripeCheckout.currency,
       amount: state.page.stripeCheckout.amount,
-      email: state.page.user.email,
+      email: user.email,
       token: paymentToken,
-      marketing: state.page.user.gnmMarketing,
-      postcode: state.page.user.postcode,
-      ophanPageviewId: ophan.viewId,
-      ophanBrowserId: getCookie('bwid'),
-      ophanVisitId: getCookie('vsid'),
-      intcmp: state.common.referrerAcquisitionData.campaignCode,
-      refererPageviewId: state.common.referrerAcquisitionData.referrerPageviewId,
-      refererUrl: state.common.referrerAcquisitionData.referrerUrl,
+      marketing: user.gnmMarketing,
+      postcode: user.postcode,
+      ophanPageviewId: ophanIds.pageviewId,
+      ophanBrowserId: ophanIds.browserId,
+      ophanVisitId: ophanIds.visitId,
+      intcmp: referrerAcquisitionData.campaignCode,
+      refererPageviewId: referrerAcquisitionData.referrerPageviewId,
+      refererUrl: referrerAcquisitionData.referrerUrl,
     };
 
     return {

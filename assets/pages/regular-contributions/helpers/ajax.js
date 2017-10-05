@@ -2,11 +2,10 @@
 
 // ----- Imports ----- //
 
-import * as ophan from 'ophan';
 
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import { get as getCookie } from 'helpers/cookie';
+import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { BillingPeriod, Contrib } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
@@ -83,15 +82,9 @@ function requestData(paymentFieldName: PaymentField,
     });
   }
 
-  const ophanIds: OphanIds = {
-    pageviewId: ophan.viewId,
-    visitId: getCookie('vsid'),
-    browserId: getCookie('bwid'),
-  };
-
+  const ophanIds: OphanIds = getOphanIds();
   const referrerAcquisitionData: ReferrerAcquisitionData =
     removeNullFields(getState().common.referrerAcquisitionData);
-
   const supportAbTests = participationsToAcquisitionABTest(getState().common.abParticipations);
 
   const regularContribFields: RegularContribFields = {

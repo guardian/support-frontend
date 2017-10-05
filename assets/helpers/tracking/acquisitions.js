@@ -2,6 +2,9 @@
 
 // ----- Imports ----- //
 
+
+import * as ophan from 'ophan';
+import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abtest';
@@ -15,11 +18,11 @@ export type AcquisitionABTest = {
   variant: string,
 };
 
-export type OphanIds = {
-  pageviewId: ?string,
+export type OphanIds = {|
+  pageviewId: string,
   visitId: ?string,
   browserId: ?string,
-};
+|};
 
 export type ReferrerAcquisitionData = {|
   campaignCode: ?string,
@@ -150,11 +153,17 @@ function getAcquisition(): ReferrerAcquisitionData {
 
 }
 
+const getOphanIds = (): OphanIds => ({
+  pageviewId: ophan.viewId,
+  browserId: getCookie('bwid'),
+  visitId: getCookie('vsid'),
+});
 
 // ----- Exports ----- //
 
 export {
   getCampaign,
   getAcquisition,
+  getOphanIds,
   participationsToAcquisitionABTest,
 };
