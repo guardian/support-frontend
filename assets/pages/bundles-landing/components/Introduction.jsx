@@ -10,12 +10,12 @@ import IntroductionText from 'components/introductionText/introductionText';
 
 const copy = [
   {
-    heading: 'support the Guardian',
-    copy: ['be part of our future', 'by helping to secure it'],
+    heading: 'help us deliver the',
+    copy: ['independent journalism', 'the world needs'],
   },
   {
-    heading: 'hold power to account',
-    copy: ['by funding quality,', 'independent journalism'],
+    heading: 'support the Guardian',
+    copy: ['contribute or subscribe'],
   },
 ];
 
