@@ -286,34 +286,6 @@
       }
     }
 
-    .why-support__image {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-
-      @include mq($from: tablet) {
-        height: 240px;
-      }
-
-      @include mq($from: desktop) {
-        height: 360px;
-      }
-
-      .component-grid-picture__image {
-        display: block;
-
-        @include mq($from: tablet) {
-          position: absolute;
-          top: -100%;
-          bottom: -100%;
-          left: -100%;
-          right: -100%;
-          margin: auto;
-          height: 100%;
-        }
-      }
-    }
-
     .why-support__top-content, .why-support__bottom-content {
       flex-basis: 300px;
       flex-grow: 1;
