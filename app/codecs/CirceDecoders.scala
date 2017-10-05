@@ -4,6 +4,7 @@ import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.model.{BillingPeriod, PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.{Decoder, Encoder, Json}
 import cats.implicits._
+import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState, FailureHandlerState}
 import io.circe.generic.decoding.DerivedDecoder
@@ -12,6 +13,8 @@ import io.circe.generic.semiauto._
 import services.stepfunctions.StripePaymentToken
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
+import ophan.thrift.event.AbTest
+import com.gu.fezziwig.CirceScroogeMacros._
 
 object CirceDecoders {
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
@@ -57,6 +60,11 @@ object CirceDecoders {
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
+
+  implicit val supportAbTestsDecoder: Decoder[AbTest] = Decoder[AbTest]
+  implicit val supportAbTestsEncoder: Encoder[AbTest] = Encoder[AbTest]
+  implicit val referrerAcquisitionDataCodec: Codec[ReferrerAcquisitionData] = deriveCodec
+  implicit val ophanIdsCodec: Codec[OphanIds] = deriveCodec
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val contributionCodec: Codec[Contribution] = deriveCodec
