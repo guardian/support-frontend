@@ -11,7 +11,7 @@ import * as logger from 'helpers/logger';
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { detect } from 'helpers/internationalisation/country';
 
-import type { Campaign, Acquisition } from 'helpers/tracking/acquisitions';
+import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
 
@@ -22,14 +22,15 @@ import type { Action } from './pageActions';
 
 export type CommonState = {
   campaign: ?Campaign,
-  acquisition: Acquisition,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+
   country: IsoCountry,
   abParticipations: Participations,
 };
 
 export type PreloadedState = {
   campaign?: $PropertyType<CommonState, 'campaign'>,
-  acquisition?: $PropertyType<CommonState, 'acquisition'>,
+  referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
   country?: $PropertyType<CommonState, 'country'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
@@ -61,7 +62,7 @@ function buildInitialState(
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
-    acquisition,
+    referrerAcquisitionData: acquisition,
     country,
     abParticipations,
   }, preloadedState);

@@ -110,7 +110,7 @@ function buildAcquisition(acquisitionData: Object = {}): ReferrerAcquisitionData
   const campaignCode = acquisitionData.campaignCode ||
     getQueryParameter('INTCMP') ||
     null;
-  debugger
+
   return {
     referrerPageviewId,
     campaignCode,
