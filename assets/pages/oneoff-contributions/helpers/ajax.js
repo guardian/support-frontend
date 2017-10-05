@@ -2,6 +2,8 @@
 
 // ----- Imports ----- //
 
+import { get as getCookie } from 'helpers/cookie';
+import * as ophan from 'ophan';
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 
@@ -52,9 +54,12 @@ function requestData(paymentToken: string, getState: () => PageState) {
       token: paymentToken,
       marketing: state.page.user.gnmMarketing,
       postcode: state.page.user.postcode,
-      ophanPageviewId: 'dummy', // todo: correct ophan pageview id
+      ophanPageviewId: ophan.viewId,
+      ophanBrowserId: getCookie('bwid'),
+      ophanVisitId: getCookie('vsid'),
       intcmp: state.common.referrerAcquisitionData.campaignCode,
       refererPageviewId: state.common.referrerAcquisitionData.referrerPageviewId,
+      refererUrl: state.common.referrerAcquisitionData.referrerUrl,
     };
 
     return {
