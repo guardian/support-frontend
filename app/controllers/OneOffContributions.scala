@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{CacheControl, CustomActionBuilders}
+import actions.CustomActionBuilders
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe
@@ -32,14 +32,6 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() { implicit request =>
-    form(uatMode = false, paypal)
-  }
-
-  def displayFormTestUser(paypal: Option[Boolean]): Action[AnyContent] = authAction { implicit request =>
-    form(uatMode = true, paypal).withHeaders(CacheControl.noCache)
-  }
-
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).fold(
       _ => Ok(Autofill.empty.asJson),
@@ -47,18 +39,20 @@ class OneOffContributions(
     )
   }
 
-  private def form(uatMode: Boolean, paypal: Option[Boolean])(implicit request: RequestHeader): Result = Ok(
-    oneOffContributions(
-      title = "Support the Guardian | One-off Contribution",
-      id = "oneoff-contributions-page",
-      js = "oneoffContributionsPage.js",
-      uatMode = uatMode,
-      payPalButton = paypal.getOrElse(true),
-      stripeConfig = stripeConfigProvider.get(uatMode),
-      contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = contributionsPayPalEndpoint
+  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(
+      oneOffContributions(
+        title = "Support the Guardian | One-off Contribution",
+        id = "oneoff-contributions-page",
+        js = "oneoffContributionsPage.js",
+        payPalButton = paypal.getOrElse(true),
+        defaultStripeConfig = stripeConfigProvider.get(false),
+        uatStripeConfig = stripeConfigProvider.get(true),
+        contributionsStripeEndpoint = contributionsStripeEndpoint,
+        contributionsPayPalEndpoint = contributionsPayPalEndpoint
+      )
     )
-  )
+  }
 
   private def fullNameFor(user: IdUser): Option[String] = {
     for {

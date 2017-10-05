@@ -1,6 +1,9 @@
 // @flow
 
-import type { PayPalButtonType } from 'components/paymentMethods/paymentMethods';
+// ----- Imports ----- //
+
+import type { PayPalButtonType } from './components/regularContributionsPayment';
+
 
 // ----- Types ----- //
 

@@ -6,9 +6,9 @@
         title: String,
         id: String,
         js: String,
-        uatMode: Boolean,
         payPalButton: Boolean,
-        stripeConfig: StripeConfig,
+        defaultStripeConfig: StripeConfig,
+        uatStripeConfig: StripeConfig,
         contributionsStripeEndpoint: String,
         contributionsPayPalEndpoint: String
 )(implicit assets: AssetsResolver, request: RequestHeader)
@@ -16,11 +16,13 @@
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
-        window.guardian.stripeKey = "@stripeConfig.publicKey";
+        window.guardian.stripeKey = {
+          default: "@defaultStripeConfig.publicKey",
+          uat: "@uatStripeConfig.publicKey"
+        };
         window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
         window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
         window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
-        window.guardian.uatMode = @uatMode;
     </script>
     <script type="text/javascript" src="@assets(js)"></script>
 }

@@ -25,11 +25,10 @@ import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 
-import PaymentMethodsContainer from './components/paymentMethodsContainer';
+import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 import FormFields from './components/formFields';
 import reducer from './oneOffContributionsReducers';
 import type { PageState } from './oneOffContributionsReducers';
-import postCheckout from './helpers/ajax';
 
 import { setPayPalButton } from './oneoffContributionsActions';
 
@@ -79,11 +78,7 @@ const content = (
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
-          <PaymentMethodsContainer
-            stripeCallback={postCheckout}
-            payPalCallback={postCheckout}
-            payPalType={store.getState().page.oneoffContrib.payPalType}
-          />
+          <OneoffContributionsPayment />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">

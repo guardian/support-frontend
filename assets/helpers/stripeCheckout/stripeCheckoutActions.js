@@ -53,6 +53,7 @@ export function setupStripeCheckout(callback: Function): Function {
 
     return stripeCheckout.setup(
       getState().page.stripeCheckout,
+      getState().page.user.isTestUser || false,
       handleToken,
       handleCloseOverlay,
     ).then(() => dispatch(stripeCheckoutLoaded()));

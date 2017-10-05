@@ -17,6 +17,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
+import Signout from 'components/signout/signout';
 
 import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -26,9 +27,8 @@ import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 
-import postCheckout from './helpers/ajax';
 import FormFields from './components/formFields';
-import PaymentMethodsContainer from './components/paymentMethodsContainer';
+import RegularContributionsPayment from './components/regularContributionsPayment';
 import reducer from './regularContributionsReducers';
 import type { PageState } from './regularContributionsReducers';
 
@@ -82,16 +82,12 @@ const content = (
             currency={state.page.regularContrib.currency}
           />
         </InfoSection>
-        <InfoSection heading="Your details" className="regular-contrib__your-details">
+        <InfoSection heading="Your details" headingContent={<Signout />} className="regular-contrib__your-details">
           <DisplayName />
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="regular-contrib__payment-methods">
-          <PaymentMethodsContainer
-            stripeCallback={postCheckout('stripeToken', contributionType)}
-            payPalCallback={postCheckout('baid', contributionType)}
-            payPalType={state.page.regularContrib.payPalType}
-          />
+          <RegularContributionsPayment contributionType={contributionType} />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">

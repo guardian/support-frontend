@@ -48,7 +48,8 @@ class RegularContributions(
               user = fullUser,
               uatMode = uatMode,
               payPalButton = paypal.getOrElse(true),
-              stripeConfig = stripeConfigProvider.get(uatMode),
+              defaultStripeConfig = stripeConfigProvider.get(false),
+              uatStripeConfig = stripeConfigProvider.get(true),
               payPalConfig = payPalConfigProvider.get(uatMode)
             )
           )

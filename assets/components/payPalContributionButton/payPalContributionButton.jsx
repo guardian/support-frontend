@@ -4,8 +4,12 @@
 
 import React from 'react';
 import Svg from 'components/svg/svg';
+
+import {
+  paypalContributionsRedirect,
+} from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 
 
 // ---- Types ----- //
@@ -18,8 +22,12 @@ type PropTypes = {
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
   canClick?: boolean,
+  buttonText?: string,
 };
 /* eslint-enable react/no-unused-prop-types */
+
+
+// ----- Functions ----- //
 
 function payWithPayPal(props: PropTypes) {
   return () => {
@@ -34,6 +42,7 @@ function payWithPayPal(props: PropTypes) {
   };
 }
 
+
 // ----- Component ----- //
 
 const PayPalContributionButton = (props: PropTypes) =>
@@ -45,18 +54,19 @@ const PayPalContributionButton = (props: PropTypes) =>
     >
 
       <Svg svgName="paypal-p-logo" />
-      <span>contribute with PayPal</span>
+      <span>{props.buttonText}</span>
       <Svg svgName="arrow-right-straight" />
     </button>
   );
 
 
-// ----- Defaults ----- //
+// ----- Default Props ----- //
 
 PayPalContributionButton.defaultProps = {
   intCmp: null,
   refpvid: null,
   canClick: true,
+  buttonText: 'Pay with PayPal',
 };
 
 
