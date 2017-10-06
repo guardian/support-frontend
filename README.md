@@ -8,7 +8,7 @@ such as Salesforce, Zuora, Paypal and Stripe and to provide retry functionality 
 
 ## Project structure
 The project is divided up into a common module, which contains code used by all of the step functions, and separate
-modules for each of the step functions.
+modules for each of the step functions. It also depends on the [support-models](https://github.com/guardian/support-models) library which defines all the state to be shared between this project and [support-frontend](https://github.com/guardian/support-frontend)
 
 ## Setup
 
@@ -80,7 +80,21 @@ This behaviour is illustrated through a number of tests in [CirceEncodingBehavio
 ## Encryption
 To protect user data as it is passed through the various stages of the step functions we encrypt it using the [AWS KMS API](https://docs.aws.amazon.com/kms/latest/developerguide/programming-top.html).
 
-This encryption can be switched off for debugging purposes by setting the aws.useEncryption config setting to false.
+This encryption is controlled on a per request basis by a flag 'encrypted' passed in with the Json payload.
+
+If you want to look at the input to a particular state machine execution you can decrypt it using the script in scripts/decode.sh as follows:
+
+* Copy the json state from the AWS console
+
+* Minify it (so that it can be passed in to the script on the command line)
+
+* Call the script eg.
+    `./decode.sh '{"state":"AQICAHjJHubNEB1WH+W22uvaeQCP8EVHJ9ho4gS436mo+W3QTgE38M5ynj5ZU+GbHVt5ZBnGAAACIjCCAh4GCSqGSIb3DQEHBqCCAg8wggILAgEAMIICBAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzZFWiO1E0uyop/6RUCARCAggHVDvHnH1QkR8VVnuPwRaNRAQoMkBE0yf9I5Kb0ugxirrfZqklswIhPWOGBktG9XWZ31mJDHJ6mb2H5PTJxmAA/64jqYvv0W5Q7yMhwHXTroTraa8+oawgaMipKDtMzfjVDYkHcUsfSHePVgXTCmdEkjthnTV+g10Y0TK3RximRLeBJ/Us9WW07gyg4ibBKdjDEAHYyLfx59nRNDL3f5NN0ZT1aYhhoxCle4d4QxsijQ9a2soZoRXNZ11CgCTrSB9bd08gBjfY0Y0kuA7Emv6oskBImGcLp6CXf3uZHU/pdT7L6PgcBw41hKk9aOXCpiPEPUyni8ePAv+qN74IjkrsXqwMVAzqtgewx1HwgShcYFnhLQ97b9KaoClAiSiYxF0CB2k/AgM6zHo2riaCnRje2bwjE065e8NJzz9wPfhKDLj95B06bpm/1eCOsF6bKGyqrfhZCk23880O58OQAVzzaTRTE3PIktbaICLdIVfLGSN4kF2GxV3Qako/E5W7BCKKt/GsV+pbraLh3WfuokFy4ABPgWqDBRfUKeYJMqKsKDiUzyp6xydMj9yf9ooJKmlqjiRT3QLvScsKCetvYsKTO9/bpgQkKp7iS1QIPTqlxu05MU5z9Gw==","error":null,"encrypted":true}'`
+
+    __(note the single quotes around the json, these are necessary or quotes get stripped out)__
+
+    The output should be something like:
+    `{"requestId":"9759a67f-61a7-10c6-0000-00000000008c","user":{"id":"30001273","primaryEmailAddress":"dslkjfsdlk@gu.com","firstName":"tstssdd","lastName":"ljsdlfkjsdflkj","country":"GB","state":null,"allowMembershipMail":false,"allowThirdPartyMail":false,"allowGURelatedMail":true,"isTestUser":false},"contribution":{"amount":5,"currency":"GBP","billingPeriod":"Monthly"},"paymentFields":{"userId":"30001273","stripeToken":"tok_BWg0DWRgTkyCY7"}}`
 
 ## Emails
 Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md)
