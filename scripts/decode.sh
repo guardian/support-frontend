@@ -14,6 +14,10 @@ This script allows you to decrypt the state from step function executions, it ca
     The output should be something like:
 
     `{"requestId":"9759a67f-61a7-10c6-0000-00000000008c","user":{"id":"30001273","primaryEmailAddress":"dslkjfsdlk@gu.com","firstName":"tstssdd","lastName":"ljsdlfkjsdflkj","country":"GB","state":null,"allowMembershipMail":false,"allowThirdPartyMail":false,"allowGURelatedMail":true,"isTestUser":false},"contribution":{"amount":5,"currency":"GBP","billingPeriod":"Monthly"},"paymentFields":{"userId":"30001273","stripeToken":"tok_BWg0DWRgTkyCY7"}}`
+
+    By default the script will use the AWS encryption key ARN from the local support-workers.private.conf, this is fine
+    for decrypting state from the CODE environment but if you want to decrypt state from PROD, you can pass the
+    production AWS encryption key ARN as a second parameter to the script.
 END
 cd ..
 sbt --error "project monthly-contributions" "run-main com.gu.support.workers.encoding.StateDecoder $1 $2"
