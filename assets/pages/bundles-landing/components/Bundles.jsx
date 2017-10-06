@@ -127,7 +127,7 @@ const paperCopy: PaperAttrs = {
       heading: 'Save money off the retail price',
     },
     {
-      heading: 'Get all the benefits of a digital subscription with a paper+digital subscription',
+      heading: 'Get all the benefits of a digital subscription with paper+digital',
     },
   ],
   paperCtaText: 'Get a paper subscription',
