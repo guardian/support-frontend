@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { UUID } from 'helpers/utilities';
+import uuidv4 from 'uuid';
 
 // ----- Types ----- //
 
@@ -62,7 +62,7 @@ export default function RadioToggle(props: PropTypes) {
 
   });
 
-  const radioGroupId = UUID();
+  const radioGroupId = uuidv4();
 
   return (
     <div>

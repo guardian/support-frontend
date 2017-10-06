@@ -4,8 +4,8 @@
 
 import React from 'react';
 import Svg from 'components/svg/svg';
-import { clickSubstituteKeyPressHandler, UUID } from 'helpers/utilities';
-
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
+import uuidv4 from 'uuid';
 
 // ----- Types ----- //
 
@@ -22,7 +22,7 @@ type PropTypes = {
 // ----- Component ----- //
 
 export default function CtaLink(props: PropTypes) {
-  const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : UUID();
+  const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : uuidv4();
   const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
   return (
     <div>
