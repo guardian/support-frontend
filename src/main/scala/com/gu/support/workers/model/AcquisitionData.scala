@@ -6,5 +6,5 @@ import ophan.thrift.event.AbTest
 case class AcquisitionData(
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  supporterAbTest: Set[AbTest]
+  supportAbTests: Set[AbTest]
 )
