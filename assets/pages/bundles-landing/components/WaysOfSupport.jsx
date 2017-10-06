@@ -33,7 +33,7 @@ const waysOfSupport = [
   },
   {
     heading: 'Guardian Live events',
-    infoText: 'Events, discussions, debates, interviews, festivals, dinners and private views',
+    infoText: 'Meet Guardian journalists and readers at our events, debates, interviews and festivals',
     ctaText: 'Find out about events',
     product: 'events',
     modifierClass: 'gu-events',
