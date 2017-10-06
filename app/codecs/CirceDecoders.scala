@@ -14,7 +14,7 @@ import services.stepfunctions.StripePaymentToken
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.AbTest
-import com.gu.fezziwig.CirceScroogeMacros._
+import codecs.CirceThriftDecoders._
 
 object CirceDecoders {
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
@@ -61,9 +61,6 @@ object CirceDecoders {
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
-  implicit val supportAbTestsDecoder: Decoder[AbTest] = Decoder[AbTest]
-  implicit val supportAbTestsEncoder: Encoder[AbTest] = Encoder[AbTest]
-  implicit val referrerAcquisitionDataCodec: Codec[ReferrerAcquisitionData] = deriveCodec
   implicit val ophanIdsCodec: Codec[OphanIds] = deriveCodec
 
   implicit val userCodec: Codec[User] = deriveCodec
@@ -72,3 +69,4 @@ object CirceDecoders {
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec
 }
+
