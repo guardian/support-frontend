@@ -16,7 +16,6 @@ object Configuration extends LazyLogging {
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
 
-  // scalastyle:off
   val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
     .getOrElse("DEV"))
     .getOrElse(Stages.DEV)
