@@ -16,10 +16,8 @@ class EncryptionSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val encryption = new AwsEncryptionProvider(Configuration.awsConfig)
 
     val encrypted = encryption.encrypt(text)
-    val enString = new String(encrypted, "utf8")
-    logger.info(s"encrypted: ${enString}")
 
-    val decrypted = encryption.decrypt(enString.getBytes("utf8"))
+    val decrypted = encryption.decrypt(encrypted)
 
     decrypted should be(text)
 
