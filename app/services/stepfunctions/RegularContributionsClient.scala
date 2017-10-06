@@ -32,7 +32,6 @@ case class StripePaymentToken(stripeToken: String) {
 }
 
 object CreateRegularContributorRequest {
-  import codecs.CirceThriftDecoders._
   implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
 }
 case class CreateRegularContributorRequest(
