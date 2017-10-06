@@ -3,7 +3,7 @@ package com.gu.support.workers.model.monthlyContributions.state
 import java.util.UUID
 
 import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.{NonPaymentAcquisitionData, PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, SalesforceContactRecord, User}
 
 case class SendThankYouEmailState(
   requestId: UUID,
@@ -12,6 +12,6 @@ case class SendThankYouEmailState(
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
-  nonPaymentAcquisitionData: Option[NonPaymentAcquisitionData]
+  nonPaymentAcquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 
