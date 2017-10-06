@@ -10,5 +10,5 @@ case class CreatePaymentMethodState(
   user: User,
   contribution: Contribution,
   paymentFields: Either[StripePaymentFields, PayPalPaymentFields],
-  nonPaymentAcquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState

@@ -11,5 +11,5 @@ case class CreateZuoraSubscriptionState(
   contribution: Contribution,
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
-  nonPaymentAcquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState

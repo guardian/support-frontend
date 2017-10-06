@@ -12,6 +12,6 @@ case class SendThankYouEmailState(
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
-  nonPaymentAcquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 
