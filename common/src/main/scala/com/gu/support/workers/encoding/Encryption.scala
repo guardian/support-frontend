@@ -5,11 +5,10 @@ import java.nio.ByteBuffer
 import com.amazonaws.services.kms.AWSKMSClientBuilder
 import com.amazonaws.services.kms.model._
 import com.gu.aws.CredentialsProvider
-import com.gu.config.Configuration.awsConfig
-import com.gu.support.config.AwsConfig
+import com.gu.config.Configuration.encryptionKeyId
 
 object Encryption {
-  lazy val encryption = new AwsEncryptionProvider(awsConfig)
+  lazy val encryption = new AwsEncryptionProvider(encryptionKeyId)
   lazy val passThrough = new PassThroughEncryptionProvider()
 
   def decrypt(data: Array[Byte], encrypted: Boolean): String = {
@@ -27,7 +26,7 @@ object Encryption {
   }
 }
 
-class AwsEncryptionProvider(config: AwsConfig) extends EncryptionProvider {
+class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider {
 
   import com.amazonaws.services.kms.model.EncryptRequest
 
@@ -39,7 +38,7 @@ class AwsEncryptionProvider(config: AwsConfig) extends EncryptionProvider {
   override def encrypt(data: String): Array[Byte] = {
     val plainText = ByteBuffer.wrap(data.getBytes(utf8))
     val req = new EncryptRequest()
-      .withKeyId(config.encryptionKeyId)
+      .withKeyId(encryptionKeyId)
       .withPlaintext(plainText)
     //Encrypt requests work with up to 4KB of data which is plenty
     //for our purposes here. If the amount of data increases significantly

@@ -16,6 +16,7 @@ object Configuration extends LazyLogging {
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
 
+  // scalastyle:off
   val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
     .getOrElse("DEV"))
     .getOrElse(Stages.DEV)
@@ -26,7 +27,7 @@ object Configuration extends LazyLogging {
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
-  val awsConfig = AwsConfig.fromConfig(config)
+  val encryptionKeyId = config.getString("aws.encryptionKeyId")
   val stripeConfigProvider = new StripeConfigProvider(config, stage)
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
