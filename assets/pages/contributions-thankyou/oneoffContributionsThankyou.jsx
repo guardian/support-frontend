@@ -38,7 +38,7 @@ const content = (
             ctaId="return-to-the-guardian"
             text="Return to the Guardian"
             url="https://theguardian.com"
-            accessibilityHint="return to theguardian dot com"
+            accessibilityHint="Go to theguardian dot com front page"
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">

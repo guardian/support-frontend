@@ -35,7 +35,7 @@ const content = (
             ctaId="become-supporter-paypal"
             text="Become a Supporter"
             url="https://support.theguardian.com/uk"
-            accessibilityHint="Become a supporter"
+            accessibilityHint="Restart your journey to become a guardian supporter"
           />
         </div>
         <InfoSection heading="Questions?" className="paypal-error__questions">

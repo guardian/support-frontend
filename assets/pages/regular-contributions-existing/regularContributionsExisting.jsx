@@ -37,7 +37,7 @@ const content = (
             ctaId="contribute-one-off-again"
             text="Make a one-off contribution"
             url={routes.oneOffContribCheckout}
-            accessibilityHint="Make a one-off contribution"
+            accessibilityHint="Further support the guardian over and above your current regular contribution"
           />
         </div>
         <InfoSection heading="Questions?" className="existing__questions">
