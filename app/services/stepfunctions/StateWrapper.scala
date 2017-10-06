@@ -11,7 +11,7 @@ import io.circe.syntax._
 
 import scala.util.Try
 
-class StateWrapper(encryption: EncryptionProvider) {
+class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
   implicit private val executionErrorEncoder = deriveEncoder[ExecutionError]
   implicit private val executionErrorDecoder = deriveDecoder[ExecutionError]
 
@@ -19,7 +19,7 @@ class StateWrapper(encryption: EncryptionProvider) {
   implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
 
   def wrap[T](state: T)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None).asJson.noSpaces
+    JsonWrapper(encodeState(state), None, useEncryption).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =
