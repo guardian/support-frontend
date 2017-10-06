@@ -31,8 +31,10 @@ object SendAcquisitionEvent {
   private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventState] =
 
     new AcquisitionSubmissionBuilder[SendAcquisitionEventState] {
+      import cats.syntax.either._
 
-      override def buildOphanIds(state: SendAcquisitionEventState): Either[String, OphanIds] = Right(state.ophanIds)
+      override def buildOphanIds(state: SendAcquisitionEventState): Either[String, OphanIds] =
+        Either.fromOption(state.acquisitionData.map(_.ophanIds), "acquisition data not included")
 
       def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod): thrift.PaymentFrequency =
         // object BillingObject extends the BillingObject trait.
@@ -49,26 +51,29 @@ object SendAcquisitionEvent {
         }
 
       override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] =
-        Right(
-          thrift.Acquisition(
-            product = ophan.thrift.event.Product.RecurringContribution,
-            paymentFrequency = paymentFrequencyFromBillingPeriod(state.contribution.billingPeriod),
-            currency = state.contribution.currency.iso,
-            amount = state.contribution.amount.toDouble,
-            amountInGBP = None,
-            paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
-            // Currently only passing through at most one campaign code
-            campaignCode = state.referrerAcquisitionData.campaignCode.map(Set(_)),
-            abTests = Some(thrift.AbTestInfo(
-              state.supportAbTests ++ Set(state.referrerAcquisitionData.abTest).flatten
-            )),
-            countryCode = Some(state.user.country.alpha2),
-            referrerPageViewId = state.referrerAcquisitionData.referrerPageviewId,
-            referrerUrl = state.referrerAcquisitionData.referrerUrl,
-            componentId = state.referrerAcquisitionData.componentId,
-            componentTypeV2 = state.referrerAcquisitionData.componentType,
-            source = state.referrerAcquisitionData.source
-          )
+        Either.fromOption(
+          state.acquisitionData.map { data =>
+            thrift.Acquisition(
+              product = ophan.thrift.event.Product.RecurringContribution,
+              paymentFrequency = paymentFrequencyFromBillingPeriod(state.contribution.billingPeriod),
+              currency = state.contribution.currency.iso,
+              amount = state.contribution.amount.toDouble,
+              amountInGBP = None,
+              paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
+              // Currently only passing through at most one campaign code
+              campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
+              abTests = Some(thrift.AbTestInfo(
+                data.supportAbTests ++ Set(data.referrerAcquisitionData.abTest).flatten
+              )),
+              countryCode = Some(state.user.country.alpha2),
+              referrerPageViewId = data.referrerAcquisitionData.referrerPageviewId,
+              referrerUrl = data.referrerAcquisitionData.referrerUrl,
+              componentId = data.referrerAcquisitionData.componentId,
+              componentTypeV2 = data.referrerAcquisitionData.componentType,
+              source = data.referrerAcquisitionData.source
+            )
+          },
+          "acquisition data not included"
         )
     }
 }

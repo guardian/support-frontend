@@ -42,8 +42,6 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.contribution,
       state.paymentMethod,
       response.ContactRecord,
-      state.ophanIds,
-      state.referrerAcquisitionData,
-      state.supportAbTests
+      state.acquisitionData
     )
 }

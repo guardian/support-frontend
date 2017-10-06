@@ -50,9 +50,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.user,
       state.contribution,
       paymentMethod,
-      state.ophanIds,
-      state.referrerAcquisitionData,
-      state.supportAbTests
+      state.acquisitionData
     )
 
   def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
