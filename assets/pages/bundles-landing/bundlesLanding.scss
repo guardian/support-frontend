@@ -531,6 +531,7 @@
         flex-basis: 300px;
         // Fix for Safari 8.
         max-width: 300px;
+        height: 340px;
         margin-bottom: 0;
       }
 
@@ -558,6 +559,13 @@
       font-size: 16px;
       margin: 0 ($gu-h-spacing / 2);
       line-height: 20px;
+    }
+
+    .component-cta-circle {
+      @include mq($from: desktop) {
+        position: absolute;
+        bottom: 0;
+      }
     }
 
     .component-cta-circle--patron {
