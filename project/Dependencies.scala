@@ -4,6 +4,8 @@ import sbt._
 object Dependencies {
   val circeVersion = "0.7.0"
   val awsVersion = "1.11.131"
+  val okhttpVersion = "3.9.0"
+
   val config = "com.typesafe" % "config" % "1.3.1"
   val joda = "org.joda" % "joda-convert" % "1.8.1"
   val cats = "org.typelevel" %% "cats" % "0.9.0"
@@ -14,7 +16,7 @@ object Dependencies {
   val supportModels = "com.gu" %% "support-models" % "0.15"
   val supportConfig = "com.gu" %% "support-config" % "0.6"
   val acquisitionEventProducer = "com.gu" %% "acquisition-event-producer" % "2.0.0-rc.5"
-  val okhttp = "com.squareup.okhttp3" % "okhttp" % "3.4.1"
+  val okhttp = "com.squareup.okhttp3" % "okhttp" % okhttpVersion
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
   val awsS3 = "com.amazonaws" % "aws-java-sdk-s3" % awsVersion
@@ -22,7 +24,7 @@ object Dependencies {
   val awsCloudwatch = "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion
   val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   val mokito = "org.mockito" % "mockito-core" % "1.9.5" % "test"
-  val mockWebserver = "com.squareup.okhttp3" % "mockwebserver" % "3.4.1" % "test"
+  val mockWebserver = "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "test"
   val circeCore = "io.circe" %% "circe-core" % circeVersion
   val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
   val circeGenericExtras = "io.circe" %% "circe-generic-extras" % circeVersion
