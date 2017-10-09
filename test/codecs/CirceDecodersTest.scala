@@ -55,8 +55,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       val referrerAcquisitionData2: ReferrerAcquisitionData = referrerAcquisitionDataCodec.decodeJson(parsedJson2).right.get
 
       referrerAcquisitionData2.componentType mustBe Some(EnumUnknownComponentType(-1))
-
-      referrerAcquisitionData2.componentType
+      
     }
   }
 
