@@ -1,17 +1,11 @@
 package com.gu.support.workers.model.monthlyContributions.state
 
-import java.util.UUID
-
+import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, User}
 import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, SalesforceContactRecord, User}
 
-case class SendThankYouEmailState(
-  requestId: UUID,
+case class SendAcquisitionEventState(
   user: User,
   contribution: Contribution,
   paymentMethod: PaymentMethod,
-  salesForceContact: SalesforceContactRecord,
-  accountNumber: String,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
-
