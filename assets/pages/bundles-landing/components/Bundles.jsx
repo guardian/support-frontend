@@ -105,7 +105,7 @@ const digitalCopy: DigitalAttrs = {
   listItems: [
     {
       heading: 'Premium experience on the Guardian app',
-      text: 'Get faster loading pages and a clearer reading experience without adverts. Play our daily crosswords offline wherever you are',
+      text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
     },
     {
       heading: 'Daily Tablet Edition app',
