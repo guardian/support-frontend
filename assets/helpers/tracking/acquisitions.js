@@ -121,7 +121,7 @@ function buildAcquisition(acquisitionData: Object = {}): ReferrerAcquisitionData
     componentId: acquisitionData.componentId || null,
     componentType: acquisitionData.componentType || null,
     source: acquisitionData.source || null,
-    abTest: acquisitionData.abTests || [],
+    abTest: acquisitionData.abTest || [],
   };
 
 }
