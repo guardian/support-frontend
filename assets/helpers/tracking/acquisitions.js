@@ -31,7 +31,7 @@ export type ReferrerAcquisitionData = {|
   componentId: ?string,
   componentType: ?string,
   source: ?string,
-  abTest: AcquisitionABTest,
+  abTest: ?AcquisitionABTest,
 |};
 
 
