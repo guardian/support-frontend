@@ -226,7 +226,7 @@
     line-height: 32px;
     font-weight: 900;
     font-family: $gu-egyptian-web;
-    color: gu-colour(guardian-brand);
+    color: gu-colour(guardian-brand-dark);
     display: inline-block;
     vertical-align: top;
     margin-right: $gu-h-spacing / 2;
@@ -521,7 +521,7 @@
 
     .ways-of-support__heading {
       flex-basis: 100%;
-      color: gu-colour(news-support-2);
+      color: gu-colour(guardian-brand-dark);
       font-family: 'Guardian Titlepiece Web', sans-serif;
       font-weight: 400;
       padding-top: 2px;
