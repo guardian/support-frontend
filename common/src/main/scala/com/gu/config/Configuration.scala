@@ -26,7 +26,7 @@ object Configuration extends LazyLogging {
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
-  val awsConfig = AwsConfig.fromConfig(config)
+  val encryptionKeyId = config.getString("aws.encryptionKeyId")
   val stripeConfigProvider = new StripeConfigProvider(config, stage)
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)

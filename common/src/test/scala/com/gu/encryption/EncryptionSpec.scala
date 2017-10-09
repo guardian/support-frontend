@@ -13,7 +13,7 @@ class EncryptionSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
     val text = "Some test text"
 
-    val encryption = new AwsEncryptionProvider(Configuration.awsConfig)
+    val encryption = new AwsEncryptionProvider(Configuration.encryptionKeyId)
 
     val encrypted = encryption.encrypt(text)
 
