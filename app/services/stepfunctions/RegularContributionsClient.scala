@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.config.Stage
 import RegularContributionsClient._
-import com.gu.support.workers.model.{PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model.{AcquisitionData, PayPalPaymentFields, StripePaymentFields, User}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
@@ -75,9 +75,11 @@ class RegularContributionsClient(
       user = user,
       contribution = request.contribution,
       paymentFields = request.paymentFields.leftMap(_.stripePaymentFields(user.id)),
-      ophanIds = request.ophanIds,
-      referrerAcquisitionData = request.referrerAcquisitionData,
-      supportAbTests = request.supportAbTests
+      acquisitionData = Some(AcquisitionData(
+        ophanIds = request.ophanIds,
+        referrerAcquisitionData = request.referrerAcquisitionData,
+        supportAbTests = request.supportAbTests
+      ))
     )
     underlying.triggerExecution(createPaymentMethodState).bimap(
       { error =>
