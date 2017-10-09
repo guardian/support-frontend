@@ -56,17 +56,6 @@ const isStateValid = (inputState: Object) => {
          user.email !== null && user.email !== undefined;
 };
 
-function removeNullFields(obj: Object): Object {
-
-  const response = obj;
-  Object.keys(response).forEach((key) => {
-    if (response[key] === null || response[key] === undefined) {
-      delete response[key];
-    }
-  });
-  return response;
-}
-
 function requestData(paymentFieldName: PaymentField,
   token: string,
   contributionType: Contrib,
@@ -84,7 +73,7 @@ function requestData(paymentFieldName: PaymentField,
 
   const ophanIds: OphanIds = getOphanIds();
   const referrerAcquisitionData: ReferrerAcquisitionData =
-    removeNullFields(getState().common.referrerAcquisitionData);
+    getState().common.referrerAcquisitionData;
   const supportAbTests = participationsToAcquisitionABTest(getState().common.abParticipations);
 
   const regularContribFields: RegularContribFields = {
