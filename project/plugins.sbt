@@ -9,5 +9,3 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-s3" % "0.9")
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0" excludeAll ExclusionRule(organization = "com.danieltrinh"))
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")
-
-addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.1")

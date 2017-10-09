@@ -32,6 +32,7 @@ lazy val common = project
     name := "guardian-support-common",
     description := "Common code for the support-workers project",
     libraryDependencies ++= commonDependencies,
+    resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
     scalaStyleSettings
   )
   .settings(Settings.shared: _*)
@@ -58,7 +59,6 @@ lazy val `monthly-contributions` = project
         oldStrategy(x)
     },
     libraryDependencies ++= monthlyContributionsDependencies,
-    resolvers += Resolver.sonatypeRepo("releases"),
     scalaStyleSettings
   )
   .settings(Settings.shared: _*)
