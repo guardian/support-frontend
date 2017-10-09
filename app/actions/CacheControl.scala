@@ -29,7 +29,8 @@ object CacheControl {
       CacheControl.cdn(maxAge),
       CacheControl.browser(browserAge),
       "Expires" -> expires.toHttpDateTimeString,
-      "Date" -> now.toHttpDateTimeString
+      "Date" -> now.toHttpDateTimeString,
+      "Vary" -> "DNT"
     )
   }
 }
