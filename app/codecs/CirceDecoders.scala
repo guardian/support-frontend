@@ -1,9 +1,8 @@
 package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.workers.model.{BillingPeriod, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model._
 import io.circe.{Decoder, Encoder, Json}
-
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState, FailureHandlerState}
@@ -72,6 +71,8 @@ object CirceDecoders {
 
   implicit val acquisitionSourceDecoder: Decoder[AcquisitionSource] = decodeThriftEnum[AcquisitionSource]
   implicit val acquisitionSourceEncoder: Encoder[AcquisitionSource] = encodeThriftEnum[AcquisitionSource]
+
+  implicit val acquisitionDataCodec: Codec[AcquisitionData] = deriveCodec
 
   implicit val referrerAcquisitionDataCodec: Codec[ReferrerAcquisitionData] = deriveCodec
 
