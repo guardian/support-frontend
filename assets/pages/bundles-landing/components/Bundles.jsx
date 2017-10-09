@@ -112,7 +112,7 @@ const digitalCopy: DigitalAttrs = {
       text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad, Android and Kindle Fire tablets',
     },
   ],
-  ctaText: 'Start your 14 day trial',
+  ctaText: 'Start your free trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
