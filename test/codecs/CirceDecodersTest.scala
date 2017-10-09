@@ -6,7 +6,7 @@ import io.circe.Json
 import io.circe.parser.parse
 import cats.syntax.either._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import ophan.thrift.componentEvent.ComponentType.AcquisitionsEpic
+import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
 class CirceDecodersTest extends WordSpec with MustMatchers {
@@ -41,7 +41,22 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       referrerAcquisitionData.componentId mustBe Some("example_component_id")
       referrerAcquisitionData.componentType mustBe Some(AcquisitionsEpic)
       referrerAcquisitionData.referrerPageviewId mustBe Some("j8jza3155r9ye3wmfll1")
-      referrerAcquisitionData.componentType
+
+      val json2 =
+        """
+          |{
+          |    "componentType": "InvalidType"
+          |}
+        """
+          .stripMargin
+
+      val parsedJson2 = parse(json2).toOption.get
+
+      val referrerAcquisitionData2: ReferrerAcquisitionData = referrerAcquisitionDataCodec.decodeJson(parsedJson2).right.get
+
+      referrerAcquisitionData2.componentType mustBe Some(EnumUnknownComponentType(-1))
+
+      referrerAcquisitionData2.componentType
     }
   }
 
@@ -85,7 +100,6 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       abtest.name mustBe "test_1"
       abtest.variant mustBe "variant_34"
     }
-
   }
 }
 
