@@ -34,7 +34,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
 
 val circeVersion = "0.8.0"
 
-resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
+resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
