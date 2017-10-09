@@ -64,8 +64,8 @@ object CirceDecoders {
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
   implicit val ophanIdsCodec: Codec[OphanIds] = deriveCodec
-  implicit val supportAbTestsDecoder: Decoder[AbTest] = decodeThriftStruct[AbTest]
-  implicit val supportAbTestsEncoder: Encoder[AbTest] = encodeThriftStruct[AbTest]
+  implicit val abTestDecoder: Decoder[AbTest] = decodeThriftStruct[AbTest]
+  implicit val abTestEncoder: Encoder[AbTest] = encodeThriftStruct[AbTest]
 
   implicit val componentTypeDecoder: Decoder[ComponentType] = decodeThriftEnum[ComponentType]
   implicit val componentTypeEncoder: Encoder[ComponentType] = encodeThriftEnum[ComponentType]
