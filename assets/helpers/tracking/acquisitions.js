@@ -31,7 +31,7 @@ export type ReferrerAcquisitionData = {|
   componentId: ?string,
   componentType: ?string,
   source: ?string,
-  abTest: AcquisitionABTest[],
+  abTest: AcquisitionABTest,
 |};
 
 
@@ -121,7 +121,7 @@ function buildAcquisition(acquisitionData: Object = {}): ReferrerAcquisitionData
     componentId: acquisitionData.componentId || null,
     componentType: acquisitionData.componentType || null,
     source: acquisitionData.source || null,
-    abTest: acquisitionData.abTest || [],
+    abTest: acquisitionData.abTest || null,
   };
 
 }
