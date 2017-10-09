@@ -231,6 +231,11 @@
     vertical-align: top;
     margin-right: $gu-h-spacing / 2;
 
+    @include mq($from: tablet) {
+      width: 220px;
+      margin-right: $gu-h-spacing;
+    }
+
     @include mq($from: desktop) {
       width: 300px;
       margin-right: $gu-h-spacing;
