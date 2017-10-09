@@ -15,6 +15,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
+import CrossProduct from './crossProduct';
+
 import {
   changeContribType,
   changeContribAmount,
@@ -262,6 +264,7 @@ function Bundles(props: PropTypes) {
           <div className="bundles__divider" />
           <PaperBundle {...paperAttrs} />
         </div>
+        <CrossProduct />
       </div>
     </section>
   );
