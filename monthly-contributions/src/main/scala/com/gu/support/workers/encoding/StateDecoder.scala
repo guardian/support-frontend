@@ -14,7 +14,7 @@ import scala.util.Try
 object StateDecoder extends App with LazyLogging {
 
   if (args.length < 1) {
-    println("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
+    print("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
   }
 
   val jsonWrapper = decode[JsonWrapper](args(0)).right.get
@@ -33,6 +33,6 @@ object StateDecoder extends App with LazyLogging {
     print(encoder.decrypt(state))
   }
 
-  def print(output: String): Unit = println(s"\n\n$output\n\n")
 
+  def print(output: String): Unit = println(s"\n\n$output\n\n") // scalastyle:ignore
 }
