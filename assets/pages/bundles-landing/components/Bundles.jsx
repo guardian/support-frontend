@@ -272,7 +272,6 @@ function Bundles(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     contribType: state.page.type,
     contribAmount: state.page.amount,
