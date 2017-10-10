@@ -115,6 +115,7 @@
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
       font-family: $gu-text-sans-web;
+      color: gu-colour(neutral-1);
 
       .component-double-heading__heading {
         color: gu-colour(neutral-1);
@@ -191,6 +192,7 @@
     .component-feature-list {
       padding-left: 0;
       list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#005689;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      color: gu-colour(neutral-1);
 
       h3 {
         color: gu-colour(guardian-brand);
