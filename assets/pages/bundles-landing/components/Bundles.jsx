@@ -254,9 +254,7 @@ function Bundles(props: PropTypes) {
 
   return (
     <section className="bundles">
-      <div className="bundles__introduction-bleed-margins" />
       <div className="bundles__content gu-content-margin">
-        <div className="bundles__introduction-bleed" />
         <div className="bundles__wrapper">
           <ContributionBundle {...props} />
           <div className="bundles__divider" />

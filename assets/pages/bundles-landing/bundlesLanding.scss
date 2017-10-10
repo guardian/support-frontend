@@ -82,30 +82,10 @@
 
   .bundles {
 
-    background-color: darken(gu-colour(comment-support-2), 5%);
-
-    .bundles__introduction-bleed, .bundles__introduction-bleed-margins {
-      height: 180px;
-      background-color: darken(gu-colour(guardian-brand-dark), 5%);
-      position: absolute;
-      left: 0;
-      width: 100%;
-
-      @include mq($from: phablet) {
-        height: 130px;
-      }
-
-      @include mq($from: desktop) {
-        height: 210px;
-      }
-    }
-
-    .bundles__introduction-bleed {
-      background-color: gu-colour(guardian-brand-dark);
-    }
+    background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .bundles__content {
-      background-color: gu-colour(comment-support-2);
+      background-color: gu-colour(guardian-brand-dark);
       position: relative;
       padding-bottom: ($gu-v-spacing * 6);
 
