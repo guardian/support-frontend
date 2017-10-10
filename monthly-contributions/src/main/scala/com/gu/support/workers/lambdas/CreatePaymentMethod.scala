@@ -26,8 +26,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
       _ <- putMetric(state.paymentFields)
-    } yield CreateSalesforceContactState(state.requestId, state.user, state.contribution, paymentMethod)
-
+    } yield getCreateSalesforceContactState(state, paymentMethod)
   }
 
   private def createPaymentMethod(
@@ -44,6 +43,15 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       putCloudWatchMetrics("stripe")
     else
       putCloudWatchMetrics("paypal")
+
+  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
+    CreateSalesforceContactState(
+      state.requestId,
+      state.user,
+      state.contribution,
+      paymentMethod,
+      state.acquisitionData
+    )
 
   def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
     stripeService

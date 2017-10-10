@@ -74,6 +74,11 @@ trait ModelsCodecs {
     .or(Decoder.forProduct2("state", "error")((s: String, e: Option[ExecutionError]) => JsonWrapper(s, e, encrypted = false)))
   implicit val jsonWrapperEncoder: Encoder[JsonWrapper] = deriveEncoder
 
+  implicit val acquisitionDataCodec: Codec[AcquisitionData] = {
+    import com.gu.acquisition.instances.abTest._
+    deriveCodec
+  }
+
 }
 
 trait HelperCodecs {

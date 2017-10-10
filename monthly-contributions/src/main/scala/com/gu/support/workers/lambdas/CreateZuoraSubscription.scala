@@ -45,7 +45,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.contribution,
       state.paymentMethod,
       state.salesForceContact,
-      accountNumber
+      accountNumber,
+      state.acquisitionData
     )
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {

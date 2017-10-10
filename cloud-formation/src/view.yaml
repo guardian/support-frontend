@@ -9,11 +9,11 @@ lambdas:
   description: Step 2. Create Salesforce contact
 - name: CreateZuoraSubscription
   description: Step 3. Create Zuora subscription
-  memorySize: 512
 - name: FailureHandler
   description: Failure handler
-  memorySize: 512
 - name: SendThankYouEmail
   description: Send thank-you email
 - name: UpdateMembersDataAPI
   description: Request members data api sync with Zuora and SalesForce
+- name: SendAcquisitionEvent
+  description: Submit Acquisition events to Ophan
