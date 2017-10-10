@@ -1,9 +1,9 @@
 package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.workers.model.{BillingPeriod, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model._
 import io.circe.{Decoder, Encoder, Json}
-import cats.implicits._
+import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState, FailureHandlerState}
 import io.circe.generic.decoding.DerivedDecoder
@@ -12,6 +12,10 @@ import io.circe.generic.semiauto._
 import services.stepfunctions.StripePaymentToken
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
+import ophan.thrift.event.{AbTest, AcquisitionSource}
+import cats.syntax.either._
+import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
+import ophan.thrift.componentEvent.ComponentType
 
 object CirceDecoders {
   type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
@@ -58,9 +62,24 @@ object CirceDecoders {
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
+  implicit val ophanIdsCodec: Codec[OphanIds] = deriveCodec
+  implicit val abTestDecoder: Decoder[AbTest] = decodeThriftStruct[AbTest]
+  implicit val abTestEncoder: Encoder[AbTest] = encodeThriftStruct[AbTest]
+
+  implicit val componentTypeDecoder: Decoder[ComponentType] = decodeThriftEnum[ComponentType]
+  implicit val componentTypeEncoder: Encoder[ComponentType] = encodeThriftEnum[ComponentType]
+
+  implicit val acquisitionSourceDecoder: Decoder[AcquisitionSource] = decodeThriftEnum[AcquisitionSource]
+  implicit val acquisitionSourceEncoder: Encoder[AcquisitionSource] = encodeThriftEnum[AcquisitionSource]
+
+  implicit val acquisitionDataCodec: Codec[AcquisitionData] = deriveCodec
+
+  implicit val referrerAcquisitionDataCodec: Codec[ReferrerAcquisitionData] = deriveCodec
+
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val contributionCodec: Codec[Contribution] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec
 }
+
