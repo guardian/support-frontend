@@ -19,8 +19,7 @@ export default function CrossProduct() {
       </h1>
       <p className="bundles__cross-product-copy">
         Everyone who supports the Guardian can experience it up close with
-        emails from our newsroom and the opportunity to participate in our
-        journalism
+        emails from our newsroom and the opportunity to participate
       </p>
     </div>
   );
