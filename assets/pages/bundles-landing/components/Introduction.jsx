@@ -3,25 +3,21 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import IntroductionText from 'components/introductionText/introductionText';
-
-
-// ----- Copy ----- //
-
-const copy = [
-  {
-    heading: 'help us deliver the',
-    copy: ['independent journalism', 'the world needs'],
-  },
-  {
-    heading: 'support the Guardian',
-    copy: ['contribute or subscribe'],
-  },
-];
 
 
 // ----- Component ----- //
 
 export default function Introduction() {
-  return <IntroductionText messages={copy} />;
+
+  return (
+    <section className="introduction-text">
+      <div className="introduction-text__content gu-content-margin">
+        <h1 className="introduction-text__heading">help us deliver the</h1>
+        <p>independent journalism the world&nbsp;needs</p>
+        <h1 className="introduction-text__heading">support the Guardian</h1>
+        <p>contribute or subscribe</p>
+      </div>
+    </section>
+  );
+
 }
