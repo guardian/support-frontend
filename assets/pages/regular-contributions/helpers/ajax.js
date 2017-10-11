@@ -9,8 +9,8 @@ import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { BillingPeriod, Contrib } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
+import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { PageState } from '../regularContributionsReducers';
-import { participationsToAcquisitionABTest } from '../../../helpers/tracking/acquisitions';
 import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
