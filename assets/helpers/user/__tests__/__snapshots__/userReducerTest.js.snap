@@ -6,6 +6,7 @@ Object {
   "email": "",
   "firstName": "",
   "gnmMarketing": false,
+  "id": "",
   "isTestUser": null,
   "lastName": "",
 }
