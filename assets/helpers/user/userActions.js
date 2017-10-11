@@ -3,6 +3,7 @@
 // ----- Types ----- //
 
 export type Action =
+  | { type: 'SET_USER_ID', id: string }
   | { type: 'SET_DISPLAY_NAME', name: string }
   | { type: 'SET_FIRST_NAME', name: string }
   | { type: 'SET_LAST_NAME', name: string }
@@ -16,6 +17,10 @@ export type Action =
 
 
 // ----- Actions Creators ----- //
+
+export function setId(id: string): Action {
+  return { type: 'SET_USER_ID', id };
+}
 
 export function setDisplayName(name: string): Action {
   return { type: 'SET_DISPLAY_NAME', name };

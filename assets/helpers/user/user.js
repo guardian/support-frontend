@@ -6,6 +6,7 @@ import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 
 import {
+  setId,
   setDisplayName,
   setEmail,
   setFirstName,
@@ -31,6 +32,7 @@ const init = (dispatch: Function) => {
   }
 
   if (windowHasUser) {
+    dispatch(setId(window.guardian.user.id));
     dispatch(setEmail(window.guardian.user.email));
     dispatch(setDisplayName(window.guardian.user.displayName));
     dispatch(setFirstName(window.guardian.user.firstName));
@@ -40,6 +42,9 @@ const init = (dispatch: Function) => {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
+          if (data.id) {
+            dispatch(setId(data.id));
+          }
           if (data.name) {
             dispatch(setFullName(data.name));
           }
