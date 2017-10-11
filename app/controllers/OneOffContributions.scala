@@ -35,7 +35,7 @@ class OneOffContributions(
   def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).fold(
       _ => Ok(Autofill.empty.asJson),
-      user => Ok(Autofill(fullNameFor(user), Some(user.primaryEmailAddress)).asJson)
+      user => Ok(Autofill(id = Some(user.id), name = fullNameFor(user), email = Some(user.primaryEmailAddress)).asJson)
     )
   }
 
