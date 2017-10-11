@@ -15,6 +15,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
+import CrossProduct from './crossProduct';
+
 import {
   changeContribType,
   changeContribAmount,
@@ -37,7 +39,7 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  intCmp: string,
+  intCmp: ?string,
   campaign: ?Campaign,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
@@ -90,7 +92,7 @@ type BundlesType = {
 const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
-  ctaText: 'Contribute',
+  ctaText: 'Contribute with card or PayPal',
   modifierClass: 'contributions',
   ctaLink: '',
 };
@@ -100,15 +102,15 @@ const digitalCopy: DigitalAttrs = {
   subheading: '£11.99/month',
   listItems: [
     {
-      heading: 'Ad-free mobile app',
-      text: 'No interruptions means pages load quicker for a clearer reading experience',
+      heading: 'Premium experience on the Guardian app',
+      text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
     },
     {
-      heading: 'Daily tablet edition',
-      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
+      heading: 'Daily Tablet Edition app',
+      text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad, Android and Kindle Fire tablets',
     },
   ],
-  ctaText: 'Start your 14 day trial',
+  ctaText: 'Start your free trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
 };
@@ -118,19 +120,18 @@ const paperCopy: PaperAttrs = {
   subheading: 'from £10.79/month',
   listItems: [
     {
-      heading: 'Newspaper',
-      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
+      heading: 'Choose your package and delivery method',
+      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
       heading: 'Save money off the retail price',
     },
     {
-      heading: 'All the benefits of a digital subscription',
-      text: 'Available with paper+digital',
+      heading: 'Get all the benefits of a digital subscription with paper+digital',
     },
   ],
-  paperCtaText: 'Become a paper subscriber',
-  paperDigCtaText: 'Become a paper+digital subscriber',
+  paperCtaText: 'Get a paper subscription',
+  paperDigCtaText: 'Get a paper+digital subscription',
   modifierClass: 'paper',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
@@ -158,7 +159,7 @@ const contribSubheading = {
 
 // ----- Functions ----- //
 
-function getContribKey(contribType) {
+function getContribKey(contribType: Contrib) {
   switch (contribType) {
     case 'ANNUAL': return 'annual';
     case 'MONTHLY': return 'monthly';
@@ -166,7 +167,10 @@ function getContribKey(contribType) {
   }
 }
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
+const getContribAttrs = (
+  contribType: Contrib,
+  contribAmount: Amounts,
+  intCmp: ?string): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -174,7 +178,10 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
-  params.append('INTCMP', intCmp);
+
+  if (intCmp !== null && intCmp !== undefined) {
+    params.append('INTCMP', intCmp);
+  }
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
   return Object.assign({}, bundles.contrib, { ctaLink, subheading });
@@ -196,7 +203,12 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
 
 function ContributionBundle(props: PropTypes) {
 
-  const contribAttrs: ContribAttrs = getContribAttrs(props);
+  const contribAttrs: ContribAttrs =
+    getContribAttrs(
+      props.contribType,
+      props.contribAmount,
+      props.intCmp,
+    );
 
   const onClick = () => {
     if (!props.contribError) {
@@ -206,6 +218,9 @@ function ContributionBundle(props: PropTypes) {
 
   return (
     <Bundle {...contribAttrs}>
+      <p>
+        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism
+      </p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
@@ -250,9 +265,7 @@ function Bundles(props: PropTypes) {
 
   return (
     <section className="bundles">
-      <div className="bundles__introduction-bleed-margins" />
       <div className="bundles__content gu-content-margin">
-        <div className="bundles__introduction-bleed" />
         <div className="bundles__wrapper">
           <ContributionBundle {...props} />
           <div className="bundles__divider" />
@@ -260,6 +273,7 @@ function Bundles(props: PropTypes) {
           <div className="bundles__divider" />
           <PaperBundle {...paperAttrs} />
         </div>
+        <CrossProduct />
       </div>
     </section>
   );
@@ -273,7 +287,7 @@ function mapStateToProps(state) {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
-    intCmp: state.common.acquisition.campaignCode,
+    intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,

@@ -19,7 +19,7 @@ describe('reducer tests', () => {
 
     const initialState = {
       campaign: 'dummy_campaign',
-      acquisition: {
+      referrerAcquisitionData: {
         referrerPageviewId: null,
         campaignCode: null,
         referrerUrl: null,
@@ -51,9 +51,9 @@ describe('reducer tests', () => {
     const newState = reducer(undefined, action);
 
     expect(newState.country).toEqual(country);
-    expect(newState.acquisition.campaignCode).toMatchSnapshot();
+    expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
-    expect(newState.acquisition.campaignCode).toMatchSnapshot();
+    expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.abParticipations).toMatchSnapshot();
   });
 

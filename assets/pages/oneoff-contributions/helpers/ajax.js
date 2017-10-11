@@ -2,8 +2,12 @@
 
 // ----- Imports ----- //
 
+import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
+
+import type { OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import type { PageState } from '../oneOffContributionsReducers';
@@ -16,45 +20,64 @@ const ONEOFF_CONTRIB_ENDPOINT = window.guardian.contributionsStripeEndpoint;
 
 // ----- Types ----- //
 
-type OneoffContribFields = {
+type OneOffContribFields = {
   name: string,
   currency: string,
   amount: number,
   email: string,
   token: string,
   marketing: boolean,
-  postcode?: string,
+  postcode: ?string,
   ophanPageviewId: string,
-  ophanBrowserId?: string,
-  cmp?: string,
+  ophanBrowserId: ?string,
+  cmp: ?string,
   intcmp: ?string,
   refererPageviewId: ?string,
-  refererUrl?: string,
-  idUser?: string,
-  platform?: string,
-  ophanVisitId?: string,
+  refererUrl: ?string,
+  idUser: ?string,
+  platform: ?string,
+  ophanVisitId: ?string,
+  componentId: ?string,
+  componentType: ?string,
+  source: ?string,
+  nativeAbTests: ?AcquisitionABTest[],
+  refererAbTest: ?AcquisitionABTest,
 };
-
 
 // ----- Functions ----- //
 
 function requestData(paymentToken: string, getState: () => PageState) {
 
   const state = getState();
+  const user = state.page.user;
+  const ophanIds: OphanIds = getOphanIds();
 
-  if (state.page.user.fullName !== null && state.page.user.fullName !== undefined
-    && state.page.user.email !== null && state.page.user.email !== undefined) {
-    const oneOffContribFields: OneoffContribFields = {
-      name: state.page.user.fullName,
+  if (user.fullName !== null && user.fullName !== undefined &&
+    user.email !== null && user.email !== undefined) {
+    const referrerAcquisitionData = state.common.referrerAcquisitionData;
+
+    const oneOffContribFields: OneOffContribFields = {
+      name: user.fullName,
       currency: state.page.stripeCheckout.currency,
       amount: state.page.stripeCheckout.amount,
-      email: state.page.user.email,
+      email: user.email,
       token: paymentToken,
-      marketing: state.page.user.gnmMarketing,
-      postcode: state.page.user.postcode,
-      ophanPageviewId: 'dummy', // todo: correct ophan pageview id
-      intcmp: state.common.acquisition.campaignCode,
-      refererPageviewId: state.common.acquisition.referrerPageviewId,
+      marketing: user.gnmMarketing,
+      postcode: user.postcode,
+      ophanPageviewId: ophanIds.pageviewId,
+      ophanBrowserId: ophanIds.browserId,
+      ophanVisitId: ophanIds.visitId,
+      idUser: user.id,
+      cmp: null,
+      platform: null,
+      intcmp: referrerAcquisitionData.campaignCode,
+      refererPageviewId: referrerAcquisitionData.referrerPageviewId,
+      refererUrl: referrerAcquisitionData.referrerUrl,
+      componentId: referrerAcquisitionData.componentId,
+      componentType: referrerAcquisitionData.componentType,
+      source: referrerAcquisitionData.source,
+      nativeAbTests: participationsToAcquisitionABTest(state.common.abParticipations),
+      refererAbTest: referrerAcquisitionData.abTest,
     };
 
     return {
@@ -84,7 +107,7 @@ export default function postCheckout(
     const url: string = addQueryParamToURL(
       routes.oneOffContribThankyou,
       'INTCMP',
-      getState().common.acquisition.campaignCode,
+      getState().common.referrerAcquisitionData.campaignCode,
     );
 
     if (response.ok) {

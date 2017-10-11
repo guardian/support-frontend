@@ -20,6 +20,7 @@
         window.guardian = window.guardian || {};
         window.guardian.uatMode = @uatMode;
         window.guardian.user = {
+            id: "@user.id",
             email: "@user.primaryEmailAddress",
             @user.publicFields.displayName.map { displayName =>
             displayName: "@displayName",
