@@ -172,8 +172,7 @@ function getContribKey(contribType: Contrib) {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
-  intCmp: ?string): ContribAttrs =>
-{
+  intCmp: ?string): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -206,7 +205,12 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
 
 function ContributionBundle(props: PropTypes) {
 
-  const contribAttrs: ContribAttrs = getContribAttrs(props.contribType, props.contribAmount, props.intCmp);
+  const contribAttrs: ContribAttrs =
+    getContribAttrs(
+      props.contribType,
+      props.contribAmount,
+      props.intCmp,
+    );
 
   const onClick = () => {
     if (!props.contribError) {
