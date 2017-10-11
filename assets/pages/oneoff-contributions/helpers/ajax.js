@@ -5,8 +5,9 @@
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
 
-import type { OphanIds } from 'helpers/tracking/acquisitions';
+import type { OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import type { PageState } from '../oneOffContributionsReducers';
@@ -19,25 +20,29 @@ const ONEOFF_CONTRIB_ENDPOINT = window.guardian.contributionsStripeEndpoint;
 
 // ----- Types ----- //
 
-type OneoffContribFields = {
+type OneOffContribFields = {
   name: string,
   currency: string,
   amount: number,
   email: string,
   token: string,
   marketing: boolean,
-  postcode?: string,
+  postcode: ?string,
   ophanPageviewId: string,
   ophanBrowserId: ?string,
-  cmp?: string,
+  cmp: ?string,
   intcmp: ?string,
   refererPageviewId: ?string,
   refererUrl: ?string,
-  idUser?: string,
+  idUser: ?string,
   platform?: string,
   ophanVisitId: ?string,
+  componentId: ?string,
+  componentType: ?string,
+  source: ?string,
+  nativeAbTests: ?AcquisitionABTest[],
+  refererAbTest: ?AcquisitionABTest,
 };
-
 
 // ----- Functions ----- //
 
@@ -51,7 +56,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
     user.email !== null && user.email !== undefined) {
     const referrerAcquisitionData = state.common.referrerAcquisitionData;
 
-    const oneOffContribFields: OneoffContribFields = {
+    const oneOffContribFields: OneOffContribFields = {
       name: user.fullName,
       currency: state.page.stripeCheckout.currency,
       amount: state.page.stripeCheckout.amount,
@@ -62,9 +67,15 @@ function requestData(paymentToken: string, getState: () => PageState) {
       ophanPageviewId: ophanIds.pageviewId,
       ophanBrowserId: ophanIds.browserId,
       ophanVisitId: ophanIds.visitId,
+      idUser: user.id,
       intcmp: referrerAcquisitionData.campaignCode,
       refererPageviewId: referrerAcquisitionData.referrerPageviewId,
       refererUrl: referrerAcquisitionData.referrerUrl,
+      componentId: referrerAcquisitionData.componentId,
+      componentType: referrerAcquisitionData.componentType,
+      source: referrerAcquisitionData.source,
+      nativeAbTests: participationsToAcquisitionABTest(state.common.abParticipations),
+      refererAbTest: referrerAcquisitionData.abTest,
     };
 
     return {
