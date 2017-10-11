@@ -39,7 +39,7 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  intCmp: string,
+  intCmp: ?string,
   campaign: ?Campaign,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
@@ -161,7 +161,7 @@ const contribSubheading = {
 
 // ----- Functions ----- //
 
-function getContribKey(contribType) {
+function getContribKey(contribType: Contrib) {
   switch (contribType) {
     case 'ANNUAL': return 'annual';
     case 'MONTHLY': return 'monthly';
@@ -169,7 +169,10 @@ function getContribKey(contribType) {
   }
 }
 
-const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs => {
+const getContribAttrs = (
+  contribType: Contrib,
+  contribAmount: Amounts,
+  intCmp: ?string): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -177,7 +180,10 @@ const getContribAttrs = ({ contribType, contribAmount, intCmp }): ContribAttrs =
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
-  params.append('INTCMP', intCmp);
+
+  if (intCmp !== null && intCmp !== undefined) {
+    params.append('INTCMP', intCmp);
+  }
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
   return Object.assign({}, bundles.contrib, { ctaLink, subheading });
@@ -199,7 +205,12 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
 
 function ContributionBundle(props: PropTypes) {
 
-  const contribAttrs: ContribAttrs = getContribAttrs(props);
+  const contribAttrs: ContribAttrs =
+    getContribAttrs(
+      props.contribType,
+      props.contribAmount,
+      props.intCmp,
+    );
 
   const onClick = () => {
     if (!props.contribError) {
