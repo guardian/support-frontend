@@ -22,6 +22,12 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
+  def indexRedirect(REFPVID: Option[String], INTCMP: Option[String], acquisitionData: Option[String]): Action[AnyContent] = Action {
+    val queryParams: Map[String, Seq[String]] = Map("REFPVID" -> Seq(REFPVID), "INTCMP" -> Seq(INTCMP), "acquisitionData" -> Seq(acquisitionData))
+
+    Redirect("/uk", queryParams)
+  }
+
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, id, js, contributionsPayPalEndpoint))
   }
