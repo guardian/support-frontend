@@ -190,10 +190,12 @@
       }
 
       p {
-        font-size: 16px;
-        line-height: 20px;
-        margin-bottom: $gu-v-spacing;
-        font-family: $gu-text-egyptian-web;
+        &:first-child {
+          font-size: 16px;
+          line-height: 20px;
+          margin-bottom: $gu-v-spacing;
+          font-family: $gu-text-egyptian-web;
+        }
       }
     }
 
