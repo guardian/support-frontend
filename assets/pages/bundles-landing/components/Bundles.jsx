@@ -124,7 +124,7 @@ const paperCopy: PaperAttrs = {
       text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
-      heading: 'Save money off the retail price',
+      heading: 'Save money on the retail price',
     },
     {
       heading: 'Get all the benefits of a digital subscription with paper+digital',
