@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgArrowRightStraight } from 'components/svg/svg';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
 
@@ -36,7 +36,7 @@ export default function CtaLink(props: PropTypes) {
         aria-describedby={accessibilityHintId}
       >
         <span>{props.text}</span>
-        <Svg svgName="arrow-right-straight" />
+        <SvgArrowRightStraight />
       </a>
       <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
     </div>

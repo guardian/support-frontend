@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgExclamation } from 'components/svg/svg';
 
 
 // ---- Types ----- //
@@ -19,7 +19,7 @@ type PropTypes = {
 export default function ErrorMessage(props: PropTypes) {
   return (
     <div className="component-error-message">
-      <Svg svgName="exclamation" /><span>{props.message}</span>
+      <SvgExclamation /><span>{props.message}</span>
     </div>
   );
 }
