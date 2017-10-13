@@ -10,9 +10,12 @@ import Bundle from 'components/bundle/bundle';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
+import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abtest';
 
 import {
   changeContribType,
@@ -22,7 +25,6 @@ import {
   changeContribAmountOneOff,
   payPalError,
 } from '../contributionsLandingActions';
-import type { Participations } from '../../../helpers/abtest';
 
 
 // ----- Types ----- //
@@ -34,8 +36,6 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  intCmp: string,
-  refpvid: string,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,
@@ -45,6 +45,7 @@ type PropTypes = {
   payPalErrorHandler: (string) => void,
   payPalError: ?string,
   abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -89,8 +90,8 @@ function showPayPal(props: PropTypes) {
   if (props.contribType === 'ONE_OFF') {
     return (<PayPalContributionButton
       amount={props.contribAmount.oneOff.value}
-      intCmp={props.intCmp}
-      refpvid={props.refpvid}
+      abParticipations={props.abTests}
+      referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.isoCountry}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
@@ -124,12 +125,17 @@ function getContribKey(contribType) {
   }
 }
 
-const getContribAttrs = ({
-  contribType, contribAmount, intCmp, refpvid, isoCountry,
-}): ContribAttrs => {
+const getContribAttrs = (
+  contribType: Contrib,
+  contribAmount: Amounts,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  isoCountry: IsoCountry,
+): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const params = new URLSearchParams();
+  const intCmp = referrerAcquisitionData.campaignCode;
+  const refpvid = referrerAcquisitionData.referrerPageviewId;
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
@@ -153,7 +159,10 @@ const getContribAttrs = ({
 
 function ContributionsBundle(props: PropTypes) {
 
-  const attrs: ContribAttrs = getContribAttrs(props);
+  const attrs: ContribAttrs = getContribAttrs(props.contribType,
+    props.contribAmount,
+    props.referrerAcquisitionData,
+    props.isoCountry);
 
   attrs.showPaymentLogos = true;
 
@@ -186,8 +195,7 @@ function mapStateToProps(state) {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
-    intCmp: state.common.referrerAcquisitionData.campaignCode,
-    refpvid: state.common.referrerAcquisitionData.referrerPageviewId,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.country,
     payPalError: state.page.payPalError,
   };

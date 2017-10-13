@@ -11,6 +11,8 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abtest';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
@@ -25,10 +27,10 @@ type PropTypes = {
   error: ?string,
   isFormEmpty: boolean,
   amount: string,
-  intCmp?: string,
-  refpvid?: string,
+  referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
   checkoutError: (?string) => void,
+  abParticipations: Participations,
 };
 
 
@@ -79,10 +81,10 @@ function OneoffContributionsPayment(props: PropTypes) {
       />
       <PayPalContributionButton
         amount={props.amount}
-        intCmp={props.intCmp}
-        refpvid={props.refpvid}
+        referrerAcquisitionData={props.referrerAcquisitionData}
         isoCountry={props.isoCountry}
         errorHandler={props.checkoutError}
+        abParticipations={props.abParticipations}
       />
     </section>
   );
@@ -99,9 +101,9 @@ function mapStateToProps(state) {
     error: state.page.oneoffContrib.error,
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
     amount: state.page.oneoffContrib.amount,
-    intCmp: state.common.intCmp,
-    refpvid: state.common.refpvid,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.country,
+    abParticipations: state.common.abParticipations,
   };
 
 }
@@ -115,14 +117,6 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
-
-
-// ----- Default Props ----- //
-
-OneoffContributionsPayment.defaultProps = {
-  intCmp: null,
-  refpvid: null,
-};
 
 
 // ----- Exports ----- //
