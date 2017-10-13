@@ -24,8 +24,8 @@ function generateOnClick(product: MemProduct, intCmp: ?string): () => void {
 const waysOfSupport = [
   {
     heading: 'Patrons',
-    infoText: 'The Patron tier is for those who care deeply about the Guardian\'s journalism and the impact it has on the world',
-    ctaText: 'Become a Patron',
+    infoText: 'The Patron tier is for those who want a deeper relationship with the Guardian and its journalists',
+    ctaText: 'Find out more',
     product: 'patrons',
     modifierClass: 'patron',
     gridImg: '137d6b217a27acddf85512657d04f6490b9e0bb1/1638_0_3571_2009',
@@ -33,7 +33,7 @@ const waysOfSupport = [
   },
   {
     heading: 'Guardian Live events',
-    infoText: 'Events, discussions, debates, interviews, festivals, dinners and private views exclusively for Guardian members',
+    infoText: 'Meet Guardian journalists and readers at our events, debates, interviews and festivals',
     ctaText: 'Find out about events',
     product: 'events',
     modifierClass: 'gu-events',
@@ -82,7 +82,7 @@ const WaysOfSupport = (props: PropTypes) => {
 
 function mapStateToProps(state) {
   return {
-    intCmp: state.common.acquisition.campaignCode,
+    intCmp: state.common.referrerAcquisitionData.campaignCode,
   };
 }
 

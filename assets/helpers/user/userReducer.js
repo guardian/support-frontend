@@ -8,6 +8,7 @@ import type { Action } from './userActions';
 // ----- Types ----- //
 
 export type User = {
+  id: ?string,
   email: ?string,
   displayName: ?string,
   firstName: ?string,
@@ -23,6 +24,7 @@ export type User = {
 // ----- Setup ----- //
 
 const initialState: User = {
+  id: '',
   email: '',
   displayName: '',
   firstName: '',
@@ -39,6 +41,8 @@ function userReducer(
   action: Action): User {
 
   switch (action.type) {
+    case 'SET_USER_ID':
+      return Object.assign({}, state, { id: action.id });
 
     case 'SET_DISPLAY_NAME':
       return Object.assign({}, state, { displayName: action.name });

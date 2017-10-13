@@ -7,40 +7,20 @@ import React from 'react';
 import Svg from 'components/svg/svg';
 
 import BodyCopy from 'components/bodyCopy/bodyCopy';
-import GridPicture from 'components/gridPicture/gridPicture';
 import Video from 'components/video/video';
 
 
 // ----- Copy ----- //
 
-const heroImage = {
-  sources: [
-    {
-      gridId: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720',
-      srcSizes: [2000, 1000],
-      media: '(min-width: 740px)',
-      sizes: '(max-width: 980px) 1734px, 2600px',
-    },
-    {
-      gridId: 'd1a7088f8f2a367b0321528f081777c9b5618412/0_0_3578_2013',
-      srcSizes: [2000, 1000, 500],
-      media: '(max-width: 740px)',
-      sizes: '100vw',
-    },
-  ],
-  fallback: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720/1000.jpg',
-  altText: 'Guardian supporters',
-};
-
 const copy = {
   top: [
-    'Like many other media organisations, the Guardian is operating in an incredibly challenging financial climate. Our advertising revenues are falling fast. We have huge numbers of readers, and we are increasingly reliant upon their financial support.',
-    'We don’t have a wealthy owner pulling the strings. No shareholders, advertisers or billionaire owners can edit our editor.',
+    'Your support is vital in helping the Guardian do the most important journalism of all: that which takes time and effort. Hundreds of thousands of readers now support the Guardian\'s independent, quality and investigative journalism.',
+    'This is crucial, when like many media organisations, the Guardian is operating in an incredibly challenging commercial environment, and the advertising that we used to rely on to fund our work continues to fall.',
   ],
   bottom: [
-    'Our owner, the Scott Trust, safeguards our editorial independence from commercial or political interference. It reinvests revenue into our journalism, as opposed to into shareholders\' pockets.',
-    'But while the Scott Trust ensures our independence, we need our readers, now more than ever before, to help secure our future.',
-    'We know that not everyone is in a position to fund our journalism. But if you can, you’ll be an integral part of our mission to make the world a better, fairer place, for everyone.',
+    'We haven\'t put up a paywall – we want to keep our journalism as open as we can.',
+    'We don’t have a billionaire owner pulling our strings. Our owner, the Scott Trust, safeguards our editorial independence from commercial or political interference and reinvests revenue into our journalism, as opposed to into shareholders\' pockets.',
+    'Help to make the Guardian\'s journalism possible: by funding it, by reading it, by sharing it, and by participating in it so that together we can continue to tell the stories that matter, to inform the world and to make it a better place. ',
   ],
   videoCaption: 'Katharine Viner, editor-in-chief, explains the Guardian\'s unique ownership model',
 };
@@ -52,9 +32,6 @@ export default function WhySupport() {
 
   return (
     <section className="why-support">
-      <div className="why-support__image">
-        <GridPicture {...heroImage} />
-      </div>
       <div className="why-support__content gu-content-margin">
         <div className="why-support__top-content">
           <div className="why-support__top-copy">
