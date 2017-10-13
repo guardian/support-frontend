@@ -2,10 +2,9 @@
 
 // ----- Imports ----- //
 
-import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
+import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 
 import type { OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 
