@@ -23,9 +23,18 @@ class Application(
   }
 
   def indexRedirect(REFPVID: Option[String], INTCMP: Option[String], acquisitionData: Option[String]): Action[AnyContent] = Action {
-    val queryParams: Map[String, Seq[String]] = Map("REFPVID" -> Seq(REFPVID), "INTCMP" -> Seq(INTCMP), "acquisitionData" -> Seq(acquisitionData))
 
-    Redirect("/uk", queryParams)
+    //val queryParams: Map[String, Seq[String]] = Map("REFPVID" -> Seq(REFPVID), "INTCMP" -> Seq(INTCMP), "acquisitionData" -> Seq(acquisitionData))
+
+    val queryParams = Seq(
+      "REFPVID" -> REFPVID,
+      "INTCMP" -> INTCMP,
+      "acquisitionData" -> acquisitionData
+    ).collect {
+        case (key, Some(value)) => (key, Seq(value))
+      }.toMap
+
+    Redirect("/uk", request.queryString)
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
