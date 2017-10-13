@@ -198,6 +198,7 @@ function mapStateToProps(state) {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.country,
     payPalError: state.page.payPalError,
+    abTests: state.common.abParticipations,
   };
 }
 
