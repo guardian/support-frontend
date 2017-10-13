@@ -2,20 +2,35 @@
 
 // ----- Imports ----- //
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
+
 import { toCountryGroup } from 'helpers/internationalisation/country';
+import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamToURL } from 'helpers/url';
 
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abtest';
+
 // ----- Types ----- //
 
-type PayPalPostData = {
+type PayPalPostData = {|
   countryGroup: string,
   amount: number,
+  cmp: ?string,
   intCmp: ?string,
+  refererPageviewId: ?string,
+  refererUrl: ?string,
+  ophanPageviewId: string,
+  ophanBrowserId: ?string,
+  ophanVisitId: ?string,
   supportRedirect: boolean,
-}
-
+  componentId: ?string,
+  componentType: ?string,
+  source: ?string,
+  refererAbTest: ?AcquisitionABTest,
+  nativeAbTests: ?AcquisitionABTest[],
+|}
 
 // ----- Functions ----- //
 
@@ -33,28 +48,29 @@ function payalContributionEndpoint(testUser) {
 
 export function paypalContributionsRedirect(
   amount: number,
-  intCmp: ?string,
-  refpvid: ?string,
+  referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
-  errorHandler: (string) => void): void {
+  errorHandler: (string) => void,
+  nativeAbParticipations: Participations): void {
 
   const country = toCountryGroup(isoCountry);
+  const ophanIds: OphanIds = getOphanIds();
   const postData: PayPalPostData = {
     countryGroup: country,
     amount,
-    intCmp,
-    refererPageviewId: refpvid,
+    cmp: null,
+    intCmp: referrerAcquisitionData.campaignCode,
+    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
+    refererUrl: referrerAcquisitionData.referrerUrl,
+    ophanPageviewId: ophanIds.pageviewId,
+    ophanBrowserId: ophanIds.browserId,
+    ophanVisitId: ophanIds.visitId,
     supportRedirect: true,
-    /*
-     TODO: pass these argument to contributions in order to improve
-     the tracking of one-off contributions.
-
-     cmp: state.data.cmpCode,
-     refererUrl: state.data.refererUrl,
-     ophanPageviewId: state.data.ophan.pageviewId,
-     ophanBrowserId: state.data.ophan.browserId,
-     ophanVisitId: state.data.ophan.visitId
-     */
+    componentId: referrerAcquisitionData.componentId,
+    componentType: referrerAcquisitionData.componentType,
+    source: referrerAcquisitionData.source,
+    refererAbTest: referrerAcquisitionData.abTest,
+    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
   };
 
   const fetchOptions: Object = {
