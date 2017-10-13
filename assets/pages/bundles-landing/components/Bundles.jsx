@@ -124,7 +124,7 @@ const digitalCopy: DigitalAttrs = {
   ctaId: 'start-digi-trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
-  ctaAccessibilityHint: 'Proceed to begin a fourteen day trial of a digital subscription to the guardian. After fourteen days you will be charged eleven pounds and ninety nine pence per month.',
+  ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
 };
 
 const paperCopy: PaperAttrs = {
