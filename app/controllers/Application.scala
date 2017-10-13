@@ -22,18 +22,7 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
-  def indexRedirect(REFPVID: Option[String], INTCMP: Option[String], acquisitionData: Option[String]): Action[AnyContent] = Action {
-
-    //val queryParams: Map[String, Seq[String]] = Map("REFPVID" -> Seq(REFPVID), "INTCMP" -> Seq(INTCMP), "acquisitionData" -> Seq(acquisitionData))
-
-    val queryParams = Seq(
-      "REFPVID" -> REFPVID,
-      "INTCMP" -> INTCMP,
-      "acquisitionData" -> acquisitionData
-    ).collect {
-        case (key, Some(value)) => (key, Seq(value))
-      }.toMap
-
+  def indexRedirect: Action[AnyContent] = Action { implicit request =>
     Redirect("/uk", request.queryString)
   }
 
