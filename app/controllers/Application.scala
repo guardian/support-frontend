@@ -22,8 +22,12 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
-  def indexRedirect: Action[AnyContent] = Action { implicit request =>
+  def indexRedirect: Action[AnyContent] = CachedAction() { implicit request =>
     Redirect("/uk", request.queryString)
+  }
+
+  def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Redirect(location, request.queryString)
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
