@@ -22,6 +22,10 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
+  def indexRedirect: Action[AnyContent] = Action { implicit request =>
+    Redirect("/uk", request.queryString)
+  }
+
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, id, js, contributionsPayPalEndpoint))
   }
