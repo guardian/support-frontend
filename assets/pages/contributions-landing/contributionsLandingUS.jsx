@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyMiddleware } from 'redux';
+import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
@@ -21,7 +21,11 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 
 // ----- Page Startup ----- //
 
-const store = pageInit(reducer, undefined, applyMiddleware(thunkMiddleware));
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+
+const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
 
