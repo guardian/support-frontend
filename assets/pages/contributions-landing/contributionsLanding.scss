@@ -57,21 +57,21 @@
 			}
 
 			h1:nth-child(2) {
-				margin-left: 160px;
+				margin-left: 25px;
 			}
 
 			h1:nth-child(3) {
-				margin-left: 60px;
+				margin-left: 25px;
 			}
 		}
 
 		@include mq($from: leftCol) {
 			h1:nth-child(2) {
-				margin-left: 267px;
+				margin-left: 100px;
 			}
 
 			h1:nth-child(3) {
-				margin-left: 116px;
+				margin-left: 100px;
 			}
 		}
 	}
@@ -81,13 +81,13 @@
 
 		@include mq($from: phablet) {
 			h1:nth-child(2) {
-				margin-left: 55px;
+				margin-left: 0;
 			}
 		}
 
 		@include mq($from: desktop) {
 			h1:nth-child(1) {
-				margin-left: 147px;
+				margin-left: $gu-h-spacing;
 				display: inline;
 			}
 
@@ -99,7 +99,7 @@
 
 		@include mq($from: leftCol) {
 			h1:nth-child(1) {
-				margin-left: 254px;
+				margin-left: $gu-h-spacing;
 			}
 
 			h1:nth-child(2) {
@@ -110,16 +110,16 @@
 
 	.contributions-introduction__indent {
 		@include mq($from: phablet, $until: desktop) {
-			margin-left: 85px;
+			margin-left: 0;
 		}
 
 		@include mq($from: desktop) {
 			display: block;
-			margin-left: 420px;
+			margin-left: 25px;
 		}
 
 		@include mq($from: leftCol) {
-			margin-left: 525px;
+			margin-left: 100px;
 		}
 	}
 
@@ -279,10 +279,14 @@
 		}
 
 		@include mq($from: desktop) {
-			margin-top: 0px;
-			margin-left: 85px;
+			margin-top: 0;
+			margin-left: 49px;
 			position: absolute;
 			top: 80px;
+		}
+
+		@include mq($from: leftCol) {
+			margin-left: 85px;
 		}
 
 		@include mq($from: wide) {
