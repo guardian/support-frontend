@@ -19,6 +19,12 @@ object OphanIds {
 
   implicit val writes: Writes[OphanIds] = PlayJson.writes[OphanIds]
 
+  /**
+    * Generate a pageview ID using the same logic (barring the suffix) used
+    * in tracker-js
+    *
+    * @see https://github.com/guardian/ophan/blob/master/tracker-js/assets/coffee/ophan/transmit.coffee#L3
+    */
   def syntheticPageviewId: String = {
     import scala.util.Random
     import java.lang.Long
