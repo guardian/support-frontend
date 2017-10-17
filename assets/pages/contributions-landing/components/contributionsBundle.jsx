@@ -73,9 +73,8 @@ const subHeadingOneOffText = {
 };
 
 const contentText = {
-  GB: `Support the Guardian’s editorial operations by making a
-    monthly or one-off contribution today`,
-  US: `Your contribution funds and supports the Guardian’s journalism`,
+  GB: 'Support the Guardian\'s editorial operations by making a monthly or one-off contribution today',
+  US: 'Your contribution funds and supports the Guardian\'s journalism',
 };
 
 const contribCtaText = {
