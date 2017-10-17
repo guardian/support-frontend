@@ -12,6 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
@@ -47,6 +48,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  currency: Currency,
   abTests: Participations,
 };
 
@@ -170,6 +172,7 @@ function getContribKey(contribType: Contrib) {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
+  currency: IsoCurrency,
   intCmp: ?string): ContribAttrs => {
 
   const contType = getContribKey(contribType);
@@ -178,6 +181,7 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
+  params.append('currency', currency);
 
   if (intCmp !== null && intCmp !== undefined) {
     params.append('INTCMP', intCmp);
@@ -207,6 +211,7 @@ function ContributionBundle(props: PropTypes) {
     getContribAttrs(
       props.contribType,
       props.contribAmount,
+      props.currency.iso,
       props.intCmp,
     );
 
@@ -290,6 +295,7 @@ function mapStateToProps(state) {
     intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
     isoCountry: state.common.country,
+    currency: state.common.currency,
     abTests: state.common.abParticipations,
   };
 }

@@ -14,7 +14,7 @@ import { CONFIG as contribConfig } from 'helpers/contributions';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { forCountry } from 'helpers/internationalisation/currency';
+import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from '../../helpers/abtest';
 
 // ----- Types ----- //
@@ -33,6 +33,7 @@ type PropTypes = {
   toggleContribType: (string) => void,
   onNumberInputKeyPress: () => void,
   isoCountry: IsoCountry,
+  currency: Currency,
   abTests: Participations,
 };
 
@@ -60,7 +61,7 @@ type ContribAttrs = {
 
 // ----- Setup ----- //
 const amountRadiosAnnual = {
-  GB: [
+  GBP: [
     {
       value: '50',
       text: '£50',
@@ -74,7 +75,7 @@ const amountRadiosAnnual = {
       text: '£100',
     },
   ],
-  US: [
+  USD: [
     {
       value: '50',
       text: '$50',
@@ -91,7 +92,7 @@ const amountRadiosAnnual = {
 };
 
 const amountRadiosMonthly = {
-  GB: [
+  GBP: [
     {
       value: '5',
       text: '£5',
@@ -105,7 +106,7 @@ const amountRadiosMonthly = {
       text: '£20',
     },
   ],
-  US: [
+  USD: [
     {
       value: '5',
       text: '$5',
@@ -122,7 +123,7 @@ const amountRadiosMonthly = {
 };
 
 const amountRadiosOneOff = {
-  GB: [
+  GBP: [
     {
       value: '25',
       text: '£25',
@@ -140,7 +141,7 @@ const amountRadiosOneOff = {
       text: '£250',
     },
   ],
-  US: [
+  USD: [
     {
       value: '25',
       text: '$25',
@@ -200,19 +201,19 @@ const contribCaptionRadios = {
 
 // ----- Functions ----- //
 
-function amountToggles(isoCountry: IsoCountry = 'GB'): AmountToggle {
+function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
   return {
     ANNUAL: {
       name: 'contributions-amount-annual-toggle',
-      radios: amountRadiosAnnual[isoCountry],
+      radios: amountRadiosAnnual[currency],
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
-      radios: amountRadiosMonthly[isoCountry],
+      radios: amountRadiosMonthly[currency],
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
-      radios: amountRadiosOneOff[isoCountry],
+      radios: amountRadiosOneOff[currency],
     },
   };
 }
@@ -226,16 +227,15 @@ function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean): Togg
 
 function errorMessage(error: ?ContribError,
   contribType: Contrib,
-  isoCountry: IsoCountry): ?React$Element<any> {
+  currency: Currency): ?React$Element<any> {
 
   const limits = contribConfig[contribType];
-  const currencyGlyph = forCountry(isoCountry).glyph;
 
   const contribErrors: {
     [ContribError]: string,
   } = {
-    tooLittle: `Please enter at least ${currencyGlyph}${limits.min}`,
-    tooMuch: `We are presently only able to accept contributions of ${currencyGlyph}${limits.max} or less`,
+    tooLittle: `Please enter at least ${currency.glyph}${limits.min}`,
+    tooMuch: `We are presently only able to accept contributions of ${currency.glyph}${limits.max} or less`,
     invalidEntry: 'Please enter a numeric amount',
   };
 
@@ -255,7 +255,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribAnnualAmount,
       checked: !userDefined ? props.contribAmount.annual.value : null,
-      toggles: amountToggles(props.isoCountry).ANNUAL,
+      toggles: amountToggles(props.currency.iso).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
     };
@@ -265,7 +265,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribMonthlyAmount,
       checked: !userDefined ? props.contribAmount.monthly.value : null,
-      toggles: amountToggles(props.isoCountry).MONTHLY,
+      toggles: amountToggles(props.currency.iso).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
     };
@@ -276,7 +276,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
-    toggles: amountToggles(props.isoCountry).ONE_OFF,
+    toggles: amountToggles(props.currency.iso).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
   };
@@ -330,11 +330,11 @@ export default function ContribAmounts(props: PropTypes) {
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
             selected={attrs.selected}
-            placeholder={`Other amount (${forCountry(props.isoCountry).glyph})`}
+            placeholder={`Other amount (${props.currency.glyph})`}
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
           />
         </div>
-        {errorMessage(props.contribError, attrs.contribType, props.isoCountry)}
+        {errorMessage(props.contribError, attrs.contribType, props.currency)}
       </div>
     </div>
   );

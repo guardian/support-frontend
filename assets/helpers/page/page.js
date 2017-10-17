@@ -9,10 +9,12 @@ import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { detect } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
 
 import type { Action } from './pageActions';
@@ -23,7 +25,7 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-
+  currency: Currency,
   country: IsoCountry,
   abParticipations: Participations,
 };
@@ -56,6 +58,7 @@ function buildInitialState(
   abParticipations: Participations,
   preloadedState: PreloadedState = {},
   country: IsoCountry,
+  currency: Currency,
 ): CommonState {
 
   const acquisition = getAcquisition();
@@ -65,6 +68,7 @@ function buildInitialState(
     referrerAcquisitionData: acquisition,
     country,
     abParticipations,
+    currency,
   }, preloadedState);
 
 }
@@ -108,10 +112,17 @@ function init(
   middleware: ?Function,
 ) {
 
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
+  const currency: Currency = detectCurrency(country);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  const initialState: CommonState = buildInitialState(participations, preloadedState, country);
+  console.log(`Currency=${currency.iso}`);
+  const initialState: CommonState = buildInitialState(
+    participations,
+    preloadedState,
+    country,
+    currency,
+  );
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(

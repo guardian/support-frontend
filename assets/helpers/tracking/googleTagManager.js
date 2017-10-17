@@ -4,7 +4,7 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
-import { forCountry } from '../internationalisation/currency';
+import { detect as detectCurrency } from '../internationalisation/currency';
 import { getQueryParameter } from '../url';
 import { detect as detectCountry } from '../internationalisation/country';
 
@@ -21,7 +21,7 @@ function getDataValue(name, generator) {
 }
 
 function getCurrency() {
-  return forCountry(detectCountry()).iso;
+  return detectCurrency(detectCountry()).iso;
 }
 
 function getContributionValue() {

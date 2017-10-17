@@ -14,6 +14,7 @@ import PayPalContributionButton from 'components/payPalContributionButton/payPal
 
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
 
@@ -42,6 +43,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  currency: Currency,
   payPalErrorHandler: (string) => void,
   payPalError: ?string,
   abTests: Participations,
@@ -140,6 +142,7 @@ const getContribAttrs = (
   contribAmount: Amounts,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
+  currency: IsoCurrency,
 ): ContribAttrs => {
 
   const contType = getContribKey(contribType);
@@ -149,6 +152,7 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
+  params.append('currency', currency);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
@@ -172,7 +176,8 @@ function ContributionsBundle(props: PropTypes) {
   const attrs: ContribAttrs = getContribAttrs(props.contribType,
     props.contribAmount,
     props.referrerAcquisitionData,
-    props.isoCountry);
+    props.isoCountry,
+    props.currency.iso);
 
   attrs.showPaymentLogos = true;
 
@@ -210,6 +215,7 @@ function mapStateToProps(state) {
     contribError: state.page.error,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.country,
+    currency: state.common.currency,
     payPalError: state.page.payPalError,
     abTests: state.common.abParticipations,
   };
