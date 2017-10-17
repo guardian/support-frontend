@@ -56,7 +56,7 @@ function analyticsInitialisation(participations: Participations): void {
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
-  preloadedState: PreloadedState = {},
+  preloadedState: ?PreloadedState = {},
   country: IsoCountry,
   currency: Currency,
 ): CommonState {
@@ -99,7 +99,7 @@ function createCommonReducer(
 
 // For pages that don't need Redux.
 function statelessInit() {
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
 
@@ -108,7 +108,7 @@ function statelessInit() {
 // Initialises the page.
 function init(
   pageReducer: Object,
-  preloadedState?: PreloadedState,
+  preloadedState: ?PreloadedState = null,
   middleware: ?Function,
 ) {
 
