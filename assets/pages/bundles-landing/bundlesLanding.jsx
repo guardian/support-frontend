@@ -21,8 +21,9 @@ import { trackOphan } from '../../helpers/abtest';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer);
-
+/* eslint-disable no-underscore-dangle */
+const store = pageInit(reducer, null, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+/* eslint-enable */
 
 // ----- Setup ----- //
 
