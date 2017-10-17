@@ -327,10 +327,7 @@
 	}
 
 	.component-double-heading__subheading {
-		margin-top: $gu-v-spacing;
-		font-size: 16px;
-		line-height: 20px;
-		font-family: $gu-text-egyptian-web;
+		padding-top: 4px;
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
