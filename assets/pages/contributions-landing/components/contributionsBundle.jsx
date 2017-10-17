@@ -62,11 +62,20 @@ type ContribAttrs = {
 
 // ----- Copy ----- //
 
-const subHeadingText = {
+const subHeadingMonthlyText = {
+  GB: 'from £5 a month',
+  US: 'from $5 a month',
+};
+
+const subHeadingOneOffText = {
+  GB: '',
+  US: '',
+};
+
+const contentText = {
   GB: `Support the Guardian’s editorial operations by making a
     monthly or one-off contribution today`,
-  US: `Support the Guardian’s editorial operations by making a
-    monthly or one-time contribution today`,
+  US: `Your contribution funds and supports the Guardian’s journalism`,
 };
 
 const contribCtaText = {
@@ -76,9 +85,11 @@ const contribCtaText = {
 };
 
 function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttrs {
+  const subHeadingText = contribType === 'ONE_OFF' ? subHeadingOneOffText[isoCountry] : subHeadingMonthlyText[isoCountry];
+
   return {
     heading: 'contribute',
-    subheading: subHeadingText[isoCountry],
+    subheading: subHeadingText,
     ctaText: contribCtaText[contribType],
     modifierClass: 'contributions',
     ctaLink: '',
@@ -174,6 +185,9 @@ function ContributionsBundle(props: PropTypes) {
 
   return (
     <Bundle {...attrs}>
+      <p>
+        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism
+      </p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
