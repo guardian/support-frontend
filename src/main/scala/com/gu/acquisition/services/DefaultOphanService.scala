@@ -3,7 +3,7 @@ package com.gu.acquisition.services
 import java.io.IOException
 
 import cats.data.EitherT
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
+import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds, SyntheticPageviewId}
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import okhttp3._
@@ -33,7 +33,7 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
 
     val url = endpoint.newBuilder()
       .addPathSegment("a.gif")
-      .addQueryParameter("viewId", ophanIds.pageviewId.getOrElse(OphanIds.syntheticPageviewId))
+      .addQueryParameter("viewId", ophanIds.pageviewId.getOrElse(SyntheticPageviewId.generate))
       .addQueryParameter("acquisition" , acquisition.asJson.noSpaces)
       .build()
 
