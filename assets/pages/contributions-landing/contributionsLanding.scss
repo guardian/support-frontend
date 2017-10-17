@@ -43,6 +43,10 @@
 		margin-bottom: 36px;
 		margin-top: $gu-v-spacing/2;
 
+        h1:nth-child(1) {
+          color: gu-colour(neutral-1);
+        }
+
 		@include mq($from: phablet) {
 			margin-bottom: $gu-v-spacing;
 			margin-top: 34px;
@@ -109,14 +113,16 @@
 	}
 
 	.contributions-introduction__indent {
-		@include mq($from: phablet, $until: desktop) {
-			margin-left: 0;
-		}
+      color: #fff;
 
-		@include mq($from: desktop) {
-			display: block;
-			margin-left: 25px;
-		}
+      @include mq($from: phablet, $until: desktop) {
+        margin-left: 0;
+      }
+
+      @include mq($from: desktop) {
+        display: block;
+        margin-left: 25px;
+      }
 
 		@include mq($from: leftCol) {
 			margin-left: 100px;
