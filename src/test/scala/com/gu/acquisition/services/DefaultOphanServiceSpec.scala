@@ -12,7 +12,7 @@ class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
   val service: DefaultOphanService = OphanService.prod
 
   val submission: AcquisitionSubmission = AcquisitionSubmission(
-    OphanIds("pageviewId", Some("visitId"), Some("browserId")),
+    OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
     Acquisition(
       product = ophan.thrift.event.Product.Contribution,
       paymentFrequency = PaymentFrequency.OneOff,
