@@ -96,18 +96,7 @@
 			}
 
 			h1:nth-child(2) {
-				margin-left: 0;
 				display: inline;
-			}
-		}
-
-		@include mq($from: leftCol) {
-			h1:nth-child(1) {
-				margin-left: $gu-h-spacing;
-			}
-
-			h1:nth-child(2) {
-				margin-left: 0;
 			}
 		}
 	}
