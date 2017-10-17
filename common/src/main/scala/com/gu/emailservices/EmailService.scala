@@ -24,13 +24,15 @@ case class EmailFields(
        |    "Address": "$email",
        |    "SubscriberKey": "$email",
        |    "ContactAttributes": {
-       |      "EmailAddress": "$email",
-       |      "created": "$created",
-       |      "amount": $amount,
-       |      "currency": "$currency",
-       |      "edition": "$edition",
-       |      "name": "$name",
-       |      "product": "$product"
+       |      "SubscriberAttributes": {
+       |        "EmailAddress": "$email",
+       |        "created": "$created",
+       |        "amount": $amount,
+       |        "currency": "$currency",
+       |        "edition": "$edition",
+       |        "name": "$name",
+       |        "product": "$product"
+       |      }
        |    }
        |  },
        |  "DataExtensionName": "$dataExtensionName"
