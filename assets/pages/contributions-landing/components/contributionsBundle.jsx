@@ -186,7 +186,7 @@ function ContributionsBundle(props: PropTypes) {
   return (
     <Bundle {...attrs}>
       <p>
-        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism
+        {contentText[props.isoCountry]}
       </p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
