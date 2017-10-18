@@ -12,7 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
 import CrossProduct from './crossProduct';
@@ -283,7 +283,7 @@ function Bundles(props: PropTypes) {
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state): ReferrerAcquisitionData {
+function mapStateToProps(state) {
   return {
     contribType: state.page.type,
     contribAmount: state.page.amount,
