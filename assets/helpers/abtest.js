@@ -2,6 +2,8 @@
 
 // ----- Imports ----- //
 
+import shajs from 'sha.js';
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import * as ophan from 'ophan';
@@ -35,6 +37,7 @@ type Test = {
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
+  independence?: number,
 };
 
 
@@ -125,8 +128,18 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   return (mvtId > testMin) && (mvtId < testMax);
 }
 
+function randomNumber(seed: number, rounds: number): number {
+  if (rounds === 0) {
+    return seed;
+  }
+
+  return Math.abs(shajs('sha256').update(String(seed + rounds)).digest().readInt32BE(0));
+}
+
 function assignUserToVariant(mvtId: number, test: Test): string {
-  const variantIndex = mvtId % test.variants.length;
+  const independence = test.independence || 0;
+
+  const variantIndex = randomNumber(mvtId, independence) % test.variants.length;
 
   return test.variants[variantIndex];
 }
