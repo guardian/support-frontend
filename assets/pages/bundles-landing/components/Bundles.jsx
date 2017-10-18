@@ -12,7 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Campaign } from 'helpers/tracking/acquisitions';
+import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
 import CrossProduct from './crossProduct';
@@ -41,6 +41,7 @@ type PropTypes = {
   contribError: ContribError,
   intCmp: ?string,
   campaign: ?Campaign,
+  otherQueryParams: [string, string][],
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,
@@ -259,7 +260,7 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
@@ -282,13 +283,14 @@ function Bundles(props: PropTypes) {
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
+function mapStateToProps(state): ReferrerAcquisitionData {
   return {
     contribType: state.page.type,
     contribAmount: state.page.amount,
     contribError: state.page.error,
     intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
+    otherQueryParams: state.common.referrerAcquisitionData.otherQueryParams,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,
   };

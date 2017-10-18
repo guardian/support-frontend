@@ -23,7 +23,6 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-
   country: IsoCountry,
   abParticipations: Participations,
 };

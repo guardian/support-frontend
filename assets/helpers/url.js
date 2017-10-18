@@ -35,6 +35,10 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 
 };
 
+const getQueryParams = (excluded: string[]): [string, string][] => Array
+  .from(new URLSearchParams(window.location.search))
+  .filter(p => excluded.indexOf(p[0]) === -1);
+
 const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?string): string => {
 
   // We are interested in the query params i.e. the part after the '?'
@@ -76,6 +80,7 @@ function getBaseDomain(): Domain {
 
 export {
   getQueryParameter,
+  getQueryParams,
   addQueryParamToURL,
   getBaseDomain,
 };
