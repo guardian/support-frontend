@@ -27,5 +27,7 @@ object SyntheticPageviewId {
   val defaultLength = 20
   val defaultSuffix = "AEP"
 
-  def generate: String = new SyntheticPageviewId(defaultLength, defaultSuffix).generate
+  private val defaultInstance = new SyntheticPageviewId(defaultLength, defaultSuffix)
+
+  def generate: String = defaultInstance.generate
 }
