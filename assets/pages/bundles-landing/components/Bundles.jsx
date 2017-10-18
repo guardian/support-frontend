@@ -290,7 +290,7 @@ function mapStateToProps(state) {
     contribError: state.page.error,
     intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
-    otherQueryParams: state.common.referrerAcquisitionData.otherQueryParams,
+    otherQueryParams: state.common.otherQueryParams,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,
   };

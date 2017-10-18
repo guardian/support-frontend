@@ -5,7 +5,7 @@
 
 import * as ophan from 'ophan';
 import { get as getCookie } from 'helpers/cookie';
-import { getQueryParameter, getQueryParams } from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abtest';
 import * as storage from 'helpers/storage';
@@ -27,7 +27,6 @@ export type OphanIds = {|
 export type ReferrerAcquisitionData = {|
   campaignCode: ?string,
   referrerPageviewId: ?string,
-  otherQueryParams: [string, string][],
   referrerUrl: ?string,
   componentId: ?string,
   componentType: ?string,
@@ -115,13 +114,9 @@ function buildAcquisition(acquisitionData: Object = {}): ReferrerAcquisitionData
     getQueryParameter('INTCMP') ||
     null;
 
-  const otherQueryParams = acquisitionData.otherQueryParams ||
-    getQueryParams(['REFPVID', 'INTCMP']);
-
   return {
     referrerPageviewId,
     campaignCode,
-    otherQueryParams,
     referrerUrl: acquisitionData.referrerUrl || null,
     componentId: acquisitionData.componentId || null,
     componentType: acquisitionData.componentType || null,
