@@ -242,6 +242,11 @@
 
 	.contributions-bundle__content {
 		background-color: gu-colour(multimedia-main-2);
+
+        p {
+          font-family: $gu-text-egyptian-web;
+        }
+
 		padding: 0;
 
 		@include mq($from: mobileLandscape) {
