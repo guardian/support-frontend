@@ -5,7 +5,7 @@ import play.api.libs.json.{Reads, Writes, Json => PlayJson}
 /**
   * Ids to be included in requests to Ophan.
   */
-case class OphanIds(pageviewId: String, visitId: Option[String], browserId: Option[String])
+case class OphanIds(pageviewId: Option[String], visitId: Option[String], browserId: Option[String])
 
 object OphanIds {
   import io.circe._
