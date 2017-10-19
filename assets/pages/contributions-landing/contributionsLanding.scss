@@ -322,6 +322,11 @@
 
 	.component-double-heading__subheading {
 		padding-top: 4px;
+		height: 24px;
+
+		@include mq($from: phablet) {
+			height: 28px;
+		}
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
