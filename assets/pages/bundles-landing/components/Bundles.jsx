@@ -41,6 +41,7 @@ type PropTypes = {
   contribError: ContribError,
   intCmp: ?string,
   campaign: ?Campaign,
+  otherQueryParams: Array<[string, string]>,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,
@@ -55,7 +56,9 @@ type ContribAttrs = {
   subheading: string,
   ctaText: string,
   modifierClass: string,
+  ctaId: string,
   ctaLink: string,
+  ctaAccessibilityHint: string,
 }
 
 type DigitalAttrs = {
@@ -64,7 +67,9 @@ type DigitalAttrs = {
   listItems: ListItem[],
   ctaText: string,
   modifierClass: string,
+  ctaId: string,
   ctaLink: string,
+  ctaAccessibilityHint: string,
 }
 
 type PaperAttrs = {
@@ -74,8 +79,12 @@ type PaperAttrs = {
   paperCtaText: string,
   paperDigCtaText: string,
   modifierClass: string,
+  paperCtaId: string,
   paperCtaLink: string,
+  paperCtaAccessibilityHint: string,
+  paperDigCtaId: string,
   paperDigCtaLink: string,
+  paperDigCtaAccessibilityHint: string,
 }
 
 /* eslint-enable react/no-unused-prop-types */
@@ -93,8 +102,10 @@ const contribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
+  ctaId: 'contribute',
   modifierClass: 'contributions',
   ctaLink: '',
+  ctaAccessibilityHint: 'Proceed to make your chosen contribution',
 };
 
 const digitalCopy: DigitalAttrs = {
@@ -111,8 +122,10 @@ const digitalCopy: DigitalAttrs = {
     },
   ],
   ctaText: 'Start your free trial',
+  ctaId: 'start-digi-trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
+  ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
 };
 
 const paperCopy: PaperAttrs = {
@@ -124,7 +137,7 @@ const paperCopy: PaperAttrs = {
       text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
-      heading: 'Save money off the retail price',
+      heading: 'Save money on the retail price',
     },
     {
       heading: 'Get all the benefits of a digital subscription with paper+digital',
@@ -133,8 +146,12 @@ const paperCopy: PaperAttrs = {
   paperCtaText: 'Get a paper subscription',
   paperDigCtaText: 'Get a paper+digital subscription',
   modifierClass: 'paper',
+  paperDigCtaId: 'paper-digi-sub',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
+  paperDigCtaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
+  paperCtaId: 'paper-sub',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
+  paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
 
 const bundles: BundlesType = {
@@ -170,7 +187,8 @@ function getContribKey(contribType: Contrib) {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
-  intCmp: ?string): ContribAttrs => {
+  intCmp: ?string,
+  isoCountry: string): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -182,16 +200,20 @@ const getContribAttrs = (
   if (intCmp !== null && intCmp !== undefined) {
     params.append('INTCMP', intCmp);
   }
+  const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
-
-  return Object.assign({}, bundles.contrib, { ctaLink, subheading });
+  const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
+  const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
+  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading, ctaAccessibilityHint });
 
 };
 
 function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
   return Object.assign({}, bundles.paper, {
+    paperCtaId: 'paper-sub',
     paperCtaLink: subsLinks.paper,
+    paperDigCtaId: 'paper-digital-sub',
     paperDigCtaLink: subsLinks.paperDig,
   });
 
@@ -208,6 +230,7 @@ function ContributionBundle(props: PropTypes) {
       props.contribType,
       props.contribAmount,
       props.intCmp,
+      props.isoCountry,
     );
 
   const onClick = () => {
@@ -225,7 +248,12 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-      <CtaLink text={contribAttrs.ctaText} onClick={onClick} />
+      <CtaLink
+        ctaId={contribAttrs.ctaId.toLowerCase()}
+        text={contribAttrs.ctaText}
+        accessibilityHint={contribAttrs.ctaAccessibilityHint}
+        onClick={onClick}
+      />
     </Bundle>
   );
 
@@ -236,7 +264,12 @@ function DigitalBundle(props: DigitalAttrs) {
   return (
     <Bundle {...props}>
       <FeatureList listItems={bundles.digital.listItems} />
-      <CtaLink text={props.ctaText} url={props.ctaLink} />
+      <CtaLink
+        ctaId={props.ctaId}
+        text={props.ctaText}
+        accessibilityHint={props.ctaAccessibilityHint}
+        url={props.ctaLink}
+      />
     </Bundle>
   );
 
@@ -247,8 +280,18 @@ function PaperBundle(props: PaperAttrs) {
   return (
     <Bundle {...props}>
       <FeatureList listItems={props.listItems} />
-      <CtaLink text={props.paperCtaText} url={props.paperCtaLink} />
-      <CtaLink text={props.paperDigCtaText} url={props.paperDigCtaLink} />
+      <CtaLink
+        ctaId={props.paperCtaId}
+        text={props.paperCtaText}
+        accessibilityHint={props.paperCtaAccessibilityHint}
+        url={props.paperCtaLink}
+      />
+      <CtaLink
+        ctaId={props.paperDigCtaId}
+        text={props.paperDigCtaText}
+        accessibilityHint={props.paperDigCtaAccessibilityHint}
+        url={props.paperDigCtaLink}
+      />
     </Bundle>
   );
 
@@ -259,7 +302,7 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
@@ -289,6 +332,7 @@ function mapStateToProps(state) {
     contribError: state.page.error,
     intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
+    otherQueryParams: state.common.otherQueryParams,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,
   };

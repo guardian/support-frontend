@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgArrowRightStraight } from 'components/svg/svg';
 import { generateClassName } from 'helpers/utilities';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
@@ -33,7 +33,7 @@ const CtaCircle = (props: PropTypes) => {
       tabIndex={props.tabIndex}
     >
 
-      <button tabIndex={-1}><Svg svgName="arrow-right-straight" /></button>
+      <button tabIndex={-1}><SvgArrowRightStraight /></button>
       <span>{props.text}</span>
     </a>
   );

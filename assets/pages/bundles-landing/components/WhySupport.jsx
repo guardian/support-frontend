@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import Svg from 'components/svg/svg';
+import { SvgVideo } from 'components/svg/svg';
 
 import BodyCopy from 'components/bodyCopy/bodyCopy';
 import Video from 'components/video/video';
@@ -42,7 +42,7 @@ export default function WhySupport() {
         </div>
         <div className="why-support__bottom-content">
           <p className="why-support__video-caption">
-            <Svg svgName="video" />
+            <SvgVideo />
             {copy.videoCaption}
           </p>
           <BodyCopy copy={copy.bottom} />

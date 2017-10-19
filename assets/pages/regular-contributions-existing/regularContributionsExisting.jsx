@@ -34,8 +34,10 @@ const content = (
             another way you can&nbsp;help.
           </h2>
           <CtaLink
+            ctaId="contribute-one-off-again"
             text="Make a one-off contribution"
             url={routes.oneOffContribCheckout}
+            accessibilityHint="Further support the guardian over and above your current regular contribution"
           />
         </div>
         <InfoSection heading="Questions?" className="existing__questions">

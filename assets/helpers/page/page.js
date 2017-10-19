@@ -14,6 +14,7 @@ import { detect } from 'helpers/internationalisation/country';
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
+import { getQueryParams, getQueryParameter } from 'helpers/url';
 
 import type { Action } from './pageActions';
 
@@ -23,7 +24,7 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-
+  otherQueryParams: Array<[string, string]>,
   country: IsoCountry,
   abParticipations: Participations,
 };
@@ -43,6 +44,8 @@ function analyticsInitialisation(participations: Participations): void {
 
   // Google analytics.
   ga.init();
+  ga.setDimension('campaignCodeBusinessUnit', getQueryParameter('CMP_BUNIT'));
+  ga.setDimension('campaignCodeTeam', getQueryParameter('CMP_TU'));
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
@@ -59,10 +62,12 @@ function buildInitialState(
 ): CommonState {
 
   const acquisition = getAcquisition();
+  const otherQueryParams = getQueryParams(['REFPVID', 'INTCMP']);
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
+    otherQueryParams,
     country,
     abParticipations,
   }, preloadedState);

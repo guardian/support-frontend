@@ -52,7 +52,7 @@ class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsCl
     wsClient
       .url(url)
       .withHttpHeaders("Cookie" -> credentials.cookies.map(c => s"${c.name}=${c.value}").mkString("; "))
-      .withRequestTimeout(1.second)
+      .withRequestTimeout(2.second)
       .get()
       .map(responseAsJson[T])
       .recover {

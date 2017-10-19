@@ -35,8 +35,10 @@ const content = (
             </p>
           </h2>
           <CtaLink
+            ctaId="return-to-the-guardian"
             text="Return to the Guardian"
             url="https://theguardian.com"
+            accessibilityHint="Go to theguardian dot com front page"
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">

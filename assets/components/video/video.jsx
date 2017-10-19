@@ -19,7 +19,7 @@ const YOUTUBE_PARAMS = 'enablejsapi=1&wmode=transparent&rel=0';
 const videoCatalogue: {
   scottTrustExplained: string,
 } = {
-  scottTrustExplained: 'jn4wAy1Xs5M',
+  scottTrustExplained: 'tgusJhI95TI',
 };
 
 

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgCreditCard } from 'components/svg/svg';
 import { connect } from 'react-redux';
 
 import {
@@ -43,7 +43,7 @@ const StripePopUpButton = (props: PropTypes) => {
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
       onClick={onClick}
-    >Pay with debit/credit card <Svg svgName="credit-card" /></button>
+    >Pay with debit/credit card <SvgCreditCard /></button>
   );
 
 };

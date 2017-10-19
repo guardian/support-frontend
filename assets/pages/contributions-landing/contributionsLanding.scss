@@ -43,6 +43,10 @@
 		margin-bottom: 36px;
 		margin-top: $gu-v-spacing/2;
 
+        h1:nth-child(1) {
+          color: gu-colour(neutral-1);
+        }
+
 		@include mq($from: phablet) {
 			margin-bottom: $gu-v-spacing;
 			margin-top: 34px;
@@ -57,21 +61,21 @@
 			}
 
 			h1:nth-child(2) {
-				margin-left: 160px;
+				margin-left: 25px;
 			}
 
 			h1:nth-child(3) {
-				margin-left: 60px;
+				margin-left: 25px;
 			}
 		}
 
 		@include mq($from: leftCol) {
 			h1:nth-child(2) {
-				margin-left: 267px;
+				margin-left: 100px;
 			}
 
 			h1:nth-child(3) {
-				margin-left: 116px;
+				margin-left: 100px;
 			}
 		}
 	}
@@ -81,45 +85,36 @@
 
 		@include mq($from: phablet) {
 			h1:nth-child(2) {
-				margin-left: 55px;
+				margin-left: 0;
 			}
 		}
 
 		@include mq($from: desktop) {
 			h1:nth-child(1) {
-				margin-left: 147px;
+				margin-left: $gu-h-spacing;
 				display: inline;
 			}
 
 			h1:nth-child(2) {
-				margin-left: 0;
 				display: inline;
-			}
-		}
-
-		@include mq($from: leftCol) {
-			h1:nth-child(1) {
-				margin-left: 254px;
-			}
-
-			h1:nth-child(2) {
-				margin-left: 0;
 			}
 		}
 	}
 
 	.contributions-introduction__indent {
-		@include mq($from: phablet, $until: desktop) {
-			margin-left: 85px;
-		}
+      color: #fff;
 
-		@include mq($from: desktop) {
-			display: block;
-			margin-left: 420px;
-		}
+      @include mq($from: phablet, $until: desktop) {
+        margin-left: 0;
+      }
+
+      @include mq($from: desktop) {
+        display: block;
+        margin-left: 25px;
+      }
 
 		@include mq($from: leftCol) {
-			margin-left: 525px;
+			margin-left: 100px;
 		}
 	}
 
@@ -247,6 +242,11 @@
 
 	.contributions-bundle__content {
 		background-color: gu-colour(multimedia-main-2);
+
+        p {
+          font-family: $gu-text-egyptian-web;
+        }
+
 		padding: 0;
 
 		@include mq($from: mobileLandscape) {
@@ -279,10 +279,14 @@
 		}
 
 		@include mq($from: desktop) {
-			margin-top: 0px;
-			margin-left: 85px;
+			margin-top: 0;
+			margin-left: 49px;
 			position: absolute;
 			top: 80px;
+		}
+
+		@include mq($from: leftCol) {
+			margin-left: 85px;
 		}
 
 		@include mq($from: wide) {
@@ -317,10 +321,7 @@
 	}
 
 	.component-double-heading__subheading {
-		margin-top: $gu-v-spacing;
-		font-size: 16px;
-		line-height: 20px;
-		font-family: $gu-text-egyptian-web;
+		padding-top: 4px;
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {

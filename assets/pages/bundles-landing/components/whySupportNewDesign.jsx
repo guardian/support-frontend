@@ -6,7 +6,7 @@ import React from 'react';
 
 import InfoSection from 'components/infoSection/infoSection';
 import CtaCircle from 'components/ctaCircle/ctaCircle';
-import Svg from 'components/svg/svg';
+import { SvgScribble, SvgGraphLine, SvgGraphLineMobile } from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -18,7 +18,7 @@ export default function WhySupport() {
       <InfoSection heading="why support?" className="why-support-new-design__content gu-content-margin">
         <div className="why-support-new-design__wrapper">
           <h1 className="why-support-new-design__heading why-support-new-design__heading--edits">
-            <Svg svgName="scribble" />
+            <SvgScribble />
             <div className="why-support-new-design__heading-text-wrapper">
               <span>no one edits</span>
               <span>our editor</span>
@@ -32,8 +32,8 @@ export default function WhySupport() {
           <h1 className="why-support-new-design__heading why-support-new-design__heading--advertising">
             <span>advertising revenues</span>
             <span>are falling</span>
-            <Svg svgName="graph-line" />
-            <Svg svgName="graph-line-mobile" />
+            <SvgGraphLine />
+            <SvgGraphLineMobile />
           </h1>
           <p className="why-support-new-design__copy">
             Our quality, investigative journalism takes a lot of time and money

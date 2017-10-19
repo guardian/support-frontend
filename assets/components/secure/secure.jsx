@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import Svg from 'components/svg/svg';
+import { SvgLock } from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -13,7 +13,7 @@ export default function Secure() {
 
   return (
     <div className="component-secure">
-      <Svg svgName="lock" />
+      <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
   );

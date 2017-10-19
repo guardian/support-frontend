@@ -3,13 +3,15 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
 
 import {
   paypalContributionsRedirect,
 } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abtest';
 
 
 // ---- Types ----- //
@@ -17,8 +19,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: string,
-  intCmp?: ?string,
-  refpvid?: ?string,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  abParticipations: Participations,
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
   canClick?: boolean,
@@ -34,10 +36,10 @@ function payWithPayPal(props: PropTypes) {
     if (props.canClick) {
       paypalContributionsRedirect(
         Number(props.amount),
-        props.intCmp,
-        props.refpvid,
+        props.referrerAcquisitionData,
         props.isoCountry,
-        props.errorHandler);
+        props.errorHandler,
+        props.abParticipations);
     }
   };
 }
@@ -53,9 +55,9 @@ const PayPalContributionButton = (props: PropTypes) =>
       onClick={payWithPayPal(props)}
     >
 
-      <Svg svgName="paypal-p-logo" />
+      <SvgPaypalPLogo />
       <span>{props.buttonText}</span>
-      <Svg svgName="arrow-right-straight" />
+      <SvgArrowRightStraight />
     </button>
   );
 
@@ -63,8 +65,6 @@ const PayPalContributionButton = (props: PropTypes) =>
 // ----- Default Props ----- //
 
 PayPalContributionButton.defaultProps = {
-  intCmp: null,
-  refpvid: null,
   canClick: true,
   buttonText: 'Pay with PayPal',
 };
