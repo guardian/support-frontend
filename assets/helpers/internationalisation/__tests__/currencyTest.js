@@ -12,29 +12,29 @@ jest.mock('helpers/url', () => ({
 
 // ----- Tests ----- //
 
-describe('currency', () => {
+describe('detect currency', () => {
 
-  it('return the currency for the supplied country if there is no query parameter set (GB)', () => {
+  it('should return the currency for the supplied country if there is no query parameter set (GB)', () => {
     mockCurrency = null;
     expect(detect('GB')).toEqual(GBP);
   });
 
-  it('return the currency for the supplied country if there is no query parameter set (US)', () => {
+  it('should return the currency for the supplied country if there is no query parameter set (US)', () => {
     mockCurrency = null;
     expect(detect('US')).toEqual(USD);
   });
 
-  it('return GBP if the country is not recognised', () => {
+  it('should return GBP if the country is not recognised', () => {
     mockCurrency = null;
     expect(detect('ZZ')).toEqual(GBP);
   });
 
-  it('returns the currency from the query parameter (USD)', () => {
+  it('should return the currency from the query parameter (USD)', () => {
     mockCurrency = 'USD';
     expect(detect('GB')).toEqual(USD);
   });
 
-  it('returns the currency from the query parameter (GBP)', () => {
+  it('should return the currency from the query parameter (GBP)', () => {
     mockCurrency = 'GBP';
     expect(detect('US')).toEqual(GBP);
   });
