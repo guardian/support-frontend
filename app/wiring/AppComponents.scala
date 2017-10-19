@@ -35,7 +35,6 @@ trait AppComponents extends PlayComponents
   override lazy val router: Router = new _root_.router.Routes(
     httpErrorHandler,
     applicationController,
-    new controllers.Default,
     regularContributionsController,
     oneOffContributions,
     loginController,
