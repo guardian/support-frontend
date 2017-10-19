@@ -35,7 +35,7 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 
 };
 
-const getQueryParams = (excluded: string[]): [string, string][] => Array
+const getQueryParams = (excluded: string[]): Array<string, string> => Array
   .from(new URLSearchParams(window.location.search).entries())
   .filter(p => excluded.indexOf(p[0]) === -1);
 

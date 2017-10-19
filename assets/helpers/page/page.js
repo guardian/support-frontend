@@ -24,7 +24,7 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  otherQueryParams: [string, string][],
+  otherQueryParams: Array<string, string>,
   country: IsoCountry,
   abParticipations: Participations,
 };
