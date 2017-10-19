@@ -14,7 +14,7 @@ import { detect } from 'helpers/internationalisation/country';
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
-import { getQueryParams } from 'helpers/url';
+import { getQueryParams, getQueryParameter } from 'helpers/url';
 
 import type { Action } from './pageActions';
 
@@ -44,6 +44,8 @@ function analyticsInitialisation(participations: Participations): void {
 
   // Google analytics.
   ga.init();
+  ga.setDimension('campaignCodeBusinessUnit', getQueryParameter('CMP_BUNIT'));
+  ga.setDimension('campaignCodeTeam', getQueryParameter('CMP_TU'));
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
