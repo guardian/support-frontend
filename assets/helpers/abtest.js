@@ -128,12 +128,12 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   return (mvtId > testMin) && (mvtId < testMax);
 }
 
-function randomNumber(seed: number, rounds: number): number {
-  if (rounds === 0) {
+function randomNumber(seed: number, independence: number): number {
+  if (independence === 0) {
     return seed;
   }
 
-  return Math.abs(shajs('sha256').update(String(seed + rounds)).digest().readInt32BE(0));
+  return Math.abs(shajs('sha256').update(String(seed + independence)).digest().readInt32BE(0));
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
