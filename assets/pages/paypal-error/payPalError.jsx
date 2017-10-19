@@ -32,8 +32,10 @@ const content = (
             <p>Sorry, there was a problem completing your PayPal payment. Please try again:</p>
           </h2>
           <CtaLink
+            ctaId="become-supporter-paypal"
             text="Become a Supporter"
             url="https://support.theguardian.com/uk"
+            accessibilityHint="Restart your journey to become a guardian supporter"
           />
         </div>
         <InfoSection heading="Questions?" className="paypal-error__questions">
