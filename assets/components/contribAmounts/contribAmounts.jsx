@@ -339,10 +339,10 @@ export default function ContribAmounts(props: PropTypes) {
   const showAnnual: boolean = getShowAnnual(props);
   const attrs = getAttrs(props);
   const className = getClassName(attrs.contribType);
-  const contribTypeTermHint = props.isoCountry === 'US' ? 'one time' : 'one-off';
+  const contribTypeTermHint = props.isoCountry === 'US' ? 'one-time' : 'one-off';
   const contribTypeDescription = props.contribType === 'MONTHLY' ? 'monthly' : contribTypeTermHint;
   const contribMinMonthlyAmountHint = props.isoCountry === 'US' ? 'five dollars or more' : 'five pounds or more';
-  const contribGroupAccessibilityHint = `Choose a monthly or ${contribTypeTermHint} contribution option`;
+  const contribGroupAccessibilityHint = `Choose either to make a ${contribTypeTermHint} contribution or set up a regular contribution`;
   const contribAmountHint = `Enter an amount of ${props.contribType === 'MONTHLY' ? contribMinMonthlyAmountHint : 'your choice'}`;
   const contribOtherAmountAccessibilityHintId = `accessibility-hint-other-amount-${props.contribType.toLowerCase()}`;
   const contribOtherAmountAccessibilityHint = `${contribAmountHint} for your ${contribTypeDescription} contribution.`;

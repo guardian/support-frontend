@@ -148,7 +148,7 @@ const paperCopy: PaperAttrs = {
   modifierClass: 'paper',
   paperDigCtaId: 'paper-digi-sub',
   paperDigCtaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
-  paperDigCtaAccessibilityHint: 'Proceed to choose which paper you would like to receive regularly in conjunction with a digital subscription',
+  paperDigCtaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
   paperCtaId: 'paper-sub',
   paperCtaLink: 'https://subscribe.theguardian.com/collection/paper',
   paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
