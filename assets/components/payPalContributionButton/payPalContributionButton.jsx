@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
 
 import {
   paypalContributionsRedirect,
@@ -55,9 +55,9 @@ const PayPalContributionButton = (props: PropTypes) =>
       onClick={payWithPayPal(props)}
     >
 
-      <Svg svgName="paypal-p-logo" />
+      <SvgPaypalPLogo />
       <span>{props.buttonText}</span>
-      <Svg svgName="arrow-right-straight" />
+      <SvgArrowRightStraight />
     </button>
   );
 
