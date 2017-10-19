@@ -1,4 +1,6 @@
 const dimensions = {
+  campaignCodeBusinessUnit: 'dimension14',
+  campaignCodeTeam: 'dimension15',
   experience: 'dimension16',
 };
 
