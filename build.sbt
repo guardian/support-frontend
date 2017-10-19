@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-kms" % "1.11.128",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
   "org.typelevel" %% "cats" % "0.9.0",
-  "play-circe" %% "play-circe" % "2.6-0.8.0",
+  "com.dripower" %% "play-circe" % "2608.5",
   "com.gu" %% "support-models" % "0.15",
   "com.gu" %% "support-config" % "0.7",
   "com.gu" %% "fezziwig" % "0.6",

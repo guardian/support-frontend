@@ -16,6 +16,7 @@ import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisi
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
+import { getQueryParams } from 'helpers/url';
 
 import type { Action } from './pageActions';
 
@@ -26,6 +27,7 @@ export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
   currency: Currency,
+  otherQueryParams: Array<[string, string]>,
   country: IsoCountry,
   abParticipations: Participations,
 };
@@ -62,10 +64,12 @@ function buildInitialState(
 ): CommonState {
 
   const acquisition = getAcquisition();
+  const otherQueryParams = getQueryParams(['REFPVID', 'INTCMP']);
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
+    otherQueryParams,
     country,
     abParticipations,
     currency,
