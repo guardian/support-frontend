@@ -41,6 +41,7 @@ type PropTypes = {
   contribError: ContribError,
   intCmp: ?string,
   campaign: ?Campaign,
+  otherQueryParams: Array<[string, string]>,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,
@@ -259,7 +260,7 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign);
+  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
@@ -289,6 +290,7 @@ function mapStateToProps(state) {
     contribError: state.page.error,
     intCmp: state.common.referrerAcquisitionData.campaignCode,
     campaign: state.common.campaign,
+    otherQueryParams: state.common.otherQueryParams,
     isoCountry: state.common.country,
     abTests: state.common.abParticipations,
   };
