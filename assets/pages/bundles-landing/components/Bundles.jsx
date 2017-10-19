@@ -41,7 +41,7 @@ type PropTypes = {
   contribError: ContribError,
   intCmp: ?string,
   campaign: ?Campaign,
-  otherQueryParams: Array<string, string>,
+  otherQueryParams: Array<[string, string]>,
   toggleContribType: (string) => void,
   changeContribAnnualAmount: (string) => void,
   changeContribMonthlyAmount: (string) => void,

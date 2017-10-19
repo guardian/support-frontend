@@ -62,7 +62,7 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(promoCodes: PromoCodes, intCmp: ?string,
-  otherQueryParams: Array<string, string>): SubsUrls {
+  otherQueryParams: Array<[string, string]>): SubsUrls {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
@@ -78,7 +78,7 @@ function buildSubsUrls(promoCodes: PromoCodes, intCmp: ?string,
 
 // Creates links to subscriptions, tailored to the user's campaign.
 function getSubsLinks(intCmp: ?string, campaign: ?Campaign,
-  otherQueryParams: Array<string, string>): SubsUrls {
+  otherQueryParams: Array<[string, string]>): SubsUrls {
 
   if (campaign && customPromos[campaign]) {
     return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams);
