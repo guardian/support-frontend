@@ -60,7 +60,9 @@ type ContribAttrs = {
 };
 
 // ----- Setup ----- //
-const amountRadiosAnnual = {
+const amountRadiosAnnual: {
+  [IsoCurrency]: Radio[]
+} = {
   GBP: [
     {
       value: '50',
@@ -91,7 +93,9 @@ const amountRadiosAnnual = {
   ],
 };
 
-const amountRadiosMonthly = {
+const amountRadiosMonthly: {
+  [IsoCurrency]: Radio[]
+} = {
   GBP: [
     {
       value: '5',
@@ -122,7 +126,9 @@ const amountRadiosMonthly = {
   ],
 };
 
-const amountRadiosOneOff = {
+const amountRadiosOneOff: {
+  [IsoCurrency]: Radio[]
+} = {
   GBP: [
     {
       value: '25',

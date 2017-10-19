@@ -116,7 +116,6 @@ function init(
   const currency: Currency = detectCurrency(country);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  console.log(`Currency=${currency.iso}`);
   const initialState: CommonState = buildInitialState(
     participations,
     preloadedState,
