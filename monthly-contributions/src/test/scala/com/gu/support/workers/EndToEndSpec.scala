@@ -14,8 +14,8 @@ import scala.io.Source
 @IntegrationTest
 class EndToEndSpec extends LambdaSpec {
   "The monthly contribution lambdas" should "chain successfully" in {
-    logger.info(createPayPalPaymentMethodJson)
-    val output = wrapFixture(createPayPalPaymentMethodJson)
+    logger.info(createPayPalPaymentMethodJson())
+    val output = wrapFixture(createPayPalPaymentMethodJson())
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())

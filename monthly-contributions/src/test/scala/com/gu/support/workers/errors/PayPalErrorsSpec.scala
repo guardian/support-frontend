@@ -21,7 +21,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson()), outStream, context)
     }
   }
 
@@ -35,7 +35,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson()), outStream, context)
     }
 
     // Shut down the server. Instances cannot be reused.

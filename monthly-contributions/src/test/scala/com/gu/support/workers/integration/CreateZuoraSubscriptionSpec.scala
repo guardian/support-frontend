@@ -9,6 +9,7 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
+import com.gu.support.workers.model.{Annual, Monthly}
 import com.gu.test.tags.annotations.IntegrationTest
 
 @IntegrationTest
@@ -19,7 +20,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(wrapFixture(createMonthlyZuoraSubscriptionJson), outStream, context)
+    createZuora.handleRequest(wrapFixture(createZuoraSubscriptionJson(billingPeriod = Monthly)), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.accountNumber.length should be > 0
@@ -30,7 +31,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(wrapFixture(createAnnualZuoraSubscriptionJson), outStream, context)
+    createZuora.handleRequest(wrapFixture(createZuoraSubscriptionJson(billingPeriod = Annual)), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.accountNumber.length should be > 0
