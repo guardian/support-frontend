@@ -61,8 +61,8 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "22.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.0",
-  "io.github.bonigarcia" % "webdrivermanager" % "1.4.10" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.0.1" % "test",
+  "io.github.bonigarcia" % "webdrivermanager" % "1.7.2" % "test",
+  "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.8.1",
   filters,
   ws
