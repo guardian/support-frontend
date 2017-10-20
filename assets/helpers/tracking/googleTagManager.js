@@ -35,7 +35,7 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
-function pushBasicDimensions() {
+function setBasicDimensions() {
   window.googleTagManagerDataLayer = [{
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
@@ -54,5 +54,5 @@ export function pushDimensions(dimensions: Dimensions) {
 }
 
 export function init() {
-  pushBasicDimensions();
+  setBasicDimensions();
 }
