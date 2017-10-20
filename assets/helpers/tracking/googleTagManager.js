@@ -35,17 +35,6 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
-function setBasicDimensions() {
-  window.googleTagManagerDataLayer = [{
-    // orderId anonymously identifies this user in this session.
-    // We need this to prevent page refreshes on conversion pages being
-    // treated as new conversions
-    orderId: getDataValue('orderId', uuidv4),
-    currency: getDataValue('currency', getCurrency),
-    value: getContributionValue(),
-  }];
-}
-
 // ----- Exports ---//
 
 export function pushDimensions(dimensions: Dimensions) {
@@ -54,5 +43,12 @@ export function pushDimensions(dimensions: Dimensions) {
 }
 
 export function init() {
-  setBasicDimensions();
+  window.googleTagManagerDataLayer = [{
+    // orderId anonymously identifies this user in this session.
+    // We need this to prevent page refreshes on conversion pages being
+    // treated as new conversions
+    orderId: getDataValue('orderId', uuidv4),
+    currency: getDataValue('currency', getCurrency),
+    value: getContributionValue(),
+  }];
 }
