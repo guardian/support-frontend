@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
+import com.gu.monitoring.products.{FailureMetrics, RecurringContributionsMetrics}
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.ExecutionError
@@ -27,6 +28,7 @@ class FailureHandler(emailService: EmailService)
     logger.info(
       s"FAILED contribution_amount: ${state.contribution.amount} contribution_currency: ${state.contribution.currency.iso} test_user: ${state.user.isTestUser}"
     )
+    putCloudWatchMetric()
     emailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -62,4 +64,10 @@ class FailureHandler(emailService: EmailService)
         "There was an error processing your payment. Please\u00a0try\u00a0again."
     }
   }
+
+  def putCloudWatchMetric(): Future[Unit] = {
+    new FailureMetrics("monthly")
+      .putFailureHandlerTriggered().recover({ case _ => () })
+  }
+
 }
