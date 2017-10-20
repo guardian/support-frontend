@@ -4,9 +4,10 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
-import { forCountry } from '../internationalisation/currency';
-import { getQueryParameter } from '../url';
-import { detect as detectCountry } from '../internationalisation/country';
+import { getVariantsAsString, getCurrentParticipations } from 'helpers/abtest';
+import { forCountry } from 'helpers/internationalisation/currency';
+import { getQueryParameter } from 'helpers/url';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Functions ----- //
@@ -42,6 +43,9 @@ window.googleTagManagerDataLayer = [{
   orderId: getDataValue('orderId', uuidv4),
   currency: getDataValue('currency', getCurrency),
   value: getContributionValue(),
+  campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT'),
+  campaignCodeTeam: getQueryParameter('CMP_TU'),
+  experience: getVariantsAsString(getCurrentParticipations()),
 }];
 
 // Google Tag Manager
