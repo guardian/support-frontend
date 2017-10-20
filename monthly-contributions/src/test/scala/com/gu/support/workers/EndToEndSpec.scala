@@ -2,6 +2,8 @@ package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.support.workers.model.JsonWrapper
@@ -13,8 +15,12 @@ import scala.io.Source
 
 @IntegrationTest
 class EndToEndSpec extends LambdaSpec {
-  "The monthly contribution lambdas" should "chain successfully" in {
-    logger.info(createPayPalPaymentMethodJson())
+  "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
+
+  they should "work with other currencies"  in runSignupWithCurrency(EUR)
+
+  def runSignupWithCurrency(currency: Currency){
+    logger.info(createPayPalPaymentMethodJson(currency))
     val output = wrapFixture(createPayPalPaymentMethodJson())
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
