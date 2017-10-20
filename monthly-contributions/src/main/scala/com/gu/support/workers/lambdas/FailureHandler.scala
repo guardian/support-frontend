@@ -34,7 +34,7 @@ class FailureHandler(emailService: EmailService)
       currency = state.contribution.currency.iso,
       edition = state.user.country.alpha2,
       name = state.user.firstName,
-      product = "regular-contribution"
+      product = "monthly-contribution"
     )).whenFinished {
       logger.info(s"Error=$error")
       CompletedState(

@@ -26,10 +26,10 @@ object Fixtures {
     s"""
       "user":{
           "id": "$idId",
-          "primaryEmailAddress": "rupert.bates@guardian.co.uk",
+          "primaryEmailAddress": "test@gu.com",
           "firstName": "test",
           "lastName": "user",
-          "country": "US",
+          "country": "GBP",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
