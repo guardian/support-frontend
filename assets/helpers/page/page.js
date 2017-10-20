@@ -58,6 +58,7 @@ function analyticsInitialisation(participations: Participations): void {
     experience: abTest.getVariantsAsString(participations),
   };
 
+  googleTagManager.init();
   googleTagManager.pushDimensions(dimensions);
 
   // Logging.
