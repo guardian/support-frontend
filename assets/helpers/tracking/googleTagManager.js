@@ -4,11 +4,15 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
-import { getVariantsAsString, getCurrentParticipations } from 'helpers/abtest';
 import { forCountry } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 
+export type Dimensions = {|
+  campaignCodeBusinessUnit?: string,
+  campaignCodeTeam?: string,
+  experience?: string,
+|}
 
 // ----- Functions ----- //
 
@@ -33,6 +37,12 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
+// ----- Exports ---//
+
+export function pushDimensions(dimensions: Dimensions) {
+  const dataLayer = window.googleTagManagerDataLayer;
+  dataLayer.push(dimensions);
+}
 
 // ----- Run ----- //
 
@@ -43,9 +53,6 @@ window.googleTagManagerDataLayer = [{
   orderId: getDataValue('orderId', uuidv4),
   currency: getDataValue('currency', getCurrency),
   value: getContributionValue(),
-  campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT'),
-  campaignCodeTeam: getQueryParameter('CMP_TU'),
-  experience: getVariantsAsString(getCurrentParticipations()),
 }];
 
 // Google Tag Manager
