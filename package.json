@@ -30,7 +30,8 @@
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
-    "verbose": true
+    "verbose": true,
+    "testEnvironment": "jest-environment-jsdom-11.0.0"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
+    "jest-environment-jsdom-11.0.0": "^20.0.9",
     "raven-js": "^3.16.1",
     "react-redux": "^5.0.5",
     "redux": "^3.7.1",
