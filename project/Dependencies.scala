@@ -13,9 +13,9 @@ object Dependencies {
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
-  val supportModels = "com.gu" %% "support-models" % "0.15"
+  val supportModels = "com.gu" %% "support-models" % "0.16"
   val supportConfig = "com.gu" %% "support-config" % "0.6"
-  val acquisitionEventProducer = "com.gu" %% "acquisition-event-producer" % "2.0.0-rc.5"
+  val acquisitionEventProducer = "com.gu" %% "acquisition-event-producer" % "2.0.1"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % okhttpVersion
   val scalaUri = "com.netaporter" %% "scala-uri" % "0.4.16"
   val awsLambdas = "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
