@@ -6,7 +6,12 @@ import React from 'react';
 
 import InfoSection from 'components/infoSection/infoSection';
 import CtaCircle from 'components/ctaCircle/ctaCircle';
-import { SvgScribble, SvgGraphLine, SvgGraphLineMobile } from 'components/svg/svg';
+import {
+  SvgScribble,
+  SvgGraphLine,
+  SvgGraphLineMobile,
+  SvgWallDesktop,
+} from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -48,6 +53,7 @@ export default function WhySupport() {
           <h1 className="why-support-new-design__heading why-support-new-design__heading--paywall">
             <span>we haven&#39;t put up </span>
             <span>a paywall</span>
+            <div className="why-support-new-design__paywall-svg"><SvgWallDesktop /></div>
           </h1>
           <p className="why-support-new-design__copy">
             We believe the truth should be open to everyone, regardless of their

@@ -260,7 +260,7 @@ function SvgScribble() {
 function SvgWallDesktop() {
 
   return (
-    <svg viewBox="0 0 1360 360" xmlns="http://www.w3.org/2000/svg">
+    <svg className="svg-wall-desktop" viewBox="0 0 1360 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid">
       <g fill="none" fillRule="evenodd">
         <g fill="#333">
           <g transform="translate(1143.49 -.004)">
@@ -471,7 +471,7 @@ function SvgWallDesktop() {
 function SvgWallMobile() {
 
   return (
-    <svg viewBox="0 0 457 260" xmlns="http://www.w3.org/2000/svg">
+    <svg className="svg-wall-mobile" viewBox="0 0 457 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid">
       <g fill="none" fillRule="evenodd">
         <g transform="translate(45 26)" fill="#333">
           <circle cx="26" cy="26" r="26" />
