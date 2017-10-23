@@ -59,7 +59,7 @@ function createOneOffContribReducer(amount: number, currency: Currency) {
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
 
-      case 'SET_PAYPAL_BUTTON' :
+      case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
 
       default:

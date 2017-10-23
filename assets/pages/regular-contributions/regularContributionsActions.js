@@ -13,8 +13,7 @@ export type Action =
   | { type: 'SET_STATUS_URI', uri: string }
   | { type: 'INCREMENT_POLL_COUNT' }
   | { type: 'RESET_POLL_COUNT' }
-  | { type: 'CREATING_CONTRIBUTOR' }
-  ;
+  | { type: 'CREATING_CONTRIBUTOR' };
 
 
 // ----- Actions ----- //

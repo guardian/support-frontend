@@ -35,15 +35,16 @@ const content = (
             </p>
           </h2>
           <CtaLink
+            ctaId="return-to-the-guardian"
             text="Return to the Guardian"
             url="https://theguardian.com"
+            accessibilityHint="Go to theguardian dot com front page"
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">
           <p>
             If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">
-            contact us</a>
+            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
           </p>
         </InfoSection>
         <InfoSection

@@ -318,10 +318,19 @@
 	.component-double-heading__heading {
 		font-size: 24px;
 		line-height: 24px;
+
+		@include mq($from: desktop, $until: wide) {
+			padding-bottom: 1px;
+		}
 	}
 
 	.component-double-heading__subheading {
 		padding-top: 4px;
+		height: 24px;
+
+		@include mq($from: phablet) {
+			height: 28px;
+		}
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgCreditCard } from 'components/svg/svg';
 import { connect } from 'react-redux';
 
 import {
@@ -19,7 +19,7 @@ type PropTypes = {
   stripeLoaded: boolean,
   setupStripeCheckout: Function,
   openStripeOverlay: Function,
-  stripeClick: Function,
+  stripeClick?: Function,
   amount: number,
   email: string,
   callback: Function,
@@ -35,15 +35,20 @@ const StripePopUpButton = (props: PropTypes) => {
     props.setupStripeCheckout(props.callback);
   }
 
-  const onClick = () =>
-    props.stripeClick(() => props.openStripeOverlay(props.amount, props.email));
+  const onClick = () => {
+    if (props.stripeClick) {
+      props.stripeClick(() => props.openStripeOverlay(props.amount, props.email));
+    }
+  };
 
   return (
     <button
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
       onClick={onClick}
-    >Pay with debit/credit card <Svg svgName="credit-card" /></button>
+    >
+      Pay with debit/credit card <SvgCreditCard />
+    </button>
   );
 
 };
@@ -74,13 +79,11 @@ function mapDispatchToProps(dispatch) {
 
 }
 
-
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
   stripeClick: callback => callback(),
 };
-
 
 // ----- Exports ----- //
 

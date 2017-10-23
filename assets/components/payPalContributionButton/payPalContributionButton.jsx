@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Svg from 'components/svg/svg';
+import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
 
 import {
   paypalContributionsRedirect,
@@ -39,7 +39,8 @@ function payWithPayPal(props: PropTypes) {
         props.referrerAcquisitionData,
         props.isoCountry,
         props.errorHandler,
-        props.abParticipations);
+        props.abParticipations,
+      );
     }
   };
 }
@@ -55,9 +56,9 @@ const PayPalContributionButton = (props: PropTypes) =>
       onClick={payWithPayPal(props)}
     >
 
-      <Svg svgName="paypal-p-logo" />
+      <SvgPaypalPLogo />
       <span>{props.buttonText}</span>
-      <Svg svgName="arrow-right-straight" />
+      <SvgArrowRightStraight />
     </button>
   );
 

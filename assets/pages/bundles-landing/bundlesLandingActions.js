@@ -12,8 +12,7 @@ export type Action =
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount: Amount }
-  | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
-  ;
+  | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount };
 
 
 // ----- Actions ----- //

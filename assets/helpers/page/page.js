@@ -16,7 +16,7 @@ import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisi
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
-import { getQueryParams } from 'helpers/url';
+import { getQueryParams, getQueryParameter } from 'helpers/url';
 
 import type { Action } from './pageActions';
 
@@ -47,6 +47,8 @@ function analyticsInitialisation(participations: Participations): void {
 
   // Google analytics.
   ga.init();
+  ga.setDimension('campaignCodeBusinessUnit', getQueryParameter('CMP_BUNIT'));
+  ga.setDimension('campaignCodeTeam', getQueryParameter('CMP_TU'));
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
@@ -78,12 +80,12 @@ function buildInitialState(
 }
 
 // Sets up the common reducer with its initial state.
-function createCommonReducer(
-  initialState: CommonState): (CommonState, Action) => CommonState {
+function createCommonReducer(initialState: CommonState): (CommonState, Action) => CommonState {
 
   function commonReducer(
     state: CommonState = initialState,
-    action: Action): CommonState {
+    action: Action,
+  ): CommonState {
 
     switch (action.type) {
 

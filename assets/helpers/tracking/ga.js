@@ -1,4 +1,6 @@
 const dimensions = {
+  campaignCodeBusinessUnit: 'dimension14', // helps us to filter marketing campaign reports by business unit
+  campaignCodeTeam: 'dimension15', // campaign team
   experience: 'dimension16',
 };
 

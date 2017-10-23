@@ -66,7 +66,7 @@ export default function TextInput(props: PropTypes) {
   if (!props.labelText) {
     return input;
   }
-
+  /* eslint-disable jsx-a11y/label-has-for */
   return (
     <div className="component-text-input">
       <label htmlFor={props.id} className="component-text-input__label">
@@ -75,6 +75,7 @@ export default function TextInput(props: PropTypes) {
       {input}
     </div>
   );
+  /* eslint-enable jsx-a11y/label-has-for */
 
 }
 

@@ -54,9 +54,6 @@ export default function Bundle(props: PropTypes) {
 // ----- Proptypes ----- //
 
 Bundle.defaultProps = {
-  subheading: '',
-  infoText: '',
-  modifierClass: null,
   children: null,
   doubleHeadingModifierClass: '',
   showPaymentLogos: false,

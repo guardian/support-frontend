@@ -8,8 +8,7 @@ import { toCountryGroup } from 'helpers/internationalisation/country';
 export type Action =
   | { type: 'PAYPAL_PAY_CONTRIBUTIONS_CLICKED' }
   | { type: 'PAYPAL_CONTRIBUTIONS_ERROR', message: string }
-  | { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' }
-  ;
+  | { type: 'PAYPAL_CONTRIBUTIONS_SUBMIT' };
 
 type PayPalPostData = {
   countryGroup: string,
@@ -38,7 +37,8 @@ export function paypalContributionsRedirect(
   amount: number,
   intCmp: ?string,
   isoCountry: IsoCountry,
-  errorHandler: (string) => void): void {
+  errorHandler: (string) => void,
+): void {
 
   const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 

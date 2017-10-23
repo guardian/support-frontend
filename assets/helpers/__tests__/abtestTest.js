@@ -61,6 +61,31 @@ describe('basic behaviour of init', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
+  it('The user should be allocated in the variant bucket', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = [
+      {
+        testId: 'mockTest',
+        independence: 1,
+        variants: ['control', 'variant'],
+        audiences: {
+          GB: {
+            offset: 0,
+            size: 1,
+          },
+        },
+        isActive: true,
+      }];
+
+    const country = 'GB';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'variant' };
+
+    expect(participations).toEqual(expectedParticipations);
+  });
+
   it('The user should not be allocated in a test for a different country', () => {
 
     document.cookie = 'GU_mvt_id=12346';

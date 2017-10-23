@@ -173,11 +173,13 @@ const getContribAttrs = (
 
 function ContributionsBundle(props: PropTypes) {
 
-  const attrs: ContribAttrs = getContribAttrs(props.contribType,
+  const attrs: ContribAttrs = getContribAttrs(
+    props.contribType,
     props.contribAmount,
     props.referrerAcquisitionData,
     props.isoCountry,
-    props.currency.iso);
+    props.currency.iso,
+  );
 
   attrs.showPaymentLogos = true;
 
@@ -186,6 +188,8 @@ function ContributionsBundle(props: PropTypes) {
       window.location = attrs.ctaLink;
     }
   };
+
+  const accessibilityHint = `Make your ${props.contribType.toLowerCase()} contribution`;
 
   return (
     <Bundle {...attrs}>
@@ -196,7 +200,13 @@ function ContributionsBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-      <CtaLink text={attrs.ctaText} onClick={onClick} id="qa-contribute-button" />
+      <CtaLink
+        ctaId="contribute"
+        text={attrs.ctaText}
+        onClick={onClick}
+        id="qa-contribute-button"
+        accessibilityHint={accessibilityHint}
+      />
       {showPayPal(props)}
       {showPayPalError(props)}
     </Bundle>
