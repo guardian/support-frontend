@@ -7,13 +7,11 @@ scalaVersion := "2.11.11"
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
-resolvers += Resolver.bintrayRepo("guardian", "ophan")
-
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.github.mpilquist" %% "simulacrum" % "0.10.0",
   "com.gu" %% "fezziwig" % "0.6",
-  "com.gu" %% "ophan-event-model" % "1.0.0",
+  "com.gu" %% "ophan-event-model" % "0.0.1",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "io.circe" %% "circe-core" % "0.8.0",

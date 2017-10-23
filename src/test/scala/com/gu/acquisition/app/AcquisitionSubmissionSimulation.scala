@@ -24,7 +24,6 @@ object BasicMockDataGenerator extends MockDataGenerator {
         paymentFrequency = PaymentFrequency.OneOff,
         currency = "GBP",
         amount = 20d,
-        amountInGBP = None,
         paymentProvider = Some(PaymentProvider.Stripe),
         campaignCode = None,
         abTests = None,

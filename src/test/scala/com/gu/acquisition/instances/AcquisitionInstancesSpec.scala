@@ -12,7 +12,6 @@ class AcquisitionInstancesSpec extends WordSpecLike with Matchers {
     paymentFrequency = PaymentFrequency.OneOff,
     currency = "GBP",
     amount = 10.0,
-    amountInGBP = None,
     paymentProvider = Some(PaymentProvider.Stripe),
     campaignCode = Some(Set("campaign_code")),
     abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name")))),

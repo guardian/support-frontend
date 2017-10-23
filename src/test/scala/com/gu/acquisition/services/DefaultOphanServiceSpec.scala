@@ -18,7 +18,6 @@ class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
       paymentFrequency = PaymentFrequency.OneOff,
       currency = "GBP",
       amount = 20d,
-      amountInGBP = None,
       paymentProvider = Some(PaymentProvider.Stripe),
       campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
       abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name")))),
