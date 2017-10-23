@@ -17,7 +17,7 @@ import {
 export default function InlinePaymentLogos() {
 
   return (
-    <div className={'component-inline-payment-logos'}>
+    <div className="component-inline-payment-logos">
       <SvgVisaLogo />
       <SvgMastercardLogo />
       <SvgPaypalLogo />

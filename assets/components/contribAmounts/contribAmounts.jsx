@@ -253,9 +253,11 @@ function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean, acces
   };
 }
 
-function errorMessage(error: ?ContribError,
+function errorMessage(
+  error: ?ContribError,
   contribType: Contrib,
-  isoCountry: IsoCountry): ?React$Element<any> {
+  isoCountry: IsoCountry,
+): ?React$Element<any> {
 
   const limits = contribConfig[contribType];
   const currencyGlyph = forCountry(isoCountry).glyph;
@@ -280,7 +282,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
 
   if (props.contribType === 'ANNUAL') {
 
-    const userDefined = props.contribAmount.annual.userDefined;
+    const { userDefined } = props.contribAmount.annual;
     return {
       toggleAction: props.changeContribAnnualAmount,
       checked: !userDefined ? props.contribAmount.annual.value : null,
@@ -291,7 +293,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     };
   } else if (props.contribType === 'MONTHLY') {
 
-    const userDefined = props.contribAmount.monthly.userDefined;
+    const { userDefined } = props.contribAmount.monthly;
     return {
       toggleAction: props.changeContribMonthlyAmount,
       checked: !userDefined ? props.contribAmount.monthly.value : null,
@@ -303,7 +305,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
 
   }
 
-  const userDefined = props.contribAmount.oneOff.userDefined;
+  const { userDefined } = props.contribAmount.oneOff;
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,

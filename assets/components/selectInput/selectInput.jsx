@@ -31,8 +31,7 @@ type PropTypes = {
 export default function SelectInput(props: PropTypes) {
 
   const options = props.options.map((option: SelectOption) =>
-    <option value={option.value}>{option.text}</option>,
-  );
+    <option value={option.value}>{option.text}</option>);
 
   return (
     <select

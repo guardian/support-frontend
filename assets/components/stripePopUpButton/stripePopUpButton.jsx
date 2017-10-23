@@ -43,7 +43,9 @@ const StripePopUpButton = (props: PropTypes) => {
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
       onClick={onClick}
-    >Pay with debit/credit card <SvgCreditCard /></button>
+    >
+      Pay with debit/credit card <SvgCreditCard />
+    </button>
   );
 
 };
@@ -73,14 +75,6 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
-
-
-// ----- Default Props ----- //
-
-StripePopUpButton.defaultProps = {
-  stripeClick: callback => callback(),
-};
-
 
 // ----- Exports ----- //
 

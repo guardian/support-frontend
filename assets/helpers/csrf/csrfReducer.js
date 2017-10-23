@@ -25,7 +25,8 @@ const initialState: Csrf = window.guardian && window.guardian.csrf ? {
 
 export default function csrfReducer(
   state: Csrf = initialState,
-  action: Action): Csrf {
+  action: Action,
+): Csrf {
 
   switch (action.type) {
 

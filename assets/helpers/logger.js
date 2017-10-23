@@ -5,7 +5,7 @@ import Raven from 'raven-js';
 
 export const init = () => {
   const dsn: string = 'https://dc13eb8698614a8081ce6a139d9f4aab@sentry.io/171710';
-  const gitCommitId = window.guardian.gitCommitId;
+  const { gitCommitId } = window.guardian;
 
   Raven.config(dsn, {
     whitelistUrls: ['support.theguardian.com', 'localhost'],
@@ -15,10 +15,12 @@ export const init = () => {
 
 
 export const logException = (ex: string, context?: Object): void => {
-  Raven.captureException(ex,
+  Raven.captureException(
+    ex,
     {
       extra: context,
-    });
+    },
+  );
 
   if (window.console && console.error) {
     console.error(ex);

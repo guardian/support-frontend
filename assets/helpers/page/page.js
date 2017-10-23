@@ -75,12 +75,12 @@ function buildInitialState(
 }
 
 // Sets up the common reducer with its initial state.
-function createCommonReducer(
-  initialState: CommonState): (CommonState, Action) => CommonState {
+function createCommonReducer(initialState: CommonState): (CommonState, Action) => CommonState {
 
   function commonReducer(
     state: CommonState = initialState,
-    action: Action): CommonState {
+    action: Action,
+  ): CommonState {
 
     switch (action.type) {
 

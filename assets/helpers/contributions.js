@@ -13,8 +13,7 @@ export type BillingPeriod = 'Monthly' | 'Annual';
 export type ContribError =
   | 'tooLittle'
   | 'tooMuch'
-  | 'invalidEntry'
-  ;
+  | 'invalidEntry';
 
 export type Amount = {
   value: string,

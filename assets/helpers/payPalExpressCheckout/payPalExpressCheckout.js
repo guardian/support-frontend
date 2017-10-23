@@ -90,7 +90,9 @@ function createAgreement(payPalData: Object, state: CombinedState) {
 
 function setup(
   dispatch: Function,
-  getState: () => PageState, callback: Function): Promise<void> {
+  getState: () => PageState,
+  callback: Function,
+): Promise<void> {
 
   return loadPayPalExpress()
     .then(() => {

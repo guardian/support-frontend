@@ -77,7 +77,5 @@ export default function RadioToggle(props: PropTypes) {
 // ----- Proptypes ----- //
 
 RadioToggle.defaultProps = {
-  checked: '',
-  id: null,
   accessibilityHint: '',
 };

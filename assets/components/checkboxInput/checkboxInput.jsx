@@ -24,7 +24,7 @@ export default function CheckboxInput(props: PropTypes) {
     label = <label htmlFor={props.id}>{props.labelText}</label>;
   }
   return (
-    <div className={'component-checkbox'}>
+    <div className="component-checkbox">
       <input
         id={props.id}
         type="checkbox"
@@ -37,6 +37,5 @@ export default function CheckboxInput(props: PropTypes) {
 }
 
 CheckboxInput.defaultProps = {
-  id: null,
   labelText: '',
 };

@@ -169,10 +169,12 @@ const getContribAttrs = (
 
 function ContributionsBundle(props: PropTypes) {
 
-  const attrs: ContribAttrs = getContribAttrs(props.contribType,
+  const attrs: ContribAttrs = getContribAttrs(
+    props.contribType,
     props.contribAmount,
     props.referrerAcquisitionData,
-    props.isoCountry);
+    props.isoCountry,
+  );
 
   attrs.showPaymentLogos = true;
 
