@@ -42,6 +42,11 @@ export type PreloadedState = {
 
 // ----- Functions ----- //
 
+function doNotTrack() {
+  // $FlowFixMe
+  return navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+}
+
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
 
@@ -58,9 +63,10 @@ function analyticsInitialisation(participations: Participations): void {
     experience: abTest.getVariantsAsString(participations),
   };
 
-  googleTagManager.init();
-  googleTagManager.pushDimensions(dimensions);
-
+  if (!(doNotTrack() === '1' || doNotTrack() === 'yes')) {
+    googleTagManager.init();
+    googleTagManager.pushDimensions(dimensions);
+  }
   // Logging.
   logger.init();
 
