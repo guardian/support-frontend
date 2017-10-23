@@ -21,6 +21,7 @@ export default function CheckboxInput(props: PropTypes) {
   let label = '';
 
   if (props.labelText && props.id) {
+    // eslint-disable-next-line jsx-a11y/label-has-for
     label = <label htmlFor={props.id}>{props.labelText}</label>;
   }
   return (
