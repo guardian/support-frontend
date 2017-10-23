@@ -64,7 +64,8 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('oneoff-contributions-thankyou-page'),
-);
+const element: ?Element = document.getElementById('oneoff-contributions-thankyou-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}

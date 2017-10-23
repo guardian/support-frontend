@@ -52,7 +52,9 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('regular-contributions-existing-page'),
-);
+const element: ?Element = document.getElementById('regular-contributions-existing-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}
+

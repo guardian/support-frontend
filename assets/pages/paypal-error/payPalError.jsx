@@ -61,7 +61,9 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('paypal-error-page'),
-);
+const element: ?Element = document.getElementById('paypal-error-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}
+

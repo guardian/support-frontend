@@ -104,4 +104,8 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('regular-contributions-page'));
+const element: ?Element = document.getElementById('regular-contributions-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}

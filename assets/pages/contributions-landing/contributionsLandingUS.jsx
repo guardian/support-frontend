@@ -45,4 +45,8 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('contributions-landing-page-us'));
+const element: ?Element = document.getElementById('contributions-landing-page-us');
+
+if (element) {
+  ReactDOM.render(content, element);
+}

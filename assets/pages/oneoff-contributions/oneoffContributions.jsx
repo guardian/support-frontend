@@ -95,4 +95,9 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('oneoff-contributions-page'));
+const element: ?Element = document.getElementById('oneoff-contributions-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}
+

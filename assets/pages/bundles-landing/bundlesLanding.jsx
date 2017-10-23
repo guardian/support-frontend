@@ -47,4 +47,9 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('bundles-landing-page'));
+const element: ?Element = document.getElementById('bundles-landing-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}
+

@@ -64,7 +64,9 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('regular-contributions-pending-page'),
-);
+const element: ?Element = document.getElementById('regular-contributions-pending-page');
+
+if (element) {
+  ReactDOM.render(content, element);
+}
+
