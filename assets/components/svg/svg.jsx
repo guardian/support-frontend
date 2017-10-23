@@ -256,6 +256,296 @@ function SvgScribble() {
 
 }
 
+// The wall of circles used on the main landing page.
+function SvgWallDesktop() {
+
+  return (
+    <svg viewBox="0 0 1360 360" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fillRule="evenodd">
+        <g fill="#333">
+          <g transform="translate(1143.49 -.004)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="330" r="30" />
+            <circle cx="30" cy="150" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+          </g>
+          <g transform="translate(1091.49 29.996)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+            <circle cx="30" cy="150" r="30" />
+          </g>
+          <g transform="translate(987.49 29.996)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+            <circle cx="30" cy="150" r="30" />
+          </g>
+          <g transform="translate(1039.49 -.004)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="330" r="30" />
+            <circle cx="30" cy="150" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+          </g>
+        </g>
+        <g fill="#333">
+          <g transform="translate(1299.49 29.996)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+            <circle cx="30" cy="150" r="30" />
+          </g>
+          <g transform="translate(1195.49 29.996)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+            <circle cx="30" cy="150" r="30" />
+          </g>
+          <g transform="translate(1247.49 -.004)">
+            <circle cx="30" cy="90" r="30" />
+            <circle cx="30" cy="30" r="30" />
+            <circle cx="30" cy="330" r="30" />
+            <circle cx="30" cy="150" r="30" />
+            <circle cx="30" cy="210" r="30" />
+            <circle cx="30" cy="270" r="30" />
+          </g>
+        </g>
+        <g transform="translate(935.49 -.004)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(883.49 29.996)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(779.49 29.996)">
+          <circle cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(831.49 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(727.494 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(675.494 29.996)">
+          <circle cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(623.494 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(571.494 29.996)">
+          <circle cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(519.494 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(311.498 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle fill="#333" cx="30" cy="150" r="30" />
+          <circle fill="#333" cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(467.494 29.996)">
+          <circle cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(259.498 29.996)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(415.494 -.004)">
+          <circle fill="#333" cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(363.494 29.996)">
+          <circle cx="30" cy="90" r="30" />
+          <circle fill="#333" cx="30" cy="30" r="30" />
+          <circle fill="#333" cx="30" cy="210" r="30" />
+          <circle fill="#333" cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(207.498 -.004)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(103.506 -.004)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(.008 -.004)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="330" r="30" />
+          <circle cx="30" cy="150" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+        </g>
+        <g transform="translate(155.498 29.996)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+        <g transform="translate(51.506 29.996)" fill="#333">
+          <circle cx="30" cy="90" r="30" />
+          <circle cx="30" cy="30" r="30" />
+          <circle cx="30" cy="210" r="30" />
+          <circle cx="30" cy="270" r="30" />
+          <circle cx="30" cy="150" r="30" />
+        </g>
+      </g>
+    </svg>
+  );
+
+}
+
+// The wall of circles used on the main landing page, at mobile breakpoints.
+function SvgWallMobile() {
+
+  return (
+    <svg viewBox="0 0 457 260" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fillRule="evenodd">
+        <g transform="translate(45 26)" fill="#333">
+          <circle cx="26" cy="26" r="26" />
+          <circle cx="26" cy="78" r="26" />
+          <circle cx="26" cy="130" r="26" />
+          <circle cx="26" cy="182" r="26" />
+        </g>
+        <g transform="translate(90)">
+          <circle cx="26" cy="78" r="26" />
+          <circle fill="#333" cx="26" cy="26" r="26" />
+          <circle fill="#333" cx="26" cy="182" r="26" />
+          <circle fill="#333" cx="26" cy="234" r="26" />
+          <circle cx="26" cy="130" r="26" />
+        </g>
+        <g fill="#333">
+          <circle cx="26" cy="78" r="26" />
+          <circle cx="26" cy="26" r="26" />
+          <circle cx="26" cy="182" r="26" />
+          <circle cx="26" cy="234" r="26" />
+          <circle cx="26" cy="130" r="26" />
+        </g>
+        <g transform="translate(135 26)">
+          <circle fill="#333" cx="26" cy="26" r="26" />
+          <circle cx="26" cy="78" r="26" />
+          <circle cx="26" cy="130" r="26" />
+          <circle fill="#333" cx="26" cy="182" r="26" />
+        </g>
+        <g transform="translate(180)">
+          <circle cx="26" cy="78" r="26" />
+          <circle fill="#333" cx="26" cy="26" r="26" />
+          <circle cx="26" cy="182" r="26" />
+          <circle fill="#333" cx="26" cy="234" r="26" />
+          <circle cx="26" cy="130" r="26" />
+        </g>
+        <g>
+          <g transform="translate(225 26)">
+            <circle fill="#333" cx="26" cy="26" r="26" />
+            <circle cx="26" cy="78" r="26" />
+            <circle cx="26" cy="130" r="26" />
+            <circle fill="#333" cx="26" cy="182" r="26" />
+          </g>
+          <g transform="translate(270)">
+            <circle cx="26" cy="78" r="26" />
+            <circle fill="#333" cx="26" cy="26" r="26" />
+            <circle cx="26" cy="182" r="26" />
+            <circle fill="#333" cx="26" cy="234" r="26" />
+            <circle cx="26" cy="130" r="26" />
+          </g>
+          <g transform="translate(315 26)">
+            <circle fill="#333" cx="26" cy="26" r="26" />
+            <circle cx="26" cy="78" r="26" />
+            <circle cx="26" cy="130" r="26" />
+            <circle fill="#333" cx="26" cy="182" r="26" />
+          </g>
+          <g transform="translate(405 26)" fill="#333">
+            <circle cx="26" cy="26" r="26" />
+            <circle cx="26" cy="78" r="26" />
+            <circle cx="26" cy="130" r="26" />
+            <circle cx="26" cy="182" r="26" />
+          </g>
+          <g transform="translate(360)" fill="#333">
+            <circle cx="26" cy="78" r="26" />
+            <circle cx="26" cy="26" r="26" />
+            <circle cx="26" cy="182" r="26" />
+            <circle cx="26" cy="234" r="26" />
+            <circle cx="26" cy="130" r="26" />
+          </g>
+        </g>
+      </g>
+    </svg>
+  );
+
+}
+
 
 // ----- Exports ----- //
 
@@ -278,4 +568,6 @@ export {
   SvgGraphLine,
   SvgGraphLineMobile,
   SvgScribble,
+  SvgWallDesktop,
+  SvgWallMobile,
 };
