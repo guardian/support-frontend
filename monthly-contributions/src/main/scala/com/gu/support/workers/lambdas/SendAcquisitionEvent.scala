@@ -58,7 +58,6 @@ object SendAcquisitionEvent {
               paymentFrequency = paymentFrequencyFromBillingPeriod(state.contribution.billingPeriod),
               currency = state.contribution.currency.iso,
               amount = state.contribution.amount.toDouble,
-              amountInGBP = None,
               paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
@@ -70,7 +69,8 @@ object SendAcquisitionEvent {
               referrerUrl = data.referrerAcquisitionData.referrerUrl,
               componentId = data.referrerAcquisitionData.componentId,
               componentTypeV2 = data.referrerAcquisitionData.componentType,
-              source = data.referrerAcquisitionData.source
+              source = data.referrerAcquisitionData.source,
+              platform = Some(ophan.thrift.event.Platform.Support)
             )
           },
           "acquisition data not included"
