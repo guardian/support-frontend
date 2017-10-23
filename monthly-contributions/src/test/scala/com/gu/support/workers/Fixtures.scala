@@ -2,9 +2,12 @@ package com.gu.support.workers
 
 import java.io.ByteArrayInputStream
 
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
+import com.gu.support.workers.model.{BillingPeriod, Monthly}
 import com.gu.zuora.encoding.CustomCodecs.jsonWrapperEncoder
 import io.circe.syntax._
 
@@ -26,7 +29,7 @@ object Fixtures {
           "primaryEmailAddress": "test@gu.com",
           "firstName": "test",
           "lastName": "user",
-          "country": "GB",
+          "country": "GBP",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
@@ -46,20 +49,12 @@ object Fixtures {
          }
        """
 
-  val annualContributionJson =
-    """
+  def contribution(amount: BigDecimal = 5,currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
+    s"""
       {
-        "amount": 150,
-        "currency": "GBP",
-        "billingPeriod": "Annual"
-      }
-    """
-
-  val monthlyContributionJson =
-    """
-      {
-        "amount": 5,
-        "currency": "GBP"
+        "amount": $amount,
+        "currency": "$currency",
+        "billingPeriod": "$billingPeriod"
       }
     """
 
@@ -78,27 +73,19 @@ object Fixtures {
                 }
                 """
 
-  val createPayPalPaymentMethodJson =
+  def createPayPalPaymentMethodJson(currency: Currency = GBP) =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $monthlyContributionJson,
+          "contribution": ${contribution(currency = currency)},
           "paymentFields": $payPalJson
         }"""
 
-  val createMonthlyStripeJson =
+  def createStripePaymentMethodJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5) =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": $monthlyContributionJson,
-          "paymentFields": $stripeJson
-        }"""
-
-  val createAnnualStripeJson =
-    s"""{
-          $requestIdJson,
-          $userJson,
-          "contribution": $annualContributionJson,
+          "contribution": ${contribution(amount = amount, billingPeriod = billingPeriod)},
           "paymentFields": $stripeJson
         }"""
 
@@ -107,7 +94,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": $monthlyContributionJson,
+            "contribution": ${contribution()},
             "paymentMethod": $payPalPaymentMethod
           }
         """
@@ -116,7 +103,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $monthlyContributionJson,
+       |  "contribution": ${contribution()},
        |  "paymentMethod": $payPalPaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
@@ -140,28 +127,16 @@ object Fixtures {
           "AccountId": "001g000001gOR06AAG"
         }
       """
-  val createMonthlyZuoraSubscriptionJson =
+  def createZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly) =
     s"""
           {
             $requestIdJson,
             $userJson,
-            "contribution": $monthlyContributionJson,
+            "contribution": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
         """
-
-  val createAnnualZuoraSubscriptionJson =
-    s"""
-          {
-            $requestIdJson,
-            $userJson,
-            "contribution": $annualContributionJson,
-            "paymentMethod": $payPalPaymentMethod,
-            "salesForceContact": $salesforceContactJson
-            }
-        """
-
   val stripeCardDeclinedErrorJson =
     s"""
        {
@@ -172,7 +147,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": $monthlyContributionJson,
+       |  "contribution": ${contribution()},
        |  "error": {
        |    "Error": "com.gu.support.workers.exceptions.ErrorHandler.logAndRethrow(ErrorHandler.scala:33)",
        |    "Cause": "The card has expired"

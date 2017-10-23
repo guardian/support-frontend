@@ -1,6 +1,8 @@
 package com.gu.zuora
 
 import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
@@ -51,17 +53,18 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  "Subscribe request" should "succeed" in {
-    val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
-    zuoraService.subscribe(subscriptionRequest).map {
-      response =>
-        response.head.success should be(true)
-    }
-  }
+  "Subscribe request" should "succeed" in subscribeRequestWithCurrency(GBP)
 
-  it should "work for $USD contributions" in {
+  it should "work for $USD contributions" in subscribeRequestWithCurrency(USD)
+
+  it should "work for €Euro contributions" in subscribeRequestWithCurrency(EUR)
+
+  it should "work for AUD contributions" in subscribeRequestWithCurrency(AUD)
+
+  def subscribeRequestWithCurrency(currency: Currency) = {
+    //Accounts will be created in Sandbox
     val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
-    zuoraService.subscribe(usSubscriptionRequest).map {
+    zuoraService.subscribe(subscriptionRequest(currency)).map {
       response =>
         response.head.success should be(true)
     }.recover {

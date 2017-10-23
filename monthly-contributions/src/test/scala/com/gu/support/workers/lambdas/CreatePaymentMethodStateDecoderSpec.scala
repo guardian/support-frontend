@@ -13,7 +13,7 @@ import org.scalatest.{FlatSpec, Matchers}
 class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
 
   "CreatePaymentMethodStateDecoder" should "be able to decode a monthly contribution with PayPal payment fields" in {
-    val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson)
+    val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson())
     val result = state.right.get
     result.contribution.amount should be(5)
     result.paymentFields.isRight should be(true) //PayPal
@@ -21,7 +21,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   }
 
   it should "be able to decode a monthly contribution with Stripe payment fields" in {
-    val state = decode[CreatePaymentMethodState](createMonthlyStripeJson)
+    val state = decode[CreatePaymentMethodState](createStripePaymentMethodJson(Monthly))
     val result = state.right.get
     result.contribution.amount should be(5)
     result.contribution.billingPeriod should be(Monthly)
@@ -30,7 +30,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   }
 
   it should "be able to decode an annual contribution with Stripe payment fields" in {
-    val state = decode[CreatePaymentMethodState](createAnnualStripeJson)
+    val state = decode[CreatePaymentMethodState](createStripePaymentMethodJson(Annual, 150))
     val result = state.right.get
     result.contribution.amount should be(150)
     result.contribution.billingPeriod should be(Annual)

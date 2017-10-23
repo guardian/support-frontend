@@ -1,8 +1,8 @@
 package com.gu.zuora
 
 import com.gu.config.Configuration
-import com.gu.i18n.Country
-import com.gu.i18n.Currency.{GBP, USD}
+import com.gu.i18n.Currency.GBP
+import com.gu.i18n.{Country, Currency}
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
 import com.gu.zuora.model._
 import org.joda.time.LocalDate
@@ -103,7 +103,7 @@ object Fixtures {
 
   val date = new LocalDate(2017, 5, 4)
 
-  val account = Account(salesforceAccountId, GBP, salesforceAccountId, salesforceId, identityId, StripeGateway)
+  def account(currency: Currency = GBP) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, StripeGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
@@ -122,13 +122,7 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
-  val subscriptionRequest = SubscribeRequest(List(SubscribeItem(account, contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
-
-  val usAccount = Account(salesforceAccountId, USD, salesforceAccountId, salesforceId, identityId, StripeGateway)
-
-  val usSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(usAccount, contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
-  ))
+  def subscriptionRequest(currency: Currency = GBP) = SubscribeRequest(List(SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
 
   val invalidMonthlySubsData = SubscriptionData(
     List(
@@ -143,10 +137,10 @@ object Fixtures {
     Subscription(date, date, date, termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account, contactDetails, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
   ))
 
-  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account, contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
+  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
 
   val invoiceResult =
     """

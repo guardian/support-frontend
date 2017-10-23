@@ -33,6 +33,5 @@ object StateDecoder extends App with LazyLogging {
     print(encoder.decrypt(state))
   }
 
-
   def print(output: String): Unit = println(s"\n\n$output\n\n") // scalastyle:ignore
 }
