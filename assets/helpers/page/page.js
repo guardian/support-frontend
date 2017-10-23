@@ -42,9 +42,11 @@ export type PreloadedState = {
 
 // ----- Functions ----- //
 
-function doNotTrack() {
+function doNotTrack(): boolean {
   // $FlowFixMe
-  return navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+  const doNotTrackFlag = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+
+  return doNotTrackFlag === '1' || doNotTrackFlag === 'yes';
 }
 
 // Sets up GA and logging.
@@ -57,13 +59,14 @@ function analyticsInitialisation(participations: Participations): void {
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
-  const dimensions:Dimensions = {
-    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-    experience: abTest.getVariantsAsString(participations),
-  };
+  if (!(doNotTrack())) {
 
-  if (!(doNotTrack() === '1' || doNotTrack() === 'yes')) {
+    const dimensions:Dimensions = {
+      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+      experience: abTest.getVariantsAsString(participations),
+    };
+
     googleTagManager.init();
     googleTagManager.pushDimensions(dimensions);
   }
