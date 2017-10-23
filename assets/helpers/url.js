@@ -64,7 +64,7 @@ function getBaseDomain(): Domain {
 
   const loc = window.location;
   const origin = window.location.origin ||
-    `${loc.protocol}'//'${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
+    `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
 
   if (origin.includes(DOMAINS.DEV)) {
     return DOMAINS.DEV;
