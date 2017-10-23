@@ -12,8 +12,7 @@ export type Action =
   | { type: 'STRIPE_CHECKOUT_LOADED' }
   | { type: 'SET_STRIPE_CHECKOUT_TOKEN', token: string }
   | { type: 'CLOSE_STRIPE_OVERLAY' }
-  | { type: 'OPEN_STRIPE_OVERLAY' }
-  ;
+  | { type: 'OPEN_STRIPE_OVERLAY' };
 
 // ----- Actions ----- //
 

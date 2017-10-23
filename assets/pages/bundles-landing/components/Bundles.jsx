@@ -188,7 +188,8 @@ const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
   intCmp: ?string,
-  isoCountry: string): ContribAttrs => {
+  isoCountry: string,
+): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -204,7 +205,9 @@ const getContribAttrs = (
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
-  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading, ctaAccessibilityHint });
+  return Object.assign({}, bundles.contrib, {
+    ctaId, ctaLink, subheading, ctaAccessibilityHint,
+  });
 
 };
 

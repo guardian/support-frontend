@@ -39,7 +39,8 @@ function payWithPayPal(props: PropTypes) {
         props.referrerAcquisitionData,
         props.isoCountry,
         props.errorHandler,
-        props.abParticipations);
+        props.abParticipations,
+      );
     }
   };
 }

@@ -9,8 +9,7 @@ import type { PayPalButtonType } from './components/oneoffContributionsPayment';
 
 export type Action =
   | { type: 'CHECKOUT_ERROR', message: ?string }
-  | { type: 'SET_PAYPAL_BUTTON', value: PayPalButtonType }
-  ;
+  | { type: 'SET_PAYPAL_BUTTON', value: PayPalButtonType };
 
 
 // ----- Actions ----- //

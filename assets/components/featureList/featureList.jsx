@@ -13,8 +13,7 @@ import React from 'react';
 export type ListItem =
   | {| heading: string, text: string |}
   | {| heading: string |}
-  | {| text: string |}
-  ;
+  | {| text: string |};
 
 /* eslint-enable react/no-unused-prop-types */
 

@@ -19,16 +19,8 @@ export default function BodyCopy(props: PropTypes) {
   return (
     <div className="component-body-copy">
       {props.copy.map(para =>
-        <p className="component-body-copy__para">{para}</p>,
-      )}
+        <p className="component-body-copy__para">{para}</p>)}
     </div>
   );
 
 }
-
-
-// ----- Proptypes ----- //
-
-BodyCopy.defaultProps = {
-  copy: [],
-};

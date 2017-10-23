@@ -38,7 +38,8 @@ const initialState: User = {
 
 function userReducer(
   state: User = initialState,
-  action: Action): User {
+  action: Action,
+): User {
 
   switch (action.type) {
     case 'SET_USER_ID':

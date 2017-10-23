@@ -30,7 +30,6 @@ object Driver {
     val caps = DesiredCapabilities.chrome()
     caps.setCapability("platform", "Windows 8.1")
     caps.setCapability("name", "support-frontend")
-    caps.setCapability("version", "60")
     new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), caps)
   }
 
