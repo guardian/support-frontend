@@ -1,8 +1,6 @@
 
 name := "acquisition-event-producer"
 
-version := "2.0.0"
-
 scalaVersion := "2.11.11"
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
