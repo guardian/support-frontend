@@ -43,7 +43,7 @@ PROD stage uses the PROD environment for non test users and UAT for test users. 
 
 
 ## Public settings
-Any public config settings can be put in the [application.conf](src/main/resources/application.conf) file,
+Any public config settings can be put in the [reference.conf](src/main/resources/reference.conf) file,
 private settings should go in a separate private conf file as described in
 the main project repos.
 
