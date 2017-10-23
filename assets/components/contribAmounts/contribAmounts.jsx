@@ -263,7 +263,7 @@ function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean, acces
 function errorMessage(
   error: ?ContribError,
   contribType: Contrib,
-  currency: Currency
+  currency: Currency,
 ): ?React$Element<any> {
 
   const limits = contribConfig[contribType];

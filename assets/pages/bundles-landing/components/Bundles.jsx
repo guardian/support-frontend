@@ -237,8 +237,8 @@ function ContributionBundle(props: PropTypes) {
       props.contribType,
       props.contribAmount,
       props.currency.iso,
-      props.intCmp,
       props.isoCountry,
+      props.intCmp,
     );
 
   const onClick = () => {
