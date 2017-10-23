@@ -28,7 +28,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
-        putMetric(state.paymentMethod.`type`)
+        putSalesForceContactCreated(state.paymentMethod.`type`)
         getCreateZuoraSubscriptionState(state, response)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
@@ -47,14 +47,8 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.acquisitionData
     )
 
-  private def putMetric(paymentType: String) =
-    if (paymentType == "PayPal")
-      putCloudWatchMetrics("paypal")
-    else
-      putCloudWatchMetrics("stripe")
-
-  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putSalesforceAccountCreated().recover({ case _ => () })
+  def putSalesForceContactCreated(paymentMethod: String): Future[Unit] =
+    new RecurringContributionsMetrics(paymentMethod.toLowerCase, "monthly")
+      .putSalesforceContactCreated().recover({ case _ => () })
 
 }

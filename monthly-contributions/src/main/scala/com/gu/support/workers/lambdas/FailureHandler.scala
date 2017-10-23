@@ -28,7 +28,7 @@ class FailureHandler(emailService: EmailService)
     logger.info(
       s"FAILED contribution_amount: ${state.contribution.amount} contribution_currency: ${state.contribution.currency.iso} test_user: ${state.user.isTestUser}"
     )
-    putCloudWatchMetric()
+    putFailureHandlerTriggered()
     emailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -65,7 +65,7 @@ class FailureHandler(emailService: EmailService)
     }
   }
 
-  def putCloudWatchMetric(): Future[Unit] = {
+  def putFailureHandlerTriggered(): Future[Unit] = {
     new FailureMetrics("monthly")
       .putFailureHandlerTriggered().recover({ case _ => () })
   }

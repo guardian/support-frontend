@@ -22,10 +22,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
-
+    putStartup(state.paymentFields)
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
-      _ <- putStartupMetric(state.paymentFields)
+      _ <- putPaymentMethodCreated(state.paymentFields)
     } yield getCreateSalesforceContactState(state, paymentMethod)
   }
 
@@ -48,7 +48,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     )
 
   def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] = {
-    putCloudWatchCreatePaymentMethodMetric("stripe")
     stripeService
       .createCustomer(stripe.userId, stripe.stripeToken)
       .map { stripeCustomer =>
@@ -59,24 +58,29 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] = {
-    putCloudWatchCreatePaymentMethodMetric("paypal")
     payPalService
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
   }
 
-  private def putStartupMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
+  private def putStartup(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
     if (paymentType.isLeft)
-      putCloudWatchStartupMetric("stripe")
+      startupMetric("stripe")
     else
-      putCloudWatchStartupMetric("paypal")
+      startupMetric("paypal")
 
-  def putCloudWatchStartupMetric(paymentMethod: String): Future[Unit] =
+  private def putPaymentMethodCreated(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
+    if (paymentType.isLeft)
+      paymentMethodCreatedMetric("stripe")
+    else
+      paymentMethodCreatedMetric("paypal")
+
+  def startupMetric(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
       .putContributionSignUpStartProcess().recover({ case _ => () })
 
-  def putCloudWatchCreatePaymentMethodMetric(paymentMethod: String): Future[Unit] =
+  def paymentMethodCreatedMetric(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putContributionSignUpStartProcess().recover({ case _ => () })
+      .putPaymentMethodCreated().recover({ case _ => () })
 
 }

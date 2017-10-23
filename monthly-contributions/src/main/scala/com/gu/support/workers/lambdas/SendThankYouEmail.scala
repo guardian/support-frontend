@@ -24,7 +24,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
   }
 
   def sendEmail(state: SendThankYouEmailState): Future[Unit] = {
-    putMetric(state.paymentMethod.`type`)
+    putThankYouEmailSent(state.paymentMethod.`type`)
     thankYouEmailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -36,13 +36,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
     )).map(_ => Unit)
   }
 
-  private def putMetric(paymentType: String) =
-    if (paymentType == "PayPal")
-      putCloudWatchMetrics("paypal")
-    else
-      putCloudWatchMetrics("stripe")
-
-  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
+  def putThankYouEmailSent(paymentMethod: String): Future[Unit] =
+    new RecurringContributionsMetrics(paymentMethod.toLowerCase, "monthly")
       .putThankYouEmailSent().recover({ case _ => () })
 }
