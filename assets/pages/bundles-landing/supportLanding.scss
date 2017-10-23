@@ -388,18 +388,38 @@
     }
 
     .why-support-new-design__heading--paywall {
-      padding: 120px 0;
-      width: 300px;
-      margin: 0 auto;
+      padding-bottom: 260px;
+      width: 100%;
+      margin: 0;
       position: relative;
 
       span:nth-of-type(2) {
         margin-left: 60px;
       }
 
-      @include mq($from: phablet) {
-        width: auto;
+      @include mq($from: mobileLandscape) {
         margin: 0;
+        padding-top: 92px;
+        padding-bottom: 140px;
+        padding-left: 80px;
+        width: auto;
+      }
+
+      @include mq($from: phablet) {
+        padding-top: 150px;
+        padding-bottom: 200px;
+        padding-left: 150px;
+      }
+
+      @include mq($from: tablet) {
+        padding-top: 180px;
+        padding-bottom: 260px;
+        padding-left: 110px;
+      }
+
+      @include mq($from: desktop) {
+        padding-top: 120px;
+        padding-left: 0;
       }
 
       @include mq($from: leftCol) {
@@ -407,14 +427,29 @@
       }
 
       @include mq($from: wide) {
-        padding-left: $gu-h-spacing * 4.5;
+        padding-left: 90px;
       }
     }
 
     .why-support-new-design__paywall-svg {
       position: absolute;
       overflow: hidden;
+      width: 100vw;
       top: 0;
+      left: - $gu-h-spacing / 2;
+
+      @include mq($from: mobileLandscape) {
+        width: gu-breakpoint(mobileLandscape);
+        left: - $gu-h-spacing;
+      }
+
+      @include mq($from: phablet) {
+        width: gu-breakpoint(phablet);
+      }
+
+      @include mq($from: tablet) {
+        width: gu-breakpoint(tablet);
+      }
 
       @include mq($from: desktop) {
         width: gu-breakpoint(desktop);
@@ -429,6 +464,25 @@
       @include mq($from: wide) {
         left: -272px;
         width: gu-breakpoint(wide);
+      }
+    }
+
+    .svg-wall-mobile {
+      @include mq($from: mobileLandscape) {
+        width: gu-breakpoint(mobileLandscape);
+      }
+
+      @include mq($from: phablet) {
+        width: gu-breakpoint(phablet);
+      }
+
+      @include mq($from: tablet) {
+        width: gu-breakpoint(tablet) + 120px;
+        margin-left: - ((gu-breakpoint(tablet) + 120px) - gu-breakpoint(tablet)) / 2;
+      }
+
+      @include mq($from: desktop) {
+        display: none;
       }
     }
 

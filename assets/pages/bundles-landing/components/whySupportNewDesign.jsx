@@ -11,6 +11,7 @@ import {
   SvgGraphLine,
   SvgGraphLineMobile,
   SvgWallDesktop,
+  SvgWallMobile,
 } from 'components/svg/svg';
 
 
@@ -53,7 +54,10 @@ export default function WhySupport() {
           <h1 className="why-support-new-design__heading why-support-new-design__heading--paywall">
             <span>we haven&#39;t put up </span>
             <span>a paywall</span>
-            <div className="why-support-new-design__paywall-svg"><SvgWallDesktop /></div>
+            <div className="why-support-new-design__paywall-svg">
+              <SvgWallDesktop />
+              <SvgWallMobile />
+            </div>
           </h1>
           <p className="why-support-new-design__copy">
             We believe the truth should be open to everyone, regardless of their
