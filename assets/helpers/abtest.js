@@ -172,7 +172,7 @@ function getParticipation(abTests: Test[], mvtId: number, country: IsoCountry): 
 
 // ----- Exports ----- //
 
-export const init = (country: IsoCountry, abTests: Test[] = tests): Participations => {
+const init = (country: IsoCountry, abTests: Test[] = tests): Participations => {
 
   const mvt: number = getMvtId();
   let participation: Participations = getParticipation(abTests, mvt, country);
@@ -186,7 +186,7 @@ export const init = (country: IsoCountry, abTests: Test[] = tests): Participatio
 
 };
 
-export const getVariantsAsString = (participation: Participations): string => {
+const getVariantsAsString = (participation: Participations): string => {
   const variants: string[] = [];
 
   Object.keys(participation).forEach((testId) => {
@@ -196,7 +196,9 @@ export const getVariantsAsString = (participation: Participations): string => {
   return variants.join('; ');
 };
 
-export const trackOphan = (
+const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
+
+const trackOphan = (
   testId: TestId,
   variant: string,
   complete?: boolean = false,
@@ -214,4 +216,11 @@ export const trackOphan = (
   ophan.record({
     abTestRegister: payload,
   });
+};
+
+export {
+  init,
+  getVariantsAsString,
+  getCurrentParticipations,
+  trackOphan,
 };
