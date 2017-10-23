@@ -49,20 +49,22 @@ type PaymentField = 'baid' | 'stripeToken';
 // ----- Functions ----- //
 
 const isStateValid = (inputState: Object) => {
-  const user = inputState.user;
+  const { user } = inputState;
 
   return user.firstName !== null && user.firstName !== undefined &&
          user.lastName !== null && user.lastName !== undefined &&
          user.email !== null && user.email !== undefined;
 };
 
-function requestData(paymentFieldName: PaymentField,
+function requestData(
+  paymentFieldName: PaymentField,
   token: string,
   contributionType: Contrib,
-  getState: () => PageState) {
+  getState: () => PageState,
+) {
 
   const state = getState().page;
-  const country = getState().common.country;
+  const { country } = getState().common;
 
   if (!isStateValid(state)) {
     return Promise.resolve({
@@ -72,8 +74,7 @@ function requestData(paymentFieldName: PaymentField,
   }
 
   const ophanIds: OphanIds = getOphanIds();
-  const referrerAcquisitionData: ReferrerAcquisitionData =
-    getState().common.referrerAcquisitionData;
+  const { referrerAcquisitionData } = getState().common;
   const supportAbTests = participationsToAcquisitionABTest(getState().common.abParticipations);
 
   const regularContribFields: RegularContribFields = {
@@ -159,7 +160,8 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
 
 export default function postCheckout(
   paymentFieldName: PaymentField,
-  contributionType: Contrib): Function {
+  contributionType: Contrib,
+): Function {
   return (token: string, dispatch: Function, getState: () => PageState) => {
 
     dispatch(resetPollCount());

@@ -51,7 +51,8 @@ export function paypalContributionsRedirect(
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
   errorHandler: (string) => void,
-  nativeAbParticipations: Participations): void {
+  nativeAbParticipations: Participations,
+): void {
 
   const country = toCountryGroup(isoCountry);
   const ophanIds: OphanIds = getOphanIds();

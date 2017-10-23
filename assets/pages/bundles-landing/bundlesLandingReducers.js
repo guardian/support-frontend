@@ -43,7 +43,8 @@ const initialContrib: ContribState = {
 
 function contributionReducer(
   state: ContribState = initialContrib,
-  action: Action): ContribState {
+  action: Action,
+): ContribState {
 
   switch (action.type) {
 

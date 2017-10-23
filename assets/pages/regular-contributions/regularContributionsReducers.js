@@ -71,7 +71,7 @@ function createRegularContribReducer(amount: number, currency: Currency) {
       case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
 
-      case 'SET_STATUS_URI' :
+      case 'SET_STATUS_URI':
         return Object.assign({}, state, { statusUri: action.uri });
 
       case 'INCREMENT_POLL_COUNT':

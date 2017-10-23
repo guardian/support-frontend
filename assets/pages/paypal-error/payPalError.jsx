@@ -41,8 +41,7 @@ const content = (
         <InfoSection heading="Questions?" className="paypal-error__questions">
           <p>
             If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">
-            contact us</a>
+            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
           </p>
         </InfoSection>
         <InfoSection
