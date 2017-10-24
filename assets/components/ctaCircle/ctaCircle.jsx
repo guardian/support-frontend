@@ -11,7 +11,7 @@ import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
 type PropTypes = {
   text: string,
-  modifierClass: ?string,
+  modifierClass?: ?string,
   url?: ?string,
   onClick?: ?Function,
   tabIndex?: number,
@@ -44,6 +44,7 @@ CtaCircle.defaultProps = {
   url: null,
   onClick: null,
   tabIndex: 0,
+  modifierClass: null,
 };
 
 

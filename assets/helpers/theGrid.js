@@ -32,7 +32,8 @@ export type ImageId = $Keys<typeof imageCatalogue>;
 export function gridUrl(
   gridId: ImageId,
   size: number,
-  imgType: ImageType = 'jpg'): string {
+  imgType: ImageType = 'jpg',
+): string {
 
   const path = `${imageCatalogue[gridId]}/${size}.${imgType}`;
   const url = new URL(path, GRID_DOMAIN);
@@ -49,7 +50,8 @@ export function gridUrl(
 export function gridSrcset(
   gridId: ImageId,
   sizes: number[],
-  imgType: ImageType = 'jpg'): string {
+  imgType: ImageType = 'jpg',
+): string {
 
   const sources = sizes.map(size => `${gridUrl(gridId, size, imgType)} ${size}w`);
   return sources.join(', ');
