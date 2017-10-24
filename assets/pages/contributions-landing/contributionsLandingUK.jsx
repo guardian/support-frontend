@@ -12,7 +12,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import { init as pageInit } from 'helpers/page/page';
+import { init as pageInit, renderPage } from 'helpers/page/page';
 
 import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
@@ -45,9 +45,4 @@ const content = (
   </Provider>
 );
 
-const element: ?Element = document.getElementById('contributions-landing-page-uk');
-
-if (element) {
-  ReactDOM.render(content, element);
-}
-
+renderPage(content, 'contributions-landing-page-uk');

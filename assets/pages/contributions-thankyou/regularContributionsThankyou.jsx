@@ -11,7 +11,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
 
-import { statelessInit as pageInit } from 'helpers/page/page';
+import { statelessInit as pageInit, renderPage } from 'helpers/page/page';
 
 
 // ----- Page Startup ----- //
@@ -64,9 +64,4 @@ const content = (
   </div>
 );
 
-const element: ?Element = document.getElementById('regular-contributions-thankyou-page');
-
-if (element) {
-  ReactDOM.render(content, element);
-}
-
+renderPage(content, 'regular-contributions-thankyou-page');

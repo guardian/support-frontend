@@ -3,14 +3,13 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { trackOphan } from 'helpers/abtest';
-import { init as pageInit } from 'helpers/page/page';
+import { init as pageInit, renderPage } from 'helpers/page/page';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -47,9 +46,4 @@ const content = (
   </Provider>
 );
 
-const element: ?Element = document.getElementById('bundles-landing-page');
-
-if (element) {
-  ReactDOM.render(content, element);
-}
-
+renderPage(content, 'bundles-landing-page');

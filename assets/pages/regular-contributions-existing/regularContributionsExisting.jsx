@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -11,7 +10,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 
 import { routes } from 'helpers/routes';
-import { statelessInit as pageInit } from 'helpers/page/page';
+import { statelessInit as pageInit, renderPage } from 'helpers/page/page';
 
 
 // ----- Page Startup ----- //
@@ -52,9 +51,4 @@ const content = (
   </div>
 );
 
-const element: ?Element = document.getElementById('regular-contributions-existing-page');
-
-if (element) {
-  ReactDOM.render(content, element);
-}
-
+renderPage(content, 'regular-contributions-existing-page');

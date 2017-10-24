@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
@@ -23,7 +22,7 @@ import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
-import { init as pageInit } from 'helpers/page/page';
+import { init as pageInit, renderPage } from 'helpers/page/page';
 
 import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 import FormFields from './components/formFields';
@@ -95,9 +94,4 @@ const content = (
   </Provider>
 );
 
-const element: ?Element = document.getElementById('oneoff-contributions-page');
-
-if (element) {
-  ReactDOM.render(content, element);
-}
-
+renderPage(content ,'oneoff-contributions-page');
