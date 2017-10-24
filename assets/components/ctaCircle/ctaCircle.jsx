@@ -13,7 +13,7 @@ type PropTypes = {
   text: string,
   modifierClass?: ?string,
   url?: ?string,
-  onClick?: ?Function,
+  onClick?: ?() => void,
   tabIndex?: number,
 };
 
