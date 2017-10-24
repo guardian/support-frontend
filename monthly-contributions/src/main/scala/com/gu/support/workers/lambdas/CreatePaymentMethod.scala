@@ -22,10 +22,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
-    putStartup(state.paymentFields)
+    putMetric(state.paymentFields, startupMetric)
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
-      _ <- putPaymentMethodCreated(state.paymentFields)
+      _ <- putMetric(state.paymentFields, paymentMethodCreatedMetric)
     } yield getCreateSalesforceContactState(state, paymentMethod)
   }
 
@@ -47,7 +47,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.acquisitionData
     )
 
-  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] = {
+  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
     stripeService
       .createCustomer(stripe.userId, stripe.stripeToken)
       .map { stripeCustomer =>
@@ -55,25 +55,17 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
           CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
       }
-  }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] = {
+  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
     payPalService
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
-  }
 
-  private def putStartup(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
+  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields], f: String => Future[Unit]) =
     if (paymentType.isLeft)
-      startupMetric("stripe")
+      f("stripe")
     else
-      startupMetric("paypal")
-
-  private def putPaymentMethodCreated(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
-    if (paymentType.isLeft)
-      paymentMethodCreatedMetric("stripe")
-    else
-      paymentMethodCreatedMetric("paypal")
+      f("paypal")
 
   def startupMetric(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
