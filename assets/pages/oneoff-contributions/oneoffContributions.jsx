@@ -94,4 +94,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content ,'oneoff-contributions-page');
+renderPage(content, 'oneoff-contributions-page');
