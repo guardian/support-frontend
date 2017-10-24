@@ -40,6 +40,7 @@ export default function RadioToggle(props: PropTypes) {
     const className = getClassName(props);
     const accessibilityHintId = `accessibility-hint-${radioId}`;
     const accessibilityHint = <p id={accessibilityHintId} className="accessibility-hint">{radio.accessibilityHint}</p>;
+    /* eslint-disable jsx-a11y/label-has-for */
     return (
       <span id={radio.id} className={`component-radio-toggle__button ${className}`} key={radioId}>
         {accessibilityHint}
@@ -54,10 +55,11 @@ export default function RadioToggle(props: PropTypes) {
           tabIndex="0"
           aria-describedby={accessibilityHintId}
         />
-        <label className="component-radio-toggle__label" htmlFor={radioId} >
+        <label htmlFor={radioId} className="component-radio-toggle__label">
           {radio.text}
         </label>
       </span>
+      /* eslint-enable jsx-a11y/label-has-for */
     );
 
   });
@@ -77,7 +79,5 @@ export default function RadioToggle(props: PropTypes) {
 // ----- Proptypes ----- //
 
 RadioToggle.defaultProps = {
-  checked: '',
-  id: null,
   accessibilityHint: '',
 };

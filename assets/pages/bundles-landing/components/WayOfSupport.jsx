@@ -49,16 +49,6 @@ const WayOfSupport = (props: PropTypes) => {
   );
 };
 
-
-// ----- Proptypes ----- //
-
-WayOfSupport.defaultProps = {
-  infoText: '',
-  modifierClass: '',
-  ctaModifierClass: '',
-};
-
-
 // ----- Exports ----- //
 
 export default WayOfSupport;

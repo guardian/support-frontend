@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { User } from 'helpers/user/userReducer';
 import TextInput from 'components/textInput/textInput';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 
@@ -73,7 +72,7 @@ function FormFields(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  const user: User = state.page.user;
+  const { user } = state.page;
 
   return {
     name: user.fullName,

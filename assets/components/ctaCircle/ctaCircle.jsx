@@ -41,7 +41,6 @@ const CtaCircle = (props: PropTypes) => {
 
 
 CtaCircle.defaultProps = {
-  modifierClass: null,
   url: null,
   onClick: null,
   tabIndex: 0,

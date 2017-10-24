@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
@@ -19,13 +18,14 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
 
-import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
@@ -41,7 +41,7 @@ import { parseContrib } from '../../helpers/contributions';
 const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
 const country = detectCountry();
-const currency = currencyForCountry(country);
+const currency = detectCurrency(country);
 
 const title = {
   annual: 'Make an annual contribution',
@@ -104,4 +104,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('regular-contributions-page'));
+renderPage(content, 'regular-contributions-page');

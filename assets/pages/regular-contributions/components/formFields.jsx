@@ -38,13 +38,12 @@ function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
   if (country === 'US') {
 
     const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
-      ({ value: stateCode, text: usStates[stateCode] }),
-    );
+      ({ value: stateCode, text: usStates[stateCode] }));
 
     // Sets the initial state to the first in the dropdown.
     stateUpdate(options[0].value);
 
-    return <SelectInput id={'qa-state-dropdown'} onChange={stateUpdate} options={options} />;
+    return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
 
   }
 

@@ -8,13 +8,19 @@ import 'ophan';
 import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
+import * as googleTagManager from 'helpers/tracking/googleTagManager';
+
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { detect } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
+import type { Dimensions } from 'helpers/tracking/googleTagManager';
 import { getQueryParams, getQueryParameter } from 'helpers/url';
+
 
 import type { Action } from './pageActions';
 
@@ -24,6 +30,7 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  currency: Currency,
   otherQueryParams: Array<[string, string]>,
   country: IsoCountry,
   abParticipations: Participations,
@@ -39,6 +46,13 @@ export type PreloadedState = {
 
 // ----- Functions ----- //
 
+function doNotTrack(): boolean {
+  // $FlowFixMe
+  const doNotTrackFlag = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+
+  return doNotTrackFlag === '1' || doNotTrackFlag === 'yes';
+}
+
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
 
@@ -49,6 +63,17 @@ function analyticsInitialisation(participations: Participations): void {
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
+  if (!(doNotTrack())) {
+
+    const dimensions:Dimensions = {
+      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+      experience: abTest.getVariantsAsString(participations),
+    };
+
+    googleTagManager.init();
+    googleTagManager.pushDimensions(dimensions);
+  }
   // Logging.
   logger.init();
 
@@ -57,8 +82,9 @@ function analyticsInitialisation(participations: Participations): void {
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
-  preloadedState: PreloadedState = {},
+  preloadedState: ?PreloadedState = {},
   country: IsoCountry,
+  currency: Currency,
 ): CommonState {
 
   const acquisition = getAcquisition();
@@ -70,17 +96,18 @@ function buildInitialState(
     otherQueryParams,
     country,
     abParticipations,
+    currency,
   }, preloadedState);
 
 }
 
 // Sets up the common reducer with its initial state.
-function createCommonReducer(
-  initialState: CommonState): (CommonState, Action) => CommonState {
+function createCommonReducer(initialState: CommonState): (CommonState, Action) => CommonState {
 
   function commonReducer(
     state: CommonState = initialState,
-    action: Action): CommonState {
+    action: Action,
+  ): CommonState {
 
     switch (action.type) {
 
@@ -100,7 +127,7 @@ function createCommonReducer(
 
 // For pages that don't need Redux.
 function statelessInit() {
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
 
@@ -109,14 +136,20 @@ function statelessInit() {
 // Initialises the page.
 function init(
   pageReducer: Object,
-  preloadedState?: PreloadedState,
+  preloadedState: ?PreloadedState = null,
   middleware: ?Function,
 ) {
 
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
+  const currency: Currency = detectCurrency(country);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  const initialState: CommonState = buildInitialState(participations, preloadedState, country);
+  const initialState: CommonState = buildInitialState(
+    participations,
+    preloadedState,
+    country,
+    currency,
+  );
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(
@@ -124,9 +157,7 @@ function init(
     undefined,
     middleware,
   );
-
 }
-
 
 // ----- Exports ----- //
 

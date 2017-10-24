@@ -13,8 +13,7 @@ export type BillingPeriod = 'Monthly' | 'Annual';
 export type ContribError =
   | 'tooLittle'
   | 'tooMuch'
-  | 'invalidEntry'
-  ;
+  | 'invalidEntry';
 
 export type Amount = {
   value: string,
@@ -69,7 +68,7 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
   let error = null;
   const numericAmount = Number(input);
 
-  if (input === undefined || input === null || input === '' || isNaN(numericAmount)) {
+  if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
   } else if (numericAmount < CONFIG[contrib].min) {
     error = 'tooLittle';

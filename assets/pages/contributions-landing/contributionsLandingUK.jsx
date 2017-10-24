@@ -3,8 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { applyMiddleware } from 'redux';
+import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
@@ -13,6 +12,7 @@ import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
@@ -21,7 +21,11 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 
 // ----- Page Startup ----- //
 
-const store = pageInit(reducer, undefined, applyMiddleware(thunkMiddleware));
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+
+const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
 
@@ -45,4 +49,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('contributions-landing-page-uk'));
+renderPage(content, 'contributions-landing-page-uk');

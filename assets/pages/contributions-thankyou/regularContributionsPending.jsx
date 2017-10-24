@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -12,6 +11,7 @@ import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //
@@ -31,7 +31,8 @@ const content = (
           <h2 id="qa-thank-you-message" className="thankyou__subheading">
             <p>You have helped to make the Guardian&#39;s future more secure.
               Look out for an email confirming your recurring
-              payment.</p>
+              payment.
+            </p>
           </h2>
           <CtaLink
             ctaId="return-to-the-guardian"
@@ -43,8 +44,7 @@ const content = (
         <InfoSection heading="Questions?" className="thankyou__questions">
           <p>
             If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">
-            contact us</a>
+            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
           </p>
         </InfoSection>
         <InfoSection
@@ -64,7 +64,4 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('regular-contributions-pending-page'),
-);
+renderPage(content, 'regular-contributions-pending-page');

@@ -5,8 +5,7 @@
 export type Domain
   = 'thegulocal.com'
   | 'code.dev-theguardian.com'
-  | 'theguardian.com'
-  ;
+  | 'theguardian.com';
 
 export type Env = 'DEV' | 'CODE' | 'PROD';
 
@@ -63,7 +62,9 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
 // Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
 function getBaseDomain(): Domain {
 
-  const origin = window.location.origin;
+  const loc = window.location;
+  const origin = window.location.origin ||
+    `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
 
   if (origin.includes(DOMAINS.DEV)) {
     return DOMAINS.DEV;

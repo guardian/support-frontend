@@ -9,8 +9,7 @@ import * as payPalExpressCheckout from './payPalExpressCheckout';
 export type Action =
   | { type: 'START_PAYPAL_EXPRESS_CHECKOUT' }
   | { type: 'PAYPAL_EXPRESS_CHECKOUT_LOADED' }
-  | { type: 'PAYPAL_EXPRESS_ERROR', message: string }
-  ;
+  | { type: 'PAYPAL_EXPRESS_ERROR', message: string };
 
 // ----- Actions ----- //
 

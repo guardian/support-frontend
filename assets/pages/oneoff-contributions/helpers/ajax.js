@@ -48,12 +48,12 @@ type OneOffContribFields = {
 function requestData(paymentToken: string, getState: () => PageState) {
 
   const state = getState();
-  const user = state.page.user;
+  const { user } = state.page;
   const ophanIds: OphanIds = getOphanIds();
 
   if (user.fullName !== null && user.fullName !== undefined &&
     user.email !== null && user.email !== undefined) {
-    const referrerAcquisitionData = state.common.referrerAcquisitionData;
+    const { referrerAcquisitionData } = state.common;
 
     const oneOffContribFields: OneOffContribFields = {
       name: user.fullName,

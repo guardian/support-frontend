@@ -67,15 +67,14 @@ export type Campaign = $Keys<typeof campaigns>;
 // Retrieves the user's campaign, if known, from the campaign code.
 function getCampaign(acquisition: ReferrerAcquisitionData): ?Campaign {
 
-  const campaignCode = acquisition.campaignCode;
+  const { campaignCode } = acquisition;
 
   if (!campaignCode) {
     return null;
   }
 
   return Object.keys(campaigns).find(campaign =>
-    campaigns[campaign].includes(campaignCode),
-  ) || null;
+    campaigns[campaign].includes(campaignCode)) || null;
 
 }
 

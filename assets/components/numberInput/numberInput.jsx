@@ -36,13 +36,3 @@ export default function NumberInput(props: PropTypes) {
   );
 
 }
-
-
-// ----- Proptypes ----- //
-
-NumberInput.defaultProps = {
-  selected: false,
-  placeholder: null,
-  onKeyPress: null,
-  ariaDescribedBy: null,
-};

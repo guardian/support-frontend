@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -12,6 +11,7 @@ import InfoSection from 'components/infoSection/infoSection';
 
 import { routes } from 'helpers/routes';
 import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //
@@ -43,8 +43,7 @@ const content = (
         <InfoSection heading="Questions?" className="existing__questions">
           <p>
             If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">
-            contact us</a>
+            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
           </p>
         </InfoSection>
       </div>
@@ -53,7 +52,4 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('regular-contributions-existing-page'),
-);
+renderPage(content, 'regular-contributions-existing-page');

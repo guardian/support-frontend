@@ -12,6 +12,7 @@ import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 
@@ -48,6 +49,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  currency: Currency,
   abTests: Participations,
 };
 
@@ -187,8 +189,10 @@ function getContribKey(contribType: Contrib) {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
+  currency: IsoCurrency,
+  isoCountry: string,
   intCmp: ?string,
-  isoCountry: string): ContribAttrs => {
+): ContribAttrs => {
 
   const contType = getContribKey(contribType);
   const subheading = contribSubheading[contType];
@@ -196,6 +200,7 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
+  params.append('currency', currency);
 
   if (intCmp !== null && intCmp !== undefined) {
     params.append('INTCMP', intCmp);
@@ -204,7 +209,9 @@ const getContribAttrs = (
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
-  return Object.assign({}, bundles.contrib, { ctaId, ctaLink, subheading, ctaAccessibilityHint });
+  return Object.assign({}, bundles.contrib, {
+    ctaId, ctaLink, subheading, ctaAccessibilityHint,
+  });
 
 };
 
@@ -229,8 +236,9 @@ function ContributionBundle(props: PropTypes) {
     getContribAttrs(
       props.contribType,
       props.contribAmount,
-      props.intCmp,
+      props.currency.iso,
       props.isoCountry,
+      props.intCmp,
     );
 
   const onClick = () => {
@@ -334,6 +342,7 @@ function mapStateToProps(state) {
     campaign: state.common.campaign,
     otherQueryParams: state.common.otherQueryParams,
     isoCountry: state.common.country,
+    currency: state.common.currency,
     abTests: state.common.abParticipations,
   };
 }

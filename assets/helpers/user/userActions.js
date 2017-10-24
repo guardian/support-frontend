@@ -12,8 +12,7 @@ export type Action =
   | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
-  | { type: 'SET_GNM_MARKETING', preference: boolean }
-  ;
+  | { type: 'SET_GNM_MARKETING', preference: boolean };
 
 
 // ----- Actions Creators ----- //

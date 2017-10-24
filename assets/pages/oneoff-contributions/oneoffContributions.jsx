@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
@@ -17,13 +16,14 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 import FormFields from './components/formFields';
@@ -37,7 +37,7 @@ import { setPayPalButton } from './oneoffContributionsActions';
 
 const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
 const country = detectCountry();
-const currency = currencyForCountry(country);
+const currency = detectCurrency(country);
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -95,4 +95,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('oneoff-contributions-page'));
+renderPage(content, 'oneoff-contributions-page');
