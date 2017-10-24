@@ -5,7 +5,6 @@
 import { createStore, combineReducers } from 'redux';
 import 'ophan';
 
-import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -55,13 +54,6 @@ function doNotTrack(): boolean {
 
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
-
-  // Google analytics.
-  ga.init();
-  ga.setDimension('campaignCodeBusinessUnit', getQueryParameter('CMP_BUNIT'));
-  ga.setDimension('campaignCodeTeam', getQueryParameter('CMP_TU'));
-  ga.setDimension('experience', abTest.getVariantsAsString(participations));
-  ga.trackPageview();
 
   if (!(doNotTrack())) {
 
