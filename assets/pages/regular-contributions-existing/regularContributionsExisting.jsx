@@ -10,7 +10,8 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 
 import { routes } from 'helpers/routes';
-import { statelessInit as pageInit, renderPage } from 'helpers/page/page';
+import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //

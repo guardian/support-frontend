@@ -10,7 +10,8 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
 
-import { statelessInit as pageInit, renderPage } from 'helpers/page/page';
+import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //

@@ -11,7 +11,8 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import { init as pageInit, renderPage } from 'helpers/page/page';
+import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';

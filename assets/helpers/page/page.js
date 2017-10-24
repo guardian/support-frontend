@@ -9,7 +9,7 @@ import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-import ReactDOM from 'react-dom';
+
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { detect } from 'helpers/internationalisation/country';
 
@@ -148,20 +148,10 @@ function init(
   );
 }
 
-const renderPage = (content: Object, id: string) => {
-  const element: ?Element = document.getElementById(id);
-
-  if (element) {
-    ReactDOM.render(content, element);
-  }
-};
-
-
 // ----- Exports ----- //
 
 export {
   createCommonReducer,
   init,
   statelessInit,
-  renderPage,
 };

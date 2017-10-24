@@ -24,7 +24,8 @@ import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
-import { init as pageInit, renderPage } from 'helpers/page/page';
+import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
