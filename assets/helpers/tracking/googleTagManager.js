@@ -49,6 +49,7 @@ export function init() {
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
+    event: 'DataLayerReady',
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
