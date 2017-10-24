@@ -35,7 +35,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def subscribe(state: CreateZuoraSubscriptionState, services: Services): Future[SendThankYouEmailState] =
     for {
       response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
-      _ <- putMetric(state.paymentMethod.`type`)
+      _ <- putZuoraAccountCreated(state.paymentMethod.`type`)
     } yield getEmailState(state, response.head.accountNumber)
 
   private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
@@ -96,13 +96,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     ))
   }
 
-  private def putMetric(paymentType: String) =
-    if (paymentType == "PayPal")
-      putCloudWatchMetrics("paypal")
-    else
-      putCloudWatchMetrics("stripe")
-
-  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
+  def putZuoraAccountCreated(paymentMethod: String): Future[Unit] =
+    new RecurringContributionsMetrics(paymentMethod.toLowerCase, "monthly")
       .putZuoraAccountCreated().recover({ case _ => () })
 }
