@@ -20,7 +20,7 @@ import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
 
 // New Design Test
-import supportLanding from './supportLanding';
+import supportLanding from './support-landing-ab-test/supportLanding';
 
 
 // ----- Redux Store ----- //
