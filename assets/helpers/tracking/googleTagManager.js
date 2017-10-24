@@ -38,8 +38,8 @@ function getContributionValue() {
 // ----- Exports ---//
 
 export function pushDimensions(dimensions: Dimensions) {
-  const dataLayer = window.googleTagManagerDataLayer || [];
-  dataLayer.push(dimensions);
+  window.googleTagManagerDataLayer =  window.googleTagManagerDataLayer || [];
+  window.googleTagManagerDataLayer.push(dimensions);
 }
 
 export function init() {
