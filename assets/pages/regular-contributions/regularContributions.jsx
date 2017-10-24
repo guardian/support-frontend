@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
@@ -26,6 +25,7 @@ import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
@@ -104,4 +104,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('regular-contributions-page'));
+renderPage(content, 'regular-contributions-page');

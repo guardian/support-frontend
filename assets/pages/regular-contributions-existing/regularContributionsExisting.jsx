@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
@@ -12,6 +11,7 @@ import InfoSection from 'components/infoSection/infoSection';
 
 import { routes } from 'helpers/routes';
 import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //
@@ -52,7 +52,4 @@ const content = (
   </div>
 );
 
-ReactDOM.render(
-  content,
-  document.getElementById('regular-contributions-existing-page'),
-);
+renderPage(content, 'regular-contributions-existing-page');

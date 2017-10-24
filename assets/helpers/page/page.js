@@ -9,6 +9,7 @@ import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
+
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
@@ -156,9 +157,7 @@ function init(
     undefined,
     middleware,
   );
-
 }
-
 
 // ----- Exports ----- //
 

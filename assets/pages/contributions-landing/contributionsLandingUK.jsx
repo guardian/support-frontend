@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -13,6 +12,7 @@ import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
@@ -49,4 +49,4 @@ const content = (
   </Provider>
 );
 
-ReactDOM.render(content, document.getElementById('contributions-landing-page-uk'));
+renderPage(content, 'contributions-landing-page-uk');
