@@ -38,7 +38,7 @@ function getContributionValue() {
 // ----- Exports ---//
 
 export function pushDimensions(dimensions: Dimensions) {
-  const dataLayer = window.googleTagManagerDataLayer;
+  const dataLayer = window.googleTagManagerDataLayer || [];
   dataLayer.push(dimensions);
 }
 
