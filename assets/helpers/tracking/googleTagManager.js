@@ -7,6 +7,7 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 
 export type Dimensions = {|
+  event?: string,
   campaignCodeBusinessUnit?: string,
   campaignCodeTeam?: string,
   experience?: string,
@@ -38,17 +39,20 @@ function getContributionValue() {
 // ----- Exports ---//
 
 export function pushDimensions(dimensions: Dimensions) {
-  const dataLayer = window.googleTagManagerDataLayer;
-  dataLayer.push(dimensions);
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+  window.googleTagManagerDataLayer.push(dimensions);
 }
 
 export function init() {
-  window.googleTagManagerDataLayer = [{
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+
+  window.googleTagManagerDataLayer.push({
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
+    event: 'DataLayerReady',
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
-  }];
+  });
 }

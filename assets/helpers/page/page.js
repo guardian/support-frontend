@@ -66,6 +66,7 @@ function analyticsInitialisation(participations: Participations): void {
   if (!(doNotTrack())) {
 
     const dimensions:Dimensions = {
+      event: 'DimensionsReady',
       campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
       campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
       experience: abTest.getVariantsAsString(participations),
