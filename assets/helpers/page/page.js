@@ -11,10 +11,12 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { detect } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
 import type { Dimensions } from 'helpers/tracking/googleTagManager';
 import { getQueryParams, getQueryParameter } from 'helpers/url';
@@ -28,6 +30,7 @@ import type { Action } from './pageActions';
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  currency: Currency,
   otherQueryParams: Array<[string, string]>,
   country: IsoCountry,
   abParticipations: Participations,
@@ -79,8 +82,9 @@ function analyticsInitialisation(participations: Participations): void {
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
-  preloadedState: PreloadedState = {},
+  preloadedState: ?PreloadedState = {},
   country: IsoCountry,
+  currency: Currency,
 ): CommonState {
 
   const acquisition = getAcquisition();
@@ -92,6 +96,7 @@ function buildInitialState(
     otherQueryParams,
     country,
     abParticipations,
+    currency,
   }, preloadedState);
 
 }
@@ -122,7 +127,7 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
 
 // For pages that don't need Redux.
 function statelessInit() {
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
 
@@ -131,14 +136,20 @@ function statelessInit() {
 // Initialises the page.
 function init(
   pageReducer: Object,
-  preloadedState?: PreloadedState,
+  preloadedState: ?PreloadedState = null,
   middleware: ?Function,
 ) {
 
-  const country: IsoCountry = detect();
+  const country: IsoCountry = detectCountry();
+  const currency: Currency = detectCurrency(country);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-  const initialState: CommonState = buildInitialState(participations, preloadedState, country);
+  const initialState: CommonState = buildInitialState(
+    participations,
+    preloadedState,
+    country,
+    currency,
+  );
   const commonReducer = createCommonReducer(initialState);
 
   return createStore(

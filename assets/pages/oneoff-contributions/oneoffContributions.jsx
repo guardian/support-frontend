@@ -16,8 +16,8 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
-import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
@@ -37,7 +37,7 @@ import { setPayPalButton } from './oneoffContributionsActions';
 
 const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
 const country = detectCountry();
-const currency = currencyForCountry(country);
+const currency = detectCurrency(country);
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
