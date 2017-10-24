@@ -7,6 +7,7 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 
 export type Dimensions = {|
+  event?: string,
   campaignCodeBusinessUnit?: string,
   campaignCodeTeam?: string,
   experience?: string,
