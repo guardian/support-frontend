@@ -19,7 +19,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
 
-import { forCountry as currencyForCountry } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
@@ -41,7 +41,7 @@ import { parseContrib } from '../../helpers/contributions';
 const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
 const country = detectCountry();
-const currency = currencyForCountry(country);
+const currency = detectCurrency(country);
 
 const title = {
   annual: 'Make an annual contribution',
