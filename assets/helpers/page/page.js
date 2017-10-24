@@ -8,6 +8,7 @@ import 'ophan';
 import * as ga from 'helpers/tracking/ga';
 import * as abTest from 'helpers/abtest';
 import * as logger from 'helpers/logger';
+import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
@@ -16,7 +17,9 @@ import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisi
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abtest';
+import type { Dimensions } from 'helpers/tracking/googleTagManager';
 import { getQueryParams, getQueryParameter } from 'helpers/url';
+
 
 import type { Action } from './pageActions';
 
@@ -42,6 +45,13 @@ export type PreloadedState = {
 
 // ----- Functions ----- //
 
+function doNotTrack(): boolean {
+  // $FlowFixMe
+  const doNotTrackFlag = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+
+  return doNotTrackFlag === '1' || doNotTrackFlag === 'yes';
+}
+
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
 
@@ -52,6 +62,17 @@ function analyticsInitialisation(participations: Participations): void {
   ga.setDimension('experience', abTest.getVariantsAsString(participations));
   ga.trackPageview();
 
+  if (!(doNotTrack())) {
+
+    const dimensions:Dimensions = {
+      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+      experience: abTest.getVariantsAsString(participations),
+    };
+
+    googleTagManager.init();
+    googleTagManager.pushDimensions(dimensions);
+  }
   // Logging.
   logger.init();
 
