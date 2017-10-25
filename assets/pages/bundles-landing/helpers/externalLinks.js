@@ -60,6 +60,21 @@ const customPromos : {
     paper: 'p/NEOPC',
     paperDig: 'p/NDEOPC',
   },
+  seven_fifty_middle: {
+    digital: 'p/D750MIDDLE',
+    paper: 'p/N750MIDDLE',
+    paperDig: 'p/ND750MIDDLE',
+  },
+  seven_fifty_end: {
+    digital: 'p/D750END',
+    paper: 'p/N750END',
+    paperDig: 'p/ND750END',
+  },
+  seven_fifty_email: {
+    digital: 'p/D750EMAIL',
+    paper: 'p/N750EMAIL',
+    paperDig: 'p/ND750EMAIL',
+  },
 };
 
 
