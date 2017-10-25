@@ -13,7 +13,7 @@ fi
 
 # Installing packages via yarn
 
-${YARN_LOCATION}/dist/bin/yarn install
+${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn install
 
 # Stop and starts flow daemon
 
