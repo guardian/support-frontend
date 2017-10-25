@@ -40,10 +40,25 @@ const defaultPromos: PromoCodes = {
 const customPromos : {
   [Campaign]: PromoCodes,
 } = {
-  baseline_test: {
-    digital: 'p/DJ6CCJZLL',
-    paper: 'p/NJ6CCQLD4',
-    paperDig: 'p/NJ6CCSVMC',
+  ease_of_payment_test_currency_symbol_in_cta: {
+    digital: 'p/DEOPCSICTA',
+    paper: 'p/NEOPCSICTA',
+    paperDig: 'p/NDEOPCSICTA',
+  },
+  ease_of_payment_test_just_a_minute: {
+    digital: 'p/DEOPJAM',
+    paper: 'p/NEOPJAM',
+    paperDig: 'p/NDEOPJAM',
+  },
+  ease_of_payment_test_just_one_pound: {
+    digital: 'p/DEOPJOP',
+    paper: 'p/NEOPJOP',
+    paperDig: 'p/NDEOPJOP',
+  },
+  ease_of_payment_test_control: {
+    digital: 'p/DEOPC',
+    paper: 'p/NEOPC',
+    paperDig: 'p/NDEOPC',
   },
 };
 
