@@ -12,6 +12,6 @@ class NoCacheActionBuilder(
   implicit private val ec = executionContext
 
   override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] =
-    block(request).map(_.withHeaders("Cache-Control" -> "no-cache, private", "Pragma" -> "no-cache", "Expires" -> "0"))
+    block(request).map(_.withHeaders(CacheControl.noCache, "Pragma" -> "no-cache", "Expires" -> "0"))
 
 }
