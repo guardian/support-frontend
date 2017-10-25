@@ -48,11 +48,16 @@ trait Controllers {
     controllerComponents
   )
 
-  lazy val testUsersContoller = new TestUsersManagement(
+  lazy val testUsersController = new TestUsersManagement(
     authAction,
     controllerComponents,
     testUsers,
     appConfig.supportUrl,
     appConfig.guardianDomain
+  )
+
+  lazy val siteMapController = new SiteMap(
+    actionRefiners,
+    controllerComponents
   )
 }
