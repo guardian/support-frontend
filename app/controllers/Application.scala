@@ -1,9 +1,12 @@
 package controllers
 
+import actions.NoCacheAction
 import actions.CustomActionBuilders
 import assets.AssetsResolver
+import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
+import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
 
@@ -24,6 +27,17 @@ class Application(
 
   def indexRedirect: Action[AnyContent] = CachedAction() { implicit request =>
     Redirect("/uk", request.queryString)
+  }
+
+  def geoRedirect: Action[AnyContent] = NoCacheAction() { implicit request =>
+
+    val redirectUrl = request.getFastlyCountry match {
+      case Some(UK) => "/uk"
+      case Some(US) => "/us"
+      case _ => "https://membership.theguardian.com/supporter"
+    }
+
+    Redirect(redirectUrl, request.queryString)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
