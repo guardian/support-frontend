@@ -17,7 +17,11 @@ class SiteMap(
                             { supportLandingPages }
                             { contributeLandingPages }
                             <url>
-                              <loc>{ routes.Application.indexRedirect.absoluteURL(secure = true) }</loc>
+                              <loc>{ routes.Application.reactTemplate(
+                                title = "Support the Guardian",
+                                id = "bundles-landing-page",
+                                js = "bundlesLandingPage.js"
+                              ).absoluteURL(secure = true) }</loc>
                               <priority>0.8</priority>
                             </url>
                           </urlset>
