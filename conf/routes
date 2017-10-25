@@ -16,6 +16,8 @@ GET /sitemap.xml                                    controllers.SiteMap.sitemap
 
 GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
 
+GET /geo-redirect                                     controllers.Application.geoRedirect()
+
 # ----- Contributions ----- #
 
 GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
