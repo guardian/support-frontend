@@ -7,7 +7,7 @@ GET /healthcheck                                    controllers.Application.heal
 
 GET /uk                                             controllers.Application.reactTemplate(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js")
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
-GET /                                               controllers.Application.indexRedirect
+GET /                                               controllers.Application.geoRedirect()
 
 
 
@@ -15,8 +15,6 @@ GET /                                               controllers.Application.inde
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
 GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
-
-GET /geo-redirect                                     controllers.Application.geoRedirect()
 
 # ----- Contributions ----- #
 

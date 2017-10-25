@@ -25,10 +25,6 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
-  def indexRedirect: Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect("/uk", request.queryString)
-  }
-
   def geoRedirect: Action[AnyContent] = NoCacheAction() { implicit request =>
 
     val redirectUrl = request.fastlyCountry match {
