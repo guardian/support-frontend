@@ -14,13 +14,13 @@ class SiteMap(
 
   def sitemap: Action[AnyContent] = CachedAction() { implicit request =>
     val sitemapResponse = <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-                { supportLandingPages }
-                { contributeLandingPages }
-                <url>
-                  <loc>{ routes.Application.indexRedirect.absoluteURL(secure = true) }</loc>
-                  <priority>0.8</priority>
-                </url>
-              </urlset>
+                            { supportLandingPages }
+                            { contributeLandingPages }
+                            <url>
+                              <loc>{ routes.Application.indexRedirect.absoluteURL(secure = true) }</loc>
+                              <priority>0.8</priority>
+                            </url>
+                          </urlset>
 
     Ok(sitemapResponse)
   }
@@ -28,7 +28,10 @@ class SiteMap(
   private def supportLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>
-        { routes.Application.reactTemplate(title = "Support the Guardian", id = "bundles-landing-page", js = "bundlesLandingPage.js").absoluteURL(secure = true) }
+        { routes.Application.reactTemplate(
+            title = "Support the Guardian",
+            id = "bundles-landing-page",
+            js = "bundlesLandingPage.js").absoluteURL(secure = true) }
       </loc>
       <priority>1.0</priority>
     </url>
