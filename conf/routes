@@ -11,6 +11,10 @@ GET /                                               controllers.Application.geoR
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
 
+# ----- Events Redirect ----- #
+GET /events/archive                                 controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
+GET /event/*eventId                                 controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
+
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
