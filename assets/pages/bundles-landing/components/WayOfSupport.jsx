@@ -7,6 +7,9 @@ import React from 'react';
 import CtaCircle from 'components/ctaCircle/ctaCircle';
 import GridImage from 'components/gridImage/gridImage';
 
+import type { ImageId } from 'helpers/theGrid';
+
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -15,7 +18,7 @@ type PropTypes = {
   ctaText: string,
   onClick: () => void,
   modifierClass: ?string,
-  gridImg: string,
+  gridImg: ImageId,
   imgAlt: ?string,
 };
 

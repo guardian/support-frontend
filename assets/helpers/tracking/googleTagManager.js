@@ -5,6 +5,8 @@ import * as storage from 'helpers/storage';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { getOphanIds } from 'helpers/tracking/acquisitions';
+import type { OphanIds } from 'helpers/tracking/acquisitions';
 
 export type Dimensions = {|
   event?: string,
@@ -45,11 +47,13 @@ export function pushDimensions(dimensions: Dimensions) {
 
 export function init() {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+  const ophanIds: OphanIds = getOphanIds();
 
   window.googleTagManagerDataLayer.push({
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
+    ophanBrowserID: ophanIds.browserId,
     event: 'DataLayerReady',
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
