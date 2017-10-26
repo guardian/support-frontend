@@ -9,6 +9,7 @@ import type { Store } from 'redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
+import Mothership from './components/mothershipNewDesign';
 import Contribute from './components/contributeNewDesign';
 import Subscribe from './components/subscribeNewDesign';
 import WhySupport from './components/whySupportNewDesign';
@@ -23,6 +24,7 @@ export default function supportLanding(store: Store) {
     <Provider store={store}>
       <div className="gu-content support-landing">
         <SimpleHeader />
+        <Mothership />
         <Contribute />
         <Subscribe />
         <WhySupport />
