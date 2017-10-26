@@ -8,6 +8,8 @@ import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
 import services.TestUserService
+import utils.RequestCountry
+
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,6 +57,10 @@ class CustomActionBuilders(
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
-  val NoCacheAction = new NoCacheAction(cc.parsers.defaultBodyParser, cc.executionContext)
+  val GeoTargetedCachedAction = new CachedAction(
+    cc.parsers.defaultBodyParser,
+    cc.executionContext,
+    List("Vary" -> RequestCountry.fastlyCountryHeader)
+  )
 
 }

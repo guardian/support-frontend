@@ -1,6 +1,5 @@
 package controllers
 
-import actions.NoCacheAction
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
@@ -25,7 +24,7 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
-  def geoRedirect: Action[AnyContent] = NoCacheAction() { implicit request =>
+  def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
 
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
