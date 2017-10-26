@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Installing yarn
-YARN_VERSION="0.23.2"
+YARN_VERSION="1.2.1"
 YARN_LOCATION="tools/${YARN_VERSION}"
 
 if [ ! -d "$YARN_LOCATION" ]; then
@@ -13,15 +13,15 @@ fi
 
 # Installing packages via yarn
 
-${YARN_LOCATION}/dist/bin/yarn install
+${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn install
 
 # Stop and starts flow daemon
 
-${YARN_LOCATION}/dist/bin/yarn flow stop
+${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn flow stop
 
-${YARN_LOCATION}/dist/bin/yarn flow start
+${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn flow start
 
 # Building the client-side assets
 
-${YARN_LOCATION}/dist/bin/yarn run build-prod
+${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn run build-prod
 
