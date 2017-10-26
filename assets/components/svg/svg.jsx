@@ -546,6 +546,53 @@ function SvgWallMobile() {
 
 }
 
+// Yellow circles flying around.
+function SvgGasParticles() {
+
+  return (
+    <svg className="svg-gas-particles" viewBox="0 0 1400 745" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid">
+      <g fill="none" fillRule="evenodd">
+        <path fill="#FFF" d="M0 0h1400v745H0z" />
+        <circle fillOpacity=".6" fill="#FB0" cx="943" cy="135" r="15" />
+        <circle fillOpacity=".4" fill="#FB0" cx="969" cy="135" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="989" cy="135" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="954" cy="135" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="1157" cy="515" r="15" />
+        <circle fillOpacity=".05" fill="#FB0" cx="1172" cy="495" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="220" cy="97" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="201" cy="97" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="231" cy="103" r="15" />
+        <circle fillOpacity=".6" fill="#FB0" cx="146" cy="700" r="15" />
+        <circle fillOpacity=".4" fill="#FB0" cx="146" cy="690" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="146" cy="675" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="146" cy="680" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="146" cy="683" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="85" cy="54" r="15" />
+        <circle fillOpacity=".6" fill="#FB0" cx="1321.665" cy="343.26" r="15" />
+        <circle fillOpacity=".4" fill="#FB0" cx="1330.325" cy="338.26" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1343.316" cy="330.76" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1338.986" cy="333.26" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1336.388" cy="334.76" r="15" />
+        <circle fillOpacity=".3" fill="#FB0" cx="1257" cy="651" r="15" />
+        <circle fillOpacity=".3" fill="#FB0" cx="1038" cy="422" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="1023" cy="416" r="15" />
+        <circle fillOpacity=".3" fill="#FB0" cx="923" cy="210" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="908" cy="225" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1095" cy="560" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1242" cy="93" r="15" />
+        <circle fillOpacity=".2" fill="#FB0" cx="1236" cy="102" r="15" />
+        <circle fillOpacity=".6" fill="#FB0" cx="889" cy="532" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="909" cy="542" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="900" cy="542" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="896" cy="539" r="15" />
+        <circle fillOpacity=".1" fill="#FB0" cx="891" cy="536" r="15" />
+        <circle fillOpacity=".4" fill="#FB0" cx="742" cy="33" r="15" />
+      </g>
+    </svg>
+  );
+
+}
+
 
 // ----- Exports ----- //
 
@@ -570,4 +617,5 @@ export {
   SvgScribble,
   SvgWallDesktop,
   SvgWallMobile,
+  SvgGasParticles,
 };
