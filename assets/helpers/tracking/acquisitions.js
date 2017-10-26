@@ -60,6 +60,15 @@ const campaigns : {
   ease_of_payment_test_control: [
     `${easeOfPaymentTestPrefix}_control`,
   ],
+  seven_fifty_middle: [
+    'gdnwb_copts_editorial_memco_seven_fifty_middle',
+  ],
+  seven_fifty_end: [
+    'gdnwb_copts_editorial_memco_seven_fifty_end',
+  ],
+  seven_fifty_email: [
+    'gdnwb_copts_email_memco_seven_fifty',
+  ],
 };
 
 export type Campaign = $Keys<typeof campaigns>;
