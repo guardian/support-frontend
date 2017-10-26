@@ -9,7 +9,7 @@ GET /uk                                             controllers.Application.reac
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /                                               controllers.Application.geoRedirect()
 
-
+GET /sitemap.xml                                    controllers.SiteMap.sitemap
 
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it

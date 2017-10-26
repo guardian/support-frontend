@@ -43,19 +43,31 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 // ----- Campaigns ----- //
 
-const baselineTestPrefix = 'gdnwb_copts_memco_sandc_support_baseline_support';
+const easeOfPaymentTestPrefix = 'gdnwb_copts_memco_epic_ease_of_payment';
 
 const campaigns : {
   [string]: string[],
 } = {
-  baseline_test: [
-    `${baselineTestPrefix}_banner`,
-    `${baselineTestPrefix}_epic`,
-    `${baselineTestPrefix}_liveblog`,
-    `${baselineTestPrefix}_header_become_supporter`,
-    `${baselineTestPrefix}_header_subscribe`,
-    `${baselineTestPrefix}_side_menu_become_supporter`,
-    `${baselineTestPrefix}_side_menu_subscribe`,
+  ease_of_payment_test_currency_symbol_in_cta: [
+    `${easeOfPaymentTestPrefix}_currency_symbol_in_cta`,
+  ],
+  ease_of_payment_test_just_a_minute: [
+    `${easeOfPaymentTestPrefix}_just_a_minute`,
+  ],
+  ease_of_payment_test_just_one_pound: [
+    `${easeOfPaymentTestPrefix}_just_one_pound`,
+  ],
+  ease_of_payment_test_control: [
+    `${easeOfPaymentTestPrefix}_control`,
+  ],
+  seven_fifty_middle: [
+    'gdnwb_copts_editorial_memco_seven_fifty_middle',
+  ],
+  seven_fifty_end: [
+    'gdnwb_copts_editorial_memco_seven_fifty_end',
+  ],
+  seven_fifty_email: [
+    'gdnwb_copts_email_memco_seven_fifty',
   ],
 };
 

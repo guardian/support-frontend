@@ -4,3 +4,5 @@ Disallow: /uk/contribute
 Disallow: /contribute
 
 Allow: /
+
+Sitemap: https://support.theguardian.com/sitemap.xml
