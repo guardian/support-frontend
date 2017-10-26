@@ -32,11 +32,11 @@ class Application(
       case _ => "https://membership.theguardian.com/supporter"
     }
 
-    Redirect(redirectUrl, request.queryString)
+    Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location, request.queryString)
+    Redirect(location, request.queryString, status = FOUND)
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
