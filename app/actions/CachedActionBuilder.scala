@@ -25,7 +25,7 @@ class CachedActionBuilder(
   }
 
   private def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
-    val (vary, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
-    (header -> vary.map(_._2).mkString(", ")) :: others
+    val (selected, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
+    (header -> selected.map(_._2).mkString(", ")) :: others
   }
 }
