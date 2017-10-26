@@ -7,6 +7,9 @@ import { SvgArrowRightStraight } from 'components/svg/svg';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
 
+import type { Node } from 'react';
+
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -17,13 +20,16 @@ type PropTypes = {
   onClick?: ?Function,
   tabIndex?: number,
   id?: ?string,
+  svg?: Node,
 };
 
 // ----- Component ----- //
 
 export default function CtaLink(props: PropTypes) {
+
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : uuidv4();
   const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
+
   return (
     <div>
       <a
@@ -36,7 +42,7 @@ export default function CtaLink(props: PropTypes) {
         aria-describedby={accessibilityHintId}
       >
         <span>{props.text}</span>
-        <SvgArrowRightStraight />
+        {props.svg}
       </a>
       <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
     </div>
@@ -52,4 +58,5 @@ CtaLink.defaultProps = {
   onClick: null,
   tabIndex: 0,
   id: null,
+  svg: <SvgArrowRightStraight />,
 };
