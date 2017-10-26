@@ -41,7 +41,7 @@ class Application(
   }
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location.concat(path), request.queryString)
+    Redirect(location + path, request.queryString)
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
