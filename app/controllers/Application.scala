@@ -39,6 +39,10 @@ class Application(
     Redirect(location, request.queryString, status = FOUND)
   }
 
+  def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Redirect(location + path, request.queryString)
+  }
+
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, id, js, contributionsPayPalEndpoint))
   }
