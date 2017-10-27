@@ -66,8 +66,24 @@
         height: 400px;
       }
 
+      // Workaround for IE not being capable of doing SVGs.
       @include mq($from: tablet) {
-        height: auto;
+        height: 393px;
+      }
+
+      // Workaround for IE not being capable of doing SVGs.
+      @include mq($from: desktop) {
+        height: 520px;
+      }
+
+      // Workaround for IE not being capable of doing SVGs.
+      @include mq($from: leftCol) {
+        height: 606px;
+      }
+
+      // Workaround for IE not being capable of doing SVGs.
+      @include mq($from: wide) {
+        height: 690px;
       }
     }
 
