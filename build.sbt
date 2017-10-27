@@ -102,10 +102,13 @@ javaOptions in Universal ++= Seq(
 javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.SpacesAroundMultiImports
+import scalariform.formatter.preferences.{DanglingCloseParenthesis, DoubleIndentConstructorArguments, SpacesAroundMultiImports}
+import scalariform.formatter.preferences.Force
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(SpacesAroundMultiImports, false)
+  .setPreference(DoubleIndentConstructorArguments, true)
+  .setPreference(DanglingCloseParenthesis, Force)
 
 excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value ||
   "Routes.scala" ||

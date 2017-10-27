@@ -8,11 +8,11 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext
 
 class Login(
-  val authConfig: GoogleAuthConfig,
-  override val wsClient: WSClient,
-  val controllerComponents: ControllerComponents
+    val authConfig: GoogleAuthConfig,
+    override val wsClient: WSClient,
+    val controllerComponents: ControllerComponents
 )(implicit executionContext: ExecutionContext)
-    extends LoginSupport with BaseController {
+  extends LoginSupport with BaseController {
   /**
    * Shows UI for login button and logout error feedback
    */

@@ -32,11 +32,11 @@ package object stepfunctions {
   }
 
   case class StateMachineExecutionStatus(
-    input: String,
-    output: String,
-    startDate: DateTime,
-    stopDate: Option[DateTime],
-    status: String
+      input: String,
+      output: String,
+      startDate: DateTime,
+      stopDate: Option[DateTime],
+      status: String
   )
 
 }
