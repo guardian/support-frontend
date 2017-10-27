@@ -6,6 +6,8 @@ packageSummary := "Support Play APP"
 
 scalaVersion := "2.11.8"
 
+import scala.sys.process._
+
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
 
 def commitId(): String = try {
@@ -26,7 +28,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoPackage := "app",
   buildInfoOptions += BuildInfoOption.ToMap,
   scalastyleFailOnError := true,
-  testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+  testScalastyle := scalastyle.in(Compile).toTask("").value,
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
