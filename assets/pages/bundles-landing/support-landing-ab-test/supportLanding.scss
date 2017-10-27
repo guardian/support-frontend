@@ -62,20 +62,57 @@
       color: #fff;
       position: absolute;
       top: $gu-v-spacing * 1.5;
-      left: 150px;
-      border-radius: 325px;
-      height: 650px;
-      width: 650px;
+
+      @include mq($from: desktop) {
+        top: $gu-v-spacing;
+        left: 110px;
+        border-radius: 285px;
+        height: 490px;
+        width: 490px;
+      }
+
+      @include mq($from: leftCol) {
+        left: 130px;
+        border-radius: 285px;
+        height: 570px;
+        width: 570px;
+      }
+
+      @include mq($from: wide) {
+        left: 150px;
+        border-radius: 325px;
+        height: 650px;
+        width: 650px;
+      }
     }
 
     .mothership-new-design__heading {
-      margin-top: 90px;
-      margin-left: 125px;
-      width: 440px;
-      font-size: 56px;
-      line-height: 58px;
-      font-weight: 100;
       font-family: $gu-egyptian-web;
+      font-weight: 100;
+
+      @include mq($from: desktop) {
+        margin-top: 60px;
+        margin-left: 100px;
+        width: 280px;
+        font-size: 36px;
+        line-height: 38px;
+      }
+
+      @include mq($from: leftCol) {
+        margin-top: 75px;
+        margin-left: 110px;
+        width: 360px;
+        font-size: 46px;
+        line-height: 48px;
+      }
+
+      @include mq($from: wide) {
+        margin-top: 90px;
+        margin-left: 125px;
+        width: 440px;
+        font-size: 56px;
+        line-height: 58px;
+      }
     }
 
     .mothership-new-design__supporter-number {
@@ -84,10 +121,27 @@
     }
 
     .mothership-new-design__copy {
-      width: 400px;
-      margin-left: 125px;
-      margin-top: $gu-v-spacing * 1.5;
-      line-height: 20px;
+      @include mq($from: desktop) {
+        width: 300px;
+        margin-left: 100px;
+        margin-top: $gu-v-spacing * 1.5;
+        font-size: 14px;
+        line-height: 18px;
+      }
+
+      @include mq($from: leftCol) {
+        width: 320px;
+        margin-left: 110px;
+        margin-top: $gu-v-spacing * 1.5;
+        font-size: 16px;
+        line-height: 20px;
+      }
+
+      @include mq($from: wide) {
+        width: 400px;
+        margin-left: 125px;
+        margin-top: $gu-v-spacing * 1.5;
+      }
 
       &::before {
         content: " ";
