@@ -55,13 +55,36 @@
       background-color: #fff;
       padding: 0;
       position: relative;
+      overflow: hidden;
+      height: 500px;
+
+      @include mq($from: mobileLandscape) {
+        height: 440px;
+      }
+
+      @include mq($from: phablet) {
+        height: 400px;
+      }
+
+      @include mq($from: tablet) {
+        height: auto;
+      }
     }
 
     .mothership-new-design__circle {
       background-color: gu-colour(guardian-brand);
       color: #fff;
       position: absolute;
-      top: $gu-v-spacing * 1.5;
+      top: -80px;
+      left: -170px;
+      border-radius: 285px;
+      height: 490px;
+      width: 490px;
+
+      @include mq($from: mobileLandscape) {
+        top: -100px;
+        left: -120px;
+      }
 
       @include mq($from: desktop) {
         top: $gu-v-spacing;
@@ -72,6 +95,7 @@
       }
 
       @include mq($from: leftCol) {
+        top: $gu-v-spacing * 1.5;
         left: 130px;
         border-radius: 285px;
         height: 570px;
@@ -89,13 +113,20 @@
     .mothership-new-design__heading {
       font-family: $gu-egyptian-web;
       font-weight: 100;
+      width: 280px;
+      margin-top: 80px;
+      margin-left: 180px;
+      font-size: 36px;
+      line-height: 38px;
+
+      @include mq($from: mobileLandscape) {
+        margin-top: 100px;
+        margin-left: 130px;
+      }
 
       @include mq($from: desktop) {
         margin-top: 60px;
         margin-left: 100px;
-        width: 280px;
-        font-size: 36px;
-        line-height: 38px;
       }
 
       @include mq($from: leftCol) {
@@ -121,18 +152,24 @@
     }
 
     .mothership-new-design__copy {
-      @include mq($from: desktop) {
+      width: 240px;
+      margin-left: 180px;
+      margin-top: $gu-v-spacing * 1.5;
+      font-size: 14px;
+      line-height: 18px;
+
+      @include mq($from: mobileLandscape) {
         width: 300px;
+        margin-left: 130px;
+      }
+
+      @include mq($from: desktop) {
         margin-left: 100px;
-        margin-top: $gu-v-spacing * 1.5;
-        font-size: 14px;
-        line-height: 18px;
       }
 
       @include mq($from: leftCol) {
         width: 320px;
         margin-left: 110px;
-        margin-top: $gu-v-spacing * 1.5;
         font-size: 16px;
         line-height: 20px;
       }
