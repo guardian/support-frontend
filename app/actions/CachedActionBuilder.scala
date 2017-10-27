@@ -26,6 +26,11 @@ class CachedActionBuilder(
 
   private def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
     val (selected, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
-    (header -> selected.map(_._2).mkString(", ")) :: others
+    if (selected.isEmpty) {
+      others
+    } else {
+      val selectedValues = selected.map(_._2)
+      (header -> selectedValues.mkString(", ")) :: others
+    }
   }
 }
