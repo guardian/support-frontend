@@ -4,40 +4,44 @@
 
 import React from 'react';
 import { SvgCreditCard } from 'components/svg/svg';
-import { connect } from 'react-redux';
+import type { Currency } from 'helpers/internationalisation/currency';
 
 import {
-  openStripeOverlay,
   setupStripeCheckout,
-} from 'helpers/stripeCheckout/stripeCheckoutActions';
-
+  openDialogBox,
+} from 'helpers/stripeCheckout/stripeCheckout';
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  stripeLoaded: boolean,
-  setupStripeCheckout: Function,
-  openStripeOverlay: Function,
-  stripeClick?: Function,
   amount: number,
-  email: string,
   callback: Function,
+  closeHandler?: Function,
+  currency: Currency,
+  email: string,
+  isTestUser: boolean,
+  isValid?: Function,
 };
 /* eslint-enable react/no-unused-prop-types */
+
+
+function isStripeSetup(): boolean {
+  return window.StripeCheckout !== undefined;
+}
 
 
 // ----- Component ----- //
 
 const StripePopUpButton = (props: PropTypes) => {
 
-  if (!props.stripeLoaded) {
-    props.setupStripeCheckout(props.callback);
+  if (!isStripeSetup()) {
+    setupStripeCheckout(props.callback, props.closeHandler, props.currency.iso, props.isTestUser);
   }
 
   const onClick = () => {
-    if (props.stripeClick) {
-      props.stripeClick(() => props.openStripeOverlay(props.amount, props.email));
+    if (props.isValid && props.isValid()) {
+      openDialogBox(props.amount, props.email);
     }
   };
 
@@ -53,38 +57,13 @@ const StripePopUpButton = (props: PropTypes) => {
 
 };
 
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    overlayOpen: state.page.stripeCheckout.overlay,
-    stripeLoaded: state.page.stripeCheckout.loaded,
-    amount: state.page.stripeCheckout.amount,
-  };
-
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    setupStripeCheckout: (callback: Function) => {
-      dispatch(setupStripeCheckout(callback));
-    },
-    openStripeOverlay: (amount: number, email: string) => {
-      dispatch(openStripeOverlay(amount, email));
-    },
-  };
-
-}
-
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
-  stripeClick: callback => callback(),
+  isValid: () => true,
+  closeHandler: () => {},
 };
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(StripePopUpButton);
+export default StripePopUpButton;
