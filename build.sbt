@@ -29,6 +29,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoOptions += BuildInfoOption.ToMap,
   scalastyleFailOnError := true,
   testScalastyle := scalastyle.in(Compile).toTask("").value,
+  testOptions in Test += Tests.Argument("-l", "Selenium"),
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
@@ -117,5 +118,5 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
-addCommandAlias("fast-test", "testOnly -- -l Selenium")
+addCommandAlias("fast-test", "test")
 addCommandAlias("selenium-test", "testOnly -- -n Selenium")
