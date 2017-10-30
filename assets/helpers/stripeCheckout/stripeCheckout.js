@@ -1,9 +1,5 @@
 // @flow
 
-// ----- Imports ----- //
-
-import type { State as StripeState } from './stripeCheckoutReducer';
-
 
 // ----- Setup ----- //
 
@@ -31,30 +27,32 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
-export const setup = (
-  state: StripeState,
+export const setupStripeCheckout = (
+  callback: Function,
+  closeHandler: ?Function,
+  currency: string,
   isTestUser: boolean,
-  token: Function,
-  closed: Function,
-): Promise<void> => loadStripe().then(() => {
+): Promise<*> => loadStripe().then(() => {
+
+  const handleToken = (token) => {
+    callback(token.id);
+  };
+  const defaultCloseHandler: Function = () => {};
 
   stripeHandler = window.StripeCheckout.configure({
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
-    key: isTestUser ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
+    key: (isTestUser || false) ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
     image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
-    currency: state.currency,
-    token,
-    closed,
+    currency,
+    token: handleToken,
+    closed: closeHandler || defaultCloseHandler,
   });
-
 });
 
-
 export const openDialogBox = (amount: number, email: string) => {
-
   if (stripeHandler) {
     stripeHandler.open({
       // Must be passed in pence.
