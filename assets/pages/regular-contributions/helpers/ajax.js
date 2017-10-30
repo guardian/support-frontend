@@ -10,10 +10,13 @@ import type { BillingPeriod, Contrib } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
-import type { PageState } from '../regularContributionsReducers';
-import { checkoutError, setStatusUri, incrementPollCount, resetPollCount, creatingContributor } from '../regularContributionsActions';
-import { billingPeriodFromContrib } from '../../../helpers/contributions';
+import type { User as UserState } from 'helpers/user/userReducer';
+import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
+import type { Participations } from 'helpers/abtest';
 
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { checkoutError, creatingContributor } from '../regularContributionsActions';
+import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
 // ----- Setup ----- //
 
@@ -48,25 +51,25 @@ type PaymentField = 'baid' | 'stripeToken';
 
 // ----- Functions ----- //
 
-const isStateValid = (inputState: Object) => {
-  const { user } = inputState;
-
-  return user.firstName !== null && user.firstName !== undefined &&
-         user.lastName !== null && user.lastName !== undefined &&
-         user.email !== null && user.email !== undefined;
-};
+const isUserValid = (user: UserState) =>
+  user.firstName !== null && user.firstName !== undefined &&
+  user.lastName !== null && user.lastName !== undefined &&
+  user.email !== null && user.email !== undefined;
 
 function requestData(
+  abParticipations: Participations,
+  amount: number,
+  contributionType: Contrib,
+  country: IsoCountry,
+  currency: IsoCurrency,
+  csrf: CsrfState,
   paymentFieldName: PaymentField,
   token: string,
-  contributionType: Contrib,
-  getState: () => PageState,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  user: UserState,
 ) {
 
-  const state = getState().page;
-  const { country } = getState().common;
-
-  if (!isStateValid(state)) {
+  if (!isUserValid(user)) {
     return Promise.resolve({
       ok: false,
       text: () => 'Failed to process payment - missing fields',
@@ -74,16 +77,15 @@ function requestData(
   }
 
   const ophanIds: OphanIds = getOphanIds();
-  const { referrerAcquisitionData } = getState().common;
-  const supportAbTests = participationsToAcquisitionABTest(getState().common.abParticipations);
+  const supportAbTests = participationsToAcquisitionABTest(abParticipations);
 
   const regularContribFields: RegularContribFields = {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
+    firstName: user.firstName,
+    lastName: user.lastName,
     country,
     contribution: {
-      amount: state.stripeCheckout.amount,
-      currency: state.stripeCheckout.currency,
+      amount,
+      currency,
       billingPeriod: billingPeriodFromContrib(contributionType),
     },
     paymentFields: {
@@ -94,64 +96,85 @@ function requestData(
     supportAbTests,
   };
 
-  if (state.user.stateField) {
-    regularContribFields.state = state.user.stateField;
+  if (user.stateField) {
+    regularContribFields.state = user.stateField;
   }
 
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.csrf.token || '' },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
     credentials: 'same-origin',
     body: JSON.stringify(regularContribFields),
   };
 }
 
-function statusPoll(dispatch: Function, getState: Function) {
-  const state = getState();
+let trackingURI = null;
+let pollCount = 0;
 
-  if (state.page.regularContrib.pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', state.common.referrerAcquisitionData.campaignCode);
+function statusPoll(
+  dispatch: Function,
+  csrf: CsrfState,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+) {
+
+  if (pollCount >= MAX_POLLS) {
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', referrerAcquisitionData.campaignCode);
     window.location.assign(url);
   }
 
-  dispatch(incrementPollCount());
+  pollCount += 1;
 
   const request = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': state.page.csrf.token },
+    headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
     credentials: 'same-origin',
   };
+  if (trackingURI != null) {
+    return fetch(trackingURI, request).then((response) => {
+      // eslint-disable-next-line no-use-before-define
+      handleStatus(response, dispatch, csrf, referrerAcquisitionData);
+    });
+  }
 
-  return fetch(state.page.regularContrib.statusUri, request).then((response) => {
-    handleStatus(response, dispatch, getState); // eslint-disable-line no-use-before-define
-  });
+  return null;
 }
 
-function delayedStatusPoll(dispatch: Function, getState: Function) {
-  setTimeout(() => statusPoll(dispatch, getState), POLLING_INTERVAL);
+function delayedStatusPoll(
+  dispatch: Function,
+  csrf: CsrfState,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+) {
+  setTimeout(() => statusPoll(dispatch, csrf, referrerAcquisitionData), POLLING_INTERVAL);
 }
 
-function handleStatus(response: Response, dispatch: Function, getState: Function) {
-  const state = getState();
+
+function handleStatus(
+  response: Response,
+  dispatch: Function,
+  csrf: CsrfState,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+) {
+
   if (response.ok) {
     response.json().then((status) => {
-      dispatch(setStatusUri(status.trackingUri));
+      trackingURI = status.trackingUri;
+
       switch (status.status) {
         case 'pending':
-          delayedStatusPoll(dispatch, getState);
+          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
           break;
         case 'failure':
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', state.common.referrerAcquisitionData.campaignCode));
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', referrerAcquisitionData.campaignCode));
           break;
         default:
-          delayedStatusPoll(dispatch, getState);
+          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
       }
     });
-  } else if (state.page.regularContrib.statusUri) {
-    delayedStatusPoll(dispatch, getState);
+  } else if (trackingURI) {
+    delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
   } else {
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
   }
@@ -159,18 +182,37 @@ function handleStatus(response: Response, dispatch: Function, getState: Function
 
 
 export default function postCheckout(
-  paymentFieldName: PaymentField,
+  abParticipations: Participations,
+  amount: number,
+  csrf: CsrfState,
+  currency: Currency,
   contributionType: Contrib,
+  country: IsoCountry,
+  dispatch: Function,
+  paymentFieldName: PaymentField,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  user: UserState,
 ): Function {
-  return (token: string, dispatch: Function, getState: () => PageState) => {
+  return (token: string) => {
 
-    dispatch(resetPollCount());
+    pollCount = 0;
     dispatch(creatingContributor());
 
-    const request = requestData(paymentFieldName, token, contributionType, getState);
+    const request = requestData(
+      abParticipations,
+      amount,
+      contributionType,
+      country,
+      currency.iso,
+      csrf,
+      paymentFieldName,
+      token,
+      referrerAcquisitionData,
+      user,
+    );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
-      handleStatus(response, dispatch, getState);
+      handleStatus(response, dispatch, csrf, referrerAcquisitionData);
     });
   };
 }
