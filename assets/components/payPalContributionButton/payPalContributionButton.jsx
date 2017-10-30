@@ -18,7 +18,7 @@ import type { Participations } from 'helpers/abtest';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  amount: string,
+  amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
   isoCountry: IsoCountry,
@@ -35,7 +35,7 @@ function payWithPayPal(props: PropTypes) {
   return () => {
     if (props.canClick) {
       paypalContributionsRedirect(
-        Number(props.amount),
+        props.amount,
         props.referrerAcquisitionData,
         props.isoCountry,
         props.errorHandler,
