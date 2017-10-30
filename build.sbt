@@ -117,5 +117,5 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
-addCommandAlias("fast-test", "test-only -- -l Selenium")
-addCommandAlias("selenium-test", "test-only -- -n Selenium")
+addCommandAlias("fast-test", "testOnly -- -l Selenium")
+addCommandAlias("selenium-test", "testOnly -- -n Selenium")
