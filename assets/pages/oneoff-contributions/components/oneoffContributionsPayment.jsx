@@ -55,7 +55,7 @@ function getStatusMessage(isFormEmpty: boolean, error: ?string): Node {
 // If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(
   isFormEmpty: boolean,
-  error: ?Function,
+  error: ?string => void,
 ): Function {
 
   return (): boolean => {
