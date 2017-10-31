@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.ExecutionError
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
@@ -24,7 +23,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
   }
 
   def sendEmail(state: SendThankYouEmailState): Future[Unit] = {
-    putThankYouEmailSent(state.paymentMethod.`type`)
     thankYouEmailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -35,8 +33,4 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
       product = "monthly-contribution"
     )).map(_ => Unit)
   }
-
-  def putThankYouEmailSent(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod.toLowerCase, "monthly")
-      .putThankYouEmailSent().recover({ case _ => () })
 }

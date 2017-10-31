@@ -22,10 +22,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
-    putMetric(state.paymentFields, startupMetric)
+
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
-      _ <- putMetric(state.paymentFields, paymentMethodCreatedMetric)
+      _ <- putMetric(state.paymentFields)
     } yield getCreateSalesforceContactState(state, paymentMethod)
   }
 
@@ -37,6 +37,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
       case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
     }
+
+  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
+    if (paymentType.isLeft)
+      putCloudWatchMetrics("stripe")
+    else
+      putCloudWatchMetrics("paypal")
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
     CreateSalesforceContactState(
@@ -61,18 +67,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
-  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields], f: String => Future[Unit]) =
-    if (paymentType.isLeft)
-      f("stripe")
-    else
-      f("paypal")
-
-  def startupMetric(paymentMethod: String): Future[Unit] =
+  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")
       .putContributionSignUpStartProcess().recover({ case _ => () })
-
-  def paymentMethodCreatedMetric(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putPaymentMethodCreated().recover({ case _ => () })
 
 }

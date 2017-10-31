@@ -1,7 +1,6 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
 import com.gu.services.Services
 import com.gu.support.workers.encoding.StateCodecs._
@@ -28,7 +27,6 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
-        putSalesForceContactCreated(state.paymentMethod.`type`)
         getCreateZuoraSubscriptionState(state, response)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
@@ -46,9 +44,4 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       response.ContactRecord,
       state.acquisitionData
     )
-
-  def putSalesForceContactCreated(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod.toLowerCase, "monthly")
-      .putSalesforceContactCreated().recover({ case _ => () })
-
 }
