@@ -6,6 +6,8 @@ packageSummary := "Support Play APP"
 
 scalaVersion := "2.11.8"
 
+import scala.sys.process._
+
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
 
 def commitId(): String = try {
@@ -26,7 +28,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoPackage := "app",
   buildInfoOptions += BuildInfoOption.ToMap,
   scalastyleFailOnError := true,
-  testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
+  testScalastyle := scalastyle.in(Compile).toTask("").value,
+  testOptions in Test += Tests.Argument("-l", "Selenium"),
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
@@ -100,10 +103,13 @@ javaOptions in Universal ++= Seq(
 javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.SpacesAroundMultiImports
+import scalariform.formatter.preferences.{DanglingCloseParenthesis, DoubleIndentConstructorArguments, SpacesAroundMultiImports}
+import scalariform.formatter.preferences.Force
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(SpacesAroundMultiImports, false)
+  .setPreference(DoubleIndentConstructorArguments, true)
+  .setPreference(DanglingCloseParenthesis, Force)
 
 excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value ||
   "Routes.scala" ||
@@ -112,5 +118,5 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
-addCommandAlias("fast-test", "test-only -- -l Selenium")
-addCommandAlias("selenium-test", "test-only -- -n Selenium")
+addCommandAlias("fast-test", "test")
+addCommandAlias("selenium-test", "testOnly -- -n Selenium")

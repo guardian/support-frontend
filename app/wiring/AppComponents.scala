@@ -12,15 +12,15 @@ import monitoring.SentryLogging
 import play.filters.HttpFiltersComponents
 
 trait AppComponents extends PlayComponents
-    with AhcWSComponents
-    with AssetsComponents
-    with Controllers
-    with Services
-    with ApplicationConfiguration
-    with ActionBuilders
-    with Assets
-    with GoogleAuth
-    with HttpFiltersComponents {
+  with AhcWSComponents
+  with AssetsComponents
+  with Controllers
+  with Services
+  with ApplicationConfiguration
+  with ActionBuilders
+  with Assets
+  with GoogleAuth
+  with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))

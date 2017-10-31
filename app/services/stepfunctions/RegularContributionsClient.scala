@@ -35,15 +35,15 @@ object CreateRegularContributorRequest {
   implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
 }
 case class CreateRegularContributorRequest(
-  firstName: String,
-  lastName: String,
-  country: Country,
-  state: Option[String],
-  contribution: Contribution,
-  paymentFields: Either[StripePaymentToken, PayPalPaymentFields],
-  ophanIds: OphanIds,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  supportAbTests: Set[AbTest]
+    firstName: String,
+    lastName: String,
+    country: Country,
+    state: Option[String],
+    contribution: Contribution,
+    paymentFields: Either[StripePaymentToken, PayPalPaymentFields],
+    ophanIds: OphanIds,
+    referrerAcquisitionData: ReferrerAcquisitionData,
+    supportAbTests: Set[AbTest]
 )
 
 object RegularContributionsClient {
