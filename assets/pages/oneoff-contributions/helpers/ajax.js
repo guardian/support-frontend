@@ -6,11 +6,12 @@ import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 
-import type { OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
+import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { User as UserState } from 'helpers/user/userReducer';
+import type { Participations } from 'helpers/abtest';
+import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { checkoutError } from '../oneoffContributionsActions';
-import type { PageState } from '../oneOffContributionsReducers';
-
 
 // ----- Setup ----- //
 
@@ -46,20 +47,24 @@ type OneOffContribFields = {
 
 // ----- Functions ----- //
 
-function requestData(paymentToken: string, getState: () => PageState) {
+function requestData(
+  abParticipations: Participations,
+  paymentToken: string,
+  currency: IsoCurrency,
+  amount: number,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  user: UserState,
+) {
 
-  const state = getState();
-  const { user } = state.page;
   const ophanIds: OphanIds = getOphanIds();
 
   if (user.fullName !== null && user.fullName !== undefined &&
     user.email !== null && user.email !== undefined) {
-    const { referrerAcquisitionData } = state.common;
 
     const oneOffContribFields: OneOffContribFields = {
       name: user.fullName,
-      currency: state.page.stripeCheckout.currency,
-      amount: state.page.stripeCheckout.amount,
+      currency,
+      amount,
       email: user.email,
       token: paymentToken,
       marketing: user.gnmMarketing,
@@ -76,7 +81,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
       componentId: referrerAcquisitionData.componentId,
       componentType: referrerAcquisitionData.componentType,
       source: referrerAcquisitionData.source,
-      nativeAbTests: participationsToAcquisitionABTest(state.common.abParticipations),
+      nativeAbTests: participationsToAcquisitionABTest(abParticipations),
       refererAbTest: referrerAcquisitionData.abTest,
       isSupport: true,
     };
@@ -96,29 +101,40 @@ function requestData(paymentToken: string, getState: () => PageState) {
 }
 
 export default function postCheckout(
-  paymentToken: string,
+  abParticipations: Participations,
   dispatch: Function,
-  getState: () => PageState,
+  amount: number,
+  currency: Currency,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  user: UserState,
 ) {
 
-  const request = requestData(paymentToken, getState);
-
-  return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
-
-    const url: string = addQueryParamToURL(
-      routes.oneOffContribThankyou,
-      'INTCMP',
-      getState().common.referrerAcquisitionData.campaignCode,
+  return (paymentToken: string) => {
+    const request = requestData(
+      abParticipations,
+      paymentToken,
+      currency.iso,
+      amount,
+      referrerAcquisitionData,
+      user,
     );
 
-    if (response.ok) {
-      window.location.assign(url);
-      return;
-    }
+    return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
 
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  }).catch(() => {
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  });
+      const url: string = addQueryParamToURL(
+        routes.oneOffContribThankyou,
+        'INTCMP',
+        referrerAcquisitionData.campaignCode,
+      );
 
+      if (response.ok) {
+        window.location.assign(url);
+        return;
+      }
+
+      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
+    }).catch(() => {
+      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
+    });
+  };
 }
