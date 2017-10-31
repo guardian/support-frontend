@@ -26,7 +26,7 @@ type Audiences = {
   },
 };
 
-type TestId = 'addAnnualContributions';
+type TestId = 'addAnnualContributions' | 'usMonthlyVsOneOff';
 
 export type Participations = {
   [TestId]: string,
@@ -66,7 +66,20 @@ const tests: Test[] = [
       },
     },
     isActive: false,
-  }];
+  },
+
+  {
+    testId: 'usMonthlyVsOneOff',
+    variants: ['one_off', 'monthly'],
+    audiences: {
+      US: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+  },
+];
 
 
 // ----- Functions ----- //

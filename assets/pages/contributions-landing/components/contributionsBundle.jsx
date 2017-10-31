@@ -218,9 +218,11 @@ function ContributionsBundle(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+  const contribType = (state.common.abParticipations && state.common.abParticipations.usMonthlyVsOneOff === 'monthly'
+    ? 'MONTHLY' : 'ONE_OFF') || state.page.type;
 
   return {
-    contribType: state.page.type,
+    contribType,
     contribAmount: state.page.amount,
     contribError: state.page.error,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
