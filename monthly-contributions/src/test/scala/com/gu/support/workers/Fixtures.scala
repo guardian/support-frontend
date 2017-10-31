@@ -29,7 +29,7 @@ object Fixtures {
           "primaryEmailAddress": "test@gu.com",
           "firstName": "test",
           "lastName": "user",
-          "country": "GBP",
+          "country": "GB",
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
