@@ -60,5 +60,4 @@ export const openDialogBox = (amount: number, email: string) => {
       email,
     });
   }
-
 };
