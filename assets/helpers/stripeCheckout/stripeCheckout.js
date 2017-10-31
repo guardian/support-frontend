@@ -43,7 +43,7 @@ export const setupStripeCheckout = (
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
-    key: (isTestUser || false) ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
+    key: isTestUser ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
     image: 'https://d24w1tjgih0o9s.cloudfront.net/gu.png',
     locale: 'auto',
     currency,
