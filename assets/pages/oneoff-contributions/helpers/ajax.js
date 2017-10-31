@@ -41,6 +41,7 @@ type OneOffContribFields = {
   source: ?string,
   nativeAbTests: ?AcquisitionABTest[],
   refererAbTest: ?AcquisitionABTest,
+  isSupport: ?boolean
 };
 
 // ----- Functions ----- //
@@ -77,6 +78,7 @@ function requestData(paymentToken: string, getState: () => PageState) {
       source: referrerAcquisitionData.source,
       nativeAbTests: participationsToAcquisitionABTest(state.common.abParticipations),
       refererAbTest: referrerAcquisitionData.abTest,
+      isSupport: true,
     };
 
     return {
