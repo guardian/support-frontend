@@ -39,6 +39,8 @@ val circeVersion = "0.8.0"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
+PlayKeys.playRunHooks += new AssetWatch(baseDirectory.value)
+
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
   "org.mockito" % "mockito-core" % "2.7.22" % Test,
