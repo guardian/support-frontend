@@ -21,7 +21,7 @@ type PropTypes = {
   currency: Currency,
   email: string,
   isTestUser: boolean,
-  isValid?: Function,
+  canOpen?: Function,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -40,7 +40,7 @@ const StripePopUpButton = (props: PropTypes) => {
   }
 
   const onClick = () => {
-    if (props.isValid && props.isValid()) {
+    if (props.canOpen && props.canOpen()) {
       openDialogBox(props.amount, props.email);
     }
   };
@@ -60,7 +60,7 @@ const StripePopUpButton = (props: PropTypes) => {
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
-  isValid: () => true,
+  canOpen: () => true,
   closeHandler: () => {},
 };
 
