@@ -32,7 +32,7 @@ export const setupStripeCheckout = (
   closeHandler: ?Function,
   currency: string,
   isTestUser: boolean,
-): Promise<*> => loadStripe().then(() => {
+): Promise<void> => loadStripe().then(() => {
 
   const handleToken = (token) => {
     callback(token.id);
