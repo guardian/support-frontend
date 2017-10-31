@@ -13,24 +13,29 @@ import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
+import type { Currency } from 'helpers/internationalisation/currency';
+import type { User as UserState } from 'helpers/user/userReducer';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
-
 
 // ----- Types ----- //
 
 export type PayPalButtonType = 'ContributionsCheckout' | 'NotSet';
 
 type PropTypes = {
+  dispatch: Function,
   email: string,
   error: ?string,
   isFormEmpty: boolean,
-  amount: string,
+  amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
   checkoutError: (?string) => void,
   abParticipations: Participations,
+  currency: Currency,
+  user: UserState,
+  isTestUser: boolean,
 };
 
 
@@ -50,18 +55,22 @@ function getStatusMessage(isFormEmpty: boolean, error: ?string): Node {
 // If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(
   isFormEmpty: boolean,
-  error: ?string => void,
-): Function => void {
+  error: ?Function,
+): Function {
 
-  return (callback: Function) => {
+  return (): boolean => {
 
     if (!isFormEmpty) {
-      error(null);
-      callback();
-    } else {
-      error('Please fill in all the fields above.');
+      if (error) {
+        error(null);
+      }
+      return true;
     }
 
+    if (error) {
+      error('Please fill in all the fields above.');
+    }
+    return false;
   };
 
 }
@@ -74,10 +83,21 @@ function OneoffContributionsPayment(props: PropTypes) {
   return (
     <section className="oneoff-contribution-payment">
       {getStatusMessage(props.isFormEmpty, props.error)}
+
       <StripePopUpButton
         email={props.email}
-        callback={postCheckout}
-        stripeClick={formValidation(props.isFormEmpty, props.checkoutError)}
+        callback={postCheckout(
+          props.abParticipations,
+          props.dispatch,
+          props.amount,
+          props.currency,
+          props.referrerAcquisitionData,
+          props.user,
+        )}
+        isValid={formValidation(props.isFormEmpty, props.checkoutError)}
+        currency={props.currency}
+        isTestUser={props.isTestUser}
+        amount={props.amount}
       />
       <PayPalContributionButton
         amount={props.amount}
@@ -95,8 +115,8 @@ function OneoffContributionsPayment(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-
   return {
+    isTestUser: state.page.user.isTestUser || false,
     email: state.page.user.email,
     error: state.page.oneoffContrib.error,
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
@@ -104,6 +124,8 @@ function mapStateToProps(state) {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.country,
     abParticipations: state.common.abParticipations,
+    currency: state.page.oneoffContrib.currency,
+    user: state.page.user,
   };
 
 }
@@ -111,6 +133,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
+    dispatch,
     checkoutError: (message: ?string) => {
       dispatch(checkoutError(message));
     },
