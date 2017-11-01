@@ -5,7 +5,7 @@ import {
 } from '../oneoffContributionsActions';
 
 
-describe('actions', () => {
+describe('One-off actions', () => {
 
   it('should create an action to flag a checkout error', () => {
     const message:string = 'This is an error.';
