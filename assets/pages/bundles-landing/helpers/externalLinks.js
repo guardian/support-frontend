@@ -75,6 +75,21 @@ const customPromos : {
     paper: 'p/N750EMAIL',
     paperDig: 'p/ND750EMAIL',
   },
+  big_long_banner_control: {
+    digital: 'p/DBIGBANCONT',
+    paper: 'p/NBIGBANCONT',
+    paperDig: 'p/NDBIGBANCONT',
+  },
+  big_long_banner_big: {
+    digital: 'p/DBIGBANBIG',
+    paper: 'p/NBIGBANBIG',
+    paperDig: 'p/NDBIGBANBIG',
+  },
+  big_long_banner_long: {
+    digital: 'p/DBIGBANLONG',
+    paper: 'p/NBIGBANLONG',
+    paperDig: 'p/NDBIGBANLONG',
+  },
 };
 
 
