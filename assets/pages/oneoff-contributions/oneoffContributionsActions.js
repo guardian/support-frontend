@@ -27,4 +27,4 @@ function setPayPalButton(value: PayPalButtonType): Action {
 export {
   checkoutError,
   setPayPalButton,
-}
+};
