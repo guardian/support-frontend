@@ -15,15 +15,15 @@ export type Action =
 
 // ----- Actions ----- //
 
-const checkoutError = (message: string): Action => {
+function checkoutError(message: string): Action {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
-const setPayPalButton = (value: PayPalButtonType): Action => {
+function setPayPalButton(value: PayPalButtonType): Action {
   return { type: 'SET_PAYPAL_BUTTON', value };
 }
 
-const creatingContributor = (): Action => {
+function creatingContributor(): Action {
   return { type: 'CREATING_CONTRIBUTOR' };
 }
 
@@ -31,4 +31,4 @@ export {
   checkoutError,
   setPayPalButton,
   creatingContributor,
-}
+};
