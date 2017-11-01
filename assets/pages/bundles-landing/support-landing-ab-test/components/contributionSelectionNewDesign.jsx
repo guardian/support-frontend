@@ -17,6 +17,7 @@ import { getContributionAmounts } from '../helpers/contributionAmounts';
 type PropTypes = {
   contributionType: ContributionType,
   currency: Currency,
+  selectedAmount: string,
 };
 
 
@@ -30,7 +31,7 @@ export default function ContributionSelection(props: PropTypes) {
         <RadioToggle
           name="contributions-amount-toggle"
           radios={getContributionAmounts(props.contributionType, props.currency)}
-          checked={null}
+          checked={props.selectedAmount}
           toggleAction={() => {}}
         />
       </div>
