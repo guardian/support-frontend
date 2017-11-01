@@ -5,10 +5,10 @@
 import React from 'react';
 import uuidv4 from 'uuid';
 
-// ----- Types ----- //
+import { generateClassName } from 'helpers/utilities';
 
-// Disabling the linter here because it's just buggy...
-/* eslint-disable react/no-unused-prop-types */
+
+// ----- Types ----- //
 
 export type Radio = {
   id?: string,
@@ -17,33 +17,50 @@ export type Radio = {
   accessibilityHint?: ?string,
 };
 
+// Disabling the linter here because it's just buggy...
+/* eslint-disable react/no-unused-prop-types */
+
 type PropTypes = {
   name: string,
   radios: Radio[],
   checked: ?string,
   toggleAction: (string) => void,
-  showAnnual: boolean,
+  modifierClass?: ?string,
   accessibilityHint?: ?string,
 };
 
 /* eslint-enable react/no-unused-prop-types */
 
-function getClassName(props: PropTypes) {
-  return props.showAnnual === true ? 'component-radio-toggle__button--with-annual' : 'component-radio-toggle__button--without-annual';
-}
-// ----- Component ----- //
 
-export default function RadioToggle(props: PropTypes) {
-  const radioButtons = props.radios.map((radio: Radio, idx: number) => {
+// ----- Functions ----- //
+
+// Builds an accessibility hint for the button.
+function getA11yHint(id: string, hint: ?string) {
+
+  return (
+    <p id={id} className="accessibility-hint">
+      {hint}
+    </p>
+  );
+
+}
+
+// Returns a list of the radio button elements.
+function getRadioButtons(props: PropTypes) {
+
+  return props.radios.map((radio: Radio, idx: number) => {
 
     const radioId = `${props.name}-${idx}`;
-    const className = getClassName(props);
-    const accessibilityHintId = `accessibility-hint-${radioId}`;
-    const accessibilityHint = <p id={accessibilityHintId} className="accessibility-hint">{radio.accessibilityHint}</p>;
+    const a11yHintId = `accessibility-hint-${radioId}`;
+
     /* eslint-disable jsx-a11y/label-has-for */
     return (
-      <span id={radio.id} className={`component-radio-toggle__button ${className}`} key={radioId}>
-        {accessibilityHint}
+      <span
+        id={radio.id}
+        className={generateClassName('component-radio-toggle__button', props.modifierClass)}
+        key={radioId}
+      >
+        {getA11yHint(a11yHintId, radio.accessibilityHint)}
         <input
           className="component-radio-toggle__input"
           type="radio"
@@ -53,17 +70,25 @@ export default function RadioToggle(props: PropTypes) {
           onChange={() => props.toggleAction(radio.value)}
           checked={radio.value === props.checked}
           tabIndex="0"
-          aria-describedby={accessibilityHintId}
+          aria-describedby={a11yHintId}
         />
         <label htmlFor={radioId} className="component-radio-toggle__label">
           {radio.text}
         </label>
       </span>
-      /* eslint-enable jsx-a11y/label-has-for */
     );
+    /* eslint-enable jsx-a11y/label-has-for */
 
   });
 
+}
+
+
+// ----- Component ----- //
+
+export default function RadioToggle(props: PropTypes) {
+
+  const radioButtons = getRadioButtons(props);
   const radioGroupId = uuidv4();
 
   return (
@@ -80,4 +105,5 @@ export default function RadioToggle(props: PropTypes) {
 
 RadioToggle.defaultProps = {
   accessibilityHint: '',
+  modifierClass: null,
 };

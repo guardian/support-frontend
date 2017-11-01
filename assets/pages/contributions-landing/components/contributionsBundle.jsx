@@ -218,7 +218,6 @@ function ContributionsBundle(props: PropTypes) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-
   return {
     contribType: state.page.type,
     contribAmount: state.page.amount,
