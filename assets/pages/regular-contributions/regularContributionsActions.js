@@ -27,6 +27,8 @@ function creatingContributor(): Action {
   return { type: 'CREATING_CONTRIBUTOR' };
 }
 
+// ----- Exports ----- //
+
 export {
   checkoutError,
   setPayPalButton,
