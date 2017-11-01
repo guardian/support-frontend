@@ -15,14 +15,20 @@ export type Action =
 
 // ----- Actions ----- //
 
-export function checkoutError(message: string): Action {
+const checkoutError = (message: string): Action => {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
-export function setPayPalButton(value: PayPalButtonType): Action {
+const setPayPalButton = (value: PayPalButtonType): Action => {
   return { type: 'SET_PAYPAL_BUTTON', value };
 }
 
-export function creatingContributor(): Action {
+const creatingContributor = (): Action => {
   return { type: 'CREATING_CONTRIBUTOR' };
+}
+
+export {
+  checkoutError,
+  setPayPalButton,
+  creatingContributor,
 }
