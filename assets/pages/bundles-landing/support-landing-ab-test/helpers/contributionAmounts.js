@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { Contrib as ContributionType } from 'helpers/contributions';
+import type { Radio } from 'components/radioToggle/radioToggle';
 import type {
   Currency,
   IsoCurrency,
@@ -81,7 +82,7 @@ function getA11yHint(
 function getContributionAmounts(
   contributionType: ContributionType,
   currency: Currency,
-) {
+): Radio[] {
 
   return amounts[contributionType][currency.iso].map(amount => ({
     value: amount.value,

@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import RadioToggle from 'components/radioToggle/radioToggle';
+
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Contrib as ContributionType } from 'helpers/contributions';
 
@@ -25,8 +27,12 @@ export default function ContributionSelection(props: PropTypes) {
   return (
     <div className="component-contribution-selection">
       <div className="component-contribution-selection__contribution-type">
-        {getContributionAmounts(props.contributionType, props.currency).map(amount =>
-          <p>{amount.text}</p>)}
+        <RadioToggle
+          name="contributions-amount-toggle"
+          radios={getContributionAmounts(props.contributionType, props.currency)}
+          checked={null}
+          toggleAction={() => {}}
+        />
       </div>
     </div>
   );
