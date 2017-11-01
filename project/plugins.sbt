@@ -13,3 +13,5 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0" excludeAll Ex
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.3")
+
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.3")
