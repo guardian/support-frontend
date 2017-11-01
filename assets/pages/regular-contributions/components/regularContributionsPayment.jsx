@@ -15,7 +15,6 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
 import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { User as UserState } from 'helpers/user/userReducer';
 import type { Participations } from 'helpers/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
@@ -39,7 +38,6 @@ type PropTypes = {
   paymentStatus: PaymentStatus,
   currency: Currency,
   amount: number,
-  user: UserState,
   csrf: CsrfState,
   country: IsoCountry,
   abParticipations: Participations,
@@ -78,10 +76,10 @@ function getStripeButton(
   currency: Currency,
   isTestUser: boolean,
   dispatch: Function,
-  user: UserState,
   csrf: CsrfState,
   country: IsoCountry,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  getState,
 ): Node {
 
   if (hide) {
@@ -101,7 +99,7 @@ function getStripeButton(
         dispatch,
         'stripeToken',
         referrerAcquisitionData,
-        user,
+        getState,
       )}
       currency={currency}
       isTestUser={isTestUser}
@@ -121,10 +119,10 @@ function getPayPalButton(
   currency: Currency,
   isTestUser: boolean,
   dispatch: Function,
-  user: UserState,
   csrf: CsrfState,
   country: IsoCountry,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  getState: Function,
 ): Node {
 
   if (hide) {
@@ -141,7 +139,7 @@ function getPayPalButton(
     dispatch,
     'baid',
     referrerAcquisitionData,
-    user,
+    getState,
   )}
   />);
 
@@ -150,7 +148,14 @@ function getPayPalButton(
 
 // ----- Component ----- //
 
-function RegularContributionsPayment(props: PropTypes) {
+/*
+ * WARNING: we are using the React context here to be able to pass the getState function
+ * to the postCheckout function. PostCheckout requires this function to access to the
+ * most recent user.
+ * More information here:https://reactjs.org/docs/context.html
+ * You should not use context for other purposes. Please use redux.
+ */
+function RegularContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="regular-contribution-payment">
@@ -164,10 +169,10 @@ function RegularContributionsPayment(props: PropTypes) {
         props.currency,
         props.isTestUser,
         props.dispatch,
-        props.user,
         props.csrf,
         props.country,
         props.referrerAcquisitionData,
+        context.store.getState,
       )}
       {getPayPalButton(
         props.hide,
@@ -178,10 +183,10 @@ function RegularContributionsPayment(props: PropTypes) {
         props.currency,
         props.isTestUser,
         props.dispatch,
-        props.user,
         props.csrf,
         props.country,
         props.referrerAcquisitionData,
+        context.store.getState,
       )}
     </section>
   );
@@ -199,7 +204,6 @@ function mapStateToProps(state) {
     amount: state.page.regularContrib.amount,
     currency: state.page.regularContrib.currency,
     regularContrib: state.page.regularContrib,
-    user: state.page.user,
     csrf: state.page.csrf,
     country: state.common.country,
     abParticipations: state.common.abParticipations,

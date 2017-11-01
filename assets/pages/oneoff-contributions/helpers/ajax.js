@@ -7,7 +7,6 @@ import { routes } from 'helpers/routes';
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { User as UserState } from 'helpers/user/userReducer';
 import type { Participations } from 'helpers/abtest';
 import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -53,10 +52,11 @@ function requestData(
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  user: UserState,
+  getState: Function,
 ) {
 
   const ophanIds: OphanIds = getOphanIds();
+  const { user } = getState().page;
 
   if (user.fullName !== null && user.fullName !== undefined &&
     user.email !== null && user.email !== undefined) {
@@ -106,9 +106,8 @@ export default function postCheckout(
   amount: number,
   currency: Currency,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  user: UserState,
+  getState: Function,
 ) {
-
   return (paymentToken: string) => {
     const request = requestData(
       abParticipations,
@@ -116,7 +115,7 @@ export default function postCheckout(
       currency.iso,
       amount,
       referrerAcquisitionData,
-      user,
+      getState,
     );
 
     return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {

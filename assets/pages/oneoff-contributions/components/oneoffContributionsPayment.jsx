@@ -14,7 +14,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { User as UserState } from 'helpers/user/userReducer';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
@@ -34,7 +33,6 @@ type PropTypes = {
   checkoutError: (?string) => void,
   abParticipations: Participations,
   currency: Currency,
-  user: UserState,
   isTestUser: boolean,
 };
 
@@ -78,7 +76,15 @@ function formValidation(
 
 // ----- Component ----- //
 
-function OneoffContributionsPayment(props: PropTypes) {
+
+/*
+ * WARNING: we are using the React context here to be able to pass the getState function
+ * to the postCheckout function. PostCheckout requires this function to access to the
+ * most recent user.
+ * More information here:https://reactjs.org/docs/context.html
+ * You should not use context for other purposes. Please use redux.
+ */
+function OneoffContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="oneoff-contribution-payment">
@@ -92,7 +98,7 @@ function OneoffContributionsPayment(props: PropTypes) {
           props.amount,
           props.currency,
           props.referrerAcquisitionData,
-          props.user,
+          context.store.getState,
         )}
         isValid={formValidation(props.isFormEmpty, props.checkoutError)}
         currency={props.currency}
@@ -125,7 +131,6 @@ function mapStateToProps(state) {
     isoCountry: state.common.country,
     abParticipations: state.common.abParticipations,
     currency: state.page.oneoffContrib.currency,
-    user: state.page.user,
   };
 
 }

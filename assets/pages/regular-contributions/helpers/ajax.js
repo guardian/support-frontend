@@ -66,8 +66,10 @@ function requestData(
   paymentFieldName: PaymentField,
   token: string,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  user: UserState,
+  getState: Function,
 ) {
+
+  const { user } = getState().page;
 
   if (!isUserValid(user)) {
     return Promise.resolve({
@@ -191,7 +193,7 @@ export default function postCheckout(
   dispatch: Function,
   paymentFieldName: PaymentField,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  user: UserState,
+  getState: Function,
 ): Function {
   return (token: string) => {
 
@@ -208,7 +210,7 @@ export default function postCheckout(
       paymentFieldName,
       token,
       referrerAcquisitionData,
-      user,
+      getState,
     );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
