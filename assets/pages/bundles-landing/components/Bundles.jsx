@@ -6,11 +6,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FeatureList from 'components/featureList/featureList';
-import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import { routes } from 'helpers/routes';
+import { contribCamelCase } from 'helpers/contributions';
+
+import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
@@ -18,10 +21,7 @@ import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
-import { routes } from 'helpers/routes';
-
 import CrossProduct from './crossProduct';
-
 import {
   changeContribType,
   changeContribAmount,
@@ -212,14 +212,6 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
-function getContribKey(contribType: Contrib) {
-  switch (contribType) {
-    case 'ANNUAL': return 'annual';
-    case 'MONTHLY': return 'monthly';
-    default: return 'oneOff';
-  }
-}
-
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
@@ -228,7 +220,7 @@ const getContribAttrs = (
   intCmp: ?string,
 ): ContribAttrs => {
 
-  const contType = getContribKey(contribType);
+  const contType = contribCamelCase(contribType);
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
