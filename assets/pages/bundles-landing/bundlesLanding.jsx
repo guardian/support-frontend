@@ -56,7 +56,7 @@ if (getQueryParameter('newDesigns', 'false') === 'true') {
         <Introduction />
         <Bundles />
         <WhySupport />
-        {store.getState().common.campaign === 'baseline_test' ? '' : <WaysOfSupport />}
+        <WaysOfSupport />
         <LinksFooter />
       </div>
     </Provider>

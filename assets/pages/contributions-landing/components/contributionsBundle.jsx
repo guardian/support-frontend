@@ -101,7 +101,7 @@ function contribAttrs(isoCountry: IsoCountry, contribType: Contrib): ContribAttr
 function showPayPal(props: PropTypes) {
   if (props.contribType === 'ONE_OFF') {
     return (<PayPalContributionButton
-      amount={props.contribAmount.oneOff.value}
+      amount={Number(props.contribAmount.oneOff.value)}
       abParticipations={props.abTests}
       referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.isoCountry}
