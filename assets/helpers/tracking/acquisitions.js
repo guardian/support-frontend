@@ -69,14 +69,14 @@ const campaigns : {
   seven_fifty_email: [
     'gdnwb_copts_email_memco_seven_fifty',
   ],
-  big_long_banner_control: [
-    'banner_big_long_control',
+  big_long_banner_control_2: [
+    'banner_big_long_control_2',
   ],
-  big_long_banner_big: [
-    'banner_big_long_big',
+  big_long_banner_big_2: [
+    'banner_big_long_big_2',
   ],
-  big_long_banner_long: [
-    'banner_big_long_long',
+  big_long_banner_long_2: [
+    'banner_big_long_long_2',
   ],
 };
 
