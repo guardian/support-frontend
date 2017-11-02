@@ -43,7 +43,7 @@ object Driver {
     driver.get(Config.identityFrontendUrl)
     driver.manage.deleteAllCookies()
 
-    driver.get(Config.supportFrontendUrl)
+    driver.get(Config.supportFrontendUrl + "/uk")
     driver.manage.deleteAllCookies()
   }
 
