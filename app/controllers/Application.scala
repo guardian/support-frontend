@@ -16,7 +16,7 @@ class Application(
     identityService: IdentityService,
     components: ControllerComponents,
     contributionsPayPalEndpoint: String,
-    copyConfig: StringsConfig
+    stringsConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
@@ -46,7 +46,7 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js, description = Some(copyConfig.bundleLandingDescription)))
+    Ok(views.html.react(title, id, js, description = Some(stringsConfig.bundleLandingDescription)))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
