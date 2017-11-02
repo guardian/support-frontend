@@ -75,20 +75,20 @@ const customPromos : {
     paper: 'p/N750EMAIL',
     paperDig: 'p/ND750EMAIL',
   },
-  big_long_banner_control: {
-    digital: 'p/DBIGBANCONT',
-    paper: 'p/NBIGBANCONT',
-    paperDig: 'p/NDBIGBANCONT',
+  big_long_banner_two_control: {
+    digital: 'p/DBIGBANCONT2',
+    paper: 'p/NBIGBANCONT2',
+    paperDig: 'p/NDBIGBANCONT2',
   },
-  big_long_banner_big: {
-    digital: 'p/DBIGBANBIG',
-    paper: 'p/NBIGBANBIG',
-    paperDig: 'p/NDBIGBANBIG',
+  big_long_banner_two_big: {
+    digital: 'p/DBIGBANBIG2',
+    paper: 'p/NBIGBANBIG2',
+    paperDig: 'p/NDBIGBANBIG2',
   },
-  big_long_banner_long: {
-    digital: 'p/DBIGBANLONG',
-    paper: 'p/NBIGBANLONG',
-    paperDig: 'p/NDBIGBANLONG',
+  big_long_banner_two_long: {
+    digital: 'p/DBIGBANLONG2',
+    paper: 'p/NBIGBANLONG2',
+    paperDig: 'p/NDBIGBANLONG2',
   },
 };
 
