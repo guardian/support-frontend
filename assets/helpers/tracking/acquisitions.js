@@ -69,6 +69,15 @@ const campaigns : {
   seven_fifty_email: [
     'gdnwb_copts_email_memco_seven_fifty',
   ],
+  big_long_banner_two_control: [
+    'banner_big_long_two_control',
+  ],
+  big_long_banner_two_big: [
+    'banner_big_long_two_big',
+  ],
+  big_long_banner_two_long: [
+    'banner_big_long_two_long',
+  ],
 };
 
 export type Campaign = $Keys<typeof campaigns>;

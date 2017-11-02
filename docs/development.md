@@ -162,13 +162,13 @@ yarn run test
 
 To run server-side unit tests:
 ```
-sbt fast-test
+sbt test
 ```
 
 To run end-to-end browser-driven tests:
 
 ```
-sbt selenium-test
+sbt selenium:test
 ```
 
 **Note** that you need to run *identity-frontend*, *contributions-frontend* and *support-frontend* locally before running the end-to-end tests.

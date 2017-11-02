@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`One-off Reducer should handle CHECKOUT_ERROR 1`] = `"NotSet"`;
+
+exports[`One-off Reducer should handle SET_PAYPAL_BUTTON 1`] = `null`;
+
+exports[`One-off Reducer should return the initial state 1`] = `
+Object {
+  "csrf": Object {
+    "token": null,
+  },
+  "oneoffContrib": Object {
+    "amount": 20,
+    "currency": "GBP",
+    "error": null,
+    "payPalType": "NotSet",
+  },
+  "payPalContributionsCheckout": Object {
+    "amount": 20,
+    "currency": undefined,
+    "payPalPayClicked": false,
+  },
+  "user": Object {
+    "displayName": "",
+    "email": "",
+    "firstName": "",
+    "gnmMarketing": false,
+    "id": "",
+    "isTestUser": null,
+    "lastName": "",
+  },
+}
+`;
