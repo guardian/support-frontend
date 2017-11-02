@@ -87,7 +87,7 @@ function getContributionAmounts(
   return amounts[contributionType][currency.iso].map(amount => ({
     value: amount.value,
     text: `${currency.glyph}${amount.value}`,
-    a11yHint: getA11yHint(contributionType, currency.iso, amount.spoken),
+    accessibilityHint: getA11yHint(contributionType, currency.iso, amount.spoken),
   }));
 
 }
