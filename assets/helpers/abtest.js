@@ -3,14 +3,13 @@
 // ----- Imports ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Tests } from 'helpers/abtests';
 
 import shajs from 'sha.js';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
-import { tests } from './abtests';
+import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -43,6 +42,8 @@ export type Test = {
   isActive: boolean,
   independence?: number,
 };
+
+export type Tests = { [testId: string]: Test }
 
 // ----- Setup ----- //
 
@@ -171,7 +172,7 @@ const init = (country: IsoCountry, abTests: Tests = tests): Participations => {
 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country);
-  const urlParticipations = getParticipationsFromUrl();
+  const urlParticipations: ?Participations = getParticipationsFromUrl();
 
   setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
   trackAB(participations, false);

@@ -1,9 +1,7 @@
 // @flow
-import type { Test } from './abtest';
+import type { Tests } from './abtest';
 
 // ----- Tests ----- //
-
-export type Tests = { [testId: string]: Test }
 
 export const tests: Tests = {
   addAnnualContributions: {

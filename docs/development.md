@@ -320,6 +320,7 @@ compute the sample size of your experiment, from the sample size, you can then e
        },
      },
      isActive: true,
+     independence: 1,
    },
  };
  ```
