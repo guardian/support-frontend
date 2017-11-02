@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 import scala.sys.process._
 
@@ -52,21 +52,22 @@ val circeVersion = "0.8.0"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
+val awsVersion = "1.11.221"
 libraryDependencies ++= Seq(
-  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
-  "org.mockito" % "mockito-core" % "2.7.22" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  "org.mockito" % "mockito-core" % "2.11.0" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-  "com.amazonaws" % "aws-java-sdk-kms" % "1.11.128",
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
+  "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
   "org.typelevel" %% "cats" % "0.9.0",
   "com.dripower" %% "play-circe" % "2608.5",
-  "com.gu" %% "support-models" % "0.15",
+  "com.gu" %% "support-models" % "0.16",
   "com.gu" %% "support-config" % "0.7",
-  "com.gu" %% "fezziwig" % "0.6",
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.128",
-  "com.typesafe.akka" %% "akka-agent" % "2.4.12",
-  "com.gu" %% "support-internationalisation" % "0.2",
+  "com.gu" %% "fezziwig" % "0.7",
+  "com.typesafe.akka" %% "akka-agent" % "2.5.6",
+  "com.gu" %% "support-internationalisation" % "0.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -74,12 +75,12 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-play-auth" % "2.0",
   "com.gu" %% "identity-test-users" % "0.6",
-  "com.google.guava" % "guava" % "22.0",
+  "com.google.guava" % "guava" % "23.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.0",
   "io.github.bonigarcia" % "webdrivermanager" % "1.7.2" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "test",
-  "com.squareup.okhttp3" % "okhttp" % "3.8.1",
+  "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   filters,
   ws
 )
