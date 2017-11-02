@@ -32,7 +32,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
 
   feature("Sign up for a Monthly Contribution") {
 
-    scenario("Monthly contribution sign-up with Stripe - GBP", SeleniumTag) {
+    scenario("Monthly contribution sign-up with Stripe - GBP") {
 
       val landingPage = ContributionsLanding("uk")
 
@@ -84,7 +84,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
 
     }
 
-    scenario("Monthly contribution sign-up with PayPal - USD", SeleniumTag) {
+    scenario("Monthly contribution sign-up with PayPal - USD") {
 
       val landingPage = ContributionsLanding("us")
       val expectedPayment = "10.00"
@@ -146,7 +146,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
 
   feature("Perform a one-off contribution") {
 
-    scenario("One-off contribution with PayPal - USD", SeleniumTag) {
+    scenario("One-off contribution with PayPal - USD") {
 
       val testUser = new TestUser
       val landingPage = ContributionsLanding("us")
