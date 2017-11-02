@@ -5,5 +5,5 @@ import com.typesafe.config.ConfigFactory
 class StringsConfig {
   val config = ConfigFactory.load("strings.conf")
 
-  val bundleLandingDescription = config.getString("strings.bundleLanding.description")
+  val bundleLandingDescription = config.getString("bundleLanding.description")
 }
