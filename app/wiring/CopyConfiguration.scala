@@ -1,7 +1,7 @@
 package wiring
 
-import config.CopyConfig
+import config.StringsConfig
 
 trait CopyConfiguration {
-  val copyConfig = new CopyConfig()
+  val copyConfig = new StringsConfig()
 }

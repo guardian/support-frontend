@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
-import config.CopyConfig
+import config.StringsConfig
 
 import scala.concurrent.ExecutionContext
 
@@ -16,7 +16,7 @@ class Application(
     identityService: IdentityService,
     components: ControllerComponents,
     contributionsPayPalEndpoint: String,
-    copyConfig: CopyConfig
+    copyConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._

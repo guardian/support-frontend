@@ -2,8 +2,8 @@ package config
 
 import com.typesafe.config.ConfigFactory
 
-class CopyConfig {
-  val config = ConfigFactory.load("copy.conf")
+class StringsConfig {
+  val config = ConfigFactory.load("strings.conf")
 
   val bundleLandingDescription = config.getString("copy.bundleLanding.description")
 }
