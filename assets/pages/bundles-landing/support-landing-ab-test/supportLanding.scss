@@ -208,11 +208,38 @@
     // ----- Contribute
 
     .contribute-new-design {
-      background-color: darken(gu-colour(multimedia-main-2), 5%);
+      background-color: darken(#fff, 5%);
     }
 
     .contribute-new-design__content {
-      background-color: gu-colour(multimedia-main-2);
+      background-color: #fff;
+      border-top: none;
+    }
+
+    .component-contribution-selection__amount, .component-contribution-selection__type {
+
+      .component-radio-toggle label {
+        border: 1px solid gu-colour(comment-main-2);
+        background-color: gu-colour(comment-main-2);
+      }
+
+      .component-radio-toggle input:not(:checked)+label {
+        background-color: #fff;
+      }
+
+    }
+
+    .component-contribution-selection__custom-amount {
+
+      .component-number-input {
+        background-color: #fff;
+        border: 1px solid gu-colour(comment-main-2);
+      }
+
+      .component-number-input--selected {
+        background-color: gu-colour(comment-main-2);
+      }
+
     }
 
     // ----- Subscribe
