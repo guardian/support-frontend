@@ -17,6 +17,7 @@ trait AppComponents extends PlayComponents
   with Controllers
   with Services
   with ApplicationConfiguration
+  with CopyConfiguration
   with ActionBuilders
   with Assets
   with GoogleAuth
