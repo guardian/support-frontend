@@ -10,9 +10,11 @@ import { contribCamelCase } from 'helpers/contributions';
 
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import ContributionSelection from './contributionSelectionNewDesign';
 import {
+  changeContribType,
   changeContribAmountAnnual,
   changeContribAmountMonthly,
   changeContribAmountOneOff,
@@ -26,11 +28,13 @@ import {
 
 type PropTypes = {
   contributionType: ContributionType,
+  country: IsoCountry,
   currency: Currency,
   selectedAmount: string,
-  changeContribAmountAnnual: string => void,
-  changeContribAmountMonthly: string => void,
-  changeContribAmountOneOff: string => void,
+  changeContributionType: string => void,
+  changeContributionAmountAnnual: string => void,
+  changeContributionAmountMonthly: string => void,
+  changeContributionAmountOneOff: string => void,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -41,6 +45,7 @@ function mapStateToProps(state) {
 
   return {
     contributionType: state.page.type,
+    country: state.common.country,
     currency: state.common.currency,
     selectedAmount: state.page.amount[contributionTypeCamelCase].value,
   };
@@ -50,13 +55,16 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    changeContribAmountAnnual: (value: string) => {
+    changeContributionType: (contributionType: ContributionType) => {
+      dispatch(changeContribType(contributionType));
+    },
+    changeContributionAmountAnnual: (value: string) => {
       dispatch(changeContribAmountAnnual({ value, userDefined: false }));
     },
-    changeContribAmountMonthly: (value: string) => {
+    changeContributionAmountMonthly: (value: string) => {
       dispatch(changeContribAmountMonthly({ value, userDefined: false }));
     },
-    changeContribAmountOneOff: (value: string) => {
+    changeContributionAmountOneOff: (value: string) => {
       dispatch(changeContribAmountOneOff({ value, userDefined: false }));
     },
   };
@@ -69,9 +77,9 @@ function mapDispatchToProps(dispatch) {
 function getAmountToggle(props: PropTypes) {
 
   switch (props.contributionType) {
-    case 'ANNUAL': return props.changeContribAmountAnnual;
-    case 'MONTHLY': return props.changeContribAmountMonthly;
-    default: return props.changeContribAmountOneOff;
+    case 'ANNUAL': return props.changeContributionAmountAnnual;
+    case 'MONTHLY': return props.changeContributionAmountMonthly;
+    default: return props.changeContributionAmountOneOff;
   }
 
 }
@@ -88,10 +96,12 @@ function Contribute(props: PropTypes) {
         className="contribute-new-design__content gu-content-margin"
       >
         <ContributionSelection
-          currency={props.currency}
           contributionType={props.contributionType}
+          country={props.country}
+          currency={props.currency}
           selectedAmount={props.selectedAmount}
           toggleAmount={getAmountToggle(props)}
+          toggleType={props.changeContributionType}
         />
       </InfoSection>
     </div>
