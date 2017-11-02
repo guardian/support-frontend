@@ -37,7 +37,9 @@ export type ParsedContrib = {
 type Config = {
   [Contrib]: {
     min: number,
+    spokenMin: string,
     max: number,
+    spokenMax: string,
     default: number,
   }
 }
@@ -48,17 +50,23 @@ type Config = {
 const config: Config = {
   ANNUAL: {
     min: 50,
+    spokenMin: 'fifty',
     max: 2000,
+    spokenMax: 'two thousand',
     default: 75,
   },
   MONTHLY: {
     min: 5,
+    spokenMin: 'five',
     max: 166,
+    spokenMax: 'one hundred and sixty six',
     default: 10,
   },
   ONE_OFF: {
     min: 1,
+    spokenMin: 'one',
     max: 2000,
+    spokenMax: 'two thousand',
     default: 50,
   },
 };

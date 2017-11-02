@@ -8,7 +8,10 @@ import { connect } from 'react-redux';
 import InfoSection from 'components/infoSection/infoSection';
 import { contribCamelCase } from 'helpers/contributions';
 
-import type { Contrib as ContributionType } from 'helpers/contributions';
+import type {
+  Amount,
+  Contrib as ContributionType,
+} from 'helpers/contributions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
@@ -18,6 +21,7 @@ import {
   changeContribAmountAnnual,
   changeContribAmountMonthly,
   changeContribAmountOneOff,
+  changeContribAmount,
 } from '../../bundlesLandingActions';
 
 
@@ -30,11 +34,12 @@ type PropTypes = {
   contributionType: ContributionType,
   country: IsoCountry,
   currency: Currency,
-  selectedAmount: string,
+  selectedAmount: Amount,
   changeContributionType: string => void,
   changeContributionAmountAnnual: string => void,
   changeContributionAmountMonthly: string => void,
   changeContributionAmountOneOff: string => void,
+  setContributionCustomAmount: string => void,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -47,7 +52,7 @@ function mapStateToProps(state) {
     contributionType: state.page.type,
     country: state.common.country,
     currency: state.common.currency,
-    selectedAmount: state.page.amount[contributionTypeCamelCase].value,
+    selectedAmount: state.page.amount[contributionTypeCamelCase],
   };
 
 }
@@ -66,6 +71,9 @@ function mapDispatchToProps(dispatch) {
     },
     changeContributionAmountOneOff: (value: string) => {
       dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    },
+    setContributionCustomAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
     },
   };
 
@@ -102,6 +110,7 @@ function Contribute(props: PropTypes) {
           selectedAmount={props.selectedAmount}
           toggleAmount={getAmountToggle(props)}
           toggleType={props.changeContributionType}
+          setCustomAmount={props.setContributionCustomAmount}
         />
       </InfoSection>
     </div>

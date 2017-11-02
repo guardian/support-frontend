@@ -2,19 +2,27 @@
 
 // ----- Imports ----- //
 
+import { CONFIG as contributionConfig } from 'helpers/contributions';
+
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
-import type {
-  Currency,
-  IsoCurrency,
-} from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+
+import { getSpokenType } from './contributionTypes';
 
 
 // ----- Setup ----- //
 
 const spokenCurrencies = {
-  GBP: 'pounds',
-  USD: 'dollars',
+  GBP: {
+    singular: 'pound',
+    plural: 'pounds',
+  },
+  USD: {
+    singular: 'dollar',
+    plural: 'dollars',
+  },
 };
 
 const amounts = {
@@ -63,11 +71,11 @@ const amounts = {
 
 function getA11yHint(
   contributionType: ContributionType,
-  currency: IsoCurrency,
+  currency: Currency,
   spokenAmount: string,
 ): string {
 
-  const spokenCurrency = spokenCurrencies[currency];
+  const spokenCurrency = spokenCurrencies[currency.iso].plural;
 
   if (contributionType === 'ONE_OFF') {
     return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
@@ -79,6 +87,24 @@ function getA11yHint(
 
 }
 
+function getCustomAmountA11yHint(
+  contributionType: ContributionType,
+  country: IsoCountry,
+  currency: Currency,
+): string {
+
+  let spokenCurrency = spokenCurrencies[currency.iso].plural;
+
+  if (contributionType === 'ONE_OFF') {
+    spokenCurrency = spokenCurrencies[currency.iso].singular;
+  }
+
+  return `Enter an amount of ${contributionConfig[contributionType].spokenMin} 
+    ${spokenCurrency} or more for your 
+    ${getSpokenType(contributionType, country)} contribution.`;
+
+}
+
 function getContributionAmounts(
   contributionType: ContributionType,
   currency: Currency,
@@ -87,7 +113,7 @@ function getContributionAmounts(
   return amounts[contributionType][currency.iso].map(amount => ({
     value: amount.value,
     text: `${currency.glyph}${amount.value}`,
-    accessibilityHint: getA11yHint(contributionType, currency.iso, amount.spoken),
+    accessibilityHint: getA11yHint(contributionType, currency, amount.spoken),
   }));
 
 }
@@ -96,5 +122,6 @@ function getContributionAmounts(
 // ----- Exports ----- //
 
 export {
+  getCustomAmountA11yHint,
   getContributionAmounts,
 };
