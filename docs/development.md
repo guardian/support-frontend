@@ -221,7 +221,8 @@ it generates a new MVTid and saves it in the cookie.
    * Override the variant if the user passes the variant in the url using the form: `#ab-[name_of_test]=[variant_name]`.
 
 3. Save the `Participations` object in `localStorage`. 
-     
+
+4. Submit an event to Ophan to track the initial impression for all active A/B tests.
 
 #### `getVariantsAsString(participations: Participations)`
 Takes the participation object and returns all variants as a string in the following format:
@@ -233,9 +234,8 @@ he has to set up the custom dimension called `experiment` with the value of the 
 found [here](https://github.com/guardian/support-frontend/pull/68/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R31).  
 
 
-#### `trackOphan( testId: TestId, variant: string, complete?: boolean = false, campaignCodes?: string[] = [])`
+#### `trackOphan(participation: Participations, complete: boolean)`
 Track event using `tracker-js` from Ophan. 
-
 
 #### `abTestReducer(state: Participations = {}, action: Action)`
 Reducer function to be included in the reducer of pages which import the AB test framework.
@@ -300,49 +300,37 @@ you need more samples and therefore a longer running test. This is related to th
 [This tool](http://powerandsamplesize.com/Calculators/Compare-2-Proportions/2-Sample-Equality) can help to 
 compute the sample size of your experiment, from the sample size, you can then estimate the duration of your test.  
 
-#### Step 1: Add your test to the Tests array
+#### Step 1: Add your test to the Tests object
 
  After your hypothesis is defined, you can implement the test in the codebase. First, define the test 
- in the [`abtest.js` shared helper](/assets/helpers/abtest.js) by adding a new object to the tests array (under the **Tests** section). 
+ in the [`abtest.js` shared helper](/assets/helpers/abtests.js) by adding a new object to the tests array (under the **Tests** section). 
  
  ```javascript 1.8
  // ----- Tests ----- //
  
- const tests: Test[] = [
-   {
-     testId: 'yourTestId', 
-     variants: ['control', 'variantA'],  
+ export type Tests = { [testId: string]: Test }
+ 
+ export const tests: Tests = {
+   yourTestId: {
+     variants: ['control', 'variant'],
      audiences: {
-       GB :{
-          offset: 0,
-          size: 1,
-        }
+       GB: {
+         offset: 0,
+         size: 1,
+       },
      },
      isActive: true,
    },
- ];
+ };
  ```
+ 
+  The `tests` object represents all of the tests running on the site, where each key is a test ID and each value is an object with the following fields:
   
-  Each test object has the following fields:
-  
-  * **testId**: name of the test, this name has to match with the name of the test in Abacus. Additionally, it should be 
-  unique across all the test names in Abacus. 
   * **variants**: This field is an array of strings, each string will be the name of a variant. One of these variant names has 
   to be **control**. 
   * **audiences**: The *audiences* object contains a field for every country where the test will run. Then each audience object has two fields: `offset`, a number from 0 to 1 which indicates the 
   part of the audience that will be affected by the test, and `size` a number from 0 to 1 which specifies the percentage of the audience to be included in the test.
   For example a test with offset 0.2 and size 0.5 will affect 50% of the audience starting from the 20%.
- 
- 
- Since the testId has a type `TestId`, you have to add your test name to that type. The `TestId` is a 
- [flow Union Type](https://flow.org/en/docs/types/unions/). 
- Inside the same file look for the type definition and update it:
- 
- ```
- type TestId = 'test1' | 'yourTestId';
- ```
- 
- If you don't update the type definition, `flow` will throw an error in the `validation` step (`yarn validate`).
  
 #### Step 2: Read the variant from the state
 
@@ -360,14 +348,12 @@ be found [here](https://github.com/guardian/support-frontend/commit/b73794ca3a24
 Now that you are rendering the correct component depending on the variant, the final step is to track user conversion.
 *Conversion* can mean different things depending on what you are testing, it could be a click on a video, a scroll action,
 a button click, whether the user writes something in a text field, etc. Basically, it can be any event that the user can produce. 
-In order to use abacus as your test tool, you have to track two events with Ophan:
-  * When the variant is first displayed to the user.
-  * When the user converts.
+Test displays are automatically tracked to Ophan, but in order to use abacus as your test tool, you have to track the test's conversion action.
   
-This tracking can be done using the [`trackOphan`](#71-api) function from the ABtest framework. This function 
-receives the name of the test and the name of the variant and an optional flag indicating whether is a complete event 
-or not.  
+This tracking can be done using the [`trackAB`](#71-api) function from the ABtest framework. This function 
+receives an A/B participation and a flag indicating whether is a complete event or not (which should be `true` in the case of conversions).
 
+If you are firing a conversion event for a specific test, be sure that the `participations` parameter you provide to `trackOphan` only contains your test.
 
 ## 9 Test Environments
 
