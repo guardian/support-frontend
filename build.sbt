@@ -18,7 +18,21 @@ def commitId(): String = try {
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).settings(
+lazy val SeleniumTest = config("selenium") extend(Test)
+
+def seleniumTestFilter(name: String): Boolean = name startsWith "selenium"
+
+def unitTestFilter(name: String): Boolean = !seleniumTestFilter(name)
+
+testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
+
+testOptions in Test := Seq(Tests.Filter(unitTestFilter))
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
+  .configs(SeleniumTest)
+  .settings(
+  inConfig(SeleniumTest)(Defaults.testTasks),
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
@@ -29,7 +43,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoOptions += BuildInfoOption.ToMap,
   scalastyleFailOnError := true,
   testScalastyle := scalastyle.in(Compile).toTask("").value,
-  testOptions in Test += Tests.Argument("-l", "Selenium"),
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
@@ -118,5 +131,3 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
-addCommandAlias("fast-test", "test")
-addCommandAlias("selenium-test", "testOnly -- -n Selenium")
