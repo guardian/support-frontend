@@ -217,6 +217,14 @@
       color: gu-colour(neutral-2);
     }
 
+    .component-inline-payment-logos {
+      float: none;
+
+      svg {
+        margin: 0 ($gu-h-spacing / 2) 0 0;
+      }
+    }
+
     .component-contribution-selection__amount, .component-contribution-selection__type {
       .component-radio-toggle__label {
         background-color: #fff;
@@ -234,7 +242,7 @@
       font-size: 16px;
       line-height: 16px;
       padding: ($gu-v-spacing + 1) 0;
-      margin-bottom: $gu-v-spacing;
+      margin: $gu-v-spacing 0;
 
       .component-radio-toggle {
         display: inline;
