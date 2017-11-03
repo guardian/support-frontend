@@ -216,10 +216,6 @@
       border-color: gu-colour(light-yellow);
       color: gu-colour(neutral-2);
 
-      .component-secure {
-        
-      }
-
       .component-info-section__header {
         position: relative;
 
@@ -239,6 +235,31 @@
 
         @include mq($until: desktop) {
           display: none;
+        }
+      }
+
+      .component-cta-link {
+        height: 60px;
+        line-height: 60px;
+        background-color: gu-colour(comment-main-2);
+        color: gu-colour(neutral-1);
+        font-size: 16px;
+        font-weight: bold;
+        padding-left: 28px;
+
+        &:hover {
+          background-color: darken(gu-colour(comment-main-2), 5%);
+        }
+
+        @include mq($from: tablet) {
+          width: 600px;
+        }
+
+        .svg-arrow-right-straight {
+          top: 22px;
+          right: 22px;
+          height: 38%;
+          fill: gu-colour(neutral-1);
         }
       }
     }
@@ -312,6 +333,7 @@
       font-size: 16px;
       line-height: 16px;
       margin-top: $gu-v-spacing;
+      margin-bottom: $gu-v-spacing * 3;
       display: block;
 
       @include mq($from: phablet) {

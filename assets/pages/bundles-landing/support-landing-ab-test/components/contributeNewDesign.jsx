@@ -8,11 +8,13 @@ import { connect } from 'react-redux';
 import InfoSection from 'components/infoSection/infoSection';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import Secure from 'components/secure/secure';
+import CtaLink from 'components/ctaLink/ctaLink';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {
   Amount,
   Contrib as ContributionType,
+  ContribError as ContributionError,
 } from 'helpers/contributions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -25,6 +27,7 @@ import {
   changeContribAmountOneOff,
   changeContribAmount,
 } from '../../bundlesLandingActions';
+import { getCardLink } from '../helpers/contributionLinks';
 
 
 // ----- Props ----- //
@@ -37,6 +40,7 @@ type PropTypes = {
   country: IsoCountry,
   currency: Currency,
   selectedAmount: Amount,
+  contributionError: ContributionError,
   changeContributionType: string => void,
   changeContributionAmountAnnual: string => void,
   changeContributionAmountMonthly: string => void,
@@ -55,6 +59,7 @@ function mapStateToProps(state) {
     country: state.common.country,
     currency: state.common.currency,
     selectedAmount: state.page.amount[contributionTypeCamelCase],
+    contributionError: state.page.error,
   };
 
 }
@@ -94,6 +99,22 @@ function getAmountToggle(props: PropTypes) {
 
 }
 
+function ctaClick(props: PropTypes) {
+
+  const linkLocation = getCardLink(
+    props.contributionType,
+    props.selectedAmount,
+    props.currency,
+  );
+
+  return () => {
+    if (!props.contributionError) {
+      window.location = linkLocation;
+    }
+  };
+
+}
+
 
 // ----- Component ----- //
 
@@ -115,6 +136,13 @@ function Contribute(props: PropTypes) {
           toggleAmount={getAmountToggle(props)}
           toggleType={props.changeContributionType}
           setCustomAmount={props.setContributionCustomAmount}
+        />
+        <CtaLink
+          ctaId="contribute"
+          text="contribute with credit/debit"
+          onClick={ctaClick(props)}
+          id="qa-contribute-button"
+          accessibilityHint="contribute with credit or debit card"
         />
       </InfoSection>
     </div>
