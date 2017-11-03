@@ -1,5 +1,7 @@
 #bundles-landing-page {
 
+  // ----- General
+
   // ----- Introduction
 
   .introduction-text {
@@ -195,6 +197,22 @@
           line-height: 20px;
           margin-bottom: $gu-v-spacing;
           font-family: $gu-text-egyptian-web;
+        }
+      }
+
+      .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
+        background-color: gu-colour(multimedia-main-2);
+      }
+
+      .component-number-input--selected {
+        background-color: gu-colour(neutral-1);
+        color: #fff;
+        font-weight: bold;
+
+        &::placeholder {
+          font-weight: normal;
+          color: #ffffff;
+          opacity: 0.4;
         }
       }
     }
@@ -712,19 +730,4 @@
     margin-bottom: 0;
   }
 
-  .component-radio-toggle input:not(:checked)+label, .component-number-input {
-      background-color: gu-colour(multimedia-main-2);
-  }
-
-  .component-number-input--selected {
-      background-color: gu-colour(neutral-1);
-      color: #fff;
-      font-weight: bold;
-
-      &::placeholder {
-          font-weight: normal;
-          color: #ffffff;
-          opacity: 0.4;
-      }
-  }
 }

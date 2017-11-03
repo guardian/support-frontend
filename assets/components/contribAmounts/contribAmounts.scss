@@ -26,6 +26,10 @@
     }
 
     .component-radio-toggle__label {
+        background-color: #fff;
+        padding: 6px 10px;
+        margin: 3px 0;
+        height: 36px;
         display: block;
         height: $gu-v-spacing * 2;
         text-align: center;
