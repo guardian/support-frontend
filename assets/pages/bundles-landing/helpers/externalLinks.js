@@ -90,6 +90,21 @@ const customPromos : {
     paper: 'p/NBIGBANLONG2',
     paperDig: 'p/NDBIGBANLONG2',
   },
+  epic_paradise_paradise_highlight: {
+    digital: 'p/DPARAHIGH',
+    paper: 'p/NPARAHIGH',
+    paperDig: 'p/NDPARAHIGH',
+  },
+  epic_paradise_control: {
+    digital: 'p/DPARACON',
+    paper: 'p/NPARACON',
+    paperDig: 'p/NDPARACON',
+  },
+  epic_paradise_standfirst: {
+    digital: 'p/DPARASTAND',
+    paper: 'p/NPARASTAND',
+    paperDig: 'p/NDPARASTAND',
+  },
 };
 
 
