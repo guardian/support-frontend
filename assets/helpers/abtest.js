@@ -4,7 +4,7 @@
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-import shajs from 'sha.js';
+import seedrandom from 'seedrandom';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
@@ -114,7 +114,8 @@ function randomNumber(seed: number, independence: number): number {
     return seed;
   }
 
-  return Math.abs(shajs('sha256').update(String(seed + independence)).digest().readInt32BE(0));
+  const rng = seedrandom(seed + independence);
+  return Math.abs(rng.int32());
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
