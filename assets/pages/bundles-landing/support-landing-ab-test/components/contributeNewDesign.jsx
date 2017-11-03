@@ -9,6 +9,8 @@ import InfoSection from 'components/infoSection/infoSection';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import Secure from 'components/secure/secure';
 import CtaLink from 'components/ctaLink/ctaLink';
+import PayPalContributionButton
+  from 'components/payPalContributionButton/payPalContributionButton';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {
@@ -18,6 +20,8 @@ import type {
 } from 'helpers/contributions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Participations } from 'helpers/abtest';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import ContributionSelection from './contributionSelectionNewDesign';
 import {
@@ -27,7 +31,11 @@ import {
   changeContribAmountOneOff,
   changeContribAmount,
 } from '../../bundlesLandingActions';
-import { getCardLink } from '../helpers/contributionLinks';
+import {
+  getCardLink,
+  getCardCtaText,
+  getCardA11yText,
+} from '../helpers/contributionLinks';
 
 
 // ----- Props ----- //
@@ -41,6 +49,8 @@ type PropTypes = {
   currency: Currency,
   selectedAmount: Amount,
   contributionError: ContributionError,
+  abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
   changeContributionType: string => void,
   changeContributionAmountAnnual: string => void,
   changeContributionAmountMonthly: string => void,
@@ -115,6 +125,26 @@ function ctaClick(props: PropTypes) {
 
 }
 
+function paypalButton(props: PropTypes) {
+
+  if (props.contributionType === 'ONE_OFF') {
+
+    return (<PayPalContributionButton
+      amount={Number(props.selectedAmount.value)}
+      abParticipations={props.abTests}
+      referrerAcquisitionData={props.referrerAcquisitionData}
+      isoCountry={props.country}
+      errorHandler={() => {}}
+      canClick={!props.contributionError}
+      buttonText="contribute with PayPal"
+    />);
+
+  }
+
+  return null;
+
+}
+
 
 // ----- Component ----- //
 
@@ -137,12 +167,13 @@ function Contribute(props: PropTypes) {
           toggleType={props.changeContributionType}
           setCustomAmount={props.setContributionCustomAmount}
         />
+        {paypalButton(props)}
         <CtaLink
           ctaId="contribute"
-          text="contribute with credit/debit"
+          text={getCardCtaText(props.contributionType)}
           onClick={ctaClick(props)}
           id="qa-contribute-button"
-          accessibilityHint="contribute with credit or debit card"
+          accessibilityHint={getCardA11yText(props.contributionType)}
         />
       </InfoSection>
     </div>

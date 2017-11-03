@@ -39,9 +39,31 @@ function getCardLink(
 
 }
 
+function getCardCtaText(contributionType: ContributionType) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'contribute with credit/debit';
+  }
+
+  return 'contribute with credit/debit or PayPal';
+
+}
+
+function getCardA11yText(contributionType: ContributionType) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'contribute with credit or debit card';
+  }
+
+  return 'contribute with credit or debit card, or with PayPal';
+
+}
+
 
 // ----- Exports ----- //
 
 export {
   getCardLink,
+  getCardCtaText,
+  getCardA11yText,
 };

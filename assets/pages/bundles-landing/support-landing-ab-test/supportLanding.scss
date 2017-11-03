@@ -239,13 +239,16 @@
       }
 
       .component-cta-link {
-        height: 60px;
-        line-height: 60px;
+        height: 62px;
+        line-height: 62px;
         background-color: gu-colour(comment-main-2);
         color: gu-colour(neutral-1);
         font-size: 16px;
         font-weight: bold;
         padding-left: 28px;
+        padding-top: 0;
+        padding-bottom: 0;
+        box-sizing: border-box;
 
         &:hover {
           background-color: darken(gu-colour(comment-main-2), 5%);
@@ -256,10 +259,36 @@
         }
 
         .svg-arrow-right-straight {
-          top: 22px;
-          right: 22px;
-          height: 38%;
+          top: 20px;
+          right: 16px;
+          height: 35%;
           fill: gu-colour(neutral-1);
+        }
+      }
+
+      .component-paypal-contribution-button {
+        height: 60px;
+        border-color: #012169;
+        color: #012169;
+        font-size: 16px;
+        font-family: $gu-text-sans-web;
+        width: 100%;
+        margin-top: $gu-v-spacing;
+
+        @include mq($from: tablet) {
+          width: 600px;
+        }
+
+        .svg-arrow-right-straight {
+          fill: #012169;
+        }
+
+        .paypal-p-logo-0, .paypal-p-logo-2 {
+          fill: #012169;
+        }
+
+        .paypal-p-logo-1 {
+          fill: #009cde;
         }
       }
     }
