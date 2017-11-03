@@ -234,7 +234,7 @@ he has to set up the custom dimension called `experiment` with the value of the 
 found [here](https://github.com/guardian/support-frontend/pull/68/files#diff-bdf2dc8b3411cc1e5f83ca22c698e7b3R31).  
 
 
-#### `trackOphan(participation: Participations, complete: boolean)`
+#### `trackABOphan(participation: Participations, complete: boolean)`
 Track event using `tracker-js` from Ophan. 
 
 #### `abTestReducer(state: Participations = {}, action: Action)`
@@ -351,10 +351,10 @@ Now that you are rendering the correct component depending on the variant, the f
 a button click, whether the user writes something in a text field, etc. Basically, it can be any event that the user can produce. 
 Test displays are automatically tracked to Ophan, but in order to use abacus as your test tool, you have to track the test's conversion action.
   
-This tracking can be done using the [`trackAB`](#71-api) function from the ABtest framework. This function 
+This tracking can be done using the [`trackABOphan`](#71-api) function from the ABtest framework. This function 
 receives an A/B participation and a flag indicating whether is a complete event or not (which should be `true` in the case of conversions).
 
-If you are firing a conversion event for a specific test, be sure that the `participations` parameter you provide to `trackOphan` only contains your test.
+If you are firing a conversion event for a specific test, be sure that the `participations` parameter you provide to `trackABOphan` only contains your test.
 
 ## 9 Test Environments
 

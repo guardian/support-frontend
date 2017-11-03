@@ -162,7 +162,7 @@ const buildOphanPayload = (participations: Participations, complete: boolean): O
 
 // ----- Exports ----- //
 
-const trackAB = (participations: Participations, complete: boolean): void => {
+const trackABOphan = (participations: Participations, complete: boolean): void => {
   ophan.record({
     abTestRegister: buildOphanPayload(participations, complete),
   });
@@ -175,7 +175,7 @@ const init = (country: IsoCountry, abTests: Tests = tests): Participations => {
   const urlParticipations: ?Participations = getParticipationsFromUrl();
 
   setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
-  trackAB(participations, false);
+  trackABOphan(participations, false);
 
   return participations;
 };
