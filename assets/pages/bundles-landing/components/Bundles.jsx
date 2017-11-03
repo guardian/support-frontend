@@ -10,6 +10,7 @@ import type { ListItem } from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
+import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
@@ -29,6 +30,7 @@ import { getSubsLinks } from '../helpers/externalLinks';
 
 import type { SubsUrls } from '../helpers/externalLinks';
 import type { Participations } from '../../../helpers/abtest';
+import type {ReferrerAcquisitionData} from '../../../helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -51,16 +53,22 @@ type PropTypes = {
   isoCountry: IsoCountry,
   currency: Currency,
   abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 };
 
 type ContribAttrs = {
   heading: string,
-  subheading: string,
+  subheading?: string,
   ctaText: string,
   modifierClass: string,
   ctaId: string,
   ctaLink: string,
   ctaAccessibilityHint: string,
+  paypalCta?: {
+    id: string,
+    text: string,
+    accessibilityHint: string,
+  },
 }
 
 type DigitalAttrs = {
@@ -92,7 +100,11 @@ type PaperAttrs = {
 /* eslint-enable react/no-unused-prop-types */
 
 type BundlesType = {
-  contrib: ContribAttrs,
+  contrib: {
+    oneOff: ContribAttrs,
+    monthly: ContribAttrs,
+    annual: ContribAttrs,
+  },
   digital: DigitalAttrs,
   paper: PaperAttrs,
 }
@@ -100,14 +112,38 @@ type BundlesType = {
 
 // ----- Copy ----- //
 
-const contribCopy: ContribAttrs = {
+const oneOffContribCopy: ContribAttrs = {
+  heading: 'contribute',
+  ctaText: 'Contribute with card',
+  ctaId: 'contribute',
+  modifierClass: 'contributions',
+  ctaLink: '',
+  ctaAccessibilityHint: 'Proceed to make a one-off contribution',
+  paypalCta: {
+    id: 'contribute-paypal',
+    text: 'Contribute with PayPal',
+    accessibilityHint: 'Proceed to make a one-off contribution with PayPal',
+  },
+};
+
+const monthlyContribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
   modifierClass: 'contributions',
   ctaLink: '',
-  ctaAccessibilityHint: 'Proceed to make your chosen contribution',
+  ctaAccessibilityHint: 'Proceed to make a monthly contribution',
+};
+
+const annualContribCopy: ContribAttrs = {
+  heading: 'contribute',
+  subheading: 'from £50/year',
+  ctaText: 'Contribute with card or PayPal',
+  ctaId: 'contribute',
+  modifierClass: 'contributions',
+  ctaLink: '',
+  ctaAccessibilityHint: 'Proceed to make an annual contribution',
 };
 
 const digitalCopy: DigitalAttrs = {
@@ -157,7 +193,11 @@ const paperCopy: PaperAttrs = {
 };
 
 const bundles: BundlesType = {
-  contrib: contribCopy,
+  contrib: {
+    oneOff: oneOffContribCopy,
+    monthly: monthlyContribCopy,
+    annual: annualContribCopy,
+  },
   digital: digitalCopy,
   paper: paperCopy,
 };
@@ -168,13 +208,6 @@ const ctaLinks = {
   oneOff: routes.oneOffContribCheckout,
   subs: 'https://subscribe.theguardian.com',
 };
-
-const contribSubheading = {
-  annual: 'from £50/year',
-  monthly: 'from £5/month',
-  oneOff: '',
-};
-
 
 // ----- Functions ----- //
 
@@ -195,7 +228,6 @@ const getContribAttrs = (
 ): ContribAttrs => {
 
   const contType = getContribKey(contribType);
-  const subheading = contribSubheading[contType];
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);
@@ -209,8 +241,9 @@ const getContribAttrs = (
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
-  return Object.assign({}, bundles.contrib, {
-    ctaId, ctaLink, subheading, ctaAccessibilityHint,
+
+  return Object.assign({}, bundles.contrib[contType], {
+    ctaId, ctaLink, ctaAccessibilityHint,
   });
 
 };
@@ -256,6 +289,19 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
+
+      {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
+        <PayPalContributionButton
+          buttonText={contribAttrs.paypalCta.text}
+          amount={Number(props.contribAmount.oneOff.value)}
+          referrerAcquisitionData={props.referrerAcquisitionData}
+          isoCountry={props.isoCountry}
+          errorHandler={e => alert(e)}
+          abParticipations={props.abTests}
+          additionalClass={`bundle-landing ${props.contribError ? 'contrib-error' : ''}`}
+        />
+      }
+
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
         text={contribAttrs.ctaText}
@@ -344,6 +390,7 @@ function mapStateToProps(state) {
     isoCountry: state.common.country,
     currency: state.common.currency,
     abTests: state.common.abParticipations,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
   };
 }
 

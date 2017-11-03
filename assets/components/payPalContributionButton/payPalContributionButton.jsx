@@ -25,6 +25,7 @@ type PropTypes = {
   errorHandler: (string) => void,
   canClick?: boolean,
   buttonText?: string,
+  additionalClass?: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -52,7 +53,7 @@ const PayPalContributionButton = (props: PropTypes) =>
   (
     <button
       id="qa-contribute-paypal-button"
-      className="component-paypal-contribution-button"
+      className={`component-paypal-contribution-button ${props.additionalClass || ''}`}
       onClick={payWithPayPal(props)}
     >
 

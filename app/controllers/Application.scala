@@ -46,7 +46,7 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js, description = Some(stringsConfig.bundleLandingDescription)))
+    Ok(views.html.react(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -54,11 +54,11 @@ class Application(
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js))
+    Ok(views.html.react(title, id, js, contributionsPayPalEndpoint))
   }
 
   def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { implicit request =>
-    Ok(views.html.react(title, id, js))
+    Ok(views.html.react(title, id, js, contributionsPayPalEndpoint))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

@@ -42,9 +42,17 @@
   &:hover {
     border-color: #000;
     color: #000;
-    
+
     .svg-arrow-right-straight {
       fill: #000;
+    }
+  }
+
+  &.bundle-landing {
+    width: 100%;
+
+    &.contrib-error {
+      top: -16px;
     }
   }
 }
