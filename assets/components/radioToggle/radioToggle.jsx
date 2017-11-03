@@ -92,8 +92,8 @@ export default function RadioToggle(props: PropTypes) {
   const radioGroupId = uuidv4();
 
   return (
-    <div>
-      <div className="component-radio-toggle" aria-describedby={radioGroupId}>{radioButtons}</div>
+    <div className="component-radio-toggle" aria-describedby={radioGroupId}>
+      {radioButtons}
       <p id={radioGroupId} className="accessibility-hint">{props.accessibilityHint}</p>
     </div>
   );
