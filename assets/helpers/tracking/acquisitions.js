@@ -78,6 +78,15 @@ const campaigns : {
   big_long_banner_two_long: [
     'banner_big_long_two_long',
   ],
+  epic_paradise_paradise_highlight: [
+    'gdnwb_copts_memco_epic_paradise_paradise_highlight',
+  ],
+  epic_paradise_control: [
+    'gdnwb_copts_memco_epic_paradise_control',
+  ],
+  epic_paradise_standfirst: [
+    'gdnwb_copts_memco_epic_paradise_standfirst',
+  ],
 };
 
 export type Campaign = $Keys<typeof campaigns>;
