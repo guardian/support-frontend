@@ -214,26 +214,70 @@
     .contribute-new-design__content {
       background-color: #fff;
       border-top: none;
+      color: gu-colour(neutral-2);
     }
 
     .component-contribution-selection__amount, .component-contribution-selection__type {
-
-      .component-radio-toggle label {
+      .component-radio-toggle__label {
         border: 1px solid gu-colour(comment-main-2);
-        background-color: gu-colour(comment-main-2);
+        background-color: #fff;
       }
 
-      .component-radio-toggle input:not(:checked)+label {
-        background-color: #fff;
+      .component-radio-toggle__input:checked+.component-radio-toggle__label {
+        background-color: gu-colour(comment-main-2);
+        font-weight: bold;
+        color: gu-colour(neutral-1);
       }
 
     }
 
+    .component-contribution-selection__type {
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    .component-contribution-selection__amount {
+      display: inline-block;
+      vertical-align: top;
+      font-size: 18px;
+      line-height: 18px;
+
+      @include mq($until: phablet) {
+        border-top: 2px dotted gu-colour(neutral-2);
+        width: 100%;
+        padding-top: $gu-v-spacing;
+      }
+
+      .component-radio-toggle__label {
+        display: inline-block;
+        text-align: center;
+        line-height: 60px;
+        width: 60px;
+        height: 60px;
+        margin-right: $gu-h-spacing / 2;
+      }
+    }
+
     .component-contribution-selection__custom-amount {
+      vertical-align: top;
+      font-size: 16px;
+      line-height: 16px;
+      margin-top: $gu-v-spacing;
+      display: block;
+
+      @include mq($from: phablet) {
+        display: inline-block;
+        margin-left: $gu-h-spacing / 2;
+        margin-top: 0;
+      }
 
       .component-number-input {
         background-color: #fff;
         border: 1px solid gu-colour(comment-main-2);
+        font-size: 16px;
+        padding: 0;
+        margin: 0;
+        height: 60px;
       }
 
       .component-number-input--selected {
