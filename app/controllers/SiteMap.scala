@@ -24,11 +24,7 @@ class SiteMap(
   private def supportLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>{
-        routes.Application.reactTemplate(
-          title = "Support the Guardian",
-          id = "bundles-landing-page",
-          js = "bundlesLandingPage.js"
-        ).absoluteURL(secure = true)
+        routes.Application.bundleLanding().absoluteURL(secure = true)
       }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
         routes.Application.contributionsLanding(
@@ -37,11 +33,7 @@ class SiteMap(
         ).absoluteURL(secure = true)
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
-        routes.Application.reactTemplate(
-          title = "Support the Guardian",
-          id = "bundles-landing-page",
-          js = "bundlesLandingPage.js"
-        ).absoluteURL(secure = true)
+        routes.Application.bundleLanding().absoluteURL(secure = true)
       }/>
       <priority>1.0</priority>
     </url>
@@ -59,11 +51,7 @@ class SiteMap(
         ).absoluteURL(secure = true)
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
-        routes.Application.reactTemplate(
-          title = "Support the Guardian",
-          id = "bundles-landing-page",
-          js = "bundlesLandingPage.js"
-        ).absoluteURL(secure = true)
+        routes.Application.bundleLanding().absoluteURL(secure = true)
       }/>
       <priority>1.0</priority>
     </url>
