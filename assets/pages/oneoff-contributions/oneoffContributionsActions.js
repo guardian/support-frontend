@@ -14,10 +14,17 @@ export type Action =
 
 // ----- Actions ----- //
 
-export function checkoutError(message: ?string): Action {
+function checkoutError(message: ?string): Action {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
-export function setPayPalButton(value: PayPalButtonType): Action {
+function setPayPalButton(value: PayPalButtonType): Action {
   return { type: 'SET_PAYPAL_BUTTON', value };
 }
+
+// ----- Exports ----- //
+
+export {
+  checkoutError,
+  setPayPalButton,
+};

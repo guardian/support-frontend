@@ -8,6 +8,7 @@ import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
+import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{IdentityService, TestUserService}
@@ -36,14 +37,14 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint, mock[StringsConfig]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint, mock[StringsConfig]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

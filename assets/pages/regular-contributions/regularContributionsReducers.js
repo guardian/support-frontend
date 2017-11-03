@@ -5,11 +5,9 @@
 import { combineReducers } from 'redux';
 
 import type { User as UserState } from 'helpers/user/userReducer';
-import type { State as StripeCheckoutState } from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import createStripeCheckoutReducer from 'helpers/stripeCheckout/stripeCheckoutReducer';
 import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -35,7 +33,6 @@ export type State = {
 export type CombinedState = {
   regularContrib: State,
   user: UserState,
-  stripeCheckout: StripeCheckoutState,
   payPalExpressCheckout: PayPalExpressCheckoutState,
   csrf: CsrfState,
 };
@@ -71,15 +68,6 @@ function createRegularContribReducer(amount: number, currency: Currency) {
       case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
 
-      case 'SET_STATUS_URI':
-        return Object.assign({}, state, { statusUri: action.uri });
-
-      case 'INCREMENT_POLL_COUNT':
-        return Object.assign({}, state, { pollCount: state.pollCount + 1 });
-
-      case 'RESET_POLL_COUNT':
-        return Object.assign({}, state, { pollCount: 0 });
-
       default:
         return state;
 
@@ -94,7 +82,6 @@ export default function createRootRegularContributionsReducer(amount: number, cu
   return combineReducers({
     regularContrib: createRegularContribReducer(amount, currency),
     user,
-    stripeCheckout: createStripeCheckoutReducer(amount, currency.iso),
     payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),
     csrf,
   });

@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 import scala.sys.process._
 
@@ -18,7 +18,21 @@ def commitId(): String = try {
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).settings(
+lazy val SeleniumTest = config("selenium") extend(Test)
+
+def seleniumTestFilter(name: String): Boolean = name startsWith "selenium"
+
+def unitTestFilter(name: String): Boolean = !seleniumTestFilter(name)
+
+testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
+
+testOptions in Test := Seq(Tests.Filter(unitTestFilter))
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
+  .configs(SeleniumTest)
+  .settings(
+  inConfig(SeleniumTest)(Defaults.testTasks),
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
@@ -29,7 +43,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, BuildInfoPlugin,
   buildInfoOptions += BuildInfoOption.ToMap,
   scalastyleFailOnError := true,
   testScalastyle := scalastyle.in(Compile).toTask("").value,
-  testOptions in Test += Tests.Argument("-l", "Selenium"),
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
@@ -39,21 +52,22 @@ val circeVersion = "0.8.0"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
+val awsVersion = "1.11.221"
 libraryDependencies ++= Seq(
-  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % Test,
-  "org.mockito" % "mockito-core" % "2.7.22" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  "org.mockito" % "mockito-core" % "2.11.0" % Test,
   "com.getsentry.raven" % "raven-logback" % "8.0.3",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-  "com.amazonaws" % "aws-java-sdk-kms" % "1.11.128",
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % "1.11.128",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
+  "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
   "org.typelevel" %% "cats" % "0.9.0",
   "com.dripower" %% "play-circe" % "2608.5",
-  "com.gu" %% "support-models" % "0.15",
+  "com.gu" %% "support-models" % "0.16",
   "com.gu" %% "support-config" % "0.7",
-  "com.gu" %% "fezziwig" % "0.6",
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.128",
-  "com.typesafe.akka" %% "akka-agent" % "2.4.12",
-  "com.gu" %% "support-internationalisation" % "0.2",
+  "com.gu" %% "fezziwig" % "0.7",
+  "com.typesafe.akka" %% "akka-agent" % "2.5.6",
+  "com.gu" %% "support-internationalisation" % "0.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -61,12 +75,12 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-play-auth" % "2.0",
   "com.gu" %% "identity-test-users" % "0.6",
-  "com.google.guava" % "guava" % "22.0",
+  "com.google.guava" % "guava" % "23.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.0",
   "io.github.bonigarcia" % "webdrivermanager" % "1.7.2" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "test",
-  "com.squareup.okhttp3" % "okhttp" % "3.8.1",
+  "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   filters,
   ws
 )
@@ -118,5 +132,3 @@ excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value
   "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
-addCommandAlias("fast-test", "test")
-addCommandAlias("selenium-test", "testOnly -- -n Selenium")
