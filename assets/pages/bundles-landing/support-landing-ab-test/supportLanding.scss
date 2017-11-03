@@ -215,6 +215,32 @@
       background-color: #fff;
       border-top: none;
       color: gu-colour(neutral-2);
+
+      .component-secure {
+        
+      }
+
+      .component-info-section__header {
+        position: relative;
+
+        .component-secure {
+          position: absolute;
+          top: 10px;
+          right: 0;
+
+          @include mq($from: desktop) {
+            display: none;
+          }
+        }
+      }
+
+      .component-info-section__content .component-secure {
+        float: right;
+
+        @include mq($until: desktop) {
+          display: none;
+        }
+      }
     }
 
     .component-inline-payment-logos {

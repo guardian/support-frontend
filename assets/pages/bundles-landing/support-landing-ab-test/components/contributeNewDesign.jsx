@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import InfoSection from 'components/infoSection/infoSection';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
+import Secure from 'components/secure/secure';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {
@@ -103,8 +104,9 @@ function Contribute(props: PropTypes) {
       <InfoSection
         heading="contribute"
         className="contribute-new-design__content gu-content-margin"
-        headingContent={<InlinePaymentLogos />}
+        headingContent={<div><Secure /><InlinePaymentLogos /></div>}
       >
+        <Secure />
         <ContributionSelection
           contributionType={props.contributionType}
           country={props.country}
