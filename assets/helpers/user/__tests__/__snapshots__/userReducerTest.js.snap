@@ -7,6 +7,7 @@ Object {
   "firstName": "",
   "gnmMarketing": false,
   "id": "",
+  "isPostDeploymentTestUser": null,
   "isTestUser": null,
   "lastName": "",
 }

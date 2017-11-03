@@ -62,21 +62,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       When("they press the Stripe payment button")
       MonthlyContribution.selectStripePayment()
 
-      Then("the Stripe Checkout iFrame should display")
-      assert(MonthlyContribution.stripeCheckoutHasLoaded)
-
-      Given("that the Stripe Checkout iFrame has the expected fields")
-      MonthlyContribution.switchToStripe()
-      assert(MonthlyContribution.stripeCheckoutHasCardNumberField)
-      assert(MonthlyContribution.stripeCheckoutHasExpiryField)
-      assert(MonthlyContribution.stripeCheckoutHasCvcField)
-      assert(MonthlyContribution.stripeCheckoutHasSubmitButton)
-
-      When("they fill in valid credit card payment details")
-      MonthlyContribution.fillInCreditCardDetails()
-
-      And("they click on the pay button")
-      MonthlyContribution.clickStripePayButton()
+      And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
       RecurringContributionThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed

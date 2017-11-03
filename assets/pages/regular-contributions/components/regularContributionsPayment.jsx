@@ -34,6 +34,7 @@ type PropTypes = {
   hide: boolean,
   error: ?string,
   isTestUser: boolean,
+  isPostDeploymentTestUser: boolean,
   contributionType: Contrib,
   paymentStatus: PaymentStatus,
   currency: Currency,
@@ -75,6 +76,7 @@ function getStripeButton(
   contribType: Contrib,
   currency: Currency,
   isTestUser: boolean,
+  isPostDeploymentTestUser: boolean,
   dispatch: Function,
   csrf: CsrfState,
   country: IsoCountry,
@@ -103,6 +105,7 @@ function getStripeButton(
       )}
       currency={currency}
       isTestUser={isTestUser}
+      isPostDeploymentTestUser={isPostDeploymentTestUser}
       amount={amount}
     />
   );
@@ -168,6 +171,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
         props.contributionType,
         props.currency,
         props.isTestUser,
+        props.isPostDeploymentTestUser,
         props.dispatch,
         props.csrf,
         props.country,
@@ -197,6 +201,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
 function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
+    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser || false,
     email: state.page.user.email,
     hide: state.page.user.firstName === '' || state.page.user.lastName === '',
     error: state.page.regularContrib.error,

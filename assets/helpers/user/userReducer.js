@@ -14,6 +14,7 @@ export type User = {
   firstName: ?string,
   lastName: ?string,
   isTestUser: ?boolean,
+  isPostDeploymentTestUser: ?boolean,
   fullName?: string,
   stateField?: string,
   postcode?: string,
@@ -30,6 +31,7 @@ const initialState: User = {
   firstName: '',
   lastName: '',
   isTestUser: null,
+  isPostDeploymentTestUser: null,
   gnmMarketing: false,
 };
 
@@ -59,6 +61,9 @@ function userReducer(
 
     case 'SET_TEST_USER':
       return Object.assign({}, state, { isTestUser: action.testUser });
+
+    case 'SET_POST_DEPLOYMENT_TEST_USER':
+      return Object.assign({}, state, { isPostDeploymentTestUser: action.postDeploymentTestUser });
 
     case 'SET_EMAIL':
       return Object.assign({}, state, { email: action.email });

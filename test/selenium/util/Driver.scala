@@ -1,7 +1,7 @@
 package selenium.util
 
 import java.net.URL
-import java.util.{Date}
+import java.util.Date
 import io.github.bonigarcia.wdm.ChromeDriverManager
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
@@ -45,6 +45,10 @@ object Driver {
 
     driver.get(Config.supportFrontendUrl + "/uk")
     driver.manage.deleteAllCookies()
+
+    // This enables the tests to use the mocked payment services
+    addCookie(name = "_post_deploy_user", value = "true")
+
   }
 
   def quit(): Unit = driver.quit()
