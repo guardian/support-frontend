@@ -219,7 +219,6 @@
 
     .component-contribution-selection__amount, .component-contribution-selection__type {
       .component-radio-toggle__label {
-        border: 1px solid gu-colour(comment-main-2);
         background-color: #fff;
       }
 
@@ -234,6 +233,19 @@
     .component-contribution-selection__type {
       font-size: 16px;
       line-height: 16px;
+      padding: ($gu-v-spacing + 1) 0;
+      margin-bottom: $gu-v-spacing;
+
+      .component-radio-toggle {
+        display: inline;
+        border: 1px solid gu-colour(comment-main-2);
+        border-radius: 600px;
+        padding: $gu-v-spacing 0;
+      }
+
+      .component-radio-toggle__label {
+        padding: $gu-v-spacing $gu-h-spacing;
+      }
     }
 
     .component-contribution-selection__amount {
@@ -241,16 +253,19 @@
       vertical-align: top;
       font-size: 18px;
       line-height: 18px;
+      margin-top: $gu-v-spacing;
 
       @include mq($until: phablet) {
-        border-top: 2px dotted gu-colour(neutral-2);
+        border-top: 2px dotted gu-colour(neutral-3);
         width: 100%;
         padding-top: $gu-v-spacing;
+        margin-top: $gu-v-spacing * 2;
       }
 
       .component-radio-toggle__label {
         display: inline-block;
         text-align: center;
+        border: 1px solid gu-colour(comment-main-2);
         line-height: 60px;
         width: 60px;
         height: 60px;
@@ -268,7 +283,6 @@
       @include mq($from: phablet) {
         display: inline-block;
         margin-left: $gu-h-spacing / 2;
-        margin-top: 0;
       }
 
       .component-number-input {
