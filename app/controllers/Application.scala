@@ -6,6 +6,7 @@ import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
+import config.StringsConfig
 
 import scala.concurrent.ExecutionContext
 
@@ -14,7 +15,8 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    contributionsPayPalEndpoint: String
+    contributionsPayPalEndpoint: String,
+    stringsConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
@@ -41,6 +43,10 @@ class Application(
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location + path, request.queryString)
+  }
+
+  def bundleLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.react(title, id, js, description = Some(stringsConfig.bundleLandingDescription)))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
