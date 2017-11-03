@@ -13,7 +13,8 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
-    appConfig.contributionsPayPalEndpoint
+    appConfig.contributionsPayPalEndpoint,
+    stringsConfig
   )
 
   lazy val regularContributionsController = new RegularContributions(
