@@ -41,8 +41,12 @@ const StripePopUpButton = (props: PropTypes) => {
   }
 
   const onClick = () => {
-    if (props.canOpen && props.canOpen()) {
-      openDialogBox(props.amount, props.email, props.callback, props.isPostDeploymentTestUser);
+    // Don't open Stripe Checkout for automated tests, call the backend immediately
+    if (props.isPostDeploymentTestUser) {
+      const testTokenId = 'tok_visa';
+      props.callback(testTokenId);
+    } else if (props.canOpen && props.canOpen()) {
+      openDialogBox(props.amount, props.email);
     }
   };
 

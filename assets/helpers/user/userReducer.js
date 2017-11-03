@@ -14,7 +14,7 @@ export type User = {
   firstName: ?string,
   lastName: ?string,
   isTestUser: ?boolean,
-  isPostDeploymentTestUser: ?boolean,
+  isPostDeploymentTestUser: boolean,
   fullName?: string,
   stateField?: string,
   postcode?: string,
@@ -31,7 +31,7 @@ const initialState: User = {
   firstName: '',
   lastName: '',
   isTestUser: null,
-  isPostDeploymentTestUser: null,
+  isPostDeploymentTestUser: false,
   gnmMarketing: false,
 };
 

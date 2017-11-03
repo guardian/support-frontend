@@ -52,20 +52,12 @@ export const setupStripeCheckout = (
   });
 });
 
-export const openDialogBox = (
-  amount: number,
-  email: string,
-  postDeployTestCallback: Function,
-  isPostDeploymentTestUser: boolean,
-) => {
-  if (stripeHandler && !isPostDeploymentTestUser) {
+export const openDialogBox = (amount: number, email: string) => {
+  if (stripeHandler) {
     stripeHandler.open({
       // Must be passed in pence.
       amount: amount * 100,
       email,
     });
-  } else if (stripeHandler && isPostDeploymentTestUser) {
-    const testTokenId = 'tok_visa';
-    postDeployTestCallback(testTokenId);
   }
 };

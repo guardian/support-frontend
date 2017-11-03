@@ -32,7 +32,7 @@ Object {
     "firstName": "",
     "gnmMarketing": false,
     "id": "",
-    "isPostDeploymentTestUser": null,
+    "isPostDeploymentTestUser": false,
     "isTestUser": null,
     "lastName": "",
   },
