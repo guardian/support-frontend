@@ -50,7 +50,7 @@ class Application(
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.contributionsLanding(title, id, js, contributionsPayPalEndpoint))
+    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>

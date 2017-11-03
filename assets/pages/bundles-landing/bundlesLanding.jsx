@@ -9,7 +9,6 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { getQueryParameter } from 'helpers/url';
-import { trackOphan } from 'helpers/abtest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
@@ -32,14 +31,6 @@ const store = pageInit(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 /* eslint-enable */
-
-// ----- Setup ----- //
-
-const participations = store.getState().common.abParticipations;
-if (participations.addAnnualContributions) {
-  trackOphan('addAnnualContributions', participations.addAnnualContributions);
-}
-
 
 // ----- Render ----- //
 
