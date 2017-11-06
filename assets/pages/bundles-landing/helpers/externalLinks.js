@@ -100,6 +100,11 @@ const customPromos : {
     paper: 'p/NPARACON',
     paperDig: 'p/NDPARACON',
   },
+  epic_paradise_different_highlight: {
+    digital: 'p/DPARADIFF',
+    paper: 'p/NPARADIFF',
+    paperDig: 'p/NDPARADIFF',
+  },
   epic_paradise_standfirst: {
     digital: 'p/DPARASTAND',
     paper: 'p/NPARASTAND',
