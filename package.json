@@ -47,7 +47,7 @@
     "react-redux": "^5.0.5",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
-    "sha.js": "^2.4.9",
+    "seedrandom": "^2.4.3",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
