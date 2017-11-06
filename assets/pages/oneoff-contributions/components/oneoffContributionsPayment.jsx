@@ -125,7 +125,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
 function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
-    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser || false,
+    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     error: state.page.oneoffContrib.error,
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',

@@ -201,7 +201,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
 function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
-    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser || false,
+    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     hide: state.page.user.firstName === '' || state.page.user.lastName === '',
     error: state.page.regularContrib.error,
