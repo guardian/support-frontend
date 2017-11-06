@@ -81,6 +81,9 @@ const campaigns : {
   epic_paradise_paradise_highlight: [
     'gdnwb_copts_memco_epic_paradise_paradise_highlight',
   ],
+  epic_paradise_different_highlight: [
+    'gdnwb_copts_memco_epic_paradise_different_highlight',
+  ],
   epic_paradise_control: [
     'gdnwb_copts_memco_epic_paradise_control',
   ],
