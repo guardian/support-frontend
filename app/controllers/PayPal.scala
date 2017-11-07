@@ -20,8 +20,7 @@ class PayPal(
     assets: AssetsResolver,
     payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents,
-    contributionsPayPalEndpoint: String
+    components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionBuilders._

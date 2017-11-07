@@ -34,8 +34,7 @@ trait Controllers {
     assetsResolver,
     payPalServiceProvider,
     testUsers,
-    controllerComponents,
-    appConfig.contributionsPayPalEndpoint
+    controllerComponents
   )
 
   lazy val oneOffContributions = new OneOffContributions(
