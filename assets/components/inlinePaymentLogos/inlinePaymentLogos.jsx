@@ -20,8 +20,8 @@ export default function InlinePaymentLogos() {
     <div className="component-inline-payment-logos">
       <SvgVisaLogo />
       <SvgMastercardLogo />
-      <SvgPaypalLogo />
       <SvgAmexLogo />
+      <SvgPaypalLogo />
     </div>
   );
 }
