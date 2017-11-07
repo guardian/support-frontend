@@ -47,12 +47,12 @@
       fill: #000;
     }
   }
+}
 
-  &.bundle-landing {
-    width: 100%;
+.component-paypal-contribution-button--bundle-landing {
+  width: 100%;
 
-    &.contrib-error {
-      top: -16px;
-    }
+  &.contrib-error {
+    top: -16px;
   }
 }
