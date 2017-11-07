@@ -297,7 +297,7 @@ function ContributionBundle(props: PropTypes) {
           amount={Number(props.contribAmount.oneOff.value)}
           referrerAcquisitionData={props.referrerAcquisitionData}
           isoCountry={props.isoCountry}
-          /* eslint no-alert: "off" */
+          // eslint-disable-next-line no-alert
           errorHandler={e => alert(e)}
           abParticipations={props.abTests}
           additionalClass={`bundle-landing ${props.contribError ? 'contrib-error' : ''}`}
