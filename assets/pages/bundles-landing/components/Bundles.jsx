@@ -30,7 +30,7 @@ import { getSubsLinks } from '../helpers/externalLinks';
 
 import type { SubsUrls } from '../helpers/externalLinks';
 import type { Participations } from '../../../helpers/abtest';
-import type {ReferrerAcquisitionData} from '../../../helpers/tracking/acquisitions';
+import type { ReferrerAcquisitionData } from '../../../helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -296,6 +296,7 @@ function ContributionBundle(props: PropTypes) {
           amount={Number(props.contribAmount.oneOff.value)}
           referrerAcquisitionData={props.referrerAcquisitionData}
           isoCountry={props.isoCountry}
+          /* eslint no-alert: "off" */
           errorHandler={e => alert(e)}
           abParticipations={props.abTests}
           additionalClass={`bundle-landing ${props.contribError ? 'contrib-error' : ''}`}

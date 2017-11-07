@@ -69,6 +69,7 @@ const PayPalContributionButton = (props: PropTypes) =>
 PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
+  additionalClass: '',
 };
 
 

@@ -92,5 +92,5 @@ export function paypalContributionsRedirect(
       throw response;
     })
     .then((res) => { window.location = res.approvalUrl; })
-    .catch(e => errorHandler('Sorry, an error occurred, please try again or use another payment method.'));
+    .catch(errorHandler.bind(null, 'Sorry, an error occurred, please try again or use another payment method.'));
 }
