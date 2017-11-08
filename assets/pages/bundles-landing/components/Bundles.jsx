@@ -325,6 +325,7 @@ function DigitalBundle(props: DigitalAttrs) {
       <CtaLink
         ctaId={props.ctaId}
         text={props.ctaText}
+        dataLinkName="bundlesLandingPageDigipackLink"
         accessibilityHint={props.ctaAccessibilityHint}
         url={props.ctaLink}
       />
@@ -360,7 +361,8 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams);
+  const subsLinks: SubsUrls =
+      getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams, props.abTests);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 

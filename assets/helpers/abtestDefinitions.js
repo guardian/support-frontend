@@ -14,4 +14,16 @@ export const tests: Tests = {
     },
     isActive: false,
   },
+
+  digipackFlowOptimisationTest: {
+    variants: ['control', 'variant'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 1,
+  },
 };
