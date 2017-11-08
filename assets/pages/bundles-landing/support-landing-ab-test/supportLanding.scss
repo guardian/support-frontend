@@ -239,48 +239,51 @@
       }
 
       .component-cta-link {
-        height: 62px;
-        line-height: 62px;
+        height: 54px;
+        line-height: 54px;
         background-color: gu-colour(comment-main-2);
         color: gu-colour(neutral-1);
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
-        padding-left: 28px;
+        padding-left: 20px;
         padding-top: 0;
         padding-bottom: 0;
         box-sizing: border-box;
+        margin-top: $gu-v-spacing * 2;
 
         &:hover {
           background-color: darken(gu-colour(comment-main-2), 5%);
         }
 
         @include mq($from: tablet) {
-          width: 620px;
+          width: 500px;
         }
 
         .svg-arrow-right-straight {
-          top: 20px;
+          top: 18px;
           right: 16px;
-          height: 35%;
+          height: 33%;
           fill: gu-colour(neutral-1);
         }
       }
 
       .component-paypal-contribution-button {
-        height: 60px;
+        height: 52px;
         border-color: #012169;
         color: #012169;
-        font-size: 16px;
+        font-size: 14px;
         font-family: $gu-text-sans-web;
         width: 100%;
         margin-top: $gu-v-spacing;
 
         @include mq($from: tablet) {
-          width: 620px;
+          width: 500px;
         }
 
         .svg-arrow-right-straight {
           fill: #012169;
+          height: 35%;
+          right: 11px;
         }
 
         .paypal-p-logo-0, .paypal-p-logo-2 {
@@ -317,28 +320,27 @@
     }
 
     .component-contribution-selection__type {
-      font-size: 16px;
-      line-height: 16px;
-      padding: ($gu-v-spacing + 1) 0;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 15px 0;
       margin: $gu-v-spacing 0;
 
       .component-radio-toggle {
         display: inline;
         border: 1px solid gu-colour(comment-main-2);
         border-radius: 600px;
-        padding: $gu-v-spacing 0;
+        padding: 13px 0;
       }
 
       .component-radio-toggle__label {
-        padding: $gu-v-spacing $gu-h-spacing;
+        padding: 13px $gu-h-spacing;
       }
     }
 
     .component-contribution-selection__amount {
       display: inline-block;
       vertical-align: top;
-      font-size: 18px;
-      line-height: 18px;
+      font-size: 14px;
       margin-top: $gu-v-spacing;
 
       @include mq($until: phablet) {
@@ -352,39 +354,49 @@
         display: inline-block;
         text-align: center;
         border: 1px solid gu-colour(comment-main-2);
-        line-height: 60px;
-        width: 60px;
-        height: 60px;
-        margin-right: $gu-h-spacing / 2;
+        line-height: 42px;
+        width: 42px;
+        height: 42px;
+        margin-right: 12px;
       }
     }
 
     .component-contribution-selection__custom-amount {
       vertical-align: top;
-      font-size: 16px;
-      line-height: 16px;
+      font-size: 14px;
       margin-top: $gu-v-spacing;
-      margin-bottom: $gu-v-spacing * 3;
       display: block;
 
       @include mq($from: phablet) {
         display: inline-block;
-        margin-left: $gu-h-spacing / 2;
+        margin-left: 24px;
       }
 
       .component-number-input {
         background-color: #fff;
         border: 1px solid gu-colour(comment-main-2);
-        font-size: 16px;
+        font-size: 14px;
         padding: 0;
         margin: 0;
-        height: 60px;
+        height: 42px;
       }
 
       .component-number-input--selected {
         background-color: gu-colour(comment-main-2);
       }
 
+    }
+
+    .component-contribution-selection--monthly {
+      .component-number-input {
+        width: 305px;
+      }
+    }
+
+    .component-contribution-selection--one-off {
+      .component-number-input {
+        width: 249px;
+      }
     }
 
     // ----- Subscribe
