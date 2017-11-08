@@ -291,6 +291,13 @@ function ContributionBundle(props: PropTypes) {
         {...props}
       />
 
+      <CtaLink
+        ctaId={contribAttrs.ctaId.toLowerCase()}
+        text={contribAttrs.ctaText}
+        accessibilityHint={contribAttrs.ctaAccessibilityHint}
+        onClick={onClick}
+      />
+
       {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
         <PayPalContributionButton
           buttonText={contribAttrs.paypalCta.text}
@@ -305,12 +312,6 @@ function ContributionBundle(props: PropTypes) {
         />
       }
 
-      <CtaLink
-        ctaId={contribAttrs.ctaId.toLowerCase()}
-        text={contribAttrs.ctaText}
-        accessibilityHint={contribAttrs.ctaAccessibilityHint}
-        onClick={onClick}
-      />
     </Bundle>
   );
 
