@@ -728,4 +728,11 @@
     margin-bottom: 0;
   }
 
+  .component-paypal-contribution-button {
+    width: 100%;
+  }
+
+  .component-paypal-contribution-button--contrib-error {
+    top: -16px;
+  }
 }

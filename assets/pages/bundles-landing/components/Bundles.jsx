@@ -300,7 +300,8 @@ function ContributionBundle(props: PropTypes) {
           // eslint-disable-next-line no-alert
           errorHandler={e => alert(e)}
           abParticipations={props.abTests}
-          additionalClass={`bundle-landing ${props.contribError ? 'contrib-error' : ''}`}
+          additionalClass={props.contribError ? 'contrib-error' : ''}
+          canClick={!props.contribError}
         />
       }
 
