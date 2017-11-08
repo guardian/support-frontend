@@ -136,7 +136,7 @@ function paypalButton(props: PropTypes) {
       isoCountry={props.country}
       errorHandler={() => {}}
       canClick={!props.contributionError}
-      buttonText="contribute with PayPal"
+      buttonText="Contribute with PayPal"
     />);
 
   }
@@ -167,7 +167,6 @@ function Contribute(props: PropTypes) {
           toggleType={props.changeContributionType}
           setCustomAmount={props.setContributionCustomAmount}
         />
-        {paypalButton(props)}
         <CtaLink
           ctaId="contribute"
           text={getCardCtaText(props.contributionType)}
@@ -175,6 +174,7 @@ function Contribute(props: PropTypes) {
           id="qa-contribute-button"
           accessibilityHint={getCardA11yText(props.contributionType)}
         />
+        {paypalButton(props)}
       </InfoSection>
     </div>
   );

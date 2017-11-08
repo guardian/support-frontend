@@ -42,10 +42,10 @@ function getCardLink(
 function getCardCtaText(contributionType: ContributionType) {
 
   if (contributionType === 'ONE_OFF') {
-    return 'contribute with credit/debit';
+    return 'Contribute with credit/debit';
   }
 
-  return 'contribute with credit/debit or PayPal';
+  return 'Contribute with credit/debit or PayPal';
 
 }
 
