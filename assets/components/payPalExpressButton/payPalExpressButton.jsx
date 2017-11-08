@@ -17,12 +17,18 @@ type PropTypes = {
   callback: Function,
 };
 
+function isPayPalSetup(): boolean {
+  return window.paypal !== undefined;
+}
+
 
 // ----- Component ----- //
 
 const PayPalExpressButton = (props: PropTypes) => {
-  props.setupPayPalCheckout(props.callback);
-  return <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />;
+  if (!isPayPalSetup()) {
+    props.setupPayPalCheckout(props.callback);
+    return <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />;
+  }
 };
 
 
