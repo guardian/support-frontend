@@ -158,6 +158,10 @@ function Contribute(props: PropTypes) {
         headingContent={<div><Secure /><InlinePaymentLogos /></div>}
       >
         <Secure />
+        <p className="contribute-new-design__description">
+          Support the Guardian&#39;s editorial operations by making a monthly,
+          or one-off contribution today
+        </p>
         <ContributionSelection
           contributionType={props.contributionType}
           country={props.country}
