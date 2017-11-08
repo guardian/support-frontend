@@ -295,9 +295,11 @@
 
     .component-inline-payment-logos {
       float: none;
+      height: 25px;
+      margin-top: 8px;
 
       svg {
-        margin: 0 ($gu-h-spacing / 2) 0 0;
+        width: 36px;
       }
     }
 
