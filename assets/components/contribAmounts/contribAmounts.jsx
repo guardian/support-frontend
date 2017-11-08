@@ -354,6 +354,8 @@ export default function ContribAmounts(props: PropTypes) {
   const contribAmountHint = `Enter an amount of ${props.contribType === 'MONTHLY' ? contribMinMonthlyAmountHint : 'your choice'}`;
   const contribOtherAmountAccessibilityHintId = `accessibility-hint-other-amount-${props.contribType.toLowerCase()}`;
   const contribOtherAmountAccessibilityHint = `${contribAmountHint} for your ${contribTypeDescription} contribution.`;
+  const radioModifier = showAnnual ? 'with-annual' : 'without-annual';
+
   return (
     <div className="component-contrib-amounts">
       <div className="contrib-type">
@@ -361,7 +363,7 @@ export default function ContribAmounts(props: PropTypes) {
           {...contribToggle(props.isoCountry, showAnnual, contribGroupAccessibilityHint)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
-          showAnnual={showAnnual}
+          modifierClass={radioModifier}
         />
       </div>
       <div className={className}>
@@ -369,7 +371,7 @@ export default function ContribAmounts(props: PropTypes) {
           {...attrs.toggles}
           toggleAction={attrs.toggleAction}
           checked={attrs.checked}
-          showAnnual={showAnnual}
+          modifierClass={radioModifier}
         />
         <div className="component-contrib-amounts__other-amount">
           <NumberInput

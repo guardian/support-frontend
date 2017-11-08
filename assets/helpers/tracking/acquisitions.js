@@ -69,6 +69,27 @@ const campaigns : {
   seven_fifty_email: [
     'gdnwb_copts_email_memco_seven_fifty',
   ],
+  big_long_banner_two_control: [
+    'banner_big_long_two_control',
+  ],
+  big_long_banner_two_big: [
+    'banner_big_long_two_big',
+  ],
+  big_long_banner_two_long: [
+    'banner_big_long_two_long',
+  ],
+  epic_paradise_paradise_highlight: [
+    'gdnwb_copts_memco_epic_paradise_paradise_highlight',
+  ],
+  epic_paradise_different_highlight: [
+    'gdnwb_copts_memco_epic_paradise_different_highlight',
+  ],
+  epic_paradise_control: [
+    'gdnwb_copts_memco_epic_paradise_control',
+  ],
+  epic_paradise_standfirst: [
+    'gdnwb_copts_memco_epic_paradise_standfirst',
+  ],
 };
 
 export type Campaign = $Keys<typeof campaigns>;

@@ -9,7 +9,6 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { getQueryParameter } from 'helpers/url';
-import { trackOphan } from 'helpers/abtest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
@@ -33,14 +32,6 @@ const store = pageInit(
 );
 /* eslint-enable */
 
-// ----- Setup ----- //
-
-const participations = store.getState().common.abParticipations;
-if (participations.addAnnualContributions) {
-  trackOphan('addAnnualContributions', participations.addAnnualContributions);
-}
-
-
 // ----- Render ----- //
 
 let content = null;
@@ -56,7 +47,7 @@ if (getQueryParameter('newDesigns', 'false') === 'true') {
         <Introduction />
         <Bundles />
         <WhySupport />
-        {store.getState().common.campaign === 'baseline_test' ? '' : <WaysOfSupport />}
+        <WaysOfSupport />
         <LinksFooter />
       </div>
     </Provider>

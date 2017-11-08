@@ -18,7 +18,6 @@ import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
-
 // ----- Page Startup ----- //
 
 /* eslint-disable no-underscore-dangle */
@@ -28,7 +27,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
-
 
 // ----- Render ----- //
 

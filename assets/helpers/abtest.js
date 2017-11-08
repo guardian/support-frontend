@@ -2,22 +2,32 @@
 
 // ----- Imports ----- //
 
-import shajs from 'sha.js';
-
 import type { IsoCountry } from 'helpers/internationalisation/country';
+
+import seedrandom from 'seedrandom';
 
 import * as ophan from 'ophan';
 import * as cookie from './cookie';
 import * as storage from './storage';
-
-
-// ----- Setup ----- //
-
-const MVT_COOKIE: string = 'GU_mvt_id';
-const MVT_MAX: number = 1000000;
-
+import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
+
+type TestId = $Keys<typeof tests>;
+
+type OphanABEvent = {
+  variantName: string,
+  complete: boolean,
+  campaignCodes?: string[],
+};
+
+export type Participations = {
+  [TestId]: string,
+}
+
+type OphanABPayload = {
+  [TestId]: OphanABEvent,
+};
 
 type Audiences = {
   [IsoCountry]: {
@@ -26,48 +36,19 @@ type Audiences = {
   },
 };
 
-type TestId = 'addAnnualContributions';
-
-export type Participations = {
-  [TestId]: string,
-}
-
-type Test = {
-  testId: TestId,
+export type Test = {
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
   independence?: number,
 };
 
+export type Tests = { [testId: string]: Test }
 
-type OphanABEvent = {
-  variantName: string,
-  complete: boolean,
-  campaignCodes?: string[],
-};
+// ----- Setup ----- //
 
-
-type OphanABPayload = {
-  [TestId]: OphanABEvent,
-};
-
-
-// ----- Tests ----- //
-
-const tests: Test[] = [
-  {
-    testId: 'addAnnualContributions',
-    variants: ['control', 'variant'],
-    audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: false,
-  }];
-
+const MVT_COOKIE: string = 'GU_mvt_id';
+const MVT_MAX: number = 1000000;
 
 // ----- Functions ----- //
 
@@ -94,11 +75,11 @@ function getLocalStorageParticipation(): Participations {
 
 }
 
-function setLocalStorageParticipation(participation): void {
-  storage.setLocal('gu.support.abTests', JSON.stringify(participation));
+function setLocalStorageParticipations(participations: Participations): void {
+  storage.setLocal('gu.support.abTests', JSON.stringify(participations));
 }
 
-function getUrlParticipation(): ?Participations {
+function getParticipationsFromUrl(): ?Participations {
 
   const hashUrl = (new URL(document.URL)).hash;
 
@@ -133,7 +114,8 @@ function randomNumber(seed: number, independence: number): number {
     return seed;
   }
 
-  return Math.abs(shajs('sha256').update(String(seed + independence)).digest().readInt32BE(0));
+  const rng = seedrandom(seed + independence);
+  return Math.abs(rng.int32());
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
@@ -144,46 +126,59 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipation(abTests: Test[], mvtId: number, country: IsoCountry): Participations {
+function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
-  const participation:Participations = {};
+  const participations: Participations = {};
 
-  abTests.forEach((test) => {
+  Object.keys(abTests).forEach((testId) => {
+    const test = abTests[testId];
 
     if (!test.isActive) {
       return;
     }
 
-    if (test.testId in currentParticipation) {
-      participation[test.testId] = currentParticipation[test.testId];
+    if (testId in currentParticipation) {
+      participations[testId] = currentParticipation[testId];
     } else if (userInTest(test.audiences, mvtId, country)) {
-      participation[test.testId] = assignUserToVariant(mvtId, test);
+      participations[testId] = assignUserToVariant(mvtId, test);
     } else {
-      participation[test.testId] = 'notintest';
+      participations[testId] = 'notintest';
     }
-
   });
 
-  return participation;
-
+  return participations;
 }
 
+const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
+  Object.keys(participations).reduce((payload, participation) => {
+    const ophanABEvent: OphanABEvent = {
+      variantName: participations[participation],
+      complete,
+      campaignCodes: [],
+    };
+
+    return Object.assign({}, payload, { [participation]: ophanABEvent });
+  }, {});
 
 // ----- Exports ----- //
 
-const init = (country: IsoCountry, abTests: Test[] = tests): Participations => {
+const trackABOphan = (participations: Participations, complete: boolean): void => {
+  ophan.record({
+    abTestRegister: buildOphanPayload(participations, complete),
+  });
+};
+
+const init = (country: IsoCountry, abTests: Tests = tests): Participations => {
 
   const mvt: number = getMvtId();
-  let participation: Participations = getParticipation(abTests, mvt, country);
+  const participations: Participations = getParticipations(abTests, mvt, country);
+  const urlParticipations: ?Participations = getParticipationsFromUrl();
 
-  const urlParticipation = getUrlParticipation();
-  participation = Object.assign({}, participation, urlParticipation);
+  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
+  trackABOphan(participations, false);
 
-  setLocalStorageParticipation(participation);
-
-  return participation;
-
+  return participations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
@@ -198,29 +193,8 @@ const getVariantsAsString = (participation: Participations): string => {
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
 
-const trackOphan = (
-  testId: TestId,
-  variant: string,
-  complete?: boolean = false,
-  campaignCodes?: string[] = [],
-): void => {
-
-  const payload: OphanABPayload = {
-    [testId]: {
-      variantName: variant,
-      complete,
-      campaignCodes,
-    },
-  };
-
-  ophan.record({
-    abTestRegister: payload,
-  });
-};
-
 export {
   init,
   getVariantsAsString,
   getCurrentParticipations,
-  trackOphan,
 };

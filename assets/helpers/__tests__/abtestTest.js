@@ -5,8 +5,9 @@
 import { getVariantsAsString, init as abInit } from '../abtest';
 import type { Participations } from '../abtest';
 
-jest.mock('ophan', () => {});
-
+jest.mock('ophan', () => ({
+  record: () => null,
+}));
 
 // ----- Tests ----- //
 
@@ -17,9 +18,8 @@ describe('basic behaviour of init', () => {
 
     document.cookie = 'GU_mvt_id=12346';
 
-    const tests = [
-      {
-        testId: 'mockTest',
+    const tests = {
+      mockTest: {
         variants: ['control', 'variant'],
         audiences: {
           GB: {
@@ -28,7 +28,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
-      }];
+      },
+    };
 
     const country = 'GB';
     const participations: Participations = abInit(country, tests);
@@ -41,9 +42,8 @@ describe('basic behaviour of init', () => {
 
     document.cookie = 'GU_mvt_id=12345';
 
-    const tests = [
-      {
-        testId: 'mockTest',
+    const tests = {
+      mockTest: {
         variants: ['control', 'variant'],
         audiences: {
           GB: {
@@ -52,7 +52,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
-      }];
+      },
+    };
 
     const country = 'GB';
     const participations: Participations = abInit(country, tests);
@@ -65,11 +66,10 @@ describe('basic behaviour of init', () => {
 
     document.cookie = 'GU_mvt_id=12346';
 
-    const tests = [
-      {
-        testId: 'mockTest',
-        independence: 1,
+    const tests = {
+      mockTest: {
         variants: ['control', 'variant'],
+        independence: 2,
         audiences: {
           GB: {
             offset: 0,
@@ -77,7 +77,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
-      }];
+      },
+    };
 
     const country = 'GB';
     const participations: Participations = abInit(country, tests);
@@ -90,9 +91,8 @@ describe('basic behaviour of init', () => {
 
     document.cookie = 'GU_mvt_id=12346';
 
-    const tests = [
-      {
-        testId: 'mockTest',
+    const tests = {
+      mockTest: {
         variants: ['control', 'variant'],
         audiences: {
           GB: {
@@ -101,7 +101,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
-      }];
+      },
+    };
 
     const country = 'US';
     const participations: Participations = abInit(country, tests);
@@ -120,9 +121,8 @@ describe('Correct allocation in a multi test environment', () => {
         Test 1         Test 2              Not in Test
    */
 
-  const tests = [
-    {
-      testId: 'mockTest',
+  const tests = {
+    mockTest: {
       variants: ['control', 'variant'],
       audiences: {
         GB: {
@@ -136,8 +136,8 @@ describe('Correct allocation in a multi test environment', () => {
       },
       isActive: true,
     },
-    {
-      testId: 'mockTest2',
+
+    mockTest2: {
       variants: ['control', 'variant'],
       audiences: {
         US: {
@@ -147,7 +147,7 @@ describe('Correct allocation in a multi test environment', () => {
       },
       isActive: true,
     },
-  ];
+  };
 
   it('It correctly segments a user who has a cookie in the top 80% in GB', () => {
 

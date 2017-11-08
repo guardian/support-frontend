@@ -23,8 +23,8 @@ $ sbt devrun
 
 ## Starting `webpack-dev-server`
 
-Install [yarn](https://yarnpkg.com/lang/en/docs/install/) and download client-side
-dependencies with:
+Install [yarn](https://yarnpkg.com/lang/en/docs/install/). In order to run support-frontend, you need at least yarn version `1.0`.
+Once yarn is installed, download client-side dependencies with:
 
 ```
 yarn install
