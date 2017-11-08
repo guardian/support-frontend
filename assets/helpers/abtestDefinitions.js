@@ -14,15 +14,4 @@ export const tests: Tests = {
     },
     isActive: false,
   },
-
-  usMonthlyVsOneOff: {
-    variants: ['one_off', 'monthly'],
-    audiences: {
-      US: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-  },
 };
