@@ -71,7 +71,7 @@ function SvgExclamation() {
 
   return (
     <svg
-      className="svg-credit-card"
+      className="svg-exclamation"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 2.2 8.9"
       preserveAspectRatio="xMinYMid"
