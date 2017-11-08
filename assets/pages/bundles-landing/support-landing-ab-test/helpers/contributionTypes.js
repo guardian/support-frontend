@@ -31,6 +31,18 @@ function getSpokenType(
 
 }
 
+function getClassName(contributionType: ContributionType) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'one-off';
+  } else if (contributionType === 'MONTHLY') {
+    return 'monthly';
+  }
+
+  return 'annual';
+
+}
+
 function getContributionTypes(country: IsoCountry) {
 
   return [
@@ -53,5 +65,6 @@ function getContributionTypes(country: IsoCountry) {
 
 export {
   getSpokenType,
+  getClassName,
   getContributionTypes,
 };

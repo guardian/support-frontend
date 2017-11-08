@@ -14,8 +14,12 @@ import type {
   Amount,
   Contrib as ContributionType,
 } from 'helpers/contributions';
+import { generateClassName } from 'helpers/utilities';
 
-import { getContributionTypes } from '../helpers/contributionTypes';
+import {
+  getClassName as getContributionTypeClassName,
+  getContributionTypes,
+} from '../helpers/contributionTypes';
 import {
   getCustomAmountA11yHint,
   getContributionAmounts,
@@ -35,12 +39,24 @@ type PropTypes = {
 };
 
 
+// ----- Functions ----- //
+
+function getClassName(contributionType: ContributionType) {
+
+  return generateClassName(
+    'component-contribution-selection',
+    getContributionTypeClassName(contributionType),
+  );
+
+}
+
+
 // ----- Exports ----- //
 
 export default function ContributionSelection(props: PropTypes) {
 
   return (
-    <div className="component-contribution-selection">
+    <div className={getClassName(props.contributionType)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
