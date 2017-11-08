@@ -215,8 +215,11 @@
 
       .component-number-input--selected {
         background-color: gu-colour(neutral-1);
-        color: #fff;
         font-weight: bold;
+
+        .component-number-input__input, .component-number-input__label {
+          color: #fff;
+        }
 
         &::placeholder {
           font-weight: normal;

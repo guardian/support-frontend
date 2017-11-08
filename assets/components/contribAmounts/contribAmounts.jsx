@@ -378,9 +378,10 @@ export default function ContribAmounts(props: PropTypes) {
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
             selected={attrs.selected}
-            placeholder={`Other amount (${props.currency.glyph})`}
+            placeholder="Other amount"
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
+            labelText={props.currency.glyph}
           />
 
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
