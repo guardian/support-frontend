@@ -1,26 +1,10 @@
 .component-inline-payment-logos {
   float: right;
+  height: 20px;
 
-  svg{
-    margin-left: $gu-h-spacing /2;
-  }
-
-  .svg-visa-logo {
+  svg {
+    height: 100%;
+    margin-left: 4px;
     width: 30px;
-    height: 21px;
-  }
-  .svg-mastercard-logo {
-    height: 21px;
-    width: 27px;
-  }
-
-  .svg-paypal-logo {
-    height: 21px;
-    width: 22.9px;
-  }
-
-  .svg-amex-logo {
-    height: 20px;
-    width: 21px;
   }
 }
