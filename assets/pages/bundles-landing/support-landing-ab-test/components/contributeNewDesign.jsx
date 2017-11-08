@@ -170,6 +170,7 @@ function Contribute(props: PropTypes) {
           toggleAmount={getAmountToggle(props)}
           toggleType={props.changeContributionType}
           setCustomAmount={props.setContributionCustomAmount}
+          contributionError={props.contributionError}
         />
         <CtaLink
           ctaId="contribute"

@@ -6,13 +6,15 @@ import React from 'react';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
-import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 
+import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type {
   Amount,
   Contrib as ContributionType,
+  ContribError as ContributionError,
 } from 'helpers/contributions';
 import { generateClassName } from 'helpers/utilities';
 
@@ -36,6 +38,7 @@ type PropTypes = {
   toggleAmount: string => void,
   toggleType: string => void,
   setCustomAmount: string => void,
+  contributionError: ContributionError,
 };
 
 
@@ -47,6 +50,16 @@ function getClassName(contributionType: ContributionType) {
     'component-contribution-selection',
     getContributionTypeClassName(contributionType),
   );
+
+}
+
+function showError(error: ContributionError) {
+
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
+
+  return null;
 
 }
 
@@ -85,6 +98,7 @@ export default function ContributionSelection(props: PropTypes) {
         <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
           {getCustomAmountA11yHint(props.contributionType, props.country, props.currency)}
         </p>
+        {showError(props.contributionError)}
       </div>
     </div>
   );

@@ -375,7 +375,9 @@
       vertical-align: top;
       font-size: 14px;
       margin-top: $gu-v-spacing * 2;
+      margin-bottom: $gu-v-spacing * 2;
       display: block;
+      position: relative;
 
       @include mq($from: phablet) {
         display: inline-block;
@@ -396,6 +398,21 @@
         background-color: gu-colour(comment-main-2);
       }
 
+      .component-error-message {
+        background-color: inherit;
+        color: gu-colour(error);
+        height: 20px;
+        margin-top: 3px;
+        margin-bottom: 0;
+        position: absolute;
+      }
+
+      .svg-exclamation {
+        background-color: gu-colour(error);
+        border-radius: 600px;
+        height: 13px;
+        padding: 3px 8px;
+      }
     }
 
     .component-contribution-selection--monthly {
