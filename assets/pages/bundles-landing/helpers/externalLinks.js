@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
-
+import type { Participations } from 'helpers/abtest';
 
 // ----- Types ----- //
 
@@ -125,21 +125,30 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
+  abTests: Participations,
 ): SubsUrls {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
 
+  const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
+  const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
+  const digital = `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
+  params.append('promocode', promoCodes.digital.replace('p/', ''));
+  const digitalDigipackTestLink = `${subsUrl}/checkout?${params.toString()}`;
+  const shouldGetAlternativeDigipackLink = abTests.digipackFlowOptimisationTest === 'variant';
+
   return {
-    digital: `${subsUrl}/${promoCodes.digital}?${params.toString()}`,
-    paper: `${subsUrl}/${promoCodes.paper}?${params.toString()}`,
-    paperDig: `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`,
+    digital: shouldGetAlternativeDigipackLink ? digitalDigipackTestLink : digital,
+    paper,
+    paperDig,
   };
 
 }
@@ -149,13 +158,14 @@ function getSubsLinks(
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
+  abTests: Participations,
 ): SubsUrls {
 
   if (campaign && customPromos[campaign]) {
-    return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams);
+    return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams, abTests);
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams);
+  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, abTests);
 
 }
 
