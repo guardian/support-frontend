@@ -34,11 +34,14 @@ const content = (
               our independent, investigative journalism
             </p>
           </h2>
+          <h2 className="thankyou__cta-ask">
+            We need on-going support from our readers, now more than ever &ndash; show your sustained support for the Guardian from as little as £5 a month
+          </h2>
           <CtaLink
             ctaId="return-to-the-guardian"
-            text="Return to the Guardian"
-            url="https://theguardian.com"
-            accessibilityHint="Go to theguardian dot com front page"
+            text="Contribute £5 a month"
+            url="/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=GBP"
+            accessibilityHint="Contribute from £5 a month"
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">
