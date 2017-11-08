@@ -40,7 +40,7 @@ export default function NumberInput(props: PropTypes) {
   const selectedClass = props.selected ? ' component-number-input--selected' : '';
 
   return (
-    <span className={generateClassName('component-number-input', selectedClass)}>
+    <div className={generateClassName('component-number-input', selectedClass)}>
       {getLabel(props.labelText)}
       <input
         className="component-number-input__input"
@@ -51,7 +51,7 @@ export default function NumberInput(props: PropTypes) {
         onKeyPress={props.onKeyPress}
         aria-describedby={props.ariaDescribedBy}
       />
-    </span>
+    </div>
   );
 
 }
