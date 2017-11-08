@@ -4,6 +4,9 @@
 
 import { roundDp } from 'helpers/utilities';
 
+import type { Currency } from 'helpers/internationalisation/currency';
+
+
 // ----- Types ----- //
 
 export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
@@ -96,4 +99,26 @@ export function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
     case 'ANNUAL': return 'Annual';
     default: return 'Monthly';
   }
+}
+
+export function errorMessage(
+  error: ContribError,
+  currency: Currency,
+  contributionType: Contrib,
+): string {
+
+  const minContrib = CONFIG[contributionType].min;
+  const maxContrib = CONFIG[contributionType].max;
+
+  switch (error) {
+    case 'tooLittle':
+      return `Please enter at least ${currency.glyph}${minContrib}`;
+    case 'tooMuch':
+      return `We are presently only able to accept contributions of
+        ${currency.glyph}${maxContrib} or less`;
+    case 'invalidEntry':
+    default:
+      return 'Please enter a numeric amount';
+  }
+
 }
