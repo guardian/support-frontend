@@ -2,10 +2,9 @@
 
 // ----- Imports ----- //
 
-import { payPalExpressError } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
 import { routes } from 'helpers/routes';
-import type { PageState, CombinedState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
-
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { Currency } from '../internationalisation/currency';
 
 // ----- Functions ----- //
 
@@ -52,17 +51,19 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
-function setupPayment(dispatch: Function, state: CombinedState) {
-
-  const payPalState = state.payPalExpressCheckout;
-  const csrfToken = state.csrf.token;
+function setupPayment(
+  amountToPay: number,
+  currency: Currency,
+  csrf: CsrfState,
+) {
+  const csrfToken = csrf.token;
 
   return (resolve, reject) => {
 
     const requestBody = {
-      amount: payPalState.amount,
-      billingPeriod: payPalState.billingPeriod,
-      currency: payPalState.currency,
+      amount: amountToPay,
+      billingPeriod: 'monthly',
+      currency: currency.iso,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -71,41 +72,44 @@ function setupPayment(dispatch: Function, state: CombinedState) {
         if (token) {
           resolve(token.token);
         } else {
-          dispatch(payPalExpressError('PayPal token came back blank.'));
+          // FIXME - do something useful with this error
+          console.log('PayPal token came back blank.');
         }
       }).catch((err) => {
-        dispatch(payPalExpressError(err.message));
+        // FIXME - do something useful with this error
+        console.log(err.message);
         reject(err);
       });
   };
 }
 
-function createAgreement(payPalData: Object, state: CombinedState) {
+function createAgreement(payPalData: Object, csrf: CsrfState) {
   const body = { token: payPalData.paymentToken };
-  const csrfToken = state.csrf.token;
+  const csrfToken = csrf.token;
 
   return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken || ''))
     .then(response => response.json());
 }
 
 function setup(
-  dispatch: Function,
-  getState: () => PageState,
+  amount: number,
+  currency: Currency,
+  csrf: CsrfState,
   callback: Function,
-): Promise<void> {
+): Promise<Object> {
 
   return loadPayPalExpress()
     .then(() => {
-
       const handleBaId = (baid: Object) => {
-        callback(baid.token, dispatch, getState);
+        callback(baid.token);
       };
 
       const onAuthorize = (data) => {
-        createAgreement(data, getState().page)
+        createAgreement(data, csrf)
           .then(handleBaId)
           .catch((err) => {
-            dispatch(payPalExpressError(err));
+            console.log(err);
+            // FIXME - do something useful with this error
           });
       };
 
@@ -117,18 +121,13 @@ function setup(
         commit: true,
 
         // This function is called when user clicks the PayPal button.
-        payment: setupPayment(dispatch, getState().page),
+        payment: setupPayment(amount, currency, csrf),
 
         // This function is called when the user finishes with PayPal interface (approves payment).
         onAuthorize,
       };
-      const payPalId = 'component-paypal-button-checkout';
-      const htmlElement = document.getElementById(payPalId);
-      const elementCount: ?number = htmlElement ? htmlElement.childElementCount : null;
 
-      if (elementCount === 0) {
-        window.paypal.Button.render(payPalOptions, `#${payPalId}`);
-      }
+      return payPalOptions;
 
     });
 }

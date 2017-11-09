@@ -129,19 +129,25 @@ function getPayPalButton(
     return null;
   }
 
-  return (<PayPalExpressButton callback={postCheckout(
-    abParticipations,
-    amount,
-    csrf,
-    currency,
-    contribType,
-    country,
-    dispatch,
-    'baid',
-    referrerAcquisitionData,
-    getState,
-  )}
-  />);
+  return (
+    <PayPalExpressButton
+      amount={amount}
+      currency={currency}
+      csrf={csrf}
+      callback={postCheckout(
+        abParticipations,
+        amount,
+        csrf,
+        currency,
+        contribType,
+        country,
+        dispatch,
+        'baid',
+        referrerAcquisitionData,
+        getState,
+      )}
+    />
+  );
 
 }
 
@@ -174,6 +180,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
         props.referrerAcquisitionData,
         context.store.getState,
       )}
+      <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />
       {getPayPalButton(
         props.hide,
         props.abParticipations,

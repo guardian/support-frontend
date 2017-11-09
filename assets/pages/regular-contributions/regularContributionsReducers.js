@@ -5,15 +5,11 @@
 import { combineReducers } from 'redux';
 
 import type { User as UserState } from 'helpers/user/userReducer';
-import type { State as PayPalExpressCheckoutState } from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
-import createPayPalExpressCheckout from 'helpers/payPalExpressCheckout/payPalExpressCheckoutReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
-
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
 
@@ -33,7 +29,6 @@ export type State = {
 export type CombinedState = {
   regularContrib: State,
   user: UserState,
-  payPalExpressCheckout: PayPalExpressCheckoutState,
   csrf: CsrfState,
 };
 
@@ -82,7 +77,6 @@ export default function createRootRegularContributionsReducer(amount: number, cu
   return combineReducers({
     regularContrib: createRegularContribReducer(amount, currency),
     user,
-    payPalExpressCheckout: createPayPalExpressCheckout(amount, currency.iso),
     csrf,
   });
 }
