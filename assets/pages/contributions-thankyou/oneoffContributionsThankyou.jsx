@@ -17,7 +17,8 @@ import { trackComponentEvents } from './helpers/trackComponentEvents';
 // ----- Page Startup ----- //
 
 pageInit();
-trackComponentEvents('INSERT');
+const campaignCode = 'oneoff-thankyou-page-recurring-upsell';
+trackComponentEvents('INSERT', campaignCode);
 
 
 // ----- Render ----- //
@@ -42,9 +43,9 @@ const content = (
           <CtaLink
             ctaId="return-to-the-guardian"
             text="Contribute £5 a month"
-            url="/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=GBP"
+            url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=GBP&INTCMP=${campaignCode}`}
             accessibilityHint="Contribute from £5 a month"
-            onClick={trackComponentEvents('CLICK')}
+            onClick={trackComponentEvents('CLICK', campaignCode)}
           />
         </div>
         <InfoSection heading="Questions?" className="thankyou__questions">
