@@ -13,6 +13,8 @@ import SocialShare from 'components/socialShare/socialShare';
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { trackComponentEvents } from './helpers/trackComponentEvents';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Page Startup ----- //
 
@@ -20,6 +22,8 @@ pageInit();
 const campaignCode = 'oneoff-thankyou-page-recurring-upsell';
 trackComponentEvents('INSERT', campaignCode);
 
+const country = detectCountry();
+const currency = detectCurrency(country);
 
 // ----- Render ----- //
 
@@ -38,13 +42,13 @@ const content = (
           </h2>
           <h2 className="thankyou__cta-ask">
             We need ongoing support from our readers, now more than ever &ndash; show
-              sustained support for the Guardian from as little as £5 a month
+              sustained support for the Guardian from as little as {currency.glyph}5 a month
           </h2>
           <CtaLink
             ctaId="return-to-the-guardian"
             text="Contribute £5 a month"
-            url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=GBP&INTCMP=${campaignCode}`}
-            accessibilityHint="Contribute from £5 a month"
+            url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${campaignCode}`}
+            accessibilityHint={`Contribute from ${currency.glyph}5 a month`}
             onClick={trackComponentEvents('CLICK', campaignCode)}
           />
         </div>
