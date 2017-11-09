@@ -46,7 +46,7 @@ const content = (
           </h2>
           <CtaLink
             ctaId="return-to-the-guardian"
-            text="Contribute £5 a month"
+            text={`Contribute ${currency.glyph}5 a month`}
             url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${campaignCode}`}
             accessibilityHint={`Contribute from ${currency.glyph}5 a month`}
             onClick={trackComponentEvents('CLICK', campaignCode)}
