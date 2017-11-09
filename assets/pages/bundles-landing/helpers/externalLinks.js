@@ -131,9 +131,8 @@ function getDigiPackLink(digipackTest, params, promoCodes): string {
   } else if (digipackTest === 'variant') {
     params.append('promoCode', 'DFLOWVAR');
     return `${subsUrl}/checkout?${params.toString()}`;
-  } else {
-    return `${subsUrl}/${promoCodes.digital}?${params.toString()}`
   }
+  return `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
 }
 
 // Creates URLs for the subs site from promo codes and intCmp.
