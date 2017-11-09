@@ -74,6 +74,10 @@
         flex-grow: 1;
         border: 1px solid gu-colour(neutral-1);
       }
+
+      .component-number-input__input {
+        font-size: 14px;
+      }
     }
 
     .component-contrib-amounts__amounts--recurring {
