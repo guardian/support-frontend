@@ -31,11 +31,13 @@ const content = (
           <h1 className="thankyou__heading">Thank you</h1>
           <h2 className="thankyou__subheading" id="qa-thank-you-message">
             <p>
-              You&#39;ve made a vital contribution that will help us maintain our independent, investigative journalism.
+              You&#39;ve made a vital contribution that will help us maintain our independent,
+                investigative journalism.
             </p>
           </h2>
           <h2 className="thankyou__cta-ask">
-            We need ongoing support from our readers, now more than ever &ndash; show sustained support for the Guardian from as little as £5 a month
+            We need ongoing support from our readers, now more than ever &ndash; show
+              sustained support for the Guardian from as little as £5 a month
           </h2>
           <CtaLink
             ctaId="return-to-the-guardian"
