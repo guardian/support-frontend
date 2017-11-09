@@ -125,6 +125,16 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+function getDigiPackLink(digipackTest, params, promoCodes): string {
+  if (digipackTest === 'control') {
+    return `${subsUrl}/p/DFLOWCON?${params.toString()}`;
+  } else if (digipackTest === 'variant') {
+    params.append('promoCode', 'DFLOWVAR');
+    return `${subsUrl}/checkout?${params.toString()}`;
+  } else {
+    return `${subsUrl}/${promoCodes.digital}?${params.toString()}`
+  }
+}
 
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
@@ -140,13 +150,10 @@ function buildSubsUrls(
 
   const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
-  params.append('promocode', promoCodes.digital.replace('p/', ''));
-  const digitalDigipackTestLink = `${subsUrl}/checkout?${params.toString()}`;
-  const shouldGetAlternativeDigipackLink = abTests.digipackFlowOptimisationTest === 'variant';
+  const digital = getDigiPackLink(abTests.digipackFlowOptimisationTest, params, promoCodes);
 
   return {
-    digital: shouldGetAlternativeDigipackLink ? digitalDigipackTestLink : digital,
+    digital,
     paper,
     paperDig,
   };
