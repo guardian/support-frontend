@@ -12,26 +12,12 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-    contribType: Contrib,
-    contribAmount: Amounts,
-    contribError: ContribError,
-    intCmp: ?string,
-    campaign: ?Campaign,
-    otherQueryParams: Array<[string, string]>,
-    toggleContribType: (string) => void,
-    changeContribAnnualAmount: (string) => void,
-    changeContribMonthlyAmount: (string) => void,
-    changeContribOneOffAmount: (string) => void,
-    changeContribAmount: (string) => void,
-    isoCountry: IsoCountry,
-    currency: Currency,
     abTests: Participations,
-    referrerAcquisitionData: ReferrerAcquisitionData,
 }
 
 type HeaderCopy = {
     line1: string,
-    line2: string
+    line2: string,
 }
 // ----- Component ----- //
 
@@ -48,7 +34,7 @@ export default function Introduction(props: PropTypes) {
 `
         }
     };
-    
+    q
     const headerCopy = props.abTests.headerCopyTest === 'numberOfSupporters' 
         ? headerCopyOptions['numberOfSupporters']
         : headerCopyOptions['control'];
@@ -56,8 +42,8 @@ export default function Introduction(props: PropTypes) {
   return (
     <section className="introduction-text">
       <div className="introduction-text__content gu-content-margin">
-        <h1 className="introduction-text__heading">headerCopy['line1']</h1>
-        <p>headerCopy['line2']</p>
+        <h1 className="introduction-text__heading">{headerCopy['line1']}</h1>
+        <p>{headerCopy['line2']}</p>
         <h1 className="introduction-text__heading">support the Guardian</h1>
         <p>contribute or subscribe</p>
       </div>
