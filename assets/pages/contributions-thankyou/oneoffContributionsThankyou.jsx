@@ -12,9 +12,10 @@ import SocialShare from 'components/socialShare/socialShare';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { trackComponentEvents } from './helpers/trackComponentEvents';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import { trackComponentEvents } from './helpers/trackComponentEvents';
+
 
 // ----- Page Startup ----- //
 
