@@ -40,14 +40,12 @@
 		font-family: $gu-text-egyptian-web;
 		font-size: 22px;
 		line-height: 24px;
-		margin-top:5px;
 		font-weight: lighter;
 		color: gu-colour(neutral-1);
 
 		@include mq($from: desktop) {
 			font-size: 26px;
 			line-height: 30px;
-			margin-top:20px;
 		}
 	}
 
