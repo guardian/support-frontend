@@ -14,6 +14,7 @@ export type ContribState = {
   type: Contrib,
   error: ?ContribError,
   amount: Amounts,
+  payPalError: boolean,
 };
 
 
@@ -36,6 +37,7 @@ const initialContrib: ContribState = {
       userDefined: false,
     },
   },
+  payPalError: false,
 };
 
 
@@ -106,6 +108,9 @@ function contributionReducer(
         },
         error: parseContribution(action.amount.value, state.type).error,
       });
+
+    case 'SET_PAYPAL_ERROR':
+      return Object.assign({}, state, { payPalError: action.payPalError });
 
     default:
       return state;

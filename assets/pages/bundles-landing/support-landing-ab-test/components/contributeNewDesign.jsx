@@ -30,6 +30,7 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
   changeContribAmount,
+  setPayPalError,
 } from '../../bundlesLandingActions';
 import {
   getCardLink,
@@ -51,11 +52,13 @@ type PropTypes = {
   contributionError: ContributionError,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  payPalError: boolean,
   changeContributionType: string => void,
   changeContributionAmountAnnual: string => void,
   changeContributionAmountMonthly: string => void,
   changeContributionAmountOneOff: string => void,
   setContributionCustomAmount: string => void,
+  setPayPalError: boolean => void,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -70,6 +73,9 @@ function mapStateToProps(state) {
     currency: state.common.currency,
     selectedAmount: state.page.amount[contributionTypeCamelCase],
     contributionError: state.page.error,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    abTests: state.common.abParticipations,
+    payPalError: state.page.payPalError,
   };
 
 }
@@ -91,6 +97,9 @@ function mapDispatchToProps(dispatch) {
     },
     setContributionCustomAmount: (value: string) => {
       dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+    setPayPalError: (error: boolean) => {
+      dispatch(setPayPalError(error));
     },
   };
 
@@ -125,7 +134,7 @@ function ctaClick(props: PropTypes) {
 
 }
 
-function paypalButton(props: PropTypes) {
+function payPalButton(props: PropTypes) {
 
   if (props.contributionType === 'ONE_OFF') {
 
@@ -138,6 +147,25 @@ function paypalButton(props: PropTypes) {
       canClick={!props.contributionError}
       buttonText="Contribute with PayPal"
     />);
+
+  }
+
+  return null;
+
+}
+
+function payPalErrorMessage(error: boolean) {
+
+  if (error) {
+
+    return (
+      <div className="payPalErrorDialog">
+        <p className="payPalErrorDialog__message">
+          Sorry, an error occurred, please try again or use another payment
+          method.
+        </p>
+      </div>
+    );
 
   }
 
@@ -179,7 +207,8 @@ function Contribute(props: PropTypes) {
           id="qa-contribute-button"
           accessibilityHint={getCardA11yText(props.contributionType)}
         />
-        {paypalButton(props)}
+        {payPalButton(props)}
+        {payPalErrorMessage(props.payPalError)}
       </InfoSection>
     </div>
   );

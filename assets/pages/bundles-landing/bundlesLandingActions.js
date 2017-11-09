@@ -12,7 +12,8 @@ export type Action =
   | { type: 'CHANGE_CONTRIB_AMOUNT', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount: Amount }
-  | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount };
+  | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
+  | { type: 'SET_PAYPAL_ERROR', error: boolean };
 
 
 // ----- Actions ----- //
@@ -35,4 +36,8 @@ export function changeContribAmountMonthly(amount: Amount): Action {
 
 export function changeContribAmountOneOff(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount };
+}
+
+export function setPayPalError(error: boolean): Action {
+  return { type: 'SET_PAYPAL_ERROR', error };
 }
