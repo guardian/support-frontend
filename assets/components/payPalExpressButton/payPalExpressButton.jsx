@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
 import type { Currency } from '../../helpers/internationalisation/currency';
@@ -37,7 +36,7 @@ const PayPalExpressButton = (props: PropTypes) => {
     payPalPromise.then((payPalOptions) => {
       window.paypal.Button.render(payPalOptions, `#${payPalId}`);
     });
-  };
+  }
 };
 
 export default PayPalExpressButton;

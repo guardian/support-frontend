@@ -11,12 +11,6 @@ Object {
   "csrf": Object {
     "token": null,
   },
-  "payPalExpressCheckout": Object {
-    "amount": 20,
-    "billingPeriod": "monthly",
-    "currency": undefined,
-    "loaded": false,
-  },
   "regularContrib": Object {
     "amount": 20,
     "currency": "GBP",
