@@ -45,7 +45,7 @@ type Config = {
 
 // ----- Setup ----- //
 
-export const CONFIG: Config = {
+const config: Config = {
   ANNUAL: {
     min: 50,
     max: 2000,
@@ -73,13 +73,13 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
-  } else if (numericAmount < CONFIG[contrib].min) {
+  } else if (numericAmount < config[contrib].min) {
     error = 'tooLittle';
-  } else if (numericAmount > CONFIG[contrib].max) {
+  } else if (numericAmount > config[contrib].max) {
     error = 'tooMuch';
   }
 
-  const amount = error ? CONFIG[contrib].default : roundDp(numericAmount);
+  const amount = error ? config[contrib].default : roundDp(numericAmount);
 
   return { error, amount };
 
@@ -107,8 +107,8 @@ export function errorMessage(
   contributionType: Contrib,
 ): string {
 
-  const minContrib = CONFIG[contributionType].min;
-  const maxContrib = CONFIG[contributionType].max;
+  const minContrib = config[contributionType].min;
+  const maxContrib = config[contributionType].max;
 
   switch (error) {
     case 'tooLittle':
