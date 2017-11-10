@@ -145,6 +145,7 @@ function contribCamelCase(contrib: Contrib) {
 // ----- Exports ----- //
 
 export {
+  config,
   parse,
   parseContrib,
   billingPeriodFromContrib,

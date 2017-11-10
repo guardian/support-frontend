@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { CONFIG as contributionConfig } from 'helpers/contributions';
+import { config as contributionConfig } from 'helpers/contributions';
 
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
