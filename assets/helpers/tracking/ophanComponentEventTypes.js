@@ -37,7 +37,9 @@ export type OphanComponentType =
     | 'ACQUISITIONS_NUGGET'
     | 'ACQUISITIONS_STANDFIRST'
     | 'ACQUISITIONS_THRASHER'
-    | 'ACQUISITIONS_EDITORIAL_LINK';
+    | 'ACQUISITIONS_EDITORIAL_LINK'
+    | 'ACQUISITIONS_BUTTON'
+    | 'ACQUISITIONS_OTHER';
 
 export type OphanComponent = {
     componentType: OphanComponentType,
