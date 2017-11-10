@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracking';
-import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponentEventTypes';
+import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ----- Prop Types ----- //
 
