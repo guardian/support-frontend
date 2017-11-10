@@ -16,6 +16,8 @@ type Props = {
 
 
 // ----- Component ----- //
+// This is a non-functional component so we can use the componentDidMount event,
+// which is not available in stateless components
 
 class TrackedComponent extends React.Component<Props> {
 
