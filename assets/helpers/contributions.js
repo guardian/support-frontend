@@ -4,6 +4,9 @@
 
 import { roundDp } from 'helpers/utilities';
 
+import type { Currency } from 'helpers/internationalisation/currency';
+
+
 // ----- Types ----- //
 
 export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
@@ -42,7 +45,7 @@ type Config = {
 
 // ----- Setup ----- //
 
-export const CONFIG: Config = {
+const config: Config = {
   ANNUAL: {
     min: 50,
     max: 2000,
@@ -70,13 +73,13 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
-  } else if (numericAmount < CONFIG[contrib].min) {
+  } else if (numericAmount < config[contrib].min) {
     error = 'tooLittle';
-  } else if (numericAmount > CONFIG[contrib].max) {
+  } else if (numericAmount > config[contrib].max) {
     error = 'tooMuch';
   }
 
-  const amount = error ? CONFIG[contrib].default : roundDp(numericAmount);
+  const amount = error ? config[contrib].default : roundDp(numericAmount);
 
   return { error, amount };
 
@@ -96,4 +99,26 @@ export function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
     case 'ANNUAL': return 'Annual';
     default: return 'Monthly';
   }
+}
+
+export function errorMessage(
+  error: ContribError,
+  currency: Currency,
+  contributionType: Contrib,
+): string {
+
+  const minContrib = config[contributionType].min;
+  const maxContrib = config[contributionType].max;
+
+  switch (error) {
+    case 'tooLittle':
+      return `Please enter at least ${currency.glyph}${minContrib}`;
+    case 'tooMuch':
+      return `We are presently only able to accept contributions of
+        ${currency.glyph}${maxContrib} or less`;
+    case 'invalidEntry':
+    default:
+      return 'Please enter a numeric amount';
+  }
+
 }
