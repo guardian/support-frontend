@@ -148,6 +148,17 @@
         svg {
           left: 250px;
         }
+
+        &.contribute-one_off {
+          bottom: 70px;
+        }
+      }
+
+      &.contribute-one_off {
+        @include mq($until: desktop) {
+          margin-top: 0;
+          top: 50px;
+        }
       }
 
       svg {
@@ -204,8 +215,11 @@
 
       .component-number-input--selected {
         background-color: gu-colour(neutral-1);
-        color: #fff;
         font-weight: bold;
+
+        .component-number-input__input, .component-number-input__label {
+          color: #fff;
+        }
 
         &::placeholder {
           font-weight: normal;
@@ -728,4 +742,16 @@
     margin-bottom: 0;
   }
 
+  .component-paypal-contribution-button {
+    margin-top: 64px;
+    width: 100%;
+
+    @include mq(desktop) {
+      margin-top: 80px;
+    }
+  }
+
+  .component-paypal-contribution-button--contrib-error {
+    top: -16px;
+  }
 }

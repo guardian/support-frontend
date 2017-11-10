@@ -21,6 +21,7 @@ type PropTypes = {
   tabIndex?: number,
   id?: ?string,
   svg?: Node,
+  dataLinkName?: ?string,
 };
 
 // ----- Component ----- //
@@ -31,21 +32,20 @@ export default function CtaLink(props: PropTypes) {
   const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
 
   return (
-    <div>
-      <a
-        id={props.id}
-        className={ctaUniqueClassName}
-        href={props.url}
-        onClick={props.onClick}
-        onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
-        tabIndex={props.tabIndex}
-        aria-describedby={accessibilityHintId}
-      >
-        <span>{props.text}</span>
-        {props.svg}
-      </a>
+    <a
+      id={props.id}
+      className={ctaUniqueClassName}
+      href={props.url}
+      onClick={props.onClick}
+      onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
+      tabIndex={props.tabIndex}
+      data-link-name={props.dataLinkName}
+      aria-describedby={accessibilityHintId}
+    >
+      <span>{props.text}</span>
+      {props.svg}
       <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
-    </div>
+    </a>
   );
 
 }
@@ -58,5 +58,6 @@ CtaLink.defaultProps = {
   onClick: null,
   tabIndex: 0,
   id: null,
+  dataLinkName: null,
   svg: <SvgArrowRightStraight />,
 };

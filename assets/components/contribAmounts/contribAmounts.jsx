@@ -6,16 +6,19 @@ import React from 'react';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
+import type { Radio } from 'components/radioToggle/radioToggle';
 import {
   generateClassName,
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
-import { CONFIG as contribConfig } from 'helpers/contributions';
+import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
+
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
-import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
+
 import type { Participations } from '../../helpers/abtest';
+
 
 // ----- Types ----- //
 
@@ -60,7 +63,9 @@ type ContribAttrs = {
   accessibilityHint: string,
 };
 
+
 // ----- Setup ----- //
+
 const amountRadiosAnnual: {
   [IsoCurrency]: Radio[]
 } = {
@@ -266,18 +271,11 @@ function errorMessage(
   currency: Currency,
 ): ?React$Element<any> {
 
-  const limits = contribConfig[contribType];
-
-  const contribErrors: {
-    [ContribError]: string,
-  } = {
-    tooLittle: `Please enter at least ${currency.glyph}${limits.min}`,
-    tooMuch: `We are presently only able to accept contributions of ${currency.glyph}${limits.max} or less`,
-    invalidEntry: 'Please enter a numeric amount',
-  };
-
   if (error) {
-    return <p className="component-contrib-amounts__error-message">{contribErrors[error]}</p>;
+
+    const message = contributionErrorMessage(error, currency, contribType);
+    return <p className="component-contrib-amounts__error-message">{message}</p>;
+
   }
 
   return null;
@@ -333,6 +331,7 @@ function getClassName(contribType: Contrib): string {
   }
 }
 
+
 // ----- Component ----- //
 
 function getShowAnnual(props): boolean {
@@ -378,9 +377,10 @@ export default function ContribAmounts(props: PropTypes) {
             onFocus={props.changeContribAmount}
             onInput={props.changeContribAmount}
             selected={attrs.selected}
-            placeholder={`Other amount (${props.currency.glyph})`}
+            placeholder="Other amount"
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
+            labelText={props.currency.glyph}
           />
 
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>

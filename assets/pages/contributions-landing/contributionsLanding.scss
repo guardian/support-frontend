@@ -334,12 +334,19 @@
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
-        background-color: gu-colour(comment-support-3);
+    background-color: gu-colour(comment-support-3);
+	}
+
+	.component-number-input__label {
+		top: 11px;
 	}
 
 	.component-number-input--selected {
 		background-color: gu-colour(neutral-1);
-		color: #fff;
+
+    .component-number-input__input, .component-number-input__label {
+			color: #fff;
+		}
 	}
 
 	.component-cta-link {
