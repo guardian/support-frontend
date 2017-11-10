@@ -23,7 +23,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independence: 1,
   },
 };
