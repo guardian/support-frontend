@@ -24,6 +24,7 @@ import type { OphanComponent } from 'helpers/tracking/ophanComponentEventTypes';
 pageInit();
 
 const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
+
 const componentMetaData: OphanComponent = {
   componentType: 'ACQUISITIONS_THANK_YOU_EPIC',
   id: 'oneoff-thankyou-page-recurring-upsell',

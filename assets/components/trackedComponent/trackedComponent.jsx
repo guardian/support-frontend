@@ -7,9 +7,9 @@ import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracki
 import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponentEventTypes';
 
 type PropTypes = {
-    component: OphanComponent,
-    children?: React.Node,
-    action?: OphanAction,
+  component: OphanComponent,
+  action?: OphanAction,
+  children?: React.Node,
 };
 
 // ----- Component ----- //
