@@ -373,7 +373,6 @@
 
     .component-contribution-selection__custom-amount {
       vertical-align: top;
-      font-size: 14px;
       margin-top: $gu-v-spacing * 2;
       margin-bottom: $gu-v-spacing * 2;
       display: block;
@@ -388,14 +387,27 @@
       .component-number-input {
         background-color: #fff;
         border: 1px solid gu-colour(comment-main-2);
-        font-size: 14px;
         padding: 0;
         margin: 0;
         height: 42px;
       }
 
+      .component-number-input__input {
+        font-size: 14px;
+        line-height: 36px;
+        color: gu-colour(neutral-1);
+      }
+
+      .component-number-input__label {
+        line-height: 28px;
+      }
+
       .component-number-input--selected {
         background-color: gu-colour(comment-main-2);
+
+        .component-number-input__label {
+          color: gu-colour(neutral-1);
+        }
       }
 
       .component-error-message {

@@ -9,6 +9,8 @@ import NumberInput from 'components/numberInput/numberInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
+import { errorMessage as contributionsErrorMessage } from 'helpers/contributions';
+
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type {
@@ -53,10 +55,17 @@ function getClassName(contributionType: ContributionType) {
 
 }
 
-function showError(error: ContributionError) {
+function showError(
+  error: ContributionError,
+  currency: Currency,
+  contributionType: ContributionType,
+) {
 
   if (error) {
-    return <ErrorMessage message={error} />;
+
+    const message = contributionsErrorMessage(error, currency, contributionType);
+    return <ErrorMessage message={message} />;
+
   }
 
   return null;
@@ -91,14 +100,15 @@ export default function ContributionSelection(props: PropTypes) {
           onFocus={props.setCustomAmount}
           onInput={props.setCustomAmount}
           selected={props.selectedAmount.userDefined}
-          placeholder={`Other amount (${props.currency.glyph})`}
+          placeholder="Other amount"
           onKeyPress={clickSubstituteKeyPressHandler(() => {})}
           ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
+          labelText={props.currency.glyph}
         />
         <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
           {getCustomAmountA11yHint(props.contributionType, props.country, props.currency)}
         </p>
-        {showError(props.contributionError)}
+        {showError(props.contributionError, props.currency, props.contributionType)}
       </div>
     </div>
   );
