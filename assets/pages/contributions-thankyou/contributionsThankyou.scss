@@ -37,42 +37,52 @@
 	}
 
 	.thankyou__subheading {
-		font-family: $gu-egyptian-web;
-		font-size: 28px;
-		line-height: 32px;
+		font-family: $gu-text-egyptian-web;
+		font-size: 22px;
+		line-height: 24px;
 		font-weight: lighter;
 		color: gu-colour(neutral-1);
 
 		@include mq($from: desktop) {
-			font-size: 36px;
-			line-height: 40px;
+			font-size: 26px;
+			line-height: 30px;
 		}
 	}
 
 	// ----- Main Content
 
-	.component-cta-link {
+	.thankyou__cta-ask {
+		font-family: $gu-text-egyptian-web;
+		font-size: 22px;
+		line-height: 24px;
+		font-weight: bold;
 		color: gu-colour(neutral-1);
-		background: transparent;
+		margin-top:30px;
+
+		@include mq($from: desktop) {
+			font-size: 26px;
+			line-height: 30px;
+			margin-top:40px;
+		}
+	}
+
+	.component-cta-link {
+		color: #fff;
 		display: inline-block;
 		width: 180px;
 		border: 1px solid gu-colour(neutral-1);
 		font-weight: normal;
 		margin-bottom: $gu-v-spacing * 4;
+		margin-top:20px;
 
 		svg {
-			fill: gu-colour(neutral-1);
+			fill: #fff;
 			// Fix for IE10.
 			left: 190px;
 		}
 
 		&:hover {
 			border-color: #000;
-			color: #000;
-
-			svg {
-				fill: #000;
-			}
 		}
 	}
 

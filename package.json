@@ -41,6 +41,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "jest-environment-jsdom-11.0.0": "^20.0.9",
     "raven-js": "^3.19.1",

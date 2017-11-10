@@ -1,6 +1,6 @@
 {
   "presets": ["react", ["es2015", {"modules": false}]],
-  "plugins": ["babel-plugin-transform-exponentiation-operator"],
+  "plugins": ["babel-plugin-transform-exponentiation-operator", "transform-class-properties"],
   "env": {
     "test": {
       "presets": ["es2015"]
