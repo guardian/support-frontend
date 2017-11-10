@@ -15,8 +15,6 @@ import { renderPage } from 'helpers/render';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import TrackedComponent from 'components/trackedComponent/trackedComponent';
-import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracking';
-import type { OphanComponent } from 'helpers/tracking/ophanComponentEventTypes';
 
 
 // ----- Page Startup ----- //
@@ -24,14 +22,6 @@ import type { OphanComponent } from 'helpers/tracking/ophanComponentEventTypes';
 pageInit();
 
 const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
-
-const componentMetaData: OphanComponent = {
-  componentType: 'ACQUISITIONS_THANK_YOU_EPIC',
-  id: 'oneoff-thankyou-page-recurring-upsell',
-  products: ['RECURRING_CONTRIBUTION'],
-  upSellCampaignCode,
-  labels: [],
-};
 
 const country = detectCountry();
 const currency = detectCurrency(country);
@@ -51,17 +41,23 @@ const content = (
                 investigative journalism.
             </p>
           </h2>
-          <TrackedComponent component={componentMetaData} >
-            <h2 className="thankyou__cta-ask">
-                    We need ongoing support from our readers, now more than ever &ndash; show
-                      sustained support for the Guardian from as little as {currency.glyph}5 a month
-            </h2>
+          <h2 className="thankyou__cta-ask">
+            We need ongoing support from our readers, now more than ever &ndash; show
+            sustained support for the Guardian from as little as {currency.glyph}5 a month
+          </h2>
+          <TrackedComponent component={{
+            componentType: 'ACQUISITIONS_OTHER',
+            id: 'oneoff-thankyou-page-recurring-upsell',
+            products: ['RECURRING_CONTRIBUTION'],
+            upSellCampaignCode,
+            labels: [],
+          }}
+          >
             <CtaLink
-              ctaId="return-to-the-guardian"
+              ctaId="make-a-recurring-contribution"
               text={`Contribute ${currency.glyph}5 a month`}
               url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${upSellCampaignCode}`}
               accessibilityHint={`Contribute from ${currency.glyph}5 a month`}
-              onClick={() => { trackComponentEvents('CLICK', componentMetaData); }}
             />
           </TrackedComponent>
 

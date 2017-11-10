@@ -6,23 +6,39 @@ import * as React from 'react';
 import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracking';
 import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponentEventTypes';
 
-type PropTypes = {
+// ----- Prop Types ----- //
+
+type Props = {
   component: OphanComponent,
-  action?: OphanAction,
+  action: OphanAction,
   children?: React.Node,
 };
 
+
 // ----- Component ----- //
 
-export default function trackedComponent(props: PropTypes) {
-  trackComponentEvents(props.action || trackedComponent.defaultProps.action, props.component);
-  return (<div>{props.children}</div>);
+class TrackedComponent extends React.Component<Props> {
+
+  static defaultProps = {
+    action: 'INSERT',
+    children: null,
+  }
+  componentDidMount() {
+    trackComponentEvents(this.props.action, this.props.component);
+  }
+
+  render() {
+
+    const childrenWithProps = React.Children.map(
+      this.props.children,
+      child => React.cloneElement(child, {
+        trackComponentEvent: (eventName: OphanAction, id: string) =>
+          trackComponentEvents(eventName, this.props.component, id),
+      }),
+    );
+
+    return (<div>{childrenWithProps}</div>);
+  }
 }
 
-
-// ----- Default Props ----- //
-
-trackedComponent.defaultProps = {
-  action: 'INSERT',
-  children: null,
-};
+export default TrackedComponent;

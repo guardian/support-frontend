@@ -6,11 +6,16 @@ import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponen
 
 // ----- Functions ----- //
 
-export const trackComponentEvents = (action: OphanAction, component: OphanComponent) => {
+export const trackComponentEvents = (
+  action: OphanAction,
+  component: OphanComponent,
+  id?: string,
+) => {
   ophan.record({
     componentEvent: {
       component,
       action,
+      id,
     },
   });
 };

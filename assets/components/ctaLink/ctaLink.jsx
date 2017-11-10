@@ -17,6 +17,7 @@ type PropTypes = {
   accessibilityHint: string,
   ctaId: string,
   url?: ?string,
+  trackComponentEvent?: Function,
   onClick?: ?Function,
   tabIndex?: number,
   id?: ?string,
@@ -36,7 +37,16 @@ export default function CtaLink(props: PropTypes) {
       id={props.id}
       className={ctaUniqueClassName}
       href={props.url}
-      onClick={props.onClick}
+      onClick={
+        () => {
+          if (typeof props.trackComponentEvent === 'function') {
+            props.trackComponentEvent('CLICK', props.ctaId);
+          }
+          if (typeof props.onClick === 'function') {
+            props.onClick();
+          }
+        }
+      }
       onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
       tabIndex={props.tabIndex}
       data-link-name={props.dataLinkName}
@@ -55,6 +65,7 @@ export default function CtaLink(props: PropTypes) {
 
 CtaLink.defaultProps = {
   url: null,
+  trackComponentEvent: () => {},
   onClick: null,
   tabIndex: 0,
   id: null,
