@@ -100,7 +100,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
         )}
-        isValid={formValidation(props.isFormEmpty, props.checkoutError)}
+        canOpen={formValidation(props.isFormEmpty, props.checkoutError)}
         currency={props.currency}
         isTestUser={props.isTestUser}
         amount={props.amount}

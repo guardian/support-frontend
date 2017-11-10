@@ -42,24 +42,9 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 
 // ----- Campaigns ----- //
-
-const easeOfPaymentTestPrefix = 'gdnwb_copts_memco_epic_ease_of_payment';
-
 const campaigns : {
   [string]: string[],
 } = {
-  ease_of_payment_test_currency_symbol_in_cta: [
-    `${easeOfPaymentTestPrefix}_currency_symbol_in_cta`,
-  ],
-  ease_of_payment_test_just_a_minute: [
-    `${easeOfPaymentTestPrefix}_just_a_minute`,
-  ],
-  ease_of_payment_test_just_one_pound: [
-    `${easeOfPaymentTestPrefix}_just_one_pound`,
-  ],
-  ease_of_payment_test_control: [
-    `${easeOfPaymentTestPrefix}_control`,
-  ],
   seven_fifty_middle: [
     'gdnwb_copts_editorial_memco_seven_fifty_middle',
   ],
@@ -68,15 +53,6 @@ const campaigns : {
   ],
   seven_fifty_email: [
     'gdnwb_copts_email_memco_seven_fifty',
-  ],
-  big_long_banner_two_control: [
-    'banner_big_long_two_control',
-  ],
-  big_long_banner_two_big: [
-    'banner_big_long_two_big',
-  ],
-  big_long_banner_two_long: [
-    'banner_big_long_two_long',
   ],
   epic_paradise_paradise_highlight: [
     'gdnwb_copts_memco_epic_paradise_paradise_highlight',
@@ -89,6 +65,12 @@ const campaigns : {
   ],
   epic_paradise_standfirst: [
     'gdnwb_copts_memco_epic_paradise_standfirst',
+  ],
+  banner_just_one_control: [
+    'banner_just_one_control',
+  ],
+  banner_just_one_just_one: [
+    'banner_just_one_just_one',
   ],
 };
 
