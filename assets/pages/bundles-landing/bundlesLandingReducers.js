@@ -110,7 +110,7 @@ function contributionReducer(
       });
 
     case 'SET_PAYPAL_ERROR':
-      return Object.assign({}, state, { payPalError: action.payPalError });
+      return Object.assign({}, state, { payPalError: action.error });
 
     default:
       return state;
