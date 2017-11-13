@@ -24,6 +24,7 @@ import type { Participations } from 'helpers/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import ContributionSelection from './contributionSelectionNewDesign';
+import GraveError from './graveErrorNewDesign';
 import {
   changeContribType,
   changeContribAmountAnnual,
@@ -58,7 +59,7 @@ type PropTypes = {
   changeContributionAmountMonthly: string => void,
   changeContributionAmountOneOff: string => void,
   setContributionCustomAmount: string => void,
-  setPayPalError: boolean => void,
+  setPayPalError: string => void,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -98,7 +99,7 @@ function mapDispatchToProps(dispatch) {
     setContributionCustomAmount: (value: string) => {
       dispatch(changeContribAmount({ value, userDefined: true }));
     },
-    setPayPalError: (error: boolean) => {
+    setPayPalError: (error: string) => {
       dispatch(setPayPalError(error));
     },
   };
@@ -134,6 +135,20 @@ function ctaClick(props: PropTypes) {
 
 }
 
+function cardButton(props: PropTypes, includeQaId: boolean = true) {
+
+  return (
+    <CtaLink
+      ctaId="contribute"
+      text={getCardCtaText(props.contributionType)}
+      onClick={ctaClick(props)}
+      id={includeQaId ? 'qa-contribute-button' : null}
+      accessibilityHint={getCardA11yText(props.contributionType)}
+    />
+  );
+
+}
+
 function payPalButton(props: PropTypes) {
 
   if (props.contributionType === 'ONE_OFF') {
@@ -143,7 +158,7 @@ function payPalButton(props: PropTypes) {
       abParticipations={props.abTests}
       referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.country}
-      errorHandler={() => {}}
+      errorHandler={props.setPayPalError}
       canClick={!props.contributionError}
       buttonText="Contribute with PayPal"
     />);
@@ -154,19 +169,15 @@ function payPalButton(props: PropTypes) {
 
 }
 
-function payPalErrorMessage(error: boolean) {
+function payPalErrorMessage(props: PropTypes) {
 
-  if (error) {
-
+  if (props.payPalError) {
     return (
-      <div className="payPalErrorDialog">
-        <p className="payPalErrorDialog__message">
-          Sorry, an error occurred, please try again or use another payment
-          method.
-        </p>
-      </div>
+      <GraveError
+        ctaLink={cardButton(props, false)}
+        onClose={() => props.setPayPalError('')}
+      />
     );
-
   }
 
   return null;
@@ -200,15 +211,9 @@ function Contribute(props: PropTypes) {
           setCustomAmount={props.setContributionCustomAmount}
           contributionError={props.contributionError}
         />
-        <CtaLink
-          ctaId="contribute"
-          text={getCardCtaText(props.contributionType)}
-          onClick={ctaClick(props)}
-          id="qa-contribute-button"
-          accessibilityHint={getCardA11yText(props.contributionType)}
-        />
+        {cardButton(props)}
         {payPalButton(props)}
-        {payPalErrorMessage(props.payPalError)}
+        {payPalErrorMessage(props)}
       </InfoSection>
     </div>
   );

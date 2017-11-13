@@ -215,6 +215,7 @@
       background-color: #fff;
       border-color: gu-colour(light-yellow);
       color: gu-colour(neutral-2);
+      position: relative;
 
       .component-info-section__header {
         position: relative;
@@ -443,6 +444,56 @@
       .component-number-input, .component-error-message {
         width: 249px;
       }
+    }
+
+    .grave-error {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(black, 0.98);
+      color: #fff;
+    }
+
+    .grave-error__close {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      height: 34px;
+      width: 30px;
+      fill: #fff;
+
+      &:hover {
+        fill: darken(#fff, 10%);
+        cursor: pointer;
+      }
+
+      .svg-cross {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .grave-error__message {
+      width: 40%;
+      margin-left: 21%;
+      margin-top: 100px;
+    }
+
+    .grave-error__heading {
+      font-size: 36px;
+      line-height: 36px;
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+    }
+
+    .grave-error__copy {
+      font-size: 18px;
+      line-height: 20px;
+      font-family: $gu-text-egyptian-web;
+      margin: $gu-v-spacing 0;
+      width: 80%;
     }
 
     // ----- Subscribe
