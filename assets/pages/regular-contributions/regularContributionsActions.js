@@ -23,6 +23,10 @@ function setPayPalButton(value: PayPalButtonType): Action {
   return { type: 'SET_PAYPAL_BUTTON', value };
 }
 
+function setPayPalHasLoaded(): Action {
+  return { type: 'SET_PAYPAL_HAS_LOADED' };
+}
+
 function creatingContributor(): Action {
   return { type: 'CREATING_CONTRIBUTOR' };
 }
@@ -33,4 +37,5 @@ export {
   checkoutError,
   setPayPalButton,
   creatingContributor,
+  setPayPalHasLoaded,
 };

@@ -15,6 +15,7 @@ Object {
     "amount": 20,
     "currency": "GBP",
     "error": null,
+    "payPalHasLoaded": false,
     "payPalType": "NotSet",
     "paymentStatus": "NotStarted",
     "pollCount": 0,

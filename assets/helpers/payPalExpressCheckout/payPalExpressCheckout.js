@@ -98,38 +98,34 @@ function setup(
   callback: Function,
 ): Promise<Object> {
 
-  return loadPayPalExpress()
-    .then(() => {
-      const handleBaId = (baid: Object) => {
-        callback(baid.token);
-      };
+  const handleBaId = (baid: Object) => {
+    callback(baid.token);
+  };
 
-      const onAuthorize = (data) => {
-        createAgreement(data, csrf)
-          .then(handleBaId)
-          .catch((err) => {
-            console.log(err);
-            // FIXME - do something useful with this error
-          });
-      };
+  const onAuthorize = (data) => {
+    createAgreement(data, csrf)
+      .then(handleBaId)
+      .catch((err) => {
+        console.log(err);
+        // FIXME - do something useful with this error
+      });
+  };
 
-      const payPalOptions: Object = {
-        env: window.guardian.payPalEnvironment,
-        style: { color: 'blue', size: 'responsive' },
+  const payPalOptions: Object = {
+    env: window.guardian.payPalEnvironment,
+    style: { color: 'blue', size: 'responsive' },
 
-        // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
-        commit: true,
+    // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
+    commit: true,
 
-        // This function is called when user clicks the PayPal button.
-        payment: setupPayment(amount, currency, csrf),
+    // This function is called when user clicks the PayPal button.
+    payment: setupPayment(amount, currency, csrf),
 
-        // This function is called when the user finishes with PayPal interface (approves payment).
-        onAuthorize,
-      };
+    // This function is called when the user finishes with PayPal interface (approves payment).
+    onAuthorize,
+  };
 
-      return payPalOptions;
-
-    });
+  return payPalOptions;
 }
 
 
@@ -137,4 +133,5 @@ function setup(
 
 export {
   setup,
+  loadPayPalExpress,
 };

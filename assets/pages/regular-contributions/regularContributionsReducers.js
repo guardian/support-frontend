@@ -22,6 +22,7 @@ export type State = {
   error: ?string,
   paymentStatus: PaymentStatus,
   payPalType: PayPalButtonType,
+  payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
 };
@@ -47,6 +48,7 @@ function createRegularContribReducer(amount: number, currency: Currency) {
     error: null,
     paymentStatus: 'NotStarted',
     payPalType: 'NotSet',
+    payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
   };
@@ -62,6 +64,9 @@ function createRegularContribReducer(amount: number, currency: Currency) {
 
       case 'SET_PAYPAL_BUTTON':
         return Object.assign({}, state, { payPalType: action.value });
+
+      case 'SET_PAYPAL_HAS_LOADED':
+        return Object.assign({}, state, { payPalHasLoaded: true });
 
       default:
         return state;
