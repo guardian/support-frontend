@@ -24,9 +24,9 @@ export default function GraveError(props: PropTypes) {
   return (
     <div className="grave-error">
       <div className="grave-error__message">
-        <div className="grave-error__close" onClick={props.onClose}>
+        <button className="grave-error__close" onClick={props.onClose}>
           <SvgCross />
-        </div>
+        </button>
         <h1 className="grave-error__heading">We&#39;re sorry</h1>
         <p className="grave-error__copy">
           Your contribution using PayPal could not be processed.
