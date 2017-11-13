@@ -79,9 +79,9 @@ function buildInitialState(
   country: IsoCountry,
   currency: Currency,
 ): CommonState {
-
-  const acquisition = getAcquisition();
-  const otherQueryParams = getQueryParams(['REFPVID', 'INTCMP']);
+  const acquisition = getAcquisition(abParticipations);
+  // note: getQueryParams takes a list of parameters to exclude
+  const otherQueryParams = getQueryParams(['REFPVID', 'INTCMP', 'acquisitionData']);
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,

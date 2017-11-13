@@ -361,8 +361,13 @@ function PaperBundle(props: PaperAttrs) {
 
 function Bundles(props: PropTypes) {
 
-  const subsLinks: SubsUrls =
-      getSubsLinks(props.intCmp, props.campaign, props.otherQueryParams, props.abTests);
+  const subsLinks: SubsUrls = getSubsLinks(
+    props.intCmp,
+    props.campaign,
+    props.otherQueryParams,
+    props.abTests,
+    props.referrerAcquisitionData,
+  );
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
