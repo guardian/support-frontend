@@ -24,7 +24,7 @@ export type OphanIds = {|
   browserId: ?string,
 |};
 
-export type ReferrerAcquisitionData = {|
+export type AcquisitionData = {|
   campaignCode: ?string,
   referrerPageviewId: ?string,
   referrerUrl: ?string,
@@ -81,7 +81,7 @@ export type Campaign = $Keys<typeof campaigns>;
 // ----- Functions ----- //
 
 // Retrieves the user's campaign, if known, from the campaign code.
-function getCampaign(acquisition: ReferrerAcquisitionData): ?Campaign {
+function getCampaign(acquisition: AcquisitionData): ?Campaign {
 
   const { campaignCode } = acquisition;
 
@@ -95,7 +95,7 @@ function getCampaign(acquisition: ReferrerAcquisitionData): ?Campaign {
 }
 
 // Stores the acquisition data in sessionStorage.
-function storeAcquisition(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
+function storeAcquisition(referrerAcquisitionData: AcquisitionData): boolean {
 
   try {
 
@@ -111,7 +111,7 @@ function storeAcquisition(referrerAcquisitionData: ReferrerAcquisitionData): boo
 }
 
 // Reads the acquisition data from sessionStorage.
-function readAcquisition(): ?ReferrerAcquisitionData {
+function readAcquisition(): ?AcquisitionData {
 
   const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
   return stored ? deserialiseJsonObject(stored) : null;
@@ -135,7 +135,7 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 function buildAcquisition(
   acquisitionData: Object = {},
   abParticipations: Participations,
-): ReferrerAcquisitionData {
+): AcquisitionData {
 
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID');
@@ -164,7 +164,7 @@ function buildAcquisition(
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function getAcquisition(abParticipations: Participations): ReferrerAcquisitionData {
+function getAcquisition(abParticipations: Participations): AcquisitionData {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
