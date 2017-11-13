@@ -16,7 +16,7 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     componentType = Some(ComponentType.AcquisitionsEpic),
     source = Some(AcquisitionSource.GuardianWeb),
     abTest = Some(AbTest("test_name", "variant_name")),
-    abTests = Some(Seq(AbTest("test_name", "variant_name"), AbTest("test_name2", "variant_name2")))
+    abTests = Some(Set(AbTest("test_name", "variant_name"), AbTest("test_name2", "variant_name2")))
   )
 
   val referrerAcquisitionCJson: CJson = CJson.obj(
