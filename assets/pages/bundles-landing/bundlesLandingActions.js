@@ -13,7 +13,7 @@ export type Action =
   | { type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY', amount: Amount }
   | { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount: Amount }
-  | { type: 'SET_PAYPAL_ERROR', error: boolean };
+  | { type: 'SET_PAYPAL_ERROR', error: string };
 
 
 // ----- Actions ----- //
@@ -38,6 +38,6 @@ export function changeContribAmountOneOff(amount: Amount): Action {
   return { type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF', amount };
 }
 
-export function setPayPalError(error: boolean): Action {
+export function setPayPalError(error: string): Action {
   return { type: 'SET_PAYPAL_ERROR', error };
 }

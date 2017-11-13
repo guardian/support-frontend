@@ -14,7 +14,7 @@ export type ContribState = {
   type: Contrib,
   error: ?ContribError,
   amount: Amounts,
-  payPalError: boolean,
+  payPalError: string,
 };
 
 
@@ -37,7 +37,7 @@ const initialContrib: ContribState = {
       userDefined: false,
     },
   },
-  payPalError: false,
+  payPalError: '',
 };
 
 
