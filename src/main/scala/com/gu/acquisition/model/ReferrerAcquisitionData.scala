@@ -16,7 +16,8 @@ case class ReferrerAcquisitionData(
     componentId: Option[String],
     componentType: Option[ComponentType],
     source: Option[AcquisitionSource],
-    abTest: Option[AbTest]
+    abTest: Option[AbTest], //Deprecated, please use abTests
+    abTests: Option[Set[AbTest]]
 )
 
 object ReferrerAcquisitionData {
