@@ -476,9 +476,19 @@
     }
 
     .grave-error__message {
-      width: 40%;
-      margin-left: 21%;
-      margin-top: 100px;
+      margin-top: 120px;
+      padding: 0 ($gu-h-spacing / 2);
+
+      @include mq($from: mobileLandscape) {
+        padding: 0 $gu-h-spacing;
+      }
+
+      @include mq($from: desktop) {
+        margin-top: 100px;
+        padding: 0;
+        width: 40%;
+        margin-left: 21%;
+      }
     }
 
     .grave-error__heading {
