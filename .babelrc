@@ -3,7 +3,7 @@
   "plugins": ["babel-plugin-transform-exponentiation-operator", "transform-class-properties"],
   "env": {
     "test": {
-      "presets": ["es2015"]
+      "presets": ["env"]
     }
   }
 }
