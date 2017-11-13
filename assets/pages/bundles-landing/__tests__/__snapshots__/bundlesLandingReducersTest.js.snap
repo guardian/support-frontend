@@ -111,6 +111,7 @@ Object {
     },
   },
   "error": null,
+  "payPalError": "",
   "type": "MONTHLY",
 }
 `;
