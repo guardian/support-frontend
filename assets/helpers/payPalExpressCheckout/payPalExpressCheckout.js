@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Currency } from '../internationalisation/currency';
@@ -72,12 +73,10 @@ function setupPayment(
         if (token) {
           resolve(token.token);
         } else {
-          // FIXME - do something useful with this error
-          console.log('PayPal token came back blank.');
+          logException('PayPal token came back blank');
         }
       }).catch((err) => {
-        // FIXME - do something useful with this error
-        console.log(err.message);
+        logException(err.message);
         reject(err);
       });
   };
@@ -106,8 +105,7 @@ function setup(
     createAgreement(data, csrf)
       .then(handleBaId)
       .catch((err) => {
-        console.log(err);
-        // FIXME - do something useful with this error
+        logException(err.message);
       });
   };
 
