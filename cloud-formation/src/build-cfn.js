@@ -2,6 +2,9 @@ const Handlebars = require('handlebars'),
   fs = require('fs'),
   yaml = require('js-yaml')
 
+//create the output directory
+try { fs.mkdirSync('../target'); } catch(err) { }
+
 //We need to deal with the statemachine and its retries separately because they are
 //converted to Json before inclusion in the final cfn output
 let partials = {
