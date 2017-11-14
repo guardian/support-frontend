@@ -222,7 +222,7 @@
     }
 
     .subscribe-new-design__content {
-      background-color: #fff;
+      background-color: gu-colour(neutral-6);
       border-color: gu-colour(light-yellow);
     }
 
@@ -260,7 +260,7 @@
         }
 
         button {
-          background-color: gu-colour(neutral-6);
+          background-color: #fff;
           vertical-align: middle;
 
           svg {
