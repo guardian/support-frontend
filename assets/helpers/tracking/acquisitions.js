@@ -32,6 +32,7 @@ export type ReferrerAcquisitionData = {|
   componentType: ?string,
   source: ?string,
   abTest: ?AcquisitionABTest,
+  abTests: ?Array<AcquisitionABTest>,
 |};
 
 
@@ -117,29 +118,6 @@ function readAcquisition(): ?ReferrerAcquisitionData {
 
 }
 
-// Builds the acquisition object from data and other sources.
-function buildAcquisition(acquisitionData: Object = {}): ReferrerAcquisitionData {
-
-  const referrerPageviewId = acquisitionData.referrerPageviewId ||
-    getQueryParameter('REFPVID') ||
-    null;
-
-  const campaignCode = acquisitionData.campaignCode ||
-    getQueryParameter('INTCMP') ||
-    null;
-
-  return {
-    referrerPageviewId,
-    campaignCode,
-    referrerUrl: acquisitionData.referrerUrl || null,
-    componentId: acquisitionData.componentId || null,
-    componentType: acquisitionData.componentType || null,
-    source: acquisitionData.source || null,
-    abTest: acquisitionData.abTest || null,
-  };
-
-}
-
 const participationsToAcquisitionABTest = (participations: Participations): AcquisitionABTest[] => {
   const response: AcquisitionABTest[] = [];
 
@@ -153,14 +131,46 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
+// Builds the acquisition object from data and other sources.
+function buildAcquisition(
+  acquisitionData: Object = {},
+  abParticipations: Participations,
+): ReferrerAcquisitionData {
+
+  const referrerPageviewId = acquisitionData.referrerPageviewId ||
+    getQueryParameter('REFPVID');
+
+  const campaignCode = acquisitionData.campaignCode ||
+    getQueryParameter('INTCMP');
+
+  const abTests = participationsToAcquisitionABTest(abParticipations);
+
+  if (acquisitionData.abTest) {
+    abTests.push(acquisitionData.abTest);
+  }
+
+  return {
+    referrerPageviewId,
+    campaignCode,
+    referrerUrl: acquisitionData.referrerUrl,
+    componentId: acquisitionData.componentId,
+    componentType: acquisitionData.componentType,
+    source: acquisitionData.source,
+    abTest: acquisitionData.abTest,
+    abTests: abTests.length > 0 ? abTests : undefined,
+  };
+
+}
+
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function getAcquisition(): ReferrerAcquisitionData {
+function getAcquisition(abParticipations: Participations): ReferrerAcquisitionData {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData = buildAcquisition(paramData || readAcquisition() || undefined);
+  const referrerAcquisitionData =
+      buildAcquisition(paramData || readAcquisition() || undefined, abParticipations);
   storeAcquisition(referrerAcquisitionData);
 
   return referrerAcquisitionData;

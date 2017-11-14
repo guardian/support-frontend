@@ -69,6 +69,19 @@ describe('user reducer tests', () => {
     expect(newState.isTestUser).toEqual(testUser);
   });
 
+  it('should handle SET_POST_DEPLOYMENT_TEST_USER', () => {
+
+    const postDeploymentTestUser = true;
+    const action = {
+      type: 'SET_POST_DEPLOYMENT_TEST_USER',
+      postDeploymentTestUser,
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.isPostDeploymentTestUser).toEqual(postDeploymentTestUser);
+  });
+
   it('should handle SET_EMAIL', () => {
 
     const email = 'jdoe@example.com';
