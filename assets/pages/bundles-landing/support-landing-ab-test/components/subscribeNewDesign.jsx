@@ -23,7 +23,7 @@ export default function Subscribe() {
             price="11.99"
             from={false}
             copy={subscriptionFeatures.digital}
-            ctaText="Start 14-day trial"
+            ctaText="Start your free trial"
             image="digitalBundle"
           />
           <SubscriptionBundle
@@ -31,7 +31,7 @@ export default function Subscribe() {
             price="10.79"
             from
             copy={subscriptionFeatures.paper}
-            ctaText="Choose paper"
+            ctaText="Get paper"
             image="paperBundle"
           />
           <SubscriptionBundle
@@ -39,7 +39,7 @@ export default function Subscribe() {
             price="22.06"
             from
             copy={subscriptionFeatures.paperDig}
-            ctaText="Choose paper & digital"
+            ctaText="Get paper+digital"
             image="paperDigitalBundle"
           />
         </div>
