@@ -21,6 +21,7 @@ type PropTypes = {
   currency: Currency,
   email: string,
   isTestUser: boolean,
+  isPostDeploymentTestUser: boolean,
   canOpen?: Function,
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -40,7 +41,11 @@ const StripePopUpButton = (props: PropTypes) => {
   }
 
   const onClick = () => {
-    if (props.canOpen && props.canOpen()) {
+    // Don't open Stripe Checkout for automated tests, call the backend immediately
+    if (props.isPostDeploymentTestUser) {
+      const testTokenId = 'tok_visa';
+      props.callback(testTokenId);
+    } else if (props.canOpen && props.canOpen()) {
       openDialogBox(props.amount, props.email);
     }
   };

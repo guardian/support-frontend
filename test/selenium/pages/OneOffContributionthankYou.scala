@@ -9,8 +9,6 @@ object OneOffContributionThankYou extends Page with Browser {
 
   private val thankYouHeader = id("qa-thank-you-message")
 
-  def focusOnDefaultFrame: Unit = revertToDefaultFrame
-
   def pageHasLoaded: Boolean = pageHasElement(thankYouHeader) && pageHasUrl("/contribute/one-off/thankyou")
 
 }

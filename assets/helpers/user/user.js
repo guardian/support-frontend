@@ -12,6 +12,7 @@ import {
   setFirstName,
   setLastName,
   setTestUser,
+  setPostDeploymentTestUser,
   setFullName,
 } from './userActions';
 
@@ -27,8 +28,14 @@ const init = (dispatch: Function) => {
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 
-  if ((isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode) {
+  const testUserCondition = (isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode;
+
+  if (testUserCondition) {
     dispatch(setTestUser(true));
+  }
+
+  if (testUserCondition && cookie.get('_post_deploy_user')) {
+    dispatch(setPostDeploymentTestUser(true));
   }
 
   if (windowHasUser) {
