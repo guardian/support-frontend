@@ -34,7 +34,7 @@ class TrackedComponent extends React.Component<Props> {
 
     const acquisitionData: ReferrerAcquisitionData = {
       referrerPageviewId: undefined,
-      referrerUrl: undefined,
+      referrerUrl: window.location.href,
       campaignCode: this.props.component.campaignCode,
       componentId: this.props.component.id,
       componentType: 'ACQUISITIONS_OTHER',
