@@ -58,8 +58,5 @@ export function init() {
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
-    // Used by Krux for targeting
-    site: 'Support',
-    path: window.location.pathname,
   });
 }
