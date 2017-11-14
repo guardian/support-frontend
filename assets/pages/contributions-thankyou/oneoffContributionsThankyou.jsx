@@ -16,7 +16,6 @@ import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import TrackedComponent from 'components/trackedComponent/trackedComponent';
 
-
 // ----- Page Startup ----- //
 
 pageInit();
@@ -49,7 +48,7 @@ const content = (
             componentType: 'ACQUISITIONS_OTHER',
             id: 'oneoff-thankyou-page-recurring-upsell',
             products: ['RECURRING_CONTRIBUTION'],
-            upSellCampaignCode,
+            campaignCode: upSellCampaignCode,
             labels: [],
           }}
           >
