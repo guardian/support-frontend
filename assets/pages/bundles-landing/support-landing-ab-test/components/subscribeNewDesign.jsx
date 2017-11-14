@@ -3,16 +3,55 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import InfoSection from 'components/infoSection/infoSection';
 
+import type { Campaign } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abtest';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+
 import SubscriptionBundle from './subscriptionBundleNewDesign';
 import { features as subscriptionFeatures } from '../helpers/subscriptionFeatures';
+import { getSubsLinks } from '../../helpers/externalLinks';
+
+import type { SubsUrls } from '../../helpers/externalLinks';
+
+
+// ----- Props ----- //
+
+type PropTypes = {
+  intCmp: ?string,
+  campaign: ?Campaign,
+  otherQueryParams: Array<[string, string]>,
+  abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+};
+
+function mapStateToProps(state) {
+
+  return {
+    intCmp: state.common.referrerAcquisitionData.campaignCode,
+    campaign: state.common.campaign,
+    otherQueryParams: state.common.otherQueryParams,
+    abTests: state.common.abParticipations,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+  };
+
+}
 
 
 // ----- Component ----- //
 
-export default function Subscribe() {
+function Subscribe(props: PropTypes) {
+
+  const subsLinks: SubsUrls = getSubsLinks(
+    props.intCmp,
+    props.campaign,
+    props.otherQueryParams,
+    props.abTests,
+    props.referrerAcquisitionData,
+  );
 
   return (
     <div className="subscribe-new-design">
@@ -25,6 +64,7 @@ export default function Subscribe() {
             copy={subscriptionFeatures.digital}
             ctaText="Start your free trial"
             image="digitalBundle"
+            ctaUrl={subsLinks.digital}
           />
           <SubscriptionBundle
             heading="paper"
@@ -33,6 +73,7 @@ export default function Subscribe() {
             copy={subscriptionFeatures.paper}
             ctaText="Get paper"
             image="paperBundle"
+            ctaUrl={subsLinks.paper}
           />
           <SubscriptionBundle
             heading="paper & digital"
@@ -41,6 +82,7 @@ export default function Subscribe() {
             copy={subscriptionFeatures.paperDig}
             ctaText="Get paper + digital"
             image="paperDigitalBundle"
+            ctaUrl={subsLinks.paperDig}
           />
         </div>
       </InfoSection>
@@ -48,3 +90,8 @@ export default function Subscribe() {
   );
 
 }
+
+
+// ----- Export ----- //
+
+export default connect(mapStateToProps)(Subscribe);

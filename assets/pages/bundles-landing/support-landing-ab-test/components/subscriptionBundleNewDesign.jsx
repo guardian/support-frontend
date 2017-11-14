@@ -20,6 +20,7 @@ type PropTypes = {
   copy: ListItem[],
   ctaText: string,
   image: string,
+  ctaUrl: string,
 };
 
 
@@ -45,7 +46,10 @@ export default function SubscriptionBundle(props: PropTypes) {
       <p className="subscription-bundle__copy">
         <FeatureList listItems={props.copy} />
       </p>
-      <CtaCircle text={props.ctaText} />
+      <CtaCircle
+        text={props.ctaText}
+        url={props.ctaUrl}
+      />
     </div>
   );
 
