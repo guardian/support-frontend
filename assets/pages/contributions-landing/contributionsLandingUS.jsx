@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-import type { Contrib } from 'helpers/contributions';
-
 import React from 'react';
 import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -19,7 +17,6 @@ import { renderPage } from 'helpers/render';
 import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
-import { changeContribType } from './contributionsLandingActions';
 
 // ----- Page Startup ----- //
 
@@ -30,15 +27,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
-
-(function initialiseMonthlyVsOneOffTest() {
-  try {
-    const contribType: Contrib =
-        store.getState().common.abParticipations.usMonthlyVsOneOff.toUpperCase();
-
-    return store.dispatch(changeContribType(contribType));
-  } catch (e) { return null; }
-}());
 
 // ----- Render ----- //
 

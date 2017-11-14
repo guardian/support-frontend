@@ -15,14 +15,15 @@ export const tests: Tests = {
     isActive: false,
   },
 
-  usMonthlyVsOneOff: {
-    variants: ['one_off', 'monthly'],
+  digipackFlowOptimisationTest: {
+    variants: ['control', 'variant'],
     audiences: {
-      US: {
+      GB: {
         offset: 0,
         size: 1,
       },
     },
     isActive: true,
+    independence: 1,
   },
 };

@@ -8,6 +8,7 @@ import {
   setStateField,
   setPostcode,
   setTestUser,
+  setPostDeploymentTestUser,
   setGnmMarketing,
 } from '../userActions';
 
@@ -84,6 +85,15 @@ describe('actions', () => {
       testUser,
     };
     expect(setTestUser(testUser)).toEqual(expectedAction);
+  });
+
+  it('should create SET_POST_DEPLOYMENT_TEST_USER action', () => {
+    const postDeploymentTestUser: boolean = true;
+    const expectedAction = {
+      type: 'SET_POST_DEPLOYMENT_TEST_USER',
+      postDeploymentTestUser,
+    };
+    expect(setPostDeploymentTestUser(postDeploymentTestUser)).toEqual(expectedAction);
   });
 
   it('should create SET_GNM_MARKETING action', () => {

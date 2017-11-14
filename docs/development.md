@@ -22,9 +22,16 @@ get `support-frontend` running locally.
 
 ## 2. Introduction to the technological stack
 
+In the following diagram it is possible to see the entire ecosystem of the support platform:   
+
+![Support Platform](support-platform.png)
+
+Inside `support-frontend` you will find the code which runs in the reader's browser and in the application server.
+Please bear in mind that `support-frontend` should not have external dependencies. 
+
 The pieces that make up `support-frontend` are:
 
-### Frontend
+### Frontend's technologies
  * autoprefixer
  * babel
  * eslint
@@ -33,11 +40,12 @@ The pieces that make up `support-frontend` are:
  * redux
  * flow
  * sass
- * ga and ophan for tracking
+ * Google tag manager and ophan for tracking
  * raven (sentry)
 
 ### Backend
 
+* Scala
 * Play
 
 ### Tools

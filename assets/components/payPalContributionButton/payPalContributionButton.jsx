@@ -8,6 +8,7 @@ import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
 import {
   paypalContributionsRedirect,
 } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
+import { generateClassName } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -25,6 +26,7 @@ type PropTypes = {
   errorHandler: (string) => void,
   canClick?: boolean,
   buttonText?: string,
+  additionalClass?: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -52,7 +54,7 @@ const PayPalContributionButton = (props: PropTypes) =>
   (
     <button
       id="qa-contribute-paypal-button"
-      className="component-paypal-contribution-button"
+      className={generateClassName('component-paypal-contribution-button', props.additionalClass)}
       onClick={payWithPayPal(props)}
     >
 
@@ -68,6 +70,7 @@ const PayPalContributionButton = (props: PropTypes) =>
 PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
+  additionalClass: '',
 };
 
 

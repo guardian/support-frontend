@@ -26,6 +26,7 @@ Object {
     "firstName": "",
     "gnmMarketing": false,
     "id": "",
+    "isPostDeploymentTestUser": false,
     "isTestUser": null,
     "lastName": "",
   },
