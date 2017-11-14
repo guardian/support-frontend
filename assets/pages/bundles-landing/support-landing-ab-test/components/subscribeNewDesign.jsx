@@ -7,6 +7,7 @@ import React from 'react';
 import InfoSection from 'components/infoSection/infoSection';
 
 import SubscriptionBundle from './subscriptionBundleNewDesign';
+import { features as subscriptionFeatures } from '../helpers/subscriptionFeatures';
 
 
 // ----- Component ----- //
@@ -21,7 +22,7 @@ export default function Subscribe() {
             heading="digital"
             price="11.99"
             from={false}
-            copy="Get our journalism across up to 10 devices, to enjoy wherever you go"
+            copy={subscriptionFeatures.digital}
             ctaText="Start 14-day trial"
             image="digitalBundle"
           />
@@ -29,7 +30,7 @@ export default function Subscribe() {
             heading="paper"
             price="10.79"
             from
-            copy="With six day, weekend and everyday options, you can choose the package that suits you"
+            copy={subscriptionFeatures.paper}
             ctaText="Choose paper"
             image="paperBundle"
           />
@@ -37,7 +38,7 @@ export default function Subscribe() {
             heading="paper & digital"
             price="22.06"
             from
-            copy="Enjoy the Guardian at your leisure, whether it's on your tablet on the go, or reading the paper at home"
+            copy={subscriptionFeatures.paperDig}
             ctaText="Choose paper & digital"
             image="paperDigitalBundle"
           />
