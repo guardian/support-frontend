@@ -12,6 +12,7 @@ export type Action =
   | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
+  | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
   | { type: 'SET_GNM_MARKETING', preference: boolean };
 
 
@@ -51,6 +52,10 @@ export function setPostcode(postcode: string): Action {
 
 export function setTestUser(testUser: boolean): Action {
   return { type: 'SET_TEST_USER', testUser };
+}
+
+export function setPostDeploymentTestUser(postDeploymentTestUser: boolean): Action {
+  return { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser };
 }
 
 export function setGnmMarketing(preference: boolean): Action {
