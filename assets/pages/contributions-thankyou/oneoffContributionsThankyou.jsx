@@ -48,7 +48,7 @@ const content = (
             componentType: 'ACQUISITIONS_OTHER',
             id: 'oneoff-thankyou-page-recurring-upsell',
             products: ['RECURRING_CONTRIBUTION'],
-            upSellCampaignCode,
+            campaignCode: upSellCampaignCode,
             labels: [],
           }}
           >
