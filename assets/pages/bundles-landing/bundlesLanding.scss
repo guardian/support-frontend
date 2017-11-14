@@ -126,7 +126,7 @@
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
         width: 280px;
-        height: 410px;
+        height: 434px;
         display: inline-block;
         vertical-align: top;
         position: relative;
@@ -147,6 +147,16 @@
         // Fix for IE.
         svg {
           left: 250px;
+        }
+
+        &.contribute-one_off {
+          bottom: 72px;
+        }
+      }
+
+      &.contribute-one_off {
+        @include mq($until: desktop) {
+          margin-top: 48px;
         }
       }
 
@@ -174,6 +184,7 @@
     .component-bundle--contributions {
       background-color: gu-colour(multimedia-main-2);
       font-size: 14px;
+      position: relative;
       font-family: $gu-text-sans-web;
       color: gu-colour(neutral-1);
 
@@ -204,14 +215,28 @@
 
       .component-number-input--selected {
         background-color: gu-colour(neutral-1);
-        color: #fff;
         font-weight: bold;
+
+        .component-number-input__input, .component-number-input__label {
+          color: #fff;
+        }
 
         &::placeholder {
           font-weight: normal;
           color: #fff;
           opacity: 0.4;
         }
+      }
+    }
+
+    .component-paypal-contribution-button {
+      width: 100%;
+      margin-top: $gu-v-spacing;
+
+      @include mq($from: desktop) {
+        width: 280px;
+        bottom: $gu-v-spacing;
+        position: absolute;
       }
     }
 
@@ -727,5 +752,4 @@
   .component-double-heading--variant-a {
     margin-bottom: 0;
   }
-
 }

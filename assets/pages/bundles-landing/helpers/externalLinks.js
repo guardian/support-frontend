@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
-
+import type { Participations } from 'helpers/abtest';
 
 // ----- Types ----- //
 
@@ -40,26 +40,6 @@ const defaultPromos: PromoCodes = {
 const customPromos : {
   [Campaign]: PromoCodes,
 } = {
-  ease_of_payment_test_currency_symbol_in_cta: {
-    digital: 'p/DEOPCSICTA',
-    paper: 'p/NEOPCSICTA',
-    paperDig: 'p/NDEOPCSICTA',
-  },
-  ease_of_payment_test_just_a_minute: {
-    digital: 'p/DEOPJAM',
-    paper: 'p/NEOPJAM',
-    paperDig: 'p/NDEOPJAM',
-  },
-  ease_of_payment_test_just_one_pound: {
-    digital: 'p/DEOPJOP',
-    paper: 'p/NEOPJOP',
-    paperDig: 'p/NDEOPJOP',
-  },
-  ease_of_payment_test_control: {
-    digital: 'p/DEOPC',
-    paper: 'p/NEOPC',
-    paperDig: 'p/NDEOPC',
-  },
   seven_fifty_middle: {
     digital: 'p/D750MIDDLE',
     paper: 'p/N750MIDDLE',
@@ -74,21 +54,6 @@ const customPromos : {
     digital: 'p/D750EMAIL',
     paper: 'p/N750EMAIL',
     paperDig: 'p/ND750EMAIL',
-  },
-  big_long_banner_two_control: {
-    digital: 'p/DBIGBANCONT2',
-    paper: 'p/NBIGBANCONT2',
-    paperDig: 'p/NDBIGBANCONT2',
-  },
-  big_long_banner_two_big: {
-    digital: 'p/DBIGBANBIG2',
-    paper: 'p/NBIGBANBIG2',
-    paperDig: 'p/NDBIGBANBIG2',
-  },
-  big_long_banner_two_long: {
-    digital: 'p/DBIGBANLONG2',
-    paper: 'p/NBIGBANLONG2',
-    paperDig: 'p/NDBIGBANLONG2',
   },
   epic_paradise_paradise_highlight: {
     digital: 'p/DPARAHIGH',
@@ -110,6 +75,16 @@ const customPromos : {
     paper: 'p/NPARASTAND',
     paperDig: 'p/NDPARASTAND',
   },
+  banner_just_one_control: {
+    digital: 'p/DBANJUSTCON',
+    paper: 'p/NBANJUSTCON',
+    paperDig: 'p/NDBANJUSTCON',
+  },
+  banner_just_one_just_one: {
+    digital: 'p/DBANJUSTONE',
+    paper: 'p/NBANJUSTONE',
+    paperDig: 'p/NDBANJUSTONE',
+  },
 };
 
 
@@ -125,21 +100,30 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
+  abTests: Participations,
 ): SubsUrls {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
 
+  const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
+  const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
+  const digital = `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
+  params.append('promocode', promoCodes.digital.replace('p/', ''));
+  const digitalDigipackTestLink = `${subsUrl}/checkout?${params.toString()}`;
+  const shouldGetAlternativeDigipackLink = abTests.digipackFlowOptimisationTest === 'variant';
+
   return {
-    digital: `${subsUrl}/${promoCodes.digital}?${params.toString()}`,
-    paper: `${subsUrl}/${promoCodes.paper}?${params.toString()}`,
-    paperDig: `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`,
+    digital: shouldGetAlternativeDigipackLink ? digitalDigipackTestLink : digital,
+    paper,
+    paperDig,
   };
 
 }
@@ -149,13 +133,14 @@ function getSubsLinks(
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
+  abTests: Participations,
 ): SubsUrls {
 
   if (campaign && customPromos[campaign]) {
-    return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams);
+    return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams, abTests);
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams);
+  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, abTests);
 
 }
 

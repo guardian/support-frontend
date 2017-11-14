@@ -46,7 +46,7 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js, description = Some(stringsConfig.bundleLandingDescription)))
+    Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
