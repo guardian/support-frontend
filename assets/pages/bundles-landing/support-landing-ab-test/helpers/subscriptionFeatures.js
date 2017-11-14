@@ -35,7 +35,7 @@ const features: {
   paperDig: [
     {
       heading: 'Choose your package and delivery method',
-      text: 'Everyday+, Sixday+, Weekend+ and Sunday+; redeem paper vouchers or get home delivery',
+      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
       heading: 'Save money on the retail price',
