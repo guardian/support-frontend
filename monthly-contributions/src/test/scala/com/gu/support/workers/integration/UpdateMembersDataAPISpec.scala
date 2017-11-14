@@ -9,7 +9,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 
 @IntegrationTest
 class UpdateMembersDataAPISpec extends LambdaSpec {
-  
+
   "UpdateMembersDataAPI" should "make post request to members data api" in {
     val updateMembersDataAPI = new UpdateMembersDataAPI()
 
