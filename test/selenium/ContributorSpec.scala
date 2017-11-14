@@ -65,7 +65,6 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
-      RecurringContributionThankYou.focusOnDefaultFrame // ensure that we are looking at the main page, and not the Stripe iFrame that may have just closed
       assert(RecurringContributionThankYou.pageHasLoaded)
 
     }

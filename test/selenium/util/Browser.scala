@@ -67,8 +67,6 @@ trait Browser extends WebBrowser {
       throw new MissingPageElementException(q)
   }
 
-  def revertToDefaultFrame: Unit = webDriver.switchTo().defaultContent()
-
   // Switches to the first window in the list of windows that doesn't match the parent window.
   def switchWindow(): Unit = {
     waitUntil(numberOfWindowsToBe(2))
