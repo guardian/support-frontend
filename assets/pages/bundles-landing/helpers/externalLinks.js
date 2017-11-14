@@ -8,7 +8,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
-type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type SubsProduct = 'paper' | 'digital' | 'paperDig';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
