@@ -4,21 +4,21 @@ const Handlebars = require('handlebars'),
 
 //We need to deal with the statemachine and its retries separately because they are
 //converted to Json before inclusion in the final cfn output
-const stateMachinePartials = {
+let partials = {
   retry: loadTemplate('retries.yaml'),
   catch: loadTemplate('catch.yaml')
 }
 const stateMachine = Handlebars.compile(loadTemplate('state-machine.yaml'))
-const stateMachineYaml = stateMachine({}, {partials: stateMachinePartials})
+const stateMachineYaml = stateMachine({}, {partials})
 const stateMachineJson = JSON.stringify(yaml.load(stateMachineYaml))
 
-const mainPartials = {
+partials = {
   lambda: loadTemplate('lambda.yaml'),
   environmentVariables: loadTemplate('environment-variables.yaml'),
   stateMachine: stateMachineJson,
 }
 const main = Handlebars.compile(loadTemplate('cfn-template.yaml'))
-const output = main(yaml.load(readFile('view.yaml')), {partials: mainPartials})
+const output = main(yaml.load(readFile('view.yaml')), {partials})
 
 fs.writeFileSync('../target/cfn.yaml', output, 'utf-8')
 
