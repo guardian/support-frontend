@@ -34,7 +34,7 @@ const features: {
   ],
   paperDig: [
     {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
+      heading: 'Get all the benefits of a digital subscription with paper + digital',
     },
   ],
 };

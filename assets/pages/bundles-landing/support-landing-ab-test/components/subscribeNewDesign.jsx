@@ -39,7 +39,7 @@ export default function Subscribe() {
             price="22.06"
             from
             copy={subscriptionFeatures.paperDig}
-            ctaText="Get paper+digital"
+            ctaText="Get paper + digital"
             image="paperDigitalBundle"
           />
         </div>
