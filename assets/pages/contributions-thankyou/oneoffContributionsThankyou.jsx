@@ -15,7 +15,6 @@ import { renderPage } from 'helpers/render';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import TrackedComponent from 'components/trackedComponent/trackedComponent';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Page Startup ----- //
 
@@ -25,7 +24,6 @@ const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
 
 const country = detectCountry();
 const currency = detectCurrency(country);
-
 
 // ----- Render ----- //
 
