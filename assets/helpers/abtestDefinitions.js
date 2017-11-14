@@ -38,4 +38,16 @@ export const tests: Tests = {
     isActive: true,
     independence: 2,
   },
+
+  usRecurringCopyTest: {
+    variants: ['control', 'subtitle', 'contributeBox'],
+    audiences: {
+      US: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 3,
+  }
 };
