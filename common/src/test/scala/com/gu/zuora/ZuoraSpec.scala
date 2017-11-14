@@ -53,6 +53,20 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
+  it should "ignore active subscriptions which do not have a recurring contributor plan" in {
+    uatService.getRecurringSubscription("30001578", Monthly).map {
+      response =>
+        response.isDefined should be(false)
+    }
+  }
+
+  it should "ignore cancelled recurring contributions" in {
+    uatService.getRecurringSubscription("30001580", Monthly).map {
+      response =>
+        response.isDefined should be(false)
+    }
+  }
+
   "Subscribe request" should "succeed" in subscribeRequestWithCurrency(GBP)
 
   it should "work for $USD contributions" in subscribeRequestWithCurrency(USD)

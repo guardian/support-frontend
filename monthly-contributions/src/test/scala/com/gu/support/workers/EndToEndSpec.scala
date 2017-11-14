@@ -17,9 +17,9 @@ import scala.io.Source
 class EndToEndSpec extends LambdaSpec {
   "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
 
-  they should "work with other currencies"  in runSignupWithCurrency(EUR)
+  they should "work with other currencies" in runSignupWithCurrency(EUR)
 
-  def runSignupWithCurrency(currency: Currency){
+  def runSignupWithCurrency(currency: Currency) {
     logger.info(createPayPalPaymentMethodJson(currency))
     val output = wrapFixture(createPayPalPaymentMethodJson())
       .chain(new CreatePaymentMethod())
