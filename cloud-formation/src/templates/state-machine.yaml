@@ -5,19 +5,22 @@ States:
     Type: Task
     Resource: "${CreatePaymentMethodLambda.Arn}"
     Next: CreateSalesforceContact
-    {{> sequentialRetries}}
+    {{> retry}}
+    {{> catch}}
 
   CreateSalesforceContact:
     Type: Task
     Resource: "${CreateSalesforceContactLambda.Arn}"
     Next: CreateZuoraSubscription
-    {{> sequentialRetries}}
+    {{> retry}}
+    {{> catch}}
 
   CreateZuoraSubscription:
     Type: Task
     Resource: "${CreateZuoraSubscriptionLambda.Arn}"
     Next: ParallelTasks
-    {{> sequentialRetries}}
+    {{> retry}}
+    {{> catch}}
 
   ParallelTasks:
     Type: Parallel
@@ -34,21 +37,21 @@ States:
           Type: Task
           Resource: "${SendThankYouEmailLambda.Arn}"
           End: True
-          {{> parallelRetries}}
+          {{> retry}}
     - StartAt: UpdateMembersDataAPI
       States:
         UpdateMembersDataAPI:
           Type: Task
           Resource: "${UpdateMembersDataAPILambda.Arn}"
           End: True
-          {{> parallelRetries}}
+          {{> retry}}
     - StartAt: SendAcquisitionEvent
       States:
         SendAcquisitionEvent:
           Type: Task
           Resource: "${SendAcquisitionEventLambda.Arn}"
           End: True
-          {{> parallelRetries}}
+          {{> retry}}
     Next: WaitForBrowserPoll
 
   WaitForBrowserPoll:

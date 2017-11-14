@@ -94,10 +94,9 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-          {{#lambdas}}
-            {{> lambda}}
-
-          {{/lambdas}}
+  {{#lambdas}}
+  {{> lambda}}
+  {{/lambdas}}
 
   MonthlyContributionsPROD:
     Type: "AWS::StepFunctions::StateMachine"
