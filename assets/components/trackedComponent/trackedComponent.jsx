@@ -40,6 +40,7 @@ class TrackedComponent extends React.Component<Props> {
       componentType: 'ACQUISITIONS_OTHER',
       source: 'GUARDIAN_WEB',
       abTest: undefined,
+      abTests: undefined,
     };
 
     const childrenWithProps = React.Children.map(
