@@ -6,8 +6,10 @@ import React from 'react';
 import { SvgArrowRightStraight } from 'components/svg/svg';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
+import { addQueryParamToURL } from 'helpers/url';
 
 import type { Node } from 'react';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -23,6 +25,7 @@ type PropTypes = {
   id?: ?string,
   svg?: Node,
   dataLinkName?: ?string,
+  acquisitionData?: ?ReferrerAcquisitionData,
 };
 
 // ----- Component ----- //
@@ -31,12 +34,16 @@ export default function CtaLink(props: PropTypes) {
 
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : uuidv4();
   const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
+  const urlString = props.url || '';
 
   return (
     <a
       id={props.id}
       className={ctaUniqueClassName}
-      href={props.url}
+      href={props.acquisitionData ?
+        addQueryParamToURL(urlString, 'acquisitionData', JSON.stringify(props.acquisitionData))
+         : props.url
+      }
       onClick={
         () => {
           if (props.trackComponentEvent) {
@@ -71,4 +78,5 @@ CtaLink.defaultProps = {
   id: null,
   dataLinkName: null,
   svg: <SvgArrowRightStraight />,
+  acquisitionData: null,
 };

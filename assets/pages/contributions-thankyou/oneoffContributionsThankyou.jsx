@@ -15,7 +15,7 @@ import { renderPage } from 'helpers/render';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import TrackedComponent from 'components/trackedComponent/trackedComponent';
-import { getAcquisition } from 'helpers/tracking/acquisitions';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Page Startup ----- //
 
@@ -26,7 +26,6 @@ const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
 const country = detectCountry();
 const currency = detectCurrency(country);
 
-const acquisitionData = getAcquisition()
 
 // ----- Render ----- //
 
@@ -58,7 +57,7 @@ const content = (
             <CtaLink
               ctaId="make-a-recurring-contribution"
               text={`Contribute ${currency.glyph}5 a month`}
-              url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${upSellCampaignCode}&acquisitionData=${JSON.stringify(acquisitionData)}`}
+              url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${upSellCampaignCode}`}
               accessibilityHint={`Contribute from ${currency.glyph}5 a month`}
             />
           </TrackedComponent>
