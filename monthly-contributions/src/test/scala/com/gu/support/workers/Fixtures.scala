@@ -49,7 +49,7 @@ object Fixtures {
          }
        """
 
-  def contribution(amount: BigDecimal = 5,currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
+  def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
     s"""
       {
         "amount": $amount,

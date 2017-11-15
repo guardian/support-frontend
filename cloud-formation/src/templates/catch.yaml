@@ -1,0 +1,5 @@
+Catch:
+  - ErrorEquals:
+    - States.TaskFailed
+    ResultPath: "$.error"
+    Next: FailureHandler

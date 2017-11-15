@@ -10,8 +10,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 @IntegrationTest
 class UpdateMembersDataAPISpec extends LambdaSpec {
 
-  //"UpdateMembersDataAPI lambda" Ignored because we don't currently have a code environment for members data api
-  ignore should "make post request to members data api" in {
+  "UpdateMembersDataAPI" should "make post request to members data api" in {
     val updateMembersDataAPI = new UpdateMembersDataAPI()
 
     val outStream = new ByteArrayOutputStream()
