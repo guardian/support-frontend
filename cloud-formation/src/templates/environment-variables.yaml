@@ -1,5 +1,5 @@
-      Environment:
-        Variables:
-          "SENTRY_DSN" : "https://25a9f99e8b21438a8b9022a0752d6a89:926329a2289a49c3b23b4a17c1e49253@sentry.io/172235"
-          "SENTRY_ENVIRONMENT" : !Ref Stage
-          "GU_SUPPORT_WORKERS_STAGE" : !Ref Stage
+Environment:
+  Variables:
+    "SENTRY_DSN" : "https://25a9f99e8b21438a8b9022a0752d6a89:926329a2289a49c3b23b4a17c1e49253@sentry.io/172235"
+    "SENTRY_ENVIRONMENT" : !Ref Stage
+    "GU_SUPPORT_WORKERS_STAGE" : !Ref Stage
