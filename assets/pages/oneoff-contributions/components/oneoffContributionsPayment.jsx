@@ -34,6 +34,7 @@ type PropTypes = {
   abParticipations: Participations,
   currency: Currency,
   isTestUser: boolean,
+  isPostDeploymentTestUser: boolean,
 };
 
 
@@ -103,6 +104,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         canOpen={formValidation(props.isFormEmpty, props.checkoutError)}
         currency={props.currency}
         isTestUser={props.isTestUser}
+        isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
       />
       <PayPalContributionButton
@@ -123,6 +125,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
 function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
+    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     error: state.page.oneoffContrib.error,
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',

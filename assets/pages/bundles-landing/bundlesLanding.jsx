@@ -44,7 +44,7 @@ if (getQueryParameter('newDesigns', 'false') === 'true') {
     <Provider store={store}>
       <div>
         <SimpleHeader />
-        <Introduction />
+        <Introduction abTests={store.getState().common.abParticipations} />
         <Bundles />
         <WhySupport />
         <WaysOfSupport />

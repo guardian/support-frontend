@@ -5,6 +5,7 @@
 import * as React from 'react';
 import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracking';
 import type { OphanComponent, OphanAction } from 'helpers/tracking/ophanComponentEventTracking';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Prop Types ----- //
 
@@ -31,11 +32,23 @@ class TrackedComponent extends React.Component<Props> {
 
   render() {
 
+    const acquisitionData: ReferrerAcquisitionData = {
+      referrerPageviewId: undefined,
+      referrerUrl: window.location.href,
+      campaignCode: this.props.component.campaignCode,
+      componentId: this.props.component.id,
+      componentType: 'ACQUISITIONS_OTHER',
+      source: 'GUARDIAN_WEB',
+      abTest: undefined,
+      abTests: undefined,
+    };
+
     const childrenWithProps = React.Children.map(
       this.props.children,
       child => React.cloneElement(child, {
         trackComponentEvent: (eventName: OphanAction, id: string) =>
           trackComponentEvents(eventName, this.props.component, id),
+        acquisitionData,
       }),
     );
 

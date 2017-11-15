@@ -4,10 +4,11 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
-type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type SubsProduct = 'paper' | 'digital' | 'paperDig';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
@@ -100,18 +101,19 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
-
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
   abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
 
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
+  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
   const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
@@ -134,13 +136,19 @@ function getSubsLinks(
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
   abTests: Participations,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
-
   if (campaign && customPromos[campaign]) {
-    return buildSubsUrls(customPromos[campaign], intCmp, otherQueryParams, abTests);
+    return buildSubsUrls(
+      customPromos[campaign],
+      intCmp,
+      otherQueryParams,
+      abTests,
+      referrerAcquisitionData,
+    );
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, abTests);
+  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, abTests, referrerAcquisitionData);
 
 }
 

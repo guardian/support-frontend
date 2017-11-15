@@ -190,7 +190,7 @@ function payPalErrorMessage(props: PropTypes) {
 function Contribute(props: PropTypes) {
 
   return (
-    <div className="contribute-new-design">
+    <div className="contribute-new-design" id="contribute">
       <InfoSection
         heading="contribute"
         className="contribute-new-design__content gu-content-margin"

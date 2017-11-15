@@ -26,4 +26,16 @@ export const tests: Tests = {
     isActive: true,
     independence: 1,
   },
+
+  headerCopyTest: {
+    variants: ['control', 'howAndWhy', 'numberOfSupporters'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 2,
+  },
 };

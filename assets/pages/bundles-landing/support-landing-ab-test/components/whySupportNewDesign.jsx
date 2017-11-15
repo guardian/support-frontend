@@ -5,7 +5,6 @@
 import React from 'react';
 
 import InfoSection from 'components/infoSection/infoSection';
-import CtaCircle from 'components/ctaCircle/ctaCircle';
 import {
   SvgScribble,
   SvgGraphLine,
@@ -34,7 +33,6 @@ export default function WhySupport() {
             With no billionaire owner pulling our strings, nobody, be they
             shareholders or advertisers, can tell us to censor or drop a story.
           </p>
-          <CtaCircle text="Find out more about our independence" />
           <h1 className="why-support-new-design__heading why-support-new-design__heading--advertising">
             <span>advertising revenues</span>
             <span>are falling</span>
@@ -50,7 +48,6 @@ export default function WhySupport() {
             With ad revenues falling across the media, we need our readers&#39;
             support to secure our future.
           </p>
-          <CtaCircle text="Find out more about the Scott Trust" />
           <h1 className="why-support-new-design__heading why-support-new-design__heading--paywall">
             <span>we haven&#39;t put up </span>
             <span>a paywall</span>
