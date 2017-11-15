@@ -131,7 +131,7 @@ function errorMessage(
 
 }
 
-function contribCamelCase(contrib: Contrib) {
+function contribCamelCase(contrib: Contrib): string {
 
   switch (contrib) {
     case 'ANNUAL': return 'annual';
