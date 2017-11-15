@@ -27,7 +27,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
 
   def skipSubscribe(state: CreateZuoraSubscriptionState, subscription: SubscriptionResponse): Future[SendThankYouEmailState] = {
-    logger.info(s"Skipping subscribe for user because they are already a contributor " +
+    logger.info(s"Skipping subscribe for user because they are already an active contributor " +
       s"with account number ${subscription.accountNumber}")
     Future.successful(getEmailState(state, subscription.accountNumber))
   }

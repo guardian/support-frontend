@@ -2,6 +2,8 @@ package com.gu.zuora.model.response
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.gu.support.workers.model.BillingPeriod
+import com.gu.zuora.ZuoraConfig
 
 object SubscriptionsResponse {
   implicit val codec: Codec[SubscriptionsResponse] = deriveCodec
@@ -17,7 +19,12 @@ object RatePlan {
 
 case class SubscriptionsResponse(subscriptions: List[Subscription])
 
-case class Subscription(accountNumber: String, ratePlans: List[RatePlan])
+case class Subscription(accountNumber: String, status: String, ratePlans: List[RatePlan]) {
+  def isActive: Boolean = status == "Active"
+  def hasContributorPlan(config: ZuoraConfig, billingPeriod: BillingPeriod): Boolean = {
+    ratePlans.exists(_.productRatePlanId == config.configForBillingPeriod(billingPeriod).productRatePlanId)
+  }
+}
 
 case class RatePlan(productId: String, productName: String, productRatePlanId: String)
 

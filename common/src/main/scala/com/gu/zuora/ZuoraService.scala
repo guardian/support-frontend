@@ -44,7 +44,7 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
     for {
       accountIds <- getAccountIds(identityId)
       subscriptions <- accountIds.map(getSubscriptions).combineAll
-    } yield subscriptions.find(_.ratePlans.exists(_.productRatePlanId == config.configForBillingPeriod(billingPeriod).productRatePlanId))
+    } yield subscriptions.find(sub => sub.hasContributorPlan(config, billingPeriod) && sub.isActive)
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
     //The Zuora api docs say that the subscribe action returns
