@@ -99,7 +99,7 @@ function getCustomAmountA11yHint(
     spokenCurrency = spokenCurrencies[currency.iso].singular;
   }
 
-  return `Enter an amount of ${contributionConfig[contributionType].spokenMin} 
+  return `Enter an amount of ${contributionConfig[contributionType].minInWords}
     ${spokenCurrency} or more for your 
     ${getSpokenType(contributionType, country)} contribution.`;
 
