@@ -33,7 +33,7 @@ import {
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type PropTypes = {
+export type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
@@ -76,15 +76,14 @@ const subHeadingOneOffText = {
 
 function ContentText(props: PropTypes) {
   if (props.isoCountry === 'GB') {
-      return <p>Support the Guardian's editorial operations by making a monthly or one-off contribution today</p>;
+    return <p className="component-bundle__content__intro">Support the Guardian’s editorial operations by making a monthly or one-off contribution today</p>;
   }
 
   if (props.isoCountry === 'US') {
     if (props.abTests.usRecurringCopyTest === 'contributeBox') {
-      return <p>Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
-    } else {
-      return <p>Your contribution funds and supports the Guardian's journalism</p>;
+      return <p className="component-bundle__content__intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
     }
+    return <p className="component-bundle__content__intro">Your contribution funds and supports the Guardian’s journalism</p>;
   }
 }
 
@@ -204,7 +203,7 @@ function ContributionsBundle(props: PropTypes) {
   return (
     <Bundle {...attrs}>
       <ContentText
-          {...props}
+        {...props}
       />
       <ContribAmounts
         onNumberInputKeyPress={onClick}

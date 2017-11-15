@@ -49,5 +49,5 @@ export const tests: Tests = {
     },
     isActive: true,
     independence: 3,
-  }
+  },
 };

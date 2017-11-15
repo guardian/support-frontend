@@ -23,8 +23,8 @@ strong {
 	}
 
 	.contributions-introduction__primary, .contributions-introduction__secondary {
-		font-size: 32px;
-		line-height: 36px;
+		font-size: 26px;
+		line-height: 28px;
 		color: #fff;
 		font-family: $gu-egyptian-web;
 		font-weight: 600;
@@ -44,7 +44,7 @@ strong {
 	}
 
 	.contributions-introduction__primary {
-		margin-bottom: 36px;
+		margin-bottom: 30px;
 		margin-top: $gu-v-spacing/2;
 
         h1:nth-child(1) {
@@ -102,6 +102,28 @@ strong {
 			h1:nth-child(2) {
 				display: inline;
 			}
+		}
+	}
+
+	.contributions-introduction__upsell {
+		max-width: 100%;
+		margin: $gu-h-spacing / 2;
+		line-height: 20px;
+
+		@include mq($from: phablet) {
+
+		}
+
+		@include mq($from: desktop) {
+			margin-left: 24px;
+			font-size: 22px;
+			font-weight: normal;
+			line-height: 24px;
+			max-width:530px;
+		}
+
+		@include mq($from: leftCol) {
+			margin-left: 100px;
 		}
 	}
 
@@ -335,6 +357,11 @@ strong {
 		@include mq($from: phablet) {
 			height: 28px;
 		}
+	}
+
+	.component-bundle__content__intro {
+		line-height:20px;
+		margin-bottom:24px;
 	}
 
 	.component-radio-toggle input:not(:checked)+label, .component-number-input {
