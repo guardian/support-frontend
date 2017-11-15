@@ -6,6 +6,9 @@ import React from 'react';
 
 import CtaCircle from 'components/ctaCircle/ctaCircle';
 import GridImage from 'components/gridImage/gridImage';
+import FeatureList from 'components/featureList/featureList';
+
+import type { ListItem } from 'components/featureList/featureList';
 
 
 // ----- Types ----- //
@@ -14,9 +17,10 @@ type PropTypes = {
   heading: string,
   price: string,
   from: boolean,
-  copy: string,
+  copy: ListItem[],
   ctaText: string,
   image: string,
+  ctaUrl: string,
 };
 
 
@@ -39,8 +43,13 @@ export default function SubscriptionBundle(props: PropTypes) {
         <span className="subscription-bundle__price-amount">£{props.price}</span>
         <span className="subscription-bundle__price-period"> /&nbsp;month</span>
       </h4>
-      <p className="subscription-bundle__copy">{props.copy}</p>
-      <CtaCircle text={props.ctaText} />
+      <p className="subscription-bundle__copy">
+        <FeatureList listItems={props.copy} />
+      </p>
+      <CtaCircle
+        text={props.ctaText}
+        url={props.ctaUrl}
+      />
     </div>
   );
 
