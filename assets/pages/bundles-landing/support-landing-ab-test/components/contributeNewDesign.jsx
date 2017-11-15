@@ -53,7 +53,7 @@ type PropTypes = {
   contributionError: ContributionError,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  payPalError: boolean,
+  payPalError: string,
   changeContributionType: string => void,
   changeContributionAmountAnnual: string => void,
   changeContributionAmountMonthly: string => void,
