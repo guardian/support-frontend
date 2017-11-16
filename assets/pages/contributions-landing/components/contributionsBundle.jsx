@@ -33,7 +33,7 @@ import {
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-export type PropTypes = {
+type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
