@@ -10,7 +10,7 @@ import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.ExecutionError
 import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
-import com.gu.zuora.model.response.ZuoraErrorResponse
+import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import org.joda.time.DateTime
@@ -25,41 +25,50 @@ class FailureHandler(emailService: EmailService)
 
   override protected def handlerFuture(state: FailureHandlerState, error: Option[ExecutionError], context: Context): Future[CompletedState] = {
     logger.info(
-      s"FAILED contribution_amount: ${state.contribution.amount} contribution_currency: ${state.contribution.currency.iso} test_user: ${state.user.isTestUser}"
+      s"FAILED contribution_amount: ${state.contribution.amount}\n" +
+        s"contribution_currency: ${state.contribution.currency.iso}\n" +
+        s"test_user: ${state.user.isTestUser}\n" +
+        s"error: $error"
     )
-    emailService.send(EmailFields(
-      email = state.user.primaryEmailAddress,
-      created = DateTime.now(),
-      amount = state.contribution.amount,
-      currency = state.contribution.currency.iso,
-      edition = state.user.country.alpha2,
-      name = state.user.firstName,
-      product = "monthly-contribution"
-    )).whenFinished {
-      logger.info(s"Error=$error")
-      CompletedState(
-        requestId = state.requestId,
-        user = state.user,
-        contribution = state.contribution,
-        status = Status.Failure,
-        message = Some(error.flatMap(messageFromExecutionError).getOrElse(defaultErrorMessage))
-      )
-    }
+    sendEmail(state).whenFinished(handleError(state, error))
   }
 
-  private val defaultErrorMessage =
-    "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
+  private def sendEmail(state: FailureHandlerState) = emailService.send(EmailFields(
+    email = state.user.primaryEmailAddress,
+    created = DateTime.now(),
+    amount = state.contribution.amount,
+    currency = state.contribution.currency.iso,
+    edition = state.user.country.alpha2,
+    name = state.user.firstName,
+    product = "monthly-contribution"
+  ))
 
-  private def messageFromExecutionError(error: ExecutionError): Option[String] = {
-    val maybeZuoraError = for {
-      retryException <- decode[ErrorJson](error.Cause).toOption
-      underlyingException <- retryException.cause
-      zuoraError <- ZuoraErrorResponse.fromErrorJson(underlyingException)
-    } yield zuoraError
-
-    maybeZuoraError.collect {
-      case e if e.errors.exists(_.Code == "TRANSACTION_FAILED") =>
+  private def handleError(state: FailureHandlerState, error: Option[ExecutionError]) =
+    error.flatMap(getZuoraError) match {
+      case Some(ZuoraErrorResponse(_, List(ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
+        state,
+        Status.Failure,
         "There was an error processing your payment. Please\u00a0try\u00a0again."
+      )
+      case _ => returnState(state)
     }
-  }
+
+  private def returnState(
+    state: FailureHandlerState,
+    status: Status = Status.Exception,
+    message: String = "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
+  ) =
+    CompletedState(
+      requestId = state.requestId,
+      user = state.user,
+      contribution = state.contribution,
+      status = status,
+      message = Some(message)
+    )
+
+  private def getZuoraError(executionError: ExecutionError): Option[ZuoraErrorResponse] = for {
+    retryException <- decode[ErrorJson](executionError.Cause).toOption
+    underlyingException <- retryException.cause
+    zuoraError <- ZuoraErrorResponse.fromErrorJson(underlyingException)
+  } yield zuoraError
 }

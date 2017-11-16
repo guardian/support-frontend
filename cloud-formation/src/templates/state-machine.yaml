@@ -54,6 +54,19 @@ States:
           {{> retry}}
     Next: WaitForBrowserPoll
 
+  FailureHandler:
+    Type: Task
+    Resource: "${FailureHandlerLambda.Arn}"
+    Next: SucceedOrFailChoice
+
+  SucceedOrFailChoice:
+    Type: Choice
+    Choices:
+      - Variable: "$.status"
+        StringEquals: "exception"
+        Next: FailState
+    Default: WaitForBrowserPoll
+
   WaitForBrowserPoll:
     Type: Wait
     Seconds: 30
@@ -63,7 +76,6 @@ States:
       is created and the old is terminated.
     End: True
 
-  FailureHandler:
-    Type: Task
-    Resource: "${FailureHandlerLambda.Arn}"
-    Next: WaitForBrowserPoll
+  FailState:
+    Type: Fail
+

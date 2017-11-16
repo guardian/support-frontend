@@ -4,13 +4,17 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.support.workers.Conversions.FromOutputStream
-import com.gu.support.workers.Fixtures.{failureJson, wrapFixture}
-import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
+import com.gu.support.workers.Fixtures.{cardDeclinedJson, failureJson}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
+import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.CompletedState
+import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
+import com.gu.zuora.encoding.CustomCodecs._
+import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
+import io.circe.parser.decode
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,17 +25,41 @@ class FailureHandlerSpec extends LambdaSpec {
   "EmailService" should "send a failure email" in {
     val service = new EmailService(Configuration.emailServicesConfig.failed)
     val email = "rupert.bates@theguardian.com"
-    service.send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "", "monthly-contribution")).map(result => result.getMessageId should not be "")
+    service
+      .send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "", "monthly-contribution"))
+      .map(result => result.getMessageId should not be "")
   }
 
-  "FailureHandler lambda" should "add message to sqs queue" in {
+  "FailureHandler lambda" should "return a Status.Exception for any error except a card declined error" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
 
-    failureHandler.handleRequest(wrapFixture(failureJson), outStream, context)
+    failureHandler.handleRequest(failureJson.asInputStream, outStream, context)
 
-    Encoding.in[CompletedState](outStream.toInputStream).isSuccess should be(true)
+    val outState = Encoding.in[CompletedState](outStream.toInputStream)
+    outState.isSuccess should be(true)
+    outState.get._1.status should be(Status.Exception)
   }
 
+  it should "return a Status.Failure for a card declined error" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(cardDeclinedJson.asInputStream, outStream, context)
+
+    val outState = Encoding.in[CompletedState](outStream.toInputStream)
+    outState.isSuccess should be(true)
+    outState.get._1.status should be(Status.Failure)
+  }
+
+  it should "match a transaction declined error" in {
+    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](Fixtures.zuoraErrorResponse).right.get))
+
+    errorResponse match {
+      case Some(ZuoraErrorResponse(_, List(ZuoraError("TRANSACTION_FAILED", _)))) => succeed
+      case _ => fail()
+    }
+  }
 }
