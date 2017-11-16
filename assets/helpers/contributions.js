@@ -37,7 +37,9 @@ export type ParsedContrib = {
 type Config = {
   [Contrib]: {
     min: number,
+    minInWords: string,
     max: number,
+    maxInWords: string,
     default: number,
   }
 }
@@ -48,17 +50,23 @@ type Config = {
 const config: Config = {
   ANNUAL: {
     min: 50,
+    minInWords: 'fifty',
     max: 2000,
+    maxInWords: 'two thousand',
     default: 75,
   },
   MONTHLY: {
     min: 5,
+    minInWords: 'five',
     max: 166,
+    maxInWords: 'one hundred and sixty six',
     default: 10,
   },
   ONE_OFF: {
     min: 1,
+    minInWords: 'one',
     max: 2000,
+    maxInWords: 'two thousand',
     default: 50,
   },
 };
@@ -66,7 +74,7 @@ const config: Config = {
 
 // ----- Functions ----- //
 
-export function parse(input: ?string, contrib: Contrib): ParsedContrib {
+function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);
@@ -85,7 +93,7 @@ export function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
 }
 
-export function parseContrib(s: ?string, contrib: Contrib): Contrib {
+function parseContrib(s: ?string, contrib: Contrib): Contrib {
   switch ((s || contrib).toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
     case 'MONTHLY': return 'MONTHLY';
@@ -94,14 +102,14 @@ export function parseContrib(s: ?string, contrib: Contrib): Contrib {
   }
 }
 
-export function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
+function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
   switch (contrib) {
     case 'ANNUAL': return 'Annual';
     default: return 'Monthly';
   }
 }
 
-export function errorMessage(
+function errorMessage(
   error: ContribError,
   currency: Currency,
   contributionType: Contrib,
@@ -122,3 +130,25 @@ export function errorMessage(
   }
 
 }
+
+function contribCamelCase(contrib: Contrib): string {
+
+  switch (contrib) {
+    case 'ANNUAL': return 'annual';
+    case 'MONTHLY': return 'monthly';
+    default: return 'oneOff';
+  }
+
+}
+
+
+// ----- Exports ----- //
+
+export {
+  config,
+  parse,
+  parseContrib,
+  billingPeriodFromContrib,
+  errorMessage,
+  contribCamelCase,
+};

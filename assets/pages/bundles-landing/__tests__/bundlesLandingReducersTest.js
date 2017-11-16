@@ -138,4 +138,19 @@ describe('reducer tests', () => {
     expect(newState.amount.oneOff).toEqual(amount);
     expect(newState.amount.monthly).toMatchSnapshot();
   });
+
+  it('should handle SET_PAYPAL_ERROR', () => {
+
+    const action = {
+      type: 'SET_PAYPAL_ERROR',
+      error: 'I am an error!',
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.type).toMatchSnapshot();
+    expect(newState.error).toMatchSnapshot();
+    expect(newState.payPalError).toEqual(action.error);
+    expect(newState.amount.monthly).toMatchSnapshot();
+  });
 });

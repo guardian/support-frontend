@@ -8,7 +8,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
-type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type SubsProduct = 'paper' | 'digital' | 'paperDig';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
@@ -113,7 +113,7 @@ function buildSubsUrls(
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
-  params.append('acquisitionsData', JSON.stringify(referrerAcquisitionData));
+  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
   const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
