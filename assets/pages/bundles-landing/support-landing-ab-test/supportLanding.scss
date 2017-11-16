@@ -208,11 +208,305 @@
     // ----- Contribute
 
     .contribute-new-design {
-      background-color: darken(gu-colour(multimedia-main-2), 5%);
+      background-color: darken(#fff, 5%);
     }
 
     .contribute-new-design__content {
-      background-color: gu-colour(multimedia-main-2);
+      background-color: #fff;
+      border-color: gu-colour(light-yellow);
+      color: gu-colour(neutral-2);
+      position: relative;
+
+      .component-info-section__header {
+        position: relative;
+
+        .component-secure {
+          position: absolute;
+          top: 10px;
+          right: 0;
+
+          @include mq($from: desktop) {
+            display: none;
+          }
+        }
+      }
+
+      .component-info-section__content .component-secure {
+        float: right;
+
+        @include mq($until: desktop) {
+          display: none;
+        }
+      }
+
+      .component-cta-link {
+        height: 54px;
+        line-height: 54px;
+        background-color: gu-colour(comment-main-2);
+        color: gu-colour(neutral-1);
+        font-size: 14px;
+        font-weight: bold;
+        padding-left: 20px;
+        padding-top: 0;
+        padding-bottom: 0;
+        box-sizing: border-box;
+        margin-top: $gu-v-spacing * 2;
+
+        &:hover {
+          background-color: darken(gu-colour(comment-main-2), 5%);
+        }
+
+        @include mq($from: tablet) {
+          width: 500px;
+        }
+
+        .svg-arrow-right-straight {
+          top: 18px;
+          right: 16px;
+          height: 33%;
+          fill: gu-colour(neutral-1);
+        }
+      }
+
+      .component-paypal-contribution-button {
+        height: 52px;
+        border-color: #012169;
+        color: #012169;
+        font-size: 14px;
+        font-family: $gu-text-sans-web;
+        width: 100%;
+        margin-top: $gu-v-spacing;
+
+        @include mq($from: tablet) {
+          width: 500px;
+        }
+
+        .svg-arrow-right-straight {
+          fill: #012169;
+          height: 35%;
+          right: 11px;
+        }
+
+        .paypal-p-logo-0, .paypal-p-logo-2 {
+          fill: #012169;
+        }
+
+        .paypal-p-logo-1 {
+          fill: #009cde;
+        }
+      }
+    }
+
+    .contribute-new-design__description {
+      font-family: $gu-text-egyptian-web;
+      font-size: 18px;
+      line-height: 22px;
+
+      @include mq($from: tablet) {
+        width: 600px;
+      }
+    }
+
+    .component-inline-payment-logos {
+      float: none;
+      height: 25px;
+      margin-top: 8px;
+
+      svg {
+        width: 36px;
+      }
+    }
+
+    .component-contribution-selection__amount, .component-contribution-selection__type {
+      .component-radio-toggle__label {
+        background-color: #fff;
+      }
+
+      .component-radio-toggle__input:checked+.component-radio-toggle__label {
+        background-color: gu-colour(comment-main-2);
+        font-weight: bold;
+        color: gu-colour(neutral-1);
+      }
+
+    }
+
+    .component-contribution-selection__type {
+      font-size: 14px;
+      line-height: 14px;
+      padding: 15px 0;
+      margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
+
+      .component-radio-toggle {
+        display: inline;
+        border: 1px solid gu-colour(comment-main-2);
+        border-radius: 600px;
+        padding: 13px 0;
+      }
+
+      .component-radio-toggle__label {
+        padding: 13px $gu-h-spacing;
+      }
+    }
+
+    .component-contribution-selection__amount {
+      display: inline-block;
+      vertical-align: top;
+      font-size: 14px;
+      margin-top: $gu-v-spacing;
+
+      @include mq($until: phablet) {
+        border-top: 2px dotted gu-colour(neutral-3);
+        width: 100%;
+        padding-top: $gu-v-spacing;
+        margin-top: $gu-v-spacing * 2;
+      }
+
+      .component-radio-toggle__label {
+        display: inline-block;
+        text-align: center;
+        border: 1px solid gu-colour(comment-main-2);
+        line-height: 42px;
+        width: 42px;
+        height: 42px;
+        margin-right: 12px;
+      }
+    }
+
+    .component-contribution-selection__custom-amount {
+      vertical-align: top;
+      margin-top: $gu-v-spacing * 2;
+      margin-bottom: $gu-v-spacing * 4;
+      display: block;
+      position: relative;
+
+      @include mq($from: phablet) {
+        display: inline-block;
+        margin-left: 24px;
+        margin-top: $gu-v-spacing;
+        margin-bottom: $gu-v-spacing * 2;
+      }
+
+      .component-number-input {
+        background-color: #fff;
+        border: 1px solid gu-colour(comment-main-2);
+        padding: 0;
+        margin: 0;
+        height: 42px;
+      }
+
+      .component-number-input__input {
+        font-size: 14px;
+        line-height: 36px;
+        color: gu-colour(neutral-1);
+      }
+
+      .component-number-input__label {
+        line-height: 28px;
+      }
+
+      .component-number-input--selected {
+        background-color: gu-colour(comment-main-2);
+
+        .component-number-input__label {
+          color: gu-colour(neutral-1);
+        }
+      }
+
+      .component-error-message {
+        position: absolute;
+        background-color: inherit;
+        color: gu-colour(error);
+        height: 36px;
+        box-sizing: border-box;
+        padding: 0;
+
+        span {
+          left: 40px;
+        }
+      }
+
+      .svg-exclamation {
+        background-color: gu-colour(error);
+        border-radius: 600px;
+        height: 13px;
+        padding: 3px 8px;
+        left: 15px;
+      }
+    }
+
+    .component-contribution-selection--monthly {
+      .component-number-input, .component-error-message {
+        width: 305px;
+      }
+    }
+
+    .component-contribution-selection--one-off {
+      .component-number-input, .component-error-message {
+        width: 249px;
+      }
+    }
+
+    .grave-error {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(black, 0.98);
+      color: #fff;
+    }
+
+    .grave-error__close {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      height: 34px;
+      width: 30px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      fill: #fff;
+
+      &:hover {
+        fill: darken(#fff, 10%);
+        cursor: pointer;
+      }
+
+      .svg-cross {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .grave-error__message {
+      margin-top: 120px;
+      padding: 0 ($gu-h-spacing / 2);
+
+      @include mq($from: mobileLandscape) {
+        padding: 0 $gu-h-spacing;
+      }
+
+      @include mq($from: desktop) {
+        margin-top: 100px;
+        padding: 0;
+        width: 40%;
+        margin-left: 21%;
+      }
+    }
+
+    .grave-error__heading {
+      font-size: 36px;
+      line-height: 36px;
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+    }
+
+    .grave-error__copy {
+      font-size: 18px;
+      line-height: 20px;
+      font-family: $gu-text-egyptian-web;
+      margin: $gu-v-spacing 0;
+      width: 80%;
     }
 
     // ----- Subscribe

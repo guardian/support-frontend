@@ -94,6 +94,17 @@ Object {
 }
 `;
 
+exports[`reducer tests should handle SET_PAYPAL_ERROR 1`] = `"MONTHLY"`;
+
+exports[`reducer tests should handle SET_PAYPAL_ERROR 2`] = `null`;
+
+exports[`reducer tests should handle SET_PAYPAL_ERROR 3`] = `
+Object {
+  "userDefined": false,
+  "value": "10",
+}
+`;
+
 exports[`reducer tests should return the initial state 1`] = `
 Object {
   "amount": Object {
@@ -111,6 +122,7 @@ Object {
     },
   },
   "error": null,
+  "payPalError": "",
   "type": "MONTHLY",
 }
 `;
