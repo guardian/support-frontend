@@ -74,10 +74,19 @@ const subHeadingOneOffText = {
   US: '',
 };
 
-const contentText = {
-  GB: 'Support the Guardian\'s editorial operations by making a monthly or one-off contribution today',
-  US: 'Your contribution funds and supports the Guardian\'s journalism',
-};
+function ContentText(props: PropTypes) {
+  if (props.isoCountry === 'GB') {
+    return <p className="component-bundle__content-intro">Support the Guardian’s editorial operations by making a monthly or one-off contribution today</p>;
+  }
+
+  if (props.isoCountry === 'US') {
+    if (props.abTests.usRecurringCopyTest === 'contributeBox') {
+      return <p className="component-bundle__content-intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
+    }
+    return <p className="component-bundle__content-intro">Your contribution funds and supports the Guardian’s journalism</p>;
+  }
+}
+
 
 const contribCtaText = {
   ANNUAL: 'Contribute with card or PayPal',
@@ -193,9 +202,9 @@ function ContributionsBundle(props: PropTypes) {
 
   return (
     <Bundle {...attrs}>
-      <p>
-        {contentText[props.isoCountry]}
-      </p>
+      <ContentText
+        {...props}
+      />
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
