@@ -11,6 +11,7 @@ import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
 
 import Mothership from './components/mothershipNewDesign';
 import Contribute from './components/contributeNewDesign';
+import BehindTheScenes from './components/behindTheScenesNewDesign';
 import Subscribe from './components/subscribeNewDesign';
 import WhySupport from './components/whySupportNewDesign';
 import Ready from './components/readyNewDesign';
@@ -26,6 +27,7 @@ export default function supportLanding(store: Store) {
         <SimpleHeader />
         <Mothership />
         <Contribute />
+        <BehindTheScenes />
         <Subscribe />
         <WhySupport />
         <Ready />
