@@ -76,14 +76,14 @@ const subHeadingOneOffText = {
 
 function ContentText(props: PropTypes) {
   if (props.isoCountry === 'GB') {
-    return <p className="component-bundle__content__intro">Support the Guardian’s editorial operations by making a monthly or one-off contribution today</p>;
+    return <p className="component-bundle__content-intro">Support the Guardian’s editorial operations by making a monthly or one-off contribution today</p>;
   }
 
   if (props.isoCountry === 'US') {
     if (props.abTests.usRecurringCopyTest === 'contributeBox') {
-      return <p className="component-bundle__content__intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
+      return <p className="component-bundle__content-intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
     }
-    return <p className="component-bundle__content__intro">Your contribution funds and supports the Guardian’s journalism</p>;
+    return <p className="component-bundle__content-intro">Your contribution funds and supports the Guardian’s journalism</p>;
   }
 }
 

@@ -110,10 +110,6 @@ strong {
 		margin: $gu-h-spacing / 2;
 		line-height: 20px;
 
-		@include mq($from: phablet) {
-
-		}
-
 		@include mq($from: desktop) {
 			margin-left: 24px;
 			font-size: 22px;
@@ -359,7 +355,7 @@ strong {
 		}
 	}
 
-	.component-bundle__content__intro {
+	.component-bundle__content-intro {
 		line-height:20px;
 		margin-bottom:24px;
 	}
