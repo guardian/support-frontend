@@ -14,6 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
+import BundlesGBStructureTest from './components/bundlesGBStructureTest';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
@@ -40,12 +41,15 @@ let content = null;
 if (getQueryParameter('newDesigns', 'false') === 'true') {
   content = supportLanding(store);
 } else {
+  const variantSelected = store.getState().common.abParticipations.gbStructureTest;
+  const bundlesSelected = variantSelected === 'contributeOnTop'? <BundlesGBStructureTest /> : <Bundles />;
+
   content = (
     <Provider store={store}>
       <div>
         <SimpleHeader />
         <Introduction abTests={store.getState().common.abParticipations} />
-        <Bundles />
+        {bundlesSelected}
         <WhySupport />
         <WaysOfSupport />
         <LinksFooter />
