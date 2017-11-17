@@ -8,6 +8,7 @@
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
+    <link rel="preload"  as="script" href="@assets(js)">
     <script type="text/javascript" src="@assets(js)"></script>
     <script type="text/javascript">
         window.guardian = window.guardian || {};
