@@ -6,10 +6,9 @@
         window.guardian = window.guardian || {};
         window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
     </script>
-    <link rel="preload"  as="script" href="@assets(js)">
     <script type="text/javascript" src="@assets(js)"></script>
 }
 
-@main(title = title, scripts = scripts, description = description) {
+@main(title = title, scripts = scripts, description = description, mainJs = Some(js)) {
     <main id="@id" class="gu-content-wrapper"></main>
 }

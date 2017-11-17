@@ -8,7 +8,6 @@
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
-    <link rel="preload"  as="script" href="@assets(js)">
     <script type="text/javascript" src="@assets(js)"></script>
     <script type="text/javascript">
         window.guardian = window.guardian || {};
@@ -16,6 +15,6 @@
     </script>
 }
 
-@main(title = title, description = description, scripts = scripts) {
+@main(title = title, description = description, scripts = scripts, mainJs = Some(js)) {
     <main id="@id" class="gu-content-wrapper"></main>
 }

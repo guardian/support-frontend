@@ -4,7 +4,8 @@
 	title: String,
 	description: Option[String] = None,
 	styles: Html = Html(""),
-	scripts: Html = Html("")
+	scripts: Html = Html(""),
+	mainJs: Option[String] = None
 )(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
@@ -45,6 +46,11 @@
 	@if(!doNotTrack) {
 		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 	}
+
+	@if(mainJs.isDefined) {
+		<link rel="preload"  as="script" href="@assets(mainJs.get)">
+	}
+
 	@styles
 </head>
 <body>
