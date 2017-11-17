@@ -1109,6 +1109,20 @@
       }
     }
 
+    // ----- Other Ways
+
+    .other-ways-new-design {
+      background-color: darken(#fff, 5%);
+    }
+
+    .other-ways-new-design__content {
+      background-color: gu-colour(neutral-1);
+
+      .component-info-section__heading {
+        color: #fff;
+      }
+    }
+
   }
 
 }
