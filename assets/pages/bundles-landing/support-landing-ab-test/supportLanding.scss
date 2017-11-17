@@ -301,6 +301,7 @@
       font-family: $gu-text-egyptian-web;
       font-size: 18px;
       line-height: 22px;
+      color: gu-colour(neutral-1);
 
       @include mq($from: tablet) {
         width: 600px;
@@ -509,6 +510,42 @@
       width: 80%;
     }
 
+    // ----- Behind The Scenes
+
+    .behind-the-scenes-new-design {
+      background-color: darken(#fff, 5%);
+    }
+
+    .behind-the-scenes-new-design__content {
+      background-color: gu-colour(neutral-6);
+      color: gu-colour(neutral-1);
+      border-top: 1px solid gu-colour(neutral-4);
+      padding-bottom: $gu-v-spacing * 2;
+
+      .component-info-section__heading {
+        font-family: $gu-egyptian-web;
+        font-weight: bold;
+        display: inline;
+      }
+
+      .component-info-section__content {
+        font-family: $gu-text-egyptian-web;
+        line-height: 20px;
+      }
+
+      .svg-moving-circle {
+        height: 30px;
+        margin-left: 5px;
+        width: 100px;
+      }
+    }
+
+    .behind-the-scenes-new-design__copy {
+      @include mq($from: tablet) {
+        width: 600px;
+      }
+    }
+
     // ----- Subscribe
 
     .subscribe-new-design {
@@ -516,7 +553,7 @@
     }
 
     .subscribe-new-design__content {
-      background-color: gu-colour(neutral-6);
+      background-color: #fff;
       border-color: gu-colour(light-yellow);
     }
 
@@ -554,7 +591,7 @@
         }
 
         button {
-          background-color: #fff;
+          background-color: gu-colour(neutral-6);
           vertical-align: middle;
 
           svg {
@@ -627,6 +664,7 @@
 
     .why-support-new-design__content {
       background-color: #fff;
+      border-top: 1px solid gu-colour(neutral-4);
     }
 
     .why-support-new-design__wrapper {
