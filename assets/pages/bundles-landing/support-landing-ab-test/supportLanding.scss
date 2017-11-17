@@ -519,6 +519,7 @@
     .behind-the-scenes-new-design__content {
       background-color: gu-colour(neutral-6);
       color: gu-colour(neutral-1);
+      border-top: 1px solid gu-colour(neutral-4);
 
       .component-info-section__heading {
         font-family: $gu-egyptian-web;
@@ -551,7 +552,7 @@
 
     .subscribe-new-design__content {
       background-color: #fff;
-      border-color: gu-colour(light-yellow);
+      border-top: 1px solid gu-colour(neutral-4);
     }
 
     .subscribe-new-design__bundles-wrapper {
