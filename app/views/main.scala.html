@@ -70,8 +70,10 @@
 		window.guardian = window.guardian || {};
         window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
 	</script>
-	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
 	@scripts
+	 <!-- This script is intentional at the bottom of the file. Please check
+	      all the critical flows work correctly if you change its position -->
+	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
 	<!-- build-commit-id: @app.BuildInfo.gitCommitId -->
 </body>
 </html>
