@@ -24,9 +24,8 @@
         window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
         window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
     </script>
-    <script type="text/javascript" src="@assets(js)"></script>
 }
 
-@main(title = title, scripts = scripts) {
+@main(title = title, scripts = scripts, mainBundleJs = js) {
     <main id="@id" class="gu-content-wrapper"></main>
 }
