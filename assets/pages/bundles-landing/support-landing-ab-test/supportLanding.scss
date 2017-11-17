@@ -554,7 +554,7 @@
 
     .subscribe-new-design__content {
       background-color: #fff;
-      border-top: 1px solid gu-colour(neutral-4);
+      border-color: gu-colour(light-yellow);
     }
 
     .subscribe-new-design__bundles-wrapper {
@@ -664,6 +664,7 @@
 
     .why-support-new-design__content {
       background-color: #fff;
+      border-top: 1px solid gu-colour(neutral-4);
     }
 
     .why-support-new-design__wrapper {

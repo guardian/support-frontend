@@ -27,8 +27,8 @@ export default function supportLanding(store: Store) {
         <SimpleHeader />
         <Mothership />
         <Contribute />
-        <BehindTheScenes />
         <Subscribe />
+        <BehindTheScenes />
         <WhySupport />
         <Ready />
         <SimpleFooter />
