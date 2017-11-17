@@ -12,9 +12,9 @@ import InfoSection from 'components/infoSection/infoSection';
 export default function BehindTheScenes() {
 
   return (
-    <div className="behind-the-scenes-new-design gu-content-filler">
+    <div className="behind-the-scenes-new-design">
       <InfoSection
-        className="behind-the-scenes-new-design__content gu-content-filler__inner"
+        className="behind-the-scenes-new-design__content gu-content-margin"
         heading="...and go behind the scenes"
       >
         <p className="behind-the-scenes-new-design__copy">

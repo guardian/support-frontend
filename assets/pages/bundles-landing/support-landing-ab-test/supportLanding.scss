@@ -301,6 +301,7 @@
       font-family: $gu-text-egyptian-web;
       font-size: 18px;
       line-height: 22px;
+      color: gu-colour(neutral-1);
 
       @include mq($from: tablet) {
         width: 600px;
@@ -509,6 +510,33 @@
       width: 80%;
     }
 
+    // ----- Behind The Scenes
+
+    .behind-the-scenes-new-design {
+      background-color: darken(#fff, 5%);
+    }
+
+    .behind-the-scenes-new-design__content {
+      background-color: gu-colour(neutral-6);
+      color: gu-colour(neutral-1);
+
+      .component-info-section__heading {
+        font-family: $gu-egyptian-web;
+        font-weight: bold;
+      }
+
+      .component-info-section__content {
+        font-family: $gu-text-egyptian-web;
+        line-height: 20px;
+      }
+    }
+
+    .behind-the-scenes-new-design__copy {
+      @include mq($from: tablet) {
+        width: 600px;
+      }
+    }
+
     // ----- Subscribe
 
     .subscribe-new-design {
@@ -516,7 +544,7 @@
     }
 
     .subscribe-new-design__content {
-      background-color: gu-colour(neutral-6);
+      background-color: #fff;
       border-color: gu-colour(light-yellow);
     }
 
