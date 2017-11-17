@@ -5,7 +5,7 @@
 	description: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
-	mainJs: Option[String] = None
+	mainBundleJs: String
 )(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
@@ -47,9 +47,8 @@
 		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 	}
 
-	@if(mainJs.isDefined) {
-		<link rel="preload"  as="script" href="@assets(mainJs.get)">
-	}
+	<link rel="preload"  as="script" href="@assets(mainBundleJs)">
+
 
 	@styles
 </head>
@@ -71,6 +70,7 @@
 		window.guardian = window.guardian || {};
         window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
 	</script>
+	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
 	@scripts
 	<!-- build-commit-id: @app.BuildInfo.gitCommitId -->
 </body>
