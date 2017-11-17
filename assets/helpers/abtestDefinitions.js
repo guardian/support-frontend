@@ -50,4 +50,16 @@ export const tests: Tests = {
     isActive: true,
     independence: 3,
   },
+
+  gbStructureTest: {
+    variants: ['control', 'contributeOnTop'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 4,
+  },
 };
