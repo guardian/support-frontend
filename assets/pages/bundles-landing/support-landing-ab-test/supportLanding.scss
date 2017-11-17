@@ -520,6 +520,7 @@
       background-color: gu-colour(neutral-6);
       color: gu-colour(neutral-1);
       border-top: 1px solid gu-colour(neutral-4);
+      padding-bottom: $gu-v-spacing * 2;
 
       .component-info-section__heading {
         font-family: $gu-egyptian-web;
