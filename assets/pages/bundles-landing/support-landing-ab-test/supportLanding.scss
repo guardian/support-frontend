@@ -523,11 +523,17 @@
       .component-info-section__heading {
         font-family: $gu-egyptian-web;
         font-weight: bold;
+        display: inline;
       }
 
       .component-info-section__content {
         font-family: $gu-text-egyptian-web;
         line-height: 20px;
+      }
+
+      .svg-moving-circle {
+        height: 30px;
+        margin-left: 5px;
       }
     }
 
