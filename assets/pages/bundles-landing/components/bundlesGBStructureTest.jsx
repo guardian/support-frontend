@@ -91,7 +91,6 @@ type BundlesType = {
   contrib: {
     oneOff: ContribAttrs,
     monthly: ContribAttrs,
-    annual: ContribAttrs,
   },
   [subscribeProductNames]: SubscribeAttrs,
 }
@@ -114,23 +113,13 @@ const oneOffContribCopy: ContribAttrs = {
 };
 
 const monthlyContribCopy: ContribAttrs = {
-  heading: 'contribute',
+  heading: '',
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
   modifierClass: 'contributions structureTest',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
-};
-
-const annualContribCopy: ContribAttrs = {
-  heading: 'contribute',
-  subheading: 'from £50/year',
-  ctaText: 'Contribute with card or PayPal',
-  ctaId: 'contribute',
-  modifierClass: 'contributions structureTest',
-  ctaLink: '',
-  ctaAccessibilityHint: 'Proceed to make an annual contribution',
 };
 
 const digitalCopy: SubscribeAttrs = {
@@ -146,7 +135,7 @@ const digitalCopy: SubscribeAttrs = {
       text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
     },
   ],
-  ctaText: 'Get a digital subscription',
+  ctaText: 'Start your 14 day trial',
   ctaId: 'digital-sub',
   modifierClass: 'digital  structureTest',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
@@ -199,7 +188,6 @@ const bundles: BundlesType = {
   contrib: {
     oneOff: oneOffContribCopy,
     monthly: monthlyContribCopy,
-    annual: annualContribCopy,
   },
   digital: digitalCopy,
   paper: paperCopy,
@@ -245,18 +233,11 @@ const getContribAttrs = (
 };
 
 function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
-
-  return Object.assign({}, bundles.paper, {
-    ctaLink: subsLinks.paper,
-  });
-
+  return Object.assign({}, bundles.paper, { ctaLink: subsLinks.paper });
 }
 
 function getPaperDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
-
-  return Object.assign({}, bundles.paperDigital, {
-    ctaLink: subsLinks.paperDig,
-  });
+  return Object.assign({}, bundles.paperDigital, { ctaLink: subsLinks.paperDig });
 }
 
 function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
@@ -352,10 +333,11 @@ function BundlesGBStructureTest(props: PropTypes) {
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
+          <h2>contribute</h2>
           <ContributionBundle {...props} />
         </div>
-
         <div className="bundles__wrapper">
+          <h2>subscribe</h2>
           <div className="bundles__divider" />
           <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
           <div className="bundles__divider" />
