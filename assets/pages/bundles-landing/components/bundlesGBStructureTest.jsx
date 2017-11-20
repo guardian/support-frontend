@@ -244,7 +244,7 @@ const getContribAttrs = (
 
 };
 
-function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
+function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
   return Object.assign({}, bundles.paper, {
     paperCtaId: 'paper-sub',
@@ -255,7 +255,7 @@ function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
 }
 
-function getPaperDigitalAttrs(subsLinks: SubsUrls): PaperAttrs {
+function getPaperDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
   return Object.assign({}, bundles.paperDigital, {
     paperCtaId: 'paper-sub',
