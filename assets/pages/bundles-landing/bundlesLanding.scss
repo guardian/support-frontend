@@ -104,6 +104,15 @@
 
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
+    .bundles__title {
+      color: #fff;
+      font-size: 28px;
+      line-height: 32px;
+      font-weight: 900;
+      font-family: $gu-egyptian-web;
+      margin-left: $gu-h-spacing/2;
+    }
+
     .bundles__content {
       background-color: gu-colour(guardian-brand-dark);
       position: relative;

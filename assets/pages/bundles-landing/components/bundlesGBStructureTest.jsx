@@ -333,11 +333,11 @@ function BundlesGBStructureTest(props: PropTypes) {
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className="bundles__wrapper">
-          <h2>contribute</h2>
+          <h2 className="bundles__title">contribute</h2>
           <ContributionBundle {...props} />
         </div>
         <div className="bundles__wrapper">
-          <h2>subscribe</h2>
+          <h2 className="bundles__title">subscribe</h2>
           <div className="bundles__divider" />
           <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
           <div className="bundles__divider" />
