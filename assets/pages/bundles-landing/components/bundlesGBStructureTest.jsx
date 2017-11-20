@@ -247,10 +247,7 @@ const getContribAttrs = (
 function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
   return Object.assign({}, bundles.paper, {
-    paperCtaId: 'paper-sub',
-    paperCtaLink: subsLinks.paper,
-    paperDigCtaId: 'paper-digital-sub structure-test',
-    paperDigCtaLink: subsLinks.paperDig,
+    ctaLink: subsLinks.paper,
   });
 
 }
@@ -258,10 +255,7 @@ function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 function getPaperDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
   return Object.assign({}, bundles.paperDigital, {
-    paperCtaId: 'paper-digital-sub',
-    paperCtaLink: subsLinks.paper,
-    paperDigCtaId: 'paper-digital-sub',
-    paperDigCtaLink: subsLinks.paperDig,
+    ctaLink: subsLinks.paperDig,
   });
 }
 
