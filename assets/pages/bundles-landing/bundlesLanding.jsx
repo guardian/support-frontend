@@ -42,7 +42,7 @@ if (getQueryParameter('newDesigns', 'false') === 'true') {
   content = supportLanding(store);
 } else {
   const variantSelected = store.getState().common.abParticipations.gbStructureTest;
-  const bundlesSelected = variantSelected === 'contributeOnTop'? <BundlesGBStructureTest /> : <Bundles />;
+  const bundlesSelected = variantSelected === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
 
   content = (
     <Provider store={store}>
