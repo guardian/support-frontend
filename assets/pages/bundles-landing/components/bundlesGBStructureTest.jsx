@@ -72,7 +72,7 @@ type ContribAttrs = {
   },
 }
 
-type DigitalAttrs = {
+type SubscribeAttrs = {
   heading: string,
   subheading: string,
   listItems: ListItem[],
@@ -121,7 +121,7 @@ type BundlesType = {
     monthly: ContribAttrs,
     annual: ContribAttrs,
   },
-  digital: DigitalAttrs,
+  digital: SubscribeAttrs,
   paper: PaperAttrs,
   paperDigital: PaperDigitalAttrs,
 }
@@ -163,7 +163,7 @@ const annualContribCopy: ContribAttrs = {
   ctaAccessibilityHint: 'Proceed to make an annual contribution',
 };
 
-const digitalCopy: DigitalAttrs = {
+const digitalCopy: SubscribeAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
   listItems: [
@@ -303,7 +303,7 @@ function getPaperDigitalAttrs(subsLinks: SubsUrls): PaperDigitalAttrs {
   });
 }
 
-function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
+function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
@@ -360,7 +360,7 @@ function ContributionBundle(props: PropTypes) {
 
 }
 
-function DigitalBundle(props: DigitalAttrs) {
+function DigitalBundle(props: SubscribeAttrs) {
 
   return (
     <Bundle {...props}>
@@ -433,7 +433,7 @@ function BundlesGBStructureTest(props: PropTypes) {
     props.abTests,
     props.referrerAcquisitionData,
   );
-  const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
+  const digitalAttrs: SubscribeAttrs = getDigitalAttrs(subsLinks);
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);
   const paperDigitalAttrs: PaperDigitalAttrs = getPaperDigitalAttrs(subsLinks);
 
