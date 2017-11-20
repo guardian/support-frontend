@@ -8,6 +8,7 @@ import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamCo
 import com.gu.support.workers.Fixtures.{cardDeclinedJson, failureJson}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
+import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.CompletedState
 import com.gu.support.workers.{Fixtures, LambdaSpec}
@@ -18,6 +19,7 @@ import io.circe.parser.decode
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.io.Source
 
 @IntegrationTest
 class FailureHandlerSpec extends LambdaSpec {
@@ -30,16 +32,26 @@ class FailureHandlerSpec extends LambdaSpec {
       .map(result => result.getMessageId should not be "")
   }
 
-  "FailureHandler lambda" should "return a Status.Exception for any error except a card declined error" in {
+  "FailureHandler lambda" should "return a failed JsonWrapper for any errors except payment errors" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequest(failureJson.asInputStream, outStream, context)
 
-    val outState = Encoding.in[CompletedState](outStream.toInputStream)
-    outState.isSuccess should be(true)
-    outState.get._1.status should be(Status.Exception)
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInformation.failed should be(true)
+  }
+
+  "FailureHandler lambda" should "return a non failed JsonWrapper for payment errors" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(cardDeclinedJson.asInputStream, outStream, context)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInformation.failed should be(false)
   }
 
   it should "return a Status.Failure for a card declined error" in {
