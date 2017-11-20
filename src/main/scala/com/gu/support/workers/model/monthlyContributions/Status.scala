@@ -5,7 +5,7 @@ sealed trait Status {
 }
 
 object Status {
-  val all = List(Success, Failure, Exception, Pending)
+  val all = List(Success, Failure, Pending)
 
   def fromString(s: String): Option[Status] = all.find(_.asString == s)
 
@@ -15,10 +15,6 @@ object Status {
 
   case object Failure extends Status {
     override def asString = "failure"
-  }
-
-  case object Exception extends Status {
-    override def asString = "exception"
   }
 
   case object Pending extends Status {
