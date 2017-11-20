@@ -354,50 +354,6 @@ function SubscribeBundle(props: SubscribeAttrs) {
 
 }
 
-function PaperBundle(props: PaperAttrs) {
-
-  return (
-    <Bundle {...props}>
-      <FeatureList listItems={props.listItems} />
-      <CtaLink
-        ctaId={props.paperCtaId}
-        text={props.paperCtaText}
-        accessibilityHint={props.paperCtaAccessibilityHint}
-        url={props.paperCtaLink}
-      />
-      <CtaLink
-        ctaId={props.paperDigCtaId}
-        text={props.paperDigCtaText}
-        accessibilityHint={props.paperDigCtaAccessibilityHint}
-        url={props.paperDigCtaLink}
-      />
-    </Bundle>
-  );
-
-}
-
-function PaperDigitalBundle(props: PaperDigitalAttrs) {
-
-  return (
-    <Bundle {...props}>
-      <FeatureList listItems={props.listItems} />
-      <CtaLink
-        ctaId={props.paperCtaId}
-        text={props.paperCtaText}
-        accessibilityHint={props.paperCtaAccessibilityHint}
-        url={props.paperCtaLink}
-      />
-      <CtaLink
-        ctaId={props.paperDigCtaId}
-        text={props.paperDigCtaText}
-        accessibilityHint={props.paperDigCtaAccessibilityHint}
-        url={props.paperDigCtaLink}
-      />
-    </Bundle>
-  );
-
-}
-
 
 // ----- Component ----- //
 
