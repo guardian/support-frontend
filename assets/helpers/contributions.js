@@ -56,8 +56,8 @@ const config: Config = {
     default: 75,
   },
   MONTHLY: {
-    min: 5,
-    minInWords: 'five',
+    min: 2,
+    minInWords: 'two',
     max: 166,
     maxInWords: 'one hundred and sixty six',
     default: 10,
