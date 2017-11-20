@@ -26,6 +26,13 @@ export default function OtherWays() {
           gridImg="guardianObserverOffice"
           imgAlt="the Guardian and the Observer"
         />
+        <OtherWaysCard
+          heading="Live events"
+          copy="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
+          ctaText="Find out more"
+          gridImg="liveEvent"
+          imgAlt="live event"
+        />
       </InfoSection>
     </div>
   );
