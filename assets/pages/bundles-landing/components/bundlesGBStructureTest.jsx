@@ -99,7 +99,18 @@ type PaperAttrs = {
 }
 
 type PaperDigitalAttrs = {
-
+  heading: string,
+  subheading: string,
+  listItems: ListItem[],
+  paperCtaText: string,
+  paperDigCtaText: string,
+  modifierClass: string,
+  paperCtaId: string,
+  paperCtaLink: string,
+  paperCtaAccessibilityHint: string,
+  paperDigCtaId: string,
+  paperDigCtaLink: string,
+  paperDigCtaAccessibilityHint: string,
 }
 
 /* eslint-enable react/no-unused-prop-types */
@@ -112,6 +123,7 @@ type BundlesType = {
   },
   digital: DigitalAttrs,
   paper: PaperAttrs,
+  paperDigital: PaperDigitalAttrs,
 }
 
 
@@ -182,9 +194,6 @@ const paperCopy: PaperAttrs = {
     {
       heading: 'Save money on the retail price',
     },
-    {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
-    },
   ],
   paperCtaText: 'Get a paper subscription',
   paperDigCtaText: 'Get a paper+digital subscription',
@@ -197,16 +206,17 @@ const paperCopy: PaperAttrs = {
   paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
 
-const paperDigialCopy: PaperDigitalAttrs = {
+const paperDigitalCopy: PaperDigitalAttrs = {
   heading: 'paper subscription',
   subheading: 'from £10.79/month',
   listItems: [
     {
       heading: 'Newspaper',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
     },
     {
       heading: 'Save money on the retail price',
+      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
     },
     {
       heading: 'Get all the benefits of a digital subscription with paper+digital',
@@ -231,6 +241,7 @@ const bundles: BundlesType = {
   },
   digital: digitalCopy,
   paper: paperCopy,
+  paperDigital: paperDigitalCopy,
 };
 
 const ctaLinks = {
@@ -284,7 +295,7 @@ function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
 function getPaperDigitalAttrs(subsLinks: SubsUrls): PaperDigitalAttrs {
 
-  return Object.assign({}, bundles.paper, {
+  return Object.assign({}, bundles.paperDigital, {
     paperCtaId: 'paper-sub',
     paperCtaLink: subsLinks.paper,
     paperDigCtaId: 'paper-digital-sub',
