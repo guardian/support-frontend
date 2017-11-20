@@ -85,15 +85,15 @@ type SubscribeAttrs = {
 
 /* eslint-enable react/no-unused-prop-types */
 
+type subscribeProductNames = 'digital' | 'paper' | 'paperDigital';
+
 type BundlesType = {
   contrib: {
     oneOff: ContribAttrs,
     monthly: ContribAttrs,
     annual: ContribAttrs,
   },
-  digital: SubscribeAttrs,
-  paper: SubscribeAttrs,
-  paperDigital: SubscribeAttrs,
+  [subscribeProductNames]: SubscribeAttrs,
 }
 
 
@@ -118,7 +118,7 @@ const monthlyContribCopy: ContribAttrs = {
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions',
+  modifierClass: 'contributions structureTest',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
@@ -128,7 +128,7 @@ const annualContribCopy: ContribAttrs = {
   subheading: 'from £50/year',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions',
+  modifierClass: 'contributions structureTest',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make an annual contribution',
 };
@@ -147,8 +147,8 @@ const digitalCopy: SubscribeAttrs = {
     },
   ],
   ctaText: 'Get a digital subscription',
-  ctaId: 'start-digi-trial',
-  modifierClass: 'digital',
+  ctaId: 'digital-sub',
+  modifierClass: 'digital  structureTest',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
   ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
 };
@@ -158,16 +158,16 @@ const paperCopy: SubscribeAttrs = {
   subheading: 'from £10.79/month',
   listItems: [
     {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+      heading: 'Newspaper',
+      text: 'and delivery method: Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
     },
     {
       heading: 'Save money on the retail price',
     },
   ],
   ctaText: 'Get a paper subscription',
-  ctaId: 'paper-digi-sub',
-  modifierClass: 'paper',
+  ctaId: 'paper-sub structure-test',
+  modifierClass: 'paper structureTest',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper',
   ctaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
@@ -185,12 +185,12 @@ const paperDigitalCopy: SubscribeAttrs = {
       text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
     },
     {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
+      heading: 'Get all the digital benefits',
     },
   ],
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
-  modifierClass: 'paper',
+  modifierClass: 'paperDigital structureTest',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   ctaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
 };
@@ -249,7 +249,7 @@ function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
   return Object.assign({}, bundles.paper, {
     paperCtaId: 'paper-sub',
     paperCtaLink: subsLinks.paper,
-    paperDigCtaId: 'paper-digital-sub',
+    paperDigCtaId: 'paper-digital-sub structure-test',
     paperDigCtaLink: subsLinks.paperDig,
   });
 
@@ -258,7 +258,7 @@ function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 function getPaperDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
   return Object.assign({}, bundles.paperDigital, {
-    paperCtaId: 'paper-sub',
+    paperCtaId: 'paper-digital-sub',
     paperCtaLink: subsLinks.paper,
     paperDigCtaId: 'paper-digital-sub',
     paperDigCtaLink: subsLinks.paperDig,
@@ -322,11 +322,10 @@ function ContributionBundle(props: PropTypes) {
 
 }
 
-function SubscribeBundle(props: SubscribeAttrs) {
-
+function SubscribeBundle(props: Object) {
   return (
     <Bundle {...props}>
-      <FeatureList listItems={bundles.digital.listItems} />
+      <FeatureList listItems={bundles[props.subscriptionProduct].listItems} />
       <CtaLink
         ctaId={props.ctaId}
         text={props.ctaText}
@@ -364,11 +363,11 @@ function BundlesGBStructureTest(props: PropTypes) {
 
         <div className="bundles__wrapper">
           <div className="bundles__divider" />
-          <SubscribeBundle {...digitalAttrs} />
+          <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
           <div className="bundles__divider" />
-          <SubscribeBundle {...paperAttrs} />
+          <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
           <div className="bundles__divider" />
-          <SubscribeBundle {...paperDigitalAttrs} />
+          <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
         </div>
         <CrossProduct />
       </div>
