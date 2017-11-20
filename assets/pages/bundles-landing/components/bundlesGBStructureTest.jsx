@@ -108,7 +108,7 @@ type BundlesType = {
   },
   digital: SubscribeAttrs,
   paper: SubscribeAttrs,
-  paperDigital: PaperDigitalAttrs,
+  paperDigital: SubscribeAttrs,
 }
 
 
