@@ -31,7 +31,7 @@ export default function OtherWaysCard(props: PropTypes) {
         <GridImage
           gridId={props.gridImg}
           srcSizes={[1000, 500, 140]}
-          sizes="(max-width: 480px) 100vw, (max-width: 740px) 210px, (max-width: 980px) 220px, 300px"
+          sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
           altText={props.imgAlt}
         />
       </div>
