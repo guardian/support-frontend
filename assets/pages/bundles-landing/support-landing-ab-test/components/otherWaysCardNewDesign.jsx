@@ -26,8 +26,8 @@ type PropTypes = {
 export default function OtherWaysCard(props: PropTypes) {
 
   return (
-    <div className="other-ways-new-design gu-content-filler">
-      <div>
+    <div className="other-ways-card-new-design gu-content-filler">
+      <div className="other-ways-card-new-design__image">
         <GridImage
           gridId={props.gridImg}
           srcSizes={[1000, 500, 140]}
@@ -35,7 +35,7 @@ export default function OtherWaysCard(props: PropTypes) {
           altText={props.imgAlt}
         />
       </div>
-      <div>
+      <div className="other-ways-card-new-design__description">
         <h1 className="other-ways-card-new-design__heading">{props.heading}</h1>
         <p className="other-ways-card-new-design__copy">{props.copy}</p>
         <CtaCircle text={props.ctaText} />

@@ -20,7 +20,7 @@ export default function OtherWays() {
         className="other-ways-new-design__content gu-content-filler__inner"
       >
         <OtherWaysCard
-          heading="patrons"
+          heading="Patrons"
           copy="The Patron tier is for those who want a deeper relationship with the Guardian and its journalists"
           ctaText="Find out more"
           gridImg="guardianObserverOffice"
