@@ -50,4 +50,28 @@ export const tests: Tests = {
     isActive: true,
     independence: 3,
   },
+
+  ukRecurringAmountsTest: {
+    variants: ['control', 'higher', 'lower', 'wildcard'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 4,
+  },
+
+  usRecurringAmountsTest: {
+    variants: ['control', 'higher', 'lower', 'wildcard'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independence: 5,
+  },
 };

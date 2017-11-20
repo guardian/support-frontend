@@ -64,6 +64,7 @@ type ContribAttrs = {
 };
 
 
+
 // ----- Setup ----- //
 
 const amountRadiosAnnual: {
@@ -105,7 +106,7 @@ const amountRadiosAnnual: {
   ],
 };
 
-const amountRadiosMonthly: {
+const amountRadiosMonthlyControl: {
   [IsoCurrency]: Radio[]
 } = {
   GBP: [
@@ -135,6 +136,123 @@ const amountRadiosMonthly: {
       value: '10',
       text: '$10',
       accessibilityHint: 'contribute ten dollars per month',
+    },
+    {
+      value: '20',
+      text: '$20',
+      accessibilityHint: 'contribute twenty dollars per month',
+    },
+  ],
+};
+
+const amountRadiosMonthlyHigher: {
+  [IsoCurrency]: Radio[]
+} = {
+  GBP: [
+    {
+      value: '10',
+      text: '£10',
+      accessibilityHint: 'contribute ten pounds per month',
+    },
+    {
+      value: '20',
+      text: '£20',
+      accessibilityHint: 'contribute twenty pounds per month',
+    },
+    {
+      value: '50',
+      text: '£50',
+      accessibilityHint: 'contribute fifty pounds per month',
+    },
+  ],
+  USD: [
+    {
+      value: '10',
+      text: '$10',
+      accessibilityHint: 'contribute ten dollars per month',
+    },
+    {
+      value: '20',
+      text: '$20',
+      accessibilityHint: 'contribute twenty dollars per month',
+    },
+    {
+      value: '50',
+      text: '$50',
+      accessibilityHint: 'contribute fifty dollars per month',
+    },
+  ],
+};
+
+const amountRadiosMonthlyLower: {
+  [IsoCurrency]: Radio[]
+} = {
+  GBP: [
+    {
+      value: '2',
+      text: '£2',
+      accessibilityHint: 'contribute two pounds per month',
+    },
+    {
+      value: '5',
+      text: '£5',
+      accessibilityHint: 'contribute five pounds per month',
+    },
+    {
+      value: '10',
+      text: '£10',
+      accessibilityHint: 'contribute ten pounds per month',
+    },
+  ],
+  USD: [
+    {
+      value: '2',
+      text: '$2',
+      accessibilityHint: 'contribute two dollars per month',
+    },
+    {
+      value: '5',
+      text: '$5',
+      accessibilityHint: 'contribute five dollars per month',
+    },
+    {
+      value: '10',
+      text: '$10',
+      accessibilityHint: 'contribute ten dollars per month',
+    },
+  ],
+};
+
+const amountRadiosMonthlyWildcard: {
+  [IsoCurrency]: Radio[]
+} = {
+  GBP: [
+    {
+      value: '5',
+      text: '£5',
+      accessibilityHint: 'contribute five pounds per month',
+    },
+    {
+      value: '7',
+      text: '£7',
+      accessibilityHint: 'contribute seven pounds per month',
+    },
+    {
+      value: '20',
+      text: '£20',
+      accessibilityHint: 'contribute twenty pounds per month',
+    },
+  ],
+  USD: [
+    {
+      value: '5',
+      text: '$5',
+      accessibilityHint: 'contribute five dollars per month',
+    },
+    {
+      value: '7',
+      text: '$7',
+      accessibilityHint: 'contribute seven dollars per month',
     },
     {
       value: '20',
@@ -238,9 +356,26 @@ const contribCaptionRadios = {
   ],
 };
 
+function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
+  if (abTests.ukRecurringAmountsTest === 'higher' || abTests.usRecurringAmountsTest === 'higher') {
+    return amountRadiosMonthlyHigher[currency];
+  }
+
+  if (abTests.ukRecurringAmountsTest === 'lower' || abTests.usRecurringAmountsTest === 'lower') {
+    return amountRadiosMonthlyLower[currency];
+  }
+
+  if (abTests.ukRecurringAmountsTest === 'wildcard' || abTests.usRecurringAmountsTest === 'wildcard') {
+    return amountRadiosMonthlyWildcard[currency];
+  }
+
+  return amountRadiosMonthlyControl[currency];
+
+}
+
 // ----- Functions ----- //
 
-function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
+function amountToggles(abTests: Participations, currency: IsoCurrency = 'GBP'): AmountToggle {
   return {
     ANNUAL: {
       name: 'contributions-amount-annual-toggle',
@@ -248,7 +383,7 @@ function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
-      radios: amountRadiosMonthly[currency],
+      radios: getMonthlyAmount(abTests, currency),
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
@@ -290,7 +425,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribAnnualAmount,
       checked: !userDefined ? props.contribAmount.annual.value : null,
-      toggles: amountToggles(props.currency.iso).ANNUAL,
+      toggles: amountToggles(props.abTests, props.currency.iso).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Annual contribution',
@@ -301,7 +436,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribMonthlyAmount,
       checked: !userDefined ? props.contribAmount.monthly.value : null,
-      toggles: amountToggles(props.currency.iso).MONTHLY,
+      toggles: amountToggles(props.abTests, props.currency.iso).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Monthly contribution',
@@ -313,7 +448,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
-    toggles: amountToggles(props.currency.iso).ONE_OFF,
+    toggles: amountToggles(props.abTests, props.currency.iso).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
     accessibilityHint: `${props.isoCountry === 'us' ? 'one time' : 'one-off'} contribution`,
