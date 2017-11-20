@@ -10,19 +10,23 @@ import com.gu.support.workers.model.monthlyContributions.state.SendAcquisitionEv
 import ophan.thrift.{event => thrift}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendAcquisitionEventState, Unit] {
 
-  import cats.instances.future._
   import SendAcquisitionEvent._
+  import cats.instances.future._
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: SendAcquisitionEventState, context: Context, services: Services): Future[Unit] =
+  override protected def servicesHandler(
+    state: SendAcquisitionEventState,
+    requestInformation: RequestInformation,
+    context: Context,
+    services: Services
+  ): FutureHandlerResult =
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    serviceProvider.forUser(state.user.isTestUser).ophanService.submit(state).fold(throw _, _ => ())
+    services.ophanService.submit(state).fold(throw _, _ => handlerResult(Unit, requestInformation))
 }
 
 object SendAcquisitionEvent {
@@ -31,6 +35,7 @@ object SendAcquisitionEvent {
   private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventState] =
 
     new AcquisitionSubmissionBuilder[SendAcquisitionEventState] {
+
       import cats.syntax.either._
 
       override def buildOphanIds(state: SendAcquisitionEventState): Either[String, OphanIds] =

@@ -2,8 +2,8 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.model.ExecutionError
 import com.gu.support.workers.model.monthlyContributions.state.StepFunctionUserState
+import com.gu.support.workers.model.{ExecutionError, RequestInformation}
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._
@@ -16,10 +16,10 @@ abstract class ServicesHandler[T <: StepFunctionUserState, R](servicesProvider: 
     ec: ExecutionContext
 ) extends FutureHandler[T, R] {
 
-  override protected def handlerFuture(input: T, error: Option[ExecutionError], context: Context) = {
-    servicesHandler(input, context, servicesProvider.forUser(input.user.isTestUser))
+  override protected def handlerFuture(input: T, error: Option[ExecutionError], requestInformation: RequestInformation, context: Context) = {
+    servicesHandler(input, requestInformation, context, servicesProvider.forUser(input.user.isTestUser))
   }
 
-  protected def servicesHandler(input: T, context: Context, services: Services): Future[R]
+  protected def servicesHandler(input: T, requestInformation: RequestInformation, context: Context, services: Services): Future[(R, RequestInformation)]
 
 }

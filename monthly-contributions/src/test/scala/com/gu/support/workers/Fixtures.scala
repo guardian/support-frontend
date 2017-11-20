@@ -7,7 +7,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.workers.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import com.gu.support.workers.model.{BillingPeriod, Monthly}
+import com.gu.support.workers.model.{BillingPeriod, Monthly, RequestInformation}
 import com.gu.zuora.encoding.CustomCodecs.jsonWrapperEncoder
 import io.circe.syntax._
 
@@ -15,12 +15,13 @@ import io.circe.syntax._
 object Fixtures {
   val useEncryption = false
 
-  def wrapFixture(string: String): ByteArrayInputStream = Wrapper.wrapString(string, useEncryption).asJson.noSpaces.asInputStream
+  def wrapFixture(string: String): ByteArrayInputStream =
+    Wrapper.wrapString(string, RequestInformation(useEncryption, testUser = false, failed = false, Nil)).asJson.noSpaces.asInputStream
 
   val oldJsonWrapper =
     """
-      {"state":"CiAgICAgIHsKICAgICAgICAiYW1vdW50IjogNSwKICAgICAgICAiY3VycmVuY3kiOiAiR0JQIgogICAgICB9CiAgICA=","error":null}
-    """.asInputStream
+      {"state":"CiAgICAgIHsKICAgICAgICAiYW1vdW50IjogNSwKICAgICAgICAiY3VycmVuY3kiOiAiR0JQIgogICAgICB9CiAgICA=","error":null,"encrypted":false}
+    """
 
   val userJson =
     s"""

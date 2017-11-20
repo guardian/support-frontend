@@ -22,7 +22,7 @@ object StateDecoder extends App with LazyLogging {
 
   val decoded = Base64.getDecoder.decode(jsonWrapper.state)
 
-  if (jsonWrapper.encrypted)
+  if (jsonWrapper.requestInformation.encrypted)
     decryptState(decoded)
   else
     print(new String(decoded, utf8))

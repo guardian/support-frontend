@@ -14,9 +14,7 @@ lazy val scalaStyleSettings = Seq(
   (test in Test) := ((test in Test) dependsOn testScalastyle).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
-  ScalariformKeys.preferences := ScalariformKeys.preferences.value
-    .setPreference(SpacesAroundMultiImports, false)
+  ScalariformKeys.preferences := ScalariformKeys.preferences.value.setPreference(SpacesAroundMultiImports, false)
 )
 
 lazy val root =
