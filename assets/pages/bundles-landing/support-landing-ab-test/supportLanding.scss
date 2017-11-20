@@ -1118,6 +1118,7 @@
     .other-ways-new-design__content {
       background-color: gu-colour(neutral-1);
       padding-bottom: $gu-v-spacing * 4;
+      border: none;
 
       .component-info-section__heading {
         color: #fff;
@@ -1129,12 +1130,25 @@
     }
 
     .other-ways-card-new-design {
-      width: 300px;
       color: #fff;
       display: inline-block;
 
-      &:first-of-type {
-        margin-right: $gu-h-spacing;
+      @include mq($until: phablet) {
+        &:first-of-type {
+          margin-bottom: $gu-v-spacing * 4;
+        }
+      }
+
+      @include mq($from: phablet) {
+        width: 300px;
+
+        &:first-of-type {
+          margin-right: $gu-h-spacing;
+        }
+      }
+
+      @include mq($from: tablet, $until: desktop) {
+        margin: 0 25px;
       }
     }
 
