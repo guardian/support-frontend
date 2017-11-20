@@ -18,6 +18,7 @@ type PropTypes = {
   ctaText: string,
   gridImg: ImageId,
   imgAlt: ?string,
+  ctaUrl: string,
 };
 
 
@@ -38,7 +39,7 @@ export default function OtherWaysCard(props: PropTypes) {
       <div className="other-ways-card-new-design__description">
         <h1 className="other-ways-card-new-design__heading">{props.heading}</h1>
         <p className="other-ways-card-new-design__copy">{props.copy}</p>
-        <CtaCircle text={props.ctaText} />
+        <CtaCircle text={props.ctaText} url={props.ctaUrl} />
       </div>
     </div>
   );
