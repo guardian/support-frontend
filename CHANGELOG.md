@@ -1,3 +1,6 @@
+# v2.0.4
+* change release process to publish 3 different packages for play-json 2.4, 2.5 and 2.6
+
 # v2.0.0-rc2
 * add `AcquisitionSubmission` to represent a combination of an `Acquisition` and `OphanIds`
 * add the `AcquisitionSubmissionBuilder` type class for generating acquisition submissions

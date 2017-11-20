@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq("com.typesafe.play" %% "play-json" % "2.4.11"),
-    name := "acquisition-event-producer"
+    name := "acquisition-event-producer-play24"
   )
 
 lazy val eventProducerPlayJson25 = (project in file("play25"))
