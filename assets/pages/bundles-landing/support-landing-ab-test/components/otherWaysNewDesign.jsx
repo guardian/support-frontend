@@ -29,7 +29,7 @@ export default function OtherWays() {
         <OtherWaysCard
           heading="Live events"
           copy="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
-          ctaText="Find out more"
+          ctaText="Find out about events"
           gridImg="liveEvent"
           imgAlt="live event"
         />
