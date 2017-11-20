@@ -1122,6 +1122,10 @@
 
       .component-info-section__heading {
         color: #fff;
+
+        @include mq($from: leftCol) {
+          width: 80%;
+        }
       }
 
       .component-info-section__content {
