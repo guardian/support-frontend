@@ -110,7 +110,9 @@
       line-height: 32px;
       font-weight: 900;
       font-family: $gu-egyptian-web;
-      margin-left: $gu-h-spacing/2;
+      @include mq($from: desktop) {
+        margin-left: $gu-h-spacing/2;
+      }
     }
 
     .bundles__content {
