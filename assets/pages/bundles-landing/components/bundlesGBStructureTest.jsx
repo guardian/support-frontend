@@ -83,21 +83,6 @@ type SubscribeAttrs = {
   ctaAccessibilityHint: string,
 }
 
-type PaperDigitalAttrs = {
-  heading: string,
-  subheading: string,
-  listItems: ListItem[],
-  paperCtaText: string,
-  paperDigCtaText: string,
-  modifierClass: string,
-  paperCtaId: string,
-  paperCtaLink: string,
-  paperCtaAccessibilityHint: string,
-  paperDigCtaId: string,
-  paperDigCtaLink: string,
-  paperDigCtaAccessibilityHint: string,
-}
-
 /* eslint-enable react/no-unused-prop-types */
 
 type BundlesType = {
