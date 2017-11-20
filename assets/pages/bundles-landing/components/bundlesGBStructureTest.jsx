@@ -168,15 +168,15 @@ const digitalCopy: DigitalAttrs = {
   subheading: '£11.99/month',
   listItems: [
     {
-      heading: 'Premium experience on the Guardian app',
-      text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
+      heading: 'Ad-free mobile app',
+      text: 'No interruptions means pages load quicker for a clearer reading experience',
     },
     {
-      heading: 'Daily Tablet Edition app',
-      text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad, Android and Kindle Fire tablets',
+      heading: 'Daily tablet edition',
+      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
     },
   ],
-  ctaText: 'Start your free trial',
+  ctaText: 'Get a digital subscription',
   ctaId: 'start-digi-trial',
   modifierClass: 'digital',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
@@ -207,8 +207,8 @@ const paperCopy: PaperAttrs = {
 };
 
 const paperDigitalCopy: PaperDigitalAttrs = {
-  heading: 'paper subscription',
-  subheading: 'from £10.79/month',
+  heading: 'paper+digital',
+  subheading: 'from £22.06/month',
   listItems: [
     {
       heading: 'Newspaper',
