@@ -731,6 +731,7 @@
 
   .why-support-new-design__heading--edits {
     position: relative;
+    margin-top: $gu-v-spacing * 3;
     height: 180px;
 
     @include mq($from: mobileLandscape) {
@@ -962,6 +963,12 @@
 
     @include mq($from: tablet) {
       width: gu-breakpoint(tablet);
+    }
+
+    @include mq($from: desktop) {
+      padding-top: 120px;
+      padding-left: 0;
+      padding-bottom: 140px;
     }
 
     @include mq($from: desktop) {
