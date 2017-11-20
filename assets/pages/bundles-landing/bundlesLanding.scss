@@ -149,6 +149,10 @@
       }
     }
 
+    .structureTest {
+      height: 340px;
+    }
+
     .component-cta-link {
       padding-top: $gu-v-spacing;
       padding-bottom: $gu-v-spacing;
@@ -181,6 +185,12 @@
         top: 15px;
         right: 12px;
       }
+    }
+
+    .paper-digi-sub,
+    .paper-sub,
+    .digital-sub {
+      margin-top: 0;
     }
 
     @include mq($from: phablet, $until: desktop) {
@@ -261,7 +271,7 @@
       }
     }
 
-    .component-bundle--digital, .component-bundle--paper {
+    .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
         background-color: #fff;
 
         @include mq($until: desktop) {
@@ -296,6 +306,12 @@
       .component-cta-link.paper-sub {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
+        }
+      }
+
+      .component-cta-link.paper-sub.structure-test {
+        @include mq($from: desktop) {
+          bottom: $gu-v-spacing;
         }
       }
 
