@@ -147,6 +147,7 @@
     .bundles__content--structure-test{
       background-color: gu-colour(guardian-brand);
       border-top: solid 1px gu-colour(guardian-brand-light);
+      border-bottom: solid 1px gu-colour(guardian-brand-light);
     }
 
     .bundles__divider {
@@ -410,10 +411,18 @@
 
   }
 
+  .bundles--structure-test {
+    .bundles__cross-product {
+      margin-top: 0;
+      border-top: 0;
+      padding-top: $gu-v-spacing;
+    }
+    padding-bottom: $gu-v-spacing * 3;
+  }
+
   .bundles__cross-product {
     border-top: 1px solid gu-colour(news-support-1);
     margin: 0 auto;
-    margin-top: $gu-v-spacing * 2;
 
     @include mq($from: desktop) {
       width: 940px;

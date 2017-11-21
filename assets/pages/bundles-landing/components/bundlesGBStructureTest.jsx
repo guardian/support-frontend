@@ -330,7 +330,7 @@ function BundlesGBStructureTest(props: PropTypes) {
   const paperDigitalAttrs: SubscribeAttrs = getPaperDigitalAttrs(subsLinks);
 
   return (
-    <section className="bundles">
+    <section className="bundles bundles--structure-test">
       <div className="bundles__content gu-content-margin bundles__content--structure-test">
         <div className="bundles__wrapper">
           <h2 className="bundles__title">contribute</h2>
