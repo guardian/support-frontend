@@ -7,7 +7,7 @@ import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-import { defaultAmounts } from 'helpers/amountsTest';
+import { defaultAmountsUS } from 'helpers/amountsTest';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
@@ -35,8 +35,8 @@ saveContext(store.dispatch);
 (function initialiseAmountsTest() {
   try {
     const defaultSelectedAmount =
-      defaultAmounts[store.getState().common.abParticipations.usRecurringAmountsTest];
-
+      defaultAmountsUS[store.getState().common.abParticipations.usRecurringAmountsTest]
+      || defaultAmountsUS.control;
     return store.dispatch(changeContribAmountMonthly({
       value: defaultSelectedAmount, userDefined: false,
     }));

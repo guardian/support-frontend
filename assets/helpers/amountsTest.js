@@ -5,12 +5,41 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCurrency } from './internationalisation/currency';
 
 
-export const defaultAmounts = {
+export const defaultAmountsUK = {
   control: '10',
-  higher: '20',
   lower: '5',
   wildcard: '7',
   notintest: '10',
+};
+
+export const defaultAmountsUS = {
+  control: '10',
+  higher: '15',
+  lower: '5',
+  notintest: '10',
+};
+
+
+export const amountRadiosMonthlyHigher: {
+  [IsoCurrency]: Radio[]
+} = {
+  USD: [
+    {
+      value: '7',
+      text: '$7',
+      accessibilityHint: 'contribute seven dollars per month',
+    },
+    {
+      value: '15',
+      text: '$15',
+      accessibilityHint: 'contribute fifteen dollars per month',
+    },
+    {
+      value: '30',
+      text: '$30',
+      accessibilityHint: 'contribute thirty dollars per month',
+    },
+  ],
 };
 
 export const amountRadiosMonthlyLower: {
@@ -70,23 +99,6 @@ export const amountRadiosMonthlyWildcard: {
       value: '20',
       text: '£20',
       accessibilityHint: 'contribute twenty pounds per month',
-    },
-  ],
-  USD: [
-    {
-      value: '7',
-      text: '$7',
-      accessibilityHint: 'contribute seven dollars per month',
-    },
-    {
-      value: '15',
-      text: '$15',
-      accessibilityHint: 'contribute fifteen dollars per month',
-    },
-    {
-      value: '30',
-      text: '$30',
-      accessibilityHint: 'contribute thirty dollars per month',
     },
   ],
 };

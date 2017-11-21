@@ -12,7 +12,7 @@ import {
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
-import { amountRadiosMonthlyLower, amountRadiosMonthlyWildcard } from 'helpers/amountsTest';
+import { amountRadiosMonthlyHigher, amountRadiosMonthlyLower, amountRadiosMonthlyWildcard } from 'helpers/amountsTest';
 
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
@@ -252,8 +252,8 @@ function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
     if (abTests.usRecurringAmountsTest === 'lower') {
       return amountRadiosMonthlyLower[currency];
     }
-    if (abTests.uRecurringAmountsTest === 'wildcard') {
-      return amountRadiosMonthlyWildcard[currency];
+    if (abTests.usRecurringAmountsTest === 'higher') {
+      return amountRadiosMonthlyHigher[currency];
     }
   }
 

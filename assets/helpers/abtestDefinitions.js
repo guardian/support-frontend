@@ -64,7 +64,7 @@ export const tests: Tests = {
   },
 
   usRecurringAmountsTest: {
-    variants: ['control', 'lower', 'wildcard'],
+    variants: ['control', 'lower', 'higher'],
     audiences: {
       US: {
         offset: 0,
