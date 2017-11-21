@@ -2,6 +2,7 @@
 import {
   checkoutError,
   setPayPalButton,
+  setPayPalHasLoaded,
   creatingContributor,
 } from '../regularContributionsActions';
 
@@ -26,11 +27,17 @@ describe('Regular contributions actions', () => {
     expect(setPayPalButton(value)).toEqual(expectedAction);
   });
 
+  it('should create an action to set a value when PayPal has loaded', () => {
+    const expectedAction = {
+      type: 'SET_PAYPAL_HAS_LOADED',
+    };
+    expect(setPayPalHasLoaded()).toEqual(expectedAction);
+  });
+
   it('should create an action to set payment status as pending.', () => {
     const expectedAction = {
       type: 'CREATING_CONTRIBUTOR',
     };
-
     expect(creatingContributor()).toEqual(expectedAction);
   });
 

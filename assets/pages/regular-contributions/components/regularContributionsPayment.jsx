@@ -4,23 +4,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
 import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
 import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
-
+import { setPayPalHasLoaded } from '../regularContributionsActions';
 import postCheckout from '../helpers/ajax';
-
 
 // ----- Types ----- //
 
@@ -43,6 +39,7 @@ type PropTypes = {
   country: IsoCountry,
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  payPalHasLoaded: boolean,
 };
 
 
@@ -126,25 +123,34 @@ function getPayPalButton(
   country: IsoCountry,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  payPalHasLoaded: boolean,
 ): Node {
 
   if (hide) {
     return null;
   }
 
-  return (<PayPalExpressButton callback={postCheckout(
-    abParticipations,
-    amount,
-    csrf,
-    currency,
-    contribType,
-    country,
-    dispatch,
-    'baid',
-    referrerAcquisitionData,
-    getState,
-  )}
-  />);
+  return (
+    <PayPalExpressButton
+      amount={amount}
+      currency={currency}
+      csrf={csrf}
+      callback={postCheckout(
+        abParticipations,
+        amount,
+        csrf,
+        currency,
+        contribType,
+        country,
+        dispatch,
+        'baid',
+        referrerAcquisitionData,
+        getState,
+      )}
+      hasLoaded={payPalHasLoaded}
+      setHasLoaded={() => dispatch(setPayPalHasLoaded())}
+    />
+  );
 
 }
 
@@ -191,6 +197,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
         props.country,
         props.referrerAcquisitionData,
         context.store.getState,
+        props.payPalHasLoaded,
       )}
     </section>
   );
@@ -213,6 +220,7 @@ function mapStateToProps(state) {
     country: state.common.country,
     abParticipations: state.common.abParticipations,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
+    payPalHasLoaded: state.page.regularContrib.payPalHasLoaded,
   };
 }
 
