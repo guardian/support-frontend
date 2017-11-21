@@ -267,29 +267,36 @@
     }
 
     .component-bundle--contributions.structureTest {
-      margin-right: $gu-h-spacing/2;
-      width: 920px;
-      height: 352px;
+      @include mq($from: desktop) {
+        margin-right: $gu-h-spacing/2;
+        width: 920px;
+        height: 340px;
 
-      .component-double-heading {
-        margin-bottom: 0;
-        width: 100%;
-        float: left;
+        .component-double-heading {
+          margin-bottom: 0;
+          width: 100%;
+          float: left;
 
-      }
+        }
 
-      .component-bundle__content {
-        p {
-          float:left;
+        .component-bundle__content {
+          p {
+            float: left;
+            width: 300px;
+          }
+        }
+
+        .component-contrib-amounts {
+          position: absolute;
+          top: $gu-v-spacing/2;
+          right: $gu-h-spacing/2;;
           width: 300px;
         }
-      }
 
-      .component-contrib-amounts {
-        position: absolute;
-        top:0;
-        right:0;
-        width: 300px;
+        .component-cta-link {
+          max-width: 320px;
+          margin-left: 615px;
+        }
       }
     }
 
