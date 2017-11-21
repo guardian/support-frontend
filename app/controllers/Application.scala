@@ -45,8 +45,11 @@ class Application(
     Redirect(location + path, request.queryString)
   }
 
-  def bundleLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+  def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
+    newDesigns match {
+      case "true" => Ok(views.html.bundleLanding(title, "support-landing-page", "supportLandingPage.js", contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      case _ => Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+    }
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
