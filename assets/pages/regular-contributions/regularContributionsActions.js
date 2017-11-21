@@ -10,6 +10,7 @@ import type { PayPalButtonType } from './components/regularContributionsPayment'
 export type Action =
   | { type: 'CHECKOUT_ERROR', message: string }
   | { type: 'SET_PAYPAL_BUTTON', value: PayPalButtonType }
+  | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'CREATING_CONTRIBUTOR' };
 
 
@@ -36,6 +37,6 @@ function creatingContributor(): Action {
 export {
   checkoutError,
   setPayPalButton,
-  creatingContributor,
   setPayPalHasLoaded,
+  creatingContributor,
 };

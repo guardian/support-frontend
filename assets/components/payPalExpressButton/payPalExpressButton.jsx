@@ -20,26 +20,24 @@ type PropTypes = {
 };
 
 // ----- Component ----- //
-/* eslint-disable react/prefer-stateless-function */
-class PayPalExpressButton extends React.Component<PropTypes> {
-  render() {
-    if (!this.props.hasLoaded) {
-      loadPayPalExpress().then(this.props.setHasLoaded);
-      return null;
-    }
-    const payPalOptions = setup(
-      this.props.amount,
-      this.props.currency,
-      this.props.csrf,
-      this.props.callback,
-    );
-    const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
-    return (
-      <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
-        <PayPalButton {...payPalOptions} />
-      </div>
-    );
+
+function PayPalExpressButton(props: PropTypes) {
+  if (!props.hasLoaded) {
+    loadPayPalExpress().then(props.setHasLoaded);
+    return null;
   }
+  const payPalOptions = setup(
+    props.amount,
+    props.currency,
+    props.csrf,
+    props.callback,
+  );
+  const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
+  return (
+    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
+      <PayPalButton {...payPalOptions} />
+    </div>
+  );
 }
 
 export default PayPalExpressButton;

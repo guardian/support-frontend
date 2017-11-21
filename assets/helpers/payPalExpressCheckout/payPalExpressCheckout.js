@@ -9,25 +9,16 @@ import type { Currency } from '../internationalisation/currency';
 
 // ----- Functions ----- //
 
-const loadPayPalExpress = () => new Promise((resolve) => {
-
-  if (!window.paypal) {
-
+function loadPayPalExpress(): Promise<void> {
+  return new Promise((resolve) => {
     const script = document.createElement('script');
-
     script.onload = resolve;
     script.src = 'https://www.paypalobjects.com/api/checkout.js';
-
     if (document.head) {
       document.head.appendChild(script);
     }
-
-  } else {
-    resolve();
-  }
-
-});
-
+  });
+}
 
 // ----- Auxiliary Functions -----//
 
