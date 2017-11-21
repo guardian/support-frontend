@@ -52,7 +52,7 @@ export const tests: Tests = {
   },
 
   ukRecurringAmountsTest: {
-    variants: ['control', 'higher', 'lower', 'wildcard'],
+    variants: ['control', 'lower', 'wildcard'],
     audiences: {
       GB: {
         offset: 0,
@@ -64,7 +64,7 @@ export const tests: Tests = {
   },
 
   usRecurringAmountsTest: {
-    variants: ['control', 'higher', 'lower', 'wildcard'],
+    variants: ['control', 'lower', 'wildcard'],
     audiences: {
       US: {
         offset: 0,
