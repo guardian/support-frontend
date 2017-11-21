@@ -235,8 +235,8 @@ function Contribute(props: PropTypes) {
         />
         {cardButton(props)}
         {payPalButton(props)}
-        {payPalErrorMessage(props)}
         {termsAndConditions(props.contributionType, props.country)}
+        {payPalErrorMessage(props)}
       </InfoSection>
     </div>
   );
