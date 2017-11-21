@@ -117,7 +117,7 @@ const monthlyContribCopy: ContribAttrs = {
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions structureTest',
+  modifierClass: 'contributions component-bundle--structure-test',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
@@ -137,7 +137,7 @@ const digitalCopy: SubscribeAttrs = {
   ],
   ctaText: 'Start your 14 day trial',
   ctaId: 'digital-sub',
-  modifierClass: 'digital  structureTest',
+  modifierClass: 'digital  component-bundle--structure-test',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
   ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
 };
@@ -156,7 +156,7 @@ const paperCopy: SubscribeAttrs = {
   ],
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
-  modifierClass: 'paper structureTest',
+  modifierClass: 'paper component-bundle--structure-test',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper',
   ctaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
@@ -179,7 +179,7 @@ const paperDigitalCopy: SubscribeAttrs = {
   ],
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
-  modifierClass: 'paperDigital structureTest',
+  modifierClass: 'paperDigital component-bundle--structure-test',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   ctaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
 };
@@ -331,12 +331,10 @@ function BundlesGBStructureTest(props: PropTypes) {
 
   return (
     <section className="bundles">
-      <div className="bundles__content gu-content-margin">
+      <div className="bundles__content gu-content-margin bundles__content--structure-test">
         <div className="bundles__wrapper">
           <h2 className="bundles__title">contribute</h2>
           <ContributionBundle {...props} />
-        </div>
-        <div className="bundles__wrapper">
           <h2 className="bundles__title">subscribe</h2>
           <div className="bundles__divider" />
           <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
@@ -345,8 +343,8 @@ function BundlesGBStructureTest(props: PropTypes) {
           <div className="bundles__divider" />
           <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
         </div>
-        <CrossProduct />
       </div>
+      <CrossProduct />
     </section>
   );
 }
