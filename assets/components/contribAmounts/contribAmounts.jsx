@@ -240,16 +240,27 @@ const contribCaptionRadios = {
 };
 
 function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
-  if (abTests.ukRecurringAmountsTest === 'higher' || abTests.usRecurringAmountsTest === 'higher') {
-    return amountRadiosMonthlyHigher[currency];
+  if (currency === 'GBP') {
+    if (abTests.ukRecurringAmountsTest === 'higher') {
+      return amountRadiosMonthlyHigher[currency];
+    }
+    if (abTests.ukRecurringAmountsTest === 'lower') {
+      return amountRadiosMonthlyLower[currency];
+    }
+    if (abTests.ukRecurringAmountsTest === 'wildcard') {
+      return amountRadiosMonthlyWildcard[currency];
+    }
   }
-
-  if (abTests.ukRecurringAmountsTest === 'lower' || abTests.usRecurringAmountsTest === 'lower') {
-    return amountRadiosMonthlyLower[currency];
-  }
-
-  if (abTests.ukRecurringAmountsTest === 'wildcard' || abTests.usRecurringAmountsTest === 'wildcard') {
-    return amountRadiosMonthlyWildcard[currency];
+  if (currency === 'USD') {
+    if (abTests.usRecurringAmountsTest === 'higher') {
+      return amountRadiosMonthlyHigher[currency];
+    }
+    if (abTests.usRecurringAmountsTest === 'lower') {
+      return amountRadiosMonthlyLower[currency];
+    }
+    if (abTests.uRecurringAmountsTest === 'wildcard') {
+      return amountRadiosMonthlyWildcard[currency];
+    }
   }
 
   return amountRadiosMonthlyControl[currency];
