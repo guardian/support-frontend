@@ -47,7 +47,13 @@ class Application(
 
   def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
     newDesigns match {
-      case "true" => Ok(views.html.bundleLanding(title, "support-landing-page", "supportLandingPage.js", contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      case "true" => Ok(views.html.bundleLanding(
+        title,
+        "support-landing-page",
+        "supportLandingPage.js",
+        contributionsPayPalEndpoint,
+        description = Some(stringsConfig.bundleLandingDescription)
+      ))
       case _ => Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
     }
   }
