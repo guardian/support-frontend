@@ -9,7 +9,6 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
 import { defaultAmountsUK } from 'helpers/amountsTest';
-import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
@@ -18,9 +17,6 @@ import Bundles from './components/Bundles';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
-
-// New Design Test
-import supportLanding from './support-landing-ab-test/supportLanding';
 
 // Amounts test
 import { changeContribAmountMonthly } from './bundlesLandingActions';
@@ -36,27 +32,21 @@ const store = pageInit(
 );
 /* eslint-enable */
 
+
 // ----- Render ----- //
 
-let content = null;
-
-// New Design Test: Replace with check for variant when test goes live.
-if (getQueryParameter('newDesigns', 'false') === 'true') {
-  content = supportLanding(store);
-} else {
-  content = (
-    <Provider store={store}>
-      <div>
-        <SimpleHeader />
-        <Introduction abTests={store.getState().common.abParticipations} />
-        <Bundles />
-        <WhySupport />
-        <WaysOfSupport />
-        <LinksFooter />
-      </div>
-    </Provider>
-  );
-}
+const content = (
+  <Provider store={store}>
+    <div>
+      <SimpleHeader />
+      <Introduction abTests={store.getState().common.abParticipations} />
+      <Bundles />
+      <WhySupport />
+      <WaysOfSupport />
+      <LinksFooter />
+    </div>
+  </Provider>
+);
 
 (function initialiseAmountsTest() {
   try {
