@@ -19,13 +19,13 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreatePaymentMethodState, requestInformation: RequestInformation, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreatePaymentMethodState, RequestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
 
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
       _ <- putMetric(state.paymentFields)
-    } yield handlerResult(getCreateSalesforceContactState(state, paymentMethod), requestInformation)
+    } yield handlerResult(getCreateSalesforceContactState(state, paymentMethod), RequestInfo)
   }
 
   private def createPaymentMethod(

@@ -4,14 +4,14 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, SendThankYouEmailState}
-import com.gu.support.workers.model.{ExecutionError, RequestInformation}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.typesafe.scalalogging.LazyLogging
 
 class ContributionCompleted
     extends Handler[SendThankYouEmailState, CompletedState]
     with LazyLogging {
 
-  override protected def handler(state: SendThankYouEmailState, error: Option[ExecutionError], requestInformation: RequestInformation, context: Context) = {
+  override protected def handler(state: SendThankYouEmailState, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context) = {
     val fields = List(
       "contribution_amount" -> state.contribution.amount.toString,
       "contribution_currency" -> state.contribution.currency.iso.toString,
@@ -27,6 +27,6 @@ class ContributionCompleted
       contribution = state.contribution,
       status = Status.Success,
       message = None
-    ), requestInformation)
+    ), RequestInfo)
   }
 }

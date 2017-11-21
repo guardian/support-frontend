@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.monitoring.MembersDataAPIMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.RequestInformation
+import com.gu.support.workers.model.RequestInfo
 import com.gu.support.workers.model.monthlyContributions.state.UpdateMembersDataAPIState
 import com.typesafe.scalalogging.LazyLogging
 
@@ -18,16 +18,16 @@ class UpdateMembersDataAPI(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(
     state: UpdateMembersDataAPIState,
-    requestInformation: RequestInformation,
+    requestInfo: RequestInfo,
     context: Context,
     services: Services
   ): FutureHandlerResult =
     services.membersDataService
       .update(state.user.id, state.user.isTestUser)
       .flatMap(_ => putCloudWatchMetrics)
-      .map(_ => handlerResult(Unit, requestInformation))
+      .map(_ => handlerResult(Unit, requestInfo))
 
-  def putCloudWatchMetrics(): Future[Unit] =
+  def putCloudWatchMetrics: Future[Unit] =
     new MembersDataAPIMetrics("recurring-contribution")
       .putMembersDataAPIUpdated()
 }

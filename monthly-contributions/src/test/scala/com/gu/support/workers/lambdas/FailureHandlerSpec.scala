@@ -40,7 +40,7 @@ class FailureHandlerSpec extends LambdaSpec {
     failureHandler.handleRequest(failureJson.asInputStream, outStream, context)
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInformation.failed should be(true)
+    outState.right.get.requestInfo.failed should be(true)
   }
 
   "FailureHandler lambda" should "return a non failed JsonWrapper for payment errors" in {
@@ -51,7 +51,7 @@ class FailureHandlerSpec extends LambdaSpec {
     failureHandler.handleRequest(cardDeclinedJson.asInputStream, outStream, context)
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInformation.failed should be(false)
+    outState.right.get.requestInfo.failed should be(false)
   }
 
   it should "return a Status.Failure for a card declined error" in {

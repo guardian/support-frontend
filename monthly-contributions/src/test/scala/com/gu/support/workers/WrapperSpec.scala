@@ -18,13 +18,13 @@ class WrapperSpec extends FlatSpec with Matchers with LazyLogging {
     result.isSuccess should be(true)
   }
 
-  it should "be able to handle versions of the json with a missing requestInformation parameter" in {
+  it should "be able to handle versions of the json with a missing RequestInfo parameter" in {
     val contribution = Encoding.in[Contribution](oldJsonWrapper.asInputStream)
     contribution.isSuccess should be(true)
   }
 
   "The JsonWrapperDecoder" should "be able to handle old versions of the json" in {
     val jsonWrapper = decode[JsonWrapper](oldJsonWrapper)
-    jsonWrapper.right.get.requestInformation.testUser should be(false)
+    jsonWrapper.right.get.requestInfo.testUser should be(false)
   }
 }

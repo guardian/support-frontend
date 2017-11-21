@@ -4,7 +4,7 @@ import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.gu.support.workers.exceptions.ErrorHandler
-import com.gu.support.workers.model.{ExecutionError, RequestInformation}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._
@@ -14,11 +14,11 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 
   import com.gu.support.workers.encoding.Encoding._
 
-  type HandlerResult = (R, RequestInformation)
+  type HandlerResult = (R, RequestInfo)
 
-  def handlerResult(r: R, ri: RequestInformation): HandlerResult = (r, ri)
+  def handlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri)
 
-  protected def handler(input: T, error: Option[ExecutionError], requestInformation: RequestInformation, context: Context): HandlerResult
+  protected def handler(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): HandlerResult
 
   def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     try {
@@ -37,15 +37,15 @@ abstract class FutureHandler[T, R](d: Option[Duration] = None)(
     ec: ExecutionContext
 ) extends Handler[T, R] {
 
-  type FutureHandlerResult = Future[(R, RequestInformation)]
+  type FutureHandlerResult = Future[(R, RequestInfo)]
 
-  def futureHandlerResult(r: R, ri: RequestInformation): FutureHandlerResult = Future.successful((r, ri))
+  def futureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri))
 
-  protected def handlerFuture(input: T, error: Option[ExecutionError], requestInformation: RequestInformation, context: Context): FutureHandlerResult
+  protected def handlerFuture(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): FutureHandlerResult
 
-  override protected def handler(input: T, error: Option[ExecutionError], requestInformation: RequestInformation, context: Context): HandlerResult =
+  override protected def handler(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): HandlerResult =
     Await.result(
-      handlerFuture(input, error, requestInformation, context),
+      handlerFuture(input, error, RequestInfo, context),
       d.getOrElse(Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS))
     )
 }

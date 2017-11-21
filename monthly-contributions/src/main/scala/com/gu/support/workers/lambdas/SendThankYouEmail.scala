@@ -5,7 +5,7 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
-import com.gu.support.workers.model.{ExecutionError, RequestInformation}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
@@ -20,12 +20,12 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
   override protected def handlerFuture(
     state: SendThankYouEmailState,
     error: Option[ExecutionError],
-    requestInformation: RequestInformation,
+    requestInfo: RequestInfo,
     context: Context
   ): FutureHandlerResult =
-    sendEmail(state, requestInformation)
+    sendEmail(state, requestInfo)
 
-  def sendEmail(state: SendThankYouEmailState, requestInformation: RequestInformation): FutureHandlerResult = {
+  def sendEmail(state: SendThankYouEmailState, requestInfo: RequestInfo): FutureHandlerResult = {
     thankYouEmailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
@@ -34,6 +34,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
       edition = state.user.country.alpha2,
       name = state.user.firstName,
       product = "monthly-contribution"
-    )).map(_ => handlerResult(Unit, requestInformation))
+    )).map(_ => handlerResult(Unit, requestInfo))
   }
 }

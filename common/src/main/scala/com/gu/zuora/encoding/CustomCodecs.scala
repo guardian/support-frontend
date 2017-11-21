@@ -70,12 +70,12 @@ trait ModelsCodecs {
 
   implicit val executionErrorCodec: Codec[ExecutionError] = deriveCodec
 
-  implicit val requestInformationCodec: Codec[RequestInformation] = deriveCodec
+  implicit val RequestInfoCodec: Codec[RequestInfo] = deriveCodec
 
   implicit val jsonWrapperDecoder: Decoder[JsonWrapper] = Decoder
-    .forProduct3("state", "error", "requestInformation")(JsonWrapper.apply)
+    .forProduct3("state", "error", "requestInfo")(JsonWrapper.apply)
     .or(Decoder.forProduct3("state", "error", "encrypted")((s: String, e: Option[ExecutionError], en: Boolean) =>
-      JsonWrapper(s, e, RequestInformation(en, testUser = false, failed = false, Nil))))
+      JsonWrapper(s, e, RequestInfo(en, testUser = false, failed = false, Nil))))
 
   implicit val jsonWrapperEncoder: Encoder[JsonWrapper] = deriveEncoder
 

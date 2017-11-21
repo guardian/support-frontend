@@ -9,7 +9,7 @@ import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
-import com.gu.support.workers.model.{ExecutionError, RequestInformation}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
@@ -25,7 +25,7 @@ class FailureHandler(emailService: EmailService)
   override protected def handlerFuture(
     state: FailureHandlerState,
     error: Option[ExecutionError],
-    requestInformation: RequestInformation,
+    RequestInfo: RequestInfo,
     context: Context
   ): FutureHandlerResult = {
     logger.info(
@@ -34,7 +34,7 @@ class FailureHandler(emailService: EmailService)
         s"test_user: ${state.user.isTestUser}\n" +
         s"error: $error"
     )
-    sendEmail(state).whenFinished(handleError(state, error, requestInformation))
+    sendEmail(state).whenFinished(handleError(state, error, RequestInfo))
   }
 
   private def sendEmail(state: FailureHandlerState) = emailService.send(EmailFields(
@@ -47,19 +47,19 @@ class FailureHandler(emailService: EmailService)
     product = "monthly-contribution"
   ))
 
-  private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInformation: RequestInformation) =
+  private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) =
     error.flatMap(getZuoraError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
-        requestInformation.addMessage(s"Zuora reported a payment failure: $ze"),
+        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
         "There was an error processing your payment. Please\u00a0try\u00a0again."
       )
-      case _ => returnState(state, requestInformation.copy(failed = true))
+      case _ => returnState(state, requestInfo.copy(failed = true))
     }
 
   private def returnState(
     state: FailureHandlerState,
-    requestInformation: RequestInformation,
+    RequestInfo: RequestInfo,
     message: String = "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
   ) =
     handlerResult(
@@ -69,7 +69,7 @@ class FailureHandler(emailService: EmailService)
         contribution = state.contribution,
         status = Status.Failure,
         message = Some(message)
-      ), requestInformation
+      ), RequestInfo
     )
 
   private def getZuoraError(executionError: ExecutionError): Option[ZuoraErrorResponse] = for {

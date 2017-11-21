@@ -5,7 +5,7 @@ import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
 import com.gu.services.Services
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.model.RequestInformation
+import com.gu.support.workers.model.RequestInfo
 import com.gu.support.workers.model.monthlyContributions.state.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.typesafe.scalalogging.LazyLogging
 
@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
 
-  override protected def servicesHandler(state: CreateSalesforceContactState, requestInformation: RequestInformation, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreateSalesforceContactState, RequestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreateSalesforceContact state: $state")
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
@@ -27,7 +27,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
-        handlerResult(getCreateZuoraSubscriptionState(state, response), requestInformation)
+        handlerResult(getCreateZuoraSubscriptionState(state, response), RequestInfo)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
         logger.warn(s"Error creating Salesforce contact:\n$errorMessage")
