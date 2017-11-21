@@ -88,7 +88,7 @@ The pieces that make up `support-frontend` are:
  3. The store saves the new state defined by the reducer in the previous step. 
  4. The UI is updated to reflect the last version of the state.
  
- You can find more information about the data flow [here](http://redux.js.org/docs/basics/DataFlow.html)
+ You can find more information about the data flow [here](http://redux.js.org/docs/basics/DataFlow.html).
  ### Server side architecture
  //TODO 
 
