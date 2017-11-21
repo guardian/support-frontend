@@ -269,6 +269,28 @@
     .component-bundle--contributions.structureTest {
       margin-right: $gu-h-spacing/2;
       width: 920px;
+      height: 352px;
+
+      .component-double-heading {
+        margin-bottom: 0;
+        width: 100%;
+        float: left;
+
+      }
+
+      .component-bundle__content {
+        p {
+          float:left;
+          width: 300px;
+        }
+      }
+
+      .component-contrib-amounts {
+        position: absolute;
+        top:0;
+        right:0;
+        width: 300px;
+      }
     }
 
     .component-paypal-contribution-button {
