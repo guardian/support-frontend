@@ -15,6 +15,7 @@ import BehindTheScenes from './components/behindTheScenesNewDesign';
 import Subscribe from './components/subscribeNewDesign';
 import WhySupport from './components/whySupportNewDesign';
 import Ready from './components/readyNewDesign';
+import OtherWays from './components/otherWaysNewDesign';
 
 
 // ----- Render ----- //
@@ -31,6 +32,7 @@ export default function supportLanding(store: Store) {
         <BehindTheScenes />
         <WhySupport />
         <Ready />
+        <OtherWays />
         <SimpleFooter />
       </div>
     </Provider>

@@ -1109,6 +1109,93 @@
       }
     }
 
+    // ----- Other Ways
+
+    .other-ways-new-design {
+      background-color: darken(#fff, 5%);
+    }
+
+    .other-ways-new-design__content {
+      background-color: gu-colour(neutral-1);
+      padding-bottom: $gu-v-spacing * 4;
+      border: none;
+
+      .component-info-section__heading {
+        color: #fff;
+
+        @include mq($from: leftCol) {
+          width: 80%;
+        }
+      }
+
+      .component-info-section__content {
+        padding-top: $gu-v-spacing * 4;
+      }
+    }
+
+    .other-ways-card-new-design {
+      color: #fff;
+      display: inline-block;
+
+      @include mq($until: phablet) {
+        &:first-of-type {
+          margin-bottom: $gu-v-spacing * 4;
+        }
+      }
+
+      @include mq($from: phablet) {
+        width: 300px;
+
+        &:first-of-type {
+          margin-right: $gu-h-spacing;
+        }
+      }
+
+      @include mq($from: tablet, $until: desktop) {
+        margin: 0 25px;
+      }
+    }
+
+    .other-ways-card-new-design__image {
+      border-bottom: 2px solid gu-colour(comment-main-2);
+
+      .component-grid-image {
+        display: block;
+        width: 90%;
+        margin: 0 5%;
+      }
+    }
+
+    .other-ways-card-new-design__description {
+      .component-cta-circle {
+        margin-left: 0;
+        margin-top: $gu-v-spacing * 2;
+      }
+
+      button {
+        background-color: gu-colour(comment-main-2);
+        margin-right: $gu-h-spacing / 2;
+      }
+
+      .svg-arrow-right-straight {
+        fill: gu-colour(neutral-1);
+      }
+    }
+
+    .other-ways-card-new-design__heading {
+      font-size: 36px;
+      line-height: 40px;
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+      margin-bottom: $gu-v-spacing * 2;
+    }
+
+    .other-ways-card-new-design__copy {
+      font-size: 16px;
+      line-height: 20px;
+      font-family: $gu-text-egyptian-web;
+    }
+
   }
 
 }
