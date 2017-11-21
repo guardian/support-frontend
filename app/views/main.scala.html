@@ -4,7 +4,8 @@
 	title: String,
 	description: Option[String] = None,
 	styles: Html = Html(""),
-	scripts: Html = Html("")
+	scripts: Html = Html(""),
+	mainBundleJs: String
 )(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
@@ -45,6 +46,10 @@
 	@if(!doNotTrack) {
 		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 	}
+
+	<link rel="preload"  as="script" href="@assets(mainBundleJs)">
+
+
 	@styles
 </head>
 <body>
@@ -66,6 +71,9 @@
         window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
 	</script>
 	@scripts
+	 <!-- This script is intentionally at the bottom of the file. Please check
+	      all the critical flows work correctly if you change its position -->
+	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
 	<!-- build-commit-id: @app.BuildInfo.gitCommitId -->
 </body>
 </html>

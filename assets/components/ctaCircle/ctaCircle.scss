@@ -4,6 +4,7 @@
   margin: $gu-v-spacing ($gu-h-spacing/2);
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 
   @include mq($until: mobileLandscape) {
     margin-bottom: 0;

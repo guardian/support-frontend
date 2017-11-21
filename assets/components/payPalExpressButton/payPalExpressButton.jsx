@@ -2,43 +2,42 @@
 
 // ----- Imports ----- //
 
+import ReactDOM from 'react-dom';
 import React from 'react';
-import { connect } from 'react-redux';
-
-import {
-  setupPayPalExpressCheckout,
-} from 'helpers/payPalExpressCheckout/payPalExpressCheckoutActions';
-
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { loadPayPalExpress, setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
+import type { Currency } from '../../helpers/internationalisation/currency';
 
 // ---- Types ----- //
 
 type PropTypes = {
-  setupPayPalCheckout: Function,
+  amount: number,
+  currency: Currency,
+  csrf: CsrfState,
   callback: Function,
+  setHasLoaded: Function,
+  hasLoaded: boolean,
 };
-
 
 // ----- Component ----- //
 
-const PayPalExpressButton = (props: PropTypes) => {
-  props.setupPayPalCheckout(props.callback);
-  return <div id="component-paypal-button-checkout" className="component-paypal-button-checkout" />;
-};
-
-
-// ----- Map State/Props ----- //
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    setupPayPalCheckout: (callback: Function) => {
-      dispatch(setupPayPalExpressCheckout(callback));
-    },
-  };
-
+function PayPalExpressButton(props: PropTypes) {
+  if (!props.hasLoaded) {
+    loadPayPalExpress().then(props.setHasLoaded);
+    return null;
+  }
+  const payPalOptions = setup(
+    props.amount,
+    props.currency,
+    props.csrf,
+    props.callback,
+  );
+  const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
+  return (
+    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
+      <PayPalButton {...payPalOptions} />
+    </div>
+  );
 }
 
-
-// ----- Exports ----- //
-
-export default connect(undefined, mapDispatchToProps)(PayPalExpressButton);
+export default PayPalExpressButton;
