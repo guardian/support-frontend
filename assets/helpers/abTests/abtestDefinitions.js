@@ -13,7 +13,8 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independence: 3,
+    independent: true,
+    seed: 3,
   },
 
   ukRecurringAmountsTest: {
@@ -25,7 +26,8 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independence: 4,
+    independent: true,
+    seed: 4,
   },
 
   usRecurringAmountsTest: {
@@ -37,6 +39,7 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independence: 5,
+    independent: true,
+    seed: 5,
   },
 };
