@@ -322,7 +322,6 @@ function BundlesGBStructureTest(props: PropTypes) {
     props.intCmp,
     props.campaign,
     props.otherQueryParams,
-    props.abTests,
     props.referrerAcquisitionData,
   );
   const digitalAttrs: SubscribeAttrs = getDigitalAttrs(subsLinks);
