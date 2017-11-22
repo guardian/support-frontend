@@ -298,19 +298,19 @@
         .component-bundle__content {
           p {
             float: left;
-            width: 300px;
+            width: 600px;
           }
         }
 
         .component-contrib-amounts {
           position: absolute;
           top: $gu-v-spacing/2;
-          right: 310px;
+          right: $gu-h-spacing/2;
           width: 300px;
         }
 
         .component-cta-link {
-          margin-left: 315px;
+          margin-left: 615px;
           width: 271px;
           svg {
             left: 279px;
@@ -318,7 +318,7 @@
         }
 
         .component-paypal-contribution-button {
-          margin-left: 315px;
+          margin-left: 615px;
           width: 307px;
         }
 
