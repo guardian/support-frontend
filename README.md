@@ -1,9 +1,11 @@
+[ ![Download](https://api.bintray.com/packages/guardian/ophan/acquisition-event-producer-play26/images/download.svg) ](https://bintray.com/guardian/ophan/acquisition-event-producer-play26/_latestVersion)
+
 # acquisition event producer
 A tool to submit Acquisition events to Ophan.
 
 ## usage 
 ### in Play projects
-Add a dependency on the version that corresponds to your version of Play:
+Add a dependency on the package that corresponds to your version of Play:
 
 `libraryDependencies += "com.gu" %% "acquisition-event-producer-play24" % "2.0.4"`
 
