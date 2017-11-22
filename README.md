@@ -6,7 +6,9 @@ A tool to submit Acquisition events to Ophan.
 Add a dependency on the version that corresponds to your version of Play:
 
 `libraryDependencies += "com.gu" %% "acquisition-event-producer-play24" % "2.0.4"`
+
 `libraryDependencies += "com.gu" %% "acquisition-event-producer-play25" % "2.0.4"`
+
 `libraryDependencies += "com.gu" %% "acquisition-event-producer-play26" % "2.0.4"`
 
 ### in projects that don't use Play
