@@ -119,7 +119,7 @@ function randomNumber(seed: number, independence: number): number {
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
-  const independence = test.independence || 0;
+  const independence = test.independence || 1;
 
   const variantIndex = randomNumber(mvtId, independence) % test.variants.length;
 

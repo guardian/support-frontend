@@ -135,6 +135,7 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
+      independence: 0,
     },
 
     mockTest2: {
@@ -146,6 +147,7 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
+      independence: 0,
     },
   };
 
