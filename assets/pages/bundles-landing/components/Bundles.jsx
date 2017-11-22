@@ -380,7 +380,6 @@ function Bundles(props: PropTypes) {
     props.intCmp,
     props.campaign,
     props.otherQueryParams,
-    props.abTests,
     props.referrerAcquisitionData,
   );
   const paperAttrs: PaperAttrs = getPaperAttrs(subsLinks);

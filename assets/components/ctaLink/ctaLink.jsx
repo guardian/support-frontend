@@ -24,7 +24,6 @@ type PropTypes = {
   tabIndex?: number,
   id?: ?string,
   svg?: Node,
-  dataLinkName?: ?string,
   acquisitionData?: ?ReferrerAcquisitionData,
 };
 
@@ -56,7 +55,6 @@ export default function CtaLink(props: PropTypes) {
       }
       onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
       tabIndex={props.tabIndex}
-      data-link-name={props.dataLinkName}
       aria-describedby={accessibilityHintId}
     >
       <span>{props.text}</span>
@@ -76,7 +74,6 @@ CtaLink.defaultProps = {
   onClick: null,
   tabIndex: 0,
   id: null,
-  dataLinkName: null,
   svg: <SvgArrowRightStraight />,
   acquisitionData: null,
 };

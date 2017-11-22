@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
@@ -106,7 +105,6 @@ function buildSubsUrls(
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
-  abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
 
@@ -118,12 +116,9 @@ function buildSubsUrls(
   const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
   const digital = `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
-  params.append('promocode', promoCodes.digital.replace('p/', ''));
-  const digitalDigipackTestLink = `${subsUrl}/checkout?${params.toString()}`;
-  const shouldGetAlternativeDigipackLink = abTests.digipackFlowOptimisationTest === 'variant';
 
   return {
-    digital: shouldGetAlternativeDigipackLink ? digitalDigipackTestLink : digital,
+    digital,
     paper,
     paperDig,
   };
@@ -135,7 +130,6 @@ function getSubsLinks(
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
-  abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
   if (campaign && customPromos[campaign]) {
@@ -143,12 +137,11 @@ function getSubsLinks(
       customPromos[campaign],
       intCmp,
       otherQueryParams,
-      abTests,
       referrerAcquisitionData,
     );
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, abTests, referrerAcquisitionData);
+  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
 
 }
 

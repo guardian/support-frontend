@@ -79,22 +79,6 @@
         line-height: 48px;
         margin-left: 160px;
       }
-
-      &.introduction-text__paragraph {
-        margin-left: 0;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        max-width: 460px;
-        font-family: $gu-text-egyptian-web;
-
-        @include mq($from: desktop) {
-          font-weight: 200;
-          font-size: 18px;
-          line-height: 22px;
-          max-width: 620px;
-        }
-      }
     }
   }
 

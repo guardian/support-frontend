@@ -43,7 +43,7 @@ const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <Introduction abTests={store.getState().common.abParticipations} />
+      <Introduction />
       {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />
