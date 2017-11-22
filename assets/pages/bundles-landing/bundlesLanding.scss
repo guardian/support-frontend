@@ -345,7 +345,10 @@
 
         .component-cta-link {
           margin-left: 315px;
-          width: 265px;
+          width: 271px;
+          svg {
+            left: 279px;
+          }
         }
 
         .component-paypal-contribution-button {
