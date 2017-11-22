@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import InfoSection from 'components/infoSection/infoSection';
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import SubscriptionBundle from './subscriptionBundleNewDesign';
@@ -24,7 +23,6 @@ type PropTypes = {
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
-  abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
 };
 
@@ -49,7 +47,6 @@ function Subscribe(props: PropTypes) {
     props.intCmp,
     props.campaign,
     props.otherQueryParams,
-    props.abTests,
     props.referrerAcquisitionData,
   );
 
