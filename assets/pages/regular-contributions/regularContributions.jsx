@@ -20,7 +20,7 @@ import Signout from 'components/signout/signout';
 
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { termsLinks } from 'helpers/internationalisation/legal';
+import { termsLinks } from 'helpers/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';

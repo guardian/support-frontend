@@ -12,7 +12,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import PayPalContributionButton
   from 'components/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
-import { termsLinks, privacyLink } from 'helpers/internationalisation/legal';
+import { termsLinks, privacyLink } from 'helpers/legal';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {

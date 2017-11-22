@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { IsoCountry } from './country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Terms & Conditions ----- //
