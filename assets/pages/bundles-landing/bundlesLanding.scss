@@ -300,13 +300,13 @@
         .component-contrib-amounts {
           position: absolute;
           top: $gu-v-spacing/2;
-          right: $gu-h-spacing/2;;
+          right: 310px;
           width: 300px;
         }
 
         .component-cta-link {
-          max-width: 320px;
-          margin-left: 615px;
+          width: 265px;
+          margin-left: 315px;
         }
       }
     }
