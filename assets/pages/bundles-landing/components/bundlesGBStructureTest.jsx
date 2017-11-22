@@ -99,10 +99,10 @@ type BundlesType = {
 // ----- Copy ----- //
 
 const oneOffContribCopy: ContribAttrs = {
-  heading: 'contribute',
+  heading: '',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
-  modifierClass: 'contributions',
+  modifierClass: 'contributions component-bundle--structure-test',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a one-off contribution',
   paypalCta: {
