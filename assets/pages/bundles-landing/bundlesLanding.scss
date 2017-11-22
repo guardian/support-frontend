@@ -467,7 +467,8 @@
 
   .bundles__cross-product {
     border-top: 1px solid gu-colour(news-support-1);
-    margin: 0 auto;
+    margin: $gu-v-spacing * 2 auto 0;
+
 
     @include mq($from: desktop) {
       width: 940px;
