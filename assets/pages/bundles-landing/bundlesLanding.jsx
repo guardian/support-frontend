@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
-import { defaultAmountsUK } from 'helpers/amountsTest';
+import { defaultAmountsUK } from 'helpers/abTests/amountsTest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 

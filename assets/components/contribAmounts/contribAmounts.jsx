@@ -12,14 +12,14 @@ import {
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
-import { amountRadiosMonthlyHigher, amountRadiosMonthlyLower, amountRadiosMonthlyWildcard } from 'helpers/amountsTest';
+import { amountRadiosMonthlyHigher, amountRadiosMonthlyLower, amountRadiosMonthlyWildcard } from 'helpers/abTests/amountsTest';
 
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 
-import type { Participations } from '../../helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //

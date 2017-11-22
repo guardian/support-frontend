@@ -10,7 +10,7 @@ import { addQueryParamToURL } from 'helpers/url';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 

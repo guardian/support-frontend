@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import ContributionsIntroduction from './contributionsIntroduction';
 import ContributionsContext from './contributionsContext';
 import ContributionsContextIntro from './contributionsContextIntro';

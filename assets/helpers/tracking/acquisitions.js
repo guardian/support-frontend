@@ -7,7 +7,7 @@ import * as ophan from 'ophan';
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 
 

@@ -2,7 +2,7 @@
 
 // ----- Imports --- //
 import type { Radio } from 'components/radioToggle/radioToggle';
-import type { IsoCurrency } from './internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 export const defaultAmountsUK = {

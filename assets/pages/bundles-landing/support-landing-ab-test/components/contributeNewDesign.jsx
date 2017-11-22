@@ -22,7 +22,7 @@ import type {
 } from 'helpers/contributions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import ContributionSelection from './contributionSelectionNewDesign';

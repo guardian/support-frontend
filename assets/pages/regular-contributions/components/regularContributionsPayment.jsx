@@ -13,7 +13,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
 import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import postCheckout from '../helpers/ajax';

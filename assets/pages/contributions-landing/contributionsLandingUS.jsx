@@ -7,7 +7,7 @@ import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-import { defaultAmountsUS } from 'helpers/amountsTest';
+import { defaultAmountsUS } from 'helpers/abTests/amountsTest';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';

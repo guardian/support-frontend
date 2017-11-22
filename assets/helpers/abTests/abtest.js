@@ -7,8 +7,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
 
 import * as ophan from 'ophan';
-import * as cookie from './cookie';
-import * as storage from './storage';
+import * as cookie from 'helpers/cookie';
+import * as storage from 'helpers/storage';
 import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
