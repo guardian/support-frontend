@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import type { Store } from 'redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import DisclaimerFooter from 'components/footers/disclaimerFooter/disclaimerFooter';
 
 import Mothership from './components/mothershipNewDesign';
 import Contribute from './components/contributeNewDesign';
@@ -33,7 +33,7 @@ export default function supportLanding(store: Store) {
         <WhySupport />
         <Ready />
         <OtherWays />
-        <SimpleFooter />
+        <DisclaimerFooter />
       </div>
     </Provider>
   );

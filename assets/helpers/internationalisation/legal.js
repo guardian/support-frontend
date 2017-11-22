@@ -14,9 +14,12 @@ const termsLinks: {
   US: 'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
 };
 
+const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
+
 
 // ----- Exports ----- //
 
 export {
   termsLinks,
+  privacyLink,
 };

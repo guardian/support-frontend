@@ -11,6 +11,8 @@ import Secure from 'components/secure/secure';
 import CtaLink from 'components/ctaLink/ctaLink';
 import PayPalContributionButton
   from 'components/payPalContributionButton/payPalContributionButton';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
+import { termsLinks, privacyLink } from 'helpers/internationalisation/legal';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {
@@ -184,6 +186,26 @@ function payPalErrorMessage(props: PropTypes) {
 
 }
 
+function termsAndConditions(
+  contributionType: ContributionType,
+  country: IsoCountry,
+) {
+
+  if (contributionType === 'ONE_OFF') {
+
+    return (
+      <TermsPrivacy
+        termsLink={termsLinks[country]}
+        privacyLink={privacyLink}
+      />
+    );
+
+  }
+
+  return null;
+
+}
+
 
 // ----- Component ----- //
 
@@ -213,6 +235,7 @@ function Contribute(props: PropTypes) {
         />
         {cardButton(props)}
         {payPalButton(props)}
+        {termsAndConditions(props.contributionType, props.country)}
         {payPalErrorMessage(props)}
       </InfoSection>
     </div>
