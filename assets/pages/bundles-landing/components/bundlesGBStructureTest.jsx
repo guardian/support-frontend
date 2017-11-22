@@ -348,7 +348,9 @@ function BundlesGBStructureTest(props: PropTypes) {
           <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
         </div>
       </div>
-      <CrossProduct />
+      <div className="gu-content-margin">
+        <CrossProduct />
+      </div>
     </section>
   );
 }
