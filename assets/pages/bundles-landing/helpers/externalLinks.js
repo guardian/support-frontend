@@ -4,6 +4,7 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { inOfferPeriod as inBlackFridayPeriod } from './blackFriday';
 
 // ----- Types ----- //
 
@@ -85,6 +86,11 @@ const customPromos : {
     paper: 'p/NBANJUSTONE',
     paperDig: 'p/NDBANJUSTONE',
   },
+  black_friday: {
+    digital: 'p/DBQ80M',
+    paper: 'p/GBQ80N',
+    paperDig: 'p/GBQ80N',
+  },
 };
 
 
@@ -132,9 +138,9 @@ function getSubsLinks(
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
-  if (campaign && customPromos[campaign]) {
+  if ((campaign && customPromos[campaign]) || (!campaign && inBlackFridayPeriod())) {
     return buildSubsUrls(
-      customPromos[campaign],
+      customPromos[campaign || 'black_friday'],
       intCmp,
       otherQueryParams,
       referrerAcquisitionData,
