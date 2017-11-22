@@ -37,13 +37,13 @@ type Audiences = {
   },
 };
 
-export type Test = {
+export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
   independent: boolean,
   seed: number,
-};
+|};
 
 export type Tests = { [testId: string]: Test }
 
