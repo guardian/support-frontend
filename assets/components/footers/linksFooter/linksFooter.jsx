@@ -4,17 +4,20 @@
 
 import React from 'react';
 
+
 // ----- Component ----- //
 
-const Footer = () => (
-  <footer className="links-footer">
-    <div className="links-footer__content gu-content-margin">
-      <small className="links-footer__privacy">
-        <a href="//theguardian.com/help/privacy-policy">Privacy Policy</a>
+const LinksFooter = () => (
+  <footer className="component-links-footer">
+    <div className="component-links-footer__content gu-content-margin">
+      <small className="component-links-footer__privacy">
+        <a className="component-links-footer__link" href="//theguardian.com/help/privacy-policy">
+          Privacy Policy
+        </a>
       </small>
     </div>
-    <div className="links-footer__content gu-content-margin">
-      <small className="links-footer__copyright">
+    <div className="component-links-footer__content gu-content-margin">
+      <small className="component-links-footer__copyright">
         &copy; 2017 Guardian News and Media Limited or its affiliated companies.
         All rights reserved.
       </small>
@@ -22,4 +25,4 @@ const Footer = () => (
   </footer>
 );
 
-export default Footer;
+export default LinksFooter;
