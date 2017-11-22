@@ -284,40 +284,6 @@
     .component-bundle--contributions.component-bundle--structure-test {
       border-top: 2px gu-colour(neutral-1) solid;
 
-      .component-secure {
-        display: none;
-
-        @include mq($from: phablet) {
-          display: inline;
-          position: absolute;
-        }
-
-        @include mq($from: phablet, $until: desktop) {
-          left: 14px;
-          top: 245px;
-        }
-
-        @include mq($from: desktop) {
-          position: absolute;
-          right: $gu-h-spacing/2;
-          top: 10px;
-        }
-      }
-
-      .component-inline-payment-logos {
-        display: none;
-
-        @include mq($from: phablet) {
-          display: inline;
-        }
-
-        @include mq($from: phablet, $until: desktop) {
-          position: absolute;
-          left: $gu-h-spacing/2;
-          top: 270px;
-        }
-      }
-
       @include mq($from: desktop) {
         margin-right: $gu-h-spacing/2;
         width: 920px;
