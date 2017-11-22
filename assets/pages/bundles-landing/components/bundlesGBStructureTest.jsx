@@ -20,6 +20,8 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
+import Secure from 'components/secure/secure';
 
 import CrossProduct from './crossProduct';
 import {
@@ -270,6 +272,8 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
+      <Secure />
+      <InlinePaymentLogos />
 
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
