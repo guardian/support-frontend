@@ -4,12 +4,13 @@
 
 import React from 'react';
 
+
 // ----- Component ----- //
 
-const Footer = () => (
-  <footer className="simple-footer">
-    <div className="simple-footer__content gu-content-margin">
-      <small className="simple-footer__copyright">
+const SimpleFooter = () => (
+  <footer className="component-simple-footer">
+    <div className="component-simple-footer__content gu-content-margin">
+      <small className="component-simple-footer__copyright">
         &copy; 2017 Guardian News and Media Limited or its affiliated companies.
         All rights reserved.
       </small>
@@ -17,4 +18,4 @@ const Footer = () => (
   </footer>
 );
 
-export default Footer;
+export default SimpleFooter;
