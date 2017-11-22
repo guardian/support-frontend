@@ -137,6 +137,25 @@ const monthlyContribCopy: ContribAttrs = {
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
 
+const monthlyContribCopyTwo: ContribAttrs = {
+  heading: 'contribute',
+  subheading: 'from £2/month',
+  ctaText: 'Contribute with card or PayPal',
+  ctaId: 'contribute',
+  modifierClass: 'contributions',
+  ctaLink: '',
+  ctaAccessibilityHint: 'Proceed to make a monthly contribution',
+};
+
+function getMonthlyContribCopy(abTests: ?Participations) {
+  if (abTests) {
+    return abTests.ukRecurringAmountsTest === 'lower'
+      ? monthlyContribCopyTwo
+      : monthlyContribCopy;
+  }
+  return monthlyContribCopy;
+}
+
 const annualContribCopy: ContribAttrs = {
   heading: 'contribute',
   subheading: 'from £50/year',
@@ -193,15 +212,17 @@ const paperCopy: PaperAttrs = {
   paperCtaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
 
-const bundles: BundlesType = {
-  contrib: {
-    oneOff: oneOffContribCopy,
-    monthly: monthlyContribCopy,
-    annual: annualContribCopy,
-  },
-  digital: digitalCopy,
-  paper: paperCopy,
-};
+function bundles(abTests: ?Participations): BundlesType {
+  return {
+    contrib: {
+      oneOff: oneOffContribCopy,
+      monthly: getMonthlyContribCopy(abTests),
+      annual: annualContribCopy,
+    },
+    digital: digitalCopy,
+    paper: paperCopy,
+  };
+}
 
 const ctaLinks = {
   annual: routes.recurringContribCheckout,
@@ -218,6 +239,7 @@ const getContribAttrs = (
   currency: IsoCurrency,
   isoCountry: string,
   intCmp: ?string,
+  abTests: Participations,
 ): ContribAttrs => {
 
   const contType = contribCamelCase(contribType);
@@ -235,7 +257,7 @@ const getContribAttrs = (
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
 
-  return Object.assign({}, bundles.contrib[contType], {
+  return Object.assign({}, bundles(abTests).contrib[contType], {
     ctaId, ctaLink, ctaAccessibilityHint,
   });
 
@@ -243,7 +265,7 @@ const getContribAttrs = (
 
 function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 
-  return Object.assign({}, bundles.paper, {
+  return Object.assign({}, bundles().paper, {
     paperCtaId: 'paper-sub',
     paperCtaLink: subsLinks.paper,
     paperDigCtaId: 'paper-digital-sub',
@@ -253,7 +275,7 @@ function getPaperAttrs(subsLinks: SubsUrls): PaperAttrs {
 }
 
 function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
-  return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
+  return Object.assign({}, bundles().digital, { ctaLink: subsLinks.digital });
 }
 
 function ContributionBundle(props: PropTypes) {
@@ -265,6 +287,7 @@ function ContributionBundle(props: PropTypes) {
       props.currency.iso,
       props.isoCountry,
       props.intCmp,
+      props.abTests,
     );
 
   const onClick = () => {
@@ -313,7 +336,7 @@ function DigitalBundle(props: DigitalAttrs) {
 
   return (
     <Bundle {...props}>
-      <FeatureList listItems={bundles.digital.listItems} />
+      <FeatureList listItems={bundles().digital.listItems} />
       <CtaLink
         ctaId={props.ctaId}
         text={props.ctaText}

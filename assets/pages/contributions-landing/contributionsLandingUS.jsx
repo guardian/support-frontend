@@ -7,6 +7,8 @@ import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
+import { defaultAmountsUS } from 'helpers/amountsTest';
+
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
@@ -18,6 +20,8 @@ import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
+import { changeContribAmountMonthly } from './contributionsLandingActions';
+
 // ----- Page Startup ----- //
 
 /* eslint-disable no-underscore-dangle */
@@ -27,6 +31,18 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
+
+(function initialiseAmountsTest() {
+  try {
+    const defaultSelectedAmount =
+      defaultAmountsUS[store.getState().common.abParticipations.usRecurringAmountsTest]
+      || defaultAmountsUS.control;
+    return store.dispatch(changeContribAmountMonthly({
+      value: defaultSelectedAmount, userDefined: false,
+    }));
+  } catch (e) { return null; }
+}());
+
 
 // ----- Render ----- //
 

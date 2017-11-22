@@ -1,1201 +1,1201 @@
-#bundles-landing-page {
+#support-landing-page {
 
-  .support-landing {
+  // ----- General
 
-    // ----- General
+  .component-info-section {
+    border-top: 2px solid gu-colour(light-blue);
+  }
 
-    .component-info-section {
-      border-top: 2px solid gu-colour(light-blue);
+  .component-info-section__heading {
+    font-family: $gu-egyptian-web;
+    font-weight: 100;
+    font-size: 48px;
+    line-height: 48px;
+    color: gu-colour(neutral-1);
+
+    @include mq($from: tablet) {
+      font-size: 36px;
+      line-height: 40px;
+    }
+  }
+
+  .floating-circle {
+    border-radius: 600px;
+    background-color: gu-colour(multimedia-main-2);
+    width: 50px;
+    height: 50px;
+
+    @include mq($from: tablet) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .floating-semicircle {
+    @extend .floating-circle;
+    border-radius: unset;
+    border-top-left-radius: 600px;
+    border-top-right-radius: 600px;
+    height: 25px;
+
+    @include mq($from: tablet) {
+      height: 30px;
+    }
+  }
+
+  // ----- Mothership
+
+  .mothership-new-design {
+    background-color: darken(#fff, 5%);
+  }
+
+  .mothership-new-design__content {
+    background-color: #fff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    height: 500px;
+
+    @include mq($from: mobileLandscape) {
+      height: 440px;
     }
 
-    .component-info-section__heading {
-      font-family: $gu-egyptian-web;
-      font-weight: 100;
-      font-size: 48px;
-      line-height: 48px;
-      color: gu-colour(neutral-1);
-
-      @include mq($from: tablet) {
-        font-size: 36px;
-        line-height: 40px;
-      }
+    @include mq($from: phablet) {
+      height: 400px;
     }
 
-    .floating-circle {
-      border-radius: 600px;
-      background-color: gu-colour(multimedia-main-2);
-      width: 50px;
-      height: 50px;
-
-      @include mq($from: tablet) {
-        width: 60px;
-        height: 60px;
-      }
+    // Workaround for IE not being capable of doing SVGs.
+    @include mq($from: tablet) {
+      height: 393px;
     }
 
-    .floating-semicircle {
-      @extend .floating-circle;
-      border-radius: unset;
-      border-top-left-radius: 600px;
-      border-top-right-radius: 600px;
-      height: 25px;
-
-      @include mq($from: tablet) {
-        height: 30px;
-      }
+    // Workaround for IE not being capable of doing SVGs.
+    @include mq($from: desktop) {
+      height: 520px;
     }
 
-    // ----- Mothership
-
-    .mothership-new-design {
-      background-color: darken(#fff, 5%);
+    // Workaround for IE not being capable of doing SVGs.
+    @include mq($from: leftCol) {
+      height: 606px;
     }
 
-    .mothership-new-design__content {
-      background-color: #fff;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-      height: 500px;
+    // Workaround for IE not being capable of doing SVGs.
+    @include mq($from: wide) {
+      height: 690px;
+    }
+  }
 
-      @include mq($from: mobileLandscape) {
-        height: 440px;
-      }
+  .mothership-new-design__circle {
+    background-color: gu-colour(guardian-brand);
+    color: #fff;
+    position: absolute;
+    top: -80px;
+    left: -170px;
+    border-radius: 285px;
+    height: 490px;
+    width: 490px;
 
-      @include mq($from: phablet) {
-        height: 400px;
-      }
-
-      // Workaround for IE not being capable of doing SVGs.
-      @include mq($from: tablet) {
-        height: 393px;
-      }
-
-      // Workaround for IE not being capable of doing SVGs.
-      @include mq($from: desktop) {
-        height: 520px;
-      }
-
-      // Workaround for IE not being capable of doing SVGs.
-      @include mq($from: leftCol) {
-        height: 606px;
-      }
-
-      // Workaround for IE not being capable of doing SVGs.
-      @include mq($from: wide) {
-        height: 690px;
-      }
+    @include mq($from: mobileLandscape) {
+      top: -100px;
+      left: -120px;
     }
 
-    .mothership-new-design__circle {
-      background-color: gu-colour(guardian-brand);
-      color: #fff;
-      position: absolute;
-      top: -80px;
-      left: -170px;
+    @include mq($from: desktop) {
+      top: $gu-v-spacing;
+      left: 110px;
       border-radius: 285px;
       height: 490px;
       width: 490px;
-
-      @include mq($from: mobileLandscape) {
-        top: -100px;
-        left: -120px;
-      }
-
-      @include mq($from: desktop) {
-        top: $gu-v-spacing;
-        left: 110px;
-        border-radius: 285px;
-        height: 490px;
-        width: 490px;
-      }
-
-      @include mq($from: leftCol) {
-        top: $gu-v-spacing * 1.5;
-        left: 130px;
-        border-radius: 285px;
-        height: 570px;
-        width: 570px;
-      }
-
-      @include mq($from: wide) {
-        left: 150px;
-        border-radius: 325px;
-        height: 650px;
-        width: 650px;
-      }
     }
 
-    .mothership-new-design__heading {
-      font-family: $gu-egyptian-web;
-      font-weight: 100;
-      width: 280px;
-      margin-top: 80px;
-      margin-left: 180px;
-      font-size: 36px;
-      line-height: 38px;
-
-      @include mq($from: mobileLandscape) {
-        margin-top: 100px;
-        margin-left: 130px;
-      }
-
-      @include mq($from: desktop) {
-        margin-top: 60px;
-        margin-left: 100px;
-      }
-
-      @include mq($from: leftCol) {
-        margin-top: 75px;
-        margin-left: 110px;
-        width: 360px;
-        font-size: 46px;
-        line-height: 48px;
-      }
-
-      @include mq($from: wide) {
-        margin-top: 90px;
-        margin-left: 125px;
-        width: 440px;
-        font-size: 56px;
-        line-height: 58px;
-      }
+    @include mq($from: leftCol) {
+      top: $gu-v-spacing * 1.5;
+      left: 130px;
+      border-radius: 285px;
+      height: 570px;
+      width: 570px;
     }
 
-    .mothership-new-design__supporter-number {
-      display: block;
-      font-weight: 900;
+    @include mq($from: wide) {
+      left: 150px;
+      border-radius: 325px;
+      height: 650px;
+      width: 650px;
+    }
+  }
+
+  .mothership-new-design__heading {
+    font-family: $gu-egyptian-web;
+    font-weight: 100;
+    width: 280px;
+    margin-top: 80px;
+    margin-left: 180px;
+    font-size: 36px;
+    line-height: 38px;
+
+    @include mq($from: mobileLandscape) {
+      margin-top: 100px;
+      margin-left: 130px;
     }
 
-    .mothership-new-design__copy {
-      width: 240px;
-      margin-left: 180px;
-      margin-top: $gu-v-spacing * 1.5;
-      font-size: 14px;
-      line-height: 18px;
-
-      @include mq($from: mobileLandscape) {
-        width: 300px;
-        margin-left: 130px;
-      }
-
-      @include mq($from: desktop) {
-        margin-left: 100px;
-      }
-
-      @include mq($from: leftCol) {
-        width: 320px;
-        margin-left: 110px;
-        font-size: 16px;
-        line-height: 20px;
-      }
-
-      @include mq($from: wide) {
-        width: 400px;
-        margin-left: 125px;
-        margin-top: $gu-v-spacing * 1.5;
-      }
-
-      &::before {
-        content: " ";
-        border-top: 1px solid gu-colour(news-support-1);
-        width: 50px;
-        display: block;
-        padding-bottom: $gu-v-spacing / 2;
-      }
+    @include mq($from: desktop) {
+      margin-top: 60px;
+      margin-left: 100px;
     }
 
-    // ----- Contribute
-
-    .contribute-new-design {
-      background-color: darken(#fff, 5%);
+    @include mq($from: leftCol) {
+      margin-top: 75px;
+      margin-left: 110px;
+      width: 360px;
+      font-size: 46px;
+      line-height: 48px;
     }
 
-    .contribute-new-design__content {
-      background-color: #fff;
-      border-color: gu-colour(light-yellow);
-      color: gu-colour(neutral-2);
-      position: relative;
+    @include mq($from: wide) {
+      margin-top: 90px;
+      margin-left: 125px;
+      width: 440px;
+      font-size: 56px;
+      line-height: 58px;
+    }
+  }
 
-      .component-info-section__header {
-        position: relative;
+  .mothership-new-design__supporter-number {
+    display: block;
+    font-weight: 900;
+  }
 
-        .component-secure {
-          position: absolute;
-          top: 10px;
-          right: 0;
+  .mothership-new-design__copy {
+    width: 240px;
+    margin-left: 180px;
+    margin-top: $gu-v-spacing * 1.5;
+    font-size: 14px;
+    line-height: 18px;
 
-          @include mq($from: desktop) {
-            display: none;
-          }
-        }
-      }
-
-      .component-info-section__content .component-secure {
-        float: right;
-
-        @include mq($until: desktop) {
-          display: none;
-        }
-      }
-
-      .component-cta-link {
-        height: 54px;
-        line-height: 54px;
-        background-color: gu-colour(comment-main-2);
-        color: gu-colour(neutral-1);
-        font-size: 14px;
-        font-weight: bold;
-        padding-left: 20px;
-        padding-top: 0;
-        padding-bottom: 0;
-        box-sizing: border-box;
-        margin-top: $gu-v-spacing * 2;
-
-        &:hover {
-          background-color: darken(gu-colour(comment-main-2), 5%);
-        }
-
-        @include mq($from: tablet) {
-          width: 500px;
-        }
-
-        .svg-arrow-right-straight {
-          top: 18px;
-          right: 16px;
-          height: 33%;
-          fill: gu-colour(neutral-1);
-        }
-      }
-
-      .component-paypal-contribution-button {
-        height: 52px;
-        border-color: #012169;
-        color: #012169;
-        font-size: 14px;
-        font-family: $gu-text-sans-web;
-        width: 100%;
-        margin-top: $gu-v-spacing;
-
-        @include mq($from: tablet) {
-          width: 500px;
-        }
-
-        .svg-arrow-right-straight {
-          fill: #012169;
-          height: 35%;
-          right: 11px;
-        }
-
-        .paypal-p-logo-0, .paypal-p-logo-2 {
-          fill: #012169;
-        }
-
-        .paypal-p-logo-1 {
-          fill: #009cde;
-        }
-      }
+    @include mq($from: mobileLandscape) {
+      width: 300px;
+      margin-left: 130px;
     }
 
-    .contribute-new-design__description {
-      font-family: $gu-text-egyptian-web;
-      font-size: 18px;
-      line-height: 22px;
-      color: gu-colour(neutral-1);
-
-      @include mq($from: tablet) {
-        width: 600px;
-      }
+    @include mq($from: desktop) {
+      margin-left: 100px;
     }
 
-    .component-inline-payment-logos {
-      float: none;
-      height: 25px;
-      margin-top: 8px;
-
-      svg {
-        width: 36px;
-      }
-    }
-
-    .component-contribution-selection__amount, .component-contribution-selection__type {
-      .component-radio-toggle__label {
-        background-color: #fff;
-      }
-
-      .component-radio-toggle__input:checked+.component-radio-toggle__label {
-        background-color: gu-colour(comment-main-2);
-        font-weight: bold;
-        color: gu-colour(neutral-1);
-      }
-
-    }
-
-    .component-contribution-selection__type {
-      font-size: 14px;
-      line-height: 14px;
-      padding: 15px 0;
-      margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
-
-      .component-radio-toggle {
-        display: inline;
-        border: 1px solid gu-colour(comment-main-2);
-        border-radius: 600px;
-        padding: 13px 0;
-      }
-
-      .component-radio-toggle__label {
-        padding: 13px $gu-h-spacing;
-      }
-    }
-
-    .component-contribution-selection__amount {
-      display: inline-block;
-      vertical-align: top;
-      font-size: 14px;
-      margin-top: $gu-v-spacing;
-
-      @include mq($until: phablet) {
-        border-top: 2px dotted gu-colour(neutral-3);
-        width: 100%;
-        padding-top: $gu-v-spacing;
-        margin-top: $gu-v-spacing * 2;
-      }
-
-      .component-radio-toggle__label {
-        display: inline-block;
-        text-align: center;
-        border: 1px solid gu-colour(comment-main-2);
-        line-height: 42px;
-        width: 42px;
-        height: 42px;
-        margin-right: 12px;
-      }
-    }
-
-    .component-contribution-selection__custom-amount {
-      vertical-align: top;
-      margin-top: $gu-v-spacing * 2;
-      margin-bottom: $gu-v-spacing * 4;
-      display: block;
-      position: relative;
-
-      @include mq($from: phablet) {
-        display: inline-block;
-        margin-left: 24px;
-        margin-top: $gu-v-spacing;
-        margin-bottom: $gu-v-spacing * 2;
-      }
-
-      .component-number-input {
-        background-color: #fff;
-        border: 1px solid gu-colour(comment-main-2);
-        padding: 0;
-        margin: 0;
-        height: 42px;
-      }
-
-      .component-number-input__input {
-        font-size: 14px;
-        line-height: 36px;
-        color: gu-colour(neutral-1);
-      }
-
-      .component-number-input__label {
-        line-height: 28px;
-      }
-
-      .component-number-input--selected {
-        background-color: gu-colour(comment-main-2);
-
-        .component-number-input__label {
-          color: gu-colour(neutral-1);
-        }
-      }
-
-      .component-error-message {
-        position: absolute;
-        background-color: inherit;
-        color: gu-colour(error);
-        height: 36px;
-        box-sizing: border-box;
-        padding: 0;
-
-        span {
-          left: 40px;
-        }
-      }
-
-      .svg-exclamation {
-        background-color: gu-colour(error);
-        border-radius: 600px;
-        height: 13px;
-        padding: 3px 8px;
-        left: 15px;
-      }
-    }
-
-    .component-contribution-selection--monthly {
-      .component-number-input, .component-error-message {
-        width: 305px;
-      }
-    }
-
-    .component-contribution-selection--one-off {
-      .component-number-input, .component-error-message {
-        width: 249px;
-      }
-    }
-
-    .grave-error {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background-color: rgba(black, 0.98);
-      color: #fff;
-    }
-
-    .grave-error__close {
-      position: absolute;
-      top: 5px;
-      right: 8px;
-      height: 34px;
-      width: 30px;
-      border: none;
-      background: transparent;
-      padding: 0;
-      fill: #fff;
-
-      &:hover {
-        fill: darken(#fff, 10%);
-        cursor: pointer;
-      }
-
-      .svg-cross {
-        height: 100%;
-        width: 100%;
-      }
-    }
-
-    .grave-error__message {
-      margin-top: 120px;
-      padding: 0 ($gu-h-spacing / 2);
-
-      @include mq($from: mobileLandscape) {
-        padding: 0 $gu-h-spacing;
-      }
-
-      @include mq($from: desktop) {
-        margin-top: 100px;
-        padding: 0;
-        width: 40%;
-        margin-left: 21%;
-      }
-    }
-
-    .grave-error__heading {
-      font-size: 36px;
-      line-height: 36px;
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-    }
-
-    .grave-error__copy {
-      font-size: 18px;
+    @include mq($from: leftCol) {
+      width: 320px;
+      margin-left: 110px;
+      font-size: 16px;
       line-height: 20px;
-      font-family: $gu-text-egyptian-web;
-      margin: $gu-v-spacing 0;
-      width: 80%;
     }
 
-    // ----- Behind The Scenes
-
-    .behind-the-scenes-new-design {
-      background-color: darken(#fff, 5%);
+    @include mq($from: wide) {
+      width: 400px;
+      margin-left: 125px;
+      margin-top: $gu-v-spacing * 1.5;
     }
 
-    .behind-the-scenes-new-design__content {
-      background-color: gu-colour(neutral-6);
-      color: gu-colour(neutral-1);
-      border-top: 1px solid gu-colour(neutral-4);
-      padding-bottom: $gu-v-spacing * 2;
-
-      .component-info-section__heading {
-        font-family: $gu-egyptian-web;
-        font-weight: bold;
-        display: inline;
-      }
-
-      .component-info-section__content {
-        font-family: $gu-text-egyptian-web;
-        line-height: 20px;
-      }
-
-      .svg-moving-circle {
-        height: 30px;
-        margin-left: 5px;
-        width: 100px;
-      }
+    &::before {
+      content: " ";
+      border-top: 1px solid gu-colour(news-support-1);
+      width: 50px;
+      display: block;
+      padding-bottom: $gu-v-spacing / 2;
     }
+  }
 
-    .behind-the-scenes-new-design__copy {
-      @include mq($from: tablet) {
-        width: 600px;
-      }
-    }
+  // ----- Contribute
 
-    // ----- Subscribe
+  .contribute-new-design {
+    background-color: darken(#fff, 5%);
+  }
 
-    .subscribe-new-design {
-      background-color: darken(#fff, 5%);
-    }
+  .contribute-new-design__content {
+    background-color: #fff;
+    border-color: gu-colour(light-yellow);
+    color: gu-colour(neutral-2);
+    position: relative;
 
-    .subscribe-new-design__content {
-      background-color: #fff;
-      border-color: gu-colour(light-yellow);
-    }
-
-    .subscribe-new-design__bundles-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .subscription-bundle {
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-      padding-top: $gu-v-spacing;
-
-      .component-grid-image {
-        width: 90%;
-        margin: 0 auto;
-      }
-
-      @include mq($from: tablet) {
-        flex-basis: 32%;
-      }
-
-      .component-cta-circle {
-        margin: 0;
-        padding-top: $gu-v-spacing * 2;
-
-        span {
-          font-size: 18px;
-          line-height: 24px;
-          font-weight: bold;
-          vertical-align: middle;
-          color: gu-colour(neutral-1);
-        }
-
-        button {
-          background-color: gu-colour(neutral-6);
-          vertical-align: middle;
-
-          svg {
-            fill: gu-colour(neutral-1);
-            height: 100%;
-            width: 100%;
-          }
-        }
-
-        &:hover {
-          cursor: pointer;
-          text-decoration: none;
-
-          button {
-            background-color: gu-colour(multimedia-main-2);
-          }
-        }
-      }
-    }
-
-    .subscription-bundle__heading {
-      font-family: $gu-egyptian-web;
-      font-weight: 100;
-      font-size: 36px;
-      line-height: 44px;
-      color: gu-colour(neutral-1);
-      border-top: 2px solid gu-colour(light-yellow);
-    }
-
-    .subscription-bundle__price {
-      font-family: $gu-egyptian-web;
-      font-size: 24px;
-      line-height: 28px;
-      padding: $gu-v-spacing 0;
-      color: gu-colour(neutral-1);
-      font-weight: 500;
-    }
-
-    .subscription-bundle__price-amount {
-      font-size: 36px;
-      line-height: 28px;
-    }
-
-    .subscription-bundle__copy {
-      color: gu-colour(neutral-2);
-      flex-grow: 1;
-
-      .component-feature-list {
-        list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#333;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-        padding-left: 0;
-        
-        h3, p {
-          font-family: $gu-text-egyptian-web;
-          font-weight: normal;
-          font-size: 16px;
-          line-height: 22px;
-        }
-
-        h3 {
-          color: gu-colour(neutral-1);
-        }
-      }
-    }
-
-    // ----- Why Support
-
-    .why-support-new-design {
-      background-color: darken(#fff, 5%);
-    }
-
-    .why-support-new-design__content {
-      background-color: #fff;
-      border-top: 1px solid gu-colour(neutral-4);
-    }
-
-    .why-support-new-design__wrapper {
-      @include mq($from: desktop) {
-        width: 700px;
-      }
-    }
-
-    .why-support-new-design__heading {
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-      font-size: 30px;
-      line-height: 34px;
-      color: gu-colour(neutral-1);
-
-      @include mq($from: mobileMedium) {
-        font-size: 36px;
-        line-height: 36px;
-      }
-
-      @include mq($from: tablet) {
-        font-size: 60px;
-        line-height: 60px;
-      }
-
-      span {
-        display: block;
-      }
-    }
-
-    .why-support-new-design__heading--edits {
-      position: relative;
-      height: 180px;
-
-      @include mq($from: mobileLandscape) {
-        height: 200px;
-      }
-
-      @include mq($from: phablet) {
-        height: 300px;
-      }
-
-      .why-support-new-design__heading-text-wrapper {
-        position: absolute;
-        top: 26px;
-        left: 48px;
-
-        @include mq($from: mobileMedium) {
-          top: 32px;
-          left: 60px;
-        }
-
-        @include mq($from: mobileLandscape) {
-          top: 50px;
-          left: 100px;
-        }
-
-        @include mq($from: phablet) {
-          top: 80px;
-          left: unset;
-        }
-      }
-
-      span:nth-of-type(2) {
-        margin-left: 50px;
-      }
-
-      @include mq($from: phablet) {
-        padding-left: 180px;
-      }
-
-      @include mq($from: tablet) {
-        padding-left: 140px;
-
-        span:nth-of-type(2) {
-          margin-left: 95px;
-        }
-      }
-
-      .svg-scribble {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 305px;
-
-        @include mq($from: mobileMedium) {
-          width: 355px;
-        }
-
-        @include mq($from: mobileLandscape) {
-          width: unset;
-        }
-
-        .scribble-0, .scribble-1 {
-          fill: none;
-          stroke: gu-colour(neutral-1);
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          stroke-width: 6px;
-        }
-
-        .scribble-2 {
-          fill:#fff;
-        }
-      }
-
-      &::after {
-        @extend .floating-circle;
-        content: " ";
-        position: absolute;
-        left: 230px;
-        bottom: $gu-v-spacing;
-
-        @include mq($from: phablet) {
-          left: 170px;
-          bottom: $gu-v-spacing * 3;
-        }
-      }
-    }
-
-    .why-support-new-design__heading--advertising {
-      padding: $gu-v-spacing 0 150px;
-      margin-top: $gu-v-spacing * 4;
+    .component-info-section__header {
       position: relative;
 
-      span:nth-of-type(2) {
-        margin-left: 140px;
-      }
-
-      @include mq($from: phablet) {
-        padding: $gu-v-spacing 0 152px 80px;
-      }
-
-      @include mq($from: tablet) {
-        padding-bottom: 132px;
-
-        span:nth-of-type(2) {
-          margin-left: 235px;
-        }
-      }
-
-      .svg-graph-line {
-        stroke: gu-colour(neutral-1);
-        fill: none;
-        stroke-width: 8;
-        stroke-linecap: round;
+      .component-secure {
         position: absolute;
-        top: 18px;
-        left: 20px;
+        top: 10px;
+        right: 0;
 
-        @include mq($until: phablet) {
+        @include mq($from: desktop) {
           display: none;
         }
       }
-
-      .svg-graph-line-mobile {
-        stroke: gu-colour(neutral-1);
-        fill: none;
-        stroke-width: 6;
-        stroke-linecap: round;
-        position: absolute;
-        top: $gu-v-spacing;
-        left: -20px;
-        width: 290px;
-
-        @include mq($from: phablet) {
-          display: none;
-        }
-      }
-
-      &::after {
-        @extend .floating-circle;
-        content: " ";
-        position: absolute;
-        bottom: $gu-v-spacing;
-        left: 250px;
-
-        @include mq($from: phablet) {
-          right: 0;
-          left: unset;
-        }
-      }
     }
 
-    .why-support-new-design__heading--paywall {
-      width: 100%;
-      box-sizing: border-box;
-      margin: 0;
-      position: relative;
-      padding-top: 80px;
-      padding-bottom: 100px;
-      padding-left: 50px;
-      margin-top: $gu-v-spacing * 4;
+    .component-info-section__content .component-secure {
+      float: right;
 
-      span:nth-of-type(2) {
-        margin-left: 60px;
-      }
-
-      @include mq($from: mobileMedium) {
-        padding-bottom: 150px;
-        padding-top: 100px;
-        padding-left: 50px;
-      }
-
-      @include mq($from: mobileLandscape) {
-        margin-left: 0;
-        margin-right: 0;
-        margin-bottom: 0;
-        padding-top: 92px;
-        padding-bottom: 140px;
-        padding-left: 80px;
-        width: auto;
-      }
-
-      @include mq($from: phablet) {
-        padding-top: 150px;
-        padding-bottom: 200px;
-        padding-left: 150px;
-      }
-
-      @include mq($from: tablet) {
-        padding-top: 180px;
-        padding-bottom: 260px;
-        padding-left: 110px;
-      }
-
-      @include mq($from: desktop) {
-        padding-top: 120px;
-        padding-left: 0;
-      }
-
-      @include mq($from: leftCol) {
-        padding-left: $gu-h-spacing * 2;
-      }
-
-      @include mq($from: wide) {
-        padding-left: 90px;
-      }
-    }
-
-    .why-support-new-design__paywall-svg {
-      position: absolute;
-      overflow: hidden;
-      width: 100vw;
-      top: 0;
-      left: - $gu-h-spacing / 2;
-
-      @include mq($from: mobileMedium) {
-        width: 100vw;
-      }
-
-      @include mq($from: mobileLandscape) {
-        width: gu-breakpoint(mobileLandscape);
-        left: - $gu-h-spacing;
-      }
-
-      @include mq($from: phablet) {
-        width: gu-breakpoint(phablet);
-      }
-
-      @include mq($from: tablet) {
-        width: gu-breakpoint(tablet);
-      }
-
-      @include mq($from: desktop) {
-        width: gu-breakpoint(desktop);
-        left: -208px;
-      }
-
-      @include mq($from: leftCol) {
-        width: gu-breakpoint(leftCol);
-        left: -240px;
-      }
-
-      @include mq($from: wide) {
-        left: -272px;
-        width: gu-breakpoint(wide);
-      }
-    }
-
-    .svg-wall-mobile {
-      width: gu-breakpoint(mobileMedium) + 40px;
-      margin-left: -30px;
-
-      @include mq($from: mobileMedium) {
-        width: gu-breakpoint(mobileLandscape) + 20px;
-        margin-left: -50px;
-      }
-
-      @include mq($from: mobileLandscape) {
-        width: gu-breakpoint(mobileLandscape);
-        margin-left: 0;
-      }
-
-      @include mq($from: phablet) {
-        width: gu-breakpoint(phablet);
-      }
-
-      @include mq($from: tablet) {
-        width: gu-breakpoint(tablet) + 120px;
-        margin-left: - ((gu-breakpoint(tablet) + 120px) - gu-breakpoint(tablet)) / 2;
-      }
-
-      @include mq($from: desktop) {
+      @include mq($until: desktop) {
         display: none;
       }
     }
 
-    .svg-wall-desktop {
-      display: none;
-
-      @include mq($from: desktop) {
-        display: block;
-        width: gu-breakpoint(wide);
-        margin-left: - (gu-breakpoint(wide) - gu-breakpoint(desktop)) / 2;
-      }
-
-      @include mq($from: leftCol) {
-        margin-left: - (gu-breakpoint(wide) - gu-breakpoint(leftCol)) / 2;
-      }
-
-      @include mq($from: wide) {
-        margin-left: 0;
-      }
-    }
-
-    .why-support-new-design__heading--perspective {
-      padding: ($gu-v-spacing * 2) 0;
-      position: relative;
-
-      @include mq($from: tablet) {
-        padding: 70px 0;
-      }
-
-      &::before {
-        @extend .floating-circle;
-        content: " ";
-        position: absolute;
-        right: 0;
-        top: 0;
-
-        @include mq($from: tablet) {
-          top: 70px;
-        }
-
-        @include mq($from: desktop) {
-          left: -80px;
-        }
-      }
-    }
-
-    .why-support-new-design__copy {
-      font-family: $gu-text-egyptian-web;
-      font-size: 18px;
-      line-height: 24px;
+    .component-cta-link {
+      height: 54px;
+      line-height: 54px;
+      background-color: gu-colour(comment-main-2);
       color: gu-colour(neutral-1);
-      border-top: 1px dotted gu-colour(multimedia-main-2);
-    }
+      font-size: 14px;
+      font-weight: bold;
+      padding-left: 20px;
+      padding-top: 0;
+      padding-bottom: 0;
+      box-sizing: border-box;
+      margin-top: $gu-v-spacing * 2;
 
-    .why-support-new-design__copy--no-border {
-      border: none;
-      padding-top: $gu-v-spacing;
-    }
-
-    // ----- Ready?
-
-    .ready-new-design {
-      background-color: darken(#fff, 5%);
-
-      .component-cta-link {
-        background-color: gu-colour(guardian-brand-dark);
-        width: 250px;
-        padding: 18px 24px;
-        padding-top: 18px;
-        padding-bottom: 18px;
-
-        svg {
-          left: 250px;
-          top: 12px;
-          height: 60%;
-        }
-
-        &:hover {
-          background-color: darken(gu-colour(guardian-brand-dark), 10%);
-        }
-      }
-
-      .component-info-section__header {
-        position: relative;
-
-        &::before {
-          @extend .floating-semicircle;
-          content: " ";
-          position: absolute;
-          top: -27px;
-          right: 0;
-
-          @include mq($from: tablet) {
-            top: -32px;
-          }
-
-          @include mq($from: desktop) {
-            right: $gu-h-spacing;
-          }
-        }
-
-        &::after {
-          @extend .floating-semicircle;
-          background-color: gu-colour(guardian-brand-dark);
-          content: " ";
-          position: absolute;
-          transform: rotateZ(180deg);
-          top: 0;
-          right: 0;
-
-          @include mq($from: desktop) {
-            right: $gu-h-spacing;
-          }
-        }
-      }
-    }
-
-    .ready-new-design__content {
-      background-color: #fff;
-      padding-bottom: $gu-v-spacing * 3;
-    }
-
-    .ready-new-design__heading {
-      font-family: $gu-egyptian-web;
-      color: gu-colour(guardian-brand);
-      font-size: 48px;
-      line-height: 48px;
-      font-weight: 100;
-
-      @include mq($until: tablet) {
-        width: 80%;
+      &:hover {
+        background-color: darken(gu-colour(comment-main-2), 5%);
       }
 
       @include mq($from: tablet) {
-        font-size: 36px;
-        line-height: 40px;
-      }
-    }
-
-    // ----- Other Ways
-
-    .other-ways-new-design {
-      background-color: darken(#fff, 5%);
-    }
-
-    .other-ways-new-design__content {
-      background-color: gu-colour(neutral-1);
-      padding-bottom: $gu-v-spacing * 4;
-      border: none;
-
-      .component-info-section__heading {
-        color: #fff;
-
-        @include mq($from: leftCol) {
-          width: 80%;
-        }
-      }
-
-      .component-info-section__content {
-        padding-top: $gu-v-spacing * 4;
-      }
-    }
-
-    .other-ways-card-new-design {
-      color: #fff;
-      display: inline-block;
-
-      @include mq($until: phablet) {
-        &:first-of-type {
-          margin-bottom: $gu-v-spacing * 4;
-        }
-      }
-
-      @include mq($from: phablet) {
-        width: 300px;
-
-        &:first-of-type {
-          margin-right: $gu-h-spacing;
-        }
-      }
-
-      @include mq($from: tablet, $until: desktop) {
-        margin: 0 25px;
-      }
-    }
-
-    .other-ways-card-new-design__image {
-      border-bottom: 2px solid gu-colour(comment-main-2);
-
-      .component-grid-image {
-        display: block;
-        width: 90%;
-        margin: 0 5%;
-      }
-    }
-
-    .other-ways-card-new-design__description {
-      .component-cta-circle {
-        margin-left: 0;
-        margin-top: $gu-v-spacing * 2;
-      }
-
-      button {
-        background-color: gu-colour(comment-main-2);
-        margin-right: $gu-h-spacing / 2;
+        width: 500px;
       }
 
       .svg-arrow-right-straight {
+        top: 18px;
+        right: 16px;
+        height: 33%;
         fill: gu-colour(neutral-1);
       }
     }
 
-    .other-ways-card-new-design__heading {
-      font-size: 36px;
-      line-height: 40px;
-      font-family: $gu-egyptian-web;
+    .component-paypal-contribution-button {
+      height: 52px;
+      border-color: #012169;
+      color: #012169;
+      font-size: 14px;
+      font-family: $gu-text-sans-web;
+      width: 100%;
+      margin-top: $gu-v-spacing;
+
+      @include mq($from: tablet) {
+        width: 500px;
+      }
+
+      .svg-arrow-right-straight {
+        fill: #012169;
+        height: 35%;
+        right: 11px;
+      }
+
+      .paypal-p-logo-0, .paypal-p-logo-2 {
+        fill: #012169;
+      }
+
+      .paypal-p-logo-1 {
+        fill: #009cde;
+      }
+    }
+  }
+
+  .contribute-new-design__description {
+    font-family: $gu-text-egyptian-web;
+    font-size: 18px;
+    line-height: 22px;
+    color: gu-colour(neutral-1);
+
+    @include mq($from: tablet) {
+      width: 600px;
+    }
+  }
+
+  .component-inline-payment-logos {
+    float: none;
+    height: 25px;
+    margin-top: 8px;
+
+    svg {
+      width: 36px;
+    }
+  }
+
+  .component-contribution-selection__amount, .component-contribution-selection__type {
+    .component-radio-toggle__label {
+      background-color: #fff;
+    }
+
+    .component-radio-toggle__input:checked+.component-radio-toggle__label {
+      background-color: gu-colour(comment-main-2);
       font-weight: bold;
+      color: gu-colour(neutral-1);
+    }
+
+  }
+
+  .component-contribution-selection__type {
+    font-size: 14px;
+    line-height: 14px;
+    padding: 15px 0;
+    margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
+
+    .component-radio-toggle {
+      display: inline;
+      border: 1px solid gu-colour(comment-main-2);
+      border-radius: 600px;
+      padding: 13px 0;
+    }
+
+    .component-radio-toggle__label {
+      padding: 13px $gu-h-spacing;
+    }
+  }
+
+  .component-contribution-selection__amount {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 14px;
+    margin-top: $gu-v-spacing;
+
+    @include mq($until: phablet) {
+      border-top: 2px dotted gu-colour(neutral-3);
+      width: 100%;
+      padding-top: $gu-v-spacing;
+      margin-top: $gu-v-spacing * 2;
+    }
+
+    .component-radio-toggle__label {
+      display: inline-block;
+      text-align: center;
+      border: 1px solid gu-colour(comment-main-2);
+      line-height: 42px;
+      width: 42px;
+      height: 42px;
+      margin-right: 12px;
+    }
+  }
+
+  .component-contribution-selection__custom-amount {
+    vertical-align: top;
+    margin-top: $gu-v-spacing * 2;
+    margin-bottom: $gu-v-spacing * 4;
+    display: block;
+    position: relative;
+
+    @include mq($from: phablet) {
+      display: inline-block;
+      margin-left: 24px;
+      margin-top: $gu-v-spacing;
       margin-bottom: $gu-v-spacing * 2;
     }
 
-    .other-ways-card-new-design__copy {
-      font-size: 16px;
-      line-height: 20px;
-      font-family: $gu-text-egyptian-web;
+    .component-number-input {
+      background-color: #fff;
+      border: 1px solid gu-colour(comment-main-2);
+      padding: 0;
+      margin: 0;
+      height: 42px;
     }
 
+    .component-number-input__input {
+      font-size: 14px;
+      line-height: 36px;
+      color: gu-colour(neutral-1);
+    }
+
+    .component-number-input__label {
+      line-height: 28px;
+    }
+
+    .component-number-input--selected {
+      background-color: gu-colour(comment-main-2);
+
+      .component-number-input__label {
+        color: gu-colour(neutral-1);
+      }
+    }
+
+    .component-error-message {
+      position: absolute;
+      background-color: inherit;
+      color: gu-colour(error);
+      height: 36px;
+      box-sizing: border-box;
+      padding: 0;
+
+      span {
+        left: 40px;
+      }
+    }
+
+    .svg-exclamation {
+      background-color: gu-colour(error);
+      border-radius: 600px;
+      height: 13px;
+      padding: 3px 8px;
+      left: 15px;
+    }
+  }
+
+  .component-contribution-selection--monthly {
+    .component-number-input, .component-error-message {
+      width: 305px;
+    }
+  }
+
+  .component-contribution-selection--one-off {
+    .component-number-input, .component-error-message {
+      width: 249px;
+    }
+  }
+
+  .component-terms-privacy {
+    margin-top: $gu-v-spacing * 2;
+  }
+
+  .grave-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(black, 0.98);
+    color: #fff;
+  }
+
+  .grave-error__close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    height: 34px;
+    width: 30px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    fill: #fff;
+
+    &:hover {
+      fill: darken(#fff, 10%);
+      cursor: pointer;
+    }
+
+    .svg-cross {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .grave-error__message {
+    margin-top: 120px;
+    padding: 0 ($gu-h-spacing / 2);
+
+    @include mq($from: mobileLandscape) {
+      padding: 0 $gu-h-spacing;
+    }
+
+    @include mq($from: desktop) {
+      margin-top: 100px;
+      padding: 0;
+      width: 40%;
+      margin-left: 21%;
+    }
+  }
+
+  .grave-error__heading {
+    font-size: 36px;
+    line-height: 36px;
+    font-family: $gu-egyptian-web;
+    font-weight: bold;
+  }
+
+  .grave-error__copy {
+    font-size: 18px;
+    line-height: 20px;
+    font-family: $gu-text-egyptian-web;
+    margin: $gu-v-spacing 0;
+    width: 80%;
+  }
+
+  // ----- Behind The Scenes
+
+  .behind-the-scenes-new-design {
+    background-color: darken(#fff, 5%);
+  }
+
+  .behind-the-scenes-new-design__content {
+    background-color: gu-colour(neutral-6);
+    color: gu-colour(neutral-1);
+    border-top: 1px solid gu-colour(neutral-4);
+    padding-bottom: $gu-v-spacing * 2;
+
+    .component-info-section__heading {
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+      display: inline;
+    }
+
+    .component-info-section__content {
+      font-family: $gu-text-egyptian-web;
+      line-height: 20px;
+    }
+
+    .svg-moving-circle {
+      height: 30px;
+      margin-left: 5px;
+      width: 100px;
+    }
+  }
+
+  .behind-the-scenes-new-design__copy {
+    @include mq($from: tablet) {
+      width: 600px;
+    }
+  }
+
+  // ----- Subscribe
+
+  .subscribe-new-design {
+    background-color: darken(#fff, 5%);
+  }
+
+  .subscribe-new-design__content {
+    background-color: #fff;
+    border-color: gu-colour(light-yellow);
+  }
+
+  .subscribe-new-design__bundles-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .subscription-bundle {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: $gu-v-spacing;
+
+    .component-grid-image {
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    @include mq($from: tablet) {
+      flex-basis: 32%;
+    }
+
+    .component-cta-circle {
+      margin: 0;
+      padding-top: $gu-v-spacing * 2;
+
+      span {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: bold;
+        vertical-align: middle;
+        color: gu-colour(neutral-1);
+      }
+
+      button {
+        background-color: gu-colour(neutral-6);
+        vertical-align: middle;
+
+        svg {
+          fill: gu-colour(neutral-1);
+          height: 100%;
+          width: 100%;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: none;
+
+        button {
+          background-color: gu-colour(multimedia-main-2);
+        }
+      }
+    }
+  }
+
+  .subscription-bundle__heading {
+    font-family: $gu-egyptian-web;
+    font-weight: 100;
+    font-size: 36px;
+    line-height: 44px;
+    color: gu-colour(neutral-1);
+    border-top: 2px solid gu-colour(light-yellow);
+  }
+
+  .subscription-bundle__price {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 28px;
+    padding: $gu-v-spacing 0;
+    color: gu-colour(neutral-1);
+    font-weight: 500;
+  }
+
+  .subscription-bundle__price-amount {
+    font-size: 36px;
+    line-height: 28px;
+  }
+
+  .subscription-bundle__copy {
+    color: gu-colour(neutral-2);
+    flex-grow: 1;
+
+    .component-feature-list {
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#333;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      padding-left: 0;
+      
+      h3, p {
+        font-family: $gu-text-egyptian-web;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 22px;
+      }
+
+      h3 {
+        color: gu-colour(neutral-1);
+      }
+    }
+  }
+
+  // ----- Why Support
+
+  .why-support-new-design {
+    background-color: darken(#fff, 5%);
+  }
+
+  .why-support-new-design__content {
+    background-color: #fff;
+    border-top: 1px solid gu-colour(neutral-4);
+  }
+
+  .why-support-new-design__wrapper {
+    @include mq($from: desktop) {
+      width: 700px;
+    }
+  }
+
+  .why-support-new-design__heading {
+    font-family: $gu-egyptian-web;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 34px;
+    color: gu-colour(neutral-1);
+
+    @include mq($from: mobileMedium) {
+      font-size: 36px;
+      line-height: 36px;
+    }
+
+    @include mq($from: tablet) {
+      font-size: 60px;
+      line-height: 60px;
+    }
+
+    span {
+      display: block;
+    }
+  }
+
+  .why-support-new-design__heading--edits {
+    position: relative;
+    height: 180px;
+
+    @include mq($from: mobileLandscape) {
+      height: 200px;
+    }
+
+    @include mq($from: phablet) {
+      height: 300px;
+    }
+
+    .why-support-new-design__heading-text-wrapper {
+      position: absolute;
+      top: 26px;
+      left: 48px;
+
+      @include mq($from: mobileMedium) {
+        top: 32px;
+        left: 60px;
+      }
+
+      @include mq($from: mobileLandscape) {
+        top: 50px;
+        left: 100px;
+      }
+
+      @include mq($from: phablet) {
+        top: 80px;
+        left: unset;
+      }
+    }
+
+    span:nth-of-type(2) {
+      margin-left: 50px;
+    }
+
+    @include mq($from: phablet) {
+      padding-left: 180px;
+    }
+
+    @include mq($from: tablet) {
+      padding-left: 140px;
+
+      span:nth-of-type(2) {
+        margin-left: 95px;
+      }
+    }
+
+    .svg-scribble {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 305px;
+
+      @include mq($from: mobileMedium) {
+        width: 355px;
+      }
+
+      @include mq($from: mobileLandscape) {
+        width: unset;
+      }
+
+      .scribble-0, .scribble-1 {
+        fill: none;
+        stroke: gu-colour(neutral-1);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 6px;
+      }
+
+      .scribble-2 {
+        fill:#fff;
+      }
+    }
+
+    &::after {
+      @extend .floating-circle;
+      content: " ";
+      position: absolute;
+      left: 230px;
+      bottom: $gu-v-spacing;
+
+      @include mq($from: phablet) {
+        left: 170px;
+        bottom: $gu-v-spacing * 3;
+      }
+    }
+  }
+
+  .why-support-new-design__heading--advertising {
+    padding: $gu-v-spacing 0 150px;
+    margin-top: $gu-v-spacing * 4;
+    position: relative;
+
+    span:nth-of-type(2) {
+      margin-left: 140px;
+    }
+
+    @include mq($from: phablet) {
+      padding: $gu-v-spacing 0 152px 80px;
+    }
+
+    @include mq($from: tablet) {
+      padding-bottom: 132px;
+
+      span:nth-of-type(2) {
+        margin-left: 235px;
+      }
+    }
+
+    .svg-graph-line {
+      stroke: gu-colour(neutral-1);
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      position: absolute;
+      top: 18px;
+      left: 20px;
+
+      @include mq($until: phablet) {
+        display: none;
+      }
+    }
+
+    .svg-graph-line-mobile {
+      stroke: gu-colour(neutral-1);
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+      position: absolute;
+      top: $gu-v-spacing;
+      left: -20px;
+      width: 290px;
+
+      @include mq($from: phablet) {
+        display: none;
+      }
+    }
+
+    &::after {
+      @extend .floating-circle;
+      content: " ";
+      position: absolute;
+      bottom: $gu-v-spacing;
+      left: 250px;
+
+      @include mq($from: phablet) {
+        right: 0;
+        left: unset;
+      }
+    }
+  }
+
+  .why-support-new-design__heading--paywall {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    padding-top: 80px;
+    padding-bottom: 100px;
+    padding-left: 50px;
+    margin-top: $gu-v-spacing * 4;
+
+    span:nth-of-type(2) {
+      margin-left: 60px;
+    }
+
+    @include mq($from: mobileMedium) {
+      padding-bottom: 150px;
+      padding-top: 100px;
+      padding-left: 50px;
+    }
+
+    @include mq($from: mobileLandscape) {
+      margin-left: 0;
+      margin-right: 0;
+      margin-bottom: 0;
+      padding-top: 92px;
+      padding-bottom: 140px;
+      padding-left: 80px;
+      width: auto;
+    }
+
+    @include mq($from: phablet) {
+      padding-top: 150px;
+      padding-bottom: 200px;
+      padding-left: 150px;
+    }
+
+    @include mq($from: tablet) {
+      padding-top: 180px;
+      padding-bottom: 260px;
+      padding-left: 110px;
+    }
+
+    @include mq($from: desktop) {
+      padding-top: 120px;
+      padding-left: 0;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: $gu-h-spacing * 2;
+    }
+
+    @include mq($from: wide) {
+      padding-left: 90px;
+    }
+  }
+
+  .why-support-new-design__paywall-svg {
+    position: absolute;
+    overflow: hidden;
+    width: 100vw;
+    top: 0;
+    left: - $gu-h-spacing / 2;
+
+    @include mq($from: mobileMedium) {
+      width: 100vw;
+    }
+
+    @include mq($from: mobileLandscape) {
+      width: gu-breakpoint(mobileLandscape);
+      left: - $gu-h-spacing;
+    }
+
+    @include mq($from: phablet) {
+      width: gu-breakpoint(phablet);
+    }
+
+    @include mq($from: tablet) {
+      width: gu-breakpoint(tablet);
+    }
+
+    @include mq($from: desktop) {
+      width: gu-breakpoint(desktop);
+      left: -208px;
+    }
+
+    @include mq($from: leftCol) {
+      width: gu-breakpoint(leftCol);
+      left: -240px;
+    }
+
+    @include mq($from: wide) {
+      left: -272px;
+      width: gu-breakpoint(wide);
+    }
+  }
+
+  .svg-wall-mobile {
+    width: gu-breakpoint(mobileMedium) + 40px;
+    margin-left: -30px;
+
+    @include mq($from: mobileMedium) {
+      width: gu-breakpoint(mobileLandscape) + 20px;
+      margin-left: -50px;
+    }
+
+    @include mq($from: mobileLandscape) {
+      width: gu-breakpoint(mobileLandscape);
+      margin-left: 0;
+    }
+
+    @include mq($from: phablet) {
+      width: gu-breakpoint(phablet);
+    }
+
+    @include mq($from: tablet) {
+      width: gu-breakpoint(tablet) + 120px;
+      margin-left: - ((gu-breakpoint(tablet) + 120px) - gu-breakpoint(tablet)) / 2;
+    }
+
+    @include mq($from: desktop) {
+      display: none;
+    }
+  }
+
+  .svg-wall-desktop {
+    display: none;
+
+    @include mq($from: desktop) {
+      display: block;
+      width: gu-breakpoint(wide);
+      margin-left: - (gu-breakpoint(wide) - gu-breakpoint(desktop)) / 2;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: - (gu-breakpoint(wide) - gu-breakpoint(leftCol)) / 2;
+    }
+
+    @include mq($from: wide) {
+      margin-left: 0;
+    }
+  }
+
+  .why-support-new-design__heading--perspective {
+    padding: ($gu-v-spacing * 2) 0;
+    position: relative;
+
+    @include mq($from: tablet) {
+      padding: 70px 0;
+    }
+
+    &::before {
+      @extend .floating-circle;
+      content: " ";
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      @include mq($from: tablet) {
+        top: 70px;
+      }
+
+      @include mq($from: desktop) {
+        left: -80px;
+      }
+    }
+  }
+
+  .why-support-new-design__copy {
+    font-family: $gu-text-egyptian-web;
+    font-size: 18px;
+    line-height: 24px;
+    color: gu-colour(neutral-1);
+    border-top: 1px dotted gu-colour(multimedia-main-2);
+  }
+
+  .why-support-new-design__copy--no-border {
+    border: none;
+    padding-top: $gu-v-spacing;
+  }
+
+  // ----- Ready?
+
+  .ready-new-design {
+    background-color: darken(#fff, 5%);
+
+    .component-cta-link {
+      background-color: gu-colour(guardian-brand-dark);
+      width: 250px;
+      padding: 18px 24px;
+      padding-top: 18px;
+      padding-bottom: 18px;
+
+      svg {
+        left: 250px;
+        top: 12px;
+        height: 60%;
+      }
+
+      &:hover {
+        background-color: darken(gu-colour(guardian-brand-dark), 10%);
+      }
+    }
+
+    .component-info-section__header {
+      position: relative;
+
+      &::before {
+        @extend .floating-semicircle;
+        content: " ";
+        position: absolute;
+        top: -27px;
+        right: 0;
+
+        @include mq($from: tablet) {
+          top: -32px;
+        }
+
+        @include mq($from: desktop) {
+          right: $gu-h-spacing;
+        }
+      }
+
+      &::after {
+        @extend .floating-semicircle;
+        background-color: gu-colour(guardian-brand-dark);
+        content: " ";
+        position: absolute;
+        transform: rotateZ(180deg);
+        top: 0;
+        right: 0;
+
+        @include mq($from: desktop) {
+          right: $gu-h-spacing;
+        }
+      }
+    }
+  }
+
+  .ready-new-design__content {
+    background-color: #fff;
+    padding-bottom: $gu-v-spacing * 3;
+  }
+
+  .ready-new-design__heading {
+    font-family: $gu-egyptian-web;
+    color: gu-colour(guardian-brand);
+    font-size: 48px;
+    line-height: 48px;
+    font-weight: 100;
+
+    @include mq($until: tablet) {
+      width: 80%;
+    }
+
+    @include mq($from: tablet) {
+      font-size: 36px;
+      line-height: 40px;
+    }
+  }
+
+  // ----- Other Ways
+
+  .other-ways-new-design {
+    background-color: darken(#fff, 5%);
+  }
+
+  .other-ways-new-design__content {
+    background-color: gu-colour(neutral-1);
+    padding-bottom: $gu-v-spacing * 4;
+    border: none;
+
+    .component-info-section__heading {
+      color: #fff;
+
+      @include mq($from: leftCol) {
+        width: 80%;
+      }
+    }
+
+    .component-info-section__content {
+      padding-top: $gu-v-spacing * 4;
+    }
+  }
+
+  .other-ways-card-new-design {
+    color: #fff;
+    display: inline-block;
+
+    @include mq($until: phablet) {
+      &:first-of-type {
+        margin-bottom: $gu-v-spacing * 4;
+      }
+    }
+
+    @include mq($from: phablet) {
+      width: 300px;
+
+      &:first-of-type {
+        margin-right: $gu-h-spacing;
+      }
+    }
+
+    @include mq($from: tablet, $until: desktop) {
+      margin: 0 25px;
+    }
+  }
+
+  .other-ways-card-new-design__image {
+    border-bottom: 2px solid gu-colour(comment-main-2);
+
+    .component-grid-image {
+      display: block;
+      width: 90%;
+      margin: 0 5%;
+    }
+  }
+
+  .other-ways-card-new-design__description {
+    .component-cta-circle {
+      margin-left: 0;
+      margin-top: $gu-v-spacing * 2;
+    }
+
+    button {
+      background-color: gu-colour(comment-main-2);
+      margin-right: $gu-h-spacing / 2;
+    }
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(neutral-1);
+    }
+  }
+
+  .other-ways-card-new-design__heading {
+    font-size: 36px;
+    line-height: 40px;
+    font-family: $gu-egyptian-web;
+    font-weight: bold;
+    margin-bottom: $gu-v-spacing * 2;
+  }
+
+  .other-ways-card-new-design__copy {
+    font-size: 16px;
+    line-height: 20px;
+    font-family: $gu-text-egyptian-web;
   }
 
 }
