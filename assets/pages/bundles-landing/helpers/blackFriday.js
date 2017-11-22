@@ -1,4 +1,4 @@
-import { getQueryParameter } from '../../../helpers/url'
+import { getQueryParameter } from '../../../helpers/url';
 
 function inOfferPeriod() {
   // The offer is valid between 24th November & 3rd December 2017
