@@ -59,7 +59,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: true,
-    independence: 4,
+    isActive: false,
+    independence: 8,
   },
 };
