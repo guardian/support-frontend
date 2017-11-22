@@ -69,7 +69,8 @@ describe('basic behaviour of init', () => {
     const tests = {
       mockTest: {
         variants: ['control', 'variant'],
-        independence: 2,
+        independent: true,
+        seed: 2,
         audiences: {
           GB: {
             offset: 0,
