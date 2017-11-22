@@ -12,7 +12,7 @@ import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkoutError, creatingContributor } from '../regularContributionsActions';
