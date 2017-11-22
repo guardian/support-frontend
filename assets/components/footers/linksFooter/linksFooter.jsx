@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { privacyLink } from 'helpers/legal';
+import { privacyLink, copyrightNotice } from 'helpers/legal';
 
 
 // ----- Component ----- //
@@ -17,10 +17,7 @@ const LinksFooter = () => (
           Privacy Policy
         </a>
       </small>
-      <small className="component-links-footer__copyright">
-        &copy; 2017 Guardian News and Media Limited or its affiliated companies.
-        All rights reserved.
-      </small>
+      <small className="component-links-footer__copyright">{copyrightNotice}</small>
     </div>
   </footer>
 );
