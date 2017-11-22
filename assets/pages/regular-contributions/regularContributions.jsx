@@ -20,7 +20,6 @@ import Signout from 'components/signout/signout';
 
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { termsLinks } from 'helpers/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
@@ -92,10 +91,7 @@ const content = (
       </div>
       <div className="terms-privacy gu-content-filler">
         <InfoSection className="terms-privacy__content gu-content-filler__inner">
-          <TermsPrivacy
-            termsLink={termsLinks[state.common.country]}
-            privacyLink="https://www.theguardian.com/help/privacy-policy"
-          />
+          <TermsPrivacy country={country} />
           <ContribLegal />
         </InfoSection>
       </div>
