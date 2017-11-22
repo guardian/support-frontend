@@ -36,8 +36,8 @@ const store = pageInit(
 
 // ----- Render ----- //
 
-const variantSelected = store.getState().common.abParticipations.gbStructureTest;
-const bundlesSelected = variantSelected === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
+const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
 
 const content = (
   <Provider store={store}>
