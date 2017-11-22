@@ -1,6 +1,10 @@
 .component-links-footer {
   background-color: gu-colour(multimedia-support-4);
 
+  .component-links-footer__content {
+    padding-top: 1px;
+  }
+
   .component-links-footer__link {
     color: gu-colour(neutral-4);
     text-decoration: none;
@@ -12,11 +16,12 @@
 
   .component-links-footer__privacy,
   .component-links-footer__copyright {
+    display: block;
+    padding: 4px 0;
     color: gu-colour(neutral-4);
     font-family: $gu-text-sans-web;
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
-    border-bottom: 1px gu-colour(neutral-4);
   }
 }

@@ -15,8 +15,6 @@ const LinksFooter = () => (
           Privacy Policy
         </a>
       </small>
-    </div>
-    <div className="component-links-footer__content gu-content-margin">
       <small className="component-links-footer__copyright">
         &copy; 2017 Guardian News and Media Limited or its affiliated companies.
         All rights reserved.
