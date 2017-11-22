@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import LinksFooter from 'components/footers/linksFooter/linksFooter';
 
+import { defaultAmountsUK } from 'helpers/amountsTest';
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -20,6 +21,9 @@ import reducer from './bundlesLandingReducers';
 
 // New Design Test
 import supportLanding from './support-landing-ab-test/supportLanding';
+
+// Amounts test
+import { changeContribAmountMonthly } from './bundlesLandingActions';
 
 
 // ----- Redux Store ----- //
@@ -53,5 +57,17 @@ if (getQueryParameter('newDesigns', 'false') === 'true') {
     </Provider>
   );
 }
+
+(function initialiseAmountsTest() {
+  try {
+    const defaultSelectedAmount =
+      defaultAmountsUK[store.getState().common.abParticipations.ukRecurringAmountsTest]
+      || defaultAmountsUK.control;
+    return store.dispatch(changeContribAmountMonthly({
+      value: defaultSelectedAmount, userDefined: false,
+    }));
+  } catch (e) { return null; }
+}());
+
 
 renderPage(content, 'bundles-landing-page');
