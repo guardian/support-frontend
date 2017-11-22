@@ -20,7 +20,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Dimensions } from 'helpers/tracking/googleTagManager';
 import { getQueryParams, getQueryParameter } from 'helpers/url';
 
-
 import type { Action } from './pageActions';
 
 
@@ -151,6 +150,7 @@ function init(
     middleware,
   );
 }
+
 
 // ----- Exports ----- //
 

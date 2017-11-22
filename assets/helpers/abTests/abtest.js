@@ -11,6 +11,7 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { tests } from './abtestDefinitions';
 
+
 // ----- Types ----- //
 
 type TestId = $Keys<typeof tests>;
@@ -45,10 +46,12 @@ export type Test = {
 
 export type Tests = { [testId: string]: Test }
 
+
 // ----- Setup ----- //
 
 const MVT_COOKIE: string = 'GU_mvt_id';
 const MVT_MAX: number = 1000000;
+
 
 // ----- Functions ----- //
 
@@ -161,8 +164,6 @@ const buildOphanPayload = (participations: Participations, complete: boolean): O
     return Object.assign({}, payload, { [participation]: ophanABEvent });
   }, {});
 
-// ----- Exports ----- //
-
 const trackABOphan = (participations: Participations, complete: boolean): void => {
   ophan.record({
     abTestRegister: buildOphanPayload(participations, complete),
@@ -192,6 +193,9 @@ const getVariantsAsString = (participation: Participations): string => {
 };
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
+
+
+// ----- Exports ----- //
 
 export {
   init,
