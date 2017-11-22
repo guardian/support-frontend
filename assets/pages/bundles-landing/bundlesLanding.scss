@@ -174,6 +174,7 @@
 
     .component-bundle--structure-test {
       height: 340px;
+      border-top: 2px gu-colour(news-support-1) solid;
     }
 
     .component-cta-link {
@@ -279,10 +280,12 @@
     }
 
     .component-bundle--contributions.component-bundle--structure-test {
+      border-top: 2px gu-colour(neutral-1) solid;
+
       @include mq($from: desktop) {
         margin-right: $gu-h-spacing/2;
         width: 920px;
-        height: 210px;
+        height: 270px;
 
         .component-double-heading {
           margin-bottom: 0;
@@ -305,8 +308,13 @@
         }
 
         .component-cta-link {
-          width: 265px;
           margin-left: 315px;
+          width: 265px;
+        }
+
+        .component-paypal-contribution-button {
+          margin-left: 315px;
+          width: 307px;
         }
       }
     }
