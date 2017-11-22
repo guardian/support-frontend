@@ -5,7 +5,7 @@ GET /healthcheck                                    controllers.Application.heal
 
 # ----- Bundles Landing Page ----- #
 
-GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns ?= "false")
+GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: Boolean ?= false)
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /                                               controllers.Application.geoRedirect()
 
