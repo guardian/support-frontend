@@ -28,6 +28,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
+        independent: false,
+        seed: 0,
       },
     };
 
@@ -52,6 +54,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
+        independent: false,
+        seed: 0,
       },
     };
 
@@ -69,8 +73,6 @@ describe('basic behaviour of init', () => {
     const tests = {
       mockTest: {
         variants: ['control', 'variant'],
-        independent: true,
-        seed: 2,
         audiences: {
           GB: {
             offset: 0,
@@ -78,6 +80,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
+        independent: true,
+        seed: 2,
       },
     };
 
@@ -102,6 +106,8 @@ describe('basic behaviour of init', () => {
           },
         },
         isActive: true,
+        independent: false,
+        seed: 0,
       },
     };
 
@@ -136,6 +142,8 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
+      independent: false,
+      seed: 0,
     },
 
     mockTest2: {
@@ -147,6 +155,8 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
+      independent: false,
+      seed: 0,
     },
   };
 
