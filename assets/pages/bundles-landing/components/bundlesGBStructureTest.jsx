@@ -20,6 +20,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { getDigiPackItems,  getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest } from '../helpers/blackFriday';
 
 import CrossProduct from './crossProduct';
 import {
@@ -125,16 +126,7 @@ const monthlyContribCopy: ContribAttrs = {
 const digitalCopy: SubscribeAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
-  listItems: [
-    {
-      heading: 'Ad-free mobile app',
-      text: 'No interruptions means pages load quicker for a clearer reading experience',
-    },
-    {
-      heading: 'Daily tablet edition',
-      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
-    },
-  ],
+  listItems: getDigiPackItems(),
   ctaText: 'Start your 14 day trial',
   ctaId: 'digital-sub',
   modifierClass: 'digital  component-bundle--structure-test',
@@ -145,15 +137,7 @@ const digitalCopy: SubscribeAttrs = {
 const paperCopy: SubscribeAttrs = {
   heading: 'paper subscription',
   subheading: 'from £10.79/month',
-  listItems: [
-    {
-      heading: 'Newspaper',
-      text: 'and delivery method: Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-    {
-      heading: 'Save money on the retail price',
-    },
-  ],
+  listItems: getPaperItemsForStructureTest(),
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
   modifierClass: 'paper component-bundle--structure-test',
@@ -164,19 +148,7 @@ const paperCopy: SubscribeAttrs = {
 const paperDigitalCopy: SubscribeAttrs = {
   heading: 'paper+digital',
   subheading: 'from £22.06/month',
-  listItems: [
-    {
-      heading: 'Newspaper',
-      text: 'Choose the package you want: Everyday, Sixday, Weekend and Sunday',
-    },
-    {
-      heading: 'Save money on the retail price',
-      text: 'Daily newspaper optimised for tablet; available on Apple, Android and Kindle Fire',
-    },
-    {
-      heading: 'Get all the digital benefits',
-    },
-  ],
+  listItems: getPaperDigitalItemsForStructureTest(),
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
   modifierClass: 'paperDigital component-bundle--structure-test',
