@@ -32,6 +32,7 @@ import {
 import { getSubsLinks } from '../helpers/externalLinks';
 
 import type { SubsUrls } from '../helpers/externalLinks';
+import { getDigiPackItems, getPaperItems } from '../helpers/blackFriday';
 
 
 // ----- Types ----- //
@@ -169,16 +170,7 @@ const annualContribCopy: ContribAttrs = {
 const digitalCopy: DigitalAttrs = {
   heading: 'digital subscription',
   subheading: '£11.99/month',
-  listItems: [
-    {
-      heading: 'Premium experience on the Guardian app',
-      text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
-    },
-    {
-      heading: 'Daily Tablet Edition app',
-      text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad, Android and Kindle Fire tablets',
-    },
-  ],
+  listItems: getDigiPackItems(),
   ctaText: 'Start your free trial',
   ctaId: 'start-digi-trial',
   modifierClass: 'digital',
@@ -189,18 +181,7 @@ const digitalCopy: DigitalAttrs = {
 const paperCopy: PaperAttrs = {
   heading: 'paper subscription',
   subheading: 'from £10.79/month',
-  listItems: [
-    {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-    {
-      heading: 'Save money on the retail price',
-    },
-    {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
-    },
-  ],
+  listItems: getPaperItems(),
   paperCtaText: 'Get a paper subscription',
   paperDigCtaText: 'Get a paper+digital subscription',
   modifierClass: 'paper',
