@@ -126,7 +126,7 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateCodeResources
     Properties:
-      AlarmActions:
+      InsufficientDataActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
       OKActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
@@ -139,7 +139,7 @@ Resources:
           Value: !Ref MonthlyContributionsCODE
       ComparisonOperator: LessThanThreshold
       Threshold: 1
-      Period: 10800
+      Period: 7200
       EvaluationPeriods: 1
       Statistic: Sum
     DependsOn: MonthlyContributionsCODE
