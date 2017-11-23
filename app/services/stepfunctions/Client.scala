@@ -42,14 +42,14 @@ class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineCon
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
   }
 
-  def triggerExecution[T](input: T)(
+  def triggerExecution[T](input: T, isTestUser: Boolean)(
     implicit
     ec: ExecutionContext,
     encoder: Encoder[T],
     stateWrapper: StateWrapper
   ): Response[StateMachineExecution] = {
     stateMachineWrapper
-      .map(machine => startExecution(machine.arn, stateWrapper.wrap(input)))
+      .map(machine => startExecution(machine.arn, stateWrapper.wrap(input, isTestUser)))
       .map(StateMachineExecution.fromStartExecution)
   }
 

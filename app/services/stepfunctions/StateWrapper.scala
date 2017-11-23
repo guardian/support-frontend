@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import java.util.Base64
 
-import com.gu.support.workers.model.{ExecutionError, JsonWrapper}
+import com.gu.support.workers.model.{ExecutionError, JsonWrapper, RequestInfo}
 import cats.syntax.either._
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -15,11 +15,14 @@ class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
   implicit private val executionErrorEncoder = deriveEncoder[ExecutionError]
   implicit private val executionErrorDecoder = deriveDecoder[ExecutionError]
 
+  implicit private val requestInfoEncoder = deriveEncoder[RequestInfo]
+  implicit private val requestInfoDecoder = deriveDecoder[RequestInfo]
+
   implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
   implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
 
-  def wrap[T](state: T)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None, useEncryption).asJson.noSpaces
+  def wrap[T](state: T, isTestUser: Boolean)(implicit encoder: Encoder[T]): String = {
+    JsonWrapper(encodeState(state), None, RequestInfo(useEncryption, isTestUser, failed = false, Nil)).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =

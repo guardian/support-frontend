@@ -81,7 +81,7 @@ class RegularContributionsClient(
         supportAbTests = request.supportAbTests
       ))
     )
-    underlying.triggerExecution(createPaymentMethodState).bimap(
+    underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
         logger.error(s"[$requestId] Failed to create regular contribution - $error")
         StateMachineFailure: RegularContributionError
