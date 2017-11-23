@@ -19,22 +19,29 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreatePaymentMethodState, RequestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
 
     for {
-      paymentMethod <- createPaymentMethod(state.paymentFields, services)
+      paymentMethod <- createPaymentMethod(state.paymentFields, requestInfo, services)
       _ <- putMetric(state.paymentFields)
-    } yield HandlerResult(getCreateSalesforceContactState(state, paymentMethod), RequestInfo)
+    } yield HandlerResult(getCreateSalesforceContactState(state, paymentMethod), requestInfo)
   }
 
   private def createPaymentMethod(
     paymentType: Either[StripePaymentFields, PayPalPaymentFields],
+    requestInfo: RequestInfo,
     services: Services
   ) =
     paymentType match {
-      case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
-      case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
+      case Left(stripe) => {
+        requestInfo.appendMessage("Payment method is Stripe")
+        createStripePaymentMethod(stripe, services.stripeService)
+      }
+      case Right(paypal) => {
+        requestInfo.appendMessage("Payment method is PayPal")
+        createPayPalPaymentMethod(paypal, services.payPalService)
+      }
     }
 
   private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
