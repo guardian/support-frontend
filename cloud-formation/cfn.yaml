@@ -245,7 +245,7 @@ Resources:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
       AlarmName: !Sub No healthy instances for support-frontend in ${Stage}
       MetricName: HealthyHostCount
-      Namespace: AWS/ApplicatonELB
+      Namespace: AWS/ApplicationELB
       Dimensions:
         - Name: LoadBalancer
           Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
@@ -268,7 +268,7 @@ Resources:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
       AlarmName: !Sub High 5XX rate for support-frontend in ${Stage}
       MetricName: HTTPCode_Target_5XX_Count
-      Namespace: AWS/ApplicatonELB
+      Namespace: AWS/ApplicationELB
       Dimensions:
         - Name: LoadBalancer
           Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
