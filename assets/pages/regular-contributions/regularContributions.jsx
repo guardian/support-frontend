@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
 import Secure from 'components/secure/secure';
@@ -95,7 +95,7 @@ const content = (
           <ContribLegal />
         </InfoSection>
       </div>
-      <SimpleFooter />
+      <Footer />
     </div>
   </Provider>
 );
