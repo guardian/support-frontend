@@ -43,12 +43,6 @@
     }
   }
 
-  .background-circle {
-    border-radius: 600px;
-    width: 460px;
-    height: 460px;
-  }
-
   // ----- Mothership
 
   .mothership-new-design {
@@ -556,7 +550,9 @@
     }
 
     &::after {
-      @extend .background-circle;
+      border-radius: 600px;
+      width: 460px;
+      height: 460px;
       content: " ";
       background-color: #fff;
       position: absolute;
