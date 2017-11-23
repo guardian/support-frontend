@@ -123,6 +123,7 @@ const monthlyContribCopy: ContribAttrs = {
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
 
+
 const componentBundleModifierClass = `component-bundle--structure-test ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
 
 const digitalCopy: SubscribeAttrs = {
@@ -168,6 +169,26 @@ const bundles: BundlesType = {
   paperDigital: paperDigitalCopy,
 };
 
+function getMonthlyContribCopy(abTests: ?Participations) {
+  let response = monthlyContribCopy;
+  if (abTests && abTests.ukRecurringAmountsTest === 'lower') {
+    response = Object.assign({}, monthlyContribCopy, { subheading: 'from £2/month' });
+  }
+  return response;
+}
+
+
+function getBundles(abTests: ?Participations): BundlesType {
+  return {
+    contrib: {
+      oneOff: oneOffContribCopy,
+      monthly: getMonthlyContribCopy(abTests),
+    },
+    digital: digitalCopy,
+    paper: paperCopy,
+  };
+}
+
 const ctaLinks = {
   annual: routes.recurringContribCheckout,
   monthly: routes.recurringContribCheckout,
@@ -183,6 +204,7 @@ const getContribAttrs = (
   currency: IsoCurrency,
   isoCountry: string,
   intCmp: ?string,
+  abTests: Participations,
 ): ContribAttrs => {
 
   const contType = contribCamelCase(contribType);
@@ -200,7 +222,7 @@ const getContribAttrs = (
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
 
-  return Object.assign({}, bundles.contrib[contType], {
+  return Object.assign({}, getBundles(abTests).contrib[contType], {
     ctaId, ctaLink, ctaAccessibilityHint,
   });
 
@@ -227,6 +249,7 @@ function ContributionBundle(props: PropTypes) {
       props.currency.iso,
       props.isoCountry,
       props.intCmp,
+      props.abTests,
     );
 
   const onClick = () => {
