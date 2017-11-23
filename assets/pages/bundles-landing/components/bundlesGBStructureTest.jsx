@@ -123,7 +123,7 @@ const monthlyContribCopy: ContribAttrs = {
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
 
-const componentBundleModifierClass = `component-bundle--structure-test ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`
+const componentBundleModifierClass = `component-bundle--structure-test ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
 
 const digitalCopy: SubscribeAttrs = {
   heading: 'digital subscription',
