@@ -80,5 +80,5 @@ export {
   getDigiPackItems,
   getPaperItems,
   getPaperItemsForStructureTest,
-  getPaperDigitalItemsForStructureTest
+  getPaperDigitalItemsForStructureTest,
 };
