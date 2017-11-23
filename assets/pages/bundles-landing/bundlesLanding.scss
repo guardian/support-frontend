@@ -158,8 +158,14 @@
 
     .component-bundle--structure-test {
       @include mq($from: desktop) {
-        height: 340px;
+        height: 380px;
         border-top: 2px gu-colour(news-support-1) solid;
+      }
+    }
+
+    .component-bundle--structure-test.component-bundle--black-friday {
+      @include mq($from: desktop) {
+        height: 440px;
       }
     }
 
