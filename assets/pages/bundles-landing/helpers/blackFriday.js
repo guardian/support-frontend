@@ -1,6 +1,6 @@
-//@flow
+// @flow
 
-import { getQueryParameter } from '../../../helpers/url';
+import { getQueryParameter } from 'helpers/url';
 
 function inOfferPeriod(): boolean {
   // The offer is valid between 24th November & 3rd December 2017
@@ -8,7 +8,7 @@ function inOfferPeriod(): boolean {
   const startTime = new Date(2017, 11, 24, 0, 0).getTime();
   const endTime = new Date(2017, 12, 4, 0, 0).getTime();
 
-  return (now > startTime && now < endTime) || getQueryParameter('black_friday', false);
+  return (now > startTime && now < endTime) || getQueryParameter('black_friday') === 'true' || false;
 }
 
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
