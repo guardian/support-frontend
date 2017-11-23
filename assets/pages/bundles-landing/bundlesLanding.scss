@@ -126,7 +126,7 @@
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
         width: 280px;
-        height: 434px;
+        height: 480px;
         display: inline-block;
         vertical-align: top;
         position: relative;
@@ -150,7 +150,7 @@
         }
 
         &.contribute-one_off {
-          bottom: 72px;
+          bottom: 122px;
         }
       }
 
@@ -227,6 +227,16 @@
           opacity: 0.4;
         }
       }
+
+      .component-terms-privacy {
+        margin-top: $gu-v-spacing;
+
+        @include mq($from: desktop) {
+          margin-top: 0;
+          position: absolute;
+          bottom: $gu-v-spacing;
+        }
+      }
     }
 
     .component-paypal-contribution-button {
@@ -235,7 +245,7 @@
 
       @include mq($from: desktop) {
         width: 280px;
-        bottom: $gu-v-spacing;
+        bottom: 64px;
         position: absolute;
       }
 

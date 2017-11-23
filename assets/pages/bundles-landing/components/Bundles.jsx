@@ -10,6 +10,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { contribCamelCase } from 'helpers/contributions';
 
@@ -259,6 +260,16 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
   return Object.assign({}, bundles().digital, { ctaLink: subsLinks.digital });
 }
 
+function TermsAndPrivacy(props: { country: IsoCountry, contribType: Contrib }) {
+
+  if (props.contribType === 'ONE_OFF') {
+    return <TermsPrivacy country={props.country} />;
+  }
+
+  return null;
+
+}
+
 function ContributionBundle(props: PropTypes) {
 
   const contribAttrs: ContribAttrs =
@@ -307,6 +318,8 @@ function ContributionBundle(props: PropTypes) {
           canClick={!props.contribError}
         />
       }
+
+      <TermsAndPrivacy country={props.isoCountry} contribType={props.contribType} />
 
     </Bundle>
   );
