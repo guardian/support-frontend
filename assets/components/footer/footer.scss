@@ -1,0 +1,28 @@
+.component-footer {
+  background-color: gu-colour(multimedia-support-4);
+
+  .component-footer__content {
+    padding: ($gu-v-spacing / 3) $gu-h-spacing ($gu-v-spacing * 1.5);
+  }
+
+  .component-footer__privacy-policy {
+    color: gu-colour(neutral-4);
+    text-decoration: none;
+  }
+
+  .component-footer__privacy-policy:hover {
+    text-decoration: underline;
+  }
+
+  .component-footer__copyright, .component-contrib-legal {
+    color: gu-colour(neutral-4);
+    font-family: $gu-text-sans-web;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .component-contrib-legal {
+    margin-top: $gu-v-spacing;
+  }
+}
