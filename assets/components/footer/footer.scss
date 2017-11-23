@@ -1,13 +1,15 @@
 .component-footer {
   background-color: gu-colour(multimedia-support-4);
-
-  .component-footer__content {
-    padding: ($gu-v-spacing / 3) $gu-h-spacing ($gu-v-spacing * 1.5);
-  }
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
+  line-height: 16px;
+  padding: $gu-v-spacing 0;
 
   .component-footer__privacy-policy {
-    color: gu-colour(neutral-4);
     text-decoration: none;
+    display: block;
+    color: gu-colour(neutral-4);
+    padding: 5px 0;
   }
 
   .component-footer__privacy-policy:hover {
@@ -15,11 +17,10 @@
   }
 
   .component-footer__copyright, .component-contrib-legal {
-    color: gu-colour(neutral-4);
-    font-family: $gu-text-sans-web;
     font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
+    display: block;
+    padding: 3px 0;
+    color: gu-colour(neutral-4);
   }
 
   .component-contrib-legal {
