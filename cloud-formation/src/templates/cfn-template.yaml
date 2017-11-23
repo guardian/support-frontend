@@ -159,7 +159,7 @@ Resources:
           Value: !Ref MonthlyContributionsCODE
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
-      Period: 300
+      Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
     DependsOn: MonthlyContributionsCODE
