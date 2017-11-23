@@ -37,12 +37,13 @@ type Audiences = {
   },
 };
 
-export type Test = {
+export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  independence?: number,
-};
+  independent: boolean,
+  seed: number,
+|};
 
 export type Tests = { [testId: string]: Test }
 
@@ -112,19 +113,19 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   return (mvtId > testMin) && (mvtId < testMax);
 }
 
-function randomNumber(seed: number, independence: number): number {
-  if (independence === 0) {
-    return seed;
+function randomNumber(mvtId: number, independent: boolean, seed: number): number {
+  if (!independent) {
+    return mvtId;
   }
 
-  const rng = seedrandom(seed + independence);
+  const rng = seedrandom(mvtId + seed);
   return Math.abs(rng.int32());
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
-  const independence = test.independence || 0;
+  const { independent, seed } = test;
 
-  const variantIndex = randomNumber(mvtId, independence) % test.variants.length;
+  const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
 
   return test.variants[variantIndex];
 }
