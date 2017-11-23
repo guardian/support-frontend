@@ -43,7 +43,7 @@ const content = (
       <Bundles />
       <WhySupport />
       <WaysOfSupport />
-      <Footer disclaimer />
+      <Footer privacyPolicy />
     </div>
   </Provider>
 );
