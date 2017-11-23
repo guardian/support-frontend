@@ -89,7 +89,7 @@ const customPromos : {
   black_friday: {
     digital: 'p/DBQ80M',
     paper: 'p/GBQ80N',
-    paperDig: 'p/GBQ80N',
+    paperDig: 'p/GBQ80O',
   },
 };
 
