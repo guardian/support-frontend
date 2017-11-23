@@ -1,6 +1,8 @@
+//@flow
+
 import { getQueryParameter } from '../../../helpers/url';
 
-function inOfferPeriod() {
+function inOfferPeriod(): boolean {
   // The offer is valid between 24th November & 3rd December 2017
   const now = new Date().getTime();
   const startTime = new Date(2017, 11, 24, 0, 0).getTime();
