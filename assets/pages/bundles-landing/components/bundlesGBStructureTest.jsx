@@ -20,7 +20,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getDigiPackItems,  getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest } from '../helpers/blackFriday';
+import { getDigiPackItems, getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest } from '../helpers/blackFriday';
 
 import CrossProduct from './crossProduct';
 import {
