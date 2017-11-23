@@ -5,7 +5,7 @@
 import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
@@ -16,6 +16,7 @@ import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import TrackedComponent from 'components/trackedComponent/trackedComponent';
 
+
 // ----- Page Startup ----- //
 
 pageInit();
@@ -24,6 +25,7 @@ const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
 
 const country = detectCountry();
 const currency = detectCurrency(country);
+
 
 // ----- Render ----- //
 
@@ -80,7 +82,7 @@ const content = (
         </InfoSection>
       </div>
     </section>
-    <SimpleFooter />
+    <Footer />
   </div>
 );
 
