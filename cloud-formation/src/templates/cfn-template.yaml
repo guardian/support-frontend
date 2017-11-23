@@ -130,7 +130,7 @@ Resources:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
       OKActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
-      AlarmName: No Recent State Machine Execution Attempts (Monthly Contributions Sign-Ups)
+      AlarmName: !Sub No Recent State Machine Execution Attempts in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contribtions state machine has not been triggered for 3 hours - has something broken?
       MetricName: ExecutionsStarted
       Namespace: AWS/States
@@ -150,7 +150,7 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
-      AlarmName: State Machine Failure (Monthly Contributions Sign-Ups)
+      AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contribtions state machine failed during execution - please investigate.
       MetricName: ExecutionsFailed
       Namespace: AWS/States
