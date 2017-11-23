@@ -5,6 +5,7 @@ import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.RequestInfo
 import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
 import com.gu.zuora.model.response.{Subscription => SubscriptionResponse}
@@ -20,23 +21,28 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreateZuoraSubscriptionState, context: Context, services: Services): Future[SendThankYouEmailState] =
+  override protected def servicesHandler(
+    state: CreateZuoraSubscriptionState,
+    requestInfo: RequestInfo,
+    context: Context,
+    services: Services
+  ): FutureHandlerResult =
     services.zuoraService.getRecurringSubscription(state.user.id, state.contribution.billingPeriod).flatMap {
-      case Some(sub) => skipSubscribe(state, sub)
-      case None => subscribe(state, services)
+      case Some(sub) => skipSubscribe(state, requestInfo, sub)
+      case None => subscribe(state, requestInfo, services)
     }
 
-  def skipSubscribe(state: CreateZuoraSubscriptionState, subscription: SubscriptionResponse): Future[SendThankYouEmailState] = {
-    logger.info(s"Skipping subscribe for user because they are already an active contributor " +
-      s"with account number ${subscription.accountNumber}")
-    Future.successful(getEmailState(state, subscription.accountNumber))
+  def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: SubscriptionResponse): FutureHandlerResult = {
+    val message = "Skipping subscribe for user because they are already an active contributor"
+    logger.info(message)
+    FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
   }
 
-  def subscribe(state: CreateZuoraSubscriptionState, services: Services): Future[SendThankYouEmailState] =
+  def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
     for {
       response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
       _ <- putMetric(state.paymentMethod.`type`)
-    } yield getEmailState(state, response.head.accountNumber)
+    } yield HandlerResult(getEmailState(state, response.head.accountNumber), requestInfo)
 
   private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
     SendThankYouEmailState(
