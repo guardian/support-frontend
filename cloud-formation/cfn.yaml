@@ -23,6 +23,9 @@ Parameters:
     Description: AMI ID
     Type: String
     Default: ami-0eb88168
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+  CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
 Mappings:
   StageVariables:
     CODE:
@@ -233,3 +236,49 @@ Resources:
           FromPort: 123
           ToPort: 123
           CidrIp: 0.0.0.0/0
+
+  NoHealthyInstancesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateCodeResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
+      AlarmName: !Sub No healthy instances for support-frontend in ${Stage}
+      MetricName: HealthyHostCount
+      Namespace: AWS/ApplicatonELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0.5
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Average
+    DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
+  High5XXRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateCodeResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
+      AlarmName: !Sub High 5XX rate for support-frontend in ${Stage}
+      MetricName: HTTPCode_Target_5XX_Count
+      Namespace: AWS/ApplicatonELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 3
+      Period: 60
+      EvaluationPeriods: 10
+      Statistic: Sum
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
