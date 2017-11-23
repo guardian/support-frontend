@@ -5,7 +5,7 @@
 import { createStore, combineReducers } from 'redux';
 import 'ophan';
 
-import * as abTest from 'helpers/abtest';
+import * as abTest from 'helpers/abTests/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 
@@ -16,10 +16,9 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { Dimensions } from 'helpers/tracking/googleTagManager';
 import { getQueryParams, getQueryParameter } from 'helpers/url';
-
 
 import type { Action } from './pageActions';
 
@@ -151,6 +150,7 @@ function init(
     middleware,
   );
 }
+
 
 // ----- Exports ----- //
 

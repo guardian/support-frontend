@@ -1,26 +1,28 @@
 // @flow
 
 // ----- Imports --- //
+
 import type { Radio } from 'components/radioToggle/radioToggle';
-import type { IsoCurrency } from './internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
-export const defaultAmountsUK = {
+// ----- Functions ----- //
+
+const defaultAmountsUK = {
   control: '10',
   lower: '5',
   wildcard: '7',
   notintest: '10',
 };
 
-export const defaultAmountsUS = {
+const defaultAmountsUS = {
   control: '10',
   higher: '15',
   lower: '5',
   notintest: '10',
 };
 
-
-export const amountRadiosMonthlyHigher: {
+const amountRadiosMonthlyHigher: {
   [IsoCurrency]: Radio[]
 } = {
   USD: [
@@ -42,7 +44,7 @@ export const amountRadiosMonthlyHigher: {
   ],
 };
 
-export const amountRadiosMonthlyLower: {
+const amountRadiosMonthlyLower: {
   [IsoCurrency]: Radio[]
 } = {
   GBP: [
@@ -81,7 +83,7 @@ export const amountRadiosMonthlyLower: {
   ],
 };
 
-export const amountRadiosMonthlyWildcard: {
+const amountRadiosMonthlyWildcard: {
   [IsoCurrency]: Radio[]
 } = {
   GBP: [
@@ -101,4 +103,15 @@ export const amountRadiosMonthlyWildcard: {
       accessibilityHint: 'contribute twenty pounds per month',
     },
   ],
+};
+
+
+// ----- Exports ----- //
+
+export {
+  defaultAmountsUK,
+  defaultAmountsUS,
+  amountRadiosMonthlyHigher,
+  amountRadiosMonthlyLower,
+  amountRadiosMonthlyWildcard,
 };

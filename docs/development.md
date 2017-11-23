@@ -311,7 +311,7 @@ compute the sample size of your experiment, from the sample size, you can then e
 #### Step 1: Add your test to the Tests object
 
  After your hypothesis is defined, you can implement the test in the codebase. First, define the test 
- in the [`abtest.js` shared helper](/assets/helpers/abtests.js) by adding a new object to the tests array (under the **Tests** section). 
+ in the [`abtest.js` shared helper](/assets/helpers/abTests/abtests.js) by adding a new object to the tests array (under the **Tests** section). 
  
  ```javascript 1.8
  // ----- Tests ----- //

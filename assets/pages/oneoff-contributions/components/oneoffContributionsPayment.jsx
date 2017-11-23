@@ -12,7 +12,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
 
 import { checkoutError } from '../oneoffContributionsActions';

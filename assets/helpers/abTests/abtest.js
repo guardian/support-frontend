@@ -7,9 +7,10 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
 
 import * as ophan from 'ophan';
-import * as cookie from './cookie';
-import * as storage from './storage';
+import * as cookie from 'helpers/cookie';
+import * as storage from 'helpers/storage';
 import { tests } from './abtestDefinitions';
+
 
 // ----- Types ----- //
 
@@ -36,19 +37,22 @@ type Audiences = {
   },
 };
 
-export type Test = {
+export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  independence?: number,
-};
+  independent: boolean,
+  seed: number,
+|};
 
 export type Tests = { [testId: string]: Test }
+
 
 // ----- Setup ----- //
 
 const MVT_COOKIE: string = 'GU_mvt_id';
 const MVT_MAX: number = 1000000;
+
 
 // ----- Functions ----- //
 
@@ -109,19 +113,19 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   return (mvtId > testMin) && (mvtId < testMax);
 }
 
-function randomNumber(seed: number, independence: number): number {
-  if (independence === 0) {
-    return seed;
+function randomNumber(mvtId: number, independent: boolean, seed: number): number {
+  if (!independent) {
+    return mvtId;
   }
 
-  const rng = seedrandom(seed + independence);
+  const rng = seedrandom(mvtId + seed);
   return Math.abs(rng.int32());
 }
 
 function assignUserToVariant(mvtId: number, test: Test): string {
-  const independence = test.independence || 0;
+  const { independent, seed } = test;
 
-  const variantIndex = randomNumber(mvtId, independence) % test.variants.length;
+  const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
 
   return test.variants[variantIndex];
 }
@@ -161,8 +165,6 @@ const buildOphanPayload = (participations: Participations, complete: boolean): O
     return Object.assign({}, payload, { [participation]: ophanABEvent });
   }, {});
 
-// ----- Exports ----- //
-
 const trackABOphan = (participations: Participations, complete: boolean): void => {
   ophan.record({
     abTestRegister: buildOphanPayload(participations, complete),
@@ -192,6 +194,9 @@ const getVariantsAsString = (participation: Participations): string => {
 };
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
+
+
+// ----- Exports ----- //
 
 export {
   init,

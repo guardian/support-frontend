@@ -7,7 +7,7 @@ import { routes } from 'helpers/routes';
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { checkoutError } from '../oneoffContributionsActions';

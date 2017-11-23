@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { Participations } from 'helpers/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Componenent ----- //
 type PropTypes = {
