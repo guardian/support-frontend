@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import LinksFooter from 'components/footers/linksFooter/linksFooter';
+import Footer from 'components/footer/footer';
 
 import { defaultAmountsUK } from 'helpers/abTests/amountsTest';
 import { init as pageInit } from 'helpers/page/page';
@@ -43,7 +43,7 @@ const content = (
       <Bundles />
       <WhySupport />
       <WaysOfSupport />
-      <LinksFooter />
+      <Footer privacyPolicy />
     </div>
   </Provider>
 );

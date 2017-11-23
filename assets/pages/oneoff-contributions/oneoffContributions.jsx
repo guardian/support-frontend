@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
@@ -18,7 +18,6 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import { termsLinks } from 'helpers/internationalisation/legal';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseContrib } from 'helpers/contributions';
@@ -83,14 +82,11 @@ const content = (
       </div>
       <div className="terms-privacy gu-content-filler">
         <InfoSection className="terms-privacy__content gu-content-filler__inner">
-          <TermsPrivacy
-            termsLink={termsLinks[country]}
-            privacyLink="https://www.theguardian.com/help/privacy-policy"
-          />
+          <TermsPrivacy country={country} />
           <ContribLegal />
         </InfoSection>
       </div>
-      <SimpleFooter />
+      <Footer />
     </div>
   </Provider>
 );

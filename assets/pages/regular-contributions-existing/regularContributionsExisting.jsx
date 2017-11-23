@@ -5,7 +5,7 @@
 import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import SimpleFooter from 'components/footers/simpleFooter/simpleFooter';
+import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 
@@ -48,7 +48,7 @@ const content = (
         </InfoSection>
       </div>
     </section>
-    <SimpleFooter />
+    <Footer />
   </div>
 );
 

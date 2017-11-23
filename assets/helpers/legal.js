@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { IsoCountry } from './country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Terms & Conditions ----- //
@@ -16,10 +16,14 @@ const termsLinks: {
 
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 
+const copyrightNotice = `\u00A9 2017 Guardian News and Media Limited or its
+  affiliated companies. All rights reserved.`;
+
 
 // ----- Exports ----- //
 
 export {
   termsLinks,
   privacyLink,
+  copyrightNotice,
 };

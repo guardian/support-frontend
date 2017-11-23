@@ -12,7 +12,6 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import PayPalContributionButton
   from 'components/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
-import { termsLinks, privacyLink } from 'helpers/internationalisation/legal';
 import { contribCamelCase } from 'helpers/contributions';
 
 import type {
@@ -194,10 +193,7 @@ function termsAndConditions(
   if (contributionType === 'ONE_OFF') {
 
     return (
-      <TermsPrivacy
-        termsLink={termsLinks[country]}
-        privacyLink={privacyLink}
-      />
+      <TermsPrivacy country={country} />
     );
 
   }
