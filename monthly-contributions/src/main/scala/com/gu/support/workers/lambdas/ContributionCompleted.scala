@@ -21,7 +21,7 @@ class ContributionCompleted
 
     logger.info(fields.map({ case (k, v) => s"$k: $v" }).mkString("SUCCESS ", " ", ""))
 
-    handlerResult(CompletedState(
+    HandlerResult(CompletedState(
       requestId = state.requestId,
       user = state.user,
       contribution = state.contribution,

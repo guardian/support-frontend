@@ -25,7 +25,7 @@ class UpdateMembersDataAPI(servicesProvider: ServiceProvider = ServiceProvider)
     services.membersDataService
       .update(state.user.id, state.user.isTestUser)
       .flatMap(_ => putCloudWatchMetrics)
-      .map(_ => handlerResult(Unit, requestInfo))
+      .map(_ => HandlerResult(Unit, requestInfo))
 
   def putCloudWatchMetrics: Future[Unit] =
     new MembersDataAPIMetrics("recurring-contribution")

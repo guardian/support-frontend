@@ -34,6 +34,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
       edition = state.user.country.alpha2,
       name = state.user.firstName,
       product = "monthly-contribution"
-    )).map(_ => handlerResult(Unit, requestInfo))
+    )).map(_ => HandlerResult(Unit, requestInfo))
   }
 }

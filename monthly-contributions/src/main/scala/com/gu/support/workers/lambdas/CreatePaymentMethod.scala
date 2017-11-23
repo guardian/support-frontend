@@ -25,7 +25,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
       _ <- putMetric(state.paymentFields)
-    } yield handlerResult(getCreateSalesforceContactState(state, paymentMethod), RequestInfo)
+    } yield HandlerResult(getCreateSalesforceContactState(state, paymentMethod), RequestInfo)
   }
 
   private def createPaymentMethod(
@@ -34,7 +34,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     paymentType match {
       case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
-      case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
+      case Right(paypal) =>
+        createPayPalPaymentMethod(paypal, services.payPalService)
     }
 
   private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =

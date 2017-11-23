@@ -62,8 +62,8 @@ States:
   SucceedOrFailChoice:
     Type: Choice
     Choices:
-      - Variable: "$.status"
-        StringEquals: "exception"
+      - Variable: "$.requestInfo.failed"
+        BooleanEquals: true
         Next: FailState
     Default: WaitForBrowserPoll
 

@@ -27,7 +27,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
-        handlerResult(getCreateZuoraSubscriptionState(state, response), RequestInfo)
+        HandlerResult(getCreateZuoraSubscriptionState(state, response), RequestInfo)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
         logger.warn(s"Error creating Salesforce contact:\n$errorMessage")

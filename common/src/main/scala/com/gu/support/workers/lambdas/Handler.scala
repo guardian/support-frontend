@@ -16,7 +16,7 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 
   type HandlerResult = (R, RequestInfo)
 
-  def handlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri)
+  def HandlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri) // scalastyle:ignore method.name
 
   protected def handler(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): HandlerResult
 
@@ -39,7 +39,7 @@ abstract class FutureHandler[T, R](d: Option[Duration] = None)(
 
   type FutureHandlerResult = Future[(R, RequestInfo)]
 
-  def futureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri))
+  def FutureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri)) // scalastyle:ignore method.name
 
   protected def handlerFuture(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): FutureHandlerResult
 
