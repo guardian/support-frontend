@@ -34,14 +34,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: SubscriptionResponse): FutureHandlerResult = {
     val message = "Skipping subscribe for user because they are already an active contributor"
+    logger.info(message)
     FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
   }
 
-  def subscribe(state: CreateZuoraSubscriptionState, RequestInfo: RequestInfo, services: Services): FutureHandlerResult =
+  def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
     for {
       response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
       _ <- putMetric(state.paymentMethod.`type`)
-    } yield HandlerResult(getEmailState(state, response.head.accountNumber), RequestInfo)
+    } yield HandlerResult(getEmailState(state, response.head.accountNumber), requestInfo)
 
   private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
     SendThankYouEmailState(

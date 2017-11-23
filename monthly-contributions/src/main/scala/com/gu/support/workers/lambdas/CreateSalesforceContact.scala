@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] with LazyLogging {
 
-  override protected def servicesHandler(state: CreateSalesforceContactState, RequestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreateSalesforceContactState, requestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreateSalesforceContact state: $state")
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
@@ -27,7 +27,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.allowGURelatedMail
     )).map(response =>
       if (response.Success) {
-        HandlerResult(getCreateZuoraSubscriptionState(state, response), RequestInfo)
+        HandlerResult(getCreateZuoraSubscriptionState(state, response), requestInfo)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
         logger.warn(s"Error creating Salesforce contact:\n$errorMessage")

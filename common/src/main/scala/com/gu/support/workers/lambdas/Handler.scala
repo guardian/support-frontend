@@ -18,7 +18,7 @@ abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) 
 
   def HandlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri) // scalastyle:ignore method.name
 
-  protected def handler(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): HandlerResult
+  protected def handler(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): HandlerResult
 
   def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     try {
@@ -41,11 +41,11 @@ abstract class FutureHandler[T, R](d: Option[Duration] = None)(
 
   def FutureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri)) // scalastyle:ignore method.name
 
-  protected def handlerFuture(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): FutureHandlerResult
+  protected def handlerFuture(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
 
-  override protected def handler(input: T, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context): HandlerResult =
+  override protected def handler(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): HandlerResult =
     Await.result(
-      handlerFuture(input, error, RequestInfo, context),
+      handlerFuture(input, error, requestInfo, context),
       d.getOrElse(Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS))
     )
 }

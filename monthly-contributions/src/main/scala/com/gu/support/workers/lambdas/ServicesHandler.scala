@@ -20,6 +20,6 @@ abstract class ServicesHandler[T <: StepFunctionUserState, R](servicesProvider: 
     servicesHandler(input, requestInfo, context, servicesProvider.forUser(input.user.isTestUser))
   }
 
-  protected def servicesHandler(input: T, RequestInfo: RequestInfo, context: Context, services: Services): Future[(R, RequestInfo)]
+  protected def servicesHandler(input: T, requestInfo: RequestInfo, context: Context, services: Services): Future[(R, RequestInfo)]
 
 }

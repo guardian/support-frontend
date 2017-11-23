@@ -21,12 +21,12 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(
     state: SendAcquisitionEventState,
-    RequestInfo: RequestInfo,
+    requestInfo: RequestInfo,
     context: Context,
     services: Services
   ): FutureHandlerResult =
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    services.ophanService.submit(state).fold(throw _, _ => HandlerResult(Unit, RequestInfo))
+    services.ophanService.submit(state).fold(throw _, _ => HandlerResult(Unit, requestInfo))
 }
 
 object SendAcquisitionEvent {

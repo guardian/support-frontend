@@ -25,7 +25,7 @@ class FailureHandler(emailService: EmailService)
   override protected def handlerFuture(
     state: FailureHandlerState,
     error: Option[ExecutionError],
-    RequestInfo: RequestInfo,
+    requestInfo: RequestInfo,
     context: Context
   ): FutureHandlerResult = {
     logger.info(
@@ -34,7 +34,7 @@ class FailureHandler(emailService: EmailService)
         s"test_user: ${state.user.isTestUser}\n" +
         s"error: $error"
     )
-    sendEmail(state).whenFinished(handleError(state, error, RequestInfo))
+    sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
   private def sendEmail(state: FailureHandlerState) = emailService.send(EmailFields(
@@ -59,7 +59,7 @@ class FailureHandler(emailService: EmailService)
 
   private def returnState(
     state: FailureHandlerState,
-    RequestInfo: RequestInfo,
+    requestInfo: RequestInfo,
     message: String = "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
   ) =
     HandlerResult(
@@ -69,7 +69,7 @@ class FailureHandler(emailService: EmailService)
         contribution = state.contribution,
         status = Status.Failure,
         message = Some(message)
-      ), RequestInfo
+      ), requestInfo
     )
 
   private def getZuoraError(executionError: ExecutionError): Option[ZuoraErrorResponse] = for {

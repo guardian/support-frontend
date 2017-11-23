@@ -34,8 +34,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     paymentType match {
       case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
-      case Right(paypal) =>
-        createPayPalPaymentMethod(paypal, services.payPalService)
+      case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
     }
 
   private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =

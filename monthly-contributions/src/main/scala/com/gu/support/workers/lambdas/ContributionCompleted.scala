@@ -11,7 +11,7 @@ class ContributionCompleted
     extends Handler[SendThankYouEmailState, CompletedState]
     with LazyLogging {
 
-  override protected def handler(state: SendThankYouEmailState, error: Option[ExecutionError], RequestInfo: RequestInfo, context: Context) = {
+  override protected def handler(state: SendThankYouEmailState, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context) = {
     val fields = List(
       "contribution_amount" -> state.contribution.amount.toString,
       "contribution_currency" -> state.contribution.currency.iso.toString,
@@ -27,6 +27,6 @@ class ContributionCompleted
       contribution = state.contribution,
       status = Status.Success,
       message = None
-    ), RequestInfo)
+    ), requestInfo)
   }
 }
