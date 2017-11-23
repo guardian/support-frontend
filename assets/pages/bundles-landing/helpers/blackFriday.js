@@ -12,7 +12,7 @@ function inOfferPeriod() {
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
 
 function getDigiPackItems() {
-  const originalList = [
+  const items = [
     {
       heading: 'Premium experience on the Guardian app',
       text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
@@ -24,9 +24,9 @@ function getDigiPackItems() {
   ];
 
   if (inOfferPeriod()) {
-    return [offerItem, ...originalList];
+    return [offerItem, ...items];
   }
-  return originalList;
+  return items;
 }
 
 function getPaperItems() {
@@ -45,8 +45,40 @@ function getPaperItems() {
   return [items[0], { heading: 'Save money on the retail price' }, items[1]];
 }
 
+function getPaperItemsForStructureTest() {
+  const items = [
+    {
+      heading: 'Choose your package and delivery method',
+      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+    },
+  ];
+
+  if (inOfferPeriod()) { return [offerItem, ...items]; }
+
+  return [items[0], { heading: 'Save money on the retail price' }];
+}
+
+function getPaperDigitalItemsForStructureTest() {
+
+  const items = [
+    {
+      heading: 'Choose your package and delivery method',
+      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+    },
+    {
+      heading: 'Get all the benefits of a digital subscription',
+    },
+  ];
+
+  if (inOfferPeriod()) { return [offerItem, ...items]; }
+
+  return [items[0], { heading: 'Save money on the retail price' }, items[1]];
+}
+
 export {
   inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
+  getPaperItemsForStructureTest,
+  getPaperDigitalItemsForStructureTest
 };
