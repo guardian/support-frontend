@@ -523,22 +523,42 @@
     color: gu-colour(neutral-1);
     border-top: 1px solid gu-colour(neutral-4);
     padding-bottom: $gu-v-spacing * 2;
+    position: relative;
+    overflow: hidden;
 
     .component-info-section__heading {
       font-family: $gu-egyptian-web;
       font-weight: bold;
       display: inline;
+      position: relative;
+      z-index: 1;
     }
 
     .component-info-section__content {
       font-family: $gu-text-egyptian-web;
       line-height: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     .svg-moving-circle {
       height: 30px;
       margin-left: 5px;
       width: 100px;
+      z-index: 1;
+      position: relative;
+    }
+
+    &::after {
+      border-radius: 600px;
+      width: 460px;
+      height: 460px;
+      content: " ";
+      background-color: #fff;
+      position: absolute;
+      left: 80px;
+      top: 0;
+      z-index: 0;
     }
   }
 
