@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import DisclaimerFooter from 'components/footers/disclaimerFooter/disclaimerFooter';
+import Footer from 'components/footer/footer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -45,7 +45,7 @@ const content = (
       <WhySupport />
       <Ready />
       <OtherWays />
-      <DisclaimerFooter />
+      <Footer disclaimer />
     </div>
   </Provider>
 );

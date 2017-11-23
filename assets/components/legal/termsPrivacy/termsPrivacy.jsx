@@ -4,12 +4,15 @@
 
 import React from 'react';
 
+import { privacyLink, termsLinks } from 'helpers/legal';
+
+import type { IsoCountry } from 'helpers/internationalisation/country';
+
 
 // ---- Types ----- //
 
 type PropTypes = {
-  termsLink: string,
-  privacyLink: string,
+  country: IsoCountry,
 };
 
 
@@ -17,8 +20,8 @@ type PropTypes = {
 
 function TermsPrivacy(props: PropTypes) {
 
-  const terms = <a href={props.termsLink}>Terms and Conditions</a>;
-  const privacy = <a href={props.privacyLink}>Privacy Policy</a>;
+  const terms = <a href={termsLinks[props.country]}>Terms and Conditions</a>;
+  const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
   return (
     <div className="component-terms-privacy">
