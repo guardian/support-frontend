@@ -1,12 +1,13 @@
-// import { getQueryParameter } from '../../../helpers/url';
+import { getQueryParameter } from '../../../helpers/url';
 
 function inOfferPeriod() {
   // The offer is valid between 24th November & 3rd December 2017
-  const now = new Date().getTime();
-  const startTime = new Date(2017, 11, 24, 0, 0).getTime();
-  const endTime = new Date(2017, 12, 4, 0, 0).getTime();
+  const now = Date.now();
+  // Days are 1 based, months are 0 based - WHY??
+  const startTime = new Date(2017, 10, 24, 0, 0).getTime();
+  const endTime = new Date(2017, 11, 4, 0, 0).getTime();
 
-  return (now > startTime && now < endTime) || true; // getQueryParameter('black_friday', false);
+  return (now > startTime && now < endTime) || getQueryParameter('black_friday', false);
 }
 
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
