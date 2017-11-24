@@ -163,6 +163,12 @@
       }
     }
 
+    .component-bundle--structure-one-off {
+      .component-double-heading {
+        display: none;
+      }
+    }
+
     .component-bundle--structure-test.component-bundle--black-friday {
       @include mq($from: desktop) {
         height: 440px;

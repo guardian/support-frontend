@@ -104,7 +104,7 @@ const oneOffContribCopy: ContribAttrs = {
   heading: '',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test',
+  modifierClass: 'contributions component-bundle--structure-test component-bundle--structure-one-off',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a one-off contribution',
   paypalCta: {
