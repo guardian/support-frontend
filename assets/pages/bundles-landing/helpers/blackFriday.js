@@ -55,9 +55,7 @@ function getPaperItemsForStructureTest() {
 }
 
 function getPaperDigitalItemsForStructureTest() {
-  if (inOfferPeriod()) { return [offerItem, ...paperItems]; }
-
-  return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
+  return getPaperItems();
 }
 
 export {
