@@ -124,42 +124,42 @@ Resources:
 
   NoStateMachineExecutionsAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       InsufficientDataActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
       OKActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
       AlarmName: !Sub No Recent State Machine Execution Attempts in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contribtions state machine has not been triggered for 3 hours - has something broken?
       MetricName: ExecutionsStarted
       Namespace: AWS/States
       Dimensions:
         - Name: StateMachineArn
-          Value: !Ref MonthlyContributionsCODE
+          Value: !Ref MonthlyContributionsPROD
       ComparisonOperator: LessThanThreshold
       Threshold: 1
       Period: 7200
       EvaluationPeriods: 1
       Statistic: Sum
-    DependsOn: MonthlyContributionsCODE
+    DependsOn: MonthlyContributionsPROD
 
   ExecutionFailureAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:jacob-testing
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
       AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contribtions state machine failed during execution - please investigate.
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:
         - Name: StateMachineArn
-          Value: !Ref MonthlyContributionsCODE
+          Value: !Ref MonthlyContributionsPROD
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
-    DependsOn: MonthlyContributionsCODE
+    DependsOn: MonthlyContributionsPROD
