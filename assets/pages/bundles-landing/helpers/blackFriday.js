@@ -4,9 +4,10 @@ import { getQueryParameter } from 'helpers/url';
 
 function inOfferPeriod(): boolean {
   // The offer is valid between 24th November & 3rd December 2017
-  const now = new Date().getTime();
-  const startTime = new Date(2017, 11, 24, 0, 0).getTime();
-  const endTime = new Date(2017, 12, 4, 0, 0).getTime();
+  const now = Date.now();
+  // Days are 1 based, months are 0 based - WHY??
+  const startTime = new Date(2017, 10, 24, 0, 0).getTime();
+  const endTime = new Date(2017, 11, 4, 0, 0).getTime();
 
   return (now > startTime && now < endTime) || getQueryParameter('black_friday') === 'true' || false;
 }
