@@ -165,7 +165,9 @@
 
     .component-bundle--structure-one-off {
       .component-double-heading {
-        display: none;
+        @include mq($from: desktop) {
+          display: none;
+        }
       }
     }
 
@@ -285,15 +287,52 @@
           font-family: $gu-text-sans-web;
 
           @include mq($from: desktop) {
-            width: 500px;
+            width: 475px;
+          }
+
+          @include mq($from: tablet, $until: desktop) {
+            position: absolute;
+            left: 10px;
+            top: 35px;
+            width:300px;
+          }
+
+          @include mq($from: phablet, $until: tablet) {
+            position: absolute;
+            left: 10px;
+            top: 35px;
+            width:290px;
           }
         }
+
+
       }
 
       .component-terms-privacy {
+        font-size: 12px;
+        line-height: 16px;
+
         @include mq($from: desktop) {
           position: absolute;
           bottom: 10px;
+        }
+
+        @include mq($from: tablet, $until: desktop) {
+          position: absolute;
+          left: 10px;
+          bottom: 5px;
+          width:300px;
+        }
+
+        @include mq($from: phablet, $until: tablet) {
+          position: absolute;
+          left: 10px;
+          bottom: 5px;
+          width: 280px;
+        }
+
+        @include mq($until: tablet) {
+          padding-top: 5px;
         }
       }
 
@@ -315,7 +354,7 @@
         }
 
         .component-terms-privacy {
-          font-size: 16px;
+          line-height: 16px;
           width: 500px;
           margin-top: 0;
         }
