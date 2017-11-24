@@ -30,7 +30,6 @@ export const tests: Tests = {
     seed: 4,
   },
 
-
   usRecurringAmountsTest: {
     variants: ['control', 'lower', 'higher'],
     audiences: {
@@ -52,7 +51,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
     seed: 6,
   },
