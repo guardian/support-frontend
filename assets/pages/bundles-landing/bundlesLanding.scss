@@ -163,10 +163,21 @@
       }
     }
 
-    .component-bundle--structure-one-off {
+    .component-bundle--contributions.component-bundle--structure-test.component-bundle--structure-one-off {
       .component-double-heading {
         @include mq($from: desktop) {
           display: none;
+        }
+      }
+
+      .component-bundle__content {
+        p {
+          @include mq($from: tablet, $until: desktop) {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width:300px;
+          }
         }
       }
     }
