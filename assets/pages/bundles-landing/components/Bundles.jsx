@@ -260,16 +260,6 @@ function getDigitalAttrs(subsLinks: SubsUrls): DigitalAttrs {
   return Object.assign({}, bundles().digital, { ctaLink: subsLinks.digital });
 }
 
-function TermsAndPrivacy(props: { country: IsoCountry, contribType: Contrib }) {
-
-  if (props.contribType === 'ONE_OFF') {
-    return <TermsPrivacy country={props.country} />;
-  }
-
-  return null;
-
-}
-
 function ContributionBundle(props: PropTypes) {
 
   const contribAttrs: ContribAttrs =
@@ -297,14 +287,12 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
         text={contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}
       />
-
       {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
         <PayPalContributionButton
           buttonText={contribAttrs.paypalCta.text}
@@ -318,9 +306,7 @@ function ContributionBundle(props: PropTypes) {
           canClick={!props.contribError}
         />
       }
-
-      <TermsAndPrivacy country={props.isoCountry} contribType={props.contribType} />
-
+      <TermsPrivacy country={props.isoCountry} />
     </Bundle>
   );
 

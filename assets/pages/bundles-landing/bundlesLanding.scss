@@ -126,7 +126,7 @@
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
         width: 280px;
-        height: 480px;
+        height: 484px;
         display: inline-block;
         vertical-align: top;
         position: relative;
@@ -150,7 +150,11 @@
         }
 
         &.contribute-one_off {
-          bottom: 122px;
+          bottom: 130px;
+        }
+
+        &.contribute-monthly {
+          bottom: 72px;
         }
       }
 
@@ -245,7 +249,7 @@
 
       @include mq($from: desktop) {
         width: 280px;
-        bottom: 64px;
+        bottom: 72px;
         position: absolute;
       }
 
