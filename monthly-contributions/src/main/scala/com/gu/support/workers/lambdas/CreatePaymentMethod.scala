@@ -7,6 +7,7 @@ import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.typesafe.scalalogging.LazyLogging
@@ -15,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
@@ -23,32 +24,24 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     logger.debug(s"CreatePaymentMethod state: $state")
 
     for {
-      paymentMethod <- createPaymentMethod(state.paymentFields, requestInfo, services)
-      _ <- putMetric(state.paymentFields)
-    } yield HandlerResult(getCreateSalesforceContactState(state, paymentMethod), requestInfo)
+      paymentMethod <- createPaymentMethod(state.paymentFields, services)
+      _ <- putCloudWatchMetrics(paymentMethod.value.toFriendlyString)
+    } yield HandlerResult(
+      getCreateSalesforceContactState(state, paymentMethod.value),
+      requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+    )
   }
 
   private def createPaymentMethod(
     paymentType: Either[StripePaymentFields, PayPalPaymentFields],
-    requestInfo: RequestInfo,
     services: Services
   ) =
     paymentType match {
-      case Left(stripe) => {
-        requestInfo.appendMessage("Payment method is Stripe")
+      case Left(stripe) =>
         createStripePaymentMethod(stripe, services.stripeService)
-      }
-      case Right(paypal) => {
-        requestInfo.appendMessage("Payment method is PayPal")
+      case Right(paypal) =>
         createPayPalPaymentMethod(paypal, services.payPalService)
-      }
     }
-
-  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
-    if (paymentType.isLeft)
-      putCloudWatchMetrics("stripe")
-    else
-      putCloudWatchMetrics("paypal")
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
     CreateSalesforceContactState(

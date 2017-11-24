@@ -13,7 +13,7 @@ object Dependencies {
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
   val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.1"
-  val supportModels = "com.gu" %% "support-models" % "0.19-SNAPSHOT"
+  val supportModels = "com.gu" %% "support-models" % "0.18"
   val supportConfig = "com.gu" %% "support-config" % "0.6"
   val acquisitionEventProducer = "com.gu" %% "acquisition-event-producer" % "2.0.1"
   val okhttp = "com.squareup.okhttp3" % "okhttp" % okhttpVersion
