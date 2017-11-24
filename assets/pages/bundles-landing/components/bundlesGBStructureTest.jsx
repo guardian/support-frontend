@@ -262,7 +262,8 @@ function ContributionBundle(props: PropTypes) {
   return (
     <Bundle {...contribAttrs}>
       <p>
-        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism
+        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
+        All profit is reinvested to safeguard the quality of our journalism.
       </p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
