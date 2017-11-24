@@ -1,5 +1,6 @@
 Comment: Carries out the steps needed to create a Monthly Contributor
 StartAt: CreatePaymentMethod
+TimeoutSeconds: 10800
 States:
   CreatePaymentMethod:
     Type: Task
