@@ -19,6 +19,10 @@ const chooseYourPackage = {
   heading: 'Choose your package and delivery method',
   text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
 };
+const paperItems = [
+  chooseYourPackage,
+  getAllBenefits,
+];
 
 function getDigiPackItems() {
   const items = [
@@ -39,14 +43,9 @@ function getDigiPackItems() {
 }
 
 function getPaperItems() {
-  const items = [
-    chooseYourPackage,
-    getAllBenefits,
-  ];
+  if (inOfferPeriod()) { return [offerItem, ...paperItems]; }
 
-  if (inOfferPeriod()) { return [offerItem, ...items]; }
-
-  return [items[0], saveMoneyOnRetailPrice, items[1]];
+  return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
 }
 
 function getPaperItemsForStructureTest() {
@@ -56,15 +55,9 @@ function getPaperItemsForStructureTest() {
 }
 
 function getPaperDigitalItemsForStructureTest() {
+  if (inOfferPeriod()) { return [offerItem, ...paperItems]; }
 
-  const items = [
-    chooseYourPackage,
-    getAllBenefits,
-  ];
-
-  if (inOfferPeriod()) { return [offerItem, ...items]; }
-
-  return [items[0], saveMoneyOnRetailPrice, items[1]];
+  return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
 }
 
 export {
