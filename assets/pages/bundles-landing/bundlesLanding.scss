@@ -274,10 +274,20 @@
     .component-bundle--contributions.component-bundle--structure-test {
       border-top: 2px gu-colour(neutral-1) solid;
 
+      .component-bundle__content {
+        p {
+          font-family: $gu-text-sans-web;
+        }
+      }
+
+      .component-terms-privacy {
+        margin-top: $gu-v-spacing;
+      }
+
       @include mq($from: desktop) {
         margin-right: $gu-h-spacing/2;
         width: 920px;
-        height: 270px;
+        height: 286px;
 
         .component-double-heading {
           margin-bottom: 0;
@@ -287,29 +297,34 @@
 
         .component-bundle__content {
           p {
-            float: left;
-            width: 400px;
+            margin-bottom: 0;
           }
+        }
+
+        .component-terms-privacy {
+          font-size: 16px;
+          width: 500px;
+          margin-top: 0;
         }
 
         .component-contrib-amounts {
           position: absolute;
           top: $gu-v-spacing/2;
           right: $gu-h-spacing/2;
-          width: 500px;
+          width: 280px;
         }
 
         .component-cta-link {
-          margin-left: 415px;
-          width: 465px;
+          margin-left: 640px;
+          width: 240px;
           svg {
-            left: 479px;
+            left: 250px;
           }
         }
 
         .component-paypal-contribution-button {
-          margin-left: 415px;
-          width: 507px;
+          margin-left: 640px;
+          width: 280px;
         }
 
       }
