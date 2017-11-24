@@ -46,7 +46,7 @@ function getPaperItems() {
 
   if (inOfferPeriod()) { return [offerItem, ...items]; }
 
-  return [items[0], { heading: 'Save money on the retail price' }, items[1]];
+  return [items[0], saveMoneyOnRetailPrice, items[1]];
 }
 
 function getPaperItemsForStructureTest() {
