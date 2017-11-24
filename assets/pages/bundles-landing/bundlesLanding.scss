@@ -288,7 +288,7 @@
         .component-bundle__content {
           p {
             float: left;
-            width: 600px;
+            width: 400px;
           }
         }
 
@@ -296,20 +296,20 @@
           position: absolute;
           top: $gu-v-spacing/2;
           right: $gu-h-spacing/2;
-          width: 300px;
+          width: 500px;
         }
 
         .component-cta-link {
-          margin-left: 615px;
-          width: 271px;
+          margin-left: 415px;
+          width: 465px;
           svg {
-            left: 279px;
+            left: 479px;
           }
         }
 
         .component-paypal-contribution-button {
-          margin-left: 615px;
-          width: 307px;
+          margin-left: 415px;
+          width: 507px;
         }
 
       }
