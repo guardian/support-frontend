@@ -4,7 +4,7 @@ import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalRefer
 
 object PaymentMethodExtensions {
   implicit class PaymentMethodExtension[T <: PaymentMethod](self: T) {
-    def toFriendlyString = self match {
+    def toFriendlyString: String = self match {
       case _: CreditCardReferenceTransaction => "Stripe"
       case _: PayPalReferenceTransaction => "PayPal"
     }

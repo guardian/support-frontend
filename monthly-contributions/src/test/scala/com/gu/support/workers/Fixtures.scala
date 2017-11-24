@@ -16,7 +16,7 @@ object Fixtures {
   val useEncryption = false
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false)).asJson.noSpaces.asInputStream
+    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil)).asJson.noSpaces.asInputStream
 
   val userJson =
     s"""

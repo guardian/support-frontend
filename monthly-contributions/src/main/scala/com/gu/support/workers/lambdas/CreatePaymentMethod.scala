@@ -16,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
+    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
@@ -25,9 +25,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
-      _ <- putCloudWatchMetrics(paymentMethod.value.toFriendlyString)
+      _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)
     } yield HandlerResult(
-      getCreateSalesforceContactState(state, paymentMethod.value),
+      getCreateSalesforceContactState(state, paymentMethod),
       requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
     )
   }
