@@ -13,6 +13,12 @@ function inOfferPeriod(): boolean {
 }
 
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
+const saveMoneyOnRetailPrice = { heading: 'Save money on the retail price' };
+const getAllBenefits = { heading: 'Get all the benefits of a digital subscription' };
+const chooseYourPackage = {
+  heading: 'Choose your package and delivery method',
+  text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+};
 
 function getDigiPackItems() {
   const items = [
@@ -34,13 +40,8 @@ function getDigiPackItems() {
 
 function getPaperItems() {
   const items = [
-    {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-    {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
-    },
+    chooseYourPackage,
+    getAllBenefits,
   ];
 
   if (inOfferPeriod()) { return [offerItem, ...items]; }
@@ -49,33 +50,21 @@ function getPaperItems() {
 }
 
 function getPaperItemsForStructureTest() {
-  const items = [
-    {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-  ];
+  if (inOfferPeriod()) { return [offerItem, chooseYourPackage]; }
 
-  if (inOfferPeriod()) { return [offerItem, ...items]; }
-
-  return [items[0], { heading: 'Save money on the retail price' }];
+  return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
 function getPaperDigitalItemsForStructureTest() {
 
   const items = [
-    {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-    {
-      heading: 'Get all the benefits of a digital subscription',
-    },
+    chooseYourPackage,
+    getAllBenefits,
   ];
 
   if (inOfferPeriod()) { return [offerItem, ...items]; }
 
-  return [items[0], { heading: 'Save money on the retail price' }, items[1]];
+  return [items[0], saveMoneyOnRetailPrice, items[1]];
 }
 
 export {
