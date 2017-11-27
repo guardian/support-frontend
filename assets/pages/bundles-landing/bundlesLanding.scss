@@ -130,8 +130,6 @@
 
     .bundles__content--structure-test{
       background-color: gu-colour(guardian-brand);
-      border-top: solid 1px gu-colour(guardian-brand-light);
-      border-bottom: solid 1px gu-colour(guardian-brand-light);
     }
 
     .bundles__divider {
@@ -298,7 +296,7 @@
           font-family: $gu-text-sans-web;
 
           @include mq($from: desktop) {
-            width: 475px;
+            width: 295px;
           }
 
           @include mq($from: tablet, $until: desktop) {
@@ -366,28 +364,28 @@
 
         .component-terms-privacy {
           line-height: 16px;
-          width: 500px;
+          width: 300px;
           margin-top: 0;
         }
 
         .component-contrib-amounts {
           position: absolute;
           top: $gu-v-spacing/2;
-          right: $gu-h-spacing/2;
-          width: 400px;
+          right: 162px;
+          width: 450px;
         }
 
         .component-cta-link {
-          margin-left: 525px;
-          width: 355px;
+          margin-left: 318px;
+          width: 411px;
           svg {
-            left: 365px;
+            left: 421px;
           }
         }
 
         .component-paypal-contribution-button {
-          margin-left: 525px;
-          width: 395px;
+          margin-left: 318px;
+          width: 450px;
         }
 
       }
@@ -494,6 +492,7 @@
   }
 
   .bundles--structure-test {
+    background-color: gu-colour(guardian-brand-dark);
     .bundles__cross-product {
       margin-top: 0;
       border-top: 0;
