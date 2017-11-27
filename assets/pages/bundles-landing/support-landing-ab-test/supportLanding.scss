@@ -240,7 +240,7 @@
     .component-cta-link {
       height: 54px;
       line-height: 54px;
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       color: gu-colour(neutral-1);
       font-size: 14px;
       font-weight: bold;
@@ -251,7 +251,7 @@
       margin-top: $gu-v-spacing * 2;
 
       &:hover {
-        background-color: darken(gu-colour(comment-main-2), 5%);
+        background-color: gu-colour(light-yellow);
       }
 
       @include mq($from: tablet) {
@@ -322,7 +322,7 @@
     }
 
     .component-radio-toggle__input:checked+.component-radio-toggle__label {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       font-weight: bold;
       color: gu-colour(neutral-1);
     }
@@ -337,7 +337,7 @@
 
     .component-radio-toggle {
       display: inline;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       border-radius: 600px;
       padding: 13px 0;
     }
@@ -363,7 +363,7 @@
     .component-radio-toggle__label {
       display: inline-block;
       text-align: center;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       line-height: 42px;
       width: 42px;
       height: 42px;
@@ -387,7 +387,7 @@
 
     .component-number-input {
       background-color: #fff;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       padding: 0;
       margin: 0;
       height: 42px;
@@ -404,7 +404,7 @@
     }
 
     .component-number-input--selected {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
 
       .component-number-input__label {
         color: gu-colour(neutral-1);
@@ -613,7 +613,7 @@
       }
 
       button {
-        background-color: gu-colour(neutral-6);
+        background-color: gu-colour(multimedia-main-2);
         vertical-align: middle;
 
         svg {
@@ -628,7 +628,7 @@
         text-decoration: none;
 
         button {
-          background-color: gu-colour(multimedia-main-2);
+          background-color: gu-colour(light-yellow);
         }
       }
     }
@@ -1179,7 +1179,7 @@
   }
 
   .other-ways-card-new-design__image {
-    border-bottom: 2px solid gu-colour(comment-main-2);
+    border-bottom: 2px solid gu-colour(multimedia-main-2);
 
     .component-grid-image {
       display: block;
@@ -1195,7 +1195,7 @@
     }
 
     button {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       margin-right: $gu-h-spacing / 2;
     }
 
