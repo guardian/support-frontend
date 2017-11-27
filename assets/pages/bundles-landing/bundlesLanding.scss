@@ -88,6 +88,23 @@
 
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
+    .bundles__title {
+      color: #fff;
+      font-size: 28px;
+      line-height: 32px;
+      font-weight: 900;
+      font-family: $gu-egyptian-web;
+      padding-top: $gu-v-spacing * 2;
+      padding-bottom: $gu-v-spacing/2;
+      @include mq($from: desktop) {
+        margin-left: $gu-h-spacing/2;
+      }
+    }
+
+    .bundles__title:nth-child(1) {
+      padding-top: $gu-v-spacing;
+    }
+
     .bundles__content {
       background-color: gu-colour(guardian-brand-dark);
       position: relative;
@@ -111,6 +128,10 @@
       }
     }
 
+    .bundles__content--structure-test{
+      background-color: gu-colour(guardian-brand);
+    }
+
     .bundles__divider {
       height: $gu-v-spacing;
       width: 100%;
@@ -130,6 +151,38 @@
         display: inline-block;
         vertical-align: top;
         position: relative;
+      }
+    }
+
+    .component-bundle--structure-test {
+      @include mq($from: desktop) {
+        height: 380px;
+        border-top: 2px gu-colour(news-support-1) solid;
+      }
+    }
+
+    .component-bundle--contributions.component-bundle--structure-test.component-bundle--structure-one-off {
+      .component-double-heading {
+        @include mq($from: desktop) {
+          display: none;
+        }
+      }
+
+      .component-bundle__content {
+        p {
+          @include mq($from: tablet, $until: desktop) {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width:300px;
+          }
+        }
+      }
+    }
+
+    .component-bundle--structure-test.component-bundle--black-friday {
+      @include mq($from: desktop) {
+        height: 440px;
       }
     }
 
@@ -169,6 +222,12 @@
         top: 15px;
         right: 12px;
       }
+    }
+
+    .paper-digi-sub,
+    .paper-sub,
+    .digital-sub {
+      margin-top: 0;
     }
 
     @include mq($from: phablet, $until: desktop) {
@@ -243,6 +302,118 @@
       }
     }
 
+    .component-bundle--contributions.component-bundle--structure-test {
+      border-top: 2px gu-colour(neutral-1) solid;
+
+      .component-bundle__content {
+        p {
+          font-family: $gu-text-sans-web;
+
+          @include mq($from: desktop) {
+            width: 295px;
+          }
+
+          @include mq($from: tablet, $until: desktop) {
+            position: absolute;
+            left: 10px;
+            top: 35px;
+            width:300px;
+          }
+
+          @include mq($from: phablet, $until: tablet) {
+            position: absolute;
+            left: 10px;
+            top: 35px;
+            width:290px;
+          }
+        }
+
+      }
+
+      .component-terms-privacy {
+        font-size: 12px;
+        line-height: 16px;
+
+        @include mq($from: desktop) {
+          position: absolute;
+          bottom: 10px;
+        }
+
+        @include mq($from: tablet, $until: desktop) {
+          position: absolute;
+          left: 10px;
+          bottom: 5px;
+          width:300px;
+        }
+
+        @include mq($from: phablet, $until: tablet) {
+          position: absolute;
+          left: 10px;
+          bottom: 5px;
+          width: 280px;
+        }
+
+        @include mq($until: tablet) {
+          padding-top: 5px;
+        }
+      }
+
+      @include mq($from: desktop) {
+        margin-right: $gu-h-spacing/2;
+        width: 920px;
+        height: 286px;
+
+        .component-double-heading {
+          margin-bottom: 0;
+          width: 100%;
+          float: left;
+        }
+
+        .component-bundle__content {
+          p {
+            margin-bottom: 0;
+          }
+        }
+
+        .component-terms-privacy {
+          line-height: 16px;
+          width: 300px;
+          margin-top: 0;
+        }
+
+        .component-contrib-amounts {
+          position: absolute;
+          top: $gu-v-spacing/2;
+          right: 162px;
+          width: 450px;
+        }
+
+        .component-cta-link {
+          margin-left: 318px;
+          width: 411px;
+
+          svg {
+            left: 421px;
+          }
+        }
+
+        .component-cta-link.contribute-monthly {
+          bottom: $gu-v-spacing;
+        }
+
+        .component-cta-link.contribute-one_off {
+          bottom: $gu-v-spacing * 6;
+        }
+
+        .component-paypal-contribution-button {
+          margin-left: 318px;
+          width: 450px;
+          bottom: $gu-v-spacing;
+        }
+
+      }
+    }
+
     .component-paypal-contribution-button {
       width: 100%;
       margin-top: $gu-v-spacing;
@@ -259,7 +430,7 @@
       }
     }
 
-    .component-bundle--digital, .component-bundle--paper {
+    .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
         background-color: #fff;
 
         @include mq($until: desktop) {
@@ -294,6 +465,12 @@
       .component-cta-link.paper-sub {
         @include mq($from: desktop) {
           bottom: $gu-v-spacing * 6;
+        }
+      }
+
+      .component-cta-link.paper-sub.structure-test {
+        @include mq($from: desktop) {
+          bottom: $gu-v-spacing;
         }
       }
 
@@ -337,10 +514,20 @@
 
   }
 
+  .bundles--structure-test {
+    background-color: gu-colour(guardian-brand-dark);
+    .bundles__cross-product {
+      margin-top: 0;
+      border-top: 0;
+      padding-top: $gu-v-spacing;
+    }
+    padding-bottom: $gu-v-spacing * 3;
+  }
+
   .bundles__cross-product {
     border-top: 1px solid gu-colour(news-support-1);
-    margin: 0 auto;
-    margin-top: $gu-v-spacing * 2;
+    margin: $gu-v-spacing * 2 auto 0;
+
 
     @include mq($from: desktop) {
       width: 940px;

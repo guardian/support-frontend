@@ -14,6 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
+import BundlesGBStructureTest from './components/bundlesGBStructureTest';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
@@ -35,12 +36,15 @@ const store = pageInit(
 
 // ----- Render ----- //
 
+const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
+const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+
 const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
       <Introduction />
-      <Bundles />
+      {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />
       <Footer privacyPolicy disclaimer />

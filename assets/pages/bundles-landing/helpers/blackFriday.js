@@ -1,19 +1,31 @@
-import { getQueryParameter } from '../../../helpers/url';
+// @flow
 
-function inOfferPeriod() {
+import { getQueryParameter } from 'helpers/url';
+
+function inOfferPeriod(): boolean {
   // The offer is valid between 24th November & 3rd December 2017
   const now = Date.now();
   // Days are 1 based, months are 0 based - WHY??
   const startTime = new Date(2017, 10, 24, 0, 0).getTime();
   const endTime = new Date(2017, 11, 4, 0, 0).getTime();
 
-  return (now > startTime && now < endTime) || getQueryParameter('black_friday', false);
+  return (now > startTime && now < endTime) || getQueryParameter('black_friday') === 'true' || false;
 }
 
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
+const saveMoneyOnRetailPrice = { heading: 'Save money on the retail price' };
+const getAllBenefits = { heading: 'Get all the benefits of a digital subscription' };
+const chooseYourPackage = {
+  heading: 'Choose your package and delivery method',
+  text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+};
+const paperItems = [
+  chooseYourPackage,
+  getAllBenefits,
+];
 
 function getDigiPackItems() {
-  const originalList = [
+  const items = [
     {
       heading: 'Premium experience on the Guardian app',
       text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
@@ -25,29 +37,31 @@ function getDigiPackItems() {
   ];
 
   if (inOfferPeriod()) {
-    return [offerItem, ...originalList];
+    return [offerItem, ...items];
   }
-  return originalList;
+  return items;
 }
 
 function getPaperItems() {
-  const items = [
-    {
-      heading: 'Choose your package and delivery method',
-      text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-    },
-    {
-      heading: 'Get all the benefits of a digital subscription with paper+digital',
-    },
-  ];
+  if (inOfferPeriod()) { return [offerItem, ...paperItems]; }
 
-  if (inOfferPeriod()) { return [offerItem, ...items]; }
+  return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
+}
 
-  return [items[0], { heading: 'Save money on the retail price' }, items[1]];
+function getPaperItemsForStructureTest() {
+  if (inOfferPeriod()) { return [offerItem, chooseYourPackage]; }
+
+  return [chooseYourPackage, saveMoneyOnRetailPrice];
+}
+
+function getPaperDigitalItemsForStructureTest() {
+  return getPaperItems();
 }
 
 export {
   inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
+  getPaperItemsForStructureTest,
+  getPaperDigitalItemsForStructureTest,
 };
