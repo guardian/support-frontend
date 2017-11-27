@@ -328,7 +328,6 @@
           }
         }
 
-
       }
 
       .component-terms-privacy {
@@ -392,15 +391,24 @@
         .component-cta-link {
           margin-left: 318px;
           width: 411px;
-          bottom: $gu-v-spacing;
+
           svg {
             left: 421px;
           }
         }
 
+        .component-cta-link.contribute-monthly {
+          bottom: $gu-v-spacing;
+        }
+
+        .component-cta-link.contribute-one_off {
+          bottom: $gu-v-spacing * 6;
+        }
+
         .component-paypal-contribution-button {
           margin-left: 318px;
           width: 450px;
+          bottom: $gu-v-spacing;
         }
 
       }
