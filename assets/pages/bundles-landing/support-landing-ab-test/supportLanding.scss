@@ -517,13 +517,13 @@
   // ----- Behind The Scenes
 
   .behind-the-scenes-new-design {
-    background-color: darken(#fff, 5%);
+    background-color: darken(gu-colour(neutral-6), 5%);
   }
 
   .behind-the-scenes-new-design__content {
     background-color: gu-colour(neutral-6);
     color: gu-colour(neutral-1);
-    border-top: 1px solid gu-colour(neutral-4);
+    border-top: none;
     padding-bottom: $gu-v-spacing * 2;
     position: relative;
     overflow: hidden;
@@ -688,7 +688,7 @@
 
   .why-support-new-design__content {
     background-color: #fff;
-    border-top: 1px solid gu-colour(neutral-4);
+    border-top: none;
   }
 
   .why-support-new-design__wrapper {
