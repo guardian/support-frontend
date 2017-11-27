@@ -1082,11 +1082,11 @@
         @extend .floating-semicircle;
         content: " ";
         position: absolute;
-        top: -27px;
+        top: -26px;
         right: 0;
 
         @include mq($from: tablet) {
-          top: -32px;
+          top: -31px;
         }
 
         @include mq($from: desktop) {
@@ -1112,6 +1112,7 @@
 
   .ready-new-design__content {
     background-color: #fff;
+    padding-top: 0;
     padding-bottom: $gu-v-spacing * 3;
   }
 
@@ -1129,6 +1130,10 @@
     @include mq($from: tablet) {
       font-size: 36px;
       line-height: 40px;
+    }
+
+    @include mq($from: desktop) {
+      padding-top: $gu-v-spacing / 2;
     }
   }
 
