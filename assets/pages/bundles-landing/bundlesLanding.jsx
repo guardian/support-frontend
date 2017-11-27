@@ -47,7 +47,7 @@ const content = (
       {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />
-      <Footer privacyPolicy />
+      <Footer privacyPolicy disclaimer />
     </div>
   </Provider>
 );

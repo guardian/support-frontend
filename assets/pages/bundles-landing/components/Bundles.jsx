@@ -10,6 +10,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { contribCamelCase } from 'helpers/contributions';
 
@@ -286,14 +287,12 @@ function ContributionBundle(props: PropTypes) {
         onNumberInputKeyPress={onClick}
         {...props}
       />
-
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
         text={contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}
       />
-
       {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
         <PayPalContributionButton
           buttonText={contribAttrs.paypalCta.text}
@@ -307,7 +306,7 @@ function ContributionBundle(props: PropTypes) {
           canClick={!props.contribError}
         />
       }
-
+      <TermsPrivacy country={props.isoCountry} />
     </Bundle>
   );
 
