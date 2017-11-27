@@ -1059,14 +1059,15 @@
 
     .component-cta-link {
       background-color: gu-colour(guardian-brand-dark);
-      width: 250px;
-      padding: 18px 24px;
-      padding-top: 18px;
-      padding-bottom: 18px;
+      padding: 15px 24px;
+
+      @include mq($from: tablet) {
+        width: 250px;
+      }
 
       svg {
-        left: 250px;
         top: 12px;
+        right: 12px;
         height: 60%;
       }
 
