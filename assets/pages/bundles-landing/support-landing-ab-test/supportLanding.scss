@@ -211,6 +211,7 @@
 
   .contribute-new-design__content {
     background-color: #fff;
+    font-family: $gu-text-sans-web;
     border-color: gu-colour(light-yellow);
     color: gu-colour(neutral-2);
     position: relative;
@@ -397,6 +398,7 @@
       font-size: 14px;
       line-height: 36px;
       color: gu-colour(neutral-1);
+      font-family: $gu-text-sans-web;
     }
 
     .component-number-input__label {
