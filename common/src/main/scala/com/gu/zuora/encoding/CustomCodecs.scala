@@ -36,6 +36,7 @@ trait ModelsCodecs {
 
   implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
 
+  //noinspection ConvertExpressionToSAM
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
     override final def apply(a: PaymentMethod): Json = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
@@ -72,10 +73,7 @@ trait ModelsCodecs {
 
   implicit val RequestInfoCodec: Codec[RequestInfo] = deriveCodec
 
-  implicit val jsonWrapperDecoder: Decoder[JsonWrapper] = Decoder
-    .forProduct3("state", "error", "requestInfo")(JsonWrapper.apply)
-    .or(Decoder.forProduct3("state", "error", "encrypted")((s: String, e: Option[ExecutionError], en: Boolean) =>
-      JsonWrapper(s, e, RequestInfo(en, testUser = false, failed = false, Nil))))
+  implicit val jsonWrapperDecoder: Codec[JsonWrapper] = deriveCodec
 
   implicit val jsonWrapperEncoder: Encoder[JsonWrapper] = deriveEncoder
 
