@@ -11,6 +11,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -195,6 +196,16 @@ const getContribAttrs = (
 
 };
 
+function TermsAndPrivacy(props: { country: IsoCountry, contribType: Contrib }) {
+
+  if (props.contribType === 'ONE_OFF') {
+    return <TermsPrivacy country={props.country} />;
+  }
+
+  return null;
+
+}
+
 
 // ----- Component ----- //
 
@@ -237,6 +248,7 @@ function ContributionsBundle(props: PropTypes) {
       />
       {showPayPal(props)}
       {showPayPalError(props)}
+      <TermsAndPrivacy country={props.isoCountry} contribType={props.contribType} />
     </Bundle>
   );
 

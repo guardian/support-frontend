@@ -43,7 +43,7 @@ const content = (
       <Bundles />
       <WhySupport />
       <WaysOfSupport />
-      <Footer privacyPolicy />
+      <Footer privacyPolicy disclaimer />
     </div>
   </Provider>
 );
@@ -58,6 +58,5 @@ const content = (
     }));
   } catch (e) { return null; }
 }());
-
 
 renderPage(content, 'bundles-landing-page');
