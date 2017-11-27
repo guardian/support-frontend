@@ -9,6 +9,8 @@ import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
 import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
+import { validateEmailAddress } from 'helpers/utilities';
+
 import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -54,12 +56,13 @@ function getStatusMessage(isFormEmpty: boolean, error: ?string): Node {
 // If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(
   isFormEmpty: boolean,
+  validEmail: Boolean,
   error: ?string => void,
 ): Function {
 
   return (): boolean => {
 
-    if (!isFormEmpty) {
+    if (!isFormEmpty && validEmail) {
       if (error) {
         error(null);
       }
@@ -67,7 +70,11 @@ function formValidation(
     }
 
     if (error) {
-      error('Please fill in all the fields above.');
+      if (isFormEmpty) {
+        error('Please fill in all the fields above.');
+      } else {
+        error('Please fill in a valid email address.');
+      }
     }
     return false;
   };
@@ -101,7 +108,11 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
         )}
-        canOpen={formValidation(props.isFormEmpty, props.checkoutError)}
+        canOpen={formValidation(
+          props.isFormEmpty,
+          validateEmailAddress(props.email),
+          props.checkoutError,
+        )}
         currency={props.currency}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
