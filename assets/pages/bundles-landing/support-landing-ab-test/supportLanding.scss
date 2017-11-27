@@ -3,7 +3,7 @@
   // ----- General
 
   .component-info-section {
-    border-top: 2px solid gu-colour(light-blue);
+    border-top: 1px solid gu-colour(light-blue);
   }
 
   .component-info-section__heading {
@@ -640,7 +640,7 @@
     font-size: 36px;
     line-height: 44px;
     color: gu-colour(neutral-1);
-    border-top: 2px solid gu-colour(light-yellow);
+    border-top: 1px solid gu-colour(light-yellow);
   }
 
   .subscription-bundle__price {
@@ -1043,7 +1043,7 @@
     font-size: 18px;
     line-height: 24px;
     color: gu-colour(neutral-1);
-    border-top: 1px dotted gu-colour(multimedia-main-2);
+    border-top: 1px solid gu-colour(light-yellow);
   }
 
   .why-support-new-design__copy--no-border {
@@ -1179,7 +1179,7 @@
   }
 
   .other-ways-card-new-design__image {
-    border-bottom: 2px solid gu-colour(multimedia-main-2);
+    border-bottom: 1px solid gu-colour(multimedia-main-2);
 
     .component-grid-image {
       display: block;
