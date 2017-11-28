@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
+import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.Status
@@ -54,6 +55,11 @@ class FailureHandler(emailService: EmailService)
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
         "There was an error processing your payment. Please\u00a0try\u00a0again."
       )
+      case Some(se @ StripeError(_, _, Some("card_declined"), _, _)) => returnState(
+        state,
+        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}"),
+        "There was an error processing your payment. Please\u00a0try\u00a0again."
+      )
       case _ => returnState(state, requestInfo.copy(failed = true))
     }
 
@@ -72,9 +78,15 @@ class FailureHandler(emailService: EmailService)
       ), requestInfo
     )
 
-  private def getZuoraError(executionError: ExecutionError): Option[ZuoraErrorResponse] = for {
-    retryException <- decode[ErrorJson](executionError.Cause).toOption
-    underlyingException <- retryException.cause
-    zuoraError <- ZuoraErrorResponse.fromErrorJson(underlyingException)
-  } yield zuoraError
+  private def getZuoraError(executionError: ExecutionError): Option[Throwable] = {
+    val errorJson = for {
+      errorJson <- decode[ErrorJson](executionError.Cause).toOption
+    } yield errorJson
+
+    val result = errorJson.flatMap(getZuoraOrStripeError)
+    result
+  }
+
+  private def getZuoraOrStripeError(errorJson: ErrorJson): Option[Throwable] =
+    errorJson.cause.flatMap(ZuoraErrorResponse.fromErrorJson) orElse decode[StripeError](errorJson.errorMessage).toOption
 }

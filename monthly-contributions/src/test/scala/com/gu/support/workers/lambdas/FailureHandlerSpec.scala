@@ -52,6 +52,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
+    logger.info(outState.right.get.requestInfo.messages.head)
   }
 
   it should "return a non failed JsonWrapper for Stripe payment errors" in {
@@ -63,6 +64,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
+    logger.info(outState.right.get.requestInfo.messages.head)
   }
 
   it should "return a Status.Failure for a Zuora card declined error" in {

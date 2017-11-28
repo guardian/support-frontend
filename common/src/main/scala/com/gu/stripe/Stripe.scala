@@ -32,9 +32,9 @@ object Stripe {
       s"message: $message; type: ${`type`}; code: ${code.getOrElse("")}; decline_code: ${decline_code.getOrElse("")}; param: ${param.getOrElse("")}"
 
     def asRetryException: RetryException = `type` match {
-      case message @ ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(this.asJson.spaces2, cause = this)
-      case message @ "authentication_error" => new RetryLimited(this.asJson.spaces2, cause = this)
-      case message @ ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(this.asJson.spaces2, cause = this)
+      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(this.asJson.noSpaces, cause = this)
+      case "authentication_error" => new RetryLimited(this.asJson.noSpaces, cause = this)
+      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(this.asJson.noSpaces, cause = this)
     }
   }
 
