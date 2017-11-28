@@ -81,7 +81,8 @@ class CreatePaymentMethodSpec extends AsyncFlatSpec with Matchers with MockitoSu
     }
   }
 
-  "StripeService" should "throw a card_declined StripeError" in {
+
+  "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
     val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds))
     val ex = recoverToExceptionIf[StripeError] {
       service.createCustomer("Test", "tok_chargeDeclined")
