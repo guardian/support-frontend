@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.Fixtures.{cardDeclinedJson, failureJson}
+import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
 import com.gu.support.workers.model.JsonWrapper
@@ -43,23 +43,34 @@ class FailureHandlerSpec extends LambdaSpec {
     outState.right.get.requestInfo.failed should be(true)
   }
 
-  "FailureHandler lambda" should "return a non failed JsonWrapper for payment errors" in {
+  it should "return a non failed JsonWrapper for Zuora payment errors" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
 
-    failureHandler.handleRequest(cardDeclinedJson.asInputStream, outStream, context)
+    failureHandler.handleRequest(cardDeclinedJsonZuora.asInputStream, outStream, context)
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
   }
 
-  it should "return a Status.Failure for a card declined error" in {
+  it should "return a non failed JsonWrapper for Stripe payment errors" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
 
-    failureHandler.handleRequest(cardDeclinedJson.asInputStream, outStream, context)
+    failureHandler.handleRequest(cardDeclinedJsonStripe.asInputStream, outStream, context)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInfo.failed should be(false)
+  }
+
+  it should "return a Status.Failure for a Zuora card declined error" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(cardDeclinedJsonZuora.asInputStream, outStream, context)
 
     val outState = Encoding.in[CompletedState](outStream.toInputStream)
     outState.isSuccess should be(true)
