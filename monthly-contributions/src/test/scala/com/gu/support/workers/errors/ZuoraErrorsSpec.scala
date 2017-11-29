@@ -2,18 +2,23 @@ package com.gu.support.workers.errors
 
 import java.io.ByteArrayOutputStream
 
+import cats.syntax.either._
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.support.workers.Fixtures.{createZuoraSubscriptionJson, wrapFixture}
-import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
+import com.gu.support.workers.model.JsonWrapper
+import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
 import com.gu.zuora.ZuoraService
+import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
 import com.gu.zuora.model.response.ZuoraErrorResponse
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.parser.decode
 import org.scalatest.RecoverMethods
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -63,6 +68,18 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     }
 
     server.shutdown()
+  }
+
+  "JsonWrapped error" should "deserialise correctly" in {
+
+    val zuoraErrorResponse = for {
+      wrapper <- decode[JsonWrapper](Fixtures.cardDeclinedJsonZuora).toOption
+      executionError <- wrapper.error
+      errorJson <- decode[ErrorJson](executionError.Cause).toOption
+      zuoraErrorResponse <- decode[ZuoraErrorResponse](errorJson.errorMessage).toOption
+    } yield zuoraErrorResponse
+
+    zuoraErrorResponse.get.errors.head.Code should be ("TRANSACTION_FAILED")
   }
 
   private val timeoutServices = errorServices(None, 1.milliseconds)
