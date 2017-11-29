@@ -79,7 +79,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
       zuoraErrorResponse <- decode[ZuoraErrorResponse](errorJson.errorMessage).toOption
     } yield zuoraErrorResponse
 
-    zuoraErrorResponse.get.errors.head.Code should be ("TRANSACTION_FAILED")
+    zuoraErrorResponse.get.errors.head.Code should be("TRANSACTION_FAILED")
   }
 
   private val timeoutServices = errorServices(None, 1.milliseconds)

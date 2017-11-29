@@ -85,7 +85,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
   }
 
   "JsonWrapped error" should "deserialise correctly" in {
-    val stripeError = for{
+    val stripeError = for {
       wrapper <- decode[JsonWrapper](Fixtures.cardDeclinedJsonStripe).toOption
       executionError <- wrapper.error
       errorJson <- decode[ErrorJson](executionError.Cause).toOption

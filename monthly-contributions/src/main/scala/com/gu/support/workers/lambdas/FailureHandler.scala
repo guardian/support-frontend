@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class FailureHandler(emailService: EmailService)
-  extends FutureHandler[FailureHandlerState, CompletedState]
+    extends FutureHandler[FailureHandlerState, CompletedState]
     with LazyLogging {
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
@@ -51,17 +51,16 @@ class FailureHandler(emailService: EmailService)
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) =
     error.flatMap(extractUnderlyingError) match {
-      case Some(ZuoraErrorResponse(_, List(ze@ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
+      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
-      case Some(se@StripeError(_, _, Some("card_declined"), _, _)) => returnState(
+      case Some(se @ StripeError(_, _, Some("card_declined"), _, _)) => returnState(
         state,
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
       )
       case _ => returnState(state, requestInfo.copy(failed = true),
-        "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
-      )
+        "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.")
     }
 
   private def returnState(

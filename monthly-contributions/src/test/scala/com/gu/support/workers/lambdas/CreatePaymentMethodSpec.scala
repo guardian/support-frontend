@@ -79,7 +79,6 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec {
     }
   }
 
-
   "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
     val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds))
     val ex = recoverToExceptionIf[StripeError] {
