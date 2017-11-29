@@ -53,21 +53,21 @@ class FailureHandler(emailService: EmailService)
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze@ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
-        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
-        "There was an error processing your payment. Please\u00a0try\u00a0again."
+        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
       case Some(se@StripeError(_, _, Some("card_declined"), _, _)) => returnState(
         state,
-        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}"),
-        "There was an error processing your payment. Please\u00a0try\u00a0again."
+        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
       )
-      case _ => returnState(state, requestInfo.copy(failed = true))
+      case _ => returnState(state, requestInfo.copy(failed = true),
+        "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
+      )
     }
 
   private def returnState(
     state: FailureHandlerState,
     requestInfo: RequestInfo,
-    message: String = "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
+    message: String = "There was an error processing your payment. Please\u00a0try\u00a0again."
   ) =
     HandlerResult(
       CompletedState(
