@@ -13,13 +13,14 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.parser._
+import io.circe.Decoder
+import io.circe.parser.decode
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class FailureHandler(emailService: EmailService)
-    extends FutureHandler[FailureHandlerState, CompletedState]
+  extends FutureHandler[FailureHandlerState, CompletedState]
     with LazyLogging {
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
 
@@ -49,13 +50,13 @@ class FailureHandler(emailService: EmailService)
   ))
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) =
-    error.flatMap(getZuoraError) match {
-      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
+    error.flatMap(extractUnderlyingError) match {
+      case Some(ZuoraErrorResponse(_, List(ze@ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
         "There was an error processing your payment. Please\u00a0try\u00a0again."
       )
-      case Some(se @ StripeError(_, _, Some("card_declined"), _, _)) => returnState(
+      case Some(se@StripeError(_, _, Some("card_declined"), _, _)) => returnState(
         state,
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}"),
         "There was an error processing your payment. Please\u00a0try\u00a0again."
@@ -78,15 +79,10 @@ class FailureHandler(emailService: EmailService)
       ), requestInfo
     )
 
-  private def getZuoraError(executionError: ExecutionError): Option[Throwable] = {
-    val errorJson = for {
-      errorJson <- decode[ErrorJson](executionError.Cause).toOption
-    } yield errorJson
+  private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {
+    errorJson <- decode[ErrorJson](executionError.Cause).toOption
+    result <- tryToDecode[ZuoraErrorResponse](errorJson) orElse tryToDecode[StripeError](errorJson)
+  } yield result
 
-    val result = errorJson.flatMap(getZuoraOrStripeError)
-    result
-  }
-
-  private def getZuoraOrStripeError(errorJson: ErrorJson): Option[Throwable] =
-    errorJson.cause.flatMap(ZuoraErrorResponse.fromErrorJson) orElse decode[StripeError](errorJson.errorMessage).toOption
+  private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] = decode[T](errorJson.errorMessage).toOption
 }
