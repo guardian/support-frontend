@@ -370,6 +370,11 @@ strong {
     background-color: gu-colour(comment-support-3);
 	}
 
+	.component-number-input__input::placeholder {
+    color: gu-colour(neutral-1);
+    opacity: 0.6;
+  }
+
 	.component-number-input__label {
 		top: 11px;
 	}
@@ -379,6 +384,11 @@ strong {
 
     .component-number-input__input, .component-number-input__label {
 			color: #fff;
+			&::placeholder {
+        font-weight: normal;
+        color: #fff;
+        opacity: 0.4;
+      }
 		}
 	}
 
