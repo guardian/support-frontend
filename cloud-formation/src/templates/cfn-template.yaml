@@ -163,3 +163,23 @@ Resources:
       EvaluationPeriods: 1
       Statistic: Sum
     DependsOn: MonthlyContributionsPROD
+
+  TimeoutAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      AlarmName: !Sub Monthly Contributions Sign-Up Timeout in ${Stage}
+      AlarmDescription: An execution of the Monthly Contributions state machine has taken an excessively long time to complete
+      MetricName: ExecutionsTimedOut
+      Namespace: AWS/States
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref MonthlyContributionsPROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+    DependsOn: MonthlyContributionsPROD
