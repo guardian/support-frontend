@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
+import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.Status
@@ -12,7 +13,8 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.parser._
+import io.circe.Decoder
+import io.circe.parser.decode
 import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,19 +50,23 @@ class FailureHandler(emailService: EmailService)
   ))
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) =
-    error.flatMap(getZuoraError) match {
+    error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
-        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
-        "There was an error processing your payment. Please\u00a0try\u00a0again."
+        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
-      case _ => returnState(state, requestInfo.copy(failed = true))
+      case Some(se @ StripeError(_, _, Some("card_declined"), _, _)) => returnState(
+        state,
+        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
+      )
+      case _ => returnState(state, requestInfo.copy(failed = true),
+        "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.")
     }
 
   private def returnState(
     state: FailureHandlerState,
     requestInfo: RequestInfo,
-    message: String = "There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later."
+    message: String = "There was an error processing your payment. Please\u00a0try\u00a0again."
   ) =
     HandlerResult(
       CompletedState(
@@ -72,9 +78,10 @@ class FailureHandler(emailService: EmailService)
       ), requestInfo
     )
 
-  private def getZuoraError(executionError: ExecutionError): Option[ZuoraErrorResponse] = for {
-    retryException <- decode[ErrorJson](executionError.Cause).toOption
-    underlyingException <- retryException.cause
-    zuoraError <- ZuoraErrorResponse.fromErrorJson(underlyingException)
-  } yield zuoraError
+  private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {
+    errorJson <- decode[ErrorJson](executionError.Cause).toOption
+    result <- tryToDecode[ZuoraErrorResponse](errorJson) orElse tryToDecode[StripeError](errorJson)
+  } yield result
+
+  private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] = decode[T](errorJson.errorMessage).toOption
 }

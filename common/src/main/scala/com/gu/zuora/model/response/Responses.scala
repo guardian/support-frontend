@@ -34,7 +34,7 @@ object ZuoraErrorResponse {
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
-  def asRetryException: RetryException = new RetryNone(message = toString, cause = this)
+  def asRetryException: RetryException = new RetryNone(message = this.asJson.noSpaces, cause = this)
 
   override def toString: String = this.errors.toString()
 }

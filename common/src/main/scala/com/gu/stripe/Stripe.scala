@@ -2,8 +2,9 @@ package com.gu.stripe
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 
 object Stripe {
@@ -31,9 +32,9 @@ object Stripe {
       s"message: $message; type: ${`type`}; code: ${code.getOrElse("")}; decline_code: ${decline_code.getOrElse("")}; param: ${param.getOrElse("")}"
 
     def asRetryException: RetryException = `type` match {
-      case message @ ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(message, cause = this)
-      case message @ "authentication_error" => new RetryLimited(message, cause = this)
-      case message @ ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(message, cause = this)
+      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(this.asJson.noSpaces, cause = this)
+      case "authentication_error" => new RetryLimited(this.asJson.noSpaces, cause = this)
+      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(this.asJson.noSpaces, cause = this)
     }
   }
 

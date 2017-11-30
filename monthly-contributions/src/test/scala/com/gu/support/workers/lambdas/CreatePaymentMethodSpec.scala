@@ -3,12 +3,14 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.config.Configuration
+import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.Stripe.StripeList
+import com.gu.stripe.Stripe.{StripeError, StripeList}
 import com.gu.stripe.{Stripe, StripeService}
+import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
-import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
@@ -21,8 +23,9 @@ import org.mockito.Mockito._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
-class CreatePaymentMethodSpec extends LambdaSpec {
+class CreatePaymentMethodSpec extends AsyncLambdaSpec {
 
   "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" taggedAs IntegrationTest in {
     val createPaymentMethod = new CreatePaymentMethod()
@@ -74,6 +77,14 @@ class CreatePaymentMethodSpec extends LambdaSpec {
 
       val p = outStream.toClass[PaymentMethod](encrypted = false)
     }
+  }
+
+  "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
+    val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds))
+    val ex = recoverToExceptionIf[StripeError] {
+      service.createCustomer("Test", "tok_chargeDeclined")
+    }
+    ex.map(_.code should be(Some("card_declined")))
   }
 
   private lazy val mockServices = {
