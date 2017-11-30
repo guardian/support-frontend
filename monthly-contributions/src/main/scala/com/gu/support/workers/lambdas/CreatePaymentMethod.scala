@@ -7,6 +7,7 @@ import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.typesafe.scalalogging.LazyLogging
@@ -19,13 +20,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreatePaymentMethodState, RequestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
 
     for {
       paymentMethod <- createPaymentMethod(state.paymentFields, services)
-      _ <- putMetric(state.paymentFields)
-    } yield HandlerResult(getCreateSalesforceContactState(state, paymentMethod), RequestInfo)
+      _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)
+    } yield HandlerResult(
+      getCreateSalesforceContactState(state, paymentMethod),
+      requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+    )
   }
 
   private def createPaymentMethod(
@@ -33,15 +37,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     services: Services
   ) =
     paymentType match {
-      case Left(stripe) => createStripePaymentMethod(stripe, services.stripeService)
-      case Right(paypal) => createPayPalPaymentMethod(paypal, services.payPalService)
+      case Left(stripe) =>
+        createStripePaymentMethod(stripe, services.stripeService)
+      case Right(paypal) =>
+        createPayPalPaymentMethod(paypal, services.payPalService)
     }
-
-  private def putMetric(paymentType: Either[StripePaymentFields, PayPalPaymentFields]) =
-    if (paymentType.isLeft)
-      putCloudWatchMetrics("stripe")
-    else
-      putCloudWatchMetrics("paypal")
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
     CreateSalesforceContactState(
