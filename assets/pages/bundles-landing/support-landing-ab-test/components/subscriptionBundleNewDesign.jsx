@@ -40,8 +40,7 @@ export default function SubscriptionBundle(props: PropTypes) {
       <h3 className="subscription-bundle__heading">{props.heading}</h3>
       <h4 className="subscription-bundle__price">
         {props.from ? 'from ' : ''}
-        <span className="subscription-bundle__price-amount">£{props.price}</span>
-        <span className="subscription-bundle__price-period"> /&nbsp;month</span>
+        £{props.price}/month
       </h4>
       <p className="subscription-bundle__copy">
         <FeatureList listItems={props.copy} />
