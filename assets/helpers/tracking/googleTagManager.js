@@ -58,5 +58,6 @@ export function init() {
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
+    paymentMethod: storage.getSession('paymentMethod'),
   });
 }

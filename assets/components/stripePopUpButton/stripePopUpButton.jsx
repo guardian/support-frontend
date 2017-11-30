@@ -5,6 +5,7 @@
 import React from 'react';
 import { SvgCreditCard } from 'components/svg/svg';
 import type { Currency } from 'helpers/internationalisation/currency';
+import * as storage from 'helpers/storage';
 
 import {
   setupStripeCheckout,
@@ -46,6 +47,7 @@ const StripePopUpButton = (props: PropTypes) => {
       const testTokenId = 'tok_visa';
       props.callback(testTokenId);
     } else if (props.canOpen && props.canOpen()) {
+      storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);
     }
   };
