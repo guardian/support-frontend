@@ -269,8 +269,8 @@
 
     .component-paypal-contribution-button {
       height: 52px;
-      border-color: #012169;
-      color: #012169;
+      border-color: gu-colour(guardian-brand);
+      color: gu-colour(guardian-brand);
       font-size: 14px;
       font-family: $gu-text-sans-web;
       width: 100%;
@@ -292,6 +292,19 @@
 
       .paypal-p-logo-1 {
         fill: #009cde;
+      }
+
+      &:hover {
+        color: gu-colour(guardian-brand-light);
+        border-color: gu-colour(guardian-brand-light);
+
+        .svg-arrow-right-straight {
+          fill: gu-colour(guardian-brand-light);
+        }
+
+        .paypal-p-logo-0, .paypal-p-logo-1, .paypal-p-logo-2 {
+          opacity: 0.6;
+        }
       }
     }
   }
