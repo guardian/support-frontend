@@ -249,7 +249,7 @@
       padding-top: 0;
       padding-bottom: 0;
       box-sizing: border-box;
-      margin-top: $gu-v-spacing * 2;
+      margin-top: $gu-v-spacing;
 
       &:hover {
         background-color: gu-colour(light-yellow);
@@ -368,10 +368,8 @@
     margin-top: $gu-v-spacing;
 
     @include mq($until: phablet) {
-      border-top: 2px dotted gu-colour(neutral-3);
       width: 100%;
-      padding-top: $gu-v-spacing;
-      margin-top: $gu-v-spacing * 2;
+      margin-top: $gu-v-spacing;
     }
 
     .component-radio-toggle__label {
@@ -388,7 +386,7 @@
   .component-contribution-selection__custom-amount {
     vertical-align: top;
     margin-top: $gu-v-spacing * 2;
-    margin-bottom: $gu-v-spacing * 4;
+    margin-bottom: $gu-v-spacing * 3;
     display: block;
     position: relative;
 
@@ -461,7 +459,7 @@
   }
 
   .component-terms-privacy {
-    margin-top: $gu-v-spacing * 2;
+    margin-top: $gu-v-spacing;
   }
 
   .grave-error {
