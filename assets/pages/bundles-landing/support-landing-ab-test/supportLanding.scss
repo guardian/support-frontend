@@ -392,7 +392,7 @@
 
     @include mq($from: phablet) {
       display: inline-block;
-      margin-left: 24px;
+      margin-left: $gu-v-spacing;
       margin-top: $gu-v-spacing;
       margin-bottom: $gu-v-spacing * 2;
     }
@@ -448,13 +448,13 @@
 
   .component-contribution-selection--monthly {
     .component-number-input, .component-error-message {
-      width: 305px;
+      width: 317px;
     }
   }
 
   .component-contribution-selection--one-off {
     .component-number-input, .component-error-message {
-      width: 249px;
+      width: 261px;
     }
   }
 

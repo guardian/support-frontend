@@ -122,8 +122,7 @@ function errorMessage(
     case 'tooLittle':
       return `Please enter at least ${currency.glyph}${minContrib}`;
     case 'tooMuch':
-      return `We are presently only able to accept contributions of
-        ${currency.glyph}${maxContrib} or less`;
+      return `${currency.glyph}${maxContrib} is the maximum we can accept`;
     case 'invalidEntry':
     default:
       return 'Please enter a numeric amount';
