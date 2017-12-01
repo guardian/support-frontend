@@ -17,8 +17,7 @@ import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisi
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Dimensions } from 'helpers/tracking/googleTagManager';
-import { getQueryParams, getQueryParameter } from 'helpers/url';
+import { getQueryParams } from 'helpers/url';
 
 import type { Action } from './pageActions';
 
@@ -53,22 +52,11 @@ function doNotTrack(): boolean {
 
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
-
   if (!(doNotTrack())) {
-
-    const dimensions:Dimensions = {
-      event: 'DimensionsReady',
-      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-      experience: abTest.getVariantsAsString(participations),
-    };
-
-    googleTagManager.init();
-    googleTagManager.pushDimensions(dimensions);
+    googleTagManager.init(participations);
   }
   // Logging.
   logger.init();
-
 }
 
 // Creates the initial state for the common reducer.

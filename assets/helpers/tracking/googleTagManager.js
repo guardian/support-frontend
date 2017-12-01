@@ -2,18 +2,12 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
+import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
-import type { OphanIds } from 'helpers/tracking/acquisitions';
-
-export type Dimensions = {|
-  event?: string,
-  campaignCodeBusinessUnit?: string,
-  campaignCodeTeam?: string,
-  experience?: string,
-|}
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Functions ----- //
 
@@ -40,23 +34,21 @@ function getContributionValue() {
 
 // ----- Exports ---//
 
-export function pushDimensions(dimensions: Dimensions) {
+export function init(participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
-  window.googleTagManagerDataLayer.push(dimensions);
-}
-
-export function init() {
-  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
-  const ophanIds: OphanIds = getOphanIds();
 
   window.googleTagManagerDataLayer.push({
+    event: 'DataLayerReady',
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
-    ophanBrowserID: ophanIds.browserId,
-    event: 'DataLayerReady',
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
+    paymentMethod: storage.getSession('paymentMethod') || undefined,
+    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    experience: getVariantsAsString(participations),
+    ophanBrowserID: getOphanIds().browserId,
   });
 }

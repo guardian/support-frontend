@@ -13,6 +13,7 @@ import { generateClassName } from 'helpers/utilities';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import * as storage from 'helpers/storage';
 
 
 // ---- Types ----- //
@@ -36,6 +37,7 @@ type PropTypes = {
 function payWithPayPal(props: PropTypes) {
   return () => {
     if (props.canClick) {
+      storage.setSession('paymentMethod', 'PayPal');
       paypalContributionsRedirect(
         props.amount,
         props.referrerAcquisitionData,
