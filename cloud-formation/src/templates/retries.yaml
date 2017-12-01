@@ -9,3 +9,8 @@ Retry:
   IntervalSeconds: 1
   MaxAttempts: 999999 #If we don't provide a value here it defaults to 3
   BackoffRate: 2
+- ErrorEquals:
+  - States.ALL # Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
+  IntervalSeconds: 3
+  MaxAttempts: 999999
+  BackoffRate: 2
