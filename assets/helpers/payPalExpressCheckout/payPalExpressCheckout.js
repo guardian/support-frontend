@@ -4,6 +4,7 @@
 
 import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
+import * as storage from 'helpers/storage';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Currency } from '../internationalisation/currency';
 
@@ -51,7 +52,7 @@ function setupPayment(
   const csrfToken = csrf.token;
 
   return (resolve, reject) => {
-
+    storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount: amountToPay,
       billingPeriod: 'monthly',
