@@ -311,7 +311,7 @@ compute the sample size of your experiment, from the sample size, you can then e
 #### Step 1: Add your test to the Tests object
 
  After your hypothesis is defined, you can implement the test in the codebase. First, define the test 
- in the [`abtest.js` shared helper](/assets/helpers/abTests/abtests.js) by adding a new object to the tests array (under the **Tests** section). 
+ in the [`abtestDefinitions.js`](/assets/helpers/abTests/abtestsDefinitions.js) by adding a new field to the tests object. 
  
  ```javascript 1.8
  // ----- Tests ----- //
@@ -328,7 +328,8 @@ compute the sample size of your experiment, from the sample size, you can then e
        },
      },
      isActive: true,
-     independence: 1,
+     independent: false,
+     seed: 0,
    },
  };
  ```
@@ -337,10 +338,17 @@ compute the sample size of your experiment, from the sample size, you can then e
   
   * **variants**: This field is an array of strings, each string will be the name of a variant. One of these variant names has 
   to be **control**. 
-  * **audiences**: The *audiences* object contains a field for every country where the test will run. Then each audience object has two fields: `offset`, a number from 0 to 1 which indicates the 
-  part of the audience that will be affected by the test, and `size` a number from 0 to 1 which specifies the percentage of the audience to be included in the test.
-  For example a test with offset 0.2 and size 0.5 will affect 50% of the audience starting from the 20%.
+  * **audiences**: The *audiences* object contains a field for every country where the test will run. Then each audience object has two fields:
+    *   `offset`, a number from 0 to 1 which indicates the part of the audience that will be affected by the test.
+    *   `size`: a number from 0 to 1 which specifies the percentage of the audience to be included in the test.
+  
+    For example a test with offset 0.2 and size 0.5 will affect 50% of the audience starting from the 20%.
+  * **isActive**: Indicates whether the test is active or not. If the test is not active it is not possible to force any variant.
+  * **independent**: Expresses whether the algorithm uses the mvtId (`independent: false`) or a random number (`independent: true`) to assign a user to a variant.   
+  * **seed**: It is used only when `independent` is equal to `false`. It is useful to sync different tests. In other words, the user will be in the same variant across different tests. For example, two tests with two 
+  variants (`control` and `variantA`) and the **same seed**, will cause that the user will be in `control` for both tests or `variantA` for both tests. Use this functionality carefully, if the tests are dependent on each other (e.g. part of the same flow), it is possible to invalidate both tests.
  
+       
 #### Step 2: Read the variant from the state
 
 The test and its variant(s), are now present in the `abParticipations` object. You can find that object inside the `common` object which is in every state of every page. 
