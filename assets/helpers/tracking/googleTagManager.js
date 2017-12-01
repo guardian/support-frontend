@@ -44,7 +44,7 @@ export function init(participations: Participations) {
     orderId: getDataValue('orderId', uuidv4),
     currency: getDataValue('currency', getCurrency),
     value: getContributionValue(),
-    paymentMethod: storage.getSession('paymentMethod'),
+    paymentMethod: storage.getSession('paymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
     campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
     experience: getVariantsAsString(participations),
