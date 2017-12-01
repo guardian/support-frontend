@@ -2,11 +2,12 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
-import { Participations, getVariantsAsString } from 'helpers/abTests/abtest';
+import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Functions ----- //
 
