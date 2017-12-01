@@ -186,6 +186,10 @@ describe('utilities', () => {
     it('should return false if there is no dot in the domain', () => {
       expect(validateEmailAddress('test@gu')).toEqual(false);
     });
+
+    it('should return true for test@gu.co.uk', () => {
+      expect(validateEmailAddress('test@gu.co.uk')).toEqual(true);
+    });
   });
 
 });
