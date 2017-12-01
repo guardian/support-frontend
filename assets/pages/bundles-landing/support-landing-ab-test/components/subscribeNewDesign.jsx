@@ -73,7 +73,7 @@ function Subscribe(props: PropTypes) {
             ctaUrl={subsLinks.paper}
           />
           <SubscriptionBundle
-            heading="paper & digital"
+            heading="paper + digital"
             price="22.06"
             from
             copy={subscriptionFeatures.paperDig}

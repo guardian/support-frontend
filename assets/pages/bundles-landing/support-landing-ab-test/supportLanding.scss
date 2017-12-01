@@ -3,7 +3,7 @@
   // ----- General
 
   .component-info-section {
-    border-top: 2px solid gu-colour(light-blue);
+    border-top: 1px solid gu-colour(light-blue);
   }
 
   .component-info-section__heading {
@@ -211,6 +211,7 @@
 
   .contribute-new-design__content {
     background-color: #fff;
+    font-family: $gu-text-sans-web;
     border-color: gu-colour(light-yellow);
     color: gu-colour(neutral-2);
     position: relative;
@@ -240,7 +241,7 @@
     .component-cta-link {
       height: 54px;
       line-height: 54px;
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       color: gu-colour(neutral-1);
       font-size: 14px;
       font-weight: bold;
@@ -248,10 +249,10 @@
       padding-top: 0;
       padding-bottom: 0;
       box-sizing: border-box;
-      margin-top: $gu-v-spacing * 2;
+      margin-top: $gu-v-spacing;
 
       &:hover {
-        background-color: darken(gu-colour(comment-main-2), 5%);
+        background-color: gu-colour(light-yellow);
       }
 
       @include mq($from: tablet) {
@@ -268,8 +269,8 @@
 
     .component-paypal-contribution-button {
       height: 52px;
-      border-color: #012169;
-      color: #012169;
+      border-color: gu-colour(guardian-brand);
+      color: gu-colour(guardian-brand);
       font-size: 14px;
       font-family: $gu-text-sans-web;
       width: 100%;
@@ -291,6 +292,19 @@
 
       .paypal-p-logo-1 {
         fill: #009cde;
+      }
+
+      &:hover {
+        color: gu-colour(guardian-brand-light);
+        border-color: gu-colour(guardian-brand-light);
+
+        .svg-arrow-right-straight {
+          fill: gu-colour(guardian-brand-light);
+        }
+
+        .paypal-p-logo-0, .paypal-p-logo-1, .paypal-p-logo-2 {
+          opacity: 0.6;
+        }
       }
     }
   }
@@ -322,7 +336,7 @@
     }
 
     .component-radio-toggle__input:checked+.component-radio-toggle__label {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       font-weight: bold;
       color: gu-colour(neutral-1);
     }
@@ -337,7 +351,7 @@
 
     .component-radio-toggle {
       display: inline;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       border-radius: 600px;
       padding: 13px 0;
     }
@@ -354,16 +368,14 @@
     margin-top: $gu-v-spacing;
 
     @include mq($until: phablet) {
-      border-top: 2px dotted gu-colour(neutral-3);
       width: 100%;
-      padding-top: $gu-v-spacing;
-      margin-top: $gu-v-spacing * 2;
+      margin-top: $gu-v-spacing;
     }
 
     .component-radio-toggle__label {
       display: inline-block;
       text-align: center;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       line-height: 42px;
       width: 42px;
       height: 42px;
@@ -374,20 +386,20 @@
   .component-contribution-selection__custom-amount {
     vertical-align: top;
     margin-top: $gu-v-spacing * 2;
-    margin-bottom: $gu-v-spacing * 4;
+    margin-bottom: $gu-v-spacing * 3;
     display: block;
     position: relative;
 
     @include mq($from: phablet) {
       display: inline-block;
-      margin-left: 24px;
+      margin-left: $gu-v-spacing;
       margin-top: $gu-v-spacing;
       margin-bottom: $gu-v-spacing * 2;
     }
 
     .component-number-input {
       background-color: #fff;
-      border: 1px solid gu-colour(comment-main-2);
+      border: 1px solid gu-colour(multimedia-main-2);
       padding: 0;
       margin: 0;
       height: 42px;
@@ -397,6 +409,7 @@
       font-size: 14px;
       line-height: 36px;
       color: gu-colour(neutral-1);
+      font-family: $gu-text-sans-web;
     }
 
     .component-number-input__label {
@@ -404,7 +417,7 @@
     }
 
     .component-number-input--selected {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
 
       .component-number-input__label {
         color: gu-colour(neutral-1);
@@ -435,18 +448,18 @@
 
   .component-contribution-selection--monthly {
     .component-number-input, .component-error-message {
-      width: 305px;
+      width: 317px;
     }
   }
 
   .component-contribution-selection--one-off {
     .component-number-input, .component-error-message {
-      width: 249px;
+      width: 261px;
     }
   }
 
   .component-terms-privacy {
-    margin-top: $gu-v-spacing * 2;
+    margin-top: $gu-v-spacing;
   }
 
   .grave-error {
@@ -515,13 +528,13 @@
   // ----- Behind The Scenes
 
   .behind-the-scenes-new-design {
-    background-color: darken(#fff, 5%);
+    background-color: darken(gu-colour(neutral-6), 5%);
   }
 
   .behind-the-scenes-new-design__content {
     background-color: gu-colour(neutral-6);
     color: gu-colour(neutral-1);
-    border-top: 1px solid gu-colour(neutral-4);
+    border-top: none;
     padding-bottom: $gu-v-spacing * 2;
     position: relative;
     overflow: hidden;
@@ -613,8 +626,9 @@
       }
 
       button {
-        background-color: gu-colour(neutral-6);
+        background-color: gu-colour(multimedia-main-2);
         vertical-align: middle;
+        margin-right: 12px;
 
         svg {
           fill: gu-colour(neutral-1);
@@ -628,7 +642,7 @@
         text-decoration: none;
 
         button {
-          background-color: gu-colour(multimedia-main-2);
+          background-color: gu-colour(light-yellow);
         }
       }
     }
@@ -636,25 +650,21 @@
 
   .subscription-bundle__heading {
     font-family: $gu-egyptian-web;
-    font-weight: 100;
-    font-size: 36px;
-    line-height: 44px;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 30px;
+    padding-top: 2px;
     color: gu-colour(neutral-1);
-    border-top: 2px solid gu-colour(light-yellow);
+    border-top: 1px solid gu-colour(light-yellow);
   }
 
   .subscription-bundle__price {
-    font-family: $gu-egyptian-web;
+    font-family: $gu-text-sans-web;
     font-size: 24px;
-    line-height: 28px;
-    padding: $gu-v-spacing 0;
+    line-height: 24px;
+    padding: ($gu-v-spacing / 2) 0 ($gu-v-spacing * 2);
     color: gu-colour(neutral-1);
     font-weight: 500;
-  }
-
-  .subscription-bundle__price-amount {
-    font-size: 36px;
-    line-height: 28px;
   }
 
   .subscription-bundle__copy {
@@ -662,7 +672,7 @@
     flex-grow: 1;
 
     .component-feature-list {
-      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#333;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><style>.st0{fill:#ffbb00;}</style><path class="st0" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
       padding-left: 0;
       
       h3, p {
@@ -670,10 +680,12 @@
         font-weight: normal;
         font-size: 16px;
         line-height: 22px;
+        display: inline;
       }
 
       h3 {
         color: gu-colour(neutral-1);
+        padding-right: 5px;
       }
     }
   }
@@ -686,7 +698,7 @@
 
   .why-support-new-design__content {
     background-color: #fff;
-    border-top: 1px solid gu-colour(neutral-4);
+    border-top: none;
   }
 
   .why-support-new-design__wrapper {
@@ -915,6 +927,7 @@
 
     @include mq($from: desktop) {
       padding-top: 120px;
+      padding-bottom: 180px;
       padding-left: 0;
     }
 
@@ -1043,7 +1056,7 @@
     font-size: 18px;
     line-height: 24px;
     color: gu-colour(neutral-1);
-    border-top: 1px dotted gu-colour(multimedia-main-2);
+    border-top: 1px solid gu-colour(light-yellow);
   }
 
   .why-support-new-design__copy--no-border {
@@ -1058,14 +1071,15 @@
 
     .component-cta-link {
       background-color: gu-colour(guardian-brand-dark);
-      width: 250px;
-      padding: 18px 24px;
-      padding-top: 18px;
-      padding-bottom: 18px;
+      padding: 15px 24px;
+
+      @include mq($from: tablet) {
+        width: 250px;
+      }
 
       svg {
-        left: 250px;
         top: 12px;
+        right: 12px;
         height: 60%;
       }
 
@@ -1081,11 +1095,11 @@
         @extend .floating-semicircle;
         content: " ";
         position: absolute;
-        top: -27px;
+        top: -26px;
         right: 0;
 
         @include mq($from: tablet) {
-          top: -32px;
+          top: -31px;
         }
 
         @include mq($from: desktop) {
@@ -1111,6 +1125,7 @@
 
   .ready-new-design__content {
     background-color: #fff;
+    padding-top: 0;
     padding-bottom: $gu-v-spacing * 3;
   }
 
@@ -1129,12 +1144,16 @@
       font-size: 36px;
       line-height: 40px;
     }
+
+    @include mq($from: desktop) {
+      padding-top: $gu-v-spacing / 2;
+    }
   }
 
   // ----- Other Ways
 
   .other-ways-new-design {
-    background-color: darken(#fff, 5%);
+    background-color: darken(gu-colour(neutral-1), 5%);
   }
 
   .other-ways-new-design__content {
@@ -1179,7 +1198,7 @@
   }
 
   .other-ways-card-new-design__image {
-    border-bottom: 2px solid gu-colour(comment-main-2);
+    border-bottom: 1px solid gu-colour(multimedia-main-2);
 
     .component-grid-image {
       display: block;
@@ -1195,7 +1214,7 @@
     }
 
     button {
-      background-color: gu-colour(comment-main-2);
+      background-color: gu-colour(multimedia-main-2);
       margin-right: $gu-h-spacing / 2;
     }
 
