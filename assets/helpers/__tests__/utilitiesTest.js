@@ -10,6 +10,7 @@ import {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
+  validateEmailAddress,
 } from '../utilities';
 
 
@@ -166,6 +167,29 @@ describe('utilities', () => {
 
     });
 
+  });
+
+  describe('validateEmailAddress', () => {
+
+    it('should return true for test@gu.com', () => {
+      expect(validateEmailAddress('test@gu.com')).toEqual(true);
+    });
+
+    it('should return false if there is a space at the end of an email address', () => {
+      expect(validateEmailAddress('test@gu.com ')).toEqual(false);
+    });
+
+    it('should return false if there is a space at the start of an email address', () => {
+      expect(validateEmailAddress(' test@gu.com')).toEqual(false);
+    });
+
+    it('should return false if there is no dot in the domain', () => {
+      expect(validateEmailAddress('test@gu')).toEqual(false);
+    });
+
+    it('should return true for test@gu.co.uk', () => {
+      expect(validateEmailAddress('test@gu.co.uk')).toEqual(true);
+    });
   });
 
 });
