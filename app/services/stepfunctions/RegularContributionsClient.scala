@@ -1,7 +1,6 @@
 package services.stepfunctions
 
 import java.util.UUID
-
 import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
@@ -107,6 +106,12 @@ class RegularContributionsClient(
   }
 
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
+
+    def respondToClient(statusResponse: StatusResponse) = {
+      logger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse.status}")
+      statusResponse
+    }
+
     underlying.history(jobId).bimap(
       { error =>
         logger.error(s"[$requestId] Failed to get execution status of $jobId - $error")
@@ -118,16 +123,16 @@ class RegularContributionsClient(
         val trackingUri = supportUrl + statusCall(jobId).url
 
         val pendingOrFailure = if (executionStatus.exists(_.unsuccessful)) {
-          StatusResponse(Status.Failure, trackingUri, None)
+          respondToClient(StatusResponse(Status.Failure, trackingUri, None))
         } else {
-          StatusResponse(Status.Pending, trackingUri, None)
+          respondToClient(StatusResponse(Status.Pending, trackingUri, None))
         }
 
         events
           .collect { case event if event.getType == "LambdaFunctionSucceeded" => event.getLambdaFunctionSucceededEventDetails }
           .flatMap { event => stateWrapper.unWrap[CompletedState](event.getOutput).toOption }
           .headOption
-          .map { event => StatusResponse(event.status, trackingUri, event.message) }
+          .map { event => respondToClient(StatusResponse(event.status, trackingUri, event.message)) }
           .getOrElse(pendingOrFailure)
       }
     )
