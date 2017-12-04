@@ -14,6 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
+import PartialBundle from './components/PartialBundle';
 import BundlesGBStructureTest from './components/bundlesGBStructureTest';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
@@ -37,7 +38,11 @@ const store = pageInit(
 // ----- Render ----- //
 
 const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
-const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+// const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+
+const url: URL = new URL(window.location.href);
+const bundle: ?string = url.searchParams.get('bundle');
+const bundlesSelected = bundle ? <PartialBundle bundle={bundle} /> : <Bundles />;
 
 const content = (
   <Provider store={store}>
