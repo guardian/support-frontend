@@ -14,7 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
-import PartialBundle from './components/PartialBundle';
+import ContributionsBundle from './components/ContributionsBundle';
 import BundlesGBStructureTest from './components/bundlesGBStructureTest';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
@@ -42,7 +42,18 @@ const structureTestVariant = store.getState().common.abParticipations.gbStructur
 
 const url: URL = new URL(window.location.href);
 const bundle: ?string = url.searchParams.get('bundle');
-const bundlesSelected = bundle ? <PartialBundle bundle={bundle} /> : <Bundles />;
+
+let bundlesSelected;
+
+if (bundle === 'contribute') {
+  bundlesSelected = <ContributionsBundle />;
+} else if (bundle === 'subscribe') {
+
+} else if (bundle === 'contribute-and-digipack') {
+
+} else {
+  bundlesSelected = <Bundles />;
+}
 
 const content = (
   <Provider store={store}>
