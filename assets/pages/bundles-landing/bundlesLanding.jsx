@@ -48,14 +48,15 @@ let bundlesSelected;
 if (bundle === 'contribute') {
   bundlesSelected = <ContributionsBundle />;
 } else if (bundle === 'subscribe') {
-
+  bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']}/>;
 } else if (bundle === 'contribute-and-digipack') {
-
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']}/>;
 } else {
-  bundlesSelected = <Bundles />;
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
 }
 
 const content = (
+  // TODO: vary introduction!
   <Provider store={store}>
     <div>
       <SimpleHeader />
