@@ -372,7 +372,7 @@ function Bundles(props: PropTypes) {
     // TODO: add padding in place of divider
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
-        <div className="bundles__wrapper">
+        <div className={`bundles__wrapper bundles__wrapper--${props.products.length}`}>
           {props.products.map(p => {
             if (p === 'PAPER_SUBSCRIPTION') return <PaperBundle {...paperAttrs} />;
             if (p === 'DIGITAL_SUBSCRIPTION') return <DigitalBundle {...digitalAttrs} />;
