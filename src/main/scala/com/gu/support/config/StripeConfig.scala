@@ -1,8 +1,6 @@
 package com.gu.support.config
 
-import com.typesafe.config.{Config, ConfigException}
-
-import scala.util.control.Exception.catching
+import com.typesafe.config.Config
 
 case class StripeConfig(secretKey: String, publicKey: String, version: Option[String]) extends TouchpointConfig
 
@@ -14,7 +12,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   )
 
   def stripeVersion(config: Config): Option[String] = {
-    val catchMissing = catching(classOf[ConfigException.Missing])
-    catchMissing opt config.getString(s"stripe.api.version")
+    val stripeVersion = "stripe.api.version"
+    if (config.hasPath(stripeVersion)) Some(config.getString(stripeVersion)) else None
   }
 }
