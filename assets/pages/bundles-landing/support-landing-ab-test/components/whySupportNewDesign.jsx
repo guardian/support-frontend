@@ -24,8 +24,8 @@ export default function WhySupport() {
         <div className="why-support-new-design__wrapper">
           <p className="why-support-new-design__copy why-support-new-design__copy--no-border">
             Your support is vital in helping the Guardian do the most important
-            journalism of all: that which takes time and effort. Hundreds of
-            thousands of readers now support the Guardian&#39;s independent,
+            journalism of all: that which takes time and effort. More people
+            than ever now read and support the Guardian&#39;s independent,
             quality and investigative journalism.
           </p>
           <h1 className="why-support-new-design__heading why-support-new-design__heading--advertising">
@@ -58,7 +58,7 @@ export default function WhySupport() {
             </div>
           </h1>
           <p className="why-support-new-design__copy">
-            We don’t have a billionaire owner pulling our strings. Our owner,
+            We don&#39;t have a billionaire owner pulling our strings. Our owner,
             the Scott Trust, safeguards our editorial independence from
             commercial or political interference and reinvests revenue into our
             journalism, as opposed to into shareholders&#39; pockets.
@@ -68,10 +68,11 @@ export default function WhySupport() {
             <span>our perspective matters</span>
           </h1>
           <p className="why-support-new-design__copy">
-            Help to make the Guardian&#39;s journalism possible: by funding it, by
-            reading it, by sharing it, and by participating in it so that
-            together we can continue to tell the stories that matter, to inform
-            the world and to make it a better place
+            Help to make the Guardian&#39;s journalism have as big an impact as
+            possible: by supporting it, by advocating for it and by
+            participating in it so that together we can continue to tell the
+            stories that matter, to inform the world and to make it a better
+            place.
           </p>
         </div>
       </InfoSection>
