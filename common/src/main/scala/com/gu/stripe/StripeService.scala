@@ -15,8 +15,17 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  override def wsPreExecute(req: Request.Builder): Request.Builder =
+  override def wsPreExecute(req: Request.Builder): Request.Builder = {
     req.addHeader("Authorization", s"Bearer ${config.secretKey}")
+
+    config.version match {
+      case Some(version) => {
+        logger.info(s"Making a stripe call with version: $version")
+        req.addHeader("Stripe-Version", version)
+      }
+      case None => req
+    }
+  }
 
   def createCustomer(description: String, card: String): Future[Customer] =
     post[Customer]("customers", Map(
