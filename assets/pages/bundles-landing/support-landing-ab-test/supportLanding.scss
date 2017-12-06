@@ -450,7 +450,11 @@
 
   .component-contribution-selection--monthly {
     .component-number-input, .component-error-message {
-      width: 317px;
+      width: 100%;
+
+      @include mq($from: mobileMedium) {
+        width: 317px;
+      }
     }
   }
 
