@@ -91,7 +91,7 @@ const oneOffContribCopy: ContribAttrs = {
   heading: '',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test component-bundle--structure-one-off',
+  modifierClass: 'contributions component-bundle--contributions-only component-bundle--one-off',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a one-off contribution',
   paypalCta: {
@@ -106,7 +106,7 @@ const monthlyContribCopy: ContribAttrs = {
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test',
+  modifierClass: 'contributions component-bundle--contributions-only',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
@@ -234,8 +234,8 @@ function ContributionsBundle(props: PropTypes) {
   // bundle=no-digipack
 
   return (
-    <section className="bundles bundles--structure-test">
-      <div className="bundles__content gu-content-margin bundles__content--structure-test">
+    <section className="bundles bundles--contributions-only">
+      <div className="bundles__content gu-content-margin bundles__content--contributions-only">
         <div className="bundles__wrapper">
           <h2 className="bundles__title">contribute</h2>
           <ContributionBundle {...props} />
