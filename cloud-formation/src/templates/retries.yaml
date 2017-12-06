@@ -1,5 +1,8 @@
 Retry:
 - ErrorEquals:
+  - com.gu.support.workers.exceptions.RetryNone
+  MaxAttempts: 0
+- ErrorEquals:
   - com.gu.support.workers.exceptions.RetryLimited
   IntervalSeconds: 1
   MaxAttempts: 3
