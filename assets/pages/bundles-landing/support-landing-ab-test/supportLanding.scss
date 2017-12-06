@@ -131,7 +131,7 @@
     margin-top: 80px;
     margin-left: 180px;
     font-size: 36px;
-    line-height: 38px;
+    line-height: 34px;
 
     @include mq($from: mobileLandscape) {
       margin-top: 100px;
@@ -141,6 +141,8 @@
     @include mq($from: desktop) {
       margin-top: 60px;
       margin-left: 100px;
+      font-size: 40px;
+      line-height: 38px;
     }
 
     @include mq($from: leftCol) {
@@ -148,7 +150,7 @@
       margin-left: 110px;
       width: 360px;
       font-size: 46px;
-      line-height: 48px;
+      line-height: 43px;
     }
 
     @include mq($from: wide) {
@@ -156,7 +158,7 @@
       margin-left: 125px;
       width: 440px;
       font-size: 56px;
-      line-height: 58px;
+      line-height: 52px;
     }
   }
 
@@ -448,7 +450,11 @@
 
   .component-contribution-selection--monthly {
     .component-number-input, .component-error-message {
-      width: 317px;
+      width: 100%;
+
+      @include mq($from: mobileMedium) {
+        width: 317px;
+      }
     }
   }
 
@@ -731,6 +737,7 @@
 
   .why-support-new-design__heading--edits {
     position: relative;
+    margin-top: $gu-v-spacing * 3;
     height: 180px;
 
     @include mq($from: mobileLandscape) {
@@ -962,6 +969,11 @@
 
     @include mq($from: tablet) {
       width: gu-breakpoint(tablet);
+    }
+
+    @include mq($from: desktop) {
+      padding-left: 0;
+      padding-bottom: 140px;
     }
 
     @include mq($from: desktop) {
