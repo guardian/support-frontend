@@ -144,13 +144,22 @@
     .component-bundle {
       padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
+
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
+
         width: 280px;
         height: 484px;
         display: inline-block;
         vertical-align: top;
         position: relative;
+      }
+    }
+
+    .bundles__wrapper--2 .component-bundle {
+      @include mq($from: desktop) {
+        width: 440px;
+        height: 440px;
       }
     }
 
@@ -196,11 +205,6 @@
         bottom: $gu-v-spacing;
         right: $gu-h-spacing / 2;
         left: $gu-h-spacing / 2;
-
-        // Fix for IE.
-        svg {
-          left: 250px;
-        }
 
         &.contribute-one_off {
           bottom: 130px;
