@@ -87,14 +87,18 @@ const subHeadingOneOffText = {
   US: '',
 };
 
-function ContentText(props: PropTypes) {
-  if (props.isoCountry === 'GB') {
-    return <p className="component-bundle__content-intro">Support the Guardian’s editorial operations by making a monthly or one-off contribution today</p>;
-  }
+const contentText = {
+  GB: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
+  US: (
+    <span>
+      Contributing to the Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+    </span>
+  ),
+};
 
-  if (props.isoCountry === 'US') {
-    return <p className="component-bundle__content-intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
-  }
+function ContentText(props: PropTypes) {
+  return <p className="component-bundle__content-intro"> {contentText[props.isoCountry]} </p>;
 }
 
 const contribCtaText = {
