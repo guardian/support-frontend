@@ -189,7 +189,6 @@
       }
     }
 
-    // TODO: check this doesn't apply anymore?
     .component-bundle--structure-test.component-bundle--black-friday {
       @include mq($from: desktop) {
         height: 440px;
@@ -522,6 +521,9 @@
       margin-bottom: 2 * $gu-v-spacing;
     }
 
+    .bundles__content--contributions-only {
+      background-color: gu-colour(guardian-brand);
+    }
   }
 
   .bundles--structure-test {
@@ -1102,16 +1104,15 @@
     }
   }
 
-  // TODO: do we need?
-  //.bundles--contributions-only {
-  //  background-color: gu-colour(guardian-brand-dark);
-  //  .bundles__cross-product {
-  //    margin-top: 0;
-  //    border-top: 0;
-  //    padding-top: $gu-v-spacing;
-  //  }
-  //  padding-bottom: $gu-v-spacing * 3;
-  //}
+  .bundles--contributions-only {
+    background-color: gu-colour(guardian-brand-dark);
+    .bundles__cross-product {
+      margin-top: 0;
+      border-top: 0;
+      padding-top: $gu-v-spacing;
+    }
+    padding-bottom: $gu-v-spacing * 3;
+  }
 
   // ----- Shared Components ----- //
 
