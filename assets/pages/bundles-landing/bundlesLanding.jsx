@@ -15,7 +15,6 @@ import { renderPage } from 'helpers/render';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import ContributionsBundle from './components/ContributionsBundle';
-import BundlesGBStructureTest from './components/bundlesGBStructureTest';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
@@ -37,8 +36,6 @@ const store = pageInit(
 
 // ----- Render ----- //
 
-const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
-
 const url: URL = new URL(window.location.href);
 const bundle: ?string = url.searchParams.get('bundle');
 
@@ -53,10 +50,7 @@ if (bundle === 'contribute') {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']}/>;
   showContributeOrSubscribe = true;
 } else {
-  bundlesSelected = structureTestVariant === 'contributeOnTop'
-    ? <BundlesGBStructureTest />
-    : <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
-
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
   showContributeOrSubscribe = true;
 }
 
