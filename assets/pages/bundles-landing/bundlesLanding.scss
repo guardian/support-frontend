@@ -970,8 +970,6 @@
 
   // ----- Contributions Only ----- //
 
-  // TODO: the following are bugs which affect the existing Stack test
-  // TODO: gap at the top on "one off"
   .component-bundle--contributions-only {
     @include mq($from: desktop) {
       height: 380px;
