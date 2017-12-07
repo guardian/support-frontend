@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import type { Participations } from 'helpers/abTests/abtest';
 import ContributionsIntroduction from './contributionsIntroduction';
 import ContributionsContext from './contributionsContext';
 import ContributionsContextIntro from './contributionsContextIntro';
@@ -16,7 +15,6 @@ import ContributionsBundle from './contributionsBundle';
 
 type PropTypes = {
   context: boolean,
-  abTests: Participations,
 };
 
 
@@ -28,9 +26,7 @@ function ContributionsBundleContent(props: PropTypes) {
     <div className="contributions-bundle__content gu-content-margin">
       {props.context
         ? <ContributionsContext />
-        : <ContributionsIntroduction
-          abTests={props.abTests}
-        />
+        : <ContributionsIntroduction />
       }
       {props.context ? <ContributionsContextIntro /> : null}
       <ContributionsBundle />
@@ -46,7 +42,6 @@ function mapStateToProps(state) {
 
   return {
     context: state.page.context,
-    abTests: state.common.abParticipations,
   };
 
 }
