@@ -93,10 +93,7 @@ function ContentText(props: PropTypes) {
   }
 
   if (props.isoCountry === 'US') {
-    if (props.abTests.usRecurringCopyTest === 'contributeBox') {
-      return <p className="component-bundle__content-intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
-    }
-    return <p className="component-bundle__content-intro">Your contribution funds and supports the Guardian’s journalism</p>;
+    return <p className="component-bundle__content-intro">Contributing to the Guardian makes a big impact. If you’re able, please consider <strong>monthly</strong> support – it will help to fund our journalism for the long term.</p>;
   }
 }
 
