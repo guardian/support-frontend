@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
@@ -14,7 +13,6 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { contribCamelCase } from 'helpers/contributions';
 
-import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
@@ -30,10 +28,6 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../bundlesLandingActions';
-import { getSubsLinks } from '../helpers/externalLinks';
-
-import type { SubsUrls } from '../helpers/externalLinks';
-import { getDigiPackItems, getPaperItems } from '../helpers/blackFriday';
 
 
 // ----- Types ----- //
@@ -81,7 +75,6 @@ type BundlesType = {
   contrib: {
     oneOff: ContribAttrs,
     monthly: ContribAttrs,
-    annual: ContribAttrs,
   }
 }
 
@@ -124,7 +117,6 @@ function bundles(abTests: ?Participations): BundlesType {
     contrib: {
       oneOff: oneOffContribCopy,
       monthly: getMonthlyContribCopy(abTests),
-      // TODO: ask Santiago, why no annual in GB structure test?
     },
   };
 }

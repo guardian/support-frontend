@@ -372,10 +372,17 @@ function Bundles(props: PropTypes) {
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className={`bundles__wrapper bundles__wrapper--${props.products.length}`}>
-          {props.products.map(p => {
-            if (p === 'PAPER_SUBSCRIPTION') return <PaperBundle {...paperAttrs} />;
-            if (p === 'DIGITAL_SUBSCRIPTION') return <DigitalBundle {...digitalAttrs} />;
-            if (p === 'CONTRIBUTE') return <ContributionBundle {...props} />;
+          {props.products.map((p) => {
+            if (p === 'PAPER_SUBSCRIPTION') {
+              return <PaperBundle {...paperAttrs} />;
+            }
+            if (p === 'DIGITAL_SUBSCRIPTION') {
+              return <DigitalBundle {...digitalAttrs} />;
+            }
+            if (p === 'CONTRIBUTE') {
+              return <ContributionBundle {...props} />;
+            }
+            return null;
           })}
         </div>
         <CrossProduct />
