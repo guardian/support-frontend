@@ -369,7 +369,6 @@ function Bundles(props: PropTypes) {
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
   return (
-    // TODO: add padding in place of divider
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
         <div className={`bundles__wrapper bundles__wrapper--${props.products.length}`}>
