@@ -44,11 +44,11 @@ object Stripe {
 
   case class StripeList[T](total_count: Int, data: Seq[T]) extends StripeObject
 
-  object Card {
-    implicit val codec: Codec[Card] = deriveCodec
+  object Source {
+    implicit val codec: Codec[Source] = deriveCodec
   }
 
-  case class Card(id: String, brand: String, last4: String, exp_month: Int, exp_year: Int, country: String) extends StripeObject {
+  case class Source(id: String, brand: String, last4: String, exp_month: Int, exp_year: Int, country: String) extends StripeObject {
     val issuer = brand.toLowerCase
     // Zuora requires 'AmericanExpress' not 'American Express'
     // See CreditCardType at https://www.zuora.com/developer/api-reference/#operation/Object_POSTPaymentMethod
@@ -59,27 +59,13 @@ object Stripe {
     implicit val codec: Codec[Customer] = deriveCodec
   }
 
-  case class Customer(id: String, sources: StripeList[Card]) extends StripeObject {
+  case class Customer(id: String, sources: StripeList[Source]) extends StripeObject {
     // customers should always have a card
     if (sources.total_count != 1) {
       throw StripeError("internal", s"Customer $id has ${sources.total_count} cards, should have exactly one")
     }
 
-    val card = sources.data.head
-  }
-
-  object Source {
-    implicit val codec: Codec[Source] = deriveCodec
-  }
-
-  case class Source(country: String) extends StripeObject
-
-  object Charge {
-    implicit val codec: Codec[Charge] = deriveCodec
-  }
-
-  case class Charge(id: String, amount: Int, balance_transaction: Option[String], created: Int, currency: String, livemode: Boolean,
-      paid: Boolean, refunded: Boolean, receipt_email: String, metadata: Map[String, String], source: Source) extends StripeObject {
+    val source = sources.data.head
   }
 
   object BalanceTransaction {

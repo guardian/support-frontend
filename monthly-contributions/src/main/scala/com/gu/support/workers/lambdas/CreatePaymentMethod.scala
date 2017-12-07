@@ -56,7 +56,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     stripeService
       .createCustomer(stripe.userId, stripe.stripeToken)
       .map { stripeCustomer =>
-        val card = stripeCustomer.card
+        val card = stripeCustomer.source
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
           CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
       }
