@@ -213,6 +213,11 @@
         right: $gu-h-spacing / 2;
         left: $gu-h-spacing / 2;
 
+        // Fix for IE
+        svg {
+          left: 250px;
+        }
+
         &.contribute-one_off {
           bottom: 130px;
         }
@@ -232,6 +237,15 @@
         height: 35%;
         top: 15px;
         right: 12px;
+      }
+    }
+
+    .bundles__wrapper--2 .component-cta-link {
+      // Fix for IE
+      @include mq($from: desktop) {
+        svg {
+          left: 405px;
+        }
       }
     }
 
