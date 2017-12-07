@@ -38,12 +38,12 @@ const store = pageInit(
 // ----- Render ----- //
 
 const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
-// const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
 
 const url: URL = new URL(window.location.href);
 const bundle: ?string = url.searchParams.get('bundle');
 
 let bundlesSelected;
+let showContributeOrSubscribe = false;
 
 if (bundle === 'contribute') {
   bundlesSelected = <ContributionsBundle />;
@@ -51,16 +51,20 @@ if (bundle === 'contribute') {
   bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']}/>;
 } else if (bundle === 'contribute-and-digipack') {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']}/>;
+  showContributeOrSubscribe = true;
 } else {
-  bundlesSelected = <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+  bundlesSelected = structureTestVariant === 'contributeOnTop'
+    ? <BundlesGBStructureTest />
+    : <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+
+  showContributeOrSubscribe = true;
 }
 
 const content = (
-  // TODO: vary introduction!
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <Introduction />
+      <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />
