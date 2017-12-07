@@ -971,7 +971,6 @@
   // ----- Contributions Only ----- //
 
   // TODO: the following are bugs which affect the existing Stack test
-  // TODO: "please enter numeric amount" placement on tablet
   // TODO: gap at the top on "one off"
   .component-bundle--contributions-only {
     @include mq($from: desktop) {
@@ -988,7 +987,7 @@
     }
 
     .component-bundle__content {
-      p {
+      p:first-child {
         @include mq($from: tablet, $until: desktop) {
           position: absolute;
           left: 10px;
@@ -1003,7 +1002,7 @@
     border-top: 2px gu-colour(neutral-1) solid;
 
     .component-bundle__content {
-      p {
+      p:first-child {
         font-family: $gu-text-sans-web;
 
         @include mq($from: desktop) {
@@ -1024,7 +1023,6 @@
           width:290px;
         }
       }
-
     }
 
     .component-terms-privacy {
