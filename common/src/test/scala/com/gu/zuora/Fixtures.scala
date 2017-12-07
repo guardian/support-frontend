@@ -9,7 +9,7 @@ import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val accountNumber = "A00069567"
+  val accountNumber = "A00071408"
 
   val getAccountResponse =
     s"""
