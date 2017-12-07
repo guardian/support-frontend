@@ -124,8 +124,7 @@ function bundles(abTests: ?Participations): BundlesType {
     contrib: {
       oneOff: oneOffContribCopy,
       monthly: getMonthlyContribCopy(abTests),
-
-      // TODO: why no annual in GB structure test?
+      // TODO: ask Santiago, why no annual in GB structure test?
     },
   };
 }
