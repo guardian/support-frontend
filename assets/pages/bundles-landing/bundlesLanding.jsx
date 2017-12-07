@@ -45,9 +45,9 @@ let showContributeOrSubscribe = false;
 if (bundle === 'contribute') {
   bundlesSelected = <ContributionsBundle />;
 } else if (bundle === 'subscribe') {
-  bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']}/>;
+  bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
 } else if (bundle === 'contribute-and-digipack') {
-  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']}/>;
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
   showContributeOrSubscribe = true;
 } else {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
