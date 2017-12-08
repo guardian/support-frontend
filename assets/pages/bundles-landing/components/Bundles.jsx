@@ -280,6 +280,14 @@ function ContributionBundle(props: PropTypes) {
       window.location = contribAttrs.ctaLink;
     }
   };
+  const isContributeAndDigipack = (products: Array<Product>): boolean =>
+    products.length === 2 && products[0] === 'CONTRIBUTE' && products[1] === 'DIGITAL_SUBSCRIPTION';
+  let additionalClass = '';
+  if (props.contribError) {
+    additionalClass = 'contrib-error';
+  } else if (isContributeAndDigipack(props.products)) {
+    additionalClass = 'contribute-and-digipack';
+  }
 
   return (
     <Bundle {...contribAttrs}>
@@ -305,7 +313,7 @@ function ContributionBundle(props: PropTypes) {
           // eslint-disable-next-line no-alert
           errorHandler={e => alert(e)}
           abParticipations={props.abTests}
-          additionalClass={props.contribError ? 'contrib-error' : ''}
+          additionalClass={additionalClass}
           canClick={!props.contribError}
         />
       }

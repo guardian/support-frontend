@@ -460,6 +460,12 @@
       }
     }
 
+    .component-paypal-contribution-button--contribute-and-digipack {
+      @include mq($from: desktop) {
+        width: 440px;
+      }
+    }
+
     .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
         background-color: #fff;
 
