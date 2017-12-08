@@ -11,7 +11,7 @@ module.exports = (env) => {
 
   const isProd = env && env.prod;
   const isGarnett = process.env && process.env.SUPPORT_FRONTEND_GARNETT === 'true';
-  console.log(`Running Garnett: ${isGarnett}`);
+  console.info(`Running Garnett: ${isGarnett}`);
 
   const plugins = [
     new ManifestPlugin({
