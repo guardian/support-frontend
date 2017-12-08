@@ -460,7 +460,7 @@
       }
     }
 
-    .component-paypal-contribution-button--contribute-and-digipack {
+    .bundles__wrapper--2 .component-paypal-contribution-button {
       @include mq($from: desktop) {
         width: 440px;
       }
