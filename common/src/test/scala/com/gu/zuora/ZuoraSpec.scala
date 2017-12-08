@@ -27,7 +27,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountIds("30000701").map {
+    uatService.getAccountIds("30001758").map {
       response =>
         response.nonEmpty should be(true)
     }
@@ -38,7 +38,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "retrieve subscriptions from an account id" in {
-    uatService.getSubscriptions("A00069602").map {
+    uatService.getSubscriptions("A00071408").map {
       response =>
         response.nonEmpty should be(true)
         response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
@@ -46,7 +46,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    uatService.getRecurringSubscription("30000701", Monthly).map {
+    uatService.getRecurringSubscription("30001758", Monthly).map {
       response =>
         response.isDefined should be(true)
         response.get.ratePlans.head.productName should be("Contributor")
@@ -54,14 +54,14 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "ignore active subscriptions which do not have a recurring contributor plan" in {
-    uatService.getRecurringSubscription("30001578", Monthly).map {
+    uatService.getRecurringSubscription("18390845", Monthly).map {
       response =>
         response.isDefined should be(false)
     }
   }
 
   it should "ignore cancelled recurring contributions" in {
-    uatService.getRecurringSubscription("30001580", Monthly).map {
+    uatService.getRecurringSubscription("30001780", Monthly).map {
       response =>
         response.isDefined should be(false)
     }

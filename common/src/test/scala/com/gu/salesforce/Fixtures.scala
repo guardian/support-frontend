@@ -1,10 +1,10 @@
 package com.gu.salesforce
 
 object Fixtures {
-  val idId = "30000264"
-  val salesforceId = "003g000001UnFItAAN"
-  val email = "6cwdm8aler7z9r6nwbc@gu.com"
-  val name = "6cWdM8AlER7z9R6nWBc"
+  val idId = "3111123"
+  val salesforceId = "0036E00000ImlhfQAB"
+  val email = "yjcysqxfcqqytuzupjc@gu.com"
+  val name = "YJCysqXFCqqYtuzuPJc"
   val uk = "UK"
   val us = "US"
   val state = "CA"
