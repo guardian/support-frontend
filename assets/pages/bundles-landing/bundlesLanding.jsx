@@ -11,6 +11,7 @@ import Footer from 'components/footer/footer';
 import { defaultAmountsUK } from 'helpers/abTests/amountsTest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { getQueryParameter } from 'helpers/url';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
@@ -39,8 +40,7 @@ const store = pageInit(
 
 const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
 
-const url: URL = new URL(window.location.href);
-const bundle: ?string = url.searchParams.get('bundle');
+const bundle: ?string = getQueryParameter('bundle');
 
 let bundlesSelected;
 let showContributeOrSubscribe = false;

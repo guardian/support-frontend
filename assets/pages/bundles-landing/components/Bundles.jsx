@@ -21,6 +21,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { generateClassName } from 'helpers/utilities';
 
 import CrossProduct from './crossProduct';
 import {
@@ -379,7 +380,7 @@ function Bundles(props: PropTypes) {
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
-        <div className={`bundles__wrapper bundles__wrapper--${props.products.length}`}>
+        <div className={generateClassName('bundles__wrapper', props.products.length.toString())}>
           {props.products.map((p) => {
             if (p === 'PAPER_SUBSCRIPTION') {
               return <PaperBundle {...paperAttrs} />;
