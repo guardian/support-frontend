@@ -22,7 +22,6 @@ import reducer from './bundlesLandingReducers';
 
 // Amounts test
 import { changeContribAmountMonthly } from './bundlesLandingActions';
-import {getQueryParameter} from "../../helpers/url";
 
 
 // ----- Redux Store ----- //
