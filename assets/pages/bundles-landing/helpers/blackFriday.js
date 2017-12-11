@@ -48,13 +48,13 @@ function getPaperItems() {
   return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
 }
 
-function getPaperItemsForStructureTest() {
+function getPaperItemsForStackedBundle() {
   if (inOfferPeriod()) { return [offerItem, chooseYourPackage]; }
 
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
-function getPaperDigitalItemsForStructureTest() {
+function getPaperDigitalItemsForStackedBundle() {
   return getPaperItems();
 }
 
@@ -62,6 +62,6 @@ export {
   inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
-  getPaperItemsForStructureTest,
-  getPaperDigitalItemsForStructureTest,
+  getPaperItemsForStackedBundle,
+  getPaperDigitalItemsForStackedBundle,
 };

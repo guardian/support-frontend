@@ -21,7 +21,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getDigiPackItems, getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest, inOfferPeriod } from '../helpers/blackFriday';
+import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/blackFriday';
 
 import CrossProduct from './crossProduct';
 import {
@@ -142,7 +142,7 @@ const digitalCopy: SubscribeAttrs = {
 const paperCopy: SubscribeAttrs = {
   heading: 'paper subscription',
   subheading: 'from £10.79/month',
-  listItems: getPaperItemsForStructureTest(),
+  listItems: getPaperItemsForStackedBundle(),
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
   modifierClass: `paper ${componentBundleModifierClass}`,
@@ -153,7 +153,7 @@ const paperCopy: SubscribeAttrs = {
 const paperDigitalCopy: SubscribeAttrs = {
   heading: 'paper+digital',
   subheading: 'from £22.06/month',
-  listItems: getPaperDigitalItemsForStructureTest(),
+  listItems: getPaperDigitalItemsForStackedBundle(),
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
   modifierClass: `paperDigital ${componentBundleModifierClass}`,
