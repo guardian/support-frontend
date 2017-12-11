@@ -30,17 +30,4 @@ export const tests: Tests = {
     seed: 5,
   },
 
-  gbStructureTest: {
-    variants: ['control', 'contributeOnTop'],
-    audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 6,
-  },
-
 };

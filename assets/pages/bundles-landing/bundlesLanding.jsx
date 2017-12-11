@@ -14,7 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
-import BundlesGBStructureTest from './components/bundlesGBStructureTest';
+import ContributionsBundle from './components/ContributionsBundle';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
@@ -36,14 +36,29 @@ const store = pageInit(
 
 // ----- Render ----- //
 
-const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
-const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+const url: URL = new URL(window.location.href);
+const bundle: ?string = url.searchParams.get('bundle');
+
+let bundlesSelected;
+let showContributeOrSubscribe = false;
+
+if (bundle === 'contribute') {
+  bundlesSelected = <ContributionsBundle />;
+} else if (bundle === 'subscribe') {
+  bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+} else if (bundle === 'contribute-and-digipack') {
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
+  showContributeOrSubscribe = true;
+} else {
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+  showContributeOrSubscribe = true;
+}
 
 const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <Introduction />
+      <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />

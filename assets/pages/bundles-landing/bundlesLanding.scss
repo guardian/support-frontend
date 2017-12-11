@@ -128,10 +128,6 @@
       }
     }
 
-    .bundles__content--structure-test{
-      background-color: gu-colour(guardian-brand);
-    }
-
     .bundles__divider {
       height: $gu-v-spacing;
       width: 100%;
@@ -141,11 +137,20 @@
       }
     }
 
+    .component-bundle:not(:last-child) {
+      margin-bottom: $gu-v-spacing;
+
+      @include mq($from: desktop) {
+        margin-bottom: 0;
+      }
+    }
+
     .component-bundle {
       padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
 
       @include mq($from: desktop) {
         margin: 0 ($gu-h-spacing / 2);
+
         width: 280px;
         height: 484px;
         display: inline-block;
@@ -154,35 +159,10 @@
       }
     }
 
-    .component-bundle--structure-test {
+    .bundles__wrapper--2 .component-bundle {
       @include mq($from: desktop) {
-        height: 380px;
-        border-top: 2px gu-colour(news-support-1) solid;
-      }
-    }
-
-    .component-bundle--contributions.component-bundle--structure-test.component-bundle--structure-one-off {
-      .component-double-heading {
-        @include mq($from: desktop) {
-          display: none;
-        }
-      }
-
-      .component-bundle__content {
-        p {
-          @include mq($from: tablet, $until: desktop) {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            width:300px;
-          }
-        }
-      }
-    }
-
-    .component-bundle--structure-test.component-bundle--black-friday {
-      @include mq($from: desktop) {
-        height: 440px;
+        width: 440px;
+        height: 480px;
       }
     }
 
@@ -197,7 +177,7 @@
         right: $gu-h-spacing / 2;
         left: $gu-h-spacing / 2;
 
-        // Fix for IE.
+        // Fix for IE
         svg {
           left: 250px;
         }
@@ -221,6 +201,15 @@
         height: 35%;
         top: 15px;
         right: 12px;
+      }
+    }
+
+    .bundles__wrapper--2 .component-cta-link {
+      // Fix for IE
+      @include mq($from: desktop) {
+        svg {
+          left: 405px;
+        }
       }
     }
 
@@ -304,118 +293,6 @@
           position: absolute;
           bottom: $gu-v-spacing;
         }
-      }
-    }
-
-    .component-bundle--contributions.component-bundle--structure-test {
-      border-top: 2px gu-colour(neutral-1) solid;
-
-      .component-bundle__content {
-        p {
-          font-family: $gu-text-sans-web;
-
-          @include mq($from: desktop) {
-            width: 295px;
-          }
-
-          @include mq($from: tablet, $until: desktop) {
-            position: absolute;
-            left: 10px;
-            top: 35px;
-            width:300px;
-          }
-
-          @include mq($from: phablet, $until: tablet) {
-            position: absolute;
-            left: 10px;
-            top: 35px;
-            width:290px;
-          }
-        }
-
-      }
-
-      .component-terms-privacy {
-        font-size: 12px;
-        line-height: 16px;
-
-        @include mq($from: desktop) {
-          position: absolute;
-          bottom: 10px;
-        }
-
-        @include mq($from: tablet, $until: desktop) {
-          position: absolute;
-          left: 10px;
-          bottom: 5px;
-          width:300px;
-        }
-
-        @include mq($from: phablet, $until: tablet) {
-          position: absolute;
-          left: 10px;
-          bottom: 5px;
-          width: 280px;
-        }
-
-        @include mq($until: tablet) {
-          padding-top: 5px;
-        }
-      }
-
-      @include mq($from: desktop) {
-        margin-right: $gu-h-spacing/2;
-        width: 920px;
-        height: 286px;
-
-        .component-double-heading {
-          margin-bottom: 0;
-          width: 100%;
-          float: left;
-        }
-
-        .component-bundle__content {
-          p {
-            margin-bottom: 0;
-          }
-        }
-
-        .component-terms-privacy {
-          line-height: 16px;
-          width: 300px;
-          margin-top: 0;
-        }
-
-        .component-contrib-amounts {
-          position: absolute;
-          top: $gu-v-spacing/2;
-          right: 162px;
-          width: 450px;
-        }
-
-        .component-cta-link {
-          margin-left: 318px;
-          width: 411px;
-
-          svg {
-            left: 421px;
-          }
-        }
-
-        .component-cta-link.contribute-monthly {
-          bottom: $gu-v-spacing;
-        }
-
-        .component-cta-link.contribute-one_off {
-          bottom: $gu-v-spacing * 6;
-        }
-
-        .component-paypal-contribution-button {
-          margin-left: 318px;
-          width: 450px;
-          bottom: $gu-v-spacing;
-        }
-
       }
     }
 
@@ -517,16 +394,9 @@
       margin-bottom: 2 * $gu-v-spacing;
     }
 
-  }
-
-  .bundles--structure-test {
-    background-color: gu-colour(guardian-brand-dark);
-    .bundles__cross-product {
-      margin-top: 0;
-      border-top: 0;
-      padding-top: $gu-v-spacing;
+    .bundles__content--contributions-only {
+      background-color: gu-colour(guardian-brand);
     }
-    padding-bottom: $gu-v-spacing * 3;
   }
 
   .bundles__cross-product {
@@ -952,6 +822,155 @@
         bottom: 0;
       }
     }
+  }
+
+  // ----- Contributions Only ----- //
+
+  .component-bundle--contributions-only {
+    @include mq($from: desktop) {
+      height: 380px;
+      border-top: 2px gu-colour(news-support-1) solid;
+    }
+  }
+
+  .component-bundle--contributions.component-bundle--contributions-only.component-bundle--one-off {
+    .component-double-heading {
+      @include mq($from: desktop) {
+        display: none;
+      }
+    }
+
+    .component-bundle__content {
+      p:first-child {
+        @include mq($from: tablet, $until: desktop) {
+          position: absolute;
+          left: 10px;
+          top: 10px;
+          width:300px;
+        }
+      }
+    }
+  }
+
+  .component-bundle--contributions.component-bundle--contributions-only {
+    border-top: 2px gu-colour(neutral-1) solid;
+
+    .component-bundle__content {
+      p:first-child {
+        font-family: $gu-text-sans-web;
+
+        @include mq($from: desktop) {
+          width: 295px;
+        }
+
+        @include mq($from: tablet, $until: desktop) {
+          position: absolute;
+          left: 10px;
+          top: 35px;
+          width:300px;
+        }
+
+        @include mq($from: phablet, $until: tablet) {
+          position: absolute;
+          left: 10px;
+          top: 35px;
+          width:290px;
+        }
+      }
+    }
+
+    .component-terms-privacy {
+      font-size: 12px;
+      line-height: 16px;
+
+      @include mq($from: desktop) {
+        position: absolute;
+        bottom: 10px;
+      }
+
+      @include mq($from: tablet, $until: desktop) {
+        position: absolute;
+        left: 10px;
+        bottom: 5px;
+        width:300px;
+      }
+
+      @include mq($from: phablet, $until: tablet) {
+        position: absolute;
+        left: 10px;
+        bottom: 5px;
+        width: 280px;
+      }
+
+      @include mq($until: tablet) {
+        padding-top: 5px;
+      }
+    }
+
+    @include mq($from: desktop) {
+      margin-right: $gu-h-spacing/2;
+      width: 920px;
+      height: 286px;
+
+      .component-double-heading {
+        margin-bottom: 0;
+        width: 100%;
+        float: left;
+      }
+
+      .component-bundle__content {
+        p {
+          margin-bottom: 0;
+        }
+      }
+
+      .component-terms-privacy {
+        line-height: 16px;
+        width: 300px;
+        margin-top: 0;
+      }
+
+      .component-contrib-amounts {
+        position: absolute;
+        top: $gu-v-spacing/2;
+        right: 162px;
+        width: 450px;
+      }
+
+      .component-cta-link {
+        margin-left: 318px;
+        width: 411px;
+
+        svg {
+          left: 421px;
+        }
+      }
+
+      .component-cta-link.contribute-monthly {
+        bottom: $gu-v-spacing;
+      }
+
+      .component-cta-link.contribute-one_off {
+        bottom: $gu-v-spacing * 6;
+      }
+
+      .component-paypal-contribution-button {
+        margin-left: 318px;
+        width: 450px;
+        bottom: $gu-v-spacing;
+      }
+
+    }
+  }
+
+  .bundles--contributions-only {
+    background-color: gu-colour(guardian-brand-dark);
+    .bundles__cross-product {
+      margin-top: 0;
+      border-top: 0;
+      padding-top: $gu-v-spacing;
+    }
+    padding-bottom: $gu-v-spacing * 3;
   }
 
   // ----- Shared Components ----- //

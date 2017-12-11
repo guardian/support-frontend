@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
@@ -14,14 +13,12 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { contribCamelCase } from 'helpers/contributions';
 
-import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getDigiPackItems, getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest, inOfferPeriod } from '../helpers/blackFriday';
 
 import CrossProduct from './crossProduct';
 import {
@@ -31,9 +28,6 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../bundlesLandingActions';
-import { getSubsLinks } from '../helpers/externalLinks';
-
-import type { SubsUrls } from '../helpers/externalLinks';
 
 
 // ----- Types ----- //
@@ -74,29 +68,15 @@ type ContribAttrs = {
   },
 }
 
-type SubscribeAttrs = {
-  heading: string,
-  subheading: string,
-  listItems: ListItem[],
-  ctaText: string,
-  modifierClass: string,
-  ctaId: string,
-  ctaLink: string,
-  ctaAccessibilityHint: string,
-}
 
 /* eslint-enable react/no-unused-prop-types */
-
-type subscribeProductNames = 'digital' | 'paper' | 'paperDigital';
 
 type BundlesType = {
   contrib: {
     oneOff: ContribAttrs,
     monthly: ContribAttrs,
-  },
-  [subscribeProductNames]: SubscribeAttrs,
+  }
 }
-
 
 // ----- Copy ----- //
 
@@ -104,7 +84,7 @@ const oneOffContribCopy: ContribAttrs = {
   heading: '',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test component-bundle--structure-one-off',
+  modifierClass: 'contributions component-bundle--contributions-only component-bundle--one-off',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a one-off contribution',
   paypalCta: {
@@ -119,55 +99,9 @@ const monthlyContribCopy: ContribAttrs = {
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test',
+  modifierClass: 'contributions component-bundle--contributions-only',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
-};
-
-
-const componentBundleModifierClass = `component-bundle--structure-test ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
-
-const digitalCopy: SubscribeAttrs = {
-  heading: 'digital subscription',
-  subheading: '£11.99/month',
-  listItems: getDigiPackItems(),
-  ctaText: 'Start your 14 day trial',
-  ctaId: 'digital-sub',
-  modifierClass: `digital ${componentBundleModifierClass}`,
-  ctaLink: 'https://subscribe.theguardian.com/uk/digital',
-  ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
-};
-
-const paperCopy: SubscribeAttrs = {
-  heading: 'paper subscription',
-  subheading: 'from £10.79/month',
-  listItems: getPaperItemsForStructureTest(),
-  ctaText: 'Get a paper subscription',
-  ctaId: 'paper-sub structure-test',
-  modifierClass: `paper ${componentBundleModifierClass}`,
-  ctaLink: 'https://subscribe.theguardian.com/collection/paper',
-  ctaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
-};
-
-const paperDigitalCopy: SubscribeAttrs = {
-  heading: 'paper+digital',
-  subheading: 'from £22.06/month',
-  listItems: getPaperDigitalItemsForStructureTest(),
-  ctaText: 'Get a paper + digital subscription',
-  ctaId: 'paper-digi-sub',
-  modifierClass: `paperDigital ${componentBundleModifierClass}`,
-  ctaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
-  ctaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
-};
-
-const bundles: BundlesType = {
-  contrib: {
-    oneOff: oneOffContribCopy,
-    monthly: monthlyContribCopy,
-  },
-  digital: digitalCopy,
-  paper: paperCopy,
-  paperDigital: paperDigitalCopy,
 };
 
 function getMonthlyContribCopy(abTests: ?Participations) {
@@ -178,15 +112,12 @@ function getMonthlyContribCopy(abTests: ?Participations) {
   return response;
 }
 
-
-function getBundles(abTests: ?Participations): BundlesType {
+function bundles(abTests: ?Participations): BundlesType {
   return {
     contrib: {
       oneOff: oneOffContribCopy,
       monthly: getMonthlyContribCopy(abTests),
     },
-    digital: digitalCopy,
-    paper: paperCopy,
   };
 }
 
@@ -194,7 +125,6 @@ const ctaLinks = {
   annual: routes.recurringContribCheckout,
   monthly: routes.recurringContribCheckout,
   oneOff: routes.oneOffContribCheckout,
-  subs: 'https://subscribe.theguardian.com',
 };
 
 // ----- Functions ----- //
@@ -223,23 +153,11 @@ const getContribAttrs = (
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
 
-  return Object.assign({}, getBundles(abTests).contrib[contType], {
+  return Object.assign({}, bundles(abTests).contrib[contType], {
     ctaId, ctaLink, ctaAccessibilityHint,
   });
 
 };
-
-function getPaperAttrs(subsLinks: SubsUrls): SubscribeAttrs {
-  return Object.assign({}, bundles.paper, { ctaLink: subsLinks.paper });
-}
-
-function getPaperDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
-  return Object.assign({}, bundles.paperDigital, { ctaLink: subsLinks.paperDig });
-}
-
-function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
-  return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
-}
 
 function ContributionBundle(props: PropTypes) {
 
@@ -298,50 +216,20 @@ function ContributionBundle(props: PropTypes) {
 
 }
 
-function SubscribeBundle(props: Object) {
-  return (
-    <Bundle {...props}>
-      <FeatureList listItems={bundles[props.subscriptionProduct].listItems} />
-      <CtaLink
-        ctaId={props.ctaId}
-        text={props.ctaText}
-        dataLinkName="bundlesLandingPageDigipackLink"
-        accessibilityHint={props.ctaAccessibilityHint}
-        url={props.ctaLink}
-      />
-    </Bundle>
-  );
-
-}
-
-
 // ----- Component ----- //
 
-function BundlesGBStructureTest(props: PropTypes) {
+function ContributionsBundle(props: PropTypes) {
 
-  const subsLinks: SubsUrls = getSubsLinks(
-    props.intCmp,
-    props.campaign,
-    props.otherQueryParams,
-    props.referrerAcquisitionData,
-  );
-  const digitalAttrs: SubscribeAttrs = getDigitalAttrs(subsLinks);
-  const paperAttrs: SubscribeAttrs = getPaperAttrs(subsLinks);
-  const paperDigitalAttrs: SubscribeAttrs = getPaperDigitalAttrs(subsLinks);
+  // bundle=contribute
+  // bundle=subscribe
+  // bundle=no-digipack
 
   return (
-    <section className="bundles bundles--structure-test">
-      <div className="bundles__content gu-content-margin bundles__content--structure-test">
+    <section className="bundles bundles--contributions-only">
+      <div className="bundles__content gu-content-margin bundles__content--contributions-only">
         <div className="bundles__wrapper">
           <h2 className="bundles__title">contribute</h2>
           <ContributionBundle {...props} />
-          <h2 className="bundles__title">subscribe</h2>
-          <div className="bundles__divider" />
-          <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
         </div>
       </div>
       <div className="gu-content-margin">
@@ -349,6 +237,7 @@ function BundlesGBStructureTest(props: PropTypes) {
       </div>
     </section>
   );
+
 }
 
 
@@ -394,4 +283,4 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(BundlesGBStructureTest);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionsBundle);
