@@ -11,10 +11,11 @@ import Footer from 'components/footer/footer';
 import { defaultAmountsUK } from 'helpers/abTests/amountsTest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { getQueryParameter } from 'helpers/url';
 
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
-import BundlesGBStructureTest from './components/bundlesGBStructureTest';
+import StackedBundle from './components/StackedBundle';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';
@@ -36,14 +37,28 @@ const store = pageInit(
 
 // ----- Render ----- //
 
-const structureTestVariant = store.getState().common.abParticipations.gbStructureTest;
-const bundlesSelected = structureTestVariant === 'contributeOnTop' ? <BundlesGBStructureTest /> : <Bundles />;
+const bundle: ?string = getQueryParameter('bundle');
+
+let bundlesSelected;
+let showContributeOrSubscribe = false;
+
+if (bundle === 'contribute') {
+  bundlesSelected = <StackedBundle products={['CONTRIBUTE']} />;
+} else if (bundle === 'subscribe') {
+  bundlesSelected = <StackedBundle products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+} else if (bundle === 'contribute-and-digipack') {
+  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
+  showContributeOrSubscribe = true;
+} else {
+  bundlesSelected = <StackedBundle products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+  showContributeOrSubscribe = true;
+}
 
 const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <Introduction />
+      <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
       <WhySupport />
       <WaysOfSupport />

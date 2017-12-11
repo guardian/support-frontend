@@ -21,6 +21,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { generateClassName } from 'helpers/utilities';
 
 import CrossProduct from './crossProduct';
 import {
@@ -41,6 +42,8 @@ import { getDigiPackItems, getPaperItems } from '../helpers/blackFriday';
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
+export type Product = 'CONTRIBUTE' | 'DIGITAL_SUBSCRIPTION' | 'PAPER_SUBSCRIPTION';
+
 type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
@@ -57,6 +60,7 @@ type PropTypes = {
   currency: Currency,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  products: Array<Product>
 };
 
 type ContribAttrs = {
@@ -368,12 +372,19 @@ function Bundles(props: PropTypes) {
   return (
     <section className="bundles">
       <div className="bundles__content gu-content-margin">
-        <div className="bundles__wrapper">
-          <ContributionBundle {...props} />
-          <div className="bundles__divider" />
-          <DigitalBundle {...digitalAttrs} />
-          <div className="bundles__divider" />
-          <PaperBundle {...paperAttrs} />
+        <div className={generateClassName('bundles__wrapper', props.products.length.toString())}>
+          {props.products.map((p) => {
+            if (p === 'PAPER_SUBSCRIPTION') {
+              return <PaperBundle {...paperAttrs} />;
+            }
+            if (p === 'DIGITAL_SUBSCRIPTION') {
+              return <DigitalBundle {...digitalAttrs} />;
+            }
+            if (p === 'CONTRIBUTE') {
+              return <ContributionBundle {...props} />;
+            }
+            return null;
+          })}
         </div>
         <CrossProduct />
       </div>
