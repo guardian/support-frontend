@@ -50,7 +50,8 @@ if (bundle === 'contribute') {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
   showContributeOrSubscribe = true;
 } else {
-  bundlesSelected = <StackedBundle hasSubscriptions={true} />;
+  // I don't understand why the linter makes me to Boolean(true) instead of true
+  bundlesSelected = <StackedBundle hasSubscriptions={Boolean(true)} />;
   showContributeOrSubscribe = true;
 }
 
