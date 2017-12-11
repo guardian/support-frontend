@@ -57,6 +57,7 @@ type PropTypes = {
   currency: Currency,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  hasSubscriptions: boolean
 };
 
 type ContribAttrs = {
@@ -314,7 +315,6 @@ function SubscribeBundle(props: Object) {
 
 }
 
-
 // ----- Component ----- //
 
 function StackedBundle(props: PropTypes) {
@@ -329,19 +329,28 @@ function StackedBundle(props: PropTypes) {
   const paperAttrs: SubscribeAttrs = getPaperAttrs(subsLinks);
   const paperDigitalAttrs: SubscribeAttrs = getPaperDigitalAttrs(subsLinks);
 
+  const subscriptions = (
+    <div>
+      <h2 className="bundles__title">subscribe</h2>
+      <div className="bundles__divider" />
+      <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
+      <div className="bundles__divider" />
+      <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
+      <div className="bundles__divider" />
+      <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
+    </div>
+  );
+
   return (
     <section className="bundles bundles--stacked">
       <div className="bundles__content gu-content-margin bundles__content--stacked">
         <div className="bundles__wrapper">
           <h2 className="bundles__title">contribute</h2>
           <ContributionBundle {...props} />
-          <h2 className="bundles__title">subscribe</h2>
-          <div className="bundles__divider" />
-          <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
+          {props.hasSubscriptions
+            ? subscriptions
+            : null
+          }
         </div>
       </div>
       <div className="gu-content-margin">
