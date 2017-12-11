@@ -48,20 +48,8 @@ function getPaperItems() {
   return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
 }
 
-function getPaperItemsForStructureTest() {
-  if (inOfferPeriod()) { return [offerItem, chooseYourPackage]; }
-
-  return [chooseYourPackage, saveMoneyOnRetailPrice];
-}
-
-function getPaperDigitalItemsForStructureTest() {
-  return getPaperItems();
-}
-
 export {
   inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
-  getPaperItemsForStructureTest,
-  getPaperDigitalItemsForStructureTest,
 };
