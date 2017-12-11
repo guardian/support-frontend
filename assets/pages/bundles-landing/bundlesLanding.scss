@@ -185,7 +185,7 @@
       }
 
       .component-bundle__content {
-        p {
+        p:first-child {
           @include mq($from: tablet, $until: desktop) {
             position: absolute;
             left: 10px;
@@ -336,7 +336,7 @@
       border-top: 2px gu-colour(neutral-1) solid;
 
       .component-bundle__content {
-        p {
+        p:first-child {
           font-family: $gu-text-sans-web;
 
           @include mq($from: desktop) {
