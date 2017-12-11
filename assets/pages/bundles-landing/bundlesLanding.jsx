@@ -43,15 +43,14 @@ let bundlesSelected;
 let showContributeOrSubscribe = false;
 
 if (bundle === 'contribute') {
-  bundlesSelected = <StackedBundle hasSubscriptions={false} />;
+  bundlesSelected = <StackedBundle products={['CONTRIBUTE']} />;
 } else if (bundle === 'subscribe') {
-  bundlesSelected = <Bundles products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
+  bundlesSelected = <StackedBundle products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
 } else if (bundle === 'contribute-and-digipack') {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
   showContributeOrSubscribe = true;
 } else {
-  // I don't understand why the linter makes me to Boolean(true) instead of true
-  bundlesSelected = <StackedBundle hasSubscriptions={Boolean(true)} />;
+  bundlesSelected = <StackedBundle products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
   showContributeOrSubscribe = true;
 }
 

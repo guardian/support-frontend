@@ -34,6 +34,7 @@ import {
 import { getSubsLinks } from '../helpers/externalLinks';
 
 import type { SubsUrls } from '../helpers/externalLinks';
+import type { Product } from 'Bundles';
 
 
 // ----- Types ----- //
@@ -57,7 +58,7 @@ type PropTypes = {
   currency: Currency,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  hasSubscriptions: boolean
+  products: Array<Product>
 };
 
 type ContribAttrs = {
@@ -329,6 +330,13 @@ function StackedBundle(props: PropTypes) {
   const paperAttrs: SubscribeAttrs = getPaperAttrs(subsLinks);
   const paperDigitalAttrs: SubscribeAttrs = getPaperDigitalAttrs(subsLinks);
 
+  const contributions = (
+    <div>
+      <h2 className="bundles__title">contribute</h2>
+      <ContributionBundle {...props} />
+    </div>
+  );
+
   const subscriptions = (
     <div>
       <h2 className="bundles__title">subscribe</h2>
@@ -341,16 +349,20 @@ function StackedBundle(props: PropTypes) {
     </div>
   );
 
+  const hasContributions = props.products.includes('CONTRIBUTE');
+  const hasSubscriptions = props.products.includes('PAPER_SUBSCRIPTION')
+    && props.products.includes('DIGITAL_SUBSCRIPTION');
+
   return (
     <section className="bundles bundles--stacked">
       <div className="bundles__content gu-content-margin bundles__content--stacked">
         <div className="bundles__wrapper">
-          <h2 className="bundles__title">contribute</h2>
-          <ContributionBundle {...props} />
-          {props.hasSubscriptions
+          {hasContributions
+            ? contributions
+            : null}
+          {hasSubscriptions
             ? subscriptions
-            : null
-          }
+            : null}
         </div>
       </div>
       <div className="gu-content-margin">

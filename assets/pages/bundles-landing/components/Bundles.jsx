@@ -42,7 +42,7 @@ import { getDigiPackItems, getPaperItems } from '../helpers/blackFriday';
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type Product = 'CONTRIBUTE' | 'DIGITAL_SUBSCRIPTION' | 'PAPER_SUBSCRIPTION';
+export type Product = 'CONTRIBUTE' | 'DIGITAL_SUBSCRIPTION' | 'PAPER_SUBSCRIPTION';
 
 type PropTypes = {
   contribType: Contrib,
