@@ -15,7 +15,7 @@ import { renderPage } from 'helpers/render';
 import Introduction from './components/Introduction';
 import Bundles from './components/Bundles';
 import ContributionsBundle from './components/ContributionsBundle';
-import BundlesGBStructureTest from './components/bundlesGBStructureTest';
+import BundlesGBStructureTest from './components/StackedBundle';
 import WhySupport from './components/WhySupport';
 import WaysOfSupport from './components/WaysOfSupport';
 import reducer from './bundlesLandingReducers';

@@ -128,7 +128,7 @@
       }
     }
 
-    .bundles__content--structure-test{
+    .bundles__content--stacked{
       background-color: gu-colour(guardian-brand);
     }
 
@@ -170,14 +170,14 @@
       }
     }
 
-    .component-bundle--structure-test {
+    .component-bundle--stacked {
       @include mq($from: desktop) {
         height: 380px;
         border-top: 2px gu-colour(news-support-1) solid;
       }
     }
 
-    .component-bundle--contributions.component-bundle--structure-test.component-bundle--structure-one-off {
+    .component-bundle--contributions.component-bundle--stacked.component-bundle--stacked-one-off {
       .component-double-heading {
         @include mq($from: desktop) {
           display: none;
@@ -196,7 +196,7 @@
       }
     }
 
-    .component-bundle--structure-test.component-bundle--black-friday {
+    .component-bundle--stacked.component-bundle--black-friday {
       @include mq($from: desktop) {
         height: 440px;
       }
@@ -332,7 +332,7 @@
       }
     }
 
-    .component-bundle--contributions.component-bundle--structure-test {
+    .component-bundle--contributions.component-bundle--stacked {
       border-top: 2px gu-colour(neutral-1) solid;
 
       .component-bundle__content {
@@ -547,7 +547,7 @@
     }
   }
 
-  .bundles--structure-test {
+  .bundles--stacked {
     background-color: gu-colour(guardian-brand-dark);
     .bundles__cross-product {
       margin-top: 0;
