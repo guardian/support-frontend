@@ -23,7 +23,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Product } from './bundles';
 
-import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/blackFriday';
+import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/flashSale';
 
 import CrossProduct from './crossProduct';
 import {
@@ -128,7 +128,7 @@ const monthlyContribCopy: ContribAttrs = {
 };
 
 
-const componentBundleModifierClass = `component-bundle--stacked ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
+const componentBundleModifierClass = `component-bundle--stacked ${inOfferPeriod() ? 'component-bundle--flash-sale' : ''}`;
 
 const digitalCopy: SubscribeAttrs = {
   heading: 'digital subscription',

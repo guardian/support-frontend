@@ -34,7 +34,7 @@ import {
 import { getSubsLinks } from '../helpers/externalLinks';
 
 import type { SubsUrls } from '../helpers/externalLinks';
-import { getDigiPackItems, getPaperItems } from '../helpers/blackFriday';
+import { getDigiPackItems, getPaperItems } from '../helpers/flashSale';
 
 
 // ----- Types ----- //
