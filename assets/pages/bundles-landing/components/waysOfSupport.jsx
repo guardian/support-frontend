@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getMemLink } from '../helpers/externalLinks';
-import WayOfSupport from './WayOfSupport';
+import WayOfSupport from './wayOfSupport';
 
 import type { MemProduct } from '../helpers/externalLinks';
 

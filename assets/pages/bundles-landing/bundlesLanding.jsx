@@ -13,11 +13,11 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { getQueryParameter } from 'helpers/url';
 
-import Introduction from './components/Introduction';
-import Bundles from './components/Bundles';
-import StackedBundle from './components/StackedBundle';
-import WhySupport from './components/WhySupport';
-import WaysOfSupport from './components/WaysOfSupport';
+import Introduction from './components/introduction';
+import Bundles from './components/bundles';
+import StackedBundle from './components/stackedBundle';
+import WhySupport from './components/whySupport';
+import WaysOfSupport from './components/waysOfSupport';
 import reducer from './bundlesLandingReducers';
 
 // Amounts test
