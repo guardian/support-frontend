@@ -20,7 +20,7 @@ const features: {
     {
       heading: 'Daily Tablet Edition app',
       text: `Read the Guardian, the Observer and all the Weekend supplements in an
-        optimised tablet app; available on iPad, Android and Kindle Fire tablets`,
+        optimised tablet app; available on iPad`,
     },
   ],
   paper: [
