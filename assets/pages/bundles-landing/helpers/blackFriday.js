@@ -15,14 +15,11 @@ function inOfferPeriod(): boolean {
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
 const saveMoneyOnRetailPrice = { heading: 'Save money on the retail price' };
 const getAllBenefits = { heading: 'Get all the benefits of a digital subscription' };
+const getAllBenefitsWithPaperPlus = { heading: 'Get all the benefits of a digital subscription with paper+digital' };
 const chooseYourPackage = {
   heading: 'Choose your package and delivery method',
   text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
 };
-const paperItems = [
-  chooseYourPackage,
-  getAllBenefits,
-];
 
 function getDigiPackItems() {
   const items = [
@@ -43,25 +40,30 @@ function getDigiPackItems() {
 }
 
 function getPaperItems() {
-  if (inOfferPeriod()) { return [offerItem, ...paperItems]; }
+  if (inOfferPeriod()) { return [offerItem, chooseYourPackage, getAllBenefitsWithPaperPlus]; }
 
-  return [paperItems[0], saveMoneyOnRetailPrice, paperItems[1]];
+  return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefitsWithPaperPlus];
 }
 
-function getPaperItemsForStructureTest() {
+// In the stacked bundle, paper and paper+digital are in separate boxes.
+// So in the paper only box, we don't mention the digital benefits.
+// And in the paper+digital box, we do
+function getPaperItemsForStackedBundle() {
   if (inOfferPeriod()) { return [offerItem, chooseYourPackage]; }
 
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
-function getPaperDigitalItemsForStructureTest() {
-  return getPaperItems();
+function getPaperDigitalItemsForStackedBundle() {
+  if (inOfferPeriod()) { return [offerItem, chooseYourPackage, getAllBenefits]; }
+
+  return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
 }
 
 export {
   inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
-  getPaperItemsForStructureTest,
-  getPaperDigitalItemsForStructureTest,
+  getPaperItemsForStackedBundle,
+  getPaperDigitalItemsForStackedBundle,
 };

@@ -21,7 +21,9 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getDigiPackItems, getPaperItemsForStructureTest, getPaperDigitalItemsForStructureTest, inOfferPeriod } from '../helpers/blackFriday';
+import type { Product } from './Bundles';
+
+import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/blackFriday';
 
 import CrossProduct from './crossProduct';
 import {
@@ -57,6 +59,7 @@ type PropTypes = {
   currency: Currency,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  products: Array<Product>
 };
 
 type ContribAttrs = {
@@ -104,7 +107,7 @@ const oneOffContribCopy: ContribAttrs = {
   heading: '',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test component-bundle--structure-one-off',
+  modifierClass: 'contributions component-bundle--stacked component-bundle--stacked-one-off',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a one-off contribution',
   paypalCta: {
@@ -119,13 +122,13 @@ const monthlyContribCopy: ContribAttrs = {
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
-  modifierClass: 'contributions component-bundle--structure-test',
+  modifierClass: 'contributions component-bundle--stacked',
   ctaLink: '',
   ctaAccessibilityHint: 'Proceed to make a monthly contribution',
 };
 
 
-const componentBundleModifierClass = `component-bundle--structure-test ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
+const componentBundleModifierClass = `component-bundle--stacked ${inOfferPeriod() ? 'component-bundle--black-friday' : ''}`;
 
 const digitalCopy: SubscribeAttrs = {
   heading: 'digital subscription',
@@ -141,7 +144,7 @@ const digitalCopy: SubscribeAttrs = {
 const paperCopy: SubscribeAttrs = {
   heading: 'paper subscription',
   subheading: 'from £10.79/month',
-  listItems: getPaperItemsForStructureTest(),
+  listItems: getPaperItemsForStackedBundle(),
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
   modifierClass: `paper ${componentBundleModifierClass}`,
@@ -152,7 +155,7 @@ const paperCopy: SubscribeAttrs = {
 const paperDigitalCopy: SubscribeAttrs = {
   heading: 'paper+digital',
   subheading: 'from £22.06/month',
-  listItems: getPaperDigitalItemsForStructureTest(),
+  listItems: getPaperDigitalItemsForStackedBundle(),
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
   modifierClass: `paperDigital ${componentBundleModifierClass}`,
@@ -314,10 +317,9 @@ function SubscribeBundle(props: Object) {
 
 }
 
-
 // ----- Component ----- //
 
-function BundlesGBStructureTest(props: PropTypes) {
+function StackedBundle(props: PropTypes) {
 
   const subsLinks: SubsUrls = getSubsLinks(
     props.intCmp,
@@ -329,19 +331,39 @@ function BundlesGBStructureTest(props: PropTypes) {
   const paperAttrs: SubscribeAttrs = getPaperAttrs(subsLinks);
   const paperDigitalAttrs: SubscribeAttrs = getPaperDigitalAttrs(subsLinks);
 
+  const contributions = (
+    <div>
+      <h2 className="bundles__title">contribute</h2>
+      <ContributionBundle {...props} />
+    </div>
+  );
+
+  const subscriptions = (
+    <div>
+      <h2 className="bundles__title">subscribe</h2>
+      <div className="bundles__divider" />
+      <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
+      <div className="bundles__divider" />
+      <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
+      <div className="bundles__divider" />
+      <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
+    </div>
+  );
+
+  const hasContributions = props.products.includes('CONTRIBUTE');
+  const hasSubscriptions = props.products.includes('PAPER_SUBSCRIPTION')
+    && props.products.includes('DIGITAL_SUBSCRIPTION');
+
   return (
-    <section className="bundles bundles--structure-test">
-      <div className="bundles__content gu-content-margin bundles__content--structure-test">
+    <section className="bundles bundles--stacked">
+      <div className="bundles__content gu-content-margin bundles__content--stacked">
         <div className="bundles__wrapper">
-          <h2 className="bundles__title">contribute</h2>
-          <ContributionBundle {...props} />
-          <h2 className="bundles__title">subscribe</h2>
-          <div className="bundles__divider" />
-          <SubscribeBundle {...digitalAttrs} subscriptionProduct="digital" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperAttrs} subscriptionProduct="paper" />
-          <div className="bundles__divider" />
-          <SubscribeBundle {...paperDigitalAttrs} subscriptionProduct="paperDigital" />
+          {hasContributions
+            ? contributions
+            : null}
+          {hasSubscriptions
+            ? subscriptions
+            : null}
         </div>
       </div>
       <div className="gu-content-margin">
@@ -394,4 +416,4 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(BundlesGBStructureTest);
+export default connect(mapStateToProps, mapDispatchToProps)(StackedBundle);
