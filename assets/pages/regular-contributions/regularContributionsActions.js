@@ -16,7 +16,9 @@ export type Action =
 
 // ----- Actions ----- //
 
-function checkoutError(message: string): Action {
+function checkoutError(specificError: ?string): Action {
+  const defaultError = 'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.';
+  const message = specificError || defaultError;
   return { type: 'CHECKOUT_ERROR', message };
 }
 
