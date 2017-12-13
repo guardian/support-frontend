@@ -29,7 +29,7 @@ const initialContrib: ContribState = {
       userDefined: false,
     },
     monthly: {
-      value: '10',
+      value: '5',
       userDefined: false,
     },
     oneOff: {
