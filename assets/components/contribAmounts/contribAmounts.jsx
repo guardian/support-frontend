@@ -241,10 +241,10 @@ const contribCaptionRadios = {
 
 function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
   if (currency === 'USD') {
-    if (abTests.usRecurringAmountsTest === 'range') {
+    if (abTests.usRecurringAmountsTestTwo === 'range') {
       return amountRadiosMonthlyRange[currency];
     }
-    if (abTests.usRecurringAmountsTest === 'higher') {
+    if (abTests.usRecurringAmountsTestTwo === 'higher') {
       return amountRadiosMonthlyHigher[currency];
     }
   }

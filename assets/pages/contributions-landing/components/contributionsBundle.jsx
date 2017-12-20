@@ -70,18 +70,6 @@ const subHeadingMonthlyText = {
   US: 'from $5 a month',
 };
 
-const subHeadingMonthlyTextTwo = {
-  GB: 'from £2 a month',
-  US: 'from $2 a month',
-};
-
-function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
-  return abTests.usRecurringAmountsTest === 'lower'
-    ? subHeadingMonthlyTextTwo[isoCountry]
-    : subHeadingMonthlyText[isoCountry];
-}
-
-
 const subHeadingOneOffText = {
   GB: '',
   US: '',
@@ -110,11 +98,10 @@ const contribCtaText = {
 function contribAttrs(
   isoCountry: IsoCountry,
   contribType: Contrib,
-  abTests: Participations,
 ): ContribAttrs {
   const subHeadingText = contribType === 'ONE_OFF'
     ? subHeadingOneOffText[isoCountry]
-    : getSubHeadingMonthly(abTests, isoCountry);
+    : subHeadingMonthlyText[isoCountry];
 
   return {
     heading: 'contribute',
@@ -171,7 +158,6 @@ const getContribAttrs = (
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
   currency: IsoCurrency,
-  abTests: Participations,
 ): ContribAttrs => {
 
   const contType = getContribKey(contribType);
@@ -193,7 +179,7 @@ const getContribAttrs = (
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs(isoCountry, contribType, abTests), { ctaLink });
+  return Object.assign({}, contribAttrs(isoCountry, contribType), { ctaLink });
 
 };
 
@@ -218,7 +204,6 @@ function ContributionsBundle(props: PropTypes) {
     props.referrerAcquisitionData,
     props.isoCountry,
     props.currency.iso,
-    props.abTests,
   );
 
   attrs.showPaymentLogos = true;
