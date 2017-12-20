@@ -397,7 +397,6 @@ export default function ContribAmounts(props: PropTypes) {
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
             labelText={props.currency.glyph}
           />
-
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
             {contribOtherAmountAccessibilityHint}
           </p>
