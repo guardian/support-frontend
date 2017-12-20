@@ -72,11 +72,11 @@ const subHeadingMonthlyText = {
 
 const subHeadingMonthlyTextTwo = {
   GB: 'from £2 a month',
-  US: 'from $2 a month',
+  US: 'from $3 a month',
 };
 
 function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
-  return abTests.usRecurringAmountsTest === 'lower'
+  return abTests.usRecurringAmountsTestTwo === 'range'
     ? subHeadingMonthlyTextTwo[isoCountry]
     : subHeadingMonthlyText[isoCountry];
 }

@@ -35,7 +35,7 @@ saveContext(store.dispatch);
 
 (function initialiseAmountsTest() {
   try {
-    const testParticipation = store.getState().common.abParticipations.usRecurringAmountsTest;
+    const testParticipation = store.getState().common.abParticipations.usRecurringAmountsTestTwo;
     const defaultSelectedAmount =
       defaultAmountsUS[testParticipation]
       || defaultAmountsUS.control;
