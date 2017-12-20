@@ -6,6 +6,7 @@ import React from 'react';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
+import Secure from 'components/secure/secure';
 import { generateClassName } from 'helpers/utilities';
 
 import type { Node } from 'react';
@@ -20,6 +21,7 @@ type PropTypes = {
   children?: Node,
   doubleHeadingModifierClass?: string,
   showPaymentLogos?: boolean,
+  showSecureLogo?: boolean
 };
 
 
@@ -28,15 +30,13 @@ type PropTypes = {
 export default function Bundle(props: PropTypes) {
 
   const className = generateClassName('component-bundle', props.modifierClass);
-  let paymentLogos = '';
-
-  if (props.showPaymentLogos) {
-    paymentLogos = <InlinePaymentLogos />;
-  }
 
   return (
     <div className={className}>
-      {paymentLogos}
+      <div style={{ float: 'right' }}>
+        {props.showPaymentLogos ? <InlinePaymentLogos /> : null}
+        {props.showSecureLogo ? <Secure style={{ textAlign: 'right', paddingTop: '5px' }} /> : null}
+      </div>
       <DoubleHeading
         heading={props.heading}
         subheading={props.subheading}
@@ -57,4 +57,5 @@ Bundle.defaultProps = {
   children: null,
   doubleHeadingModifierClass: '',
   showPaymentLogos: false,
+  showSecureLogo: false,
 };
