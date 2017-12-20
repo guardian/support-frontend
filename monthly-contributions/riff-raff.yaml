@@ -15,7 +15,6 @@ deployments:
         - "-CreateSalesforceContactLambda-"
         - "-CreateZuoraSubscriptionLambda-"
         - "-SendThankYouEmailLambda-"
-        - "-UpdateMembersDataAPILambda-"
         - "-FailureHandlerLambda-"
         - "-ContributionCompletedLambda-"
         - "-SendAcquisitionEventLambda-"

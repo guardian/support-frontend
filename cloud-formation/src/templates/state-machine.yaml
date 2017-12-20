@@ -39,13 +39,6 @@ States:
           Resource: "${SendThankYouEmailLambda.Arn}"
           End: True
           {{> retry}}
-    - StartAt: UpdateMembersDataAPI
-      States:
-        UpdateMembersDataAPI:
-          Type: Task
-          Resource: "${UpdateMembersDataAPILambda.Arn}"
-          End: True
-          {{> retry}}
     - StartAt: SendAcquisitionEvent
       States:
         SendAcquisitionEvent:

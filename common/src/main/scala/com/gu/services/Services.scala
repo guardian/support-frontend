@@ -1,7 +1,6 @@
 package com.gu.services
 
 import com.gu.config.Configuration._
-import com.gu.membersDataAPI.MembersDataService
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.ophan.OphanService
 import com.gu.paypal.PayPalService
@@ -25,7 +24,6 @@ class Services(isTestUser: Boolean) {
   lazy val payPalService: PayPalService = new PayPalService(payPalConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
-  lazy val membersDataService = new MembersDataService(membersDataApiConfigProvider.get(isTestUser))
   lazy val ophanService = OphanService(isTestUser)
 }
 
