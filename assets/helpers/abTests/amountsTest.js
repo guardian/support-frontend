@@ -7,29 +7,22 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Functions ----- //
-
-const defaultAmountsUK = {
-  control: '10',
-  lower: '5',
-  wildcard: '7',
-  notintest: '10',
-};
-
 const defaultAmountsUS = {
-  control: '10',
-  higher: '15',
-  lower: '5',
-  notintest: '10',
+  control: '15',
+  range: '15',
+  higher: '35',
+
 };
 
-const amountRadiosMonthlyHigher: {
+
+const amountRadiosMonthlyRange: {
   [IsoCurrency]: Radio[]
 } = {
   USD: [
     {
-      value: '7',
-      text: '$7',
-      accessibilityHint: 'contribute seven dollars per month',
+      value: '3',
+      text: '$3',
+      accessibilityHint: 'contribute three dollars per month',
     },
     {
       value: '15',
@@ -44,74 +37,31 @@ const amountRadiosMonthlyHigher: {
   ],
 };
 
-const amountRadiosMonthlyLower: {
+const amountRadiosMonthlyHigher: {
   [IsoCurrency]: Radio[]
 } = {
-  GBP: [
-    {
-      value: '2',
-      text: '£2',
-      accessibilityHint: 'contribute two pounds per month',
-    },
-    {
-      value: '5',
-      text: '£5',
-      accessibilityHint: 'contribute five pounds per month',
-    },
-    {
-      value: '10',
-      text: '£10',
-      accessibilityHint: 'contribute ten pounds per month',
-    },
-  ],
   USD: [
     {
-      value: '2',
-      text: '$2',
-      accessibilityHint: 'contribute two dollars per month',
+      value: '15',
+      text: '$15',
+      accessibilityHint: 'contribute fifteen dollars per month',
     },
     {
-      value: '5',
-      text: '$5',
-      accessibilityHint: 'contribute five dollars per month',
+      value: '35',
+      text: '$35',
+      accessibilityHint: 'contribute thirty five dollars per month',
     },
     {
-      value: '10',
-      text: '$10',
-      accessibilityHint: 'contribute ten dollars per month',
+      value: '50',
+      text: '$50',
+      accessibilityHint: 'contribute fifty dollars per month',
     },
   ],
 };
-
-const amountRadiosMonthlyWildcard: {
-  [IsoCurrency]: Radio[]
-} = {
-  GBP: [
-    {
-      value: '5',
-      text: '£5',
-      accessibilityHint: 'contribute five pounds per month',
-    },
-    {
-      value: '7',
-      text: '£7',
-      accessibilityHint: 'contribute seven pounds per month',
-    },
-    {
-      value: '20',
-      text: '£20',
-      accessibilityHint: 'contribute twenty pounds per month',
-    },
-  ],
-};
-
 
 // ----- Exports ----- //
-
 export {
-  defaultAmountsUK,
   defaultAmountsUS,
+  amountRadiosMonthlyRange,
   amountRadiosMonthlyHigher,
-  amountRadiosMonthlyLower,
-  amountRadiosMonthlyWildcard,
 };

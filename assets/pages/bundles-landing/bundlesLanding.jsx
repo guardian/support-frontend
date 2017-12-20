@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 
-import { defaultAmountsUK } from 'helpers/abTests/amountsTest';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { getQueryParameter } from 'helpers/url';
@@ -19,10 +18,6 @@ import StackedBundle from './components/stackedBundle';
 import WhySupport from './components/whySupport';
 import WaysOfSupport from './components/waysOfSupport';
 import reducer from './bundlesLandingReducers';
-
-// Amounts test
-import { changeContribAmountMonthly } from './bundlesLandingActions';
-
 
 // ----- Redux Store ----- //
 
@@ -66,16 +61,5 @@ const content = (
     </div>
   </Provider>
 );
-
-(function initialiseAmountsTest() {
-  try {
-    const defaultSelectedAmount =
-      defaultAmountsUK[store.getState().common.abParticipations.ukRecurringAmountsTest]
-      || defaultAmountsUK.control;
-    return store.dispatch(changeContribAmountMonthly({
-      value: defaultSelectedAmount, userDefined: false,
-    }));
-  } catch (e) { return null; }
-}());
 
 renderPage(content, 'bundles-landing-page');
