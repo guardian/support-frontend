@@ -60,7 +60,7 @@ type ContribAttrs = {
   modifierClass: string,
   ctaLink: string,
   showPaymentLogos: boolean,
-  showSecureLogo: boolean
+  showSecureLogo: boolean,
 }
 
 
