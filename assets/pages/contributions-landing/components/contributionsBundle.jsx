@@ -124,6 +124,7 @@ function contribAttrs(
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
+    showSecureLogo: false,
   };
 }
 
