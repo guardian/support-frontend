@@ -17,4 +17,17 @@ export const tests: Tests = {
     seed: 1,
   },
 
+  usSecureLogoTest: {
+    variants: ['control', 'logo'],
+    audiences: {
+      US: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 6,
+  },
+
 };
