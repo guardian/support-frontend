@@ -17,7 +17,7 @@ import { contribCamelCase } from 'helpers/contributions';
 import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -63,6 +63,12 @@ type PropTypes = {
   products: Array<Product>
 };
 
+type PayPalCta = {
+  id: string,
+  text: string,
+  accessibilityHint: string,
+}
+
 type ContribAttrs = {
   heading: string,
   subheading?: string,
@@ -71,11 +77,7 @@ type ContribAttrs = {
   ctaId: string,
   ctaLink: string,
   ctaAccessibilityHint: string,
-  paypalCta?: {
-    id: string,
-    text: string,
-    accessibilityHint: string,
-  },
+  paypalCta?: PayPalCta,
 }
 
 type DigitalAttrs = {
@@ -222,7 +224,7 @@ const ctaLinks = {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
-  currency: IsoCurrency,
+  currency: Currency,
   isoCountry: string,
   intCmp: ?string,
   abTests: Participations,
@@ -233,18 +235,19 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
-  params.append('currency', currency);
+  params.append('currency', currency.iso);
 
   if (intCmp !== null && intCmp !== undefined) {
     params.append('INTCMP', intCmp);
   }
   const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+  const ctaText = `Contribute ${currency.glyph}${contribAmount[contType].value} with card`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
-
+  const paypalCta = Object.assign({}, { text: `Contribute ${currency.glyph}${contribAmount[contType].value} with PayPal` });
   return Object.assign({}, bundles(abTests).contrib[contType], {
-    ctaId, ctaLink, ctaAccessibilityHint,
+    ctaText, ctaId, ctaLink, ctaAccessibilityHint, paypalCta,
   });
 
 };
@@ -270,7 +273,7 @@ function ContributionBundle(props: PropTypes) {
     getContribAttrs(
       props.contribType,
       props.contribAmount,
-      props.currency.iso,
+      props.currency,
       props.isoCountry,
       props.intCmp,
       props.abTests,
@@ -299,7 +302,7 @@ function ContributionBundle(props: PropTypes) {
       />
       {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
         <PayPalContributionButton
-          buttonText={contribAttrs.paypalCta.text}
+          buttonText={contribAttrs.ctaText}
           amount={Number(props.contribAmount.oneOff.value)}
           referrerAcquisitionData={props.referrerAcquisitionData}
           isoCountry={props.isoCountry}
