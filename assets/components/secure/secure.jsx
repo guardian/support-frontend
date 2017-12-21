@@ -17,7 +17,7 @@ type PropTypes = {
 export default function Secure(props: PropTypes) {
 
   return (
-    <div className="component-secure" style={props && props.style}>
+    <div className="component-secure" style={props.style}>
       <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
@@ -28,5 +28,5 @@ export default function Secure(props: PropTypes) {
 // ----- Default Props ----- //
 
 Secure.defaultProps = {
-  style: null,
+  style: {},
 };
