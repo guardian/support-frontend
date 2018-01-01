@@ -12,6 +12,7 @@ import {
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { finalPrice as paperFinalPrice } from 'helpers/productPrice/paperProductPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../paperSubscriptionCheckoutReducer';
 
 function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatch: Dispatch<Action>) {
@@ -36,15 +37,18 @@ function showStripe(
   dispatch: Dispatch<Action>,
   state: State,
 ) {
-  const { currencyId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
 
-  const { price } = { price: 99999 };
+  const { price, currency } = paperFinalPrice(
+    state.page.checkout.productPrices,
+    state.page.checkout.fulfilmentOption,
+    state.page.checkout.productOption,
+  );
 
   const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch);
 
   loadStripe()
-    .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
+    .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
     .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
 }
 
