@@ -19,7 +19,6 @@ object StateCodecs {
   implicit val createSalesforceContactStateCodec: Codec[CreateSalesforceContactState] = deriveCodec
   implicit val createZuoraSubscriptionStateCodec: Codec[CreateZuoraSubscriptionState] = deriveCodec
   implicit val sendThankYouEmailStateCodec: Codec[SendThankYouEmailState] = deriveCodec
-  implicit val updateMembersDataApiStateCodec: Codec[UpdateMembersDataAPIState] = deriveCodec
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec[CompletedState]
   implicit val sendAcquisitionEventStateDecoder: Decoder[SendAcquisitionEventState] = deriveDecoder

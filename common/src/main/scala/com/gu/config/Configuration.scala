@@ -2,7 +2,6 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
-import com.gu.membersDataAPI.MembersDataServiceConfigProvider
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
 import com.gu.zuora.ZuoraConfigProvider
@@ -32,5 +31,4 @@ object Configuration extends LazyLogging {
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
   val emailServicesConfig = EmailServicesConfig.fromConfig(config)
-  val membersDataApiConfigProvider = new MembersDataServiceConfigProvider(config, stage)
 }

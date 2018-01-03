@@ -13,7 +13,5 @@ lambdas:
   description: Failure handler
 - name: SendThankYouEmail
   description: Send thank-you email
-- name: UpdateMembersDataAPI
-  description: Request members data api sync with Zuora and SalesForce
 - name: SendAcquisitionEvent
   description: Submit Acquisition events to Ophan
