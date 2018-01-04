@@ -30,8 +30,7 @@
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
-    "verbose": true,
-    "testEnvironment": "jest-environment-jsdom-11.0.0"
+    "verbose": true
   },
   "repository": {
     "type": "git",
@@ -43,7 +42,6 @@
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
-    "jest-environment-jsdom-11.0.0": "^20.0.9",
     "raven-js": "^3.20.1",
     "react-redux": "^5.0.5",
     "redux": "^3.7.1",
@@ -70,7 +68,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "flow-bin": "^0.60.1",
-    "jest": "^21.2.1",
+    "jest": "^22.0.4",
     "node-sass": "^4.7.2",
     "npm-run-all": "^4.1.2",
     "ophan-tracker-js": "^1.3.9",
