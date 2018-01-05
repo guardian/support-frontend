@@ -51,8 +51,8 @@ if (bundle === 'contribute') {
 }
 
 const whyAndWaysOfSupport = (bundle === 'contribute' && bottomTest === 'no_bottom')
-    ? ''
-    : (
+  ? ''
+  : (
     <div>
       <WhySupport />
       <WaysOfSupport />

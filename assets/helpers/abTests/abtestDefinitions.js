@@ -1,4 +1,5 @@
 // @flow
+import { getQueryParameter } from '../url';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
@@ -30,17 +31,19 @@ export const tests: Tests = {
     seed: 6,
   },
 
-  ukDropBottomTest : {
+  ukDropBottomTest: {
     variants: ['control', 'no_bottom'],
     audiences: {
-        GB: {
-            offset: 0,
-            size: 1,
-        },
+      GB: {
+        offset: 0,
+        size: 1,
+      },
     },
     isActive: true,
     independent: true,
+    customSegmentCondition: () => getQueryParameter('bundle') === 'contribute',
     seed: 7,
   },
 
 };
+
