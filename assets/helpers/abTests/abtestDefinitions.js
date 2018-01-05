@@ -30,4 +30,17 @@ export const tests: Tests = {
     seed: 6,
   },
 
+  ukDropBottomTest : {
+    variants: ['control', 'no_bottom'],
+    audiences: {
+        GB: {
+            offset: 0,
+            size: 1,
+        },
+    },
+    isActive: true,
+    independent: true,
+    seed: 7,
+  },
+
 };

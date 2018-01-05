@@ -33,6 +33,7 @@ const store = pageInit(
 // ----- Render ----- //
 
 const bundle: ?string = getQueryParameter('bundle');
+const bottomTest = store.getState().common.abParticipations.ukDropBottomTest;
 
 let bundlesSelected;
 let showContributeOrSubscribe = false;
@@ -49,14 +50,22 @@ if (bundle === 'contribute') {
   showContributeOrSubscribe = true;
 }
 
+const whyAndWaysOfSupport = (bundle === 'contribute' && bottomTest === 'no_bottom')
+    ? ''
+    : (
+    <div>
+      <WhySupport />
+      <WaysOfSupport />
+    </div>
+  );
+
 const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
       <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
-      <WhySupport />
-      <WaysOfSupport />
+      {whyAndWaysOfSupport}
       <Footer privacyPolicy disclaimer />
     </div>
   </Provider>

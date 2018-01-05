@@ -30,6 +30,7 @@ const copy = {
 
 export default function WhySupport() {
 
+
   return (
     <section className="why-support">
       <div className="why-support__content gu-content-margin">
