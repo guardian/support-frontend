@@ -343,8 +343,8 @@ function StackedBundle(props: PropTypes) {
     && props.products.includes('DIGITAL_SUBSCRIPTION');
 
   return (
-    <section className="bundles bundles--stacked">
-      <div className="bundles__content gu-content-margin bundles__content--stacked">
+    <section className="bundles bundles--stacked gu-content-filler">
+      <div className="bundles__content gu-content-filler__inner bundles__content--stacked">
         <div className="bundles__wrapper">
           {hasContributions
             ? contributions

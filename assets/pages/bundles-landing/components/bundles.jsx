@@ -370,8 +370,8 @@ function Bundles(props: PropTypes) {
   const digitalAttrs: DigitalAttrs = getDigitalAttrs(subsLinks);
 
   return (
-    <section className="bundles">
-      <div className="bundles__content gu-content-margin">
+    <section className="bundles gu-content-filler">
+      <div className="bundles__content gu-content-filler__inner">
         <div className={generateClassName('bundles__wrapper', props.products.length.toString())}>
           {props.products.map((p) => {
             if (p === 'PAPER_SUBSCRIPTION') {
