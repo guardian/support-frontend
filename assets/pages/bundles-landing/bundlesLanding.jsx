@@ -61,7 +61,7 @@ const whyAndWaysOfSupport = (bundle === 'contribute' && bottomTest === 'no_botto
 
 const content = (
   <Provider store={store}>
-    <div>
+    <div className="gu-content">
       <SimpleHeader />
       <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
