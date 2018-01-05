@@ -127,7 +127,7 @@ describe('Correct allocation in a multi test environment', () => {
   US: |  20%   |        60%                |   20%   |
         Test 1         Test 2              Not in Test
 
-  Test 3 is 100% GB, but canRun is false
+  Test 3 is 100% GB, but customSegmentCondition is false
    */
 
   const tests = {
@@ -170,7 +170,7 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
-      canRun: () => false,
+      customSegmentCondition: () => false,
       independent: false,
       seed: 0,
     },

@@ -41,7 +41,7 @@ export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  canRun?: () => boolean,
+  customSegmentCondition?: () => boolean,
   independent: boolean,
   seed: number,
 |};
@@ -144,7 +144,7 @@ function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): 
       return;
     }
 
-    if (test.canRun && !test.canRun()) {
+    if (test.customSegmentCondition && !test.customSegmentCondition()) {
       participations[testId] = notintest;
     } else if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
