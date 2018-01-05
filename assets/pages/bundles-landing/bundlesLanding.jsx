@@ -53,15 +53,12 @@ if (bundle === 'contribute') {
 const whyAndWaysOfSupport = (bundle === 'contribute' && bottomTest === 'no_bottom')
   ? ''
   : (
-    <div>
-      <WhySupport />
-      <WaysOfSupport />
-    </div>
+    [<WhySupport />, <WaysOfSupport />]
   );
 
 const content = (
   <Provider store={store}>
-    <div>
+    <div className="gu-content">
       <SimpleHeader />
       <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
       {bundlesSelected}
