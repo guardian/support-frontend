@@ -1,6 +1,7 @@
 // @flow
 import { getQueryParameter } from '../url';
 import type { Tests } from './abtest';
+import * as storage from '../storage';
 
 // ----- Tests ----- //
 
@@ -41,7 +42,8 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    customSegmentCondition: () => getQueryParameter('bundle') === 'contribute',
+    customSegmentCondition: () =>
+      storage.getSession('gu.contributeOnly') === 'true' || getQueryParameter('bundle') === 'contribute',
     seed: 7,
   },
 
