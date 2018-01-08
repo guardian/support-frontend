@@ -60,6 +60,7 @@ type ContribAttrs = {
   modifierClass: string,
   ctaLink: string,
   showPaymentLogos: boolean,
+  showSecureLogo: boolean,
 }
 
 
@@ -72,11 +73,11 @@ const subHeadingMonthlyText = {
 
 const subHeadingMonthlyTextTwo = {
   GB: 'from £2 a month',
-  US: 'from $2 a month',
+  US: 'from $3 a month',
 };
 
 function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
-  return abTests.usRecurringAmountsTest === 'lower'
+  return abTests.usRecurringAmountsTestTwo === 'range'
     ? subHeadingMonthlyTextTwo[isoCountry]
     : subHeadingMonthlyText[isoCountry];
 }
@@ -123,6 +124,7 @@ function contribAttrs(
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
+    showSecureLogo: false,
   };
 }
 
@@ -222,6 +224,7 @@ function ContributionsBundle(props: PropTypes) {
   );
 
   attrs.showPaymentLogos = true;
+  attrs.showSecureLogo = props.abTests.usSecureLogoTest === 'logo';
 
   const onClick = () => {
     if (!props.contribError) {

@@ -119,7 +119,7 @@ const oneOffContribCopy: ContribAttrs = {
 
 const monthlyContribCopy: ContribAttrs = {
   heading: '',
-  subheading: 'from £5/month',
+  subheading: 'from £2/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
   modifierClass: 'contributions component-bundle--stacked',
@@ -173,20 +173,11 @@ const bundles: BundlesType = {
   paperDigital: paperDigitalCopy,
 };
 
-function getMonthlyContribCopy(abTests: ?Participations) {
-  let response = monthlyContribCopy;
-  if (abTests && abTests.ukRecurringAmountsTest === 'lower') {
-    response = Object.assign({}, monthlyContribCopy, { subheading: 'from £2/month' });
-  }
-  return response;
-}
-
-
-function getBundles(abTests: ?Participations): BundlesType {
+function getBundles(): BundlesType {
   return {
     contrib: {
       oneOff: oneOffContribCopy,
-      monthly: getMonthlyContribCopy(abTests),
+      monthly: monthlyContribCopy,
     },
     digital: digitalCopy,
     paper: paperCopy,
@@ -208,7 +199,6 @@ const getContribAttrs = (
   currency: Currency,
   isoCountry: string,
   intCmp: ?string,
-  abTests: Participations,
 ): ContribAttrs => {
 
   const contType = contribCamelCase(contribType);
@@ -228,7 +218,7 @@ const getContribAttrs = (
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
   const paypalCta = Object.assign({}, { text: `Contribute ${currency.glyph}${contribAmount[contType].value} with PayPal` });
 
-  return Object.assign({}, getBundles(abTests).contrib[contType], {
+  return Object.assign({}, getBundles().contrib[contType], {
     ctaId, ctaLink, ctaText, ctaAccessibilityHint, paypalCta,
   });
 
@@ -255,7 +245,6 @@ function ContributionBundle(props: PropTypes) {
       props.currency,
       props.isoCountry,
       props.intCmp,
-      props.abTests,
     );
 
   const onClick = () => {
@@ -268,7 +257,6 @@ function ContributionBundle(props: PropTypes) {
     <Bundle {...contribAttrs}>
       <p>
         Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
-        All profit is reinvested to safeguard the quality of our journalism.
       </p>
       <ContribAmounts
         onNumberInputKeyPress={onClick}
@@ -357,8 +345,8 @@ function StackedBundle(props: PropTypes) {
     && props.products.includes('DIGITAL_SUBSCRIPTION');
 
   return (
-    <section className="bundles bundles--stacked">
-      <div className="bundles__content gu-content-margin bundles__content--stacked">
+    <section className="bundles bundles--stacked gu-content-filler">
+      <div className="bundles__content gu-content-filler__inner bundles__content--stacked">
         <div className="bundles__wrapper">
           {hasContributions
             ? contributions

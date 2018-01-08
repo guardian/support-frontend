@@ -41,6 +41,7 @@ export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
+  customSegmentCondition?: () => boolean,
   independent: boolean,
   seed: number,
 |};
@@ -137,17 +138,20 @@ function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): 
 
   Object.keys(abTests).forEach((testId) => {
     const test = abTests[testId];
+    const notintest = 'notintest';
 
     if (!test.isActive) {
       return;
     }
 
-    if (testId in currentParticipation) {
+    if (test.customSegmentCondition && !test.customSegmentCondition()) {
+      participations[testId] = notintest;
+    } else if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
     } else if (userInTest(test.audiences, mvtId, country)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
-      participations[testId] = 'notintest';
+      participations[testId] = notintest;
     }
   });
 

@@ -1,24 +1,12 @@
 // @flow
+import { getQueryParameter } from '../url';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
 export const tests: Tests = {
-  ukRecurringAmountsTest: {
-    variants: ['control', 'lower', 'wildcard'],
-    audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-  },
-
-  usRecurringAmountsTest: {
-    variants: ['control', 'lower', 'higher'],
+  usRecurringAmountsTestTwo: {
+    variants: ['control', 'higher', 'range'],
     audiences: {
       US: {
         offset: 0,
@@ -27,7 +15,35 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 5,
+    seed: 1,
+  },
+
+  usSecureLogoTest: {
+    variants: ['control', 'logo'],
+    audiences: {
+      US: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 6,
+  },
+
+  ukDropBottomTest: {
+    variants: ['control', 'no_bottom'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    customSegmentCondition: () => getQueryParameter('bundle') === 'contribute',
+    seed: 7,
   },
 
 };
+

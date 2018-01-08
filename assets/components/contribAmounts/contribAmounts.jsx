@@ -12,7 +12,7 @@ import {
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
-import { amountRadiosMonthlyHigher, amountRadiosMonthlyLower, amountRadiosMonthlyWildcard } from 'helpers/abTests/amountsTest';
+import { amountRadiosMonthlyRange, amountRadiosMonthlyHigher } from 'helpers/abTests/amountsTest';
 
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
@@ -111,6 +111,11 @@ const amountRadiosMonthlyControl: {
 } = {
   GBP: [
     {
+      value: '2',
+      text: '£2',
+      accessibilityHint: 'contribute two pounds per month',
+    },
+    {
       value: '5',
       text: '£5',
       accessibilityHint: 'contribute five pounds per month',
@@ -120,27 +125,22 @@ const amountRadiosMonthlyControl: {
       text: '£10',
       accessibilityHint: 'contribute ten pounds per month',
     },
-    {
-      value: '20',
-      text: '£20',
-      accessibilityHint: 'contribute twenty pounds per month',
-    },
   ],
   USD: [
     {
-      value: '5',
-      text: '$5',
-      accessibilityHint: 'contribute five dollars per month',
+      value: '7',
+      text: '$7',
+      accessibilityHint: 'contribute seven dollars per month',
     },
     {
-      value: '10',
-      text: '$10',
-      accessibilityHint: 'contribute ten dollars per month',
+      value: '15',
+      text: '$15',
+      accessibilityHint: 'contribute fifteen dollars per month',
     },
     {
-      value: '20',
-      text: '$20',
-      accessibilityHint: 'contribute twenty dollars per month',
+      value: '30',
+      text: '$30',
+      accessibilityHint: 'contribute thirty dollars per month',
     },
   ],
 };
@@ -240,19 +240,11 @@ const contribCaptionRadios = {
 };
 
 function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
-  if (currency === 'GBP') {
-    if (abTests.ukRecurringAmountsTest === 'lower') {
-      return amountRadiosMonthlyLower[currency];
-    }
-    if (abTests.ukRecurringAmountsTest === 'wildcard') {
-      return amountRadiosMonthlyWildcard[currency];
-    }
-  }
   if (currency === 'USD') {
-    if (abTests.usRecurringAmountsTest === 'lower') {
-      return amountRadiosMonthlyLower[currency];
+    if (abTests.usRecurringAmountsTestTwo === 'range') {
+      return amountRadiosMonthlyRange[currency];
     }
-    if (abTests.usRecurringAmountsTest === 'higher') {
+    if (abTests.usRecurringAmountsTestTwo === 'higher') {
       return amountRadiosMonthlyHigher[currency];
     }
   }
@@ -405,7 +397,6 @@ export default function ContribAmounts(props: PropTypes) {
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
             labelText={props.currency.glyph}
           />
-
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
             {contribOtherAmountAccessibilityHint}
           </p>
