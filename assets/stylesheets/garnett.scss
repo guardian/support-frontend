@@ -93,3 +93,88 @@
     }
   }
 }
+
+// Garnett Colour Pallete
+
+#bundles-landing-page {
+
+  .introduction-text {
+    background-color: darken(#0084c6, 5%);
+
+    .introduction-text__heading {
+      color: #fff;
+    }
+
+    .introduction-text__heading:nth-child(2) {
+      color:black;
+    }
+    .introduction-text__content {
+      background-color: #0084c6;
+    }
+  } 
+
+  .bundles--stacked {
+    background-color: #f2f2f2;
+    padding-bottom: 0;
+  }
+
+  .bundles {
+
+    .bundles__title {
+      color: #121212
+    }
+
+    .bundles__content {
+      padding-bottom: $gu-v-spacing;
+    }
+
+    .component-bundle.component-bundle--contributions {
+      background-color: #ffe500;
+    }
+
+    .bundles__content--stacked {
+      background-color: #fff;
+    }
+
+    .component-bundle {
+      background-color: #f2f2f2;
+    }
+
+    .bundles__cross-product {
+      display: none;
+    }
+
+    .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
+      .component-double-heading__heading {
+        color: #0084c6;
+      }
+    }
+  }
+
+  .why-support {
+
+    .why-support__heading {
+      color: #bb3b80;
+      text-align: left;
+    }
+
+    .why-support__video-caption {
+      display: none;
+    }
+  }
+
+  .ways-of-support {
+    .ways-of-support__heading {
+      color: #121212;
+    }
+
+    .way-of-support--gu-events {
+      background-color: #fff;
+    }
+  }
+
+  .component-footer {
+    background-color: #121212;
+  }
+}
+
