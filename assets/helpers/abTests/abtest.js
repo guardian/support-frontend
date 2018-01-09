@@ -10,6 +10,7 @@ import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { tests } from './abtestDefinitions';
+import { getQueryParameter } from '../url';
 
 
 // ----- Types ----- //
@@ -78,6 +79,12 @@ function getLocalStorageParticipation(): Participations {
 
   return abTests ? JSON.parse(abTests) : {};
 
+}
+
+function setContributeOnlyLocalStorageParameter(): void {
+  if (getQueryParameter('bundle') === 'contribute') {
+    storage.setSession('gu.contributeOnly', 'true');
+  }
 }
 
 function setLocalStorageParticipations(participations: Participations): void {
@@ -180,7 +187,7 @@ const init = (country: IsoCountry, abTests: Tests = tests): Participations => {
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-
+  setContributeOnlyLocalStorageParameter();
   setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
   trackABOphan(participations, false);
 
