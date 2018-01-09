@@ -130,6 +130,10 @@
 
     .component-bundle.component-bundle--contributions {
       background-color: #ffe500;
+
+      .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
+        background-color: #ffe500;
+      }
     }
 
     .bundles__content--stacked {
@@ -166,6 +170,7 @@
   .ways-of-support {
     .ways-of-support__heading {
       color: #121212;
+      text-align: left;
     }
 
     .way-of-support--gu-events {
