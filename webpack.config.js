@@ -10,8 +10,6 @@ const pxtorem = require('postcss-pxtorem');
 module.exports = (env) => {
 
   const isProd = env && env.prod;
-  const isGarnett = process.env && process.env.SUPPORT_FRONTEND_GARNETT === 'true';
-  console.info(`Running Garnett: ${isGarnett}`);
 
   const plugins = [
     new ManifestPlugin({
@@ -48,7 +46,7 @@ module.exports = (env) => {
 
     entry: {
       favicons: 'images/favicons.js',
-      styles: isGarnett ? 'stylesheets/garnett.scss' : 'stylesheets/main.scss',
+      styles: 'stylesheets/garnett.scss',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
       supportLandingPage: 'pages/bundles-landing/support-landing-ab-test/supportLanding.jsx',
       contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',
