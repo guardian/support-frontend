@@ -57,6 +57,17 @@ class RegularContributions(
     } getOrElse InternalServerError
   }
 
+  def submitMarketing(): Action[AnyContent] = PrivateAction { implicit request =>
+    logger.info("hello")
+    request.session.data.get("email") match {
+      case Some(email) => logger.info("email = " + email)
+      case None => Future.successful(logger.error("email not found in session while trying to update marketing opt in"))
+    }
+
+    Ok("hello".asJson)
+
+  }
+
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>

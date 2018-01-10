@@ -54,6 +54,7 @@ module.exports = (env) => {
       regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
       regularContributionsThankyouPage: 'pages/contributions-thankyou/regularContributionsThankyou.jsx',
       regularContributionsPendingPage: 'pages/contributions-thankyou/regularContributionsPending.jsx',
+      regularContributionsMarketing: 'pages/contributions-email-consent/regularContributionsMarketing.jsx',
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
       regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',

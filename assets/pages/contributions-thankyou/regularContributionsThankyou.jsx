@@ -12,12 +12,20 @@ import SocialShare from 'components/socialShare/socialShare';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import {routes} from "../../helpers/routes";
 
 
 // ----- Page Startup ----- //
 
 pageInit();
 
+const onClick = () => {
+  console.log("here");
+  return fetch(routes.recurringContributionsSendMarketing()).then(response => {
+    console.log(response);
+    window.location.assign(routes.recurringContribThankyou);
+  });
+};
 
 // ----- Render ----- //
 
@@ -27,6 +35,19 @@ const content = (
     <section className="thankyou gu-content-filler">
       <div className="thankyou__content gu-content-filler__inner">
         <div className="thankyou__wrapper">
+
+          <h1 className="thankyou__heading">We would like to hear from you</h1>
+          <h2 id="qa-thank-you-message" className="thankyou__subheading">
+            <p>Some copy around supporting the guardian
+            </p>
+          </h2>
+          <CtaLink
+            onClick={onClick}
+            ctaId="next"
+            text="next"
+            accessibilityHint="Go to the guardian dot com front page"
+          />
+
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 id="qa-thank-you-message" className="thankyou__subheading">
             <p>You have helped to make the Guardian&#39;s future more secure.

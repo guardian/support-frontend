@@ -9,6 +9,8 @@ const routes: {
   recurringContribThankyou: '/contribute/recurring/thankyou',
   recurringContribCreate: '/contribute/recurring/create',
   recurringContribPending: '/contribute/recurring/pending',
+  recurringContribMarketingPreferences: 'recurring/marketing',
+  recurringContributionsSendMarketing: '/contribute/send-marketing',
   oneOffContribCheckout: '/contribute/one-off',
   oneOffContribThankyou: '/contribute/one-off/thankyou',
   oneOffContribAutofill: '/contribute/one-off/autofill',

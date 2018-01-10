@@ -4,7 +4,6 @@
 
 import type { Contrib, Amount } from 'helpers/contributions';
 
-
 // ----- Types ----- //
 
 export type Action =

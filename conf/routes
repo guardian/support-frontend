@@ -32,7 +32,10 @@ GET  /contribute/recurring/thankyou                 controllers.Application.reac
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/recurring/pending                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/recurring/marketing                controllers.Application.reactTemplate(title="Support the Guardian | Marketing", id="regular-contributions-marketing", js="regularContributionsMarketing.js")
+GET /contribute/send-marketing                     controllers.RegularContributions.submitMarketing
+
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/one-off/thankyou                   controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
