@@ -122,7 +122,8 @@
   .bundles {
 
     .bundles__title {
-      color: #121212
+      color: #121212;
+      text-transform: capitalize;
     }
 
     .bundles__content {
@@ -152,6 +153,7 @@
     .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
       .component-double-heading__heading {
         color: #0084c6;
+        text-transform: capitalize;
       }
     }
   }
