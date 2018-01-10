@@ -17,7 +17,7 @@ import { contribCamelCase } from 'helpers/contributions';
 import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -196,7 +196,7 @@ const ctaLinks = {
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
-  currency: IsoCurrency,
+  currency: Currency,
   isoCountry: string,
   intCmp: ?string,
 ): ContribAttrs => {
@@ -206,18 +206,20 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
-  params.append('currency', currency);
+  params.append('currency', currency.iso);
 
   if (intCmp !== null && intCmp !== undefined) {
     params.append('INTCMP', intCmp);
   }
   const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
+  const ctaText = `Contribute ${currency.glyph}${contribAmount[contType].value} with card`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
+  const paypalCta = Object.assign({}, { text: `Contribute ${currency.glyph}${contribAmount[contType].value} with PayPal` });
 
   return Object.assign({}, getBundles().contrib[contType], {
-    ctaId, ctaLink, ctaAccessibilityHint,
+    ctaId, ctaLink, ctaText, ctaAccessibilityHint, paypalCta,
   });
 
 };
@@ -240,7 +242,7 @@ function ContributionBundle(props: PropTypes) {
     getContribAttrs(
       props.contribType,
       props.contribAmount,
-      props.currency.iso,
+      props.currency,
       props.isoCountry,
       props.intCmp,
     );
