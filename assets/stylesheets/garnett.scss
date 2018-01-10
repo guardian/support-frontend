@@ -130,8 +130,30 @@
       padding-bottom: $gu-v-spacing;
     }
 
+    .component-feature-list {
+      h3 {
+        color: #0084c6;
+      }
+    }
+
     .component-bundle.component-bundle--contributions {
       background-color: #ffe500;
+
+      .component-number-input--selected {
+        .component-number-input__input, .component-number-input__label {
+          color: #121212;
+
+          &::placeholder {
+            color: #121212;
+            opacity: 0.4;
+          }
+        }
+      }
+
+      .component-number-input__input::placeholder {
+        color: #121212;
+        opacity: 0.6;
+      }
 
       .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
         background-color: #ffe500;
@@ -154,6 +176,14 @@
       .component-double-heading__heading {
         color: #0084c6;
         text-transform: capitalize;
+      }
+
+      .component-cta-link {
+        border: 1px solid #0084c6;
+
+        &:hover {
+          background-color: #0084c6;
+        }
       }
     }
   }
