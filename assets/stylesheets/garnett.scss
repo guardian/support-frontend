@@ -93,3 +93,126 @@
     }
   }
 }
+
+// Garnett Colour Pallete
+
+#bundles-landing-page {
+
+  .introduction-text {
+    background-color: darken(#0084c6, 5%);
+
+    .introduction-text__heading {
+      color: #fff;
+    }
+
+    .introduction-text__heading:nth-child(3) {
+      color:#121212;
+    }
+
+    .introduction-text__content {
+      background-color: #0084c6;
+    }
+  } 
+
+  .bundles--stacked {
+    background-color: #f2f2f2;
+    padding-bottom: 0;
+  }
+
+  .bundles {
+
+    .bundles__title {
+      color: #121212;
+      text-transform: capitalize;
+    }
+
+    .bundles__content {
+      padding-bottom: $gu-v-spacing;
+    }
+
+    .component-feature-list {
+      h3 {
+        color: #0084c6;
+      }
+    }
+
+    .component-bundle.component-bundle--contributions {
+      background-color: #ffe500;
+
+      .component-number-input--selected {
+        .component-number-input__input, .component-number-input__label {
+          color: #121212;
+
+          &::placeholder {
+            color: #121212;
+            opacity: 0.4;
+          }
+        }
+      }
+
+      .component-number-input__input::placeholder {
+        color: #121212;
+        opacity: 0.6;
+      }
+
+      .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
+        background-color: #ffe500;
+      }
+    }
+
+    .bundles__content--stacked {
+      background-color: #fff;
+    }
+
+    .component-bundle {
+      background-color: #f2f2f2;
+    }
+
+    .bundles__cross-product {
+      display: none;
+    }
+
+    .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
+      .component-double-heading__heading {
+        color: #0084c6;
+        text-transform: capitalize;
+      }
+
+      .component-cta-link {
+        border: 1px solid #0084c6;
+
+        &:hover {
+          background-color: #0084c6;
+        }
+      }
+    }
+  }
+
+  .why-support {
+
+    .why-support__heading {
+      color: #bb3b80;
+      text-align: left;
+    }
+
+    .why-support__video-caption {
+      display: none;
+    }
+  }
+
+  .ways-of-support {
+    .ways-of-support__heading {
+      color: #121212;
+      text-align: left;
+    }
+
+    .way-of-support--gu-events {
+      background-color: #fff;
+    }
+  }
+
+  .component-footer {
+    background-color: #121212;
+  }
+}
+
