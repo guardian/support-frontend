@@ -14,6 +14,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import MarketingConsent from 'components/thankyouPageComponents/recurringContributions/marketingConsent/marketingConsent';
 import ThankYou from 'components/thankyouPageComponents/recurringContributions/thankYou';
+import QuestionsAndSocial from 'components/thankyouPageComponents/recurringContributions/questionsAndSocial';
 import reducer from './regularContributionsThankyouReducer';
 import type { PageState } from './regularContributionsThankyouReducer';
 import * as user from '../../helpers/user/user';
@@ -44,8 +45,9 @@ const content = (
       <SimpleHeader />
       <section className="thankyou gu-content-filler">
         <div className="thankyou__content gu-content-filler__inner">
-          <MarketingConsent />
           <ThankYou />
+          <MarketingConsent />
+          <QuestionsAndSocial />
         </div>
       </section>
       <Footer />

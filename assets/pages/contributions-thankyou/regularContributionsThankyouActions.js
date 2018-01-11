@@ -6,7 +6,6 @@ import { routes } from 'helpers/routes';
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'SEND_MARKETING_PREFERENCES', optInt: boolean}
   | { type: 'MARKETING_PREFERENCES_SELECTED' };
 
 
@@ -15,12 +14,12 @@ function setMarketingPreferencesSelected(): Action {
   return { type: 'MARKETING_PREFERENCES_SELECTED' };
 }
 
-function sendMarketingPreferencesToIdentity(optIn: boolean): Function {
+function sendMarketingPreferencesToIdentity(optIn: boolean, email: string): Function {
   return (dispatch) => {
-    return fetch(routes.recurringContributionsSendMarketing).then(response => {
-      console.log(response)
-    });
-
+    if (optIn) {
+      // fire and forget
+      return fetch(`${routes.recurringContributionsSendMarketing}?email=${email}`);
+    }
 };
 }
 
