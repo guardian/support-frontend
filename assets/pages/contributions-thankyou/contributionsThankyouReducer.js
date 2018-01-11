@@ -6,7 +6,7 @@ import { combineReducers } from 'redux';
 
 
 import { userReducer as user } from 'helpers/user/userReducer';
-import type { Action } from './regularContributionsThankyouActions';
+import type { Action } from './contributionsThankyouActions';
 import type { User as UserState } from '../../helpers/user/userReducer';
 import type { CommonState } from '../../helpers/page/page';
 

@@ -12,11 +12,10 @@ import { Provider } from 'react-redux';
 import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import MarketingConsent from 'components/thankyouPageComponents/recurringContributions/marketingConsent/marketingConsent';
-import ThankYou from 'components/thankyouPageComponents/recurringContributions/thankYou';
-import QuestionsAndSocial from 'components/thankyouPageComponents/recurringContributions/questionsAndSocial';
-import reducer from './regularContributionsThankyouReducer';
-import type { PageState } from './regularContributionsThankyouReducer';
+import MarketingConsent from 'components/thankyouPageComponents/marketingConsent/marketingConsent';
+import ThankYou from 'components/thankyouPageComponents/thankYou';
+import QuestionsAndSocial from 'components/thankyouPageComponents/questionsAndSocial';
+import reducer from './contributionsThankyouReducer';
 import * as user from '../../helpers/user/user';
 
 
@@ -33,9 +32,6 @@ const store = pageInit(
 );
 
 user.init(store.dispatch);
-
-const state: PageState = store.getState();
-console.log(state.page);
 
 // ----- Render ----- //
 

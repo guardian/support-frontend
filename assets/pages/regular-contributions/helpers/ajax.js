@@ -21,7 +21,7 @@ import { billingPeriodFromContrib } from '../../../helpers/contributions';
 // ----- Setup ----- //
 
 const POLLING_INTERVAL = 3000;
-const MAX_POLLS = 2;
+const MAX_POLLS = 10;
 
 
 // ----- Types ----- //

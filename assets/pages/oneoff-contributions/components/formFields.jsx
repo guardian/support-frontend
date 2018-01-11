@@ -21,7 +21,6 @@ type PropTypes = {
   nameUpdate: (name: string) => void,
   emailUpdate: (email: string) => void,
   postcodeUpdate: (postcode: string) => void,
-  gnmMarketingPreferenceUpdate: (preference: boolean) => void,
   name: string,
   email: string,
   postcode: ?string,

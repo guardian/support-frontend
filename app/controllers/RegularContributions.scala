@@ -57,12 +57,6 @@ class RegularContributions(
     } getOrElse InternalServerError
   }
 
-  def submitMarketing(email: String): Action[AnyContent] = PrivateAction { implicit request =>
-    logger.info("email = " + email)
-    identityService.sendConsentPreferencesEmail(email)
-    Ok
-  }
-
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
