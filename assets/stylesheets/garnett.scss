@@ -141,10 +141,10 @@
 
       .component-number-input--selected {
         .component-number-input__input, .component-number-input__label {
-          color: #121212;
+          color: #fff;
 
           &::placeholder {
-            color: #121212;
+            color: #fff;
             opacity: 0.4;
           }
         }
@@ -157,6 +157,10 @@
 
       .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
         background-color: #ffe500;
+      }
+
+      .component-number-input.component-number-input--selected {
+        background-color: #333333;
       }
     }
 
