@@ -6,13 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import TextInput from 'components/textInput/textInput';
-import CheckboxInput from 'components/checkboxInput/checkboxInput';
+import { setSession } from 'helpers/storage';
 
 import {
   setFullName,
   setEmail,
   setPostcode,
-  setGnmMarketing,
 } from 'helpers/user/userActions';
 
 
@@ -26,7 +25,6 @@ type PropTypes = {
   name: string,
   email: string,
   postcode: ?string,
-  gnmMarketingPreference: boolean,
   isoCountry: IsoCountry,
 };
 
@@ -57,12 +55,6 @@ function FormFields(props: PropTypes) {
         value={props.postcode || ''}
         onChange={props.postcodeUpdate}
       />
-      <CheckboxInput
-        id="gnm-marketing-preference"
-        checked={props.gnmMarketingPreference || false}
-        onChange={props.gnmMarketingPreferenceUpdate}
-        labelText="Keep me up to date with offers from the Guardian"
-      />
     </form>
   );
 
@@ -73,12 +65,11 @@ function FormFields(props: PropTypes) {
 
 function mapStateToProps(state) {
   const { user } = state.page;
-
+  setSession('gu.email', user.email);
   return {
     name: user.fullName,
     email: user.email,
     postcode: user.postcode,
-    gnmMarketingPreference: user.gnmMarketing,
     isoCountry: state.common.country,
   };
 
@@ -95,9 +86,6 @@ function mapDispatchToProps(dispatch) {
     },
     postcodeUpdate: (postcode: string) => {
       dispatch(setPostcode(postcode));
-    },
-    gnmMarketingPreferenceUpdate: (preference: boolean) => {
-      dispatch(setGnmMarketing(preference));
     },
   };
 

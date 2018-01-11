@@ -45,7 +45,10 @@ const content = (
       <SimpleHeader />
       <section className="thankyou gu-content-filler">
         <div className="thankyou__content gu-content-filler__inner">
-          <ThankYou />
+          <ThankYou thankYouMessage="You have helped to make the Guardian&#39;s future more secure.
+              Look out for an email confirming your recurring
+              payment."
+          />
           <MarketingConsent />
           <QuestionsAndSocial />
         </div>

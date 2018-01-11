@@ -64,7 +64,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-
+  console.log("em,al = " + state.page.user.email);
   return {
     marketingPreferencesSelected:
       state.page.regularContributionsThankYou.marketingPreferencesSelected,
