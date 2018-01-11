@@ -17,7 +17,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkoutError, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
-import { set as setCookie } from '../../../helpers/cookie';
 
 // ----- Setup ----- //
 
@@ -121,7 +120,7 @@ function statusPoll(
 ) {
 
   if (pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribMarketingPreferences, 'INTCMP', referrerAcquisitionData.campaignCode);
+    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', referrerAcquisitionData.campaignCode);
     window.location.assign(url);
   }
 
@@ -169,7 +168,7 @@ function handleStatus(
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribMarketingPreferences, 'INTCMP', referrerAcquisitionData.campaignCode));
+          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', referrerAcquisitionData.campaignCode));
           break;
         default:
           delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);

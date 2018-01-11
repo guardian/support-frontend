@@ -3,34 +3,28 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
+import { connect } from 'react-redux';
 
-import { statelessInit as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+type PropTypes = {
+  marketingPreferencesSelected: boolean
+};
 
+// ----- Component ----- //
 
-// ----- Page Startup ----- //
-
-pageInit();
-
-// ----- Render ----- //
-
-const content = (
-  <div className="gu-content">
-    <SimpleHeader />
-    <section className="thankyou gu-content-filler">
-      <div className="thankyou__content gu-content-filler__inner">
+function ThankYou(props: PropTypes) {
+  console.log("prefs2 = " + props.marketingPreferencesSelected.toString())
+  if (props.marketingPreferencesSelected === true) {
+    return (
+      <div>
         <div className="thankyou__wrapper">
           <h1 className="thankyou__heading">Thank you!</h1>
           <h2 id="qa-thank-you-message" className="thankyou__subheading">
             <p>You have helped to make the Guardian&#39;s future more secure.
-            Look out for an email confirming your recurring
-            payment.
+              Look out for an email confirming your recurring
+              payment.
             </p>
           </h2>
           <CtaLink
@@ -57,10 +51,18 @@ const content = (
           <SocialShare name="facebook" />
           <SocialShare name="twitter" />
         </InfoSection>
-      </div>
-    </section>
-    <Footer />
-  </div>
-);
+      </div>);
+  }
+}
 
-renderPage(content, 'regular-contributions-thankyou-page');
+function mapStateToProps(state) {
+  return {
+    marketingPreferencesSelected:
+    state.page.regularContributionsThankYou.marketingPreferencesSelected,
+  };
+}
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(ThankYou);
+
