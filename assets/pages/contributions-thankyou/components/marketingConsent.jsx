@@ -8,7 +8,7 @@ import CheckboxInput from 'components/checkboxInput/checkboxInput';
 
 import { connect } from 'react-redux';
 import { setMarketingPreferencesSelected, sendMarketingPreferencesToIdentity } from
-  '../../../pages/contributions-thankyou/contributionsThankyouActions';
+  '../contributionsThankyouActions';
 import { setGnmMarketing } from '../../../helpers/user/userActions';
 
 // ----- Types ----- //

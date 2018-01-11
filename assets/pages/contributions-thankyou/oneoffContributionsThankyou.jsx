@@ -12,9 +12,9 @@ import { Provider } from 'react-redux';
 import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import MarketingConsent from 'components/thankyouPageComponents/marketingConsent/marketingConsent';
-import ThankYou from 'components/thankyouPageComponents/thankYou';
-import QuestionsAndSocial from 'components/thankyouPageComponents/questionsAndSocial';
+import MarketingConsent from './components/marketingConsent';
+import ThankYou from './components/thankYou';
+import QuestionsAndSocial from './components/questionsAndSocial';
 import reducer from './contributionsThankyouReducer';
 import * as user from '../../helpers/user/user';
 

@@ -3,11 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { statelessInit as pageInit } from 'helpers/page/page';
-
-// ----- Page Startup ----- //
-
-pageInit();
 
 // ----- Component ----- //
 
