@@ -58,7 +58,5 @@ GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
 
 # ----- Assets ----- #
 
-GET  /apple-app-site-association                    controllers.Assets.at(path="/public", file="apple-app-site-association.json")
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                         controllers.Assets.at(path="/public", file)
-
