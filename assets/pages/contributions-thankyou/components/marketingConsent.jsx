@@ -35,7 +35,8 @@ function MarketingConsent(props: PropTypes) {
                 id="gnm-marketing-preference"
                 checked={props.marketingPreferencesOptIn || false}
                 onChange={props.marketingPreferenceUpdate}
-                labelText="Some text that asks for permissions. It's gonna be pretty long so I'm writing some random text. I like turtles"
+                labelText="Whether you’re a subscriber, a member or you support us via a regular or one-off contribution, opt in here so we can keep sending you news, updates and more. If you don’t, then we won’t be able to contact you again.
+                        If you’d like to hear about our wide range of subscription offers - or you’re interested in helpi"
               />
             </h2>
             <CtaLink
