@@ -66,7 +66,7 @@ type ContribAttrs = {
   heading: string,
   subheading?: string,
   ctaText: string,
-  cardText: string,
+  cardText?: string,
   modifierClass: string,
   ctaId: string,
   ctaLink: string,
@@ -267,7 +267,7 @@ function ContributionBundle(props: PropTypes) {
 
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
-        text={props.contribType === 'ONE_OFF' ? contribAttrs.cardText : contribAttrs.ctaText}
+        text={props.contribType === 'ONE_OFF' && contribAttrs.cardText ? contribAttrs.cardText : contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}
       />
