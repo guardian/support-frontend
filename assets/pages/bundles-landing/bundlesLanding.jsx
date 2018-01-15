@@ -33,7 +33,6 @@ const store = pageInit(
 // ----- Render ----- //
 
 const bundle: ?string = getQueryParameter('bundle');
-const bottomTest = store.getState().common.abParticipations.ukDropBottomTest;
 
 let bundlesSelected;
 let showContributeOrSubscribe = false;
@@ -50,7 +49,7 @@ if (bundle === 'contribute') {
   showContributeOrSubscribe = true;
 }
 
-const whyAndWaysOfSupport = (bundle === 'contribute' && bottomTest === 'no_bottom')
+const whyAndWaysOfSupport = (bundle === 'contribute')
   ? ''
   : (
     [<WhySupport />, <WaysOfSupport />]
