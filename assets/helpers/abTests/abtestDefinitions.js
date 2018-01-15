@@ -1,7 +1,5 @@
 // @flow
-import { getQueryParameter } from '../url';
 import type { Tests } from './abtest';
-import * as storage from '../storage';
 
 // ----- Tests ----- //
 
@@ -31,21 +29,5 @@ export const tests: Tests = {
     independent: true,
     seed: 6,
   },
-
-  ukDropBottomTest: {
-    variants: ['control', 'no_bottom'],
-    audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    customSegmentCondition: () =>
-      storage.getSession('gu.contributeOnly') === 'true' || getQueryParameter('bundle') === 'contribute',
-    seed: 7,
-  },
-
 };
 
