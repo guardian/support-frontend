@@ -132,7 +132,7 @@ const monthlyContribCopy: ContribAttrs = {
 const componentBundleModifierClass = `component-bundle--stacked ${inOfferPeriod() ? 'component-bundle--flash-sale' : ''}`;
 
 const digitalCopy: SubscribeAttrs = {
-  heading: 'digital subscription',
+  heading: 'Digital subscription',
   subheading: '£11.99/month',
   listItems: getDigiPackItems(),
   ctaText: 'Start your 14 day trial',
@@ -143,7 +143,7 @@ const digitalCopy: SubscribeAttrs = {
 };
 
 const paperCopy: SubscribeAttrs = {
-  heading: 'paper subscription',
+  heading: 'Paper subscription',
   subheading: 'from £10.79/month',
   listItems: getPaperItemsForStackedBundle(),
   ctaText: 'Get a paper subscription',
@@ -154,7 +154,7 @@ const paperCopy: SubscribeAttrs = {
 };
 
 const paperDigitalCopy: SubscribeAttrs = {
-  heading: 'paper+digital',
+  heading: 'Paper+digital',
   subheading: 'from £22.06/month',
   listItems: getPaperDigitalItemsForStackedBundle(),
   ctaText: 'Get a paper + digital subscription',
