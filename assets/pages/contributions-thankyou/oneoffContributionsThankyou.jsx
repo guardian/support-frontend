@@ -39,7 +39,7 @@ const content = (
   <Provider store={store}>
     <div className="gu-content">
       <SimpleHeader />
-      <section className="thankyou gu-content-filler">
+      <section className="thankyou thankyou--marketing gu-content-filler">
         <div className="thankyou__content gu-content-filler__inner">
           <ThankYou thankYouMessage="You&#39;ve made a vital contribution that will help us maintain our independent,
               investigative journalism."

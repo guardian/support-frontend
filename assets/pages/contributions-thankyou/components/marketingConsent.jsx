@@ -21,6 +21,7 @@ type PropTypes = {
   email?: string,
 };
 
+
 // ----- Component ----- //
 
 function MarketingConsent(props: PropTypes) {
@@ -29,20 +30,20 @@ function MarketingConsent(props: PropTypes) {
       <div>
         <section className="component-info-section component-marketing">
           <div className="thankyou__wrapper">
-            <h2 className="thankyou__heading">We would like to hear from you</h2>
+            <h1 className="thankyou__subheading">We would like to stay in touch</h1>
             <h2 id="qa-thank-you-message" className="thankyou__subheading">
               <CheckboxInput
                 id="gnm-marketing-preference"
                 checked={props.marketingPreferencesOptIn || false}
                 onChange={props.marketingPreferenceUpdate}
-                labelText="Whether you’re a subscriber, a member or you support us via a regular or one-off contribution, opt in here so we can keep sending you news, updates and more. If you don’t, then we won’t be able to contact you again.
-                        If you’d like to hear about our wide range of subscription offers - or you’re interested in helpi"
+                labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
+                labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
               />
             </h2>
             <CtaLink
               onClick={() => props.onClick(props.marketingPreferencesOptIn, props.email)}
-              ctaId="next"
-              text="next"
+              ctaId="Next"
+              text="Next"
               accessibilityHint="Go to the guardian dot com front page"
             />
           </div>

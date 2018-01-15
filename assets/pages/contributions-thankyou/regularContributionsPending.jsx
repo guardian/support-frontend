@@ -45,7 +45,6 @@ const content = (
               Look out for an email confirming your recurring
               payment."
           />
-          <MarketingConsent />
           <QuestionsAndSocial />
         </div>
       </section>

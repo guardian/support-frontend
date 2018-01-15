@@ -23,6 +23,18 @@
 		}
 	}
 
+	.thankyou--marketing {
+		.thankyou__wrapper {
+			max-width: 450px;
+		}
+	}
+
+
+	.thankyou__component {
+		margin-bottom: 45px;
+	}
+
+
 	.thankyou__heading {
 		font-family: $gu-egyptian-web;
 		color: gu-colour(neutral-1);
@@ -47,6 +59,10 @@
 			font-size: 26px;
 			line-height: 30px;
 		}
+	}
+
+	.component-marketing {
+		padding-bottom: 0;
 	}
 
 	// ----- Main Content
