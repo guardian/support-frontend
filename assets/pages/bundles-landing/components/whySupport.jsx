@@ -35,7 +35,7 @@ export default function WhySupport() {
       <div className="why-support__content gu-content-margin">
         <div className="why-support__top-content">
           <div className="why-support__top-copy">
-            <h1 className="why-support__heading">why do we need your support?</h1>
+            <h1 className="why-support__heading">Why do we need your support?</h1>
             <BodyCopy copy={copy.top} />
           </div>
           <Video name="scottTrustExplained" poster={null} />

@@ -472,12 +472,13 @@
         }
 
         .component-cta-link {
-          background-color: #fff;
-          color: gu-colour(guardian-brand);
-          border: 1px solid gu-colour(guardian-brand);
+          background-color: #0084c6;
+          color: #fff;
+          border: 1px solid #0084c6;
 
           &:hover {
-            background-color: gu-colour(guardian-brand);
+            background-color: darken(#0084c6, 10%);
+            border-color: darken(#0084c6, 10%);
             color: #fff;
 
             svg {
@@ -486,7 +487,7 @@
           }
 
           svg {
-            fill: gu-colour(guardian-brand);
+            fill: #fff;
           }
         }
     }
