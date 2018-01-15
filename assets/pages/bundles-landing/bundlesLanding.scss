@@ -8,7 +8,7 @@
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .introduction-text__content {
-      padding-bottom: $gu-v-spacing * 5;
+      padding-bottom: $gu-v-spacing * 4;
       background-color: gu-colour(guardian-brand-dark);
 
       @include mq($from: leftCol) {
@@ -38,13 +38,13 @@
       }
 
       @include mq($from: desktop) {
-        font-size: 56px;
-        line-height: 62px;
+        font-size: 48px;
+        line-height: 52px;
       }
     }
 
     .introduction-text__support {
-      margin-top: $gu-v-spacing * 4;
+      margin-top: $gu-v-spacing * 3;
     }
 
     .introduction-text__heading--support {
@@ -60,7 +60,7 @@
       }
 
       @include mq($from: desktop) {
-        line-height: 70px;
+        line-height: 60px;
       }
     }
 
