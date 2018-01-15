@@ -44,7 +44,7 @@ export const setupStripeCheckout = (
     description: 'Please enter your card details.',
     allowRememberMe: false,
     key: isTestUser ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
-    image: 'https://uploads.guim.co.uk/2018/01/10/gu.png',
+    image: 'https://uploads.guim.co.uk/2018/01/15/gu.png',
     locale: 'auto',
     currency,
     token: handleToken,
