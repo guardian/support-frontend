@@ -8,8 +8,7 @@
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .introduction-text__content {
-      padding-top: $gu-v-spacing;
-      padding-bottom: $gu-v-spacing * 3;
+      padding-bottom: $gu-v-spacing * 4;
       background-color: gu-colour(guardian-brand-dark);
 
       @include mq($from: leftCol) {
@@ -21,64 +20,59 @@
       }
     }
 
-    h1 {
-      color: gu-colour(news-support-1);
+    .introduction-text__heading {
+      color: #fff;
       font-family: $gu-egyptian-web;
       font-weight: bold;
-      font-size: 22px;
-      line-height: 26px;
-      margin-top: $gu-v-spacing;
-
-      @include mq($from: phablet) {
-        margin-top: $gu-v-spacing * 2;
-      }
+      font-size: 28px;
+      line-height: 30px;
 
       @include mq($from: mobileMedium) {
-        font-size: 24px;
-        line-height: 28px;
+        font-size: 30px;
+        line-height: 32px;
       }
 
       @include mq($from: phablet) {
-        font-size: 36px;
-        line-height: 40px;
+        font-size: 46px;
+        line-height: 50px;
       }
 
       @include mq($from: desktop) {
-        font-size: 44px;
-        line-height: 48px;
+        font-size: 48px;
+        line-height: 52px;
       }
     }
 
-    p {
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-      font-size: 22px;
-      line-height: 26px;
-      color: #ffffff;
-      margin-left: 40px;
+    .introduction-text__support {
+      margin-top: $gu-v-spacing * 3;
+    }
 
-      &:nth-of-type(2) {
-        margin-bottom: $gu-v-spacing * 2;
-      }
+    .introduction-text__heading--support {
+      margin: 0;
+      line-height: 35px;
 
       @include mq($from: mobileMedium) {
-        font-size: 24px;
-        line-height: 28px;
-        margin-left: 88px;
+        line-height: 37px;
       }
 
       @include mq($from: phablet) {
-        font-size: 36px;
-        line-height: 40px;
-        margin-left: 128px;
+        line-height: 58px;
       }
-
 
       @include mq($from: desktop) {
-        font-size: 44px;
-        line-height: 48px;
-        margin-left: 160px;
+        line-height: 60px;
       }
+    }
+
+    .introduction-text__highlight {
+      color: #121212;
+      margin: 0;
+      background-color: #ffe500;
+      padding: 0 ($gu-h-spacing / 2);
+    }
+
+    .introduction-text__heading--contribute-or-subscribe {
+      margin-top: $gu-v-spacing * 4;
     }
   }
 
@@ -478,12 +472,13 @@
         }
 
         .component-cta-link {
-          background-color: #fff;
-          color: gu-colour(guardian-brand);
-          border: 1px solid gu-colour(guardian-brand);
+          background-color: #0084c6;
+          color: #fff;
+          border: 1px solid #0084c6;
 
           &:hover {
-            background-color: gu-colour(guardian-brand);
+            background-color: darken(#0084c6, 10%);
+            border-color: darken(#0084c6, 10%);
             color: #fff;
 
             svg {
@@ -492,7 +487,7 @@
           }
 
           svg {
-            fill: gu-colour(guardian-brand);
+            fill: #fff;
           }
         }
     }
@@ -914,7 +909,6 @@
     .way-of-support {
       margin: 0 0 ($gu-v-spacing / 2);
       background-color: gu-colour(comment-support-2);
-      color: gu-colour(neutral-1);
       padding-bottom: $gu-v-spacing;
 
       @include mq($from: mobileLandscape) {
@@ -959,6 +953,7 @@
       font-weight: 900;
       font-size: 23px;
       line-height: 26px;
+      color: #c28a2f;
     }
 
     .way-of-support__info-text {
@@ -973,6 +968,10 @@
       @include mq($from: desktop) {
         position: absolute;
         bottom: 0;
+      }
+
+      button {
+        background-color: #c28a2f;
       }
     }
 

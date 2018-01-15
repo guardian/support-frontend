@@ -123,7 +123,7 @@ type BundlesType = {
 // ----- Copy ----- //
 
 const oneOffContribCopy: ContribAttrs = {
-  heading: 'contribute',
+  heading: 'Contribute',
   ctaText: 'Contribute with card',
   ctaId: 'contribute',
   modifierClass: 'contributions',
@@ -137,7 +137,7 @@ const oneOffContribCopy: ContribAttrs = {
 };
 
 const monthlyContribCopy: ContribAttrs = {
-  heading: 'contribute',
+  heading: 'Contribute',
   subheading: 'from £5/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
@@ -147,7 +147,7 @@ const monthlyContribCopy: ContribAttrs = {
 };
 
 const monthlyContribCopyTwo: ContribAttrs = {
-  heading: 'contribute',
+  heading: 'Contribute',
   subheading: 'from £2/month',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
@@ -166,7 +166,7 @@ function getMonthlyContribCopy(abTests: ?Participations) {
 }
 
 const annualContribCopy: ContribAttrs = {
-  heading: 'contribute',
+  heading: 'Contribute',
   subheading: 'from £50/year',
   ctaText: 'Contribute with card or PayPal',
   ctaId: 'contribute',
@@ -176,7 +176,7 @@ const annualContribCopy: ContribAttrs = {
 };
 
 const digitalCopy: DigitalAttrs = {
-  heading: 'digital subscription',
+  heading: 'Digital subscription',
   subheading: '£11.99/month',
   listItems: getDigiPackItems(),
   ctaText: 'Start your free trial',
@@ -187,7 +187,7 @@ const digitalCopy: DigitalAttrs = {
 };
 
 const paperCopy: PaperAttrs = {
-  heading: 'paper subscription',
+  heading: 'Paper subscription',
   subheading: 'from £10.79/month',
   listItems: getPaperItems(),
   paperCtaText: 'Get a paper subscription',

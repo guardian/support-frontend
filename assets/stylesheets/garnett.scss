@@ -97,16 +97,16 @@
 // Garnett Colour Pallete
 
 #bundles-landing-page {
-
+  
   .introduction-text {
     background-color: darken(#0084c6, 5%);
 
-    .introduction-text__heading {
-      color: #fff;
+    .introduction-text__heading--contribute-or-subscribe {
+      display: none;
     }
 
-    .introduction-text__heading:nth-child(3) {
-      color:#121212;
+    .introduction-text__heading {
+      color: #fff;
     }
 
     .introduction-text__content {
@@ -179,15 +179,6 @@
     .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
       .component-double-heading__heading {
         color: #0084c6;
-        text-transform: capitalize;
-      }
-
-      .component-cta-link {
-        border: 1px solid #0084c6;
-
-        &:hover {
-          background-color: #0084c6;
-        }
       }
     }
   }
@@ -206,7 +197,7 @@
 
   .ways-of-support {
     .ways-of-support__heading {
-      color: #121212;
+      color: #c28a2f;
       text-align: left;
     }
 

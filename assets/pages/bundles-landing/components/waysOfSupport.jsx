@@ -69,7 +69,7 @@ const WaysOfSupport = (props: PropTypes) => {
     <section className={className}>
       <div className={`${className}__content gu-content-margin`}>
         <div className={`${className}__heading`}>
-          <h1>other ways you can support us</h1>
+          <h1>Other ways you can support us</h1>
         </div>
         {waysOfSupportRendered}
       </div>
