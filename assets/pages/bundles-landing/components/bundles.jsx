@@ -73,6 +73,7 @@ type ContribAttrs = {
   heading: string,
   subheading?: string,
   ctaText: string,
+  cardText?: string,
   modifierClass: string,
   ctaId: string,
   ctaLink: string,
@@ -242,12 +243,13 @@ const getContribAttrs = (
   }
   const ctaId = `contribute-${contribType}`;
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
-  const ctaText = `Contribute ${currency.glyph}${contribAmount[contType].value} with card`;
+  const ctaText = `Contribute ${currency.glyph}${contribAmount[contType].value} with card or PayPal`;
   const localisedOneOffContType = isoCountry === 'us' ? 'one time' : 'one-off';
   const ctaAccessibilityHint = `proceed to make your ${contType.toLowerCase() === 'oneoff' ? localisedOneOffContType : contType.toLowerCase()} contribution`;
+  const cardText = `Contribute ${currency.glyph}${contribAmount[contType].value} with card`;
   const paypalCta = Object.assign({}, { text: `Contribute ${currency.glyph}${contribAmount[contType].value} with PayPal` });
   return Object.assign({}, bundles(abTests).contrib[contType], {
-    ctaText, ctaId, ctaLink, ctaAccessibilityHint, paypalCta,
+    ctaText, ctaId, ctaLink, ctaAccessibilityHint, cardText, paypalCta,
   });
 
 };
@@ -296,7 +298,7 @@ function ContributionBundle(props: PropTypes) {
       />
       <CtaLink
         ctaId={contribAttrs.ctaId.toLowerCase()}
-        text={contribAttrs.ctaText}
+        text={props.contribType === 'ONE_OFF' && contribAttrs.cardText ? contribAttrs.cardText : contribAttrs.ctaText}
         accessibilityHint={contribAttrs.ctaAccessibilityHint}
         onClick={onClick}
       />
