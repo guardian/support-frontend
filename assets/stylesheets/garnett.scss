@@ -97,9 +97,13 @@
 // Garnett Colour Pallete
 
 #bundles-landing-page {
-
+  
   .introduction-text {
     background-color: darken(#0084c6, 5%);
+
+    .introduction-text__heading--contribute-or-subscribe {
+      display: none;
+    }
 
     .introduction-text__heading {
       color: #fff;
