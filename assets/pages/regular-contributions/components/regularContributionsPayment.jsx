@@ -64,97 +64,6 @@ function getStatusMessage(
 
 }
 
-// Provides the Stripe button component.
-function getStripeButton(
-  hide: boolean,
-  abParticipations: Participations,
-  amount: number,
-  email: string,
-  contribType: Contrib,
-  currency: Currency,
-  isTestUser: boolean,
-  isPostDeploymentTestUser: boolean,
-  dispatch: Function,
-  csrf: CsrfState,
-  country: IsoCountry,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  getState,
-): Node {
-
-  if (hide) {
-    return null;
-  }
-
-  return (
-    <StripePopUpButton
-      email={email}
-      callback={postCheckout(
-        abParticipations,
-        amount,
-        csrf,
-        currency,
-        contribType,
-        country,
-        dispatch,
-        'stripeToken',
-        referrerAcquisitionData,
-        getState,
-      )}
-      currency={currency}
-      isTestUser={isTestUser}
-      isPostDeploymentTestUser={isPostDeploymentTestUser}
-      amount={amount}
-    />
-  );
-
-}
-
-// Provides the PayPal Express Checkout button component.
-function getPayPalButton(
-  hide: boolean,
-  abParticipations: Participations,
-  amount: number,
-  email: string,
-  contribType: Contrib,
-  currency: Currency,
-  isTestUser: boolean,
-  dispatch: Function,
-  csrf: CsrfState,
-  country: IsoCountry,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  getState: Function,
-  payPalHasLoaded: boolean,
-): Node {
-
-  if (hide) {
-    return null;
-  }
-
-  return (
-    <PayPalExpressButton
-      amount={amount}
-      currency={currency}
-      csrf={csrf}
-      callback={postCheckout(
-        abParticipations,
-        amount,
-        csrf,
-        currency,
-        contribType,
-        country,
-        dispatch,
-        'baid',
-        referrerAcquisitionData,
-        getState,
-      )}
-      hasLoaded={payPalHasLoaded}
-      setHasLoaded={() => dispatch(setPayPalHasLoaded())}
-    />
-  );
-
-}
-
-
 // ----- Component ----- //
 
 /*
@@ -166,39 +75,56 @@ function getPayPalButton(
  */
 function RegularContributionsPayment(props: PropTypes, context) {
 
+  let stripeButton = (<StripePopUpButton
+    email={props.email}
+    callback={postCheckout(
+      props.abParticipations,
+      props.amount,
+      props.csrf,
+      props.currency,
+      props.contributionType,
+      props.country,
+      props.dispatch,
+      'stripeToken',
+      props.referrerAcquisitionData,
+      context.store.getState,
+    )}
+    currency={props.currency}
+    isTestUser={props.isTestUser}
+    isPostDeploymentTestUser={props.isPostDeploymentTestUser}
+    amount={props.amount}
+  />);
+
+  let payPalButton = (<PayPalExpressButton
+    amount={props.amount}
+    currency={props.currency}
+    csrf={props.csrf}
+    callback={postCheckout(
+      props.abParticipations,
+      props.amount,
+      props.csrf,
+      props.currency,
+      props.contributionType,
+      props.country,
+      props.dispatch,
+      'baid',
+      props.referrerAcquisitionData,
+      context.store.getState,
+    )}
+    hasLoaded={props.payPalHasLoaded}
+    setHasLoaded={() => props.dispatch(setPayPalHasLoaded())}
+  />);
+
+  if (props.hide) {
+    stripeButton = null;
+    payPalButton = null;
+  }
+
   return (
     <section className="regular-contribution-payment">
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
-      {getStripeButton(
-        props.hide,
-        props.abParticipations,
-        props.amount,
-        props.email,
-        props.contributionType,
-        props.currency,
-        props.isTestUser,
-        props.isPostDeploymentTestUser,
-        props.dispatch,
-        props.csrf,
-        props.country,
-        props.referrerAcquisitionData,
-        context.store.getState,
-      )}
-      {getPayPalButton(
-        props.hide,
-        props.abParticipations,
-        props.amount,
-        props.email,
-        props.contributionType,
-        props.currency,
-        props.isTestUser,
-        props.dispatch,
-        props.csrf,
-        props.country,
-        props.referrerAcquisitionData,
-        context.store.getState,
-        props.payPalHasLoaded,
-      )}
+      {stripeButton}
+      {payPalButton}
     </section>
   );
 }
