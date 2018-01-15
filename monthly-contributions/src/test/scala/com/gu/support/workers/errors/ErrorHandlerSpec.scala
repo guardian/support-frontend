@@ -9,6 +9,7 @@ import com.gu.salesforce.Salesforce.SalesforceErrorResponse.expiredAuthenticatio
 import com.gu.stripe.Stripe
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
+import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.ParsingFailure
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -61,5 +62,10 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
     new InvalidGrantTokenException("").asRetryException shouldBe a[RetryNone]
     new DisabledException("").asRetryException shouldBe a[RetryLimited]
     new AWSKMSException("The security token included in the request is expired").asRetryException shouldBe a[RetryLimited]
+
+    //Zuora
+    ZuoraErrorResponse(false, List(ZuoraError("UNKNOWN_ERROR", "Operation failed due to an unknown error."))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("TRANSACTION_FAILED", "Your card was declined"))).asRetryException shouldBe a[RetryNone]
+
   }
 }
