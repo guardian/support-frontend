@@ -25,17 +25,18 @@ export default function CheckboxInput(props: PropTypes) {
   if (props.id) {
     if (props.labelTitle) {
       // eslint-disable-next-line jsx-a11y/label-has-for
-      labelTitle = <p className="component-checkbox__title" htmlFor={props.id}>{props.labelTitle}</p>;
+      labelTitle = <p className="component-checkbox__title">{props.labelTitle}</p>;
     }
     if (props.labelCopy) {
       // eslint-disable-next-line jsx-a11y/label-has-for
-      labelCopy = <p className="component-checkbox__copy" htmlFor={props.id}>{props.labelCopy}</p>;
+      labelCopy = <p className="component-checkbox__copy" >{props.labelCopy}</p>;
     }
   }
 
   return (
-    <label className="component-checkbox">
-      <input className="component-checkbox__checkbox"
+    <label htmlFor={props.id} className="component-checkbox">
+      <input
+        className="component-checkbox__checkbox"
         id={props.id}
         type="checkbox"
         onChange={e => props.onChange(e.target.checked)}

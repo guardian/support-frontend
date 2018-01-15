@@ -1,7 +1,6 @@
-import { routes } from 'helpers/routes';
-
-
 // @flow
+
+import { routes } from 'helpers/routes';
 
 // ----- Types ----- //
 
@@ -14,12 +13,11 @@ function setMarketingPreferencesSelected(): Action {
   return { type: 'MARKETING_PREFERENCES_SELECTED' };
 }
 
-// Fire and forget
+// Fire and forget, as we don't want to interupt the flow
 function sendMarketingPreferencesToIdentity(optIn: boolean, email: string): Function {
   return () => {
     if (optIn) {
-      // fire and forget
-      return fetch(`${routes.recurringContributionsSendMarketing}?email=${email}`);
+      return fetch(`${routes.contributionsSendMarketing}?email=${email}`);
     }
     return null;
   };

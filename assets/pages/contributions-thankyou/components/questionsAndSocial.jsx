@@ -6,8 +6,6 @@ import React from 'react';
 
 import InfoSection from 'components/infoSection/infoSection';
 import SocialShare from 'components/socialShare/socialShare';
-import { statelessInit as pageInit } from 'helpers/page/page';
-
 
 // ----- Component ----- //
 

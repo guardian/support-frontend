@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 // ----- Component ----- //
 
@@ -13,7 +13,10 @@ type PropTypes = {
 };
 
 function ThankYou(props: PropTypes) {
-  const copy = props.marketingPreferencesSelected === true ? 'Your response has been recorded. Please check your email to confirm your selection' : props.thankYouMessage;
+  const copy = props.marketingPreferencesSelected === true
+    ? 'Your response has been recorded. Please check your email to confirm your selection.'
+    : props.thankYouMessage;
+
   return (
     <section className="component-info-section__heading thankyou__component">
       <div className="thankyou__wrapper">

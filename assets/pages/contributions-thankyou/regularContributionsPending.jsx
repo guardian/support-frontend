@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import MarketingConsent from './components/marketingConsent';
 import ThankYou from './components/thankYou';
 import QuestionsAndSocial from './components/questionsAndSocial';
 import reducer from './contributionsThankyouReducer';
