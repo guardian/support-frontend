@@ -277,7 +277,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 3
       Period: 60
-      EvaluationPeriods: 10
+      EvaluationPeriods: 2
       Statistic: Sum
     DependsOn:
     - TargetGroup
