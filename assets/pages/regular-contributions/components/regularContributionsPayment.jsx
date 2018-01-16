@@ -4,8 +4,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import StripePopUpButton from 'components/stripePopUpButton/stripePopUpButton';
-import PayPalExpressButton from 'components/payPalExpressButton/payPalExpressButton';
+import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
+import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
+import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -74,6 +75,12 @@ function getStatusMessage(
  * You should not use context for other purposes. Please use redux.
  */
 function RegularContributionsPayment(props: PropTypes, context) {
+  let directDebitButton = null;
+  const isDirectDebitEnable = window.guardian && window.guardian.directDebitEnable;
+
+  if (props.country === 'GB' && isDirectDebitEnable) {
+    directDebitButton = (<DirectDebitPopUpButton />);
+  }
 
   let stripeButton = (<StripePopUpButton
     email={props.email}
@@ -116,6 +123,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
   />);
 
   if (props.hide) {
+    directDebitButton = null;
     stripeButton = null;
     payPalButton = null;
   }
@@ -123,6 +131,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
   return (
     <section className="regular-contribution-payment">
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
+      {directDebitButton}
       {stripeButton}
       {payPalButton}
     </section>
