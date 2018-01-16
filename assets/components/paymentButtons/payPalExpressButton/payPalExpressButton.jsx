@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { loadPayPalExpress, setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
-import type { Currency } from '../../helpers/internationalisation/currency';
+import type { Currency } from '../../../helpers/internationalisation/currency';
 
 // ---- Types ----- //
 

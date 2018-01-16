@@ -30,9 +30,9 @@
 @import '../components/numberInput/numberInput';
 @import '../components/paymentAmount/paymentAmount';
 @import '../components/radioToggle/radioToggle';
-@import '../components/payPalContributionButton/payPalContributionButton';
-@import '../components/payPalExpressButton/payPalExpressButton';
-@import '../components/stripePopUpButton/stripePopUpButton';
+@import '../components/paymentButtons/payPalContributionButton/payPalContributionButton';
+@import '../components/paymentButtons/payPalExpressButton/payPalExpressButton';
+@import '../components/paymentButtons/stripePopUpButton/stripePopUpButton';
 @import '../components/legal/termsPrivacy/termsPrivacy';
 @import '../components/signout/signout';
 @import '../components/textInput/textInput';
