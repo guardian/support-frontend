@@ -12,8 +12,8 @@ import SocialShare from 'components/socialShare/socialShare';
 
 function QuestionsAndSocial() {
   return (
-    <div>
-      <InfoSection heading="Questions?" className="thankyou__questions">
+    <div className="questions-and-social">
+      <InfoSection heading="Questions?" className="questions-and-social__questions">
         <p>
           If you have any questions about contributing to the Guardian,
           please <a href="mailto:contribution.support@theguardian.com">contact us</a>
@@ -21,7 +21,7 @@ function QuestionsAndSocial() {
       </InfoSection>
       <InfoSection
         heading="Spread the word"
-        className="thankyou__spread-the-word"
+        className="questions-and-social__spread-the-word"
       >
         <p>
           We report for everyone. Let your friends and followers know that

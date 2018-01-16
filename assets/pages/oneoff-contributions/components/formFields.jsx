@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import TextInput from 'components/textInput/textInput';
-import { setSession } from 'helpers/storage';
 
 import {
   setFullName,
@@ -64,7 +63,6 @@ function FormFields(props: PropTypes) {
 
 function mapStateToProps(state) {
   const { user } = state.page;
-  setSession('gu.email', user.email);
   return {
     name: user.fullName,
     email: user.email,

@@ -9,7 +9,7 @@ type PropTypes = {
   thankYouMessage: string,
 };
 
-function ThankYou(props: PropTypes) {
+function ThankYouIntroduction(props: PropTypes) {
   return (
     <section className="component-info-section__heading thankyou__component">
       <div className="thankyou__wrapper">
@@ -24,5 +24,5 @@ function ThankYou(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default ThankYou;
+export default ThankYouIntroduction;
 

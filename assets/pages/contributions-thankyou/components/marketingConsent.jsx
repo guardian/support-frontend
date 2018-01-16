@@ -7,9 +7,10 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 
 import { connect } from 'react-redux';
-import { setMarketingPreferencesSelected, sendMarketingPreferencesToIdentity } from
+import { sendMarketingPreferencesToIdentity } from
   '../contributionsThankyouActions';
 import { setGnmMarketing } from '../../../helpers/user/userActions';
+import { routes } from '../../../helpers/routes';
 
 // ----- Types ----- //
 
@@ -24,6 +25,12 @@ type PropTypes = {
 // ----- Component ----- //
 
 function MarketingConsent(props: PropTypes) {
+
+  const params = new URLSearchParams();
+  const optInParam = props.marketingPreferencesOptIn === true ? 'yes' : 'no';
+  params.append('optIn', optInParam);
+  const marketingConfirmUrl = `${routes.contributionsMarketingConfirm}?${params.toString()}`;
+
   return (
     <div>
       <section className="component-info-section marketing-opt-in">
@@ -45,6 +52,7 @@ function MarketingConsent(props: PropTypes) {
             ctaId="Next"
             text="Next"
             accessibilityHint="Go to the guardian dot com front page"
+            url={marketingConfirmUrl}
           />
         </div>
       </section>
@@ -55,7 +63,6 @@ function mapDispatchToProps(dispatch) {
 
   return {
     onClick: (marketingPreferencesOptIn: boolean, email?: string) => {
-      dispatch(setMarketingPreferencesSelected(marketingPreferencesOptIn));
       dispatch(sendMarketingPreferencesToIdentity(marketingPreferencesOptIn, email));
     },
     marketingPreferenceUpdate: (preference: boolean) => {
@@ -66,8 +73,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    email: state.page.user.email,
-    marketingPreferencesOptIn: state.page.user.gnmMarketing,
+    email: state.page.email,
+    marketingPreferencesOptIn: state.page.gnmMarketing,
   };
 }
 

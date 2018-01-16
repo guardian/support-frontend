@@ -17,7 +17,6 @@ class IdentityController(
   import actionRefiners._
 
   def submitMarketing(email: String): Action[AnyContent] = PrivateAction { implicit request =>
-    logger.info("email = " + email)
     identityService.sendConsentPreferencesEmail(email)
     Ok
   }

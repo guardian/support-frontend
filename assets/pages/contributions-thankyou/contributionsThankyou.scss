@@ -38,7 +38,9 @@
 		}
 
 		.component-info-section__header {
-			position: absolute;
+			@include mq($from: desktop) {
+				position: absolute;
+			}
 		}
 	}
 
@@ -120,3 +122,4 @@
 	}
 
 }
+
