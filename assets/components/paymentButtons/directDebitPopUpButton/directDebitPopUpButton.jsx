@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
-import { openDirectDebitPopUp, closeDirectDebitPopUp } from '../../directDebit/directDebitActions';
+import { openDirectDebitPopUp, closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
 // ---- Types ----- //
 
