@@ -23,7 +23,7 @@ export default function Introduction(props: PropTypes) {
             <span className="introduction-text__highlight">Support</span>
           </h1>
           <h1 className="introduction-text__heading introduction-text__heading--support">
-            <span className="introduction-text__highlight">the Guardian</span>
+            <span className="introduction-text__highlight">The Guardian</span>
           </h1>
         </div>
         {props.showContributeOrSubscribe
