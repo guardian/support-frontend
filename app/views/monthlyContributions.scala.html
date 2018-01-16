@@ -10,6 +10,7 @@
   user: IdUser,
   uatMode: Boolean,
   payPalButton: Boolean,
+  directDebitButtonEnable: Boolean,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
@@ -31,6 +32,7 @@
             }
         };
         window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
+        window.guardian.directDebitEnable = @directDebitButtonEnable;
         window.guardian.stripeKey = {
           default: "@defaultStripeConfig.publicKey",
           uat: "@uatStripeConfig.publicKey"
