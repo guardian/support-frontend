@@ -2,7 +2,6 @@
 
   // ----- Introduction
 
-
   .introduction-text {
 
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
@@ -65,9 +64,9 @@
     }
 
     .introduction-text__highlight {
-      color: #121212;
+      color: gu-colour(garnett-neutral-1);
       margin: 0;
-      background-color: #ffe500;
+      background-color: gu-colour(news-garnett-highlight);
       padding: 0 ($gu-h-spacing / 2);
     }
 
@@ -472,13 +471,13 @@
         }
 
         .component-cta-link {
-          background-color: #0084c6;
+          background-color: gu-colour(sport-garnett-main-1);
           color: #fff;
-          border: 1px solid #0084c6;
+          border: 1px solid gu-colour(sport-garnett-main-1);
 
           &:hover {
-            background-color: darken(#0084c6, 10%);
-            border-color: darken(#0084c6, 10%);
+            background-color: darken(gu-colour(sport-garnett-main-1), 10%);
+            border-color: darken(gu-colour(sport-garnett-main-1), 10%);
             color: #fff;
 
             svg {
