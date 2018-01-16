@@ -3,20 +3,18 @@
 import { routes } from 'helpers/routes';
 
 // ----- Types ----- //
-
-export type Action =
-  | { type: 'MARKETING_PREFERENCES_SELECTED' };
-
-
 // ----- Actions ----- //
-function setMarketingPreferencesSelected(): Action {
-  return { type: 'MARKETING_PREFERENCES_SELECTED' };
+function setMarketingPreferencesSelected(optIn: boolean) {
+  const params = new URLSearchParams();
+  const optInParam = optIn ? 'yes' : 'no';
+  params.append('optIn', optInParam);
+  window.location = `${routes.contributionsMarketingConfirm}?${params.toString()}`;
 }
 
 // Fire and forget, as we don't want to interupt the flow
-function sendMarketingPreferencesToIdentity(optIn: boolean, email: string): Function {
+function sendMarketingPreferencesToIdentity(optIn: boolean, email?: string): Function {
   return () => {
-    if (optIn) {
+    if (optIn && email) {
       return fetch(`${routes.contributionsSendMarketing}?email=${email}`);
     }
     return null;

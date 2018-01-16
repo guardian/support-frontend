@@ -15,7 +15,6 @@ import { setGnmMarketing } from '../../../helpers/user/userActions';
 
 type PropTypes = {
   onClick: (marketingPreferencesOptIn: boolean, email?: string) => void,
-  marketingPreferencesSelected: boolean,
   marketingPreferencesOptIn: boolean,
   marketingPreferenceUpdate: (preference: boolean) => void,
   email?: string,
@@ -25,38 +24,38 @@ type PropTypes = {
 // ----- Component ----- //
 
 function MarketingConsent(props: PropTypes) {
-  if (props.marketingPreferencesSelected === false) {
-    return (
-      <div>
-        <section className="component-info-section component-marketing">
-          <div className="thankyou__wrapper">
-            <h1 className="thankyou__subheading">We would like to stay in touch</h1>
-            <h2 id="qa-thank-you-message" className="thankyou__subheading">
-              <CheckboxInput
-                id="gnm-marketing-preference"
-                checked={props.marketingPreferencesOptIn || false}
-                onChange={props.marketingPreferenceUpdate}
-                labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
-                labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
-              />
-            </h2>
-            <CtaLink
-              onClick={() => props.onClick(props.marketingPreferencesOptIn, props.email)}
-              ctaId="Next"
-              text="Next"
-              accessibilityHint="Go to the guardian dot com front page"
+  return (
+    <div>
+      <section className="component-info-section marketing-opt-in">
+        <div className="component-info-section__header">
+          Stay in touch
+        </div>
+        <div className="thankyou__wrapper marketing-opt-in__wrapper">
+          <h2 id="qa-thank-you-message" className="thankyou__subheading">
+            <CheckboxInput
+              id="gnm-marketing-preference"
+              checked={props.marketingPreferencesOptIn || false}
+              onChange={props.marketingPreferenceUpdate}
+              labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
+              labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
             />
-          </div>
-        </section>
-      </div>);
-  }
+          </h2>
+          <CtaLink
+            onClick={() => props.onClick(props.marketingPreferencesOptIn, props.email)}
+            ctaId="Next"
+            text="Next"
+            accessibilityHint="Go to the guardian dot com front page"
+          />
+        </div>
+      </section>
+    </div>);
 }
 
 function mapDispatchToProps(dispatch) {
 
   return {
     onClick: (marketingPreferencesOptIn: boolean, email?: string) => {
-      dispatch(setMarketingPreferencesSelected());
+      dispatch(setMarketingPreferencesSelected(marketingPreferencesOptIn));
       dispatch(sendMarketingPreferencesToIdentity(marketingPreferencesOptIn, email));
     },
     marketingPreferenceUpdate: (preference: boolean) => {
@@ -67,8 +66,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    marketingPreferencesSelected:
-      state.page.regularContributionsThankYou.marketingPreferencesSelected,
     email: state.page.user.email,
     marketingPreferencesOptIn: state.page.user.gnmMarketing,
   };

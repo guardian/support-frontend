@@ -34,6 +34,7 @@ POST /contribute/recurring/create                   controllers.RegularContribut
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
 GET  /contribute/recurring/pending                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
 GET  /contribute/send-marketing                     controllers.IdentityController.submitMarketing(email: String)
+GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
