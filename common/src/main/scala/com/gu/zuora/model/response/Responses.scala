@@ -3,7 +3,7 @@ package com.gu.zuora.model.response
 import cats.implicits._
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.encoding.{Codec, ErrorJson}
-import com.gu.support.workers.exceptions.{RetryException, RetryNone}
+import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import io.circe.parser._
 import io.circe.syntax._
 
@@ -34,7 +34,10 @@ object ZuoraErrorResponse {
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
-  def asRetryException: RetryException = new RetryNone(message = this.asJson.noSpaces, cause = this)
+  def asRetryException: RetryException = errors match {
+    case List(ZuoraError("UNKNOWN_ERROR", _)) => new RetryUnlimited(this.asJson.noSpaces, cause = this)
+    case _ => new RetryNone(message = this.asJson.noSpaces, cause = this)
+  }
 
   override def toString: String = this.errors.toString()
 }
