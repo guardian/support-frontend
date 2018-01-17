@@ -26,7 +26,7 @@ const initialState: DirectDebitState = {
 
 // ----- Reducers ----- //
 
-const directDebitPopUpButtonReducer = (
+const directDebitReducer = (
   state: DirectDebitState = initialState,
   action: Action,
 ): DirectDebitState => {
@@ -79,5 +79,5 @@ const directDebitPopUpButtonReducer = (
 // ----- Exports ----- //
 
 export {
-  directDebitPopUpButtonReducer,
+  directDebitReducer,
 };

@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
-import { directDebitPopUpButtonReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
