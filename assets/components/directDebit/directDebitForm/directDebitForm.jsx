@@ -101,7 +101,7 @@ const DirectDebitForm = (props: PropTypes) => (
         <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
           United Kingdom
         </div>
-        <div>Tel: +44 (0) 330 333 6767</div>
+        <div><a href="tel:+443303336767">Tel: +44 (0) 330 333 6767</a></div>
         <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
       </div>
     </div>
