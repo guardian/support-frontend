@@ -5,7 +5,7 @@ import com.typesafe.scalalogging.LazyLogging
 import play.api.mvc._
 import services.IdentityService
 
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.{Await, ExecutionContext}
 
 class IdentityController(
     identityService: IdentityService,
@@ -16,8 +16,11 @@ class IdentityController(
 
   import actionRefiners._
 
-  def submitMarketing(email: String): Action[AnyContent] = PrivateAction { implicit request =>
-    identityService.sendConsentPreferencesEmail(email)
-    Ok
+  def submitMarketing(email: String): Action[AnyContent] = PrivateAction.async { implicit request =>
+    val result = identityService.sendConsentPreferencesEmail(email)
+    result.map(res => {
+      if (res) Ok
+      else InternalServerError
+    })
   }
 }

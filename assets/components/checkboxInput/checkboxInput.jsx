@@ -22,19 +22,16 @@ export default function CheckboxInput(props: PropTypes) {
   let labelTitle = '';
   let labelCopy = '';
 
-  if (props.id) {
-    if (props.labelTitle) {
-      // eslint-disable-next-line jsx-a11y/label-has-for
-      labelTitle = <p className="component-checkbox__title">{props.labelTitle}</p>;
-    }
-    if (props.labelCopy) {
-      // eslint-disable-next-line jsx-a11y/label-has-for
-      labelCopy = <p className="component-checkbox__copy" >{props.labelCopy}</p>;
-    }
+  if (props.labelTitle) {
+    labelTitle = <p className="component-checkbox__title">{props.labelTitle}</p>;
+  }
+  if (props.labelCopy) {
+    labelCopy = <p className="component-checkbox__copy" >{props.labelCopy}</p>;
   }
 
   return (
-    <label htmlFor={props.id} className="component-checkbox">
+    // eslint-disable-next-line jsx-a11y/label-has-for
+    <label className="component-checkbox">
       <input
         className="component-checkbox__checkbox"
         id={props.id}

@@ -27,7 +27,7 @@ const init = (dispatch: Function) => {
 
   const uatMode = window.guardian && window.guardian.uatMode;
 
-  const getEmailFromSession: ?string = getSession('gu.email');
+  const emailFromSession: ?string = getSession('gu.email');
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 
@@ -64,11 +64,8 @@ const init = (dispatch: Function) => {
         });
       }
     });
-  } else {
-    const emailFromSession = getEmailFromSession;
-    if (emailFromSession) {
-      dispatch(setEmail(emailFromSession));
-    }
+  } else if (emailFromSession) {
+    dispatch(setEmail(emailFromSession));
   }
 };
 
