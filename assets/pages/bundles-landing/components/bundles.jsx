@@ -23,7 +23,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { generateClassName } from 'helpers/utilities';
 
-import CrossProduct from './crossProduct';
 import {
   changeContribType,
   changeContribAmount,
@@ -391,7 +390,6 @@ function Bundles(props: PropTypes) {
             return null;
           })}
         </div>
-        <CrossProduct />
       </div>
     </section>
   );

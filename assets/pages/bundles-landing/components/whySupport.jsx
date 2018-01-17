@@ -4,8 +4,6 @@
 
 import React from 'react';
 
-import { SvgVideo } from 'components/svg/svg';
-
 import BodyCopy from 'components/bodyCopy/bodyCopy';
 import Video from 'components/video/video';
 
@@ -22,7 +20,6 @@ const copy = {
     'We don’t have a billionaire owner pulling our strings. Our owner, the Scott Trust, safeguards our editorial independence from commercial or political interference and reinvests revenue into our journalism, as opposed to into shareholders\' pockets.',
     'Help to make the Guardian\'s journalism possible: by funding it, by reading it, by sharing it, and by participating in it so that together we can continue to tell the stories that matter, to inform the world and to make it a better place. ',
   ],
-  videoCaption: 'Katharine Viner, editor-in-chief, explains the Guardian\'s unique ownership model',
 };
 
 
@@ -41,10 +38,6 @@ export default function WhySupport() {
           <Video name="scottTrustExplained" poster={null} />
         </div>
         <div className="why-support__bottom-content">
-          <p className="why-support__video-caption">
-            <SvgVideo />
-            {copy.videoCaption}
-          </p>
           <BodyCopy copy={copy.bottom} />
         </div>
       </div>

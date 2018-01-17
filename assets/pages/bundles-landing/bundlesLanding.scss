@@ -2,14 +2,12 @@
 
   // ----- Introduction
 
-
   .introduction-text {
-
-    background-color: darken(gu-colour(guardian-brand-dark), 5%);
+    background-color: darken(gu-colour(sport-garnett-main-1), 5%);
 
     .introduction-text__content {
       padding-bottom: $gu-v-spacing * 4;
-      background-color: gu-colour(guardian-brand-dark);
+      background-color: gu-colour(sport-garnett-main-1);
 
       @include mq($from: leftCol) {
         padding-left: 100px;
@@ -65,9 +63,9 @@
     }
 
     .introduction-text__highlight {
-      color: #121212;
+      color: gu-colour(garnett-neutral-1);
       margin: 0;
-      background-color: #ffe500;
+      background-color: gu-colour(news-garnett-highlight);
       padding: 0 ($gu-h-spacing / 2);
     }
 
@@ -83,7 +81,7 @@
     background-color: darken(gu-colour(guardian-brand-dark), 5%);
 
     .bundles__title {
-      color: #fff;
+      color: gu-colour(garnett-neutral-1);
       font-size: 28px;
       line-height: 32px;
       font-weight: 900;
@@ -102,10 +100,10 @@
     .bundles__content {
       background-color: gu-colour(guardian-brand-dark);
       position: relative;
-      padding-bottom: ($gu-v-spacing * 6);
+      padding-bottom: $gu-v-spacing;
 
       @include mq($from: desktop) {
-        padding: 0 0 ($gu-v-spacing * 6);
+        padding: 0 0 $gu-v-spacing;;
       }
     }
 
@@ -123,7 +121,7 @@
     }
 
     .bundles__content--stacked{
-      background-color: gu-colour(guardian-brand);
+      background-color: #fff;
     }
 
     .bundles__divider {
@@ -292,7 +290,7 @@
       }
 
       .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
-        background-color: gu-colour(multimedia-main-2);
+        background-color: gu-colour(news-garnett-highlight);
       }
 
       .component-number-input__input::placeholder {
@@ -328,6 +326,7 @@
 
     .component-bundle--contributions.component-bundle--stacked {
       border-top: 2px gu-colour(neutral-1) solid;
+      background-color: gu-colour(news-garnett-highlight);
 
       .component-bundle__content {
         p:first-child {
@@ -461,24 +460,24 @@
     }
 
     .component-bundle--digital, .component-bundle--paper, .component-bundle--paperDigital {
-        background-color: #fff;
+        background-color: gu-colour(garnett-neutral-3);
 
         @include mq($until: desktop) {
           border-top: 1px solid gu-colour(news-support-1);
         }
 
         .component-double-heading__heading {
-          color: gu-colour(guardian-brand);
+          color: gu-colour(sport-garnett-main-1);
         }
 
         .component-cta-link {
-          background-color: #0084c6;
+          background-color: gu-colour(sport-garnett-main-1);
           color: #fff;
-          border: 1px solid #0084c6;
+          border: 1px solid gu-colour(sport-garnett-main-1);
 
           &:hover {
-            background-color: darken(#0084c6, 10%);
-            border-color: darken(#0084c6, 10%);
+            background-color: darken(gu-colour(sport-garnett-main-1), 10%);
+            border-color: darken(gu-colour(sport-garnett-main-1), 10%);
             color: #fff;
 
             svg {
@@ -526,7 +525,7 @@
       color: gu-colour(neutral-1);
 
       h3 {
-        color: gu-colour(guardian-brand);
+        color: gu-colour(sport-garnett-main-1);
       }
 
       li {
@@ -545,13 +544,13 @@
   }
 
   .bundles--stacked {
-    background-color: gu-colour(guardian-brand-dark);
+    background-color: gu-colour(garnett-neutral-3);
     .bundles__cross-product {
       margin-top: 0;
       border-top: 0;
       padding-top: $gu-v-spacing;
     }
-    padding-bottom: $gu-v-spacing * 3;
+    padding-bottom: 0;
   }
 
   .bundles__cross-product {
@@ -629,7 +628,7 @@
 
   .why-support {
 
-    background-color: darken(#fff, 5%);
+    background-color: gu-colour(garnett-neutral-3);
     color: gu-colour(neutral-1);
 
     .why-support__content {
@@ -662,7 +661,7 @@
 
     .why-support__heading {
       font-family: 'Guardian Titlepiece Web', sans-serif;
-      color: gu-colour(comment-main-1);
+      color: gu-colour(lifestyle-garnett-main-1);
       font-weight: 400;
       padding-top: $gu-v-spacing / 2;
       font-size: 28px;
@@ -675,7 +674,6 @@
         margin: 0;
         font-size: 40px;
         line-height: 37px;
-        text-align: center;
         flex-basis: 220px;
         padding-top: 0;
       }
@@ -754,40 +752,13 @@
 
     // Breaks the video out of 'gu-content-margin' to make it full width.
     .component-video {
+      @include mq($until: tablet) {
+        margin-bottom: $gu-v-spacing;
+      }
+
       @include mq($until: mobileLandscape) {
         width: 100vw;
         margin-left: - $gu-h-spacing / 2;
-      }
-    }
-
-    p.why-support__video-caption {
-      font-family: $gu-text-sans-web;
-    }
-
-    .why-support__video-caption {
-      font-size: small;
-      margin-top: $gu-v-spacing / 2;
-      font-size: 12px;
-      line-height: 15px;
-
-      @include mq($until: tablet) {
-        margin-bottom: 16px;
-      }
-
-      @include mq($from: tablet, $until: desktop) {
-        max-width: 220px;
-        margin-top: 0;
-      }
-
-      @include mq($from: desktop) {
-        order: 1;
-        margin-bottom: 0;
-      }
-
-      .svg-video {
-        height: 8px;
-        fill: gu-colour(comment-main-1);
-        margin-right: 6px;
       }
     }
 
@@ -856,7 +827,7 @@
 
     .ways-of-support__heading {
       flex-basis: 100%;
-      color: gu-colour(guardian-brand-dark);
+      color: gu-colour(culture-garnett-main-1);
       font-family: 'Guardian Titlepiece Web', sans-serif;
       font-weight: 400;
       padding-top: 2px;
@@ -884,7 +855,6 @@
         margin: 0;
         font-size: 40px;
         line-height: 37px;
-        text-align: center;
         margin-left: $gu-h-spacing / 2;
         margin-right: $gu-h-spacing / 2;
         flex-basis: 220px;
@@ -900,7 +870,6 @@
         flex-basis: 300px;
         // Fix for Safari 8.
         max-width: 300px;
-        text-align: center;
         border: none;
         order: 1;
       }
@@ -943,17 +912,13 @@
       }
     }
 
-    .way-of-support--gu-events {
-      background: gu-colour(comment-main-2);
-    }
-
     .way-of-support__heading {
       margin: ($gu-v-spacing / 3) ($gu-h-spacing / 2) $gu-v-spacing;
       font-family: $gu-egyptian-web;
       font-weight: 900;
       font-size: 23px;
       line-height: 26px;
-      color: #c28a2f;
+      color: gu-colour(culture-garnett-main-1);
     }
 
     .way-of-support__info-text {
@@ -971,7 +936,7 @@
       }
 
       button {
-        background-color: #c28a2f;
+        background-color: gu-colour(culture-garnett-main-1);
       }
     }
 
@@ -991,5 +956,9 @@
 
   .component-double-heading--variant-a {
     margin-bottom: 0;
+  }
+
+  .component-footer {
+    background-color: #121212;
   }
 }
