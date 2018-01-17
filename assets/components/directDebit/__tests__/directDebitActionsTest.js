@@ -38,7 +38,7 @@ describe('actions', () => {
     const accountNumber: string = '123456789';
     const expectedAction = {
       type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER',
-      accountNumber
+      accountNumber,
     };
     expect(updateAccountNumber(accountNumber)).toEqual(expectedAction);
   });
