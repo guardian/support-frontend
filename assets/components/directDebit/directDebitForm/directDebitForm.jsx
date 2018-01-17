@@ -162,7 +162,6 @@ function AccountNumber(props: {valid: boolean, onChange: Function, value: string
         <input
           value={props.value}
           onChange={props.onChange}
-          id="payment-account"
           name="payment.account"
           pattern="[0-9]*"
           minLength="6"
