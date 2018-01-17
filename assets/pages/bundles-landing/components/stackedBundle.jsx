@@ -25,7 +25,6 @@ import type { Product } from './bundles';
 
 import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/flashSale';
 
-import CrossProduct from './crossProduct';
 import {
   changeContribType,
   changeContribAmount,
@@ -357,9 +356,6 @@ function StackedBundle(props: PropTypes) {
             ? subscriptions
             : null}
         </div>
-      </div>
-      <div className="gu-content-margin">
-        <CrossProduct />
       </div>
     </section>
   );
