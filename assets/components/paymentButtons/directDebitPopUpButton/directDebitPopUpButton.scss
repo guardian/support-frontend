@@ -1,0 +1,24 @@
+.component-direct-debit-pop-up-button {
+  background-color: gu-colour(neutral-1);
+  border: none;
+  border-radius: 600px;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  height: $gu-v-spacing * 4;
+  padding-left: $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  @include mq($from: mobileMedium) {
+    width: 304px;
+  }
+
+  &:hover {
+    background-color: #000;
+  }
+}

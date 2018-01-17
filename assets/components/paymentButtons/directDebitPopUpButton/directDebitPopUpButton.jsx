@@ -6,7 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
-import { openDirectDebitPopUp, closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
 // ---- Types ----- //
 
@@ -19,7 +20,6 @@ type PropTypes = {
   isTestUser: boolean,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
-  closeDirectDebitPopUp: () => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -37,9 +37,6 @@ function mapDispatchToProps(dispatch) {
     openDirectDebitPopUp: () => {
       dispatch(openDirectDebitPopUp());
     },
-    closeDirectDebitPopUp: () => {
-      dispatch(closeDirectDebitPopUp());
-    },
   };
 
 }
@@ -56,7 +53,7 @@ const DirectDebitPopUpButton = (props: PropTypes) => {
   let content = null;
 
   if (props.isPopUpOpen) {
-    content = null;
+    content = <DirectDebitPopUpForm />;
   } else {
     content = (
       <button
@@ -65,10 +62,11 @@ const DirectDebitPopUpButton = (props: PropTypes) => {
         onClick={onClick}
       >
         Pay with direct debit
-      </button>);
+      </button>
+    );
   }
 
-  return ({ content });
+  return (content);
 
 };
 
