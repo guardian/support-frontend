@@ -6,6 +6,7 @@ import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
+import utils.CheckBrowser._
 import config.StringsConfig
 
 import scala.concurrent.ExecutionContext
@@ -46,16 +47,20 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String, newDesigns: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns) {
-      Ok(views.html.bundleLanding(
-        title,
-        "support-landing-page",
-        "supportLandingPage.js",
-        contributionsPayPalEndpoint,
-        description = Some(stringsConfig.bundleLandingDescription)
-      ))
+    if (unsupportedBrowser) {
+      Ok(views.html.unsupportedBrowserPage())
     } else {
-      Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      if (newDesigns) {
+        Ok(views.html.bundleLanding(
+          title,
+          "support-landing-page",
+          "supportLandingPage.js",
+          contributionsPayPalEndpoint,
+          description = Some(stringsConfig.bundleLandingDescription)
+        ))
+      } else {
+        Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      }
     }
   }
 
