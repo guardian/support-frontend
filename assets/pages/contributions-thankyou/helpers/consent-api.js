@@ -17,8 +17,12 @@ const marketingConfirmUrl = (marketingPreferencesOptIn: boolean) => {
 function sendMarketingPreferencesToIdentity(optIn: boolean, email: string, dispatch: Function) {
   if (optIn) {
     fetch(`${routes.contributionsSendMarketing}?email=${email}`)
-      .then(() => {
-        window.location = marketingConfirmUrl(optIn);
+      .then((response) => {
+        if (response.status === 200) {
+          window.location = marketingConfirmUrl(optIn);
+        } else {
+          dispatch(setConsentApiError(true));
+        }
       })
       .catch(() => {
         dispatch(setConsentApiError(true));
