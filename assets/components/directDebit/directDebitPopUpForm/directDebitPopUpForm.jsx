@@ -63,7 +63,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
     );
   }
 
-  return (content);
+  return content;
 
 };
 

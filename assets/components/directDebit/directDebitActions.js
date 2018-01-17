@@ -1,5 +1,7 @@
 // @flow
 
+import * as storage from 'helpers/storage';
+
 // ----- Types ----- //
 
 export type Action =
@@ -13,7 +15,10 @@ export type Action =
 
 // ----- Actions ----- //
 
-const openDirectDebitPopUp = (): Action => ({ type: 'DIRECT_DEBIT_POP_UP_OPEN' });
+const openDirectDebitPopUp = (): Action => {
+  storage.setSession('paymentMethod', 'DirectDebit');
+  return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
+};
 
 const closeDirectDebitPopUp = (): Action => ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
 

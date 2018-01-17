@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Currency } from 'helpers/internationalisation/currency';
-import * as storage from 'helpers/storage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
@@ -45,11 +44,6 @@ function mapDispatchToProps(dispatch) {
 
 const DirectDebitPopUpButton = (props: PropTypes) => {
 
-  const onClick = () => {
-    storage.setSession('paymentMethod', 'DirectDebit');
-    props.openDirectDebitPopUp();
-  };
-
   let content = null;
 
   if (props.isPopUpOpen) {
@@ -59,14 +53,14 @@ const DirectDebitPopUpButton = (props: PropTypes) => {
       <button
         id="qa-pay-with-direct-debit"
         className="component-direct-debit-pop-up-button"
-        onClick={onClick}
+        onClick={props.openDirectDebitPopUp}
       >
         Pay with direct debit
       </button>
     );
   }
 
-  return (content);
+  return content;
 
 };
 
