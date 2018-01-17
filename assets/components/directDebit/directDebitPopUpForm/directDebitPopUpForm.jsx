@@ -45,10 +45,6 @@ function mapDispatchToProps(dispatch) {
 
 const DirectDebitPopUpForm = (props: PropTypes) => {
 
-  const onClick = () => {
-    props.closeDirectDebitPopUp();
-  };
-
   let content = null;
 
   if (props.isPopUpOpen) {
@@ -57,7 +53,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
         <button
           id="qa-pay-with-direct-debit"
           className="component-direct-debit-pop-up-form"
-          onClick={onClick}
+          onClick={props.closeDirectDebitPopUp}
         >
           Close form
         </button>
