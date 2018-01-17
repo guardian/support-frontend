@@ -35,7 +35,6 @@ const store = pageInit(
 const bundle: ?string = getQueryParameter('bundle');
 
 let bundlesSelected;
-let showContributeOrSubscribe = false;
 
 if (bundle === 'contribute') {
   bundlesSelected = <StackedBundle products={['CONTRIBUTE']} />;
@@ -43,10 +42,8 @@ if (bundle === 'contribute') {
   bundlesSelected = <StackedBundle products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
 } else if (bundle === 'contribute-and-digipack') {
   bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
-  showContributeOrSubscribe = true;
 } else {
   bundlesSelected = <StackedBundle products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
-  showContributeOrSubscribe = true;
 }
 
 const whyAndWaysOfSupport = (bundle === 'contribute')
@@ -59,7 +56,7 @@ const content = (
   <Provider store={store}>
     <div className="gu-content">
       <SimpleHeader />
-      <Introduction showContributeOrSubscribe={showContributeOrSubscribe} />
+      <Introduction />
       {bundlesSelected}
       {whyAndWaysOfSupport}
       <Footer privacyPolicy disclaimer />
