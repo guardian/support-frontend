@@ -25,7 +25,6 @@ export type State = {
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
-  marketingPreferencesSelected: boolean,
 };
 
 export type CombinedState = {
@@ -52,7 +51,6 @@ function createRegularContribReducer(amount: number, currency: Currency) {
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
-    marketingPreferencesSelected: false,
   };
 
   return function regularContrib(state: State = initialState, action: Action): State {

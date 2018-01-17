@@ -30,17 +30,24 @@
 		}
 
 		.component-cta-link {
+			margin-top: 0;
 			margin-bottom: 0;
 		}
 
 		.component-checkbox {
 			margin-top: 0;
+			margin-bottom: 20px;
 		}
 
 		.component-info-section__header {
 			@include mq($from: desktop) {
 				position: absolute;
 			}
+		}
+
+		.component-error-message {
+			margin-top: 12px;
+			margin-bottom: 5px;
 		}
 	}
 

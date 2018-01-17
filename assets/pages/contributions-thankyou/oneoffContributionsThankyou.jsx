@@ -7,11 +7,11 @@ import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, compose } from 'redux';
 import { init as pageInit } from 'helpers/page/page';
 import { Provider } from 'react-redux';
-import { userReducer as reducer } from 'helpers/user/userReducer';
-
 import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
+import CtaLink from 'components/ctaLink/ctaLink';
+import reducer from './contributionsThankYouReducer';
 import MarketingConsent from './components/marketingConsent';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
@@ -32,6 +32,22 @@ const store = pageInit(
 
 user.init(store.dispatch);
 
+const marketing = () => {
+  if (store.getState().page.user.email) {
+    return <MarketingConsent />;
+  }
+  return (
+    <div className="thankyou__wrapper">
+      <CtaLink
+        ctaId="return-to-the-guardian"
+        text="Return to the Guardian"
+        url="https://theguardian.com"
+        accessibilityHint="Go to the guardian dot com front page"
+      />
+    </div>
+  );
+};
+
 // ----- Render ----- //
 
 const content = (
@@ -43,7 +59,7 @@ const content = (
           <ThankYouIntroduction thankYouMessage="You&#39;ve made a vital contribution that will help us maintain our independent,
               investigative journalism."
           />
-          <MarketingConsent />
+          {marketing()}
           <QuestionsAndSocial />
         </div>
       </div>
