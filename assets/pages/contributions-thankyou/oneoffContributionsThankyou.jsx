@@ -11,11 +11,11 @@ import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
+import * as user from 'helpers/user/user';
 import reducer from './contributionsThankYouReducer';
 import MarketingConsent from './components/marketingConsent';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
-import * as user from '../../helpers/user/user';
 
 
 // ----- Page Startup ----- //

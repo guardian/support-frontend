@@ -2,7 +2,7 @@
 
 // ----- Types ----- //
 
-import { setSession } from '../storage';
+import { setSession } from 'helpers/storage';
 
 export type Action =
   | { type: 'SET_USER_ID', id: string }

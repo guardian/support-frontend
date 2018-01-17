@@ -8,9 +8,9 @@ import { renderPage } from 'helpers/render';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
+import { statelessInit as pageInit } from 'helpers/page/page';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
-import { statelessInit as pageInit } from '../../helpers/page/page';
 
 
 // ----- Page Startup ----- //

@@ -8,9 +8,8 @@ import CheckboxInput from 'components/checkboxInput/checkboxInput';
 
 import { connect } from 'react-redux';
 import ErrorMessage from 'components/errorMessage/errorMessage';
-import { sendMarketingPreferencesToIdentity } from
-  '../helpers/consent-api';
-import { setGnmMarketing } from '../../../helpers/user/userActions';
+import { setGnmMarketing } from 'helpers/user/userActions';
+import { sendMarketingPreferencesToIdentity } from '../helpers/consent-api';
 
 // ----- Types ----- //
 

@@ -160,6 +160,7 @@ function handleStatus(
   if (response.ok) {
     response.json().then((status) => {
       trackingURI = status.trackingUri;
+
       switch (status.status) {
         case 'pending':
           delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);

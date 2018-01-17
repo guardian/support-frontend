@@ -10,6 +10,7 @@ import Footer from 'components/footer/footer';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
 
+// ----- Page Startup ----- //
 
 pageInit();
 
@@ -31,6 +32,5 @@ const content = (
     <Footer />
   </div>
 );
-
 
 renderPage(content, 'regular-contributions-thankyou-page');

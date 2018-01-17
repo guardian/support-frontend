@@ -29,7 +29,6 @@ const init = (dispatch: Function) => {
 
   const getEmailFromSession: ?string = getSession('gu.email');
 
-
   const isUndefinedOrNull = x => x === null || x === undefined;
 
   const testUserCondition = (isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode;

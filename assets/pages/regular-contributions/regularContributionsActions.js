@@ -4,6 +4,7 @@
 
 import type { PayPalButtonType } from './components/regularContributionsPayment';
 
+
 // ----- Types ----- //
 
 export type Action =

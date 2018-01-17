@@ -93,6 +93,7 @@ function formValidation(
  * You should not use context for other purposes. Please use redux.
  */
 function OneoffContributionsPayment(props: PropTypes, context) {
+
   return (
     <section className="oneoff-contribution-payment">
       {getStatusMessage(props.isFormEmpty, props.error)}
