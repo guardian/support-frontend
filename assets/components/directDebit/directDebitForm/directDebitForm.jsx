@@ -113,10 +113,8 @@ DirectDebitForm.defaultProps = {
 
 };
 
-// ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
-
+// ----- Auxiliary components ----- //
 
 function SortCodeInput(props: {value: string, onChange: Function}) {
   return (
@@ -200,3 +198,7 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
     </div>
   );
 }
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
