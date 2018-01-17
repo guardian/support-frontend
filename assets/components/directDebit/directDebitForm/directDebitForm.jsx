@@ -61,40 +61,36 @@ function mapDispatchToProps(dispatch) {
 // ----- Component ----- //
 
 const DirectDebitForm = (props: PropTypes) => (
-  <div>
-    <dd className="mma-section__list--content">
+  <div className="component-direct-debit-form">
+    <dd className="component-direct-debit-form__direct-debit-logo">
       <img src="#" alt="The Direct Debit logo" />
     </dd>
 
-    <SortCodeComponent
+    <SortCodeInput
       value={props.sortCode}
       onChange={props.updateSortCode}
-      valid={props.validSortCode}
     />
 
-    <AccountNumber
+    <AccountNumberInput
       onChange={props.updateAccountNumber}
       value={props.accountNumber}
-      valid={props.validAccountNumber}
     />
 
-    <AccountHolder
+    <AccountHolderNameInput
       onChange={props.updateAccountHolderName}
       value={props.accountHolderName}
-      valid={props.validAccountHolder}
     />
 
-    <Confirmation
+    <ConfirmationInput
       checked={props.accountHolderConfirmation}
       onChange={props.updateAccountHolderConfirmation}
-      valid={props.validDirectDebitConfirmed}
     />
 
-    <dt className="mma-section__list--title">
+    <dt className="component-direct-debit-form__advance-notice__title">
         Advance notice
     </dt>
-    <dd className="mma-section__list--content">
-      <div className="mma-section__list--restricted u-note prose">
+    <dd className="component-direct-debit-form__advance-notice__content">
+      <div>
         <p>The details of your Direct Debit instruction including payment schedule, due date,
           frequency and amount will be sent to you within three working days. All the normal
           Direct Debit safeguards and guarantees apply.
@@ -124,55 +120,38 @@ DirectDebitForm.defaultProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
 
 
-function SortCodeComponent(props: {valid: boolean, value: string, onChange: Function}) {
-  const invalid = props.valid === false;
+function SortCodeInput(props: {value: string, onChange: Function}) {
   return (
-    <div>
-      <dt className="mma-section__list--title">
-        <label className="label" htmlFor="payment-sortcode">Sort code</label>
-      </dt>
-      <dd className="mma-section__list--content">
+    <div className="component-direct-debit-form__sort-code">
+      <label htmlFor="sort-code-input">
+        Sort code
         <input
+          id="sort-code-input"
           value={props.value}
           onChange={props.onChange}
           type="text"
-          className="input-text js-input"
           placeholder="00-00-00"
         />
-
-        {invalid &&
-        <p className="mma-error">
-          Please enter a valid sort code
-        </p>}
-      </dd>
+      </label>
     </div>
   );
 }
 
 
-function AccountNumber(props: {valid: boolean, onChange: Function, value: string}) {
-  const invalid = props.valid === false;
-
+function AccountNumberInput(props: {onChange: Function, value: string}) {
   return (
-    <div>
-      <dt className="mma-section__list--title">
-        <label className="label" htmlFor="payment-account">Account number</label>
-      </dt>
-      <dd className="mma-section__list--content">
+    <div className="component-direct-debit-form__account-number">
+      <label htmlFor="account-number-input">
+        Account number
         <input
+          id="account-number-input"
           value={props.value}
           onChange={props.onChange}
-          name="payment.account"
           pattern="[0-9]*"
           minLength="6"
           maxLength="10"
-          className="input-text"
         />
-        {invalid &&
-        <p className="mma-error">
-          Please enter a valid bank account number
-        </p>}
-      </dd>
+      </label>
     </div>
   );
 }
@@ -184,34 +163,23 @@ function AccountNumber(props: {valid: boolean, onChange: Function, value: string
  and has signed the Direct Debit Instruction (DDI)."
  http://www.bacs.co.uk/Bacs/Businesses/Resources/Pages/Glossary.aspx
  * */
-function AccountHolder(props: {valid: boolean, value: string, onChange: Function}) {
-  const invalid = props.valid === false;
-
+function AccountHolderNameInput(props: {value: string, onChange: Function}) {
   return (
-    <div>
-      <dt className="mma-section__list--title">
-        <label htmlFor="payment-holder">Account holder</label>
-      </dt>
-      <dd className="mma-section__list--content">
+    <div className="component-direct-debit-form__account-holder-name">
+      <label htmlFor="account-holder-name-input">
+        Account holder name
         <input
+          id="account-holder-name-input"
           value={props.value}
           onChange={props.onChange}
-          className="input-text"
           maxLength="18"
         />
-        {invalid &&
-        <p className="mma-error">
-          This field is required
-        </p>}
-      </dd>
+      </label>
     </div>
   );
 }
 
-
-function Confirmation(props: { checked: boolean, valid: boolean, onChange: Function }) {
-  const invalid = props.valid === false;
-
+function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
   return (
     <div>
       <dt className="mma-section__list--title">
@@ -219,24 +187,20 @@ function Confirmation(props: { checked: boolean, valid: boolean, onChange: Funct
       </dt>
       <dd className="mma-section__list--content">
         <div className="mma-section__list--restricted">
-          <label className="option">
+          <label className="option" htmlFor="confirmation-input">
             <span className="option__input">
               <input
+                id="confirmation-input"
                 type="checkbox"
                 onChange={props.onChange}
                 checked={props.checked}
               />
             </span>
-            <span className="option__label">
+            <span>
               I confirm that I am the account holder and I am solely able to authorise debit from
               the account
             </span>
           </label>
-
-          {invalid &&
-          <p className="mma-error">
-            Please confirm that you are the account holder
-          </p>}
         </div>
       </dd>
     </div>
