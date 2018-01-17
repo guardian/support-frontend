@@ -55,7 +55,7 @@ class FailureHandler(emailService: EmailService)
         state,
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
-      case Some(se @ StripeError(_, _, Some("card_declined"), _, _)) => returnState(
+      case Some(se @ StripeError("card_error", _, _, _, _)) => returnState(
         state,
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
       )
