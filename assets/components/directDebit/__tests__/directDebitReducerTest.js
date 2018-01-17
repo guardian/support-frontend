@@ -59,7 +59,7 @@ describe('direct debit reducer tests', () => {
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', () => {
 
-    const accountHolderName = "John Doe";
+    const accountHolderName = 'John Doe';
     const action = {
       type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME',
       accountHolderName,
