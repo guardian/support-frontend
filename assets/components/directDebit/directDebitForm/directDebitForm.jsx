@@ -182,13 +182,13 @@ function AccountHolderNameInput(props: {value: string, onChange: Function}) {
 function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
   return (
     <div>
-      <dt className="mma-section__list--title">
+      <dt className="component-direct-debit-form__account-holder-confirmation">
         Confirmation
       </dt>
-      <dd className="mma-section__list--content">
-        <div className="mma-section__list--restricted">
-          <label className="option" htmlFor="confirmation-input">
-            <span className="option__input">
+      <dd>
+        <div>
+          <label htmlFor="confirmation-input">
+            <span>
               <input
                 id="confirmation-input"
                 type="checkbox"
