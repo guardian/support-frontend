@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Thank you Reducer should return the initial state 1`] = `
+Object {
+  "thankYouState": Object {
+    "consentApiError": false,
+  },
+  "user": Object {
+    "displayName": "",
+    "email": "",
+    "firstName": "",
+    "gnmMarketing": false,
+    "id": "",
+    "isPostDeploymentTestUser": false,
+    "isTestUser": null,
+    "lastName": "",
+  },
+}
+`;
