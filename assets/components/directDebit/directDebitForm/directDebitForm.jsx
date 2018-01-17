@@ -62,9 +62,9 @@ function mapDispatchToProps(dispatch) {
 
 const DirectDebitForm = (props: PropTypes) => (
   <div className="component-direct-debit-form">
-    <dd className="component-direct-debit-form__direct-debit-logo">
-      <img src="#" alt="The Direct Debit logo" />
-    </dd>
+
+    <img className="component-direct-debit-form__direct-debit-logo" src="#" alt="The Direct Debit logo" />
+
 
     <SortCodeInput
       value={props.sortCode}
@@ -86,27 +86,25 @@ const DirectDebitForm = (props: PropTypes) => (
       onChange={props.updateAccountHolderConfirmation}
     />
 
-    <dt className="component-direct-debit-form__advance-notice__title">
+    <div className="component-direct-debit-form__advance-notice__title">
         Advance notice
-    </dt>
-    <dd className="component-direct-debit-form__advance-notice__content">
+    </div>
+    <div className="component-direct-debit-form__advance-notice__content">
+      <p>The details of your Direct Debit instruction including payment schedule, due date,
+        frequency and amount will be sent to you within three working days. All the normal
+        Direct Debit safeguards and guarantees apply.
+      </p>
+      <p>
+        Your payments are protected by the <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct Debit guarantee</a>.
+      </p>
       <div>
-        <p>The details of your Direct Debit instruction including payment schedule, due date,
-          frequency and amount will be sent to you within three working days. All the normal
-          Direct Debit safeguards and guarantees apply.
-        </p>
-        <p>
-          Your payments are protected by the <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct Debit guarantee</a>.
-        </p>
-        <div>
-          <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
-            United Kingdom
-          </div>
-          <div>Tel: +44 (0) 330 333 6767</div>
-          <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
+        <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
+          United Kingdom
         </div>
+        <div>Tel: +44 (0) 330 333 6767</div>
+        <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
       </div>
-    </dd>
+    </div>
   </div>);
 
 // ----- Default Props ----- //
@@ -181,28 +179,24 @@ function AccountHolderNameInput(props: {value: string, onChange: Function}) {
 
 function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
   return (
-    <div>
-      <dt className="component-direct-debit-form__account-holder-confirmation">
-        Confirmation
-      </dt>
-      <dd>
-        <div>
-          <label htmlFor="confirmation-input">
-            <span>
-              <input
-                id="confirmation-input"
-                type="checkbox"
-                onChange={props.onChange}
-                checked={props.checked}
-              />
-            </span>
-            <span>
-              I confirm that I am the account holder and I am solely able to authorise debit from
-              the account
-            </span>
-          </label>
-        </div>
-      </dd>
+    <div className="component-direct-debit-form__account-holder-confirmation">
+      Confirmation
+      <div>
+        <label htmlFor="confirmation-input">
+          <span>
+            <input
+              id="confirmation-input"
+              type="checkbox"
+              onChange={props.onChange}
+              checked={props.checked}
+            />
+          </span>
+          <span>
+            I confirm that I am the account holder and I am solely able to authorise debit from
+            the account
+          </span>
+        </label>
+      </div>
     </div>
   );
 }
