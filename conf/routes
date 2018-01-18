@@ -32,10 +32,16 @@ GET  /contribute/recurring/thankyou                 controllers.Application.reac
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/recurring/pending                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
+
+# this endpoint should be removed once identity remove
+# the need for a client token
+POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
+
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/one-off/thankyou                   controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="oneoff-contributions-thankyou-page", js="oneoffContributionsThankyouPage.js")
+GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.thankYouPage
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 

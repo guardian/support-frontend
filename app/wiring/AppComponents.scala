@@ -37,6 +37,7 @@ trait AppComponents extends PlayComponents
     applicationController,
     siteMapController,
     regularContributionsController,
+    identityController,
     oneOffContributions,
     loginController,
     testUsersController,

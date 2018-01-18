@@ -54,6 +54,10 @@ class OneOffContributions(
     )
   }
 
+  def thankYouPage(): Action[AnyContent] = PrivateAction { implicit request =>
+    Ok(views.html.thankYou("Support the Guardian | Thank You", "oneoff-contributions-thankyou-page", "oneoffContributionsThankyouPage.js"))
+  }
+
   private def fullNameFor(user: IdUser): Option[String] = {
     for {
       privateFields <- user.privateFields
