@@ -14,6 +14,7 @@ class TestUser {
   private def addTestUserCookies(testUsername: String) = {
     Driver.addCookie(name = "pre-signin-test-user", value = testUsername)
     Driver.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
+    Driver.addCookie(name = "_post_deploy_user", value = "true") // This enables the tests to use the mocked payment services
   }
 
   val username = testUsers.generate()
