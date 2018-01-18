@@ -2,6 +2,9 @@
 
 exports[`Thank you Reducer should return the initial state 1`] = `
 Object {
+  "csrf": Object {
+    "token": null,
+  },
   "thankYouState": Object {
     "consentApiError": false,
   },
