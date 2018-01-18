@@ -11,6 +11,13 @@ Object {
   "csrf": Object {
     "token": null,
   },
+  "directDebit": Object {
+    "accountHolderConfirmation": false,
+    "accountHolderName": "",
+    "bankAccountNumber": "",
+    "bankSortCode": "",
+    "isPopUpOpen": false,
+  },
   "regularContrib": Object {
     "amount": 20,
     "currency": "GBP",
