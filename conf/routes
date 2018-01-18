@@ -61,6 +61,9 @@ POST /paypal/create-agreement                       controllers.PayPal.createAgr
 GET  /paypal/return                                 controllers.PayPal.returnUrl
 GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
 
+# ----- Direct Debit ----- #
+
+
 
 # ----- Assets ----- #
 

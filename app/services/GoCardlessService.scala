@@ -7,6 +7,7 @@ import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.typesafe.scalalogging.LazyLogging
 import models.DirectDebitData
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class GoCardlessService(token: String, environment: Environment) extends LazyLogging {
