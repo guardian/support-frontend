@@ -1,4 +1,4 @@
-#regular-contributions-thankyou-page, #oneoff-contributions-thankyou-page, #regular-contributions-pending-page, #contributions-confirm-marketing {
+#regular-contributions-thankyou-page, #oneoff-contributions-thankyou-page, #regular-contributions-pending-page {
 
 	a {
 		color: gu-colour(neutral-1);
@@ -23,40 +23,6 @@
 		}
 	}
 
-	.marketing-opt-in {
-		.marketing-opt-in__wrapper {
-			max-width: 450px;
-			padding-bottom: 0;
-		}
-
-		.component-cta-link {
-			margin-top: 0;
-			margin-bottom: 0;
-		}
-
-		.component-checkbox {
-			margin-top: 0;
-			margin-bottom: 20px;
-		}
-
-		.component-info-section__header {
-			@include mq($from: desktop) {
-				position: absolute;
-			}
-		}
-
-		.component-error-message {
-			margin-top: 12px;
-			margin-bottom: 5px;
-		}
-	}
-
-
-	.thankyou__component {
-		margin-bottom: 45px;
-	}
-
-
 	.thankyou__heading {
 		font-family: $gu-egyptian-web;
 		color: gu-colour(neutral-1);
@@ -70,7 +36,7 @@
 		}
 	}
 
-	.thankyou__subheading, .marketing-opt-in__subheading {
+	.thankyou__subheading {
 		font-family: $gu-text-egyptian-web;
 		font-size: 22px;
 		line-height: 24px;
@@ -129,4 +95,3 @@
 	}
 
 }
-

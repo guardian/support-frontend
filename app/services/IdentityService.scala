@@ -12,12 +12,8 @@ import java.net.URI
 
 import com.google.common.net.InetAddresses
 import config.Identity
-import com.gu.identity.model.Consent.Supporter
-import play.api.Logger
-import play.api.libs.json.Json
 
 import scala.util.Try
-import scala.concurrent.{ExecutionContext, Future}
 
 object IdentityServiceEnrichers {
 
@@ -52,26 +48,6 @@ object IdentityService {
 class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
 
   import IdentityServiceEnrichers._
-
-  private def request(path: String): WSRequest = {
-    wsClient.url(s"$apiUrl/$path")
-      .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
-  }
-
-  def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-    val payload = Json.obj("email" -> email, "set-consents" -> Json.arr(Supporter.id))
-    request(s"consent-email").post(payload).map { response =>
-      val validResponse = response.status >= 200 && response.status < 300
-      val logMessage = "Response from Identity Consent API: " + response.toString
-      if (validResponse) Logger.info(logMessage)
-      else Logger.error(logMessage)
-      validResponse
-    } recover {
-      case e: Exception =>
-        Logger.error("Impossible to update the user's marketing preferences", e)
-        false
-    }
-  }
 
   private def headers(request: RequestHeader): List[(String, String)] = List(
     "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
