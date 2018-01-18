@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
 import { setConsentApiError } from '../contributionsThankYouActions';
+import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
 
 // ----- Functions ----- //
 
@@ -13,10 +14,22 @@ const marketingConfirmUrl = (marketingPreferencesOptIn: boolean) => {
   return `${routes.contributionsMarketingConfirm}?${params.toString()}`;
 };
 
+const requestData = (email: string, csrf: CsrfState) => ({
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
+  credentials: 'same-origin',
+  body: JSON.stringify({ email }),
+});
+
 // Fire and forget, as we don't want to interupt the flow
-function sendMarketingPreferencesToIdentity(optIn: boolean, email: string, dispatch: Function) {
+function sendMarketingPreferencesToIdentity(
+  optIn: boolean,
+  email: string,
+  dispatch: Function,
+  csrf: CsrfState,
+) {
   if (optIn) {
-    fetch(`${routes.contributionsSendMarketing}?email=${email}`)
+    fetch(`${routes.contributionsSendMarketing}`, requestData(email, csrf))
       .then((response) => {
         if (response.status === 200) {
           window.location = marketingConfirmUrl(optIn);

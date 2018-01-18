@@ -12,6 +12,7 @@ import java.net.URI
 
 import com.google.common.net.InetAddresses
 import config.Identity
+import com.gu.identity.model.Consent.Supporter
 import play.api.Logger
 import play.api.libs.json.Json
 
@@ -58,10 +59,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-    val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
-    val endpoint = s"$apiUrl/consent-email"
-    val headers = List("Authorization" -> s"Bearer $apiClientToken")
-
+    val payload = Json.obj("email" -> email, "set-consents" -> Json.arr(Supporter.id))
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
       val logMessage = "Response from Identity Consent API: " + response.toString

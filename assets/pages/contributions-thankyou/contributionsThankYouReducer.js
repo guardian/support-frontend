@@ -6,9 +6,11 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 
 import { userReducer as user } from 'helpers/user/userReducer';
+import csrfReducer from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
 
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Action } from './contributionsThankYouActions';
 
 
@@ -21,6 +23,7 @@ export type State = {
 export type CombinedState = {
   thankYouState: State,
   user: UserState,
+  csrf: CsrfState,
 };
 
 export type PageState = {
@@ -57,5 +60,6 @@ function createThankYouReducer() {
 export default combineReducers({
   thankYouState: createThankYouReducer(),
   user,
+  csrf: csrfReducer,
 });
 
