@@ -1,8 +1,5 @@
 package models
 
-/**
-  * Created by santiago_fernandez on 18/01/2018.
-  */
-class DirectDebitData {
-
+case class DirectDebitData(accountNumber: String, sortCodeValue: String, accountHolderName: String) {
+  val sortCode = sortCodeValue.filter(_.isDigit)
 }
