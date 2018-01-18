@@ -117,6 +117,43 @@ describe('basic behaviour of init', () => {
 
     expect(participations).toEqual(expectedParticipations);
   });
+
+  it('A post-deployment test user should not be allocated into a test', () => {
+
+    const postDeploymentTestCookie = '_post_deploy_user=true; path=/;';
+
+    function deleteCookie() {
+      document.cookie = `${postDeploymentTestCookie} expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+    }
+
+    document.cookie = postDeploymentTestCookie;
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          GB: {
+            offset: 0,
+            size: 1,
+          },
+        },
+        isActive: true,
+        independent: true,
+        seed: 2,
+      },
+    };
+
+    const country = 'GB';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+
+    expect(participations).toEqual(expectedParticipations);
+
+    deleteCookie();
+  });
+
 });
 
 describe('Correct allocation in a multi test environment', () => {

@@ -45,10 +45,6 @@ object Driver {
 
     driver.get(Config.supportFrontendUrl + "/uk")
     driver.manage.deleteAllCookies()
-
-    // This enables the tests to use the mocked payment services
-    addCookie(name = "_post_deploy_user", value = "true")
-
   }
 
   def quit(): Unit = driver.quit()
