@@ -4,6 +4,7 @@
 
 import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
+import { getSession } from 'helpers/storage';
 
 import {
   setId,
@@ -25,6 +26,8 @@ const init = (dispatch: Function) => {
   const userAppearsLoggedIn = cookie.get('GU_U');
 
   const uatMode = window.guardian && window.guardian.uatMode;
+
+  const emailFromSession: ?string = getSession('gu.email');
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 
@@ -61,6 +64,8 @@ const init = (dispatch: Function) => {
         });
       }
     });
+  } else if (emailFromSession) {
+    dispatch(setEmail(emailFromSession));
   }
 };
 

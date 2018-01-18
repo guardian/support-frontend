@@ -1,0 +1,21 @@
+@import assets.AssetsResolver
+@import helper.CSRF
+
+@(
+    title: String,
+    id: String,
+    js: String,
+    description: Option[String] = None
+)(implicit assets: AssetsResolver, request: RequestHeader)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
+    </script>
+}
+
+
+@main(title = title, description = description, mainBundleJs = js, scripts = scripts) {
+    <main id="@id" class="gu-content-wrapper"></main>
+}
