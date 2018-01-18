@@ -47,6 +47,7 @@ module.exports = (env) => {
     entry: {
       favicons: 'images/favicons.js',
       styles: 'stylesheets/garnett.scss',
+      supportLandingPage: 'pages/support-landing/supportLanding.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
       supportLandingPageOld: 'pages/bundles-landing/support-landing-ab-test/supportLandingOld.jsx',
       contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',

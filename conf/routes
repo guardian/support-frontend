@@ -3,6 +3,11 @@
 GET /healthcheck                                    controllers.Application.healthcheck
 
 
+# ----- Landing Pages ----- #
+
+GET /circles/uk                                     controllers.Application.reactTemplate(title="Support the Guardian", id="support-landing-page", js="supportLandingPage.js")
+
+
 # ----- Bundles Landing Page ----- #
 
 GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: Boolean ?= false)
