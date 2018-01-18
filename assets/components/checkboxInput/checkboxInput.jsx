@@ -11,41 +11,32 @@ type PropTypes = {
   id: ?string,
   onChange: (preference: boolean) => void,
   checked: boolean,
-  labelTitle?: string,
-  labelCopy?: string,
+  labelText?: string,
 };
 
 
 // ----- Component ----- //
 
 export default function CheckboxInput(props: PropTypes) {
-  let labelTitle = '';
-  let labelCopy = '';
+  let label = '';
 
-  if (props.labelTitle) {
-    labelTitle = <p className="component-checkbox__title">{props.labelTitle}</p>;
-  }
-  if (props.labelCopy) {
-    labelCopy = <p className="component-checkbox__copy" >{props.labelCopy}</p>;
-  }
-
-  return (
+  if (props.labelText && props.id) {
     // eslint-disable-next-line jsx-a11y/label-has-for
-    <label className="component-checkbox">
+    label = <label htmlFor={props.id}>{props.labelText}</label>;
+  }
+  return (
+    <div className="component-checkbox">
       <input
-        className="component-checkbox__checkbox"
         id={props.id}
         type="checkbox"
         onChange={e => props.onChange(e.target.checked)}
         checked={props.checked}
       />
-      {labelTitle}
-      {labelCopy}
-    </label>
+      {label}
+    </div>
   );
 }
 
 CheckboxInput.defaultProps = {
-  labelCopy: '',
-  labelTitle: '',
+  labelText: '',
 };

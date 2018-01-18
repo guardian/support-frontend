@@ -61,10 +61,4 @@ trait Controllers {
     actionRefiners,
     controllerComponents
   )
-
-  lazy val identityController = new IdentityController(
-    identityService,
-    controllerComponents,
-    actionRefiners
-  )
 }

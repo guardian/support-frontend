@@ -2,8 +2,6 @@
 
 // ----- Types ----- //
 
-import { setSession } from 'helpers/storage';
-
 export type Action =
   | { type: 'SET_USER_ID', id: string }
   | { type: 'SET_DISPLAY_NAME', name: string }
@@ -41,7 +39,6 @@ export function setFullName(name: string): Action {
 }
 
 export function setEmail(email: string): Action {
-  setSession('gu.email', email);
   return { type: 'SET_EMAIL', email };
 }
 
