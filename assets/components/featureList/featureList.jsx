@@ -24,22 +24,43 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function FeatureList(props: PropTypes) {
+function FeatureList(props: PropTypes) {
 
-  const items = props.listItems.map((item: ListItem) => {
-
-    const itemHeading = item.heading ? <h3>{ item.heading }</h3> : null;
-    const itemText = item.text ? <p>{ item.text }</p> : null;
-
-    return (
-      <li>
-        {itemHeading}
-        {itemText}
-      </li>
-    );
-
-  });
+  const items = props.listItems.map((item: ListItem) => (
+    <li className="component-feature-list__item">
+      <ItemHeading heading={item.heading ? item.heading : null} />
+      <ItemText text={item.text ? item.text : null} />
+    </li>
+  ));
 
   return <ul className="component-feature-list">{ items }</ul>;
 
 }
+
+
+// ----- Auxiliary Components ----- //
+
+function ItemHeading(props: { heading: ?string }) {
+
+  if (props.heading) {
+    return <h3 className="component-feature-list__heading">{props.heading}</h3>;
+  }
+
+  return null;
+
+}
+
+function ItemText(props: { text: ?string }) {
+
+  if (props.text) {
+    return <p className="component-feature-list__text">{props.text}</p>;
+  }
+
+  return null;
+
+}
+
+
+// ----- Exports ----- //
+
+export default FeatureList;
