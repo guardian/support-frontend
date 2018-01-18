@@ -49,8 +49,8 @@ class Application(
     if (newDesigns) {
       Ok(views.html.bundleLanding(
         title,
-        "support-landing-page",
-        "supportLandingPage.js",
+        "support-landing-page-old",
+        "supportLandingPageOld.js",
         contributionsPayPalEndpoint,
         description = Some(stringsConfig.bundleLandingDescription)
       ))

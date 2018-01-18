@@ -50,4 +50,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content, 'support-landing-page');
+renderPage(content, 'support-landing-page-old');
