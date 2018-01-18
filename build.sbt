@@ -81,6 +81,7 @@ libraryDependencies ++= Seq(
   "io.github.bonigarcia" % "webdrivermanager" % "1.7.2" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
+  "com.gocardless" % "gocardless-pro" % "2.7.0",
   filters,
   ws
 )

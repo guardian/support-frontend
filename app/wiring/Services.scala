@@ -18,6 +18,8 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
+  lazy val goCardlessService = GoCardlessService(appConfig.goCardlessToken, appConfig.goCardlessEnvironment)
+
   lazy val regularContributionsClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)
     val regularContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
