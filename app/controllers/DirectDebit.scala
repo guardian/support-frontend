@@ -12,16 +12,15 @@ import services.GoCardlessService
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
 class DirectDebit(
-  actionBuilders: CustomActionBuilders,
-  components: ControllerComponents,
-  goCardlessService: GoCardlessService
+    actionBuilders: CustomActionBuilders,
+    components: ControllerComponents,
+    goCardlessService: GoCardlessService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionBuilders._
 
-  def checkAccount: Action[DirectDebitData]  =
+  def checkAccount: Action[DirectDebitData] =
     PrivateAction.async(circe.json[DirectDebitData]) { implicit request =>
       goCardlessService.checkBankDetails(request.body).map { isAccountValid =>
         Ok(("accountValid" -> isAccountValid).asJson)

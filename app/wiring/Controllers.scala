@@ -62,14 +62,13 @@ trait Controllers {
     controllerComponents
   )
 
-
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,
     actionRefiners
   )
 
-  lazy val DirectDebitController = new DirectDebit(
+  lazy val directDebitController = new DirectDebit(
     actionRefiners,
     controllerComponents,
     goCardlessService
