@@ -6,11 +6,14 @@ import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax._
+import cats.implicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{PayPalService, TestUserService}
+import services.{ContributionsFrontendService, PayPalService, TestUserService}
+import ophan.thrift.componentEvent.ComponentType
+import ophan.thrift.event.{AbTest, AcquisitionSource}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -20,7 +23,8 @@ class PayPal(
     assets: AssetsResolver,
     payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents
+    components: ControllerComponents,
+    contributionsFrontendService: ContributionsFrontendService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionBuilders._
@@ -45,6 +49,47 @@ class PayPal(
     withPaypalServiceForUser(request.user) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
+  }
+
+  // scalastyle:off parameter.number
+  def execute(
+    paymentId: String,
+    token: String,
+    payerId: String,
+    CMP: Option[String],
+    INTCMP: Option[String],
+    refererPageviewId: Option[String],
+    refererUrl: Option[String],
+    pvid: Option[String],
+    bid: Option[String],
+    ophanVisitId: Option[String],
+    componentId: Option[String],
+    componentType: Option[ComponentType],
+    source: Option[AcquisitionSource],
+    refererAbTest: Option[AbTest],
+    nativeAbTests: Option[Set[AbTest]],
+    supportRedirect: Option[Boolean]
+  ): Action[AnyContent] = PrivateAction.async { implicit request =>
+    contributionsFrontendService.execute(
+      paymentId,
+      token,
+      payerId,
+      CMP,
+      INTCMP,
+      refererPageviewId,
+      refererUrl,
+      pvid,
+      bid,
+      ophanVisitId,
+      componentId,
+      componentType,
+      source,
+      refererAbTest,
+      nativeAbTests,
+      supportRedirect
+    ).map { email =>
+      Redirect("/contribute/one-off/thankyou").flashing("email" -> email)
+    } getOrElse Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
   }
 
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {

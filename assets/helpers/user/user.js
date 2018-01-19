@@ -27,7 +27,14 @@ const init = (dispatch: Function) => {
 
   const uatMode = window.guardian && window.guardian.uatMode;
 
-  const emailFromSession: ?string = getSession('gu.email');
+  function getEmailFromPage(): ?string {
+    if (window.guardian && window.guardian.email) {
+      return window.guardian.email;
+    }
+    return getSession('gu.email');
+  }
+
+  const emailFromPage = getEmailFromPage();
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 
@@ -64,8 +71,8 @@ const init = (dispatch: Function) => {
         });
       }
     });
-  } else if (emailFromSession) {
-    dispatch(setEmail(emailFromSession));
+  } else if (emailFromPage) {
+    dispatch(setEmail(emailFromPage));
   }
 };
 

@@ -6,6 +6,13 @@ packageSummary := "Support Play APP"
 
 scalaVersion := "2.11.12"
 
+routesImport ++= Seq(
+  "utils.ThriftUtils.Implicits._",
+  "ophan.thrift.componentEvent.ComponentType",
+  "ophan.thrift.event.AbTest",
+  "ophan.thrift.event.AcquisitionSource"
+)
+
 import scala.sys.process._
 
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)

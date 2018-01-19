@@ -34,4 +34,6 @@ trait Services {
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
   lazy val authenticationService = AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
+
+  lazy val contributionsFrontendService = new ContributionsFrontendService(wsClient)
 }

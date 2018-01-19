@@ -6,12 +6,13 @@
     id: String,
     js: String,
     description: Option[String] = None
-)(implicit assets: AssetsResolver, request: RequestHeader)
+)(implicit assets: AssetsResolver, request: RequestHeader, flash: Flash)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
+        window.guardian.email = "@flash.get("email")";
     </script>
 }
 
