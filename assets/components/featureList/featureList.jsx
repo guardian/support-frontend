@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import { generateClassName } from 'helpers/utilities';
+
 
 // ----- Types ----- //
 
@@ -18,6 +20,7 @@ export type ListItem =
 /* eslint-enable react/no-unused-prop-types */
 
 type PropTypes = {
+  modifierClass?: string,
   listItems: ListItem[],
 };
 
@@ -33,7 +36,11 @@ function FeatureList(props: PropTypes) {
     </li>
   ));
 
-  return <ul className="component-feature-list">{ items }</ul>;
+  return (
+    <ul className={generateClassName('component-feature-list', props.modifierClass)}>
+      { items }
+    </ul>
+  );
 
 }
 
@@ -59,6 +66,13 @@ function ItemText(props: { text: ?string }) {
   return null;
 
 }
+
+
+// ----- Default Props ----- //
+
+FeatureList.defaultProps = {
+  modifierClass: '',
+};
 
 
 // ----- Exports ----- //

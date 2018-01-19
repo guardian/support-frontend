@@ -35,7 +35,7 @@ export default function SubscriptionBundle(props: PropTypes) {
         heading={props.heading}
         subheading={props.subheading}
       />
-      <FeatureList listItems={props.benefits} />
+      <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
       <CtaCircle text={props.ctaText} url={props.ctaLink} />
     </div>
   );
@@ -46,5 +46,5 @@ export default function SubscriptionBundle(props: PropTypes) {
 // ----- Default Props ----- //
 
 SubscriptionBundle.defaultProps = {
-  modifierClass: null,
+  modifierClass: '',
 };
