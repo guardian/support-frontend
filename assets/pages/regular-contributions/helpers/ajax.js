@@ -195,7 +195,12 @@ export default function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {
-  return (token: string) => {
+  return (
+    token?: string,
+    bankAccountNumber?: string,
+    bankSortCodeValue?: string,
+    bankAccountHolderName?: string,
+  ) => {
 
     pollCount = 0;
     dispatch(creatingContributor());
