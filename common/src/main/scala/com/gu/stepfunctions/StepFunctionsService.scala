@@ -39,14 +39,24 @@ class StepFunctionsService extends LazyLogging {
         .filter(_.getName.startsWith(prefix))
     }
 
-  private def findUserDataInStateMachine(userId: String, arn: String)(implicit ec: ExecutionContext): Future[Option[User]] =
-    client.listExecutions(arn)
-      .flatMap(response => findUserDataInExecutions(userId, response.getExecutions.toList)) //TODO: Paging for executions
+  private def findUserDataInStateMachine(userId: String, arn: String, nextToken: Option[String] = None)(implicit ec: ExecutionContext): Future[Option[User]] = {
+    logger.info(s"Searching for userId $userId in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
+
+    for {
+      response <- client.listExecutions(arn, nextToken)
+      maybeUser <- findUserDataInExecutions(userId, response.getExecutions.toList)
+      result <- if (maybeUser.isDefined || response.getNextToken == "")
+        Future.successful(maybeUser)
+      else
+        findUserDataInStateMachine(userId, arn, Some(response.getNextToken))
+
+    } yield result
+  }
 
   private def findUserDataInExecutions(userId: String, executions: List[ExecutionListItem])(implicit ec: ExecutionContext): Future[Option[User]] =
     Future
       .sequence(executions.map(findUserDataInExecution(userId, _)))
-      .map(l => l.find(_.isDefined).get)
+      .map(l => l.find(_.isDefined).flatten)
 
   private def findUserDataInExecution(userId: String, executionListItem: ExecutionListItem)(implicit ec: ExecutionContext): Future[Option[User]] =
     client

@@ -10,8 +10,13 @@ class ClientWrapper(client: AWSStepFunctionsAsync) {
   def listStateMachines: Future[ListStateMachinesResult] =
     AwsAsync(client.listStateMachinesAsync, new ListStateMachinesRequest())
 
-  def listExecutions(arn: String): Future[ListExecutionsResult] =
-    AwsAsync(client.listExecutionsAsync, new ListExecutionsRequest().withStateMachineArn(arn))
+  def listExecutions(arn: String, nextToken: Option[String]): Future[ListExecutionsResult] = {
+    val param = nextToken
+      .map(new ListExecutionsRequest().withNextToken(_))
+      .getOrElse(new ListExecutionsRequest())
+
+    AwsAsync(client.listExecutionsAsync, param.withStateMachineArn(arn))
+  }
 
   def describeExecution(executionArn: String): Future[DescribeExecutionResult] =
     AwsAsync(client.describeExecutionAsync, new DescribeExecutionRequest().withExecutionArn(executionArn))
