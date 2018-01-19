@@ -44,6 +44,46 @@ const resetDirectDebitFormError = (): Action =>
   ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
 
 
+const payDirectDebitClicked: (callback) => Function = () => {
+
+  return function (dispatch, getState) {
+    const {
+      bankSortCode,
+      bankAccountNumber,
+      accountHolderName,
+      accountHolderConfirmation,
+    } = getState().page.directDebit;
+
+    const isTestUser: boolean = getState().page.user.isTestUser || false;
+    const { csrf }: CsrfState = getState().page;
+
+    dispatch(resetDirectDebitFormError());
+
+    if (!accountHolderConfirmation) {
+      dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
+      return;
+    }
+
+    return checkAccount(bankSortCode, bankAccountNumber, accountHolderName, isTestUser, csrf)
+      .then((response) => {
+        if (!response.accountValid) {
+          throw new Error('code1');
+        }
+      }).then(() => {
+        callback();
+      }).catch((e) => {
+        let msg = '';
+        switch(e.message) {
+          case 'code1': msg = 'Your bank data is not ok, please check it and try again.';
+          default:  msg = 'Your bank data is not ok, please check it and try again.';
+
+        }
+        dispatch(setDirectDebitFormError(msg));
+      });
+
+  };
+};
+
 // ----- Exports ----//
 
 export {
@@ -55,4 +95,5 @@ export {
   updateAccountHolderConfirmation,
   setDirectDebitFormError,
   resetDirectDebitFormError,
+  payDirectDebitClicked,
 };
