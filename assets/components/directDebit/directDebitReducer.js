@@ -70,12 +70,12 @@ const directDebitReducer = (
         accountHolderConfirmation: action.accountHolderConfirmation,
       });
 
-    case: 'DIRECT_DEBIT_SET_FORM_ERROR':
+    case 'DIRECT_DEBIT_SET_FORM_ERROR':
       return Object.assign({}, state, {
         formError: action.message,
       });
 
-    case: 'DIRECT_DEBIT_RESET_FORM_ERROR': {
+    case 'DIRECT_DEBIT_RESET_FORM_ERROR': {
       return Object.assign({}, state, {
         formError: '',
       });

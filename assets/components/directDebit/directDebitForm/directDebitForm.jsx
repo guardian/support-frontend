@@ -32,6 +32,7 @@ type PropTypes = {
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
   payDirectDebitClicked: (callback: Function) => void,
+  formError: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -44,6 +45,7 @@ function mapStateToProps(state) {
     accountNumber: state.page.directDebit.bankAccountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
+    formError: state.page.directDebit.formError,
   };
 }
 
@@ -80,7 +82,6 @@ const DirectDebitForm = (props: PropTypes) => (
 
     <img className="component-direct-debit-form__direct-debit-logo" src="#" alt="The Direct Debit logo" />
 
-
     <SortCodeInput
       onChange={props.updateSortCode}
       value={props.sortCode}
@@ -101,10 +102,7 @@ const DirectDebitForm = (props: PropTypes) => (
       checked={props.accountHolderConfirmation}
     />
 
-    <div className="component-direct-debit-form__advance-notice__title">
-        Advance notice
-    </div>
-
+    <p>{props.formError}</p>
     <button
       id="qa-pay-with-direct-debit-close-pop-up"
       className="component-direct-debit-pop-up-form"
@@ -112,6 +110,11 @@ const DirectDebitForm = (props: PropTypes) => (
     >
       Pay
     </button>
+
+    <div className="component-direct-debit-form__advance-notice__title">
+        Advance notice
+    </div>
+
     <div className="component-direct-debit-form__advance-notice__content">
       <p>The details of your Direct Debit instruction including payment schedule, due date,
         frequency and amount will be sent to you within three working days. All the normal
