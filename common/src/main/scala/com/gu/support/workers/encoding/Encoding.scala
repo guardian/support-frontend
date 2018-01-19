@@ -11,7 +11,7 @@ import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncode
 
 import scala.util.Try
 
-private[workers] object Encoding {
+object Encoding {
 
   import io.circe._
   import io.circe.parser._

@@ -9,8 +9,8 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.{StripeError, StripeList}
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.workers.AsyncLambdaSpec
-import com.gu.support.workers.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.Fixtures.{validBaid, _}
+import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
@@ -71,7 +71,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec {
 
       val outStream = new ByteArrayOutputStream()
 
-      val inStream = "Test user".asInputStream()
+      val inStream = "Test user".asInputStream
 
       createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
 

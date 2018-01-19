@@ -1,9 +1,8 @@
-package com.gu.support.workers
+package com.gu.support.workers.encoding
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 import cats.syntax.either._
-import com.gu.support.workers.encoding.{Encryption, utf8}
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -36,7 +35,7 @@ object Conversions {
 
   implicit class StringInputStreamConversions[String](val str: String) {
 
-    def asInputStream()(implicit encoder: Encoder[String]): ByteArrayInputStream = {
+    def asInputStream: ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
 
       convertStream.write(str.toString.getBytes(utf8))
