@@ -53,16 +53,20 @@ function mapDispatchToProps(dispatch) {
     payDirectDebitClicked: (callback) => {
       dispatch(payDirectDebitClicked(callback));
     },
-    updateSortCode: (sortCode: string) => {
+    updateSortCode: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const sortCode: string = event.target.value;
       dispatch(updateSortCode(sortCode));
     },
-    updateAccountNumber: (accountNumber: string) => {
+    updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountNumber: string = event.target.value;
       dispatch(updateAccountNumber(accountNumber));
     },
-    updateAccountHolderName: (accountHolderName: string) => {
+    updateAccountHolderName: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountHolderName: string = event.target.value;
       dispatch(updateAccountHolderName(accountHolderName));
     },
-    updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => {
+    updateAccountHolderConfirmation: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountHolderConfirmation: boolean = event.target.checked;
       dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
     },
   };
@@ -78,8 +82,8 @@ const DirectDebitForm = (props: PropTypes) => (
 
 
     <SortCodeInput
-      value={props.sortCode}
       onChange={props.updateSortCode}
+      value={props.sortCode}
     />
 
     <AccountNumberInput
@@ -93,8 +97,8 @@ const DirectDebitForm = (props: PropTypes) => (
     />
 
     <ConfirmationInput
-      checked={props.accountHolderConfirmation}
       onChange={props.updateAccountHolderConfirmation}
+      checked={props.accountHolderConfirmation}
     />
 
     <div className="component-direct-debit-form__advance-notice__title">
