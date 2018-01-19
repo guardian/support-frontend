@@ -1,0 +1,29 @@
+.component-page-section--three-subscriptions {
+  .component-double-heading {
+    margin-bottom: $gu-v-spacing * 2;
+  }
+
+  .component-double-heading__heading {
+    font-size: 36px;
+    line-height: 1;
+  }
+
+  .component-double-heading__subheading {
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 500;
+    font-family: $gu-egyptian-web;
+  }
+
+  .component-feature-list--digital {
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#bb3b80" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+  }
+
+  .component-feature-list--paper {
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#0084c6" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+  }
+
+  .component-feature-list--paper-digital {
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#ed6300" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+  }  
+}
