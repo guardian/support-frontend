@@ -2,27 +2,19 @@
 	margin: 0;
 	padding: 0;
 	padding-left: 10px;
+}
 
-	h3, p {
-		margin: 0;
-	}
+.component-feature-list__heading {
+	font-weight: 900;
+	margin: 0;
+}
 
-	h3 {
-		font-family: $gu-text-sans-web;
-		font-weight: 900;
-		font-size: 16px;
-		line-height: 20px;
-	}
+.component-feature-list__text {
+	font-weight: 300;
+	margin: 0;
+}
 
-	p {
-		font-family: $gu-text-sans-web;
-		font-weight: 300;
-		font-size: 14px;
-		line-height: 18px;
-	}
-
-	li {
-		margin-bottom: $gu-v-spacing;
-		margin-left: $gu-h-spacing;
-	}
+.component-feature-list__item {
+	margin-bottom: $gu-v-spacing;
+	margin-left: $gu-h-spacing;
 }
