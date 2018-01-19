@@ -6,7 +6,7 @@ import React from 'react';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import FeatureList from 'components/featureList/featureList';
-import CtaCircle from 'components/ctaCircle/ctaCircle';
+import CtaLink from 'components/ctaLink/ctaLink';
 
 import { generateClassName } from 'helpers/utilities';
 
@@ -21,7 +21,9 @@ type PropTypes = {
   subheading: string,
   benefits: ListItem[],
   ctaText: string,
-  ctaLink: string,
+  ctaUrl: string,
+  ctaId: string,
+  ctaAccessibilityHint: string,
 };
 
 
@@ -36,7 +38,12 @@ export default function SubscriptionBundle(props: PropTypes) {
         subheading={props.subheading}
       />
       <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
-      <CtaCircle text={props.ctaText} url={props.ctaLink} />
+      <CtaLink
+        text={props.ctaText}
+        url={props.ctaUrl}
+        ctaId={props.ctaId}
+        accessibilityHint={props.ctaAccessibilityHint}
+      />
     </div>
   );
 

@@ -31,7 +31,9 @@ export default function ThreeSubscriptions() {
           },
         ]}
         ctaText="Start your 14 day trial"
-        ctaLink="https://subscribe.theguardian.com/p/DXX83X"
+        ctaUrl="https://subscribe.theguardian.com/p/DXX83X"
+        ctaId="digital-sub"
+        ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       />
       <SubscriptionBundle
         modifierClass="paper"
@@ -47,7 +49,9 @@ export default function ThreeSubscriptions() {
           },
         ]}
         ctaText="Get a paper subscription"
-        ctaLink="https://subscribe.theguardian.com/p/GXX83P"
+        ctaUrl="https://subscribe.theguardian.com/p/GXX83P"
+        ctaId="paper-sub"
+        ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
       />
       <SubscriptionBundle
         modifierClass="paper-digital"
@@ -66,7 +70,9 @@ export default function ThreeSubscriptions() {
           },
         ]}
         ctaText="Get a paper + digital subscription"
-        ctaLink="https://subscribe.theguardian.com/p/GXX83X"
+        ctaUrl="https://subscribe.theguardian.com/p/GXX83X"
+        ctaId="paper-digi-sub"
+        ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
       />
     </PageSection>
   );
