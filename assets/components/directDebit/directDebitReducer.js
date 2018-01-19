@@ -12,6 +12,7 @@ export type DirectDebitState = {
   bankAccountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
+  formError: string
 };
 
 
@@ -21,6 +22,7 @@ const initialState: DirectDebitState = {
   bankAccountNumber: '',
   accountHolderName: '',
   accountHolderConfirmation: false,
+  formError: '',
 };
 
 
@@ -67,6 +69,17 @@ const directDebitReducer = (
       return Object.assign({}, state, {
         accountHolderConfirmation: action.accountHolderConfirmation,
       });
+
+    case: 'DIRECT_DEBIT_SET_FORM_ERROR':
+      return Object.assign({}, state, {
+        formError: action.message,
+      });
+
+    case: 'DIRECT_DEBIT_RESET_FORM_ERROR': {
+      return Object.assign({}, state, {
+        formError: '',
+      });
+    }
 
     default:
       return state;

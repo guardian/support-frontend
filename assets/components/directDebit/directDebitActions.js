@@ -1,6 +1,8 @@
 // @flow
 
 import * as storage from 'helpers/storage';
+import { checkAccount } from './helpers/ajax';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 // ----- Types ----- //
 
@@ -10,7 +12,9 @@ export type Action =
   | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
-  | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean };
+  | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
+  | { type: 'DIRECT_DEBIT_SET_FORM_ERROR', message: string }
+  | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' };
 
 
 // ----- Actions ----- //
@@ -33,6 +37,13 @@ const updateAccountHolderName = (accountHolderName: string): Action =>
 const updateAccountHolderConfirmation = (accountHolderConfirmation: boolean): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation });
 
+const setDirectDebitFormError = (message: string): Action =>
+  ({ type: 'DIRECT_DEBIT_SET_FORM_ERROR', message });
+
+const resetDirectDebitFormError = (): Action =>
+  ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
+
+
 // ----- Exports ----//
 
 export {
@@ -42,4 +53,6 @@ export {
   updateAccountNumber,
   updateAccountHolderName,
   updateAccountHolderConfirmation,
+  setDirectDebitFormError,
+  resetDirectDebitFormError,
 };
