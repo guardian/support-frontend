@@ -51,7 +51,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
     content = (
       <div>
         <button
-          id="qa-pay-with-direct-debit"
+          id="qa-pay-with-direct-debit-close-pop-up"
           className="component-direct-debit-pop-up-form"
           onClick={props.closeDirectDebitPopUp}
         >
