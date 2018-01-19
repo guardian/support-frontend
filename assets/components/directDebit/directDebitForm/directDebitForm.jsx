@@ -4,8 +4,15 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import {
+  updateSortCode,
+  updateAccountNumber,
+  updateAccountHolderName,
+  updateAccountHolderConfirmation,
+  payDirectDebitClicked,
+} from 'components/directDebit/directDebitActions';
+
 import type { Currency } from 'helpers/internationalisation/currency';
-import { updateSortCode, updateAccountNumber, updateAccountHolderName, updateAccountHolderConfirmation } from 'components/directDebit/directDebitActions';
 
 
 // ---- Types ----- //
@@ -24,6 +31,7 @@ type PropTypes = {
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
+  payDirectDebitClicked: (callback: Function) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -42,6 +50,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
+    payDirectDebitClicked: (callback) => {
+      dispatch(payDirectDebitClicked(callback));
+    },
     updateSortCode: (sortCode: string) => {
       dispatch(updateSortCode(sortCode));
     },
@@ -89,6 +100,14 @@ const DirectDebitForm = (props: PropTypes) => (
     <div className="component-direct-debit-form__advance-notice__title">
         Advance notice
     </div>
+
+    <button
+      id="qa-pay-with-direct-debit-close-pop-up"
+      className="component-direct-debit-pop-up-form"
+      onClick={props.payDirectDebitClicked}
+    >
+      Pay
+    </button>
     <div className="component-direct-debit-form__advance-notice__content">
       <p>The details of your Direct Debit instruction including payment schedule, due date,
         frequency and amount will be sent to you within three working days. All the normal
