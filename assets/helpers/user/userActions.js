@@ -2,7 +2,7 @@
 
 // ----- Types ----- //
 
-import { setSession } from 'helpers/storage';
+import * as cookie from 'helpers/cookie';
 
 export type Action =
   | { type: 'SET_USER_ID', id: string }
@@ -41,7 +41,7 @@ export function setFullName(name: string): Action {
 }
 
 export function setEmail(email: string): Action {
-  setSession('gu.email', email);
+  cookie.set('gu.email', email, 1);
   return { type: 'SET_EMAIL', email };
 }
 
