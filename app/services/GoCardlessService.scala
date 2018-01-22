@@ -22,8 +22,8 @@ class GoCardlessService(token: String, environment: Environment) extends LazyLog
   def checkBankDetails(paymentData: DirectDebitData): Future[Boolean] = {
     Future {
       client.bankDetailsLookups().create()
-        .withAccountNumber(paymentData.accountNumber)
-        .withBranchCode(paymentData.sortCode)
+        .withAccountNumber(paymentData.accountNumber.value)
+        .withBranchCode(paymentData.sortCode.value)
         .withCountryCode("GB")
         .execute()
     } map { bdl =>

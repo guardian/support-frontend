@@ -100,5 +100,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       abtest.variant mustBe "variant_34"
     }
   }
+
+
 }
 
