@@ -23,7 +23,7 @@ class DirectDebit(
   def checkAccount: Action[DirectDebitData] =
     PrivateAction.async(circe.json[DirectDebitData]) { implicit request =>
       goCardlessService.checkBankDetails(request.body).map { isAccountValid =>
-        Ok(("accountValid" -> isAccountValid).asJson)
+        Ok(Map("accountValid" -> isAccountValid).asJson)
       }
     }
 }
