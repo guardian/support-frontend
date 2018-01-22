@@ -76,10 +76,10 @@ function payDirectDebitClicked(callback: Function): Function {
       }).catch((e) => {
         let msg = '';
         switch (e.message) {
-          case 'code1': msg = 'Your bank data is not ok, please check it and try again.';
+          case 'code1': msg = 'Your payment details are invalid. Please check them and try again';
             break;
 
-          default: msg = 'Your bank data is not ok, please check it and try again.';
+          default: msg = 'Your payment details are invalid. Please check them and try again.';
 
         }
         dispatch(setDirectDebitFormError(msg));
