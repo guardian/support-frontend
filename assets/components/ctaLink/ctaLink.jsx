@@ -69,7 +69,6 @@ export default function CtaLink(props: PropTypes) {
 // ----- Default Props ----- //
 
 CtaLink.defaultProps = {
-  modifierClass: null,
   url: null,
   trackComponentEvent: () => {},
   onClick: null,
