@@ -41,7 +41,7 @@ export function setFullName(name: string): Action {
 }
 
 export function setEmail(email: string): Action {
-  cookie.set('gu.email', email, 1);
+  cookie.set('gu.email', email);
   return { type: 'SET_EMAIL', email };
 }
 
