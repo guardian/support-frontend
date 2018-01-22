@@ -5,7 +5,13 @@
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-const checkAccount = (sortCode: string, accountNumber: string, accountHolderName: string, isTestUser: boolean, csrf: CsrfState) => {
+const checkAccount = (
+  sortCode: string,
+  accountNumber: string,
+  accountHolderName: string,
+  isTestUser: boolean,
+  csrf: CsrfState,
+) => {
 
   const bankAccountInformation = {
     sortCodeValue: sortCode,
@@ -25,4 +31,4 @@ const checkAccount = (sortCode: string, accountNumber: string, accountHolderName
 
 export {
   checkAccount,
-}
+};
