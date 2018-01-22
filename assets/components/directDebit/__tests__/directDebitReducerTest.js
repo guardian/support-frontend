@@ -82,5 +82,29 @@ describe('direct debit reducer tests', () => {
 
     expect(newState.accountHolderConfirmation).toEqual(accountHolderConfirmation);
   });
+
+  it('should handle DIRECT_DEBIT_SET_FORM_ERROR', () => {
+
+    const message = 'this is an error';
+    const action = {
+      type: 'DIRECT_DEBIT_SET_FORM_ERROR',
+      message,
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.formError).toEqual(message);
+  });
+
+  it('should handle DIRECT_DEBIT_RESET_FORM_ERROR', () => {
+
+    const action = {
+      type: 'DIRECT_DEBIT_RESET_FORM_ERROR',
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.formError).toEqual('');
+  });
 });
 
