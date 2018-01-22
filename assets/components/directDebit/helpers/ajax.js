@@ -14,7 +14,7 @@ const checkAccount = (
 ) => {
 
   const bankAccountInformation = {
-    sortCodeValue: sortCode,
+    sortCode,
     accountNumber,
     accountHolderName,
   };
