@@ -12,7 +12,6 @@ import {
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
-import { amountRadiosMonthlyRange, amountRadiosMonthlyHigher } from 'helpers/abTests/amountsTest';
 
 
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
@@ -239,23 +238,9 @@ const contribCaptionRadios = {
   ],
 };
 
-function getMonthlyAmount(abTests: Participations, currency: IsoCurrency) {
-  if (currency === 'USD') {
-    if (abTests.usRecurringAmountsTestTwo === 'range') {
-      return amountRadiosMonthlyRange[currency];
-    }
-    if (abTests.usRecurringAmountsTestTwo === 'higher') {
-      return amountRadiosMonthlyHigher[currency];
-    }
-  }
-
-  return amountRadiosMonthlyControl[currency];
-
-}
-
 // ----- Functions ----- //
 
-function amountToggles(abTests: Participations, currency: IsoCurrency = 'GBP'): AmountToggle {
+function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
   return {
     ANNUAL: {
       name: 'contributions-amount-annual-toggle',
@@ -263,7 +248,7 @@ function amountToggles(abTests: Participations, currency: IsoCurrency = 'GBP'): 
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
-      radios: getMonthlyAmount(abTests, currency),
+      radios: amountRadiosMonthlyControl[currency],
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
@@ -305,7 +290,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribAnnualAmount,
       checked: !userDefined ? props.contribAmount.annual.value : null,
-      toggles: amountToggles(props.abTests, props.currency.iso).ANNUAL,
+      toggles: amountToggles(props.currency.iso).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Annual contribution',
@@ -316,7 +301,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribMonthlyAmount,
       checked: !userDefined ? props.contribAmount.monthly.value : null,
-      toggles: amountToggles(props.abTests, props.currency.iso).MONTHLY,
+      toggles: amountToggles(props.currency.iso).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Monthly contribution',
@@ -328,7 +313,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
-    toggles: amountToggles(props.abTests, props.currency.iso).ONE_OFF,
+    toggles: amountToggles(props.currency.iso).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
     accessibilityHint: `${props.isoCountry === 'us' ? 'one time' : 'one-off'} contribution`,
