@@ -1,13 +1,14 @@
 package services.stepfunctions
 
 import java.util.UUID
+
 import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.config.Stage
 import RegularContributionsClient._
-import com.gu.support.workers.model.{AcquisitionData, PayPalPaymentFields, StripePaymentFields, User}
+import com.gu.support.workers.model._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
@@ -39,7 +40,7 @@ case class CreateRegularContributorRequest(
     country: Country,
     state: Option[String],
     contribution: Contribution,
-    paymentFields: Either[StripePaymentToken, PayPalPaymentFields],
+    paymentFields: PaymentFields,
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest]

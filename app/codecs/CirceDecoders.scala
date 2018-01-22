@@ -18,7 +18,6 @@ import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct,
 import ophan.thrift.componentEvent.ComponentType
 
 object CirceDecoders {
-  type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
 
   def deriveCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedObjectEncoder[A]]): Codec[A] =
     new Codec(deriveEncoder, deriveDecoder)
@@ -41,16 +40,20 @@ object CirceDecoders {
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
     private val stripeEncoder = deriveEncoder[StripePaymentFields]
     private val paypalEncoder = deriveEncoder[PayPalPaymentFields]
+    private val directDebitEncoder = deriveEncoder[DirectDebitPaymentFields]
+
     override def apply(a: PaymentFields): Json = {
-      a.fold(stripeEncoder.apply, paypalEncoder.apply)
+      a match {
+        case p: PayPalPaymentFields => paypalEncoder.apply(p)
+        case s: StripePaymentFields => stripeEncoder.apply(s)
+        case d: DirectDebitPaymentFields => directDebitEncoder.apply(d)
+      }
     }
   }
 
-  implicit val paymentFields: Decoder[PaymentFields] = {
-    val stripeFields = deriveDecoder[StripePaymentFields].map(_.asLeft[PayPalPaymentFields])
-    val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentFields])
-    stripeFields or payPalFields
-  }
+  implicit val decodePaymentFields: Decoder[PaymentFields] = Decoder[PayPalPaymentFields].map(x => x: PaymentFields)
+    .or(Decoder[StripePaymentFields].map(x => x: PaymentFields))
+    .or(Decoder[DirectDebitPaymentFields].map(x => x: PaymentFields))
 
   implicit val requestPaymentFields: Decoder[Either[StripePaymentToken, PayPalPaymentFields]] = {
     val stripeFields = deriveDecoder[StripePaymentToken].map(_.asLeft[PayPalPaymentFields])

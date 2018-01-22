@@ -63,7 +63,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
   "org.typelevel" %% "cats" % "0.9.0",
   "com.dripower" %% "play-circe" % "2608.5",
-  "com.gu" %% "support-models" % "0.18",
+  "com.gu" %% "support-models" % "0.20-SNAPSHOT",
   "com.gu" %% "support-config" % "0.7",
   "com.gu" %% "fezziwig" % "0.7",
   "com.typesafe.akka" %% "akka-agent" % "2.5.6",
