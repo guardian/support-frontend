@@ -6,6 +6,7 @@ import io.circe.Json
 import io.circe.parser.parse
 import cats.syntax.either._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
+import models.DirectDebitData
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
@@ -101,6 +102,26 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
     }
   }
 
+  "DirectDebitDataDecoder" should {
+    "decode json" in {
+      val json =
+        """
+        |{
+        |   "sortCode": "121212",
+        |   "accountNumber": "12121212",
+        |   "accountHolderName": "Example Name"
+        |}
+      """.stripMargin
+
+      val parsedJson = parse(json).toOption.get
+
+      val directDebitData: DirectDebitData = DirectDebitData.codec.decodeJson(parsedJson).right.get
+
+      directDebitData.sortCode.value mustBe "121212"
+      directDebitData.accountNumber.value mustBe "12121212"
+      directDebitData.accountHolderName mustBe "Example Name"
+    }
+  }
 
 }
 
