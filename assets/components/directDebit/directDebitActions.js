@@ -1,8 +1,9 @@
 // @flow
 
 import * as storage from 'helpers/storage';
+
 import { checkAccount } from './helpers/ajax';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
 
 // ----- Types ----- //
 
@@ -44,9 +45,10 @@ const resetDirectDebitFormError = (): Action =>
   ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
 
 
-const payDirectDebitClicked: (callback) => Function = () => {
+function payDirectDebitClicked(callback: Function): Function {
 
-  return function (dispatch, getState) {
+  return (dispatch: Function, getState: Function) => {
+
     const {
       bankSortCode,
       bankAccountNumber,
@@ -55,7 +57,7 @@ const payDirectDebitClicked: (callback) => Function = () => {
     } = getState().page.directDebit;
 
     const isTestUser: boolean = getState().page.user.isTestUser || false;
-    const { csrf }: CsrfState = getState().page;
+    const { csrf } = getState().page;
 
     dispatch(resetDirectDebitFormError());
 
@@ -64,25 +66,26 @@ const payDirectDebitClicked: (callback) => Function = () => {
       return;
     }
 
-    return checkAccount(bankSortCode, bankAccountNumber, accountHolderName, isTestUser, csrf)
+    checkAccount(bankSortCode, bankAccountNumber, accountHolderName, isTestUser, csrf)
       .then((response) => {
         if (!response.accountValid) {
           throw new Error('code1');
         }
       }).then(() => {
-        callback();
+        callback(undefined, bankAccountNumber, bankSortCode, accountHolderName);
       }).catch((e) => {
         let msg = '';
-        switch(e.message) {
+        switch (e.message) {
           case 'code1': msg = 'Your bank data is not ok, please check it and try again.';
-          default:  msg = 'Your bank data is not ok, please check it and try again.';
+            break;
+
+          default: msg = 'Your bank data is not ok, please check it and try again.';
 
         }
         dispatch(setDirectDebitFormError(msg));
       });
-
   };
-};
+}
 
 // ----- Exports ----//
 
