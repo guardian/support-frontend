@@ -210,19 +210,6 @@
           left: 250px;
         }
 
-        &.contribute-one_off {
-          bottom: 130px;
-        }
-
-        &.contribute-monthly {
-          bottom: 72px;
-        }
-      }
-
-      &.contribute-one_off {
-        @include mq($until: desktop) {
-          margin-top: 48px;
-        }
       }
 
       svg {
@@ -420,11 +407,7 @@
           }
         }
 
-        .component-cta-link.contribute-monthly {
-          bottom: $gu-v-spacing;
-        }
-
-        .component-cta-link.contribute-one_off {
+        .component-cta-link--contribute-one_off {
           bottom: $gu-v-spacing * 6;
         }
 
