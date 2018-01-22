@@ -13,8 +13,6 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: Function,
-  isTestUser: boolean,
-  isPostDeploymentTestUser: boolean,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
 };
@@ -45,10 +43,7 @@ const DirectDebitPopUpButton = (props: PropTypes) => {
   let content = null;
 
   if (props.isPopUpOpen) {
-    content = <DirectDebitPopUpForm
-                amount={props.amount}
-                currency={props.currency}
-              />;
+    content = <DirectDebitPopUpForm callback={props.callback} />;
   } else {
     content = (
       <button
@@ -62,12 +57,6 @@ const DirectDebitPopUpButton = (props: PropTypes) => {
   }
 
   return content;
-
-};
-
-// ----- Default Props ----- //
-
-DirectDebitPopUpButton.defaultProps = {
 
 };
 
