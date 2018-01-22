@@ -12,17 +12,12 @@ import {
   payDirectDebitClicked,
 } from 'components/directDebit/directDebitActions';
 
-import type { Currency } from 'helpers/internationalisation/currency';
-
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  amount: number,
   callback: Function,
-  currency: Currency,
-  isTestUser: boolean,
   sortCode: string,
   accountNumber: string,
   accountHolderName: string,
@@ -106,7 +101,7 @@ const DirectDebitForm = (props: PropTypes) => (
     <button
       id="qa-pay-with-direct-debit-close-pop-up"
       className="component-direct-debit-pop-up-form"
-      onClick={props.payDirectDebitClicked}
+      onClick={() => props.payDirectDebitClicked(props.callback)}
     >
       Pay
     </button>
