@@ -48,7 +48,7 @@ class StepFunctionsService extends LazyLogging {
       result <- if (maybeUser.isDefined || response.getNextToken == "")
         Future.successful(maybeUser)
       else
-        findUserDataInStateMachine(userId, arn, Some(response.getNextToken))
+        findUserDataInStateMachine(userId, arn, Some(response.getNextToken)) //Hold on to your hats!
 
     } yield result
   }
