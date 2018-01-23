@@ -66,7 +66,7 @@ function payDirectDebitClicked(callback: Function): Function {
       return;
     }
 
-    checkAccount(bankSortCode, bankAccountNumber, accountHolderName, isTestUser, csrf)
+    checkAccount(bankSortCode, bankAccountNumber, isTestUser, csrf)
       .then((response) => {
         if (!response.accountValid) {
           throw new Error('code1');

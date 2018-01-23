@@ -8,7 +8,6 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 const checkAccount = (
   sortCode: string,
   accountNumber: string,
-  accountHolderName: string,
   isTestUser: boolean,
   csrf: CsrfState,
 ) => {
@@ -16,7 +15,6 @@ const checkAccount = (
   const bankAccountInformation = {
     sortCode,
     accountNumber,
-    accountHolderName,
   };
 
   const requestData = {

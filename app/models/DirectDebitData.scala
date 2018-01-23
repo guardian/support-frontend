@@ -37,3 +37,9 @@ case class DirectDebitData(accountNumber: AccountNumber, sortCode: SortCode, acc
 object DirectDebitData {
   implicit val codec: Codec[DirectDebitData] = deriveCodec
 }
+
+case class CheckBankAccountData(accountNumber: AccountNumber, sortCode: SortCode)
+
+object CheckBankAccountData {
+  implicit val codec: Codec[CheckBankAccountData] = deriveCodec
+}
