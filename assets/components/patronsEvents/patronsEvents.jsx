@@ -16,6 +16,8 @@ export default function PatronsEvents() {
     <PageSection heading="Other ways you can support us" modifierClass="patrons-events">
       <OtherProduct
         modifierClass="patrons"
+        gridImg="newsroom"
+        imgAlt="newsroom"
         heading="Patrons"
         copy="The Patron tier is for those who want a deeper relationship with the Guardian and its journalists"
         ctaText="Find out more"
@@ -25,6 +27,8 @@ export default function PatronsEvents() {
       />
       <OtherProduct
         modifierClass="live-events"
+        gridImg="liveEvent"
+        imgAlt="live event"
         heading="Live events"
         copy="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
         ctaText="Find out more"

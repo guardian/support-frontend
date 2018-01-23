@@ -12,6 +12,7 @@ export const GRID_DOMAIN = 'https://media.guim.co.uk';
 export const imageCatalogue: {
   [string]: string,
 } = {
+  newsroom: '8caacf301dd036a2bbb1b458cf68b637d3c55e48/0_0_1140_683',
   guardianObserverOffice: '137d6b217a27acddf85512657d04f6490b9e0bb1/1638_0_3571_2009',
   liveEvent: '5f18c6428e9f31394b14215fe3c395b8f7b4238a/500_386_2373_1335',
   digitalBundle: '7c7b9580924281914e82dc163bf716ede52daa8b/0_0_600_360',

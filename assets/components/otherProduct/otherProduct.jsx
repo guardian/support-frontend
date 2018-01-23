@@ -5,6 +5,7 @@
 import React from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
+import GridImage from 'components/gridImage/gridImage';
 
 import { generateClassName } from 'helpers/utilities';
 
@@ -13,6 +14,8 @@ import { generateClassName } from 'helpers/utilities';
 
 type PropTypes = {
   modifierClass?: string,
+  gridImg: string,
+  imgAlt: string,
   heading: string,
   copy: string,
   ctaText: string,
@@ -28,6 +31,14 @@ export default function OtherProduct(props: PropTypes) {
 
   return (
     <div className={generateClassName('component-other-product', props.modifierClass)}>
+      <div className="component-other-product__image">
+        <GridImage
+          gridId={props.gridImg}
+          srcSizes={[1000, 500, 140]}
+          sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
+          altText={props.imgAlt}
+        />
+      </div>
       <h2 className="component-other-product__heading">{props.heading}</h2>
       <p className="component-other-product__copy">{props.copy}</p>
       <CtaLink
