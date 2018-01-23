@@ -63,7 +63,7 @@ GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
 
 # ----- Direct Debit ----- #
 
-POST /directDebit/check-account                      controllers.DirectDebit.checkAccount
+POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
 # ----- Assets ----- #
 
