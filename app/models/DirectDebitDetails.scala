@@ -14,7 +14,7 @@ object AccountNumber {
   }
 
   implicit val decodeAccountNumber: Decoder[AccountNumber] =
-    Decoder.decodeString.emap(accountNumber => fromString(accountNumber).toRight(s"Invalid account number'$accountNumber'"))
+    Decoder.decodeString.emap(accountNumber => fromString(accountNumber).toRight(s"Invalid account number '$accountNumber'"))
   implicit val encodeAccountNumber: Encoder[AccountNumber] = Encoder.encodeString.contramap[AccountNumber](_.value)
 }
 
@@ -28,7 +28,7 @@ object SortCode {
   }
 
   implicit val decodeSortCode: Decoder[SortCode] =
-    Decoder.decodeString.emap(sortCode => fromString(sortCode).toRight(s"Invalid sort code'$sortCode'"))
+    Decoder.decodeString.emap(sortCode => fromString(sortCode).toRight(s"Invalid sort code '$sortCode'"))
   implicit val encodeSortCode: Encoder[SortCode] = Encoder.encodeString.contramap[SortCode](_.value)
 }
 
