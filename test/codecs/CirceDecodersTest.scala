@@ -6,11 +6,8 @@ import io.circe.Json
 import io.circe.parser.parse
 import cats.syntax.either._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-<<<<<<< HEAD
+
 import models.{CheckBankAccountDetails, DirectDebitDetails}
-=======
-import com.gu.support.workers.model.PayPalPaymentFields
->>>>>>> [direct-debit-phase-3] Adding first approach to circe decoders
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
