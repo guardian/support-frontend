@@ -9,11 +9,10 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import services.stepfunctions.StripePaymentToken
+import cats.syntax.either._
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
-import cats.syntax.either._
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
 
@@ -37,29 +36,26 @@ object CirceDecoders {
   implicit val decodeCountry: Decoder[Country] =
     Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
 
-  implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
-    private val stripeEncoder = deriveEncoder[StripePaymentFields]
-    private val paypalEncoder = deriveEncoder[PayPalPaymentFields]
-    private val directDebitEncoder = deriveEncoder[DirectDebitPaymentFields]
+  //Payment fields are input from support-frontend
+  implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
+  implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
+  implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
 
-    override def apply(a: PaymentFields): Json = {
-      a match {
-        case p: PayPalPaymentFields => paypalEncoder.apply(p)
-        case s: StripePaymentFields => stripeEncoder.apply(s)
-        case d: DirectDebitPaymentFields => directDebitEncoder.apply(d)
-      }
+  //noinspection ConvertExpressionToSAM
+  implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
+    override final def apply(a: PaymentFields): Json = a match {
+      case p: PayPalPaymentFields => Encoder[PayPalPaymentFields].apply(p)
+      case s: StripePaymentFields => Encoder[StripePaymentFields].apply(s)
+      case d: DirectDebitPaymentFields => Encoder[DirectDebitPaymentFields].apply(d)
     }
   }
 
-  implicit val decodePaymentFields: Decoder[PaymentFields] = Decoder[PayPalPaymentFields].map(x => x: PaymentFields)
-    .or(Decoder[StripePaymentFields].map(x => x: PaymentFields))
-    .or(Decoder[DirectDebitPaymentFields].map(x => x: PaymentFields))
-
-  implicit val requestPaymentFields: Decoder[Either[StripePaymentToken, PayPalPaymentFields]] = {
-    val stripeFields = deriveDecoder[StripePaymentToken].map(_.asLeft[PayPalPaymentFields])
-    val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentToken])
-    stripeFields or payPalFields
-  }
+  implicit val decodePaymentFields: Decoder[PaymentFields] =
+    Decoder[PayPalPaymentFields].map(x => x: PaymentFields).or(
+      Decoder[StripePaymentFields].map(x => x: PaymentFields).or(
+        Decoder[DirectDebitPaymentFields].map(x => x: PaymentFields)
+      )
+    )
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
