@@ -1,0 +1,69 @@
+.component-page-section--patrons-events {
+  color: gu-colour(garnett-neutral-1);
+  background-color: gu-colour(garnett-neutral-3);
+  padding-bottom: $gu-v-spacing * 4;
+
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-other-product {
+    display: inline-block;
+
+    @include mq($from: phablet) {
+      width: 300px;
+    }
+
+    @include mq($from: tablet, $until: desktop) {
+      margin: 0 25px;
+    }
+  }
+
+  .component-other-product--patrons {
+    @include mq($from: phablet) {
+      margin-right: $gu-h-spacing;
+    }
+  }
+
+  .component-other-product__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 36px;
+    line-height: 1;
+    font-weight: bold;
+  }
+
+  .component-other-product__copy {
+    margin-bottom: $gu-v-spacing * 2;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .component-cta-link {
+    background: transparent;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: gu-colour(garnett-neutral-1);
+      color: #fff;
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+    height: 35%;
+    top: 17px;
+    right: 13px;
+  }
+}
