@@ -5,6 +5,7 @@ import io.circe.{Decoder, Encoder}
 
 import scala.PartialFunction.condOpt
 
+//Payment gateways are used by Zuora to talk to the individual payment providers: Stripe, PayPal and GoCardless
 sealed trait PaymentGateway {
   def name: String
 }
@@ -27,6 +28,8 @@ object PaymentGateway {
     Decoder.decodeString.emap[PaymentGateway](s => PaymentGateway.fromString(s).toRight(s"Invalid payment gateway $s"))
 }
 
+//Gateway names need to match to those set in Zuora
+//See: https://apisandbox.zuora.com/apps/NewGatewaySetting.do?method=list
 case object StripeGateway extends PaymentGateway {
   val name = "Stripe Gateway 1"
 }
