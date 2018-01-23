@@ -21,16 +21,6 @@ import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.AbTest
 
-object StripePaymentToken {
-  implicit val decoder: Decoder[StripePaymentToken] = deriveDecoder
-}
-case class StripePaymentToken(stripeToken: String) {
-  def stripePaymentFields(userId: String): StripePaymentFields = StripePaymentFields(
-    userId = userId,
-    stripeToken = stripeToken
-  )
-}
-
 object CreateRegularContributorRequest {
   implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
 }
@@ -74,7 +64,7 @@ class RegularContributionsClient(
       requestId = requestId,
       user = user,
       contribution = request.contribution,
-      paymentFields = request.paymentFields.leftMap(_.stripePaymentFields(user.id)),
+      paymentFields = request.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.ophanIds,
         referrerAcquisitionData = request.referrerAcquisitionData,
