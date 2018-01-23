@@ -230,5 +230,14 @@ object Fixtures {
         ]
      """
 
+  val directDebitPaymentFields =
+    s"""
+       {
+        "accountHolderName": "Mickey Mouse",
+        "sortCode": "204532",
+        "accountNumber": "37462947"
+       }
+     """
+
 }
 

@@ -2,7 +2,6 @@ package com.gu.zuora.encoding
 
 import java.util.UUID
 
-import cats.syntax.either._
 import com.gu.helpers.StringExtensions._
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.encoding.Codec
@@ -30,12 +29,12 @@ trait InternationalisationCodecs {
 
 trait ModelsCodecs {
   self: CustomCodecs with InternationalisationCodecs with HelperCodecs =>
-  type PaymentFields = Either[StripePaymentFields, PayPalPaymentFields]
 
   implicit val codecPayPalReferenceTransaction: Codec[PayPalReferenceTransaction] = capitalizingCodec
 
   implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
 
+  //Payment Methods are details from the payment provider
   //noinspection ConvertExpressionToSAM
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
     override final def apply(a: PaymentMethod): Json = a match {
@@ -49,12 +48,26 @@ trait ModelsCodecs {
       Decoder[CreditCardReferenceTransaction].map(x => x: PaymentMethod)
     )
 
-  implicit val decodeStripeFields: Decoder[StripePaymentFields] = deriveDecoder
-  implicit val decodePaymentFields: Decoder[PaymentFields] = {
-    val stripeFields = deriveDecoder[StripePaymentFields].map(_.asLeft[PayPalPaymentFields])
-    val payPalFields = deriveDecoder[PayPalPaymentFields].map(_.asRight[StripePaymentFields])
-    stripeFields or payPalFields
+  //Payment fields are input from support-frontend
+  implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
+  implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
+  implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
+
+  //noinspection ConvertExpressionToSAM
+  implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
+    override final def apply(a: PaymentFields): Json = a match {
+      case p: PayPalPaymentFields => Encoder[PayPalPaymentFields].apply(p)
+      case s: StripePaymentFields => Encoder[StripePaymentFields].apply(s)
+      case d: DirectDebitPaymentFields => Encoder[DirectDebitPaymentFields].apply(d)
+    }
   }
+
+  implicit val decodePaymentFields: Decoder[PaymentFields] =
+    Decoder[PayPalPaymentFields].map(x => x: PaymentFields).or(
+      Decoder[StripePaymentFields].map(x => x: PaymentFields).or(
+        Decoder[DirectDebitPaymentFields].map(x => x: PaymentFields)
+      )
+    )
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
