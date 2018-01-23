@@ -5,7 +5,7 @@ import com.gocardless.GoCardlessClient.Environment
 import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.typesafe.scalalogging.LazyLogging
-import models.CheckBankAccountData
+import models.CheckBankAccountDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -19,7 +19,7 @@ class GoCardlessService(token: String, environment: Environment) extends LazyLog
    * @return true if either the bank details are correct, or the rate limit for this enpoint is reached.
    *         In the latter case an error is logged.
    */
-  def checkBankDetails(bankAccountData: CheckBankAccountData): Future[Boolean] = {
+  def checkBankDetails(bankAccountData: CheckBankAccountDetails): Future[Boolean] = {
     Future {
       client.bankDetailsLookups().create()
         .withAccountNumber(bankAccountData.accountNumber.value)

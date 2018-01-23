@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax._
-import models.CheckBankAccountData
+import models.CheckBankAccountDetails
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
@@ -20,8 +20,8 @@ class DirectDebit(
 
   import actionBuilders._
 
-  def checkAccount: Action[CheckBankAccountData] =
-    PrivateAction.async(circe.json[CheckBankAccountData]) { implicit request =>
+  def checkAccount: Action[CheckBankAccountDetails] =
+    PrivateAction.async(circe.json[CheckBankAccountDetails]) { implicit request =>
       goCardlessService.checkBankDetails(request.body).map { isAccountValid =>
         Ok(Map("accountValid" -> isAccountValid).asJson)
       }

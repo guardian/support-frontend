@@ -6,7 +6,7 @@ import io.circe.Json
 import io.circe.parser.parse
 import cats.syntax.either._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import models.{CheckBankAccountData, DirectDebitData}
+import models.{CheckBankAccountDetails, DirectDebitDetails}
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
@@ -115,7 +115,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       val parsedJson = parse(json).toOption.get
 
-      val directDebitData: DirectDebitData = DirectDebitData.codec.decodeJson(parsedJson).right.get
+      val directDebitData: DirectDebitDetails = DirectDebitDetails.codec.decodeJson(parsedJson).right.get
 
       directDebitData.sortCode.value mustBe "121212"
       directDebitData.accountNumber.value mustBe "12121212"
@@ -135,7 +135,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       val parsedJson = parse(json).toOption.get
 
-      val checkBankAccountData: CheckBankAccountData = CheckBankAccountData.codec.decodeJson(parsedJson).right.get
+      val checkBankAccountData: CheckBankAccountDetails = CheckBankAccountDetails.codec.decodeJson(parsedJson).right.get
 
       checkBankAccountData.sortCode.value mustBe "121212"
       checkBankAccountData.accountNumber.value mustBe "12121212"

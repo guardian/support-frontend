@@ -32,14 +32,14 @@ object SortCode {
   implicit val encodeSortCode: Encoder[SortCode] = Encoder.encodeString.contramap[SortCode](_.value)
 }
 
-case class DirectDebitData(accountNumber: AccountNumber, sortCode: SortCode, accountHolderName: String)
+case class DirectDebitDetails(accountNumber: AccountNumber, sortCode: SortCode, accountHolderName: String)
 
-object DirectDebitData {
-  implicit val codec: Codec[DirectDebitData] = deriveCodec
+object DirectDebitDetails {
+  implicit val codec: Codec[DirectDebitDetails] = deriveCodec
 }
 
-case class CheckBankAccountData(accountNumber: AccountNumber, sortCode: SortCode)
+case class CheckBankAccountDetails(accountNumber: AccountNumber, sortCode: SortCode)
 
-object CheckBankAccountData {
-  implicit val codec: Codec[CheckBankAccountData] = deriveCodec
+object CheckBankAccountDetails {
+  implicit val codec: Codec[CheckBankAccountDetails] = deriveCodec
 }
