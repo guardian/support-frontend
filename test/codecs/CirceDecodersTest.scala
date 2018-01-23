@@ -129,7 +129,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         """
           |{
           |   "sortCode": "121212",
-          |   "accountNumber": "12121212",
+          |   "accountNumber": "12121212"
           |}
         """.stripMargin
 
