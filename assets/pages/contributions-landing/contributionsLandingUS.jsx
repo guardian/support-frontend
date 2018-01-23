@@ -6,9 +6,6 @@ import React from 'react';
 import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-
-import { defaultAmountsUS } from 'helpers/abTests/amountsTest';
-
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
@@ -35,12 +32,8 @@ saveContext(store.dispatch);
 
 (function initialiseAmountsTest() {
   try {
-    const testParticipation = store.getState().common.abParticipations.usRecurringAmountsTestTwo;
-    const defaultSelectedAmount =
-      defaultAmountsUS[testParticipation]
-      || defaultAmountsUS.control;
     return store.dispatch(changeContribAmountMonthly({
-      value: defaultSelectedAmount, userDefined: false,
+      value: '15', userDefined: false,
     }));
   } catch (e) { return null; }
 }());
