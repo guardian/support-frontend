@@ -46,7 +46,7 @@ type RegularContribFields = {|
   supportAbTests: AcquisitionABTest[],
 |};
 
-type PaymentField = 'baid' | 'stripeToken';
+type PaymentField = 'baid' | 'stripeToken' | 'directDebitData';
 
 
 // ----- Functions ----- //
@@ -195,10 +195,18 @@ export default function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {
-  return (token: string) => {
+  return (
+    token?: string,
+    bankAccountNumber?: string,
+    bankSortCodeValue?: string,
+    bankAccountHolderName?: string, // eslint-disable-line no-unused-vars
+  ) => {
 
     pollCount = 0;
     dispatch(creatingContributor());
+
+    // When implementing the phase 3 of direct debit the line below needs to be removed.
+    const myToken = token || '';
 
     const request = requestData(
       abParticipations,
@@ -208,7 +216,7 @@ export default function postCheckout(
       currency.iso,
       csrf,
       paymentFieldName,
-      token,
+      myToken,
       referrerAcquisitionData,
       getState,
     );

@@ -79,7 +79,21 @@ function RegularContributionsPayment(props: PropTypes, context) {
   const isDirectDebitEnable = window.guardian && window.guardian.directDebitEnable;
 
   if (props.country === 'GB' && isDirectDebitEnable) {
-    directDebitButton = <DirectDebitPopUpButton />;
+    directDebitButton = (
+      <DirectDebitPopUpButton
+        callback={postCheckout(
+          props.abParticipations,
+          props.amount,
+          props.csrf,
+          props.currency,
+          props.contributionType,
+          props.country,
+          props.dispatch,
+          'directDebitData',
+          props.referrerAcquisitionData,
+          context.store.getState,
+      )}
+      />);
   }
 
   let stripeButton = (<StripePopUpButton

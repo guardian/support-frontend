@@ -1,5 +1,6 @@
 package config
 
+import com.gocardless.GoCardlessClient
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
@@ -19,6 +20,13 @@ class Configuration {
   lazy val aws = new AwsConfig(config.getConfig("aws"))
 
   lazy val guardianDomain = config.getString("guardianDomain")
+
+  lazy val goCardlessToken = config.getString("gocardless.token")
+
+  lazy val goCardlessEnvironment = config.getString("gocardless.environment") match {
+    case "LIVE" => GoCardlessClient.Environment.LIVE
+    case "SANDBOX" => GoCardlessClient.Environment.SANDBOX
+  }
 
   lazy val supportUrl = config.getString("support.url")
 

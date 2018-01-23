@@ -67,4 +67,10 @@ trait Controllers {
     controllerComponents,
     actionRefiners
   )
+
+  lazy val directDebitController = new DirectDebit(
+    actionRefiners,
+    controllerComponents,
+    goCardlessService
+  )
 }

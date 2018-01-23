@@ -6,6 +6,8 @@ import {
   updateAccountNumber,
   updateAccountHolderName,
   updateAccountHolderConfirmation,
+  setDirectDebitFormError,
+  resetDirectDebitFormError,
 } from '../directDebitActions';
 
 
@@ -59,6 +61,22 @@ describe('actions', () => {
       accountHolderConfirmation,
     };
     expect(updateAccountHolderConfirmation(accountHolderConfirmation)).toEqual(expectedAction);
+  });
+
+  it('should create an action to set the error message in the direct debit form', () => {
+    const message: string = 'this is an error';
+    const expectedAction = {
+      type: 'DIRECT_DEBIT_SET_FORM_ERROR',
+      message,
+    };
+    expect(setDirectDebitFormError(message)).toEqual(expectedAction);
+  });
+
+  it('should create an action to reset the error message in the direct debit form', () => {
+    const expectedAction = {
+      type: 'DIRECT_DEBIT_RESET_FORM_ERROR',
+    };
+    expect(resetDirectDebitFormError()).toEqual(expectedAction);
   });
 });
 

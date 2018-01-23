@@ -4,18 +4,20 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { updateSortCode, updateAccountNumber, updateAccountHolderName, updateAccountHolderConfirmation } from 'components/directDebit/directDebitActions';
+import {
+  updateSortCode,
+  updateAccountNumber,
+  updateAccountHolderName,
+  updateAccountHolderConfirmation,
+  payDirectDebitClicked,
+} from 'components/directDebit/directDebitActions';
 
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  amount: number,
   callback: Function,
-  currency: Currency,
-  isTestUser: boolean,
   sortCode: string,
   accountNumber: string,
   accountHolderName: string,
@@ -24,6 +26,8 @@ type PropTypes = {
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
+  payDirectDebitClicked: (callback: Function) => void,
+  formError: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -36,22 +40,30 @@ function mapStateToProps(state) {
     accountNumber: state.page.directDebit.bankAccountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
+    formError: state.page.directDebit.formError,
   };
 }
 
 function mapDispatchToProps(dispatch) {
 
   return {
-    updateSortCode: (sortCode: string) => {
+    payDirectDebitClicked: (callback) => {
+      dispatch(payDirectDebitClicked(callback));
+    },
+    updateSortCode: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const sortCode: string = event.target.value;
       dispatch(updateSortCode(sortCode));
     },
-    updateAccountNumber: (accountNumber: string) => {
+    updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountNumber: string = event.target.value;
       dispatch(updateAccountNumber(accountNumber));
     },
-    updateAccountHolderName: (accountHolderName: string) => {
+    updateAccountHolderName: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountHolderName: string = event.target.value;
       dispatch(updateAccountHolderName(accountHolderName));
     },
-    updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => {
+    updateAccountHolderConfirmation: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const accountHolderConfirmation: boolean = event.target.checked;
       dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
     },
   };
@@ -65,10 +77,9 @@ const DirectDebitForm = (props: PropTypes) => (
 
     <img className="component-direct-debit-form__direct-debit-logo" src="#" alt="The Direct Debit logo" />
 
-
     <SortCodeInput
-      value={props.sortCode}
       onChange={props.updateSortCode}
+      value={props.sortCode}
     />
 
     <AccountNumberInput
@@ -82,13 +93,23 @@ const DirectDebitForm = (props: PropTypes) => (
     />
 
     <ConfirmationInput
-      checked={props.accountHolderConfirmation}
       onChange={props.updateAccountHolderConfirmation}
+      checked={props.accountHolderConfirmation}
     />
+
+    <p>{props.formError}</p>
+    <button
+      id="qa-pay-with-direct-debit-close-pop-up"
+      className="component-direct-debit-pop-up-form"
+      onClick={() => props.payDirectDebitClicked(props.callback)}
+    >
+      Pay
+    </button>
 
     <div className="component-direct-debit-form__advance-notice__title">
         Advance notice
     </div>
+
     <div className="component-direct-debit-form__advance-notice__content">
       <p>The details of your Direct Debit instruction including payment schedule, due date,
         frequency and amount will be sent to you within three working days. All the normal

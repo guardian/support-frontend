@@ -16,6 +16,7 @@ const routes: {
   contributionsMarketingConfirm: '/contribute/marketing-confirm',
   payPalSetupPayment: '/paypal/setup-payment',
   payPalCreateAgreement: '/paypal/create-agreement',
+  directDebitCheckAccount: '/direct-debit/check-account',
 };
 
 

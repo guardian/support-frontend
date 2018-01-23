@@ -16,6 +16,7 @@ Object {
     "accountHolderName": "",
     "bankAccountNumber": "",
     "bankSortCode": "",
+    "formError": "",
     "isPopUpOpen": false,
   },
   "regularContrib": Object {

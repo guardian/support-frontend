@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Currency } from 'helpers/internationalisation/currency';
 import { closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 
@@ -13,11 +12,7 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  amount: number,
   callback: Function,
-  currency: Currency,
-  email: string,
-  isTestUser: boolean,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
 };
@@ -51,25 +46,19 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
     content = (
       <div>
         <button
-          id="qa-pay-with-direct-debit"
+          id="qa-pay-with-direct-debit-close-pop-up"
           className="component-direct-debit-pop-up-form"
           onClick={props.closeDirectDebitPopUp}
         >
           Close form
         </button>
 
-        <DirectDebitForm />
+        <DirectDebitForm callback={props.callback} />
       </div>
     );
   }
 
   return content;
-
-};
-
-// ----- Default Props ----- //
-
-DirectDebitPopUpForm.defaultProps = {
 
 };
 
