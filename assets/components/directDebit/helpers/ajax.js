@@ -5,6 +5,11 @@
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
+type CheckBankAccountDetails = {
+  accountNumber: string,
+  sortCode: string,
+};
+
 const checkAccount = (
   sortCode: string,
   accountNumber: string,
@@ -12,7 +17,7 @@ const checkAccount = (
   csrf: CsrfState,
 ) => {
 
-  const bankAccountInformation = {
+  const bankAccountDetails: CheckBankAccountDetails = {
     sortCode,
     accountNumber,
   };
@@ -21,7 +26,7 @@ const checkAccount = (
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
     credentials: 'same-origin',
-    body: JSON.stringify(bankAccountInformation),
+    body: JSON.stringify(bankAccountDetails),
   };
 
   return fetch(routes.directDebitCheckAccount, requestData);

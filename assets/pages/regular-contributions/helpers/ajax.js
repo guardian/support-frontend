@@ -32,6 +32,14 @@ type ContributionRequest = {
   billingPeriod: BillingPeriod,
 };
 
+type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
+
+type DirectDebitDetails= {|
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string
+|};
+
 type RegularContribFields = {|
   firstName: ?string,
   lastName: ?string,
@@ -39,15 +47,12 @@ type RegularContribFields = {|
   state?: UsState,
   contribution: ContributionRequest,
   paymentFields: {
-    stripeToken: string,
+    [PaymentFieldName]: string | DirectDebitDetails,
   },
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
 |};
-
-type PaymentField = 'baid' | 'stripeToken' | 'directDebitData';
-
 
 // ----- Functions ----- //
 
@@ -56,6 +61,33 @@ const isUserValid = (user: UserState) =>
   user.lastName !== null && user.lastName !== undefined &&
   user.email !== null && user.email !== undefined;
 
+const getPaymentFields =
+  (
+    token?: string,
+    accountNumber?: string,
+    sortCode?: string,
+    accountHolderName?: string,
+    paymentFieldName: string,
+  ) => {
+    if (token !== undefined) {
+      return {
+        [paymentFieldName]: token,
+      };
+    } else if (accountHolderName !== undefined &&
+      sortCode !== undefined &&
+      accountNumber !== undefined) {
+
+      return {
+        [paymentFieldName]: {
+          accountHolderName,
+          sortCode,
+          accountNumber,
+        },
+      };
+    }
+    return null;
+  };
+
 function requestData(
   abParticipations: Participations,
   amount: number,
@@ -63,10 +95,13 @@ function requestData(
   country: IsoCountry,
   currency: IsoCurrency,
   csrf: CsrfState,
-  paymentFieldName: PaymentField,
-  token: string,
+  paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  token?: string,
+  accountNumber?: string,
+  sortCode?: string,
+  accountHolderName?: string,
 ) {
 
   const { user } = getState().page;
@@ -80,6 +115,20 @@ function requestData(
 
   const ophanIds: OphanIds = getOphanIds();
   const supportAbTests = participationsToAcquisitionABTest(abParticipations);
+  const paymentFields = getPaymentFields(
+    token,
+    accountNumber,
+    sortCode,
+    accountHolderName,
+    paymentFieldName,
+  );
+
+  if (!paymentFields) {
+    return Promise.resolve({
+      ok: false,
+      text: () => 'Failed to process payment - error related to payment fields.',
+    });
+  }
 
   const regularContribFields: RegularContribFields = {
     firstName: user.firstName,
@@ -90,9 +139,7 @@ function requestData(
       currency,
       billingPeriod: billingPeriodFromContrib(contributionType),
     },
-    paymentFields: {
-      [paymentFieldName]: token,
-    },
+    paymentFields,
     ophanIds,
     referrerAcquisitionData,
     supportAbTests,
@@ -191,22 +238,19 @@ export default function postCheckout(
   contributionType: Contrib,
   country: IsoCountry,
   dispatch: Function,
-  paymentFieldName: PaymentField,
+  paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {
   return (
     token?: string,
     bankAccountNumber?: string,
-    bankSortCodeValue?: string,
-    bankAccountHolderName?: string, // eslint-disable-line no-unused-vars
+    bankSortCode?: string,
+    bankAccountHolderName?: string,
   ) => {
 
     pollCount = 0;
     dispatch(creatingContributor());
-
-    // When implementing the phase 3 of direct debit the line below needs to be removed.
-    const myToken = token || '';
 
     const request = requestData(
       abParticipations,
@@ -216,9 +260,12 @@ export default function postCheckout(
       currency.iso,
       csrf,
       paymentFieldName,
-      myToken,
       referrerAcquisitionData,
       getState,
+      token,
+      bankAccountNumber,
+      bankSortCode,
+      bankAccountHolderName,
     );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
