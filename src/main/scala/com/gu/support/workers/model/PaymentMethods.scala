@@ -23,3 +23,10 @@ case class PayPalReferenceTransaction(
   paypalType: String = "ExpressCheckout",
   `type`: String = "PayPal"
 ) extends PaymentMethod
+
+case class DirectDebitPaymentMethod(
+  accountHolderName: String,
+  sortCode: String,
+  accountNumber: String,
+  `type`: String = "DirectDebit"
+) extends PaymentMethod
