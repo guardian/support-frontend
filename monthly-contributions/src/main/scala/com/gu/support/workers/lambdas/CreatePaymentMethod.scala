@@ -33,14 +33,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   }
 
   private def createPaymentMethod(
-    paymentType: Either[StripePaymentFields, PayPalPaymentFields],
+    paymentType: PaymentFields,
     services: Services
   ) =
     paymentType match {
-      case Left(stripe) =>
+      case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService)
-      case Right(paypal) =>
+      case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
+      case dd: DirectDebitPaymentFields => Future.successful(DirectDebitPaymentMethod(dd.accountHolderName, dd.sortCode, dd.accountNumber))
+
     }
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =

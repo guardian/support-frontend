@@ -30,9 +30,9 @@ trait InternationalisationCodecs {
 trait ModelsCodecs {
   self: CustomCodecs with InternationalisationCodecs with HelperCodecs =>
 
-  implicit val codecPayPalReferenceTransaction: Codec[PayPalReferenceTransaction] = capitalizingCodec
-
-  implicit val codecCreditCardReferenceTransaction: Codec[CreditCardReferenceTransaction] = capitalizingCodec
+  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
+  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
+  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
 
   //Payment Methods are details from the payment provider
   //noinspection ConvertExpressionToSAM
@@ -40,12 +40,15 @@ trait ModelsCodecs {
     override final def apply(a: PaymentMethod): Json = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
       case c: CreditCardReferenceTransaction => Encoder[CreditCardReferenceTransaction].apply(c)
+      case d: DirectDebitPaymentMethod => directDebitPaymentMethodCodec.apply(d)
     }
   }
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
     Decoder[PayPalReferenceTransaction].map(x => x: PaymentMethod).or(
-      Decoder[CreditCardReferenceTransaction].map(x => x: PaymentMethod)
+      Decoder[CreditCardReferenceTransaction].map(x => x: PaymentMethod).or(
+        Decoder[DirectDebitPaymentMethod].map(x => x: PaymentMethod)
+      )
     )
 
   //Payment fields are input from support-frontend
