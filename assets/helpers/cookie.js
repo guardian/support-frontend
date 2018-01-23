@@ -3,15 +3,19 @@
 // ----- Functions ----- //
 
 // Trim subdomains for prod, code and dev.
-const getShortDomain = (): string => {
-
+const getDomain = (): string => {
   const domain = document.domain || '';
   return domain.replace(/^(www|m\.code|dev|m|support)\./, '.');
 };
 
-const getDomainAttribute = (): string => {
-  const shortDomain = getShortDomain();
-  return shortDomain === 'localhost' ? '' : ` domain=${shortDomain};`;
+const getDomainAttribute = (useSubDomain: boolean): string => {
+  const domain = getDomain();
+  const subDomain = document.domain || '';
+
+  if (domain === 'localhost') {
+    return '';
+  }
+  return useSubDomain ? ` domain=${subDomain};` : ` domain=${domain};`;
 };
 
 
@@ -33,9 +37,8 @@ export function get(name: string): ?string {
 
 }
 
-// Sets a cookie, modified from dotcom (https://github.com/guardian/frontend).
-export function set(name: string, value: string, daysToLive: ?number): void {
 
+const getExpires = (daysToLive: ?number) => {
   const expires = new Date();
 
   if (daysToLive) {
@@ -44,7 +47,18 @@ export function set(name: string, value: string, daysToLive: ?number): void {
     expires.setMonth(expires.getMonth() + 5);
     expires.setDate(1);
   }
+  return expires;
+};
 
-  document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute()}`;
+// Sets a cookie, modified from dotcom (https://github.com/guardian/frontend).
+export function set(name: string, value: string, daysToLive: ?number): void {
+  const expires = getExpires(daysToLive);
+  document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute(false)}`;
+}
 
+
+// Sets a cookie with on the fully qualified domain name
+export function setSubDomain(name: string, value: string, daysToLive: ?number): void {
+  const expires = getExpires(daysToLive);
+  document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute(true)}`;
 }

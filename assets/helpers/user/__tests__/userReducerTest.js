@@ -1,4 +1,3 @@
-import * as cookie from 'helpers/cookie';
 import { userReducer as reducer } from '../userReducer';
 
 // ----- Tests ----- //
