@@ -3,29 +3,78 @@
   background-color: gu-colour(garnett-neutral-3);
   padding-bottom: $gu-v-spacing * 4;
 
+  .component-page-section__header {
+    @include mq($from: desktop) {
+      position: relative;
+
+      &:after {
+        border-right: 1px solid gu-colour(garnett-neutral-4);
+        content: "";
+        display: inline-block;
+        height: 36px;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
     font-size: 24px;
     line-height: 1.17;
     font-weight: bold;
+
+    @include mq($until: phablet) {
+      width: 70%;
+    }
+
+    @include mq($from: phablet, $until: desktop) {
+      width: 40%;
+    }
   }
 
   .component-other-product {
     display: inline-block;
+    padding-top: $gu-v-spacing * 3;
 
     @include mq($from: phablet) {
       width: 300px;
-    }
-
-    @include mq($from: tablet, $until: desktop) {
-      margin: 0 25px;
+      padding-left: $gu-h-spacing / 2;
     }
   }
 
   .component-other-product--patrons {
     @include mq($from: phablet) {
-      margin-right: $gu-h-spacing;
+      padding-right: $gu-h-spacing;
+      padding-left: $gu-h-spacing;
     }
+
+    .component-grid-image {
+      margin-left: -90px;
+    }
+  }
+
+  .component-other-product--live-events {
+    @include mq($from: phablet) {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
+
+    .component-grid-image {
+      margin-left: -120px;
+    }
+  }
+
+  .component-other-product__image {
+    overflow: hidden;
+    width: 165px;
+    height: 165px;
+    border-radius: 50%;
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-grid-image {
+    height: 100%;
   }
 
   .component-other-product__heading {
@@ -33,12 +82,17 @@
     font-size: 36px;
     line-height: 1;
     font-weight: bold;
+    margin-bottom: $gu-v-spacing;
   }
 
   .component-other-product__copy {
     margin-bottom: $gu-v-spacing * 2;
     font-size: 16px;
     line-height: 1.25;
+
+    @include mq($until: phablet) {
+      width: 85%;
+    }
   }
 
   .component-cta-link {
