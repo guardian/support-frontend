@@ -47,8 +47,8 @@ type RegularContribFields = {|
   state?: UsState,
   contribution: ContributionRequest,
   paymentFields: {
-    [PaymentFieldName]: string | DirectDebitDetails,
-  },
+    [PaymentFieldName]: string,
+  } | DirectDebitDetails,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
