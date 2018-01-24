@@ -78,11 +78,9 @@ const getPaymentFields =
       accountNumber !== undefined) {
 
       return {
-        [paymentFieldName]: {
-          accountHolderName,
-          sortCode,
-          accountNumber,
-        },
+        accountHolderName,
+        sortCode,
+        accountNumber,
       };
     }
     return null;
