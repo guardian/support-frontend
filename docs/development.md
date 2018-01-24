@@ -460,7 +460,7 @@ Nesting should be avoided. The only case where it is justified is inside a CSS f
 ```
 ##### Page nesting example
 
-For example the CSS file of `examplePage` will have the following shape:
+The `.scss` file of `examplePage` will have the following shape:
 
 ```sass
 #example-page {
