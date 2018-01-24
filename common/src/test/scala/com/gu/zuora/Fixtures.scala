@@ -242,5 +242,3 @@ object Fixtures {
        }
      """
 
-}
-
