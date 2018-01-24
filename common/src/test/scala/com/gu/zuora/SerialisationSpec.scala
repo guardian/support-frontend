@@ -29,7 +29,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "SubscribeRequest" should "serialise to correct json" in {
-    val json = subscriptionRequest().asJson
+    val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
   }

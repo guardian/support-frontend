@@ -3,7 +3,7 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction}
+import com.gu.support.workers.model.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
 import com.gu.zuora.model._
 import org.joda.time.LocalDate
 
@@ -103,10 +103,11 @@ object Fixtures {
 
   val date = new LocalDate(2017, 5, 4)
 
-  def account(currency: Currency = GBP) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, StripeGateway)
+  def account(currency: Currency = GBP, paymentGateway: PaymentGateway = StripeGateway) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, paymentGateway)
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
+  val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911")
 
   val config = Configuration.zuoraConfigProvider.get()
   val monthlySubscriptionData = SubscriptionData(
@@ -122,7 +123,9 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
-  def subscriptionRequest(currency: Currency = GBP) = SubscribeRequest(List(SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
+  def creditCardSubscriptionRequest(currency: Currency = GBP) = SubscribeRequest(List(SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
+
+  def directDebitSubscriptionRequest = SubscribeRequest(List(SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
 
   val invalidMonthlySubsData = SubscriptionData(
     List(

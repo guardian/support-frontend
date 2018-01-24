@@ -32,7 +32,7 @@ trait ModelsCodecs {
 
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
-  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
+  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
 
   //Payment Methods are details from the payment provider
   //noinspection ConvertExpressionToSAM

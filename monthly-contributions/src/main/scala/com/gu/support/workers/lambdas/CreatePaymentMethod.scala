@@ -24,7 +24,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     logger.debug(s"CreatePaymentMethod state: $state")
 
     for {
-      paymentMethod <- createPaymentMethod(state.paymentFields, services)
+      paymentMethod <- createPaymentMethod(state, services)
       _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)
     } yield HandlerResult(
       getCreateSalesforceContactState(state, paymentMethod),
@@ -33,16 +33,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   }
 
   private def createPaymentMethod(
-    paymentType: PaymentFields,
+    state: CreatePaymentMethodState,
     services: Services
   ) =
-    paymentType match {
+    state.paymentFields match {
       case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
-      case dd: DirectDebitPaymentFields => Future.successful(DirectDebitPaymentMethod(dd.accountHolderName, dd.sortCode, dd.accountNumber))
-
+      case dd: DirectDebitPaymentFields =>
+        createDirectDebitPaymentMethod(dd, state.user)
     }
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
@@ -67,6 +67,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     payPalService
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
+
+  def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] =
+    Future.successful(DirectDebitPaymentMethod(
+      user.firstName,
+      user.lastName,
+      dd.accountHolderName,
+      dd.sortCode,
+      dd.accountNumber,
+      user.country
+    ))
 
   def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
     new RecurringContributionsMetrics(paymentMethod, "monthly")

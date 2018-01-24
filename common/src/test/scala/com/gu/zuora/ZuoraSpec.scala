@@ -1,12 +1,12 @@
 package com.gu.zuora
 
 import com.gu.config.Configuration.zuoraConfigProvider
-import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
+import com.gu.zuora.model.SubscribeRequest
 import com.gu.zuora.model.response.ZuoraErrorResponse
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
@@ -67,18 +67,20 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  "Subscribe request" should "succeed" in subscribeRequestWithCurrency(GBP)
+  "Subscribe request" should "succeed" in doRequest(creditCardSubscriptionRequest(GBP))
 
-  it should "work for $USD contributions" in subscribeRequestWithCurrency(USD)
+  it should "work for $USD contributions" in doRequest(creditCardSubscriptionRequest(USD))
 
-  it should "work for €Euro contributions" in subscribeRequestWithCurrency(EUR)
+  it should "work for €Euro contributions" in doRequest(creditCardSubscriptionRequest(EUR))
 
-  it should "work for AUD contributions" in subscribeRequestWithCurrency(AUD)
+  it should "work for AUD contributions" in doRequest(creditCardSubscriptionRequest(AUD))
 
-  def subscribeRequestWithCurrency(currency: Currency) = {
+  it should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
+
+  def doRequest(subscribeRequest: SubscribeRequest) = {
     //Accounts will be created in Sandbox
     val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
-    zuoraService.subscribe(subscriptionRequest(currency)).map {
+    zuoraService.subscribe(subscribeRequest).map {
       response =>
         response.head.success should be(true)
     }.recover {
