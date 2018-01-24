@@ -2,14 +2,21 @@ package utils
 
 import com.typesafe.scalalogging.LazyLogging
 import play.api.mvc.RequestHeader
+import scala.util.matching.Regex
 
 object CheckBrowser extends LazyLogging {
-  val unsupportedUA = "SamsungBrowser/3"
+  val unsupportedBrowsers: Seq[Regex] = Seq(
+    """SamsungBrowser\/[1-3]""".r,
+    """SamsungBrowser\/5.2""".r
+  )
+
   def unsupportedBrowser(implicit request: RequestHeader): Boolean = {
-    val ua = request.headers.get("User-Agent")
-    logger.info(s"### UA: $ua")
-    val unsupported = ua.exists(_.contains(unsupportedUA))
-    logger.info(s"### Unsupported: $unsupported")
-    unsupported
+    request.headers.get("User-Agent").flatMap { ua =>
+      unsupportedBrowsers.collectFirst({
+        case ex: Regex if ex.findFirstIn(ua).isDefined =>
+          logger.warn(s"Unsupported user agent: $ua")
+          true
+      })
+    }.getOrElse(false)
   }
 }
