@@ -1,0 +1,82 @@
+.component-ready-to-support {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.component-ready-to-support__content {
+  padding-bottom: $gu-v-spacing * 4;
+  position: relative;
+
+  @include mq($from: desktop) {
+    padding-left: 260px;
+  }
+
+  // The floating semicircle.
+  &:before {
+    content: "";
+    position: absolute;
+    right: 10px;
+    background-color: gu-colour(lifestyle-garnett-main-1);
+    border-bottom-left-radius: 600px;
+    border-bottom-right-radius: 600px;
+    width: 50px;
+    height: 25px;
+
+    @include mq($from: mobileLandscape) {
+      right: 20px;
+    }
+
+    @include mq($from: tablet) {
+      height: 30px;
+      width: 60px;
+    }
+
+    @include mq($from: desktop) {
+      left: 180px;
+    }
+  }
+}
+
+.component-ready-to-support__heading {
+  font-size: 36px;
+  line-height: 1;
+  color: gu-colour(garnett-neutral-1);
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+  margin-bottom: $gu-v-spacing * 2;
+
+  @include mq($until: mobileMedium) {
+    width: 80%;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 56px;
+    margin-bottom: $gu-v-spacing * 5;
+  }
+}
+
+.component-ready-to-support__heading-line {
+  display: block;
+}
+
+.component-cta-link--see-supporter-options {
+  height: 54px;
+  padding: 0 30px;
+  font-size: 14px;
+  line-height: 54px;
+  background-color: gu-colour(lifestyle-garnett-main-1);
+  transition: background-color .3s;
+
+  @include mq($from: tablet) {
+    width: 500px;
+  }
+
+  &:hover {
+    background-color: darken(gu-colour(lifestyle-garnett-main-1), 5%);
+  }
+
+  .svg-chevron-up {
+    height: 70%;
+    top: 8px;
+    right: 15px;
+  }
+}
