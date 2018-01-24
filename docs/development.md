@@ -431,23 +431,13 @@ h2 {
 
 ### 2. No nesting
 
-Nesting should be avoided. The only case where it is justified is inside a CSS file of a page, where we nest the entire style of a page inside the page id to avoid conflicts with other pages' rules.
-
-For example the CSS file of `examplePage` will have the following shape:
-
-```sass
-#example-page {
-  .component-example-component{
-    // Specific rules for a shared component in this specific page
-  }
-}
-```
+Nesting should be avoided. The only case where it is justified is inside a CSS file of a page, where we nest the entire style of a page inside the page's id to avoid conflicts with other pages' rules.
 
 #### Example:
 
-**Bad:**
+##### Bad:
 
-```scss
+```sass
 .component-cta-link {
   width: 200px;
 
@@ -457,15 +447,26 @@ For example the CSS file of `examplePage` will have the following shape:
 }
 ```
 
-**Good:**
+##### Good:
 
-```scss
+```sass
 .component-cta-link {
   width: 200px;
 }
 
 .component-cta-link__text {
   font-family: $gu-egyptian-web;
+}
+```
+##### Page nesting example
+
+For example the CSS file of `examplePage` will have the following shape:
+
+```sass
+#example-page {
+  .component-example-component{
+    // Specific rules for a shared component in this specific page
+  }
 }
 ```
 
@@ -479,7 +480,7 @@ rules out of the shared component' css file and we should place them inside the 
 As an example, a shared component which will have a different position (determine via `margin-right`) in each page, 
 should not have a `margin-right` value in the shared component'css file but inside each specific page. 
       
-### Example
+### 4. Full Example
 
 As an example consider the following CSS for a shared component called `DoubleHeading`. 
 
