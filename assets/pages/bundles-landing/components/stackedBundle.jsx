@@ -9,7 +9,7 @@ import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
-import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import PayPalContributionButton from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { contribCamelCase } from 'helpers/contributions';
@@ -21,7 +21,6 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Product } from './bundles';
 
 import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/flashSale';
 
@@ -38,6 +37,8 @@ import type { SubsUrls } from '../helpers/externalLinks';
 
 
 // ----- Types ----- //
+
+export type Product = 'CONTRIBUTE' | 'DIGITAL_SUBSCRIPTION' | 'PAPER_SUBSCRIPTION';
 
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */

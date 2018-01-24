@@ -46,11 +46,19 @@ class Application(
     Redirect(location + path, request.queryString)
   }
 
-  def bundleLanding(title: String, id: String, js: String, newDesigns: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
+  def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
     if (unsupportedBrowser) {
       Ok(views.html.unsupportedBrowserPage())
     } else {
-      if (newDesigns) {
+      if (newDesigns == "circles") {
+        Ok(views.html.bundleLanding(
+          title,
+          "support-landing-page-old",
+          "supportLandingPageOld.js",
+          contributionsPayPalEndpoint,
+          description = Some(stringsConfig.bundleLandingDescription)
+        ))
+      } else if (newDesigns == "circles-garnett") {
         Ok(views.html.bundleLanding(
           title,
           "support-landing-page",

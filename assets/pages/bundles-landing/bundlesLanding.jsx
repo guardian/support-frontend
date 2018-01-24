@@ -13,7 +13,6 @@ import { renderPage } from 'helpers/render';
 import { getQueryParameter } from 'helpers/url';
 
 import Introduction from './components/introduction';
-import Bundles from './components/bundles';
 import StackedBundle from './components/stackedBundle';
 import WhySupport from './components/whySupport';
 import WaysOfSupport from './components/waysOfSupport';
@@ -40,8 +39,6 @@ if (bundle === 'contribute') {
   bundlesSelected = <StackedBundle products={['CONTRIBUTE']} />;
 } else if (bundle === 'subscribe') {
   bundlesSelected = <StackedBundle products={['PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
-} else if (bundle === 'contribute-and-digipack') {
-  bundlesSelected = <Bundles products={['CONTRIBUTE', 'DIGITAL_SUBSCRIPTION']} />;
 } else {
   bundlesSelected = <StackedBundle products={['CONTRIBUTE', 'PAPER_SUBSCRIPTION', 'DIGITAL_SUBSCRIPTION']} />;
 }

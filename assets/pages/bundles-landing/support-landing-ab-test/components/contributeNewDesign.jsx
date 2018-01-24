@@ -10,7 +10,7 @@ import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos
 import Secure from 'components/secure/secure';
 import CtaLink from 'components/ctaLink/ctaLink';
 import PayPalContributionButton
-  from 'components/payPalContributionButton/payPalContributionButton';
+  from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { contribCamelCase } from 'helpers/contributions';
 

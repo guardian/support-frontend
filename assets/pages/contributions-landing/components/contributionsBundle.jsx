@@ -10,7 +10,7 @@ import Bundle from 'components/bundle/bundle';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
-import PayPalContributionButton from 'components/payPalContributionButton/payPalContributionButton';
+import PayPalContributionButton from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';

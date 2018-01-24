@@ -3,87 +3,69 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
+import thunkMiddleware from 'redux-thunk';
+import { applyMiddleware, compose } from 'redux';
+import { init as pageInit } from 'helpers/page/page';
+import { Provider } from 'react-redux';
+import { renderPage } from 'helpers/render';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
-import InfoSection from 'components/infoSection/infoSection';
-import SocialShare from 'components/socialShare/socialShare';
-
-import { statelessInit as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import TrackedComponent from 'components/trackedComponent/trackedComponent';
+import * as user from 'helpers/user/user';
+import reducer from './contributionsThankYouReducer';
+import MarketingConsent from './components/marketingConsent';
+import ThankYouIntroduction from './components/thankYouIntroduction';
+import QuestionsAndSocial from './components/questionsAndSocial';
 
 
 // ----- Page Startup ----- //
 
-pageInit();
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
 
-const upSellCampaignCode = 'oneoff-thankyou-page-recurring-upsell';
+const store = pageInit(
+  reducer,
+  undefined,
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
+);
 
-const country = detectCountry();
-const currency = detectCurrency(country);
+user.init(store.dispatch);
 
+const marketing = () => {
+  if (store.getState().page.user.email) {
+    return <MarketingConsent />;
+  }
+  return (
+    <div className="thankyou__wrapper">
+      <CtaLink
+        ctaId="return-to-the-guardian"
+        text="Return to the Guardian"
+        url="https://theguardian.com"
+        accessibilityHint="Go to the guardian dot com front page"
+      />
+    </div>
+  );
+};
 
 // ----- Render ----- //
 
 const content = (
-  <div className="gu-content">
-    <SimpleHeader />
-    <section className="thankyou gu-content-filler">
-      <div className="thankyou__content gu-content-filler__inner">
-        <div className="thankyou__wrapper">
-          <h1 className="thankyou__heading">Thank you</h1>
-          <h2 className="thankyou__subheading" id="qa-thank-you-message">
-            <p>
-              You&#39;ve made a vital contribution that will help us maintain our independent,
-                investigative journalism.
-            </p>
-          </h2>
-          <h2 className="thankyou__cta-ask">
-            We need ongoing support from our readers, now more than ever &ndash; show
-            sustained support for the Guardian from as little as {currency.glyph}5 a month
-          </h2>
-          <TrackedComponent component={{
-            componentType: 'ACQUISITIONS_OTHER',
-            id: 'oneoff-thankyou-page-recurring-upsell',
-            products: ['RECURRING_CONTRIBUTION'],
-            campaignCode: upSellCampaignCode,
-            labels: [],
-          }}
-          >
-            <CtaLink
-              ctaId="make-a-recurring-contribution"
-              text={`Contribute ${currency.glyph}5 a month`}
-              url={`/contribute/recurring?contributionValue=5&contribType=MONTHLY&currency=${currency.iso}&INTCMP=${upSellCampaignCode}`}
-              accessibilityHint={`Contribute from ${currency.glyph}5 a month`}
-            />
-          </TrackedComponent>
-
+  <Provider store={store}>
+    <div className="gu-content">
+      <SimpleHeader />
+      <div className="thankyou gu-content-filler">
+        <div className="thankyou__content gu-content-filler__inner">
+          <ThankYouIntroduction thankYouMessage="You&#39;ve made a vital contribution that will help us maintain our independent,
+              investigative journalism."
+          />
+          {marketing()}
+          <QuestionsAndSocial />
         </div>
-        <InfoSection heading="Questions?" className="thankyou__questions">
-          <p>
-            If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
-          </p>
-        </InfoSection>
-        <InfoSection
-          heading="Spread the word"
-          className="thankyou__spread-the-word"
-        >
-          <p>
-            We report for everyone. Let your friends and followers know that
-            you support independent journalism.
-          </p>
-          <SocialShare name="facebook" />
-          <SocialShare name="twitter" />
-        </InfoSection>
       </div>
-    </section>
-    <Footer />
-  </div>
+      <Footer />
+    </div>
+  </Provider>
 );
 
 renderPage(content, 'oneoff-contributions-thankyou-page');

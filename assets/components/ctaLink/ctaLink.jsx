@@ -7,6 +7,7 @@ import { SvgArrowRightStraight } from 'components/svg/svg';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
 import { addQueryParamToURL } from 'helpers/url';
+import { generateClassName } from 'helpers/utilities';
 
 import type { Node } from 'react';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -32,13 +33,12 @@ type PropTypes = {
 export default function CtaLink(props: PropTypes) {
 
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : uuidv4();
-  const ctaUniqueClassName = `component-cta-link ${props.ctaId}`;
   const urlString = props.url || '';
 
   return (
     <a
       id={props.id}
-      className={ctaUniqueClassName}
+      className={generateClassName('component-cta-link', props.ctaId)}
       href={props.acquisitionData ?
         addQueryParamToURL(urlString, 'acquisitionData', JSON.stringify(props.acquisitionData))
          : props.url

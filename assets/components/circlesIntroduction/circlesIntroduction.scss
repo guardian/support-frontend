@@ -1,0 +1,38 @@
+.component-circles-introduction {
+  background-color: gu-colour(nav-background-colour);
+  color: gu-colour(garnett-neutral-1);
+}
+
+.component-circles-introduction__heading {
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 30px;
+  padding-bottom: $gu-v-spacing * 4;
+
+  @include mq($from: mobileMedium) {
+    font-size: 30px;
+    line-height: 32px;
+  }
+
+  @include mq($from: phablet) {
+    font-size: 46px;
+    line-height: 50px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 48px;
+    line-height: 52px;
+  }
+}
+
+.component-circles-introduction__heading-line {
+  display: block;
+}
+
+.component-circles-introduction__highlight {
+  display: inline-block;
+  vertical-align: top;
+  padding: 4px;
+  background-color: gu-colour(news-garnett-highlight);
+}

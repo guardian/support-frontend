@@ -109,6 +109,10 @@ function getParticipationsFromUrl(): ?Participations {
 
 function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
 
+  if (cookie.get('_post_deploy_user')) {
+    return false;
+  }
+
   const audience = audiences[country];
 
   if (!audience) {

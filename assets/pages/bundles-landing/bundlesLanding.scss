@@ -210,19 +210,6 @@
           left: 250px;
         }
 
-        &.contribute-one_off {
-          bottom: 130px;
-        }
-
-        &.contribute-monthly {
-          bottom: 72px;
-        }
-      }
-
-      &.contribute-one_off {
-        @include mq($until: desktop) {
-          margin-top: 48px;
-        }
       }
 
       svg {
@@ -420,11 +407,7 @@
           }
         }
 
-        .component-cta-link.contribute-monthly {
-          bottom: $gu-v-spacing;
-        }
-
-        .component-cta-link.contribute-one_off {
+        .component-cta-link--contribute-one_off {
           bottom: $gu-v-spacing * 6;
         }
 
@@ -526,6 +509,15 @@
 
       h3 {
         color: gu-colour(sport-garnett-main-1);
+        font-family: $gu-text-sans-web;
+        font-size: 16px;
+        line-height: 20px;
+      }
+
+      p {
+        font-family: $gu-text-sans-web;
+        font-size: 14px;
+        line-height: 18px;
       }
 
       li {
@@ -951,14 +943,24 @@
   // ----- Shared Components ----- //
 
   .component-double-heading {
-      margin-bottom: (2 * $gu-v-spacing);
+    font-size: 28px;
+    line-height: 32px;
+    margin-bottom: (2 * $gu-v-spacing);
+
+    .component-double-heading__subheading {
+      font-family: $gu-text-sans-web;
+      font-size: 20px;
+      color: gu-colour(neutral-1);
+      line-height: 24px;
+
+      @include mq($from: phablet) {
+        font-size: 24px;
+        line-height: 28px;
+      }
+    }
   }
 
   .component-double-heading--variant-a {
     margin-bottom: 0;
-  }
-
-  .component-footer {
-    background-color: #121212;
   }
 }

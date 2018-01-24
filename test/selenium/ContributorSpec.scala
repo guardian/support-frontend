@@ -72,7 +72,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
     scenario("Monthly contribution sign-up with PayPal - USD") {
 
       val landingPage = ContributionsLanding("us")
-      val expectedPayment = "10.00"
+      val expectedPayment = "15.00"
 
       Given("that a test user goes to the contributions landing page")
       val testUser = new TestUser
@@ -83,7 +83,7 @@ class ContributorSpec extends FeatureSpec with Browser with GivenWhenThen with B
       landingPage.clickContribute
 
       Then("they should be redirected to register as an Identity user")
-      val register = Register(testUser, 10)
+      val register = Register(testUser, 15)
       assert(register.pageHasLoaded)
 
       Given("that the user fills in their personal details correctly")

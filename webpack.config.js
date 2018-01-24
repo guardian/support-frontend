@@ -47,8 +47,9 @@ module.exports = (env) => {
     entry: {
       favicons: 'images/favicons.js',
       styles: 'stylesheets/garnett.scss',
+      supportLandingPage: 'pages/support-landing/supportLanding.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
-      supportLandingPage: 'pages/bundles-landing/support-landing-ab-test/supportLanding.jsx',
+      supportLandingPageOld: 'pages/bundles-landing/support-landing-ab-test/supportLandingOld.jsx',
       contributionsLandingPageUK: 'pages/contributions-landing/contributionsLandingUK.jsx',
       contributionsLandingPageUS: 'pages/contributions-landing/contributionsLandingUS.jsx',
       regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
@@ -56,6 +57,7 @@ module.exports = (env) => {
       regularContributionsPendingPage: 'pages/contributions-thankyou/regularContributionsPending.jsx',
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
       oneoffContributionsThankyouPage: 'pages/contributions-thankyou/oneoffContributionsThankyou.jsx',
+      contributionsMarketingConfirmPage: 'pages/contributions-thankyou/contributionsMarketingConfirm.jsx',
       regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
       payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
       googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
