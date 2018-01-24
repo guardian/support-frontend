@@ -233,7 +233,7 @@ object Fixtures {
         ]
      """
 
-  val directDebitPaymentFields =
+  val directDebitPaymentFieldsJson =
     s"""
        {
         "accountHolderName": "Mickey Mouse",

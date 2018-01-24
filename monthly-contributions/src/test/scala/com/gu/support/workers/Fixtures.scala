@@ -69,15 +69,6 @@ object Fixtures {
                 }
                 """
 
-  val directDebitJson =
-    s"""
-       {
-        "accountHolderName": "Mickey Mouse",
-        "sortCode": "204532",
-        "accountNumber": "37462947"
-       }
-     """
-
   def createPayPalPaymentMethodJson(currency: Currency = GBP) =
     s"""{
           $requestIdJson,

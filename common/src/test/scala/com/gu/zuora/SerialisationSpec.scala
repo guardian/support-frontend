@@ -24,7 +24,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "PaymentFields" should "deserialise correctly" in {
-    val ddFields = decode[PaymentFields](directDebitPaymentFields)
+    val ddFields = decode[PaymentFields](directDebitPaymentFieldsJson)
     ddFields.isRight should be(true)
   }
 

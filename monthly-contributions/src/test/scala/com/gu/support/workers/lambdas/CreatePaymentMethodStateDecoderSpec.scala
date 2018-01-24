@@ -4,6 +4,7 @@ import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
+import com.gu.zuora.Fixtures.directDebitPaymentFieldsJson
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
@@ -38,7 +39,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     result.paymentFields.asInstanceOf[StripePaymentFields].stripeToken should be(stripeToken)
   }
 
-  "PaymentFieldsDecoder" should "be able to decode an Either[StripePaymentFields, PayPalPaymentFields]" in {
+  "PaymentFieldsDecoder" should "be able to decode PaymentFields" in {
     val stripe = decode[StripePaymentFields](stripeJson)
     val stripePaymentFields = stripe.right.get
 
@@ -48,7 +49,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val payPal = decode[PayPalPaymentFields](payPalJson)
     payPal.right.get.baid should be(validBaid)
 
-    val dd = decode[DirectDebitPaymentFields](directDebitJson)
+    val dd = decode[DirectDebitPaymentFields](directDebitPaymentFieldsJson)
     dd.right.get.accountHolderName should be("Mickey Mouse")
   }
 
