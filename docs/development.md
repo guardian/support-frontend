@@ -389,10 +389,10 @@ If you are firing a conversion event for a specific test, be sure that the `part
 
 Currently in `support-frontend` there are two types of components. 
 
-Shared component: Components that are used in more than one page, they are located inside the global `components` folder.
+Shared component: Components that are used in more than one page, they are located inside the global `components` folder. These should only contain rules which are context-independent. For instance, font sizes, colours, padding (since it's internal), margins of child elements. But margin on the parent, for example, should probably be avoided, because it's presupposing that it will be used in a particular place. This kind of positional styling should happen in the page-level CSS.
 
-Non-shared component: Components specific for a page and are not use outside that page. Typically located inside the 
-`components` folder of a certain page.
+Non-shared component: Components specific to a page which are not used outside that page. Typically located inside the 
+`components` folder of a certain page. 
 
 The shared components have their own `.scss` file. Additionally, there is a `.scss` for every page, where we put the 
 non-shared components and we add rules for the shared components in that specific page.
@@ -405,17 +405,16 @@ The classes should follow the [BEM](http://getbem.com/introduction/) convention 
 
 ### 2. No nesting
 
-Nesting should be avoided. The only case where it is justify is inside a CSS file of a page, where we nest the entire style of a page inside the page id to avoid conflicts with other pages' rules.
+Nesting should be avoided. The only case where it is justified is inside a CSS file of a page, where we nest the entire style of a page inside the page id to avoid conflicts with other pages' rules.
 
 For example the CSS file of `examplePage` will have the following shape:
 
-```$css
+```sass
 #example-page {
-    .component-example-component{
-        // Specific rules for a shared component in this specific page
-    }
+  .component-example-component{
+    // Specific rules for a shared component in this specific page
+  }
 }
-
 ```
 
 ### 3. Avoid overriding shared components CSS properties
@@ -433,31 +432,31 @@ should not have a `margin-right` value in the shared component'css file but insi
 As an example consider the following CSS for a shared component called `DoubleHeading`. 
 
 
-```$css
+```sass
 .component-double-heading {
-	font-size: 28px;
-	line-height: 32px;
+  font-size: 28px;
+  line-height: 32px;
 }
 
 .component-double-heading__heading {
-    font-weight: 900;
-    font-family: $gu-egyptian-web;
-    color: gu-colour(neutral-1);
+  font-weight: 900;
+  font-family: $gu-egyptian-web;
+  color: gu-colour(neutral-1);
 }
 
 .component-double-heading__subheading {
-    color: gu-colour(neutral-1);
-    font-family: $gu-text-sans-web;
-    font-weight: normal;
-    font-size: 20px;
-    line-height: 24px;
+  color: gu-colour(neutral-1);
+  font-family: $gu-text-sans-web;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
 
-    @include mq($from: phablet) {
-        font-size: 24px;
-        line-height: 28px;
-    }
+  @include mq($from: phablet) {
+    font-size: 24px;
+    line-height: 28px;
+  }
 }
 
 ```
 
-It is possible to see that we avoid nesting, we use a BEM approach and we prefix the classes with `component`. 
+Note that we avoid nesting, we use a BEM approach and we prefix the classes with `component`. 
