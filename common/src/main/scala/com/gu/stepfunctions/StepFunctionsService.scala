@@ -45,6 +45,7 @@ class StepFunctionsService extends LazyLogging {
     for {
       response <- client.listExecutions(arn, nextToken)
       maybeUser <- findUserDataInExecutions(userId, response.getExecutions.toList)
+      // scalastyle:off null
       result <- if (maybeUser.isDefined || response.getNextToken == null)
         Future.successful(maybeUser)
       else
