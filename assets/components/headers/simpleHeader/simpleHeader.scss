@@ -1,36 +1,44 @@
 .component-simple-header {
   background-color: gu-colour(nav-background-colour);
 
-  .component-simple-header__link {
-    float: right;
-    height: 100%;
-  }
-
   .svg-guardian-logo {
     height: 100%;
   }
 
-  .component-simple-header__content {
-    padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
-    height: 68px;
+  // The quadruple lines under the header.
+  &:after {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+    background-color: #fff;
+    display: block;
+    content: '';
+  }
+}
 
-    @include mq($from: mobileMedium) {
-      height: 78px;
-    }
+.component-simple-header__link {
+  float: right;
+  height: 100%;
+}
 
-    @include mq($from: mobileLandscape) {
-      height: 85px;
-      padding-left: $gu-h-spacing;
-      padding-right: $gu-h-spacing;
-    }
+.component-simple-header__content {
+  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+  height: 68px;
 
-    @include mq($from: phablet) {
-      padding-left: 0;
-      padding-right: 0;
-    }
+  @include mq($from: mobileMedium) {
+    height: 78px;
+  }
 
-    @include mq($from: tablet) {
-      height: 104px;
-    }
+  @include mq($from: mobileLandscape) {
+    height: 85px;
+    padding-left: $gu-h-spacing;
+    padding-right: $gu-h-spacing;
+  }
+
+  @include mq($from: phablet) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @include mq($from: tablet) {
+    height: 104px;
   }
 }
