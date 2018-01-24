@@ -38,3 +38,16 @@
     }
     @return $string;
 }
+
+// Helper to create the multilines used in e.g. the header.
+// $number - the number of lines
+// $colour - the colour of the lines
+@mixin multiline($number, $colour, $position: bottom) {
+    $bgSize: $number * 4 - 3;
+
+    background-image: repeating-linear-gradient(to bottom, $colour, $colour 1px, transparent 1px, transparent 4px);
+    background-repeat: repeat-x;
+    background-position: $position;
+    background-size: 1px #{$bgSize}px;
+    height: #{$bgSize}px;
+}
