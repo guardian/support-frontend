@@ -403,6 +403,32 @@ We follow the principles below when we write CSS files:
 
 The classes should follow the [BEM](http://getbem.com/introduction/) convention system. The shared components should have the `component` prefix in their class names. 
 
+#### Example:
+
+**Bad:**
+
+```scss
+#double-heading {
+  font-size: 22px;
+}
+
+h2 {
+  color: gu-colour(neutral-1);
+}
+```
+
+**Good:**
+
+```scss
+.component-double-heading {
+  font-size: 22px;
+}
+
+.component-double-heading__subheading {
+  color: gu-colour(neutral-1);
+}
+```
+
 ### 2. No nesting
 
 Nesting should be avoided. The only case where it is justified is inside a CSS file of a page, where we nest the entire style of a page inside the page id to avoid conflicts with other pages' rules.
@@ -414,6 +440,32 @@ For example the CSS file of `examplePage` will have the following shape:
   .component-example-component{
     // Specific rules for a shared component in this specific page
   }
+}
+```
+
+#### Example:
+
+**Bad:**
+
+```scss
+.component-cta-link {
+  width: 200px;
+
+  .component-cta-link__text {
+    font-family: $gu-egyptian-web;
+  }
+}
+```
+
+**Good:**
+
+```scss
+.component-cta-link {
+  width: 200px;
+}
+
+.component-cta-link__text {
+  font-family: $gu-egyptian-web;
 }
 ```
 
