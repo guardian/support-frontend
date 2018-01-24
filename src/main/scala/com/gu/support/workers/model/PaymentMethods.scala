@@ -25,8 +25,12 @@ case class PayPalReferenceTransaction(
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(
-  accountHolderName: String,
-  sortCode: String,
-  accountNumber: String,
-  `type`: String = "DirectDebit"
+  firstName: String,
+  lastName: String,
+  bankTransferAccountName: String,
+  bankCode: String,
+  bankTransferAccountNumber: String,
+  country: Country = Country.UK,
+  bankTransferType: String = "DirectDebitUK",
+  `type`: String = "BankTransfer"
 ) extends PaymentMethod
