@@ -14,6 +14,7 @@ Support Frontend, how they interact and how you can start adding code to this re
 7. [Yarn commands](#7-yarn-commands)
 8. [A/B Test framework](#8-ab-test-framework)
 9. [Test environments](#9-test-environments)
+10. [CSS guidelines](#10-css-guidelines)
 
 ## 1. Getting started
 
@@ -384,3 +385,79 @@ If you are firing a conversion event for a specific test, be sure that the `part
 |   `Prod`  | `false` (real user) |  `Prod`  | `Prod`   |       `Prod`      | `Prod`  |
  
 
+## 10 CSS guidelines
+
+Currently in `support-frontend` there are two types of components. 
+
+Shared component: Components that are used in more than one page, they are located inside the global `components` folder.
+
+Non-shared component: Components specific for a page and are not use outside that page. Typically located inside the 
+`components` of a certain page.
+
+The shared components have their own `.scss` file. Additionally, there is a `.scss` for evary page, where we put the 
+non-shared components and we add rules for the shared components in that specific page.
+
+We write CSS following the principles below:
+
+### 1. Apply style only via css classes. 
+
+The classes should follow the [BEM](http://getbem.com/introduction/) convention system. The shared components should have the `component` prefix in their class names. 
+
+### 2. No nesting
+
+Nesting should be avoided. The only case where it is justify is inside a CSS file of a page, where we nest the entire style of a page inside the page id to avoid conflicts with other pages' rules.
+
+For example the CSS file of `examplePage` will have the following shape:
+
+```$css
+#example-page {
+    .component-example-component{
+        // Specific rules for a shared component in this specific page
+    }
+}
+
+```
+
+### 3. Avoid overriding shared components CSS properties
+
+When we add a shared component into a page, sometimes we would like to add extra CSS rules for that component. 
+Those rules should be put inside the CSS file of a page. Additionally, we should not overide any rule of the shared 
+component. If we find ourselves overriding a lot of CSS rules, that is an indicator that we probably should move those 
+rules out of the shared component' css file and we should place them inside the pace specific file.
+
+As an example, a shared component which will have a different position (determine via `margin-right`) in each page, 
+should not have a `margin-right` value in the shared component'css file but inside each specific page. 
+      
+### Example
+
+As an example consider the following CSS for a shared component called `DoubleHeading`. 
+
+
+```$css
+.component-double-heading {
+	font-size: 28px;
+	line-height: 32px;
+}
+
+.component-double-heading__heading {
+    font-weight: 900;
+    font-family: $gu-egyptian-web;
+    color: gu-colour(neutral-1);
+}
+
+.component-double-heading__subheading {
+    color: gu-colour(neutral-1);
+    font-family: $gu-text-sans-web;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+
+    @include mq($from: phablet) {
+        font-size: 24px;
+        line-height: 28px;
+    }
+}
+
+```
+
+It is possible to see that we avoid nesting, we use a BEM approach and we prefix the classes with `component`. 
