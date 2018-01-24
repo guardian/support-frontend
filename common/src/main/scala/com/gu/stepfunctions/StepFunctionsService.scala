@@ -29,7 +29,7 @@ class StepFunctionsService extends LazyLogging {
 
   def findUserData(userId: String)(implicit ec: ExecutionContext): Future[Option[User]] =
     getStateMachines()
-      .flatMap(sm => findUserDataInStateMachine(userId, sm.head.getStateMachineArn)) //TODO: run for all state machines
+      .flatMap(sm => findUserDataInStateMachine(userId, sm.head.getStateMachineArn))
 
   private[stepfunctions] def getStateMachines()(implicit ec: ExecutionContext): Future[List[StateMachineListItem]] =
     client.listStateMachines.map { response =>
@@ -45,7 +45,7 @@ class StepFunctionsService extends LazyLogging {
     for {
       response <- client.listExecutions(arn, nextToken)
       maybeUser <- findUserDataInExecutions(userId, response.getExecutions.toList)
-      result <- if (maybeUser.isDefined || response.getNextToken == "")
+      result <- if (maybeUser.isDefined || response.getNextToken == null)
         Future.successful(maybeUser)
       else
         findUserDataInStateMachine(userId, arn, Some(response.getNextToken)) //Hold on to your hats!

@@ -34,11 +34,13 @@ object Dependencies {
   val stm = "org.scala-stm" %% "scala-stm" % "0.8"
   val sentry = "com.getsentry.raven" % "raven-logback" % "8.0.3"
   val findBugs = "com.google.code.findbugs" % "jsr305" % "3.0.2"
+  val guava = "com.google.guava" % "guava" % "23.6-jre"
+
 
   val commonDependencies: Seq[ModuleID] = Seq(config, logback, scalaLogging, sentry, lambdaLogging, joda, dispatch,
     supportInternationalisation, supportModels, supportConfig, acquisitionEventProducer, awsCloudwatch, awsS3, awsSQS,
     awsLambdas, awsStepFunctions, okhttp, scalaUri, cats, circeCore, circeGeneric, circeGenericExtras, circeParser, stm, mokito,
-    scalaTest, findBugs)
+    scalaTest, findBugs, guava)
   val monthlyContributionsDependencies: Seq[ModuleID] = Seq(mockWebserver)
 
 }
