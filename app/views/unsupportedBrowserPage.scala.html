@@ -1,4 +1,6 @@
-@()(implicit request: RequestHeader)
+@import assets.AssetsResolver
+
+@()(implicit request: RequestHeader, assets: AssetsResolver)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +8,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="google-site-verification" content="IU-vqTBscxkgU3J_f5i10_i624mvE3IjvYpeVPB2A98" />
-        <link rel="stylesheet" href="/assets/stylesheets/styles.css">
+        <link rel="stylesheet" href="@assets("styles.css")">
     </head>
     <body>
         <div class="gu-content">
