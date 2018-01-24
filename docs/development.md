@@ -392,12 +392,12 @@ Currently in `support-frontend` there are two types of components.
 Shared component: Components that are used in more than one page, they are located inside the global `components` folder.
 
 Non-shared component: Components specific for a page and are not use outside that page. Typically located inside the 
-`components` of a certain page.
+`components` folder of a certain page.
 
-The shared components have their own `.scss` file. Additionally, there is a `.scss` for evary page, where we put the 
+The shared components have their own `.scss` file. Additionally, there is a `.scss` for every page, where we put the 
 non-shared components and we add rules for the shared components in that specific page.
 
-We write CSS following the principles below:
+We follow the principles below when we write CSS files:
 
 ### 1. Apply style only via css classes. 
 
