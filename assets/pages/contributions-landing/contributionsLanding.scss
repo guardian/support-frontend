@@ -339,7 +339,8 @@ strong {
 	}
 
 	.component-double-heading {
-    	margin-bottom: (2 * $gu-v-spacing);
+  	margin-bottom: (2 * $gu-v-spacing);
+  	color: gu-colour(neutral-1);
 	}
 
 	.component-double-heading__heading {
@@ -354,9 +355,13 @@ strong {
 	.component-double-heading__subheading {
 		padding-top: 4px;
 		height: 24px;
+		font-size: 20px;
+		line-height: 24px;
 
 		@include mq($from: phablet) {
 			height: 28px;
+			font-size: 24px;
+			line-height: 28px;
 		}
 	}
 
