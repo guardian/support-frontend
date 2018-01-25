@@ -6,6 +6,7 @@ import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
+import utils.CheckBrowser._
 import config.StringsConfig
 
 import scala.concurrent.ExecutionContext
@@ -46,24 +47,28 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles") {
-      Ok(views.html.bundleLanding(
-        title,
-        "support-landing-page-old",
-        "supportLandingPageOld.js",
-        contributionsPayPalEndpoint,
-        description = Some(stringsConfig.bundleLandingDescription)
-      ))
-    } else if (newDesigns == "circles-garnett") {
-      Ok(views.html.bundleLanding(
-        title,
-        "support-landing-page",
-        "supportLandingPage.js",
-        contributionsPayPalEndpoint,
-        description = Some(stringsConfig.bundleLandingDescription)
-      ))
+    if (unsupportedBrowser) {
+      Ok(views.html.unsupportedBrowserPage())
     } else {
-      Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      if (newDesigns == "circles") {
+        Ok(views.html.bundleLanding(
+          title,
+          "support-landing-page-old",
+          "supportLandingPageOld.js",
+          contributionsPayPalEndpoint,
+          description = Some(stringsConfig.bundleLandingDescription)
+        ))
+      } else if (newDesigns == "circles-garnett") {
+        Ok(views.html.bundleLanding(
+          title,
+          "support-landing-page",
+          "supportLandingPage.js",
+          contributionsPayPalEndpoint,
+          description = Some(stringsConfig.bundleLandingDescription)
+        ))
+      } else {
+        Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
+      }
     }
   }
 
