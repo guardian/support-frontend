@@ -76,7 +76,8 @@ const getPaymentFields =
     accountHolderName?: string,
     paymentFieldName: string,
     userId: string,
-  ) => {
+  ): ?(PayPalDetails | StripeDetails | DirectDebitDetails
+    ) => {
     let response = null;
     switch (paymentFieldName) {
       case 'baid':
