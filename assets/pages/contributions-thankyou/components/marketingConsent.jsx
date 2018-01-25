@@ -27,12 +27,6 @@ type PropTypes = {
 
 function MarketingConsent(props: PropTypes) {
 
-  const showError = (consentApiError: boolean) => {
-    if (consentApiError) {
-      return <ErrorMessage message="Error confirming selection. Please try again later" />;
-    }
-    return null;
-  };
   if (props.email) {
     return (
       <div>
@@ -50,7 +44,10 @@ function MarketingConsent(props: PropTypes) {
                 labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
               />
             </h2>
-            {showError(props.consentApiError)}
+            <ErrorMessage
+              showError={props.consentApiError}
+              message="Error confirming selection. Please try again later"
+            />
             <CtaLink
               onClick={
                 () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
