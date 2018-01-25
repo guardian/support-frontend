@@ -22,7 +22,7 @@ export default function ErrorMessage(props: PropTypes) {
 
     return (
       <div className="component-error-message">
-        <SvgExclamation /><span>{props.message}</span>
+        <SvgExclamation /><span className="component-error-message__message">{props.message}</span>
       </div>
     );
 
