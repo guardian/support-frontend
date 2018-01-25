@@ -22,7 +22,7 @@ import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
-import { getDigiPackItems, getPaperItemsForStackedBundle, getPaperDigitalItemsForStackedBundle, inOfferPeriod } from '../helpers/flashSale';
+import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from '../helpers/flashSale';
 
 import {
   changeContribType,
@@ -129,15 +129,13 @@ const monthlyContribCopy: ContribAttrs = {
 };
 
 
-const componentBundleModifierClass = `component-bundle--stacked ${inOfferPeriod() ? 'component-bundle--flash-sale' : ''}`;
-
 const digitalCopy: SubscribeAttrs = {
   heading: 'Digital subscription',
   subheading: '£11.99/month',
   listItems: getDigiPackItems(),
   ctaText: 'Start your 14 day trial',
   ctaId: 'digital-sub',
-  modifierClass: `digital ${componentBundleModifierClass}`,
+  modifierClass: 'digital component-bundle--stacked',
   ctaLink: 'https://subscribe.theguardian.com/uk/digital',
   ctaAccessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
 };
@@ -145,10 +143,10 @@ const digitalCopy: SubscribeAttrs = {
 const paperCopy: SubscribeAttrs = {
   heading: 'Paper subscription',
   subheading: 'from £10.79/month',
-  listItems: getPaperItemsForStackedBundle(),
+  listItems: getPaperItems(),
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
-  modifierClass: `paper ${componentBundleModifierClass}`,
+  modifierClass: 'paper component-bundle--stacked',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper',
   ctaAccessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
 };
@@ -156,10 +154,10 @@ const paperCopy: SubscribeAttrs = {
 const paperDigitalCopy: SubscribeAttrs = {
   heading: 'Paper+digital',
   subheading: 'from £22.06/month',
-  listItems: getPaperDigitalItemsForStackedBundle(),
+  listItems: getPaperDigitalItems(),
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
-  modifierClass: `paperDigital ${componentBundleModifierClass}`,
+  modifierClass: 'paperDigital component-bundle--stacked',
   ctaLink: 'https://subscribe.theguardian.com/collection/paper-digital',
   ctaAccessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
 };

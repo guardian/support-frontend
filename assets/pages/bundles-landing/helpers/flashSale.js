@@ -2,20 +2,43 @@
 
 import { getQueryParameter } from 'helpers/url';
 
-function inOfferPeriod(): boolean {
-  const now = Date.now();
-  // Days are 1 based, months are 0 based
-  // The offer is valid between 19th December 2017 & 3rd January 2018
-  const startTime = new Date(2017, 11, 19, 0, 0).getTime();
-  const endTime = new Date(2018, 0, 4, 0, 0).getTime();
+type ProductType = 'digital' | 'paper' | 'paperAndDigital';
 
-  return (now > startTime && now < endTime) || getQueryParameter('flash_sale') === 'true' || false;
+function inOfferPeriod(product: ProductType): boolean {
+  // Days are 1 based, months are 0 based
+  const startTime = new Date(2018, 0, 29, 0, 0).getTime(); // 29th Jan 2018
+  const endTime = new Date(2018, 1, 25, 0, 0).getTime(); // 25th Feb 2018
+
+  // The current sale is paper & paper + digital only, digital is unaffected
+  const included = {
+    digital: false,
+    paper: true,
+    paperAndDigital: true,
+  };
+
+  const now = Date.now();
+  return (now > startTime && now < endTime && included[product]) ||
+    (included[product] && getQueryParameter('flash_sale') === 'true');
 }
 
+// Promo codes
+const promoCodes = {
+  digital: 'p/DXX83X',
+  paper: 'p/GRB80P',
+  paperAndDigital: 'p/GRB80X',
+};
+
+function getPromoCode(product: ProductType, defaultCode: string) {
+  if (inOfferPeriod(product)) {
+    return promoCodes[product];
+  }
+  return defaultCode;
+}
+
+// Copy text
 const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
 const saveMoneyOnRetailPrice = { heading: 'Save money on the retail price' };
 const getAllBenefits = { heading: 'Get all the benefits of a digital subscription' };
-const getAllBenefitsWithPaperPlus = { heading: 'Get all the benefits of a digital subscription with paper+digital' };
 const chooseYourPackage = {
   heading: 'Choose your package and delivery method',
   text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
@@ -33,31 +56,29 @@ function getDigiPackItems() {
     },
   ];
 
-  if (inOfferPeriod()) {
+  if (inOfferPeriod('digital')) {
     return [offerItem, ...items];
   }
   return items;
 }
 
 function getPaperItems() {
-  return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefitsWithPaperPlus];
-}
-
-// In the stacked bundle, paper and paper+digital are in separate boxes.
-// So in the paper only box, we don't mention the digital benefits.
-// And in the paper+digital box, we do
-function getPaperItemsForStackedBundle() {
+  if (inOfferPeriod('paper')) {
+    return [offerItem, chooseYourPackage];
+  }
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
-function getPaperDigitalItemsForStackedBundle() {
+function getPaperDigitalItems() {
+  if (inOfferPeriod('paperAndDigital')) {
+    return [offerItem, chooseYourPackage, getAllBenefits];
+  }
   return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
 }
 
 export {
-  inOfferPeriod,
   getDigiPackItems,
   getPaperItems,
-  getPaperItemsForStackedBundle,
-  getPaperDigitalItemsForStackedBundle,
+  getPaperDigitalItems,
+  getPromoCode,
 };
