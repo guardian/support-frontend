@@ -17,7 +17,8 @@ function inOfferPeriod(product: ProductType): boolean {
   };
 
   const now = Date.now();
-  return (now > startTime && now < endTime && included[product]) || (included[product] && getQueryParameter('flash_sale') === 'true') || false;
+  return (now > startTime && now < endTime && included[product]) ||
+    (included[product] && getQueryParameter('flash_sale') === 'true');
 }
 
 // Promo codes
