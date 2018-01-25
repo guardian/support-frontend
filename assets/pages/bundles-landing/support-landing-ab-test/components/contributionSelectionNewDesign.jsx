@@ -55,27 +55,10 @@ function getClassName(contributionType: ContributionType) {
 
 }
 
-function showError(
-  error: ContributionError,
-  currency: Currency,
-  contributionType: ContributionType,
-) {
 
-  if (error) {
+// ----- Component ----- //
 
-    const message = contributionsErrorMessage(error, currency, contributionType);
-    return <ErrorMessage message={message} />;
-
-  }
-
-  return null;
-
-}
-
-
-// ----- Exports ----- //
-
-export default function ContributionSelection(props: PropTypes) {
+function ContributionSelection(props: PropTypes) {
 
   return (
     <div className={getClassName(props.contributionType)}>
@@ -108,9 +91,37 @@ export default function ContributionSelection(props: PropTypes) {
         <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
           {getCustomAmountA11yHint(props.contributionType, props.country, props.currency)}
         </p>
-        {showError(props.contributionError, props.currency, props.contributionType)}
+        <Error
+          error={props.contributionError}
+          currency={props.currency}
+          contributionType={props.contributionType}
+        />
       </div>
     </div>
   );
 
 }
+
+
+// ----- Auxiliary Components ----- //
+
+function Error(props: {
+  error: ContributionError,
+  currency: Currency,
+  contributionType: ContributionType,
+}) {
+
+  let message = null;
+
+  if (props.error) {
+    message = contributionsErrorMessage(props.error, props.currency, props.contributionType);
+  }
+
+  return <ErrorMessage message={message} />;
+
+}
+
+
+// ----- Exports ----- //
+
+export default ContributionSelection;
