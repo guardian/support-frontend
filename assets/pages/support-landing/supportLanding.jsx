@@ -9,6 +9,8 @@ import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import WhySupport from 'components/whySupport/whySupport';
+import ReadyToSupport from 'components/readyToSupport/readyToSupport';
+import PatronsEvents from 'components/patronsEvents/patronsEvents';
 
 import { renderPage } from 'helpers/render';
 
@@ -21,6 +23,8 @@ const content = (
     <CirclesIntroduction />
     <ThreeSubscriptions />
     <WhySupport />
+    <ReadyToSupport ctaUrl="#" />
+    <PatronsEvents />
     <Footer />
   </div>
 );

@@ -1,15 +1,15 @@
 package codecs
 
-import org.scalatest.{MustMatchers, WordSpec}
-import codecs.CirceDecoders.{abTestDecoder, ophanIdsCodec, referrerAcquisitionDataCodec}
-import io.circe.Json
-import io.circe.parser.parse
 import cats.syntax.either._
+import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import models.{CheckBankAccountDetails, DirectDebitDetails}
+import com.gu.support.workers.model.DirectDebitPaymentFields
+import io.circe.parser.parse
+import models.CheckBankAccountDetails
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
+import org.scalatest.{MustMatchers, WordSpec}
 class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "referrerAcquisitionDataCodec" should {
@@ -115,10 +115,10 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       val parsedJson = parse(json).toOption.get
 
-      val directDebitData: DirectDebitDetails = DirectDebitDetails.codec.decodeJson(parsedJson).right.get
+      val directDebitData: DirectDebitPaymentFields = directDebitPaymentFieldsCodec.decodeJson(parsedJson).right.get
 
-      directDebitData.sortCode.value mustBe "121212"
-      directDebitData.accountNumber.value mustBe "12121212"
+      directDebitData.sortCode mustBe "121212"
+      directDebitData.accountNumber mustBe "12121212"
       directDebitData.accountHolderName mustBe "Example Name"
     }
   }
@@ -141,6 +141,5 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       checkBankAccountData.accountNumber.value mustBe "12121212"
     }
   }
-
 }
 
