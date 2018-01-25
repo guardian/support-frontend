@@ -88,7 +88,7 @@ class PayPal(
       nativeAbTests,
       supportRedirect
     ).map { email =>
-      Redirect("/contribute/one-off/thankyou").flashing("email" -> email)
+      Redirect("/contribute/one-off/thankyou").flashing("email" -> email.getOrElse(""))
     } getOrElse Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
   }
 

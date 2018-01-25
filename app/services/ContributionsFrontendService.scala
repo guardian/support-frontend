@@ -3,7 +3,7 @@ package services
 import cats.data.EitherT
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{JsSuccess, Json, Reads, Writes}
 
 import scala.concurrent.duration._
 import cats.implicits._
@@ -36,6 +36,13 @@ class ContributionsFrontendService(wsClient: WSClient) {
     )(func)
   }
 
+  def getEmailFromRequest(resp: WSResponse): Option[String] = {
+    (resp.json \ "email").validate[String] match {
+      case x: JsSuccess[String] => Some(x.get)
+      case _ => None
+    }
+  }
+
   // scalastyle:off parameter.number
   def execute(
     paymentId: String,
@@ -54,14 +61,12 @@ class ContributionsFrontendService(wsClient: WSClient) {
     refererAbTest: Option[AbTest],
     nativeAbTests: Option[Set[AbTest]],
     supportRedirect: Option[Boolean]
-  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, Option[String]] = {
     import utils.QueryStringBindableUtils.Syntax._
     import utils.ThriftUtils.Implicits._
     val endpoint = s"/paypal/uk/execute"
     val parameters = List(
-      Some("paymentId" -> paymentId),
-      Some("token" -> token),
-      Some("PayerID" -> PayerID),
+      Some("paymentId" -> paymentId), Some("token" -> token), Some("PayerID" -> PayerID),
       cmp.map("CMP" -> _),
       intCmp.map("INTCMP" -> _),
       pvid.map("pvid" -> _),
@@ -77,7 +82,12 @@ class ContributionsFrontendService(wsClient: WSClient) {
       supportRedirect.map(value => "supportRedirect" -> value.toString)
     ).flatten
     get(endpoint, headers(req), parameters) { resp =>
-      (resp.json \ "email").validate[String].asEither.leftMap(_.mkString(","))
+      Logger.info(resp.toString)
+      if (resp.status >= 200 && resp.status < 300) {
+        Right(getEmailFromRequest(resp))
+      } else {
+        Left(s"Error: ${resp.toString}")
+      }
     }
   }
 
