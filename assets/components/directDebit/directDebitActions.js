@@ -68,18 +68,25 @@ function payDirectDebitClicked(callback: Function): Function {
 
     checkAccount(bankSortCode, bankAccountNumber, isTestUser, csrf)
       .then((response) => {
+        if (!response.ok) {
+          throw new Error('code1');
+        }
+        return response.json();
+      })
+      .then((response) => {
         if (!response.accountValid) {
           throw new Error('code1');
         }
       }).then(() => {
         callback(undefined, bankAccountNumber, bankSortCode, accountHolderName);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         let msg = '';
         switch (e.message) {
           case 'code1': msg = 'Your payment details are invalid. Please check them and try again';
             break;
 
-          default: msg = 'Your payment details are invalid. Please check them and try again.';
+          default: msg = 'Oops, something went wrong, please try again later';
 
         }
         dispatch(setDirectDebitFormError(msg));
