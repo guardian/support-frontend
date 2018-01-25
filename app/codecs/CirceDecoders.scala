@@ -41,7 +41,6 @@ object CirceDecoders {
   implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
 
-  //noinspection ConvertExpressionToSAM
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
     override final def apply(a: PaymentFields): Json = a match {
       case p: PayPalPaymentFields => Encoder[PayPalPaymentFields].apply(p)
