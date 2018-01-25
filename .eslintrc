@@ -34,7 +34,14 @@
     "import/no-duplicates": "off",
     "import/no-extraneous-dependencies": "off",
     "padded-blocks": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-for": [ 2, {
+      "components": [ "Label" ],
+      "required": {
+        "some": [ "nesting", "id" ]
+      },
+      "allowChildren": false
+    }]
   },
   "settings": {
     "import/resolver": "webpack",
