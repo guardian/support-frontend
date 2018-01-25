@@ -11,7 +11,6 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
 
-import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
