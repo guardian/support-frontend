@@ -57,11 +57,9 @@ function getStatusMessage(
     return <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   } else if (hide) {
     return <ErrorMessage message="Please fill in all the fields above." />;
-  } else if (error !== null && error !== undefined) {
-    return <ErrorMessage message={error} />;
   }
 
-  return null;
+  return <ErrorMessage message={error} />;
 
 }
 
