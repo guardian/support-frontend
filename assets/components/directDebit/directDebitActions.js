@@ -86,7 +86,7 @@ function payDirectDebitClicked(callback: Function): Function {
           case 'code1': msg = 'Your payment details are invalid. Please check them and try again';
             break;
 
-          default: msg = 'Your payment details are invalid. Please check them and try again.';
+          default: msg = 'Oops, something went wrong, please try again later';
 
         }
         dispatch(setDirectDebitFormError(msg));
