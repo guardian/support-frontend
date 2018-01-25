@@ -34,6 +34,15 @@ type ContributionRequest = {
 
 type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
 
+type PayPalDetails = {|
+  'baid': string
+|};
+
+type StripeDetails = {|
+  userId: string,
+  stripeToken: string,
+|};
+
 type DirectDebitDetails= {|
   accountHolderName: string,
   sortCode: string,
@@ -46,9 +55,7 @@ type RegularContribFields = {|
   country: IsoCountry,
   state?: UsState,
   contribution: ContributionRequest,
-  paymentFields: {
-    [PaymentFieldName]: string,
-  } | DirectDebitDetails,
+  paymentFields: PayPalDetails | StripeDetails | DirectDebitDetails,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
@@ -68,22 +75,39 @@ const getPaymentFields =
     sortCode?: string,
     accountHolderName?: string,
     paymentFieldName: string,
+    userId: string,
   ) => {
-    if (token !== undefined) {
-      return {
-        [paymentFieldName]: token,
-      };
-    } else if (accountHolderName !== undefined &&
-      sortCode !== undefined &&
-      accountNumber !== undefined) {
-
-      return {
-        accountHolderName,
-        sortCode,
-        accountNumber,
-      };
+    let response = null;
+    switch (paymentFieldName) {
+      case 'baid':
+        if (token) {
+          response = {
+            [paymentFieldName]: token,
+          };
+        }
+        break;
+      case 'stripeToken':
+        if (token) {
+          response = {
+            userId,
+            [paymentFieldName]: token,
+          };
+        }
+        break;
+      case 'directDebitData':
+        if (accountHolderName && sortCode && accountNumber) {
+          response = {
+            accountHolderName,
+            sortCode,
+            accountNumber,
+          };
+        }
+        break;
+      default:
+        response = null;
     }
-    return null;
+
+    return response;
   };
 
 function requestData(
@@ -119,6 +143,7 @@ function requestData(
     sortCode,
     accountHolderName,
     paymentFieldName,
+    user.id,
   );
 
   if (!paymentFields) {
