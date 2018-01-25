@@ -53,6 +53,7 @@ object SendAcquisitionEvent {
         paymentMethod match {
           case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
           case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
+          case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
       override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] =

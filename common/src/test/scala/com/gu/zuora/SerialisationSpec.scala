@@ -1,6 +1,7 @@
 package com.gu.zuora
 
 import com.gu.i18n.Currency.GBP
+import com.gu.support.workers.model.PaymentFields
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response._
@@ -22,8 +23,13 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     val json = creditCardPaymentMethod.asJson
   }
 
+  "PaymentFields" should "deserialise correctly" in {
+    val ddFields = decode[PaymentFields](directDebitPaymentFieldsJson)
+    ddFields.isRight should be(true)
+  }
+
   "SubscribeRequest" should "serialise to correct json" in {
-    val json = subscriptionRequest().asJson
+    val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
   }

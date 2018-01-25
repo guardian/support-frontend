@@ -2,8 +2,9 @@ package com.gu.support.workers.lambdas
 
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
-import com.gu.support.workers.model.{Annual, Monthly, PayPalPaymentFields, StripePaymentFields}
+import com.gu.zuora.Fixtures.directDebitPaymentFieldsJson
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
@@ -16,8 +17,8 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodJson())
     val result = state.right.get
     result.contribution.amount should be(5)
-    result.paymentFields.isRight should be(true) //PayPal
-    result.paymentFields.right.get.baid should be(validBaid)
+    result.paymentFields.isInstanceOf[PayPalPaymentFields] should be(true)
+    result.paymentFields.asInstanceOf[PayPalPaymentFields].baid should be(validBaid)
   }
 
   it should "be able to decode a monthly contribution with Stripe payment fields" in {
@@ -25,8 +26,8 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val result = state.right.get
     result.contribution.amount should be(5)
     result.contribution.billingPeriod should be(Monthly)
-    result.paymentFields.isLeft should be(true) //Stripe
-    result.paymentFields.left.get.stripeToken should be(stripeToken)
+    result.paymentFields.isInstanceOf[StripePaymentFields] should be(true)
+    result.paymentFields.asInstanceOf[StripePaymentFields].stripeToken should be(stripeToken)
   }
 
   it should "be able to decode an annual contribution with Stripe payment fields" in {
@@ -34,19 +35,22 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val result = state.right.get
     result.contribution.amount should be(150)
     result.contribution.billingPeriod should be(Annual)
-    result.paymentFields.isLeft should be(true) //Stripe
-    result.paymentFields.left.get.stripeToken should be(stripeToken)
+    result.paymentFields.isInstanceOf[StripePaymentFields] should be(true)
+    result.paymentFields.asInstanceOf[StripePaymentFields].stripeToken should be(stripeToken)
   }
 
-  "PaymentFieldsDecoder" should "be able to decode an Either[StripePaymentFields, PayPalPaymentFields]" in {
-    val stripe = decode[Either[StripePaymentFields, PayPalPaymentFields]](stripeJson)
-    val stripePaymentFields = stripe.right.get.left.get
+  "PaymentFieldsDecoder" should "be able to decode PaymentFields" in {
+    val stripe = decode[StripePaymentFields](stripeJson)
+    val stripePaymentFields = stripe.right.get
 
     stripePaymentFields.userId should be("12345")
     stripePaymentFields.stripeToken should be(stripeToken)
 
-    val payPal = decode[Either[StripePaymentFields, PayPalPaymentFields]](payPalJson)
-    payPal.right.get.right.get.baid should be(validBaid)
+    val payPal = decode[PayPalPaymentFields](payPalJson)
+    payPal.right.get.baid should be(validBaid)
+
+    val dd = decode[DirectDebitPaymentFields](directDebitPaymentFieldsJson)
+    dd.right.get.accountHolderName should be("Mickey Mouse")
   }
 
   it should "fail when given duff json" in {
@@ -55,7 +59,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
                   "aintIt": "Funky"
                 }
                 """
-    val result = decode[Either[StripePaymentFields, PayPalPaymentFields]](duffJson)
+    val result = decode[PaymentFields](duffJson)
     result.isLeft should be(true)
   }
 
