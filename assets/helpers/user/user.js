@@ -27,14 +27,14 @@ const init = (dispatch: Function) => {
 
   const uatMode = window.guardian && window.guardian.uatMode;
 
-  function getEmailFromPage(): ?string {
+  function getEmailFromBrowser(): ?string {
     if (window.guardian && window.guardian.email) {
       return window.guardian.email;
     }
     return getSession('gu.email');
   }
 
-  const emailFromPage = getEmailFromPage();
+  const emailFromPage = getEmailFromBrowser();
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 

@@ -12,8 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
 import services.{ContributionsFrontendService, PayPalService, TestUserService}
-import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import services.ContributionsFrontendService.Email
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,45 +50,16 @@ class PayPal(
     }.map(token => Ok(Token(token).asJson))
   }
 
-  // scalastyle:off parameter.number
-  def execute(
-    paymentId: String,
-    token: String,
-    payerId: String,
-    CMP: Option[String],
-    INTCMP: Option[String],
-    refererPageviewId: Option[String],
-    refererUrl: Option[String],
-    pvid: Option[String],
-    bid: Option[String],
-    ophanVisitId: Option[String],
-    componentId: Option[String],
-    componentType: Option[ComponentType],
-    source: Option[AcquisitionSource],
-    refererAbTest: Option[AbTest],
-    nativeAbTests: Option[Set[AbTest]],
-    supportRedirect: Option[Boolean]
-  ): Action[AnyContent] = PrivateAction.async { implicit request =>
-    contributionsFrontendService.execute(
-      paymentId,
-      token,
-      payerId,
-      CMP,
-      INTCMP,
-      refererPageviewId,
-      refererUrl,
-      pvid,
-      bid,
-      ophanVisitId,
-      componentId,
-      componentType,
-      source,
-      refererAbTest,
-      nativeAbTests,
-      supportRedirect
-    ).map { email =>
-      Redirect("/contribute/one-off/thankyou").flashing("email" -> email.getOrElse(""))
-    } getOrElse Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+  def resultFromEmailOption(email: Option[Email]): Result = {
+    val redirect = Redirect("/contribute/one-off/thankyou")
+    email.fold(redirect)(e => redirect.flashing("email" -> e.value))
+  }
+
+  def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
+    contributionsFrontendService.execute(request.queryString).fold(
+      _ => Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js")),
+      resultFromEmailOption
+    )
   }
 
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {

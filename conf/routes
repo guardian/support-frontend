@@ -59,7 +59,7 @@ POST /paypal/setup-payment                          controllers.PayPal.setupPaym
 POST /paypal/create-agreement                       controllers.PayPal.createAgreement
 GET  /paypal/return                                 controllers.PayPal.returnUrl
 GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
-GET  /paypal/execute                                controllers.PayPal.execute(paymentId, token, PayerID, CMP: Option[String], INTCMP: Option[String], refererPageviewId: Option[String], refererUrl: Option[String], pvid: Option[String], bid: Option[String], ophanVisitId: Option[String], componentId: Option[String], componentType: Option[ComponentType], source: Option[AcquisitionSource], refererAbTest: Option[AbTest], nativeAbTests: Option[Set[AbTest]], supportRedirect: Option[Boolean])
+GET  /paypal/execute                                controllers.PayPal.execute
 
 # ----- Direct Debit ----- #
 

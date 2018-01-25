@@ -34,6 +34,8 @@ class Configuration {
 
   lazy val contributionsPayPalAuthEndpoint = config.getString("contributions.paypal.url")
 
+  lazy val contributionsFrontendUrl = config.getString("contribution.url")
+
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
   lazy val payPalConfigProvider = new PayPalConfigProvider(config, stage)
