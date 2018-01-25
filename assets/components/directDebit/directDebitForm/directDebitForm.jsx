@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import ErrorMessage from 'components/errorMessage/errorMessage'
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import {
   updateSortCode,
   updateAccountNumber,
@@ -119,9 +119,10 @@ const DirectDebitForm = (props: PropTypes) => {
           Direct Debit safeguards and guarantees apply.
         </p>
         <p>
-          Your payments are protected by the <a target="_blank" rel="noopener noreferrer"
-                                                href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct
-          Debit guarantee</a>.
+          Your payments are protected by the&nbsp;
+          <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
+            Direct Debit guarantee
+          </a>.
         </p>
         <div>
           <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
@@ -131,7 +132,7 @@ const DirectDebitForm = (props: PropTypes) => {
           <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
         </div>
       </div>
-    </div>)
+    </div>);
 };
 
 
