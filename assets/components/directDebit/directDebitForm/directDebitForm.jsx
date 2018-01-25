@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import ErrorMessage from 'components/errorMessage/errorMessage'
 import {
   updateSortCode,
   updateAccountNumber,
@@ -72,63 +73,65 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Component ----- //
 
-const DirectDebitForm = (props: PropTypes) => (
-  <div className="component-direct-debit-form">
-    <SortCodeInput
-      onChange={props.updateSortCode}
-      value={props.sortCode}
-    />
+const DirectDebitForm = (props: PropTypes) => {
+  let errorMessage = null;
+  if (props.formError) {
+    errorMessage = <ErrorMessage message={props.formError} />;
+  }
+  return (
+    <div className="component-direct-debit-form">
+      <SortCodeInput
+        onChange={props.updateSortCode}
+        value={props.sortCode}
+      />
 
-    <AccountNumberInput
-      onChange={props.updateAccountNumber}
-      value={props.accountNumber}
-    />
+      <AccountNumberInput
+        onChange={props.updateAccountNumber}
+        value={props.accountNumber}
+      />
 
-    <AccountHolderNameInput
-      onChange={props.updateAccountHolderName}
-      value={props.accountHolderName}
-    />
+      <AccountHolderNameInput
+        onChange={props.updateAccountHolderName}
+        value={props.accountHolderName}
+      />
 
-    <ConfirmationInput
-      onChange={props.updateAccountHolderConfirmation}
-      checked={props.accountHolderConfirmation}
-    />
+      <ConfirmationInput
+        onChange={props.updateAccountHolderConfirmation}
+        checked={props.accountHolderConfirmation}
+      />
 
-    <p>{props.formError}</p>
-    <button
-      id="qa-pay-with-direct-debit-close-pop-up"
-      className="component-direct-debit-form__pay-button"
-      onClick={() => props.payDirectDebitClicked(props.callback)}
-    >
-      Pay with Direct Debit
-    </button>
+      {errorMessage}
+      <button
+        id="qa-pay-with-direct-debit-pay"
+        className="component-direct-debit-form__pay-button"
+        onClick={() => props.payDirectDebitClicked(props.callback)}
+      >
+        Pay with Direct Debit
+      </button>
 
-    <div className="component-direct-debit-form__legal__title">
+      <div className="component-direct-debit-form__legal__title">
         Advance notice
-    </div>
-
-    <div className="component-direct-debit-form__legal__content">
-      <p>The details of your Direct Debit instruction including payment schedule, due date,
-        frequency and amount will be sent to you within three working days. All the normal
-        Direct Debit safeguards and guarantees apply.
-      </p>
-      <p>
-        Your payments are protected by the <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct Debit guarantee</a>.
-      </p>
-      <div>
-        <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
-          United Kingdom
-        </div>
-        <div><a href="tel:+443303336767">Tel: +44 (0) 330 333 6767</a></div>
-        <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
       </div>
-    </div>
-  </div>);
 
-// ----- Default Props ----- //
-
-DirectDebitForm.defaultProps = {
-
+      <div className="component-direct-debit-form__legal__content">
+        <p>The details of your Direct Debit instruction including payment schedule, due date,
+          frequency and amount will be sent to you within three working days. All the normal
+          Direct Debit safeguards and guarantees apply.
+        </p>
+        <p>
+          Your payments are protected by the <a target="_blank" rel="noopener noreferrer"
+                                                href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct
+          Debit guarantee</a>.
+        </p>
+        <div>
+          <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
+            United Kingdom
+          </div>
+          <div><a href="tel:+443303336767">Tel: +44 (0) 330 333 6767</a></div>
+          <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
+        </div>
+      </div>
+    </div>)
 };
 
 
