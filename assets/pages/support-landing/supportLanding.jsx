@@ -17,7 +17,7 @@ import { renderPage } from 'helpers/render';
 
 import type { CommonState } from 'helpers/page/page';
 
-import PatronsEvents from './components/patronsEvents';
+import PatronsEvents from './components/connectedPatronsEvents';
 
 
 // ----- Types ----- //
