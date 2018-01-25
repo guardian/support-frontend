@@ -7,7 +7,7 @@ import scala.util.matching.Regex
 object CheckBrowser extends LazyLogging {
   val unsupportedBrowsers: Seq[Regex] = Seq(
     """SamsungBrowser\/[1-3]""".r,
-    """SamsungBrowser\/5.2""".r
+    """SamsungBrowser\/5.[24]""".r
   )
 
   def unsupportedBrowser(implicit request: RequestHeader): Boolean = {
