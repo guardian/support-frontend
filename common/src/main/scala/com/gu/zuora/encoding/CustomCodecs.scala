@@ -35,7 +35,6 @@ trait ModelsCodecs {
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
 
   //Payment Methods are details from the payment provider
-  //noinspection ConvertExpressionToSAM
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = new Encoder[PaymentMethod] {
     override final def apply(a: PaymentMethod): Json = a match {
       case p: PayPalReferenceTransaction => Encoder[PayPalReferenceTransaction].apply(p)
@@ -56,7 +55,6 @@ trait ModelsCodecs {
   implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
 
-  //noinspection ConvertExpressionToSAM
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
     override final def apply(a: PaymentFields): Json = a match {
       case p: PayPalPaymentFields => Encoder[PayPalPaymentFields].apply(p)
