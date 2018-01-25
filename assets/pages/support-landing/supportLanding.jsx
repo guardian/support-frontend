@@ -11,10 +11,21 @@ import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduct
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
-import PatronsEvents from 'components/patronsEvents/patronsEvents';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+
+import type { CommonState } from 'helpers/page/page';
+
+import PatronsEvents from './components/patronsEvents';
+
+
+// ----- Types ----- //
+
+export type State = {
+  common: CommonState,
+  page: {||},
+};
 
 
 // ----- Redux Store ----- //
