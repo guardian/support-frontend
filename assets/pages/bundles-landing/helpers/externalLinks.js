@@ -4,7 +4,7 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { inOfferPeriod } from './flashSale';
+import { getPromoCode } from './flashSale';
 
 // ----- Types ----- //
 
@@ -33,9 +33,9 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  digital: 'p/DXX83X',
-  paper: 'p/GXX83P',
-  paperDig: 'p/GXX83X',
+  digital: getPromoCode('digital', 'p/DXX83X'),
+  paper: getPromoCode('paper', 'p/GXX83P'),
+  paperDig: getPromoCode('paperAndDigital', 'p/GXX83X'),
 };
 
 const customPromos : {
@@ -86,11 +86,6 @@ const customPromos : {
     paper: 'p/NBANJUSTONE',
     paperDig: 'p/NDBANJUSTONE',
   },
-  flash_sale: {
-    digital: 'p/DBR80H',
-    paper: 'p/GBQ80N',
-    paperDig: 'p/GBQ80O',
-  },
 };
 
 
@@ -138,9 +133,9 @@ function getSubsLinks(
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
-  if ((campaign && customPromos[campaign]) || (!campaign && inOfferPeriod())) {
+  if ((campaign && customPromos[campaign])) {
     return buildSubsUrls(
-      customPromos[campaign || 'flash_sale'],
+      customPromos[campaign],
       intCmp,
       otherQueryParams,
       referrerAcquisitionData,
