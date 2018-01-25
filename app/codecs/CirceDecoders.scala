@@ -10,6 +10,7 @@ import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
 import cats.syntax.either._
+import cats.syntax.functor._
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
@@ -49,12 +50,13 @@ object CirceDecoders {
     }
   }
 
-  implicit val decodePaymentFields: Decoder[PaymentFields] =
-    Decoder[PayPalPaymentFields].map(x => x: PaymentFields).or(
-      Decoder[StripePaymentFields].map(x => x: PaymentFields).or(
-        Decoder[DirectDebitPaymentFields].map(x => x: PaymentFields)
-      )
-    )
+  implicit val decodePaymentFields: Decoder[PaymentFields] = {
+    List[Decoder[PaymentFields]](
+      Decoder[PayPalPaymentFields].widen,
+      Decoder[StripePaymentFields].widen,
+      Decoder[DirectDebitPaymentFields].widen
+    ).reduce(_ or _)
+  }
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
