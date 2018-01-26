@@ -11,7 +11,6 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
 
-import type { Node } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -41,17 +40,6 @@ type PropTypes = {
 
 
 // ----- Functions ----- //
-
-// Shows a message about the status of the form or the payment.
-function getStatusMessage(isFormEmpty: boolean, error: ?string): Node {
-
-  if (error !== null && error !== undefined) {
-    return <ErrorMessage message={error} />;
-  }
-
-  return null;
-
-}
 
 // If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(
@@ -96,7 +84,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="oneoff-contribution-payment">
-      {getStatusMessage(props.isFormEmpty, props.error)}
+      <ErrorMessage message={props.error} />
 
       <StripePopUpButton
         email={props.email}

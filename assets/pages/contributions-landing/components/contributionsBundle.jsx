@@ -143,13 +143,6 @@ function showPayPal(props: PropTypes) {
   return null;
 }
 
-function showPayPalError(props: PropTypes) {
-  if (props.contribType === 'ONE_OFF') {
-    return (props.payPalError ? <ErrorMessage message={props.payPalError} /> : null);
-  }
-  return null;
-}
-
 const ctaLinks = {
   annual: routes.recurringContribCheckout,
   monthly: routes.recurringContribCheckout,
@@ -251,7 +244,7 @@ function ContributionsBundle(props: PropTypes) {
         accessibilityHint={accessibilityHint}
       />
       {showPayPal(props)}
-      {showPayPalError(props)}
+      <ErrorMessage showError={props.contribType === 'ONE_OFF'} message={props.payPalError} />
       <TermsAndPrivacy country={props.isoCountry} contribType={props.contribType} />
     </Bundle>
   );

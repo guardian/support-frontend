@@ -20,7 +20,7 @@
     width: 404px;
   }
 
-  svg {
+  .svg-exclamation {
     position: absolute;
     height: 16px;
     fill: #fff;
@@ -28,10 +28,11 @@
     transform: translateY(-50%);
   }
 
-  span {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 10%;
-  }
+}
+
+.component-error-message__message {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10%;
 }
