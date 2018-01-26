@@ -28,7 +28,7 @@ describe('Regular Contributions Payment fields', () => {
     expect(paymentFields.accountHolderName).toEqual(expectedPaymentFields.accountHolderName);
     expect(paymentFields.sortCode).toEqual(expectedPaymentFields.sortCode);
     expect(paymentFields.accountNumber).toEqual(expectedPaymentFields.accountNumber);
-
+    expect(Object.keys(paymentFields).length).toEqual(3);
   });
 
   it('should create the correct payment field to handle PayPal', () => {
@@ -51,6 +51,7 @@ describe('Regular Contributions Payment fields', () => {
 
     expect(paymentFields.baid).toEqual(expectedPaymentFields.baid);
     expect(paymentFields.userId).toEqual(undefined);
+    expect(Object.keys(paymentFields).length).toEqual(1);
   });
 
   it('should create the correct payment field to handle Stripe', () => {
@@ -74,6 +75,7 @@ describe('Regular Contributions Payment fields', () => {
 
     expect(paymentFields.stripeToken).toEqual(expectedPaymentFields.stripeToken);
     expect(paymentFields.userId).toEqual(expectedPaymentFields.userId);
+    expect(Object.keys(paymentFields).length).toEqual(2);
   });
 
   it('should return null if a unknown payment field name is passed', () => {
