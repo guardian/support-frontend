@@ -44,16 +44,18 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
 
   if (props.isPopUpOpen) {
     content = (
-      <div>
-        <button
-          id="qa-pay-with-direct-debit-close-pop-up"
-          className="component-direct-debit-pop-up-form"
-          onClick={props.closeDirectDebitPopUp}
-        >
-          Close form
-        </button>
-
-        <DirectDebitForm callback={props.callback} />
+      <div className="component-direct-debit-pop-up-form">
+        <div className="component-direct-debit-pop-up-form__content">
+          <button
+            id="qa-pay-with-direct-debit-close-pop-up"
+            className="component-direct-debit-pop-up-form__close-button"
+            onClick={props.closeDirectDebitPopUp}
+          >
+            X
+          </button>
+          <DirectDebitForm callback={props.callback} />
+        </div>
+        <div className="component-direct-debit-pop-up-form__background" />
       </div>
     );
   }

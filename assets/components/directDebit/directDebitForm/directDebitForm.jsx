@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import {
   updateSortCode,
   updateAccountNumber,
@@ -72,66 +73,66 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Component ----- //
 
-const DirectDebitForm = (props: PropTypes) => (
-  <div className="component-direct-debit-form">
+const DirectDebitForm = (props: PropTypes) => {
+  let errorMessage = null;
+  if (props.formError) {
+    errorMessage = <ErrorMessage message={props.formError} />;
+  }
+  return (
+    <div className="component-direct-debit-form">
+      <SortCodeInput
+        onChange={props.updateSortCode}
+        value={props.sortCode}
+      />
 
-    <img className="component-direct-debit-form__direct-debit-logo" src="#" alt="The Direct Debit logo" />
+      <AccountNumberInput
+        onChange={props.updateAccountNumber}
+        value={props.accountNumber}
+      />
 
-    <SortCodeInput
-      onChange={props.updateSortCode}
-      value={props.sortCode}
-    />
+      <AccountHolderNameInput
+        onChange={props.updateAccountHolderName}
+        value={props.accountHolderName}
+      />
 
-    <AccountNumberInput
-      onChange={props.updateAccountNumber}
-      value={props.accountNumber}
-    />
+      <ConfirmationInput
+        onChange={props.updateAccountHolderConfirmation}
+        checked={props.accountHolderConfirmation}
+      />
 
-    <AccountHolderNameInput
-      onChange={props.updateAccountHolderName}
-      value={props.accountHolderName}
-    />
+      {errorMessage}
+      <button
+        id="qa-pay-with-direct-debit-pay"
+        className="component-direct-debit-form__pay-button"
+        onClick={() => props.payDirectDebitClicked(props.callback)}
+      >
+        Pay with Direct Debit
+      </button>
 
-    <ConfirmationInput
-      onChange={props.updateAccountHolderConfirmation}
-      checked={props.accountHolderConfirmation}
-    />
-
-    <p>{props.formError}</p>
-    <button
-      id="qa-pay-with-direct-debit-close-pop-up"
-      className="component-direct-debit-pop-up-form"
-      onClick={() => props.payDirectDebitClicked(props.callback)}
-    >
-      Pay
-    </button>
-
-    <div className="component-direct-debit-form__advance-notice__title">
+      <div className="component-direct-debit-form__legal__title">
         Advance notice
-    </div>
-
-    <div className="component-direct-debit-form__advance-notice__content">
-      <p>The details of your Direct Debit instruction including payment schedule, due date,
-        frequency and amount will be sent to you within three working days. All the normal
-        Direct Debit safeguards and guarantees apply.
-      </p>
-      <p>
-        Your payments are protected by the <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">Direct Debit guarantee</a>.
-      </p>
-      <div>
-        <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
-          United Kingdom
-        </div>
-        <div><a href="tel:+443303336767">Tel: +44 (0) 330 333 6767</a></div>
-        <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
       </div>
-    </div>
-  </div>);
 
-// ----- Default Props ----- //
-
-DirectDebitForm.defaultProps = {
-
+      <div className="component-direct-debit-form__legal__content">
+        <p>The details of your Direct Debit instruction including payment schedule, due date,
+          frequency and amount will be sent to you within three working days. All the normal
+          Direct Debit safeguards and guarantees apply.
+        </p>
+        <p>
+          Your payments are protected by the&nbsp;
+          <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
+            Direct Debit guarantee
+          </a>.
+        </p>
+        <div>
+          <div>The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1JT
+            United Kingdom
+          </div>
+          <div><a href="tel:+443303336767">Tel: +44 (0) 330 333 6767</a></div>
+          <div><a href="mailto:support@theguardian.com">support@theguardian.com</a></div>
+        </div>
+      </div>
+    </div>);
 };
 
 
@@ -140,16 +141,18 @@ DirectDebitForm.defaultProps = {
 function SortCodeInput(props: {value: string, onChange: Function}) {
   return (
     <div className="component-direct-debit-form__sort-code">
-      <label htmlFor="sort-code-input">
-        Sort code
-        <input
-          id="sort-code-input"
-          value={props.value}
-          onChange={props.onChange}
-          type="text"
-          placeholder="00-00-00"
-        />
+      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
+        Bank sort code
       </label>
+      <input
+        id="sort-code-input"
+        value={props.value}
+        onChange={props.onChange}
+        type="text"
+        placeholder="00-00-00"
+        className="component-direct-debit-form__sort-code-field"
+      />
+
     </div>
   );
 }
@@ -158,40 +161,42 @@ function SortCodeInput(props: {value: string, onChange: Function}) {
 function AccountNumberInput(props: {onChange: Function, value: string}) {
   return (
     <div className="component-direct-debit-form__account-number">
-      <label htmlFor="account-number-input">
-        Account number
-        <input
-          id="account-number-input"
-          value={props.value}
-          onChange={props.onChange}
-          pattern="[0-9]*"
-          minLength="6"
-          maxLength="10"
-        />
+      <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
+        Bank account number
       </label>
+      <input
+        id="account-number-input"
+        value={props.value}
+        onChange={props.onChange}
+        pattern="[0-9]*"
+        minLength="6"
+        maxLength="10"
+        className="component-direct-debit-form__text-field"
+      />
     </div>
   );
 }
 
 /*
  * BACS requirement:
- "The payer’s account name (maximum of 18 characters).
- This must be the name of the person who is paying the Direct Debit
- and has signed the Direct Debit Instruction (DDI)."
- http://www.bacs.co.uk/Bacs/Businesses/Resources/Pages/Glossary.aspx
+ "Name of the account holder, as known by the bank. Usually this is the
+ same as the name stored with the linked creditor. This field will be
+ transliterated, upcased and truncated to 18 characters."
+ https://developer.gocardless.com/api-reference/
  * */
 function AccountHolderNameInput(props: {value: string, onChange: Function}) {
   return (
     <div className="component-direct-debit-form__account-holder-name">
-      <label htmlFor="account-holder-name-input">
-        Account holder name
-        <input
-          id="account-holder-name-input"
-          value={props.value}
-          onChange={props.onChange}
-          maxLength="18"
-        />
+      <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
+        Name of account holder
       </label>
+      <input
+        id="account-holder-name-input"
+        value={props.value}
+        onChange={props.onChange}
+        maxLength="18"
+        className="component-direct-debit-form__text-field"
+      />
     </div>
   );
 }
@@ -199,7 +204,6 @@ function AccountHolderNameInput(props: {value: string, onChange: Function}) {
 function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
   return (
     <div className="component-direct-debit-form__account-holder-confirmation">
-      Confirmation
       <div>
         <label htmlFor="confirmation-input">
           <span>
@@ -210,7 +214,7 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
               checked={props.checked}
             />
           </span>
-          <span>
+          <span className="component-direct-debit-form__account-holder-confirmation__text">
             I confirm that I am the account holder and I am solely able to authorise debit from
             the account
           </span>

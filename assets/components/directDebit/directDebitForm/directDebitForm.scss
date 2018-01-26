@@ -1,0 +1,79 @@
+.component-direct-debit-form {
+  width: 500px;
+  padding: $gu-h-spacing/2;
+}
+
+.component-direct-debit-form__field-label {
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.component-direct-debit-form__sort-code-field {
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  color: gu-colour(garnett-neutral-1);
+  margin: 0 -2px 20px;
+  border: none;
+  border-radius: 600px;
+  height: $gu-v-spacing * 4;
+  padding: 0 $gu-h-spacing;
+  width: 70px;
+}
+
+.component-direct-debit-form__text-field {
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  color: gu-colour(garnett-neutral-1);
+  margin: 0 -2px 20px;
+  border: none;
+  border-radius: 600px;
+  height: $gu-v-spacing * 4;
+  padding: 0 $gu-h-spacing;
+  width: 100px;
+}
+
+.component-direct-debit-form__account-holder-confirmation__text {
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  color: gu-colour(neutral-1);
+}
+
+.component-direct-debit-form__pay-button {
+  background-color: gu-colour(neutral-1);
+  border: none;
+  border-radius: 600px;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  height: $gu-v-spacing * 4;
+  padding-left: $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  margin-top: $gu-v-spacing;
+
+  @include mq($from: mobileMedium) {
+    width: 175px;
+  }
+
+  &:hover {
+    background-color: darken(gu-colour(neutral-1), 10%);
+  }
+}
+.component-direct-debit-form__legal__title {
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  color: gu-colour(neutral-1);
+  padding-top: $gu-v-spacing;
+}
+.component-direct-debit-form__legal__content {
+
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
+  color: gu-colour(neutral-1);
+}
