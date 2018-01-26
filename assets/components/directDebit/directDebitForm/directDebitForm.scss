@@ -13,7 +13,7 @@
 .component-direct-debit-form__sort-code-field {
   font-family: $gu-sans-web;
   font-size: 14px;
-  color: gu-colour(neutral-1);
+  color: gu-colour(garnett-neutral-1);
   margin: 0 -2px 20px;
   border: none;
   border-radius: 600px;
@@ -25,7 +25,7 @@
 .component-direct-debit-form__text-field {
   font-family: $gu-sans-web;
   font-size: 14px;
-  color: gu-colour(neutral-1);
+  color: gu-colour(garnett-neutral-1);
   margin: 0 -2px 20px;
   border: none;
   border-radius: 600px;
@@ -62,7 +62,7 @@
   }
 
   &:hover {
-    background-color: #000;
+    background-color: darken(gu-colour(neutral-1), 10%);
   }
 }
 .component-direct-debit-form__legal__title {
