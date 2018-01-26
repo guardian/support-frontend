@@ -6,11 +6,13 @@ import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax._
+import cats.implicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{PayPalService, TestUserService}
+import services.{ContributionsFrontendService, PayPalService, TestUserService}
+import services.ContributionsFrontendService.Email
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -20,7 +22,8 @@ class PayPal(
     assets: AssetsResolver,
     payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents
+    components: ControllerComponents,
+    contributionsFrontendService: ContributionsFrontendService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   import actionBuilders._
@@ -45,6 +48,18 @@ class PayPal(
     withPaypalServiceForUser(request.user) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
+  }
+
+  def resultFromEmailOption(email: Option[Email]): Result = {
+    val redirect = Redirect("/contribute/one-off/thankyou")
+    email.fold(redirect)(e => redirect.flashing("email" -> e.value))
+  }
+
+  def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
+    contributionsFrontendService.execute(request.queryString).fold(
+      _ => Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js")),
+      resultFromEmailOption
+    )
   }
 
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {
