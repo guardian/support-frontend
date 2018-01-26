@@ -82,10 +82,6 @@ describe('Regular Contributions Payment fields', () => {
     const userId = '123456';
     const token = 'PayPalToken';
 
-    const expectedPaymentFields = {
-      stripeToken: token,
-      userId,
-    };
     const paymentFields = getPaymentFields(
       token,
       undefined,
