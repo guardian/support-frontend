@@ -9,20 +9,13 @@ import play.api.libs.json.JsSuccess
 import scala.concurrent.{ExecutionContext, Future}
 
 object ContributionsFrontendService {
-  def getEmailFromRequest(resp: WSResponse): Option[Email] = {
-    (resp.json \ "email").validate[String] match {
-      case x: JsSuccess[String] => Some(Email(x.get))
-      case _ => None
-    }
-  }
-
   case class Email(value: String)
   object Email {
     def fromResponse(resp: WSResponse): Either[Throwable, Option[Email]] = {
       if (resp.status == 200) {
-        Right(getEmailFromRequest(resp))
+        Right((resp.json \ "email").validate[String].asOpt.map(Email.apply))
       } else {
-        Left(new IOException(s"${resp.toString}"))
+        Left(new IOException(resp.toString))
       }
     }
   }
@@ -40,7 +33,7 @@ class ContributionsFrontendService(wsClient: WSClient, contributionsFrontendUrl:
   def execute(queryString: Map[String, Seq[String]])(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, Throwable, Option[Email]] = {
     import cats.syntax.applicativeError._
     import cats.instances.future._
-    val endpoint = s"/paypal/uk/execute"
+    val endpoint = "/paypal/uk/execute"
     wsClient.url(s"$contributionsFrontendUrl/$endpoint")
       .withHttpHeaders("Content-Type" -> "application/json")
       .withQueryStringParameters(convertQueryString(queryString): _*)

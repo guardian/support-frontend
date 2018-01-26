@@ -34,7 +34,7 @@ const init = (dispatch: Function) => {
     return getSession('gu.email');
   }
 
-  const emailFromPage = getEmailFromBrowser();
+  const emailFromBrowser = getEmailFromBrowser();
 
   const isUndefinedOrNull = x => x === null || x === undefined;
 
@@ -71,8 +71,8 @@ const init = (dispatch: Function) => {
         });
       }
     });
-  } else if (emailFromPage) {
-    dispatch(setEmail(emailFromPage));
+  } else if (emailFromBrowser) {
+    dispatch(setEmail(emailFromBrowser));
   }
 };
 
