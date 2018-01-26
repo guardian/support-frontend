@@ -30,4 +30,71 @@ describe('Regular Contributions Payment fields', () => {
     expect(paymentFields.accountNumber).toEqual(expectedPaymentFields.accountNumber);
 
   });
+
+  it('should create the correct payment field to handle PayPal', () => {
+
+    const paymentFieldName = 'baid';
+    const userId = '123456';
+    const token = 'PayPalToken';
+
+    const expectedPaymentFields = {
+      baid: token,
+    };
+    const paymentFields = getPaymentFields(
+      token,
+      undefined,
+      undefined,
+      undefined,
+      paymentFieldName,
+      userId,
+    );
+
+    expect(paymentFields.baid).toEqual(expectedPaymentFields.baid);
+    expect(paymentFields.userId).toEqual(undefined);
+  });
+
+  it('should create the correct payment field to handle Stripe', () => {
+
+    const paymentFieldName = 'stripeToken';
+    const userId = '123456';
+    const token = 'PayPalToken';
+
+    const expectedPaymentFields = {
+      stripeToken: token,
+      userId,
+    };
+    const paymentFields = getPaymentFields(
+      token,
+      undefined,
+      undefined,
+      undefined,
+      paymentFieldName,
+      userId,
+    );
+
+    expect(paymentFields.stripeToken).toEqual(expectedPaymentFields.stripeToken);
+    expect(paymentFields.userId).toEqual(expectedPaymentFields.userId);
+  });
+
+  it('should return null if a unknown payment field name is passed', () => {
+
+    const paymentFieldName = 'helloWorld';
+    const userId = '123456';
+    const token = 'PayPalToken';
+
+    const expectedPaymentFields = {
+      stripeToken: token,
+      userId,
+    };
+    const paymentFields = getPaymentFields(
+      token,
+      undefined,
+      undefined,
+      undefined,
+      paymentFieldName,
+      userId,
+    );
+
+    expect(paymentFields).toEqual(null);
+  });
 });
