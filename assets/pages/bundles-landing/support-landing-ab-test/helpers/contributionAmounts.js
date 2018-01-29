@@ -23,6 +23,10 @@ const spokenCurrencies = {
     singular: 'dollar',
     plural: 'dollars',
   },
+  AUD: {
+    singular: 'dollar',
+    plural: 'dollars',
+  },
 };
 
 const amounts = {
@@ -39,6 +43,12 @@ const amounts = {
       { value: '100', spoken: 'one hundred' },
       { value: '250', spoken: 'two hundred and fifty' },
     ],
+    AUD: [
+      { value: '25', spoken: 'twenty five' },
+      { value: '100', spoken: 'one hundred' },
+      { value: '250', spoken: 'two hundred and fifty' },
+      { value: '500', spoken: 'five hundred' },
+    ],
   },
   MONTHLY: {
     GBP: [
@@ -51,6 +61,11 @@ const amounts = {
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
+    AUD: [
+      { value: '5', spoken: 'five' },
+      { value: '10', spoken: 'ten' },
+      { value: '20', spoken: 'twenty' },
+    ],
   },
   ANNUAL: {
     GBP: [
@@ -59,6 +74,11 @@ const amounts = {
       { value: '100', spoken: 'one hundred' },
     ],
     USD: [
+      { value: '50', spoken: 'fifty' },
+      { value: '75', spoken: 'seventy five' },
+      { value: '100', spoken: 'one hundred' },
+    ],
+    AUD: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
