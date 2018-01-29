@@ -69,28 +69,28 @@ type ContribAttrs = {
 const subHeadingMonthlyText = {
   GB: 'from £5 a month',
   US: 'from $5 a month',
-};
-
-const subHeadingMonthlyTextTwo = {
-  GB: 'from £2 a month',
-  US: 'from $3 a month',
+  AU: 'from $5 a month',
 };
 
 function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
-  return abTests.usRecurringAmountsTestTwo === 'range'
-    ? subHeadingMonthlyTextTwo[isoCountry]
-    : subHeadingMonthlyText[isoCountry];
+  return subHeadingMonthlyText[isoCountry];
 }
-
 
 const subHeadingOneOffText = {
   GB: '',
   US: '',
+  AU: '',
 };
 
 const contentText = {
   GB: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
   US: (
+    <span>
+      Contributing to the Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+    </span>
+  ),
+  AU: (
     <span>
       Contributing to the Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support – it will help to fund our journalism for the long term.
