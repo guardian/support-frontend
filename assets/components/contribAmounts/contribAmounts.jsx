@@ -236,6 +236,18 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-time contribution',
     },
   ],
+  AU: [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+      accessibilityHint: 'Make a one-off contribution',
+    },
+  ],
 };
 
 // ----- Functions ----- //
