@@ -40,7 +40,7 @@ class StepFunctionsService extends LazyLogging {
     }
 
   private def findUserDataInStateMachine(userId: String, arn: String, nextToken: Option[String] = None)(implicit ec: ExecutionContext): Future[Option[User]] = {
-    logger.info(s"Searching for userId $userId in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
+    logger.info(s"Searching for user in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
 
     for {
       response <- client.listExecutions(arn, nextToken)

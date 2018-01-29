@@ -31,7 +31,7 @@ class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](f: (Request,
   def future: Future[Response] = promise.future
 }
 
-object AwsAsync extends LazyLogging {
+object AwsAsync {
 
   def apply[Request <: AmazonWebServiceRequest, Response](
     f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
