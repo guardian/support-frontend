@@ -17,7 +17,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
-import postCheckout from '../helpers/ajax';
+import { postCheckout } from '../helpers/ajax';
 
 // ----- Types ----- //
 

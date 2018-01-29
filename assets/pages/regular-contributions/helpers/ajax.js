@@ -254,7 +254,7 @@ function handleStatus(
 }
 
 
-export default function postCheckout(
+function postCheckout(
   abParticipations: Participations,
   amount: number,
   csrf: CsrfState,
@@ -297,3 +297,8 @@ export default function postCheckout(
     });
   };
 }
+
+export {
+  postCheckout,
+  getPaymentFields,
+};
