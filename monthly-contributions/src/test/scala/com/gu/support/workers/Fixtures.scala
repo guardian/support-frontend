@@ -5,7 +5,7 @@ import java.io.ByteArrayInputStream
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.idId
-import com.gu.support.workers.Conversions.StringInputStreamConversions
+import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
 import com.gu.support.workers.model.{BillingPeriod, Monthly, RequestInfo}
 import com.gu.zuora.encoding.CustomCodecs.jsonWrapperEncoder

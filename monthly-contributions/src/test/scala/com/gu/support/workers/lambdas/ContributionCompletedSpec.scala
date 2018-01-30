@@ -4,11 +4,11 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.model.monthlyContributions.state.CompletedState
-import com.gu.support.workers.Conversions.FromOutputStream
-import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.monthlyContributions.Status
+import com.gu.support.workers.model.monthlyContributions.state.CompletedState
 
 class ContributionCompletedSpec extends LambdaSpec {
 

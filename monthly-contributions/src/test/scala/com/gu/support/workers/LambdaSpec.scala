@@ -3,7 +3,7 @@ package com.gu.support.workers
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.support.workers.Conversions.FromOutputStream
+import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.typesafe.scalalogging.LazyLogging
 import org.mockito.Mockito.when
