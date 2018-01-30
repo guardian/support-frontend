@@ -6,18 +6,22 @@ import React from 'react';
 
 import { SvgLock } from 'components/svg/svg';
 
-// ----- Types ----- //
+import { generateClassName } from 'helpers/utilities';
+
+
+// ----- Props ----- //
 
 type PropTypes = {
-  style?: Object
-}
+  modifierClass?: string,
+};
+
 
 // ----- Component ----- //
 
 export default function Secure(props: PropTypes) {
 
   return (
-    <div className="component-secure" style={props.style}>
+    <div className={generateClassName('component-secure', props.modifierClass)}>
       <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
@@ -25,8 +29,9 @@ export default function Secure(props: PropTypes) {
 
 }
 
+
 // ----- Default Props ----- //
 
 Secure.defaultProps = {
-  style: {},
+  modifierClass: '',
 };
