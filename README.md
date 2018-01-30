@@ -48,9 +48,9 @@ There are a number of integration tests in the project which talk to real servic
 
 These tests are tagged with either an @IntegrationTest annotation at the spec level or an IntegrationTest tag at the individual test level which allows us to run them selectively as follows:
 
-`sbt test` - runs all tests including integration tests.
+`sbt test` - runs unit tests only and excludes integration tests.
 
-`sbt testOnly -- -l com.gu.test.tags.annotations.IntegrationTest` - runs non-integration tests only.
+`sbt it:test` - runs all tests including integration tests.
 
 ## Deployment 
 We use [Riff-Raff](https://github.com/guardian/riff-raff) to deploy this project to production each time a new change is merged to master.
