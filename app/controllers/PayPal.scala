@@ -52,12 +52,18 @@ class PayPal(
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")
-    email.fold(redirect)(e => redirect.flashing("email" -> e.value))
+    email.fold(redirect)(e => {
+      logger.info("email: " + e)
+      redirect.flashing("email" -> e.value)
+    })
   }
 
   def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
     contributionsFrontendService.execute(request.queryString).fold(
-      _ => Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js")),
+      err => {
+        logger.error("Error making paypal payment: " + err.getMessage)
+        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+      },
       resultFromEmailOption
     )
   }
