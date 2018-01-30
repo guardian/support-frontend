@@ -6,27 +6,16 @@ import React from 'react';
 
 import { SvgLock } from 'components/svg/svg';
 
-// ----- Types ----- //
-
-type PropTypes = {
-  style?: Object
-}
 
 // ----- Component ----- //
 
-export default function Secure(props: PropTypes) {
+export default function Secure() {
 
   return (
-    <div className="component-secure" style={props.style}>
+    <div className="component-secure">
       <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
   );
 
 }
-
-// ----- Default Props ----- //
-
-Secure.defaultProps = {
-  style: {},
-};
