@@ -6,11 +6,12 @@ import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.typesafe.scalalogging.LazyLogging
 import models.CheckBankAccountDetails
+import services.touchpoint.TouchpointService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessService(token: String, environment: Environment) extends LazyLogging {
+class GoCardlessService(token: String, environment: Environment) extends TouchpointService with LazyLogging {
 
   lazy val client = GoCardlessClient.create(token, environment)
 
