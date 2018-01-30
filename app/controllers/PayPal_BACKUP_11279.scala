@@ -53,7 +53,11 @@ class PayPal(
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")
     email.fold(redirect)(e => {
+      <<<<<<< HEAD
         logger.info("Redirecting to thank you page with email in flash session")
+      =======
+      logger.info("email: " + e)
+      >>>>>>> logging
         redirect.flashing("email" -> e.value)
     })
   }

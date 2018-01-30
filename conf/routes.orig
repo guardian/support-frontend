@@ -1,0 +1,74 @@
+# ----- System ----- #
+
+GET /healthcheck                                    controllers.Application.healthcheck
+
+
+# ----- Bundles Landing Page ----- #
+
+GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: String ?= "")
+GET /us                                             controllers.Application.redirect(location="/us/contribute")
+GET /                                               controllers.Application.geoRedirect()
+
+GET /sitemap.xml                                    controllers.SiteMap.sitemap
+
+# ----- Events Redirect ----- #
+GET /events/archive                                 controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
+GET /masterclasses                                  controllers.Application.redirect(location="https://membership.theguardian.com/masterclasses")
+GET /event/*eventId                                 controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
+
+
+# This is a temporary client-side redirect based on geo-location
+# Once we have a separate payment failure email for US and UK we can consider removing it
+
+GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
+
+# ----- Contributions ----- #
+
+GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
+GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
+
+GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
+GET  /contribute/recurring/thankyou                 controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-thankyou-page", js="regularContributionsThankyouPage.js")
+GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
+POST /contribute/recurring/create                   controllers.RegularContributions.create
+GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
+GET  /contribute/recurring/pending                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
+
+# this endpoint should be removed once identity remove
+# the need for a client token
+POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
+
+
+GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.thankYouPage
+GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
+
+# ----- Authentication ----- #
+
+GET  /login                                         controllers.Login.login
+GET  /loginAction                                   controllers.Login.loginAction
+GET  /oauth2callback                                controllers.Login.oauth2Callback
+GET  /logout                                        controllers.Login.logout
+GET  /test-users                                    controllers.TestUsersManagement.createTestUser
+
+
+# ----- PayPal (NVP Endpoints) ----- #
+
+POST /paypal/setup-payment                          controllers.PayPal.setupPayment
+POST /paypal/create-agreement                       controllers.PayPal.createAgreement
+GET  /paypal/return                                 controllers.PayPal.returnUrl
+GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
+
+<<<<<<< HEAD
+# ----- Direct Debit ----- #
+
+POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
+=======
+GET  /paypal/execute                                controllers.PayPal.execute(paymentId, token, PayerID, CMP: Option[String], INTCMP: Option[String], refererPageviewId: Option[String], refererUrl: Option[String], pvid: Option[String], bid: Option[String], ophanVisitId: Option[String], componentId: Option[String], componentType: Option[ComponentType], source: Option[AcquisitionSource], refererAbTest: Option[AbTest], nativeAbTests: Option[Set[AbTest]], supportRedirect: Option[Boolean])
+>>>>>>> style test passses
+
+# ----- Assets ----- #
+
+GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
+GET  /*file                                         controllers.Assets.at(path="/public", file)
