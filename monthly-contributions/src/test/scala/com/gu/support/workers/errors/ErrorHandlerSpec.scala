@@ -5,7 +5,7 @@ import java.net.SocketTimeoutException
 import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
-import com.gu.salesforce.Salesforce.SalesforceErrorResponse.expiredAuthenticationCode
+import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.stripe.Stripe
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
@@ -45,6 +45,7 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
 
     //Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
+    new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe

@@ -1,6 +1,6 @@
 package com.gu.salesforce
 
-import com.gu.salesforce.Salesforce.SalesforceErrorResponse.expiredAuthenticationCode
+import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
@@ -68,10 +68,11 @@ object Salesforce {
   object SalesforceErrorResponse {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
     val expiredAuthenticationCode = "INVALID_SESSION_ID"
+    val rateLimitExceeded = "REQUEST_LIMIT_EXCEEDED"
   }
 
   case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable {
-    def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode)
+    def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode || errorCode == rateLimitExceeded)
       new RetryUnlimited(message, cause = this)
     else
       new RetryNone(message, cause = this)
