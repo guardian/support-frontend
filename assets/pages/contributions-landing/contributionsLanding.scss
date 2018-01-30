@@ -338,6 +338,11 @@ strong {
 		}
 	}
 
+	.component-secure {
+		text-align: right;
+		padding-top: 5px;
+	}
+
 	.component-double-heading {
   	margin-bottom: (2 * $gu-v-spacing);
   	color: gu-colour(neutral-1);
