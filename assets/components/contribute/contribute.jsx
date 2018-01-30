@@ -15,7 +15,7 @@ export default function Contribute() {
 
   const paymentImages = (
     <div className="component-contribute__payment-images">
-      <Secure />
+      <Secure modifierClass="contribute-header" />
       <InlinePaymentLogos />
     </div>
   );
@@ -27,6 +27,7 @@ export default function Contribute() {
         heading="Contribute"
         headingChildren={paymentImages}
       >
+        <Secure modifierClass="contribute-body" />
         <p>Dummy content</p>
       </PageSection>
     </div>
