@@ -1,4 +1,4 @@
-package controllers
+package app.controllers
 
 import play.api.mvc.{AbstractController, ControllerComponents}
 
