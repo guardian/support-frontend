@@ -18,7 +18,7 @@ import { renderPage } from 'helpers/render';
 
 import type { CommonState } from 'helpers/page/page';
 
-import PatronsEvents from './components/connectedPatronsEvents';
+import PatronsEventsContainer from './components/patronsEventsContainer';
 
 
 // ----- Types ----- //
@@ -45,7 +45,7 @@ const content = (
       <ThreeSubscriptions />
       <WhySupport />
       <ReadyToSupport ctaUrl="#" />
-      <PatronsEvents />
+      <PatronsEventsContainer />
       <Footer />
     </div>
   </Provider>
