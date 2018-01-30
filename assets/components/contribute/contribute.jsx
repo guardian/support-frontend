@@ -28,7 +28,10 @@ export default function Contribute() {
         headingChildren={paymentImages}
       >
         <Secure modifierClass="contribute-body" />
-        <p>Dummy content</p>
+        <p className="component-contribute__copy">
+          Support the&nbsp;Guardian&#39;s editorial operations by making a
+          monthly, or one-off contribution today
+        </p>
       </PageSection>
     </div>
   );
