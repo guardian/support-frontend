@@ -23,9 +23,9 @@ object Dependencies {
   val awsSQS = "com.amazonaws" % "aws-java-sdk-sqs" % awsVersion
   val awsCloudwatch = "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion
   val awsStepFunctions = "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion
-  val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-  val mokito = "org.mockito" % "mockito-core" % "1.9.5" % "test"
-  val mockWebserver = "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "test"
+  val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "it,test"
+  val mokito = "org.mockito" % "mockito-core" % "1.9.5" % "it,test"
+  val mockWebserver = "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test"
   val circeCore = "io.circe" %% "circe-core" % circeVersion
   val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
   val circeGenericExtras = "io.circe" %% "circe-generic-extras" % circeVersion

@@ -10,4 +10,10 @@ object Settings {
     scalaVersion := "2.11.8",
     scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
   )
+
+  val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+    scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
+    javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
+    testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
+  )
 }
