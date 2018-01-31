@@ -18,20 +18,24 @@ import { renderPage } from 'helpers/render';
 
 import type { CommonState } from 'helpers/page/page';
 
+import pageReducer from './supportLandingReducer';
+import ContributionSelectionContainer from './components/contributionSelectionContainer';
 import PatronsEventsContainer from './components/patronsEventsContainer';
+
+import type { PageState } from './supportLandingReducer';
 
 
 // ----- Types ----- //
 
 export type State = {
   common: CommonState,
-  page: {||},
+  page: PageState,
 };
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit({});
+const store = pageInit(pageReducer);
 
 
 // ----- Render ----- //
@@ -41,7 +45,9 @@ const content = (
     <div>
       <SimpleHeader />
       <CirclesIntroduction />
-      <Contribute />
+      <Contribute>
+        <ContributionSelectionContainer />
+      </Contribute>
       <ThreeSubscriptions />
       <WhySupport />
       <ReadyToSupport ctaUrl="#" />

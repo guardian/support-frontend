@@ -8,10 +8,19 @@ import PageSection from 'components/pageSection/pageSection';
 import Secure from 'components/secure/secure';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 
+import type { Node } from 'react';
+
+
+// ----- Types ----- //
+
+type PropTypes = {
+  children: Node,
+};
+
 
 // ----- Component ----- //
 
-export default function Contribute() {
+export default function Contribute(props: PropTypes) {
 
   const paymentImages = (
     <div className="component-contribute__payment-images">
@@ -32,6 +41,7 @@ export default function Contribute() {
           Support the&nbsp;Guardian&#39;s editorial operations by making a
           monthly, or one-off contribution today
         </p>
+        {props.children}
       </PageSection>
     </div>
   );
