@@ -89,6 +89,11 @@ function getAmount(state: State): number {
 
 }
 
+// Checks if a custom amount is defined.
+function isCustomAmount(state: State): boolean {
+  return state.customAmount !== null;
+}
+
 
 // ----- Reducer ----- //
 
@@ -123,4 +128,5 @@ function contributionSelectionReducerFor(prefix: string): Function {
 export {
   contributionSelectionReducerFor,
   getAmount,
+  isCustomAmount,
 };
