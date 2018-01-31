@@ -35,7 +35,7 @@ export default function Bundle(props: PropTypes) {
     <div className={className}>
       <div style={{ float: 'right' }}>
         {props.showPaymentLogos ? <InlinePaymentLogos /> : null}
-        {props.showSecureLogo ? <Secure style={{ textAlign: 'right', paddingTop: '5px' }} /> : null}
+        {props.showSecureLogo ? <Secure /> : null}
       </div>
       <DoubleHeading
         heading={props.heading}
