@@ -7,6 +7,7 @@ import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
+import utils.BrowserCheck
 
 import scala.concurrent.ExecutionContext
 
@@ -43,6 +44,11 @@ class Application(
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location + path, request.queryString)
+  }
+
+  def unsupportedBrowser: Action[AnyContent] = CachedAction() { implicit request =>
+    BrowserCheck.logUserAgent
+    Ok(views.html.unsupportedBrowserPage())
   }
 
   def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
