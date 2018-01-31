@@ -4,12 +4,12 @@ import com.gu.i18n.Country
 import com.typesafe.config.Config
 
 case class StripeConfig(config: Config, prefix: String = "stripe") extends TouchpointConfig {
-  private val aus = fromConfig(config, prefix, "aus")
+  private val australia = fromConfig(config, prefix, "AU")
   private val default = fromConfig(config, prefix, "default")
 
-  def get(country: Country) =
+  def forCountry(country: Country) =
     country match {
-      case Country.Australia => aus
+      case Country.Australia => australia
       case _ => default
     }
 
