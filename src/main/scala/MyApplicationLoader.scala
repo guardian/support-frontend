@@ -1,6 +1,5 @@
-import play.api.{ApplicationLoader, BuiltInComponentsFromContext}
 import play.api.ApplicationLoader.Context
-import play.filters.HttpFiltersComponents
+import play.api.{ApplicationLoader, BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 
 class MyApplicationLoader extends ApplicationLoader {
@@ -10,6 +9,6 @@ class MyApplicationLoader extends ApplicationLoader {
   }
 }
 
-class MyComponents(context: Context) extends BuiltInComponentsFromContext(context) with HttpFiltersComponents {
+class MyComponents(context: Context) extends BuiltInComponentsFromContext(context) with NoHttpFiltersComponents {
   lazy val router = new Routes(httpErrorHandler, new controllers.HomeController(controllerComponents))
 }
