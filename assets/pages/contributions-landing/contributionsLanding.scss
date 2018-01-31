@@ -1,5 +1,5 @@
 strong {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #contributions-landing-page-uk,
@@ -33,14 +33,14 @@ strong {
     padding-right: $gu-h-spacing / 2;
 
     @include mq($from: mobileMedium) {
-        font-size: 36px;
-        line-height: 40px;
+      font-size: 36px;
+      line-height: 40px;
     }
 
     @include mq($from: desktop) {
-        padding: 0;
-        font-size: 44px;
-        line-height: 46px;
+      padding: 0;
+      font-size: 44px;
+      line-height: 46px;
     }
   }
 
@@ -76,11 +76,11 @@ strong {
 
     @include mq($from: leftCol) {
       h1:nth-child(2) {
-          margin-left: 100px;
+        margin-left: 100px;
       }
 
       h1:nth-child(3) {
-          margin-left: 100px;
+        margin-left: 100px;
       }
     }
   }
@@ -234,7 +234,6 @@ strong {
         margin-left: 255px;
       }
 
-<<<<<<< HEAD
       @include mq($from: leftCol) {
         margin-left: 330px;
       }
@@ -340,6 +339,11 @@ strong {
     }
   }
 
+  .component-secure {
+    text-align: right;
+    padding-top: 5px;
+  }
+
   .component-double-heading {
     margin-bottom: (2 * $gu-v-spacing);
     color: gu-colour(neutral-1);
@@ -374,249 +378,6 @@ strong {
   }
 
   .component-radio-toggle input:not(:checked)+label, .component-number-input {
-=======
-		@include mq($from: leftCol) {
-			margin-left: 100px;
-		}
-	}
-
-	// ----- Context ----- //
-
-	.contributions-context {
-		display: inline-block;
-		vertical-align: top;
-		color: gu-colour(neutral-1);
-		padding-left: $gu-h-spacing / 2;
-		padding-right: $gu-h-spacing / 2;
-
-		@include mq($from: desktop) {
-			width: 540px;
-		}
-
-		@include mq($from: leftCol) {
-			width: 660px;
-		}
-	}
-
-	.contributions-context-intro {
-		display: inline-block;
-		vertical-align: top;
-		padding-left: $gu-h-spacing / 2;
-		padding-right: $gu-h-spacing / 2;
-
-		@include mq($from: phablet) {
-			width: 300px;
-			margin-top: 49px;
-		}
-
-		@include mq($from: desktop) {
-			width: 540px;
-			margin-top: 20px;
-		}
-
-		@include mq($from: leftCol) {
-			width: 660px;
-		}
-	}
-
-	.contributions-context__heading {
-		font-weight: bold;
-		margin-top: 49px;
-		margin-bottom: 20px;
-		font-size: 24px;
-		line-height: 30px;
-		font-family: $gu-egyptian-web;
-
-		@include mq($from: desktop) {
-			margin-top: 80px;
-		}
-
-		&::before {
-			content: " ";
-			border: 1px solid gu-colour(neutral-1);
-			width: 44px;
-		    display: block;
-		}
-	}
-
-	.contributions-context__copy {
-		font-size: 16px;
-		line-height: 24px;
-		font-family: $gu-text-egyptian-web;
-		margin-bottom: $gu-v-spacing;
-
-		@include mq($from: phablet) {
-			width: 620px;
-		}
-	}
-
-	.contributions-context__subheading {
-		font-weight: bold;
-		font-size: 32px;
-		line-height: 36px;
-		color: #fff;
-		font-family: $gu-egyptian-web;
-
-		@include mq($from: phablet) {
-			font-size: 36px;
-			line-height: 40px;
-		}
-
-		@include mq($from: desktop) {
-			font-size: 24px;
-			line-height: 28px;
-		}
-
-		&:nth-of-type(2) {
-			@include mq($from: desktop) {
-				margin-left: 255px;
-			}
-
-			@include mq($from: leftCol) {
-				margin-left: 330px;
-			}
-		}
-
-		&:last-of-type {
-			margin-bottom: 40px;
-			color: gu-colour(neutral-1);
-
-			@include mq($from: desktop) {
-				margin-left: 170px;
-			}
-
-			@include mq($from: leftCol) {
-				margin-left: 255px;
-			}
-		}
-	}
-
-	// ----- Bundle ----- //
-
-	.contributions-bundle {
-		background-color: darken(gu-colour(multimedia-main-2), 5%);
-
-		@include mq($from: desktop) {
-			height: 450px;
-			position: relative;
-		}
-
-		.component-terms-privacy {
-			color: #333;
-		}
-	}
-
-	.contributions-bundle__content {
-		background-color: gu-colour(multimedia-main-2);
-
-        p {
-          font-family: $gu-text-egyptian-web;
-        }
-
-		padding: 0;
-
-		@include mq($from: mobileLandscape) {
-			padding-left: 10px;
-			padding-right: 10px;
-			padding-bottom: $gu-v-spacing;
-		}
-
-		@include mq($from: desktop) {
-			height: 450px;
-		}
-	}
-
-	.component-bundle {
-		display: inline-block;
-		vertical-align: top;
-		padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2) $gu-v-spacing;
-		border-top: 2px solid gu-colour(neutral-1);
-		background-color: gu-colour(comment-support-3);
-		font-family: $gu-text-sans-web;
-
-		@include mq($from: phablet) {
-			width: 280px;
-			margin-top: 49px;
-			margin-left: 10px;
-		}
-
-		@include mq($from: tablet, $until: desktop) {
-			width: 360px;
-		}
-
-		@include mq($from: desktop) {
-			margin-top: 0;
-			margin-left: 49px;
-			position: absolute;
-			top: 80px;
-		}
-
-		@include mq($from: leftCol) {
-			margin-left: 85px;
-		}
-
-		@include mq($from: wide) {
-			width: 360px;
-			margin-left: 120px;
-		}
-
-		label, .component-number-input {
-			margin-top: 5px;
-			margin-bottom: 5px;
-			padding-top: 10px;
-			padding-bottom: 10px;
-		}
-
-		.component-cta-link {
-			padding-top: 17px;
-			padding-bottom: 17px;
-
-			svg {
-				top: 18px;
-			}
-		}
-	}
-
-	.component-secure {
-		text-align: right;
-		padding-top: 5px;
-	}
-
-	.component-double-heading {
-  	margin-bottom: (2 * $gu-v-spacing);
-  	color: gu-colour(neutral-1);
-	}
-
-	.component-double-heading__heading {
-		font-size: 24px;
-		line-height: 24px;
-
-		@include mq($from: desktop, $until: wide) {
-			padding-bottom: 1px;
-		}
-	}
-
-	.component-double-heading__subheading {
-		padding-top: 4px;
-		height: 24px;
-		font-size: 20px;
-		line-height: 24px;
-
-		@include mq($from: phablet) {
-			height: 28px;
-			font-size: 24px;
-			line-height: 28px;
-		}
-	}
-
-	.component-bundle__content-intro {
-		line-height: 20px;
-		margin-bottom: $gu-v-spacing * 2;
-		color: gu-colour(neutral-1);
-	}
-
-	.component-radio-toggle input:not(:checked)+label, .component-number-input {
->>>>>>> master
     background-color: gu-colour(comment-support-3);
   }
 
