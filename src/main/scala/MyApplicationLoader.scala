@@ -10,5 +10,5 @@ class MyApplicationLoader extends ApplicationLoader {
 }
 
 class MyComponents(context: Context) extends BuiltInComponentsFromContext(context) with NoHttpFiltersComponents {
-  lazy val router = new Routes(httpErrorHandler, new controllers.HomeController(controllerComponents))
+  lazy val router = new Routes(httpErrorHandler, new controllers.StripeController(controllerComponents))
 }
