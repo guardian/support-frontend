@@ -19,8 +19,8 @@ case class StripeAccountConfig(secretKey: String, publicKey: String)
 class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe", version: Option[String] = None)
   extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
   def fromConfig(config: Config): StripeConfig = StripeConfig(
-    accountFromConfig(config, prefix, "AU"),
     accountFromConfig(config, prefix, "default"),
+    accountFromConfig(config, prefix, "AU"),
     version = version
   )
 
