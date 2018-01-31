@@ -7,7 +7,7 @@ import com.typesafe.config.Config
 
 case class StripeConfig(defaultAccount: StripeAccountConfig, australiaAccount: StripeAccountConfig, version: Option[String] = None)
   extends TouchpointConfig {
-  def forCountry(country: Option[Country]) =
+  def forCountry(country: Option[Country] = None) =
     country match {
       case Some(Australia) => australiaAccount
       case _ => defaultAccount
@@ -15,7 +15,6 @@ case class StripeConfig(defaultAccount: StripeAccountConfig, australiaAccount: S
 }
 
 case class StripeAccountConfig(secretKey: String, publicKey: String)
-
 
 class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe", version: Option[String] = None)
   extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
