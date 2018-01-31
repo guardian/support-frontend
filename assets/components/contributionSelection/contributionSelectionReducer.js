@@ -9,6 +9,8 @@ import type {
   ContribError as ContributionError,
 } from 'helpers/contributions';
 
+import type { Action } from './contributionSelectionActions';
+
 
 // ----- Types ----- //
 
@@ -97,21 +99,26 @@ function isCustomAmount(state: State): boolean {
 
 // ----- Reducer ----- //
 
-function contributionSelectionReducerFor(prefix: string): Function {
+function contributionSelectionReducerFor(scope: string): Function {
 
-  function contributionSelectionReducer(state: State = initialState, action) {
+  function contributionSelectionReducer(state: State = initialState, action: Action): State {
+
+    if (action.scope !== scope) {
+      return state;
+    }
 
     switch (action.type) {
-      case `${prefix}_SET_CONTRIBUTION_TYPE`:
-        return { ...state, contributionType: action.payload };
-      case `${prefix}_SET_AMOUNT`:
+      case 'SET_CONTRIBUTION_TYPE':
+        return { ...state, contributionType: action.contributionType };
+      case 'SET_AMOUNT':
         return {
           ...state,
-          ...updatePredefinedAmount(state, action.payload),
+          ...updatePredefinedAmount(state, action.amount),
           customAmount: null,
+          error: null,
         };
-      case `${prefix}_SET_CUSTOM_AMOUNT`:
-        return { ...state, ...parseCustomAmount(state, action.payload) };
+      case 'SET_CUSTOM_AMOUNT':
+        return { ...state, ...parseCustomAmount(state, action.amount) };
       default:
         return state;
     }
