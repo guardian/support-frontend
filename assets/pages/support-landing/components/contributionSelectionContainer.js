@@ -9,6 +9,7 @@ import {
   getAmount,
   isCustomAmount,
 } from 'components/contributionSelection/contributionSelectionReducer';
+import actionsFor from 'components/contributionSelection/contributionSelectionActions';
 
 import type { State } from '../supportLanding';
 
@@ -31,4 +32,4 @@ function mapStateToProps(state: State) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(ContributionSelection);
+export default connect(mapStateToProps, actionsFor('CONTRIBUTE_SECTION'))(ContributionSelection);
