@@ -57,6 +57,8 @@ class CustomActionBuilders(
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
+  val NoCacheAction = new NoCacheAction(cc.parsers.defaultBodyParser, cc.executionContext)
+
   val GeoTargetedCachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,

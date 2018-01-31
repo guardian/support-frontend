@@ -46,8 +46,8 @@ class Application(
     Redirect(location + path, request.queryString)
   }
 
-  def unsupportedBrowser: Action[AnyContent] = CachedAction() { implicit request =>
-    BrowserCheck.logUserAgent
+  def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
+    BrowserCheck.logUserAgent(request)
     Ok(views.html.unsupportedBrowserPage())
   }
 
