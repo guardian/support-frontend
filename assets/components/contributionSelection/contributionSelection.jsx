@@ -30,10 +30,12 @@ type PropTypes = {
   country: IsoCountry,
   currency: Currency,
   contributionType: ContributionType,
+  selectedAmount: number,
+  isCustomAmount: boolean,
   setContributionType: string => void,
   setAmount: string => void,
   setCustomAmount: string => void,
-  onKeyPress: void => void,
+  onKeyPress: Object => void,
   error: ContributionError,
 };
 
@@ -56,7 +58,7 @@ function ContributionSelection(props: PropTypes) {
         <RadioToggle
           name="contribution-amount-toggle"
           radios={getContributionAmountRadios(props.contributionType, props.currency)}
-          checked={props.selectedAmount.value}
+          checked={props.selectedAmount.toString()}
           toggleAction={props.setAmount}
         />
       </div>
@@ -87,7 +89,8 @@ function Error(props: {
 
 function CustomAmountInput(props: {
   setCustomAmount: string => void,
-  onKeyPress: void => void,
+  isCustomAmount: boolean,
+  onKeyPress: Object => void,
   currency: Currency,
   contributionType: ContributionType,
   country: IsoCountry,
@@ -99,7 +102,7 @@ function CustomAmountInput(props: {
       <NumberInput
         onFocus={props.setCustomAmount}
         onInput={props.setCustomAmount}
-        selected={props.selectedAmount.userDefined}
+        selected={props.isCustomAmount}
         placeholder="Other amount"
         onKeyPress={props.onKeyPress}
         ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
