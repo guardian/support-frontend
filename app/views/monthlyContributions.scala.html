@@ -3,6 +3,7 @@
 @import com.gu.support.config._
 @import helper.CSRF
 
+@import com.gu.i18n.Country
 @(
   title: String,
   id: String,
@@ -33,9 +34,13 @@
         };
         window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
         window.guardian.directDebitEnable = @directDebitButtonEnable;
-        window.guardian.stripeKey = {
-          default: "@defaultStripeConfig.publicKey",
-          uat: "@uatStripeConfig.publicKey"
+        window.guardian.stripeKeyRestOfTheWorld = {
+          default: "@defaultStripeConfig.forCountry(None).publicKey",
+          uat: "@uatStripeConfig.forCountry(None).publicKey"
+        };
+        window.guardian.stripeKeyAustralia = {
+          default: "@defaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
+          uat: "@uatStripeConfig.forCountry(Some(Country.Australia)).publicKey"
         };
         window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
