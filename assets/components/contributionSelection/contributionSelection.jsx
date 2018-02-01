@@ -58,7 +58,7 @@ function ContributionSelection(props: PropTypes) {
         <RadioToggle
           name="contribution-amount-toggle"
           radios={getContributionAmountRadios(props.contributionType, props.currency)}
-          checked={props.selectedAmount.toString()}
+          checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}
         />
       </div>
