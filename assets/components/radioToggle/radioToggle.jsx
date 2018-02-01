@@ -34,17 +34,6 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-// Builds an accessibility hint for the button.
-function getA11yHint(id: string, hint: ?string) {
-
-  return (
-    <p id={id} className="accessibility-hint">
-      {hint}
-    </p>
-  );
-
-}
-
 // Returns a list of the radio button elements.
 function getRadioButtons(props: PropTypes) {
 
@@ -60,7 +49,7 @@ function getRadioButtons(props: PropTypes) {
         className={generateClassName('component-radio-toggle__button', props.modifierClass)}
         key={radioId}
       >
-        {getA11yHint(a11yHintId, radio.accessibilityHint)}
+        <A11yHint id={a11yHintId} hint={radio.accessibilityHint} />
         <input
           className="component-radio-toggle__input"
           type="radio"
@@ -101,7 +90,20 @@ export default function RadioToggle(props: PropTypes) {
 }
 
 
-// ----- Proptypes ----- //
+// ----- Auxiliary Components ----- //
+
+function A11yHint(props: {id: string, hint: ?string}) {
+
+  return (
+    <p id={props.id} className="accessibility-hint">
+      {props.hint}
+    </p>
+  );
+
+}
+
+
+// ----- Default Props ----- //
 
 RadioToggle.defaultProps = {
   accessibilityHint: '',
