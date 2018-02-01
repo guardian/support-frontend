@@ -21,7 +21,7 @@ import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUs
 import services.stepfunctions.RegularContributionsClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
-import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, StripeConfig, StripeConfigProvider}
+import com.gu.support.config._
 import fixtures.TestCSRFComponents
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
@@ -135,7 +135,10 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
       ): Future[Result] = {
         val stripeConfigProvider = mock[StripeConfigProvider]
         val payPalConfigProvider = mock[PayPalConfigProvider]
-        when(stripeConfigProvider.get(any[Boolean])).thenReturn(StripeConfig("test-key", "test-key"))
+        when(stripeConfigProvider.get(any[Boolean]))
+          .thenReturn(
+            StripeConfig(StripeAccountConfig("test-key", "test-key"), StripeAccountConfig("test-key", "test-key"))
+          )
         when(payPalConfigProvider.get(any[Boolean])).thenReturn(PayPalConfig(
           payPalEnvironment = "",
           NVPVersion = "",
