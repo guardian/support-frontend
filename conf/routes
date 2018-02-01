@@ -2,6 +2,9 @@
 
 GET /healthcheck                                    controllers.Application.healthcheck
 
+# ----- Unsupported Browsers ----- #
+
+GET /unsupported-browser                            controllers.Application.unsupportedBrowser
 
 # ----- Bundles Landing Page ----- #
 

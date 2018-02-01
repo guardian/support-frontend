@@ -2,7 +2,7 @@ package actions
 
 import org.joda.time.DateTime
 import play.api.mvc._
-
+import HttpHeaders.mergeHeader
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
@@ -24,13 +24,4 @@ class CachedActionBuilder(
     CacheControl.defaultCacheHeaders(maxAge, browserAge, now)
   }
 
-  private def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
-    val (selected, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
-    if (selected.isEmpty) {
-      others
-    } else {
-      val selectedValues = selected.map(_._2)
-      (header -> selectedValues.mkString(", ")) :: others
-    }
-  }
 }

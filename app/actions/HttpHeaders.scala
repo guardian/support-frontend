@@ -17,4 +17,14 @@ object HttpHeaders {
   implicit class DateTime2ToHttpDateFormat(date: DateTime) {
     def toHttpDateTimeString: String = date.toString(HTTPDateFormat)
   }
+
+  def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
+    val (selected, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
+    if (selected.isEmpty) {
+      others
+    } else {
+      val selectedValues = selected.map(_._2)
+      (header -> selectedValues.mkString(", ")) :: others
+    }
+  }
 }
