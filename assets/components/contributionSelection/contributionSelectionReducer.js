@@ -14,16 +14,13 @@ import type { Action } from './contributionSelectionActions';
 
 // ----- Types ----- //
 
-type PredefinedAmounts = {
-  oneOff: number,
-  monthly: number,
-  annual: number,
-};
-
 export type State = {
   contributionType: ContributionType,
-  predefinedAmounts: PredefinedAmounts,
-  customAmount: ?string,
+  oneOffAmount: string,
+  monthlyAmount: string,
+  annualAmount: string,
+  isCustomAmount: boolean,
+  customAmount: ?number,
   error: ?ContributionError,
 };
 
@@ -32,12 +29,11 @@ export type State = {
 
 const initialState: State = {
   contributionType: 'MONTHLY',
-  predefinedAmounts: {
-    oneOff: 50,
-    monthly: 5,
-    annual: 75,
-  },
+  oneOffAmount: '50',
+  monthlyAmount: '5',
+  annualAmount: '75',
   customAmount: null,
+  isCustomAmount: false,
   error: null,
 };
 
@@ -45,31 +41,36 @@ const initialState: State = {
 // ----- Functions ----- //
 
 // Changes the amount of the currently selected type of contribution.
-function updatePredefinedAmount(state: State, newAmount: number): PredefinedAmounts {
+function updatePredefinedAmount(state: State, newAmount: string): State {
+
+  const resetCustom = { isCustomAmount: false, error: null };
 
   switch (state.contributionType) {
     case 'ONE_OFF':
-      return { ...state.predefinedAmounts, oneOffAmount: newAmount };
+      return { ...state, ...resetCustom, oneOffAmount: newAmount };
     case 'MONTHLY':
-      return { ...state.predefinedAmounts, monthlyAmount: newAmount };
+      return { ...state, ...resetCustom, monthlyAmount: newAmount };
     case 'ANNUAL':
-      return { ...state.predefinedAmounts, annualAmount: newAmount };
+      return { ...state, ...resetCustom, annualAmount: newAmount };
     default:
-      return state.predefinedAmounts;
+      return state;
   }
 
 }
 
 // Checks if the custom amount is acceptable, returns a specific error if not.
-function parseCustomAmount(state, customAmount) {
+function parseCustomAmount(state: State, customAmount: string): {
+  error: ?ContributionError,
+  customAmount: ?number,
+} {
 
   const { error, amount } = parseContribution(customAmount, state.contributionType);
 
   if (error) {
-    return { error };
+    return { error, customAmount: null };
   }
 
-  return { amount };
+  return { error: null, customAmount: amount };
 
 }
 
@@ -77,23 +78,18 @@ function parseCustomAmount(state, customAmount) {
 // ----- Selectors ----- //
 
 // Retrieves the amount for the currently chosen contribution type.
-function getAmount(state: State): number {
+function getAmount(state: State): string {
 
   switch (state.contributionType) {
     case 'ONE_OFF':
-      return state.predefinedAmounts.oneOff;
+      return state.oneOffAmount;
     case 'MONTHLY':
-      return state.predefinedAmounts.monthly;
+      return state.monthlyAmount;
     default:
     case 'ANNUAL':
-      return state.predefinedAmounts.annual;
+      return state.annualAmount;
   }
 
-}
-
-// Checks if a custom amount is defined.
-function isCustomAmount(state: State): boolean {
-  return state.customAmount !== null;
 }
 
 
@@ -111,14 +107,9 @@ function contributionSelectionReducerFor(scope: string): Function {
       case 'SET_CONTRIBUTION_TYPE':
         return { ...state, contributionType: action.contributionType };
       case 'SET_AMOUNT':
-        return {
-          ...state,
-          ...updatePredefinedAmount(state, action.amount),
-          customAmount: null,
-          error: null,
-        };
+        return updatePredefinedAmount(state, action.amount);
       case 'SET_CUSTOM_AMOUNT':
-        return { ...state, ...parseCustomAmount(state, action.amount) };
+        return { ...state, isCustomAmount: true, ...parseCustomAmount(state, action.amount) };
       default:
         return state;
     }
@@ -135,5 +126,4 @@ function contributionSelectionReducerFor(scope: string): Function {
 export {
   contributionSelectionReducerFor,
   getAmount,
-  isCustomAmount,
 };

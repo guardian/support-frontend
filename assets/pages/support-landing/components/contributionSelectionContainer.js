@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import ContributionSelection from 'components/contributionSelection/contributionSelection';
 import {
   getAmount,
-  isCustomAmount,
 } from 'components/contributionSelection/contributionSelectionReducer';
 import actionsFor from 'components/contributionSelection/contributionSelectionActions';
 
@@ -23,7 +22,7 @@ function mapStateToProps(state: State) {
     currency: state.common.currency,
     contributionType: state.page.contributionType,
     selectedAmount: getAmount(state.page),
-    isCustomAmount: isCustomAmount(state.page),
+    isCustomAmount: state.page.isCustomAmount,
     error: state.page.error,
   };
 

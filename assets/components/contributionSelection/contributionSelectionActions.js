@@ -9,7 +9,7 @@ import type { Contrib as ContributionType } from 'helpers/contributions';
 
 export type Action =
   | { type: 'SET_CONTRIBUTION_TYPE', scope: string, contributionType: ContributionType }
-  | { type: 'SET_AMOUNT', scope: string, amount: number }
+  | { type: 'SET_AMOUNT', scope: string, amount: string }
   | { type: 'SET_CUSTOM_AMOUNT', scope: string, amount: string };
 
 
@@ -21,7 +21,7 @@ export default function contributionSelectionActionsFor(scope: string): Object {
     setContributionType(contributionType: ContributionType): Action {
       return { type: 'SET_CONTRIBUTION_TYPE', scope, contributionType };
     },
-    setAmount(amount: number): Action {
+    setAmount(amount: string): Action {
       return { type: 'SET_AMOUNT', scope, amount };
     },
     setCustomAmount(amount: string): Action {
