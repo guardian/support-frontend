@@ -35,7 +35,13 @@ export type State = {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(pageReducer);
+/* eslint-disable no-underscore-dangle */
+const store = pageInit(
+  pageReducer,
+  null,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+/* eslint-enable */
 
 
 // ----- Render ----- //
