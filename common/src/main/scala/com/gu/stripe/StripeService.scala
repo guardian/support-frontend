@@ -1,7 +1,7 @@
 package com.gu.stripe
 
 import com.gu.helpers.WebServiceHelper
-import com.gu.i18n.Country
+import com.gu.i18n.Currency
 import com.gu.okhttp.RequestRunners._
 import com.gu.stripe.Stripe._
 import com.gu.support.config.StripeConfig
@@ -15,17 +15,17 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def createCustomer(description: String, card: String, country: Country): Future[Customer] =
+  def createCustomer(description: String, card: String, currency: Currency): Future[Customer] =
     postForm[Customer]("customers", Map(
       "description" -> Seq(description),
       "card" -> Seq(card)
-    ), getHeaders(country))
+    ), getHeaders(currency))
 
-  private def getHeaders(country: Country) =
-    config.version.foldLeft(getAuthorizationHeader(country)) {
+  private def getHeaders(currency: Currency) =
+    config.version.foldLeft(getAuthorizationHeader(currency)) {
       case (map, version) => map + ("Stripe-Version" -> version)
     }
 
-  private def getAuthorizationHeader(country: Country) =
-    Map("Authorization" -> s"Bearer ${config.forCountry(Some(country)).secretKey}")
+  private def getAuthorizationHeader(currency: Currency) =
+    Map("Authorization" -> s"Bearer ${config.forCurrency(Some(currency)).secretKey}")
 }

@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
-import com.gu.i18n.Country
-import com.gu.i18n.Country.UK
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.GBP
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.{StripeError, StripeList}
@@ -84,7 +84,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec {
   "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
     val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds))
     val ex = recoverToExceptionIf[StripeError] {
-      service.createCustomer("Test", "tok_chargeDeclined", UK)
+      service.createCustomer("Test", "tok_chargeDeclined", GBP)
     }
     ex.map(_.code should be(Some("card_declined")))
   }
@@ -96,7 +96,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec {
     val stripe = mock[StripeService]
     val card = Stripe.Source("1234", "visa", "1234", 1, 2099, "GB")
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
-    when(stripe.createCustomer(any[String], any[String], any[Country])).thenReturn(Future(customer))
+    when(stripe.createCustomer(any[String], any[String], any[Currency])).thenReturn(Future(customer))
     when(services.stripeService).thenReturn(stripe)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
