@@ -15,7 +15,8 @@ sealed trait PaymentGateway {
 object PaymentGateway {
   def forPaymentMethod(paymentMethod: PaymentMethod, currency: Currency): PaymentGateway = paymentMethod match {
     case _: PayPalReferenceTransaction => PayPalGateway
-    case _: CreditCardReferenceTransaction => if (currency == AUD) StripeGatewayAUD else StripeGatewayDefault
+    case _: CreditCardReferenceTransaction if currency == AUD => StripeGatewayAUD
+    case _: CreditCardReferenceTransaction => StripeGatewayDefault
     case _: DirectDebitPaymentMethod => DirectDebitGateway
   }
 
