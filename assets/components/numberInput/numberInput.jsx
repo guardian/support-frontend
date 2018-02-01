@@ -37,7 +37,7 @@ function getLabel(labelText: ?string) {
 
 export default function NumberInput(props: PropTypes) {
 
-  const selectedClass = props.selected ? ' component-number-input--selected' : '';
+  const selectedClass = props.selected ? 'selected' : null;
 
   return (
     <div className={generateClassName('component-number-input', selectedClass)}>
