@@ -15,6 +15,7 @@ Support Frontend, how they interact and how you can start adding code to this re
 8. [A/B Test framework](#8-ab-test-framework)
 9. [Test environments](#9-test-environments)
 10. [CSS guidelines](#10-css-guidelines)
+11. [Payment Diagrams](#11-payment-diagrams)
 
 ## 1. Getting started
 
@@ -513,3 +514,7 @@ As an example consider the following CSS for a shared component called `DoubleHe
 ```
 
 Note that we avoid nesting, we use a BEM approach and we prefix the classes with `component`. 
+
+## 11 Payment Diagrams 
+The following diagram shows the series of requests that take place for a One-Off PayPal payment
+![This diagram shows the series of requests that take place for a One-Off PayPal payment ](https://user-images.githubusercontent.com/2844554/35405125-1a6a53ee-01fd-11e8-892b-8716f685d6d3.png)
