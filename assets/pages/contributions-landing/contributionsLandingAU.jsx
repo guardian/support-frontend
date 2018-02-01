@@ -30,15 +30,6 @@ const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thun
 
 saveContext(store.dispatch);
 
-(function initialiseAmountsTest() {
-  try {
-    return store.dispatch(changeContribAmountMonthly({
-      value: '15', userDefined: false,
-    }));
-  } catch (e) { return null; }
-}());
-
-
 // ----- Render ----- //
 
 const content = (
