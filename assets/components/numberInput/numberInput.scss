@@ -11,30 +11,30 @@
 	&::placeholder {
 		color: gu-colour(neutral-1);
 	}
+}
 
-	.component-number-input__label {
-		position: absolute;
-		top: 7px;
-		left: $gu-h-spacing;
+.component-number-input__label {
+	position: absolute;
+	top: 7px;
+	left: $gu-h-spacing;
+}
+
+.component-number-input__input {
+	border: none;
+	background: transparent;
+	text-align: center;
+	width: 100%;
+	padding: 2px 0;
+
+	&:focus {
+		outline: none;
 	}
 
-	.component-number-input__input {
-		border: none;
-		background: transparent;
-		text-align: center;
-		width: 100%;
-		padding: 2px 0;
-
-		&:focus {
-			outline: none;
-		}
-
-		// Hides the number spinners.
-		-moz-appearance: textfield;
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
+	// Hides the number spinners.
+	-moz-appearance: textfield;
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
 	}
 }
