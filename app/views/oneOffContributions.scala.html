@@ -2,7 +2,7 @@
 @import com.gu.identity.play.IdUser
 @import com.gu.support.config.StripeConfig
 @import helper.CSRF
-@import com.gu.i18n.Country
+@import com.gu.i18n.Country.Australia
 @(
         title: String,
         id: String,
@@ -22,8 +22,8 @@
           uat: "@uatStripeConfig.forCountry(None).publicKey"
         };
         window.guardian.stripeKeyAustralia = {
-          default: "@defaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
-          uat: "@uatStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+          default: "@defaultStripeConfig.forCountry(Some(Australia)).publicKey",
+          uat: "@uatStripeConfig.forCountry(Some(Australia)).publicKey"
         };
         window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
         window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
