@@ -37,7 +37,7 @@ export default function Contribute(props: PropTypes) {
         headingChildren={paymentImages}
       >
         <Secure modifierClass="contribute-body" />
-        <p className="component-contribute__copy">
+        <p className="component-contribute__description">
           Support the&nbsp;Guardian&#39;s editorial operations by making a
           monthly, or one-off contribution today
         </p>

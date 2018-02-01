@@ -7,11 +7,15 @@
   }
 
   .component-page-section__header {
-    position: relative;
+    @include dropline;
   }
 
   .component-page-section__body {
     position: relative;
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
   }
 
   .component-secure {
@@ -27,8 +31,24 @@
   }
 
   .component-secure--contribute-body {
+    position: static;
+    float: right;
+    margin-top: 4px;
+
     @include mq($until: desktop) {
       display: none;
     }
+  }
+}
+
+.component-contribute__description {
+  font-size: 16px;
+  line-height: 1.25;
+  font-family: $gu-text-egyptian-web;
+  color: gu-colour(garnett-neutral-1);
+  margin-top: $gu-v-spacing / 2;
+
+  @include mq($from: tablet) {
+    width: 600px;
   }
 }
