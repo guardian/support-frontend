@@ -16,7 +16,8 @@ scmInfo := Some(ScmInfo(
 licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.3.1"
+  "com.typesafe" % "config" % "1.3.1",
+  "com.gu" %% "support-internationalisation" % "0.1"
 )
 
 releaseProcess := Seq[ReleaseStep](
