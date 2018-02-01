@@ -7,7 +7,13 @@
   }
 
   .component-page-section__header {
+    position: relative;
+
     @include dropline;
+  }
+
+  .component-inline-payment-logos {
+    margin-top: $gu-v-spacing;
   }
 
   .component-page-section__body {
@@ -20,8 +26,15 @@
 
   .component-secure {
     position: absolute;
+    font-family: $gu-text-sans-web;
+    font-weight: bold;
+    color: rgba(gu-colour(garnett-neutral-1), 0.5);
     top: 10px;
     right: 0;
+  }
+
+  .svg-lock {
+    fill: rgba(gu-colour(garnett-neutral-1), 0.5);
   }
 
   .component-secure--contribute-header {
