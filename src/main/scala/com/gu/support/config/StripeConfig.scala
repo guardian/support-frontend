@@ -1,15 +1,15 @@
 package com.gu.support.config
 
-import com.gu.i18n.Country
-import com.gu.i18n.Country.Australia
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.AUD
 import com.typesafe.config.Config
 
 
 case class StripeConfig(defaultAccount: StripeAccountConfig, australiaAccount: StripeAccountConfig, version: Option[String] = None)
   extends TouchpointConfig {
-  def forCountry(country: Option[Country] = None) =
+  def forCurrency(country: Option[Currency] = None) =
     country match {
-      case Some(Australia) => australiaAccount
+      case Some(AUD) => australiaAccount
       case _ => defaultAccount
     }
 }
