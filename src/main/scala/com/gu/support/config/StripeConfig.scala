@@ -20,7 +20,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
   def fromConfig(config: Config): StripeConfig = StripeConfig(
     accountFromConfig(config, prefix, "default"),
-    accountFromConfig(config, prefix, "AU"),
+    accountFromConfig(config, prefix, "AUD"),
     version = stripeVersion(config)
   )
 
