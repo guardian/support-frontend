@@ -18,10 +18,7 @@ object HttpHeaders {
     def toHttpDateTimeString: String = date.toString(HTTPDateFormat)
   }
 
-  def merge(header: String, headers: List[(String, String)]): List[(String, String)] =
-    mergeHeader(header, headers)
-
-  private def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
+  def mergeHeader(header: String, headers: List[(String, String)]): List[(String, String)] = {
     val (selected, others) = headers.partition(_._1.toLowerCase == header.toLowerCase)
     if (selected.isEmpty) {
       others
