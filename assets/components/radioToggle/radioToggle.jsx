@@ -41,6 +41,8 @@ function getRadioButtons(props: PropTypes) {
 
     const radioId = `${props.name}-${idx}`;
     const a11yHintId = `accessibility-hint-${radioId}`;
+    const radioChecked = radio.value === props.checked;
+    const labelModifier = radioChecked ? 'checked' : null;
 
     /* eslint-disable jsx-a11y/label-has-for */
     return (
@@ -57,11 +59,14 @@ function getRadioButtons(props: PropTypes) {
           value={radio.value}
           id={radioId}
           onChange={() => props.toggleAction(radio.value)}
-          checked={radio.value === props.checked}
+          checked={radioChecked}
           tabIndex="0"
           aria-describedby={a11yHintId}
         />
-        <label htmlFor={radioId} className="component-radio-toggle__label">
+        <label
+          htmlFor={radioId}
+          className={generateClassName('component-radio-toggle__label', labelModifier)}
+        >
           {radio.text}
         </label>
       </span>
