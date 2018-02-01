@@ -1,10 +1,10 @@
 package com.gu.stripe
 
 import com.gu.helpers.WebServiceHelper
+import com.gu.i18n.Country
 import com.gu.okhttp.RequestRunners._
 import com.gu.stripe.Stripe._
 import com.gu.support.config.StripeConfig
-import okhttp3.Request
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,26 +15,18 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  override def wsPreExecute(req: Request.Builder): Request.Builder = {
-    req.addHeader("Authorization", s"Bearer ${config.secretKey}")
-
-    config.version foreach { version =>
-      logger.info(s"Making a stripe call with version: $version")
-      req.addHeader("Stripe-Version", version)
-    }
-    req
-  }
-
-  def createCustomer(description: String, card: String): Future[Customer] =
-    post[Customer]("customers", Map(
+  def createCustomer(description: String, card: String, country: Country): Future[Customer] =
+    postForm[Customer]("customers", Map(
       "description" -> Seq(description),
       "card" -> Seq(card)
-    ))
+    ), getHeaders(country))
 
-  def readCustomer(customerId: String): Future[Customer] =
-    get[Customer](s"customers/$customerId")
+  private def getHeaders(country: Country) =
+    config.version.foldLeft(getAuthorizationHeader(country)) {
+      case (map, version) => map + ("Stripe-Version" -> version)
+    }
 
-  def updateCard(customerId: String, card: String): Future[Customer] =
-    post[Customer](s"customers/$customerId", Map("card" -> Seq(card)))
-
+  private def getAuthorizationHeader(country: Country) = {
+    Map("Authorization" -> s"Bearer ${config.forCountry(Some(country)).secretKey}")
+  }
 }

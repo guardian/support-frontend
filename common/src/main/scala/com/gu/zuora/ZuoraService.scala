@@ -31,14 +31,14 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
 
   def getAccountIds(identityId: String): Future[List[String]] = {
     val queryData = QueryData(s"select AccountNumber from account where IdentityId__c = '${identityId.toLong}'")
-    post[QueryResponse](s"action/query", queryData.asJson).map(_.records.map(_.AccountNumber))
+    postJson[QueryResponse](s"action/query", queryData.asJson).map(_.records.map(_.AccountNumber))
   }
 
   def getSubscriptions(accountId: String): Future[List[Subscription]] =
     get[SubscriptionsResponse](s"subscriptions/accounts/$accountId").map(_.subscriptions)
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-    post[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson)
+    postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson)
 
   def getRecurringSubscription(identityId: String, billingPeriod: BillingPeriod): Future[Option[Subscription]] =
     for {

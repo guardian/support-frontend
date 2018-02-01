@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.i18n.CountryGroup
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
@@ -38,7 +38,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, services.stripeService)
+        createStripePaymentMethod(stripe, state.user.country, services.stripeService)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -54,9 +54,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.acquisitionData
     )
 
-  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
+  def createStripePaymentMethod(stripe: StripePaymentFields, country: Country, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
     stripeService
-      .createCustomer(stripe.userId, stripe.stripeToken)
+      .createCustomer(stripe.userId, stripe.stripeToken, country)
       .map { stripeCustomer =>
         val card = stripeCustomer.source
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
