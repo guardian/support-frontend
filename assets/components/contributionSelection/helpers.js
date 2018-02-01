@@ -90,6 +90,18 @@ function getSpokenType(
 
 }
 
+function getContributionTypeClassName(contributionType: ContributionType) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'one-off';
+  } else if (contributionType === 'MONTHLY') {
+    return 'monthly';
+  }
+
+  return 'annual';
+
+}
+
 function getAmountA11yHint(
   contributionType: ContributionType,
   currency: Currency,
@@ -161,6 +173,7 @@ function getContributionAmountRadios(
 
 export {
   getContributionTypeRadios,
+  getContributionTypeClassName,
   getCustomAmountA11yHint,
   getContributionAmountRadios,
 };

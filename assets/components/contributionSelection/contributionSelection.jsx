@@ -9,6 +9,7 @@ import NumberInput from 'components/numberInput/numberInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { errorMessage as contributionsErrorMessage } from 'helpers/contributions';
+import { generateClassName } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -19,6 +20,7 @@ import type {
 
 import {
   getContributionTypeRadios,
+  getContributionTypeClassName,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
 } from './helpers';
@@ -44,8 +46,10 @@ type PropTypes = {
 
 function ContributionSelection(props: PropTypes) {
 
+  const modifierClass = getContributionTypeClassName(props.contributionType);
+
   return (
-    <div className="component-contribution-selection">
+    <div className={generateClassName('component-contribution-selection', modifierClass)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
