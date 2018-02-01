@@ -27,17 +27,7 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
-export const setupStripeCheckout = (
-  callback: Function,
-  closeHandler: ?Function,
-  currency: string,
-  isTestUser: boolean,
-): Promise<void> => loadStripe().then(() => {
-
-  const handleToken = (token) => {
-    callback(token.id);
-  };
-  const defaultCloseHandler: Function = () => {};
+const getStripeKey = (currency: string, isTestUser: boolean) => {
 
   let stripeKey = null;
 
@@ -52,6 +42,23 @@ export const setupStripeCheckout = (
         window.guardian.stripeKeyRestOfTheWorld.default;
       break;
   }
+
+  return stripeKey;
+};
+
+export const setupStripeCheckout = (
+  callback: Function,
+  closeHandler: ?Function,
+  currency: string,
+  isTestUser: boolean,
+): Promise<void> => loadStripe().then(() => {
+
+  const handleToken = (token) => {
+    callback(token.id);
+  };
+  const defaultCloseHandler: Function = () => {};
+
+  const stripeKey = getStripeKey(currency, isTestUser);
 
   stripeHandler = window.StripeCheckout.configure({
     name: 'Guardian',

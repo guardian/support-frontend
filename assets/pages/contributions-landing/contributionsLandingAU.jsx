@@ -17,9 +17,6 @@ import reducer from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
-import { changeContribAmountMonthly } from './contributionsLandingActions';
-
-
 // ----- Page Startup ----- //
 
 /* eslint-disable no-underscore-dangle */
