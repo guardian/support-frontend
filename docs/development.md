@@ -517,4 +517,4 @@ Note that we avoid nesting, we use a BEM approach and we prefix the classes with
 
 ## 11 Payment Diagrams 
 The following diagram shows the series of requests that take place for a One-Off PayPal payment
-![This diagram shows the series of requests that take place for a One-Off PayPal payment ](http://i68.tinypic.com/2m5bjeo.png)
+![This diagram shows the series of requests that take place for a One-Off PayPal payment ](https://user-images.githubusercontent.com/2844554/35405125-1a6a53ee-01fd-11e8-892b-8716f685d6d3.png)
