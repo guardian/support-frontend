@@ -1,5 +1,7 @@
 package com.gu.zuora.model
 
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.AUD
 import com.gu.support.workers.model._
 import io.circe.{Decoder, Encoder}
 
@@ -11,14 +13,15 @@ sealed trait PaymentGateway {
 }
 
 object PaymentGateway {
-  def forPaymentMethod(paymentMethod: PaymentMethod): PaymentGateway = paymentMethod match {
+  def forPaymentMethod(paymentMethod: PaymentMethod, currency: Currency): PaymentGateway = paymentMethod match {
     case _: PayPalReferenceTransaction => PayPalGateway
-    case _: CreditCardReferenceTransaction => StripeGateway
+    case _: CreditCardReferenceTransaction => if (currency == AUD) StripeGatewayAUD else StripeGatewayDefault
     case _: DirectDebitPaymentMethod => DirectDebitGateway
   }
 
   def fromString(s: String): Option[PaymentGateway] = condOpt(s) {
-    case StripeGateway.name => StripeGateway
+    case StripeGatewayDefault.name => StripeGatewayDefault
+    case StripeGatewayAUD.name => StripeGatewayAUD
     case PayPalGateway.name => PayPalGateway
     case DirectDebitGateway.name => DirectDebitGateway
   }
@@ -30,8 +33,12 @@ object PaymentGateway {
 
 //Gateway names need to match to those set in Zuora
 //See: https://apisandbox.zuora.com/apps/NewGatewaySetting.do?method=list
-case object StripeGateway extends PaymentGateway {
+case object StripeGatewayDefault extends PaymentGateway {
   val name = "Stripe Gateway 1"
+}
+
+case object StripeGatewayAUD extends PaymentGateway {
+  val name = "Stripe Gateway GNM Membership AUS"
 }
 
 case object PayPalGateway extends PaymentGateway {
