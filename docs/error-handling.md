@@ -57,10 +57,10 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 ### Zuora
 
 [Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors) - note that the error json structure described on this page is incorrect as 
-the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe). Note that this returns a list of errors,
+the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe). This returns a list of errors,
 which are not yet included in the REST documentation, but can be found [here](https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object). 
 
-This is a fairly long list, and many don't seem to be particularly relevant to the API call(s) that we're making, so I have started by adding retries for the more obvious candidates:
+Many of these errors don't seem to be relevant to the API call(s) that we're making, so I have started by adding retries for the more obvious candidates:
 
 | Code                   | Description                                                                                                                                                        | Retry?    |
 |------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
@@ -72,7 +72,7 @@ This is a fairly long list, and many don't seem to be particularly relevant to t
 | UNKNOWN_ERROR          | There was an unknown error. No further details are available.                                                                                                      | Unlimited |  
 
 Handling Zuora errors is made more complicated because the response may return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors. 
-In practice, the list never seems to contain more than one item, and if the response contains multiple errors, or an error which we don't think is safe to retry, we currently assume that the request will never succeed and fail at this point.
+In practice, the list never seems to contain more than one item. Therefore if the response contains multiple errors, or an error which we don't think is safe to retry, we currently assume that the request will never succeed and fail at this point.
 
 ### Salesforce
 
