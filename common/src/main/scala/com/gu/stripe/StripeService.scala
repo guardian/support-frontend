@@ -26,7 +26,6 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
       case (map, version) => map + ("Stripe-Version" -> version)
     }
 
-  private def getAuthorizationHeader(country: Country) = {
+  private def getAuthorizationHeader(country: Country) =
     Map("Authorization" -> s"Bearer ${config.forCountry(Some(country)).secretKey}")
-  }
 }
