@@ -75,21 +75,19 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
    */
   def decodeError(responseBody: String)(implicit errorDecoder: Decoder[Error]): Either[circe.Error, Error] = decode[Error](responseBody)
 
-  def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
-    new Request.Builder()
-      .url(endpointUrl(endpoint, params))
-      .headers(okHttpHeaders(headers))
-
-  def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+  def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](buildRequest(endpoint, headers, params))
 
-  def postJson[A](endpoint: String, data: Json, headers: ParamMap = empty, params: ParamMap = empty)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postJson[A](endpoint: String, data: Json, headers: ParamMap = empty, params: ParamMap = empty)
+    (implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullKeys = true))
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }
 
-  def postForm[A](endpoint: String, data: Map[String, Seq[String]], headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postForm[A](endpoint: String, data: Map[String, Seq[String]], headers: ParamMap = empty, params: ParamMap = empty)
+    (implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) {
       case (p, (name, values)) =>
         val paramName = if (values.size > 1) s"$name[]" else name
@@ -97,6 +95,11 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     }.build()
     request[A](buildRequest(endpoint, headers, params).post(postParams))
   }
+
+  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
+    new Request.Builder()
+      .url(endpointUrl(endpoint, params))
+      .headers(okHttpHeaders(headers))
 
   private def endpointUrl(endpoint: String, params: ParamMap): HttpUrl = {
     val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
