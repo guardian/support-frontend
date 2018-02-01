@@ -26,8 +26,6 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
       case (map, version) => map + ("Stripe-Version" -> version)
     }
 
-  private def getAuthorizationHeader(currency: Currency) = {
-    logger.info(s"Using stripe key ${config.forCurrency(Some(currency)).secretKey} for currency: $currency")
+  private def getAuthorizationHeader(currency: Currency) =
     Map("Authorization" -> s"Bearer ${config.forCurrency(Some(currency)).secretKey}")
-  }
 }

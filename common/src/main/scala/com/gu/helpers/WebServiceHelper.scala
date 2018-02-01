@@ -99,7 +99,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
     new Request.Builder()
       .url(endpointUrl(endpoint, params))
-      .headers(okHttpHeaders(headers))
+      .headers(buildHeaders(headers))
 
   private def endpointUrl(endpoint: String, params: ParamMap): HttpUrl = {
     val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
@@ -112,7 +112,7 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
     }.build()
   }
 
-  private def okHttpHeaders(headers: ParamMap) =
+  private def buildHeaders(headers: ParamMap) =
     headers.foldLeft(new Headers.Builder()) {
       case (h, (k, v)) =>
         h.add(k, v)
