@@ -11,7 +11,6 @@ import io.circe
 import io.circe.Decoder
 import io.circe.parser.decode
 import io.circe.syntax._
-import okhttp3.Request.Builder
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,25 +19,24 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
-
-  override def wsPreExecute(req: Builder): Builder =
-    req //Add authentication information
-      .addHeader("apiSecretAccessKey", config.password)
-      .addHeader("apiAccessKeyId", config.username)
+  val authHeaders = Map(
+    "apiSecretAccessKey" -> config.password,
+    "apiAccessKeyId" -> config.username
+  )
 
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
-    get[GetAccountResponse](s"accounts/$accountNumber")
+    get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
   def getAccountIds(identityId: String): Future[List[String]] = {
     val queryData = QueryData(s"select AccountNumber from account where IdentityId__c = '${identityId.toLong}'")
-    post[QueryResponse](s"action/query", queryData.asJson).map(_.records.map(_.AccountNumber))
+    postJson[QueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(_.AccountNumber))
   }
 
   def getSubscriptions(accountId: String): Future[List[Subscription]] =
-    get[SubscriptionsResponse](s"subscriptions/accounts/$accountId").map(_.subscriptions)
+    get[SubscriptionsResponse](s"subscriptions/accounts/$accountId", authHeaders).map(_.subscriptions)
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-    post[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson)
+    postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)
 
   def getRecurringSubscription(identityId: String, billingPeriod: BillingPeriod): Future[Option[Subscription]] =
     for {
