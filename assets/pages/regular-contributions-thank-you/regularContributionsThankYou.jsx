@@ -3,10 +3,13 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { statelessInit as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
+import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+
+import { statelessInit as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
 
 
 // ----- Page Startup ----- //
@@ -19,6 +22,9 @@ pageInit();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
+    <CirclesIntroduction
+      headings={['Thank you', 'for your valuable', 'contribution to', 'Guardian journalism']}
+    />
     <Footer />
   </div>
 );

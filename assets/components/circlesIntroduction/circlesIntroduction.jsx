@@ -5,27 +5,39 @@
 import React from 'react';
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  headings: string[],
+  highlights?: string[],
+};
+
+
 // ----- Component ----- //
 
-export default function CirclesIntroduction() {
+export default function CirclesIntroduction(props: PropTypes) {
   return (
     <section className="component-circles-introduction">
       <div className="component-circles-introduction__content gu-content-margin">
         <h1 className="component-circles-introduction__heading">
-          <span className="component-circles-introduction__heading-line">Help us deliver</span>
-          <span className="component-circles-introduction__heading-line">the independent</span>
-          <span className="component-circles-introduction__heading-line">journalism the</span>
-          <span className="component-circles-introduction__heading-line">world needs</span>
+          {props.headings.map(heading =>
+            <span className="component-circles-introduction__heading-line">{heading}</span>)}
         </h1>
         <h2 className="component-circles-introduction__heading">
-          <span className="component-circles-introduction__heading-line">
-            <span className="component-circles-introduction__highlight">Support</span>
-          </span>
-          <span className="component-circles-introduction__heading-line">
-            <span className="component-circles-introduction__highlight">The&nbsp;Guardian</span>
-          </span>
+          {(props.highlights || []).map(highlight => (
+            <span className="component-circles-introduction__heading-line">
+              <span className="component-circles-introduction__highlight">{highlight}</span>
+            </span>
+          ))}
         </h2>
       </div>
     </section>
   );
 }
+
+
+// ----- Default Props ----- //
+
+CirclesIntroduction.defaultProps = {
+  highlights: [],
+};
