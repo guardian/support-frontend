@@ -18,6 +18,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
+import { validInputField } from '../../../helpers/utilities';
 
 // ----- Types ----- //
 
@@ -157,7 +158,7 @@ function mapStateToProps(state) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    hide: state.page.user.firstName === '' || state.page.user.lastName === '',
+    hide: !validInputField(state.page.user.firstName) || !validInputField(state.page.user.lastName),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
