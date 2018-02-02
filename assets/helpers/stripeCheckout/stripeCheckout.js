@@ -38,8 +38,8 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
       break;
     default:
       stripeKey = isTestUser ?
-        window.guardian.stripeKeyRestOfTheWorld.uat :
-        window.guardian.stripeKeyRestOfTheWorld.default;
+        window.guardian.stripeKeyDefaultCurrencies.uat :
+        window.guardian.stripeKeyDefaultCurrencies.default;
       break;
   }
 
