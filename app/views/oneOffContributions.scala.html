@@ -2,6 +2,7 @@
 @import com.gu.identity.play.IdUser
 @import com.gu.support.config.StripeConfig
 @import helper.CSRF
+@import com.gu.i18n.Currency.AUD
 @(
         title: String,
         id: String,
@@ -16,9 +17,13 @@
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
-        window.guardian.stripeKey = {
-          default: "@defaultStripeConfig.publicKey",
-          uat: "@uatStripeConfig.publicKey"
+        window.guardian.stripeKeyDefaultCurrencies = {
+          default: "@defaultStripeConfig.forCurrency(None).publicKey",
+          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+        };
+        window.guardian.stripeKeyAustralia = {
+          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         };
         window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
         window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";

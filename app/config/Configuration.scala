@@ -36,7 +36,7 @@ class Configuration {
 
   lazy val payPalConfigProvider = new PayPalConfigProvider(config, stage)
 
-  lazy val stripeConfigProvider = new StripeConfigProvider(config, stage)
+  lazy val regularStripeConfigProvider = new StripeConfigProvider(config, stage)
 
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 }

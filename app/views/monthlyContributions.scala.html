@@ -3,6 +3,7 @@
 @import com.gu.support.config._
 @import helper.CSRF
 
+@import com.gu.i18n.Currency.AUD
 @(
   title: String,
   id: String,
@@ -33,9 +34,13 @@
         };
         window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
         window.guardian.directDebitEnable = @directDebitButtonEnable;
-        window.guardian.stripeKey = {
-          default: "@defaultStripeConfig.publicKey",
-          uat: "@uatStripeConfig.publicKey"
+        window.guardian.stripeKeyDefaultCurrencies = {
+          default: "@defaultStripeConfig.forCurrency(None).publicKey",
+          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+        };
+        window.guardian.stripeKeyAustralia = {
+          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         };
         window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
         window.guardian.csrf = { token: "@CSRF.getToken.value" };

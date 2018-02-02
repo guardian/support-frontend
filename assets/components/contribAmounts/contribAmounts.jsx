@@ -103,6 +103,23 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute one hundred dollars annually',
     },
   ],
+  AUD: [
+    {
+      value: '50',
+      text: '$50',
+      accessibilityHint: 'contribute fifty dollars annually',
+    },
+    {
+      value: '100',
+      text: '$100',
+      accessibilityHint: 'contribute one hundred dollars annually',
+    },
+    {
+      value: '250',
+      text: '$250',
+      accessibilityHint: 'contribute two hundred and fifty dollars annually',
+    },
+  ],
 };
 
 const amountRadiosMonthlyControl: {
@@ -126,6 +143,23 @@ const amountRadiosMonthlyControl: {
     },
   ],
   USD: [
+    {
+      value: '7',
+      text: '$7',
+      accessibilityHint: 'contribute seven dollars per month',
+    },
+    {
+      value: '15',
+      text: '$15',
+      accessibilityHint: 'contribute fifteen dollars per month',
+    },
+    {
+      value: '30',
+      text: '$30',
+      accessibilityHint: 'contribute thirty dollars per month',
+    },
+  ],
+  AUD: [
     {
       value: '7',
       text: '$7',
@@ -191,6 +225,28 @@ const amountRadiosOneOff: {
       accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
     },
   ],
+  AUD: [
+    {
+      value: '50',
+      text: '$50',
+      accessibilityHint: 'make a one-time contribution of fifty dollars',
+    },
+    {
+      value: '100',
+      text: '$100',
+      accessibilityHint: 'make a one-time contribution of one hundred dollars',
+    },
+    {
+      value: '250',
+      text: '$250',
+      accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
+    },
+    {
+      value: '500',
+      text: '$500',
+      accessibilityHint: 'make a one-time contribution of five hundred dollars',
+    },
+  ],
 };
 
 const contribCaptionRadios = {
@@ -234,6 +290,18 @@ const contribCaptionRadios = {
       value: 'ONE_OFF',
       text: 'One-time',
       accessibilityHint: 'Make a one-time contribution',
+    },
+  ],
+  AU: [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+      accessibilityHint: 'Make a one-off contribution',
     },
   ],
 };

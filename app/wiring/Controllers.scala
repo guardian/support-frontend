@@ -24,7 +24,7 @@ trait Controllers {
     membersDataService,
     identityService,
     testUsers,
-    appConfig.stripeConfigProvider,
+    appConfig.regularStripeConfigProvider,
     appConfig.payPalConfigProvider,
     controllerComponents
   )

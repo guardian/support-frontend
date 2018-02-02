@@ -75,7 +75,8 @@ const usStates: {
 
 export type IsoCountry =
   | 'GB'
-  | 'US';
+  | 'US'
+  | 'AU';
 
 export type UsState = $Keys<typeof usStates>;
 
@@ -87,6 +88,7 @@ function fromString(s: string): ?IsoCountry {
     case 'gb': return 'GB';
     case 'uk': return 'GB';
     case 'us': return 'US';
+    case 'au': return 'AU';
     default: return null;
   }
 }
@@ -94,6 +96,7 @@ function fromString(s: string): ?IsoCountry {
 export function toCountryGroup(isoCountry: IsoCountry): string {
   switch (isoCountry) {
     case 'US': return 'us';
+    case 'AU': return 'au';
     default: return 'uk';
   }
 }
@@ -103,6 +106,8 @@ function fromPath(path: string = window.location.pathname): ?IsoCountry {
     return 'GB';
   } else if (path === '/us' || path.startsWith('/us/')) {
     return 'US';
+  } else if (path === '/au' || path.startsWith('/au/')) {
+    return 'AU';
   }
   return null;
 }

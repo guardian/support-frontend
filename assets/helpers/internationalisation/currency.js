@@ -5,7 +5,8 @@ import type { IsoCountry } from './country';
 
 export type IsoCurrency =
   | 'GBP'
-  | 'USD';
+  | 'USD'
+  | 'AUD';
 
 export type Currency = {
   iso: IsoCurrency,
@@ -22,10 +23,16 @@ export const USD: Currency = {
   glyph: '$',
 };
 
+export const AUD: Currency = {
+  iso: 'AUD',
+  glyph: '$',
+};
+
 function forCountry(country: IsoCountry): Currency {
   switch (country) {
     case 'US': return USD;
     case 'GB': return GBP;
+    case 'AU': return AUD;
     default: return GBP;
   }
 }
@@ -34,6 +41,7 @@ function fromString(s: string): ?Currency {
   switch (s.toLowerCase()) {
     case 'gbp': return GBP;
     case 'usd': return USD;
+    case 'aud': return AUD;
     default: return null;
   }
 }

@@ -27,6 +27,25 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
+const getStripeKey = (currency: string, isTestUser: boolean) => {
+
+  let stripeKey = null;
+
+  switch (currency) {
+    case 'AUD':
+      stripeKey = isTestUser ?
+        window.guardian.stripeKeyAustralia.uat : window.guardian.stripeKeyAustralia.default;
+      break;
+    default:
+      stripeKey = isTestUser ?
+        window.guardian.stripeKeyDefaultCurrencies.uat :
+        window.guardian.stripeKeyDefaultCurrencies.default;
+      break;
+  }
+
+  return stripeKey;
+};
+
 export const setupStripeCheckout = (
   callback: Function,
   closeHandler: ?Function,
@@ -39,11 +58,13 @@ export const setupStripeCheckout = (
   };
   const defaultCloseHandler: Function = () => {};
 
+  const stripeKey = getStripeKey(currency, isTestUser);
+
   stripeHandler = window.StripeCheckout.configure({
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
-    key: isTestUser ? window.guardian.stripeKey.uat : window.guardian.stripeKey.default,
+    key: stripeKey,
     image: 'https://uploads.guim.co.uk/2018/01/15/gu.png',
     locale: 'auto',
     currency,
