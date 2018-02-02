@@ -86,4 +86,10 @@ $gu-v-spacing: 12px;
   }
 }
 
-
+@mixin gu-content-filler {
+  @supports (display: flex) {
+    flex: 1 0 auto;
+    flex-direction: column;
+    display: flex;
+  }
+}
