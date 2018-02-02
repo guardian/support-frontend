@@ -7,6 +7,7 @@ import React from 'react';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
@@ -26,6 +27,7 @@ const content = (
     <CirclesIntroduction
       headings={['Thank you', 'for your valuable', 'contribution to', 'Guardian journalism']}
     />
+    <QuestionsContact />
     <SpreadTheWord />
     <Footer />
   </div>

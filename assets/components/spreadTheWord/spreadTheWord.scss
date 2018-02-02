@@ -1,5 +1,9 @@
 .component-spread-the-word {
 
+  .component-page-section {
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+  }
+
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
     font-size: 24px;
@@ -9,6 +13,8 @@
 
   .component-page-section__header {
     position: relative;
+    padding-right: $gu-h-spacing;
+    box-sizing: border-box;
 
     @include dropline;
   }
