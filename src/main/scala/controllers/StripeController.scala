@@ -97,8 +97,9 @@ class StripeController(controllerComponents: ControllerComponents) extends Abstr
   }
 
 */
+  case class StripeCharge(token: String, amount: Double)
 
-  def createCharge() = Action {
+  def createCharge() = Action { request =>
     // Deserialize POSTed JSON
     // stripe.Charge.create
     // if success:
@@ -110,6 +111,21 @@ class StripeController(controllerComponents: ControllerComponents) extends Abstr
     //   log
     //   return JSON
 
-    Ok("hey")
+    import io.circe._
+    import io.circe.generic.auto._
+    import io.circe.syntax._
+    import io.circe.parser._
+
+    val bodyEither = request.body.asText.fold[Either[String, String]](Left("No body"))(body => Right(body))
+
+    val stripeCharge = for {
+      body <- bodyEither
+      stripeCharge <- decode[StripeCharge](body).left.map(err => "Couldn't parse JSON")
+    } yield stripeCharge
+
+    stripeCharge match {
+      case Left(err) => BadRequest(err)
+      case Right(charge) => Ok(s"token: ${charge.token}, amount: ${charge.amount}")
+    }
   }
 }
