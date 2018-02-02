@@ -5,13 +5,7 @@
     height: 100%;
   }
 
-  // The quadruple lines under the header.
-  &:after {
-    @include multiline(4, gu-colour(garnett-neutral-4));
-    background-color: #fff;
-    display: block;
-    content: '';
-  }
+  border-bottom: 1px solid gu-colour(nav-rule);
 }
 
 .component-simple-header__link {
