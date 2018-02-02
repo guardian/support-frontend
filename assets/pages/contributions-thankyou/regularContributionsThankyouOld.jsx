@@ -33,4 +33,4 @@ const content = (
   </div>
 );
 
-renderPage(content, 'regular-contributions-thankyou-page');
+renderPage(content, 'regular-contributions-thankyou-page-old');
