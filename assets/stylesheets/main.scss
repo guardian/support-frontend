@@ -22,6 +22,7 @@
 @import '../components/legal/contribLegal/contribLegal';
 @import '../components/ctaCircle/ctaCircle';
 @import '../components/ctaLink/ctaLink';
+@import '../components/dotcomCta/dotcomCta';
 @import '../components/errorMessage/errorMessage';
 @import '../components/progressMessage/progressMessage';
 @import '../components/spinners/animatedDots';
@@ -64,6 +65,5 @@
 @import '../pages/regular-contributions/regularContributions';
 @import '../pages/oneoff-contributions/oneoffContributions';
 @import '../pages/contributions-thankyou/contributionsThankyou';
-@import '../pages/regular-contributions-thank-you/regularContributionsThankYou';
 @import '../pages/regular-contributions-existing/regularContributionsExisting';
 @import '../pages/paypal-error/payPalError';
