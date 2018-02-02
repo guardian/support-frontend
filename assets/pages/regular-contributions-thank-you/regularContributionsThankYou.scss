@@ -1,0 +1,41 @@
+#regular-contributions-thank-you-page {
+
+  .component-cta-link {
+    background-color: transparent;
+    border: 1px solid gu-colour(garnett-neutral-1);
+    color: gu-colour(garnett-neutral-1);
+    width: 200px;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: gu-colour(garnett-neutral-1);
+      color: #fff;
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-page-section--return-to-the-guardian {
+    .component-page-section__body {
+      padding-top: $gu-v-spacing * 2;
+      padding-bottom: $gu-v-spacing * 4;
+
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
+    }
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+    height: 35%;
+    top: 17px;
+    right: 13px;
+  }
+
+}
