@@ -3,9 +3,9 @@ package services
 import java.io.IOException
 
 import cats.data.EitherT
-import play.api.libs.ws.{WSClient, WSResponse}
-import play.api.mvc.RequestHeader
-import play.api.libs.json.JsSuccess
+import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
+import play.api.mvc._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object ContributionsFrontendService {
@@ -30,13 +30,18 @@ class ContributionsFrontendService(wsClient: WSClient, contributionsFrontendUrl:
     }
   }
 
-  def execute(queryString: Map[String, Seq[String]])(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, Throwable, Option[Email]] = {
+  def execute(request: Request[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, Throwable, Option[Email]] = {
     import cats.syntax.applicativeError._
     import cats.instances.future._
+
+    val wcCookies = request.cookies.toSeq.map { c =>
+      DefaultWSCookie(c.name, c.value, c.domain, Some(c.path), c.maxAge.map(_.toLong), c.secure, c.httpOnly)
+    }
     val endpoint = "/paypal/uk/execute"
     wsClient.url(s"$contributionsFrontendUrl/$endpoint")
-      .withHttpHeaders("Content-Type" -> "application/json")
-      .withQueryStringParameters(convertQueryString(queryString): _*)
+      .withQueryStringParameters(convertQueryString(request.queryString): _*)
+      .withHttpHeaders("Accept" -> "application/json")
+      .withCookies(wcCookies: _*)
       .withMethod("GET")
       .execute()
       .attemptT

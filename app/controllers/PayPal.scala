@@ -59,7 +59,7 @@ class PayPal(
   }
 
   def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    contributionsFrontendService.execute(request.queryString).fold(
+    contributionsFrontendService.execute(request).fold(
       err => {
         logger.error("Error making paypal payment: " + err.getMessage)
         Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
