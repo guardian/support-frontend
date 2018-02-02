@@ -1,8 +1,11 @@
 package controllers
 
+import io.circe.generic.auto._
+import io.circe.syntax._
+import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-class StripeController(controllerComponents: ControllerComponents) extends AbstractController(controllerComponents) {
+class StripeController(controllerComponents: ControllerComponents) extends AbstractController(controllerComponents) with Circe {
   // Other considerations:
   // - CORS
   // - Test users
@@ -99,7 +102,8 @@ class StripeController(controllerComponents: ControllerComponents) extends Abstr
 */
   case class StripeCharge(token: String, amount: Double)
 
-  def createCharge() = Action { request =>
+  // TODO: override Play's HTML error responses (e.g. non-JSON content type), provide JSON err description instead
+  def createCharge() = Action(circe.json[StripeCharge]) { request =>
     // Deserialize POSTed JSON
     // stripe.Charge.create
     // if success:
@@ -111,21 +115,7 @@ class StripeController(controllerComponents: ControllerComponents) extends Abstr
     //   log
     //   return JSON
 
-    import io.circe._
-    import io.circe.generic.auto._
-    import io.circe.syntax._
-    import io.circe.parser._
-
-    val bodyEither = request.body.asText.fold[Either[String, String]](Left("No body"))(body => Right(body))
-
-    val stripeCharge = for {
-      body <- bodyEither
-      stripeCharge <- decode[StripeCharge](body).left.map(err => "Couldn't parse JSON")
-    } yield stripeCharge
-
-    stripeCharge match {
-      case Left(err) => BadRequest(err)
-      case Right(charge) => Ok(s"token: ${charge.token}, amount: ${charge.amount}")
-    }
+    val charge = request.body
+    Ok(s"token: ${charge.token}, amount: ${charge.amount}")
   }
 }
