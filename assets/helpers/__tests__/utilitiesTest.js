@@ -11,6 +11,7 @@ import {
   parseBoolean,
   deserialiseJsonObject,
   validateEmailAddress,
+  emptyInputField,
 } from '../utilities';
 
 
@@ -190,6 +191,30 @@ describe('utilities', () => {
     it('should return true for test@gu.co.uk', () => {
       expect(validateEmailAddress('test@gu.co.uk')).toEqual(true);
     });
+  });
+
+  describe('emptyInputField', () => {
+
+    it('should return true for null', () => {
+      expect(emptyInputField(null)).toEqual(true);
+    });
+
+    it('should return true for undefined', () => {
+      expect(emptyInputField(undefined)).toEqual(true);
+    });
+
+    it('should return true for an empty string', () => {
+      expect(emptyInputField('')).toEqual(true);
+    });
+
+    it('should return true for a string which only contains a space', () => {
+      expect(emptyInputField(' ')).toEqual(true);
+    });
+
+    it('should return false for a string which contains characters other than a space', () => {
+      expect(emptyInputField('Test')).toEqual(false);
+    });
+
   });
 
 });

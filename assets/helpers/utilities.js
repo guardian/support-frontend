@@ -87,6 +87,10 @@ function validateEmailAddress(email: string): boolean {
   return emailValidationRegex.test(email);
 }
 
+function emptyInputField(input: ?string): boolean {
+  return input === undefined || input === null || input === '' || input.trim().length === 0;
+}
+
 // ----- Exports ----- //
 
 export {
@@ -98,4 +102,5 @@ export {
   parseBoolean,
   deserialiseJsonObject,
   validateEmailAddress,
+  emptyInputField,
 };
