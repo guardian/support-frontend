@@ -8,7 +8,9 @@ import ContributionSelection from 'components/contributionSelection/contribution
 import {
   getAmount,
 } from 'components/contributionSelection/contributionSelectionReducer';
-import actionsFor from 'components/contributionSelection/contributionSelectionActions';
+import {
+  contributionSelectionActionsFor as actionsFor,
+} from 'components/contributionSelection/contributionSelectionActions';
 
 import type { State } from '../supportLanding';
 

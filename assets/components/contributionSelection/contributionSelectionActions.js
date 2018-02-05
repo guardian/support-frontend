@@ -15,7 +15,7 @@ export type Action =
 
 // ----- Action Creators ----- //
 
-export default function contributionSelectionActionsFor(scope: string): Object {
+function contributionSelectionActionsFor(scope: string): Object {
 
   return {
     setContributionType(contributionType: ContributionType): Action {
@@ -30,3 +30,10 @@ export default function contributionSelectionActionsFor(scope: string): Object {
   };
 
 }
+
+
+// ----- Exports ----- //
+
+export {
+  contributionSelectionActionsFor,
+};
