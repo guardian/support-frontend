@@ -11,7 +11,7 @@ import {
   parseBoolean,
   deserialiseJsonObject,
   validateEmailAddress,
-  validInputField,
+  emptyInputField,
 } from '../utilities';
 
 
@@ -193,26 +193,26 @@ describe('utilities', () => {
     });
   });
 
-  describe('validInputField', () => {
+  describe('emptyInputField', () => {
 
-    it('should return false for null', () => {
-      expect(validInputField(null)).toEqual(false);
+    it('should return true for null', () => {
+      expect(emptyInputField(null)).toEqual(true);
     });
 
-    it('should return false for undefined', () => {
-      expect(validInputField(undefined)).toEqual(false);
+    it('should return true for undefined', () => {
+      expect(emptyInputField(undefined)).toEqual(true);
     });
 
-    it('should return false for an empty string', () => {
-      expect(validInputField('')).toEqual(false);
+    it('should return true for an empty string', () => {
+      expect(emptyInputField('')).toEqual(true);
     });
 
-    it('should return false for a string which only contains a space', () => {
-      expect(validInputField(' ')).toEqual(false);
+    it('should return true for a string which only contains a space', () => {
+      expect(emptyInputField(' ')).toEqual(true);
     });
 
-    it('should return true for a string which contains characters other than a space', () => {
-      expect(validInputField('Test')).toEqual(true);
+    it('should return false for a string which contains characters other than a space', () => {
+      expect(emptyInputField('Test')).toEqual(false);
     });
 
   });
