@@ -19,7 +19,7 @@ resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "acquisition-event-producer" % "2.0.1",
-  "com.gu" %% "support-internationalisation" % "0.5" % "provided"
+  "com.gu" %% "support-internationalisation" % "0.6" % "provided"
 )
 
 releaseCrossBuild := true
