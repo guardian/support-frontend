@@ -480,8 +480,29 @@ rules out of the shared component' css file and we should place them inside the 
 
 As an example, a shared component which will have a different position (determine via `margin-right`) in each page, 
 should not have a `margin-right` value in the shared component'css file but inside each specific page. 
+
+### 4. Use two spaces for indentation
+When we write `css` files we should indent them using two-spaces and avoid other styles such as tabs or four-spaces.
+
+#### Example:
+
+##### Bad:
+
+```sass
+.component-cta-link {
+    width: 200px;
+}
+```
+
+##### Good:
+
+```sass
+.component-cta-link {
+  width: 200px;
+}
+```    
       
-### 4. Full Example
+### 5. Full Example
 
 As an example consider the following CSS for a shared component called `DoubleHeading`. 
 
