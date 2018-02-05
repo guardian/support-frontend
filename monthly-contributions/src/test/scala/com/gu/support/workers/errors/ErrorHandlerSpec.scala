@@ -65,6 +65,11 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
     new AWSKMSException("The security token included in the request is expired").asRetryException shouldBe a[RetryLimited]
 
     //Zuora
+    ZuoraErrorResponse(false, List(ZuoraError("API_DISABLED", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("LOCK_COMPETITION", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_LIMIT", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_RATE", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("SERVER_UNAVAILABLE", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
     ZuoraErrorResponse(false, List(ZuoraError("UNKNOWN_ERROR", "Operation failed due to an unknown error."))).asRetryException shouldBe a[RetryUnlimited]
     ZuoraErrorResponse(false, List(ZuoraError("TRANSACTION_FAILED", "Your card was declined"))).asRetryException shouldBe a[RetryNone]
 

@@ -57,31 +57,22 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 ### Zuora
 
 [Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors) - note that the error json structure described on this page is incorrect as 
-the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe) (actually this page is incorrect as well as it says that the response is a ZuoraErrorResponse whereas it is actually a list of these)
+the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe). This returns a list of errors,
+which are not yet included in the REST documentation, but can be found [here](https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object). 
 
-It’s hard to get exact details of what errors the specific call we make to Zuora might throw but there are general categories which we can get by taking the last 2 character of the error code.
+Many of these errors don't seem to be relevant to the API call(s) that we're making, so I have started by adding retries for the more obvious candidates:
 
-Handling Zuoras is made more complicated because the response can return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors. Initially I am
-going to treat any fatal errors as meaning that the whole request can never succeed and fail at this point.
+| Code                   | Description                                                                                                                                                        | Retry?    |
+|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| API_DISABLED           | The API was disabled                                                                                                                                               | Unlimited |
+| LOCK_COMPETITION       | The operation failed from a lock competition. For example, a lock can occur when multiple client operations try to update an object at the same time. Retry later. | Unlimited |
+| REQUEST_EXCEEDED_LIMIT | The total number of requests for the unit interval has exceeded the limit allowed by the system.                                                                   | Unlimited |  
+| REQUEST_EXCEEDED_RATE  | The total number of concurrent requests has exceeded the limit allowed by the system. Please resubmit your request later.                                          | Unlimited |  
+| SERVER_UNAVAILABLE     | The Zuora server wasn't available.                                                                                                                                 | Unlimited |
+| UNKNOWN_ERROR          | There was an unknown error. No further details are available.                                                                                                      | Unlimited |  
 
-_NB. Apparently the error category codes described below need to be explicitly enabled on our account. I have put in a support request for this, but until it is completed we can't implement category specific retries_
-
-| Code | Category                    | Retry?    |
-|------|-----------------------------|-----------|
-| 00   | Unknown                     | Limited   |
-| 10   | Permission or access denied | Limited   |
-| 11   | Authentication failed       | Limited   |
-| 20   | Invalid format or value     | No        |
-| 21   | Unknown field in request    | No        |
-| 22   | Missing required field      | No        |
-| 30   | Rule restriction            | No        |
-| 40   | Not found                   | Limited   |
-| 50   | Locking contention          | Unlimited |
-| 60   | Internal error              | Unlimited |
-| 70   | Request exceeded limit      | Unlimited |
-| 90   | Malformed request           | No        |
-| 99   | Extension error             | No        |
-
+Handling Zuora errors is made more complicated because the response may return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors. 
+In practice, the list never seems to contain more than one item. Therefore if the response contains multiple errors, or an error which we don't think is safe to retry, we currently assume that the request will never succeed and fail at this point.
 
 ### Salesforce
 

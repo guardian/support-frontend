@@ -34,12 +34,21 @@ object ZuoraErrorResponse {
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
+  override def toString: String = this.errors.toString()
+  def toRetryNone: RetryNone = new RetryNone(message = this.asJson.noSpaces, cause = this)
+  def toRetryUnlimited: RetryUnlimited = new RetryUnlimited(this.asJson.noSpaces, cause = this)
+
+  // Based on https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object
   def asRetryException: RetryException = errors match {
-    case List(ZuoraError("UNKNOWN_ERROR", _)) => new RetryUnlimited(this.asJson.noSpaces, cause = this)
-    case _ => new RetryNone(message = this.asJson.noSpaces, cause = this)
+    case List(ZuoraError("API_DISABLED", _)) => toRetryUnlimited
+    case List(ZuoraError("LOCK_COMPETITION", _)) => toRetryUnlimited
+    case List(ZuoraError("REQUEST_EXCEEDED_LIMIT", _)) => toRetryUnlimited
+    case List(ZuoraError("REQUEST_EXCEEDED_RATE", _)) => toRetryUnlimited
+    case List(ZuoraError("SERVER_UNAVAILABLE", _)) => toRetryUnlimited
+    case List(ZuoraError("UNKNOWN_ERROR", _)) => toRetryUnlimited
+    case _ => toRetryNone
   }
 
-  override def toString: String = this.errors.toString()
 }
 
 object BasicInfo {
