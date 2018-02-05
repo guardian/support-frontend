@@ -1,6 +1,13 @@
 .component-circles-introduction {
   background-color: gu-colour(nav-background-colour);
   color: gu-colour(garnett-neutral-1);
+
+  &:after {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+    background-color: #fff;
+    display: block;
+    content: '';
+  }
 }
 
 .component-circles-introduction__heading {

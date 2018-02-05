@@ -51,3 +51,20 @@
   background-size: 1px #{$bgSize}px;
   height: #{$bgSize}px;
 }
+
+// Helper to create the dropped line used to separate the title in page sections.
+@mixin dropline {
+  @include mq($from: desktop) {
+    position: relative;
+
+    &:after {
+      border-right: 1px solid gu-colour(garnett-neutral-4);
+      content: "";
+      display: inline-block;
+      height: 36px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}

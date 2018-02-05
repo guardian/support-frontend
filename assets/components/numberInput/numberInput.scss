@@ -1,40 +1,40 @@
 .component-number-input {
-	background-color: #fff;
-	border-radius: 600px;
-	padding: 6px 0;
-	margin: 3px 0;
-	height: 24px;
-	font-size: 14px;
-	font-family: $gu-text-sans-web;
-	position: relative;
+  background-color: #fff;
+  border-radius: 600px;
+  padding: 6px 0;
+  margin: 3px 0;
+  height: 24px;
+  font-size: 14px;
+  font-family: $gu-text-sans-web;
+  position: relative;
 
-	&::placeholder {
-		color: gu-colour(neutral-1);
-	}
+  &::placeholder {
+    color: gu-colour(neutral-1);
+  }
+}
 
-	.component-number-input__label {
-		position: absolute;
-		top: 7px;
-		left: $gu-h-spacing;
-	}
+.component-number-input__label {
+  position: absolute;
+  top: 7px;
+  left: $gu-h-spacing;
+}
 
-	.component-number-input__input {
-		border: none;
-		background: transparent;
-		text-align: center;
-		width: 100%;
-		padding: 2px 0;
+.component-number-input__input {
+  border: none;
+  background: transparent;
+  text-align: center;
+  width: 100%;
+  padding: 2px 0;
 
-		&:focus {
-			outline: none;
-		}
+  &:focus {
+    outline: none;
+  }
 
-		// Hides the number spinners.
-		-moz-appearance: textfield;
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
-	}
+  // Hides the number spinners.
+  -moz-appearance: textfield;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

@@ -113,7 +113,7 @@ function errorMessage(
   error: ContribError,
   currency: Currency,
   contributionType: Contrib,
-): string {
+): ?string {
 
   const minContrib = config[contributionType].min;
   const maxContrib = config[contributionType].max;
@@ -124,8 +124,9 @@ function errorMessage(
     case 'tooMuch':
       return `${currency.glyph}${maxContrib} is the maximum we can accept`;
     case 'invalidEntry':
-    default:
       return 'Please enter a numeric amount';
+    default:
+      return null;
   }
 
 }

@@ -1,6 +1,10 @@
 {
   "presets": ["react", ["env", {"modules": false}]],
-  "plugins": ["babel-plugin-transform-exponentiation-operator", "transform-class-properties"],
+  "plugins": [
+    "babel-plugin-transform-exponentiation-operator",
+    "transform-class-properties",
+    ["transform-object-rest-spread", { "useBuiltIns": true }],
+  ],
   "env": {
     "test": {
       "presets": ["env"]

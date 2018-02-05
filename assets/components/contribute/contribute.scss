@@ -1,0 +1,67 @@
+.component-contribute {
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-page-section__header {
+    position: relative;
+
+    @include dropline;
+  }
+
+  .component-inline-payment-logos {
+    margin-top: $gu-v-spacing;
+  }
+
+  .component-page-section__body {
+    position: relative;
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+
+  .component-secure {
+    position: absolute;
+    font-family: $gu-text-sans-web;
+    font-weight: bold;
+    color: rgba(gu-colour(garnett-neutral-1), 0.5);
+    top: 10px;
+    right: 0;
+  }
+
+  .svg-lock {
+    fill: rgba(gu-colour(garnett-neutral-1), 0.5);
+  }
+
+  .component-secure--contribute-header {
+    @include mq($from: desktop) {
+      display: none;
+    }
+  }
+
+  .component-secure--contribute-body {
+    position: static;
+    float: right;
+    margin-top: 4px;
+
+    @include mq($until: desktop) {
+      display: none;
+    }
+  }
+}
+
+.component-contribute__description {
+  font-size: 16px;
+  line-height: 1.25;
+  font-family: $gu-text-egyptian-web;
+  color: gu-colour(garnett-neutral-1);
+  margin-top: $gu-v-spacing / 2;
+
+  @include mq($from: tablet) {
+    width: 600px;
+  }
+}

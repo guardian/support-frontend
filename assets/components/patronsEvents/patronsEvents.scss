@@ -11,19 +11,7 @@
   }
 
   .component-page-section__header {
-    @include mq($from: desktop) {
-      position: relative;
-
-      &:after {
-        border-right: 1px solid gu-colour(garnett-neutral-4);
-        content: "";
-        display: inline-block;
-        height: 36px;
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-    }
+    @include dropline;
   }
 
   .component-page-section__heading {

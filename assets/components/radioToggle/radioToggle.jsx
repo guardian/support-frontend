@@ -34,17 +34,6 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-// Builds an accessibility hint for the button.
-function getA11yHint(id: string, hint: ?string) {
-
-  return (
-    <p id={id} className="accessibility-hint">
-      {hint}
-    </p>
-  );
-
-}
-
 // Returns a list of the radio button elements.
 function getRadioButtons(props: PropTypes) {
 
@@ -52,6 +41,8 @@ function getRadioButtons(props: PropTypes) {
 
     const radioId = `${props.name}-${idx}`;
     const a11yHintId = `accessibility-hint-${radioId}`;
+    const radioChecked = radio.value === props.checked;
+    const labelModifier = radioChecked ? 'checked' : null;
 
     /* eslint-disable jsx-a11y/label-has-for */
     return (
@@ -60,7 +51,7 @@ function getRadioButtons(props: PropTypes) {
         className={generateClassName('component-radio-toggle__button', props.modifierClass)}
         key={radioId}
       >
-        {getA11yHint(a11yHintId, radio.accessibilityHint)}
+        <A11yHint id={a11yHintId} hint={radio.accessibilityHint} />
         <input
           className="component-radio-toggle__input"
           type="radio"
@@ -68,11 +59,14 @@ function getRadioButtons(props: PropTypes) {
           value={radio.value}
           id={radioId}
           onChange={() => props.toggleAction(radio.value)}
-          checked={radio.value === props.checked}
+          checked={radioChecked}
           tabIndex="0"
           aria-describedby={a11yHintId}
         />
-        <label htmlFor={radioId} className="component-radio-toggle__label">
+        <label
+          htmlFor={radioId}
+          className={generateClassName('component-radio-toggle__label', labelModifier)}
+        >
           {radio.text}
         </label>
       </span>
@@ -101,7 +95,20 @@ export default function RadioToggle(props: PropTypes) {
 }
 
 
-// ----- Proptypes ----- //
+// ----- Auxiliary Components ----- //
+
+function A11yHint(props: {id: string, hint: ?string}) {
+
+  return (
+    <p id={props.id} className="accessibility-hint">
+      {props.hint}
+    </p>
+  );
+
+}
+
+
+// ----- Default Props ----- //
 
 RadioToggle.defaultProps = {
   accessibilityHint: '',
