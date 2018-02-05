@@ -7,10 +7,10 @@ import io.circe.parser._
 import io.circe.{Decoder, Json, Printer}
 import okhttp3._
 
+import scala.collection.immutable.Map.empty
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
-import scala.collection.JavaConversions._
 
 case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
   override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"
@@ -26,6 +26,8 @@ case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: S
 trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
+
+  private type ParamMap = Map[String, String]
 
   private def urlBuilder = HttpUrl.parse(wsUrl).newBuilder()
 
@@ -66,32 +68,40 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
 
   /**
    * Allow subclasses to customise the way errors are decoded
+   *
    * @param responseBody
    * @param errorDecoder
    * @return Either[circe.Error, Error]
    */
   def decodeError(responseBody: String)(implicit errorDecoder: Decoder[Error]): Either[circe.Error, Error] = decode[Error](responseBody)
 
-  def get[A](endpoint: String, params: (String, String)*)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
-    request[A](new Request.Builder().url(endpointUrl(endpoint, params)))
+  //Scalariform won't let you add a line break in method signatures, but then scalaStyle freaks out because they're too long
+  // scalastyle:off line.size.limit
+  def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+    request[A](buildRequest(endpoint, headers, params))
 
-  def post[A](endpoint: String, data: Json, params: (String, String)*)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postJson[A](endpoint: String, data: Json, headers: ParamMap = empty, params: ParamMap = empty)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullKeys = true))
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
-    request[A](new Request.Builder().url(endpointUrl(endpoint, params)).post(body))
+    request[A](buildRequest(endpoint, headers, params).post(body))
   }
 
-  def post[A](endpoint: String, data: Map[String, Seq[String]])(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postForm[A](endpoint: String, data: Map[String, Seq[String]], headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) {
-      case (params, (name, values)) =>
+      case (p, (name, values)) =>
         val paramName = if (values.size > 1) s"$name[]" else name
-        values.foldLeft(params) { case (ps, value) => ps.add(paramName, value) }
+        values.foldLeft(p) { case (ps, value) => ps.add(paramName, value) }
     }.build()
-
-    request[A](new Request.Builder().url(endpointUrl(endpoint)).post(postParams))
+    request[A](buildRequest(endpoint, headers, params).post(postParams))
   }
+  // scalastyle:on line.size.limit
 
-  private def endpointUrl(endpoint: String, params: Seq[(String, String)] = Seq.empty): HttpUrl = {
+  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
+    new Request.Builder()
+      .url(endpointUrl(endpoint, params))
+      .headers(buildHeaders(headers))
+
+  private def endpointUrl(endpoint: String, params: ParamMap): HttpUrl = {
     val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
       case (url, segment) =>
         url.addEncodedPathSegment(segment)
@@ -101,5 +111,11 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
         url.addQueryParameter(k, v)
     }.build()
   }
+
+  private def buildHeaders(headers: ParamMap) =
+    headers.foldLeft(new Headers.Builder()) {
+      case (h, (k, v)) =>
+        h.add(k, v)
+    }.build()
 
 }

@@ -103,7 +103,7 @@ object Fixtures {
 
   val date = new LocalDate(2017, 5, 4)
 
-  def account(currency: Currency = GBP, paymentGateway: PaymentGateway = StripeGateway) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, paymentGateway)
+  def account(currency: Currency = GBP, paymentGateway: PaymentGateway = StripeGatewayDefault) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, paymentGateway)
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")

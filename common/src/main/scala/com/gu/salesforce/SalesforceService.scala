@@ -43,7 +43,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     decode[List[SalesforceErrorResponse]](responseBody).map(_.head) //Salesforce returns a list of error responses
 
   def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
-    post[SalesforceContactResponse](upsertEndpoint, data.asJson)
+    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson)
   }
 }
 
@@ -89,7 +89,7 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
     logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
-      post[Authentication]("services/oauth2/token", Map(
+      postForm[Authentication]("services/oauth2/token", Map(
         "client_id" -> Seq(sfConfig.key),
         "client_secret" -> Seq(sfConfig.secret),
         "username" -> Seq(sfConfig.username),

@@ -65,7 +65,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
       state.salesForceContact.Id,
       state.user.id,
-      PaymentGateway.forPaymentMethod(state.paymentMethod)
+      PaymentGateway.forPaymentMethod(state.paymentMethod, state.contribution.currency)
     )
 
     val contactDetails = ContactDetails(
