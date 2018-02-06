@@ -1,7 +1,9 @@
 package selenium.util
 
 import com.typesafe.config.ConfigFactory
+import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
+
 import scala.util.{Failure, Success, Try}
 
 object Config {
@@ -33,13 +35,13 @@ object Config {
 
   val paypalBuyerPassword = conf.getString("paypal.sandbox.buyer.password")
 
-  def printSummary(): Unit = {
+  def printSummary(driver: DriverConfig): Unit = {
     logger.info("Selenium Test Configuration")
     logger.info("=============================")
     logger.info(s"Stage: ${conf.getString("stage")}")
     logger.info(s"Support Frontend: ${supportFrontendUrl}")
     logger.info(s"Identity Frontend: ${identityFrontendUrl}")
-    logger.info(s"Screencast = https://saucelabs.com/tests/${Driver.sessionId}")
+    logger.info(s"Screencast = https://saucelabs.com/tests/${driver.sessionId}")
   }
 
 }

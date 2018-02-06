@@ -1,9 +1,10 @@
 package selenium.pages
 
+import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config, PayPalCheckout}
 
-object MonthlyContribution extends Page with Browser {
+class RecurringContributionForm(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring"
 
@@ -24,7 +25,5 @@ object MonthlyContribution extends Page with Browser {
   // ----- PayPal ----- //
 
   def selectPayPalPayment(): Unit = clickOn(payPalButton)
-
-  def fillInPayPalDetails(): Unit = PayPalCheckout.fillIn
 
 }

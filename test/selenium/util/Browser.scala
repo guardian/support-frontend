@@ -1,5 +1,6 @@
 package selenium.util
 
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatest.selenium.WebBrowser
@@ -8,7 +9,7 @@ import scala.util.Try
 
 trait Browser extends WebBrowser {
 
-  lazy implicit val webDriver = Driver()
+  implicit val webDriver: WebDriver
 
   // Stores a handle to the first window opened by the driver.
   lazy val parentWindow = webDriver.getWindowHandle

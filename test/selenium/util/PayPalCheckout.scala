@@ -1,9 +1,9 @@
 package selenium.util
 
-import selenium.pages.MonthlyContribution.{id, pageDoesNotHaveElement, switchToParentWindow}
+import org.openqa.selenium.WebDriver
 
 // Handles interaction with the PayPal Express Checkout overlay.
-object PayPalCheckout extends Browser {
+class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   val container = name("injectedUl")
   val loginButton = name("btnLogin")
@@ -21,29 +21,29 @@ object PayPalCheckout extends Browser {
 
   def acceptPayment(): Unit = clickOn(agreeAndPay)
 
-  def payPalHasPaymentSummary(): Boolean = pageHasElement(PayPalCheckout.agreeAndPay)
+  def payPalHasPaymentSummary(): Boolean = pageHasElement(agreeAndPay)
 
-  def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(PayPalCheckout.paymentAmount, expectedCurrencyAndAmount)
+  def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
-  def hasLoaded: Boolean = pageHasElement(PayPalCheckout.loginButton)
+  def hasLoaded: Boolean = pageHasElement(loginButton)
 
   def switchToPayPalPage(): Unit = {
-    switchFrame(PayPalCheckout.container)
+    switchFrame(container)
   }
 
   def acceptPayPalPaymentPage(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    PayPalCheckout.acceptPayment
+    acceptPayment
   }
 
   def switchToPayPalPopUp(): Unit = {
     switchWindow
-    switchFrame(PayPalCheckout.container)
+    switchFrame(container)
   }
 
   def acceptPayPalPaymentPopUp(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    PayPalCheckout.acceptPayment
+    acceptPayment
     switchToParentWindow
   }
 }

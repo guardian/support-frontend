@@ -1,9 +1,10 @@
 package selenium.pages
 
+import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config}
 
-object OneOffContributionThankYou extends Page with Browser {
+class OneOffContributionThankYou(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/contribute/one-off/thankyou"
 

@@ -2,9 +2,11 @@ package selenium.pages
 
 import org.scalatest.selenium.Page
 import java.net.URLEncoder
-import selenium.util.{Browser, TestUser, Config}
 
-case class Register(testUser: TestUser, amount: Int) extends Page with Browser {
+import org.openqa.selenium.WebDriver
+import selenium.util.{Browser, Config, TestUser}
+
+case class Register(testUser: TestUser, amount: Int)(implicit val webDriver: WebDriver) extends Page with Browser {
   private val returnUrlParam = URLEncoder.encode(s"${Config.supportFrontendUrl}/contribute/recurring?contributionValue%3D${amount}", "UTF-8")
   val url = s"${Config.identityFrontendUrl}/register?returnUrl=${returnUrlParam}&skipConfirmation=true&clientId=members"
 
