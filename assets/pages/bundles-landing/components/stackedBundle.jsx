@@ -236,6 +236,24 @@ function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
+function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
+  if (props.shouldEncourageMonthly) {
+    return (
+      <p>
+        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
+        If you’re able, please consider
+        <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+      </p>
+    );
+  }
+
+  return (
+    <p>
+      Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
+    </p>
+  );
+}
+
 function ContributionBundle(props: PropTypes) {
 
   const contribAttrs: ContribAttrs =
@@ -253,11 +271,13 @@ function ContributionBundle(props: PropTypes) {
     }
   };
 
+
   return (
     <Bundle {...contribAttrs}>
-      <p>
-        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
-      </p>
+      <WhyContribute
+        shouldEncourageMonthly={props.abTests.pleaseConsiderMonthly === 'variant'}
+      />
+
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}
