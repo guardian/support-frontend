@@ -1,9 +1,10 @@
 package selenium.pages
 
+import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config}
 
-case class ContributionsLanding(region: String) extends Page with Browser {
+case class ContributionsLanding(region: String)(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/$region/contribute"
 
