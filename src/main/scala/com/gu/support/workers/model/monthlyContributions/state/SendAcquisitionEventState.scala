@@ -1,7 +1,7 @@
 package com.gu.support.workers.model.monthlyContributions.state
 
-import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, User}
-import com.gu.support.workers.model.monthlyContributions.Contribution
+import com.gu.support.workers.model.states.StepFunctionUserState
+import com.gu.support.workers.model.{AcquisitionData, Contribution, PaymentMethod, User}
 
 case class SendAcquisitionEventState(
   user: User,

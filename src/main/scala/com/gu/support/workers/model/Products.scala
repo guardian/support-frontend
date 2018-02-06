@@ -4,7 +4,7 @@ import com.gu.i18n.Currency
 
 sealed trait ProductType {
   def currency: Currency
-  def period: Period
+  def period: BillingPeriod
 
   override def toString: String = this.getClass.getSimpleName
   def describe: String
@@ -12,7 +12,7 @@ sealed trait ProductType {
 
 case class Contribution(
   currency: Currency,
-  period: Period,
+  period: BillingPeriod,
   amount: BigDecimal
 ) extends ProductType {
   override def describe: String = s"$period-Contribution-$currency-$amount"
@@ -20,7 +20,7 @@ case class Contribution(
 
 case class DigitalBundle(
   currency: Currency,
-  period: Period
+  period: BillingPeriod
 ) extends ProductType {
   override def describe: String = s"$period-DigitalBundle-$currency"
 }

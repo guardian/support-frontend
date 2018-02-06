@@ -2,8 +2,7 @@ package com.gu.support.workers.model.states
 
 import java.util.UUID
 
-import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.{AcquisitionData, PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.workers.model._
 
 case class SendThankYouEmailState(
   requestId: UUID,
