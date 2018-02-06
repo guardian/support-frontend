@@ -2,11 +2,9 @@ package selenium.util
 
 import java.net.URL
 import java.util.Date
-
 import io.github.bonigarcia.wdm.ChromeDriverManager
-import org.joda.time.DateTime
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
+import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Cookie, WebDriver}
 
 class DriverConfig {
@@ -14,14 +12,11 @@ class DriverConfig {
   implicit val webDriver: WebDriver = createDriver
 
   def createDriver: WebDriver =
-    if (Config.webDriverRemoteUrl.isEmpty) {
+    if (Config.webDriverRemoteUrl.isEmpty)
       instantiateLocalBrowser()
-    } else {
-      println(s"Configuring driver at ${DateTime.now}")
-      val driver = instantiateRemoteBrowser()
-      println(s"Finished configuring driver at ${DateTime.now}")
-      driver
-    }
+    else
+      instantiateRemoteBrowser()
+
 
   // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
@@ -31,10 +26,10 @@ class DriverConfig {
 
   // Used by Travis to run tests in SauceLabs
   private def instantiateRemoteBrowser(): WebDriver = {
-    val caps = DesiredCapabilities.chrome()
-    caps.setCapability("platform", "Windows 8.1")
-    caps.setCapability("name", "support-frontend")
-    new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), caps)
+    val chromeOptions = new ChromeOptions
+    chromeOptions.setCapability("platform", "Windows 8.1")
+    chromeOptions.setCapability("name", "support-frontend")
+    new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), chromeOptions)
   }
 
   def reset(): Unit = {
