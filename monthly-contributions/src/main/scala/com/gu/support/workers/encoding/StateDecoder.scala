@@ -14,7 +14,8 @@ import scala.util.Try
 object StateDecoder extends App with LazyLogging {
 
   if (args.length < 1) {
-    print("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
+    //scalastyle:off regex
+    println("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
   }
 
   decode[JsonWrapper](args(0)).fold(println(_), { jsonWrapper =>
