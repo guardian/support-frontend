@@ -18,9 +18,9 @@ case class Contribution(
   override def describe: String = s"$period-Contribution-$currency-$amount"
 }
 
-case class DigitalBundle(
+case class DigitalPack(
   currency: Currency,
   period: BillingPeriod
 ) extends ProductType {
-  override def describe: String = s"$period-DigitalBundle-$currency"
+  override def describe: String = s"$period-DigitalPack-$currency"
 }
