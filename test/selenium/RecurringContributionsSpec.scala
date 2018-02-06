@@ -4,7 +4,7 @@ import org.scalatest._
 import _root_.selenium.pages._
 import _root_.selenium.util._
 
-class RecurringSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
+class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -12,7 +12,7 @@ class RecurringSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
   before { driverConfig.reset() }
 
   override def beforeAll(): Unit = {
-    Config.printSummary(driverConfig)
+    Config.printSummary(driverConfig.sessionId)
     Dependencies.dependencyCheck
   }
 

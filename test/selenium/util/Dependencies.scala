@@ -29,15 +29,15 @@ object Dependencies {
 
   def dependencyCheck: Unit = {
     assume(
-      Dependencies.SupportFrontend.isAvailable,
+      SupportFrontend.isAvailable,
       s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests."
     )
     assume(
-      Dependencies.IdentityFrontend.isAvailable,
+      IdentityFrontend.isAvailable,
       s"- ${Dependencies.IdentityFrontend.url} is unavailable! Please run identity-frontend locally before running these tests."
     )
     assume(
-      Dependencies.ContributionFrontend.isAvailable,
+      ContributionFrontend.isAvailable,
       s"${Dependencies.ContributionFrontend.url} is unavailable! Please run contribution-frontend locally before running these tests."
     )
   }

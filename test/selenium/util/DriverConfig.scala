@@ -17,7 +17,6 @@ class DriverConfig {
     else
       instantiateRemoteBrowser()
 
-
   // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
     ChromeDriverManager.getInstance().setup()
@@ -52,6 +51,6 @@ class DriverConfig {
     webDriver.manage.addCookie(new Cookie(name, value, domain.orNull, path, date.orNull))
   }
 
-  val sessionId = webDriver.asInstanceOf[RemoteWebDriver].getSessionId.toString
+  val sessionId = webDriver.asInstanceOf[RemoteWebDriver].getSessionId
 
 }

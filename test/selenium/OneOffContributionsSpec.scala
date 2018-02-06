@@ -12,15 +12,15 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
   before { driverConfig.reset() }
 
   override def beforeAll(): Unit = {
-    Config.printSummary(driverConfig)
+    Config.printSummary(driverConfig.sessionId)
     Dependencies.dependencyCheck
   }
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Perform a one-off contribution") {
+  feature("Sign up for a one-off contribution") {
 
-    scenario("One-off contribution with PayPal - USD") {
+    scenario("One-off contribution sign-up with PayPal - USD") {
 
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("us")

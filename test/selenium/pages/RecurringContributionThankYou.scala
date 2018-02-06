@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config}
 
-case class RecurringContributionThankYou(implicit val webDriver: WebDriver) extends Page with Browser {
+class RecurringContributionThankYou(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring/thankyou"
 
