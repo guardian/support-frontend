@@ -16,5 +16,17 @@ export const tests: Tests = {
     independent: true,
     seed: 6,
   },
+  directDebitTest: {
+    variants: ['control', 'directDebit'],
+    audiences: {
+      GB: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    independent: true,
+    seed: 0,
+  },
 };
 
