@@ -125,11 +125,7 @@ function NameForm(props: PropTypes) {
       {euroCountryDropdown(props.currency, props.stateUpdate)}
     </form>
   );
-
 }
-
-
-
 
 // ----- Exports ----- //
 
