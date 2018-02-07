@@ -70,6 +70,7 @@ const subHeadingMonthlyText = {
   GB: 'from £5 a month',
   US: 'from $5 a month',
   AU: 'from $5 a month',
+  EU: 'from €5 a month',
 };
 
 function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
@@ -80,6 +81,7 @@ const subHeadingOneOffText = {
   GB: '',
   US: '',
   AU: '',
+  EU: '',
 };
 
 const contentText = {
@@ -91,6 +93,12 @@ const contentText = {
     </span>
   ),
   AU: (
+    <span>
+      Contributing to the Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+    </span>
+  ),
+  EU: (
     <span>
       Contributing to the Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support – it will help to fund our journalism for the long term.
