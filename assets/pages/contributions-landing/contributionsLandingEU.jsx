@@ -46,4 +46,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content, 'contributions-landing-page-au');
+renderPage(content, 'contributions-landing-page-eu');
