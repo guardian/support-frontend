@@ -115,7 +115,6 @@ function requestData(
   abParticipations: Participations,
   amount: number,
   contributionType: Contrib,
-  country: IsoCountry,
   currency: IsoCurrency,
   csrf: CsrfState,
   paymentFieldName: PaymentFieldName,
@@ -128,6 +127,7 @@ function requestData(
 ) {
 
   const { user } = getState().page;
+  const { country } = getState().common;
 
   if (!isUserValid(user)) {
     return Promise.resolve({
@@ -260,7 +260,6 @@ function postCheckout(
   csrf: CsrfState,
   currency: Currency,
   contributionType: Contrib,
-  country: IsoCountry,
   dispatch: Function,
   paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -280,7 +279,6 @@ function postCheckout(
       abParticipations,
       amount,
       contributionType,
-      country,
       currency.iso,
       csrf,
       paymentFieldName,
