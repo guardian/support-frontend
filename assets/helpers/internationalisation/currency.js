@@ -155,5 +155,6 @@ function detect(country: IsoCountry): Currency {
 export {
   detect,
   isEuroCountry,
+  euroCountries,
   spokenCurrencies,
 };
