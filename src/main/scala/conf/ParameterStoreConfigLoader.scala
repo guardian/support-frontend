@@ -2,9 +2,7 @@ package conf
 
 import cats.data.Validated
 import cats.kernel.Semigroup
-import cats.instances.list._
 import cats.syntax.either._
-import cats.syntax.traverse._
 import cats.syntax.validated._
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
@@ -41,17 +39,6 @@ class ParameterStoreConfigLoader(ssm: AWSSimpleSystemsManagement) {
       result <- executePathRequest(request)
       config <- ParameterStoreLoadable[A].decode(environment, result).toEither
     } yield config
-  }
-
-  def loadConfigForEnvironments[A : ParameterStoreLoadable](environments: List[Environment]): Either[ConfigLoadError, EnvironmentConfigs[A]] = {
-    environments
-      // Either get all the errors as to why the config failed to load (over all environments provided),
-      // or return a list giving the config loaded for each environment.
-      .traverse[Validated[ConfigLoadError, ?], (Environment, A)] { env =>
-        loadConfig(env).map(config => env -> config).toValidated
-      }
-      .map(configs => EnvironmentConfigs(configs.toMap))
-      .toEither
   }
 }
 

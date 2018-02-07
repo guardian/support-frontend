@@ -38,9 +38,4 @@ class MyComponents(context: Context)
   println(configuration.get[Configuration]("db"))
 
   override val router = new Routes(httpErrorHandler, new controllers.StripeController(controllerComponents, configuration))
-class MyComponents(context: Context) extends BuiltInComponentsFromContext(context) with NoHttpFiltersComponents {
-  lazy val router = new Routes(
-    httpErrorHandler,
-    new controllers.StripeController(controllerComponents, configuration)
-  )
 }

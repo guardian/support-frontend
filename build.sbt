@@ -5,6 +5,7 @@ scalaVersion := "2.12.4"
 scalacOptions += "-Ypartial-unification"
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 val circeVersion = "0.9.1"
 
