@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import * as cookie from './../cookie';
+import { isEuroCountry } from 'helpers/internationalisation/currency';
+import * as cookie from 'helpers/cookie';
 
 
 // ----- Setup ----- //
@@ -70,13 +71,68 @@ const usStates: {
   AP: 'Armed Forces Pacific',
 };
 
-
 // ----- Types ----- //
 
 export type IsoCountry =
   | 'GB'
   | 'US'
-  | 'AU';
+  | 'AU'
+  | 'AD'
+  | 'AL'
+  | 'AT'
+  | 'BA'
+  | 'BE'
+  | 'BG'
+  | 'BL'
+  | 'CH'
+  | 'CY'
+  | 'CZ'
+  | 'DE'
+  | 'DK'
+  | 'EE'
+  | 'ES'
+  | 'FI'
+  | 'FO'
+  | 'FR'
+  | 'GF'
+  | 'GL'
+  | 'GP'
+  | 'GR'
+  | 'HR'
+  | 'HU'
+  | 'IE'
+  | 'IT'
+  | 'LI'
+  | 'LT'
+  | 'LU'
+  | 'LV'
+  | 'MC'
+  | 'ME'
+  | 'MF'
+  | 'IS'
+  | 'MQ'
+  | 'MT'
+  | 'NL'
+  | 'NO'
+  | 'PF'
+  | 'PL'
+  | 'PM'
+  | 'PT'
+  | 'RE'
+  | 'RO'
+  | 'RS'
+  | 'SE'
+  | 'SI'
+  | 'SJ'
+  | 'SK'
+  | 'SM'
+  | 'TF'
+  | 'TR'
+  | 'WF'
+  | 'YT'
+  | 'VA'
+  | 'AX';
+
 
 export type UsState = $Keys<typeof usStates>;
 
@@ -140,8 +196,24 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
+function handleEuroCountry(): ?IsoCountry {
+  const path = window.location.pathname;
+
+  if (path !== '/eu' && !path.startsWith('/eu/')) {
+    return null;
+  }
+
+  const tentativeCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
+
+  if (tentativeCountry && isEuroCountry(tentativeCountry)) {
+    return tentativeCountry;
+  }
+
+  return 'FR';
+}
+
 function detect(): IsoCountry {
-  const country = fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+  const country = handleEuroCountry() || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
   setCountry(country);
   return country;
 }

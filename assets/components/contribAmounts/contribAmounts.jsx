@@ -323,7 +323,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  GB: [
+  GBP: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -335,7 +335,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  US: [
+  USD: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -348,7 +348,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-time contribution',
     },
   ],
-  AU: [
+  AUD: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -360,7 +360,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  EU: [
+  EUR: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -393,10 +393,10 @@ function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
   };
 }
 
-function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean, accessibilityHint: ?string): Toggle {
+function contribToggle(isoCurrency: IsoCurrency = 'GBP', showAnnual: boolean, accessibilityHint: ?string): Toggle {
   return {
     name: 'contributions-period-toggle',
-    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCountry],
+    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCurrency],
     accessibilityHint,
   };
 }
@@ -495,7 +495,7 @@ export default function ContribAmounts(props: PropTypes) {
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle(props.isoCountry, showAnnual, contribGroupAccessibilityHint)}
+          {...contribToggle(props.currency.iso, showAnnual, contribGroupAccessibilityHint)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           modifierClass={radioModifier}

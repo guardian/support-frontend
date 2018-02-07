@@ -66,39 +66,39 @@ type ContribAttrs = {
 
 // ----- Copy ----- //
 
-const subHeadingMonthlyText = {
-  GB: 'from £5 a month',
-  US: 'from $5 a month',
-  AU: 'from $5 a month',
-  EU: 'from €5 a month',
+const subHeadingMonthlyText: {[IsoCurrency]: string} = {
+  GBP: 'from £5 a month',
+  USD: 'from $5 a month',
+  AUD: 'from $5 a month',
+  EUR: 'from €5 a month',
 };
 
-function getSubHeadingMonthly(abTests: Participations, isoCountry: IsoCountry) {
-  return subHeadingMonthlyText[isoCountry];
+function getSubHeadingMonthly(abTests: Participations, isoCurrency: IsoCurrency) {
+  return subHeadingMonthlyText[isoCurrency];
 }
 
 const subHeadingOneOffText = {
-  GB: '',
-  US: '',
-  AU: '',
-  EU: '',
+  GBP: '',
+  USD: '',
+  AUD: '',
+  EUR: '',
 };
 
 const contentText = {
-  GB: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
-  US: (
+  GBP: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
+  USD: (
     <span>
       Contributing to the Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support – it will help to fund our journalism for the long term.
     </span>
   ),
-  AU: (
+  AUD: (
     <span>
       Contributing to the Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support – it will help to fund our journalism for the long term.
     </span>
   ),
-  EU: (
+  EUR: (
     <span>
       Contributing to the Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support – it will help to fund our journalism for the long term.
@@ -107,7 +107,7 @@ const contentText = {
 };
 
 function ContentText(props: PropTypes) {
-  return <p className="component-bundle__content-intro"> {contentText[props.isoCountry]} </p>;
+  return <p className="component-bundle__content-intro"> {contentText[props.currency.iso]} </p>;
 }
 
 const contribCtaText = {
@@ -117,13 +117,13 @@ const contribCtaText = {
 };
 
 function contribAttrs(
-  isoCountry: IsoCountry,
+  isoCurrency: IsoCurrency,
   contribType: Contrib,
   abTests: Participations,
 ): ContribAttrs {
   const subHeadingText = contribType === 'ONE_OFF'
-    ? subHeadingOneOffText[isoCountry]
-    : getSubHeadingMonthly(abTests, isoCountry);
+    ? subHeadingOneOffText[isoCurrency]
+    : getSubHeadingMonthly(abTests, isoCurrency);
 
   return {
     heading: 'contribute',
@@ -196,7 +196,7 @@ const getContribAttrs = (
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs(isoCountry, contribType, abTests), { ctaLink });
+  return Object.assign({}, contribAttrs(currency, contribType, abTests), { ctaLink });
 
 };
 
