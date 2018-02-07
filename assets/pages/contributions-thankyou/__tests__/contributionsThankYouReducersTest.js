@@ -5,7 +5,6 @@ import reducer from '../contributionsThankYouReducer';
 describe('Thank you Reducer', () => {
 
   it('should return the initial state', () => {
-    console.log(reducer(undefined, {}));
     expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
