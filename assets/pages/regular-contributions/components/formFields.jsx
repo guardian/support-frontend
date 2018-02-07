@@ -34,6 +34,7 @@ type PropTypes = {
   firstName: string,
   lastName: string,
   currency: IsoCurrency,
+  country: IsoCountry,
 };
 
 // ----- Map State/Props ----- //
@@ -44,6 +45,7 @@ function mapStateToProps(state) {
     firstName: state.page.user.firstName,
     lastName: state.page.user.lastName,
     currency: state.common.currency.iso,
+    country: state.common.country,
   };
 
 }
@@ -87,15 +89,20 @@ function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
   return null;
 }
 
-function euroCountryDropdown(currency: IsoCurrency, countryUpdate: string => void) {
+function euroCountryDropdown(
+  currency: IsoCurrency,
+  countryUpdate: string => void,
+  country: IsoCountry,
+) {
 
   if (currency === 'EUR') {
 
     const options: SelectOption[] = Object.keys(euroCountries).map((countryCode: IsoCountry) =>
-      ({ value: countryCode, text: euroCountries[countryCode] }));
-
-    // Sets the initial state to the first in the dropdown.
-    countryUpdate(options[0].value);
+      ({
+        value: countryCode,
+        text: euroCountries[countryCode],
+        selected: countryCode === country,
+      }));
 
     return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
 
@@ -126,7 +133,7 @@ function NameForm(props: PropTypes) {
         required
       />
       {stateDropdown(props.currency, props.stateUpdate)}
-      {euroCountryDropdown(props.currency, props.countryUpdate)}
+      {euroCountryDropdown(props.currency, props.countryUpdate, props.country)}
     </form>
   );
 }
