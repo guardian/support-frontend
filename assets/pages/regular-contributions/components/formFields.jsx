@@ -33,7 +33,6 @@ type PropTypes = {
   countryUpdate: (value: string) => void,
   firstName: string,
   lastName: string,
-  country: IsoCountry,
   currency: IsoCurrency,
 };
 
@@ -44,7 +43,6 @@ function mapStateToProps(state) {
   return {
     firstName: state.page.user.firstName,
     lastName: state.page.user.lastName,
-    country: state.common.country,
     currency: state.common.currency.iso,
   };
 
@@ -72,9 +70,9 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Functions ----- //
 
-function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
+function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
 
-  if (country === 'US') {
+  if (currency === 'USD') {
 
     const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
       ({ value: stateCode, text: usStates[stateCode] }));
@@ -127,7 +125,7 @@ function NameForm(props: PropTypes) {
         onChange={props.lastNameUpdate}
         required
       />
-      {stateDropdown(props.country, props.stateUpdate)}
+      {stateDropdown(props.currency, props.stateUpdate)}
       {euroCountryDropdown(props.currency, props.countryUpdate)}
     </form>
   );
