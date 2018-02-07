@@ -14,11 +14,14 @@ import {
   setStateField,
 } from 'helpers/user/userActions';
 
+import { setCountry } from 'helpers/page/pageActions';
+
 import { euroCountries } from 'helpers/internationalisation/currency';
+import { usStates } from 'helpers/internationalisation/country';
 
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
-import type { IsoCurrency } from 'helpers/internationalisation/currency'
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -27,6 +30,7 @@ type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
   stateUpdate: (value: UsState) => void,
+  countryUpdate: (value: string) => void,
   firstName: string,
   lastName: string,
   country: IsoCountry,
@@ -58,10 +62,12 @@ function mapDispatchToProps(dispatch) {
     stateUpdate: (value: UsState) => {
       dispatch(setStateField(value));
     },
+    countryUpdate: (value: IsoCountry) => {
+      dispatch(setCountry(value));
+    },
   };
 
 }
-
 
 
 // ----- Functions ----- //
@@ -83,7 +89,7 @@ function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
   return null;
 }
 
-function euroCountryDropdown(currency: IsoCurrency, countryUpdate: IsoCountry => void) {
+function euroCountryDropdown(currency: IsoCurrency, countryUpdate: string => void) {
 
   if (currency === 'EUR') {
 
@@ -122,7 +128,7 @@ function NameForm(props: PropTypes) {
         required
       />
       {stateDropdown(props.country, props.stateUpdate)}
-      {euroCountryDropdown(props.currency, props.stateUpdate)}
+      {euroCountryDropdown(props.currency, props.countryUpdate)}
     </form>
   );
 }
