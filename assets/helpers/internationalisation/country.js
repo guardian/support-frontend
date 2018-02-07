@@ -262,10 +262,10 @@ function handleEuroCountry(): ?IsoCountry {
     return null;
   }
 
-  const tentativeCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
+  const candidateCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
 
-  if (tentativeCountry && isEuroCountry(tentativeCountry)) {
-    return tentativeCountry;
+  if (candidateCountry && isEuroCountry(candidateCountry)) {
+    return candidateCountry;
   }
 
   return 'FR';
