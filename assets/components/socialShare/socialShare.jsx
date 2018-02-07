@@ -11,8 +11,10 @@ import { SvgFacebook, SvgTwitter } from 'components/svg/svg';
 
 // ---- Types ----- //
 
+type Platform = 'facebook' | 'twitter';
+
 type PropTypes = {
-  name: string,
+  name: Platform,
 };
 
 type SocialMedia = {
@@ -24,7 +26,7 @@ type SocialMedia = {
 // ----- Setup ----- //
 
 const socialMedia: {
-  [string]: SocialMedia,
+  [Platform]: SocialMedia,
 } = {
   facebook: {
     link: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2F%3FINTCMP%3Dsocial&t=',

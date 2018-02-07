@@ -22,6 +22,7 @@
 @import '../components/legal/contribLegal/contribLegal';
 @import '../components/ctaCircle/ctaCircle';
 @import '../components/ctaLink/ctaLink';
+@import '../components/dotcomCta/dotcomCta';
 @import '../components/errorMessage/errorMessage';
 @import '../components/progressMessage/progressMessage';
 @import '../components/spinners/animatedDots';
@@ -41,9 +42,11 @@
 @import '../components/paymentButtons/payPalExpressButton/payPalExpressButton';
 @import '../components/paymentButtons/stripePopUpButton/stripePopUpButton';
 @import '../components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
+@import '../components/questionsContact/questionsContact';
 @import '../components/legal/termsPrivacy/termsPrivacy';
 @import '../components/readyToSupport/readyToSupport';
 @import '../components/signout/signout';
+@import '../components/spreadTheWord/spreadTheWord';
 @import '../components/textInput/textInput';
 @import '../components/testUserBanner/testUserBanner';
 @import '../components/threeSubscriptions/threeSubscriptions';
@@ -63,4 +66,5 @@
 @import '../pages/oneoff-contributions/oneoffContributions';
 @import '../pages/contributions-thankyou/contributionsThankyou';
 @import '../pages/regular-contributions-existing/regularContributionsExisting';
+@import '../pages/regular-contributions-thank-you/regularContributionsThankYou';
 @import '../pages/paypal-error/payPalError';
