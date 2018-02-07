@@ -1,0 +1,62 @@
+.component-spread-the-word {
+
+  .component-page-section {
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+  }
+
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-page-section__header {
+    position: relative;
+    padding-right: $gu-h-spacing;
+    box-sizing: border-box;
+
+    @include dropline;
+  }
+
+  .component-page-section__body {
+    position: relative;
+    padding-top: $gu-v-spacing / 2;
+    padding-bottom: $gu-v-spacing * 4;
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+
+  .component-social-share {
+    margin-right: 26px;
+  }
+
+  .svg-facebook, .svg-twitter {
+    background-color: gu-colour(garnett-neutral-1);
+    fill: #fff;
+    border: none;
+  }
+
+  .svg-facebook {
+    height: 34px;
+    width: 34px;
+    padding: 10px;
+  }
+
+  .svg-twitter {
+    padding: 13px;
+    height: 28px;
+    width: 28px;
+  }
+
+}
+
+.component-spread-the-word__description {
+  margin-bottom: $gu-v-spacing * 2;
+
+  @include mq($from: desktop) {
+    width: 60%;
+  }
+}

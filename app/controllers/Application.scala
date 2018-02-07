@@ -73,6 +73,14 @@ class Application(
     }
   }
 
+  def regularContributionsThankYou(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
+    if (newDesigns == "circles-garnett") {
+      Ok(views.html.react(title, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js"))
+    } else {
+      Ok(views.html.react(title, id, js))
+    }
+  }
+
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))
   }

@@ -50,7 +50,10 @@ const content = (
   <Provider store={store}>
     <div>
       <SimpleHeader />
-      <CirclesIntroduction />
+      <CirclesIntroduction
+        headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
+        highlights={['Support', 'The Guardian']}
+      />
       <Contribute>
         <ContributionSelectionContainer />
       </Contribute>
