@@ -34,6 +34,25 @@ export const EUR: Currency = {
   glyph: '€',
 };
 
+const spokenCurrencies = {
+  GBP: {
+    singular: 'pound',
+    plural: 'pounds',
+  },
+  USD: {
+    singular: 'dollar',
+    plural: 'dollars',
+  },
+  AUD: {
+    singular: 'dollar',
+    plural: 'dollars',
+  },
+  EUR: {
+    singular: 'euro',
+    plural: 'euros',
+  },
+};
+
 const euroCountries: {
   [IsoCountry]: string,
 } = {
@@ -136,4 +155,5 @@ function detect(country: IsoCountry): Currency {
 export {
   detect,
   isEuroCountry,
+  spokenCurrencies,
 };

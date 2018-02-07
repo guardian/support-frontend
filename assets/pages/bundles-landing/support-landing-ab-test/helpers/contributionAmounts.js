@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { config as contributionConfig } from 'helpers/contributions';
+import { spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
@@ -13,21 +14,6 @@ import { getSpokenType } from './contributionTypes';
 
 
 // ----- Setup ----- //
-
-const spokenCurrencies = {
-  GBP: {
-    singular: 'pound',
-    plural: 'pounds',
-  },
-  USD: {
-    singular: 'dollar',
-    plural: 'dollars',
-  },
-  AUD: {
-    singular: 'dollar',
-    plural: 'dollars',
-  },
-};
 
 const amounts = {
   ONE_OFF: {
@@ -49,6 +35,12 @@ const amounts = {
       { value: '250', spoken: 'two hundred and fifty' },
       { value: '500', spoken: 'five hundred' },
     ],
+    EUR: [
+      { value: '25', spoken: 'twenty five' },
+      { value: '50', spoken: 'fifty' },
+      { value: '100', spoken: 'one hundred' },
+      { value: '250', spoken: 'two hundred and fifty' },
+    ],
   },
   MONTHLY: {
     GBP: [
@@ -66,6 +58,11 @@ const amounts = {
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
+    EUR: [
+      { value: '5', spoken: 'five' },
+      { value: '10', spoken: 'ten' },
+      { value: '20', spoken: 'twenty' },
+    ],
   },
   ANNUAL: {
     GBP: [
@@ -79,6 +76,11 @@ const amounts = {
       { value: '100', spoken: 'one hundred' },
     ],
     AUD: [
+      { value: '50', spoken: 'fifty' },
+      { value: '75', spoken: 'seventy five' },
+      { value: '100', spoken: 'one hundred' },
+    ],
+    EUR: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
