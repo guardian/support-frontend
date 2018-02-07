@@ -4,6 +4,12 @@
 
 import React from 'react';
 
+import {
+  SvgCirclesHeroDesktop,
+  SvgCirclesHeroMobileLandscape,
+  SvgCirclesHeroMobile,
+} from 'components/svg/svg';
+
 
 // ----- Types ----- //
 
@@ -18,12 +24,17 @@ type PropTypes = {
 function CirclesIntroduction(props: PropTypes) {
   return (
     <section className="component-circles-introduction">
+      <SvgCirclesHeroDesktop />
+      <SvgCirclesHeroMobileLandscape />
+      <SvgCirclesHeroMobile />
       <div className="component-circles-introduction__content gu-content-margin">
-        <h1 className="component-circles-introduction__heading">
-          {props.headings.map(heading =>
-            <span className="component-circles-introduction__heading-line">{heading}</span>)}
-        </h1>
-        <Highlights highlights={props.highlights} />
+        <div className="component-circles-introduction__copy">
+          <h1 className="component-circles-introduction__heading">
+            {props.headings.map(heading =>
+              <span className="component-circles-introduction__heading-line">{heading}</span>)}
+          </h1>
+          <Highlights highlights={props.highlights} />
+        </div>
       </div>
     </section>
   );
