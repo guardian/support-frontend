@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { detect, GBP, USD, EUR, AUD, IsoCurrency } from '../currency';
+import { detect, GBP, USD, EUR, AUD, IsoCurrency, isEuroCountry } from '../currency';
 
 let mockCurrency: ?IsoCurrency = null;
 
@@ -60,3 +60,24 @@ describe('detect currency', () => {
   });
 
 });
+
+describe('isEuroCountry', () => {
+
+  it('should return true is the country process EUR (FR)', () => {
+    mockCurrency = null;
+    expect(isEuroCountry('FR')).toEqual(true);
+    expect(isEuroCountry('DE')).toEqual(true);
+    expect(isEuroCountry('NL')).toEqual(true);
+    expect(isEuroCountry('NO')).toEqual(true);
+    expect(isEuroCountry('IE')).toEqual(true);
+  });
+
+  it('should return true is the country process EUR (US)', () => {
+    mockCurrency = null;
+    expect(isEuroCountry('US')).toEqual(false);
+    expect(isEuroCountry('UK')).toEqual(false);
+    expect(isEuroCountry('AU')).toEqual(false);
+  });
+
+});
+
