@@ -268,7 +268,7 @@ function handleEuroCountry(): ?IsoCountry {
     return candidateCountry;
   }
 
-  return 'FR';
+  return 'DE';
 }
 
 function detect(): IsoCountry {
