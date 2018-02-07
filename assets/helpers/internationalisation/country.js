@@ -140,6 +140,10 @@ export type UsState = $Keys<typeof usStates>;
 // ----- Functions ----- /
 
 function fromString(s: string): ?IsoCountry {
+  if (isEuroCountry(s.toUpperCase())) {
+    return s.toUpperCase();
+  }
+
   switch (s.toLowerCase()) {
     case 'gb': return 'GB';
     case 'uk': return 'GB';
@@ -150,6 +154,10 @@ function fromString(s: string): ?IsoCountry {
 }
 
 export function toCountryGroup(isoCountry: IsoCountry): string {
+  if (isEuroCountry(isoCountry)) {
+    return 'eu';
+  }
+
   switch (isoCountry) {
     case 'US': return 'us';
     case 'AU': return 'au';
