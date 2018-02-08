@@ -114,13 +114,13 @@ const upsellRecurringContributionsTestContentText = {
   benefitsOfBoth: (
     <span>
       Make a monthly commitment to support The Guardian long-term or a one-time contribution
-      as and when you feel like it &ndash choose the option that suits you best.
+      as and when you feel like it &ndash; choose the option that suits you best.
     </span>
   ),
   bolderControl: (
     <span>
-      If you’re able, please consider monthly support &ndash
-      it will help to fund The Guardian’s journalism for the long term.
+      If you’re able, please consider <strong>monthly</strong> support &ndash;
+      it will help to fund The Guardian’s journalism for the long-term.
     </span>
   ),
 };
