@@ -1,0 +1,54 @@
+.component-thank-you-introduction {
+  background-color: gu-colour(nav-background-colour);
+  color: gu-colour(garnett-neutral-1);
+  position: relative;
+  overflow: hidden;
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 30px;
+
+  @include mq($from: mobileMedium) {
+    font-size: 30px;
+    line-height: 32px;
+  }
+
+  @include mq($from: phablet) {
+    font-size: 46px;
+    line-height: 50px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  .component-highlights {
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+      margin-left: 20%
+    }
+  }
+}
+
+.component-thank-you-introduction__content {
+  padding-top: 100px;
+}
+
+.component-thank-you-introduction__heading {
+  padding-bottom: $gu-v-spacing;
+
+  @include mq($from: mobileLandscape) {
+    padding-bottom: $gu-v-spacing * 2;
+  }
+
+  @include mq($from: desktop) {
+    padding-left: $gu-h-spacing;
+    margin-left: 20%
+  }
+
+}
+
+.component-thank-you-introduction__heading-line {
+  display: block;
+}
