@@ -74,19 +74,17 @@ function mapDispatchToProps(dispatch) {
 
 function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
 
-  if (currency === 'USD') {
-
-    const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
-      ({ value: stateCode, text: usStates[stateCode] }));
-
-    // Sets the initial state to the first in the dropdown.
-    stateUpdate(options[0].value);
-
-    return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
-
+  if (currency !== 'USD') {
+    return null;
   }
 
-  return null;
+  const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
+    ({ value: stateCode, text: usStates[stateCode] }));
+
+  // Sets the initial state to the first in the dropdown.
+  stateUpdate(options[0].value);
+
+  return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
 }
 
 function euroCountryDropdown(
@@ -95,20 +93,18 @@ function euroCountryDropdown(
   country: IsoCountry,
 ) {
 
-  if (currency === 'EUR') {
-
-    const options: SelectOption[] = Object.keys(euroCountries).map((countryCode: IsoCountry) =>
-      ({
-        value: countryCode,
-        text: euroCountries[countryCode],
-        selected: countryCode === country,
-      }));
-
-    return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
-
+  if (currency !== 'EUR') {
+    return null;
   }
 
-  return null;
+  const options: SelectOption[] = Object.keys(euroCountries).map((countryCode: IsoCountry) =>
+    ({
+      value: countryCode,
+      text: euroCountries[countryCode],
+      selected: countryCode === country,
+    }));
+
+  return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
 }
 
 
