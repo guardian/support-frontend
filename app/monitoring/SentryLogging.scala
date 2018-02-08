@@ -21,13 +21,13 @@ object SentryLogging {
 
 object SentryLogFilters {
 
-  class NoPiiFilter extends Filter[ILoggingEvent] {
+  class PiiFilter extends Filter[ILoggingEvent] {
     override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SentryLogging.noPii)) FilterReply.ACCEPT
     else FilterReply.DENY
   }
 
   val errorLevelFilter = new ThresholdFilter { setLevel("ERROR") }
-  val piiFilter = new NoPiiFilter
+  val piiFilter = new PiiFilter
 
   SentryLogFilters.errorLevelFilter.start()
   SentryLogFilters.piiFilter.start()

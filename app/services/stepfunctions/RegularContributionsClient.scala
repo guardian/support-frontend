@@ -105,7 +105,7 @@ class RegularContributionsClient(
 
     underlying.history(jobId).bimap(
       { error =>
-        logger.error(s"[${requestId}] failed to get status of step function execution $jobId: $error")
+        logger.error(s"[$requestId] failed to get status of step function execution $jobId: $error")
         StateMachineFailure: RegularContributionError
       },
       { events =>

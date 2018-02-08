@@ -8,7 +8,6 @@ import monitoring.SentryLogging
 import play.api.mvc._
 import services.IdentityService
 import play.api.libs.circe.Circe
-
 import scala.concurrent.ExecutionContext
 
 class IdentityController(

@@ -6,7 +6,6 @@ import scala.concurrent.{Future, Promise}
 import scala.util.{Failure, Success, Try}
 import akka.pattern.ask
 import akka.util.Timeout
-
 import scala.concurrent.duration._
 import com.typesafe.scalalogging.LazyLogging
 import monitoring.SentryLogging

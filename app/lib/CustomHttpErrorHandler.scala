@@ -38,7 +38,7 @@ class CustomHttpErrorHandler(
       case _ => "unknown line number, please check the logs"
     }
     val sanitizedExceptionDetails = s"Caused by: ${usefulException.cause} in $lineInfo"
-    val requestDetails = s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api=key=my_secret
+    val requestDetails = s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
     logger.error(SentryLogging.noPii, s"Internal server error, for $requestDetails. $sanitizedExceptionDetails")
 
     super.logServerError(request, usefulException) // We still want the full uri and stack trace in our logs, just not in Sentry
