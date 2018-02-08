@@ -120,6 +120,23 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute two hundred and fifty dollars annually',
     },
   ],
+  EUR: [
+    {
+      value: '50',
+      text: '€50',
+      accessibilityHint: 'contribute fifty euros annually',
+    },
+    {
+      value: '100',
+      text: '€100',
+      accessibilityHint: 'contribute one hundred euros annually',
+    },
+    {
+      value: '250',
+      text: '€250',
+      accessibilityHint: 'contribute two hundred and fifty euros annually',
+    },
+  ],
 };
 
 const amountRadiosMonthlyControl: {
@@ -176,6 +193,23 @@ const amountRadiosMonthlyControl: {
       accessibilityHint: 'contribute thirty dollars per month',
     },
   ],
+  EUR: [
+    {
+      value: '7',
+      text: '€7',
+      accessibilityHint: 'contribute seven euros per month',
+    },
+    {
+      value: '15',
+      text: '€15',
+      accessibilityHint: 'contribute fifteen euros per month',
+    },
+    {
+      value: '30',
+      text: '€30',
+      accessibilityHint: 'contribute thirty euros per month',
+    },
+  ],
 };
 
 const amountRadiosOneOff: {
@@ -229,22 +263,44 @@ const amountRadiosOneOff: {
     {
       value: '50',
       text: '$50',
-      accessibilityHint: 'make a one-time contribution of fifty dollars',
+      accessibilityHint: 'make a one-off contribution of fifty dollars',
     },
     {
       value: '100',
       text: '$100',
-      accessibilityHint: 'make a one-time contribution of one hundred dollars',
+      accessibilityHint: 'make a one-off contribution of one hundred dollars',
     },
     {
       value: '250',
       text: '$250',
-      accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
+      accessibilityHint: 'make a one-off contribution of two hundred and fifty dollars',
     },
     {
       value: '500',
       text: '$500',
-      accessibilityHint: 'make a one-time contribution of five hundred dollars',
+      accessibilityHint: 'make a one-off contribution of five hundred dollars',
+    },
+  ],
+  EUR: [
+    {
+      value: '25',
+      text: '€25',
+      accessibilityHint: 'make a one-off contribution of twenty five euros',
+    },
+    {
+      value: '50',
+      text: '€50',
+      accessibilityHint: 'make a one-off contribution of fifty euros',
+    },
+    {
+      value: '100',
+      text: '€100',
+      accessibilityHint: 'make a one-off contribution of one hundred euros',
+    },
+    {
+      value: '250',
+      text: '€250',
+      accessibilityHint: 'make a one-off contribution of two hundred and fifty euros',
     },
   ],
 };
@@ -267,7 +323,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  GB: [
+  GBP: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -279,7 +335,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  US: [
+  USD: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -292,7 +348,19 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-time contribution',
     },
   ],
-  AU: [
+  AUD: [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: 'One-off',
+      accessibilityHint: 'Make a one-off contribution',
+    },
+  ],
+  EUR: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -325,10 +393,10 @@ function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
   };
 }
 
-function contribToggle(isoCountry: IsoCountry = 'GB', showAnnual: boolean, accessibilityHint: ?string): Toggle {
+function contribToggle(isoCurrency: IsoCurrency = 'GBP', showAnnual: boolean, accessibilityHint: ?string): Toggle {
   return {
     name: 'contributions-period-toggle',
-    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCountry],
+    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCurrency],
     accessibilityHint,
   };
 }
@@ -427,7 +495,7 @@ export default function ContribAmounts(props: PropTypes) {
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle(props.isoCountry, showAnnual, contribGroupAccessibilityHint)}
+          {...contribToggle(props.currency.iso, showAnnual, contribGroupAccessibilityHint)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           modifierClass={radioModifier}

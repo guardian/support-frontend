@@ -11,6 +11,7 @@ GET /unsupported-browser                            controllers.Application.unsu
 GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: String ?= "")
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
+GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
 GET /                                               controllers.Application.geoRedirect()
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
@@ -31,6 +32,7 @@ GET  /monthly-contributions                         controllers.Application.cont
 GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPageUK.js")
 GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
 GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPageAU.js")
+GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPageEU.js")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/recurring/thankyou                 controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thankyou-page-old", js="regularContributionsThankyouPageOld.js", newDesigns: String ?= "")

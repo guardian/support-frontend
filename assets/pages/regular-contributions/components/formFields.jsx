@@ -13,10 +13,15 @@ import {
   setLastName,
   setStateField,
 } from 'helpers/user/userActions';
+
+import { setCountry } from 'helpers/page/pageActions';
+
+import { euroCountries } from 'helpers/internationalisation/currency';
 import { usStates } from 'helpers/internationalisation/country';
 
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -25,30 +30,81 @@ type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
   stateUpdate: (value: UsState) => void,
+  countryUpdate: (value: string) => void,
   firstName: string,
   lastName: string,
+  currency: IsoCurrency,
   country: IsoCountry,
 };
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+
+  return {
+    firstName: state.page.user.firstName,
+    lastName: state.page.user.lastName,
+    currency: state.common.currency.iso,
+    country: state.common.country,
+  };
+
+}
+
+function mapDispatchToProps(dispatch) {
+
+  return {
+    firstNameUpdate: (name: string) => {
+      dispatch(setFirstName(name));
+    },
+    lastNameUpdate: (name: string) => {
+      dispatch(setLastName(name));
+    },
+    stateUpdate: (value: UsState) => {
+      dispatch(setStateField(value));
+    },
+    countryUpdate: (value: IsoCountry) => {
+      dispatch(setCountry(value));
+    },
+  };
+
+}
 
 
 // ----- Functions ----- //
 
-function stateDropdown(country: IsoCountry, stateUpdate: UsState => void) {
+function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
 
-  if (country === 'US') {
-
-    const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
-      ({ value: stateCode, text: usStates[stateCode] }));
-
-    // Sets the initial state to the first in the dropdown.
-    stateUpdate(options[0].value);
-
-    return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
-
+  if (currency !== 'USD') {
+    return null;
   }
 
-  return null;
+  const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
+    ({ value: stateCode, text: usStates[stateCode] }));
 
+  // Sets the initial state to the first in the dropdown.
+  stateUpdate(options[0].value);
+
+  return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
+}
+
+function euroCountryDropdown(
+  currency: IsoCurrency,
+  countryUpdate: string => void,
+  country: IsoCountry,
+) {
+
+  if (currency !== 'EUR') {
+    return null;
+  }
+
+  const options: SelectOption[] = Object.keys(euroCountries).map((countryCode: IsoCountry) =>
+    ({
+      value: countryCode,
+      text: euroCountries[countryCode],
+      selected: countryCode === country,
+    }));
+
+  return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
 }
 
 
@@ -72,41 +128,11 @@ function NameForm(props: PropTypes) {
         onChange={props.lastNameUpdate}
         required
       />
-      {stateDropdown(props.country, props.stateUpdate)}
+      {stateDropdown(props.currency, props.stateUpdate)}
+      {euroCountryDropdown(props.currency, props.countryUpdate, props.country)}
     </form>
   );
-
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    firstName: state.page.user.firstName,
-    lastName: state.page.user.lastName,
-    country: state.common.country,
-  };
-
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    firstNameUpdate: (name: string) => {
-      dispatch(setFirstName(name));
-    },
-    lastNameUpdate: (name: string) => {
-      dispatch(setLastName(name));
-    },
-    stateUpdate: (value: UsState) => {
-      dispatch(setStateField(value));
-    },
-  };
-
-}
-
 
 // ----- Exports ----- //
 

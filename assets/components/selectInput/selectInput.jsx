@@ -14,6 +14,7 @@ import React from 'react';
 export type SelectOption = {
   text: string,
   value: string,
+  selected?: boolean,
 };
 
 /* eslint-enable react/no-unused-prop-types, react/require-default-props */
@@ -31,7 +32,7 @@ type PropTypes = {
 export default function SelectInput(props: PropTypes) {
 
   const options = props.options.map((option: SelectOption) =>
-    <option value={option.value}>{option.text}</option>);
+    <option value={option.value} selected={option.selected}>{option.text}</option>);
 
   return (
     <select
