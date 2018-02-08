@@ -114,7 +114,7 @@ const euroCountries: {
 };
 
 function isEuroCountry(country: IsoCountry): boolean {
-  return (Object.keys(euroCountries).indexOf(country) > -1);
+  return Object.prototype.hasOwnProperty.call(euroCountries, country);
 }
 
 function forCountry(country: IsoCountry): Currency {
