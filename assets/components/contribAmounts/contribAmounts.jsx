@@ -263,44 +263,44 @@ const amountRadiosOneOff: {
     {
       value: '50',
       text: '$50',
-      accessibilityHint: 'make a one-time contribution of fifty dollars',
+      accessibilityHint: 'make a one-off contribution of fifty dollars',
     },
     {
       value: '100',
       text: '$100',
-      accessibilityHint: 'make a one-time contribution of one hundred dollars',
+      accessibilityHint: 'make a one-off contribution of one hundred dollars',
     },
     {
       value: '250',
       text: '$250',
-      accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
+      accessibilityHint: 'make a one-off contribution of two hundred and fifty dollars',
     },
     {
       value: '500',
       text: '$500',
-      accessibilityHint: 'make a one-time contribution of five hundred dollars',
+      accessibilityHint: 'make a one-off contribution of five hundred dollars',
     },
   ],
   EUR: [
     {
       value: '25',
       text: '€25',
-      accessibilityHint: 'make a one-time contribution of twenty five euros',
+      accessibilityHint: 'make a one-off contribution of twenty five euros',
     },
     {
       value: '50',
       text: '€50',
-      accessibilityHint: 'make a one-time contribution of fifty euros',
+      accessibilityHint: 'make a one-off contribution of fifty euros',
     },
     {
       value: '100',
       text: '€100',
-      accessibilityHint: 'make a one-time contribution of one hundred euros',
+      accessibilityHint: 'make a one-off contribution of one hundred euros',
     },
     {
       value: '250',
       text: '€250',
-      accessibilityHint: 'make a one-time contribution of two hundred and fifty euros',
+      accessibilityHint: 'make a one-off contribution of two hundred and fifty euros',
     },
   ],
 };
