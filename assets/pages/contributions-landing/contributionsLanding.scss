@@ -378,6 +378,13 @@ strong {
     color: gu-colour(neutral-1);
   }
 
+  // TODO: implement
+  .component-bundle__content-intro--bolder-control {
+    line-height: 20px;
+    margin-bottom: $gu-v-spacing * 2;
+    color: gu-colour(neutral-1);
+  }
+
   .component-radio-toggle input:not(:checked)+label, .component-number-input {
     background-color: gu-colour(comment-support-3);
   }

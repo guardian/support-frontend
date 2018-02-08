@@ -130,8 +130,13 @@ function getContentText(props: PropTypes) {
     defaultContentText[props.isoCountry];
 }
 
+function getContentTextClassName(props: PropTypes) {
+  const modifier = (props.abTests.upsellRecurringContributions === 'bolderControl' ? '--bolder-control' : '');
+  return `component-bundle__content-intro${modifier}`;
+}
+
 function ContentText(props: PropTypes) {
-  return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
+  return <p className={getContentTextClassName(props)}> {getContentText(props)} </p>;
 }
 
 const contribCtaText = {
