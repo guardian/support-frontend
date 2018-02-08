@@ -9,6 +9,7 @@ import {
   SvgCirclesHeroMobileLandscape,
   SvgCirclesHeroMobile,
 } from 'components/svg/svg';
+import Highlights from 'components/highlights/highlights';
 
 
 // ----- Types ----- //
@@ -38,27 +39,6 @@ function CirclesIntroduction(props: PropTypes) {
       </div>
     </section>
   );
-}
-
-
-// ----- Auxiliary Components ----- //
-
-function Highlights(props: {highlights: ?string[]}) {
-
-  if (!props.highlights) {
-    return null;
-  }
-
-  return (
-    <h2 className="component-circles-introduction__heading">
-      {props.highlights.map(highlight => (
-        <span className="component-circles-introduction__heading-line">
-          <span className="component-circles-introduction__highlight">{highlight}</span>
-        </span>
-      ))}
-    </h2>
-  );
-
 }
 
 

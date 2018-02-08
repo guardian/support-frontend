@@ -47,7 +47,7 @@
   }
 }
 
-.component-circles-introduction__heading {
+.component-circles-introduction__heading, .component-highlights {
   font-family: $gu-egyptian-web;
   font-weight: bold;
   font-size: 28px;
@@ -82,11 +82,4 @@
 
 .component-circles-introduction__heading-line {
   display: block;
-}
-
-.component-circles-introduction__highlight {
-  display: inline-block;
-  vertical-align: top;
-  padding: 4px;
-  background-color: gu-colour(news-garnett-highlight);
 }
