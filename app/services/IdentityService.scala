@@ -4,17 +4,13 @@ import cats.data.EitherT
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
-
 import com.google.common.net.InetAddresses
+import com.typesafe.scalalogging.LazyLogging
 import config.Identity
-import play.api.Logger
 import play.api.libs.json.Json
-
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -48,7 +44,7 @@ object IdentityService {
     apiClientToken = config.apiClientToken
   )
 }
-class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends LazyLogging {
 
   import IdentityServiceEnrichers._
 
@@ -62,12 +58,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
       val logMessage = "Response from Identity Consent API: " + response.toString
-      if (validResponse) Logger.info(logMessage)
-      else Logger.error(logMessage)
+      if (validResponse) logger.info(logMessage)
+      else logger.error(logMessage)
       validResponse
     } recover {
       case e: Exception =>
-        Logger.error("Impossible to update the user's marketing preferences", e)
+        logger.error("Impossible to update the user's marketing preferences", e)
         false
     }
   }

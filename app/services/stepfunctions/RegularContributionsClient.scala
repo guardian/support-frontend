@@ -73,22 +73,22 @@ class RegularContributionsClient(
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to create regular contribution - $error")
+        logger.error(s"[$requestId] Failed to create regular contribution for ${user.id} - $error")
         StateMachineFailure: RegularContributionError
       },
       { success =>
-        logger.info(s"[$requestId] Creating regular contribution ($success)")
+        logger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
             trackingUri = supportUrl + statusCall(jobId).url
           )
         } getOrElse {
-          logger.error(s"Failed to parse ${success.arn} to a jobId when creating new regular contribution $request")
+          logger.error(s"[$requestId] Failed to parse ${success.arn} to a jobId when creating new regular contribution for ${user.id} $request")
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
-            message = Some("Failed to process request - please contact custom support")
+            message = Some("Failed to process request - please contact customer support")
           )
         }
 
@@ -105,7 +105,7 @@ class RegularContributionsClient(
 
     underlying.history(jobId).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to get execution status of $jobId - $error")
+        logger.error(s"[${requestId}] failed to get status of step function execution $jobId: $error")
         StateMachineFailure: RegularContributionError
       },
       { events =>

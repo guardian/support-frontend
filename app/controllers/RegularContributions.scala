@@ -15,6 +15,7 @@ import services.stepfunctions.{CreateRegularContributorRequest, RegularContribut
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
 import io.circe.syntax._
+import monitoring.SentryLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -61,7 +62,7 @@ class RegularContributions(
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
-        logger.error(s"Failed to get status: $error")
+        logger.error(SentryLogging.noPii, s"Failed to get status of step function execution")
         InternalServerError
       },
       response => Ok(response.asJson)
@@ -78,7 +79,7 @@ class RegularContributions(
 
     result.fold(
       { error =>
-        logger.error(s"Failed to create new monthly contributor: $error")
+        logger.error(SentryLogging.noPii, s"Failed to create new monthly contributor")
         InternalServerError
       },
       response => Accepted(response.asJson)
