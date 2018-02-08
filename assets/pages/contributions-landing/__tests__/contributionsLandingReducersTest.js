@@ -7,7 +7,6 @@ import type { Contrib, Amount } from 'helpers/contributions';
 import { createContributionLandingReducer } from '../contributionsLandingReducers';
 
 
-
 // ----- Tests ----- //
 
 jest.mock('ophan', () => {});

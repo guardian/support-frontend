@@ -125,7 +125,7 @@ function createContributionLandingReducer(amountMonthly: string) {
 
     }
 
-  }
+  };
 }
 
 // ----- Exports ----- //
