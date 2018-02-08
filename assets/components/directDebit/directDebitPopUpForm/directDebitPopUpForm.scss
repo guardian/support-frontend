@@ -21,16 +21,24 @@
   display: inline-block;
   top: 50%;
   transform: translateY(-50%);
-  background-color: gu-colour(nav-background-colour);
+  background-color: white;
   text-align: left;
-  border-radius: 5px;
+  border-top: 3px solid gu-colour(garnett-neutral-1);
+  padding: $gu-v-spacing $gu-h-spacing / 2;
+}
+
+.component-direct-debit-pop-up-form__heading {
+  float: left;
+  font-family: $gu-egyptian-web;
+  font-weight: bolder;
+  font-size: 24px;
+  line-height: 30px;
 }
 
 .component-direct-debit-pop-up-form__close-button {
   border-radius: 800px;
   height: 20px;
-  margin-left: 480px;
-  margin-top: $gu-v-spacing/2;
+  float: right;
 }
 
 .component-direct-debit-pop-up-form__background {

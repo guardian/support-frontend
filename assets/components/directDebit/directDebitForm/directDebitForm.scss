@@ -1,13 +1,43 @@
 .component-direct-debit-form {
   width: 500px;
-  padding: $gu-h-spacing/2;
+  clear: left;
+  margin-top: 60px;
+
+  .component-error-message {
+    background-color: transparent;
+    color: gu-colour(error);
+    padding: 0;
+    margin-top: 6px;
+
+    .svg-exclamation {
+      fill: gu-colour(error);
+      padding: 3px 8px;
+      border: 1px solid;
+      border-radius: 20px;
+      margin-right: 4px;
+    }
+
+    .component-error-message__message {
+      left: 30px;
+    }
+  }
+
+  .svg-exclamation {
+    position: absolute;
+    height: 16px;
+    fill: gu-colour(error);
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
 
 .component-direct-debit-form__field-label {
   display: block;
-  font-family: $gu-sans-web;
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
   font-size: 16px;
   line-height: 24px;
+  margin-bottom: 4px;
 }
 
 .component-direct-debit-form__sort-code-field {
@@ -15,56 +45,86 @@
   font-size: 14px;
   color: gu-colour(garnett-neutral-1);
   margin: 0 -2px 20px;
-  border: none;
+  border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 600px;
   height: $gu-v-spacing * 4;
   padding: 0 $gu-h-spacing;
-  width: 70px;
+  width: 60px;
+}
+
+.component-direct-debit-form_sort-code-separator {
+  margin: 0 10px;
+  font-size: 18px;
 }
 
 .component-direct-debit-form__text-field {
   font-family: $gu-sans-web;
   font-size: 14px;
-  color: gu-colour(garnett-neutral-1);
-  margin: 0 -2px 20px;
-  border: none;
+  font-weight: bold;
+  color: black;
+  margin: 0 auto 7px;
+  border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 600px;
   height: $gu-v-spacing * 4;
   padding: 0 $gu-h-spacing;
-  width: 100px;
+  width: 460px;
 }
 
 .component-direct-debit-form__account-holder-confirmation__text {
   font-family: $gu-sans-web;
-  font-size: 14px;
+  font-size: 16px;
   color: gu-colour(neutral-1);
+  display: block;
+  overflow: hidden;
+}
+
+.component-direct-debit-form__account-holder-confirmation__checkbox {
+  float: left;
+  padding: 10px;
+  margin-right: 10px;
 }
 
 .component-direct-debit-form__pay-button {
-  background-color: gu-colour(neutral-1);
-  border: none;
+  background-color: gu-colour(news-garnett-highlight);
+  border: 1px gu-colour(news-garnett-highlight-hover) solid;
   border-radius: 600px;
-  color: #fff;
+  color: gu-colour(neutral-1);
   cursor: pointer;
   display: block;
-  font-family: $gu-sans-web;
+  font-family: $gu-text-sans-web;
   font-size: 14px;
   font-weight: bold;
   height: $gu-v-spacing * 4;
   padding-left: $gu-h-spacing;
+  line-height: 3;
   position: relative;
   text-align: left;
-  width: 100%;
+  width: 500px;
   margin-top: $gu-v-spacing;
 
-  @include mq($from: mobileMedium) {
-    width: 175px;
+  .svg-direct-debit-symbol {
+    margin: 8px 8px 0 -5px;
+    float: left;
   }
 
+  .svg-arrow-right-straight {
+    width: 24px;
+    fill: gu-colour(neutral-1);
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  //@include mq($from: mobileMedium) {
+  //  width: 175px;
+  //}
+
   &:hover {
-    background-color: darken(gu-colour(neutral-1), 10%);
+    background-color: gu-colour(news-garnett-highlight-hover);
   }
 }
+
 .component-direct-debit-form__legal__title {
   font-family: $gu-text-sans-web;
   font-size: 14px;

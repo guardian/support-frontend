@@ -12,7 +12,7 @@ import {
   updateAccountHolderConfirmation,
   payDirectDebitClicked,
 } from 'components/directDebit/directDebitActions';
-
+import { SvgDirectDebitSymbol, SvgArrowRightStraight } from 'components/svg/svg';
 
 // ---- Types ----- //
 
@@ -75,9 +75,10 @@ function mapDispatchToProps(dispatch) {
 
 const DirectDebitForm = (props: PropTypes) => (
   <div className="component-direct-debit-form">
-    <SortCodeInput
-      onChange={props.updateSortCode}
-      value={props.sortCode}
+
+    <AccountHolderNameInput
+      onChange={props.updateAccountHolderName}
+      value={props.accountHolderName}
     />
 
     <AccountNumberInput
@@ -85,9 +86,9 @@ const DirectDebitForm = (props: PropTypes) => (
       value={props.accountNumber}
     />
 
-    <AccountHolderNameInput
-      onChange={props.updateAccountHolderName}
-      value={props.accountHolderName}
+    <SortCodeInput
+      onChange={props.updateSortCode}
+      value={props.sortCode}
     />
 
     <ConfirmationInput
@@ -95,14 +96,17 @@ const DirectDebitForm = (props: PropTypes) => (
       checked={props.accountHolderConfirmation}
     />
 
-    <ErrorMessage message={props.formError} />
     <button
       id="qa-pay-with-direct-debit-pay"
       className="component-direct-debit-form__pay-button"
       onClick={() => props.payDirectDebitClicked(props.callback)}
     >
-      Pay with Direct Debit
+      <SvgDirectDebitSymbol />
+      <span>Contribute with Direct Debit</span>
+      <SvgArrowRightStraight />
     </button>
+
+    <ErrorMessage message={props.formError} />
 
     <div className="component-direct-debit-form__legal__title">
       Advance notice
@@ -137,14 +141,27 @@ function SortCodeInput(props: {value: string, onChange: Function}) {
   return (
     <div className="component-direct-debit-form__sort-code">
       <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
-        Bank sort code
+        Sort Code
       </label>
       <input
         id="sort-code-input"
         value={props.value}
         onChange={props.onChange}
         type="text"
-        placeholder="00-00-00"
+        className="component-direct-debit-form__sort-code-field"
+      /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+      <input
+        id="sort-code-input"
+        value={props.value}
+        onChange={props.onChange}
+        type="text"
+        className="component-direct-debit-form__sort-code-field"
+      /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+      <input
+        id="sort-code-input"
+        value={props.value}
+        onChange={props.onChange}
+        type="text"
         className="component-direct-debit-form__sort-code-field"
       />
 
@@ -157,7 +174,7 @@ function AccountNumberInput(props: {onChange: Function, value: string}) {
   return (
     <div className="component-direct-debit-form__account-number">
       <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
-        Bank account number
+        Account number
       </label>
       <input
         id="account-number-input"
@@ -183,7 +200,7 @@ function AccountHolderNameInput(props: {value: string, onChange: Function}) {
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
-        Name of account holder
+        Name
       </label>
       <input
         id="account-holder-name-input"
@@ -203,6 +220,7 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
         <label htmlFor="confirmation-input">
           <span>
             <input
+              className="component-direct-debit-form__account-holder-confirmation__checkbox"
               id="confirmation-input"
               type="checkbox"
               onChange={props.onChange}

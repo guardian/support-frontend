@@ -673,6 +673,19 @@ function SvgMovingCircle() {
 
 }
 
+function SvgDirectDebitSymbol() {
+  return (
+    <svg width="35px" height="26px" className="svg-direct-debit-symbol" viewBox="0 0 35 26" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <g id="DD_Mobile_Error_3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-35.000000, -417.000000)">
+        <g id="Group-6-Copy-2" transform="translate(10.000000, 23.000000)" fill="#212121" fill-rule="nonzero">
+          <g id="Direct-Debit-Button" transform="translate(10.000000, 380.000000)">
+            <path d="M33.253578,23.6554197 L33.253578,37.3856581 C33.253578,37.3856581 25.8099726,35.94916 25.8099726,30.4917279 C25.8103935,26.1390172 31.3203872,24.2203852 33.253578,23.6554197 Z M18.6357429,30.2040681 C18.6357429,33.4043391 24.0072606,38.0829741 32.7548122,38.205871 C33.0999497,38.205871 43.0369629,37.7953144 42.8837555,26.387512 C42.7549603,16.8060565 36.0500334,15.1278162 33.905972,14.8356547 L33.905972,14.251782 C42.4535964,14.8320533 49.1762011,20.3300009 49.1762011,27.0028968 C49.1762011,34.0611397 41.6559921,39.8057814 32.4096747,39.8057814 C23.1633574,39.8057814 15.6814502,34.0606895 15.6814502,27.0028968 C15.6814502,19.9451041 23.1629365,14.2000122 32.4096747,14.2000122 C32.69294,14.2000122 32.9745217,14.2054143 33.2539989,14.2162184 L33.2539989,23.399272 C28.7798386,23.0530899 18.6357429,25.2958455 18.6357429,30.2040681 Z" id="Shape"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+  );
+
 function SvgCirclesHeroDesktop() {
 
   return (
@@ -902,6 +915,7 @@ export {
   SvgGasParticles,
   SvgCross,
   SvgMovingCircle,
+  SvgDirectDebitSymbol,
   SvgCirclesHeroDesktop,
   SvgCirclesHeroMobileLandscape,
   SvgCirclesHeroMobile,
