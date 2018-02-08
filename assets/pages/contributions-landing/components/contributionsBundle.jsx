@@ -114,7 +114,7 @@ const upsellRecurringContributionsTestContentText = {
   benefitsOfBoth: (
     <span>
       Make a monthly commitment to support The Guardian long-term or a one-time contribution
-      as and when you feel like it &ndash choose the option that suits you best
+      as and when you feel like it &ndash choose the option that suits you best.
     </span>
   ),
   bolderControl: (
