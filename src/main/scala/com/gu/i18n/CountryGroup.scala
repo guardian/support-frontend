@@ -301,7 +301,10 @@ object CountryGroup {
     locale.getISO3Country.toUpperCase -> country
   }.toMap
 
-  def countryByCode(str: String): Option[Country] = countriesByISO2.get(str) orElse countriesByISO3.get(str)
+  def countryByCode(str: String): Option[Country] = {
+    val code = str.toUpperCase
+    countriesByISO2.get(code) orElse countriesByISO3.get(code)
+  }
 
   def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
