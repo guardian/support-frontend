@@ -127,9 +127,9 @@ Resources:
     Condition: CreateProdResources
     Properties:
       InsufficientDataActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       OKActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub No Recent State Machine Execution Attempts in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contributions state machine has not been triggered for an extended period - has something broken?
       MetricName: ExecutionsStarted
@@ -149,7 +149,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contributions state machine failed during execution - please investigate.
       MetricName: ExecutionsFailed
@@ -169,7 +169,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Monthly Contributions Sign-Up Timeout in ${Stage}
       AlarmDescription: An execution of the Monthly Contributions state machine has taken an excessively long time to complete
       MetricName: ExecutionsTimedOut
