@@ -301,9 +301,7 @@ object CountryGroup {
     locale.getISO3Country.toUpperCase -> country
   }.toMap
 
-  def countryByCode(str: String): Option[Country] = countries.find { _.alpha2 == str } orElse countriesByISO3.get(str)
-
-
+  def countryByCode(str: String): Option[Country] = countriesByISO2.get(str) orElse countriesByISO3.get(str)
 
   def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
@@ -311,7 +309,10 @@ object CountryGroup {
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
   def countryByNameOrCode(str: String): Option[Country] = countries.find { _.name == str } orElse countryByCode(str)
 
-  def byCountryCode(c: String): Option[CountryGroup] = allGroups.find(_.countries.exists(_.alpha2 == c))
+  def byCountryCode(c: String): Option[CountryGroup] = {
+    val country = countryByCode(c)
+    allGroups.find(_.countries.contains(country))
+  }
 
   def byFastlyCountryCode(c: String): Option[CountryGroup] =
     byCountryCode(c) orElse Some(CountryGroup.Europe).filter(_ => c == "EU")
