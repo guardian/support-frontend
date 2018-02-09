@@ -6,7 +6,7 @@ import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import ThankYouIntroduction from 'components/thankYouIntroduction/thankYouIntroduction';
 import DotcomCta from 'components/dotcomCta/dotcomCta';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
@@ -25,8 +25,9 @@ pageInit();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <CirclesIntroduction
-      headings={['Thank you', 'for your valuable', 'contribution to', 'Guardian journalism']}
+    <ThankYouIntroduction
+      highlights={['Thank you']}
+      headings={['for a valuable', 'contribution']}
     />
     <DotcomCta />
     <QuestionsContact />

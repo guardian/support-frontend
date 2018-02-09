@@ -1,0 +1,10 @@
+.component-highlights__line {
+  display: block;
+}
+
+.component-highlights__highlight {
+  display: inline-block;
+  vertical-align: top;
+  padding: 4px;
+  background-color: gu-colour(news-garnett-highlight);
+}
