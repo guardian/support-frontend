@@ -46,6 +46,7 @@ class CountryGroupTest extends FlatSpec {
     val tests = List(
       "usa" -> Country.US,
       "republic of ireland" -> Country.Ireland,
+      "rep. of ireland" -> Country.Ireland,
       "great britain" -> Country.UK,
       "the netherlands" -> CountryGroup.countryByCode("NL").get,
       "the czech republic" -> CountryGroup.countryByCode("CZ").get,
