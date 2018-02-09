@@ -8,8 +8,9 @@ import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
 import com.google.common.net.InetAddresses
-import com.typesafe.scalalogging.LazyLogging
 import config.Identity
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +45,7 @@ object IdentityService {
     apiClientToken = config.apiClientToken
   )
 }
-class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends LazyLogging {
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
 
   import IdentityServiceEnrichers._
 
@@ -57,13 +58,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
-      val logMessage = "Response from Identity Consent API: " + response.toString
-      if (validResponse) logger.info(logMessage)
-      else logger.error(logMessage)
+      if (validResponse) SafeLogger.info(s"Successful response from Identity Consent API")
+      else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
       validResponse
     } recover {
       case e: Exception =>
-        logger.error("Impossible to update the user's marketing preferences", e)
+        SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
         false
     }
   }

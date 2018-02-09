@@ -4,15 +4,14 @@ import com.gocardless.GoCardlessClient
 import com.gocardless.GoCardlessClient.Environment
 import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
-import com.typesafe.scalalogging.LazyLogging
 import models.CheckBankAccountDetails
-import monitoring.SentryLogging
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import services.touchpoint.TouchpointService
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessService(token: String, environment: Environment) extends TouchpointService with LazyLogging {
+class GoCardlessService(token: String, environment: Environment) extends TouchpointService {
 
   lazy val client = GoCardlessClient.create(token, environment)
 
@@ -33,8 +32,7 @@ class GoCardlessService(token: String, environment: Environment) extends Touchpo
     } recover {
       case e: GoCardlessApiException =>
         if (e.getCode == 429) {
-          logger.error(SentryLogging.noPii, "Bypassing preliminary bank account check because the GoCardless rate limit" +
-            " has been reached for this endpoint. Someone might be using our website to proxy to GoCardless")
+          SafeLogger.error(scrub"Bypassing preliminary bank account check - GoCardless rate limit has been exceeded")
           true
         } else {
           false

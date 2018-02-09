@@ -7,12 +7,12 @@ import scala.util.{Failure, Success, Try}
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
-import com.typesafe.scalalogging.LazyLogging
-import monitoring.SentryLogging
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 
 case class ResourceRequest(refresh: Boolean)
 
-class ResourceManagerActor[T](getResource: () => Future[T]) extends Actor with LazyLogging {
+class ResourceManagerActor[T](getResource: () => Future[T]) extends Actor {
 
   implicit val ec = context.dispatcher
 
@@ -29,7 +29,7 @@ class ResourceManagerActor[T](getResource: () => Future[T]) extends Actor with L
       promise.complete(resource)
 
     case _: Try[T] if promise.isCompleted =>
-      logger.error(SentryLogging.noPii, s"$self received new resource when not requested")
+      SafeLogger.error(scrub"$self received new resource when not requested")
 
     case ResourceRequest(true) if promise.isCompleted =>
       promise = Promise[T]
