@@ -294,7 +294,7 @@ object CountryGroup {
 
   def countryByCode(str: String): Option[Country] = countries.find { _.alpha2 == str }
 
-  def countryByName(str: String): Option[Country] = countries.find { _.name.toLowerCase == str.toLowerCase }
+  def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
   // This is because there was an inconsistency in the code where we were writing a country name
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
@@ -319,10 +319,13 @@ object CountryGroup {
     val name = clean.toLowerCase
 
     countryByName(name) orElse countryByCode(asCode) orElse (name match {
-      case _ if name endsWith "ireland" => Some(Country.Ireland)
+      case _ if name endsWith "of ireland" => Some(Country.Ireland)
+      case _ if asCode == "GB" => Some(Country.UK)
+      case _ if name == "great britain" => Some(Country.UK)
       case _ if asCode == "USA" => Some(Country.US)
-      case _ if name startsWith "the" => countryByName(name.replaceFirst("the", "").trim)
-      case _ if name == "russian federation" => countryByName("Russia")
+      case _ if name == "viet nam" => countryByCode("VN")
+      case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
+      case _ if name == "russian federation" => countryByCode("RU")
       case _ => None
     })
   }

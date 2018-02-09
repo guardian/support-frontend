@@ -46,8 +46,10 @@ class CountryGroupTest extends FlatSpec {
     val tests = List(
       "usa" -> Country.US,
       "republic of ireland" -> Country.Ireland,
-      "the netherlands" -> CountryGroup.countryByName("Netherlands").get,
-      "the czech republic" -> CountryGroup.countryByName("Czech Republic").get
+      "great britain" -> Country.UK,
+      "the netherlands" -> CountryGroup.countryByCode("NL").get,
+      "the czech republic" -> CountryGroup.countryByCode("CZ").get,
+      "viet nam" -> CountryGroup.countryByCode("VN").get
     )
     tests.map { case (name: String, country: Country) => assert(CountryGroup.byOptimisticCountryNameOrCode(name) === Some(country)) }
   }
