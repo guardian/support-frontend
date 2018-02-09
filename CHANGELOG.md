@@ -1,3 +1,6 @@
+# v2.1.0
+* change to use cats version 1.0 (this can [cause binary incompatibilities that only show up in prod](https://github.com/guardian/subscriptions-frontend/pull/1067), beware)
+
 # v2.0.4
 * change release process to publish 3 different packages for play-json 2.4, 2.5 and 2.6
 
