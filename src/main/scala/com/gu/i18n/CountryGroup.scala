@@ -301,7 +301,10 @@ object CountryGroup {
     locale.getISO3Country.toUpperCase -> country
   }.toMap
 
-  def countryByCode(str: String): Option[Country] = countriesByISO2.get(str) orElse countriesByISO3.get(str)
+  def countryByCode(str: String): Option[Country] = {
+    val code = str.toUpperCase
+    countriesByISO2.get(code) orElse countriesByISO3.get(code)
+  }
 
   def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
@@ -324,12 +327,11 @@ object CountryGroup {
 
   def byOptimisticCountryNameOrCode(str: String): Option[Country] = {
     val clean = str.replace(".", "")
-    val asCode = clean.toUpperCase
     val name = clean.toLowerCase
 
-    countryByName(name) orElse countryByCode(asCode) orElse (name match {
+    countryByName(name) orElse countryByCode(clean) orElse (name match {
       case _ if name endsWith "of ireland" => Some(Country.Ireland)
-      case _ if asCode == "GB" => Some(Country.UK)
+      case _ if clean == "GB" => Some(Country.UK)
       case _ if name == "great britain" => Some(Country.UK)
       case _ if name == "viet nam" => countryByCode("VN")
       case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
