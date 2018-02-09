@@ -1,16 +1,17 @@
-import cats.syntax.either._
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
+import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext, Configuration, NoHttpFiltersComponents}
 import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
-import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Configuration, NoHttpFiltersComponents}
 import router.Routes
 
 import aws.AWSClientBuilder
-import conf._
-import model.Environment
+import _root_.controllers.StripeController
+import conf.{ConfigLoader, PlayConfigurationUpdater}
+import model.RequestEnvironments
+import services.AppServices
 
 class MyApplicationLoader extends ApplicationLoader {
-  def load(context: Context) = {
+  def load(context: Context): Application = {
     // logging initialisation needs to happen here
     new MyComponents(context).application
   }
@@ -24,18 +25,15 @@ class MyComponents(context: Context)
 
   val awsClientBuilder = new AWSClientBuilder(applicationLifecycle)
   val ssm: AWSSimpleSystemsManagement = awsClientBuilder.buildAWSSimpleSystemsManagementClient()
-  val configLoader = new ParameterStoreConfigLoader(ssm)
-  val dbConfig: DBConfig = configLoader.loadConfig[DBConfig](Environment.Test).valueOr(throw _)
+  val configLoader: ConfigLoader = new ConfigLoader(ssm)
+  val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
 
-  println(dbConfig)
+  val configurationUpdater = new PlayConfigurationUpdater(configLoader, requestEnvironments)
 
-  val paypalConfig: PaypalConfig = configLoader.loadConfig[PaypalConfig](Environment.Test).valueOr(throw _)
+  override val configuration: Configuration = configurationUpdater
+    .updatePlayConfiguration(super.configuration).valueOr(throw _)
 
-  println(paypalConfig)
+  val appServices: AppServices = AppServices.build(configLoader, requestEnvironments).valueOr(throw _)
 
-  override val configuration: Configuration = ConfigurationUpdater.updateConfiguration(super.configuration, dbConfig)
-
-  println(configuration.get[Configuration]("db"))
-
-  override val router = new Routes(httpErrorHandler, new controllers.StripeController(controllerComponents, configuration))
+  override val router = new Routes(httpErrorHandler, new StripeController(controllerComponents, configuration))
 }

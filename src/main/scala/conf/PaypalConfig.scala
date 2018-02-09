@@ -4,8 +4,8 @@ import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 
-import conf.ParameterStoreConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
-import model.Environment
+import conf.ConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
+import model.{Environment, InitializationError}
 
 case class PaypalConfig(clientId: String, clientSecret: String)
 
@@ -19,7 +19,7 @@ object PaypalConfig {
         .withRecursive(false)
         .withWithDecryption(true)
 
-    override def decode(environment: Environment, data: Map[String, String]): Validated[ParameterStoreConfigLoader.ConfigLoadError, PaypalConfig] = {
+    override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, PaypalConfig] = {
       val validator = new ParameterStoreValidator[PaypalConfig](environment, data); import validator._
       (
         validate("client-id"),
