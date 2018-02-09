@@ -84,8 +84,8 @@ const subHeadingOneOffText = {
   EUR: '',
 };
 
-const contentText = {
-  GBP: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
+const defaultContentText = {
+  GBP: 'Support The Guardian’s editorial operations by making a monthly or one-off contribution today',
   USD: (
     <span>
       Contributing to The Guardian makes a big impact. If you’re able, please consider
@@ -109,8 +109,29 @@ const contentText = {
   ),
 };
 
+const upsellRecurringContributionsTestContentText = {
+  control: defaultContentText.USD,
+  benefitsOfBoth: (
+    <span>
+      Make a monthly commitment to support The Guardian long-term or a one-time contribution
+      as and when you feel like it &ndash; choose the option that suits you best.
+    </span>
+  ),
+  shorterControl: (
+    <span>
+      If you’re able, please consider <strong>monthly</strong> support &ndash;
+      it will help to fund The Guardian’s journalism for the long-term.
+    </span>
+  ),
+};
+
+function getContentText(props: PropTypes) {
+  return upsellRecurringContributionsTestContentText[props.abTests.upsellRecurringContributions] ||
+    defaultContentText[props.currency.iso];
+}
+
 function ContentText(props: PropTypes) {
-  return <p className="component-bundle__content-intro"> {contentText[props.currency.iso]} </p>;
+  return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
 }
 
 const contribCtaText = {

@@ -42,5 +42,17 @@ export const tests: Tests = {
     independent: true,
     seed: 7,
   },
-};
 
+  upsellRecurringContributions: {
+    variants: ['control', 'benefitsOfBoth', 'shorterControl'],
+    audiences: {
+      US: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 99,
+  },
+};
