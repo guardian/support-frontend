@@ -29,13 +29,11 @@ function CirclesIntroduction(props: PropTypes) {
       <SvgCirclesHeroMobileLandscape />
       <SvgCirclesHeroMobile />
       <div className="component-circles-introduction__content gu-content-margin">
-        <div className="component-circles-introduction__copy">
-          <h1 className="component-circles-introduction__heading">
-            {props.headings.map(heading =>
-              <span className="component-circles-introduction__heading-line">{heading}</span>)}
-          </h1>
-          <Highlights highlights={props.highlights} />
-        </div>
+        <h1 className="component-circles-introduction__heading">
+          {props.headings.map(heading =>
+            <span className="component-circles-introduction__heading-line">{heading}</span>)}
+        </h1>
+        <Highlights highlights={props.highlights} />
       </div>
     </section>
   );

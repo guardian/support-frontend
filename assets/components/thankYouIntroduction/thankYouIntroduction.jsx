@@ -27,7 +27,7 @@ function ThankYouIntroduction(props: PropTypes) {
       <SvgThankYouHeroDesktop />
       <SvgThankYouHeroMobile />
       <div className="component-thank-you-introduction__content gu-content-margin">
-        <div className="component-thank-you-introduction__copy">
+        <div className="component-thank-you-introduction__display-copy">
           <Highlights highlights={props.highlights} />
           <h1 className="component-thank-you-introduction__heading">
             {props.headings.map(heading =>
