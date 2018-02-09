@@ -38,6 +38,8 @@ class CustomHttpErrorHandler(
     }
     val sanitizedExceptionDetails = s"Caused by: ${usefulException.cause} in $lineInfo"
     val requestDetails = s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
+
+    // We are deliberately bypassing the SafeLogger here, because we need to use standard string interpolation to make this exception handling useful.
     logger.error(SafeLogger.sanitizedLogMessage, s"Internal server error, for $requestDetails. $sanitizedExceptionDetails")
 
     super.logServerError(request, usefulException) // We still want the full uri and stack trace in our logs, just not in Sentry
