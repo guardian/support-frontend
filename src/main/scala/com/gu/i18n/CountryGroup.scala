@@ -309,18 +309,13 @@ object CountryGroup {
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
   def countryByNameOrCode(str: String): Option[Country] = countries.find { _.name == str } orElse countryByCode(str)
 
-  def byCountryCode(c: String): Option[CountryGroup] = {
-    val country = countryByCode(c)
-    allGroups.find(_.countries.contains(country))
-  }
+  def byCountryCode(c: String): Option[CountryGroup] = allGroups.find(_.countries.exists(_.alpha2 == c))
 
   def byFastlyCountryCode(c: String): Option[CountryGroup] =
     byCountryCode(c) orElse Some(CountryGroup.Europe).filter(_ => c == "EU")
 
-  def byCountryNameOrCode(str: String): Option[CountryGroup] = {
-    val country = countryByNameOrCode(str)
-    allGroups.find(_.countries.contains(country))
-  }
+  def byCountryNameOrCode(str: String): Option[CountryGroup] =
+    allGroups.find(_.countries.exists(_.name == str)) orElse byCountryCode(str)
 
   def byId(id: String): Option[CountryGroup] = allGroups.find(_.id == id)
 
