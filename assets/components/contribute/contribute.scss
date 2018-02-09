@@ -55,12 +55,12 @@
     }
   }
 
-    &:before {
-      @include multiline(4, gu-colour(garnett-neutral-4));
-      background-color: #fff;
-      display: block;
-      content: '';
-    }
+  &:before {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+    background-color: #fff;
+    display: block;
+    content: '';
+  }
 }
 
 .component-contribute__description {
