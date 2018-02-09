@@ -5,8 +5,16 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import com.typesafe.scalalogging.LazyLogging
+import org.slf4j.{Marker, MarkerFactory}
+
+class PiiFilter extends Filter[ILoggingEvent] {
+  override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SafeLogger.sanitizedLogMessage)) FilterReply.ACCEPT
+  else FilterReply.DENY
+}
 
 object SafeLogger extends LazyLogging {
+
+  val sanitizedLogMessage: Marker = MarkerFactory.getMarker("SENTRY")
 
   case class LogMessage(asTyped: String, sanitized: String) {
     override val toString = sanitized
@@ -28,27 +36,15 @@ object SafeLogger extends LazyLogging {
 
   def error(logMessage: LogMessage): Unit = {
     logger.error(logMessage.asTyped)
-    logger.error(SentryLogging.sanitizedLogMessage, logMessage.sanitized)
+    logger.error(SafeLogger.sanitizedLogMessage, logMessage.sanitized)
   }
 
 }
 
-object LogFilters {
-
-  class PiiFilter extends Filter[ILoggingEvent] {
-    override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SentryLogging.sanitizedLogMessage)) FilterReply.ACCEPT
-    else FilterReply.DENY
-  }
-
-  // Used in logback.xml, so that errors aren't duplicated in application logs
-  class SentryErrorFilter extends Filter[ILoggingEvent] {
-    override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SentryLogging.sanitizedLogMessage)) FilterReply.DENY
-    else FilterReply.ACCEPT
-  }
+object SentryFilters {
 
   val errorLevelFilter = new ThresholdFilter { setLevel("ERROR") }
   val piiFilter = new PiiFilter
-  val sentryErrorFilter = new SentryErrorFilter
 
   errorLevelFilter.start()
   piiFilter.start()

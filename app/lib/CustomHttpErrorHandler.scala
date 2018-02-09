@@ -2,14 +2,13 @@ package lib
 
 import actions.CacheControl
 import com.typesafe.scalalogging.LazyLogging
-import monitoring.SentryLogging
+import monitoring.SafeLogger
 import play.api.PlayException.ExceptionSource
 import play.api.{Configuration, Environment, UsefulException}
 import play.api.http.DefaultHttpErrorHandler
 import play.api.routing.Router
 import play.api.mvc.{RequestHeader, Result}
 import play.core.SourceMapper
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
@@ -39,7 +38,7 @@ class CustomHttpErrorHandler(
     }
     val sanitizedExceptionDetails = s"Caused by: ${usefulException.cause} in $lineInfo"
     val requestDetails = s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
-    logger.error(SentryLogging.noPii, s"Internal server error, for $requestDetails. $sanitizedExceptionDetails")
+    logger.error(SafeLogger.sanitizedLogMessage, s"Internal server error, for $requestDetails. $sanitizedExceptionDetails")
 
     super.logServerError(request, usefulException) // We still want the full uri and stack trace in our logs, just not in Sentry
   }
