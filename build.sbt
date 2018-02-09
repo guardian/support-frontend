@@ -10,10 +10,10 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
     "com.gu" %% "ophan-event-model" % "0.0.2" excludeAll(ExclusionRule(organization = "com.typesafe.play")),
     "com.squareup.okhttp3" % "okhttp" % "3.9.0",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-    "io.circe" %% "circe-core" % "0.8.0",
+    "io.circe" %% "circe-core" % "0.9.1",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "org.scalactic" %% "scalactic" % "3.0.1",
-    "org.typelevel" %% "cats" % "0.9.0",
+    "org.typelevel" %% "cats-core" % "1.0.1",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   ),
 
