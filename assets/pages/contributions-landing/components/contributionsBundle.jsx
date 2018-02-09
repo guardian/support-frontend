@@ -110,7 +110,7 @@ const defaultContentText = {
 };
 
 const upsellRecurringContributionsTestContentText = {
-  control: defaultContentText.US,
+  control: defaultContentText.USD,
   benefitsOfBoth: (
     <span>
       Make a monthly commitment to support The Guardian long-term or a one-time contribution
@@ -127,16 +127,11 @@ const upsellRecurringContributionsTestContentText = {
 
 function getContentText(props: PropTypes) {
   return upsellRecurringContributionsTestContentText[props.abTests.upsellRecurringContributions] ||
-    defaultContentText[props.isoCountry];
-}
-
-function getContentTextClassName(props: PropTypes) {
-  const modifier = (props.abTests.upsellRecurringContributions === 'bolderControl' ? '--bolder-control' : '');
-  return `component-bundle__content-intro${modifier}`;
+    defaultContentText[props.currency.iso];
 }
 
 function ContentText(props: PropTypes) {
-  return <p className={getContentTextClassName(props)}> {getContentText(props)} </p>;
+  return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
 }
 
 const contribCtaText = {
