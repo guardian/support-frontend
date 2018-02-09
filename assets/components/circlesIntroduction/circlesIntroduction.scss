@@ -68,8 +68,16 @@
 .component-circles-introduction__content {
   padding-bottom: 100px;
 
+  @include mq($from: mobileMedium) {
+    padding-bottom: 50px;
+  }
+
   @include mq($from: mobileLandscape) {
-    padding-bottom: $gu-v-spacing;
+    padding-bottom: $gu-v-spacing * 2.5;
+  }
+
+  @include mq($from: phablet) {
+    padding-bottom: $gu-v-spacing * 3.5;
   }
 }
 
