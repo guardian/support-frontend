@@ -317,8 +317,10 @@ object CountryGroup {
   def byFastlyCountryCode(c: String): Option[CountryGroup] =
     byCountryCode(c) orElse Some(CountryGroup.Europe).filter(_ => c == "EU")
 
-  def byCountryNameOrCode(str: String): Option[CountryGroup] =
-    allGroups.find(_.countries.exists(_.name == str)) orElse byCountryCode(str)
+  def byCountryNameOrCode(str: String): Option[CountryGroup] = {
+    val country = countryByNameOrCode(str)
+    allGroups.find(_.countries.contains(country))
+  }
 
   def byId(id: String): Option[CountryGroup] = allGroups.find(_.id == id)
 
