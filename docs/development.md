@@ -347,7 +347,7 @@ compute the sample size of your experiment, from the sample size, you can then e
     For example a test with offset 0.2 and size 0.5 will affect 50% of the audience starting from the 20%.
   * **isActive**: Indicates whether the test is active or not. If the test is not active it is not possible to force any variant.
   * **independent**: Expresses whether the algorithm uses the mvtId (`independent: false`) or a random number (`independent: true`) to assign a user to a variant.   
-  * **seed**: It is used only when `independent` is equal to `false`. It is useful to sync different tests. In other words, the user will be in the same variant across different tests. For example, two tests with two 
+  * **seed**: It is used only when `independent` is equal to `true`. It is useful to sync different tests. In other words, the user will be in the same variant across different tests. For example, two tests with two 
   variants (`control` and `variantA`) and the **same seed**, will cause that the user will be in `control` for both tests or `variantA` for both tests. Use this functionality carefully, if the tests are dependent on each other (e.g. part of the same flow), it is possible to invalidate both tests.
  
        
