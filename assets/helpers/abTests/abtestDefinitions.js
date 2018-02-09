@@ -53,7 +53,6 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 0,
+    seed: 99,
   },
 };
-
