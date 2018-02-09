@@ -39,6 +39,11 @@ object SafeLogger extends LazyLogging {
     logger.error(SafeLogger.sanitizedLogMessage, logMessage.sanitized)
   }
 
+  def error(logMessage: LogMessage, throwable: Throwable): Unit = {
+    logger.error(logMessage.asTyped, throwable)
+    logger.error(SafeLogger.sanitizedLogMessage, s"${logMessage.sanitized} due to ${throwable.getCause}")
+  }
+
 }
 
 object SentryFilters {
