@@ -327,12 +327,11 @@ object CountryGroup {
 
   def byOptimisticCountryNameOrCode(str: String): Option[Country] = {
     val clean = str.replace(".", "")
-    val asCode = clean.toUpperCase
     val name = clean.toLowerCase
 
-    countryByName(name) orElse countryByCode(asCode) orElse (name match {
+    countryByName(name) orElse countryByCode(clean) orElse (name match {
       case _ if name endsWith "of ireland" => Some(Country.Ireland)
-      case _ if asCode == "GB" => Some(Country.UK)
+      case _ if clean == "GB" => Some(Country.UK)
       case _ if name == "great britain" => Some(Country.UK)
       case _ if name == "viet nam" => countryByCode("VN")
       case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
