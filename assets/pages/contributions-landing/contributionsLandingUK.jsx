@@ -14,7 +14,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import reducer from './contributionsLandingReducers';
+import { createContributionLandingReducer } from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
@@ -25,7 +25,7 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(createContributionLandingReducer('10'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
 

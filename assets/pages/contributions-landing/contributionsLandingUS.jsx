@@ -13,11 +13,9 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import reducer from './contributionsLandingReducers';
+import { createContributionLandingReducer } from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 import ContributionsBundleContent from './components/contributionsBundleContent';
-
-import { changeContribAmountMonthly } from './contributionsLandingActions';
 
 
 // ----- Page Startup ----- //
@@ -26,17 +24,9 @@ import { changeContribAmountMonthly } from './contributionsLandingActions';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(reducer, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(createContributionLandingReducer('15'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
-
-(function initialiseAmountsTest() {
-  try {
-    return store.dispatch(changeContribAmountMonthly({
-      value: '15', userDefined: false,
-    }));
-  } catch (e) { return null; }
-}());
 
 
 // ----- Render ----- //
