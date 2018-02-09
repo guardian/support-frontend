@@ -26,7 +26,7 @@
   .component-highlights {
     @include mq($from: desktop) {
       padding-left: $gu-h-spacing;
-      margin-left: 20%
+      margin-left: 20%;
     }
   }
 
