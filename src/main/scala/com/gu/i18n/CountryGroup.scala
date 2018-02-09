@@ -1,6 +1,8 @@
 
 package com.gu.i18n
 
+import java.util.Locale
+
 case class CountryGroup(name: String,
                         id: String,
                         defaultCountry: Option[Country],
@@ -292,9 +294,16 @@ object CountryGroup {
 
   val countries: List[Country] = allGroups.flatMap(_.countries).sortBy(_.name)
 
-  def countryByCode(str: String): Option[Country] = countries.find { _.alpha2 == str }
+  val countriesByISO2: Map[String, Country] = countries.map{c => c.alpha2 -> c}.toMap
 
-  def countryByName(str: String): Option[Country] = countries.find { _.name == str }
+  val countriesByISO3 = countries.map { country =>
+    val locale = new Locale("", country.alpha2)
+    locale.getISO3Country.toUpperCase -> country
+  }.toMap
+
+  def countryByCode(str: String): Option[Country] = countriesByISO2.get(str) orElse countriesByISO3.get(str)
+
+  def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
   // This is because there was an inconsistency in the code where we were writing a country name
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
@@ -312,4 +321,21 @@ object CountryGroup {
 
   def availableCurrency(currencies: Set[Currency])(country: Country) =
     byCountryCode(country.alpha2).map(_.currency).filter(currencies)
+
+  def byOptimisticCountryNameOrCode(str: String): Option[Country] = {
+    val clean = str.replace(".", "")
+    val asCode = clean.toUpperCase
+    val name = clean.toLowerCase
+
+    countryByName(name) orElse countryByCode(asCode) orElse (name match {
+      case _ if name endsWith "of ireland" => Some(Country.Ireland)
+      case _ if asCode == "GB" => Some(Country.UK)
+      case _ if name == "great britain" => Some(Country.UK)
+      case _ if name == "viet nam" => countryByCode("VN")
+      case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
+      case _ if name == "russian federation" => countryByCode("RU")
+      case _ => None
+    })
+  }
+
 }
