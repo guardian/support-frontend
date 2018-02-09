@@ -4,4 +4,16 @@
     @include gu-content-filler;
   }
 
+  .component-questions-contact {
+    &:before {
+      @include multiline(4, gu-colour(garnett-neutral-4));
+      background-color: #fff;
+      display: block;
+      content: '';
+    }
+  }
+
+  .component-page-section--questions-contact {
+    border-top: 0;
+  }
 }

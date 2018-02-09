@@ -18,7 +18,7 @@ export default function QuestionsContact() {
         heading="Questions?"
       >
         <p className="component-questions-contact__description">
-          If you have any questions about contributing to the Guardian,
+          If you have any questions about contributing to The&nbsp;Guardian,
           please&nbsp;
           <a
             className="component-questions-contact__link"

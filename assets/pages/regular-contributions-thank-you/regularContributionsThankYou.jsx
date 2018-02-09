@@ -29,8 +29,8 @@ const content = (
       highlights={['Thank you']}
       headings={['for a valuable', 'contribution']}
     />
-    <DotcomCta />
     <QuestionsContact />
+    <DotcomCta />
     <SpreadTheWord />
     <Footer />
   </div>
