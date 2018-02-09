@@ -44,7 +44,7 @@ export const tests: Tests = {
   },
 
   upsellRecurringContributions: {
-    variants: ['control', 'benefitsOfBoth', 'bolderControl'],
+    variants: ['control', 'benefitsOfBoth', 'shorterControl'],
     audiences: {
       US: {
         offset: 0,
