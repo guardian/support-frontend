@@ -44,6 +44,7 @@ class CountryGroupTest extends FlatSpec {
   }
   it should "identify countries from common alternatives" in {
     val tests = List(
+      "FRANCE" -> CountryGroup.countryByCode("FR").get,
       "usa" -> Country.US,
       "republic of ireland" -> Country.Ireland,
       "rep. of ireland" -> Country.Ireland,

@@ -1,6 +1,8 @@
 
 package com.gu.i18n
 
+import java.util.Locale
+
 case class CountryGroup(name: String,
                         id: String,
                         defaultCountry: Option[Country],
@@ -292,7 +294,16 @@ object CountryGroup {
 
   val countries: List[Country] = allGroups.flatMap(_.countries).sortBy(_.name)
 
-  def countryByCode(str: String): Option[Country] = countries.find { _.alpha2 == str }
+  val countriesByISO2: Map[String, Country] = countries.map{c => c.alpha2 -> c}.toMap
+
+  val countriesByISO3 = countries.map { country =>
+    val locale = new Locale("", country.alpha2)
+    locale.getISO3Country.toUpperCase -> country
+  }.toMap
+
+  def countryByCode(str: String): Option[Country] = countries.find { _.alpha2 == str } orElse countriesByISO3.get(str)
+
+
 
   def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
@@ -322,7 +333,6 @@ object CountryGroup {
       case _ if name endsWith "of ireland" => Some(Country.Ireland)
       case _ if asCode == "GB" => Some(Country.UK)
       case _ if name == "great britain" => Some(Country.UK)
-      case _ if asCode == "USA" => Some(Country.US)
       case _ if name == "viet nam" => countryByCode("VN")
       case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
       case _ if name == "russian federation" => countryByCode("RU")
