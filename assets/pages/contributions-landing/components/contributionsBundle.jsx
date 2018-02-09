@@ -88,20 +88,23 @@ const contentText = {
   GBP: 'Support the Guardian’s editorial operations by making a monthly or one-off contribution today',
   USD: (
     <span>
-      Contributing to the Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+      Contributing to The Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
+      the long term.
     </span>
   ),
   AUD: (
     <span>
-      Contributing to the Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+      Contributing to The Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
+      the long term.
     </span>
   ),
   EUR: (
     <span>
-      Contributing to the Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support – it will help to fund our journalism for the long term.
+      Contributing to The Guardian makes a big impact. If you’re able, please consider
+      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
+      the long term.
     </span>
   ),
 };
