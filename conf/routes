@@ -39,7 +39,7 @@ GET  /contribute/recurring/thankyou                 controllers.Application.regu
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js")
+GET  /contribute/recurring/pending                  controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js", newDesigns: String ?= "")
 GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
 
 # this endpoint should be removed once identity remove
