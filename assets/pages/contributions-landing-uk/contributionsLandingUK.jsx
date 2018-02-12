@@ -44,7 +44,7 @@ const store = pageInit(
 
 const content = (
   <Provider store={store}>
-    <div>
+    <div className="gu-content">
       <SimpleHeader />
       <CirclesIntroduction
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
