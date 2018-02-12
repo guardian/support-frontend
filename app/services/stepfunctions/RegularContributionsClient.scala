@@ -1,7 +1,6 @@
 package services.stepfunctions
 
 import java.util.UUID
-
 import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
@@ -13,12 +12,13 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.typesafe.scalalogging.LazyLogging
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState}
 import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 
 object CreateRegularContributorRequest {
@@ -54,7 +54,7 @@ class RegularContributionsClient(
     stateWrapper: StateWrapper,
     supportUrl: String,
     statusCall: String => Call
-)(implicit system: ActorSystem) extends LazyLogging {
+)(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
   private val underlying = Client(s"MonthlyContributions${stage.toString}-")
@@ -73,22 +73,22 @@ class RegularContributionsClient(
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to create regular contribution - $error")
+        SafeLogger.error(scrub"[$requestId] Failed to create regular contribution for ${user.id} - $error")
         StateMachineFailure: RegularContributionError
       },
       { success =>
-        logger.info(s"[$requestId] Creating regular contribution ($success)")
+        SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
             trackingUri = supportUrl + statusCall(jobId).url
           )
         } getOrElse {
-          logger.error(s"Failed to parse ${success.arn} to a jobId when creating new regular contribution $request")
+          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId when creating new regular contribution for ${user.id} $request")
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
-            message = Some("Failed to process request - please contact custom support")
+            message = Some("Failed to process request - please contact customer support")
           )
         }
 
@@ -99,13 +99,13 @@ class RegularContributionsClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse) = {
-      logger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse.status}")
+      SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse.status}")
       statusResponse
     }
 
     underlying.history(jobId).bimap(
       { error =>
-        logger.error(s"[$requestId] Failed to get execution status of $jobId - $error")
+        SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
         StateMachineFailure: RegularContributionError
       },
       { events =>

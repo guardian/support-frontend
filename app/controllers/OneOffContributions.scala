@@ -4,10 +4,8 @@ import actions.CustomActionBuilders
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe
-
 import scala.concurrent.ExecutionContext
 import services.{IdentityService, TestUserService}
-import com.typesafe.scalalogging.LazyLogging
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
@@ -26,7 +24,7 @@ class OneOffContributions(
     contributionsPayPalEndpoint: String,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
