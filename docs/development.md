@@ -74,11 +74,43 @@ The pieces that make up `support-frontend` are:
  
  Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the 
  presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
- 
- There are two type of React components, [presentational and container components](http://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components).
- The presentational components ***are not aware of Redux***, and their main purpose is to define how the data is shown to the 
- end reader. Meanwhile, the container components ***are aware of Redux*** and their main purpose is to maintain state and handle 
- the logic of the app. 
+
+#### Presentational and Container Components
+
+A common pattern in both the vanilla React and the Redux communities is to divide your code into Presentational and Container components. There are good descriptions of how this works in the [Redux docs](https://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components) (the table at the top gives a helpful breakdown), and in [this article](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) by Dan Abramov.
+
+An example of this can be seen with the shared `ContributionSelection` presentational component, which is wrapped at the page level in `ContributionSelectionContainer` to pass through the Redux state. This way the presentational component can be used anywhere on the site without specific knowledge of a page's state. It can also be used multiple times on the same page when used with scoped actions and reducers, as described below.
+
+In some situations it's necessary to have a container component sit inside a presentational component, as in this case where `ContributionSelectionContainer` needs to exist inside the purely presentational `Contribute` component. To achieve this we've used a technique that @RichieAHB outlines [here](https://github.com/reactjs/redux/issues/419#issuecomment-291467393), where you simply pass down the container as a defined prop or as part of the presentational component's children. The React-Redux [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store) takes care of getting the store to the nested container component, and the enclosing presentational component can remain oblivious.
+
+There should also be a performance benefit to breaking up the components in this way, as state only gets passed to components that need it. This reduces the need to pass long lists of props down through multiple layers of components, resulting in less needless computation when these props change. It should also mean that each component is better encapsulated, caring only about the data that it needs.
+
+#### Scoped Actions and Reducers
+
+The main reason for having shared components is to reduce the amount of duplication in the codebase. If we have the same piece of UI across multiple pages, we should be able to reuse the same code. However, if we were only able to share the bare component, and had to rewrite the corresponding reducers and actions for every new instance, we wouldn't really be getting much benefit. We want to share these auxiliary constructs too! However, this results in a potentional problem...
+
+##### The Problem
+
+For a component to be truly shared, it should be possible to use it multiple times in the same page. Now, it's fairly straightforward to reuse a reducer multiple times in the same store, as you can just drop it into different compartments in the state:
+
+```js
+import { combineReducers } from 'redux';
+
+import reusableReducer from './reusableReducer';
+
+const appReducer = combineReducers({
+  sectionOne: reusableReducer,
+  sectionTwo: reusableReducer,
+  sectionThree: reusableReducer,
+});
+
+```
+
+However, this results in a problem. While reducers can be compartmentalised in this way, *actions are global in the Redux store*. This means that whenever an action that corresponds to `reusableReducer` is fired, *all the places in the state that use that reducer are updated*. This is probably not what you want, because, for example, clicking on a reusable checkbox in a given page may end up checking *every other checkbox on that page*.
+
+##### The Solution(s)
+
+Fortunately, this topic is covered in the [Redux docs](https://redux.js.org/docs/recipes/reducers/ReusingReducerLogic.html), and there are a couple of different solutions offered. We use the second because it allows us to maintain type safety for our actions. In brief, this method involves using action creator and reducer factories, into which you pass the scope (as a string) and get back scoped actions creators and reducers. To see how this works, have a look at `contributionSelectionReducer` and `contributionSelectionActions`. There's a great [article](https://techblog.appnexus.com/five-tips-for-working-with-redux-in-large-applications-89452af4fdcb) by AppNexus where they describe setting things up in this way.
  
  #### Data flow 
  
