@@ -5,6 +5,7 @@
 import { roundDp } from 'helpers/utilities';
 
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -141,6 +142,25 @@ function contribCamelCase(contrib: Contrib): string {
 
 }
 
+function getOneOffSpokenName(country: IsoCountry) {
+  return country === 'US' ? 'one time' : 'one off';
+}
+
+function getSpokenType(
+  contributionType: Contrib,
+  country: IsoCountry,
+) {
+
+  if (contributionType === 'ONE_OFF') {
+    return getOneOffSpokenName(country);
+  } else if (contributionType === 'MONTHLY') {
+    return 'monthly';
+  }
+
+  return 'annual';
+
+}
+
 
 // ----- Exports ----- //
 
@@ -151,4 +171,6 @@ export {
   billingPeriodFromContrib,
   errorMessage,
   contribCamelCase,
+  getOneOffSpokenName,
+  getSpokenType,
 };
