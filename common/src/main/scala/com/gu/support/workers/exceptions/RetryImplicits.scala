@@ -1,7 +1,6 @@
 package com.gu.support.workers.exceptions
 
-import java.net.SocketTimeoutException
-
+import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.OphanServiceError
@@ -12,9 +11,8 @@ object RetryImplicits {
 
   implicit class RetryConversions(val throwable: Throwable) {
     def asRetryException: RetryException = throwable match {
-      //timeouts and 500s
-      case e @ (_: SocketTimeoutException |
-        _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
+      //Timeouts/connection issues and 500s
+      case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //Invalid Json
       case e: ParsingFailure => new RetryNone(message = e.getMessage, cause = throwable)
