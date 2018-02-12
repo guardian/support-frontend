@@ -329,9 +329,10 @@ object CountryGroup {
     if (str == null) return None
     val clean = str.replace(".", "").trim
     val name = clean.toLowerCase
+    val nameAnd = name.replace(" & ", " and ")
     val nameAmpersand = name.replace(" and ", " & ")
 
-    countryByCode(clean) orElse countryByName(name) orElse countryByName(nameAmpersand) orElse (name match {
+    countryByCode(clean) orElse countryByName(name) orElse countryByName(nameAnd) orElse countryByName(nameAmpersand) orElse (name match {
       case _ if name equals "united states of america" => Some(Country.US)
       case _ if name endsWith "of ireland" => Some(Country.Ireland)
       case _ if clean == "GB" => Some(Country.UK)
