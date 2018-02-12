@@ -326,6 +326,7 @@ object CountryGroup {
     byCountryCode(country.alpha2).map(_.currency).filter(currencies)
 
   def byOptimisticCountryNameOrCode(str: String): Option[Country] = {
+    if (str == null) return None
     val clean = str.replace(".", "").trim
     val name = clean.toLowerCase
     val nameAmpersand = name.replace(" and ", " & ")
