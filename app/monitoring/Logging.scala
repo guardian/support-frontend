@@ -16,7 +16,7 @@ object SafeLogger extends LazyLogging {
 
   val sanitizedLogMessage: Marker = MarkerFactory.getMarker("SENTRY")
 
-  case class LogMessage(asTyped: String, sanitized: String) {
+  case class LogMessage(raw: String, sanitized: String) {
     override val toString = sanitized
   }
 
@@ -35,12 +35,12 @@ object SafeLogger extends LazyLogging {
   }
 
   def error(logMessage: LogMessage): Unit = {
-    logger.error(logMessage.asTyped)
+    logger.error(logMessage.raw)
     logger.error(SafeLogger.sanitizedLogMessage, logMessage.sanitized)
   }
 
   def error(logMessage: LogMessage, throwable: Throwable): Unit = {
-    logger.error(logMessage.asTyped, throwable)
+    logger.error(logMessage.raw, throwable)
     logger.error(SafeLogger.sanitizedLogMessage, s"${logMessage.sanitized} due to ${throwable.getCause}")
   }
 

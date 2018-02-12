@@ -58,7 +58,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
-      if (validResponse) SafeLogger.info(s"Successful response from Identity Consent API")
+      if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
       else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
       validResponse
     } recover {

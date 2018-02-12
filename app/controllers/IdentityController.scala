@@ -23,7 +23,7 @@ class IdentityController(
     val result = identityService.sendConsentPreferencesEmail(request.body.email)
     result.map { res =>
       if (res) {
-        SafeLogger.info(s"Successfully sent consents preferences email")
+        SafeLogger.info("Successfully sent consents preferences email")
         Ok
       } else {
         SafeLogger.error(scrub"Failed to send consents preferences email")
