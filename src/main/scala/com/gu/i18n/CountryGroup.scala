@@ -335,7 +335,7 @@ object CountryGroup {
     countryByCode(clean) orElse countryByName(name) orElse countryByName(nameAnd) orElse countryByName(nameAmpersand) orElse (name match {
       case _ if name equals "united states of america" => Some(Country.US)
       case _ if name endsWith "of ireland" => Some(Country.Ireland)
-      case _ if clean == "GB" => Some(Country.UK)
+      case _ if name == "uk" => Some(Country.UK)
       case _ if name == "great britain" => Some(Country.UK)
       case _ if name == "viet nam" => countryByCode("VN")
       case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
