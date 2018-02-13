@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-
-import { toCountryGroup } from 'helpers/internationalisation/country';
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamToURL } from 'helpers/url';
@@ -11,6 +9,8 @@ import { addQueryParamToURL } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -50,14 +50,15 @@ export function paypalContributionsRedirect(
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
   nativeAbParticipations: Participations,
 ): void {
 
-  const country = toCountryGroup(isoCountry);
+  const countryGroup = countryGroups[countryGroupId].supportInternationalizationId;
   const ophanIds: OphanIds = getOphanIds();
   const postData: PayPalPostData = {
-    countryGroup: country,
+    countryGroup,
     amount,
     cmp: null,
     intCmp: referrerAcquisitionData.campaignCode,

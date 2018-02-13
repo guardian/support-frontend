@@ -1,7 +1,8 @@
 // @flow
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { toCountryGroup } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -37,14 +38,15 @@ export function paypalContributionsRedirect(
   amount: number,
   intCmp: ?string,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
 ): void {
 
   const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 
-  const country = toCountryGroup(isoCountry);
+  const countryGroup = countryGroups[countryGroupId].supportInternationalizationId;
   const postData: PayPalPostData = {
-    countryGroup: country,
+    countryGroup,
     amount,
     intCmp,
     supportRedirect: true,
