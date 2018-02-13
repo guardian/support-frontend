@@ -2,8 +2,11 @@
 
 // ----- Imports ----- //
 
-import type { IsoCountry } from './country';
-import type { IsoCurrency } from './currency';
+import * as cookie from 'helpers/cookie';
+import { getQueryParameter } from 'helpers/url';
+
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International';
 
@@ -11,6 +14,7 @@ type CountryGroup = {
   name: string,
   currency: IsoCurrency,
   countries: IsoCountry[],
+  supportInternationalizationId: string,
 };
 
 type CountryGroups = {
@@ -22,16 +26,19 @@ const countryGroups: CountryGroups = {
     name: 'United Kingdom',
     currency: 'GBP',
     countries: ['GB'],
+    supportInternationalizationId: 'uk',
   },
   UnitedStates: {
     name: 'United States',
     currency: 'USD',
     countries: ['US'],
+    supportInternationalizationId: 'us',
   },
   AUDCountries: {
     name: 'Australia',
     currency: 'AUD',
     countries: ['AU', 'KI', 'NR', 'NF', 'TV'],
+    supportInternationalizationId: 'au',
   },
   EURCountries: {
     name: 'Europe',
@@ -39,6 +46,7 @@ const countryGroups: CountryGroups = {
     countries: ['AD', 'AL', 'AT', 'BA', 'BE', 'BG', 'BL', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FO', 'FR',
       'GF', 'GL', 'GP', 'GR', 'HR', 'HU', 'IE', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'ME', 'MF', 'IS', 'MQ', 'MT', 'NL',
       'NO', 'PF', 'PL', 'PM', 'PT', 'RE', 'RO', 'RS', 'SE', 'SI', 'SJ', 'SK', 'SM', 'TF', 'TR', 'WF', 'YT', 'VA', 'AX'],
+    supportInternationalizationId: 'eu',
   },
   International: {
     name: 'International',
@@ -52,9 +60,76 @@ const countryGroups: CountryGroups = {
       'NP', 'NU', 'OM', 'PA', 'PE', 'PG', 'PH', 'PK', 'PN', 'PR', 'PS', 'PW', 'PY', 'QA', 'RU', 'RW', 'SA', 'SB', 'SC', 'SD',
       'SG', 'SL', 'SN', 'SO', 'SR', 'SS', 'ST', 'SV', 'SX', 'SY', 'SZ', 'TC', 'TD', 'TG', 'TH', 'TJ', 'TK', 'TL', 'TM', 'TN',
       'TO', 'TT', 'TW', 'TZ', 'UA', 'UG', 'UM', 'UY', 'UZ', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZA', 'ZM', 'ZW'],
+    supportInternationalizationId: 'int',
   },
 };
 
+function fromPath(path: string = window.location.pathname): ?CountryGroupId {
+  if (path === '/uk' || path.startsWith('/uk/')) {
+    return 'GBPCountries';
+  } else if (path === '/us' || path.startsWith('/us/')) {
+    return 'UnitedStates';
+  } else if (path === '/au' || path.startsWith('/au/')) {
+    return 'AUDCountries';
+  } else if (path === '/eu' || path.startsWith('/eu/')) {
+    return 'EURCountries';
+  } else if (path === '/int' || path.startsWith('/int/')) {
+    return 'International';
+  }
+  return null;
+}
+
+function fromString(countryGroup: string): ?CountryGroupId {
+  switch (countryGroup) {
+    case 'GBPCountries': return 'GBPCountries';
+    case 'UnitedStates': return 'UnitedStates';
+    case 'AUDCountries': return 'AUDCountries';
+    case 'EURCountries': return 'EURCountries';
+    case 'International': return 'International';
+    default: return null;
+  }
+}
+
+function fromCountry(isoCountry: string): ?CountryGroupId {
+
+  Object.keys(countryGroups).forEach((countryGroupId) => {
+    if (countryGroups[countryGroupId].countries.includes(isoCountry)) {
+      return countryGroupId;
+    }
+
+    return null;
+  });
+}
+
+function fromQueryParameter(): ?CountryGroupId {
+  const countryGroup: ?string = getQueryParameter('countryGroup');
+  if (countryGroup) {
+    return fromString(countryGroup);
+  }
+  return null;
+}
+
+function fromCookie(): ?CountryGroupId {
+  const country = cookie.get('GU_country');
+  if (country) {
+    return fromCountry(country);
+  }
+  return null;
+}
+
+function fromGeolocation(): ?CountryGroupId {
+  const country = cookie.get('GU_geo_country');
+  if (country) {
+    return fromCountry(country);
+  }
+  return null;
+}
+
+function detect(): CountryGroupId {
+  return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GBPCountries';
+}
+
 export {
   countryGroups,
+  detect,
 };
