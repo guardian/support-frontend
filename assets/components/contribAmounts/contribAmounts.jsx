@@ -452,7 +452,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     toggles: amountToggles(props.currency.iso).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
-    accessibilityHint: `${props.isoCountry === 'us' ? 'one time' : 'one-off'} contribution`,
+    accessibilityHint: `${props.isoCountry === 'US' ? 'one time' : 'one-off'} contribution`,
   };
 
 }
