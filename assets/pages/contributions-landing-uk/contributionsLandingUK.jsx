@@ -17,6 +17,7 @@ import type { CommonState } from 'helpers/page/page';
 
 import pageReducer from './contributionsLandingUKReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
+import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 
 import type { PageState } from './contributionsLandingUKReducer';
 
@@ -52,6 +53,7 @@ const content = (
       />
       <Contribute>
         <ContributionSelectionContainer />
+        <ContributionPaymentCtasContainer />
       </Contribute>
       <Footer />
     </div>
