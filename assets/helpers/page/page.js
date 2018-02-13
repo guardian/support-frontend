@@ -10,15 +10,17 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 
 import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import { getQueryParams } from 'helpers/url';
 
+import { getQueryParams } from 'helpers/url';
 import type { Action } from './pageActions';
 
 
@@ -29,6 +31,7 @@ export type CommonState = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   currency: Currency,
   otherQueryParams: Array<[string, string]>,
+  countryGroup: CountryGroupId,
   country: IsoCountry,
   abParticipations: Participations,
 };
@@ -63,6 +66,7 @@ function analyticsInitialisation(participations: Participations): void {
 function buildInitialState(
   abParticipations: Participations,
   preloadedState: ?PreloadedState = {},
+  countryGroup: CountryGroupId,
   country: IsoCountry,
   currency: Currency,
 ): CommonState {
@@ -74,6 +78,7 @@ function buildInitialState(
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
+    countryGroup,
     country,
     abParticipations,
     currency,
@@ -120,13 +125,16 @@ function init(
   middleware: ?Function,
 ) {
 
+  const countryGroup: CountryGroupId = detectCountryGroup();
   const country: IsoCountry = detectCountry();
-  const currency: Currency = detectCurrency(country);
+  const currency: Currency = detectCurrency(countryGroup);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
+
   const initialState: CommonState = buildInitialState(
     participations,
     preloadedState,
+    countryGroup,
     country,
     currency,
   );
