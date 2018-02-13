@@ -468,4 +468,5 @@ export {
   detect,
   setCountry,
   usStates,
+  countries,
 };
