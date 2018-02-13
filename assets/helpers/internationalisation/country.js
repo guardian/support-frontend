@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import { isEuroCountry } from 'helpers/internationalisation/currency';
 import * as cookie from 'helpers/cookie';
+import { countryGroups } from './countryGroup';
 
 
 // ----- Setup ----- //
@@ -388,18 +388,6 @@ function fromString(s: string): ?IsoCountry {
   }
 }
 
-export function toCountryGroup(isoCountry: IsoCountry): string {
-  if (isEuroCountry(isoCountry)) {
-    return 'eu';
-  }
-
-  switch (isoCountry) {
-    case 'US': return 'us';
-    case 'AU': return 'au';
-    default: return 'uk';
-  }
-}
-
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
   if (path === '/uk' || path.startsWith('/uk/')) {
     return 'GB';
@@ -448,7 +436,7 @@ function handleEuroCountry(): ?IsoCountry {
 
   const candidateCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
 
-  if (candidateCountry && isEuroCountry(candidateCountry)) {
+  if (candidateCountry && countryGroups.EURCountries.countries.includes(candidateCountry)) {
     return candidateCountry;
   }
 
