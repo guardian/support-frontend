@@ -58,7 +58,7 @@ class CountryGroupTest extends FlatSpec {
       "the czech republic" -> CountryGroup.countryByCode("CZ").get,
       "viet nam" -> CountryGroup.countryByCode("VN").get,
       "UK" -> Country.UK,
-      "GB" -> Country.UK
+      "GB" -> Country.UK,
       "united states of america" -> Country.US,
       "trinidad and tobago" -> CountryGroup.countryByCode("TT").get
     )
