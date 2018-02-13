@@ -16,6 +16,7 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import * as user from 'helpers/user/user';
@@ -35,8 +36,9 @@ import { setPayPalButton } from './oneoffContributionsActions';
 // ----- Page Startup ----- //
 
 const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
+const countryGroup = detectCountryGroup();
 const country = detectCountry();
-const currency = detectCurrency(country);
+const currency = detectCurrency(countryGroup);
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

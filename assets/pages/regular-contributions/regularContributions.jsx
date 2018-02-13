@@ -20,6 +20,7 @@ import Signout from 'components/signout/signout';
 
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
@@ -39,8 +40,9 @@ import { parseContrib } from '../../helpers/contributions';
 
 const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
+const countryGroup = detectCountryGroup();
 const country = detectCountry();
-const currency = detectCurrency(country);
+const currency = detectCurrency(countryGroup);
 
 const title = {
   annual: 'Make an annual contribution',

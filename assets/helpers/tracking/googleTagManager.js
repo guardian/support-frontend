@@ -5,7 +5,7 @@ import * as storage from 'helpers/storage';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 
@@ -21,7 +21,7 @@ function getDataValue(name, generator) {
 }
 
 function getCurrency() {
-  return detectCurrency(detectCountry()).iso;
+  return detectCurrency(detectCountryGroup()).iso;
 }
 
 function getContributionValue() {
