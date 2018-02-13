@@ -3,4 +3,4 @@
 # ~~~~
 
 # An example controller showing a sample home page
-POST     /contribute/one-off/stripe/create                    controllers.StripeController.createCharge()
+POST     /contribute/one-off/stripe/create                    controllers.StripeController.createCharge

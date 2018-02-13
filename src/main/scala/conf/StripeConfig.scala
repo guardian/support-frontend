@@ -7,9 +7,19 @@ import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathR
 import conf.ConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
 import model.{Environment, InitializationError}
 
-case class StripeAccountConfig(publicKey: String, secretKey: String)
+sealed trait StripeAccountConfig {
+  def publicKey: String
+  def secretKey: String
+}
 
-case class StripeConfig(default: StripeAccountConfig, au: StripeAccountConfig)
+object StripeAccountConfig {
+
+  // Try to ensure some type safety for using the different accounts in conjunction
+  case class Default(publicKey: String, secretKey: String) extends StripeAccountConfig
+  case class Australia(publicKey: String, secretKey: String) extends StripeAccountConfig
+}
+
+case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountConfig.Australia)
 
 object StripeConfig {
 
@@ -27,16 +37,14 @@ object StripeConfig {
       val defaultAccount = (
         validate("default-public-key"),
         validate("default-private-key")
-      ).mapN(StripeAccountConfig.apply)
+      ).mapN(StripeAccountConfig.Default.apply)
 
       val auAccount = (
         validate("au-public-key"),
         validate("au-private-key")
-      ).mapN(StripeAccountConfig.apply)
+      ).mapN(StripeAccountConfig.Australia.apply)
 
       (defaultAccount, auAccount).mapN(StripeConfig.apply)
     }
   }
 }
-
-

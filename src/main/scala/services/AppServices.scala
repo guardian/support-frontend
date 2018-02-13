@@ -16,6 +16,7 @@ object AppServices {
   class AppServicesBuilder(configLoader: ConfigLoader, environments: RequestEnvironments) {
 
     def buildServiceProvider[Config : ParameterStoreLoadable, Service](builder: Config => Service): InitializationResult[ServiceProvider[Service]] = (
+      // Help out IntelliJ by specifying the type explicitly
       configLoader.loadConfig[Config](environments.test).map(builder): InitializationResult[Service],
       configLoader.loadConfig[Config](environments.live).map(builder): InitializationResult[Service]
     ).mapN(ServiceProvider.apply)

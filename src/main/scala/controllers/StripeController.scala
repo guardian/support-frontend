@@ -1,18 +1,16 @@
 package controllers
 
-import com.stripe
-import io.circe.generic.auto._
-import io.circe.syntax._
-import play.api.Configuration
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, ControllerComponents}
-import scala.collection.JavaConverters._
+import play.api.mvc.{AbstractController, Action, ControllerComponents}
 
-import scala.collection.immutable.HashMap
+import model.{RequestType, ResultBody}
+import model.stripe.StripeChargeData
+import services.{ServiceProvider, StripeService}
 
-class StripeController(controllerComponents: ControllerComponents, config: Configuration)
-    extends AbstractController(controllerComponents)
-    with Circe {
+class StripeController(
+    controllerComponents: ControllerComponents,
+    stripeServiceProvider: ServiceProvider[StripeService]
+  ) extends AbstractController(controllerComponents) with Circe with JsonUtils {
   // Other considerations:
   // - CORS
   // - Test users
@@ -107,10 +105,9 @@ class StripeController(controllerComponents: ControllerComponents, config: Confi
   }
 
 */
-  case class StripeChargeRequest(token: String, amount: Int)
 
   // TODO: override Play's HTML error responses (e.g. non-JSON content type), provide JSON err description instead
-  def createCharge() = Action(circe.json[StripeChargeRequest]) { request =>
+  def createCharge: Action[StripeChargeData] = Action(circe.json[StripeChargeData]) { request =>
     // Deserialize POSTed JSON
     // stripe.Charge.create
     // if success:
@@ -122,25 +119,15 @@ class StripeController(controllerComponents: ControllerComponents, config: Confi
     //   log
     //   return JSON
 
-    val chargeRequest = request.body
 
-    // TODO: fetch configs in centralised place, on app startup
-    val maybeStripeKey = config.getOptional[String]("stripe.keys.default.TEST.secret")
-    stripe.Stripe.apiKey = maybeStripeKey.getOrElse("")
-
-    val chargeParams = Map[String, AnyRef](
-      // We've lost type-safety here, unfortunately
-      "amount" -> new Integer(chargeRequest.amount),
-      "currency" -> "gbp",
-      "description" -> "Test payment via Payment API",
-      "source" -> chargeRequest.token
-    )
-
-    try {
-      Ok(stripe.model.Charge.create(chargeParams.asJava).toJson)
-    } catch {
-      // TODO: more fine-grained
-      case e: stripe.exception.StripeException => BadRequest(e.toString)
-    }
+    // TODO: determine request type
+    // TODO: persist to database
+    // TODO: send acquisition event
+    stripeServiceProvider.getService(RequestType.Test)
+      .createCharge(request.body)
+      .fold(
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        charge => Ok(ResultBody.Success(charge))
+      )
   }
 }

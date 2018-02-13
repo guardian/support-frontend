@@ -35,5 +35,5 @@ class MyComponents(context: Context)
 
   val appServices: AppServices = AppServices.build(configLoader, requestEnvironments).valueOr(throw _)
 
-  override val router = new Routes(httpErrorHandler, new StripeController(controllerComponents, configuration))
+  override val router = new Routes(httpErrorHandler, new StripeController(controllerComponents, appServices.stripeServiceProvider))
 }
