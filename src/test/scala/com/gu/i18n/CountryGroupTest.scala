@@ -42,6 +42,11 @@ class CountryGroupTest extends FlatSpec {
       )
     }
   }
+
+  it should "handle null and return None" in {
+    CountryGroup.byOptimisticCountryNameOrCode(null) === None
+  }
+
   it should "identify countries from common alternatives" in {
     val tests = List(
       "FRANCE" -> CountryGroup.countryByCode("FR").get,
@@ -54,6 +59,8 @@ class CountryGroupTest extends FlatSpec {
       "viet nam" -> CountryGroup.countryByCode("VN").get,
       "UK" -> Country.UK,
       "GB" -> Country.UK
+      "united states of america" -> Country.US,
+      "trinidad and tobago" -> CountryGroup.countryByCode("TT").get
     )
     tests.map { case (name: String, country: Country) => assert(CountryGroup.byOptimisticCountryNameOrCode(name) === Some(country)) }
   }
