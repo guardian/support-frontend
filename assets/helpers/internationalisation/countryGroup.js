@@ -5,8 +5,6 @@
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
 
-import { countries } from './country';
-
 type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International';
 
 type CountryGroup = {
@@ -19,7 +17,7 @@ type CountryGroups = {
   [CountryGroupId]: CountryGroup
 }
 
-export const countryGroups: CountryGroups = {
+const countryGroups: CountryGroups = {
   GBPCountries: {
     name: 'United Kingdom',
     currency: 'GBP',
@@ -56,3 +54,7 @@ export const countryGroups: CountryGroups = {
       'TO', 'TT', 'TW', 'TZ', 'UA', 'UG', 'UM', 'UY', 'UZ', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZA', 'ZM', 'ZW'],
   },
 };
+
+export {
+  countryGroups,
+}
