@@ -31,6 +31,7 @@ type PropTypes = {
   country: IsoCountry,
   currency: Currency,
   canClick: boolean,
+  payPalButton: Node,
 };
 
 
@@ -60,7 +61,8 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 
     return (
       <div className={generateClassName(baseClassName, 'one-off')}>
-        <OneOffCtas {...props} />
+        <OneOffCta {...props} />
+        {props.payPalButton}
       </div>
     );
 
@@ -68,7 +70,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 
   return (
     <div className={generateClassName(baseClassName, 'regular')}>
-      <RegularCtas {...props} />
+      <RegularCta {...props} />
     </div>
   );
 
@@ -77,8 +79,8 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-// Build the one-off payment buttons.
-function OneOffCtas(props: {
+// Build the one-off payment button.
+function OneOffCta(props: {
   contributionType: ContributionType,
   country: IsoCountry,
   amount: number,
@@ -105,8 +107,8 @@ function OneOffCtas(props: {
 
 }
 
-// Build the regular payment buttons.
-function RegularCtas(props: {
+// Build the regular payment button.
+function RegularCta(props: {
   contributionType: ContributionType,
   country: IsoCountry,
   amount: number,
