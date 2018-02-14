@@ -39,4 +39,23 @@
     }
   }
 
+  .component-error-message {
+    margin-top: 20px;
+    box-sizing: border-box;
+    height: 54px;
+    width: 100%;
+
+    @include mq($from: phablet) {
+      width: 501px;
+    }
+  }
+
+  .component-error-message__message {
+    padding-right: $gu-h-spacing;
+
+    @include mq($until: phablet) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+
 }

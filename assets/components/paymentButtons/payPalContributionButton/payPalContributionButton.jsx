@@ -29,6 +29,7 @@ type PropTypes = {
   canClick?: boolean,
   buttonText?: string,
   additionalClass?: string,
+  onClick: void => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -37,6 +38,9 @@ type PropTypes = {
 
 function payWithPayPal(props: PropTypes) {
   return () => {
+
+    props.onClick();
+
     if (props.canClick) {
       storage.setSession('paymentMethod', 'PayPal');
       paypalContributionsRedirect(

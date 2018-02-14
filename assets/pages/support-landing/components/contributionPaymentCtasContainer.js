@@ -8,6 +8,9 @@ import ContributionPaymentCtas from 'components/contributionPaymentCtas/contribu
 import {
   getAmount,
 } from 'components/contributionSelection/contributionSelectionReducer';
+import {
+  payPalContributionButtonActionsFor,
+} from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';
 
 import type { State } from '../supportLandingReducer';
 
@@ -23,11 +26,16 @@ function mapStateToProps(state: State) {
     country: state.common.country,
     currency: state.common.currency,
     canClick: !state.page.selection.error,
+    error: state.page.payPal.error,
   };
 
 }
 
+const mapDispatchToProps = {
+  resetError: payPalContributionButtonActionsFor('CONTRIBUTE_SECTION').resetError,
+};
+
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(ContributionPaymentCtas);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionPaymentCtas);

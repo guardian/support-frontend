@@ -7,6 +7,7 @@ import React from 'react';
 import type { Node } from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import {
   getSpokenType,
@@ -32,19 +33,23 @@ type PropTypes = {
   currency: Currency,
   canClick: boolean,
   PayPalButton: Class<React$Component<*>>,
+  error: ?string,
+  resetError: void => void,
 };
 
 
 // ----- Heading ----- //
 
 // Prevents a click event if it's not allowed.
-function allowClick(canClick) {
+function onCtaClick(canClick: boolean, resetError: void => void): Function {
 
   return (clickEvent) => {
 
     if (!canClick) {
       clickEvent.preventDefault();
     }
+
+    resetError();
 
   };
 
@@ -62,7 +67,11 @@ export default function ContributionPaymentCtas(props: PropTypes) {
     return (
       <div className={generateClassName(baseClassName, 'one-off')}>
         <OneOffCta {...props} />
-        <props.PayPalButton buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`} />
+        <props.PayPalButton
+          buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
+          onClick={props.resetError}
+        />
+        <ErrorMessage message={props.error} />
       </div>
     );
 
@@ -86,6 +95,7 @@ function OneOffCta(props: {
   amount: number,
   currency: Currency,
   canClick: boolean,
+  resetError: void => void,
 }): Node {
 
   const spokenType = getOneOffSpokenName(props.country);
@@ -101,7 +111,7 @@ function OneOffCta(props: {
       text={`Contribute ${props.currency.glyph}${props.amount} with card`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
-      onClick={allowClick(props.canClick)}
+      onClick={onCtaClick(props.canClick, props.resetError)}
     />
   );
 
@@ -114,6 +124,7 @@ function RegularCta(props: {
   amount: number,
   currency: Currency,
   canClick: boolean,
+  resetError: void => void,
 }): Node {
 
   const spokenType = getSpokenType(props.contributionType, props.country);
@@ -129,7 +140,7 @@ function RegularCta(props: {
       text={`Contribute ${props.currency.glyph}${props.amount} with card or PayPal`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
-      onClick={allowClick(props.canClick)}
+      onClick={onCtaClick(props.canClick, props.resetError)}
     />
   );
 
