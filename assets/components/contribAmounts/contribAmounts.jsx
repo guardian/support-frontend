@@ -6,17 +6,17 @@ import React from 'react';
 
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
-import type { Radio } from 'components/radioToggle/radioToggle';
 import {
   generateClassName,
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
 
-
+import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Currency } from 'helpers/internationalisation/currency';
 
 import type { Participations } from 'helpers/abTests/abtest';
 
@@ -36,6 +36,7 @@ type PropTypes = {
   changeContribAmount: (string) => void,
   toggleContribType: (string) => void,
   onNumberInputKeyPress: () => void,
+  countryGroupId: CountryGroupId,
   isoCountry: IsoCountry,
   currency: Currency,
   abTests: Participations,
@@ -67,9 +68,9 @@ type ContribAttrs = {
 // ----- Setup ----- //
 
 const amountRadiosAnnual: {
-  [IsoCurrency]: Radio[]
+  [CountryGroupId]: Radio[]
 } = {
-  GBP: [
+  GBPCountries: [
     {
       value: '50',
       text: '£50',
@@ -86,7 +87,7 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute one hundred pounds annually',
     },
   ],
-  USD: [
+  UnitedStates: [
     {
       value: '50',
       text: '$50',
@@ -103,7 +104,7 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute one hundred dollars annually',
     },
   ],
-  AUD: [
+  AUDCountries: [
     {
       value: '50',
       text: '$50',
@@ -120,7 +121,7 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute two hundred and fifty dollars annually',
     },
   ],
-  EUR: [
+  EURCountries: [
     {
       value: '50',
       text: '€50',
@@ -137,12 +138,13 @@ const amountRadiosAnnual: {
       accessibilityHint: 'contribute two hundred and fifty euros annually',
     },
   ],
+  International: [],
 };
 
 const amountRadiosMonthlyControl: {
-  [IsoCurrency]: Radio[]
+  [CountryGroupId]: Radio[]
 } = {
-  GBP: [
+  GBPCountries: [
     {
       value: '2',
       text: '£2',
@@ -159,7 +161,7 @@ const amountRadiosMonthlyControl: {
       accessibilityHint: 'contribute ten pounds per month',
     },
   ],
-  USD: [
+  UnitedStates: [
     {
       value: '7',
       text: '$7',
@@ -176,7 +178,7 @@ const amountRadiosMonthlyControl: {
       accessibilityHint: 'contribute thirty dollars per month',
     },
   ],
-  AUD: [
+  AUDCountries: [
     {
       value: '7',
       text: '$7',
@@ -193,7 +195,7 @@ const amountRadiosMonthlyControl: {
       accessibilityHint: 'contribute thirty dollars per month',
     },
   ],
-  EUR: [
+  EURCountries: [
     {
       value: '7',
       text: '€7',
@@ -210,12 +212,13 @@ const amountRadiosMonthlyControl: {
       accessibilityHint: 'contribute thirty euros per month',
     },
   ],
+  International: [],
 };
 
 const amountRadiosOneOff: {
-  [IsoCurrency]: Radio[]
+  [CountryGroupId]: Radio[]
 } = {
-  GBP: [
+  GBPCountries: [
     {
       value: '25',
       text: '£25',
@@ -237,7 +240,7 @@ const amountRadiosOneOff: {
       accessibilityHint: 'make a one-off contribution of two hundred and fifty pounds',
     },
   ],
-  USD: [
+  UnitedStates: [
     {
       value: '25',
       text: '$25',
@@ -259,7 +262,7 @@ const amountRadiosOneOff: {
       accessibilityHint: 'make a one-time contribution of two hundred and fifty dollars',
     },
   ],
-  AUD: [
+  AUDCountries: [
     {
       value: '50',
       text: '$50',
@@ -281,7 +284,7 @@ const amountRadiosOneOff: {
       accessibilityHint: 'make a one-off contribution of five hundred dollars',
     },
   ],
-  EUR: [
+  EURCountries: [
     {
       value: '25',
       text: '€25',
@@ -303,6 +306,7 @@ const amountRadiosOneOff: {
       accessibilityHint: 'make a one-off contribution of two hundred and fifty euros',
     },
   ],
+  International: [],
 };
 
 const contribCaptionRadios = {
@@ -323,7 +327,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  GBP: [
+  GBPCountries: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -335,7 +339,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  USD: [
+  UnitedStates: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -348,7 +352,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-time contribution',
     },
   ],
-  AUD: [
+  AUDCountries: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -360,7 +364,7 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
-  EUR: [
+  EURCountries: [
     {
       value: 'MONTHLY',
       text: 'Monthly',
@@ -372,31 +376,32 @@ const contribCaptionRadios = {
       accessibilityHint: 'Make a one-off contribution',
     },
   ],
+  International: [],
 };
 
 // ----- Functions ----- //
 
-function amountToggles(currency: IsoCurrency = 'GBP'): AmountToggle {
+function amountToggles(countryGroupId: CountryGroupId = 'GBPCountries'): AmountToggle {
   return {
     ANNUAL: {
       name: 'contributions-amount-annual-toggle',
-      radios: amountRadiosAnnual[currency],
+      radios: amountRadiosAnnual[countryGroupId],
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
-      radios: amountRadiosMonthlyControl[currency],
+      radios: amountRadiosMonthlyControl[countryGroupId],
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
-      radios: amountRadiosOneOff[currency],
+      radios: amountRadiosOneOff[countryGroupId],
     },
   };
 }
 
-function contribToggle(isoCurrency: IsoCurrency = 'GBP', showAnnual: boolean, accessibilityHint: ?string): Toggle {
+function contribToggle(countryGroupId: CountryGroupId = 'GBPCountries', showAnnual: boolean, accessibilityHint: ?string): Toggle {
   return {
     name: 'contributions-period-toggle',
-    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[isoCurrency],
+    radios: showAnnual ? contribCaptionRadios.GB_WITH_ANNUAL : contribCaptionRadios[countryGroupId],
     accessibilityHint,
   };
 }
@@ -426,7 +431,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribAnnualAmount,
       checked: !userDefined ? props.contribAmount.annual.value : null,
-      toggles: amountToggles(props.currency.iso).ANNUAL,
+      toggles: amountToggles(props.countryGroupId).ANNUAL,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Annual contribution',
@@ -437,7 +442,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
     return {
       toggleAction: props.changeContribMonthlyAmount,
       checked: !userDefined ? props.contribAmount.monthly.value : null,
-      toggles: amountToggles(props.currency.iso).MONTHLY,
+      toggles: amountToggles(props.countryGroupId).MONTHLY,
       selected: userDefined,
       contribType: props.contribType,
       accessibilityHint: 'Monthly contribution',
@@ -449,7 +454,7 @@ function getAttrs(props: PropTypes): ContribAttrs {
   return {
     toggleAction: props.changeContribOneOffAmount,
     checked: !userDefined ? props.contribAmount.oneOff.value : null,
-    toggles: amountToggles(props.currency.iso).ONE_OFF,
+    toggles: amountToggles(props.countryGroupId).ONE_OFF,
     selected: userDefined,
     contribType: props.contribType,
     accessibilityHint: `${props.isoCountry === 'US' ? 'one time' : 'one-off'} contribution`,
@@ -495,7 +500,7 @@ export default function ContribAmounts(props: PropTypes) {
     <div className="component-contrib-amounts">
       <div className="contrib-type">
         <RadioToggle
-          {...contribToggle(props.currency.iso, showAnnual, contribGroupAccessibilityHint)}
+          {...contribToggle(props.countryGroupId, showAnnual, contribGroupAccessibilityHint)}
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           modifierClass={radioModifier}
