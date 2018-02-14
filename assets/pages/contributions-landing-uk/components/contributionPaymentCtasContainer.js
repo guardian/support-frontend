@@ -9,7 +9,7 @@ import {
   getAmount,
 } from 'components/contributionSelection/contributionSelectionReducer';
 
-import type { State } from '../contributionsLandingUK';
+import type { State } from '../contributionsLandingUKReducer';
 
 
 // ----- State Maps ----- //
@@ -17,12 +17,12 @@ import type { State } from '../contributionsLandingUK';
 function mapStateToProps(state: State) {
 
   return {
-    contributionType: state.page.contributionType,
-    amount: getAmount(state.page),
+    contributionType: state.page.selection.contributionType,
+    amount: getAmount(state.page.selection),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     country: state.common.country,
     currency: state.common.currency,
-    canClick: !state.page.error,
+    canClick: !state.page.selection.error,
   };
 
 }
