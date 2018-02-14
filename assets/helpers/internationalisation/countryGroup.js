@@ -11,8 +11,9 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International';
 
 /*
-  Note: supportInternationalizationId should match an
-  existing id from support-internationalisation library.
+  Note: supportInternationalizationId should match an existing
+  id from support-internationalisation library. We use it to
+  communicate with the backend.
  */
 export type CountryGroup = {
   name: string,
