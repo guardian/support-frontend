@@ -1,8 +1,9 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
-import type { CountryGroupId } from './countryGroup';
 import { countryGroups } from './countryGroup';
+
+import type { CountryGroup, CountryGroupId } from './countryGroup';
 
 
 export type IsoCurrency =
@@ -55,14 +56,27 @@ const spokenCurrencies = {
   },
 };
 
+
 function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
   switch (isoCurrency) {
     case 'USD': return USD;
     case 'GBP': return GBP;
     case 'AUD': return AUD;
+    case 'EUR': return EUR;
     default: return null;
   }
 }
+
+function fromCountryGroupId(countryGroupId: CountryGroupId): ?Currency {
+  const countryGroup: ?CountryGroup = countryGroups[countryGroupId];
+
+  if (!countryGroup) {
+    return null;
+  }
+
+  return fromIsoCurrency(countryGroup.currency);
+}
+
 
 function fromString(s: string): ?Currency {
   switch (s.toLowerCase()) {
@@ -83,7 +97,7 @@ function fromQueryParameter(): ?Currency {
 }
 
 function detect(countryGroup: CountryGroupId): Currency {
-  return fromQueryParameter() || fromIsoCurrency(countryGroups[countryGroup].currency) || GBP;
+  return fromQueryParameter() || fromCountryGroupId(countryGroup) || GBP;
 }
 
 export {
