@@ -10,7 +10,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International';
 
-type CountryGroup = {
+export type CountryGroup = {
   name: string,
   currency: IsoCurrency,
   countries: IsoCountry[],
