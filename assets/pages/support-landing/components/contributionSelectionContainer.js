@@ -12,7 +12,7 @@ import {
   contributionSelectionActionsFor as actionsFor,
 } from 'components/contributionSelection/contributionSelectionActions';
 
-import type { State } from '../supportLanding';
+import type { State } from '../supportLandingReducer';
 
 
 // ----- State Maps ----- //
@@ -22,10 +22,10 @@ function mapStateToProps(state: State) {
   return {
     country: state.common.country,
     currency: state.common.currency,
-    contributionType: state.page.contributionType,
-    selectedAmount: getAmount(state.page),
-    isCustomAmount: state.page.isCustomAmount,
-    error: state.page.error,
+    contributionType: state.page.selection.contributionType,
+    selectedAmount: getAmount(state.page.selection),
+    isCustomAmount: state.page.selection.isCustomAmount,
+    error: state.page.selection.error,
   };
 
 }
