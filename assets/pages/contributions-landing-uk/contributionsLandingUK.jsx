@@ -43,7 +43,7 @@ const content = (
       <ContributeContainer>
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
-          payPalButton={<PayPalContributionButtonContainer />}
+          PayPalButton={PayPalContributionButtonContainer}
         />
       </ContributeContainer>
       <Footer />

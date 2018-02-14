@@ -31,7 +31,7 @@ type PropTypes = {
   country: IsoCountry,
   currency: Currency,
   canClick: boolean,
-  payPalButton: Node,
+  PayPalButton: Class<React$Component<*>>,
 };
 
 
@@ -62,7 +62,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
     return (
       <div className={generateClassName(baseClassName, 'one-off')}>
         <OneOffCta {...props} />
-        {props.payPalButton}
+        <props.PayPalButton buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`} />
       </div>
     );
 
