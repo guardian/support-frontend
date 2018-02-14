@@ -43,6 +43,7 @@ function payWithPayPal(props: PropTypes) {
         props.amount,
         props.referrerAcquisitionData,
         props.isoCountry,
+        props.countryGroupId,
         props.errorHandler,
         props.abParticipations,
       );
