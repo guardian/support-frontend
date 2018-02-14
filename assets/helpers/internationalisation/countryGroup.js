@@ -96,7 +96,6 @@ function fromCountry(isoCountry: string): ?CountryGroupId {
     if (countryGroups[countryGroupId].countries.includes(isoCountry)) {
       return countryGroupId;
     }
-
     return null;
   });
 }
