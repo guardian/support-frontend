@@ -226,6 +226,7 @@ function Contribute(props: PropTypes) {
         <ContributionSelection
           contributionType={props.contributionType}
           country={props.country}
+          countryGroupId={props.countryGroupId}
           currency={props.currency}
           selectedAmount={props.selectedAmount}
           toggleAmount={getAmountToggle(props)}

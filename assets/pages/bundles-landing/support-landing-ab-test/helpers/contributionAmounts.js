@@ -9,6 +9,7 @@ import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { getSpokenType } from './contributionTypes';
 
@@ -17,74 +18,77 @@ import { getSpokenType } from './contributionTypes';
 
 const amounts = {
   ONE_OFF: {
-    GBP: [
+    GBPCountries: [
       { value: '25', spoken: 'twenty five' },
       { value: '50', spoken: 'fifty' },
       { value: '100', spoken: 'one hundred' },
       { value: '250', spoken: 'two hundred and fifty' },
     ],
-    USD: [
+    UnitedStates: [
       { value: '25', spoken: 'twenty five' },
       { value: '50', spoken: 'fifty' },
       { value: '100', spoken: 'one hundred' },
       { value: '250', spoken: 'two hundred and fifty' },
     ],
-    AUD: [
+    AUDCountries: [
       { value: '25', spoken: 'twenty five' },
       { value: '100', spoken: 'one hundred' },
       { value: '250', spoken: 'two hundred and fifty' },
       { value: '500', spoken: 'five hundred' },
     ],
-    EUR: [
+    EURCountries: [
       { value: '25', spoken: 'twenty five' },
       { value: '50', spoken: 'fifty' },
       { value: '100', spoken: 'one hundred' },
       { value: '250', spoken: 'two hundred and fifty' },
     ],
+    International: [],
   },
   MONTHLY: {
-    GBP: [
+    GBPCountries: [
       { value: '5', spoken: 'five' },
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
-    USD: [
+    UnitedStates: [
       { value: '5', spoken: 'five' },
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
-    AUD: [
+    AUDCountries: [
       { value: '5', spoken: 'five' },
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
-    EUR: [
+    EURCountries: [
       { value: '5', spoken: 'five' },
       { value: '10', spoken: 'ten' },
       { value: '20', spoken: 'twenty' },
     ],
+    International: [],
   },
   ANNUAL: {
-    GBP: [
+    GBPCountries: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
     ],
-    USD: [
+    UnitedStates: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
     ],
-    AUD: [
+    AUDCountries: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
     ],
-    EUR: [
+    EURCountries: [
       { value: '50', spoken: 'fifty' },
       { value: '75', spoken: 'seventy five' },
       { value: '100', spoken: 'one hundred' },
     ],
+    International: [],
   },
 };
 
@@ -130,16 +134,16 @@ function getCustomAmountA11yHint(
 function getContributionAmounts(
   contributionType: ContributionType,
   currency: Currency,
+  countryGroupId: CountryGroupId,
 ): Radio[] {
 
-  return amounts[contributionType][currency.iso].map(amount => ({
+  return amounts[contributionType][countryGroupId].map(amount => ({
     value: amount.value,
     text: `${currency.glyph}${amount.value}`,
     accessibilityHint: getA11yHint(contributionType, currency, amount.spoken),
   }));
 
 }
-
 
 // ----- Exports ----- //
 
