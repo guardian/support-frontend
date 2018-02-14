@@ -1,15 +1,16 @@
 package controllers
 
+import backend.StripeBackend
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
+import util.RequestBasedProvider
 
-import model.{RequestType, ResultBody}
 import model.stripe.StripeChargeData
-import services.{ServiceProvider, StripeService}
+import model.{RequestType, ResultBody}
 
 class StripeController(
     controllerComponents: ControllerComponents,
-    stripeServiceProvider: ServiceProvider[StripeService]
+    stripeBackendProvider: RequestBasedProvider[StripeBackend]
   ) extends AbstractController(controllerComponents) with Circe with JsonUtils {
   // Other considerations:
   // - CORS
@@ -106,6 +107,8 @@ class StripeController(
 
 */
 
+  import util.RequestTypeDecoder.instances._
+
   // TODO: override Play's HTML error responses (e.g. non-JSON content type), provide JSON err description instead
   def createCharge: Action[StripeChargeData] = Action(circe.json[StripeChargeData]) { request =>
     // Deserialize POSTed JSON
@@ -119,11 +122,7 @@ class StripeController(
     //   log
     //   return JSON
 
-
-    // TODO: determine request type
-    // TODO: persist to database
-    // TODO: send acquisition event
-    stripeServiceProvider.getService(RequestType.Test)
+    stripeBackendProvider.getInstanceFor(request)
       .createCharge(request.body)
       .fold(
         err => InternalServerError(ResultBody.Error(err.getMessage)),

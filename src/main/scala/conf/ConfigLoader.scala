@@ -28,16 +28,16 @@ class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
     else executePathRequestImpl(request.withNextToken(result.getNextToken), updatedData)
   }
 
-  private def executePathRequest(request: GetParametersByPathRequest): Either[InitializationError, Map[String, String]] =
+  private def executePathRequest[A : ClassTag](env: Environment, request: GetParametersByPathRequest): Either[InitializationError, Map[String, String]] =
     Either.catchNonFatal(executePathRequestImpl(request, Map.empty)).leftMap { err =>
-      InitializationError(s"error executing the parameter store request: ${err.getMessage}")
+      InitializationError(s"error executing the parameter store request (${context[A](env)})", err)
     }
 
-  def loadConfig[A : ParameterStoreLoadable](environment: Environment): InitializationResult[A] = {
-    val request = ParameterStoreLoadable[A].parametersByPathRequest(environment)
+  def loadConfig[A : ParameterStoreLoadable : ClassTag](env: Environment): InitializationResult[A] = {
+    val request = ParameterStoreLoadable[A].parametersByPathRequest(env)
     (for {
-      result <- executePathRequest(request)
-      config <- ParameterStoreLoadable[A].decode(environment, result).toEither
+      result <- executePathRequest[A](env, request)
+      config <- ParameterStoreLoadable[A].decode(env, result).toEither
     } yield config).toValidated
   }
 }
@@ -56,17 +56,20 @@ object ConfigLoader {
     def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, A]
   }
 
+  // Used to add context to an initialization error
+  // TODO: consider making this a method on the InitializationError class
+  private def context[A : ClassTag](environment: Environment): String =
+    s"type: ${classTag[A].runtimeClass}, environment: ${environment.entryName}"
+
   // Utility class for implementing instances of the ParameterStoreLoadable typeclass.
   class ParameterStoreValidator[A : ClassTag](environment: Environment, data: Map[String, String]) {
-
-    private lazy val context = s"type: ${classTag[A].runtimeClass}, environment: ${environment.entryName}"
 
     // If we need to make this method generic on the return type, we can pass an implicit ReaderT[Option, String, A],
     // to handle the parsing of a String to type A, but for now it's not required.
     def validate(key: String): InitializationResult[String] =
     // Need to specify the type of the fold explicitly
       data.get(key).fold[InitializationResult[String]](
-        InitializationError(s"the key: $key is missing from the parameter store ($context)").invalid
+        InitializationError(s"the key: $key is missing from the parameter store (${context[A](environment)}").invalid
       )(_.valid)
 
     def validated[B](data: B): InitializationResult[B] = data.valid

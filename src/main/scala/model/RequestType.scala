@@ -6,6 +6,7 @@ import enumeratum.EnumEntry.Lowercase
 
 import scala.collection.immutable.IndexedSeq
 
+// TODO: should this be RequestMode?
 sealed trait RequestType extends EnumEntry with Lowercase
 
 object RequestType extends Enum[RequestType] {

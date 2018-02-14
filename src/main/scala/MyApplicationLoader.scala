@@ -1,14 +1,18 @@
+
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext, Configuration, NoHttpFiltersComponents}
 import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
 import router.Routes
+import util.RequestBasedProvider
 
 import aws.AWSClientBuilder
+import backend.StripeBackend
+
 import _root_.controllers.StripeController
-import conf.{ConfigLoader, PlayConfigurationUpdater}
+import conf.ConfigLoader
 import model.RequestEnvironments
-import services.AppServices
+import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
   def load(context: Context): Application = {
@@ -23,17 +27,25 @@ class MyComponents(context: Context)
   with NoHttpFiltersComponents
   with HikariCPComponents {
 
+  val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
+
   val awsClientBuilder = new AWSClientBuilder(applicationLifecycle)
   val ssm: AWSSimpleSystemsManagement = awsClientBuilder.buildAWSSimpleSystemsManagementClient()
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
-  val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
 
-  val configurationUpdater = new PlayConfigurationUpdater(configLoader, requestEnvironments)
+  override val configuration: Configuration =
+    DatabaseProvider.ConfigurationUpdater.updateConfiguration(configLoader, super.configuration, requestEnvironments)
 
-  override val configuration: Configuration = configurationUpdater
-    .updatePlayConfiguration(super.configuration).valueOr(throw _)
+  val databaseProvider = new DatabaseProvider(dbApi)
 
-  val appServices: AppServices = AppServices.build(configLoader, requestEnvironments).valueOr(throw _)
+  val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
+    new StripeBackend.Builder(configLoader, databaseProvider)
+      .buildRequestBasedProvider(requestEnvironments)
+      .valueOr(throw _)
 
-  override val router = new Routes(httpErrorHandler, new StripeController(controllerComponents, appServices.stripeServiceProvider))
+  override val router =
+    new Routes(
+      httpErrorHandler,
+      new StripeController(controllerComponents, stripeBackendProvider)
+    )
 }

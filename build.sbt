@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
+  "org.postgresql" % "postgresql" % "42.2.1",
   "org.typelevel" %% "cats-core" % "1.0.1",
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support

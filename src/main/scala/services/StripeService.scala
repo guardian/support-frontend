@@ -6,8 +6,8 @@ import com.stripe.net.RequestOptions
 
 import scala.collection.JavaConverters._
 
-import conf.{StripeAccountConfig, StripeConfig}
-import model.Currency
+import conf.{ConfigLoader, StripeAccountConfig, StripeConfig}
+import model._
 import model.stripe._
 
 trait StripeService {
@@ -20,11 +20,13 @@ class SingleAccountStripeService(config: StripeAccountConfig) extends StripeServ
 
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
 
+  // https://stripe.com/docs/api/java#create_charge
   private def getChargeParams(data: StripeChargeData) =
     Map[String, AnyRef](
       "amount" -> new Integer(data.amount),
       "currency" -> data.currency.entryName,
-      "source" -> data.source
+      "source" -> data.source,
+      "receipt_email" -> data.receiptEmail
     ).asJava
 
   def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess] =
