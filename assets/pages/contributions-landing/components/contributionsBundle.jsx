@@ -18,6 +18,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import {
   changeContribType,
@@ -44,6 +45,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   payPalErrorHandler: (string) => void,
   payPalError: ?string,
@@ -167,6 +169,7 @@ function showPayPal(props: PropTypes) {
       abParticipations={props.abTests}
       referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.isoCountry}
+      countryGroupId={props.countryGroupId}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
       buttonText="Contribute with PayPal"
