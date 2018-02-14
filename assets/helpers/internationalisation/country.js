@@ -330,68 +330,17 @@ export type IsoCountry = $Keys<typeof countries>;
 // ----- Functions ----- /
 
 function fromString(s: string): ?IsoCountry {
-  switch (s.toLowerCase()) {
-    case 'gb': return 'GB';
-    case 'uk': return 'GB';
-    case 'us': return 'US';
-    case 'au': return 'AU';
-    case 'ad': return 'AD';
-    case 'al': return 'AL';
-    case 'at': return 'AT';
-    case 'ba': return 'BA';
-    case 'be': return 'BE';
-    case 'bg': return 'BG';
-    case 'bl': return 'BL';
-    case 'ch': return 'CH';
-    case 'cy': return 'CY';
-    case 'cz': return 'CZ';
-    case 'de': return 'DE';
-    case 'dk': return 'DK';
-    case 'ee': return 'EE';
-    case 'es': return 'ES';
-    case 'fi': return 'FI';
-    case 'fo': return 'FO';
-    case 'fr': return 'FR';
-    case 'gf': return 'GF';
-    case 'gl': return 'GL';
-    case 'gp': return 'GP';
-    case 'gr': return 'GR';
-    case 'hr': return 'HR';
-    case 'hu': return 'HU';
-    case 'ie': return 'IE';
-    case 'it': return 'IT';
-    case 'li': return 'LI';
-    case 'lt': return 'LT';
-    case 'lu': return 'LU';
-    case 'lv': return 'LV';
-    case 'mc': return 'MC';
-    case 'me': return 'ME';
-    case 'mf': return 'MF';
-    case 'is': return 'IS';
-    case 'mq': return 'MQ';
-    case 'mt': return 'MT';
-    case 'nl': return 'NL';
-    case 'no': return 'NO';
-    case 'pf': return 'PF';
-    case 'pl': return 'PL';
-    case 'pm': return 'PM';
-    case 'pt': return 'PT';
-    case 're': return 'RE';
-    case 'ro': return 'RO';
-    case 'rs': return 'RS';
-    case 'se': return 'SE';
-    case 'si': return 'SI';
-    case 'sj': return 'SJ';
-    case 'sk': return 'SK';
-    case 'sm': return 'SM';
-    case 'tf': return 'TF';
-    case 'tr': return 'TR';
-    case 'wf': return 'WF';
-    case 'yt': return 'YT';
-    case 'va': return 'VA';
-    case 'ax': return 'AX';
-    default: return null;
+  const candidateIso = s.toUpperCase();
+  const isoCountryArray: Array<IsoCountry> = Object.keys(countries);
+  const isoIndex = isoCountryArray.indexOf(candidateIso);
+
+  if (candidateIso === 'UK') {
+    return 'GB';
   }
+  if (isoIndex > -1) {
+    return isoCountryArray[isoIndex];
+  }
+  return null;
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
