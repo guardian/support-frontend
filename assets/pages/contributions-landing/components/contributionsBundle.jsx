@@ -65,6 +65,47 @@ type ContribAttrs = {
   showSecureLogo: boolean,
 }
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return {
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    isoCountry: state.common.country,
+    countryGroupId: state.common.countryGroup,
+    currency: state.common.currency,
+    payPalError: state.page.payPalError,
+    abTests: state.common.abParticipations,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+
+  return {
+    toggleContribType: (period: Contrib) => {
+      dispatch(changeContribType(period));
+    },
+    changeContribAnnualAmount: (value: string) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    },
+    changeContribMonthlyAmount: (value: string) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    },
+    changeContribOneOffAmount: (value: string) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    },
+    changeContribAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+    payPalErrorHandler: (message: string) => {
+      dispatch(payPalError(message));
+    },
+  };
+
+}
+
 
 // ----- Copy ----- //
 
@@ -284,48 +325,6 @@ function ContributionsBundle(props: PropTypes) {
   );
 
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-  return {
-    contribType: state.page.type,
-    contribAmount: state.page.amount,
-    contribError: state.page.error,
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
-    isoCountry: state.common.country,
-    currency: state.common.currency,
-    payPalError: state.page.payPalError,
-    abTests: state.common.abParticipations,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
-    },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
-    },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
-    },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
-    },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
-    },
-    payPalErrorHandler: (message: string) => {
-      dispatch(payPalError(message));
-    },
-  };
-
-}
-
 
 // ----- Exports ----- //
 
