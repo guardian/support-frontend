@@ -2,16 +2,16 @@ package services
 
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
-import com.typesafe.scalalogging.LazyLogging
 import com.gu.support.config.PayPalConfig
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
 import services.touchpoint.TouchpointService
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService with LazyLogging {
+class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService {
 
   val defaultNVPParams = Map(
     "USER" -> apiConfig.user,
@@ -25,10 +25,10 @@ class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touchpo
     val msg = s"NVPResponse: $response"
 
     retrieveNVPParam(response, "ACK") match {
-      case "Success" => logger.info("Successful PayPal NVP request")
-      case "SuccessWithWarning" => logger.warn(msg)
-      case "Failure" => logger.error(msg)
-      case "FailureWithWarning" => logger.error(msg)
+      case "Success" => SafeLogger.info("Successful PayPal NVP request")
+      case "SuccessWithWarning" => SafeLogger.warn(s"Response (with warning) from PayPal was: $msg")
+      case "Failure" => SafeLogger.error(scrub"Failure response from PayPal was: $msg")
+      case "FailureWithWarning" => SafeLogger.error(scrub"Response from PayPal was: $msg")
     }
 
   }

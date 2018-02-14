@@ -4,12 +4,10 @@ import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.{InvalidExecutionInputException, InvalidNameException, _}
-
 import scala.concurrent.{ExecutionContext, Future}
 import StateMachineErrors._
-import com.typesafe.scalalogging.LazyLogging
 
-object StateMachineContainer extends LazyLogging {
+object StateMachineContainer {
   type Response[T] = EitherT[Future, StateMachineError, T]
 
   def convertErrors[T](response: Future[T])(implicit ec: ExecutionContext): Response[T] = EitherT {

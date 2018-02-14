@@ -49,4 +49,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content, 'contributions-landing-page-uk');
+renderPage(content, 'contributions-landing-page-uk-old');

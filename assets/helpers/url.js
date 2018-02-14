@@ -59,6 +59,22 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
   return `${strInit}?${paramsObj.toString()}`;
 };
 
+// Takes a mapping of query params and adds to an absolute or relative URL.
+function addQueryParamsToURL(
+  urlString: string,
+  params: { [string]: string },
+): string {
+
+  const [baseUrl, ...oldParams] = urlString.split('?');
+  const searchParams = new URLSearchParams(oldParams.join('&'));
+
+  Object.keys(params).forEach(key =>
+    searchParams.set(key, params[key]));
+
+  return `${baseUrl}?${searchParams.toString()}`;
+
+}
+
 // Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
 function getBaseDomain(): Domain {
 
@@ -84,4 +100,5 @@ export {
   getQueryParams,
   addQueryParamToURL,
   getBaseDomain,
+  addQueryParamsToURL,
 };

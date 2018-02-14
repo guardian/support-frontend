@@ -4,17 +4,14 @@ import cats.data.EitherT
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
-
 import com.google.common.net.InetAddresses
 import config.Identity
-import play.api.Logger
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.json.Json
-
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -61,13 +58,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
-      val logMessage = "Response from Identity Consent API: " + response.toString
-      if (validResponse) Logger.info(logMessage)
-      else Logger.error(logMessage)
+      if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
+      else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
       validResponse
     } recover {
       case e: Exception =>
-        Logger.error("Impossible to update the user's marketing preferences", e)
+        SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
         false
     }
   }

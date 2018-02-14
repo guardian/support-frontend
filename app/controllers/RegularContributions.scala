@@ -6,7 +6,6 @@ import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
-import com.typesafe.scalalogging.LazyLogging
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -15,7 +14,8 @@ import services.stepfunctions.{CreateRegularContributorRequest, RegularContribut
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
 import io.circe.syntax._
-
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
@@ -28,7 +28,7 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
@@ -60,7 +60,7 @@ class RegularContributions(
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
-        logger.error(s"Failed to get status: $error")
+        SafeLogger.error(scrub"Failed to get status of step function execution due to $error")
         InternalServerError
       },
       response => Ok(response.asJson)
@@ -68,7 +68,7 @@ class RegularContributions(
   }
 
   def create: Action[CreateRegularContributorRequest] = AuthenticatedAction.async(circe.json[CreateRegularContributorRequest]) { implicit request =>
-    logger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
+    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
     val result = for {
       user <- identityService.getUser(request.user)
@@ -77,7 +77,7 @@ class RegularContributions(
 
     result.fold(
       { error =>
-        logger.error(s"Failed to create new monthly contributor: $error")
+        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.user.id}, due to $error")
         InternalServerError
       },
       response => Accepted(response.asJson)
@@ -105,7 +105,7 @@ class RegularContributions(
         {
           case UserNotFound => Some(false)
           case error =>
-            logger.error(s"Failed to fetch user attributes from members data service: $error")
+            SafeLogger.error(scrub"Failed to fetch user attributes from members data service: $error")
             None
         },
         { response => Some(response.contentAccess.recurringContributor) }
