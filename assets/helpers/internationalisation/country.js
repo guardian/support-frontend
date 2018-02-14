@@ -312,6 +312,12 @@ const countries = {
   ZA: 'South Africa',
   ZM: 'Zambia',
   ZW: 'Zimbabwe',
+  FK: 'Falkland Islands',
+  GI: 'Gibraltar',
+  GG: 'Guernsey',
+  IM: 'Isle of Man',
+  JE: 'Jersey',
+  SH: 'Saint Helena',
 };
 
 

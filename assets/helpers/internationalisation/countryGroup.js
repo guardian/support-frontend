@@ -25,7 +25,7 @@ const countryGroups: CountryGroups = {
   GBPCountries: {
     name: 'United Kingdom',
     currency: 'GBP',
-    countries: ['GB'],
+    countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
     supportInternationalizationId: 'uk',
   },
   UnitedStates: {
