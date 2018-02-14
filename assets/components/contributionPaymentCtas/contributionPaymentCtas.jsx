@@ -79,15 +79,14 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 
 // Build the one-off payment buttons.
 function OneOffCtas(props: {
-  amount: number,
-  country: IsoCountry,
   contributionType: ContributionType,
+  country: IsoCountry,
+  amount: number,
   currency: Currency,
   canClick: boolean,
 }): Node {
 
   const spokenType = getOneOffSpokenName(props.country);
-  const accessibilityHint = `proceed to make your ${spokenType} contribution`;
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
@@ -96,9 +95,9 @@ function OneOffCtas(props: {
 
   return (
     <CtaLink
-      ctaId="contribute-oneoff"
+      ctaId="contribute-one-off"
       text={`Contribute ${props.currency.glyph}${props.amount} with card`}
-      accessibilityHint={accessibilityHint}
+      accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={allowClick(props.canClick)}
     />
@@ -109,14 +108,13 @@ function OneOffCtas(props: {
 // Build the regular payment buttons.
 function RegularCtas(props: {
   contributionType: ContributionType,
-  amount: number,
   country: IsoCountry,
+  amount: number,
   currency: Currency,
   canClick: boolean,
-}) {
+}): Node {
 
   const spokenType = getSpokenType(props.contributionType, props.country);
-  const accessibilityHint = `proceed to make your ${spokenType} contribution`;
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
@@ -127,7 +125,7 @@ function RegularCtas(props: {
     <CtaLink
       ctaId="contribute-regular"
       text={`Contribute ${props.currency.glyph}${props.amount} with card or PayPal`}
-      accessibilityHint={accessibilityHint}
+      accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={allowClick(props.canClick)}
     />
