@@ -55,7 +55,7 @@ export function paypalContributionsRedirect(
   nativeAbParticipations: Participations,
 ): void {
 
-  const countryGroup = countryGroups[countryGroupId].supportInternationalizationId;
+  const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
   const ophanIds: OphanIds = getOphanIds();
   const postData: PayPalPostData = {
     countryGroup,

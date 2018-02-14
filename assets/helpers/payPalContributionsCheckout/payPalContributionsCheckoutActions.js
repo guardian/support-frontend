@@ -44,7 +44,7 @@ export function paypalContributionsRedirect(
 
   const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
 
-  const countryGroup = countryGroups[countryGroupId].supportInternationalizationId;
+  const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
   const postData: PayPalPostData = {
     countryGroup,
     amount,

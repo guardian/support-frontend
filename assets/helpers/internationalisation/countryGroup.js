@@ -14,7 +14,7 @@ export type CountryGroup = {
   name: string,
   currency: IsoCurrency,
   countries: IsoCountry[],
-  supportInternationalizationId: string,
+  supportInternationalisationId: string,
 };
 
 type CountryGroups = {
@@ -26,19 +26,19 @@ const countryGroups: CountryGroups = {
     name: 'United Kingdom',
     currency: 'GBP',
     countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
-    supportInternationalizationId: 'uk',
+    supportInternationalisationId: 'uk',
   },
   UnitedStates: {
     name: 'United States',
     currency: 'USD',
     countries: ['US'],
-    supportInternationalizationId: 'us',
+    supportInternationalisationId: 'us',
   },
   AUDCountries: {
     name: 'Australia',
     currency: 'AUD',
     countries: ['AU', 'KI', 'NR', 'NF', 'TV'],
-    supportInternationalizationId: 'au',
+    supportInternationalisationId: 'au',
   },
   EURCountries: {
     name: 'Europe',
@@ -46,7 +46,7 @@ const countryGroups: CountryGroups = {
     countries: ['AD', 'AL', 'AT', 'BA', 'BE', 'BG', 'BL', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FO', 'FR',
       'GF', 'GL', 'GP', 'GR', 'HR', 'HU', 'IE', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'ME', 'MF', 'IS', 'MQ', 'MT', 'NL',
       'NO', 'PF', 'PL', 'PM', 'PT', 'RE', 'RO', 'RS', 'SE', 'SI', 'SJ', 'SK', 'SM', 'TF', 'TR', 'WF', 'YT', 'VA', 'AX'],
-    supportInternationalizationId: 'eu',
+    supportInternationalisationId: 'eu',
   },
   International: {
     name: 'International',
@@ -60,7 +60,7 @@ const countryGroups: CountryGroups = {
       'NP', 'NU', 'OM', 'PA', 'PE', 'PG', 'PH', 'PK', 'PN', 'PR', 'PS', 'PW', 'PY', 'QA', 'RU', 'RW', 'SA', 'SB', 'SC', 'SD',
       'SG', 'SL', 'SN', 'SO', 'SR', 'SS', 'ST', 'SV', 'SX', 'SY', 'SZ', 'TC', 'TD', 'TG', 'TH', 'TJ', 'TK', 'TL', 'TM', 'TN',
       'TO', 'TT', 'TW', 'TZ', 'UA', 'UG', 'UM', 'UY', 'UZ', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZA', 'ZM', 'ZW'],
-    supportInternationalizationId: 'int',
+    supportInternationalisationId: 'int',
   },
 };
 
