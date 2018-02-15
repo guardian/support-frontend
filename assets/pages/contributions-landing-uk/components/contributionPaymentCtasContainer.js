@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import ContributionPaymentCtas from 'components/contributionPaymentCtas/contributionPaymentCtas';
 import {
   getAmount,
-} from 'components/contributionSelection/contributionSelectionReducer';
+} from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import {
   payPalContributionButtonActionsFor,
 } from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';

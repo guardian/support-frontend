@@ -4,13 +4,13 @@
 
 import { connect } from 'react-redux';
 
-import ContributionSelection from 'components/contributionSelection/contributionSelection';
+import ContributionSelection from 'containerisableComponents/contributionSelection/contributionSelection';
 import {
   getAmount,
-} from 'components/contributionSelection/contributionSelectionReducer';
+} from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import {
   contributionSelectionActionsFor as actionsFor,
-} from 'components/contributionSelection/contributionSelectionActions';
+} from 'containerisableComponents/contributionSelection/contributionSelectionActions';
 
 import type { State } from '../contributionsLandingUKReducer';
 

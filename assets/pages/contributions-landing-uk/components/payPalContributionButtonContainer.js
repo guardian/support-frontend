@@ -10,7 +10,7 @@ import {
 } from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';
 import {
   getAmount,
-} from 'components/contributionSelection/contributionSelectionReducer';
+} from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 
 import type { State } from '../contributionsLandingUKReducer';
 
