@@ -159,6 +159,90 @@ The client-side javascript sits inside the assets folder and is organized in the
 * The UI of the project is organized in components. The shared components are self-contained and are located in the top `components` folder. Additionally, in order to keep the components as simple as possible, the **shared components are presentational components**. The components specific to a page (which are not used in other pages) are located inside the `components` folder inside a specific page.
 * The CSS for a non-shareable component is located inside the `page.scss` file.
 
+### Containerisable Components
+
+These are a specific type of shared component that can be containerised. For more details on how presentational and container components work, see [above](#presentational-and-container-components).
+
+In essence, these components work like any other shared component, in that they are presentational and know nothing about the specific state of a page. However, they carry with them a set of scoped actions and reducers, which can be plugged into the state of a page wherever this component is used. In this way, the component remains reusable, but the boilerplate of managing its corresponding state is reduced.
+
+#### Example
+
+Here we're going to add the containerisable component `MyComponent` to the page `MyPage`. To do that, we create a *container*, which is responsible for mapping the page's state to the presentational component `MyComponent`:
+
+**MyComponentContainer.jsx**
+
+Sits here: `pages/my-page/components/myComponentContainer.jsx`.
+
+```jsx
+// ----- Imports ----- //
+
+import { connect } from 'react-redux';
+
+import MyComponent from 'containerisableComponents/myComponent/myComponent';
+import { myComponentActionsFor } from 'containerisableComponents/myComponent/myComponentActions';
+
+import type { State } from '../myPageReducer';
+
+
+// ----- State Maps ----- //
+
+function mapStateToProps(state: State) {
+
+  return {
+    propertyOne: state.page.mySection.propertyOne,
+    propertyTwo: state.page.mySection.propertyTwo,
+  };
+
+}
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps, myComponentActionsFor('MY_SECTION'))(MyComponent);
+```
+
+We start by importing the shared component `MyComponent`, and its corresponding actions. Then we create a function to map the page state to the component's props, with `mapStateToProps`. Note that we can import the `State` type from the page's reducer here, to make sure that flow checks our Redux state lookups.
+
+The final line puts it all together, using the `connect` function provided by React-Redux. It takes our state mapping, and an object containing the scoped action creators for our components. For more information on how this works see the section on Scoped Actions and Reducers in [the docs](#scoped-actions-and-reducers).
+
+Finally, let's look at the page reducer, to see how the component's scoped reducer fits into this:
+
+**MyPageReducer.js**
+
+```jsx
+// ----- Imports ----- //
+
+import { combineReducers } from 'redux';
+
+import { myComponentReducerFor } from 'containerisableComponents/myComponent/myComponentReducer';
+
+import type { State as MyComponentState } from 'containerisableComponents/myComponent/myComponentReducer';
+
+import type { CommonState } from 'helpers/page/page';
+
+
+// ----- Types ----- //
+
+type PageState = {
+  mySection: MyComponentState,
+};
+
+export type State = {
+  common: CommonState,
+  page: PageState,
+};
+
+
+// ----- Reducer ----- //
+
+export default combineReducers({
+  mySection: myComponentReducerFor('MY_SECTION'),
+});
+
+```
+
+Here we import the scoped reducer for `MyComponent`, and make it part of the page's reducer using Redux's `combineReducers`, described [here](https://redux.js.org/docs/api/combineReducers.html) in their docs. We also retrieve the `State` from the component, to make sure that flow is able to check all the types.
+
 ## 5. CI build process
 
 In order to build the project, team city runs a series of steps. The first step installs node js, the second builds the assets by executing the script [`build-tc`](https://github.com/guardian/support-frontend/blob/master/build-tc). Finally, the third step compiles the Scala code, packages the frontend and backend, and uploads this to riff-raff ready to be deployed. All these steps are defined in [`build.sbt`](https://github.com/guardian/support-frontend/blob/master/build.sbt).
