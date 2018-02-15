@@ -178,8 +178,8 @@ Sits here: `pages/my-page/components/myComponentContainer.jsx`.
 
 import { connect } from 'react-redux';
 
-import MyComponent from 'components/myComponent/myComponent';
-import { myComponentActionsFor } from 'components/myComponent/myComponentActions';
+import MyComponent from 'containerisableComponents/myComponent/myComponent';
+import { myComponentActionsFor } from 'containerisableComponents/myComponent/myComponentActions';
 
 import type { State } from '../myPageReducer';
 
@@ -214,9 +214,9 @@ Finally, let's look at the page reducer, to see how the component's scoped reduc
 
 import { combineReducers } from 'redux';
 
-import { myComponentReducerFor } from 'components/myComponent/myComponentReducer';
+import { myComponentReducerFor } from 'containerisableComponents/myComponent/myComponentReducer';
 
-import type { State as MyComponentState } from 'components/myComponent/myComponentReducer';
+import type { State as MyComponentState } from 'containerisableComponents/myComponent/myComponentReducer';
 
 import type { CommonState } from 'helpers/page/page';
 
