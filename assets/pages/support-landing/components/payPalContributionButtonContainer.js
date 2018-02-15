@@ -4,13 +4,13 @@
 
 import { connect } from 'react-redux';
 
-import PayPalContributionButton from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
+import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import {
   payPalContributionButtonActionsFor,
-} from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';
+} from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 import {
   getAmount,
-} from 'components/contributionSelection/contributionSelectionReducer';
+} from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 
 import type { State } from '../supportLandingReducer';
 
@@ -21,6 +21,7 @@ function mapStateToProps(state: State) {
 
   return {
     amount: getAmount(state.page.selection),
+    countryGroupId: state.common.countryGroup,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
     isoCountry: state.common.country,

@@ -19,7 +19,7 @@
 @import '../components/contribAmounts/contribAmounts';
 @import '../components/contribute/contribute';
 @import '../components/contributionPaymentCtas/contributionPaymentCtas';
-@import '../components/contributionSelection/contributionSelection';
+@import '../containerisableComponents/contributionSelection/contributionSelection';
 @import '../components/legal/contribLegal/contribLegal';
 @import '../components/ctaCircle/ctaCircle';
 @import '../components/ctaLink/ctaLink';
@@ -40,7 +40,7 @@
 @import '../components/radioToggle/radioToggle';
 @import '../components/pageSection/pageSection';
 @import '../components/patronsEvents/patronsEvents';
-@import '../components/paymentButtons/payPalContributionButton/payPalContributionButton';
+@import '../containerisableComponents/payPalContributionButton/payPalContributionButton';
 @import '../components/paymentButtons/payPalExpressButton/payPalExpressButton';
 @import '../components/paymentButtons/stripePopUpButton/stripePopUpButton';
 @import '../components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
