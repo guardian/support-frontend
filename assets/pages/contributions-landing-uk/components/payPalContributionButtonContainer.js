@@ -22,6 +22,7 @@ function mapStateToProps(state: State) {
   return {
     amount: getAmount(state.page.selection),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
+    countryGroupId: state.common.countryGroup,
     abParticipations: state.common.abParticipations,
     isoCountry: state.common.country,
     canClick: !state.page.selection.error,
