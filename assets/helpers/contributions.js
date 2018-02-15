@@ -142,8 +142,24 @@ function contribCamelCase(contrib: Contrib): string {
 
 }
 
+function getOneOffName(country: IsoCountry) {
+  return country === 'US' ? 'One-time' : 'One-off';
+}
+
 function getOneOffSpokenName(country: IsoCountry) {
   return country === 'US' ? 'one time' : 'one off';
+}
+
+function getContributionTypeClassName(contributionType: Contrib) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'one-off';
+  } else if (contributionType === 'MONTHLY') {
+    return 'monthly';
+  }
+
+  return 'annual';
+
 }
 
 function getSpokenType(
@@ -171,6 +187,8 @@ export {
   billingPeriodFromContrib,
   errorMessage,
   contribCamelCase,
+  getOneOffName,
   getOneOffSpokenName,
+  getContributionTypeClassName,
   getSpokenType,
 };

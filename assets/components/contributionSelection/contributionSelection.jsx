@@ -8,7 +8,10 @@ import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
-import { errorMessage as contributionsErrorMessage } from 'helpers/contributions';
+import {
+  errorMessage as contributionsErrorMessage,
+  getContributionTypeClassName,
+} from 'helpers/contributions';
 import { generateClassName } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -21,7 +24,6 @@ import type {
 
 import {
   getContributionTypeRadios,
-  getContributionTypeClassName,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
 } from './helpers';

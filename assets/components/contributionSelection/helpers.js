@@ -6,6 +6,7 @@ import {
   config as contributionConfig,
   getOneOffSpokenName,
   getSpokenType,
+  getOneOffName,
 } from 'helpers/contributions';
 import { spokenCurrencies } from 'helpers/internationalisation/currency';
 
@@ -97,22 +98,6 @@ const amounts = {
 
 // ----- Functions ----- //
 
-function getOneOffName(country: IsoCountry) {
-  return country === 'US' ? 'One-time' : 'One-off';
-}
-
-function getContributionTypeClassName(contributionType: ContributionType) {
-
-  if (contributionType === 'ONE_OFF') {
-    return 'one-off';
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
-  }
-
-  return 'annual';
-
-}
-
 function getAmountA11yHint(
   contributionType: ContributionType,
   currency: Currency,
@@ -185,7 +170,6 @@ function getContributionAmountRadios(
 
 export {
   getContributionTypeRadios,
-  getContributionTypeClassName,
   getCustomAmountA11yHint,
   getContributionAmountRadios,
 };
