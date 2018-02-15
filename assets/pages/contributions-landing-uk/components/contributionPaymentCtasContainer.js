@@ -10,7 +10,7 @@ import {
 } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import {
   payPalContributionButtonActionsFor,
-} from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';
+} from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 
 import type { State } from '../contributionsLandingUKReducer';
 

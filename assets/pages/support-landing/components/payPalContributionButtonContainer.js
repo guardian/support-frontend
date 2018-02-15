@@ -4,10 +4,10 @@
 
 import { connect } from 'react-redux';
 
-import PayPalContributionButton from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
+import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import {
   payPalContributionButtonActionsFor,
-} from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonActions';
+} from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 import {
   getAmount,
 } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';

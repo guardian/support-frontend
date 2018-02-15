@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import PayPalContributionButton from 'components/paymentButtons/payPalContributionButton/payPalContributionButton';
+import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
