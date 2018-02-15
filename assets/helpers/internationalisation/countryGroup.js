@@ -13,7 +13,8 @@ export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 
 /*
   Note: supportInternationalizationId should match an existing
   id from support-internationalisation library. We use it to
-  communicate with the backend.
+  communicate with the backend. Additionally, the list of countries
+  should match the list in support-internationalisation.
  */
 export type CountryGroup = {
   name: string,
