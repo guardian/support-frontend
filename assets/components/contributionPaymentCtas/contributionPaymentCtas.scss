@@ -1,0 +1,61 @@
+.component-contribution-payment-ctas {
+
+  .component-cta-link {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+    height: 54px;
+    line-height: 54px;
+    box-sizing: border-box;
+    padding: 0 $gu-h-spacing;
+
+    @include mq($from: phablet) {
+      width: 501px;
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+    height: 35%;
+    top: 18px;
+    right: 15px;
+  }
+
+  .component-paypal-contribution-button {
+    height: 54px;
+    width: 100%;
+
+    @include mq($from: phablet) {
+      width: 501px;
+    }
+
+    .svg-arrow-right-straight {
+      height: 35%;
+      top: 26px;
+      right: 10px;
+    }
+  }
+
+  .component-error-message {
+    margin-top: 20px;
+    box-sizing: border-box;
+    height: 54px;
+    width: 100%;
+
+    @include mq($from: phablet) {
+      width: 501px;
+    }
+  }
+
+  .component-error-message__message {
+    padding-right: $gu-h-spacing;
+
+    @include mq($until: phablet) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+
+}

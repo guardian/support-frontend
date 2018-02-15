@@ -13,20 +13,10 @@ import Contribute from 'components/contribute/contribute';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import type { CommonState } from 'helpers/page/page';
-
 import pageReducer from './contributionsLandingUKReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
-
-import type { PageState } from './contributionsLandingUKReducer';
-
-
-// ----- Types ----- //
-
-export type State = {
-  common: CommonState,
-  page: PageState,
-};
+import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
+import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 
 
 // ----- Redux Store ----- //
@@ -52,6 +42,9 @@ const content = (
       />
       <Contribute>
         <ContributionSelectionContainer />
+        <ContributionPaymentCtasContainer
+          PayPalButton={PayPalContributionButtonContainer}
+        />
       </Contribute>
       <Footer />
     </div>

@@ -2,18 +2,33 @@
 
 // ----- Imports ----- //
 
-import {
-  contributionSelectionReducerFor,
-} from 'components/contributionSelection/contributionSelectionReducer';
+import { combineReducers } from 'redux';
 
-import type { State } from 'components/contributionSelection/contributionSelectionReducer';
+import { contributionSelectionReducerFor } from 'components/contributionSelection/contributionSelectionReducer';
+import { payPalContributionButtonReducerFor } from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonReducer';
+
+import type { State as ContributionSelectionState } from 'components/contributionSelection/contributionSelectionReducer';
+import type { State as PayPalState } from 'components/paymentButtons/payPalContributionButton/payPalContributionButtonReducer';
+
+import type { CommonState } from 'helpers/page/page';
 
 
 // ----- Types ----- //
 
-export type PageState = State;
+type PageState = {
+  selection: ContributionSelectionState,
+  payPal: PayPalState,
+};
+
+export type State = {
+  common: CommonState,
+  page: PageState,
+};
 
 
 // ----- Reducer ----- //
 
-export default contributionSelectionReducerFor('CONTRIBUTE_SECTION');
+export default combineReducers({
+  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION'),
+  payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
+});

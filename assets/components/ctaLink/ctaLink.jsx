@@ -44,12 +44,12 @@ export default function CtaLink(props: PropTypes) {
          : props.url
       }
       onClick={
-        () => {
+        (clickEvent) => {
           if (props.trackComponentEvent) {
             props.trackComponentEvent('CLICK', props.ctaId);
           }
           if (props.onClick) {
-            props.onClick();
+            props.onClick(clickEvent);
           }
         }
       }

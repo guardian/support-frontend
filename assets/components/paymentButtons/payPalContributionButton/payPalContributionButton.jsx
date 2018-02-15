@@ -29,6 +29,7 @@ type PropTypes = {
   canClick?: boolean,
   buttonText?: string,
   additionalClass?: string,
+  onClick?: ?(void => void),
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -37,6 +38,11 @@ type PropTypes = {
 
 function payWithPayPal(props: PropTypes) {
   return () => {
+
+    if (props.onClick) {
+      props.onClick();
+    }
+
     if (props.canClick) {
       storage.setSession('paymentMethod', 'PayPal');
       paypalContributionsRedirect(
@@ -75,6 +81,7 @@ PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
   additionalClass: '',
+  onClick: null,
 };
 
 

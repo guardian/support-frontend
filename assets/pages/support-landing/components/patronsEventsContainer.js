@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import PatronsEvents from 'components/patronsEvents/patronsEvents';
 
-import type { State } from '../supportLanding';
+import type { State } from '../supportLandingReducer';
 
 
 // ----- State Maps ----- //

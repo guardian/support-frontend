@@ -16,21 +16,11 @@ import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import type { CommonState } from 'helpers/page/page';
-
 import pageReducer from './supportLandingReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
+import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
+import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 import PatronsEventsContainer from './components/patronsEventsContainer';
-
-import type { PageState } from './supportLandingReducer';
-
-
-// ----- Types ----- //
-
-export type State = {
-  common: CommonState,
-  page: PageState,
-};
 
 
 // ----- Redux Store ----- //
@@ -56,6 +46,9 @@ const content = (
       />
       <Contribute>
         <ContributionSelectionContainer />
+        <ContributionPaymentCtasContainer
+          PayPalButton={PayPalContributionButtonContainer}
+        />
       </Contribute>
       <ThreeSubscriptions />
       <WhySupport />

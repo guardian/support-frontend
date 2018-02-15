@@ -80,6 +80,10 @@ function parseCustomAmount(state: State, customAmount: string): {
 // Retrieves the amount for the currently chosen contribution type.
 function getAmount(state: State): string {
 
+  if (state.isCustomAmount && state.customAmount) {
+    return state.customAmount.toString();
+  }
+
   switch (state.contributionType) {
     case 'ONE_OFF':
       return state.oneOffAmount;
