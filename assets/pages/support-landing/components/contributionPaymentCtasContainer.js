@@ -25,7 +25,7 @@ function mapStateToProps(state: State) {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     country: state.common.country,
     currency: state.common.currency,
-    canClick: !state.page.selection.error,
+    isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
   };
 

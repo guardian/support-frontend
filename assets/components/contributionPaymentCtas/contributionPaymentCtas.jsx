@@ -31,7 +31,7 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   country: IsoCountry,
   currency: Currency,
-  canClick: boolean,
+  isDisabled: boolean,
   PayPalButton: Class<React$Component<*>>,
   error: ?string,
   resetError: void => void,
@@ -41,11 +41,11 @@ type PropTypes = {
 // ----- Heading ----- //
 
 // Prevents a click event if it's not allowed.
-function onCtaClick(canClick: boolean, resetError: void => void): Function {
+function onCtaClick(isDisabled: boolean, resetError: void => void): Function {
 
   return (clickEvent) => {
 
-    if (!canClick) {
+    if (isDisabled) {
       clickEvent.preventDefault();
     }
 
@@ -94,7 +94,7 @@ function OneOffCta(props: {
   country: IsoCountry,
   amount: number,
   currency: Currency,
-  canClick: boolean,
+  isDisabled: boolean,
   resetError: void => void,
 }): Node {
 
@@ -111,7 +111,7 @@ function OneOffCta(props: {
       text={`Contribute ${props.currency.glyph}${props.amount} with card`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
-      onClick={onCtaClick(props.canClick, props.resetError)}
+      onClick={onCtaClick(props.isDisabled, props.resetError)}
     />
   );
 
@@ -123,7 +123,7 @@ function RegularCta(props: {
   country: IsoCountry,
   amount: number,
   currency: Currency,
-  canClick: boolean,
+  isDisabled: boolean,
   resetError: void => void,
 }): Node {
 
@@ -140,7 +140,7 @@ function RegularCta(props: {
       text={`Contribute ${props.currency.glyph}${props.amount} with card or PayPal`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
-      onClick={onCtaClick(props.canClick, props.resetError)}
+      onClick={onCtaClick(props.isDisabled, props.resetError)}
     />
   );
 
