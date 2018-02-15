@@ -18,6 +18,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import {
   changeContribType,
@@ -44,6 +45,7 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   payPalErrorHandler: (string) => void,
   payPalError: ?string,
@@ -63,54 +65,94 @@ type ContribAttrs = {
   showSecureLogo: boolean,
 }
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return {
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    isoCountry: state.common.country,
+    countryGroupId: state.common.countryGroup,
+    currency: state.common.currency,
+    payPalError: state.page.payPalError,
+    abTests: state.common.abParticipations,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+
+  return {
+    toggleContribType: (period: Contrib) => {
+      dispatch(changeContribType(period));
+    },
+    changeContribAnnualAmount: (value: string) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    },
+    changeContribMonthlyAmount: (value: string) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    },
+    changeContribOneOffAmount: (value: string) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    },
+    changeContribAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+    payPalErrorHandler: (message: string) => {
+      dispatch(payPalError(message));
+    },
+  };
+
+}
+
 
 // ----- Copy ----- //
 
-const subHeadingMonthlyText: {[IsoCurrency]: string} = {
-  GBP: 'from £5 a month',
-  USD: 'from $5 a month',
-  AUD: 'from $5 a month',
-  EUR: 'from €5 a month',
+const subHeadingMonthlyText: {[CountryGroupId]: string} = {
+  GBPCountries: 'from £5 a month',
+  UnitedStates: 'from $5 a month',
+  AUDCountries: 'from $5 a month',
+  EURCountries: 'from €5 a month',
+  International: '',
 };
 
-function getSubHeadingMonthly(abTests: Participations, isoCurrency: IsoCurrency) {
-  return subHeadingMonthlyText[isoCurrency];
-}
-
 const subHeadingOneOffText = {
-  GBP: '',
-  USD: '',
-  AUD: '',
-  EUR: '',
+  GBPCountries: '',
+  UnitedStates: '',
+  AUDCountries: '',
+  EURCountries: '',
+  International: '',
 };
 
 const defaultContentText = {
-  GBP: 'Support The Guardian’s editorial operations by making a monthly or one-off contribution today',
-  USD: (
+  GBPCountries: 'Support The Guardian’s editorial operations by making a monthly or one-off contribution today',
+  UnitedStates: (
     <span>
       Contributing to The Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support &ndash; it will help to fund our journalism for
       the long term.
     </span>
   ),
-  AUD: (
+  AUDCountries: (
     <span>
       Contributing to The Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support &ndash; it will help to fund our journalism for
       the long term.
     </span>
   ),
-  EUR: (
+  EURCountries: (
     <span>
       Contributing to The Guardian makes a big impact. If you’re able, please consider
       <strong> monthly</strong> support &ndash; it will help to fund our journalism for
       the long term.
     </span>
   ),
+  International: '',
 };
 
 const upsellRecurringContributionsTestContentText = {
-  control: defaultContentText.USD,
+  control: defaultContentText.UnitedStates,
   benefitsOfBoth: (
     <span>
       Make a monthly commitment to support The Guardian long-term or a one-time contribution
@@ -127,7 +169,7 @@ const upsellRecurringContributionsTestContentText = {
 
 function getContentText(props: PropTypes) {
   return upsellRecurringContributionsTestContentText[props.abTests.upsellRecurringContributions] ||
-    defaultContentText[props.currency.iso];
+    defaultContentText[props.countryGroupId];
 }
 
 function ContentText(props: PropTypes) {
@@ -141,13 +183,12 @@ const contribCtaText = {
 };
 
 function contribAttrs(
-  isoCurrency: IsoCurrency,
+  countryGroupId: CountryGroupId,
   contribType: Contrib,
-  abTests: Participations,
 ): ContribAttrs {
   const subHeadingText = contribType === 'ONE_OFF'
-    ? subHeadingOneOffText[isoCurrency]
-    : getSubHeadingMonthly(abTests, isoCurrency);
+    ? subHeadingOneOffText[countryGroupId]
+    : subHeadingMonthlyText[countryGroupId];
 
   return {
     heading: 'contribute',
@@ -167,6 +208,7 @@ function showPayPal(props: PropTypes) {
       abParticipations={props.abTests}
       referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.isoCountry}
+      countryGroupId={props.countryGroupId}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
       buttonText="Contribute with PayPal"
@@ -197,8 +239,8 @@ const getContribAttrs = (
   contribAmount: Amounts,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: IsoCurrency,
-  abTests: Participations,
 ): ContribAttrs => {
 
   const contType = getContribKey(contribType);
@@ -209,6 +251,7 @@ const getContribAttrs = (
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
   params.append('currency', currency);
+  params.append('countryGroup', countryGroupId);
 
   if (intCmp) {
     params.append('INTCMP', intCmp);
@@ -220,7 +263,7 @@ const getContribAttrs = (
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs(currency, contribType, abTests), { ctaLink });
+  return Object.assign({}, contribAttrs(countryGroupId, contribType), { ctaLink });
 
 };
 
@@ -244,8 +287,8 @@ function ContributionsBundle(props: PropTypes) {
     props.contribAmount,
     props.referrerAcquisitionData,
     props.isoCountry,
+    props.countryGroupId,
     props.currency.iso,
-    props.abTests,
   );
 
   attrs.showPaymentLogos = true;
@@ -282,48 +325,6 @@ function ContributionsBundle(props: PropTypes) {
   );
 
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-  return {
-    contribType: state.page.type,
-    contribAmount: state.page.amount,
-    contribError: state.page.error,
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
-    isoCountry: state.common.country,
-    currency: state.common.currency,
-    payPalError: state.page.payPalError,
-    abTests: state.common.abParticipations,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
-    },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
-    },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
-    },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
-    },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
-    },
-    payPalErrorHandler: (message: string) => {
-      dispatch(payPalError(message));
-    },
-  };
-
-}
-
 
 // ----- Exports ----- //
 

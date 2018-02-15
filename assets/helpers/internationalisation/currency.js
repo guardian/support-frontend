@@ -1,7 +1,10 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
-import type { IsoCountry } from './country';
+import { countryGroups } from './countryGroup';
+
+import type { CountryGroup, CountryGroupId } from './countryGroup';
+
 
 export type IsoCurrency =
   | 'GBP'
@@ -53,82 +56,27 @@ const spokenCurrencies = {
   },
 };
 
-const euroCountries: {
-  [IsoCountry]: string,
-} = {
-  AD: 'Andorra',
-  AL: 'Albania',
-  AT: 'Austria',
-  BA: 'Bosnia-Herzegovina',
-  BE: 'Belgium',
-  BG: 'Bulgaria',
-  BL: 'Saint Barthélemy',
-  CH: 'Switzerland',
-  CY: 'Cyprus',
-  CZ: 'Czech Republic',
-  DE: 'Germany',
-  DK: 'Denmark',
-  EE: 'Estonia',
-  ES: 'Spain',
-  FI: 'Finland',
-  FO: 'Faroe Islands',
-  FR: 'France',
-  GF: 'French Guiana',
-  GL: 'Greenland',
-  GP: 'Guadeloupe',
-  GR: 'Greece',
-  HR: 'Croatia',
-  HU: 'Hungary',
-  IE: 'Ireland',
-  IT: 'Italy',
-  LI: 'Liechtenstein',
-  LT: 'Lithuania',
-  LU: 'Luxembourg',
-  LV: 'Latvia',
-  MC: 'Monaco',
-  ME: 'Montenegro',
-  MF: 'Saint Martin',
-  IS: 'Iceland',
-  MQ: 'Martinique',
-  MT: 'Malta',
-  NL: 'Netherlands',
-  NO: 'Norway',
-  PF: 'French Polynesia',
-  PL: 'Poland',
-  PM: 'Saint Pierre & Miquelon',
-  PT: 'Portugal',
-  RE: 'Réunion',
-  RO: 'Romania',
-  RS: 'Serbia',
-  SE: 'Sweden',
-  SI: 'Slovenia',
-  SJ: 'Svalbard and Jan Mayen',
-  SK: 'Slovakia',
-  SM: 'San Marino',
-  TF: 'French Southern Territories',
-  TR: 'Turkey',
-  WF: 'Wallis & Futuna',
-  YT: 'Mayotte',
-  VA: 'Holy See',
-  AX: 'Åland Islands',
-};
 
-function isEuroCountry(country: IsoCountry): boolean {
-  return Object.prototype.hasOwnProperty.call(euroCountries, country);
-}
-
-function forCountry(country: IsoCountry): Currency {
-  if (isEuroCountry(country)) {
-    return EUR;
-  }
-
-  switch (country) {
-    case 'US': return USD;
-    case 'GB': return GBP;
-    case 'AU': return AUD;
-    default: return GBP;
+function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
+  switch (isoCurrency) {
+    case 'USD': return USD;
+    case 'GBP': return GBP;
+    case 'AUD': return AUD;
+    case 'EUR': return EUR;
+    default: return null;
   }
 }
+
+function fromCountryGroupId(countryGroupId: CountryGroupId): ?Currency {
+  const countryGroup: ?CountryGroup = countryGroups[countryGroupId];
+
+  if (!countryGroup) {
+    return null;
+  }
+
+  return fromIsoCurrency(countryGroup.currency);
+}
+
 
 function fromString(s: string): ?Currency {
   switch (s.toLowerCase()) {
@@ -148,13 +96,11 @@ function fromQueryParameter(): ?Currency {
   return null;
 }
 
-function detect(country: IsoCountry): Currency {
-  return fromQueryParameter() || forCountry(country);
+function detect(countryGroup: CountryGroupId): Currency {
+  return fromQueryParameter() || fromCountryGroupId(countryGroup) || GBP;
 }
 
 export {
   detect,
-  isEuroCountry,
-  euroCountries,
   spokenCurrencies,
 };

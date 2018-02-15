@@ -4,16 +4,16 @@
 
 import React from 'react';
 import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
-
 import {
   paypalContributionsRedirect,
 } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { generateClassName } from 'helpers/utilities';
+import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import * as storage from 'helpers/storage';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ---- Types ----- //
@@ -24,6 +24,7 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
   canClick?: boolean,
   buttonText?: string,
@@ -42,6 +43,7 @@ function payWithPayPal(props: PropTypes) {
         props.amount,
         props.referrerAcquisitionData,
         props.isoCountry,
+        props.countryGroupId,
         props.errorHandler,
         props.abParticipations,
       );

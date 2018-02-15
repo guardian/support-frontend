@@ -21,6 +21,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from '../helpers/flashSale';
 
@@ -56,11 +57,50 @@ type PropTypes = {
   changeContribOneOffAmount: (string) => void,
   changeContribAmount: (string) => void,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   products: Array<Product>
 };
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return {
+    contribType: state.page.type,
+    contribAmount: state.page.amount,
+    contribError: state.page.error,
+    intCmp: state.common.referrerAcquisitionData.campaignCode,
+    campaign: state.common.campaign,
+    otherQueryParams: state.common.otherQueryParams,
+    isoCountry: state.common.country,
+    countryGroupId: state.common.countryGroup,
+    currency: state.common.currency,
+    abTests: state.common.abParticipations,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleContribType: (period: Contrib) => {
+      dispatch(changeContribType(period));
+    },
+    changeContribAnnualAmount: (value: string) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    },
+    changeContribMonthlyAmount: (value: string) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    },
+    changeContribOneOffAmount: (value: string) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    },
+    changeContribAmount: (value: string) => {
+      dispatch(changeContribAmount({ value, userDefined: true }));
+    },
+  };
+}
 
 type ContribAttrs = {
   heading: string,
@@ -296,6 +336,7 @@ function ContributionBundle(props: PropTypes) {
         amount={Number(props.contribAmount.oneOff.value)}
         referrerAcquisitionData={props.referrerAcquisitionData}
         isoCountry={props.isoCountry}
+        countryGroupId={props.countryGroupId}
         // eslint-disable-next-line no-alert
         errorHandler={e => alert(e)}
         abParticipations={props.abTests}
@@ -379,47 +420,6 @@ function StackedBundle(props: PropTypes) {
     </section>
   );
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-  return {
-    contribType: state.page.type,
-    contribAmount: state.page.amount,
-    contribError: state.page.error,
-    intCmp: state.common.referrerAcquisitionData.campaignCode,
-    campaign: state.common.campaign,
-    otherQueryParams: state.common.otherQueryParams,
-    isoCountry: state.common.country,
-    currency: state.common.currency,
-    abTests: state.common.abParticipations,
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
-    },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
-    },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
-    },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
-    },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
-    },
-  };
-
-}
-
 
 // ----- Exports ----- //
 

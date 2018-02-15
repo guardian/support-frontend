@@ -23,6 +23,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ContributionSelection from './contributionSelectionNewDesign';
 import GraveError from './graveErrorNewDesign';
@@ -49,6 +50,7 @@ import {
 type PropTypes = {
   contributionType: ContributionType,
   country: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   selectedAmount: Amount,
   contributionError: ContributionError,
@@ -72,6 +74,7 @@ function mapStateToProps(state) {
   return {
     contributionType: state.page.type,
     country: state.common.country,
+    countryGroupId: state.common.countryGroup,
     currency: state.common.currency,
     selectedAmount: state.page.amount[contributionTypeCamelCase],
     contributionError: state.page.error,
@@ -159,6 +162,7 @@ function payPalButton(props: PropTypes) {
       abParticipations={props.abTests}
       referrerAcquisitionData={props.referrerAcquisitionData}
       isoCountry={props.country}
+      countryGroupId={props.countryGroupId}
       errorHandler={props.setPayPalError}
       canClick={!props.contributionError}
       buttonText="Contribute with PayPal"
@@ -222,6 +226,7 @@ function Contribute(props: PropTypes) {
         <ContributionSelection
           contributionType={props.contributionType}
           country={props.country}
+          countryGroupId={props.countryGroupId}
           currency={props.currency}
           selectedAmount={props.selectedAmount}
           toggleAmount={getAmountToggle(props)}

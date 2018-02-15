@@ -15,9 +15,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { checkoutError } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
+
 
 // ----- Types ----- //
 
@@ -31,6 +33,7 @@ type PropTypes = {
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
   checkoutError: (?string) => void,
   abParticipations: Participations,
   currency: Currency,
@@ -38,6 +41,32 @@ type PropTypes = {
   isPostDeploymentTestUser: boolean,
 };
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  return {
+    isTestUser: state.page.user.isTestUser || false,
+    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+    email: state.page.user.email,
+    error: state.page.oneoffContrib.error,
+    isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
+    amount: state.page.oneoffContrib.amount,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    isoCountry: state.common.country,
+    countryGroupId: state.common.countryGroup,
+    abParticipations: state.common.abParticipations,
+    currency: state.page.oneoffContrib.currency,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    checkoutError: (message: ?string) => {
+      dispatch(checkoutError(message));
+    },
+  };
+}
 
 // ----- Functions ----- //
 
@@ -71,7 +100,6 @@ function formValidation(
 
 
 // ----- Component ----- //
-
 
 /*
  * WARNING: we are using the React context here to be able to pass the getState function
@@ -110,6 +138,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         amount={props.amount}
         referrerAcquisitionData={props.referrerAcquisitionData}
         isoCountry={props.isoCountry}
+        countryGroupId={props.countryGroupId}
         errorHandler={props.checkoutError}
         abParticipations={props.abParticipations}
       />
@@ -117,37 +146,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   );
 
 }
-
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-  return {
-    isTestUser: state.page.user.isTestUser || false,
-    isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: state.page.user.email,
-    error: state.page.oneoffContrib.error,
-    isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
-    amount: state.page.oneoffContrib.amount,
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
-    isoCountry: state.common.country,
-    abParticipations: state.common.abParticipations,
-    currency: state.page.oneoffContrib.currency,
-  };
-
-}
-
-function mapDispatchToProps(dispatch) {
-
-  return {
-    dispatch,
-    checkoutError: (message: ?string) => {
-      dispatch(checkoutError(message));
-    },
-  };
-
-}
-
 
 // ----- Exports ----- //
 

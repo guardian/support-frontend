@@ -13,6 +13,7 @@ import { errorMessage as contributionsErrorMessage } from 'helpers/contributions
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Amount,
   Contrib as ContributionType,
@@ -35,6 +36,7 @@ import {
 type PropTypes = {
   contributionType: ContributionType,
   country: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   selectedAmount: Amount,
   toggleAmount: string => void,
@@ -52,7 +54,6 @@ function getClassName(contributionType: ContributionType) {
     'component-contribution-selection',
     getContributionTypeClassName(contributionType),
   );
-
 }
 
 
@@ -73,7 +74,11 @@ function ContributionSelection(props: PropTypes) {
       <div className="component-contribution-selection__amount">
         <RadioToggle
           name="contribution-amount-toggle"
-          radios={getContributionAmounts(props.contributionType, props.currency)}
+          radios={getContributionAmounts(
+            props.contributionType,
+            props.currency,
+            props.countryGroupId,
+          )}
           checked={props.selectedAmount.value}
           toggleAction={props.toggleAmount}
         />

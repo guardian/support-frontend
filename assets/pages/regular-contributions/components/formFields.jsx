@@ -16,12 +16,13 @@ import {
 
 import { setCountry } from 'helpers/page/pageActions';
 
-import { euroCountries } from 'helpers/internationalisation/currency';
 import { usStates } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -33,7 +34,7 @@ type PropTypes = {
   countryUpdate: (value: string) => void,
   firstName: string,
   lastName: string,
-  currency: IsoCurrency,
+  countryGroup: CountryGroupId,
   country: IsoCountry,
 };
 
@@ -44,7 +45,7 @@ function mapStateToProps(state) {
   return {
     firstName: state.page.user.firstName,
     lastName: state.page.user.lastName,
-    currency: state.common.currency.iso,
+    countryGroup: state.common.countryGroup,
     country: state.common.country,
   };
 
@@ -72,9 +73,9 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Functions ----- //
 
-function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
+function stateDropdown(countryGroup: CountryGroupId, stateUpdate: UsState => void) {
 
-  if (currency !== 'USD') {
+  if (countryGroup !== 'UnitedStates') {
     return null;
   }
 
@@ -88,21 +89,22 @@ function stateDropdown(currency: IsoCurrency, stateUpdate: UsState => void) {
 }
 
 function euroCountryDropdown(
-  currency: IsoCurrency,
+  countryGroup: CountryGroupId,
   countryUpdate: string => void,
   country: IsoCountry,
 ) {
 
-  if (currency !== 'EUR') {
+  if (countryGroup !== 'EURCountries') {
     return null;
   }
 
-  const options: SelectOption[] = Object.keys(euroCountries).map((countryCode: IsoCountry) =>
-    ({
-      value: countryCode,
-      text: euroCountries[countryCode],
-      selected: countryCode === country,
-    }));
+  const options: SelectOption[] =
+    countryGroups[countryGroup].countries.map((countryCode: IsoCountry) =>
+      ({
+        value: countryCode,
+        text: countries[countryCode],
+        selected: countryCode === country,
+      }));
 
   return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
 }
@@ -128,8 +130,8 @@ function NameForm(props: PropTypes) {
         onChange={props.lastNameUpdate}
         required
       />
-      {stateDropdown(props.currency, props.stateUpdate)}
-      {euroCountryDropdown(props.currency, props.countryUpdate, props.country)}
+      {stateDropdown(props.countryGroup, props.stateUpdate)}
+      {euroCountryDropdown(props.countryGroup, props.countryUpdate, props.country)}
     </form>
   );
 }
