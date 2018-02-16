@@ -1,0 +1,38 @@
+.component-simple-header {
+  background-color: gu-colour(nav-background-colour);
+
+  .svg-guardian-logo {
+    height: 100%;
+  }
+
+  border-bottom: 1px solid gu-colour(nav-rule);
+}
+
+.component-simple-header__link {
+  float: right;
+  height: 100%;
+}
+
+.component-simple-header__content {
+  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+  height: 68px;
+
+  @include mq($from: mobileMedium) {
+    height: 78px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    height: 85px;
+    padding-left: $gu-h-spacing;
+    padding-right: $gu-h-spacing;
+  }
+
+  @include mq($from: phablet) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @include mq($from: tablet) {
+    height: 104px;
+  }
+}
