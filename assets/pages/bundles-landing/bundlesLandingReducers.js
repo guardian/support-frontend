@@ -2,9 +2,10 @@
 
 // ----- Imports ----- //
 
-import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
+import type { CommonState } from 'helpers/page/page';
+import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 import type { Action } from './bundlesLandingActions';
 
 
@@ -17,6 +18,11 @@ export type ContribState = {
   payPalError: string,
 };
 
+
+export type State ={
+  common: CommonState,
+  page: ContribState,
+}
 
 // ----- Setup ----- //
 
