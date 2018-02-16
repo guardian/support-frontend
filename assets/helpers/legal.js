@@ -16,7 +16,7 @@ const termsLinks: {
 
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 
-const copyrightNotice = `\u00A9 2017 Guardian News and Media Limited or its
+const copyrightNotice = `\u00A9 ${(new Date()).getFullYear()} Guardian News and Media Limited or its
   affiliated companies. All rights reserved.`;
 
 
