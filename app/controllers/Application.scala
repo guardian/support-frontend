@@ -101,6 +101,26 @@ class Application(
     }
   }
 
+  def contributionsLandingUS(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
+    if (newDesigns == "circles-garnett") {
+      Ok(views.html.contributionsLanding(
+        title,
+        description = Some(stringsConfig.contributionLandingDescription),
+        "contributions-landing-page-us",
+        "contributionsLandingPageUS.js",
+        contributionsPayPalEndpoint
+      ))
+    } else {
+      Ok(views.html.contributionsLanding(
+        title,
+        description = Some(stringsConfig.contributionLandingDescription),
+        id,
+        js,
+        contributionsPayPalEndpoint
+      ))
+    }
+  }
+
   def regularContributionsPending(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
     if (newDesigns == "circles-garnett") {
       Ok(views.html.react(title, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js"))
