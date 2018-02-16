@@ -4,11 +4,13 @@ import cats.kernel.Semigroup
 
 // Models errors at App initialization
 // e.g invalid config, errors with building required services
-case class InitializationError(message: String) extends Exception {
-  override val getMessage: String = message
+// TODO: should this take an optional underlying error?
+case class InitializationError(message: String, underlying: Throwable = null) extends Exception {
+  override val getMessage: String = Option(underlying).fold(message)(err => s"$message - ${err.getMessage}")
 }
 
 object InitializationError {
+
 
   // Allows InitializationError to used as the left type parameter of Validated[A, B]
   // Means initialization errors can be accumulated.

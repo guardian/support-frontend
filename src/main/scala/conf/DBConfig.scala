@@ -3,9 +3,7 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import play.api.Configuration
 
-import conf.PlayConfigurationUpdater.ConfigurationEncoder
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
@@ -26,29 +24,10 @@ object DBConfig {
       (
         validated(env),
         validate("url"),
-        validate("driver"),
+        validated("org.postgresql.Driver"),
         validate("username"),
         validate("password")
       ).mapN(DBConfig.apply)
     }
   }
-
-  // Allows db config to be merged into the Play application config.
-  // This means Play can still manage the connection pools for the different database instances,
-  // whilst still managing the database config through the AWS parameter store.
-  // See https://www.playframework.com/documentation/2.6.x/SettingsJDBC
-  implicit val dbConfigConfigurationEncoder: ConfigurationEncoder[DBConfig] =
-    ConfigurationEncoder.instance { config =>
-      import config._
-      Configuration(
-        "db" -> Map(
-          env.entryName -> Map(
-            "url" -> url,
-            "driver" -> driver,
-            "username" -> username,
-            "password" -> password
-          )
-        )
-      )
-    }
 }

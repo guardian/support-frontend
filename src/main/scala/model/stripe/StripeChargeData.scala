@@ -6,4 +6,5 @@ import model.Currency
 
 // Data required to create a charge.
 // https://stripe.com/docs/api/java#create_charge
-@JsonCodec case class StripeChargeData(currency: Currency, amount: Int, source: String)
+// TODO: note about email
+@JsonCodec case class StripeChargeData(currency: Currency, amount: Int, source: String, receiptEmail: String)

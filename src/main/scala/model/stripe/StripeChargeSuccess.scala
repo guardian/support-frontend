@@ -5,9 +5,14 @@ import io.circe.generic.JsonCodec
 
 // Represents a successful Stripe charge.
 // Includes all fields of the interest to the client.
-@JsonCodec case class StripeChargeSuccess private (email: Option[String])
+// TODO: created and identityId fields
+@JsonCodec case class StripeChargeSuccess private (email: String, currency: String, amount: Long)
 
 object StripeChargeSuccess {
   def fromStripeCharge(charge: Charge): StripeChargeSuccess =
-    StripeChargeSuccess(Option(charge.getReceiptEmail))
+    StripeChargeSuccess(
+      email = charge.getReceiptEmail,
+      currency = charge.getCurrency,
+      amount = charge.getAmount
+    )
 }
