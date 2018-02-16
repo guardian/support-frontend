@@ -24,6 +24,14 @@ export type State = {
   error: ?ContributionError,
 };
 
+type ParsedCustomAmount = {|
+  error: ContributionError,
+  customAmount: null,
+|} | {|
+  error: null,
+  customAmount: number,
+|};
+
 
 // ----- Setup ----- //
 
@@ -59,18 +67,33 @@ function updatePredefinedAmount(state: State, newAmount: string): State {
 }
 
 // Checks if the custom amount is acceptable, returns a specific error if not.
-function parseCustomAmount(state: State, customAmount: string): {
-  error: ?ContributionError,
-  customAmount: ?number,
-} {
+function parseCustomAmount(
+  contributionType: ContributionType,
+  customAmount: string,
+): ParsedCustomAmount {
 
-  const { error, amount } = parseContribution(customAmount, state.contributionType);
+  const { error, amount } = parseContribution(customAmount, contributionType);
 
   if (error) {
     return { error, customAmount: null };
   }
 
   return { error: null, customAmount: amount };
+
+}
+
+// Re-parses the custom amount when the contribution type is changed.
+function checkCustomAmount(
+  isCustomAmount: boolean,
+  customAmount: ?number,
+  contributionType: ContributionType,
+): ?ParsedCustomAmount {
+
+  if (isCustomAmount && customAmount) {
+    return parseCustomAmount(contributionType, customAmount.toString());
+  }
+
+  return null;
 
 }
 
@@ -109,11 +132,23 @@ function contributionSelectionReducerFor(scope: string): Function {
 
     switch (action.type) {
       case 'SET_CONTRIBUTION_TYPE':
-        return { ...state, contributionType: action.contributionType };
+
+        return {
+          ...state,
+          contributionType: action.contributionType,
+          ...checkCustomAmount(state.isCustomAmount, state.customAmount, action.contributionType),
+        };
+
       case 'SET_AMOUNT':
         return updatePredefinedAmount(state, action.amount);
       case 'SET_CUSTOM_AMOUNT':
-        return { ...state, isCustomAmount: true, ...parseCustomAmount(state, action.amount) };
+
+        return {
+          ...state,
+          isCustomAmount: true,
+          ...parseCustomAmount(state.contributionType, action.amount),
+        };
+
       default:
         return state;
     }
