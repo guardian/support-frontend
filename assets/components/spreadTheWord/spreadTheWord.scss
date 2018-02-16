@@ -56,7 +56,7 @@
 .component-spread-the-word__description {
   margin-bottom: $gu-v-spacing * 2;
 
-  @include mq($from: desktop) {
-    width: 60%;
+  @include mq($from: phablet) {
+    width: 500px;
   }
 }

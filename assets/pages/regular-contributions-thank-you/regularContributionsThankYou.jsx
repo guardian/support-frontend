@@ -14,6 +14,8 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
+import EmailConfirmation from './components/emailConfirmation';
+
 
 // ----- Page Startup ----- //
 
@@ -29,6 +31,7 @@ const content = (
       highlights={['Thank you']}
       headings={['for a valuable', 'contribution']}
     />
+    <EmailConfirmation />
     <DotcomCta />
     <QuestionsContact />
     <SpreadTheWord />

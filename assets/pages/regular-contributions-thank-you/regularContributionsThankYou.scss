@@ -1,7 +1,29 @@
 #regular-contributions-thank-you-page {
 
+  .component-email-confirmation {
+    margin-bottom: $gu-v-spacing * 2;
+
+    &:before {
+      @include multiline(4, gu-colour(garnett-neutral-4));
+      background-color: #fff;
+      display: block;
+      content: '';
+    }
+
+    .component-page-section__header {
+      @include dropline;
+    }
+
+    .component-page-section__body {
+      padding-top: $gu-v-spacing / 2;
+
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
+    }
+  }
+
   .component-spread-the-word {
     @include gu-content-filler;
   }
-
 }
