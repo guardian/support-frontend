@@ -122,9 +122,11 @@ function getAmount(state: State): string {
 
 // ----- Reducer ----- //
 
-function contributionSelectionReducerFor(scope: string): Function {
+function contributionSelectionReducerFor(scope: string, stateOverrides?: Object = {}): Function {
 
-  function contributionSelectionReducer(state: State = initialState, action: Action): State {
+  const updatedInitialState = { ...initialState, ...stateOverrides };
+
+  function contributionSelectionReducer(state: State = updatedInitialState, action: Action): State {
 
     if (action.scope !== scope) {
       return state;
