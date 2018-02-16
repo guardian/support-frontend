@@ -2,6 +2,7 @@ package backend
 
 import cats.syntax.apply._
 import cats.syntax.either._
+import com.typesafe.scalalogging.StrictLogging
 import util.EnvironmentBasedBuilder
 
 import conf.{ConfigLoader, StripeConfig}
@@ -12,17 +13,17 @@ import services.{DatabaseProvider, DatabaseService, StripeService}
 
 // Provides methods required by the Stripe controller
 // TODO: include dependency on acquisition producer service
-class StripeBackend(stripeService: StripeService, databaseService: DatabaseService) {
+class StripeBackend(stripeService: StripeService, databaseService: DatabaseService) extends StrictLogging {
 
   // TODO: send acquisition event
   def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess] =
-    stripeService.createCharge(data)
-      .map { success =>
-        val contributionData = ContributionData.fromStripeChargeSuccess(success)
-        // The result the client receives as to whether the charge is successful,
-        // should not be dependent on the insertion of the contribution data.
-        databaseService.insertContributionData(contributionData).leftMap(err => null) // TODO: enable logging
-        success
+    stripeService.createCharge(data.paymentData)
+      // No flat map here - the result the client receives as to whether the charge is successful,
+      // should not be dependent on the insertion of the contribution data.
+      .map { charge =>
+        val contributionData = ContributionData.fromStripeCharge(data.identityData.identityId, charge)
+        databaseService.insertContributionData(contributionData)
+        StripeChargeSuccess.fromStripeCharge(charge)
       }
 }
 

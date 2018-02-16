@@ -1,6 +1,7 @@
 package controllers
 
 import akka.util.ByteString
+import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax._
 import io.circe.Encoder
 import play.api.http.{MimeTypes, Writeable}
@@ -17,14 +18,15 @@ object JsonWriteableOps {
   }
 }
 
-trait JsonUtils { self: Circe =>
+trait JsonUtils { self: Circe with StrictLogging =>
 
   import JsonWriteableOps._
 
   protected implicit def jsonWriteable[A : Encoder]: Writeable[A] =
     Writeable(_.asByteString, Some(MimeTypes.JSON))
 
-  override protected def onCirceError(e: io.circe.Error): Result = {
-    Results.BadRequest(ResultBody.Error(e.getMessage))
+  override protected def onCirceError(err: io.circe.Error): Result = {
+    logger.error("unable to decode JSON", err)
+    Results.BadRequest(ResultBody.Error(err.getMessage))
   }
 }

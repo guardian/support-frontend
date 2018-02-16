@@ -1,17 +1,18 @@
 package controllers
 
 import backend.StripeBackend
+import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 
 import model.stripe.StripeChargeData
-import model.{RequestType, ResultBody}
+import model.ResultBody
 
 class StripeController(
     controllerComponents: ControllerComponents,
     stripeBackendProvider: RequestBasedProvider[StripeBackend]
-  ) extends AbstractController(controllerComponents) with Circe with JsonUtils {
+  ) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
   // Other considerations:
   // - CORS
   // - Test users
@@ -126,7 +127,7 @@ class StripeController(
       .createCharge(request.body)
       .fold(
         err => InternalServerError(ResultBody.Error(err.getMessage)),
-        charge => Ok(ResultBody.Success(charge))
+        charge => Ok(ResultBody.Success(charge)) //  TODO: fixme
       )
   }
 }
