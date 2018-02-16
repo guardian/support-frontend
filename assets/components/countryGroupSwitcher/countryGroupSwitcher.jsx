@@ -15,7 +15,7 @@ import type { SelectOption } from 'components/selectInput/selectInput';
 type PropTypes = {
   countryGroupIds: Array<CountryGroupId>,
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: (CountryGroupId) => void,
+  onCountryGroupSelect: (String) => void,
 };
 
 
@@ -27,7 +27,7 @@ function CountryGroupSwitcher(props: PropTypes) {
     props.countryGroupIds.map((countryGroupId: CountryGroupId) =>
       ({
         value: countryGroupId,
-        text: countryGroups[countryGroupId],
+        text: countryGroups[countryGroupId].name,
         selected: countryGroupId === props.selectedCountryGroup,
       }));
 
