@@ -9,9 +9,9 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type PropTypes = {
-  countryGroupIds?: ?Array<CountryGroupId>,
-  selectedCountryGroup?: ?CountryGroupId,
-  onCountryGroupSelect?: ?(String) => void,
+  countryGroupIds: Array<CountryGroupId>,
+  selectedCountryGroup: CountryGroupId,
+  onCountryGroupSelect: (String) => void,
 };
 
 
