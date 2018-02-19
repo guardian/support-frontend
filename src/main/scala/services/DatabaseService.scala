@@ -56,6 +56,26 @@ class PostgresDatabaseService(database: Database) extends DatabaseService with S
         ${data.receiptEmail}
       );
 
+      INSERT INTO payment_hooks (
+        contributionid,
+        paymentid,
+        provider,
+        created,
+        currency,
+        amount,
+        status,
+        email
+      ) VALUES (
+        ${data.contributionId}::uuid,
+        ${data.paymentId},
+        ${data.paymentProvider.entryName}::paymentProvider,
+        ${data.created},
+        ${data.currency},
+        ${data.amount},
+        ${data.paymentStatus.entryName}::paymentStatus,
+        ${data.receiptEmail}
+      );
+
       COMMIT;
     """
 
