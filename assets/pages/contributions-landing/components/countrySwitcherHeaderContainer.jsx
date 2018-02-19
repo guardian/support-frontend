@@ -4,10 +4,11 @@
 
 import { connect } from 'react-redux';
 
-import HeaderWitchCountrySwitcher from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
+import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { State } from '../bundlesLandingReducers';
+import { setCountryGroup } from 'helpers/page/pageActions';
+import type { State } from '../contributionsLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
@@ -15,21 +16,28 @@ const availableCountriesGroups: CountryGroupId[] =
 
 // ----- Functions ----- //
 
-function handleCountryGroupChange(value: string): void {
-  switch (value) {
-    case 'UnitedStates':
-      window.location.href = '/us';
-      break;
-    case 'AUDCountries':
-      window.location.href = '/au';
-      break;
-    case 'EURCountries':
-      window.location.href = '/eu';
-      break;
-    default:
-  }
-}
+function handleCountryGroupChange(dispatch) {
+  return (value: string) => {
 
+    if (value === 'GBPCountries') {
+      window.location.href = '/uk';
+    }
+
+    switch (value) {
+      case 'UnitedStates':
+        dispatch(setCountryGroup('UnitedStates'));
+        break;
+      case 'AUDCountries':
+        dispatch(setCountryGroup('AUDCountries'));
+        break;
+      case 'EURCountries':
+        dispatch(setCountryGroup('EURCountries'));
+        break;
+      default:
+    }
+
+  };
+}
 
 // ----- State Maps ----- //
 
@@ -38,11 +46,17 @@ function mapStateToProps(state: State) {
   return {
     countryGroupIds: availableCountriesGroups,
     selectedCountryGroup: state.common.countryGroup,
-    onCountryGroupSelect: handleCountryGroupChange,
+  };
+}
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onCountryGroupSelect: handleCountryGroupChange(dispatch),
   };
 }
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(HeaderWitchCountrySwitcher);
+export default connect(mapStateToProps, mapDispatchToProps)(CountrySwitcherHeader);
