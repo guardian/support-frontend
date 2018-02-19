@@ -94,7 +94,7 @@ object StripeChargeData {
     }
   }
 
-  // Use a decoder which falls back to the old format expected by the contribution-frontend API,
+  // Use a decoder which falls back to the format expected by the contribution-frontend API.
   // Useful if the client hasn't sent Stripe charge data in the new format -
   // e.g. if a user is making a contribution through an old version of the native App.
   implicit val stripeChargeDataDecoder: Decoder[StripeChargeData] =
