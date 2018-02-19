@@ -18,7 +18,7 @@ import type { SelectOption } from 'components/selectInput/selectInput';
 type PropTypes = {
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: Function,
+  onCountryGroupSelect: (string) => void,
 };
 
 
