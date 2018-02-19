@@ -54,7 +54,7 @@ const content = (
       <WhySupport />
       <ReadyToSupport ctaUrl="#" />
       <PatronsEventsContainer />
-      <Footer />
+      <Footer disclaimer privacyPolicy />
     </div>
   </Provider>
 );

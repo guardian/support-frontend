@@ -46,7 +46,7 @@ const content = (
           PayPalButton={PayPalContributionButtonContainer}
         />
       </Contribute>
-      <Footer />
+      <Footer disclaimer />
     </div>
   </Provider>
 );

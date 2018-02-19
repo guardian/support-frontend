@@ -8,6 +8,7 @@ import type { Node } from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import {
   getSpokenType,
@@ -72,6 +73,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
           onClick={props.resetError}
         />
         <ErrorMessage message={props.error} />
+        <TermsPrivacy country={props.country} />
       </div>
     );
 
