@@ -11,7 +11,7 @@ import type { State } from '../bundlesLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'AUDCountries', 'EURCountries'];
+  ['GBPCountries', 'UnitedStates'];
 
 // ----- Functions ----- //
 
