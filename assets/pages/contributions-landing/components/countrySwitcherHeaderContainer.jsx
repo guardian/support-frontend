@@ -20,7 +20,7 @@ function handleCountryGroupChange(dispatch) {
   return (value: string) => {
 
     if (value === 'GBPCountries') {
-      window.location.href = '/uk';
+      window.location.pathname = '/uk';
     }
 
     switch (value) {

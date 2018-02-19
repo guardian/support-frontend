@@ -18,13 +18,13 @@ const availableCountriesGroups: CountryGroupId[] =
 function handleCountryGroupChange(value: string): void {
   switch (value) {
     case 'UnitedStates':
-      window.location.href = '/us';
+      window.location.pathname = '/us';
       break;
     case 'AUDCountries':
-      window.location.href = '/au';
+      window.location.pathname = '/au';
       break;
     case 'EURCountries':
-      window.location.href = '/eu';
+      window.location.pathname = '/eu';
       break;
     default:
   }
