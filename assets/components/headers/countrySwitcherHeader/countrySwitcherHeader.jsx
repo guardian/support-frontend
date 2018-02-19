@@ -18,14 +18,14 @@ type PropTypes = {
 // ----- Component ----- //
 
 const CountrySwitcherHeader = (props: PropTypes) => (
-  <header className="component-simple-header">
-    <div className="component-simple-header__content gu-header-margin">
+  <header className="component-country-switcher-header">
+    <div className="component-country-switcher-header__content gu-header-margin">
       <CountryGroupSwitcher
         countryGroupIds={props.countryGroupIds}
         selectedCountryGroup={props.selectedCountryGroup}
         onCountryGroupSelect={props.onCountryGroupSelect}
       />
-      <a className="component-simple-header__link" href="https://www.theguardian.com">
+      <a className="component-country-switcher-header__link" href="https://www.theguardian.com">
         <div className="accessibility-hint">The guardian logo</div>
         <SvgGuardianLogo />
       </a>

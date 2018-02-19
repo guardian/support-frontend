@@ -1,4 +1,4 @@
-.component-simple-header {
+.component-country-switcher-header {
   background-color: gu-colour(nav-background-colour);
 
   .svg-guardian-logo {
@@ -8,12 +8,12 @@
   border-bottom: 1px solid gu-colour(nav-rule);
 }
 
-.component-simple-header__link {
+.component-country-switcher-header__link {
   float: right;
   height: 100%;
 }
 
-.component-simple-header__content {
+.component-country-switcher-header__content {
   padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
   height: 68px;
 
