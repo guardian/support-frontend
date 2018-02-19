@@ -23,7 +23,8 @@ type PropTypes = {
   options: SelectOption[],
   onChange: (string) => void,
   required?: boolean,
-  id?: string
+  id?: string,
+  className?: string,
 };
 
 
@@ -37,7 +38,7 @@ export default function SelectInput(props: PropTypes) {
   return (
     <select
       id={props.id}
-      className="component-select-input"
+      className={props.className}
       required={props.required}
       onChange={event => props.onChange(event.target.value)}
     >
@@ -53,4 +54,5 @@ export default function SelectInput(props: PropTypes) {
 SelectInput.defaultProps = {
   required: false,
   id: null,
+  className: 'component-select-input',
 };
