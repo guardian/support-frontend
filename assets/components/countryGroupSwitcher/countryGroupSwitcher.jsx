@@ -6,6 +6,8 @@ import React from 'react';
 
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import SelectInput from 'components/selectInput/selectInput';
+import { SvgGlobe } from 'components/svg/svg';
+import { currencies } from 'helpers/internationalisation/currency';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SelectOption } from 'components/selectInput/selectInput';
@@ -28,11 +30,16 @@ function CountryGroupSwitcher(props: PropTypes) {
     props.countryGroupIds.map((countryGroupId: CountryGroupId) =>
       ({
         value: countryGroupId,
-        text: countryGroups[countryGroupId].name,
+        text: `${countryGroups[countryGroupId].name} (${currencies[countryGroups[countryGroupId].currency].glyph})`,
         selected: countryGroupId === props.selectedCountryGroup,
       }));
 
-  return <SelectInput id="qa-country-group-dropdown" onChange={props.onCountryGroupSelect} options={options} />;
+  return (
+    <div className="component-country-group-switcher">
+      <SvgGlobe />
+      <SelectInput id="qa-country-group-dropdown" className="component-country-group-switcher__selector" onChange={props.onCountryGroupSelect} options={options} />
+    </div>
+  );
 }
 
 
