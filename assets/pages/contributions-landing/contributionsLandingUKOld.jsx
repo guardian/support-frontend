@@ -7,7 +7,6 @@ import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 
@@ -16,6 +15,8 @@ import { renderPage } from 'helpers/render';
 
 import { createContributionLandingReducer } from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
+
+import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
 import ContributionsBundleContent from './components/contributionsBundleContent';
 
 
@@ -35,7 +36,7 @@ saveContext(store.dispatch);
 const content = (
   <Provider store={store}>
     <div className="gu-content">
-      <SimpleHeader />
+      <CountrySwitcherHeaderContainer />
       <section className="contributions-bundle">
         <ContributionsBundleContent />
       </section>

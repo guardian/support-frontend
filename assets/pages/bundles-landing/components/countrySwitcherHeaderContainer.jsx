@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import HeaderWitchCountrySwitcher from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
+import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { State } from '../bundlesLandingReducers';
@@ -15,7 +15,7 @@ const availableCountriesGroups: CountryGroupId[] =
 
 // ----- Functions ----- //
 
-const handleCountryGroupChange = (value: string) => {
+function handleCountryGroupChange(value: string): void {
   switch (value) {
     case 'UnitedStates':
       window.location.href = '/us';
@@ -28,7 +28,7 @@ const handleCountryGroupChange = (value: string) => {
       break;
     default:
   }
-};
+}
 
 
 // ----- State Maps ----- //
@@ -45,4 +45,4 @@ function mapStateToProps(state: State) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(HeaderWitchCountrySwitcher);
+export default connect(mapStateToProps)(CountrySwitcherHeader);

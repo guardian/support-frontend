@@ -5,6 +5,7 @@
 import type { Contrib, ContribError, Amounts } from 'helpers/contributions';
 
 import { parse as parseContribution } from 'helpers/contributions';
+import type { CommonState } from 'helpers/page/page';
 import type { Action } from './contributionsLandingActions';
 
 
@@ -17,6 +18,11 @@ export type ContribState = {
   payPalError: ?string,
   context: ?boolean,
 };
+
+export type State ={
+  common: CommonState,
+  page: ContribState,
+}
 
 
 // ----- Reducers ----- //
