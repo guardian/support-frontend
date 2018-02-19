@@ -9,15 +9,15 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type PropTypes = {
-  countryGroupIds: Array<CountryGroupId>,
+  countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: (String) => void,
+  onCountryGroupSelect: (string) => void,
 };
 
 
 // ----- Component ----- //
 
-const HeaderWithCountrySwitcher = (props: PropTypes) => (
+const CountrySwitcherHeader = (props: PropTypes) => (
   <header className="component-simple-header">
     <CountryGroupSwitcher
       countryGroupIds={props.countryGroupIds}
@@ -33,4 +33,4 @@ const HeaderWithCountrySwitcher = (props: PropTypes) => (
   </header>
 );
 
-export default HeaderWithCountrySwitcher;
+export default CountrySwitcherHeader;
