@@ -12,10 +12,11 @@ import type { SelectOption } from 'components/selectInput/selectInput';
 
 // ----- Props ----- //
 
+
 type PropTypes = {
-  countryGroupIds: Array<CountryGroupId>,
+  countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: (String) => void,
+  onCountryGroupSelect: Function,
 };
 
 
@@ -31,7 +32,7 @@ function CountryGroupSwitcher(props: PropTypes) {
         selected: countryGroupId === props.selectedCountryGroup,
       }));
 
-  return <SelectInput id="qa-country-dropdown" onChange={props.onCountryGroupSelect} options={options} />;
+  return <SelectInput id="qa-country-group-dropdown" onChange={props.onCountryGroupSelect} options={options} />;
 }
 
 
