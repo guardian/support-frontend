@@ -5,6 +5,7 @@
 import { getQueryParameter } from 'helpers/url';
 import * as cookie from 'helpers/cookie';
 import { countryGroups } from './countryGroup';
+import type { CountryGroupId } from './countryGroup';
 
 
 // ----- Setup ----- //
@@ -343,6 +344,18 @@ function fromString(s: string): ?IsoCountry {
   return null;
 }
 
+function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
+  switch (countryGroupId) {
+    case 'GBPCountries':
+      return 'GB';
+    case 'AUDCountries':
+      return 'AU';
+    case 'UnitedStates':
+      return 'US';
+    default: return null;
+  }
+}
+
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
   if (path === '/uk' || path.startsWith('/uk/')) {
     return 'GB';
@@ -382,10 +395,10 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
-function handleEuroCountry(): ?IsoCountry {
+function handleEuroCountry(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
   const path = window.location.pathname;
 
-  if (path !== '/eu' && !path.startsWith('/eu/')) {
+  if (path !== '/eu' && !path.startsWith('/eu/') && countryGroupId !== 'EURCountries') {
     return null;
   }
 
@@ -398,8 +411,8 @@ function handleEuroCountry(): ?IsoCountry {
   return 'DE';
 }
 
-function detect(): IsoCountry {
-  const country = handleEuroCountry() || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
+  const country = handleEuroCountry(countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
   setCountry(country);
   return country;
 }

@@ -37,6 +37,13 @@ export const EUR: Currency = {
   glyph: '€',
 };
 
+const currencies = {
+  GBP,
+  USD,
+  AUD,
+  EUR,
+};
+
 const spokenCurrencies = {
   GBP: {
     singular: 'pound',
@@ -103,4 +110,5 @@ function detect(countryGroup: CountryGroupId): Currency {
 export {
   detect,
   spokenCurrencies,
+  currencies,
 };

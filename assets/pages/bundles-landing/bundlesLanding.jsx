@@ -5,18 +5,19 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { getQueryParameter } from 'helpers/url';
 
+import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
 import Introduction from './components/introduction';
 import StackedBundle from './components/stackedBundle';
 import WhySupport from './components/whySupport';
 import WaysOfSupport from './components/waysOfSupport';
 import reducer from './bundlesLandingReducers';
+
 
 // ----- Redux Store ----- //
 
@@ -52,7 +53,7 @@ const whyAndWaysOfSupport = (bundle === 'contribute')
 const content = (
   <Provider store={store}>
     <div className="gu-content">
-      <SimpleHeader />
+      <CountrySwitcherHeaderContainer />
       <Introduction />
       {bundlesSelected}
       {whyAndWaysOfSupport}
