@@ -93,21 +93,24 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
     state: CommonState = initialState,
     action: Action,
   ): CommonState {
-
     switch (action.type) {
-
       case 'SET_COUNTRY':
         return Object.assign({}, state, { country: action.country });
-
+      case 'SET_COUNTRY_GROUP':
+        return Object.assign(
+          {}, state,
+          {
+            countryGroup: action.countryGroup,
+            currency: detectCurrency(action.countryGroup),
+            country: detectCountry(action.countryGroup),
+          },
+        );
       default:
         return state;
-
     }
-
   }
 
   return commonReducer;
-
 }
 
 // For pages that don't need Redux.
