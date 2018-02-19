@@ -5,7 +5,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import Contribute from 'components/contribute/contribute';
@@ -17,6 +16,7 @@ import pageReducer from './contributionsLandingUKReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
+import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
 
 
 // ----- Redux Store ----- //
@@ -35,7 +35,7 @@ const store = pageInit(
 const content = (
   <Provider store={store}>
     <div className="gu-content">
-      <SimpleHeader />
+      <CountrySwitcherHeaderContainer />
       <CirclesIntroduction
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
