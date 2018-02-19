@@ -1,8 +1,7 @@
 .component-direct-debit-form {
-  width: 500px;
   clear: left;
-  margin-top: 60px;
-
+  margin-top: 80px;
+  margin-left: 20px;
   .component-error-message {
     background-color: transparent;
     color: gu-colour(error);
@@ -34,22 +33,22 @@
 .component-direct-debit-form__field-label {
   display: block;
   font-family: $gu-egyptian-web;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 24px;
-  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 6px;
 }
 
 .component-direct-debit-form__sort-code-field {
   font-family: $gu-sans-web;
   font-size: 14px;
   color: gu-colour(garnett-neutral-1);
-  margin: 0 -2px 20px;
   border: 1px solid gu-colour(garnett-neutral-1);
-  border-radius: 600px;
-  height: $gu-v-spacing * 4;
+  border-radius: 25px;
+  height: 44px;
+  width: 66px;
   padding: 0 $gu-h-spacing;
-  width: 60px;
+  margin-bottom: 22px;
 }
 
 .component-direct-debit-form_sort-code-separator {
@@ -62,12 +61,10 @@
   font-size: 14px;
   font-weight: bold;
   color: black;
-  margin: 0 auto 7px;
   border: 1px solid gu-colour(garnett-neutral-1);
-  border-radius: 600px;
-  height: $gu-v-spacing * 4;
-  padding: 0 $gu-h-spacing;
-  width: 460px;
+  border-radius: 25px;
+  height: 44px;
+  width: 425px;
 }
 
 .component-direct-debit-form__account-holder-confirmation__text {
@@ -86,24 +83,24 @@
 
 .component-direct-debit-form__pay-button {
   background-color: gu-colour(news-garnett-highlight);
-  border: 1px gu-colour(news-garnett-highlight-hover) solid;
-  border-radius: 600px;
+  border: solid 1px gu-colour(news-garnett-highlight-hover);
+  border-radius: 100px;
   color: gu-colour(neutral-1);
   cursor: pointer;
   display: block;
   font-family: $gu-text-sans-web;
   font-size: 14px;
   font-weight: bold;
-  height: $gu-v-spacing * 4;
-  padding-left: $gu-h-spacing;
   line-height: 3;
   position: relative;
   text-align: left;
-  width: 500px;
-  margin-top: $gu-v-spacing;
+  height: 54px;
+  width: 435px;
+  margin-top: 30px;
+  margin-bottom: 40px;
 
   .svg-direct-debit-symbol {
-    margin: 8px 8px 0 -5px;
+    margin: 8px 8px 0 8px;
     float: left;
   }
 
@@ -125,15 +122,12 @@
   }
 }
 
-.component-direct-debit-form__legal__title {
-  font-family: $gu-text-sans-web;
-  font-size: 14px;
-  color: gu-colour(neutral-1);
-  padding-top: $gu-v-spacing;
-}
 .component-direct-debit-form__legal__content {
-
   font-family: $gu-text-sans-web;
   font-size: 12px;
-  color: gu-colour(neutral-1);
+  color: gu-colour(garnett-neutral-2);
+  padding-top: $gu-v-spacing;
+  a {
+    color: gu-colour(garnett-neutral-2);
+  }
 }
