@@ -19,12 +19,12 @@ type PropTypes = {
 
 const CountrySwitcherHeader = (props: PropTypes) => (
   <header className="component-simple-header">
-    <CountryGroupSwitcher
-      countryGroupIds={props.countryGroupIds}
-      selectedCountryGroup={props.selectedCountryGroup}
-      onCountryGroupSelect={props.onCountryGroupSelect}
-    />
     <div className="component-simple-header__content gu-header-margin">
+      <CountryGroupSwitcher
+        countryGroupIds={props.countryGroupIds}
+        selectedCountryGroup={props.selectedCountryGroup}
+        onCountryGroupSelect={props.onCountryGroupSelect}
+      />
       <a className="component-simple-header__link" href="https://www.theguardian.com">
         <div className="accessibility-hint">The guardian logo</div>
         <SvgGuardianLogo />
