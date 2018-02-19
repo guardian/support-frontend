@@ -21,7 +21,7 @@ export type SelectOption = {
 
 type PropTypes = {
   options: SelectOption[],
-  onChange: (value: string) => void,
+  onChange: (string) => void,
   required?: boolean,
   id?: string
 };
