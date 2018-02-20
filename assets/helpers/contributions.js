@@ -132,7 +132,7 @@ function errorMessage(
 
 }
 
-function contribCamelCase(contrib: Contrib): string {
+function getContribKey(contrib: Contrib): string {
 
   switch (contrib) {
     case 'ANNUAL': return 'annual';
@@ -186,7 +186,7 @@ export {
   parseContrib,
   billingPeriodFromContrib,
   errorMessage,
-  contribCamelCase,
+  getContribKey,
   getOneOffName,
   getOneOffSpokenName,
   getContributionTypeClassName,

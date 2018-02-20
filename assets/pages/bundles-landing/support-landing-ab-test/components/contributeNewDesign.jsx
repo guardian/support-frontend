@@ -12,7 +12,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import PayPalContributionButton
   from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
-import { contribCamelCase } from 'helpers/contributions';
+import { getContribKey } from 'helpers/contributions';
 
 import type {
   Amount,
@@ -69,14 +69,14 @@ type PropTypes = {
 
 function mapStateToProps(state) {
 
-  const contributionTypeCamelCase = contribCamelCase(state.page.type);
+  const contributionTypeKey = getContribKey(state.page.type);
 
   return {
     contributionType: state.page.type,
     country: state.common.country,
     countryGroupId: state.common.countryGroup,
     currency: state.common.currency,
-    selectedAmount: state.page.amount[contributionTypeCamelCase],
+    selectedAmount: state.page.amount[contributionTypeKey],
     contributionError: state.page.error,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abTests: state.common.abParticipations,

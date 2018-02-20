@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { contribCamelCase } from '../contributions';
+import { getContribKey } from '../contributions';
 
 
 // ----- Tests ----- //
@@ -11,9 +11,9 @@ describe('theGrid', () => {
 
   it('should correctly return camelCase versions of contributions', () => {
 
-    expect(contribCamelCase('ANNUAL')).toEqual('annual');
-    expect(contribCamelCase('MONTHLY')).toEqual('monthly');
-    expect(contribCamelCase('ONE_OFF')).toEqual('oneOff');
+    expect(getContribKey('ANNUAL')).toEqual('annual');
+    expect(getContribKey('MONTHLY')).toEqual('monthly');
+    expect(getContribKey('ONE_OFF')).toEqual('oneOff');
 
   });
 

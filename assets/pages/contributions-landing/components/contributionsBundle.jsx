@@ -13,7 +13,7 @@ import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
-import { contribCamelCase } from 'helpers/contributions';
+import { getContribKey } from 'helpers/contributions';
 
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -181,7 +181,7 @@ function ContentText(props: PropTypes) {
 function getCtaText(contribType: Contrib, currency: Currency, amounts: Amounts) {
 
   const paymentMethods = contribType === 'ONE_OFF' ? 'card' : 'card or PayPal';
-  const contType = contribCamelCase(contribType);
+  const contType = getContribKey(contribType);
 
   return `Contribute ${currency.glyph}${amounts[contType].value} with ${paymentMethods}`;
 
@@ -242,7 +242,7 @@ const getContribAttrs = (
   currency: Currency,
 ): ContribAttrs => {
 
-  const contType = contribCamelCase(contribType);
+  const contType = getContribKey(contribType);
   const params = new URLSearchParams();
   const intCmp = referrerAcquisitionData.campaignCode;
   const refpvid = referrerAcquisitionData.referrerPageviewId;
