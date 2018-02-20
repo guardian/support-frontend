@@ -205,7 +205,6 @@ export {
   config,
   parse,
   parseContrib,
-  circlesParse,
   billingPeriodFromContrib,
   errorMessage,
   getContribKey,
