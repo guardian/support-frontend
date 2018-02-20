@@ -30,7 +30,7 @@ GET  /monthly-contributions                         controllers.Application.cont
 # ----- Contributions ----- #
 
 GET  /uk/contribute                                 controllers.Application.contributionsLandingUK(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk-old", js="contributionsLandingPageUKOld.js", newDesigns: String ?= "")
-GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPageUS.js")
+GET  /us/contribute                                 controllers.Application.contributionsLandingUS(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us-old", js="contributionsLandingPageUSOld.js", newDesigns: String ?= "")
 GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPageAU.js")
 GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPageEU.js")
 
