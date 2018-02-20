@@ -41,7 +41,8 @@ class MyComponents(context: Context)
   val databaseProvider = new DatabaseProvider(dbApi)
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
-    new StripeBackend.Builder(configLoader, databaseProvider)
+    // Actor system not an implicit val, so pass it explicitly
+    new StripeBackend.Builder(configLoader, databaseProvider)(actorSystem)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
