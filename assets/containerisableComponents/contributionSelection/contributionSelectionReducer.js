@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { betterParse as parseContribution } from 'helpers/contributions';
+import { circlesParse as parseContribution } from 'helpers/contributions';
 
 import type {
   Contrib as ContributionType,

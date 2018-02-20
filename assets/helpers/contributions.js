@@ -99,7 +99,7 @@ function parse(input: ?string, contrib: Contrib): ParsedContrib {
 
 }
 
-function betterParse(input: string, contributionType: Contrib): ParsedAmount {
+function circlesParse(input: string, contributionType: Contrib): ParsedAmount {
 
   const customAmount = Number(input);
 
@@ -205,7 +205,7 @@ export {
   config,
   parse,
   parseContrib,
-  betterParse,
+  circlesParse,
   billingPeriodFromContrib,
   errorMessage,
   contribCamelCase,
