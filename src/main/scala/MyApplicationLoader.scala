@@ -1,6 +1,6 @@
 
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
-import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext, Configuration, NoHttpFiltersComponents}
+import play.api._
 import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
 import router.Routes
@@ -16,7 +16,9 @@ import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
   def load(context: Context): Application = {
-    // logging initialisation needs to happen here
+    LoggerConfigurator(context.environment.classLoader).foreach {
+      _.configure(context.environment, context.initialConfiguration, Map.empty)
+    }
     new MyComponents(context).application
   }
 }
@@ -27,10 +29,10 @@ class MyComponents(context: Context)
   with NoHttpFiltersComponents
   with HikariCPComponents {
 
+  // TODO: is prod value should be set in public Play configuration
   val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
 
-  val awsClientBuilder = new AWSClientBuilder(applicationLifecycle)
-  val ssm: AWSSimpleSystemsManagement = awsClientBuilder.buildAWSSimpleSystemsManagementClient()
+  val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
 
   override val configuration: Configuration =

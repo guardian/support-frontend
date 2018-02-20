@@ -20,7 +20,8 @@ object DatabaseProvider {
 
   object ConfigurationUpdater {
 
-    private implicit class DbConfigOps(val config: DBConfig) extends AnyVal {
+    private implicit class DBConfigOps(val config: DBConfig) extends AnyVal {
+
       // See https://www.playframework.com/documentation/2.6.x/SettingsJDBC
       def asConfiguration: Configuration = {
         import config._

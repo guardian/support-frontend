@@ -3,35 +3,47 @@ package services
 import cats.syntax.either._
 import com.stripe.model.Charge
 import com.stripe.net.RequestOptions
+import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
 
-import conf.{ConfigLoader, StripeAccountConfig, StripeConfig}
+import conf.{StripeAccountConfig, StripeConfig}
 import model._
 import model.stripe._
 
 trait StripeService {
 
   // TODO: decide if this needs to be asynchronous
-  def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess]
+  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge]
 }
 
-class SingleAccountStripeService(config: StripeAccountConfig) extends StripeService {
+class SingleAccountStripeService(config: StripeAccountConfig) extends StripeService with StrictLogging {
 
+  // Don't set the secret API key globally (i.e. Stripe.apiKey = "api_key")
+  // since charges in AUD and other currencies (respectively) will be made against different accounts.
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
 
   // https://stripe.com/docs/api/java#create_charge
   private def getChargeParams(data: StripeChargeData) =
     Map[String, AnyRef](
-      "amount" -> new Integer(data.amount),
-      "currency" -> data.currency.entryName,
-      "source" -> data.source,
-      "receipt_email" -> data.receiptEmail
+      "amount" -> new Integer(data.paymentData.amount),
+      "currency" -> data.paymentData.currency.entryName,
+      "source" -> data.paymentData.source,
+      "receipt_email" -> data.identityData.email
     ).asJava
 
-  def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess] =
+  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
     Either.catchNonFatal(Charge.create(getChargeParams(data), requestOptions))
-      .bimap(StripeChargeError.fromThrowable, StripeChargeSuccess.fromStripeCharge)
+      .bimap(
+        err => {
+          logger.error("unable to create Stripe charge", err)
+          StripeChargeError.fromThrowable(err)
+        },
+        charge => {
+          logger.info("Stripe charge created")
+          charge
+        }
+      )
 }
 
 // Create charges against out default Stripe account
@@ -49,8 +61,8 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
   private def getSingleAccountService(currency: Currency): StripeService =
     if (currency == Currency.AUD) au else default
 
-  override def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess] =
-    getSingleAccountService(data.currency).createCharge(data)
+  override def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
+    getSingleAccountService(data.paymentData.currency).createCharge(data)
 }
 
 object StripeService {
