@@ -23,6 +23,14 @@ class Application(
   import actionRefiners._
 
   implicit val ar = assets
+
+  private def applyCircles(queryParam: String, id: String, js: String, modifiedId: String, modifiedJs: String): (String, String) = {
+    queryParam match {
+      case "circles-garnett" => (modifiedId, modifiedJs)
+      case _ => (id, js)
+    }
+  }
+
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
   }
@@ -60,73 +68,48 @@ class Application(
         contributionsPayPalEndpoint,
         description = Some(stringsConfig.bundleLandingDescription)
       ))
-    } else if (newDesigns == "circles-garnett") {
+    } else {
+      val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
       Ok(views.html.bundleLanding(
         title,
-        "support-landing-page",
-        "supportLandingPage.js",
+        updatedId,
+        updatedJs,
         contributionsPayPalEndpoint,
         description = Some(stringsConfig.bundleLandingDescription)
       ))
-    } else {
-      Ok(views.html.bundleLanding(title, id, js, contributionsPayPalEndpoint, description = Some(stringsConfig.bundleLandingDescription)))
     }
   }
 
   def regularContributionsThankYou(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles-garnett") {
-      Ok(views.html.react(title, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js"))
-    } else {
-      Ok(views.html.react(title, id, js))
-    }
+    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+    Ok(views.html.react(title, updatedId, updatedJs))
   }
 
   def contributionsLandingUK(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles-garnett") {
-      Ok(views.html.contributionsLanding(
-        title,
-        description = Some(stringsConfig.contributionLandingDescription),
-        "contributions-landing-page-uk",
-        "contributionsLandingPageUK.js",
-        contributionsPayPalEndpoint
-      ))
-    } else {
-      Ok(views.html.contributionsLanding(
-        title,
-        description = Some(stringsConfig.contributionLandingDescription),
-        id,
-        js,
-        contributionsPayPalEndpoint
-      ))
-    }
+    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")
+    Ok(views.html.contributionsLanding(
+      title,
+      description = Some(stringsConfig.contributionLandingDescription),
+      updatedId,
+      updatedJs,
+      contributionsPayPalEndpoint
+    ))
   }
 
   def contributionsLandingUS(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles-garnett") {
-      Ok(views.html.contributionsLanding(
-        title,
-        description = Some(stringsConfig.contributionLandingDescription),
-        "contributions-landing-page-us",
-        "contributionsLandingPageUS.js",
-        contributionsPayPalEndpoint
-      ))
-    } else {
-      Ok(views.html.contributionsLanding(
-        title,
-        description = Some(stringsConfig.contributionLandingDescription),
-        id,
-        js,
-        contributionsPayPalEndpoint
-      ))
-    }
+    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "contributions-landing-page-us", "contributionsLandingPageUS.js")
+    Ok(views.html.contributionsLanding(
+      title,
+      description = Some(stringsConfig.contributionLandingDescription),
+      updatedId,
+      updatedJs,
+      contributionsPayPalEndpoint
+    ))
   }
 
   def regularContributionsPending(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles-garnett") {
-      Ok(views.html.react(title, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js"))
-    } else {
-      Ok(views.html.react(title, id, js))
-    }
+    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+    Ok(views.html.react(title, updatedId, updatedJs))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
