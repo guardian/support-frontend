@@ -35,6 +35,11 @@ export type ParsedContrib = {
   error: ?ContribError,
 };
 
+export type ParsedAmount = {
+  error: ?ContribError,
+  customAmount: ?number,
+};
+
 type Config = {
   [Contrib]: {
     min: number,
@@ -91,6 +96,22 @@ function parse(input: ?string, contrib: Contrib): ParsedContrib {
   const amount = error ? config[contrib].default : roundDp(numericAmount);
 
   return { error, amount };
+
+}
+
+function betterParse(input: string, contributionType: Contrib): ParsedAmount {
+
+  const customAmount = Number(input);
+
+  if (input === '' || Number.isNaN(customAmount)) {
+    return { error: 'invalidEntry', customAmount: null };
+  } else if (customAmount < config[contributionType].min) {
+    return { error: 'tooLittle', customAmount };
+  } else if (customAmount > config[contributionType].max) {
+    return { error: 'tooMuch', customAmount };
+  }
+
+  return { error: null, customAmount };
 
 }
 
@@ -184,6 +205,7 @@ export {
   config,
   parse,
   parseContrib,
+  betterParse,
   billingPeriodFromContrib,
   errorMessage,
   contribCamelCase,
