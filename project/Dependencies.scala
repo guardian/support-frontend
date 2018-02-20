@@ -12,7 +12,7 @@ object Dependencies {
   val scalaLogging = "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
   val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
   val lambdaLogging = "io.symphonia" % "lambda-logging" % "1.0.0"
-  val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.6"
+  val supportInternationalisation = "com.gu" %% "support-internationalisation" % "0.9"
   val supportModels = "com.gu" %% "support-models" % "0.22"
   val supportConfig = "com.gu" %% "support-config" % "0.12"
   val acquisitionEventProducer = "com.gu" %% "acquisition-event-producer" % "2.0.1"
