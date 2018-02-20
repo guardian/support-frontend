@@ -37,7 +37,7 @@ enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDeb
 packageName in Debian := name.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffManifestProjectName := "payment-api"
+riffRaffManifestProjectName := "support:payment-api"
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffArtifactResources += (file("resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")
 
