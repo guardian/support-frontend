@@ -12,7 +12,7 @@ import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
-import { contribCamelCase } from 'helpers/contributions';
+import { getContribKey } from 'helpers/contributions';
 
 import type { ListItem } from 'components/featureList/featureList';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
@@ -240,7 +240,7 @@ const getContribAttrs = (
   intCmp: ?string,
 ): ContribAttrs => {
 
-  const contType = contribCamelCase(contribType);
+  const contType = getContribKey(contribType);
   const params = new URLSearchParams();
 
   params.append('contributionValue', contribAmount[contType].value);

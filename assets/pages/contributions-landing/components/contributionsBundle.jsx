@@ -13,9 +13,11 @@ import ContribAmounts from 'components/contribAmounts/contribAmounts';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
+import { getContribKey } from 'helpers/contributions';
+
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -176,15 +178,20 @@ function ContentText(props: PropTypes) {
   return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
 }
 
-const contribCtaText = {
-  ANNUAL: 'Contribute with card or PayPal',
-  MONTHLY: 'Contribute with card or PayPal',
-  ONE_OFF: 'Contribute with debit/credit card',
-};
+function getCtaText(contribType: Contrib, currency: Currency, amounts: Amounts) {
+
+  const paymentMethods = contribType === 'ONE_OFF' ? 'card' : 'card or PayPal';
+  const contType = getContribKey(contribType);
+
+  return `Contribute ${currency.glyph}${amounts[contType].value} with ${paymentMethods}`;
+
+}
 
 function contribAttrs(
   countryGroupId: CountryGroupId,
   contribType: Contrib,
+  currency: Currency,
+  amounts: Amounts,
 ): ContribAttrs {
   const subHeadingText = contribType === 'ONE_OFF'
     ? subHeadingOneOffText[countryGroupId]
@@ -193,7 +200,7 @@ function contribAttrs(
   return {
     heading: 'contribute',
     subheading: subHeadingText,
-    ctaText: contribCtaText[contribType],
+    ctaText: getCtaText(contribType, currency, amounts),
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
@@ -211,7 +218,7 @@ function showPayPal(props: PropTypes) {
       countryGroupId={props.countryGroupId}
       errorHandler={props.payPalErrorHandler}
       canClick={!props.contribError}
-      buttonText="Contribute with PayPal"
+      buttonText={`Contribute ${props.currency.glyph}${props.contribAmount.oneOff.value} with PayPal`}
     />);
   }
   return null;
@@ -226,21 +233,13 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
-function getContribKey(contribType) {
-  switch (contribType) {
-    case 'ANNUAL': return 'annual';
-    case 'MONTHLY': return 'monthly';
-    default: return 'oneOff';
-  }
-}
-
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
   countryGroupId: CountryGroupId,
-  currency: IsoCurrency,
+  currency: Currency,
 ): ContribAttrs => {
 
   const contType = getContribKey(contribType);
@@ -250,7 +249,7 @@ const getContribAttrs = (
 
   params.append('contributionValue', contribAmount[contType].value);
   params.append('contribType', contribType);
-  params.append('currency', currency);
+  params.append('currency', currency.iso);
   params.append('countryGroup', countryGroupId);
 
   if (intCmp) {
@@ -263,7 +262,11 @@ const getContribAttrs = (
 
   const ctaLink = `${ctaLinks[contType]}?${params.toString()}`;
 
-  return Object.assign({}, contribAttrs(countryGroupId, contribType), { ctaLink });
+  return Object.assign(
+    {},
+    contribAttrs(countryGroupId, contribType, currency, contribAmount),
+    { ctaLink },
+  );
 
 };
 
@@ -288,7 +291,7 @@ function ContributionsBundle(props: PropTypes) {
     props.referrerAcquisitionData,
     props.isoCountry,
     props.countryGroupId,
-    props.currency.iso,
+    props.currency,
   );
 
   attrs.showPaymentLogos = true;
