@@ -1,0 +1,16 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: payment-api
+    parameters:
+      amiTags:
+        Recipe: xenial-membership
+        AmigoStage: PROD
+      templatePath: cloud-formation.yaml
+  payment-api:
+    type: autoscaling
+    parameters:
+      bucket: membership-dist
+    dependencies: [cfn]
