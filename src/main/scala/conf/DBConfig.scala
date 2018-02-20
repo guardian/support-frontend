@@ -7,6 +7,7 @@ import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathR
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
+// TODO: just use Play's DatabaseConfig case class instead?
 case class DBConfig(env: Environment, url: String, driver: String, username: String, password: String)
 
 object DBConfig {

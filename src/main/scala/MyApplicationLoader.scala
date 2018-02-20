@@ -29,10 +29,10 @@ class MyComponents(context: Context)
   with NoHttpFiltersComponents
   with HikariCPComponents {
 
+  // TODO: is prod value should be set in public Play configuration
   val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
 
-  val awsClientBuilder = new AWSClientBuilder(applicationLifecycle)
-  val ssm: AWSSimpleSystemsManagement = awsClientBuilder.buildAWSSimpleSystemsManagementClient()
+  val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
 
   override val configuration: Configuration =

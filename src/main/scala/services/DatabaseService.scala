@@ -3,8 +3,9 @@ package services
 import anorm._
 import cats.syntax.either._
 import com.typesafe.scalalogging.StrictLogging
-import play.api.db.Database
+import play.api.db.{Database, Databases}
 
+import conf.DBConfig
 import model.db.ContributionData
 
 trait DatabaseService {
@@ -83,7 +84,23 @@ class PostgresDatabaseService(database: Database) extends DatabaseService with S
   }
 }
 
-object DatabaseService {
+object PostgresDatabaseService {
 
-  def apply(database: Database): DatabaseService = new PostgresDatabaseService(database)
+  def apply(database: Database): PostgresDatabaseService = new PostgresDatabaseService(database)
+
+  // Used to create a service for testing purposes.
+  private[services] def fromDBConfig(config: DBConfig): PostgresDatabaseService = {
+    import config._
+    PostgresDatabaseService(
+      Databases(
+        driver = driver,
+        url = url,
+        name = env.entryName,
+        config = Map(
+          "username" -> username,
+          "password" -> password
+        )
+      )
+    )
+  }
 }
