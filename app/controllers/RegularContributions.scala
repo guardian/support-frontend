@@ -54,7 +54,13 @@ class RegularContributions(
             )
           )
       }
-    } getOrElse InternalServerError
+    } fold (
+      { error =>
+        SafeLogger.error(scrub"Failed to display recurring contributions form for ${request.user.id} due to Identity error: $error")
+        InternalServerError
+      },
+      identity
+    )
   }
 
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
