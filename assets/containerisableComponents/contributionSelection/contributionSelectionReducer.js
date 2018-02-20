@@ -2,11 +2,12 @@
 
 // ----- Imports ----- //
 
-import { parse as parseContribution } from 'helpers/contributions';
+import { circlesParse as parseContribution } from 'helpers/contributions';
 
 import type {
   Contrib as ContributionType,
   ContribError as ContributionError,
+  ParsedAmount,
 } from 'helpers/contributions';
 
 import type { Action } from './contributionSelectionActions';
@@ -23,14 +24,6 @@ export type State = {
   customAmount: ?number,
   error: ?ContributionError,
 };
-
-type ParsedCustomAmount = {|
-  error: ContributionError,
-  customAmount: null,
-|} | {|
-  error: null,
-  customAmount: number,
-|};
 
 
 // ----- Setup ----- //
@@ -66,31 +59,15 @@ function updatePredefinedAmount(state: State, newAmount: string): State {
 
 }
 
-// Checks if the custom amount is acceptable, returns a specific error if not.
-function parseCustomAmount(
-  contributionType: ContributionType,
-  customAmount: string,
-): ParsedCustomAmount {
-
-  const { error, amount } = parseContribution(customAmount, contributionType);
-
-  if (error) {
-    return { error, customAmount: null };
-  }
-
-  return { error: null, customAmount: amount };
-
-}
-
 // Re-parses the custom amount when the contribution type is changed.
 function checkCustomAmount(
   isCustomAmount: boolean,
   customAmount: ?number,
   contributionType: ContributionType,
-): ?ParsedCustomAmount {
+): ?ParsedAmount {
 
   if (isCustomAmount && customAmount) {
-    return parseCustomAmount(contributionType, customAmount.toString());
+    return parseContribution(customAmount.toString(), contributionType);
   }
 
   return null;
@@ -148,7 +125,7 @@ function contributionSelectionReducerFor(scope: string, stateOverrides?: Object 
         return {
           ...state,
           isCustomAmount: true,
-          ...parseCustomAmount(state.contributionType, action.amount),
+          ...parseContribution(action.amount, state.contributionType),
         };
 
       default:
