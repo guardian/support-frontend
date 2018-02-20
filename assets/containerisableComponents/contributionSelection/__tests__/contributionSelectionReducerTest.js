@@ -42,7 +42,7 @@ describe('Contributions Selection reducer', () => {
 
   });
 
-  it('should re-parse custom amounts when SET_CONTRIBUTION_TYPE is fired', () => {
+  it('should re-parse custom amounts when SET_CONTRIBUTION_TYPE is fired for MONTHLY', () => {
 
     const contributionType = 'MONTHLY';
     const initialState = {
@@ -58,6 +58,25 @@ describe('Contributions Selection reducer', () => {
     const changeContributionType = actions.setContributionType(contributionType);
     const newState = reducer(initialState, changeContributionType);
     expect(newState.error).toEqual('tooLittle');
+
+  });
+
+  it('should re-parse custom amounts when SET_CONTRIBUTION_TYPE is fired for ONE_OFF', () => {
+
+    const contributionType = 'ONE_OFF';
+    const initialState = {
+      contributionType: 'MONTHLY',
+      oneOffAmount: '50',
+      monthlyAmount: '5',
+      annualAmount: '75',
+      customAmount: '1',
+      isCustomAmount: true,
+      error: 'tooLittle',
+    };
+
+    const changeContributionType = actions.setContributionType(contributionType);
+    const newState = reducer(initialState, changeContributionType);
+    expect(newState.error).toBeNull();
 
   });
 
