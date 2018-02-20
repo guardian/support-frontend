@@ -27,5 +27,13 @@ libraryDependencies ++= Seq(
 )
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayService)
-  .enablePlugins(RoutesCompiler)
+
+enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging)
+
+packageName in Debian := name.value
+riffRaffUploadArtifactBucket := Option("riffraff-artifact")
+riffRaffUploadManifestBucket := Option("riffraff-builds")
+riffRaffManifestProjectName := "payment-api"
+riffRaffPackageType := (packageBin in Debian).value
+riffRaffArtifactResources += (file("resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")
+
