@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import { SvgCross } from 'components/svg/svg';
 
 
 // ---- Types ----- //
@@ -52,7 +53,9 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
             className="component-direct-debit-pop-up-form__close-button"
             onClick={props.closeDirectDebitPopUp}
           >
-            X
+            <span>
+              <SvgCross />
+            </span>
           </button>
           <DirectDebitForm callback={props.callback} />
         </div>

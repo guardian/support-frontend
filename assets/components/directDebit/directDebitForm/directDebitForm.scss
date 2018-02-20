@@ -35,20 +35,21 @@
   font-family: $gu-egyptian-web;
   font-weight: 600;
   font-size: 14px;
-  margin-top: 10px;
+  margin-top: 8px;
   margin-bottom: 6px;
 }
 
 .component-direct-debit-form__sort-code-field {
   font-family: $gu-sans-web;
   font-size: 14px;
+  background-color: gu-colour(garnett-neutral-3);
   color: gu-colour(garnett-neutral-1);
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
-  height: 44px;
-  width: 66px;
-  padding: 0 $gu-h-spacing;
-  margin-bottom: 22px;
+  height: 41px;
+  width: 57px;
+  padding: 0 15px;
+  margin-bottom: 25px;
 }
 
 .component-direct-debit-form_sort-code-separator {
@@ -60,17 +61,20 @@
   font-family: $gu-sans-web;
   font-size: 14px;
   font-weight: bold;
+  background-color: gu-colour(garnett-neutral-3);
   color: black;
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
-  height: 44px;
-  width: 425px;
+  height: 40px;
+  width: 405px;
+  padding: 0 15px;
 }
 
 .component-direct-debit-form__account-holder-confirmation__text {
   font-family: $gu-sans-web;
-  font-size: 16px;
+  font-size: 14px;
   color: gu-colour(neutral-1);
+  padding-left: 15px;
   display: block;
   overflow: hidden;
 }
@@ -78,7 +82,57 @@
 .component-direct-debit-form__account-holder-confirmation__checkbox {
   float: left;
   padding: 10px;
+}
+
+.fancy-checkbox {
+  width: 25px;
+  position: relative;
   margin-right: 10px;
+}
+
+.fancy-checkbox label {
+  cursor: pointer;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  left: 0;
+  background: #fff;
+  border: solid 1px #121212;
+  border-radius: 2px;
+}
+
+/**
+ * Display the tick inside the checkbox
+ */
+.fancy-checkbox label:after {
+  opacity: 0;
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 5px;
+  background: transparent;
+  top: 4px;
+  left: 4px;
+  border: 3px solid #333;
+  border-top: none;
+  border-right: none;
+
+  transform: rotate(-45deg);
+}
+
+/**
+ * Create the hover event of the tick
+ */
+.fancy-checkbox label:hover::after {
+  opacity: 0.5;
+}
+
+/**
+ * Create the checkbox state for the tick
+ */
+.fancy-checkbox input[type=checkbox]:checked + label:after {
+  opacity: 1;
 }
 
 .component-direct-debit-form__pay-button {
@@ -96,7 +150,7 @@
   text-align: left;
   height: 54px;
   width: 435px;
-  margin-top: 30px;
+  margin-top: 35px;
   margin-bottom: 40px;
 
   .svg-direct-debit-symbol {
@@ -113,10 +167,6 @@
     transform: translateY(-50%);
   }
 
-  //@include mq($from: mobileMedium) {
-  //  width: 175px;
-  //}
-
   &:hover {
     background-color: gu-colour(news-garnett-highlight-hover);
   }
@@ -127,6 +177,7 @@
   font-size: 12px;
   color: gu-colour(garnett-neutral-2);
   padding-top: $gu-v-spacing;
+  margin-bottom: 20px;
   a {
     color: gu-colour(garnett-neutral-2);
   }

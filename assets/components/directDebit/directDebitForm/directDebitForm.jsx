@@ -205,7 +205,7 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          <span>
+          <div className="fancy-checkbox">
             <input
               className="component-direct-debit-form__account-holder-confirmation__checkbox"
               id="confirmation-input"
@@ -213,7 +213,8 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
               onChange={props.onChange}
               checked={props.checked}
             />
-          </span>
+            <label htmlFor="confirmation-input" />
+          </div>
           <span className="component-direct-debit-form__account-holder-confirmation__text">
             I confirm that I am the account holder and I am solely able to authorise debit from
             the account

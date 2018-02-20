@@ -20,12 +20,13 @@
   position: relative;
   display: inline-block;
   top: 50%;
-  width: 495px;
+  width: 475px;
+  height: 566px;
   transform: translateY(-50%);
-  background-color: white;
+  background-color: gu-colour(garnett-neutral-3);
   text-align: left;
   border-top: 1px solid gu-colour(garnett-neutral-1);
-  padding: $gu-v-spacing $gu-h-spacing / 2;
+  padding: 10px;
 }
 
 .component-direct-debit-pop-up-form__heading {
@@ -37,9 +38,16 @@
 }
 
 .component-direct-debit-pop-up-form__close-button {
+  border: solid 1px gu-colour(garnett-neutral-1);
   border-radius: 800px;
-  height: 20px;
+  background-color: gu-colour(garnett-neutral-3);
+  height: 44px;
+  width: 44px;
   float: right;
+  .svg-cross {
+    padding-top: 3px;
+    height: 19px;
+  }
 }
 
 .component-direct-debit-pop-up-form__background {
