@@ -5,7 +5,6 @@ import io.circe.generic.JsonCodec
 import model.Currency
 import model.db.ContributionData
 
-// TODO: currency type
 @JsonCodec case class StripeChargeSuccess private (currency: Currency, amount: Long)
 
 object StripeChargeSuccess {

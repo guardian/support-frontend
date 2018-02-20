@@ -127,7 +127,7 @@ class StripeController(
       .createCharge(request.body)
       .fold(
         err => InternalServerError(ResultBody.Error(err.getMessage)),
-        charge => Ok(ResultBody.Success(charge)) //  TODO: fixme
+        charge => Ok(ResultBody.Success(charge))
       )
   }
 }
