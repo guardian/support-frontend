@@ -4,6 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.typesafe.scalalogging.StrictLogging
 import org.joda.time.DateTime
 
 import scala.concurrent.Future
@@ -40,7 +41,7 @@ case class EmailFields(
     """.stripMargin
 }
 
-class EmailService(config: EmailConfig) {
+class EmailService(config: EmailConfig) extends StrictLogging {
   private val sqsClient = AmazonSQSAsyncClientBuilder
     .standard
     .withCredentials(CredentialsProvider)
@@ -49,7 +50,10 @@ class EmailService(config: EmailConfig) {
 
   private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
 
-  def send(fields: EmailFields): Future[SendMessageResult] =
+  def send(fields: EmailFields): Future[SendMessageResult] = {
+    logger.info(s"Sending message to SQS queue $queueUrl")
     AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload(config.dataExtensionName)))
+  }
+
 }
 
