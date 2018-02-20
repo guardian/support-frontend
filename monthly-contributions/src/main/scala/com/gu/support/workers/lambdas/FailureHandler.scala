@@ -51,8 +51,7 @@ class FailureHandler(emailService: EmailService)
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
     logger.info(s"Attempting to handle error $error")
-    val underlyingError = error.flatMap(extractUnderlyingError)
-    underlyingError match {
+    error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
