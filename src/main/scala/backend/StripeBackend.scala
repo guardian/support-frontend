@@ -16,7 +16,7 @@ class StripeBackend(stripeService: StripeService, databaseService: DatabaseServi
 
   // TODO: send acquisition event
   def createCharge(data: StripeChargeData): Either[StripeChargeError, StripeChargeSuccess] =
-    stripeService.createCharge(data.paymentData)
+    stripeService.createCharge(data)
       // No flat map here - the result the client receives as to whether the charge is successful,
       // should not be dependent on the insertion of the contribution data.
       .map { charge =>

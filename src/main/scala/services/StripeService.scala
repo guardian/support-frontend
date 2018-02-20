@@ -14,7 +14,7 @@ import model.stripe._
 trait StripeService {
 
   // TODO: decide if this needs to be asynchronous
-  def createCharge(data: StripePaymentData): Either[StripeChargeError, Charge]
+  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge]
 }
 
 class SingleAccountStripeService(config: StripeAccountConfig) extends StripeService with StrictLogging {
@@ -24,15 +24,15 @@ class SingleAccountStripeService(config: StripeAccountConfig) extends StripeServ
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
 
   // https://stripe.com/docs/api/java#create_charge
-  private def getChargeParams(data: StripePaymentData) =
+  private def getChargeParams(data: StripeChargeData) =
     Map[String, AnyRef](
-      "amount" -> new Integer(data.amount),
-      "currency" -> data.currency.entryName,
-      "source" -> data.source,
-      "receipt_email" -> data.email
+      "amount" -> new Integer(data.paymentData.amount),
+      "currency" -> data.paymentData.currency.entryName,
+      "source" -> data.paymentData.source,
+      "receipt_email" -> data.identityData.email
     ).asJava
 
-  def createCharge(data: StripePaymentData): Either[StripeChargeError, Charge] =
+  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
     Either.catchNonFatal(Charge.create(getChargeParams(data), requestOptions))
       .bimap(
         err => {
@@ -61,8 +61,8 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
   private def getSingleAccountService(currency: Currency): StripeService =
     if (currency == Currency.AUD) au else default
 
-  override def createCharge(data: StripePaymentData): Either[StripeChargeError, Charge] =
-    getSingleAccountService(data.currency).createCharge(data)
+  override def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
+    getSingleAccountService(data.paymentData.currency).createCharge(data)
 }
 
 object StripeService {

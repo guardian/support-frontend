@@ -10,8 +10,7 @@ import model.Currency
 @JsonCodec case class StripePaymentData(
     currency: Currency,
     amount: Int,
-    source: String,
-    email: String // TODO: should email be here or in identity data?
+    source: String
 )
 
 // TODO: can this be used for both Stripe and Paypal payments?
@@ -33,7 +32,8 @@ import model.Currency
 
 // TODO: can this be used for both Stripe and Paypal payments?
 @JsonCodec case class IdentityData(
-    identityId: Option[String]
+    identityId: Option[String],
+    email: String
 )
 
 // Fields are grouped by what they're used for:
@@ -76,8 +76,7 @@ object StripeChargeData {
         paymentData = StripePaymentData(
           currency = currency,
           amount = amount,
-          source = token,
-          email = email
+          source = token
         ),
         acquisitionData = AcquisitionData(
           browserId = browserId,
@@ -88,7 +87,8 @@ object StripeChargeData {
           campaignCodes = Some(Set(cmp, intcmp).flatten)
         ),
         identityData = IdentityData(
-          identityId = identityId
+          identityId = identityId,
+          email = email
         )
       )
     }
