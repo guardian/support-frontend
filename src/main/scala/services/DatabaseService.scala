@@ -71,7 +71,7 @@ class PostgresDatabaseService(database: Database) extends DatabaseService with S
         ${data.paymentId},
         ${data.paymentProvider.entryName}::paymentProvider,
         ${data.created},
-        ${data.currency},
+        ${data.currency.entryName},
         ${data.amount},
         ${data.paymentStatus.entryName}::paymentStatus,
         ${data.receiptEmail}

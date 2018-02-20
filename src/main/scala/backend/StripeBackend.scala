@@ -22,7 +22,7 @@ class StripeBackend(stripeService: StripeService, databaseService: DatabaseServi
       .map { charge =>
         val contributionData = ContributionData.fromStripeCharge(data.identityData.identityId, charge)
         databaseService.insertContributionData(contributionData)
-        StripeChargeSuccess.fromStripeCharge(charge)
+        StripeChargeSuccess.fromContributionData(contributionData)
       }
 }
 
