@@ -233,14 +233,6 @@ const ctaLinks = {
 
 // ----- Functions ----- //
 
-function getContribKey(contribType) {
-  switch (contribType) {
-    case 'ANNUAL': return 'annual';
-    case 'MONTHLY': return 'monthly';
-    default: return 'oneOff';
-  }
-}
-
 const getContribAttrs = (
   contribType: Contrib,
   contribAmount: Amounts,
@@ -250,7 +242,7 @@ const getContribAttrs = (
   currency: Currency,
 ): ContribAttrs => {
 
-  const contType = getContribKey(contribType);
+  const contType = contribCamelCase(contribType);
   const params = new URLSearchParams();
   const intCmp = referrerAcquisitionData.campaignCode;
   const refpvid = referrerAcquisitionData.referrerPageviewId;
