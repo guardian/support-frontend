@@ -36,8 +36,10 @@ class RegularContributions(
 
   def displayForm(paypal: Option[Boolean]): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>
-      isMonthlyContributor(request.user.credentials).recover({ case _ => None }) map {
-        case Some(true) => Redirect("/contribute/recurring/existing")
+      isMonthlyContributor(request.user.credentials) map {
+        case Some(true) =>
+          SafeLogger.info(s"Determined that ${request.user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
+          Redirect("/contribute/recurring/existing")
         case Some(false) | None =>
           val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
           Ok(
@@ -54,13 +56,19 @@ class RegularContributions(
             )
           )
       }
-    } getOrElse InternalServerError
+    } fold (
+      { error =>
+        SafeLogger.error(scrub"Failed to display recurring contributions form for ${request.user.id} due to error from identityService: $error")
+        InternalServerError
+      },
+      identity
+    )
   }
 
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
-        SafeLogger.error(scrub"Failed to get status of step function execution due to $error")
+        SafeLogger.error(scrub"Failed to get status of step function execution for user ${request.user.id} due to $error")
         InternalServerError
       },
       response => Ok(response.asJson)
@@ -105,11 +113,15 @@ class RegularContributions(
         {
           case UserNotFound => Some(false)
           case error =>
-            SafeLogger.error(scrub"Failed to fetch user attributes from members data service: $error")
+            SafeLogger.warn(s"Failed to fetch user attributes due to an error from members-data-api: $error")
             None
         },
         { response => Some(response.contentAccess.recurringContributor) }
-      )
+      ).recover {
+          case throwable @ _ =>
+            SafeLogger.warn(s"Failed to fetch user attributes from members-data-api due to a failed Future: ${throwable.getCause}")
+            None
+        }
     case _ => Future.successful(None)
   }
 }
