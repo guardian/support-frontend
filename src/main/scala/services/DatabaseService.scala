@@ -1,35 +1,38 @@
 package services
 
+import akka.actor.ActorSystem
 import anorm._
-import cats.syntax.either._
+import cats.syntax.applicativeError._
+import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
-import play.api.db.{Database, Databases}
+import play.api.db.Database
 
-import conf.DBConfig
+import scala.concurrent.Future
+
+import model.{InitializationResult, JdbcThreadPool}
 import model.db.ContributionData
 
 trait DatabaseService {
 
-  // TODO: should this be asynchronous?
   // If an insert is unsuccessful then an error should be logged, however,
-  // the return type is not modelled as an Either,
+  // the return type is not modelled as an EitherT,
   // since the result of the insert has no dependencies.
   // See e.g. backend.StripeBackend for more context.
-  def insertContributionData(data: ContributionData): Unit
+  def insertContributionData(data: ContributionData): Future[Unit]
 }
 
-class PostgresDatabaseService(database: Database) extends DatabaseService with StrictLogging {
+class PostgresDatabaseService private (database: Database)(implicit pool: JdbcThreadPool)
+  extends DatabaseService with StrictLogging {
 
-  private def executeTransaction(insertStatement: SimpleSql[Row]): Unit =
-    database.withConnection { implicit conn =>
-      Either.catchNonFatal(insertStatement.execute())
-        .bimap(
-          err => logger.error("unable to insert contribution into database", err),
-          _ => logger.info("contribution inserted into database")
-        )
-    }
+  private def executeTransaction(insertStatement: SimpleSql[Row]): Future[Unit] =
+    Future(database.withConnection { implicit conn => insertStatement.execute() })
+      .attemptT
+      .fold(
+        err => logger.error("unable to insert contribution into database", err),
+        _ => logger.info("contribution inserted into database")
+      )
 
-  override def insertContributionData(data: ContributionData): Unit = {
+  override def insertContributionData(data: ContributionData): Future[Unit] = {
 
     val transaction = SQL"""
       BEGIN;
@@ -86,21 +89,6 @@ class PostgresDatabaseService(database: Database) extends DatabaseService with S
 
 object PostgresDatabaseService {
 
-  def apply(database: Database): PostgresDatabaseService = new PostgresDatabaseService(database)
-
-  // Used to create a service for testing purposes.
-  private[services] def fromDBConfig(config: DBConfig): PostgresDatabaseService = {
-    import config._
-    PostgresDatabaseService(
-      Databases(
-        driver = driver,
-        url = url,
-        name = env.entryName,
-        config = Map(
-          "username" -> username,
-          "password" -> password
-        )
-      )
-    )
-  }
+  def fromDatabase(database: Database)(implicit system: ActorSystem): InitializationResult[PostgresDatabaseService] =
+    JdbcThreadPool.load().map { implicit pool => new PostgresDatabaseService(database) }
 }

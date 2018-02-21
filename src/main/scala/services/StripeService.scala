@@ -1,11 +1,15 @@
 package services
 
-import cats.syntax.either._
+import akka.actor.ActorSystem
+import cats.data.EitherT
+import cats.instances.future._
+import cats.syntax.applicativeError._
 import com.stripe.model.Charge
 import com.stripe.net.RequestOptions
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
+import scala.concurrent.{ExecutionContext, Future}
 
 import conf.{StripeAccountConfig, StripeConfig}
 import model._
@@ -13,11 +17,10 @@ import model.stripe._
 
 trait StripeService {
 
-  // TODO: decide if this needs to be asynchronous
-  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge]
+  def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge]
 }
 
-class SingleAccountStripeService(config: StripeAccountConfig) extends StripeService with StrictLogging {
+class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
 
   // Don't set the secret API key globally (i.e. Stripe.apiKey = "api_key")
   // since charges in AUD and other currencies (respectively) will be made against different accounts.
@@ -32,8 +35,9 @@ class SingleAccountStripeService(config: StripeAccountConfig) extends StripeServ
       "receipt_email" -> data.identityData.email
     ).asJava
 
-  def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
-    Either.catchNonFatal(Charge.create(getChargeParams(data), requestOptions))
+  def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge] =
+    Future(Charge.create(getChargeParams(data), requestOptions))
+      .attemptT
       .bimap(
         err => {
           logger.error("unable to create Stripe charge", err)
@@ -47,10 +51,12 @@ class SingleAccountStripeService(config: StripeAccountConfig) extends StripeServ
 }
 
 // Create charges against out default Stripe account
-class DefaultStripeService(config: StripeAccountConfig.Default) extends SingleAccountStripeService(config)
+class DefaultStripeService (config: StripeAccountConfig.Default)(implicit pool: StripeThreadPool)
+  extends SingleAccountStripeService(config)
 
 // Create charges against our Australia Stripe account
-class AustraliaStripeService(config: StripeAccountConfig.Australia) extends SingleAccountStripeService(config)
+class AustraliaStripeService(config: StripeAccountConfig.Australia)(implicit pool: StripeThreadPool)
+  extends SingleAccountStripeService(config)
 
 // Our default Stripe account was charging people from Australia in USD,
 // which meant they occurred additional transaction costs.
@@ -61,15 +67,16 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
   private def getSingleAccountService(currency: Currency): StripeService =
     if (currency == Currency.AUD) au else default
 
-  override def createCharge(data: StripeChargeData): Either[StripeChargeError, Charge] =
+  override def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge] =
     getSingleAccountService(data.paymentData.currency).createCharge(data)
 }
 
 object StripeService {
 
-  def fromConfig(config: StripeConfig): StripeService = {
-    val default = new DefaultStripeService(config.default)
-    val au = new AustraliaStripeService(config.au)
-    new CurrencyBasedStripeService(default, au)
-  }
+  def fromStripeConfig(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
+    StripeThreadPool.load().map { implicit pool =>
+      val default = new DefaultStripeService(config.default)
+      val au = new AustraliaStripeService(config.au)
+      new CurrencyBasedStripeService(default, au)
+    }
 }

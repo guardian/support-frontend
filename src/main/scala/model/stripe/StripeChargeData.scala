@@ -98,5 +98,7 @@ object StripeChargeData {
   // Useful if the client hasn't sent Stripe charge data in the new format -
   // e.g. if a user is making a contribution through an old version of the native App.
   implicit val stripeChargeDataDecoder: Decoder[StripeChargeData] =
-    deriveDecoder[StripeChargeData].or(legacyStripeChargeDataDecoder)
+    // TODO: if both decoders fail, you only get the error message of the last decoder, which can be confusing.
+    // One solution could be to have a route per JSON format (instead of one route for all formats).
+    legacyStripeChargeDataDecoder.or(deriveDecoder[StripeChargeData])
 }

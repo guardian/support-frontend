@@ -1,18 +1,19 @@
 package controllers
 
-import backend.StripeBackend
+import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 
+import backend.StripeBackend
 import model.stripe.StripeChargeData
-import model.ResultBody
+import model.{DefaultThreadPool, ResultBody}
 
 class StripeController(
     controllerComponents: ControllerComponents,
     stripeBackendProvider: RequestBasedProvider[StripeBackend]
-  ) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+  )(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
   // Other considerations:
   // - CORS
   // - Test users
@@ -111,7 +112,7 @@ class StripeController(
   import util.RequestTypeDecoder.instances._
 
   // TODO: override Play's HTML error responses (e.g. non-JSON content type), provide JSON err description instead
-  def createCharge: Action[StripeChargeData] = Action(circe.json[StripeChargeData]) { request =>
+  def createCharge: Action[StripeChargeData] = Action(circe.json[StripeChargeData]).async { request =>
     // Deserialize POSTed JSON
     // stripe.Charge.create
     // if success:
