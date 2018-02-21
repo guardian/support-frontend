@@ -69,3 +69,9 @@
     }
   }
 }
+
+.component-contribution-payment-ctas--disabled {
+  .component-cta-link, .component-paypal-contribution-button {
+    opacity: 0.5;
+  }
+}
