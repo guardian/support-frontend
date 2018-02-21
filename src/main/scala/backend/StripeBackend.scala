@@ -7,10 +7,10 @@ import cats.syntax.apply._
 import com.typesafe.scalalogging.StrictLogging
 import util.EnvironmentBasedBuilder
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 import conf.{ConfigLoader, StripeConfig}
-import model.{Environment, InitializationResult}
+import model.{DefaultThreadPool, Environment, InitializationResult}
 import model.db.ContributionData
 import model.stripe.{StripeChargeData, StripeChargeError, StripeChargeSuccess}
 import services.{DatabaseProvider, DatabaseService, PostgresDatabaseService, StripeService}
@@ -20,8 +20,9 @@ import services.{DatabaseProvider, DatabaseService, PostgresDatabaseService, Str
 class StripeBackend(stripeService: StripeService, databaseService: DatabaseService) extends StrictLogging {
 
   // TODO: send acquisition event
-  def createCharge(data: StripeChargeData)(implicit ec: ExecutionContext): EitherT[Future, StripeChargeError, StripeChargeSuccess] =
-    stripeService.createCharge(data.paymentData)
+  // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
+  def createCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, StripeChargeSuccess] =
+    stripeService.createCharge(data)
       // No flat map here - the result the client receives as to whether the charge is successful,
       // should not be dependent on the insertion of the contribution data.
       .map { charge =>
@@ -40,8 +41,8 @@ object StripeBackend {
     extends EnvironmentBasedBuilder[StripeBackend] {
 
     override def build(env: Environment): InitializationResult[StripeBackend] = (
-      configLoader.loadConfig[StripeConfig](env).andThen(StripeService.fromConfig): InitializationResult[StripeService],
-      databaseProvider.loadDatabase(env).map(PostgresDatabaseService.apply): InitializationResult[DatabaseService]
+      configLoader.loadConfig[StripeConfig](env).andThen(StripeService.apply): InitializationResult[StripeService],
+      databaseProvider.loadDatabase(env).andThen(PostgresDatabaseService.apply): InitializationResult[DatabaseService]
     ).mapN(StripeBackend.apply)
   }
 }

@@ -6,16 +6,14 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 
-import scala.concurrent.ExecutionContext
-
 import backend.StripeBackend
 import model.stripe.StripeChargeData
-import model.ResultBody
+import model.{DefaultThreadPool, ResultBody}
 
 class StripeController(
     controllerComponents: ControllerComponents,
     stripeBackendProvider: RequestBasedProvider[StripeBackend]
-  )(implicit ec: ExecutionContext) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+  )(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
   // Other considerations:
   // - CORS
   // - Test users

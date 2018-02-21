@@ -8,10 +8,9 @@ import util.RequestBasedProvider
 
 import aws.AWSClientBuilder
 import backend.StripeBackend
-
 import _root_.controllers.StripeController
 import conf.ConfigLoader
-import model.RequestEnvironments
+import model.{DefaultThreadPoolProvider, RequestEnvironments}
 import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
@@ -25,9 +24,10 @@ class MyApplicationLoader extends ApplicationLoader {
 
 class MyComponents(context: Context)
   extends BuiltInComponentsFromContext(context)
-  with DBComponents
-  with NoHttpFiltersComponents
-  with HikariCPComponents {
+    with DBComponents
+    with NoHttpFiltersComponents
+    with HikariCPComponents
+    with DefaultThreadPoolProvider {
 
   // TODO: is prod value should be set in public Play configuration
   val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)

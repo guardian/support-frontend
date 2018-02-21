@@ -17,11 +17,10 @@ import model.stripe._
 
 trait StripeService {
 
-  // TODO: decide if this needs to be asynchronous
   def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge]
 }
 
-class SingleAccountStripeService(config: StripeAccountConfig)(implicit ec: ExecutionContext) extends StripeService with StrictLogging {
+class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
 
   // Don't set the secret API key globally (i.e. Stripe.apiKey = "api_key")
   // since charges in AUD and other currencies (respectively) will be made against different accounts.
@@ -52,11 +51,11 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit ec: Execu
 }
 
 // Create charges against out default Stripe account
-class DefaultStripeService(config: StripeAccountConfig.Default)(implicit ec: ExecutionContext)
+class DefaultStripeService (config: StripeAccountConfig.Default)(implicit pool: StripeThreadPool)
   extends SingleAccountStripeService(config)
 
 // Create charges against our Australia Stripe account
-class AustraliaStripeService(config: StripeAccountConfig.Australia)(implicit ec: ExecutionContext)
+class AustraliaStripeService(config: StripeAccountConfig.Australia)(implicit pool: StripeThreadPool)
   extends SingleAccountStripeService(config)
 
 // Our default Stripe account was charging people from Australia in USD,
@@ -74,8 +73,8 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
 
 object StripeService {
 
-  def fromConfig(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
-    ThreadPool.Stripe.load().map { implicit ec =>
+  def apply(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
+    StripeThreadPool.load().map { implicit pool =>
       val default = new DefaultStripeService(config.default)
       val au = new AustraliaStripeService(config.au)
       new CurrencyBasedStripeService(default, au)
