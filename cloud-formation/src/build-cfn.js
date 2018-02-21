@@ -9,6 +9,7 @@ try { fs.mkdirSync('../target'); } catch(err) { }
 //converted to Json before inclusion in the final cfn output
 let partials = {
   retry: loadTemplate('retries.yaml'),
+  emailRetry: loadTemplate('emailRetries.yaml'),
   catch: loadTemplate('catch.yaml')
 }
 const stateMachine = Handlebars.compile(loadTemplate('state-machine.yaml'))
