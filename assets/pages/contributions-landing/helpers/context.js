@@ -24,6 +24,4 @@ function saveContext(dispatch: Action => void) {
 
 // ----- Exports ----- //
 
-export {
-  saveContext,
-};
+export { saveContext };

@@ -136,6 +136,4 @@ function createContributionLandingReducer(amountMonthly: string) {
 
 // ----- Exports ----- //
 
-export {
-  createContributionLandingReducer,
-};
+export { createContributionLandingReducer };

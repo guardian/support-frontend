@@ -91,6 +91,4 @@ const directDebitReducer = (
 
 // ----- Exports ----- //
 
-export {
-  directDebitReducer,
-};
+export { directDebitReducer };

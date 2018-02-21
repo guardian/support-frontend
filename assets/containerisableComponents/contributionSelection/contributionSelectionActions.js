@@ -34,6 +34,4 @@ function contributionSelectionActionsFor(scope: string): Object {
 
 // ----- Exports ----- //
 
-export {
-  contributionSelectionActionsFor,
-};
+export { contributionSelectionActionsFor };

@@ -32,6 +32,4 @@ const checkAccount = (
   return fetch(routes.directDebitCheckAccount, requestData);
 };
 
-export {
-  checkAccount,
-};
+export { checkAccount };

@@ -25,6 +25,4 @@ function payPalContributionButtonActionsFor(scope: string): Object {
 
 // ----- Exports ----- //
 
-export {
-  payPalContributionButtonActionsFor,
-};
+export { payPalContributionButtonActionsFor };

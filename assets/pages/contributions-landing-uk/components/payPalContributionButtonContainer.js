@@ -5,12 +5,8 @@
 import { connect } from 'react-redux';
 
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
-import {
-  payPalContributionButtonActionsFor,
-} from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
-import {
-  getAmount,
-} from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
+import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
+import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 
 import type { State } from '../contributionsLandingUKReducer';
 

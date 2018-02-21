@@ -4,9 +4,7 @@
 
 import React from 'react';
 import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
-import {
-  paypalContributionsRedirect,
-} from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
+import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { generateClassName } from 'helpers/utilities';
 import * as storage from 'helpers/storage';
 
