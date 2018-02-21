@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { Node } from 'react';
 import { SvgExclamation } from 'components/svg/svg';
 
 
@@ -11,7 +12,7 @@ import { SvgExclamation } from 'components/svg/svg';
 type PropTypes = {
   showError?: boolean,
   message: ?string,
-  svg?: PropTypes.node,
+  svg?: Node,
 };
 
 

@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import {
   updateSortCode,
   updateAccountNumber,
@@ -122,70 +123,6 @@ const DirectDebitForm = (props: PropTypes) => (
 
 
 // ----- Auxiliary components ----- //
-
-type SortCodePropTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-};
-
-class SortCodeInput extends React.Component<SortCodePropTypes> {
-  constructor(props: {value: string, onChange: Function}) {
-    super(props);
-    const split = props.value.match(/.{1,2}/g);
-    this.state = {
-      sortCodeValues: split || Array(3).fill(''),
-      onChange: props.onChange,
-      sortCodeInputs: Array(3),
-    };
-  }
-
-  setFocus(index: number) {
-    if (this.state.sortCodeValues[index].length === 2 && index < 2) {
-      this.state.sortCodeInputs[index + 1].focus();
-    }
-  }
-
-  handleUpdate(index: number, event: SyntheticInputEvent<HTMLInputElement>) {
-    this.state.sortCodeValues[index] = event.target.value;
-    this.state.onChange(this.state.sortCodeValues.join(''));
-    this.setFocus(index);
-  }
-
-  render() {
-    return (
-      <div className="component-direct-debit-form__sort-code">
-        <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
-          Sort Code
-        </label>
-        <input
-          id="sort-code-input-1"
-          value={this.state.sortCodeValues[0]}
-          onChange={value => this.handleUpdate(0, value)}
-          ref={(input) => { this.state.sortCodeInputs[0] = input; }}
-          type="text"
-          className="component-direct-debit-form__sort-code-field"
-        /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
-        <input
-          id="sort-code-input-2"
-          value={this.state.sortCodeValues[1]}
-          onChange={value => this.handleUpdate(1, value)}
-          ref={(input) => { this.state.sortCodeInputs[1] = input; }}
-          type="text"
-          className="component-direct-debit-form__sort-code-field"
-        /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
-        <input
-          id="sort-code-input-3"
-          value={this.state.sortCodeValues[2]}
-          onChange={value => this.handleUpdate(2, value)}
-          ref={(input) => { this.state.sortCodeInputs[2] = input; }}
-          type="text"
-          className="component-direct-debit-form__sort-code-field"
-        />
-
-      </div>
-    );
-  }
-}
 
 function AccountNumberInput(props: {onChange: Function, value: string}) {
   return (
