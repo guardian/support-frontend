@@ -8,7 +8,7 @@ GET /unsupported-browser                            controllers.Application.unsu
 
 # ----- Bundles Landing Page ----- #
 
-GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: String ?= "")
+GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", INTCMP: String ?= "")
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
@@ -29,17 +29,17 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 # ----- Contributions ----- #
 
-GET  /uk/contribute                                 controllers.Application.contributionsLandingUK(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk-old", js="contributionsLandingPageUKOld.js", newDesigns: String ?= "")
-GET  /us/contribute                                 controllers.Application.contributionsLandingUS(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us-old", js="contributionsLandingPageUSOld.js", newDesigns: String ?= "")
+GET  /uk/contribute                                 controllers.Application.contributionsLandingUK(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk-old", js="contributionsLandingPageUKOld.js", INTCMP: String ?= "")
+GET  /us/contribute                                 controllers.Application.contributionsLandingUS(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us-old", js="contributionsLandingPageUSOld.js", INTCMP: String ?= "")
 GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPageAU.js")
 GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPageEU.js")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/recurring/thankyou                 controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thankyou-page-old", js="regularContributionsThankyouPageOld.js", newDesigns: String ?= "")
+GET  /contribute/recurring/thankyou                 controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thankyou-page-old", js="regularContributionsThankyouPageOld.js", INTCMP: String ?= "")
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js", newDesigns: String ?= "")
+GET  /contribute/recurring/pending                  controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js", INTCMP: String ?= "")
 GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
 
 # this endpoint should be removed once identity remove

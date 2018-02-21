@@ -24,9 +24,9 @@ class Application(
 
   implicit val ar = assets
 
-  private def applyCircles(queryParam: String, id: String, js: String, modifiedId: String, modifiedJs: String): (String, String) = {
-    queryParam match {
-      case "circles-garnett" => (modifiedId, modifiedJs)
+  private def applyCircles(intCmp: String, id: String, js: String, modifiedId: String, modifiedJs: String): (String, String) = {
+    intCmp match {
+      case "gdnwb_copts_memco_sandc_circles_variant" => (modifiedId, modifiedJs)
       case _ => (id, js)
     }
   }
@@ -59,8 +59,8 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles") {
+  def bundleLanding(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
+    if (INTCMP == "circles") {
       Ok(views.html.bundleLanding(
         title,
         "support-landing-page-old",
@@ -69,7 +69,7 @@ class Application(
         description = Some(stringsConfig.bundleLandingDescription)
       ))
     } else {
-      val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
+      val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "support-landing-page", "supportLandingPage.js")
       Ok(views.html.bundleLanding(
         title,
         updatedId,
@@ -80,13 +80,13 @@ class Application(
     }
   }
 
-  def regularContributionsThankYou(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
     Ok(views.html.react(title, updatedId, updatedJs))
   }
 
-  def contributionsLandingUK(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")
+  def contributionsLandingUK(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")
     Ok(views.html.contributionsLanding(
       title,
       description = Some(stringsConfig.contributionLandingDescription),
@@ -96,8 +96,8 @@ class Application(
     ))
   }
 
-  def contributionsLandingUS(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "contributions-landing-page-us", "contributionsLandingPageUS.js")
+  def contributionsLandingUS(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-us", "contributionsLandingPageUS.js")
     Ok(views.html.contributionsLanding(
       title,
       description = Some(stringsConfig.contributionLandingDescription),
@@ -107,8 +107,8 @@ class Application(
     ))
   }
 
-  def regularContributionsPending(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+  def regularContributionsPending(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
     Ok(views.html.react(title, updatedId, updatedJs))
   }
 
