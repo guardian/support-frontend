@@ -70,13 +70,20 @@ function SvgCreditCard() {
 function SvgExclamation() {
 
   return (
-    <svg
-      className="svg-exclamation"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 2.2 8.9"
-      preserveAspectRatio="xMinYMid"
-    >
-      <path d="M1.1 8.9C.5 8.9 0 8.4 0 7.8c0-.6.5-1.1 1.1-1.1.6 0 1.1.5 1.1 1.1 0 .6-.5 1.1-1.1 1.1zM.6 0h1.1l.4.4-.4 5.2H.6L.2.4.6 0z" />
+    <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <title>Error</title>
+      <g id="DD_Mobile_Error_1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" transform="translate(-19.000000, -468.000000)">
+        <g id="Group-6-Copy-2" transform="translate(10.000000, 28.000000)">
+          <g id="Incorrect" transform="translate(10.000000, 441.000000)">
+            <g id="Group-6">
+              <g id="Error">
+                <circle id="Oval-4" stroke="#E00000" cx="10" cy="10" r="10" />
+                <path d="M8.78571429,4.83160907 L9.30357143,11.505613 L10.7321429,11.505613 L11.2678571,4.83160907 L10.75,4.28571429 L9.30357143,4.28571429 L8.78571429,4.83160907 Z M11.4285714,14.3231345 C11.4285714,13.5483161 10.7857143,12.9143738 9.98214286,12.9143738 C9.21428571,12.9143738 8.57142857,13.5483161 8.57142857,14.3231345 C8.57142857,15.0803434 9.21428571,15.7142857 9.98214286,15.7142857 C10.7678571,15.7142857 11.4285714,15.0803434 11.4285714,14.3231345 Z" id="Type-/-Exclamation-mark" fill="#E00000" />
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
     </svg>
   );
 

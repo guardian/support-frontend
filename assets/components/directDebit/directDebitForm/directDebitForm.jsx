@@ -51,9 +51,8 @@ function mapDispatchToProps(dispatch) {
     payDirectDebitClicked: (callback) => {
       dispatch(payDirectDebitClicked(callback));
     },
-    updateSortCode: (event: SyntheticInputEvent<HTMLInputElement>) => {
-      const sortCode: string = event.target.value;
-      dispatch(updateSortCode(sortCode));
+    updateSortCode: (value: string) => {
+      dispatch(updateSortCode(value));
     },
     updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
       const accountNumber: string = event.target.value;
@@ -124,38 +123,58 @@ const DirectDebitForm = (props: PropTypes) => (
 
 // ----- Auxiliary components ----- //
 
-function SortCodeInput(props: {value: string, onChange: Function}) {
-  return (
-    <div className="component-direct-debit-form__sort-code">
-      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
-        Sort Code
-      </label>
-      <input
-        id="sort-code-input"
-        value={props.value}
-        onChange={props.onChange}
-        type="text"
-        className="component-direct-debit-form__sort-code-field"
-      /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
-      <input
-        id="sort-code-input"
-        value={props.value}
-        onChange={props.onChange}
-        type="text"
-        className="component-direct-debit-form__sort-code-field"
-      /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
-      <input
-        id="sort-code-input"
-        value={props.value}
-        onChange={props.onChange}
-        type="text"
-        className="component-direct-debit-form__sort-code-field"
-      />
+type SortCodePropTypes = {
+  value: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func.isRequired,
+};
 
-    </div>
-  );
+class SortCodeInput extends React.Component<SortCodePropTypes> {
+  constructor(props: {value: string, onChange: Function}) {
+    super(props);
+    const split = props.value.match(/.{1,2}/g);
+    this.state = {
+      sortCodeParts: split || Array(3).fill(''),
+      onChange: props.onChange,
+    };
+  }
+
+  handleUpdate(index: number, event: SyntheticInputEvent<HTMLInputElement>) {
+    this.state.sortCodeParts[index] = event.target.value;
+    this.state.onChange(this.state.sortCodeParts.join(''));
+  }
+
+  render() {
+    return (
+      <div className="component-direct-debit-form__sort-code">
+        <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
+          Sort Code
+        </label>
+        <input
+          id="sort-code-input-1"
+          value={this.state.sortCodeParts[0]}
+          onChange={value => this.handleUpdate(0, value)}
+          type="text"
+          className="component-direct-debit-form__sort-code-field"
+        /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+        <input
+          id="sort-code-input-2"
+          value={this.state.sortCodeParts[1]}
+          onChange={value => this.handleUpdate(1, value)}
+          type="text"
+          className="component-direct-debit-form__sort-code-field"
+        /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+        <input
+          id="sort-code-input-3"
+          value={this.state.sortCodeParts[2]}
+          onChange={value => this.handleUpdate(2, value)}
+          type="text"
+          className="component-direct-debit-form__sort-code-field"
+        />
+
+      </div>
+    );
+  }
 }
-
 
 function AccountNumberInput(props: {onChange: Function, value: string}) {
   return (

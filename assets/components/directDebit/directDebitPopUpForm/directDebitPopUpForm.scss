@@ -21,7 +21,7 @@
   display: inline-block;
   top: 50%;
   width: 475px;
-  height: 566px;
+  min-height: 566px;
   transform: translateY(-50%);
   background-color: gu-colour(garnett-neutral-3);
   text-align: left;
