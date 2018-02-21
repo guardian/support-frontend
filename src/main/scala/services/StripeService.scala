@@ -73,7 +73,7 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
 
 object StripeService {
 
-  def apply(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
+  def fromStripeConfig(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
     StripeThreadPool.load().map { implicit pool =>
       val default = new DefaultStripeService(config.default)
       val au = new AustraliaStripeService(config.au)

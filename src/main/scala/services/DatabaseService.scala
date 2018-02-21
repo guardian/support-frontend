@@ -89,6 +89,6 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
 
 object PostgresDatabaseService {
 
-  def apply(database: Database)(implicit system: ActorSystem): InitializationResult[PostgresDatabaseService] =
+  def fromDatabase(database: Database)(implicit system: ActorSystem): InitializationResult[PostgresDatabaseService] =
     JdbcThreadPool.load().map { implicit pool => new PostgresDatabaseService(database) }
 }

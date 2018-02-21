@@ -41,8 +41,8 @@ object StripeBackend {
     extends EnvironmentBasedBuilder[StripeBackend] {
 
     override def build(env: Environment): InitializationResult[StripeBackend] = (
-      configLoader.loadConfig[StripeConfig](env).andThen(StripeService.apply): InitializationResult[StripeService],
-      databaseProvider.loadDatabase(env).andThen(PostgresDatabaseService.apply): InitializationResult[DatabaseService]
+      configLoader.loadConfig[StripeConfig](env).andThen(StripeService.fromStripeConfig): InitializationResult[StripeService],
+      databaseProvider.loadDatabase(env).andThen(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService]
     ).mapN(StripeBackend.apply)
   }
 }
