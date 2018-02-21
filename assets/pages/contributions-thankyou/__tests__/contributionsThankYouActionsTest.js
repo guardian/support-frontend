@@ -1,7 +1,5 @@
 // @flow
-import {
-  setConsentApiError,
-} from '../contributionsThankYouActions';
+import { setConsentApiError } from '../contributionsThankYouActions';
 
 
 describe('Contributions Thank You actions', () => {

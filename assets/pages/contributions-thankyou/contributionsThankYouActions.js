@@ -14,6 +14,4 @@ function setConsentApiError(consentApiError: boolean): Action {
 
 // ----- Exports ----- //
 
-export {
-  setConsentApiError,
-};
+export { setConsentApiError };

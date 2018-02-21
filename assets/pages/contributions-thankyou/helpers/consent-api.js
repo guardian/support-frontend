@@ -47,6 +47,4 @@ function sendMarketingPreferencesToIdentity(
 
 // ----- Exports ----- //
 
-export {
-  sendMarketingPreferencesToIdentity,
-};
+export { sendMarketingPreferencesToIdentity };

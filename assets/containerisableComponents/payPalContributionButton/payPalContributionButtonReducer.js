@@ -47,6 +47,4 @@ function payPalContributionButtonReducerFor(scope: string): Function {
 
 // ----- Exports ----- //
 
-export {
-  payPalContributionButtonReducerFor,
-};
+export { payPalContributionButtonReducerFor };

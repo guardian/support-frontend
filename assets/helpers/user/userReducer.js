@@ -84,6 +84,4 @@ function userReducer(
 
 }
 
-export {
-  userReducer,
-};
+export { userReducer };

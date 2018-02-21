@@ -79,6 +79,4 @@ const init = (dispatch: Function) => {
 
 // ----- Exports ----- //
 
-export {
-  init,
-};
+export { init };

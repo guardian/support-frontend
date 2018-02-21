@@ -13,6 +13,4 @@ const renderPage = (content: Object, id: string) => {
   }
 };
 
-export {
-  renderPage,
-};
+export { renderPage };

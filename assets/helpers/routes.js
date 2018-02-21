@@ -22,6 +22,4 @@ const routes: {
 
 // ----- Exports ----- //
 
-export {
-  routes,
-};
+export { routes };

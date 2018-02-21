@@ -49,6 +49,4 @@ const features: {
 
 // ----- Exports ----- //
 
-export {
-  features,
-};
+export { features };
