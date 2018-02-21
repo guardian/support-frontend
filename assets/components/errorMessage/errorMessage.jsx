@@ -11,6 +11,7 @@ import { SvgExclamation } from 'components/svg/svg';
 type PropTypes = {
   showError?: boolean,
   message: ?string,
+  svg?: PropTypes.node,
 };
 
 
@@ -22,7 +23,7 @@ export default function ErrorMessage(props: PropTypes) {
 
     return (
       <div className="component-error-message">
-        <SvgExclamation /><span className="component-error-message__message">{props.message}</span>
+        {props.svg}<span className="component-error-message__message">{props.message}</span>
       </div>
     );
 
@@ -37,4 +38,5 @@ export default function ErrorMessage(props: PropTypes) {
 
 ErrorMessage.defaultProps = {
   showError: true,
+  svg: <SvgExclamation />,
 };

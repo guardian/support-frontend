@@ -12,7 +12,7 @@ import {
   updateAccountHolderConfirmation,
   payDirectDebitClicked,
 } from 'components/directDebit/directDebitActions';
-import { SvgDirectDebitSymbol, SvgArrowRightStraight } from 'components/svg/svg';
+import { SvgDirectDebitSymbol, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
 
 // ---- Types ----- //
 
@@ -105,7 +105,7 @@ const DirectDebitForm = (props: PropTypes) => (
       <SvgArrowRightStraight />
     </button>
 
-    <ErrorMessage message={props.formError} />
+    <ErrorMessage message={props.formError} svg={<SvgExclamationAlternate />} />
 
     <div className="component-direct-debit-form__legal__content">
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
