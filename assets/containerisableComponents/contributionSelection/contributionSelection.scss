@@ -16,12 +16,17 @@
     background-color: transparent;
     box-sizing: border-box;
     color: gu-colour(news-garnett-main-1);
-    border: 1px solid gu-colour(news-garnett-media-main-1);
+    border: none;
     height: 40px;
+    padding-left: 23px;
 
     .svg-exclamation {
-      fill: gu-colour(news-garnett-main-1);
+      display: none;
     }
+  }
+
+  .component-error-message__message {
+    position: static;
   }
 }
 
@@ -33,31 +38,11 @@
       width: 317px;
     }
   }
-
-  .component-error-message {
-    width: 100%;
-
-    @include mq($from: mobileMedium) {
-      width: 321px;
-    }
-  }
-
-  .component-error-message__message {
-    padding-left: 7px;
-  }
 }
 
 .component-contribution-selection--one-off {
   .component-number-input {
     width: 261px;
-  }
-
-  .component-error-message {
-    width: 265px;
-  }
-
-  .component-error-message__message {
-    padding-left: 14px;
   }
 }
 
@@ -123,13 +108,25 @@
 
   .component-number-input__input {
     font-size: 14px;
+    font-weight: bold;
+    color: rgba(gu-colour(garnett-neutral-1), 0.5);
+
+    &::-moz-placeholder {
+      opacity: 1;
+    }
   }
 
   .component-number-input--selected {
-    background-color: gu-colour(news-garnett-highlight);
-
     .component-number-input__label {
       color: gu-colour(garnett-neutral-1);
+    }
+
+    .component-number-input__input {
+      color: gu-colour(garnett-neutral-1);
+
+      &::placeholder {
+        color: transparent;
+      }
     }
   }
 }
