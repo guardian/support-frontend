@@ -63,4 +63,9 @@
     margin-top: $gu-v-spacing;
   }
 
+  .component-cta-link {
+    @include mq($until: phablet) {
+      margin-top: $gu-v-spacing * 2;
+    }
+  }
 }
