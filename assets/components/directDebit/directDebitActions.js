@@ -78,6 +78,7 @@ function payDirectDebitClicked(callback: Function): Function {
           throw new Error('incorrect_input');
         }
         callback(undefined, bankAccountNumber, bankSortCode, accountHolderName);
+        dispatch(closeDirectDebitPopUp());
       })
       .catch((e) => {
         let msg = '';
