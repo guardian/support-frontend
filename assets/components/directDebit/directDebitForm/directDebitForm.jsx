@@ -133,14 +133,22 @@ class SortCodeInput extends React.Component<SortCodePropTypes> {
     super(props);
     const split = props.value.match(/.{1,2}/g);
     this.state = {
-      sortCodeParts: split || Array(3).fill(''),
+      sortCodeValues: split || Array(3).fill(''),
       onChange: props.onChange,
+      sortCodeInputs: Array(3),
     };
   }
 
+  setFocus(index: number) {
+    if (this.state.sortCodeValues[index].length === 2 && index < 2) {
+      this.state.sortCodeInputs[index + 1].focus();
+    }
+  }
+
   handleUpdate(index: number, event: SyntheticInputEvent<HTMLInputElement>) {
-    this.state.sortCodeParts[index] = event.target.value;
-    this.state.onChange(this.state.sortCodeParts.join(''));
+    this.state.sortCodeValues[index] = event.target.value;
+    this.state.onChange(this.state.sortCodeValues.join(''));
+    this.setFocus(index);
   }
 
   render() {
@@ -151,22 +159,25 @@ class SortCodeInput extends React.Component<SortCodePropTypes> {
         </label>
         <input
           id="sort-code-input-1"
-          value={this.state.sortCodeParts[0]}
+          value={this.state.sortCodeValues[0]}
           onChange={value => this.handleUpdate(0, value)}
+          ref={(input) => { this.state.sortCodeInputs[0] = input; }}
           type="text"
           className="component-direct-debit-form__sort-code-field"
         /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
         <input
           id="sort-code-input-2"
-          value={this.state.sortCodeParts[1]}
+          value={this.state.sortCodeValues[1]}
           onChange={value => this.handleUpdate(1, value)}
+          ref={(input) => { this.state.sortCodeInputs[1] = input; }}
           type="text"
           className="component-direct-debit-form__sort-code-field"
         /><span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
         <input
           id="sort-code-input-3"
-          value={this.state.sortCodeParts[2]}
+          value={this.state.sortCodeValues[2]}
           onChange={value => this.handleUpdate(2, value)}
+          ref={(input) => { this.state.sortCodeInputs[2] = input; }}
           type="text"
           className="component-direct-debit-form__sort-code-field"
         />
