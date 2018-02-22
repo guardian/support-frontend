@@ -6,8 +6,8 @@ import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.typesafe.scalalogging.StrictLogging
 import org.joda.time.DateTime
-
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 case class EmailFields(
