@@ -109,7 +109,8 @@ Resources:
                 - logs:PutLogEvents
                 - logs:DescribeLogStreams
                 Resource: arn:aws:logs:*:*:*
-        # Not sure we need this
+        # Not sure we need this, because the key is uses has alias support-workers-CODE
+        # This makes me think that it's something to do with the step functions
 #        - PolicyName: KMSEncryption
 #          PolicyDocument:
 #            Version: 2012-10-17
