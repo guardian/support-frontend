@@ -5,10 +5,10 @@ import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
 import router.Routes
 import util.RequestBasedProvider
-
 import aws.AWSClientBuilder
 import backend.StripeBackend
 import _root_.controllers.StripeController
+import _root_.controllers.AppController
 import conf.ConfigLoader
 import model.{DefaultThreadPoolProvider, RequestEnvironments}
 import services.DatabaseProvider
@@ -40,6 +40,7 @@ class MyComponents(context: Context)
 
   val databaseProvider = new DatabaseProvider(dbApi)
 
+  // TODO: QUESTION: I assume this means the app won't start up if it can't find required config? (which is correct)
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     // Actor system not an implicit val, so pass it explicitly
     new StripeBackend.Builder(configLoader, databaseProvider)(actorSystem)
@@ -49,6 +50,7 @@ class MyComponents(context: Context)
   override val router =
     new Routes(
       httpErrorHandler,
+      new AppController(controllerComponents),
       new StripeController(controllerComponents, stripeBackendProvider)
     )
 }
