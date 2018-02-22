@@ -25,7 +25,7 @@ const DOMAINS: {
 
 const getQueryParameter = (paramName: string, defaultValue?: string): ?string => {
 
-  const params = new URLSearchParams(window.location.search);
+  const params = new URL(window.location).searchParams;
 
   return params.get(paramName) ||
     params.get(paramName.toLowerCase()) ||
