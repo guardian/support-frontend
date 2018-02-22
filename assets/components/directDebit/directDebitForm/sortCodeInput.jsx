@@ -41,6 +41,7 @@ function SortCodeField(props: { value: string, onChange: Function}) {
       value={props.value}
       onChange={props.onChange}
       type="text"
+      maxLength={2}
       className="component-direct-debit-form__sort-code-field"
     />
   );
