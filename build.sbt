@@ -34,7 +34,12 @@ lazy val root = (project in file("."))
 
 enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging)
 
+debianPackageDependencies := Seq("openjdk-8-jre-headless")
 packageName in Debian := name.value
+packageSummary := "Payment API Play App"
+packageDescription := """API for reader revenue payments"""
+maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
+
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:payment-api"
