@@ -20,7 +20,7 @@ Parameters:
   App:
     Description: Applied directly as a tag
     Type: String
-    Default: frontend
+    Default: payment-api
   AMI:
     Description: AMI ID
     Type: String
@@ -232,7 +232,7 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub No healthy instances for support-frontend in ${Stage}
+      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -255,7 +255,7 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub High 5XX rate for support-frontend in ${Stage}
+      AlarmName: !Sub High 5XX rate for ${App} in ${Stage}
       MetricName: HTTPCode_Target_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
