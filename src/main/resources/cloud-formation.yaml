@@ -21,7 +21,13 @@ Parameters:
     Description: Applied directly as a tag
     Type: String
     Default: payment-api
-  Version:
+  ProjectName:
+    Description: >
+      This must match the name key in your build.sbt.
+      It will probably be the same as App, but doesn't have to be.
+    Type: String
+    Default: payment-api
+  ProjectVersion:
     Description: This must match the version key in your build.sbt
     Type: String
     Default: 0.1
@@ -90,9 +96,9 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -ev
           mkdir /etc/gu
-          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/payment-api_${Version}_all.deb /tmp
-          dpkg -i /tmp/payment-api_${Version}_all.deb
-          /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/payment-api/application.log
+          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/${ProjectName}_${ProjectVersion}_all.deb /tmp
+          dpkg -i /tmp/${ProjectName}_${ProjectVersion}_all.deb
+          /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/${App}/application.log
   AppRole:
     Type: AWS::IAM::Role
     Properties:
