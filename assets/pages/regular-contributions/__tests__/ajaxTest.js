@@ -26,7 +26,7 @@ describe('Regular Contributions Payment fields', () => {
     );
 
     expect(paymentFields.accountHolderName).toEqual(expectedPaymentFields.accountHolderName);
-    expect(paymentFields.sortCode).toEqual(expectedPaymentFields.sortCode);
+    expect(paymentFields.sortCode1).toEqual(expectedPaymentFields.sortCode);
     expect(paymentFields.accountNumber).toEqual(expectedPaymentFields.accountNumber);
     expect(Object.keys(paymentFields).length).toEqual(3);
   });

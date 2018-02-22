@@ -107,7 +107,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       val json =
         """
         |{
-        |   "sortCode": "121212",
+        |   "sortCode1": "121212",
         |   "accountNumber": "12121212",
         |   "accountHolderName": "Example Name"
         |}
@@ -128,7 +128,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
       val json =
         """
           |{
-          |   "sortCode": "121212",
+          |   "sortCode1": "121212",
           |   "accountNumber": "12121212"
           |}
         """.stripMargin

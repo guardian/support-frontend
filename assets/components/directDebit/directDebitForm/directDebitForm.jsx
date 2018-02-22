@@ -20,11 +20,11 @@ import { SvgDirectDebitSymbol, SvgArrowRightStraight, SvgExclamationAlternate } 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: Function,
-  sortCode: string,
+  sortCode: Array<string>,
   accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
-  updateSortCode: (sortCode: string) => void,
+  updateSortCode: (index: number, partialSortCode: string) => void,
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
@@ -38,7 +38,7 @@ type PropTypes = {
 function mapStateToProps(state) {
   return {
     isPopUpOpen: state.page.directDebit.isPopUpOpen,
-    sortCode: state.page.directDebit.bankSortCode,
+    sortCode: state.page.directDebit.sortCode,
     accountNumber: state.page.directDebit.bankAccountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
@@ -52,8 +52,8 @@ function mapDispatchToProps(dispatch) {
     payDirectDebitClicked: (callback) => {
       dispatch(payDirectDebitClicked(callback));
     },
-    updateSortCode: (value: string) => {
-      dispatch(updateSortCode(value));
+    updateSortCode: (index: number, event: SyntheticInputEvent<HTMLInputElement>) => {
+      dispatch(updateSortCode(index, event.target.value));
     },
     updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
       const accountNumber: string = event.target.value;
@@ -88,7 +88,7 @@ const DirectDebitForm = (props: PropTypes) => (
 
     <SortCodeInput
       onChange={props.updateSortCode}
-      value={props.sortCode}
+      sortCode={props.sortCode}
     />
 
     <ConfirmationInput

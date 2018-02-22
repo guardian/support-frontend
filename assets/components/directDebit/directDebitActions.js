@@ -10,7 +10,7 @@ import { checkAccount } from './helpers/ajax';
 export type Action =
   | { type: 'DIRECT_DEBIT_POP_UP_OPEN' }
   | { type: 'DIRECT_DEBIT_POP_UP_CLOSE' }
-  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index: number, partialSortCode: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
@@ -25,9 +25,11 @@ const openDirectDebitPopUp = (): Action => {
   return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
 };
 
-const closeDirectDebitPopUp = (): Action => ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
+const closeDirectDebitPopUp = (): Action =>
+  ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
 
-const updateSortCode = (sortCode: string): Action => ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode });
+const updateSortCode = (index: number, partialSortCode: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index, partialSortCode });
 
 const updateAccountNumber = (accountNumber: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber });
@@ -50,12 +52,13 @@ function payDirectDebitClicked(callback: Function): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
-      bankSortCode,
+      sortCode,
       bankAccountNumber,
       accountHolderName,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
+    const bankSortCode = sortCode.join('');
     const isTestUser: boolean = getState().page.user.isTestUser || false;
     const { csrf } = getState().page;
 
