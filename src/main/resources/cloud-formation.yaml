@@ -21,6 +21,10 @@ Parameters:
     Description: Applied directly as a tag
     Type: String
     Default: payment-api
+  Version:
+    Description: This must match the version key in your build.sbt
+    Type: String
+    Default: 0.1
   AMI:
     Description: AMI ID
     Type: String
@@ -86,8 +90,8 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -ev
           mkdir /etc/gu
-          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/payment-api_1.0-SNAPSHOT_all.deb /tmp
-          dpkg -i /tmp/payment-api_1.0-SNAPSHOT_all.deb
+          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/payment-api_${Version}_all.deb /tmp
+          dpkg -i /tmp/payment-api_${Version}_all.deb
           /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/payment-api/application.log
   AppRole:
     Type: AWS::IAM::Role
