@@ -1,32 +1,26 @@
 .component-direct-debit-form {
   clear: left;
   margin-top: 80px;
-  margin-left: 20px;
+  margin-left: 0px;
+  @include mq($from: mobileLandscape) {
+    margin-left: 20px;
+  }
+
   .component-error-message {
     background-color: transparent;
     color: gu-colour(error);
     padding: 0;
-    margin-top: 6px;
 
-    .svg-exclamation {
-      fill: gu-colour(error);
-      padding: 3px 8px;
-      border: 1px solid;
-      border-radius: 20px;
-      margin-right: 4px;
+    .svg-exclamation-alternate {
+      float: left;
+      margin-right: 8px;
     }
 
     .component-error-message__message {
-      left: 30px;
+      position: relative;
+      left: 1px;
+      top: 3px;
     }
-  }
-
-  .svg-exclamation {
-    position: absolute;
-    height: 16px;
-    fill: gu-colour(error);
-    top: 50%;
-    transform: translateY(-50%);
   }
 }
 
@@ -66,7 +60,10 @@
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
   height: 40px;
-  width: 405px;
+  width: 315px;
+  @include mq($from: mobileLandscape) {
+    width: 405px;
+  }
   padding: 0 15px;
 }
 
@@ -148,7 +145,10 @@
   position: relative;
   text-align: left;
   height: 54px;
-  width: 435px;
+  width: 345px;
+  @include mq($from: mobileLandscape) {
+    width: 435px;
+  }
   margin-top: 35px;
   margin-bottom: 10px;
 

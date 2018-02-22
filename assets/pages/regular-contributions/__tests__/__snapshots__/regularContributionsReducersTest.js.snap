@@ -15,9 +15,13 @@ Object {
     "accountHolderConfirmation": false,
     "accountHolderName": "",
     "bankAccountNumber": "",
-    "bankSortCode": "",
     "formError": "",
     "isPopUpOpen": false,
+    "sortCode": Array [
+      "",
+      "",
+      "",
+    ],
   },
   "regularContrib": Object {
     "amount": 20,

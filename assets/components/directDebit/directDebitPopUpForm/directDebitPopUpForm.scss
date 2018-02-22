@@ -20,13 +20,17 @@
   position: relative;
   display: inline-block;
   top: 50%;
-  width: 475px;
+  width: 345px;
+  padding: 10px 5px;
+  @include mq($from: mobileLandscape) {
+    width: 475px;
+    padding: 10px;
+  }
   min-height: 566px;
   transform: translateY(-50%);
   background-color: gu-colour(garnett-neutral-3);
   text-align: left;
   border-top: 1px solid gu-colour(garnett-neutral-1);
-  padding: 10px;
 }
 
 .component-direct-debit-pop-up-form__heading {
@@ -35,6 +39,10 @@
   font-weight: bolder;
   font-size: 24px;
   line-height: 30px;
+  max-width: 280px;
+  @include mq($from: mobileLandscape) {
+    max-width: 400px;
+  }
 }
 
 .component-direct-debit-pop-up-form__close-button {
