@@ -1,0 +1,8 @@
+Retry:
+- ErrorEquals:
+  - com.gu.support.workers.exceptions.RetryNone
+  MaxAttempts: 0
+- ErrorEquals:
+  - States.ALL #Wildcard to capture any other error, including those with originate from outside of our code (e.g. an exception from AWS)
+  IntervalSeconds: 60
+  MaxAttempts: 1
