@@ -4,10 +4,12 @@ Parameters:
   VpcId:
     Type: String
     Description: VpcId of your existing Virtual Private Cloud (VPC)
+    # membership-vpc
     Default: vpc-e6e00183
   Subnets:
     Type: CommaDelimitedList
     Description: The list of SubnetIds in your Virtual Private Cloud (VPC)
+    # membership public subnet A, membership public subnet B, membership public subnet C
     Default: subnet-cb91ae8d, subnet-a7b74ac2, subnet-179e8063
   Stack:
     Description: Applied directly as a tag
@@ -22,6 +24,8 @@ Parameters:
   AMI:
     Description: AMI ID
     Type: String
+    # I think this is irrelevant, right? Since we use Amigo to bake our AMIs,
+    # it gets overwritten by RiffRaff on each deploy so it always has the latest.
     Default: ami-0eb88168
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
@@ -111,6 +115,8 @@ Resources:
                 Resource: arn:aws:logs:*:*:*
         # Not sure we need this, because the key is uses has alias support-workers-CODE
         # This makes me think that it's something to do with the step functions
+        # TODO: find out what this is actually for.
+        # TODO: find out if we need our AMIs encrypted, as per Simon Hildrew's Tech Time
 #        - PolicyName: KMSEncryption
 #          PolicyDocument:
 #            Version: 2012-10-17
