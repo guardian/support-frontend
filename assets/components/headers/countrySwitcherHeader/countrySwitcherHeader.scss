@@ -27,11 +27,12 @@
 }
 
 .component-country-switcher-header__content {
-  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
-  height: 64px;
+  padding: ($gu-v-spacing / 2) 0 ($gu-v-spacing/2);
+  height: 54px;
 
   @include mq($from: mobileMedium) {
     height: 78px;
+    padding-bottom: $gu-v-spacing;
   }
 
   @include mq($from: mobileLandscape) {
