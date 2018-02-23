@@ -7,6 +7,7 @@ import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
+import monitoring.SafeLogger
 import utils.BrowserCheck
 
 import scala.concurrent.ExecutionContext
@@ -80,10 +81,19 @@ class Application(
     }
   }
 
-  def regularContributionsThankYou(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
-    Ok(views.html.react(title, updatedId, updatedJs))
-  }
+  def regularContributionsThankYou(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] =
+    AuthenticatedAction.async { implicit request =>
+      import cats.implicits._
+      val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+      identityService.getUser(request.user).map { fullUser =>
+        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, fullUser))
+      } fold (
+        { error =>
+          InternalServerError
+        },
+        identity(_)
+      )
+    }
 
   def contributionsLandingUK(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
     val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")

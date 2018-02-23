@@ -1,0 +1,26 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+@import com.gu.support.config._
+@import helper.CSRF
+
+@import com.gu.i18n.Currency.AUD
+@(
+  title: String,
+  id: String,
+  js: String,
+  user: IdUser
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader)
+
+@scripts = {
+    <script type="text/javascript">
+        window.guardian = window.guardian || {};
+        window.guardian.user = {
+            email: "@user.primaryEmailAddress",
+       }
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
+    </script>
+}
+
+@main(title = title, scripts = scripts, mainBundleJs = js) {
+    <main id="@id" class="gu-content-wrapper"></main>
+}

@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
-import { setConsentApiError } from '../contributionsThankYouActions';
-import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
+import { setConsentApiError } from '../pages/contributions-thankyou/contributionsThankYouActions';
+import type { Csrf as CsrfState } from './csrf/csrfReducer';
 
 // ----- Functions ----- //
 
