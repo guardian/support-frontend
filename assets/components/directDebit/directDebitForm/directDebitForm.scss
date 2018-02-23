@@ -64,7 +64,7 @@
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
   height: 40px;
-  width: 315px;
+  width: 313px;
   @include mq($from: mobileLandscape) {
     width: 405px;
   }
@@ -149,7 +149,7 @@
   position: relative;
   text-align: left;
   height: 54px;
-  width: 345px;
+  width: 343px;
   @include mq($from: mobileLandscape) {
     width: 435px;
   }

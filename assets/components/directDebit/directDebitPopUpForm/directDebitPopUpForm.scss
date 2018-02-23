@@ -21,10 +21,9 @@
   display: inline-block;
   top: 50%;
   width: 345px;
-  padding: 10px 5px;
+  padding: 10px;
   @include mq($from: mobileLandscape) {
     width: 475px;
-    padding: 10px;
   }
   min-height: 566px;
   transform: translateY(-50%);
@@ -53,6 +52,7 @@
   width: 44px;
   float: right;
   .svg-cross {
+    padding-left: 2px;
     padding-top: 3px;
     height: 19px;
   }
