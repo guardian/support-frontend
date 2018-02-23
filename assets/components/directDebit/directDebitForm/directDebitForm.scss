@@ -2,8 +2,6 @@
   clear: left;
   margin-top: 80px;
   margin-left: 0;
-  button:focus {outline:0;}
-  input:focus {outline:0;}
 
   @include mq($from: mobileLandscape) {
     margin-left: 20px;
