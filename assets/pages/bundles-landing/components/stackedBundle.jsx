@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
@@ -297,13 +298,15 @@ function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
 function ContributionBundle(props: PropTypes) {
 
   const contribAttrs: ContribAttrs =
-    getContribAttrs(
+    Object.assign(getContribAttrs(
       props.contribType,
       props.contribAmount,
       props.currency,
       props.isoCountry,
       props.intCmp,
-    );
+    ), {
+      showPaymentLogosUnderSubheading: true,
+    });
 
   const onClick = () => {
     if (!props.contribError) {
