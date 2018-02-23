@@ -98,28 +98,16 @@ const DirectDebitForm = (props: PropTypes) => (
       checked={props.accountHolderConfirmation}
     />
 
-    <button
-      id="qa-pay-with-direct-debit-pay"
-      className="component-direct-debit-form__pay-button"
+    <PaymentButton
       onClick={() => props.payDirectDebitClicked(props.callback)}
-    >
-      <SvgDirectDebitSymbol />
-      <span>Contribute with Direct Debit</span>
-      <SvgArrowRightStraight />
-    </button>
+    />
 
-    <ErrorMessage message={props.formError} svg={<SvgExclamationAlternate />} />
+    <ErrorMessage
+      message={props.formError}
+      svg={<SvgExclamationAlternate />}
+    />
 
-    <div className="component-direct-debit-form__legal__content">
-      <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
-        payment schedule, due date, frequency and amount will be sent to you within three working
-        days.
-        All payments are protected by the&nbsp;
-        <a className="component-direct-debit-form__legal__link" target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
-          Direct Debit guarantee
-        </a>.
-      </p>
-    </div>
+    <LegalNotice />
   </div>
 );
 
@@ -189,6 +177,35 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
           </span>
         </label>
       </div>
+    </div>
+  );
+}
+
+function PaymentButton(props: {onClick: Function}) {
+  return (
+    <button
+      id="qa-pay-with-direct-debit-pay"
+      className="component-direct-debit-form__pay-button"
+      onClick={props.onClick}
+    >
+      <SvgDirectDebitSymbol />
+      <span>Contribute with Direct Debit</span>
+      <SvgArrowRightStraight />
+    </button>
+  );
+}
+
+function LegalNotice() {
+  return (
+    <div className="component-direct-debit-form__legal__content">
+      <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
+        payment schedule, due date, frequency and amount will be sent to you within three working
+        days.
+        All payments are protected by the&nbsp;
+        <a className="component-direct-debit-form__legal__link" target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
+          Direct Debit guarantee
+        </a>.
+      </p>
     </div>
   );
 }
