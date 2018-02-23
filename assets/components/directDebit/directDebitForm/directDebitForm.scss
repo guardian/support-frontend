@@ -73,7 +73,7 @@
   font-family: $gu-sans-web;
   font-size: 14px;
   color: gu-colour(neutral-1);
-  padding-left: 15px;
+  padding-left: 33px;
   display: block;
   overflow: hidden;
 }
@@ -84,8 +84,7 @@
   margin-right: 10px;
 
   input[type=checkbox]{
-    float: left;
-    padding: 10px;
+    display: none;
   }
 
   label {
@@ -93,7 +92,7 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    top: 0;
+    top: 2px;
     left: 0;
     background: #fff;
     border: solid 1px #121212;
