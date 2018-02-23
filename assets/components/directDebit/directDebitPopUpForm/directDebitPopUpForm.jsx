@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { SvgCross } from 'components/svg/svg';
+import { resetDirectDebitFormError } from '../directDebitActions'
 
 
 // ---- Types ----- //
@@ -32,6 +33,7 @@ function mapDispatchToProps(dispatch) {
   return {
     closeDirectDebitPopUp: () => {
       dispatch(closeDirectDebitPopUp());
+      dispatch(resetDirectDebitFormError());
     },
   };
 

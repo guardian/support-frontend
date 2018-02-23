@@ -2,6 +2,9 @@
   clear: left;
   margin-top: 80px;
   margin-left: 0px;
+  button:focus {outline:0;}
+  input:focus {outline:0;}
+
   @include mq($from: mobileLandscape) {
     margin-left: 20px;
   }
@@ -10,6 +13,7 @@
     background-color: transparent;
     color: gu-colour(error);
     padding: 0;
+    height: 0;
 
     .svg-exclamation-alternate {
       float: left;
