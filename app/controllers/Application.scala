@@ -59,8 +59,8 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def bundleLanding(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (INTCMP == "circles") {
+  def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
+    if (newDesigns == "circles") {
       Ok(views.html.bundleLanding(
         title,
         "support-landing-page-old",
@@ -69,7 +69,7 @@ class Application(
         description = Some(stringsConfig.bundleLandingDescription)
       ))
     } else {
-      val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "support-landing-page", "supportLandingPage.js")
+      val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
       Ok(views.html.bundleLanding(
         title,
         updatedId,

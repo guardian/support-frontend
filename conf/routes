@@ -8,7 +8,7 @@ GET /unsupported-browser                            controllers.Application.unsu
 
 # ----- Bundles Landing Page ----- #
 
-GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", INTCMP: String ?= "")
+GET /uk                                             controllers.Application.bundleLanding(title="Support the Guardian", id="bundles-landing-page", js="bundlesLandingPage.js", newDesigns: String ?= "")
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
