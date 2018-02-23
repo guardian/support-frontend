@@ -40,7 +40,6 @@ class MyComponents(context: Context)
 
   val databaseProvider = new DatabaseProvider(dbApi)
 
-  // TODO: QUESTION: I assume this means the app won't start up if it can't find required config? (which is correct)
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     // Actor system not an implicit val, so pass it explicitly
     new StripeBackend.Builder(configLoader, databaseProvider)(actorSystem)
