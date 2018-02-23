@@ -98,12 +98,11 @@ function fromString(countryGroup: string): ?CountryGroupId {
 
 function fromCountry(isoCountry: string): ?CountryGroupId {
 
-  Object.keys(countryGroups).forEach((countryGroupId) => {
-    if (countryGroups[countryGroupId].countries.includes(isoCountry)) {
-      return countryGroupId;
-    }
-    return null;
-  });
+  const countryGroup = Object.keys(countryGroups).find(countryGroupId =>
+    countryGroups[countryGroupId].countries.includes(isoCountry));
+
+  return countryGroup || null;
+
 }
 
 function fromQueryParameter(): ?CountryGroupId {
@@ -136,5 +135,6 @@ function detect(): CountryGroupId {
 
 export {
   countryGroups,
+  fromCountry,
   detect,
 };
