@@ -9,7 +9,7 @@ import type { Action } from './directDebitActions';
 export type DirectDebitState = {
   isPopUpOpen: boolean,
   sortCodeArray: Array<string>,
-  bankAccountNumber: string,
+  accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
   formError: string
@@ -19,7 +19,7 @@ export type DirectDebitState = {
 const initialState: DirectDebitState = {
   isPopUpOpen: false,
   sortCodeArray: Array(3).fill(''),
-  bankAccountNumber: '',
+  accountNumber: '',
   accountHolderName: '',
   accountHolderConfirmation: false,
   formError: '',
@@ -56,7 +56,7 @@ const directDebitReducer = (
     case 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER':
 
       return Object.assign({}, state, {
-        bankAccountNumber: action.accountNumber,
+        accountNumber: action.accountNumber,
       });
 
     case 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME':

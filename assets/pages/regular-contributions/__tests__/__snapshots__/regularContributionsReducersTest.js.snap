@@ -14,7 +14,7 @@ Object {
   "directDebit": Object {
     "accountHolderConfirmation": false,
     "accountHolderName": "",
-    "bankAccountNumber": "",
+    "accountNumber": "",
     "formError": "",
     "isPopUpOpen": false,
     "sortCodeArray": Array [

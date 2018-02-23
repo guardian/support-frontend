@@ -41,7 +41,7 @@ function mapStateToProps(state) {
   return {
     isPopUpOpen: state.page.directDebit.isPopUpOpen,
     sortCodeArray: state.page.directDebit.sortCodeArray,
-    accountNumber: state.page.directDebit.bankAccountNumber,
+    accountNumber: state.page.directDebit.accountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
     formError: state.page.directDebit.formError,

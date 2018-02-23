@@ -55,7 +55,7 @@ function payDirectDebitClicked(callback: Function): Function {
 
     const {
       sortCodeArray,
-      bankAccountNumber: accountNumber,
+      accountNumber,
       accountHolderName,
       accountHolderConfirmation,
     } = getState().page.directDebit;

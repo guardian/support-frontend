@@ -59,7 +59,7 @@ describe('direct debit reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.bankAccountNumber).toEqual(accountNumber);
+    expect(newState.accountNumber).toEqual(accountNumber);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', () => {
