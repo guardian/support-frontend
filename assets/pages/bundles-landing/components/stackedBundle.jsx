@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
@@ -297,16 +296,18 @@ function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
 
 function ContributionBundle(props: PropTypes) {
 
-  const contribAttrs: ContribAttrs =
-    Object.assign(getContribAttrs(
-      props.contribType,
-      props.contribAmount,
-      props.currency,
-      props.isoCountry,
-      props.intCmp,
-    ), {
-      showPaymentLogosUnderSubheading: true,
-    });
+  const contribAttrs: ContribAttrs = getContribAttrs(
+    props.contribType,
+    props.contribAmount,
+    props.currency,
+    props.isoCountry,
+    props.intCmp,
+  );
+
+  const bundleProps = Object.assign(
+    (contribAttrs: Object),
+    { showPaymentLogosUnderSubheading: true },
+  );
 
   const onClick = () => {
     if (!props.contribError) {
@@ -316,7 +317,7 @@ function ContributionBundle(props: PropTypes) {
 
 
   return (
-    <Bundle {...contribAttrs}>
+    <Bundle {...bundleProps}>
       <WhyContribute
         shouldEncourageMonthly={props.abTests.pleaseConsiderMonthly === 'variant'}
       />
