@@ -15,13 +15,19 @@
   .component-error-message {
     background-color: transparent;
     box-sizing: border-box;
-    color: gu-colour(news-garnett-main-1);
-    border: 1px solid gu-colour(news-garnett-media-main-1);
-    height: 40px;
+    color: gu-colour(garnett-neutral-1);
+    border: none;
+    padding-left: 23px;
+    margin-bottom: 0;
+    height: unset;
 
     .svg-exclamation {
-      fill: gu-colour(news-garnett-main-1);
+      display: none;
     }
+  }
+
+  .component-error-message__message {
+    position: static;
   }
 }
 
@@ -33,38 +39,18 @@
       width: 317px;
     }
   }
-
-  .component-error-message {
-    width: 100%;
-
-    @include mq($from: mobileMedium) {
-      width: 321px;
-    }
-  }
-
-  .component-error-message__message {
-    padding-left: 7px;
-  }
 }
 
 .component-contribution-selection--one-off {
   .component-number-input {
     width: 261px;
   }
-
-  .component-error-message {
-    width: 265px;
-  }
-
-  .component-error-message__message {
-    padding-left: 14px;
-  }
 }
 
 .component-contribution-selection__type {
   font-size: 14px;
   line-height: 14px;
-  margin: ($gu-v-spacing * 3) 0 ($gu-v-spacing * 2);
+  margin: ($gu-v-spacing * 2) 0 ($gu-v-spacing * 1);
 
   .component-radio-toggle {
     display: inline-block;
@@ -99,14 +85,13 @@
 
 .component-contribution-selection__custom-amount {
   margin-top: $gu-v-spacing * 2;
-  margin-bottom: $gu-v-spacing * 3;
+  margin-bottom: $gu-v-spacing;
 
   @include mq($from: phablet) {
     display: inline-block;
     vertical-align: top;
     margin-left: $gu-v-spacing;
     margin-top: $gu-v-spacing;
-    margin-bottom: $gu-v-spacing * 2;
   }
 
   .component-number-input {
@@ -123,13 +108,25 @@
 
   .component-number-input__input {
     font-size: 14px;
+    font-weight: bold;
+    color: rgba(gu-colour(garnett-neutral-1), 0.5);
+
+    &::-moz-placeholder {
+      opacity: 1;
+    }
   }
 
   .component-number-input--selected {
-    background-color: gu-colour(news-garnett-highlight);
-
     .component-number-input__label {
       color: gu-colour(garnett-neutral-1);
+    }
+
+    .component-number-input__input {
+      color: gu-colour(garnett-neutral-1);
+
+      &::placeholder {
+        color: transparent;
+      }
     }
   }
 }

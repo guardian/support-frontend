@@ -66,7 +66,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
 
     return (
-      <div className={generateClassName(baseClassName, 'one-off')}>
+      <div className={generateClassName(baseClassName, props.isDisabled ? 'disabled' : null)}>
         <OneOffCta {...props} />
         <props.PayPalButton
           buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
@@ -80,7 +80,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
   }
 
   return (
-    <div className={generateClassName(baseClassName, 'regular')}>
+    <div className={generateClassName(baseClassName, props.isDisabled ? 'disabled' : null)}>
       <RegularCta {...props} />
     </div>
   );

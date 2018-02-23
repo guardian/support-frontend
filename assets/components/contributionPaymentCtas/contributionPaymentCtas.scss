@@ -63,4 +63,15 @@
     margin-top: $gu-v-spacing;
   }
 
+  .component-cta-link {
+    @include mq($until: phablet) {
+      margin-top: $gu-v-spacing * 2;
+    }
+  }
+}
+
+.component-contribution-payment-ctas--disabled {
+  .component-cta-link, .component-paypal-contribution-button {
+    opacity: 0.5;
+  }
 }

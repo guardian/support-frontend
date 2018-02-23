@@ -14,6 +14,7 @@ import type { Node } from 'react';
 // ----- Types ----- //
 
 type PropTypes = {
+  copy: string | Node,
   children: Node,
 };
 
@@ -37,10 +38,7 @@ export default function Contribute(props: PropTypes) {
         headingChildren={paymentImages}
       >
         <Secure modifierClass="contribute-body" />
-        <p className="component-contribute__description">
-          Support the&nbsp;Guardian&#39;s editorial operations by making a
-          monthly, or one-off contribution today
-        </p>
+        <p className="component-contribute__description">{props.copy}</p>
         {props.children}
       </PageSection>
     </div>

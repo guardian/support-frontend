@@ -40,7 +40,9 @@ const content = (
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
       />
-      <Contribute>
+      <Contribute
+        copy="Your contribution funds and supports The Guardian's journalism."
+      >
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}

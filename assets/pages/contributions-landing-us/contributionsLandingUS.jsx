@@ -40,7 +40,15 @@ const content = (
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
       />
-      <Contribute>
+      <Contribute
+        copy={
+          <span>
+            Contributing to The&nbsp;Guardian makes a big impact. If you&#39;re able,
+            please consider <strong>monthly</strong> support - it will help to
+            fund our journalism for the long term.
+          </span>
+        }
+      >
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}
