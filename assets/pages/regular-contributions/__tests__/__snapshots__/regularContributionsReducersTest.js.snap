@@ -17,7 +17,7 @@ Object {
     "bankAccountNumber": "",
     "formError": "",
     "isPopUpOpen": false,
-    "sortCode": Array [
+    "sortCodeArray": Array [
       "",
       "",
       "",

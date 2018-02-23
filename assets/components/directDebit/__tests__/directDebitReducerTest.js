@@ -46,7 +46,7 @@ describe('direct debit reducer tests', () => {
     const secondUpdate = reducer(firstUpdate, action(1, '34'));
     const thirdUpdate = reducer(secondUpdate, action(2, '56'));
 
-    expect(thirdUpdate.sortCode.join('')).toEqual(sortCode);
+    expect(thirdUpdate.sortCodeArray.join('')).toEqual(sortCode);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', () => {

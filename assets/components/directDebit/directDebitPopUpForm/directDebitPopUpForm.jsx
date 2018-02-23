@@ -4,11 +4,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { closeDirectDebitPopUp, resetDirectDebitFormError } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { SvgCross } from 'components/svg/svg';
-import { resetDirectDebitFormError } from '../directDebitActions'
-
 
 // ---- Types ----- //
 

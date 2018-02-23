@@ -1,7 +1,7 @@
 .component-direct-debit-form {
   clear: left;
   margin-top: 80px;
-  margin-left: 0px;
+  margin-left: 0;
   button:focus {outline:0;}
   input:focus {outline:0;}
 
@@ -81,59 +81,60 @@
 }
 
 .component-direct-debit-form__account-holder-confirmation__checkbox {
-  float: left;
-  padding: 10px;
-}
-
-.fancy-checkbox {
   width: 25px;
   position: relative;
   margin-right: 10px;
+
+  input[type=checkbox]{
+    float: left;
+    padding: 10px;
+  }
+
+  label {
+    cursor: pointer;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    background: #fff;
+    border: solid 1px #121212;
+    border-radius: 2px;
+  }
+
+  /**
+   * Display the tick inside the checkbox
+   */
+  label:after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 5px;
+    background: transparent;
+    top: 4px;
+    left: 4px;
+    border: 3px solid #333;
+    border-top: none;
+    border-right: none;
+    transform: rotate(-45deg);
+  }
+
+  /**
+   * Create the hover event of the tick
+   */
+  label:hover::after {
+    opacity: 0.5;
+  }
+
+  /**
+   * Create the checkbox state for the tick
+   */
+  input[type=checkbox]:checked + label:after {
+    opacity: 1;
+  }
 }
 
-.fancy-checkbox label {
-  cursor: pointer;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 0;
-  left: 0;
-  background: #fff;
-  border: solid 1px #121212;
-  border-radius: 2px;
-}
-
-/**
- * Display the tick inside the checkbox
- */
-.fancy-checkbox label:after {
-  opacity: 0;
-  content: '';
-  position: absolute;
-  width: 9px;
-  height: 5px;
-  background: transparent;
-  top: 4px;
-  left: 4px;
-  border: 3px solid #333;
-  border-top: none;
-  border-right: none;
-  transform: rotate(-45deg);
-}
-
-/**
- * Create the hover event of the tick
- */
-.fancy-checkbox label:hover::after {
-  opacity: 0.5;
-}
-
-/**
- * Create the checkbox state for the tick
- */
-.fancy-checkbox input[type=checkbox]:checked + label:after {
-  opacity: 1;
-}
 
 .component-direct-debit-form__pay-button {
   background-color: gu-colour(news-garnett-highlight);

@@ -13,14 +13,16 @@ import {
   updateAccountHolderConfirmation,
   payDirectDebitClicked,
 } from 'components/directDebit/directDebitActions';
+import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
 import { SvgDirectDebitSymbol, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
+
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: Function,
-  sortCode: Array<string>,
+  sortCodeArray: Array<string>,
   accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
@@ -38,7 +40,7 @@ type PropTypes = {
 function mapStateToProps(state) {
   return {
     isPopUpOpen: state.page.directDebit.isPopUpOpen,
-    sortCode: state.page.directDebit.sortCode,
+    sortCodeArray: state.page.directDebit.sortCodeArray,
     accountNumber: state.page.directDebit.bankAccountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
@@ -52,7 +54,7 @@ function mapDispatchToProps(dispatch) {
     payDirectDebitClicked: (callback) => {
       dispatch(payDirectDebitClicked(callback));
     },
-    updateSortCode: (index: number, event: SyntheticInputEvent<HTMLInputElement>) => {
+    updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => {
       dispatch(updateSortCode(index, event.target.value));
     },
     updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -88,7 +90,7 @@ const DirectDebitForm = (props: PropTypes) => (
 
     <SortCodeInput
       onChange={props.updateSortCode}
-      sortCode={props.sortCode}
+      sortCodeArray={props.sortCodeArray}
     />
 
     <ConfirmationInput
@@ -172,9 +174,8 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          <div className="fancy-checkbox">
+          <div className="component-direct-debit-form__account-holder-confirmation__checkbox">
             <input
-              className="component-direct-debit-form__account-holder-confirmation__checkbox"
               id="confirmation-input"
               type="checkbox"
               onChange={props.onChange}

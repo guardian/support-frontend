@@ -5,11 +5,11 @@
 import React from 'react';
 
 type SortCodePropTypes = {
-  sortCode: Array<string>,
+  sortCodeArray: Array<string>,
   onChange: Function,
 };
 
-export default function SortCodeInput(props: SortCodePropTypes) {
+function SortCodeInput(props: SortCodePropTypes) {
 
   return (
     <div className="component-direct-debit-form__sort-code">
@@ -17,22 +17,24 @@ export default function SortCodeInput(props: SortCodePropTypes) {
         Sort Code
       </label>
       <SortCodeField
-        value={props.sortCode[0]}
+        value={props.sortCodeArray[0]}
         onChange={event => props.onChange(0, event)}
       />
       <span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
       <SortCodeField
-        value={props.sortCode[1]}
+        value={props.sortCodeArray[1]}
         onChange={event => props.onChange(1, event)}
       />
       <span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
       <SortCodeField
-        value={props.sortCode[2]}
+        value={props.sortCodeArray[2]}
         onChange={event => props.onChange(2, event)}
       />
     </div>
   );
 }
+
+// ----- Auxiliary components ----- //
 
 function SortCodeField(props: { value: string, onChange: Function}) {
   return (
@@ -46,3 +48,8 @@ function SortCodeField(props: { value: string, onChange: Function}) {
     />
   );
 }
+
+
+// ----- Exports ----- //
+
+export default SortCodeInput;
