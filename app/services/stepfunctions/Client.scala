@@ -7,7 +7,6 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.regions.Regions
 import services.aws.CredentialsProvider
-import services.aws.AccountId
 import com.amazonaws.services.stepfunctions.model._
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
@@ -20,7 +19,7 @@ import scala.concurrent.ExecutionContext
 import codecs.CirceDecoders._
 
 object Client {
-  def apply(stateMachinePrefix: String)(implicit system: ActorSystem): Client = {
+  def apply(arn: String)(implicit system: ActorSystem): Client = {
     implicit val ec = system.dispatcher
 
     val client = AWSStepFunctionsAsyncClientBuilder.standard
@@ -28,15 +27,11 @@ object Client {
       .withRegion(Regions.EU_WEST_1)
       .build()
 
-    val stateMachineLookup = StateMachineLookup(stateMachinePrefix)
-
-    val stateMachineWrapper = new StateMachineContainer(() => stateMachineLookup.lookup(client))
-
-    new Client(client, stateMachineWrapper, stateMachinePrefix)
+    new Client(client, arn)
   }
 }
 
-class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineContainer, stateMachinePrefix: String) {
+class Client(client: AWSStepFunctionsAsync, arn: String) {
 
   private def startExecution(arn: String, input: String)(implicit ec: ExecutionContext): Response[StartExecutionResult] = convertErrors {
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
@@ -48,20 +43,18 @@ class Client(client: AWSStepFunctionsAsync, stateMachineWrapper: StateMachineCon
     encoder: Encoder[T],
     stateWrapper: StateWrapper
   ): Response[StateMachineExecution] = {
-    stateMachineWrapper
-      .map(machine => startExecution(machine.arn, stateWrapper.wrap(input, isTestUser)))
+    startExecution(arn, stateWrapper.wrap(input, isTestUser))
       .map(StateMachineExecution.fromStartExecution)
   }
 
   def jobIdFromArn(arn: String): Option[String] = {
     PartialFunction.condOpt(arn.split(':').toList) {
       case "arn" :: "aws" :: "states" :: region :: accountId :: "execution" :: stateMachine :: executionId :: Nil =>
-        s"${stateMachine.stripPrefix(stateMachinePrefix)}:$executionId"
+        executionId
     }
   }
 
-  def arnFromJobId(jobId: String): String =
-    s"arn:aws:states:eu-west-1:$AccountId:execution:$stateMachinePrefix$jobId"
+  def arnFromJobId(jobId: String): String = s"$arn:$jobId"
 
   def statusFromEvents(events: List[HistoryEvent]): Option[ExecutionStatus] =
     events.view.map(_.getType).collectFirst(ExecutionStatus.all)
