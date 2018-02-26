@@ -5,6 +5,7 @@
 import React from 'react';
 import { generateClassName } from 'helpers/utilities';
 
+
 // ---- Types ----- //
 
 type PropTypes = {

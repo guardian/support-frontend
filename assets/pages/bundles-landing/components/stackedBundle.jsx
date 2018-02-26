@@ -15,6 +15,7 @@ import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';
 
 import type { ListItem } from 'components/featureList/featureList';
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -22,8 +23,6 @@ import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 
 import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from '../helpers/flashSale';
 
@@ -298,13 +297,14 @@ function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
 
 function ContributionBundle(props: PropTypes) {
 
-  const contribAttrs: ContribAttrs = getContribAttrs(
-    props.contribType,
-    props.contribAmount,
-    props.currency,
-    props.isoCountry,
-    props.intCmp,
-  );
+  const contribAttrs: ContribAttrs =
+    getContribAttrs(
+      props.contribType,
+      props.contribAmount,
+      props.currency,
+      props.isoCountry,
+      props.intCmp,
+    );
 
   const onClick = () => {
     if (!props.contribError) {
