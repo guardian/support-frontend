@@ -23,6 +23,8 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
+
 import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from '../helpers/flashSale';
 
 import {
@@ -279,7 +281,7 @@ function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
   if (props.shouldEncourageMonthly) {
     return (
-      <p>
+      <p className="bundles__why-contribute">
         Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
         If you’re able, please consider
         <strong> monthly</strong> support – it will help to fund our journalism for the long term.
@@ -288,7 +290,7 @@ function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
   }
 
   return (
-    <p>
+    <p className="bundles__why-contribute">
       Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
     </p>
   );
@@ -304,11 +306,6 @@ function ContributionBundle(props: PropTypes) {
     props.intCmp,
   );
 
-  const bundleProps = Object.assign(
-    (contribAttrs: Object),
-    { showPaymentLogosUnderSubheading: true },
-  );
-
   const onClick = () => {
     if (!props.contribError) {
       window.location = contribAttrs.ctaLink;
@@ -317,7 +314,8 @@ function ContributionBundle(props: PropTypes) {
 
 
   return (
-    <Bundle {...bundleProps}>
+    <Bundle {...contribAttrs}>
+      <InlinePaymentLogos />
       <WhyContribute
         shouldEncourageMonthly={props.abTests.pleaseConsiderMonthly === 'variant'}
       />
