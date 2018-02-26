@@ -21,7 +21,6 @@ type PropTypes = {
   children?: Node,
   doubleHeadingModifierClass?: string,
   showPaymentLogos?: boolean,
-  showPaymentLogosUnderSubheading?: boolean,
   showSecureLogo?: boolean
 };
 
@@ -42,7 +41,6 @@ export default function Bundle(props: PropTypes) {
         heading={props.heading}
         subheading={props.subheading}
         modifierClass={props.doubleHeadingModifierClass}
-        showPaymentLogos={props.showPaymentLogosUnderSubheading}
       />
       <div className="component-bundle__content">
         {props.children}
@@ -60,5 +58,4 @@ Bundle.defaultProps = {
   doubleHeadingModifierClass: '',
   showPaymentLogos: false,
   showSecureLogo: false,
-  showPaymentLogosUnderSubheading: false,
 };
