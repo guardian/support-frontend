@@ -9,6 +9,7 @@ import type { Action } from './marketingConsentActions';
 
 export type State = {
   error: boolean,
+  confirmOptIn: ?boolean,
 };
 
 
@@ -16,6 +17,7 @@ export type State = {
 
 const initialState: State = {
   error: false,
+  confirmOptIn: null,
 };
 
 
@@ -23,7 +25,7 @@ const initialState: State = {
 
 function marketingConsentReducerFor(scope: string): Function {
 
-  function marketingConsentReducer(state: State = initialState, action: Action): State {
+  const marketingConsentReducer = (state: State = initialState, action: Action): State => {
 
     if (action.scope !== scope) {
       return state;
@@ -32,10 +34,14 @@ function marketingConsentReducerFor(scope: string): Function {
     switch (action.type) {
       case 'SET_API_ERROR':
         return { ...state, error: action.error };
+
+      case 'SET_CONFIRM_MARKETING_CONSENT':
+        return { ...state, confirmOptIn: action.confirmOptIn };
+
       default:
         return state;
     }
-  }
+  };
 
   return marketingConsentReducer;
 }

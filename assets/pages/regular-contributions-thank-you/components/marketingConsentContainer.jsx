@@ -36,6 +36,7 @@ function mapStateToProps(state) {
     email: state.page.user.email,
     marketingPreferencesOptIn: state.page.user.gnmMarketing,
     consentApiError: state.page.marketingConsent.error,
+    confirmOptIn: state.page.marketingConsent.confirmOptIn,
     csrf: state.page.csrf,
   };
 }

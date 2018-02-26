@@ -6,14 +6,17 @@ import * as React from 'react';
 import CtaLink from 'components/ctaLink/ctaLink';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import DotcomCta from 'components/dotcomCta/dotcomCta';
 import PageSection from 'components/pageSection/pageSection';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
 
 // ----- Types ----- //
 
 type PropTypes = {
   consentApiError: boolean,
+  confirmOptIn: ?boolean,
   onClick: (marketingPreferencesOptIn: boolean, email?: string, csfr: CsrfState) => void,
   marketingPreferencesOptIn: boolean,
   marketingPreferenceUpdate: (preference: boolean) => void,
@@ -24,12 +27,13 @@ type PropTypes = {
 // ----- Component ----- //
 
 const MarketingConsent = (props: PropTypes): React.Node => {
+  let content = null;
   if (!props.email) {
-    return null;
+    return content;
   }
 
-  return (
-    <div className="component-questions-contact">
+  if (props.confirmOptIn === null) {
+    content = (
       <PageSection
         modifierClass="questions-contact"
         heading="Stay in touch"
@@ -55,7 +59,20 @@ const MarketingConsent = (props: PropTypes): React.Node => {
             accessibilityHint="Go to the guardian dot com front page"
           />
         </div>
-      </PageSection>
+      </PageSection>);
+  } else {
+    const message = props.confirmOptIn? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
+    content = (
+      <div>
+        {message}
+        <DotcomCta />
+      </div>
+    );
+  }
+
+  return (
+    <div className="component-marketing-consent">
+      {content}
     </div>
   );
 };
