@@ -5,6 +5,7 @@
 import React from 'react';
 import { applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { Provider } from 'react-redux';
 
 import * as user from 'helpers/user/user';
 import { init as pageInit } from 'helpers/page/page';
@@ -52,20 +53,22 @@ const marketing = () => {
 // ----- Render ----- //
 
 const content = (
-  <div className="gu-content">
-    <SimpleHeader />
-    <section className="thankyou gu-content-filler">
-      <div className="thankyou__content gu-content-filler__inner">
-        <ThankYouIntroduction thankYouMessage="You have helped to make the Guardian&#39;s future more secure.
-            Look out for an email confirming your recurring
-            payment."
-        />
-        {marketing()}
-        <QuestionsAndSocial />
-      </div>
-    </section>
-    <Footer />
-  </div>
+  <Provider store={store}>
+    <div className="gu-content">
+      <SimpleHeader />
+      <section className="thankyou gu-content-filler">
+        <div className="thankyou__content gu-content-filler__inner">
+          <ThankYouIntroduction thankYouMessage="You have helped to make the Guardian&#39;s future more secure.
+              Look out for an email confirming your recurring
+              payment."
+          />
+          {marketing()}
+          <QuestionsAndSocial />
+        </div>
+      </section>
+      <Footer />
+    </div>
+  </Provider>
 );
 
 renderPage(content, 'regular-contributions-thankyou-page-old');
