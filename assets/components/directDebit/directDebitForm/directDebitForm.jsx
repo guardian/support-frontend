@@ -26,7 +26,7 @@ type PropTypes = {
   accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
-  updateSortCode: (index: number, partialSortCode: string) => void,
+  updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,

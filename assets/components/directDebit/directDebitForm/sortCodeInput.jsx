@@ -3,10 +3,11 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
 
 type SortCodePropTypes = {
   sortCodeArray: Array<string>,
-  onChange: Function,
+  onChange: (SortCodeIndex, SyntheticInputEvent<HTMLInputElement>) => void,
 };
 
 function SortCodeInput(props: SortCodePropTypes) {
@@ -36,7 +37,10 @@ function SortCodeInput(props: SortCodePropTypes) {
 
 // ----- Auxiliary components ----- //
 
-function SortCodeField(props: { value: string, onChange: Function}) {
+function SortCodeField(props: {
+  value: string,
+  onChange: (SyntheticInputEvent<HTMLInputElement>) => void
+}) {
   return (
     <input
       id="sort-code-field"
