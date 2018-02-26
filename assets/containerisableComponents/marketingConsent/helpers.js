@@ -2,8 +2,10 @@
 
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
-import { setConsentApiError } from '../pages/contributions-thankyou/contributionsThankYouActions';
-import type { Csrf as CsrfState } from './csrf/csrfReducer';
+
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
+import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
 
@@ -21,13 +23,17 @@ const requestData = (email: string, csrf: CsrfState) => ({
   body: JSON.stringify({ email }),
 });
 
-// Fire and forget, as we don't want to interupt the flow
+// Fire and forget, as we don't want to interrupt the flow
 function sendMarketingPreferencesToIdentity(
   optIn: boolean,
   email: string,
   dispatch: Function,
   csrf: CsrfState,
+  scope: string,
 ) {
+
+  const setConsentApiError = marketingConsentActionsFor(scope).setAPIError;
+
   if (optIn) {
     fetch(`${routes.contributionsSendMarketing}`, requestData(email, csrf))
       .then((response) => {
