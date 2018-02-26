@@ -181,7 +181,7 @@
           @include mq($from: tablet, $until: desktop) {
             position: absolute;
             left: 10px;
-            top: 10px;
+            top: 70px;
             width:300px;
           }
         }
@@ -314,7 +314,7 @@
       background-color: gu-colour(news-garnett-highlight);
 
       .component-bundle__content {
-        @include mq($from: phablet, $until: desktop) {
+        @include mq($from: phablet) {
           .component-inline-payment-logos {
             position: absolute;
             top: 35px;
