@@ -94,35 +94,31 @@
   background: #fff;
   border: solid 1px #121212;
   border-radius: 2px;
-}
-
-.component-direct-debit-form__confirmation-label:after {
-  opacity: 0;
-  content: '';
-  position: absolute;
-  width: 9px;
-  height: 5px;
-  background: transparent;
-  top: 4px;
-  left: 4px;
-  border: 3px solid #333;
-  border-top: none;
-  border-right: none;
-  transform: rotate(-45deg);
-}
-
-.component-direct-debit-form__confirmation-label:hover::after {
-  opacity: 0.5;
+  &:after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 5px;
+    background: transparent;
+    top: 4px;
+    left: 4px;
+    border: 3px solid #333;
+    border-top: none;
+    border-right: none;
+    transform: rotate(-45deg);
+  }
+  &:hover::after {
+    opacity: 0.5;
+  }
 }
 
 .component-direct-debit-form__confirmation-input {
   display: none;
+  &:checked + label:after {
+    opacity: 1;
+  }
 }
-
-.component-direct-debit-form__confirmation-input:checked + label:after {
-  opacity: 1;
-}
-
 
 .component-direct-debit-form__pay-button {
   background-color: gu-colour(news-garnett-highlight);
