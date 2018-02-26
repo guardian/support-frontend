@@ -322,20 +322,20 @@
           @include mq($from: desktop) {
             width: 295px;
             position: absolute;
-            top: 60px;
+            top: 70px;
           }
 
           @include mq($from: tablet, $until: desktop) {
             position: absolute;
             left: 10px;
-            top: 60px;
+            top: 70px;
             width:300px;
           }
 
           @include mq($from: phablet, $until: tablet) {
             position: absolute;
             left: 10px;
-            top: 60px;
+            top: 70px;
             width:290px;
           }
         }
