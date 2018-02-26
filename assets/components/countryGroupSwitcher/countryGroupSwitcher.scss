@@ -12,8 +12,13 @@
 }
 
 .component-country-group-switcher__selector {
+  font-size: 12px;
+
+  @include mq($from: mobileLandscape) {
+    font-size: 14px;
+  }
+
   font-family: $gu-egyptian-web;
-  font-size: 14px;
   font-weight: 500;
   line-height: 20px;
 
