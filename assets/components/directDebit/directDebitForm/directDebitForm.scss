@@ -126,7 +126,7 @@
 
 .component-direct-debit-form__pay-button {
   background-color: gu-colour(news-garnett-highlight);
-  border: solid 1px gu-colour(news-garnett-highlight-hover);
+  border: solid 1px lighten(gu-colour(news-garnett-highlight), 15%);
   border-radius: 100px;
   color: gu-colour(neutral-1);
   cursor: pointer;
@@ -160,7 +160,7 @@
   }
 
   &:hover {
-    background-color: gu-colour(news-garnett-highlight-hover);
+    background-color: lighten(gu-colour(news-garnett-highlight), 15%);
   }
 }
 
