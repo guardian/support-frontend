@@ -3,63 +3,36 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-import type { User as UserState } from 'helpers/user/userReducer';
 
+import { marketingConsentReducerFor } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
 import csrfReducer from 'helpers/csrf/csrfReducer';
 
-import type { CommonState } from 'helpers/page/page';
+import type { State as MarketingConsentState } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
 
+import type { CommonState } from 'helpers/page/page';
+import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { Action } from './regularContributionsThankYouActions';
 
 
 // ----- Types ----- //
 
-export type State = {
-  consentApiError: boolean,
-};
-
-export type CombinedState = {
-  thankYouState: State,
+type PageState = {
+  marketingConsent: MarketingConsentState,
   user: UserState,
   csrf: CsrfState,
 };
 
-export type PageState = {
+export type State = {
   common: CommonState,
-  page: CombinedState,
-}
+  page: PageState,
+};
 
 
-// ----- Reducers ----- //
-
-function createThankYouReducer() {
-
-  const initialState: State = {
-    consentApiError: false,
-  };
-
-  return function thankYouReducer(state: State = initialState, action: Action): State {
-
-    switch (action.type) {
-
-      case 'CONSENT_API_ERROR':
-        return Object.assign({}, state, { consentApiError: action.consentApiError });
-      default:
-        return state;
-
-    }
-  };
-}
-
-
-// ----- Exports ----- //
-
+// ----- Reducer ----- //
 
 export default combineReducers({
-  thankYouState: createThankYouReducer(),
+  marketingConsent: marketingConsentReducerFor('REGULAR_CONTRIBUTIONS_THANK_YOU'),
   user,
   csrf: csrfReducer,
 });
-
