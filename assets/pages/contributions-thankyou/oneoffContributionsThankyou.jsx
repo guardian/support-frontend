@@ -13,7 +13,7 @@ import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import * as user from 'helpers/user/user';
 import reducer from './contributionsThankYouReducer';
-import MarketingConsent from './components/marketingConsent';
+import MarketingConsentContainer from './components/marketingConsentContainer';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
 
@@ -34,7 +34,7 @@ user.init(store.dispatch);
 
 const marketing = () => {
   if (store.getState().page.user.email) {
-    return <MarketingConsent />;
+    return <MarketingConsentContainer />;
   }
   return (
     <div className="thankyou__wrapper">
