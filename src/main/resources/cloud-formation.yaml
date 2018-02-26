@@ -41,6 +41,8 @@ Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
 Mappings:
+  Constants:
+    PostgresSecurityGroupId: sg-927bc3f5
   StageVariables:
     CODE:
       MaxInstances: 2
@@ -228,6 +230,7 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 77.91.248.0/21
+          # TODO: remove, not needed
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
@@ -241,6 +244,10 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !FindInMap [ Constants, PostgresSecurityGroupId ]
         - IpProtocol: udp
           FromPort: 123
           ToPort: 123
