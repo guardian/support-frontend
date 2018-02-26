@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 import CtaLink from 'components/ctaLink/ctaLink';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -23,7 +23,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function MarketingConsent(props: PropTypes): React.Node {
+const MarketingConsent = (props: PropTypes): React.Node => {
   if (!props.email) {
     return null;
   }
@@ -58,7 +58,7 @@ function MarketingConsent(props: PropTypes): React.Node {
       </PageSection>
     </div>
   );
-}
+};
 
 MarketingConsent.defaultProps = {
   email: '',
