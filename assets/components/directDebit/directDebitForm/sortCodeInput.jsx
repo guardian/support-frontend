@@ -21,12 +21,12 @@ function SortCodeInput(props: SortCodePropTypes) {
         value={props.sortCodeArray[0]}
         onChange={event => props.onChange(0, event)}
       />
-      <span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+      <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
         value={props.sortCodeArray[1]}
         onChange={event => props.onChange(1, event)}
       />
-      <span className="component-direct-debit-form_sort-code-separator">&mdash;</span>
+      <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
         value={props.sortCodeArray[2]}
         onChange={event => props.onChange(2, event)}
