@@ -127,7 +127,7 @@ function AccountNumberInput(props: {onChange: Function, value: string}) {
         pattern="[0-9]*"
         minLength="6"
         maxLength="10"
-        className="component-direct-debit-form__text-field"
+        className="component-direct-debit-form__text-field focus-target"
       />
     </div>
   );
@@ -151,7 +151,7 @@ function AccountHolderNameInput(props: {value: string, onChange: Function}) {
         value={props.value}
         onChange={props.onChange}
         maxLength="18"
-        className="component-direct-debit-form__text-field"
+        className="component-direct-debit-form__text-field focus-target"
       />
     </div>
   );
@@ -189,7 +189,7 @@ function PaymentButton(props: {onClick: Function}) {
   return (
     <button
       id="qa-pay-with-direct-debit-pay"
-      className="component-direct-debit-form__pay-button"
+      className="component-direct-debit-form__pay-button focus-target"
       onClick={props.onClick}
     >
       <SvgDirectDebitSymbol />
