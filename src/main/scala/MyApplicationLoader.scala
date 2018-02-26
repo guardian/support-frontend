@@ -5,10 +5,10 @@ import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
 import router.Routes
 import util.RequestBasedProvider
-
 import aws.AWSClientBuilder
-import backend.StripeBackend
+import backend.{PaypalBackend, StripeBackend}
 import _root_.controllers.StripeController
+import _root_.controllers.PaypalController
 import conf.ConfigLoader
 import model.{DefaultThreadPoolProvider, RequestEnvironments}
 import services.DatabaseProvider
@@ -46,9 +46,16 @@ class MyComponents(context: Context)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
+  val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
+  // Actor system not an implicit val, so pass it explicitly
+    new PaypalBackend.Builder(configLoader, databaseProvider)(actorSystem)
+      .buildRequestBasedProvider(requestEnvironments)
+      .valueOr(throw _)
+
   override val router =
     new Routes(
       httpErrorHandler,
-      new StripeController(controllerComponents, stripeBackendProvider)
+      new StripeController(controllerComponents, stripeBackendProvider),
+      new PaypalController(controllerComponents, paypalBackendProvider)
     )
 }

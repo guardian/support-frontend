@@ -3,11 +3,12 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
+import model.paypal.PaypalMode
 import model.{Environment, InitializationError}
 
-case class PaypalConfig(clientId: String, clientSecret: String)
+
+case class PaypalConfig(clientId: String, clientSecret: String, paypalMode: PaypalMode)
 
 object PaypalConfig {
 
@@ -20,10 +21,12 @@ object PaypalConfig {
         .withWithDecryption(true)
 
     override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, PaypalConfig] = {
+
       val validator = new ParameterStoreValidator[PaypalConfig](environment, data); import validator._
       (
         validate("client-id"),
-        validate("client-secret")
+        validate("client-secret"),
+        validated(PaypalMode.fromEnvironment(environment))
       ).mapN(PaypalConfig.apply)
     }
   }

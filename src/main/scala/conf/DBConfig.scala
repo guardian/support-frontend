@@ -21,6 +21,7 @@ object DBConfig {
         .withWithDecryption(true)
 
     override def decode(env: Environment, data: Map[String, String]): Validated[InitializationError, DBConfig] = {
+
       val validator = new ParameterStoreValidator[DBConfig](env, data); import validator._
       (
         validated(env),
