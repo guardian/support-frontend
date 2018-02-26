@@ -162,16 +162,20 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          <div className="component-direct-debit-form__account-holder-confirmation__checkbox">
+          <div className="component-direct-debit-form__confirmation-css-checkbox">
             <input
+              className="component-direct-debit-form__confirmation-input"
               id="confirmation-input"
               type="checkbox"
               onChange={props.onChange}
               checked={props.checked}
             />
-            <label htmlFor="confirmation-input" />
+            <label
+              className="component-direct-debit-form__confirmation-label"
+              htmlFor="confirmation-input"
+            />
           </div>
-          <span className="component-direct-debit-form__account-holder-confirmation__text">
+          <span className="component-direct-debit-form__confirmation-text">
             I confirm that I am the account holder and I am solely able to authorise debit from
             the account
           </span>
@@ -197,12 +201,12 @@ function PaymentButton(props: {onClick: Function}) {
 
 function LegalNotice() {
   return (
-    <div className="component-direct-debit-form__legal__content">
+    <div className="component-direct-debit-form__legal-notice">
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
         payment schedule, due date, frequency and amount will be sent to you within three working
         days.
         All payments are protected by the&nbsp;
-        <a className="component-direct-debit-form__legal__link" target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
           Direct Debit guarantee
         </a>.
       </p>
