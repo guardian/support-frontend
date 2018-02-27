@@ -4,7 +4,7 @@
 
 export type Action =
   | { type: 'SET_API_ERROR', scope: string, error: boolean }
-  | { type: 'SET', scope: string, confirmOptIn: boolean};
+  | { type: 'SET_CONFIRM_MARKETING_CONSENT', scope: string, confirmOptIn: boolean};
 
 // ----- Action Creators ----- //
 
