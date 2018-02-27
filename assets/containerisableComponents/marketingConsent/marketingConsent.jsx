@@ -35,46 +35,45 @@ const MarketingConsent = (props: PropTypes): React.Node => {
   if (props.confirmOptIn === null) {
     content = (
       <PageSection
-        modifierClass="questions-contact"
+        modifierClass="marketing-consent"
         heading="Stay in touch"
       >
-        <div className="component-questions-contact__description">
-          <CheckboxInput
-            id="gnm-marketing-preference"
-            checked={props.marketingPreferencesOptIn || false}
-            onChange={props.marketingPreferenceUpdate}
-            labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
-            labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
-          />
-          <ErrorMessage
-            showError={props.consentApiError}
-            message="Error confirming selection. Please try again later"
-          />
-          <CtaLink
-            onClick={
-              () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
-            }
-            ctaId="Next"
-            text="Next"
-            accessibilityHint="Go to the guardian dot com front page"
-          />
-        </div>
+        <CheckboxInput
+          id="gnm-marketing-preference"
+          checked={props.marketingPreferencesOptIn || false}
+          onChange={props.marketingPreferenceUpdate}
+          labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
+          labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
+        />
+        <ErrorMessage
+          showError={props.consentApiError}
+          message="Error confirming selection. Please try again later"
+        />
+        <CtaLink
+          onClick={
+            () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
+          }
+          ctaId="Next"
+          text="Next"
+          accessibilityHint="Go to the guardian dot com front page"
+        />
       </PageSection>);
   } else {
-    const message = props.confirmOptIn? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
+    const message = props.confirmOptIn ? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
     content = (
-      <div>
-        {message}
+      <div className="component-marketing-consent__confirmation-message">
+        <PageSection
+          modifierClass="marketing-consent"
+          heading="Stay in touch"
+        >
+          {message}
+        </PageSection>
         <DotcomCta />
       </div>
     );
   }
 
-  return (
-    <div className="component-marketing-consent">
-      {content}
-    </div>
-  );
+  return content;
 };
 
 MarketingConsent.defaultProps = {

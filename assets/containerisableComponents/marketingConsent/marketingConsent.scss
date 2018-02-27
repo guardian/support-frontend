@@ -1,0 +1,16 @@
+.component-page-section--marketing-consent {
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+
+    @include mq($until: phablet) {
+      width: 70%;
+    }
+
+    @include mq($from: phablet, $until: desktop) {
+      width: 40%;
+    }
+  }
+}
