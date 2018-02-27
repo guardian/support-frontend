@@ -22,6 +22,11 @@
     height: 35%;
     top: 18px;
     right: 15px;
+
+    // Fix for IE.
+    @include mq($from: phablet) {
+      left: 465px;
+    }
   }
 
   .component-paypal-contribution-button {

@@ -719,7 +719,7 @@ function SvgCirclesHeroDesktop() {
       className="svg-circles-hero-desktop"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1400 406"
-      preserveAspectRatio="xMinYMid"
+      preserveAspectRatio="xMinYMid slice"
     >
       <g fill="none" fillRule="evenodd">
         <path d="M18.512 320.347c6.889-12.381 18.47-22.136 33.143-26.343A55.1 55.1 0 0 1 81 293.685c-12.986 13.825-18.576 33.973-12.954 53.579s21.039 33.73 39.378 38.572a55.1 55.1 0 0 1-25.056 15.28c-14.673 4.208-29.663 2.073-42.067-4.776-12.515-6.912-22.398-18.622-26.657-33.477-4.26-14.855-2.084-30.022 4.867-42.516" fill="#00B2FF" opacity=".6" />
@@ -770,7 +770,7 @@ function SvgCirclesHeroMobileLandscape() {
       className="svg-circles-hero-mobile-landscape"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 768 382"
-      preserveAspectRatio="xMinYMid"
+      preserveAspectRatio="xMinYMid slice"
     >
       <g fill="none" fillRule="evenodd" transform="translate(-2)">
         <path d="M728.406 348.214c-7.84-10.002-19.467-17.017-33.055-18.686a49.417 49.417 0 0 0-26.04 3.835c13.443 10.424 21.222 27.487 18.992 45.644-2.23 18.156-13.905 32.83-29.47 39.693a49.417 49.417 0 0 0 24.339 10.02c13.587 1.67 26.567-2.325 36.593-10.133 10.117-7.878 17.228-19.638 18.917-33.394 1.69-13.757-2.366-26.887-10.276-36.98" fill="#FF1921" opacity=".6" />
@@ -843,7 +843,7 @@ function SvgThankYouHeroDesktop() {
       className="svg-thank-you-hero-desktop"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1400 308"
-      preserveAspectRatio="xMinYMid"
+      preserveAspectRatio="xMinYMid slice"
     >
       <g fill="none" fillRule="evenodd">
         <g transform="scale(1 -1) rotate(-55 -173.131 -218.706)">
