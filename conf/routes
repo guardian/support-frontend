@@ -34,7 +34,7 @@ GET  /us/contribute                                 controllers.Application.cont
 GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPageAU.js")
 GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPageEU.js")
 
-GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
 GET  /contribute/recurring/thankyou                 controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thankyou-page-old", js="regularContributionsThankyouPageOld.js", INTCMP: String ?= "")
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create

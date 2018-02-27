@@ -15,6 +15,7 @@ import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';
 
 import type { ListItem } from 'components/featureList/featureList';
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -279,7 +280,7 @@ function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
   if (props.shouldEncourageMonthly) {
     return (
-      <p>
+      <p className="bundles__why-contribute">
         Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
         If you’re able, please consider
         <strong> monthly</strong> support – it will help to fund our journalism for the long term.
@@ -288,7 +289,7 @@ function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
   }
 
   return (
-    <p>
+    <p className="bundles__why-contribute">
       Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
     </p>
   );
@@ -314,6 +315,7 @@ function ContributionBundle(props: PropTypes) {
 
   return (
     <Bundle {...contribAttrs}>
+      <InlinePaymentLogos />
       <WhyContribute
         shouldEncourageMonthly={props.abTests.pleaseConsiderMonthly === 'variant'}
       />

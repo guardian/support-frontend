@@ -14,10 +14,14 @@ Object {
   "directDebit": Object {
     "accountHolderConfirmation": false,
     "accountHolderName": "",
-    "bankAccountNumber": "",
-    "bankSortCode": "",
+    "accountNumber": "",
     "formError": "",
     "isPopUpOpen": false,
+    "sortCodeArray": Array [
+      "",
+      "",
+      "",
+    ],
   },
   "regularContrib": Object {
     "amount": 20,

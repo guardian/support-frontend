@@ -9,6 +9,7 @@ deployments:
       amiTags:
         Recipe: xenial-membership
         AmigoStage: PROD
+      amiEncrypted: true
   frontend:
     type: autoscaling
     dependencies: [cfn]

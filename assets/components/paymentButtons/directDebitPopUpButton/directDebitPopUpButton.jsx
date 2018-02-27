@@ -40,23 +40,23 @@ function mapDispatchToProps(dispatch) {
 
 const DirectDebitPopUpButton = (props: PropTypes) => {
 
-  let content = null;
+  const button = (
+    <button
+      id="qa-pay-with-direct-debit"
+      className="component-direct-debit-pop-up-button"
+      onClick={props.openDirectDebitPopUp}
+    >
+    Pay with direct debit
+    </button>);
 
   if (props.isPopUpOpen) {
-    content = <DirectDebitPopUpForm callback={props.callback} />;
-  } else {
-    content = (
-      <button
-        id="qa-pay-with-direct-debit"
-        className="component-direct-debit-pop-up-button"
-        onClick={props.openDirectDebitPopUp}
-      >
-        Pay with direct debit
-      </button>
-    );
+    return (
+      <div>
+        {button}
+        <DirectDebitPopUpForm callback={props.callback} />
+      </div>);
   }
-
-  return content;
+  return button;
 
 };
 

@@ -177,11 +177,11 @@
       }
 
       .component-bundle__content {
-        p:first-child {
+        .bundles__why-contribute {
           @include mq($from: tablet, $until: desktop) {
             position: absolute;
             left: 10px;
-            top: 10px;
+            top: 70px;
             width:300px;
           }
         }
@@ -267,13 +267,11 @@
         }
       }
 
-      p {
-        &:first-child {
-          font-size: 16px;
-          line-height: 20px;
-          margin-bottom: $gu-v-spacing;
-          font-family: $gu-text-egyptian-web;
-        }
+      .bundles__why-contribute {
+        font-size: 16px;
+        line-height: 20px;
+        margin-bottom: $gu-v-spacing;
+        font-family: $gu-text-egyptian-web;
       }
 
       .component-radio-toggle input:not(:checked)+.component-radio-toggle__label, .component-number-input {
@@ -316,24 +314,40 @@
       background-color: gu-colour(news-garnett-highlight);
 
       .component-bundle__content {
-        p:first-child {
+        @include mq($from: phablet) {
+          .component-inline-payment-logos {
+            position: absolute;
+            top: 35px;
+            left: 8px;
+          }
+        }
+
+        @include mq($until: phablet) {
+          .component-inline-payment-logos {
+            margin-bottom: 14px;
+          }
+        }
+
+        .bundles__why-contribute {
           font-family: $gu-text-sans-web;
 
           @include mq($from: desktop) {
             width: 295px;
+            position: absolute;
+            top: 70px;
           }
 
           @include mq($from: tablet, $until: desktop) {
             position: absolute;
             left: 10px;
-            top: 35px;
+            top: 70px;
             width:300px;
           }
 
           @include mq($from: phablet, $until: tablet) {
             position: absolute;
             left: 10px;
-            top: 35px;
+            top: 70px;
             width:290px;
           }
         }
@@ -368,6 +382,11 @@
         }
       }
 
+      @include mq($until: phablet) {
+        .component-double-heading {
+          margin-bottom: 6px;
+        }
+      }
       @include mq($from: desktop) {
         margin-right: $gu-h-spacing/2;
         width: 920px;
