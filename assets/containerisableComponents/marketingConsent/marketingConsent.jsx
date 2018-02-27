@@ -53,7 +53,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
           onClick={
             () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
           }
-          ctaId="Next"
+          ctaId="next"
           text="Next"
           accessibilityHint="Go to the guardian dot com front page"
         />

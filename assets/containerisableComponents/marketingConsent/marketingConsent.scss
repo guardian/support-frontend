@@ -13,4 +13,9 @@
       width: 40%;
     }
   }
+  .component-cta-link--next {
+    @include mq($from: mobileMedium) {
+      width: 300px;
+    }
+  }
 }
