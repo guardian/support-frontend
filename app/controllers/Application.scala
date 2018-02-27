@@ -90,7 +90,7 @@ class Application(
       val identityUser = identityService.getUser(request.user)
 
       identityUser.value.foreach({
-        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identiy. $error")
+        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identity. $error")
         case Right(_) =>
       })
 
