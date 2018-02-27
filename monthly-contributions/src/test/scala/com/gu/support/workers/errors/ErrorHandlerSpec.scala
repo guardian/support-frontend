@@ -1,7 +1,6 @@
 package com.gu.support.workers.errors
 
-import java.net.SocketTimeoutException
-
+import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
@@ -23,6 +22,12 @@ class ErrorHandlerSpec extends FlatSpec with Matchers {
   "ErrorHandler" should "throw an RetryUnlimited when it handles a timeout" in {
     an[RetryUnlimited] should be thrownBy {
       ErrorHandler.handleException(new SocketTimeoutException())
+    }
+  }
+
+  "ErrorHandler" should "throw an RetryUnlimited when the connection is reset" in {
+    an[RetryUnlimited] should be thrownBy {
+      ErrorHandler.handleException(new SocketException())
     }
   }
 
