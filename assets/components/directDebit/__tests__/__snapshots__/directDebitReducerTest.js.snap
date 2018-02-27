@@ -4,9 +4,13 @@ exports[`direct debit reducer tests should return the initial state 1`] = `
 Object {
   "accountHolderConfirmation": false,
   "accountHolderName": "",
-  "bankAccountNumber": "",
-  "bankSortCode": "",
+  "accountNumber": "",
   "formError": "",
   "isPopUpOpen": false,
+  "sortCodeArray": Array [
+    "",
+    "",
+    "",
+  ],
 }
 `;

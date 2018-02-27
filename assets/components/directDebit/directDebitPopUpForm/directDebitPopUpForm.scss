@@ -16,21 +16,51 @@
   text-align: center;
 }
 
+.focus-target:focus {
+  outline:0;
+  box-shadow: 0 0 1px 2px gu-colour(garnett-neutral-2);
+}
+
 .component-direct-debit-pop-up-form__content {
   position: relative;
   display: inline-block;
   top: 50%;
+  width: 345px;
+  padding: 10px;
+  @include mq($from: mobileLandscape) {
+    width: 475px;
+  }
+  min-height: 566px;
   transform: translateY(-50%);
-  background-color: gu-colour(nav-background-colour);
+  background-color: gu-colour(garnett-neutral-3);
   text-align: left;
-  border-radius: 5px;
+  border-top: 1px solid gu-colour(garnett-neutral-1);
+}
+
+.component-direct-debit-pop-up-form__heading {
+  float: left;
+  font-family: $gu-egyptian-web;
+  font-weight: bolder;
+  font-size: 24px;
+  line-height: 30px;
+  max-width: 280px;
+  @include mq($from: mobileLandscape) {
+    max-width: 400px;
+  }
 }
 
 .component-direct-debit-pop-up-form__close-button {
+  border: solid 1px gu-colour(garnett-neutral-1);
   border-radius: 800px;
-  height: 20px;
-  margin-left: 480px;
-  margin-top: $gu-v-spacing/2;
+  background-color: gu-colour(garnett-neutral-3);
+  height: 44px;
+  width: 44px;
+  float: right;
+  .svg-cross {
+    padding-left: 2px;
+    padding-top: 3px;
+    height: 19px;
+  }
 }
 
 .component-direct-debit-pop-up-form__background {
@@ -40,5 +70,5 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background:rgba(0,0,0,0.6);
+  background:transparent;
 }

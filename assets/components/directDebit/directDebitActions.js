@@ -7,10 +7,12 @@ import { checkAccount } from './helpers/ajax';
 
 // ----- Types ----- //
 
+export type SortCodeIndex = 0 | 1 | 2;
+
 export type Action =
   | { type: 'DIRECT_DEBIT_POP_UP_OPEN' }
   | { type: 'DIRECT_DEBIT_POP_UP_CLOSE' }
-  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index: SortCodeIndex, partialSortCode: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
@@ -25,9 +27,11 @@ const openDirectDebitPopUp = (): Action => {
   return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
 };
 
-const closeDirectDebitPopUp = (): Action => ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
+const closeDirectDebitPopUp = (): Action =>
+  ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
 
-const updateSortCode = (sortCode: string): Action => ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode });
+const updateSortCode = (index: SortCodeIndex, partialSortCode: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index, partialSortCode });
 
 const updateAccountNumber = (accountNumber: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber });
@@ -50,12 +54,13 @@ function payDirectDebitClicked(callback: Function): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
-      bankSortCode,
-      bankAccountNumber,
+      sortCodeArray,
+      accountNumber,
       accountHolderName,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
+    const sortCode = sortCodeArray.join('');
     const isTestUser: boolean = getState().page.user.isTestUser || false;
     const { csrf } = getState().page;
 
@@ -66,7 +71,7 @@ function payDirectDebitClicked(callback: Function): Function {
       return;
     }
 
-    checkAccount(bankSortCode, bankAccountNumber, isTestUser, csrf)
+    checkAccount(sortCode, accountNumber, isTestUser, csrf)
       .then((response) => {
         if (!response.ok) {
           throw new Error('invalid_input');
@@ -77,7 +82,8 @@ function payDirectDebitClicked(callback: Function): Function {
         if (!response.accountValid) {
           throw new Error('incorrect_input');
         }
-        callback(undefined, bankAccountNumber, bankSortCode, accountHolderName);
+        callback(undefined, accountNumber, sortCode, accountHolderName);
+        dispatch(closeDirectDebitPopUp());
       })
       .catch((e) => {
         let msg = '';

@@ -267,9 +267,9 @@ function postCheckout(
 ): Function {
   return (
     token?: string,
-    bankAccountNumber?: string,
-    bankSortCode?: string,
-    bankAccountHolderName?: string,
+    accountNumber?: string,
+    sortCode?: string,
+    accountHolderName?: string,
   ) => {
 
     pollCount = 0;
@@ -285,9 +285,9 @@ function postCheckout(
       referrerAcquisitionData,
       getState,
       token,
-      bankAccountNumber,
-      bankSortCode,
-      bankAccountHolderName,
+      accountNumber,
+      sortCode,
+      accountHolderName,
     );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
