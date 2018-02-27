@@ -8,6 +8,7 @@ import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import utils.BrowserCheck
 
 import scala.concurrent.ExecutionContext
@@ -86,8 +87,14 @@ class Application(
       import cats.implicits._
 
       val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+      val identityUser = identityService.getUser(request.user)
 
-      identityService.getUser(request.user).toOption.value.map { maybeUser =>
+      identityUser.value.foreach({
+        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identiy. $error")
+        case Right(_) =>
+      })
+
+      identityUser.toOption.value.map { maybeUser =>
         Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, maybeUser))
       }
     }
