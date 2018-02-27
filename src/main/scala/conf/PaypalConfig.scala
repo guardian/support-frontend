@@ -3,7 +3,7 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import conf.ConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
+import conf.ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreValidator, environmentShow}
 import model.paypal.PaypalMode
 import model.{Environment, InitializationError}
 
@@ -12,7 +12,7 @@ case class PaypalConfig(clientId: String, clientSecret: String, paypalMode: Payp
 
 object PaypalConfig {
 
-  implicit val paypalConfigParameterStoreLoadable: ParameterStoreLoadable[PaypalConfig] = new ParameterStoreLoadable[PaypalConfig] {
+  implicit val paypalConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[PaypalConfig] = new ParameterStoreLoadableByEnvironment[PaypalConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()
@@ -22,7 +22,7 @@ object PaypalConfig {
 
     override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, PaypalConfig] = {
 
-      val validator = new ParameterStoreValidator[PaypalConfig](environment, data); import validator._
+      val validator = new ParameterStoreValidator[PaypalConfig, Environment](environment, data); import validator._
       (
         validate("client-id"),
         validate("client-secret"),

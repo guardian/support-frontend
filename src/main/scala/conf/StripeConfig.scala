@@ -3,8 +3,7 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
-import conf.ConfigLoader.{ParameterStoreLoadable, ParameterStoreValidator}
+import conf.ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreValidator, environmentShow}
 import model.{Environment, InitializationError}
 
 sealed trait StripeAccountConfig {
@@ -23,7 +22,7 @@ case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountC
 
 object StripeConfig {
 
-  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[StripeConfig] = new ParameterStoreLoadable[StripeConfig] {
+  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[StripeConfig] = new ParameterStoreLoadableByEnvironment[StripeConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()
@@ -32,7 +31,7 @@ object StripeConfig {
         .withRecursive(false)
 
     override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, StripeConfig] = {
-      val validator = new ParameterStoreValidator[StripeConfig](environment, data); import validator._
+      val validator = new ParameterStoreValidator[StripeConfig, Environment](environment, data); import validator._
 
       val defaultAccount = (
         validate("default-public-key"),

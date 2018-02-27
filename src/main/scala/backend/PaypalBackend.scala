@@ -27,8 +27,12 @@ object PaypalBackend {
     extends EnvironmentBasedBuilder[PaypalBackend] {
 
     override def build(env: Environment): InitializationResult[PaypalBackend] = (
-      configLoader.loadConfig[PaypalConfig](env).andThen(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
-      databaseProvider.loadDatabase(env).andThen(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService]
+      configLoader
+        .configForEnvironment[PaypalConfig](env)
+        .andThen(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
+      databaseProvider
+        .loadDatabase(env)
+        .andThen(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService]
     ).mapN(PaypalBackend.apply)
   }
 
