@@ -16,12 +16,12 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: (marketingPreferencesOptIn: boolean, email: string, csfr: CsrfState) => {
+    onClick: (marketingPreferencesOptIn: boolean, email: string, csrf: CsrfState) => {
       sendMarketingPreferencesToIdentity(
         marketingPreferencesOptIn,
         email,
         dispatch,
-        csfr,
+        csrf,
         'CONTRIBUTIONS_THANK_YOU',
       );
     },
