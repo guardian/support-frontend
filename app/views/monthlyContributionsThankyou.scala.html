@@ -15,7 +15,7 @@
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.user = {
-            email: @maybeUser.map(user => user.primaryEmailAddress).getOrElse("undefined")
+            email: @Html(maybeUser.map(user => s""""${user.primaryEmailAddress}"""").getOrElse("undefined"))
        }
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>
