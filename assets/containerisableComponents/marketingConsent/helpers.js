@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
+import { logException } from 'helpers/logger';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
@@ -38,10 +39,12 @@ function sendMarketingPreferencesToIdentity(
       if (response.status === 200) {
         dispatch(setConfirmMarketingConsent(optIn));
       } else {
+        logException('Marketing preference API returned an error');
         dispatch(setConsentApiError(true));
       }
     })
     .catch(() => {
+      logException('Error while trying to interact with the marketing preference API');
       dispatch(setConsentApiError(true));
     });
 }
