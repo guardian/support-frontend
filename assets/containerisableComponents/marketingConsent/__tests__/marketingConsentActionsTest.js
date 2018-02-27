@@ -37,7 +37,7 @@ describe('Marketing Consent actions', () => {
     const expectedAction = {
       type: 'SET_CONFIRM_MARKETING_CONSENT',
       confirmOptIn,
-      scope: scope,
+      scope,
     };
 
     expect(actions.setConfirmMarketingConsent(confirmOptIn)).toEqual(expectedAction);
