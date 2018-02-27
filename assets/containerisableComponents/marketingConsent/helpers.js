@@ -25,9 +25,7 @@ function sendMarketingPreferencesToIdentity(
   csrf: CsrfState,
   scope: string,
 ): void {
-
-  const setConsentApiError = marketingConsentActionsFor(scope).setAPIError;
-  const { setConfirmMarketingConsent } = marketingConsentActionsFor(scope);
+  const { setConfirmMarketingConsent, setAPIError } = marketingConsentActionsFor(scope);
 
   if (!optIn) {
     dispatch(setConfirmMarketingConsent(false));
@@ -40,12 +38,12 @@ function sendMarketingPreferencesToIdentity(
         dispatch(setConfirmMarketingConsent(optIn));
       } else {
         logException('Marketing preference API returned an error');
-        dispatch(setConsentApiError(true));
+        dispatch(setAPIError(true));
       }
     })
     .catch(() => {
       logException('Error while trying to interact with the marketing preference API');
-      dispatch(setConsentApiError(true));
+      dispatch(setAPIError(true));
     });
 }
 
