@@ -11,7 +11,7 @@ import { renderPage } from 'helpers/render';
 import * as user from 'helpers/user/user';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import CtaLink from 'components/ctaLink/ctaLink';
+import DotcomCta from 'components/dotcomCta/dotcomCta';
 import MarketingConsentContainer from './components/marketingConsentContainer';
 import ThankYouIntroduction from './components/thankYouIntroduction';
 import QuestionsAndSocial from './components/questionsAndSocial';
@@ -36,16 +36,7 @@ const marketing = () => {
   if (store.getState().page.user.email) {
     return <MarketingConsentContainer />;
   }
-  return (
-    <div className="thankyou__wrapper">
-      <CtaLink
-        ctaId="return-to-the-guardian"
-        text="Return to the Guardian"
-        url="https://theguardian.com"
-        accessibilityHint="Go to the guardian dot com front page"
-      />
-    </div>
-  );
+  return (<DotcomCta />);
 };
 
 // ----- Render ----- //
