@@ -17,7 +17,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 type PropTypes = {
   consentApiError: boolean,
   confirmOptIn: ?boolean,
-  onClick: (marketingPreferencesOptIn: boolean, email?: string, csfr: CsrfState) => void,
+  onClick: (marketingPreferencesOptIn: boolean, email?: ?string, csfr: CsrfState) => void,
   marketingPreferencesOptIn: boolean,
   marketingPreferenceUpdate: (preference: boolean) => void,
   email?: ?string,
@@ -32,7 +32,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
     return content;
   }
 
-  if (props.confirmOptIn === null) {
+  if (props.confirmOptIn === null && props.email !== null && props.email !== undefined) {
     content = (
       <PageSection
         modifierClass="marketing-consent"
