@@ -45,17 +45,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
     );
   } else {
     const message = props.confirmOptIn ? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
-    content = (
-      <div className="component-marketing-consent__confirmation-message">
-        <PageSection
-          modifierClass="marketing-consent"
-          heading="Stay in touch"
-        >
-          {message}
-        </PageSection>
-        <DotcomCta />
-      </div>
-    );
+    content = (<MarketingConfirmationMessage message={message} />);
   }
 
   return content;
@@ -100,6 +90,22 @@ function ChooseMarketingPreference(props: {
     </PageSection>
   );
 }
+
+
+function MarketingConfirmationMessage(props: {message: string}) {
+  return (
+    <div className="component-marketing-consent__confirmation-message">
+      <PageSection
+        modifierClass="marketing-consent"
+        heading="Stay in touch"
+      >
+        {props.message}
+      </PageSection>
+      <DotcomCta />
+    </div>
+  );
+}
+
 
 // ----- Exports ----- //
 
