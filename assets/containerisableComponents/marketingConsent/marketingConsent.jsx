@@ -17,7 +17,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 type PropTypes = {
   consentApiError: boolean,
   confirmOptIn: ?boolean,
-  onClick: (marketingPreferencesOptIn: boolean, email?: ?string, csfr: CsrfState) => void,
+  onClick: (boolean, ?string, CsrfState) => void,
   marketingPreferencesOptIn: boolean,
   marketingPreferenceUpdate: (preference: boolean) => void,
   email?: ?string,
