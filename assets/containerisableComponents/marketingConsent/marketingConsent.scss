@@ -5,6 +5,7 @@
     line-height: 1.17;
     font-weight: bold;
 
+
     @include mq($until: phablet) {
       width: 70%;
     }
@@ -13,9 +14,34 @@
       width: 40%;
     }
   }
+
   .component-cta-link--next {
+    background-color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    color: #fff;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+    margin-bottom: $gu-v-spacing * 3;
+
     @include mq($from: mobileMedium) {
       width: 300px;
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(garnett-neutral-1), 10%);
+    }
+  }
+
+  .svg-arrow-right-straight {
+    height: 35%;
+    top: 17px;
+    right: 13px;
+
+    // Fix for IE.
+    @include mq($from: mobileMedium) {
+      left: 321px;
     }
   }
 }
