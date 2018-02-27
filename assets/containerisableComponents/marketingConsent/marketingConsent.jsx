@@ -34,30 +34,15 @@ const MarketingConsent = (props: PropTypes): React.Node => {
 
   if (props.confirmOptIn === null && props.email !== null && props.email !== undefined) {
     content = (
-      <PageSection
-        modifierClass="marketing-consent"
-        heading="Stay in touch"
-      >
-        <CheckboxInput
-          id="gnm-marketing-preference"
-          checked={props.marketingPreferencesOptIn}
-          onChange={props.marketingPreferenceUpdate}
-          labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
-          labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
-        />
-        <ErrorMessage
-          showError={props.consentApiError}
-          message="Error confirming selection. Please try again later"
-        />
-        <CtaLink
-          onClick={
-            () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
-          }
-          ctaId="next"
-          text="Next"
-          accessibilityHint="Go to the guardian dot com front page"
-        />
-      </PageSection>);
+      <ChooseMarketingPreference
+        marketingPreferencesOptIn={props.marketingPreferencesOptIn}
+        email={props.email}
+        marketingPreferenceUpdate={props.marketingPreferenceUpdate}
+        consentApiError={props.consentApiError}
+        onClick={props.onClick}
+        csrf={props.csrf}
+      />
+    );
   } else {
     const message = props.confirmOptIn ? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
     content = (
@@ -75,5 +60,47 @@ const MarketingConsent = (props: PropTypes): React.Node => {
 
   return content;
 };
+
+
+// ----- Auxiliary components ----- //
+
+function ChooseMarketingPreference(props: {
+    marketingPreferencesOptIn: boolean,
+    email: string,
+    csrf: CsrfState,
+    marketingPreferenceUpdate: (preference: boolean) => void,
+    consentApiError: boolean,
+    onClick: (boolean, ?string, CsrfState) => void,
+  }) {
+
+  return (
+    <PageSection
+      modifierClass="marketing-consent"
+      heading="Stay in touch"
+    >
+      <CheckboxInput
+        id="gnm-marketing-preference"
+        checked={props.marketingPreferencesOptIn}
+        onChange={props.marketingPreferenceUpdate}
+        labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
+        labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
+      />
+      <ErrorMessage
+        showError={props.consentApiError}
+        message="Error confirming selection. Please try again later"
+      />
+      <CtaLink
+        onClick={
+          () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
+        }
+        ctaId="next"
+        text="Next"
+        accessibilityHint="Go to the guardian dot com front page"
+      />
+    </PageSection>
+  );
+}
+
+// ----- Exports ----- //
 
 export default MarketingConsent;
