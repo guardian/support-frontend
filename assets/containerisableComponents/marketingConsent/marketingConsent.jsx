@@ -40,7 +40,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
       >
         <CheckboxInput
           id="gnm-marketing-preference"
-          checked={props.marketingPreferencesOptIn || false}
+          checked={props.marketingPreferencesOptIn}
           onChange={props.marketingPreferenceUpdate}
           labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
           labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
