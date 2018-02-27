@@ -20,7 +20,7 @@ type PropTypes = {
   onClick: (marketingPreferencesOptIn: boolean, email?: string, csfr: CsrfState) => void,
   marketingPreferencesOptIn: boolean,
   marketingPreferenceUpdate: (preference: boolean) => void,
-  email?: string,
+  email?: ?string,
   csrf: CsrfState,
 };
 
@@ -74,10 +74,6 @@ const MarketingConsent = (props: PropTypes): React.Node => {
   }
 
   return content;
-};
-
-MarketingConsent.defaultProps = {
-  email: '',
 };
 
 export default MarketingConsent;

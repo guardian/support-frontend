@@ -84,15 +84,12 @@ class Application(
   def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] =
     AuthenticatedAction.async { implicit request =>
       import cats.implicits._
+
       val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
-      identityService.getUser(request.user).map { fullUser =>
-        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, fullUser))
-      } fold (
-        { error =>
-          InternalServerError
-        },
-        identity(_)
-      )
+
+      identityService.getUser(request.user).toOption.value.map { maybeUser =>
+        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, maybeUser))
+      }
     }
 
   def contributionsLandingUK(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>

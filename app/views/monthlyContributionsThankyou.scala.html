@@ -8,14 +8,14 @@
   title: String,
   id: String,
   js: String,
-  user: IdUser
+  maybeUser: Option[IdUser]
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.user = {
-            email: "@user.primaryEmailAddress",
+            email: @maybeUser.map(user => user.primaryEmailAddress).getOrElse("undefined")
        }
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>
