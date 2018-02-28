@@ -64,7 +64,6 @@ type ContribAttrs = {
   modifierClass: string,
   ctaLink: string,
   showPaymentLogos: boolean,
-  showSecureLogo: boolean,
 }
 
 // ----- Map State/Props ----- //
@@ -204,7 +203,6 @@ function contribAttrs(
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
-    showSecureLogo: false,
   };
 }
 
@@ -295,7 +293,6 @@ function ContributionsBundle(props: PropTypes) {
   );
 
   attrs.showPaymentLogos = true;
-  attrs.showSecureLogo = props.abTests.usSecureLogoTest === 'logo';
 
   const onClick = () => {
     if (!props.contribError) {
