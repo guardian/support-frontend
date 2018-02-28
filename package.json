@@ -51,7 +51,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.0.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.1",
     "babel-loader": "^7.1.3",
