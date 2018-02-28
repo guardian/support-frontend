@@ -7,6 +7,8 @@ import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import utils.BrowserCheck
 
 import scala.concurrent.ExecutionContext
@@ -80,10 +82,22 @@ class Application(
     }
   }
 
-  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
-    Ok(views.html.react(title, updatedId, updatedJs))
-  }
+  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] =
+    AuthenticatedAction.async { implicit request =>
+      import cats.implicits._
+
+      val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
+      val identityUser = identityService.getUser(request.user)
+
+      identityUser.value.foreach({
+        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identity. $error")
+        case Right(_) =>
+      })
+
+      identityUser.toOption.value.map { maybeUser =>
+        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, maybeUser))
+      }
+    }
 
   def contributionsLandingUK(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
     val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")

@@ -32,7 +32,7 @@ export type State = {
 // ----- Reducer ----- //
 
 export default combineReducers({
-  marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
+  marketingConsent: marketingConsentReducerFor('REGULAR_CONTRIBUTIONS_THANK_YOU'),
   user,
   csrf: csrfReducer,
 });

@@ -40,7 +40,6 @@ GET  /contribute/recurring/existing                 controllers.Application.reac
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
 GET  /contribute/recurring/pending                  controllers.Application.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-pending-page", js="regularContributionsPendingPage.js", INTCMP: String ?= "")
-GET  /contribute/marketing-confirm                  controllers.Application.reactTemplate(title="Support the Guardian | Thank You", id="contributions-confirm-marketing", js="contributionsMarketingConfirmPage.js")
 
 # this endpoint should be removed once identity remove
 # the need for a client token
