@@ -7,5 +7,6 @@ POST     /contribute/one-off/stripe/create                    controllers.Stripe
 
 # TODO: not sure if this is the correct naming for this endpoint
 POST     /contribute/one-off/paypal/create-payment                   controllers.PaypalController.createPayment
+POST     /contribute/one-off/paypal/capture-payment                  controllers.PaypalController.capturePayment
+
 #POST     /contribute/one-off/paypal/execute-payment
-#POST     /contribute/one-off/paypal/capture-payment

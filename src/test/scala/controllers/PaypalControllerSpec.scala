@@ -21,22 +21,33 @@ import play.api.test.Helpers._
 import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
-import services.PaypalService
 import util.RequestBasedProvider
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context) extends BuiltInComponentsFromContext(context) with MockitoSugar {
+class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
+  extends BuiltInComponentsFromContext(context) with MockitoSugar {
 
-  val mockPaypalService: PaypalService = mock[PaypalService]
-  val mockPaypalBackend: PaypalBackend = mock[PaypalBackend]
-  val mockPaypalRequestBasedProvider: RequestBasedProvider[PaypalBackend] = mock[RequestBasedProvider[PaypalBackend]]
-  val mockPaypalPayment: Payment = Mockito.mock[Payment](classOf[Payment], Mockito.RETURNS_DEEP_STUBS)
+  val mockPaypalBackend: PaypalBackend =
+    mock[PaypalBackend]
+
+  val mockPaypalRequestBasedProvider: RequestBasedProvider[PaypalBackend] =
+    mock[RequestBasedProvider[PaypalBackend]]
+
   val paymentMock: Payment = mock[Payment]
-  val result:EitherT[Future, PaypalApiError, Payment] = EitherT.right(Future.successful(paymentMock))
-  val payPalController: PaypalController = new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec))
-  val stripeBackendProvider: RequestBasedProvider[StripeBackend] = mock[RequestBasedProvider[StripeBackend]]
+
+  val paymentServiceResponse:EitherT[Future, PaypalApiError, Payment] =
+    EitherT.right(Future.successful(paymentMock))
+
+  val paymentServiceResponseError:EitherT[Future, PaypalApiError, Payment] =
+    EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
+
+  val payPalController: PaypalController =
+    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec))
+
+  val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
+    mock[RequestBasedProvider[StripeBackend]]
 
   override def router: Router = new Routes(
     httpErrorHandler,
@@ -61,7 +72,7 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
     lifecycle = new DefaultApplicationLifecycle()
   )
 
-  "Paypal Controller" should {
+  "Paypal Controller" should  {
 
     "create paypal payment - 200 OK" in {
 
@@ -71,12 +82,14 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
         val links:java.util.List[Links] = List(link).asJava
         Mockito.when(paymentMock.getLinks).thenReturn(links)
         Mockito.when(paymentMock.getId).thenReturn("paymentID")
-        Mockito.when(mockPaypalRequestBasedProvider.getInstanceFor(Matchers.any())(Matchers.any())).thenReturn(mockPaypalBackend)
-        Mockito.when(mockPaypalBackend.createPayment(Matchers.any())).thenReturn(result)
+        Mockito.when(mockPaypalRequestBasedProvider.getInstanceFor(Matchers.any())(Matchers.any()))
+          .thenReturn(mockPaypalBackend)
+        Mockito.when(mockPaypalBackend.createPayment(Matchers.any())).thenReturn(paymentServiceResponse)
       }
 
 
-      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment").withJsonBody(play.api.libs.json.Json.parse(
+      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
         """{
            "currency": "GBP",
            "amount": 1,
@@ -85,7 +98,9 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
            }
         """.stripMargin))
 
-      val paypalControllerResult: Future[play.api.mvc.Result] = Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+
       status(paypalControllerResult).mustBe(200)
 
     }
@@ -94,7 +109,8 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
 
       val fixture = new PaypalControllerFixture()(executionContext, context)
 
-      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment").withJsonBody(play.api.libs.json.Json.parse(
+      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
         """{
            "currency": "GBP",
            "amount": "InValidAmount",
@@ -103,7 +119,9 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
            }
         """.stripMargin))
 
-      val paypalControllerResult: Future[play.api.mvc.Result] = Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+
       status(paypalControllerResult).mustBe(400)
     }
 
@@ -111,7 +129,8 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
 
       val fixture = new PaypalControllerFixture()(executionContext, context)
 
-      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment").withJsonBody(play.api.libs.json.Json.parse(
+      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
         """{
            "currency": "AAA",
            "amount": 1,
@@ -120,7 +139,9 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
            }
         """.stripMargin))
 
-      val paypalControllerResult: Future[play.api.mvc.Result] = Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+
       status(paypalControllerResult).mustBe(400)
     }
 
@@ -132,11 +153,13 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
         val links:java.util.List[Links] = List(link).asJava
         Mockito.when(paymentMock.getLinks).thenReturn(links)
         Mockito.when(paymentMock.getId).thenReturn("paymentID")
-        Mockito.when(mockPaypalRequestBasedProvider.getInstanceFor(Matchers.any())(Matchers.any())).thenReturn(mockPaypalBackend)
-        Mockito.when(mockPaypalBackend.createPayment(Matchers.any())).thenReturn(result)
+        Mockito.when(mockPaypalRequestBasedProvider
+          .getInstanceFor(Matchers.any())(Matchers.any())).thenReturn(mockPaypalBackend)
+        Mockito.when(mockPaypalBackend.createPayment(Matchers.any())).thenReturn(paymentServiceResponse)
       }
 
-      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment").withJsonBody(play.api.libs.json.Json.parse(
+      val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
         """{
            "currency": "GBP",
            "amount": 1,
@@ -145,14 +168,126 @@ class PaypalControllerSpec extends PlaySpec with Status with MockitoSugar with S
            }
         """.stripMargin))
 
-      val paypalControllerResult: Future[play.api.mvc.Result] = Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+
       status(paypalControllerResult).mustBe(500)
     }
 
+    "capture paypal payment - 200 OK" in {
 
+      val fixture = new PaypalControllerFixture()(executionContext, context) {
+        Mockito.when(mockPaypalRequestBasedProvider.getInstanceFor(Matchers.any())(Matchers.any()))
+          .thenReturn(mockPaypalBackend)
+        Mockito.when(mockPaypalBackend.capturePayment(Matchers.any())(Matchers.any()))
+          .thenReturn(paymentServiceResponse)
+      }
+
+      val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(play.api.libs.json.Json.parse(
+        """{
+            "paymentId":"PAY-4JG67395EA359543HLKKVTFI",
+            "platform": "android",
+            "intCmp":"intCmp",
+            "refererPageviewId":"refererPageviewId",
+            "refererUrl":"refererUrl",
+            "ophanPageviewId":"jducx5kjl3u7cwf5ocud",
+            "ophanBrowserId":"ophanBrowserId",
+            "componentId":"componentId",
+            "componentType":"AcquisitionsEditorialLink",
+            "source":"GuardianWeb",
+            "refererAbTest": {
+                              "name":"stripe-checkout",
+                              "variant":"stripe"
+                              },
+            "nativeAbTests":[
+              {
+                "name":"stripe-checkout",
+                "variant":"stripe"
+              }
+            ]}""".stripMargin))
+
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+
+      status(paypalControllerResult).mustBe(200)
+
+    }
+
+
+    "capture paypal payment - 400 Bad Request invalid JSON" in {
+
+      val fixture = new PaypalControllerFixture()(executionContext, context) {
+        Mockito.when(mockPaypalRequestBasedProvider.getInstanceFor(Matchers.any())(Matchers.any())).thenReturn(mockPaypalBackend)
+        Mockito.when(mockPaypalBackend.capturePayment(Matchers.any())(Matchers.any())).thenReturn(paymentServiceResponse)
+      }
+
+      val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
+        """{
+            "intCmp":"intCmp",
+            "refererPageviewId":"refererPageviewId",
+            "refererUrl":"refererUrl",
+            "ophanPageviewId":"jducx5kjl3u7cwf5ocud",
+            "ophanBrowserId":"ophanBrowserId",
+            "componentId":5,
+            "componentType":"AcquisitionsEditorialLink",
+            "source":"GuardianWeb",
+            "refererAbTest": {
+                              "name":"stripe-checkout",
+                              "variant":"stripe"
+                              },
+            "nativeAbTests":[
+              {
+                "name":"stripe-checkout",
+                "variant":"stripe"
+              }
+            ]}""".stripMargin))
+
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+
+      status(paypalControllerResult).mustBe(400)
+
+    }
+
+    "capture paypal payment - 500 Error response" in {
+
+      val fixture = new PaypalControllerFixture()(executionContext, context) {
+        Mockito.when(mockPaypalRequestBasedProvider
+          .getInstanceFor(Matchers.any())(Matchers.any())).thenReturn(mockPaypalBackend)
+        Mockito.when(mockPaypalBackend.capturePayment(Matchers.any())(Matchers.any()))
+          .thenReturn(paymentServiceResponseError)
+      }
+
+      val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
+        .withJsonBody(play.api.libs.json.Json.parse(
+        """{
+            "paymentId":"PAY-4JG67395EA359543HLKKVTFI",
+            "platform": "android",
+            "intCmp":"intCmp",
+            "refererPageviewId":"refererPageviewId",
+            "refererUrl":"refererUrl",
+            "ophanPageviewId":"jducx5kjl3u7cwf5ocud",
+            "ophanBrowserId":"ophanBrowserId",
+            "componentId":"componentId",
+            "componentType":"AcquisitionsEditorialLink",
+            "source":"GuardianWeb",
+            "refererAbTest": {
+                              "name":"stripe-checkout",
+                              "variant":"stripe"
+                              },
+            "nativeAbTests":[
+              {
+                "name":"stripe-checkout",
+                "variant":"stripe"
+              }
+            ]}""".stripMargin))
+
+      val paypalControllerResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+
+      status(paypalControllerResult).mustBe(500)
+
+    }
   }
-
-
 }
-
-

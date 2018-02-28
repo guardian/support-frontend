@@ -47,7 +47,8 @@ object PaypalApiError {
 
       val issueOpt: Option[String] = for {
         error <- Option(paypalException.getDetails)
-        detailMessage <- error.getDetails.asScala.headOption
+        detailMessageOpt <- Option(error.getDetails)
+        detailMessage <- detailMessageOpt.asScala.headOption
         issue <- Option(detailMessage.getIssue)
       } yield issue
 

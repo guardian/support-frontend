@@ -1,21 +1,42 @@
 package backend
 
 import akka.actor.ActorSystem
-import cats.syntax.apply._
+import cats.data.EitherT
 import com.paypal.api.payments.Payment
 import conf.{ConfigLoader, PaypalConfig}
-import model.paypal.CreatePaypalPaymentData
-import model.{Environment, InitializationResult}
+import model.db.ContributionData
+import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError}
+import model.{DefaultThreadPool, Environment, InitializationResult}
 import services._
 import util.EnvironmentBasedBuilder
+import cats.implicits._
+import com.typesafe.scalalogging.StrictLogging
 
+import scala.concurrent.Future
 
-class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService) extends Paypal {
+class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService) extends StrictLogging {
 
-  def createPayment(paypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment] = {
+  /*
+   *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
+   *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
+   */
+  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
     paypalService.createPayment(paypalPaymentData)
   }
 
+  /*
+   *  Use by Apps: Apps have previously created the payment and managed its approval with the customer.
+   *  Funds are captured at this stage.
+   */
+  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalApiError, Payment] = {
+    paypalService.capturePayment(capturePaypalPaymentData).map { payment =>
+      ContributionData.fromPaypalCharge(None, payment).fold(
+        error => logger.error(s"Error generating contribution data while capturing paypal payment. Error trace: ", error),
+        contributionData => databaseService.insertContributionData(contributionData)
+      )
+      payment
+    }
+  }
 }
 
 object PaypalBackend {
