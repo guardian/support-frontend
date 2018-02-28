@@ -15,7 +15,7 @@ class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](f: (Request,
   private val promise = Promise[Response]()
 
   override def onError(exception: Exception): Unit = {
-    logger.warn(s"Failure from AWSAsyncHandler", exception)
+    logger.warn("Failure from AWSAsyncHandler", exception)
     exception match {
       case e: AmazonServiceException =>
         if (e.getErrorCode == "ThrottlingException") {
