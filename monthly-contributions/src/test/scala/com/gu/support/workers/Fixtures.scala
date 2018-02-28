@@ -210,4 +210,20 @@ object Fixtures {
       }
     """
 
+  val wrapperWithMessages =
+    """
+      {
+        "state": "eyJyZXF1ZXN0SWQiOiIxNjVhMjk1NS00YTE4LTIzYWUtMDAwMC0wMDAwMDAwMDAwMDQiLCJ1c2VyIjp7ImlkIjoiMzAwMDIxNzciLCJwcmltYXJ5RW1haWxBZGRyZXNzIjoiZGxhc2RqQGRhc2QuY29tIiwiZmlyc3ROYW1lIjoic29tZXRoaW5nIiwibGFzdE5hbWUiOiJibGEiLCJjb3VudHJ5IjoiR0IiLCJzdGF0ZSI6bnVsbCwiYWxsb3dNZW1iZXJzaGlwTWFpbCI6ZmFsc2UsImFsbG93VGhpcmRQYXJ0eU1haWwiOmZhbHNlLCJhbGxvd0dVUmVsYXRlZE1haWwiOmZhbHNlLCJpc1Rlc3RVc2VyIjpmYWxzZX0sImNvbnRyaWJ1dGlvbiI6eyJhbW91bnQiOjMuNTIsImN1cnJlbmN5IjoiR0JQIiwiYmlsbGluZ1BlcmlvZCI6Ik1vbnRobHkifSwicGF5bWVudE1ldGhvZCI6eyJUb2tlbklkIjoiY2FyZF9DR2dWYUxzVENpdnFLdCIsIlNlY29uZFRva2VuSWQiOiJjdXNfQ0dnVlFnc0dGcWdQYlciLCJDcmVkaXRDYXJkTnVtYmVyIjoiNDI0MiIsIkNyZWRpdENhcmRDb3VudHJ5IjoiVVMiLCJDcmVkaXRDYXJkRXhwaXJhdGlvbk1vbnRoIjoxMiwiQ3JlZGl0Q2FyZEV4cGlyYXRpb25ZZWFyIjoyMDIxLCJDcmVkaXRDYXJkVHlwZSI6IlZpc2EiLCJUeXBlIjoiQ3JlZGl0Q2FyZFJlZmVyZW5jZVRyYW5zYWN0aW9uIn0sImFjcXVpc2l0aW9uRGF0YSI6eyJvcGhhbklkcyI6eyJwYWdldmlld0lkIjoiamRhNzQweWg3ZXJmYXdwenpmOW0iLCJ2aXNpdElkIjpudWxsLCJicm93c2VySWQiOm51bGx9LCJyZWZlcnJlckFjcXVpc2l0aW9uRGF0YSI6eyJjYW1wYWlnbkNvZGUiOm51bGwsInJlZmVycmVyUGFnZXZpZXdJZCI6bnVsbCwicmVmZXJyZXJVcmwiOm51bGwsImNvbXBvbmVudElkIjpudWxsLCJjb21wb25lbnRUeXBlIjpudWxsLCJzb3VyY2UiOm51bGwsImFiVGVzdCI6bnVsbH0sInN1cHBvcnRBYlRlc3RzIjpbeyJuYW1lIjoidXNTZWN1cmVMb2dvVGVzdCIsInZhcmlhbnQiOiJub3RpbnRlc3QifV19fQ==",
+        "error": null,
+        "requestInfo": {
+          "encrypted": false,
+          "testUser": false,
+          "failed": false,
+          "messages": [
+            "Payment method is Stripe"
+          ]
+        }
+      }
+    """
+
 }

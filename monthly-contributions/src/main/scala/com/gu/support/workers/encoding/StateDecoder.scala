@@ -14,24 +14,26 @@ import scala.util.Try
 object StateDecoder extends App with LazyLogging {
 
   if (args.length < 1) {
-    print("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
+    //scalastyle:off regex
+    println("Please pass in the Json state and optionally the AWS encryption key ARN if different from the DEV config")
   }
 
-  val jsonWrapper = decode[JsonWrapper](args(0)).right.get
-  val awsEncryptionKeyId = Try(args(1)).getOrElse(Configuration.encryptionKeyId)
+  decode[JsonWrapper](args(0)).fold(println(_), { jsonWrapper =>
+    val awsEncryptionKeyId = Try(args(1)).getOrElse(Configuration.encryptionKeyId)
 
-  val decoded = Base64.getDecoder.decode(jsonWrapper.state)
+    val decoded = Base64.getDecoder.decode(jsonWrapper.state)
 
-  if (jsonWrapper.requestInfo.encrypted)
-    decryptState(decoded)
-  else
-    print(new String(decoded, utf8))
+    if (jsonWrapper.requestInfo.encrypted)
+      decryptState(decoded)
+    else
+      print(new String(decoded, utf8))
 
-  def decryptState(state: Array[Byte]): Unit = {
-    val config = new AwsConfig(true, awsEncryptionKeyId)
-    val encoder = new AwsEncryptionProvider(awsEncryptionKeyId)
-    print(encoder.decrypt(state))
-  }
+    def decryptState(state: Array[Byte]): Unit = {
+      val config = new AwsConfig(true, awsEncryptionKeyId)
+      val encoder = new AwsEncryptionProvider(awsEncryptionKeyId)
+      print(encoder.decrypt(state))
+    }
+  })
 
   def print(output: String): Unit = println(s"\n\n$output\n\n") // scalastyle:ignore
 }
