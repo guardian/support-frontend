@@ -17,7 +17,6 @@ import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.parser.decode
 import org.joda.time.DateTime
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
 
@@ -25,7 +24,7 @@ import scala.io.Source
 class FailureHandlerSpec extends LambdaSpec {
 
   "EmailService" should "send a failure email" in {
-    val service = new EmailService(Configuration.emailServicesConfig.failed)
+    val service = new EmailService(Configuration.emailServicesConfig.failed, global)
     val email = "rupert.bates@theguardian.com"
     service
       .send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "", "monthly-contribution"))

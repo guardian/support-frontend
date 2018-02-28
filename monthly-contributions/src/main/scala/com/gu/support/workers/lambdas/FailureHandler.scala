@@ -22,7 +22,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState]
     with LazyLogging {
-  def this() = this(new EmailService(Configuration.emailServicesConfig.failed))
+  def this() = this(new EmailService(Configuration.emailServicesConfig.failed, global))
 
   override protected def handlerFuture(
     state: FailureHandlerState,
