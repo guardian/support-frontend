@@ -19,7 +19,7 @@ class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](f: (Request,
     exception match {
       case e: AmazonServiceException =>
         if (e.getErrorCode == "ThrottlingException") {
-          logger.warn(s"A rate limiting exception was thrown, we may need to adjust the rate limiting in ClientWrapper.scala")
+          logger.warn("A rate limiting exception was thrown, we may need to adjust the rate limiting in ClientWrapper.scala")
           Thread.sleep(1000) //Wait for a second and retry
           f(request, this)
         } else {

@@ -40,7 +40,7 @@ case class EmailFields(
     """.stripMargin
 }
 
-class EmailService(config: EmailConfig, executionContext: ExecutionContext) extends StrictLogging {
+class EmailService(config: EmailConfig, implicit val executionContext: ExecutionContext) extends StrictLogging {
 
   private val sqsClient = AmazonSQSAsyncClientBuilder
     .standard
@@ -49,8 +49,6 @@ class EmailService(config: EmailConfig, executionContext: ExecutionContext) exte
     .build()
 
   private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
-
-  implicit val ec = executionContext
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
     logger.info(s"Sending message to SQS queue $queueUrl")
