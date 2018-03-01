@@ -24,7 +24,13 @@ libraryDependencies ++= Seq(
   "org.playframework.anorm" %% "anorm" % "2.6.0",
   "org.postgresql" % "postgresql" % "42.2.1",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-  "org.typelevel" %% "cats-core" % "1.0.1",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test",
+  "org.mockito" % "mockito-all" % "1.10.19" % "test",
+  "org.typelevel" %% "cats-core" % "0.9.0",
+  "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
+  "com.gu" %% "support-internationalisation" % "0.9",
+  "com.gu" %% "ophan-event-model" % "0.0.3",
+  "com.gu" %% "fezziwig" % "0.6" excludeAll ( ExclusionRule(organization = "com.twitter") ),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc
@@ -45,4 +51,3 @@ riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:payment-api"
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffArtifactResources += (file("src/main/resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")
-

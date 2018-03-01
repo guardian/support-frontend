@@ -4,9 +4,7 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
-import play.api.inject.ApplicationLifecycle
-
-import scala.concurrent.Future
+import com.amazonaws.regions.Regions
 
 // lifecycle used to add stop hooks so AWS clients can be closed when application is shutdown.
 object AWSClientBuilder {
@@ -24,5 +22,6 @@ object AWSClientBuilder {
       // or having it set in my environment
       .withRegion(Regions.EU_WEST_1)
       .withCredentials(credentialsProvider)
+      .withRegion(Regions.EU_WEST_1)
       .build()
 }

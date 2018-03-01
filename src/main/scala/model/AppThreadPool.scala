@@ -60,6 +60,13 @@ object StripeThreadPool extends CustomThreadPoolLoader[StripeThreadPool] {
   override val threadPoolId: String = "stripe"
 }
 
+// Should be used as the execution context for all requests made to Paypal.
+case class PaypalThreadPool private (underlying: ExecutionContext) extends AppThreadPool
+
+object PaypalThreadPool extends CustomThreadPoolLoader[PaypalThreadPool] {
+  override val threadPoolId: String = "paypal"
+}
+
 // Should be used as the execution context for database IO.
 case class JdbcThreadPool private (underlying: ExecutionContext) extends AppThreadPool
 
