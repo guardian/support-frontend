@@ -16,17 +16,4 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-
-  pleaseConsiderMonthly: {
-    variants: ['control', 'variant'],
-    audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 7,
-  },
 };
