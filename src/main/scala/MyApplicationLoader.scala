@@ -48,7 +48,7 @@ class MyComponents(context: Context)
   val withDBAndAppConfig = PlayConfigEncoder.updateForAppMode[AppConfig](
     configLoader,
     withDBConfig,
-    application.mode
+    environment.mode
   )
 
   override val configuration: Configuration = withDBAndAppConfig
