@@ -9,7 +9,7 @@ import com.paypal.api.payments._
 import com.paypal.base.rest.APIContext
 import com.typesafe.scalalogging.StrictLogging
 import conf.PaypalConfig
-import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError}
+import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
 import model.{InitializationResult, PaypalThreadPool}
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
@@ -19,6 +19,7 @@ trait Paypal {
   type PaypalResult[A] = EitherT[Future, PaypalApiError, A]
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment]
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment]
+  def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment]
 }
 
 class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) extends Paypal with StrictLogging {
@@ -52,12 +53,20 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment] =
     EitherT.fromEither[Future] {
       for {
-        transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentId))
+        transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
         relatedResources <- getRelatedResources(transaction)
         capture <- getCapture(relatedResources, transaction)
         captureResult <- validateCapture(capture)
         payment <- getPayment(captureResult.getParentPayment)
       } yield payment
+    }
+
+  def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
+    EitherT.fromEither[Future] {
+      for {
+        payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
+        validatedPayment <- validateExecute(payment)
+      } yield validatedPayment
     }
 
 
@@ -96,7 +105,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   private def getRelatedResources(transaction: Transaction): Either[PaypalApiError, RelatedResources] =
     Either.fromOption(transaction.getRelatedResources.asScala.headOption, PaypalApiError
-      .fromString(s"Invaid Paypal payment status. The payment might be unconfirmed. Verify payment:"))
+      .fromString(s"Invaid Paypal payment status. Payer has not approved payment"))
 
 
   private def getCapture(relatedResources: RelatedResources, transaction: Transaction): Either[PaypalApiError, Capture] =
@@ -126,6 +135,20 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
     capture.setIsFinalCapture(true)
     capture
   }
+
+  private def validateExecute(payment: Payment): Either[PaypalApiError, Payment] = {
+    if (payment.getState.toUpperCase.equalsIgnoreCase("APPROVED"))
+      Right(payment)
+    else
+      Left(PaypalApiError.fromString(s"payment returned invalid state: ${payment.getState}"))
+  }
+
+  private def executePayment(paymentId: String, payerId: String): Either[PaypalApiError, Payment] = {
+    val payment = new Payment().setId(paymentId)
+    val paymentExecution = new PaymentExecution().setPayerId(payerId)
+    Either.catchNonFatal(payment.execute(apiContext, paymentExecution)).leftMap(PaypalApiError.fromThrowable)
+  }
+
 }
 
 object PaypalService {

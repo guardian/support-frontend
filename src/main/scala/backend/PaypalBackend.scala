@@ -5,7 +5,7 @@ import cats.data.EitherT
 import com.paypal.api.payments.Payment
 import conf.{ConfigLoader, PaypalConfig}
 import model.db.ContributionData
-import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError}
+import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
 import model.{DefaultThreadPool, Environment, InitializationResult}
 import services._
 import util.EnvironmentBasedBuilder
@@ -20,23 +20,31 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
    *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
    */
-  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
+  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
     paypalService.createPayment(paypalPaymentData)
-  }
+
 
   /*
    *  Use by Apps: Apps have previously created the payment and managed its approval with the customer.
    *  Funds are captured at this stage.
    */
-  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalApiError, Payment] = {
+  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool):
+  EitherT[Future, PaypalApiError, Payment] = {
     paypalService.capturePayment(capturePaypalPaymentData).map { payment =>
       ContributionData.fromPaypalCharge(None, payment).fold(
-        error => logger.error(s"Error generating contribution data while capturing paypal payment. Error trace: ", error),
-        contributionData => databaseService.insertContributionData(contributionData)
+        error =>
+          logger.error(s"Error generating contribution data while capturing paypal payment. Error trace: ", error),
+        contributionData =>
+          databaseService.insertContributionData(contributionData)
       )
       payment
     }
   }
+
+  def executePayment(paypalExecutePaymentData: ExecutePaypalPaymentData)(implicit pool: DefaultThreadPool):
+  EitherT[Future, PaypalApiError, Payment] =
+    paypalService.executePayment(paypalExecutePaymentData)
+
 }
 
 object PaypalBackend {

@@ -5,8 +5,7 @@
 # An example controller showing a sample home page
 POST     /contribute/one-off/stripe/create                    controllers.StripeController.createCharge
 
-# TODO: not sure if this is the correct naming for this endpoint
+# paypal endpoints - web & apps
 POST     /contribute/one-off/paypal/create-payment                   controllers.PaypalController.createPayment
 POST     /contribute/one-off/paypal/capture-payment                  controllers.PaypalController.capturePayment
-
-#POST     /contribute/one-off/paypal/execute-payment
+POST     /contribute/one-off/paypal/execute-payment                  controllers.PaypalController.executePayment

@@ -22,6 +22,5 @@ object PaypalMode extends Enum[PaypalMode] {
   case object Sandbox extends PaypalMode
 
   case object Live extends PaypalMode
+
 }
-
-
