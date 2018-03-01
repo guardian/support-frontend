@@ -136,16 +136,12 @@ const defaultContentText = {
   ),
   AUDCountries: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
     </span>
   ),
   EURCountries: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
     </span>
   ),
   International: '',
