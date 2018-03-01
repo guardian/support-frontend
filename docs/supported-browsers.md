@@ -1,6 +1,6 @@
 # Supported Browsers
 
-### **Date of last revision:** 01-02-2018 (DD-MM-YYYY)
+### **Date of last revision:** 01-03-2018 (DD-MM-YYYY)
 ### **Date of next revision:** 03-09-2018 (DD-MM-YYYY)
 
 ## The list of supported browsers is:
@@ -13,7 +13,9 @@
 * Samsung 4 and above
 * Opera 25 and above
 
-Note about Android WebView: If someone reports a issue we are going to fix it but we are not going proactively test it.
+Note about Android WebView and iOS WebView:
+
+> iOS WebView should be mostly equivalent to **Safari**, and Android WebView (for recent versions of Android) should be mostly equivalent to **Chrome**. Based on this premise we have concluded that by supporting their parent browsers we implicitly include support for these WebView as well. However, if we discover that there are problems with this approach then we will revise it. 
 
 ### Coverage: 98.08% of our traffic
 
