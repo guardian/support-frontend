@@ -114,7 +114,7 @@ const subHeadingMonthlyText: {[CountryGroupId]: string} = {
   GBPCountries: 'from £5 a month',
   UnitedStates: 'from $5 a month',
   AUDCountries: 'from $5 a month',
-  EURCountries: 'from €5 a month',
+  EURCountries: '',
   International: '',
 };
 
