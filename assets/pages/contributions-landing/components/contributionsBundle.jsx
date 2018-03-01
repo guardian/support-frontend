@@ -130,9 +130,8 @@ const defaultContentText = {
   GBPCountries: 'Support The Guardian’s editorial operations by making a monthly or one-off contribution today',
   UnitedStates: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Make a monthly commitment to support The Guardian long-term or a one-time contribution
+      as and when you feel like it &ndash; choose the option that suits you best.
     </span>
   ),
   AUDCountries: (
@@ -152,29 +151,8 @@ const defaultContentText = {
   International: '',
 };
 
-const upsellRecurringContributionsTestContentText = {
-  control: defaultContentText.UnitedStates,
-  benefitsOfBoth: (
-    <span>
-      Make a monthly commitment to support The Guardian long-term or a one-time contribution
-      as and when you feel like it &ndash; choose the option that suits you best.
-    </span>
-  ),
-  shorterControl: (
-    <span>
-      If you’re able, please consider <strong>monthly</strong> support &ndash;
-      it will help to fund The Guardian’s journalism for the long-term.
-    </span>
-  ),
-};
-
-function getContentText(props: PropTypes) {
-  return upsellRecurringContributionsTestContentText[props.abTests.upsellRecurringContributions] ||
-    defaultContentText[props.countryGroupId];
-}
-
 function ContentText(props: PropTypes) {
-  return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
+  return <p className="component-bundle__content-intro"> {defaultContentText[props.countryGroupId]} </p>;
 }
 
 function getCtaText(contribType: Contrib, currency: Currency, amounts: Amounts) {
