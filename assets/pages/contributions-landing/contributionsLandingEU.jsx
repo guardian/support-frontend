@@ -24,7 +24,7 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(createContributionLandingReducer('15'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(createContributionLandingReducer('10'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
 
