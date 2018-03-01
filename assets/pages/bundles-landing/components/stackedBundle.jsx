@@ -279,7 +279,7 @@ function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
 
 const WhyContribute = () => (
   <p className="bundles__why-contribute">
-    Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
+    Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
   </p>
 );
 
