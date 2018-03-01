@@ -15,7 +15,7 @@
 
 Note about Android WebView: If someone reports a issue we are going to fix it but we are not going proactively test it.
 
-### Coverage: 98% of our traffic
+### Coverage: 98.08% of our traffic
 
 ### Methodology:
 
