@@ -64,9 +64,9 @@ const amounts = {
       { value: '30', spoken: 'thirty' },
     ],
     EURCountries: [
-      { value: '7', spoken: 'seven' },
-      { value: '15', spoken: 'fifteen' },
-      { value: '30', spoken: 'thirty' },
+      { value: '6', spoken: 'six' },
+      { value: '10', spoken: 'ten' },
+      { value: '20', spoken: 'twenty' },
     ],
     International: [],
   },

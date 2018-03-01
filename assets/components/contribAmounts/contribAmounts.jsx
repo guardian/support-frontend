@@ -141,7 +141,7 @@ const amountRadiosAnnual: {
   International: [],
 };
 
-const amountRadiosMonthlyControl: {
+const amountRadiosMonthly: {
   [CountryGroupId]: Radio[]
 } = {
   GBPCountries: [
@@ -197,19 +197,19 @@ const amountRadiosMonthlyControl: {
   ],
   EURCountries: [
     {
-      value: '7',
-      text: '€7',
-      accessibilityHint: 'contribute seven euros per month',
+      value: '6',
+      text: '€6',
+      accessibilityHint: 'contribute six euros per month',
     },
     {
-      value: '15',
-      text: '€15',
-      accessibilityHint: 'contribute fifteen euros per month',
+      value: '10',
+      text: '€10',
+      accessibilityHint: 'contribute ten euros per month',
     },
     {
-      value: '30',
-      text: '€30',
-      accessibilityHint: 'contribute thirty euros per month',
+      value: '20',
+      text: '€20',
+      accessibilityHint: 'contribute twenty euros per month',
     },
   ],
   International: [],
@@ -389,7 +389,7 @@ function amountToggles(countryGroupId: CountryGroupId = 'GBPCountries'): AmountT
     },
     MONTHLY: {
       name: 'contributions-amount-monthly-toggle',
-      radios: amountRadiosMonthlyControl[countryGroupId],
+      radios: amountRadiosMonthly[countryGroupId],
     },
     ONE_OFF: {
       name: 'contributions-amount-oneoff-toggle',
