@@ -40,6 +40,7 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   override def router: Router = new Routes(
     httpErrorHandler,
+    new AppController(controllerComponents),
     new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec)),
     payPalController
   )
