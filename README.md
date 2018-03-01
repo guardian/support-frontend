@@ -14,6 +14,8 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 8. [A/B Test framework](/docs/development.md#8-ab-test-framework)
 9. [Test environments](/docs/development.md#9-test-environments)
 10. [CSS guidelines](/docs/development.md#10-css-guidelines)
+11. [Payment Diagrams](/docs/development.md#11-payment-diagrams)
+12. [Supported browsers](/docs/supported-browsers.md)
 
 ## Getting started
 
