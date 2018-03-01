@@ -17,6 +17,7 @@ object PlayConfigEncoder {
 
   import PlayConfigEncoder.ops._
 
+  // We need to load both configs here, since test/live mode can vary per request
   def updateForRequestEnvironments[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByEnvironment](
       configLoader: ConfigLoader,
       configuration: Configuration,
@@ -28,6 +29,8 @@ object PlayConfigEncoder {
       // Ok throwing an exception, since this method is called on the edge of the application
       .valueOr(err => throw InitializationError("unable to update Play config", err))
 
+  // We only need to load one config for that actual Play app mode,
+  // because the app cannot change mode between requests
   def updateForAppMode[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByPlayAppMode](
     configLoader: ConfigLoader,
     configuration: Configuration,
