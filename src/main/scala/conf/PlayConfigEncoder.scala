@@ -13,7 +13,7 @@ import scala.reflect.ClassTag
   def asPlayConfig(data: A): Configuration
 }
 
-class PlayConfigUpdater(val configLoader: ConfigLoader, val configuration: Configuration) {
+class PlayConfigUpdater(configLoader: ConfigLoader, val configuration: Configuration) {
   import PlayConfigEncoder.ops._
 
   // We need to load both configs here, since test/live mode can vary per request
