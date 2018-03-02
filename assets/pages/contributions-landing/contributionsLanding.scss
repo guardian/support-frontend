@@ -511,3 +511,10 @@ strong {
   }
 
 }
+
+#contributions-landing-page-au,
+#contributions-landing-page-eu {
+  .component-double-heading__subheading {
+    display: none;
+  }
+}
