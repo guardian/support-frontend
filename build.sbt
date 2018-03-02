@@ -1,13 +1,13 @@
 import sbt.Keys.organization
 
 val commonSettings: Seq[SettingsDefinition] = Seq(
-  scalaVersion := "2.11.11",
+  scalaVersion := "2.12.4",
 
   libraryDependencies := Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.github.mpilquist" %% "simulacrum" % "0.10.0",
     "com.gu" %% "fezziwig" % "0.8",
-    "com.gu" %% "ophan-event-model" % "0.0.2" excludeAll(ExclusionRule(organization = "com.typesafe.play")),
+    "com.gu" %% "ophan-event-model" % "0.0.3" excludeAll(ExclusionRule(organization = "com.typesafe.play")),
     "com.squareup.okhttp3" % "okhttp" % "3.9.0",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
     "io.circe" %% "circe-core" % "0.9.1",
@@ -30,25 +30,9 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
 // (`play25`, `play25` etc) aren't real files but need to be specified in this way to
 // emulate separate projects.
 lazy val root = (project in file("."))
-  .aggregate(eventProducerPlayJson25, eventProducerPlayJson26)
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Seq("com.typesafe.play" %% "play-json" % "2.4.11"),
-    name := "acquisition-event-producer-play24"
-  )
-
-lazy val eventProducerPlayJson25 = (project in file("play25"))
-  .settings(commonSettings: _*)
-  .settings(
-    sourceDirectory := baseDirectory.value / "../src",
-    libraryDependencies ++= Seq("com.typesafe.play" %% "play-json" % "2.5.18"),
-    name := "acquisition-event-producer-play25"
-  )
-
-lazy val eventProducerPlayJson26 = (project in file("play26"))
-  .settings(commonSettings: _*)
-  .settings(
-    sourceDirectory := baseDirectory.value / "../src",
     libraryDependencies ++= Seq("com.typesafe.play" %% "play-json" % "2.6.7"),
     name := "acquisition-event-producer-play26"
   )
+
