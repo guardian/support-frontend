@@ -464,8 +464,16 @@ If you are firing a conversion event for a specific test, be sure that the `part
 |   `Prod`  |        `true`       |   `Dev`  | `Dev`    |       `Prod`      | `UAT`   |
 |   `Prod`  | `false` (real user) |  `Prod`  | `Prod`   |       `Prod`      | `Prod`  |
 
-## 10 CSS guidelines
+## 10 CSS
 
+### Can I use flexbox?
+Yes! But since we still support IE11, there are a few caveats (courtesy of caniuse.com):
+
+- IE11 requires a unit to be added to the third argument, the flex-basis property. [see MSFT documentation](https://msdn.microsoft.com/en-us/library/dn254946%28v=vs.85%29.aspx)
+- In IE11, containers with `display: flex` and `flex-direction: column` will not properly calculate their flexed childrens' sizes if the container has `min-height` but no explicit `height` property. See [bug](https://connect.microsoft.com/IE/feedback/details/802625/min-height-and-flexbox-flex-direction-column-dont-work-together-in-ie-10-11-preview).
+- IE 11 does not vertically align items correctly when min-height is used see [bug](https://connect.microsoft.com/IE/feedback/details/816293/ie11-flexbox-with-min-height-not-vertically-aligning-with-align-items-center)
+
+### Coding conventions
 Currently in `support-frontend` there are two types of components.
 
 Shared component: Components that are used in more than one page, they are located inside the global `components` folder. These should only contain rules which are context-independent. For instance, font sizes, colours, padding (since it's internal), margins of child elements. But margin on the parent, for example, should probably be avoided, because it's presupposing that it will be used in a particular place. This kind of positional styling should happen in the page-level CSS.
