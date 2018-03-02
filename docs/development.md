@@ -13,7 +13,7 @@ Welcome to Support Frontend. In this document we will go through the elements th
 7. [Yarn commands](#7-yarn-commands)
 8. [A/B Test framework](#8-ab-test-framework)
 9. [Test environments](#9-test-environments)
-10. [CSS guidelines](#10-css-guidelines)
+10. [CSS](#10-css)
 11. [Payment Diagrams](#11-payment-diagrams)
 
 ## 1. Getting started
