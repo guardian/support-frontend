@@ -113,7 +113,7 @@ function mapDispatchToProps(dispatch) {
 const subHeadingMonthlyText: {[CountryGroupId]: string} = {
   GBPCountries: 'from £5 a month',
   UnitedStates: 'from $5 a month',
-  AUDCountries: 'from $5 a month',
+  AUDCountries: '',
   EURCountries: '',
   International: '',
 };
