@@ -43,8 +43,8 @@ class MyComponents(context: Context)
   // I guess it could be nice if a given config knew whether it was
   // request-environment-dependent or app-mode-dependent
   override val configuration: Configuration = playConfigUpdater
-    .update[DBConfig](requestEnvironments)
-    .update[AppConfig](environment.mode)
+    .merge[DBConfig](requestEnvironments)
+    .merge[AppConfig](environment.mode)
     .configuration
 
   val databaseProvider = new DatabaseProvider(dbApi)

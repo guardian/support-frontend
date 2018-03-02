@@ -17,7 +17,7 @@ class PlayConfigUpdater(configLoader: ConfigLoader, val configuration: Configura
   import PlayConfigEncoder.ops._
 
   // We need to load both configs here, since test/live mode can vary per request
-  def update[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByEnvironment](envs: RequestEnvironments): PlayConfigUpdater = {
+  def merge[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByEnvironment](envs: RequestEnvironments): PlayConfigUpdater = {
 
     val newConfiguration =
       (configLoader.configForEnvironment[A](envs.test), configLoader.configForEnvironment[A](envs.live))
@@ -31,7 +31,7 @@ class PlayConfigUpdater(configLoader: ConfigLoader, val configuration: Configura
 
   // We only need to load one config for that actual Play app mode,
   // because the app cannot change mode between requests
-  def update[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByPlayAppMode](mode: Mode): PlayConfigUpdater = {
+  def merge[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByPlayAppMode](mode: Mode): PlayConfigUpdater = {
 
     val newConfiguration = configLoader.configForPlayAppMode[A](mode)
       .map(c => configuration ++ c.asPlayConfig)
