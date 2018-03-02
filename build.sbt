@@ -82,6 +82,8 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
+  // This is required to force aws libraries to use the latest version of jackson
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
   filters,
   ws
 )
