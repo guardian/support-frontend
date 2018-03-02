@@ -18,7 +18,7 @@
 Note about Android WebView and iOS WebView:
 > iOS WebView should be mostly equivalent to **Safari**, and Android WebView (for recent versions of Android) should be mostly equivalent to **Chrome**. Based on this premise we have concluded that by supporting their parent browsers we implicitly include support for these WebView as well. However, if we discover that there are problems with this approach then we will revise it. 
 
-### Browsers we will fix if someone raise an issue that something is wrong
+### Browsers we will fix if someone raise an issue
 
 * Opera Mini
 * amazon Silk
