@@ -72,12 +72,12 @@ object ConfigLoader {
   @typeclass trait ParameterStoreLoadableByEnvironment[A] extends ParameterStoreLoadable[Environment, A]
   @typeclass trait ParameterStoreLoadableByPlayAppMode[A] extends ParameterStoreLoadable[Mode, A]
 
-  private class Context[A] {
+  private class PartiallyAppliedContext[A] {
     def apply[EnvType: Show](env: EnvType)(implicit ct: ClassTag[A]): String =
       s"type: ${classTag[A].runtimeClass}, environment: ${env.show}"
   }
 
-  private def context[A]: Context[A] = new Context[A]
+  private def context[A]: PartiallyAppliedContext[A] = new PartiallyAppliedContext[A]
 
   // Utility class for implementing instances of the ParameterStoreLoadable typeclass.
   class ParameterStoreValidator[A : ClassTag, EnvType : Show](env: EnvType, data: Map[String, String]) {
