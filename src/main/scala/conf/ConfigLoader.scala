@@ -18,6 +18,7 @@ import play.api.Mode
 
 // Load config from AWS parameter store.
 class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
+  import ConfigLoader._
 
   @tailrec private def executePathRequestImpl(request: GetParametersByPathRequest, data: Map[String, String]): Map[String, String] = {
     val result = ssm.getParametersByPath(request)
@@ -53,8 +54,8 @@ class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
 }
 
 object ConfigLoader {
-  implicit val environmentShow = Show.show[Environment](e => s"${e.entryName} request environment")
-  implicit val playAppModeShow = Show.show[Mode](m => s"${m.asJava.toString} Play app mode")
+  implicit val environmentShow: Show[Environment] = Show.show[Environment](e => s"${e.entryName} request environment")
+  implicit val playAppModeShow: Show[Mode] = Show.show[Mode](m => s"${m.asJava.toString} Play app mode")
 
   trait ParameterStoreLoadable[EnvType, A] {
 
