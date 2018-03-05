@@ -18,6 +18,7 @@ import play.api.Mode
 
 // Load config from AWS parameter store.
 class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
+  import ConfigLoader._
 
   @tailrec private def executePathRequestImpl(request: GetParametersByPathRequest, data: Map[String, String]): Map[String, String] = {
     val result = ssm.getParametersByPath(request)
@@ -53,8 +54,8 @@ class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
 }
 
 object ConfigLoader {
-  implicit val environmentShow = Show.show[Environment](e => s"${e.entryName} request environment")
-  implicit val playAppModeShow = Show.show[Mode](m => s"${m.asJava.toString} Play app mode")
+  implicit val environmentShow: Show[Environment] = Show.show[Environment](e => s"${e.entryName} request environment")
+  implicit val playAppModeShow: Show[Mode] = Show.show[Mode](m => s"${m.asJava.toString} Play app mode")
 
   trait ParameterStoreLoadable[EnvType, A] {
 
@@ -71,12 +72,12 @@ object ConfigLoader {
   @typeclass trait ParameterStoreLoadableByEnvironment[A] extends ParameterStoreLoadable[Environment, A]
   @typeclass trait ParameterStoreLoadableByPlayAppMode[A] extends ParameterStoreLoadable[Mode, A]
 
-  private class Context[A] {
+  private class PartiallyAppliedContext[A] {
     def apply[EnvType: Show](env: EnvType)(implicit ct: ClassTag[A]): String =
       s"type: ${classTag[A].runtimeClass}, environment: ${env.show}"
   }
 
-  private def context[A]: Context[A] = new Context[A]
+  private def context[A]: PartiallyAppliedContext[A] = new PartiallyAppliedContext[A]
 
   // Utility class for implementing instances of the ParameterStoreLoadable typeclass.
   class ParameterStoreValidator[A : ClassTag, EnvType : Show](env: EnvType, data: Map[String, String]) {

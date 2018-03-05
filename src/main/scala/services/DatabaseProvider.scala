@@ -38,13 +38,5 @@ object DatabaseProvider {
       }
     }
 
-    // This should be used to override the Play configuration when injecting dependencies at compile time,
-    // and called before the first call to DatabaseProvider.loadDatabase()
-    // Otherwise, the dbApi val (which Play provides lazily) will be initialized without the sufficient config.
-    def updateConfiguration(configLoader: ConfigLoader, configuration: Configuration, envs: RequestEnvironments): Configuration =
-      (configLoader.configForEnvironment[DBConfig](envs.test), configLoader.configForEnvironment[DBConfig](envs.live))
-        .mapN((testConfig, liveConfig) => configuration ++ testConfig.asConfiguration ++ liveConfig.asConfiguration)
-        // Ok throwing an exception, since this method is called on the edge of the application
-        .valueOr(err => throw InitializationError("unable to update Play config with database settings", err))
   }
 }

@@ -1,16 +1,16 @@
 
-import _root_.controllers.{AppController, PaypalController, StripeController}
-import aws.AWSClientBuilder
-import backend.{PaypalBackend, StripeBackend}
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
-import conf.{AppConfig, ConfigLoader, DBConfig, PlayConfigEncoder}
-import model.{DefaultThreadPoolProvider, RequestEnvironments}
-import play.api.ApplicationLoader.Context
 import play.api._
+import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
 import router.Routes
-import services.DatabaseProvider
 import util.RequestBasedProvider
+import aws.AWSClientBuilder
+import backend.{PaypalBackend, StripeBackend}
+import _root_.controllers.{AppController, PaypalController, StripeController}
+import conf.{AppConfig, DBConfig, PlayConfigUpdater, ConfigLoader}
+import model.{DefaultThreadPool, DefaultThreadPoolProvider, RequestEnvironments}
+import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
   def load(context: Context): Application = {
@@ -37,20 +37,14 @@ class MyComponents(context: Context)
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
 
-  // TODO: nicer way of merging in multiple configs.
-  val withDBConfig = PlayConfigEncoder.updateForRequestEnvironments[DBConfig](
-    configLoader,
-    super.configuration,
-    requestEnvironments,
-  )
+  val playConfigUpdater = new PlayConfigUpdater(configLoader, super.configuration)
 
-  val withDBAndAppConfig = PlayConfigEncoder.updateForAppMode[AppConfig](
-    configLoader,
-    withDBConfig,
-    environment.mode
-  )
-
-  override val configuration: Configuration = withDBAndAppConfig
+  // I guess it could be nice if a given config knew whether it was
+  // request-environment-dependent or app-mode-dependent
+  override val configuration: Configuration = playConfigUpdater
+    .merge[DBConfig](requestEnvironments)
+    .merge[AppConfig](environment.mode)
+    .configuration
 
   val databaseProvider = new DatabaseProvider(dbApi)
 
