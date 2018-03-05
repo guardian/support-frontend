@@ -30,7 +30,7 @@ object PaypalErrorType extends Enum[PaypalErrorType] {
 }
 
 case class PaypalApiError(errorType: PaypalErrorType,
-                           message: String)
+  message: String)
 
 object PaypalApiError {
 
@@ -38,17 +38,25 @@ object PaypalApiError {
 
   def fromThrowable(exception: Throwable): PaypalApiError = exception match {
 
+    //-- Error response coming from paypal is totally different. Entire PayPalRESTException contains all items = null
+    case paypalException: PayPalRESTException if (paypalException.getResponsecode == 401) => {
+      PaypalApiError.fromString("401 - Client Authentication failed")
+    }
+
     case paypalException: PayPalRESTException => {
 
       val errorOpt: Option[String] = for {
         error <- Option(paypalException.getDetails)
         message <- Option(error.getMessage)
+        if message != ""
       } yield message
 
       val issueOpt: Option[String] = for {
         error <- Option(paypalException.getDetails)
-        detailMessage <- error.getDetails.asScala.headOption
-        issue <- Option(detailMessage.getIssue)
+        detailMessages <- Option(error.getDetails)
+        issueMessages = detailMessages.asScala.toList.map(_.getIssue)
+        issue = issueMessages.mkString(" - ")
+        if issue != ""
       } yield issue
 
       val errorMessage: String = (errorOpt, issueOpt) match {
