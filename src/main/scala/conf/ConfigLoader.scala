@@ -12,7 +12,6 @@ import simulacrum.typeclass
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 import scala.reflect._
-import conf.ConfigLoader._
 import model.{Environment, InitializationError, InitializationResult}
 import play.api.Mode
 

@@ -17,5 +17,3 @@ case class AcquisitionData(
   source: Option[AcquisitionSource],
   abTests: Option[Set[AbTest]]
 )
-
-

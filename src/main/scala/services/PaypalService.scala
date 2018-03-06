@@ -43,30 +43,27 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       .setTransactions(transactions)
       .setRedirectUrls(redirectUrls)
 
-    EitherT.fromEither[Future] {
-      Either.catchNonFatal(paypalPayment.create(apiContext)).leftMap(PaypalApiError.fromThrowable)
-    }
+    Either.catchNonFatal(paypalPayment.create(apiContext))
+      .leftMap(PaypalApiError.fromThrowable)
+      .toEitherT[Future]
 
   }
 
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment] =
-    EitherT.fromEither[Future] {
-      for {
-        transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
-        relatedResources <- getRelatedResources(transaction)
-        capture <- getCapture(relatedResources, transaction)
-        captureResult <- validateCapture(capture)
-        payment <- getPayment(captureResult.getParentPayment)
-      } yield payment
-    }
+    (for {
+      transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
+      relatedResources <- getRelatedResources(transaction)
+      capture <- getCapture(relatedResources, transaction)
+      captureResult <- validateCapture(capture)
+      payment <- getPayment(captureResult.getParentPayment)
+    } yield payment).toEitherT[Future]
+
 
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
-    EitherT.fromEither[Future] {
-      for {
+    (for {
         payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
         validatedPayment <- validateExecute(payment)
-      } yield validatedPayment
-    }
+      } yield validatedPayment).toEitherT[Future]
 
 
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
