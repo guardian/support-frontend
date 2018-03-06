@@ -23,8 +23,8 @@ class IdentityClientSpec extends WordSpec
 
   import IdentityClientSpec._
 
-  val config: IdentityConfig = testConfigForEnvironment[IdentityConfig]()
-  val client: IdentityClient = IdentityClient.fromIdentityConfig(config)
+  lazy val config: IdentityConfig = testConfigForEnvironment[IdentityConfig]()
+  lazy val client: IdentityClient = IdentityClient.fromIdentityConfig(config)
 
   // TODO: mixin with this overridden implicit
   // The default patience config is typically not patient enough for the identity API.
