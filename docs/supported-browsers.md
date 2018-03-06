@@ -10,7 +10,7 @@
 * Chrome 38 and above
 * Safari 8 and above
 * IE 11
-* Microsoft Edge all versions
+* Microsoft Edge 12 and above
 * Firefox 44 and above
 * Samsung 4 and above
 * Opera 25 and above
