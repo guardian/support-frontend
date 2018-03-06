@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup'
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
@@ -12,10 +12,10 @@ type PropTypes = {
 // ----- Componenent ----- //
 export default function ContributionsIntroduction(props: PropTypes) {
 
-  let subject = "the world";
+  let subject = 'the world';
 
   if (props.countryGroupId === 'AUDCountries') {
-    subject = 'Autralia';
+    subject = 'Australia';
   }
 
   return (

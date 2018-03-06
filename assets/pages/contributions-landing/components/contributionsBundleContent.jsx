@@ -5,11 +5,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import ContributionsIntroduction from './contributionsIntroduction';
 import ContributionsContext from './contributionsContext';
 import ContributionsContextIntro from './contributionsContextIntro';
 import ContributionsBundle from './contributionsBundle';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup'
 
 
 // ----- Types ----- //
