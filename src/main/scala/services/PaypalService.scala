@@ -2,7 +2,6 @@ package services
 
 import java.util.UUID
 
-import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments._
@@ -10,7 +9,7 @@ import com.paypal.base.rest.APIContext
 import com.typesafe.scalalogging.StrictLogging
 import conf.PaypalConfig
 import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
-import model.{InitializationResult, PaypalThreadPool}
+import model.PaypalThreadPool
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
 import scala.collection.JavaConverters._
@@ -152,8 +151,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 }
 
 object PaypalService {
-  def fromPaypalConfig(config: PaypalConfig)(implicit system: ActorSystem): InitializationResult[PaypalService] =
-    PaypalThreadPool.load().map { implicit pool =>
-      new PaypalService(config)
-    }
+
+  def fromPaypalConfig(config: PaypalConfig)(implicit pool: PaypalThreadPool): PaypalService =
+    new PaypalService(config)
 }

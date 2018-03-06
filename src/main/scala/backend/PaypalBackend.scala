@@ -1,20 +1,23 @@
 package backend
 
-import akka.actor.ActorSystem
 import cats.data.EitherT
 import com.paypal.api.payments.Payment
+
+import conf.{ConfigLoader, IdentityConfig, PaypalConfig}
+
 import conf.{ConfigLoader, PaypalConfig}
 import model.db.ContributionData
-import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
-import model.{DefaultThreadPool, Environment, InitializationResult}
+import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, ExecutePaypalPaymentData, PaypalApiError}
+import model._
 import services._
 import util.EnvironmentBasedBuilder
 import cats.implicits._
 import com.typesafe.scalalogging.StrictLogging
+import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
 
-class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService) extends StrictLogging {
+class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService) extends StrictLogging {
 
   /*
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
@@ -49,21 +52,27 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
 
 object PaypalBackend {
 
-  private def apply(paypalService: PaypalService, databaseService: DatabaseService): PaypalBackend =
-    new PaypalBackend(paypalService, databaseService)
+  private def apply(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService): PaypalBackend =
+    new PaypalBackend(paypalService, databaseService, identityService)
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(implicit system: ActorSystem)
-    extends EnvironmentBasedBuilder[PaypalBackend] {
+  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
+    implicit defaultThreadPool: DefaultThreadPool,
+    paypalThreadPool: PaypalThreadPool,
+    jdbcThreadPool: JdbcThreadPool,
+    wsClient: WSClient
+  ) extends EnvironmentBasedBuilder[PaypalBackend] {
 
     override def build(env: Environment): InitializationResult[PaypalBackend] = (
       configLoader
         .configForEnvironment[PaypalConfig](env)
-        .andThen(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
+        .map(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
       databaseProvider
         .loadDatabase(env)
-        .andThen(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService]
+        .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
+      configLoader
+        .configForEnvironment[IdentityConfig](env)
+        .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService]
     ).mapN(PaypalBackend.apply)
   }
-
 }
 

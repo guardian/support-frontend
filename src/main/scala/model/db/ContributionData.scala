@@ -13,7 +13,7 @@ case class ContributionData private (
     paymentProvider: PaymentProvider,
     paymentStatus: PaymentStatus,
     paymentId: String,
-    identityId: Option[String],
+    identityId: Option[Long],
     receiptEmail: String,
     created: LocalDateTime,
     currency: Currency,
@@ -31,7 +31,7 @@ object ContributionData {
     LocalDateTime.parse(dateTime, formatter)
   }
 
-  def fromStripeCharge(identityId: Option[String], charge: Charge): ContributionData =
+  def fromStripeCharge(identityId: Option[Long], charge: Charge): ContributionData =
     // TODO: error handling
     ContributionData(
       paymentProvider = PaymentProvider.Stripe,
@@ -49,7 +49,7 @@ object ContributionData {
 
   import scala.collection.JavaConverters._
 
-  def fromPaypalCharge(identityId: Option[String], payment: Payment): Either[PaypalApiError, ContributionData] = {
+  def fromPaypalCharge(identityId: Option[Long], payment: Payment): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
         .fromString(s"Invaid Paypal transactions content."))
