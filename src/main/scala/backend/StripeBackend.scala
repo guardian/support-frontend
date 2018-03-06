@@ -3,12 +3,12 @@ package backend
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
+import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
-
 import conf.{ConfigLoader, IdentityConfig, StripeConfig}
 import model._
 import model.db.ContributionData
@@ -24,19 +24,32 @@ class StripeBackend(stripeService: StripeService, databaseService: DatabaseServi
   def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, Long] =
     identityService.getOrCreateIdentityIdFromEmail(email).leftMap(err => StripeChargeError.fromThrowable(err))
 
+  def trackContribution(charge: Charge, data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, Future[Unit]]  = {
+    getOrCreateIdentityIdFromEmail(data.identityData.email).map(Option(_))
+      .recover {
+        case err => {
+          logger.error(err.getMessage)
+          None
+        }
+      }
+      .map { identityId =>
+        val contributionData = ContributionData.fromStripeCharge(identityId, charge)
+        databaseService.insertContributionData(contributionData)
+      }
+  }
+
+
   // TODO: send acquisition event
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   def createCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, StripeChargeSuccess] =
     for {
-      identityId <- getOrCreateIdentityIdFromEmail(data.identityData.email)
       charge <- stripeService.createCharge(data)
+      _ = trackContribution(charge, data)
     } yield {
       // Don't use flat map for inserting the contribution data -
       // the result the client receives as to whether the charge is successful,
       // should not be dependent on this operation.
-      val contributionData = ContributionData.fromStripeCharge(Some(identityId), charge)
-      databaseService.insertContributionData(contributionData)
-      StripeChargeSuccess.fromContributionData(contributionData)
+      StripeChargeSuccess.fromCharge(charge)
     }
 }
 
