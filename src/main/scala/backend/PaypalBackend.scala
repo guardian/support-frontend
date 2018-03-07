@@ -1,9 +1,8 @@
 package backend
 
+import backend.PaypalBackend.PaypalBackendError
 import cats.data.EitherT
-import cats.implicits._
 import com.paypal.api.payments.Payment
-import conf._
 import model.db.ContributionData
 import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, ExecutePaypalPaymentData, PaypalApiError}
 import model._
@@ -15,9 +14,43 @@ import model.acquisition.PaypalAcquisition
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
+import conf._
 
 class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService,
   identityService: IdentityService, ophanService: OphanService, emailService: EmailService) extends StrictLogging {
+
+
+  // Convert the result of the identity id operation,
+  // into the monad used by the for comprehension in the createCharge() method.
+  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Long] =
+    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(PaypalBackendError.fromIdentityError)
+
+  def insetContributionDataToPostgres(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] = {
+    databaseService.insertContributionData(contributionData).leftMap(PaypalBackendError.fromDatabaseError)
+  }
+
+
+
+  def trackContribution(payment: Payment, acquisitionData: AcquisitionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit]  = {
+    getOrCreateIdentityIdFromEmail(payment.getPotentialPayerInfo.getEmail).map(Option(_))
+      .recover {
+        case err => {
+          logger.error(err.getMessage)
+          None
+        }
+      }
+      .map { identityId =>
+        ContributionData.fromPaypalCharge(identityId, payment)
+          .map {
+            contributionData => {
+              insetContributionDataToPostgres(contributionData)
+              //leaving this here for now until we add identityId to the acquisition thrift model
+              ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData))
+            }
+          }
+      }
+  }
+
 
   /*
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
@@ -35,9 +68,7 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
   EitherT[Future, PaypalApiError, Payment] = {
     for {
       payment <- paypalService.capturePayment(capturePaypalPaymentData)
-      contributionData <- ContributionData.fromPaypalCharge(None, payment).toEitherT[Future]
-      _ = databaseService.insertContributionData(contributionData)
-      _ = ophanService.submitAcquisition(PaypalAcquisition(payment, capturePaypalPaymentData.acquisitionData))
+      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData)
       _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
@@ -46,7 +77,7 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
   EitherT[Future, PaypalApiError, Payment] = {
     for {
       payment <- paypalService.executePayment(paypalExecutePaymentData)
-      _ = ophanService.submitAcquisition(PaypalAcquisition(payment, paypalExecutePaymentData.acquisitionData))
+      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData)
       _ = emailService.sendPaypalThankEmail(payment, paypalExecutePaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
@@ -83,6 +114,21 @@ object PaypalBackend {
         .configForEnvironment[EmailConfig](env)
         .andThen(EmailService.fromEmailConfig(_)): InitializationResult[EmailService]
     ).mapN(PaypalBackend.apply)
+  }
+
+  sealed abstract class PaypalBackendError extends Exception {
+    override def getMessage: String = this match {
+      case PaypalBackendError.Database(err) => err.getMessage
+      case PaypalBackendError.Service(err) => err.getMessage
+    }
+  }
+
+  object PaypalBackendError {
+    final case class Database(error: DatabaseService.Error) extends PaypalBackendError
+    final case class Service(error: IdentityClient.Error) extends PaypalBackendError
+
+    def fromIdentityError(err: IdentityClient.Error): PaypalBackendError = Service(err)
+    def fromDatabaseError(err: DatabaseService.Error): PaypalBackendError= Database(err)
   }
 }
 
