@@ -2,7 +2,8 @@ package model
 
 import akka.actor.ActorSystem
 import cats.data.Validated
-import play.api.BuiltInComponents
+import cats.syntax.apply._
+import cats.syntax.validated._
 
 import scala.concurrent.ExecutionContext
 import scala.reflect._
@@ -23,13 +24,6 @@ sealed trait AppThreadPool extends ExecutionContext {
 
 // Represents Play's default thread pool.
 case class DefaultThreadPool(underlying: ExecutionContext) extends AppThreadPool
-
-// Mixin to BuiltInComponents when injecting app dependencies at compile time.
-// Ensures that the default thread pool is actually using Play's default thread pool.
-trait DefaultThreadPoolProvider { self: BuiltInComponents =>
-  // This needs to be a lazy val to avoid a null pointer exception.
-  implicit lazy val defaultThreadPool: DefaultThreadPool = DefaultThreadPool(executionContext)
-}
 
 // Provides a standardised way of creating App thread pools.
 // All app thread pools should be created using the load() method of instances of this trait.
@@ -72,4 +66,35 @@ case class JdbcThreadPool private (underlying: ExecutionContext) extends AppThre
 
 object JdbcThreadPool extends CustomThreadPoolLoader[JdbcThreadPool] {
   override val threadPoolId: String = "jdbc"
+}
+
+// Models all thread pools required by the application
+case class AppThreadPools private (
+  default: DefaultThreadPool,
+  stripe: StripeThreadPool,
+  paypal: PaypalThreadPool,
+  jdbc: JdbcThreadPool
+)
+
+object AppThreadPools {
+
+  def load(implicit playExecutionContext: ExecutionContext, system: ActorSystem): InitializationResult[AppThreadPools] = (
+    DefaultThreadPool(playExecutionContext).valid: InitializationResult[DefaultThreadPool],
+    StripeThreadPool.load(),
+    PaypalThreadPool.load(),
+    JdbcThreadPool.load()
+  ).mapN(AppThreadPools.apply)
+}
+
+// Mixin to BuiltInComponents when injecting app dependencies at compile time.
+// Ensures all the thread pools required by app components are in scope.
+trait AppThreadPoolsProvider {
+
+  def threadPools: AppThreadPools
+
+  // Have to be lazy, otherwise the threadPools val would get initialised, causing a null pointer exception.
+  implicit lazy val defaultThreadPool: DefaultThreadPool = threadPools.default
+  implicit lazy val stripeThreadPool: StripeThreadPool = threadPools.stripe
+  implicit lazy val paypalThreadPool: PaypalThreadPool = threadPools.paypal
+  implicit lazy val jdbcThreadPool: JdbcThreadPool = threadPools.jdbc
 }

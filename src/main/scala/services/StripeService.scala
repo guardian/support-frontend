@@ -1,6 +1,5 @@
 package services
 
-import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.applicativeError._
@@ -9,7 +8,7 @@ import com.stripe.net.RequestOptions
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 import conf.{StripeAccountConfig, StripeConfig}
 import model._
@@ -73,10 +72,9 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
 
 object StripeService {
 
-  def fromStripeConfig(config: StripeConfig)(implicit system: ActorSystem): InitializationResult[StripeService] =
-    StripeThreadPool.load().map { implicit pool =>
-      val default = new DefaultStripeService(config.default)
-      val au = new AustraliaStripeService(config.au)
-      new CurrencyBasedStripeService(default, au)
-    }
+  def fromStripeConfig(config: StripeConfig)(implicit pool: StripeThreadPool): StripeService = {
+    val default = new DefaultStripeService(config.default)
+    val au = new AustraliaStripeService(config.au)
+    new CurrencyBasedStripeService(default, au)
+  }
 }

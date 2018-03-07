@@ -2,7 +2,6 @@ package services
 
 import java.util.UUID
 
-import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments._
@@ -10,7 +9,7 @@ import com.paypal.base.rest.APIContext
 import com.typesafe.scalalogging.StrictLogging
 import conf.PaypalConfig
 import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
-import model.{InitializationResult, PaypalThreadPool}
+import model.PaypalThreadPool
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
 import scala.collection.JavaConverters._
@@ -44,30 +43,27 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       .setTransactions(transactions)
       .setRedirectUrls(redirectUrls)
 
-    EitherT.fromEither[Future] {
-      Either.catchNonFatal(paypalPayment.create(apiContext)).leftMap(PaypalApiError.fromThrowable)
-    }
+    Either.catchNonFatal(paypalPayment.create(apiContext))
+      .leftMap(PaypalApiError.fromThrowable)
+      .toEitherT[Future]
 
   }
 
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment] =
-    EitherT.fromEither[Future] {
-      for {
-        transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
-        relatedResources <- getRelatedResources(transaction)
-        capture <- getCapture(relatedResources, transaction)
-        captureResult <- validateCapture(capture)
-        payment <- getPayment(captureResult.getParentPayment)
-      } yield payment
-    }
+    (for {
+      transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
+      relatedResources <- getRelatedResources(transaction)
+      capture <- getCapture(relatedResources, transaction)
+      captureResult <- validateCapture(capture)
+      payment <- getPayment(captureResult.getParentPayment)
+    } yield payment).toEitherT[Future]
+
 
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
-    EitherT.fromEither[Future] {
-      for {
+    (for {
         payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
         validatedPayment <- validateExecute(payment)
-      } yield validatedPayment
-    }
+      } yield validatedPayment).toEitherT[Future]
 
 
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
@@ -152,8 +148,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 }
 
 object PaypalService {
-  def fromPaypalConfig(config: PaypalConfig)(implicit system: ActorSystem): InitializationResult[PaypalService] =
-    PaypalThreadPool.load().map { implicit pool =>
-      new PaypalService(config)
-    }
+
+  def fromPaypalConfig(config: PaypalConfig)(implicit pool: PaypalThreadPool): PaypalService =
+    new PaypalService(config)
 }

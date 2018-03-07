@@ -1,12 +1,11 @@
 package services
 
 import cats.data.Validated
-import cats.syntax.apply._
 import play.api.Configuration
 import play.api.db.{DBApi, Database}
 
-import conf.{ConfigLoader, DBConfig}
-import model.{Environment, InitializationError, InitializationResult, RequestEnvironments}
+import conf.DBConfig
+import model.{Environment, InitializationError, InitializationResult}
 
 class DatabaseProvider(dbApi: DBApi) {
 
@@ -37,6 +36,5 @@ object DatabaseProvider {
         )
       }
     }
-
   }
 }

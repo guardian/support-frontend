@@ -3,13 +3,16 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import play.api._
 import play.api.ApplicationLoader.Context
 import play.api.db.{DBComponents, HikariCPComponents}
+import play.api.libs.ws.WSClient
+import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import util.RequestBasedProvider
+
 import aws.AWSClientBuilder
 import backend.{PaypalBackend, StripeBackend}
 import _root_.controllers.{AppController, PaypalController, StripeController}
-import conf.{AppConfig, DBConfig, PlayConfigUpdater, ConfigLoader}
-import model.{DefaultThreadPool, DefaultThreadPoolProvider, RequestEnvironments}
+import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
+import conf.{AppConfig, ConfigLoader, DBConfig, PlayConfigUpdater}
 import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
@@ -21,12 +24,16 @@ class MyApplicationLoader extends ApplicationLoader {
   }
 }
 
-class MyComponents(context: Context)
-  extends BuiltInComponentsFromContext(context)
-    with DBComponents
-    with NoHttpFiltersComponents
-    with HikariCPComponents
-    with DefaultThreadPoolProvider {
+class MyComponents(context: Context) extends BuiltInComponentsFromContext(context)
+  with DBComponents
+  with NoHttpFiltersComponents
+  with HikariCPComponents
+  with AhcWSComponents
+  with AppThreadPoolsProvider {
+
+  override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
+
+  implicit val _wsClient: WSClient = wsClient
 
   // TODO: is prod value should be set in public Play configuration
   // At this point, the app either gets two request environments that differ
@@ -49,14 +56,12 @@ class MyComponents(context: Context)
   val databaseProvider = new DatabaseProvider(dbApi)
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
-    // Actor system not an implicit val, so pass it explicitly
-    new StripeBackend.Builder(configLoader, databaseProvider)(actorSystem)
+    new StripeBackend.Builder(configLoader, databaseProvider)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
-    // Actor system not an implicit val, so pass it explicitly
-    new PaypalBackend.Builder(configLoader, databaseProvider)(actorSystem)
+    new PaypalBackend.Builder(configLoader, databaseProvider)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 

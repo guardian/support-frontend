@@ -2,7 +2,10 @@ name := "payment-api"
 
 version := "0.1"
 scalaVersion := "2.12.4"
-scalacOptions += "-Ypartial-unification"
+scalacOptions ++= Seq(
+  "-Ypartial-unification",
+  "-Ywarn-unused:imports"
+)
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
@@ -30,15 +33,27 @@ libraryDependencies ++= Seq(
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "ophan-event-model" % "0.0.3",
+  "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
   "com.gu" %% "fezziwig" % "0.6" excludeAll ( ExclusionRule(organization = "com.twitter") ),
+  "com.gu" %% "acquisition-event-producer-play26" % "4.0.0",
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
-  jdbc
+  jdbc,
+  ws
 )
 
+lazy val TeamCityTest = config("teamcity").extend(Test)
+
 lazy val root = (project in file("."))
+  .configs(TeamCityTest)
+  .settings(inConfig(TeamCityTest)(Defaults.testTasks))
+  // Allows us to not run tests which require membership credentials in TeamCity - teamcity:test
+  // Stop gap until we decide how to handle integration tests.
+  .settings(testOptions in TeamCityTest += Tests.Argument("-l", "tags.RequiresMembershipCredentials"))
 
 enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging)
+
+resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 packageName in Debian := name.value

@@ -1,15 +1,14 @@
 package services
 
-import akka.actor.ActorSystem
 import anorm._
-import cats.data.EitherT
 import cats.syntax.applicativeError._
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.db.Database
 
 import scala.concurrent.Future
-import model.{InitializationResult, JdbcThreadPool}
+
+import model.JdbcThreadPool
 import model.db.ContributionData
 
 trait DatabaseService {
@@ -85,11 +84,10 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
 
     executeTransaction(transaction)
   }
-
 }
 
 object PostgresDatabaseService {
 
-  def fromDatabase(database: Database)(implicit system: ActorSystem): InitializationResult[PostgresDatabaseService] =
-    JdbcThreadPool.load().map { implicit pool => new PostgresDatabaseService(database) }
+  def fromDatabase(database: Database)(implicit pool: JdbcThreadPool): PostgresDatabaseService =
+    new PostgresDatabaseService(database)
 }

@@ -6,7 +6,6 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
 import com.amazonaws.regions.Regions
 
-// lifecycle used to add stop hooks so AWS clients can be closed when application is shutdown.
 object AWSClientBuilder {
 
   private val credentialsProvider = new AWSCredentialsProviderChain(
