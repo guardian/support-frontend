@@ -34,9 +34,11 @@ Parameters:
   AMI:
     Description: AMI ID
     Type: String
+
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
+
 Mappings:
   Constants:
     PostgresSecurityGroupId:
@@ -48,18 +50,19 @@ Mappings:
       InstanceType: t2.small
       # This is actually the certificate for contribute.code.dev-theguardian.com
       # TODO: get our own certificate
-      CertificateARN: !Sub arn:aws:acm:eu-west-1:${AWS::AccountId}:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+      CertificateARN: arn:aws:acm:eu-west-1:${AWS::AccountId}:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
       # This is a key with alias support-workers-CODE
-      AwsKeyARN: !Sub arn:aws:kms:eu-west-1:${AWS::AccountId}:key/89f17663-c79e-4104-b718-ee0986402ad9
+      AwsKeyARN: arn:aws:kms:eu-west-1:${AWS::AccountId}:key/89f17663-c79e-4104-b718-ee0986402ad9
     PROD:
       MaxInstances: 6
       MinInstances: 3
       InstanceType: t2.small
       # This is actually the certificate for contribute.code.dev-theguardian.com
       # TODO: get our own certificate
-      CertificateARN: !Sub arn:aws:acm:eu-west-1:${AWS::AccountId}:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
+      CertificateARN: arn:aws:acm:eu-west-1:${AWS::AccountId}:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
       # This is a key with alias support-workers-PROD
-      AwsKeyARN: !Sub arn:aws:kms:eu-west-1:${AWS::AccountId}:key/d7aed06c-e961-4078-8604-0aeedae08613
+      AwsKeyARN: arn:aws:kms:eu-west-1:${AWS::AccountId}:key/d7aed06c-e961-4078-8604-0aeedae08613
+
 Resources:
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
