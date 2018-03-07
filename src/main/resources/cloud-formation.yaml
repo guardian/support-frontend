@@ -34,9 +34,6 @@ Parameters:
   AMI:
     Description: AMI ID
     Type: String
-    # I think this is irrelevant, right? Since we use Amigo to bake our AMIs,
-    # it gets overwritten by RiffRaff on each deploy so it always has the latest.
-    Default: ami-0eb88168
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
