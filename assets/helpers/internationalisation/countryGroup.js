@@ -97,6 +97,9 @@ function fromString(countryGroup: string): ?CountryGroupId {
 }
 
 function fromCountry(isoCountry: string): ?CountryGroupId {
+  if (isoCountry === 'UK') {
+    return 'GBPCountries';
+  }
 
   const countryGroup = Object.keys(countryGroups).find(countryGroupId =>
     countryGroups[countryGroupId].countries.includes(isoCountry));
@@ -135,6 +138,5 @@ function detect(): CountryGroupId {
 
 export {
   countryGroups,
-  fromCountry,
   detect,
 };

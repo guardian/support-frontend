@@ -2,31 +2,144 @@
 
 // ----- Imports ----- //
 
-import { fromCountry } from '../countryGroup';
+import { detect } from '../countryGroup';
 
 
 // ----- Tests ----- //
 
-describe('countryGroup', () => {
+describe('detect countryGroup', () => {
 
-  describe('fromCountry', () => {
+  it('should return the correct country group from the path', () => {
 
-    it('retrieves countries that exist', () => {
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/uk',
+    });
+    expect(detect()).toEqual('GBPCountries');
 
-      expect(fromCountry('GB')).toEqual('GBPCountries');
-      expect(fromCountry('US')).toEqual('UnitedStates');
-      expect(fromCountry('AU')).toEqual('AUDCountries');
-      expect(fromCountry('FR')).toEqual('EURCountries');
-      expect(fromCountry('CI')).toEqual('International');
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/us',
+    });
+    expect(detect()).toEqual('UnitedStates');
 
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/au',
+    });
+    expect(detect()).toEqual('AUDCountries');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/eu',
+    });
+    expect(detect()).toEqual('EURCountries');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/int',
+    });
+    expect(detect()).toEqual('International');
+  });
+
+  it('should return the correct country group from the query parameter', () => {
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=GBPCountries',
+    });
+    expect(detect()).toEqual('GBPCountries');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=UnitedStates',
+    });
+    expect(detect()).toEqual('UnitedStates');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=AUDCountries',
+    });
+    expect(detect()).toEqual('AUDCountries');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=EURCountries',
+    });
+    expect(detect()).toEqual('EURCountries');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=International',
+    });
+    expect(detect()).toEqual('International');
+  });
+
+  it('should return the correct country group from GU_country cookie', () => {
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath',
     });
 
-    it('returns \'null\' for a country that does not exist', () => {
+    document.cookie = 'GU_country=UK';
+    expect(detect()).toEqual('GBPCountries');
 
-      expect(fromCountry('42')).toBeNull();
+    document.cookie = 'GU_country=GB';
+    expect(detect()).toEqual('GBPCountries');
 
+    document.cookie = 'GU_country=US';
+    expect(detect()).toEqual('UnitedStates');
+
+    document.cookie = 'GU_country=AU';
+    expect(detect()).toEqual('AUDCountries');
+
+    document.cookie = 'GU_country=FR';
+    expect(detect()).toEqual('EURCountries');
+
+    document.cookie = 'GU_country=CI';
+    expect(detect()).toEqual('International');
+
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=42',
     });
+    document.cookie = 'GU_country=BR';
+    expect(detect()).toEqual('International');
+  });
+
+  it('should return the correct country group from GU_geo_country cookie', () => {
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath',
+    });
+    document.cookie = 'GU_country=42';
+
+    document.cookie = 'GU_geo_country=UK';
+    expect(detect()).toEqual('GBPCountries');
+
+    document.cookie = 'GU_geo_country=GB';
+    expect(detect()).toEqual('GBPCountries');
+
+    document.cookie = 'GU_geo_country=US';
+    expect(detect()).toEqual('UnitedStates');
+
+    document.cookie = 'GU_geo_country=AU';
+    expect(detect()).toEqual('AUDCountries');
+
+    document.cookie = 'GU_geo_country=FR';
+    expect(detect()).toEqual('EURCountries');
+
+    document.cookie = 'GU_geo_country=CI';
+    expect(detect()).toEqual('International');
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath?countryGroup=42',
+    });
+    document.cookie = 'GU_geo_country=BR';
+    expect(detect()).toEqual('International');
+  });
+
+  it('should return the GBPCountries by default', () => {
+
+    jsdom.reconfigure({
+      url: 'https://support.theguardian.com/examplePath',
+    });
+    document.cookie = 'GU_country=42';
+    document.cookie = 'GU_geo_country=42';
+
+    expect(detect()).toEqual('GBPCountries');
 
   });
 
 });
+

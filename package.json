@@ -43,7 +43,8 @@
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
-    "verbose": true
+    "verbose": true,
+    "testEnvironment": "./jestEnvironment"
   },
   "repository": {
     "type": "git",

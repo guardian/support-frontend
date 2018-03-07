@@ -23,6 +23,7 @@
     "React": true,
     "ga": true,
     "Raven": true,
+    "jsdom": true,
   },
   "rules": {
     "curly": [2, "all"],
