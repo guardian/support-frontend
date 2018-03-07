@@ -55,9 +55,14 @@ enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDeb
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
+debianPackageDependencies := Seq("openjdk-8-jre-headless")
 packageName in Debian := name.value
+packageSummary := "Payment API Play App"
+packageDescription := """API for reader revenue payments"""
+maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
+
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:payment-api"
 riffRaffPackageType := (packageBin in Debian).value
-riffRaffArtifactResources += (file("resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")
+riffRaffArtifactResources += (file("src/main/resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")

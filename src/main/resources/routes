@@ -2,7 +2,10 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
+# Pinged by load balancer to determine if instance is healthy
+GET      /healthcheck                                         controllers.AppController.healthcheck
+
+# Charges a credit/debit card via Stripe
 POST     /contribute/one-off/stripe/create                    controllers.StripeController.createCharge
 
 # paypal endpoints - web & apps

@@ -10,8 +10,7 @@ import util.RequestBasedProvider
 
 import aws.AWSClientBuilder
 import backend.{PaypalBackend, StripeBackend}
-import _root_.controllers.StripeController
-import _root_.controllers.PaypalController
+import _root_.controllers.{AppController, PaypalController, StripeController}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{AppConfig, ConfigLoader, DBConfig, PlayConfigUpdater}
 import services.DatabaseProvider
@@ -69,6 +68,7 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
   override val router =
     new Routes(
       httpErrorHandler,
+      new AppController(controllerComponents),
       new StripeController(controllerComponents, stripeBackendProvider),
       new PaypalController(controllerComponents, paypalBackendProvider)
     )
