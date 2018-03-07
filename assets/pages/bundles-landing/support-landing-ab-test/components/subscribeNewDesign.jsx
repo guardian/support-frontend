@@ -65,7 +65,7 @@ function Subscribe(props: PropTypes) {
           />
           <SubscriptionBundle
             heading="paper"
-            price="10.79"
+            price="10.36"
             from
             copy={subscriptionFeatures.paper}
             ctaText="Get paper"
@@ -74,7 +74,7 @@ function Subscribe(props: PropTypes) {
           />
           <SubscriptionBundle
             heading="paper + digital"
-            price="22.06"
+            price="21.62"
             from
             copy={subscriptionFeatures.paperDig}
             ctaText="Get paper + digital"
