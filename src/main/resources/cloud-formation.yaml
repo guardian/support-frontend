@@ -135,20 +135,6 @@ Resources:
                 - ssm:GetParametersByPath
                 Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${App}/*
 
-        # Not sure we need this, because the key is uses has alias support-workers-CODE
-        # This makes me think that it's something to do with the step functions
-        # TODO: find out what this is actually for.
-        # TODO: find out if we need our AMIs encrypted, as per Simon Hildrew's Tech Time
-#        - PolicyName: KMSEncryption
-#          PolicyDocument:
-#            Version: 2012-10-17
-#            Statement:
-#              - Effect: Allow
-#                Action:
-#                - kms:Encrypt
-#                - kms:Decrypt
-#                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
-
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
