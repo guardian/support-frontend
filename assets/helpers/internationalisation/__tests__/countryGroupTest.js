@@ -74,35 +74,6 @@ describe('detect countryGroup', () => {
     document.cookie = 'GU_country=UK';
     expect(detect()).toEqual('GBPCountries');
 
-    document.cookie = 'GU_country=US';
-    expect(detect()).toEqual('UnitedStates');
-
-    document.cookie = 'GU_country=AU';
-    expect(detect()).toEqual('AUDCountries');
-
-    document.cookie = 'GU_country=FR';
-    expect(detect()).toEqual('EURCountries');
-
-    document.cookie = 'GU_country=CI';
-    expect(detect()).toEqual('International');
-
-
-    jsdom.reconfigure({
-      url: 'https://support.theguardian.com/examplePath?countryGroup=42',
-    });
-    document.cookie = 'GU_country=BR';
-    expect(detect()).toEqual('International');
-  });
-
-  it('should return the correct country group from GU_country cookie', () => {
-
-    jsdom.reconfigure({
-      url: 'https://support.theguardian.com/examplePath',
-    });
-
-    document.cookie = 'GU_country=UK';
-    expect(detect()).toEqual('GBPCountries');
-
     document.cookie = 'GU_country=GB';
     expect(detect()).toEqual('GBPCountries');
 
