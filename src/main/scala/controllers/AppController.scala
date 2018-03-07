@@ -7,7 +7,7 @@ class AppController(
 ) extends AbstractController(controllerComponents) {
 
   def healthcheck: Action[AnyContent] = Action {
-    Ok("healthy")
+    Ok("Everything is super")
   }
 
 }
