@@ -3,8 +3,7 @@ package services
 import java.util.UUID
 
 import org.scalatest.time.{Millis, Span}
-import org.scalatest.{Matchers, WordSpec}
-import tags.RequiresMembershipCredentials
+import org.scalatest.{Ignore, Matchers, WordSpec}
 import util.FutureEitherValues
 
 import conf.{ConfigLoaderProvider, IdentityConfig}
@@ -12,7 +11,7 @@ import model.TestThreadPoolsProvider
 import services.IdentityClient.{GuestRegistrationResponse, UserResponse}
 import services.IdentityClient.UserResponse.User
 
-@RequiresMembershipCredentials
+@Ignore
 class IdentityClientSpec extends WordSpec
   with Matchers
   with ConfigLoaderProvider

@@ -1,14 +1,13 @@
 package services
 
 import org.scalatest.time.{Millis, Span}
-import org.scalatest.{Matchers, WordSpec}
-import tags.RequiresMembershipCredentials
+import org.scalatest.{Ignore, Matchers, WordSpec}
 import util.FutureEitherValues
 
 import conf.{ConfigLoaderProvider, IdentityConfig}
 import model.TestThreadPoolsProvider
 
-@RequiresMembershipCredentials
+@Ignore
 class IdentityServiceSpec extends WordSpec
   with Matchers
   with ConfigLoaderProvider
