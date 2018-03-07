@@ -122,8 +122,7 @@ Resources:
                 - logs:CreateLogGroup
                 - logs:CreateLogStream
                 - logs:PutLogEvents
-                - logs:DescribeLogStreams
-                Resource: arn:aws:logs:*:*:*
+                Resource: !GetAtt PaymentAPILogGroup.Arn
         - PolicyName: SSMConfigParams
           PolicyDocument:
             Version: 2012-10-17
@@ -250,6 +249,12 @@ Resources:
           FromPort: 123
           ToPort: 123
           CidrIp: 0.0.0.0/0
+
+  PaymentAPILogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${App}-${Stage}
+      RetentionInDays: 14
 
   NoHealthyInstancesAlarm:
     Type: AWS::CloudWatch::Alarm
