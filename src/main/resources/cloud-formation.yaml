@@ -230,7 +230,8 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 77.91.248.0/21
-          # TODO: remove, not needed
+          # the below rule is for debug purposes, allowing us to make
+          # requests from Guardian IPs directly to an app running on an instance
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
