@@ -99,7 +99,7 @@ function MarketingConfirmationMessage(props: {message: string}) {
         modifierClass="marketing-consent"
         heading="Stay in touch"
       >
-        {props.message}
+        <span className="marketing-consent__final-message">{props.message}</span>
       </PageSection>
       <DotcomCta />
     </div>
