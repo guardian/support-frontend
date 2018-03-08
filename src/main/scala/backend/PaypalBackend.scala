@@ -3,7 +3,7 @@ package backend
 import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments.Payment
-import conf.{ConfigLoader, IdentityConfig, OphanConfig, PaypalConfig}
+import conf._
 import model.db.ContributionData
 import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, ExecutePaypalPaymentData, PaypalApiError}
 import model._
@@ -16,7 +16,8 @@ import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
 
-class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService, ophanService: OphanService) extends StrictLogging {
+class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService,
+  identityService: IdentityService, ophanService: OphanService, emailService: EmailService) extends StrictLogging {
 
   /*
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
@@ -37,6 +38,7 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
       contributionData <- ContributionData.fromPaypalCharge(None, payment).toEitherT[Future]
       _ = databaseService.insertContributionData(contributionData)
       _ = ophanService.submitAcquisition(PaypalAcquisition(payment, capturePaypalPaymentData.acquisitionData))
+      _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
 
@@ -45,6 +47,7 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
     for {
       payment <- paypalService.executePayment(paypalExecutePaymentData)
       _ = ophanService.submitAcquisition(PaypalAcquisition(payment, paypalExecutePaymentData.acquisitionData))
+      _ = emailService.sendPaypalThankEmail(payment, paypalExecutePaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
 
@@ -52,8 +55,9 @@ class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseServi
 
 object PaypalBackend {
 
-  private def apply(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService, ophanService: OphanService): PaypalBackend =
-    new PaypalBackend(paypalService, databaseService, identityService, ophanService)
+  private def apply(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService,
+    ophanService: OphanService, emailService: EmailService): PaypalBackend =
+    new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService)
 
   class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
     implicit defaultThreadPool: DefaultThreadPool,
@@ -74,7 +78,10 @@ object PaypalBackend {
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       configLoader
       .configForEnvironment[OphanConfig](env)
-      .andThen(OphanService.fromOphanConfig(_)): InitializationResult[OphanService]
+      .andThen(OphanService.fromOphanConfig(_)): InitializationResult[OphanService],
+      configLoader
+        .configForEnvironment[EmailConfig](env)
+        .andThen(EmailService.fromEmailConfig(_)): InitializationResult[EmailService]
     ).mapN(PaypalBackend.apply)
   }
 }
