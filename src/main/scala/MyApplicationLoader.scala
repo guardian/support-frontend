@@ -31,10 +31,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
   with AhcWSComponents
   with AppThreadPoolsProvider {
 
-  override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
-
-  implicit val _wsClient: WSClient = wsClient
-
   // TODO: is prod value should be set in public Play configuration
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
@@ -54,6 +50,10 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
     .configuration
 
   val databaseProvider = new DatabaseProvider(dbApi)
+
+  override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
+
+  implicit val _wsClient: WSClient = wsClient
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     new StripeBackend.Builder(configLoader, databaseProvider)
