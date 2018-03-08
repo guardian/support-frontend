@@ -4,23 +4,23 @@ import com.gu.i18n.Currency
 
 sealed trait ProductType {
   def currency: Currency
-  def period: BillingPeriod
+  def billingPeriod: BillingPeriod
 
   override def toString: String = this.getClass.getSimpleName
   def describe: String
 }
 
 case class Contribution(
+  amount: BigDecimal,
   currency: Currency,
-  period: BillingPeriod,
-  amount: BigDecimal
+  billingPeriod: BillingPeriod
 ) extends ProductType {
-  override def describe: String = s"$period-Contribution-$currency-$amount"
+  override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
 case class DigitalPack(
   currency: Currency,
-  period: BillingPeriod
+  billingPeriod: BillingPeriod
 ) extends ProductType {
-  override def describe: String = s"$period-DigitalPack-$currency"
+  override def describe: String = s"$billingPeriod-DigitalPack-$currency"
 }
