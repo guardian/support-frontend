@@ -21,6 +21,5 @@ object AWSClientBuilder {
       // or having it set in my environment
       .withRegion(Regions.EU_WEST_1)
       .withCredentials(credentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
       .build()
 }

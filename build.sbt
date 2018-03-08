@@ -34,7 +34,6 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "ophan-event-model" % "0.0.3",
   "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
-  "com.gu" %% "fezziwig" % "0.6" excludeAll ( ExclusionRule(organization = "com.twitter") ),
   "com.gu" %% "acquisition-event-producer-play26" % "4.0.0",
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
