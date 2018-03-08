@@ -7,7 +7,7 @@ import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import util.EnvironmentBasedBuilder
-import cats.instances.future.catsStdInstancesForFuture
+import cats.instances.future._
 import scala.concurrent.Future
 import conf.{ConfigLoader, IdentityConfig, StripeConfig}
 import model._
@@ -24,25 +24,23 @@ class StripeBackend(stripeService: StripeService, databaseService: DatabaseServi
   def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Long] =
     identityService.getOrCreateIdentityIdFromEmail(email).leftMap(StripeBackendError.fromIdentityError)
 
-
-  def insetContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Unit] = {
+  def insertContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Unit] = {
     databaseService.insertContributionData(contributionData).leftMap(StripeBackendError.fromDatabaseError)
   }
 
   def trackContribution(charge: Charge, data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Unit]  = {
     getOrCreateIdentityIdFromEmail(data.identityData.email).map(Option(_))
       .recover {
-        case err => {
-          logger.error(err.getMessage)
+        case err =>
+          logger.error("Error getting Identity Id", err)
           None
-        }
       }
       .flatMap { identityId =>
-        val contributionData = ContributionData.fromStripeCharge(identityId, charge)
-        insetContributionData(contributionData)
+        insertContributionData(
+          ContributionData.fromStripeCharge(identityId, charge)
+        )
       }
   }
-
 
   // TODO: send acquisition event
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.

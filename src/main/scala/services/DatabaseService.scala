@@ -33,9 +33,7 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
     Future(database.withConnection { implicit conn => insertStatement.execute() })
       .attemptT
       .bimap(
-        err => {
-          DatabaseService.Error("unable to insert contribution into database", Some(err))
-        },
+        err => DatabaseService.Error("unable to insert contribution into database", Some(err)),
         _ => logger.info("contribution inserted into database")
       )
 

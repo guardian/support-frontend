@@ -17,9 +17,6 @@ import scala.concurrent.Future
 import conf.IdentityConfig
 import model.DefaultThreadPool
 
-case class PublicFields(displayName: String)
-
-
 class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, pool: DefaultThreadPool)
   extends StrictLogging {
 
@@ -46,34 +43,29 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
         .withQueryStringParameters("emailAddress" -> emailAddress)
     }
 
-  def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
-
   def createGuestAccount(email: String): Result[GuestRegistrationResponse] = {
-    val displayName = guestDisplayName(email)
     executeRequest[GuestRegistrationResponse] {
       requestForPath("/guest")
         .withMethod("POST")
-        .withBody(CreateGuestAccountRequestBody(primaryEmailAddress = email, publicFields = PublicFields(displayName)))
+        .withBody(CreateGuestAccountRequestBody.fromEmail(email))
     }
   }
 }
 
-object IdentityClient extends StrictLogging {
-  import io.circe.{Decoder, Encoder}
-  import io.circe.generic.semiauto._
 
+object IdentityClient extends StrictLogging {
   def fromIdentityConfig(config: IdentityConfig)(implicit ws: WSClient, pool: DefaultThreadPool): IdentityClient =
     new IdentityClient(config)
+
+  @JsonCodec case class PublicFields(displayName: String)
 
   @JsonCodec case class CreateGuestAccountRequestBody(primaryEmailAddress: String, publicFields: PublicFields)
 
   object CreateGuestAccountRequestBody {
 
-    implicit val publicFieldsDecoder: Decoder[PublicFields] = deriveDecoder
-    implicit val publicFieldsEncoder: Encoder[PublicFields] = deriveEncoder
-
-    implicit val createGuestAccountRequestBodyDecoder: Decoder[CreateGuestAccountRequestBody] = deriveDecoder
-    implicit val createGuestAccountRequestBodyEncoder: Encoder[CreateGuestAccountRequestBody] = deriveEncoder
+    def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
+    
+    def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(guestDisplayName(email)))
 
     implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
       transform = body => InMemoryBody(ByteString.fromString(body.asJson.noSpaces)),
