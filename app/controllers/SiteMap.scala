@@ -27,10 +27,7 @@ class SiteMap(
         routes.Application.bundleLanding().absoluteURL(secure = true)
       }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
-        routes.Application.contributionsLanding(
-          id = "contributions-landing-page-us",
-          js = "contributionsLandingPageUS.js"
-        ).absoluteURL(secure = true)
+        routes.Application.contributionsLandingUS().absoluteURL(secure = true)
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
         routes.Application.bundleLanding().absoluteURL(secure = true)
@@ -42,13 +39,10 @@ class SiteMap(
   private def contributeLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>{
-        routes.Application.contributionsLanding(id = "contributions-landing-page-us", js = "contributionsLandingPageUS.js").absoluteURL(secure = true)
+        routes.Application.contributionsLandingUS().absoluteURL(secure = true)
       }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
-        routes.Application.contributionsLanding(
-          id = "contributions-landing-page-us",
-          js = "contributionsLandingPageUS.js"
-        ).absoluteURL(secure = true)
+        routes.Application.contributionsLandingUS().absoluteURL(secure = true)
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
         routes.Application.bundleLanding().absoluteURL(secure = true)
