@@ -62,7 +62,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
     (for {
         payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
-        validatedPayment <- validateExecute(payment)
+        validatedPayment <- validatePayment(payment)
       } yield validatedPayment).toEitherT[Future]
 
 
@@ -132,7 +132,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
     capture
   }
 
-  private def validateExecute(payment: Payment): Either[PaypalApiError, Payment] = {
+  private def validatePayment(payment: Payment): Either[PaypalApiError, Payment] = {
     if (payment.getState.toUpperCase.equalsIgnoreCase("APPROVED"))
       Right(payment)
     else

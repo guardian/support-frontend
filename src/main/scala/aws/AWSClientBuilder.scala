@@ -5,6 +5,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
 import com.amazonaws.regions.Regions
+import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
 
 object AWSClientBuilder {
 
@@ -22,4 +23,12 @@ object AWSClientBuilder {
       .withRegion(Regions.EU_WEST_1)
       .withCredentials(credentialsProvider)
       .build()
+
+  def buildAmazonSQSAsyncClientBuilder(queueName: String): AmazonSQSAsync =
+    AmazonSQSAsyncClientBuilder
+      .standard()
+      .withCredentials(credentialsProvider)
+      .withRegion(Regions.EU_WEST_1)
+      .build()
+
 }

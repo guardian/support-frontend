@@ -4,7 +4,7 @@ import com.paypal.api.payments.{Transaction, _}
 import conf.PaypalConfig
 import model.PaypalThreadPool
 import model.paypal.{PaypalApiError, PaypalMode}
-import org.mockito.Mockito
+import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
@@ -22,13 +22,13 @@ class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar {
     val getTransaction = PrivateMethod[Either[PaypalApiError, Transaction]]('getTransaction)
     val getRelatedResources = PrivateMethod[Either[PaypalApiError, RelatedResources]]('getRelatedResources)
     val validateCapture = PrivateMethod[Either[PaypalApiError, Capture]]('validateCapture)
-    val validateExecute = PrivateMethod[Either[PaypalApiError, Payment]]('validateExecute)
+    val validatePayment = PrivateMethod[Either[PaypalApiError, Payment]]('validatePayment)
     val paypalService = new PaypalService(paypalConfig)
   }
 
   behavior of "Paypal Service"
 
-  it should "build paypal transactions successfully" in new PaypalServiceTestFixture {
+  it should "build paypal transactions" in new PaypalServiceTestFixture {
     val transactionList = paypalService invokePrivate buildPaypalTransactions("GBP", BigDecimal(50))
     transactionList.size() should be (1)
     val transaction:Transaction = transactionList.asScala.head
@@ -49,63 +49,63 @@ class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar {
     capture.getIsFinalCapture shouldBe(true)
   }
 
-  it should "get transaction by payment - success" in new PaypalServiceTestFixture {
+  it should "return valid transaction if the payment data is correct" in new PaypalServiceTestFixture {
     val transactionList = List[Transaction](mock[Transaction]).asJava
     val payment = mock[Payment]
-    Mockito.when(payment.getTransactions).thenReturn(transactionList)
+    when(payment.getTransactions).thenReturn(transactionList)
     val transactionResult = paypalService invokePrivate getTransaction(payment)
     transactionResult.isRight shouldBe(true)
   }
 
-  it should "get transaction by payment - failure" in new PaypalServiceTestFixture {
+  it should "return an error if the payment data is invalid" in new PaypalServiceTestFixture {
     val transactionList = List[Transaction]().asJava
     val payment = mock[Payment]
-    Mockito.when(payment.getTransactions).thenReturn(transactionList)
+    when(payment.getTransactions).thenReturn(transactionList)
     val transactionResult = paypalService invokePrivate getTransaction(payment)
     transactionResult.isRight shouldBe(false)
   }
 
-  it should "get related resources by transaction - success" in new PaypalServiceTestFixture {
+  it should "return valid related resources if the transaction data is correct" in new PaypalServiceTestFixture {
     val relatedResourcesList = List[RelatedResources](mock[RelatedResources]).asJava
     val transaction = mock[Transaction]
-    Mockito.when(transaction.getRelatedResources).thenReturn(relatedResourcesList)
+    when(transaction.getRelatedResources).thenReturn(relatedResourcesList)
     val relatedResourcesResult = paypalService invokePrivate getRelatedResources(transaction)
     relatedResourcesResult.isRight shouldBe(true)
   }
 
-  it should "get related resources by transaction - failure" in new PaypalServiceTestFixture {
+  it should "return an error if the transaction data is invalid" in new PaypalServiceTestFixture {
     val relatedResourcesList = List[RelatedResources]().asJava
     val transaction = mock[Transaction]
-    Mockito.when(transaction.getRelatedResources).thenReturn(relatedResourcesList)
+    when(transaction.getRelatedResources).thenReturn(relatedResourcesList)
     val relatedResourcesResult = paypalService invokePrivate getRelatedResources(transaction)
     relatedResourcesResult.isRight shouldBe(false)
   }
 
-  it should "validate capture - success" in new PaypalServiceTestFixture {
+  it should "validate if the capture status is completed" in new PaypalServiceTestFixture {
     val capture = mock[Capture]
-    Mockito.when(capture.getState).thenReturn("COMPLETED")
+    when(capture.getState).thenReturn("COMPLETED")
     val validateResult = paypalService invokePrivate validateCapture(capture)
     validateResult.isRight shouldBe(true)
   }
 
-  it should "validate capture - failure" in new PaypalServiceTestFixture {
+  it should "validate if the capture status is not completed" in new PaypalServiceTestFixture {
     val capture = mock[Capture]
-    Mockito.when(capture.getState).thenReturn("PAYMENT_NOT_APPROVED")
+    when(capture.getState).thenReturn("PAYMENT_NOT_APPROVED")
     val validateResult = paypalService invokePrivate validateCapture(capture)
     validateResult.isRight shouldBe(false)
   }
 
-  it should "validate execute - success" in new PaypalServiceTestFixture {
+  it should "validate if the payment status is approved" in new PaypalServiceTestFixture {
     val payment = mock[Payment]
-    Mockito.when(payment.getState).thenReturn("APPROVED")
-    val validateResult = paypalService invokePrivate validateExecute(payment)
+    when(payment.getState).thenReturn("APPROVED")
+    val validateResult = paypalService invokePrivate validatePayment(payment)
     validateResult.isRight shouldBe(true)
   }
 
-  it should "validate execute - failure" in new PaypalServiceTestFixture {
+  it should "validate if the payment status is not approved" in new PaypalServiceTestFixture {
     val payment = mock[Payment]
-    Mockito.when(payment.getState).thenReturn("PAYMENT_NOT_APPROVED_FOR_EXECUTION")
-    val validateResult = paypalService invokePrivate validateExecute(payment)
+    when(payment.getState).thenReturn("PAYMENT_NOT_APPROVED_FOR_EXECUTION")
+    val validateResult = paypalService invokePrivate validatePayment(payment)
     validateResult.isRight shouldBe(false)
   }
 

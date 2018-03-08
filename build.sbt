@@ -14,7 +14,8 @@ val circeVersion = "0.9.1"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.261",
+  "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.289",
+  "com.amazonaws" % "aws-java-sdk-sqs" % "1.11.289",
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
   "com.dripower" %% "play-circe" % "2609.0",

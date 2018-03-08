@@ -34,6 +34,9 @@ Parameters:
   AMI:
     Description: AMI ID
     Type: String
+  EmailSqsQueueArn:
+    Description: The ARN of the email SQS queue
+    Type: String
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
@@ -134,6 +137,16 @@ Resources:
                 Action:
                 - ssm:GetParametersByPath
                 Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${App}/*
+        - PolicyName: SqsMessages
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:GetQueueUrl
+                  - sqs:SendMessage
+                Resource:
+                  - !Ref EmailSqsQueueArn
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
