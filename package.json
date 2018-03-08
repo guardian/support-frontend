@@ -57,7 +57,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "raven-js": "^3.22.1",
+    "raven-js": "^3.23.1",
     "react-redux": "^5.0.5",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
