@@ -20,15 +20,15 @@ import type {
   ContribError as ContributionError,
 } from 'helpers/contributions';
 import { generateClassName } from 'helpers/utilities';
+import {
+  getCustomAmountA11yHint,
+  getContributionAmounts,
+} from 'helpers/contributionAmounts';
 
 import {
   getClassName as getContributionTypeClassName,
   getContributionTypes,
-} from '../helpers/contributionTypes';
-import {
-  getCustomAmountA11yHint,
-  getContributionAmounts,
-} from '../helpers/contributionAmounts';
+} from 'helpers/contributionTypes';
 
 
 // ----- Types ----- //
