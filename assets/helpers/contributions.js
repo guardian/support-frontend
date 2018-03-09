@@ -6,7 +6,7 @@ import { roundDp } from 'helpers/utilities';
 
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-
+import type { CountryGroupId } from './internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -53,26 +53,34 @@ type Config = {
 
 // ----- Setup ----- //
 
-const config: Config = {
+const numbersInWords: {[number] : string} = {
+  1: 'one',
+  2: 'two',
+  50: 'fifty',
+  166: 'one hundred and sixty six',
+  2000: 'two thousand',
+};
+
+const config: { [CountryGroupId]: Config } = {
   ANNUAL: {
     min: 50,
-    minInWords: 'fifty',
+    minInWords: numbersInWords[50],
     max: 2000,
-    maxInWords: 'two thousand',
+    maxInWords: numbersInWords[2000],
     default: 75,
   },
   MONTHLY: {
     min: 2,
-    minInWords: 'two',
+    minInWords: numbersInWords[2],
     max: 166,
-    maxInWords: 'one hundred and sixty six',
+    maxInWords: numbersInWords[166],
     default: 10,
   },
   ONE_OFF: {
     min: 1,
-    minInWords: 'one',
+    minInWords: numbersInWords[1],
     max: 2000,
-    maxInWords: 'two thousand',
+    maxInWords: numbersInWords[2000],
     default: 50,
   },
 };
