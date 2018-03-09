@@ -8,6 +8,7 @@ deployments:
       amiTags:
         Recipe: xenial-membership
         AmigoStage: PROD
+      amiEncrypted: true
       templatePath: cloud-formation.yaml
   payment-api:
     type: autoscaling
