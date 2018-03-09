@@ -86,14 +86,14 @@ function ContributionSelection(props: PropTypes) {
 
 function Error(props: {
   error: ContributionError,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
   contributionType: ContributionType,
 }) {
 
   let message = null;
 
   if (props.error) {
-    message = contributionsErrorMessage(props.error, props.currency, props.contributionType);
+    message = contributionsErrorMessage(props.error, props.contributionType, props.countryGroupId);
   }
 
   return <ErrorMessage message={message} />;

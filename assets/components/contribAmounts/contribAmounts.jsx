@@ -409,12 +409,12 @@ function contribToggle(countryGroupId: CountryGroupId = 'GBPCountries', showAnnu
 function errorMessage(
   error: ?ContribError,
   contribType: Contrib,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
 ): ?React$Element<any> {
 
   if (error) {
 
-    const message = contributionErrorMessage(error, currency, contribType);
+    const message = contributionErrorMessage(error, contribType, countryGroupId);
     return <p className="component-contrib-amounts__error-message">{message}</p>;
 
   }
@@ -527,7 +527,7 @@ export default function ContribAmounts(props: PropTypes) {
             {contribOtherAmountAccessibilityHint}
           </p>
         </div>
-        {errorMessage(props.contribError, attrs.contribType, props.currency)}
+        {errorMessage(props.contribError, attrs.contribType, props.countryGroupId)}
       </div>
     </div>
   );

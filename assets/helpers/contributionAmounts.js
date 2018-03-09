@@ -8,10 +8,10 @@ import { spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { getSpokenType } from './contributionTypes';
+import { countryGroups } from './internationalisation/countryGroup'
 
 
 // ----- Setup ----- //
@@ -115,9 +115,9 @@ function getA11yHint(
 
 function getCustomAmountA11yHint(
   contributionType: ContributionType,
-  country: IsoCountry,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
 ): string {
+  const currency = countryGroups[countryGroupId];
 
   let spokenCurrency = spokenCurrencies[currency.iso].plural;
 
@@ -125,7 +125,7 @@ function getCustomAmountA11yHint(
     spokenCurrency = spokenCurrencies[currency.iso].singular;
   }
 
-  return `Enter an amount of ${contributionConfig[contributionType].minInWords}
+  return `Enter an amount of ${contributionConfig[countryGroupId][contributionType].minInWords}
     ${spokenCurrency} or more for your 
     ${getSpokenType(contributionType, country)} contribution.`;
 
