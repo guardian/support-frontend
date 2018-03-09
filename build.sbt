@@ -22,6 +22,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9"
 )
 
+releaseCrossBuild := true
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
