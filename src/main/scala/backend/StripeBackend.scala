@@ -1,11 +1,11 @@
 package backend
 
 import cats.data.EitherT
+import cats.instances.future._
 import cats.syntax.apply._
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
-import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
 

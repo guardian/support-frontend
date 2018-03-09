@@ -2,6 +2,8 @@ package backend
 
 import cats.Semigroup
 import cats.data.EitherT
+import cats.instances.future._
+import cats.instances.unit._
 import cats.syntax.apply._
 import cats.syntax.either._
 import com.gu.acquisition.model.errors.OphanServiceError
