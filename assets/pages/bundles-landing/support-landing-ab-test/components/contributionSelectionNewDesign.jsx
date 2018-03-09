@@ -22,12 +22,12 @@ import { generateClassName } from 'helpers/utilities';
 import {
   getCustomAmountA11yHint,
   getContributionAmounts,
-} from 'helpers/contributionAmounts';
+} from 'helpers/contributions';
 
 import {
   getClassName as getContributionTypeClassName,
   getContributionTypes,
-} from 'helpers/contributionTypes';
+} from 'helpers/contributions';
 
 
 // ----- Types ----- //
