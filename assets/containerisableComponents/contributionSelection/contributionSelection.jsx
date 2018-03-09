@@ -60,6 +60,7 @@ function ContributionSelection(props: PropTypes) {
           radios={getContributionTypeRadios(props.country)}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <div className="component-contribution-selection__amount">
@@ -73,6 +74,7 @@ function ContributionSelection(props: PropTypes) {
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <CustomAmountInput {...props} />

@@ -11,7 +11,6 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import { errorMessage as contributionsErrorMessage } from 'helpers/contributions';
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
@@ -35,12 +34,11 @@ import {
 
 type PropTypes = {
   contributionType: ContributionType,
-  country: IsoCountry,
   countryGroupId: CountryGroupId,
   currency: Currency,
   selectedAmount: Amount,
-  toggleAmount: string => void,
-  toggleType: string => void,
+  toggleAmount: (string, CountryGroupId)=> void,
+  toggleType: (string, CountryGroupId) => void,
   setCustomAmount: string => void,
   contributionError: ContributionError,
 };
@@ -66,9 +64,10 @@ function ContributionSelection(props: PropTypes) {
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
-          radios={getContributionTypes(props.country)}
+          radios={getContributionTypes(props.countryGroupId)}
           checked={props.contributionType}
           toggleAction={props.toggleType}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <div className="component-contribution-selection__amount">
@@ -81,6 +80,7 @@ function ContributionSelection(props: PropTypes) {
           )}
           checked={props.selectedAmount.value}
           toggleAction={props.toggleAmount}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <div className="component-contribution-selection__custom-amount">
@@ -94,11 +94,11 @@ function ContributionSelection(props: PropTypes) {
           labelText={props.currency.glyph}
         />
         <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
-          {getCustomAmountA11yHint(props.contributionType, props.country, props.currency)}
+          {getCustomAmountA11yHint(props.contributionType, props.countryGroupId)}
         </p>
         <Error
           error={props.contributionError}
-          currency={props.currency}
+          countryGroupId={props.countryGroupId}
           contributionType={props.contributionType}
         />
       </div>
@@ -112,14 +112,14 @@ function ContributionSelection(props: PropTypes) {
 
 function Error(props: {
   error: ContributionError,
-  currency: Currency,
   contributionType: ContributionType,
+  countryGroupId: CountryGroupId,
 }) {
 
   let message = null;
 
   if (props.error) {
-    message = contributionsErrorMessage(props.error, props.currency, props.contributionType);
+    message = contributionsErrorMessage(props.error, props.contributionType, props.countryGroupId);
   }
 
   return <ErrorMessage message={message} />;

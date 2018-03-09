@@ -30,11 +30,11 @@ type PropTypes = {
   contribAmount: Amounts,
   contribType: Contrib,
   contribError: ?ContribError,
-  changeContribAnnualAmount: (string) => void,
-  changeContribMonthlyAmount: (string) => void,
-  changeContribOneOffAmount: (string) => void,
-  changeContribAmount: (string) => void,
-  toggleContribType: (string) => void,
+  changeContribAnnualAmount: (string, CountryGroupId) => void,
+  changeContribMonthlyAmount: (string, CountryGroupId) => void,
+  changeContribOneOffAmount: (string, CountryGroupId) => void,
+  changeContribAmount: (string, CountryGroupId) => void,
+  toggleContribType: (string, CountryGroupId) => void,
   onNumberInputKeyPress: () => void,
   countryGroupId: CountryGroupId,
   isoCountry: IsoCountry,
@@ -504,6 +504,7 @@ export default function ContribAmounts(props: PropTypes) {
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           modifierClass={radioModifier}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <div className={className}>
@@ -512,6 +513,7 @@ export default function ContribAmounts(props: PropTypes) {
           toggleAction={attrs.toggleAction}
           checked={attrs.checked}
           modifierClass={radioModifier}
+          countryGroupId={props.countryGroupId}
         />
         <div className="component-contrib-amounts__other-amount">
           <NumberInput

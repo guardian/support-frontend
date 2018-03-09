@@ -3,9 +3,11 @@
 // ----- Imports ----- //
 
 import { roundDp } from 'helpers/utilities';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroup, CountryGroupId } from './internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -52,34 +54,39 @@ type Config = {
 
 // ----- Setup ----- //
 
-const numbersInWords: {[number]: string} = {
-  1: 'one',
-  2: 'two',
-  50: 'fifty',
-  166: 'one hundred and sixty six',
-  2000: 'two thousand',
+type validNumbers = '1' | '2' | '5' | '50' | '166' | '2000';
+
+/* eslint-disable quote-props */
+const numbersInWords: {[validNumbers]: string} = {
+  '1': 'one',
+  '2': 'two',
+  '5': 'five',
+  '50': 'fifty',
+  '166': 'one hundred and sixty six',
+  '2000': 'two thousand',
 };
+/* eslint-enable  quote-props */
 
 const defaultConfig: Config = {
   ANNUAL: {
     min: 50,
-    minInWords: numbersInWords[50],
+    minInWords: numbersInWords['50'],
     max: 2000,
-    maxInWords: numbersInWords[2000],
+    maxInWords: numbersInWords['2000'],
     default: 75,
   },
   MONTHLY: {
     min: 2,
-    minInWords: numbersInWords[2],
+    minInWords: numbersInWords['2'],
     max: 166,
-    maxInWords: numbersInWords[166],
+    maxInWords: numbersInWords['166'],
     default: 10,
   },
   ONE_OFF: {
     min: 1,
-    minInWords: numbersInWords[1],
+    minInWords: numbersInWords['1'],
     max: 2000,
-    maxInWords: numbersInWords[2000],
+    maxInWords: numbersInWords['2000'],
     default: 50,
   },
 };
@@ -88,23 +95,23 @@ const config: { [CountryGroupId]: Config } = {
   AUDCountries: {
     ANNUAL: {
       min: 50,
-      minInWords: numbersInWords[50],
+      minInWords: numbersInWords['50'],
       max: 2000,
-      maxInWords: numbersInWords[2000],
+      maxInWords: numbersInWords['2000'],
       default: 75,
     },
     MONTHLY: {
       min: 5,
-      minInWords: numbersInWords[5],
+      minInWords: numbersInWords['5'],
       max: 166,
-      maxInWords: numbersInWords[166],
+      maxInWords: numbersInWords['166'],
       default: 10,
     },
     ONE_OFF: {
       min: 1,
-      minInWords: numbersInWords[1],
+      minInWords: numbersInWords['1'],
       max: 2000,
-      maxInWords: numbersInWords[2000],
+      maxInWords: numbersInWords['2000'],
       default: 50,
     },
   },
@@ -180,7 +187,7 @@ function errorMessage(
 
   const minContrib = config[countryGroupId][contributionType].min;
   const maxContrib = config[countryGroupId][contributionType].max;
-  const currency = CountryGroup[countryGroupId];
+  const currency = currencies[countryGroups[countryGroupId].currency];
 
   switch (error) {
     case 'tooLittle':

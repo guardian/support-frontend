@@ -11,7 +11,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { getSpokenType } from './contributionTypes';
-import { countryGroups } from './internationalisation/countryGroup'
+import { countryGroups } from './internationalisation/countryGroup';
 
 
 // ----- Setup ----- //
@@ -127,7 +127,7 @@ function getCustomAmountA11yHint(
 
   return `Enter an amount of ${contributionConfig[countryGroupId][contributionType].minInWords}
     ${spokenCurrency} or more for your 
-    ${getSpokenType(contributionType, country)} contribution.`;
+    ${getSpokenType(contributionType, countryGroupId)} contribution.`;
 
 }
 

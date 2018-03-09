@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Contrib as ContributionType } from 'helpers/contributions';
 

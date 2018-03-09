@@ -41,11 +41,11 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  toggleContribType: (string) => void,
-  changeContribAnnualAmount: (string) => void,
-  changeContribMonthlyAmount: (string) => void,
-  changeContribOneOffAmount: (string) => void,
-  changeContribAmount: (string) => void,
+  toggleContribType: (string, CountryGroupId) => void,
+  changeContribAnnualAmount: (string, CountryGroupId) => void,
+  changeContribMonthlyAmount: (string, CountryGroupId) => void,
+  changeContribOneOffAmount: (string, CountryGroupId) => void,
+  changeContribAmount: (string, CountryGroupId) => void,
   isoCountry: IsoCountry,
   countryGroupId: CountryGroupId,
   currency: Currency,
@@ -85,20 +85,20 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
+    toggleContribType: (period: Contrib, countryGroupId) => {
+      dispatch(changeContribType(period, countryGroupId));
     },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    changeContribAnnualAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }, countryGroupId));
     },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    changeContribMonthlyAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }, countryGroupId));
     },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    changeContribOneOffAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }, countryGroupId));
     },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
+    changeContribAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmount({ value, userDefined: true }, countryGroupId));
     },
     payPalErrorHandler: (message: string) => {
       dispatch(payPalError(message));
