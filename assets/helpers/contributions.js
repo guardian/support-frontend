@@ -4,9 +4,8 @@
 
 import { roundDp } from 'helpers/utilities';
 
-import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from './internationalisation/countryGroup';
+import type { CountryGroup, CountryGroupId } from './internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -53,7 +52,7 @@ type Config = {
 
 // ----- Setup ----- //
 
-const numbersInWords: {[number] : string} = {
+const numbersInWords: {[number]: string} = {
   1: 'one',
   2: 'two',
   50: 'fifty',
@@ -61,7 +60,7 @@ const numbersInWords: {[number] : string} = {
   2000: 'two thousand',
 };
 
-const config: { [CountryGroupId]: Config } = {
+const defaultConfig: Config = {
   ANNUAL: {
     min: 50,
     minInWords: numbersInWords[50],
@@ -85,37 +84,71 @@ const config: { [CountryGroupId]: Config } = {
   },
 };
 
+const config: { [CountryGroupId]: Config } = {
+  AUDCountries: {
+    ANNUAL: {
+      min: 50,
+      minInWords: numbersInWords[50],
+      max: 2000,
+      maxInWords: numbersInWords[2000],
+      default: 75,
+    },
+    MONTHLY: {
+      min: 5,
+      minInWords: numbersInWords[5],
+      max: 166,
+      maxInWords: numbersInWords[166],
+      default: 10,
+    },
+    ONE_OFF: {
+      min: 1,
+      minInWords: numbersInWords[1],
+      max: 2000,
+      maxInWords: numbersInWords[2000],
+      default: 50,
+    },
+  },
+  GBPCountries: defaultConfig,
+  EURCountries: defaultConfig,
+  UnitedStates: defaultConfig,
+  International: defaultConfig,
+};
+
 
 // ----- Functions ----- //
 
-function parse(input: ?string, contrib: Contrib): ParsedContrib {
+function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);
 
   if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
-  } else if (numericAmount < config[contrib].min) {
+  } else if (numericAmount < config[countryGroupId][contrib].min) {
     error = 'tooLittle';
-  } else if (numericAmount > config[contrib].max) {
+  } else if (numericAmount > config[countryGroupId][contrib].max) {
     error = 'tooMuch';
   }
 
-  const amount = error ? config[contrib].default : roundDp(numericAmount);
+  const amount = error ? config[countryGroupId][contrib].default : roundDp(numericAmount);
 
   return { error, amount };
 
 }
 
-function circlesParse(input: string, contributionType: Contrib): ParsedAmount {
+function circlesParse(
+  input: string,
+  contributionType: Contrib,
+  countryGroupId: CountryGroupId,
+): ParsedAmount {
 
   const customAmount = Number(input);
 
   if (input === '' || Number.isNaN(customAmount)) {
     return { error: 'invalidEntry', customAmount: null };
-  } else if (customAmount < config[contributionType].min) {
+  } else if (customAmount < config[countryGroupId][contributionType].min) {
     return { error: 'tooLittle', customAmount };
-  } else if (customAmount > config[contributionType].max) {
+  } else if (customAmount > config[countryGroupId][contributionType].max) {
     return { error: 'tooMuch', customAmount };
   }
 
@@ -141,12 +174,13 @@ function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
 
 function errorMessage(
   error: ContribError,
-  currency: Currency,
   contributionType: Contrib,
+  countryGroupId: CountryGroupId,
 ): ?string {
 
-  const minContrib = config[contributionType].min;
-  const maxContrib = config[contributionType].max;
+  const minContrib = config[countryGroupId][contributionType].min;
+  const maxContrib = config[countryGroupId][contributionType].max;
+  const currency = CountryGroup[countryGroupId];
 
   switch (error) {
     case 'tooLittle':
