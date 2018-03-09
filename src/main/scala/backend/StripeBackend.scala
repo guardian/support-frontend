@@ -1,14 +1,14 @@
 package backend
 
+import backend.StripeBackend.StripeBackendError
 import cats.data.EitherT
-import cats.instances.future._
 import cats.syntax.apply._
+import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import util.EnvironmentBasedBuilder
-
+import cats.instances.future._
 import scala.concurrent.Future
-
 import conf.{ConfigLoader, IdentityConfig, StripeConfig}
 import model._
 import model.db.ContributionData
@@ -21,23 +21,35 @@ class StripeBackend(stripeService: StripeService, databaseService: DatabaseServi
 
   // Convert the result of the identity id operation,
   // into the monad used by the for comprehension in the createCharge() method.
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, Long] =
-    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(err => StripeChargeError.fromThrowable(err))
+  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Long] =
+    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(StripeBackendError.fromIdentityError)
+
+  def insertContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Unit] = {
+    databaseService.insertContributionData(contributionData).leftMap(StripeBackendError.fromDatabaseError)
+  }
+
+  def trackContribution(charge: Charge, data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeBackendError, Unit]  = {
+    getOrCreateIdentityIdFromEmail(data.identityData.email).map(Option(_))
+      .recover {
+        case err =>
+          logger.error("Error getting Identity Id", err)
+          None
+      }
+      .flatMap { identityId =>
+        insertContributionData(
+          ContributionData.fromStripeCharge(identityId, charge)
+        )
+      }
+  }
 
   // TODO: send acquisition event
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   def createCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, StripeChargeError, StripeChargeSuccess] =
     for {
-      identityId <- getOrCreateIdentityIdFromEmail(data.identityData.email)
       charge <- stripeService.createCharge(data)
-    } yield {
-      // Don't use flat map for inserting the contribution data -
-      // the result the client receives as to whether the charge is successful,
-      // should not be dependent on this operation.
-      val contributionData = ContributionData.fromStripeCharge(Some(identityId), charge)
-      databaseService.insertContributionData(contributionData)
-      StripeChargeSuccess.fromContributionData(contributionData)
-    }
+      _ = trackContribution(charge, data)
+    } yield StripeChargeSuccess.fromCharge(charge)
+
 }
 
 object StripeBackend {
@@ -64,5 +76,21 @@ object StripeBackend {
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService]
     ).mapN(StripeBackend.apply)
   }
+
+  sealed abstract class StripeBackendError extends Exception {
+    override def getMessage: String = this match {
+      case StripeBackendError.Database(err) => err.getMessage
+      case StripeBackendError.Service(err) => err.getMessage
+    }
+  }
+
+  object StripeBackendError {
+    final case class Database(error: DatabaseService.Error) extends StripeBackendError
+    final case class Service(error: IdentityClient.Error) extends StripeBackendError
+
+    def fromIdentityError(err: IdentityClient.Error): StripeBackendError = Service(err)
+    def fromDatabaseError(err: DatabaseService.Error): StripeBackendError = Database(err)
+  }
+
 }
 

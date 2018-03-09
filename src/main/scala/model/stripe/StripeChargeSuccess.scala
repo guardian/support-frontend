@@ -1,13 +1,11 @@
 package model.stripe
 
+import com.stripe.model.Charge
 import io.circe.generic.JsonCodec
 
-import model.Currency
-import model.db.ContributionData
-
-@JsonCodec case class StripeChargeSuccess private (currency: Currency, amount: Long)
+@JsonCodec case class StripeChargeSuccess private (currency: String, amount: Long)
 
 object StripeChargeSuccess {
-  def fromContributionData(data: ContributionData): StripeChargeSuccess =
-    StripeChargeSuccess(data.currency, data.amount)
+  def fromCharge(charge: Charge): StripeChargeSuccess =
+    StripeChargeSuccess(charge.getCurrency, charge.getAmount)
 }

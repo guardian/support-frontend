@@ -43,22 +43,29 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
         .withQueryStringParameters("emailAddress" -> emailAddress)
     }
 
-  def createGuestAccount(email: String): Result[GuestRegistrationResponse] =
+  def createGuestAccount(email: String): Result[GuestRegistrationResponse] = {
     executeRequest[GuestRegistrationResponse] {
       requestForPath("/guest")
         .withMethod("POST")
-        .withBody(CreateGuestAccountRequestBody(primaryEmailAddress = email))
+        .withBody(CreateGuestAccountRequestBody.fromEmail(email))
     }
+  }
 }
 
-object IdentityClient extends StrictLogging {
 
+object IdentityClient extends StrictLogging {
   def fromIdentityConfig(config: IdentityConfig)(implicit ws: WSClient, pool: DefaultThreadPool): IdentityClient =
     new IdentityClient(config)
 
-  @JsonCodec case class CreateGuestAccountRequestBody(primaryEmailAddress: String)
+  @JsonCodec case class PublicFields(displayName: String)
+
+  @JsonCodec case class CreateGuestAccountRequestBody(primaryEmailAddress: String, publicFields: PublicFields)
 
   object CreateGuestAccountRequestBody {
+
+    def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
+    
+    def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(guestDisplayName(email)))
 
     implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
       transform = body => InMemoryBody(ByteString.fromString(body.asJson.noSpaces)),

@@ -1,13 +1,13 @@
 package services
 
 import anorm._
+import cats.data.EitherT
 import cats.syntax.applicativeError._
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.db.Database
 
 import scala.concurrent.Future
-
 import model.JdbcThreadPool
 import model.db.ContributionData
 
@@ -17,21 +17,27 @@ trait DatabaseService {
   // the return type is not modelled as an EitherT,
   // since the result of the insert has no dependencies.
   // See e.g. backend.StripeBackend for more context.
-  def insertContributionData(data: ContributionData): Future[Unit]
+  def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit]
+}
+
+object DatabaseService {
+  case class Error(message: String, err: Option[Throwable]) extends Exception {
+    override def getMessage: String = err.fold(message)(error => s"$message - ${error.getMessage}")
+  }
 }
 
 class PostgresDatabaseService private (database: Database)(implicit pool: JdbcThreadPool)
   extends DatabaseService with StrictLogging {
 
-  private def executeTransaction(insertStatement: SimpleSql[Row]): Future[Unit] =
+  private def executeTransaction(insertStatement: SimpleSql[Row]): EitherT[Future, DatabaseService.Error, Unit] =
     Future(database.withConnection { implicit conn => insertStatement.execute() })
       .attemptT
-      .fold(
-        err => logger.error("unable to insert contribution into database", err),
+      .bimap(
+        err => DatabaseService.Error("unable to insert contribution into database", Some(err)),
         _ => logger.info("contribution inserted into database")
       )
 
-  override def insertContributionData(data: ContributionData): Future[Unit] = {
+  override def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit] = {
 
     val transaction = SQL"""
       BEGIN;
@@ -87,7 +93,7 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
 }
 
 object PostgresDatabaseService {
-
   def fromDatabase(database: Database)(implicit pool: JdbcThreadPool): PostgresDatabaseService =
     new PostgresDatabaseService(database)
 }
+
