@@ -51,21 +51,15 @@ Mappings:
       MaxInstances: 2
       MinInstances: 1
       InstanceType: t2.small
-      # This is actually the certificate for contribute.code.dev-theguardian.com
-      # TODO: get our own certificate
-      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
-      # This is a key with alias support-workers-CODE
-      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+      # Certificate for payment.code.dev-guardianapis.com
+      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/b22661b3-379d-4ddb-a26c-5ca9888a0eb2
       SiteDomain: payment.code.dev-guardianapis.com.origin.membership.guardianapis.com
     PROD:
       MaxInstances: 6
       MinInstances: 3
       InstanceType: t2.small
-      # This is actually the certificate for contribute.code.dev-theguardian.com
-      # TODO: get our own certificate
-      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/87ae5be3-618f-450b-a0ce-fbdf673f9bed
-      # This is a key with alias support-workers-PROD
-      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+      # Certificate for payment.guardianapis.com
+      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/b2eb2e0f-6885-4fb0-a10a-15fb848f1f66
       SiteDomain: payment.guardianapis.com.origin.membership.guardianapis.com
 
 Resources:
