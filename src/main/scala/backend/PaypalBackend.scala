@@ -1,26 +1,34 @@
 package backend
 
-import backend.PaypalBackend.PaypalBackendError
+import cats.Semigroup
 import cats.data.EitherT
-import com.paypal.api.payments.Payment
-import conf.{ConfigLoader, IdentityConfig, OphanConfig, PaypalConfig}
-import model.db.ContributionData
-import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, ExecutePaypalPaymentData, PaypalApiError}
-import model._
-import services._
-import util.EnvironmentBasedBuilder
-import cats.implicits._
-import cats.kernel.Semigroup
+import cats.syntax.apply._
+import cats.syntax.either._
 import com.gu.acquisition.model.errors.OphanServiceError
+import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
-import model.acquisition.PaypalAcquisition
 import play.api.libs.ws.WSClient
 
-import scala.concurrent.Future
 import conf._
+import conf.ConfigLoader._
+import model._
+import model.acquisition.PaypalAcquisition
+import model.db.ContributionData
+import model.paypal._
+import services._
+import util.EnvironmentBasedBuilder
 
-class PaypalBackend(paypalService: PaypalService, databaseService: DatabaseService,
-  identityService: IdentityService, ophanService: OphanService, emailService: EmailService) extends StrictLogging {
+import scala.concurrent.Future
+
+class PaypalBackend(
+    paypalService: PaypalService,
+    databaseService: DatabaseService,
+    identityService: IdentityService,
+    ophanService: OphanService,
+    emailService: EmailService
+) extends StrictLogging {
+
+  import PaypalBackend._
 
   def combineResults(
     result1: EitherT[Future, PaypalBackendError, Unit],
@@ -119,20 +127,20 @@ object PaypalBackend {
 
     override def build(env: Environment): InitializationResult[PaypalBackend] = (
       configLoader
-        .configForEnvironment[PaypalConfig](env)
+        .loadConfig[Environment, PaypalConfig](env)
         .map(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
       databaseProvider
         .loadDatabase(env)
         .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
       configLoader
-        .configForEnvironment[IdentityConfig](env)
+        .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       configLoader
-      .configForEnvironment[OphanConfig](env)
-      .andThen(OphanService.fromOphanConfig(_)): InitializationResult[OphanService],
+        .loadConfig[Environment, OphanConfig](env)
+        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
       configLoader
-        .configForEnvironment[EmailConfig](env)
-        .andThen(EmailService.fromEmailConfig(_)): InitializationResult[EmailService]
+        .loadConfig[Environment, EmailConfig](env)
+        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService]
     ).mapN(PaypalBackend.apply)
   }
 
@@ -151,7 +159,8 @@ object PaypalBackend {
     final case class Ophan(error: OphanServiceError) extends PaypalBackendError
     final case class MultipleErrors(errors: List[PaypalBackendError]) extends PaypalBackendError
 
-    implicit val payPalBackendSemiGroup: Semigroup[PaypalBackendError] = Semigroup.instance((x,y) => MultipleErrors(List(x,y)))
+    implicit val payPalBackendSemiGroup: Semigroup[PaypalBackendError] =
+      Semigroup.instance((x,y) => MultipleErrors(List(x,y)))
 
     def fromIdentityError(err: IdentityClient.Error): PaypalBackendError = Service(err)
     def fromDatabaseError(err: DatabaseService.Error): PaypalBackendError= Database(err)

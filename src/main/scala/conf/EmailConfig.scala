@@ -2,7 +2,8 @@ package conf
 
 import cats.data.Validated
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import conf.ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreValidator, environmentShow}
+
+import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
 case class EmailConfig(queueName: String)
@@ -10,7 +11,7 @@ case class EmailConfig(queueName: String)
 
 object EmailConfig {
 
-  implicit val emailConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[EmailConfig] = new ParameterStoreLoadableByEnvironment[EmailConfig] {
+  implicit val emailConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, EmailConfig] = new ParameterStoreLoadable[Environment, EmailConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()

@@ -11,7 +11,7 @@ case class IdentityConfig(endpoint: String, accessToken: String)
 
 object IdentityConfig {
 
-  implicit val identityConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[IdentityConfig] = new ParameterStoreLoadableByEnvironment[IdentityConfig] {
+  implicit val identityConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, IdentityConfig] = new ParameterStoreLoadable[Environment, IdentityConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()

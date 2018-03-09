@@ -3,17 +3,17 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import conf.ConfigLoader._
-import model.{Environment, InitializationError}
 import play.api.Configuration
 
+import conf.ConfigLoader._
+import model.{Environment, InitializationError}
 
 // TODO: just use Play's DatabaseConfig case class instead?
 case class DBConfig(env: Environment, url: String, driver: String, username: String, password: String)
 
 object DBConfig {
 
-  implicit val dbConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[DBConfig] = new ParameterStoreLoadableByEnvironment[DBConfig] {
+  implicit val dbConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, DBConfig] = new ParameterStoreLoadable[Environment, DBConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()
@@ -33,7 +33,7 @@ object DBConfig {
     }
   }
 
-  implicit val dbConfigCovertibleToPlayConfig: PlayConfigEncoder[DBConfig] = new PlayConfigEncoder[DBConfig] {
+  implicit val dbConfigConvertibleToPlayConfig: PlayConfigEncoder[DBConfig] = new PlayConfigEncoder[DBConfig] {
     override def asPlayConfig(conf: DBConfig): Configuration = {
       Configuration(
         "db" -> Map(

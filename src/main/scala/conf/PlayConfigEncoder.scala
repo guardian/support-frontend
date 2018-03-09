@@ -1,43 +1,26 @@
 package conf
 
-import model.{InitializationError, RequestEnvironments}
+import cats.syntax.apply._
 import play.api.{Configuration, Mode}
 import simulacrum.typeclass
-import cats.syntax.apply._
-import ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreLoadableByPlayAppMode}
 
-import scala.reflect.ClassTag
-
+import conf.ConfigLoader._
+import model.{Environment, InitializationResult, RequestEnvironments}
 
 @typeclass trait PlayConfigEncoder[A] {
   def asPlayConfig(data: A): Configuration
 }
 
-class PlayConfigUpdater(configLoader: ConfigLoader, val configuration: Configuration) {
+class PlayConfigUpdater(configLoader: ConfigLoader) {
   import PlayConfigEncoder.ops._
 
-  // We need to load both configs here, since test/live mode can vary per request
-  def merge[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByEnvironment](envs: RequestEnvironments): PlayConfigUpdater = {
-
-    val newConfiguration =
-      (configLoader.configForEnvironment[A](envs.test), configLoader.configForEnvironment[A](envs.live))
-        .mapN((testConfig: A, liveConfig: A) =>
-          configuration ++ testConfig.asPlayConfig ++ liveConfig.asPlayConfig)
-        // Ok throwing an exception, since this method is called on the edge of the application
-        .valueOr(err => throw InitializationError("unable to update Play config", err))
-
-    new PlayConfigUpdater(configLoader, newConfiguration)
+  def updateConfiguration(configuration: Configuration, environments: RequestEnvironments, mode: Mode): InitializationResult[Configuration] = {
+    (
+      configLoader.loadConfig[Environment, DBConfig](environments.test),
+      configLoader.loadConfig[Environment, DBConfig](environments.live),
+      configLoader.loadConfig[Mode, AppConfig](mode)
+    ).mapN { (testDbConfig, liveDbConfig, appMode) =>
+      configuration ++ testDbConfig.asPlayConfig ++ liveDbConfig.asPlayConfig ++ appMode.asPlayConfig
+    }
   }
-
-  // We only need to load one config for that actual Play app mode,
-  // because the app cannot change mode between requests
-  def merge[A : ClassTag : PlayConfigEncoder : ParameterStoreLoadableByPlayAppMode](mode: Mode): PlayConfigUpdater = {
-
-    val newConfiguration = configLoader.configForPlayAppMode[A](mode)
-      .map(c => configuration ++ c.asPlayConfig)
-      .valueOr(err => throw InitializationError("unable to update Play config", err))
-
-    new PlayConfigUpdater(configLoader, newConfiguration)
-  }
-
 }

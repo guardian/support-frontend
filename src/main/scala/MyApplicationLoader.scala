@@ -12,7 +12,7 @@ import aws.AWSClientBuilder
 import backend.{PaypalBackend, StripeBackend}
 import _root_.controllers.{AppController, PaypalController, StripeController}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
-import conf.{AppConfig, ConfigLoader, DBConfig, PlayConfigUpdater}
+import conf.{ConfigLoader, PlayConfigUpdater}
 import services.DatabaseProvider
 
 class MyApplicationLoader extends ApplicationLoader {
@@ -39,15 +39,13 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
 
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
-
-  val playConfigUpdater = new PlayConfigUpdater(configLoader, super.configuration)
+  val playConfigUpdater = new PlayConfigUpdater(configLoader)
 
   // I guess it could be nice if a given config knew whether it was
   // request-environment-dependent or app-mode-dependent
   override val configuration: Configuration = playConfigUpdater
-    .merge[DBConfig](requestEnvironments)
-    .merge[AppConfig](environment.mode)
-    .configuration
+    .updateConfiguration(super.configuration, requestEnvironments, environment.mode)
+    .valueOr(throw _)
 
   val databaseProvider = new DatabaseProvider(dbApi)
 

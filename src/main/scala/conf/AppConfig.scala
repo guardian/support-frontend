@@ -2,15 +2,16 @@ package conf
 
 import cats.data.Validated
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
+import play.api.{Configuration, Mode}
+
 import conf.ConfigLoader._
 import model.InitializationError
-import play.api.{Configuration, Mode}
 
 case class AppConfig(secret: String)
 
-
 object AppConfig {
-  implicit val appConfigParameterStoreLoadable: ParameterStoreLoadableByPlayAppMode[AppConfig] = new ParameterStoreLoadableByPlayAppMode[AppConfig] {
+
+  implicit val appConfigParameterStoreLoadable: ParameterStoreLoadable[Mode, AppConfig] = new ParameterStoreLoadable[Mode, AppConfig] {
 
     override def parametersByPathRequest(mode: Mode): GetParametersByPathRequest =
       new GetParametersByPathRequest()
@@ -24,7 +25,7 @@ object AppConfig {
     }
   }
 
-  implicit val appConfigCovertibleToPlayConfig: PlayConfigEncoder[AppConfig] = new PlayConfigEncoder[AppConfig] {
+  implicit val appConfigConvertibleToPlayConfig: PlayConfigEncoder[AppConfig] = new PlayConfigEncoder[AppConfig] {
     override def asPlayConfig(conf: AppConfig): Configuration = {
       // I wonder if I can just do "play.http.secret.key"?
       Configuration(

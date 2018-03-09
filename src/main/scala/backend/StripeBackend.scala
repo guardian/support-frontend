@@ -1,19 +1,22 @@
 package backend
 
-import backend.StripeBackend.StripeBackendError
 import cats.data.EitherT
 import cats.syntax.apply._
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import util.EnvironmentBasedBuilder
-import cats.instances.future._
+
 import scala.concurrent.Future
+
+import backend.StripeBackend.StripeBackendError
 import conf.{ConfigLoader, IdentityConfig, StripeConfig}
+import conf.ConfigLoader._
 import model._
 import model.db.ContributionData
 import model.stripe.{StripeChargeData, StripeChargeError, StripeChargeSuccess}
 import services._
+import util.EnvironmentBasedBuilder
 
 // Provides methods required by the Stripe controller
 // TODO: include dependency on acquisition producer service
@@ -66,13 +69,13 @@ object StripeBackend {
 
     override def build(env: Environment): InitializationResult[StripeBackend] = (
       configLoader
-        .configForEnvironment[StripeConfig](env)
+        .loadConfig[Environment, StripeConfig](env)
         .map(StripeService.fromStripeConfig): InitializationResult[StripeService],
       databaseProvider
         .loadDatabase(env)
         .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
       configLoader
-        .configForEnvironment[IdentityConfig](env)
+        .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService]
     ).mapN(StripeBackend.apply)
   }

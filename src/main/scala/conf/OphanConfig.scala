@@ -2,14 +2,15 @@ package conf
 
 import cats.data.Validated
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import conf.ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreValidator, environmentShow}
+
+import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
 case class OphanConfig(ophanEndpoint: String)
 
 object OphanConfig {
 
-  implicit val ophanConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[OphanConfig] = new ParameterStoreLoadableByEnvironment[OphanConfig] {
+  implicit val ophanConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, OphanConfig] = new ParameterStoreLoadable[Environment, OphanConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()

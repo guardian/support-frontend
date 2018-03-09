@@ -3,7 +3,8 @@ package conf
 import cats.data.Validated
 import cats.syntax.apply._
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import conf.ConfigLoader.{ParameterStoreLoadableByEnvironment, ParameterStoreValidator, environmentShow}
+
+import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
 sealed trait StripeAccountConfig {
@@ -22,7 +23,7 @@ case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountC
 
 object StripeConfig {
 
-  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadableByEnvironment[StripeConfig] = new ParameterStoreLoadableByEnvironment[StripeConfig] {
+  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, StripeConfig] = new ParameterStoreLoadable[Environment, StripeConfig] {
 
     override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
       new GetParametersByPathRequest()
