@@ -57,7 +57,7 @@ function ContributionSelection(props: PropTypes) {
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
-          radios={getContributionTypeRadios(props.country)}
+          radios={getContributionTypeRadios(props.countryGroupId)}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
           countryGroupId={props.countryGroupId}
@@ -108,7 +108,7 @@ function CustomAmountInput(props: {
   onKeyPress: Object => void,
   currency: Currency,
   contributionType: ContributionType,
-  country: IsoCountry,
+  countryGroupId: CountryGroupId,
   error: ContributionError,
 }) {
 
@@ -122,14 +122,15 @@ function CustomAmountInput(props: {
         onKeyPress={props.onKeyPress}
         ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
         labelText={props.currency.glyph}
+        countryGroupId={props.countryGroupId}
       />
       <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
-        {getCustomAmountA11yHint(props.contributionType, props.country, props.currency)}
+        {getCustomAmountA11yHint(props.contributionType, props.countryGroupId)}
       </p>
       <Error
         error={props.error}
-        currency={props.currency}
         contributionType={props.contributionType}
+        countryGroupId={props.countryGroupId}
       />
     </div>
   );

@@ -57,7 +57,7 @@ type Toggle = {
 };
 
 type ContribAttrs = {
-  toggleAction: (string) => void,
+  toggleAction: (string, CountryGroupId) => void,
   checked: ?string,
   toggles: Toggle,
   selected: boolean,
@@ -524,6 +524,7 @@ export default function ContribAmounts(props: PropTypes) {
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
             labelText={props.currency.glyph}
+            countryGroupId={props.countryGroupId}
           />
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
             {contribOtherAmountAccessibilityHint}

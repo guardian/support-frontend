@@ -9,13 +9,12 @@ import {
   getOneOffName,
 } from 'helpers/contributions';
 import { spokenCurrencies } from 'helpers/internationalisation/currency';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
 
 // ----- Setup ----- //
 
@@ -116,7 +115,7 @@ function getAmountA11yHint(
 
 }
 
-function getContributionTypeRadios(country: IsoCountry) {
+function getContributionTypeRadios(countryGroupId: CountryGroupId) {
 
   return [
     {
@@ -126,8 +125,8 @@ function getContributionTypeRadios(country: IsoCountry) {
     },
     {
       value: 'ONE_OFF',
-      text: getOneOffName(country),
-      accessibilityHint: `Make a ${getOneOffSpokenName(country)} contribution`,
+      text: getOneOffName(countryGroupId),
+      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
     },
   ];
 
@@ -135,19 +134,19 @@ function getContributionTypeRadios(country: IsoCountry) {
 
 function getCustomAmountA11yHint(
   contributionType: ContributionType,
-  country: IsoCountry,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
 ): string {
 
-  let spokenCurrency = spokenCurrencies[currency.iso].plural;
+  const isoCurrency = countryGroups[countryGroupId].currency;
+  let spokenCurrency = spokenCurrencies[isoCurrency].plural;
 
   if (contributionType === 'ONE_OFF') {
-    spokenCurrency = spokenCurrencies[currency.iso].singular;
+    spokenCurrency = spokenCurrencies[isoCurrency].singular;
   }
 
-  return `Enter an amount of ${contributionConfig[contributionType].minInWords}
+  return `Enter an amount of ${contributionConfig[countryGroupId][contributionType].minInWords}
     ${spokenCurrency} or more for your 
-    ${getSpokenType(contributionType, country)} contribution.`;
+    ${getSpokenType(contributionType, countryGroupId)} contribution.`;
 
 }
 

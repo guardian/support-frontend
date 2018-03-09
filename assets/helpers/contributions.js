@@ -6,7 +6,6 @@ import { roundDp } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
@@ -212,12 +211,12 @@ function getContribKey(contrib: Contrib): string {
 
 }
 
-function getOneOffName(country: IsoCountry) {
-  return country === 'US' ? 'One-time' : 'One-off';
+function getOneOffName(countryGroupId: CountryGroupId) {
+  return countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
 }
 
-function getOneOffSpokenName(country: IsoCountry) {
-  return country === 'US' ? 'one time' : 'one off';
+function getOneOffSpokenName(countryGroupId: CountryGroupId) {
+  return countryGroupId === 'UnitedStates' ? 'one time' : 'one off';
 }
 
 function getContributionTypeClassName(contributionType: Contrib) {
@@ -234,11 +233,11 @@ function getContributionTypeClassName(contributionType: Contrib) {
 
 function getSpokenType(
   contributionType: Contrib,
-  country: IsoCountry,
+  countryGroupId: CountryGroupId,
 ) {
 
   if (contributionType === 'ONE_OFF') {
-    return getOneOffSpokenName(country);
+    return getOneOffSpokenName(countryGroupId);
   } else if (contributionType === 'MONTHLY') {
     return 'monthly';
   }

@@ -117,12 +117,12 @@ function getCustomAmountA11yHint(
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
 ): string {
-  const currency = countryGroups[countryGroupId];
+  const isoCurrency = countryGroups[countryGroupId].currency;
 
-  let spokenCurrency = spokenCurrencies[currency.iso].plural;
+  let spokenCurrency = spokenCurrencies[isoCurrency].plural;
 
   if (contributionType === 'ONE_OFF') {
-    spokenCurrency = spokenCurrencies[currency.iso].singular;
+    spokenCurrency = spokenCurrencies[isoCurrency].singular;
   }
 
   return `Enter an amount of ${contributionConfig[countryGroupId][contributionType].minInWords}

@@ -92,6 +92,7 @@ function ContributionSelection(props: PropTypes) {
           onKeyPress={clickSubstituteKeyPressHandler(() => {})}
           ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
           labelText={props.currency.glyph}
+          countryGroupId={props.countryGroupId}
         />
         <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">
           {getCustomAmountA11yHint(props.contributionType, props.countryGroupId)}
