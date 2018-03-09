@@ -122,28 +122,6 @@ Resources:
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
-  NoStateMachineExecutionsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      InsufficientDataActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      OKActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub No Recent State Machine Execution Attempts in ${Stage} (Monthly Contributions Sign-Ups)
-      AlarmDescription: The Monthly Contributions state machine has not been triggered for an extended period - has something broken?
-      MetricName: ExecutionsStarted
-      Namespace: AWS/States
-      Dimensions:
-        - Name: StateMachineArn
-          Value: !Ref MonthlyContributionsPROD
-      ComparisonOperator: LessThanThreshold
-      Threshold: 1
-      Period: 7200
-      EvaluationPeriods: 1
-      Statistic: Sum
-    DependsOn: MonthlyContributionsPROD
-
   ExecutionFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
