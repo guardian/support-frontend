@@ -26,7 +26,7 @@ import {
   getContributionTypeRadios,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
-} from './helpers';
+} from 'helpers/contributions';
 
 
 // ----- Props ----- //

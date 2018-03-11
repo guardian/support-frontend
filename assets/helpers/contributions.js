@@ -56,7 +56,7 @@ type Config = {
 
 // ----- Setup ----- //
 
-type validNumbers = '1' | '2' | '5' | '6' | '10' | '20' | '25' | '50' | '75' | '100' | '166' | '250' | '500' | '2000';
+type validNumbers = '1' | '2' | '5' | '6' | '7' | '10' | '15' | '20' | '25' | '30' | '50' | '75' | '100' | '166' | '250' | '500' | '2000';
 
 /* eslint-disable quote-props */
 const numbersInWords: {[validNumbers]: string} = {
@@ -64,9 +64,12 @@ const numbersInWords: {[validNumbers]: string} = {
   '2': 'two',
   '5': 'five',
   '6': 'six',
+  '7': 'seven',
   '10': 'ten',
+  '15': 'fifteen',
   '20': 'twenty',
   '25': 'twenty five',
+  '30': 'thirty',
   '50': 'fifty',
   '75': 'seventy five',
   '100': 'one hundred',
@@ -139,9 +142,9 @@ const defaultOneOffAmount = [
 ];
 
 const defaultMonthlyAmount = [
-  { value: '5', spoken: numbersInWords['5'] },
-  { value: '10', spoken: numbersInWords['10'] },
-  { value: '20', spoken: numbersInWords['20'] },
+  { value: '7', spoken: numbersInWords['7'] },
+  { value: '15', spoken: numbersInWords['15'] },
+  { value: '30', spoken: numbersInWords['30'] },
 ];
 
 const defaultAnnualAmount = [
@@ -164,9 +167,13 @@ const amounts = {
     International: [],
   },
   MONTHLY: {
-    GBPCountries: defaultMonthlyAmount,
     UnitedStates: defaultMonthlyAmount,
     AUDCountries: defaultMonthlyAmount,
+    GBPCountries: [
+      { value: '2', spoken: numbersInWords['2'] },
+      { value: '5', spoken: numbersInWords['5'] },
+      { value: '10', spoken: numbersInWords['10'] },
+    ],
     EURCountries: [
       { value: '6', spoken: numbersInWords['6'] },
       { value: '10', spoken: numbersInWords['10'] },
@@ -182,7 +189,6 @@ const amounts = {
     International: [],
   },
 };
-
 
 // ----- Functions ----- //
 
@@ -333,8 +339,8 @@ function getCustomAmountA11yHint(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
 ): string {
-  const isoCurrency = countryGroups[countryGroupId].currency;
 
+  const isoCurrency = countryGroups[countryGroupId].currency;
   let spokenCurrency = spokenCurrencies[isoCurrency].plural;
 
   if (contributionType === 'ONE_OFF') {
@@ -346,6 +352,58 @@ function getCustomAmountA11yHint(
     ${getSpokenType(contributionType, countryGroupId)} contribution.`;
 
 }
+
+function getAmountA11yHint(
+  contributionType: Contrib,
+  currency: Currency,
+  spokenAmount: string,
+): string {
+
+  const spokenCurrency = spokenCurrencies[currency.iso].plural;
+
+  if (contributionType === 'ONE_OFF') {
+    return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
+  } else if (contributionType === 'MONTHLY') {
+    return `contribute ${spokenAmount} ${spokenCurrency} per month`;
+  }
+
+  return `contribute ${spokenAmount} ${spokenCurrency} annually`;
+
+}
+
+
+function getContributionTypeRadios(countryGroupId: CountryGroupId) {
+
+  return [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: getOneOffName(countryGroupId),
+      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    },
+  ];
+
+}
+
+
+function getContributionAmountRadios(
+  contributionType: Contrib,
+  currency: Currency,
+  countryGroupId: CountryGroupId,
+): Radio[] {
+
+  return amounts[contributionType][countryGroupId].map(amount => ({
+    value: amount.value,
+    text: `${currency.glyph}${amount.value}`,
+    accessibilityHint: getAmountA11yHint(contributionType, currency, amount.spoken),
+  }));
+
+}
+
 
 function getContributionAmounts(
   contributionType: Contrib,
@@ -406,8 +464,10 @@ export {
   getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
-  getCustomAmountA11yHint,
   getContributionAmounts,
   getClassName,
   getContributionTypes,
+  getCustomAmountA11yHint,
+  getContributionTypeRadios,
+  getContributionAmountRadios,
 };
