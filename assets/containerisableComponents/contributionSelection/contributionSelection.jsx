@@ -103,7 +103,7 @@ function Error(props: {
 }
 
 function CustomAmountInput(props: {
-  setCustomAmount: string => void,
+  setCustomAmount: (string, CountryGroupId) => void,
   isCustomAmount: boolean,
   onKeyPress: Object => void,
   currency: Currency,
