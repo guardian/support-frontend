@@ -56,10 +56,8 @@ type Config = {
 
 // ----- Setup ----- //
 
-type validNumbers = '1' | '2' | '5' | '6' | '7' | '10' | '15' | '20' | '25' | '30' | '50' | '75' | '100' | '166' | '250' | '500' | '2000';
-
 /* eslint-disable quote-props */
-const numbersInWords: {[validNumbers]: string} = {
+const numbersInWords = {
   '1': 'one',
   '2': 'two',
   '5': 'five',
@@ -79,6 +77,8 @@ const numbersInWords: {[validNumbers]: string} = {
   '2000': 'two thousand',
 };
 /* eslint-enable  quote-props */
+
+type validNumbers = $Keys<typeof numbersInWords>;
 
 const defaultConfig: Config = {
   ANNUAL: {
