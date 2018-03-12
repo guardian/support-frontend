@@ -9,13 +9,11 @@ import io.circe.{Decoder, Encoder}
 import play.api.http.{MimeTypes, Writeable}
 import play.api.libs.circe.Circe
 import play.api.mvc.{Result, Results}
-import model.{AcquisitionData, IdentityData, ResultBody}
+import model.{AcquisitionData, ResultBody}
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 
 object JsonReadableOps {
-  implicit val identityDataDecoder: Decoder[IdentityData] =
-    deriveDecoder[IdentityData]
   implicit val componentTypeDecoder: Decoder[ComponentType] =
     decodeThriftEnum[ComponentType]
   implicit val acquisitionSourceDecoder: Decoder[AcquisitionSource] =

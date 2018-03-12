@@ -4,7 +4,6 @@ import io.circe.generic.JsonCodec
 import model.{AcquisitionData, Currency}
 import io.circe.Decoder
 import io.circe.generic.semiauto._
-import model.IdentityData
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 
@@ -31,7 +30,6 @@ object PaypalJsonDecoder {
       componentType <- downField("componentType").as[Option[ComponentType]]
       source <- downField("source").as[Option[AcquisitionSource]]
       identityId <- downField("idUser").as[Option[String]]
-      email <- downField("email").as[Option[String]]
       abTest <- downField("abTest").as[Option[AbTest]]
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
@@ -54,10 +52,6 @@ object PaypalJsonDecoder {
           abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
             .getOrElse(Set[AbTest]()))
             .filter(_.nonEmpty)
-        ),
-        identityData = IdentityData(
-          identityId = identityId,
-          email = email
         )
       )
     }
@@ -87,8 +81,7 @@ object PaypalJsonDecoder {
 
 case class CapturePaypalPaymentData(
   paymentData: CapturePaymentData,
-  acquisitionData: AcquisitionData,
-  identityData: IdentityData
+  acquisitionData: AcquisitionData
 )
 
 @JsonCodec case class ExecutePaymentData(
@@ -98,6 +91,5 @@ case class CapturePaypalPaymentData(
 
 case class ExecutePaypalPaymentData(
   paymentData: ExecutePaymentData,
-  acquisitionData: AcquisitionData,
-  identityData: IdentityData
+  acquisitionData: AcquisitionData
 )

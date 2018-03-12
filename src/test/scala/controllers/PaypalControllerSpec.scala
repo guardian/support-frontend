@@ -208,7 +208,6 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |  "componentType": "AcquisitionsEditorialLink",
             |  "source": "GuardianWeb",
             |  "idUser": "idUser",
-            |  "email": "email",
             |  "abTest": {
             |    "name":"abTest-checkout",
             |    "variant":"abTest-stripe"
@@ -285,10 +284,6 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |    "componentId": "componentId",
             |    "componentType": "AcquisitionsOther",
             |    "source": "GuardianWeb"
-            |  },
-            |  "identityData": {
-            |    "identityId": "identityId",
-            |    "email": "email"
             |  }
             |}
           """.stripMargin))
@@ -426,17 +421,13 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |  },
             |  "acquisitionData": {
             |    "browserId": "ophanBrowserId",
-            |     "platform": "android",
-            |     "pageviewId": "ophanPageviewId",
-            |     "referrerPageviewId": "refererPageviewId",
-            |     "referrerUrl": "refererUrl",
-            |     "componentId": "componentId",
-            |     "componentType": "AcquisitionsOther",
-            |     "source": "GuardianWeb"
-            |  },
-            |  "identityData": {
-            |    "identityId": "identityId",
-            |    "email": "email"
+            |    "platform": "android",
+            |    "pageviewId": "ophanPageviewId",
+            |    "referrerPageviewId": "refererPageviewId",
+            |    "referrerUrl": "refererUrl",
+            |    "componentId": "componentId",
+            |    "componentType": "AcquisitionsOther",
+            |    "source": "GuardianWeb"
             |  }
             |}
           """.stripMargin))
@@ -489,17 +480,13 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |  },
             |  "acquisitionData": {
             |    "browserId": "ophanBrowserId",
-            |     "platform": "android",
-            |     "pageviewId": "ophanPageviewId",
-            |     "referrerPageviewId": "refererPageviewId",
-            |     "referrerUrl": "refererUrl",
-            |     "componentId": "componentId",
-            |     "componentType": "AcquisitionsOther",
-            |     "source": "GuardianWeb"
-            |  },
-            |  "identityData": {
-            |    "identityId": "identityId",
-            |    "email": "email"
+            |    "platform": "android",
+            |    "pageviewId": "ophanPageviewId",
+            |    "referrerPageviewId": "refererPageviewId",
+            |    "referrerUrl": "refererUrl",
+            |    "componentId": "componentId",
+            |    "componentType": "AcquisitionsOther",
+            |    "source": "GuardianWeb"
             |  }
             |}
           """.stripMargin))

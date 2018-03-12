@@ -30,8 +30,8 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     Map[String, AnyRef](
       "amount" -> new Integer(data.paymentData.amount),
       "currency" -> data.paymentData.currency.entryName,
-      "source" -> data.paymentData.source,
-      "receipt_email" -> data.identityData.email
+      "source" -> data.paymentData.token,
+      "receipt_email" -> data.paymentData.email
     ).asJava
 
   def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge] =
