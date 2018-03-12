@@ -287,11 +287,11 @@ Resources:
     Type: "AWS::Logs::MetricFilter"
     Properties:
       LogGroupName: !Sub support-frontend-${Stage}
-    FilterPattern: "Regular contributions state machine is not available"
-    MetricTransformations:
-     MetricNamespace: !Sub support-frontend-${Stage}
-      MetricName: state-machine-unavailable
-      MetricValue: 1
+      FilterPattern: "Regular contributions state machine is not available"
+      MetricTransformations:
+        MetricNamespace: !Sub support-frontend-${Stage}
+        MetricName: state-machine-unavailable
+        MetricValue: 1
 
   StateMachineUnavailableAlarm:
     Type: AWS::CloudWatch::Alarm
