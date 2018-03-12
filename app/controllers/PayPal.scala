@@ -15,7 +15,6 @@ import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
 import services.{ContributionsFrontendService, PayPalService, TestUserService}
 import services.ContributionsFrontendService.Email
 import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class PayPal(
     actionBuilders: CustomActionBuilders,

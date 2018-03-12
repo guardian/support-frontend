@@ -9,7 +9,6 @@ import services.paypal.PayPalBillingDetails.codec
 import services.{GoCardlessServiceProvider, TestUserService}
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class DirectDebit(
     actionBuilders: CustomActionBuilders,

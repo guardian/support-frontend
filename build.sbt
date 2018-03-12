@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.4"
 
 import scala.sys.process._
 
@@ -48,7 +48,7 @@ lazy val root = (project in file("."))
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
 )
 
-val circeVersion = "0.8.0"
+val circeVersion = "0.9.1"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
@@ -63,8 +63,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
   "org.typelevel" %% "cats" % "0.9.0",
   "com.dripower" %% "play-circe" % "2608.5",
-  "com.gu" %% "support-models" % "0.22",
-  "com.gu" %% "support-config" % "0.12",
+  "com.gu" %% "support-models" % "0.23",
+  "com.gu" %% "support-config" % "0.16",
   "com.gu" %% "fezziwig" % "0.7",
   "com.typesafe.akka" %% "akka-agent" % "2.5.6",
   "com.gu" %% "support-internationalisation" % "0.9",
@@ -73,11 +73,11 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-play-auth" % "2.1",
+  "com.gu.identity" %% "identity-play-auth" % "2.4",
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "23.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
-  "com.gu" %% "play-googleauth" % "0.7.0",
+  "com.gu" %% "play-googleauth" % "0.7.1",
   "io.github.bonigarcia" % "webdrivermanager" % "2.1.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
