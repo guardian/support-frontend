@@ -38,9 +38,9 @@ type PropTypes = {
   contributionType: ContributionType,
   selectedAmount: number,
   isCustomAmount: boolean,
-  setContributionType: string => void,
+  setContributionType: (string, CountryGroupId) => void,
   setAmount: string => void,
-  setCustomAmount: string => void,
+  setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
 };
