@@ -5,13 +5,15 @@
 import React from 'react';
 
 import { generateClassName } from 'helpers/utilities';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
-  onFocus: (string) => void,
-  onInput: (string) => void,
+  onFocus: (string, CountryGroupId) => void,
+  onInput: (string, CountryGroupId) => void,
+  countryGroupId: CountryGroupId,
   selected: ?boolean,
   placeholder: ?string,
   onKeyPress: ?(event: Object) => void,
@@ -46,8 +48,8 @@ export default function NumberInput(props: PropTypes) {
         className="component-number-input__input"
         type="number"
         placeholder={props.placeholder}
-        onFocus={e => props.onFocus(e.target.value || '')}
-        onInput={e => props.onInput(e.target.value || '')}
+        onFocus={e => props.onFocus(e.target.value || '', props.countryGroupId)}
+        onInput={e => props.onInput(e.target.value || '', props.countryGroupId)}
         onKeyPress={props.onKeyPress}
         aria-describedby={props.ariaDescribedBy}
       />

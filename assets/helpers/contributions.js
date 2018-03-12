@@ -3,10 +3,13 @@
 // ----- Imports ----- //
 
 import { roundDp } from 'helpers/utilities';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
+import { spokenCurrencies } from 'helpers/internationalisation/currency';
 
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-
 
 // ----- Types ----- //
 
@@ -53,61 +56,172 @@ type Config = {
 
 // ----- Setup ----- //
 
-const config: Config = {
+/* eslint-disable quote-props */
+const numbersInWords = {
+  '1': 'one',
+  '2': 'two',
+  '5': 'five',
+  '6': 'six',
+  '7': 'seven',
+  '10': 'ten',
+  '15': 'fifteen',
+  '20': 'twenty',
+  '25': 'twenty five',
+  '30': 'thirty',
+  '50': 'fifty',
+  '75': 'seventy five',
+  '100': 'one hundred',
+  '166': 'one hundred and sixty six',
+  '250': 'two hundred and fifty',
+  '500': 'five hundred',
+  '2000': 'two thousand',
+};
+/* eslint-enable  quote-props */
+
+const defaultConfig: Config = {
   ANNUAL: {
     min: 50,
-    minInWords: 'fifty',
+    minInWords: numbersInWords['50'],
     max: 2000,
-    maxInWords: 'two thousand',
+    maxInWords: numbersInWords['2000'],
     default: 75,
   },
   MONTHLY: {
     min: 2,
-    minInWords: 'two',
+    minInWords: numbersInWords['2'],
     max: 166,
-    maxInWords: 'one hundred and sixty six',
+    maxInWords: numbersInWords['166'],
     default: 10,
   },
   ONE_OFF: {
     min: 1,
-    minInWords: 'one',
+    minInWords: numbersInWords['1'],
     max: 2000,
-    maxInWords: 'two thousand',
+    maxInWords: numbersInWords['2000'],
     default: 50,
   },
 };
 
+const config: { [CountryGroupId]: Config } = {
+  AUDCountries: {
+    ANNUAL: {
+      min: 50,
+      minInWords: numbersInWords['50'],
+      max: 2000,
+      maxInWords: numbersInWords['2000'],
+      default: 75,
+    },
+    MONTHLY: {
+      min: 5,
+      minInWords: numbersInWords['5'],
+      max: 166,
+      maxInWords: numbersInWords['166'],
+      default: 10,
+    },
+    ONE_OFF: {
+      min: 1,
+      minInWords: numbersInWords['1'],
+      max: 2000,
+      maxInWords: numbersInWords['2000'],
+      default: 50,
+    },
+  },
+  GBPCountries: defaultConfig,
+  EURCountries: defaultConfig,
+  UnitedStates: defaultConfig,
+  International: defaultConfig,
+};
+
+const defaultOneOffAmount = [
+  { value: '25', spoken: numbersInWords['25'] },
+  { value: '50', spoken: numbersInWords['50'] },
+  { value: '100', spoken: numbersInWords['100'] },
+  { value: '250', spoken: numbersInWords['250'] },
+];
+
+const defaultMonthlyAmount = [
+  { value: '7', spoken: numbersInWords['7'] },
+  { value: '15', spoken: numbersInWords['15'] },
+  { value: '30', spoken: numbersInWords['30'] },
+];
+
+const defaultAnnualAmount = [
+  { value: '50', spoken: numbersInWords['50'] },
+  { value: '75', spoken: numbersInWords['75'] },
+  { value: '100', spoken: numbersInWords['100'] },
+];
+
+const amounts = {
+  ONE_OFF: {
+    GBPCountries: defaultOneOffAmount,
+    UnitedStates: defaultOneOffAmount,
+    EURCountries: defaultOneOffAmount,
+    AUDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
+    International: [],
+  },
+  MONTHLY: {
+    UnitedStates: defaultMonthlyAmount,
+    AUDCountries: defaultMonthlyAmount,
+    GBPCountries: [
+      { value: '2', spoken: numbersInWords['2'] },
+      { value: '5', spoken: numbersInWords['5'] },
+      { value: '10', spoken: numbersInWords['10'] },
+    ],
+    EURCountries: [
+      { value: '6', spoken: numbersInWords['6'] },
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+    ],
+    International: [],
+  },
+  ANNUAL: {
+    GBPCountries: defaultAnnualAmount,
+    UnitedStates: defaultAnnualAmount,
+    AUDCountries: defaultAnnualAmount,
+    EURCountries: defaultAnnualAmount,
+    International: [],
+  },
+};
 
 // ----- Functions ----- //
 
-function parse(input: ?string, contrib: Contrib): ParsedContrib {
+function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
 
   let error = null;
   const numericAmount = Number(input);
 
   if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
-  } else if (numericAmount < config[contrib].min) {
+  } else if (numericAmount < config[countryGroupId][contrib].min) {
     error = 'tooLittle';
-  } else if (numericAmount > config[contrib].max) {
+  } else if (numericAmount > config[countryGroupId][contrib].max) {
     error = 'tooMuch';
   }
 
-  const amount = error ? config[contrib].default : roundDp(numericAmount);
+  const amount = error ? config[countryGroupId][contrib].default : roundDp(numericAmount);
 
   return { error, amount };
 
 }
 
-function circlesParse(input: string, contributionType: Contrib): ParsedAmount {
+function circlesParse(
+  input: string,
+  contributionType: Contrib,
+  countryGroupId: CountryGroupId,
+): ParsedAmount {
 
   const customAmount = Number(input);
 
   if (input === '' || Number.isNaN(customAmount)) {
     return { error: 'invalidEntry', customAmount: null };
-  } else if (customAmount < config[contributionType].min) {
+  } else if (customAmount < config[countryGroupId][contributionType].min) {
     return { error: 'tooLittle', customAmount };
-  } else if (customAmount > config[contributionType].max) {
+  } else if (customAmount > config[countryGroupId][contributionType].max) {
     return { error: 'tooMuch', customAmount };
   }
 
@@ -133,12 +247,13 @@ function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
 
 function errorMessage(
   error: ContribError,
-  currency: Currency,
   contributionType: Contrib,
+  countryGroupId: CountryGroupId,
 ): ?string {
 
-  const minContrib = config[contributionType].min;
-  const maxContrib = config[contributionType].max;
+  const minContrib = config[countryGroupId][contributionType].min;
+  const maxContrib = config[countryGroupId][contributionType].max;
+  const currency = currencies[countryGroups[countryGroupId].currency];
 
   switch (error) {
     case 'tooLittle':
@@ -163,12 +278,12 @@ function getContribKey(contrib: Contrib): string {
 
 }
 
-function getOneOffName(country: IsoCountry) {
-  return country === 'US' ? 'One-time' : 'One-off';
+function getOneOffName(countryGroupId: CountryGroupId) {
+  return countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
 }
 
-function getOneOffSpokenName(country: IsoCountry) {
-  return country === 'US' ? 'one time' : 'one off';
+function getOneOffSpokenName(countryGroupId: CountryGroupId) {
+  return countryGroupId === 'UnitedStates' ? 'one time' : 'one off';
 }
 
 function getContributionTypeClassName(contributionType: Contrib) {
@@ -185,11 +300,11 @@ function getContributionTypeClassName(contributionType: Contrib) {
 
 function getSpokenType(
   contributionType: Contrib,
-  country: IsoCountry,
+  countryGroupId: CountryGroupId,
 ) {
 
   if (contributionType === 'ONE_OFF') {
-    return getOneOffSpokenName(country);
+    return getOneOffSpokenName(countryGroupId);
   } else if (contributionType === 'MONTHLY') {
     return 'monthly';
   }
@@ -198,6 +313,140 @@ function getSpokenType(
 
 }
 
+/* ------- contributionAmounts functions -----*/
+
+function getA11yHint(
+  contributionType: Contrib,
+  currency: Currency,
+  spokenAmount: string,
+): string {
+
+  const spokenCurrency = spokenCurrencies[currency.iso].plural;
+
+  if (contributionType === 'ONE_OFF') {
+    return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
+  } else if (contributionType === 'MONTHLY') {
+    return `contribute ${spokenAmount} ${spokenCurrency} per month`;
+  }
+
+  return `contribute ${spokenAmount} ${spokenCurrency} annually`;
+
+}
+
+function getCustomAmountA11yHint(
+  contributionType: Contrib,
+  countryGroupId: CountryGroupId,
+): string {
+
+  const isoCurrency = countryGroups[countryGroupId].currency;
+  let spokenCurrency = spokenCurrencies[isoCurrency].plural;
+
+  if (contributionType === 'ONE_OFF') {
+    spokenCurrency = spokenCurrencies[isoCurrency].singular;
+  }
+
+  return `Enter an amount of ${config[countryGroupId][contributionType].minInWords}
+    ${spokenCurrency} or more for your 
+    ${getSpokenType(contributionType, countryGroupId)} contribution.`;
+
+}
+
+function getAmountA11yHint(
+  contributionType: Contrib,
+  currency: Currency,
+  spokenAmount: string,
+): string {
+
+  const spokenCurrency = spokenCurrencies[currency.iso].plural;
+
+  if (contributionType === 'ONE_OFF') {
+    return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
+  } else if (contributionType === 'MONTHLY') {
+    return `contribute ${spokenAmount} ${spokenCurrency} per month`;
+  }
+
+  return `contribute ${spokenAmount} ${spokenCurrency} annually`;
+
+}
+
+
+function getContributionTypeRadios(countryGroupId: CountryGroupId) {
+
+  return [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: getOneOffName(countryGroupId),
+      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    },
+  ];
+
+}
+
+
+function getContributionAmountRadios(
+  contributionType: Contrib,
+  currency: Currency,
+  countryGroupId: CountryGroupId,
+): Radio[] {
+
+  return amounts[contributionType][countryGroupId].map(amount => ({
+    value: amount.value,
+    text: `${currency.glyph}${amount.value}`,
+    accessibilityHint: getAmountA11yHint(contributionType, currency, amount.spoken),
+  }));
+
+}
+
+
+function getContributionAmounts(
+  contributionType: Contrib,
+  currency: Currency,
+  countryGroupId: CountryGroupId,
+): Radio[] {
+
+  return amounts[contributionType][countryGroupId].map(amount => ({
+    value: amount.value,
+    text: `${currency.glyph}${amount.value}`,
+    accessibilityHint: getA11yHint(contributionType, currency, amount.spoken),
+  }));
+}
+
+
+/* ------ getContributionsType Functions -----*/
+
+function getClassName(contributionType: Contrib) {
+
+  if (contributionType === 'ONE_OFF') {
+    return 'one-off';
+  } else if (contributionType === 'MONTHLY') {
+    return 'monthly';
+  }
+
+  return 'annual';
+
+}
+
+function getContributionTypes(countryGroupId: CountryGroupId) {
+
+  return [
+    {
+      value: 'MONTHLY',
+      text: 'Monthly',
+      accessibilityHint: 'Make a regular monthly contribution',
+    },
+    {
+      value: 'ONE_OFF',
+      text: getOneOffName(countryGroupId),
+      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    },
+  ];
+
+}
 
 // ----- Exports ----- //
 
@@ -213,4 +462,10 @@ export {
   getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
+  getContributionAmounts,
+  getClassName,
+  getContributionTypes,
+  getCustomAmountA11yHint,
+  getContributionTypeRadios,
+  getContributionAmountRadios,
 };

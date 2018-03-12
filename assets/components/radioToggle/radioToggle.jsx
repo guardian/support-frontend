@@ -6,6 +6,7 @@ import React from 'react';
 import uuidv4 from 'uuid';
 
 import { generateClassName } from 'helpers/utilities';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -24,9 +25,10 @@ type PropTypes = {
   name: string,
   radios: Radio[],
   checked: ?string,
-  toggleAction: (string) => void,
+  toggleAction: (string, CountryGroupId) => void,
   modifierClass?: ?string,
   accessibilityHint?: ?string,
+  countryGroupId: CountryGroupId,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -58,7 +60,7 @@ function getRadioButtons(props: PropTypes) {
           name={props.name}
           value={radio.value}
           id={radioId}
-          onChange={() => props.toggleAction(radio.value)}
+          onChange={() => props.toggleAction(radio.value, props.countryGroupId)}
           checked={radioChecked}
           tabIndex="0"
           aria-describedby={a11yHintId}

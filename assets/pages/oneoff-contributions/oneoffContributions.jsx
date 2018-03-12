@@ -35,10 +35,11 @@ import { setPayPalButton } from './oneoffContributionsActions';
 
 // ----- Page Startup ----- //
 
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF').amount;
 const countryGroup = detectCountryGroup();
 const country = detectCountry();
 const currency = detectCurrency(countryGroup);
+
+const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF', countryGroup).amount;
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -57,10 +57,10 @@ type PropTypes = {
   abTests: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   payPalError: string,
-  changeContributionType: string => void,
-  changeContributionAmountAnnual: string => void,
-  changeContributionAmountMonthly: string => void,
-  changeContributionAmountOneOff: string => void,
+  changeContributionType: (string, CountryGroupId) => void,
+  changeContributionAmountAnnual: (string, CountryGroupId) => void,
+  changeContributionAmountMonthly: (string, CountryGroupId) => void,
+  changeContributionAmountOneOff: (string, CountryGroupId) => void,
   setContributionCustomAmount: string => void,
   setPayPalError: string => void,
 };
@@ -88,20 +88,23 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    changeContributionType: (contributionType: ContributionType) => {
-      dispatch(changeContribType(contributionType));
+    changeContributionType: (
+      contributionType: ContributionType,
+      countryGroupId: CountryGroupId,
+    ) => {
+      dispatch(changeContribType(contributionType, countryGroupId));
     },
-    changeContributionAmountAnnual: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    changeContributionAmountAnnual: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }, countryGroupId));
     },
-    changeContributionAmountMonthly: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    changeContributionAmountMonthly: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }, countryGroupId));
     },
-    changeContributionAmountOneOff: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    changeContributionAmountOneOff: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }, countryGroupId));
     },
-    setContributionCustomAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
+    setContributionCustomAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmount({ value, userDefined: true }, countryGroupId));
     },
     setPayPalError: (error: string) => {
       dispatch(setPayPalError(error));

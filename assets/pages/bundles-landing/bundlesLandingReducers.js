@@ -70,7 +70,7 @@ function contributionReducer(
 
       return Object.assign({}, state, {
         type: action.contribType,
-        error: parseContribution(amount, action.contribType).error,
+        error: parseContribution(amount, action.contribType, action.countryGroupId).error,
       });
 
     }
@@ -79,7 +79,7 @@ function contributionReducer(
 
       return Object.assign({}, state, {
         amount: { annual: action.amount, monthly: action.amount, oneOff: action.amount },
-        error: parseContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type, action.countryGroupId).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ANNUAL':
@@ -90,7 +90,7 @@ function contributionReducer(
           monthly: state.amount.monthly,
           oneOff: state.amount.oneOff,
         },
-        error: parseContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type, action.countryGroupId).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_MONTHLY':
@@ -101,7 +101,7 @@ function contributionReducer(
           monthly: action.amount,
           oneOff: state.amount.oneOff,
         },
-        error: parseContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type, action.countryGroupId).error,
       });
 
     case 'CHANGE_CONTRIB_AMOUNT_ONEOFF':
@@ -112,7 +112,7 @@ function contributionReducer(
           monthly: state.amount.monthly,
           oneOff: action.amount,
         },
-        error: parseContribution(action.amount.value, state.type).error,
+        error: parseContribution(action.amount.value, state.type, action.countryGroupId).error,
       });
 
     case 'SET_PAYPAL_ERROR':

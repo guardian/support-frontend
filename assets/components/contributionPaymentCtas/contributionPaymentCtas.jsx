@@ -22,6 +22,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Contrib as ContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -31,6 +32,7 @@ type PropTypes = {
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   country: IsoCountry,
+  countryGroupId: CountryGroupId,
   currency: Currency,
   isDisabled: boolean,
   PayPalButton: Class<React$Component<*>>,
@@ -93,14 +95,14 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 // Build the one-off payment button.
 function OneOffCta(props: {
   contributionType: ContributionType,
-  country: IsoCountry,
+  countryGroupId: CountryGroupId,
   amount: number,
   currency: Currency,
   isDisabled: boolean,
   resetError: void => void,
 }): Node {
 
-  const spokenType = getOneOffSpokenName(props.country);
+  const spokenType = getOneOffSpokenName(props.countryGroupId);
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
@@ -122,14 +124,14 @@ function OneOffCta(props: {
 // Build the regular payment button.
 function RegularCta(props: {
   contributionType: ContributionType,
-  country: IsoCountry,
+  countryGroupId: CountryGroupId,
   amount: number,
   currency: Currency,
   isDisabled: boolean,
   resetError: void => void,
 }): Node {
 
-  const spokenType = getSpokenType(props.contributionType, props.country);
+  const spokenType = getSpokenType(props.contributionType, props.countryGroupId);
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,

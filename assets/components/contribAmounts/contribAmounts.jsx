@@ -30,11 +30,11 @@ type PropTypes = {
   contribAmount: Amounts,
   contribType: Contrib,
   contribError: ?ContribError,
-  changeContribAnnualAmount: (string) => void,
-  changeContribMonthlyAmount: (string) => void,
-  changeContribOneOffAmount: (string) => void,
-  changeContribAmount: (string) => void,
-  toggleContribType: (string) => void,
+  changeContribAnnualAmount: (string, CountryGroupId) => void,
+  changeContribMonthlyAmount: (string, CountryGroupId) => void,
+  changeContribOneOffAmount: (string, CountryGroupId) => void,
+  changeContribAmount: (string, CountryGroupId) => void,
+  toggleContribType: (string, CountryGroupId) => void,
   onNumberInputKeyPress: () => void,
   countryGroupId: CountryGroupId,
   isoCountry: IsoCountry,
@@ -57,7 +57,7 @@ type Toggle = {
 };
 
 type ContribAttrs = {
-  toggleAction: (string) => void,
+  toggleAction: (string, CountryGroupId) => void,
   checked: ?string,
   toggles: Toggle,
   selected: boolean,
@@ -409,12 +409,12 @@ function contribToggle(countryGroupId: CountryGroupId = 'GBPCountries', showAnnu
 function errorMessage(
   error: ?ContribError,
   contribType: Contrib,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
 ): ?React$Element<any> {
 
   if (error) {
 
-    const message = contributionErrorMessage(error, currency, contribType);
+    const message = contributionErrorMessage(error, contribType, countryGroupId);
     return <p className="component-contrib-amounts__error-message">{message}</p>;
 
   }
@@ -504,6 +504,7 @@ export default function ContribAmounts(props: PropTypes) {
           toggleAction={props.toggleContribType}
           checked={props.contribType}
           modifierClass={radioModifier}
+          countryGroupId={props.countryGroupId}
         />
       </div>
       <div className={className}>
@@ -512,6 +513,7 @@ export default function ContribAmounts(props: PropTypes) {
           toggleAction={attrs.toggleAction}
           checked={attrs.checked}
           modifierClass={radioModifier}
+          countryGroupId={props.countryGroupId}
         />
         <div className="component-contrib-amounts__other-amount">
           <NumberInput
@@ -522,12 +524,13 @@ export default function ContribAmounts(props: PropTypes) {
             onKeyPress={clickSubstituteKeyPressHandler(props.onNumberInputKeyPress)}
             ariaDescribedBy={contribOtherAmountAccessibilityHintId}
             labelText={props.currency.glyph}
+            countryGroupId={props.countryGroupId}
           />
           <p className="accessibility-hint" id={contribOtherAmountAccessibilityHintId}>
             {contribOtherAmountAccessibilityHint}
           </p>
         </div>
-        {errorMessage(props.contribError, attrs.contribType, props.currency)}
+        {errorMessage(props.contribError, attrs.contribType, props.countryGroupId)}
       </div>
     </div>
   );

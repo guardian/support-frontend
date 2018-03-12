@@ -27,6 +27,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
       contribType,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -43,6 +44,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
       contribType,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -59,6 +61,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
       contribType,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -78,6 +81,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT',
       amount,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -98,6 +102,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT_MONTHLY',
       amount,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -118,6 +123,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT_ANNUAL',
       amount,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
@@ -138,6 +144,7 @@ describe('reducer tests', () => {
     const action = {
       type: 'CHANGE_CONTRIB_AMOUNT_ONEOFF',
       amount,
+      countryGroupId: 'GBPCountries',
     };
 
     const newState = reducer(undefined, action);
