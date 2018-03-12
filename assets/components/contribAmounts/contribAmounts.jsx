@@ -180,19 +180,19 @@ const amountRadiosMonthly: {
   ],
   AUDCountries: [
     {
-      value: '7',
-      text: '$7',
-      accessibilityHint: 'contribute seven dollars per month',
+      value: '10',
+      text: '$10',
+      accessibilityHint: 'contribute ten dollars per month',
     },
     {
-      value: '15',
-      text: '$15',
-      accessibilityHint: 'contribute fifteen dollars per month',
+      value: '20',
+      text: '$20',
+      accessibilityHint: 'contribute twenty dollars per month',
     },
     {
-      value: '30',
-      text: '$30',
-      accessibilityHint: 'contribute thirty dollars per month',
+      value: '40',
+      text: '$40',
+      accessibilityHint: 'contribute forty dollars per month',
     },
   ],
   EURCountries: [
