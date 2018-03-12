@@ -252,7 +252,7 @@ Resources:
   PaymentAPILogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub ${App}-${Stage}
+      LogGroupName: !Sub ${Stack}-${App}-${Stage}
       RetentionInDays: 14
 
   FrontendELBDNSrecord:
