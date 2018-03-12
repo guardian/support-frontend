@@ -77,7 +77,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "23.0",
   "com.netaporter" %% "scala-uri" % "0.4.16",
-  "com.gu" %% "play-googleauth" % "0.7.0",
+  "com.gu" %% "play-googleauth" % "0.7.1",
   "io.github.bonigarcia" % "webdrivermanager" % "2.1.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
