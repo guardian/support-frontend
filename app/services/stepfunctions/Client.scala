@@ -70,4 +70,8 @@ class Client(client: AWSStepFunctionsAsync, arn: String) {
       case _: AWSStepFunctionsException => Fail.asLeft
     }
   }
+
+  def status()(implicit ec: ExecutionContext): Response[DescribeStateMachineResult] = convertErrors {
+    AwsAsync(client.describeStateMachineAsync, new DescribeStateMachineRequest().withStateMachineArn(arn))
+  }
 }

@@ -128,4 +128,8 @@ class RegularContributionsClient(
       }
     )
   }
+
+  def healthy(): Future[Boolean] =
+    underlying.status.map(_.getStatus == "ACTIVE").getOrElse(false)
+
 }
