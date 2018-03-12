@@ -132,7 +132,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.createCharge, createStripeRequest)
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(200)
       }
@@ -156,7 +156,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.createCharge, createStripeRequest)
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(200)
       }
@@ -204,7 +204,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.createCharge, createStripeRequest)
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(200)
       }
@@ -230,7 +230,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.createCharge, createStripeRequest)
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(400)
       }
@@ -254,7 +254,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.createCharge, createStripeRequest)
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(500)
       }

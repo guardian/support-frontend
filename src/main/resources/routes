@@ -5,10 +5,27 @@
 # Pinged by load balancer to determine if instance is healthy
 GET      /healthcheck                                         controllers.AppController.healthcheck
 
-# Charges a credit/debit card via Stripe
-POST     /contribute/one-off/stripe/create                    controllers.StripeController.createCharge
 
-# paypal endpoints - web & apps
-POST     /contribute/one-off/paypal/create-payment                   controllers.PaypalController.createPayment
-POST     /contribute/one-off/paypal/capture-payment                  controllers.PaypalController.capturePayment
-POST     /contribute/one-off/paypal/execute-payment                  controllers.PaypalController.executePayment
+#############################################
+# STRIPE
+#############################################
+
+# Execute a pre-authorised Stripe payment
+POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
+
+
+#############################################
+# PAYPAL
+#############################################
+
+# Create a payment which can then be authorised via the PayPal web interface
+POST     /contribute/one-off/paypal/create-payment            controllers.PaypalController.createPayment
+
+# Execute a payment created with /contribute/one-off/paypal/create-payment
+# and authorised via the PayPal web interface
+POST     /contribute/one-off/paypal/execute-payment           controllers.PaypalController.executePayment
+
+# Captures the funds from a payment which has been created & authorised directly via
+# the PayPal API (not via /contribute/one-off/paypal/create-payment in this API).
+# This is only used by the mobile app.
+POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment

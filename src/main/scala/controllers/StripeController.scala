@@ -18,7 +18,7 @@ class StripeController(
   import util.RequestTypeDecoder.instances._
   import model.stripe.StripeJsonDecoder._
 
-  def createCharge: Action[StripeChargeData] = Action(circe.json[StripeChargeData]).async { request =>
+  def executePayment: Action[StripeChargeData] = Action(circe.json[StripeChargeData]).async { request =>
     stripeBackendProvider.getInstanceFor(request)
       .createCharge(request.body)
       .fold(
