@@ -68,6 +68,7 @@ const numbersInWords = {
   '20': 'twenty',
   '25': 'twenty five',
   '30': 'thirty',
+  '40': 'forty',
   '50': 'fifty',
   '75': 'seventy five',
   '100': 'one hundred',
@@ -112,8 +113,8 @@ const config: { [CountryGroupId]: Config } = {
       default: 75,
     },
     MONTHLY: {
-      min: 5,
-      minInWords: numbersInWords['5'],
+      min: 10,
+      minInWords: numbersInWords['10'],
       max: 166,
       maxInWords: numbersInWords['166'],
       default: 10,
@@ -166,7 +167,11 @@ const amounts = {
   },
   MONTHLY: {
     UnitedStates: defaultMonthlyAmount,
-    AUDCountries: defaultMonthlyAmount,
+    AUDCountries: [
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+      { value: '40', spoken: numbersInWords['40'] },
+    ],
     GBPCountries: [
       { value: '2', spoken: numbersInWords['2'] },
       { value: '5', spoken: numbersInWords['5'] },
