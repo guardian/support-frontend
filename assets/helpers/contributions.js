@@ -78,8 +78,6 @@ const numbersInWords = {
 };
 /* eslint-enable  quote-props */
 
-type validNumbers = $Keys<typeof numbersInWords>;
-
 const defaultConfig: Config = {
   ANNUAL: {
     min: 50,
