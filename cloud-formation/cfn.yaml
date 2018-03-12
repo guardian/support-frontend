@@ -289,7 +289,7 @@ Resources:
       LogGroupName: !Sub support-frontend-${Stage}
       FilterPattern: "Regular contributions state machine is not available"
       MetricTransformations:
-        MetricNamespace: !Sub support-frontend-${Stage}
+      - MetricNamespace: !Sub support-frontend-${Stage}
         MetricName: state-machine-unavailable
         MetricValue: 1
 
