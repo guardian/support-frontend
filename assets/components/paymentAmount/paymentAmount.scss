@@ -1,11 +1,12 @@
 .component-payment-amount {
   border-radius: 1000px;
-  font-size: 24px;
-  color: #fff;
+  font-size: 18px;
+  color: gu-colour(garnett-neutral-1);
+  font-weight: bold;
   width: 60px;
   height: 60px;
   text-align: center;
-  background-color: gu-colour(neutral-1);
+  background-color: gu-colour(news-garnett-highlight);
   line-height: 60px;
 }
 

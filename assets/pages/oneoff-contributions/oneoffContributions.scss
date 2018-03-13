@@ -2,20 +2,10 @@
 
 	// ----- General ----- //
 
-	background-color: darken(gu-colour(multimedia-main-2), 5%);
-	color: gu-colour(neutral-1);
-
-	// Fix for IE.
-	& > div {
-		background-color: darken(gu-colour(multimedia-main-2), 5%);
-	}
-
-	.oneoff-contrib {
-		background-color: gu-colour(multimedia-main-2);
-	}
+	color: gu-colour(garnett-neutral-1);
 
 	a {
-		color: gu-colour(neutral-1);
+		color: gu-colour(garnett-neutral-1);
 	}
 
 
@@ -23,6 +13,28 @@
 
 	h2 {
 		margin-top: -2px;
+	}
+
+	.component-info-section {
+		padding-top: 0;
+	}
+
+	.component-info-section__heading {
+		font-family: $gu-egyptian-web;
+		font-size: 24px;
+		line-height: 1.17;
+		padding-top: $gu-v-spacing / 2;
+
+		@include dropline;
+	}
+
+	.component-info-section__content {
+		padding-top: $gu-v-spacing;
+
+		@include mq($from: desktop) {
+			box-sizing: border-box;
+			padding-left: $gu-h-spacing;
+		}
 	}
 
 	// ----- Header
@@ -65,6 +77,12 @@
 			margin-bottom: 0px;
 		}
 
+		#postcode {
+			@include mq($from: desktop) {
+				width: 174px;
+			}
+		}
+
 		input[type='text'] {
 			width: 100%;
 			box-sizing: border-box;
@@ -79,24 +97,45 @@
 		}
 	}
 
+	.component-text-input {
+		border: 2px solid gu-colour(news-garnett-highlight);
+		font-family: $gu-text-sans-web;
+		height: 44px;
+		font-weight: bold;
+		margin-bottom: $gu-v-spacing;
+	}
+
 	// ----- Payment methods
 
 	.oneoff-contrib__payment-methods {
 		.component-stripe-pop-up-button {
 			box-sizing: border-box;
+			height: 54px;
+			background-color: gu-colour(news-garnett-highlight);
+      color: gu-colour(garnett-neutral-1);
+
+      svg {
+      	fill: gu-colour(garnett-neutral-1);
+      }
 
 			@include mq($from: desktop) {
 				width: 304px;
 			}
 
+			&:hover {
+				background-color: darken(gu-colour(news-garnett-highlight), 5%);
+			}
 		}
+	}
+
+	.component-paypal-contribution-button {
+		height: 54px;
+		margin-top: $gu-v-spacing;
 	}
 
 	// ----- Legal ----- //
 
 	.terms-privacy {
-		background-color: darken(#fff, 5%);
-
 		.component-info-section__content {
 			@include mq($from: desktop) {
 				width: 550px;
@@ -106,12 +145,13 @@
 
 	.terms-privacy__content {
 		background-color: #fff;
-		padding-top: $gu-v-spacing;
+		color: gu-colour(media-garnett-main-1);
 	}
 
 	.component-contrib-legal {
 		padding-top: $gu-v-spacing;
 		padding-bottom: $gu-v-spacing * 2;
+		font-size: 14px;
 	}
 
 }
