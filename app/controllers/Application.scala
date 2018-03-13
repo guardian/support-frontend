@@ -86,7 +86,6 @@ class Application(
     AuthenticatedAction.async { implicit request =>
       import cats.implicits._
 
-      val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
       val identityUser = identityService.getUser(request.user)
 
       identityUser.value.foreach({
@@ -95,13 +94,12 @@ class Application(
       })
 
       identityUser.toOption.value.map { maybeUser =>
-        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, maybeUser))
+        Ok(views.html.monthlyContributionsThankyou(title, id, js, maybeUser))
       }
     }
 
   def regularContributionsPending(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
-    Ok(views.html.react(title, updatedId, updatedJs))
+    Ok(views.html.react(title, id, js))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
