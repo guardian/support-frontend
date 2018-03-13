@@ -288,7 +288,7 @@ Resources:
     Type: "AWS::Logs::MetricFilter"
     Properties:
       LogGroupName: !Sub support-frontend-${Stage}
-      FilterPattern: "Regular contributions state machine is not available"
+      FilterPattern: "regular-contributions-state-machine-unavailable"
       MetricTransformations:
       - MetricNamespace: !Sub support-frontend-${Stage}
         MetricName: state-machine-unavailable
