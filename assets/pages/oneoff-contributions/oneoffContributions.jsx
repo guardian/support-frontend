@@ -69,7 +69,7 @@ const content = (
       <TestUserBanner />
       <SimpleHeader />
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} />
-       <hr className="oneoff-contrib__multiline" />
+      <hr className="oneoff-contrib__multiline" />
       <div className="oneoff-contrib gu-content-margin">
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
