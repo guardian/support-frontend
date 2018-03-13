@@ -17,6 +17,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import DisplayName from 'components/displayName/displayName';
 import Signout from 'components/signout/signout';
+import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -67,16 +68,15 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
+      <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} />
+       <hr className="oneoff-contrib__multiline" />
       <div className="oneoff-contrib gu-content-margin">
-        <InfoSection className="oneoff-contrib__header">
-          <h1 className="oneoff-contrib__heading">{`Make a ${contribDescription} contribution`}</h1>
-          <Secure />
-        </InfoSection>
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={state.page.oneoffContrib.amount}
             currency={state.page.oneoffContrib.currency}
           />
+          <Secure />
         </InfoSection>
         <InfoSection heading="Your details" headingContent={<Signout />} className="oneoff-contrib__your-details">
           <DisplayName />

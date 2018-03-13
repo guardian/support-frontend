@@ -13,6 +13,8 @@
 
 	.component-info-section {
 		padding-top: 0;
+		padding-bottom: $gu-v-spacing * 3;
+		border-top: 1px solid gu-colour(garnett-neutral-4);
 	}
 
 	.component-info-section__heading {
@@ -52,21 +54,47 @@
 				line-height: 44px;
 			}
 		}
+	}
+
+	.regular-contrib__multiline {
+		width: 100%;
+		border: none;
+		margin: 0;
+
+		&:after {
+			@include multiline(4, gu-colour(garnett-neutral-4));
+			background-color: #fff;
+			content: '';
+			display: block;
+		}
+	}
+
+	// ----- Your contrib
+
+	.regular-contrib__your-contrib {
+		border: none;
+
+		.component-info-section__content {
+			position: relative;
+		}
 
 		.component-secure {
+			position: absolute;
+			right: 0;
+			top: $gu-v-spacing;
+			color: gu-colour(garnett-neutral-2);
+
 			&__text {
-				margin-top: $gu-v-spacing / 2;
+				margin-top: 2px;
 			}
 
 			// Fix for IE.
 			svg {
 				width: 13px;
+				fill: gu-colour(garnett-neutral-2);
 			}
 		}
-
 	}
-
-	// ----- Your contrib
 
 	.regular-contrib__amount {
 		border-radius: 1000px;
@@ -143,20 +171,29 @@
       box-sizing: border-box;
       background-color: gu-colour(news-garnett-highlight);
       color: gu-colour(garnett-neutral-1);
+      width: 100%;
 
       svg {
       	fill: gu-colour(garnett-neutral-1);
       }
 
-      @include mq($from: desktop) {
+      @include mq($from: phablet) {
         width: 304px;
       }
 
+			&:hover {
+				background-color: darken(gu-colour(news-garnett-highlight), 5%);
+			}
     }
   }
 
   .component-paypal-button-checkout {
   	margin-top: $gu-v-spacing;
+  	width: 100%;
+
+		@include mq($from: phablet) {
+			width: 304px;
+		}
   }
 
 	// ----- Legal ----- //
