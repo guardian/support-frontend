@@ -99,28 +99,6 @@ class Application(
       }
     }
 
-  def contributionsLandingUK(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")
-    Ok(views.html.contributionsLanding(
-      title,
-      description = Some(stringsConfig.contributionLandingDescription),
-      updatedId,
-      updatedJs,
-      contributionsPayPalEndpoint
-    ))
-  }
-
-  def contributionsLandingUS(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-us", "contributionsLandingPageUS.js")
-    Ok(views.html.contributionsLanding(
-      title,
-      description = Some(stringsConfig.contributionLandingDescription),
-      updatedId,
-      updatedJs,
-      contributionsPayPalEndpoint
-    ))
-  }
-
   def regularContributionsPending(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
     val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
     Ok(views.html.react(title, updatedId, updatedJs))
