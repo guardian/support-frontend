@@ -26,6 +26,10 @@ object SafeLogger extends LazyLogging {
     }
   }
 
+  def debug(logMessage: String): Unit = {
+    logger.debug(logMessage)
+  }
+
   def info(logMessage: String): Unit = {
     logger.info(logMessage)
   }
