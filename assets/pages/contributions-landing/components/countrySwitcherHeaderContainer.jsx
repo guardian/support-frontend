@@ -12,7 +12,7 @@ import type { State } from '../contributionsLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates'];
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'AUDCountries'];
 
 // ----- Functions ----- //
 

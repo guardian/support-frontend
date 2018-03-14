@@ -1,0 +1,77 @@
+.component-page-section--marketing-consent {
+  
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+
+    @include mq($until: phablet) {
+      width: 70%;
+    }
+
+    @include mq($from: phablet, $until: desktop) {
+      width: 40%;
+    }
+  }
+
+  .component-page-section__body {
+    max-width: 500px;
+  }
+
+  .component-checkbox__title {
+    font-family: $gu-text-sans-web;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .component-checkbox__copy {
+    font-family: $gu-text-sans-web;
+  }
+
+
+  .component-cta-link--next {
+    background-color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    color: #fff;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing * 2;
+
+    @include mq($from: mobileMedium) {
+      width: 300px;
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(garnett-neutral-1), 10%);
+    }
+  }
+
+
+
+  .svg-arrow-right-straight {
+    height: 35%;
+    top: 17px;
+    right: 13px;
+
+    // Fix for IE.
+    @include mq($from: mobileMedium) {
+      left: 321px;
+    }
+  }
+}
+
+.component-marketing-consent__confirmation-message {
+  .component-dotcom-cta {
+    margin-top: $gu-v-spacing * 2;
+  }
+}
+
+.marketing-consent__final-message {
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  padding-left: $gu-h-spacing;
+}

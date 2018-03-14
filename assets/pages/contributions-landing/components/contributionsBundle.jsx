@@ -41,11 +41,11 @@ type PropTypes = {
   contribType: Contrib,
   contribAmount: Amounts,
   contribError: ContribError,
-  toggleContribType: (string) => void,
-  changeContribAnnualAmount: (string) => void,
-  changeContribMonthlyAmount: (string) => void,
-  changeContribOneOffAmount: (string) => void,
-  changeContribAmount: (string) => void,
+  toggleContribType: (string, CountryGroupId) => void,
+  changeContribAnnualAmount: (string, CountryGroupId) => void,
+  changeContribMonthlyAmount: (string, CountryGroupId) => void,
+  changeContribOneOffAmount: (string, CountryGroupId) => void,
+  changeContribAmount: (string, CountryGroupId) => void,
   isoCountry: IsoCountry,
   countryGroupId: CountryGroupId,
   currency: Currency,
@@ -64,7 +64,6 @@ type ContribAttrs = {
   modifierClass: string,
   ctaLink: string,
   showPaymentLogos: boolean,
-  showSecureLogo: boolean,
 }
 
 // ----- Map State/Props ----- //
@@ -86,20 +85,20 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
   return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
+    toggleContribType: (period: Contrib, countryGroupId) => {
+      dispatch(changeContribType(period, countryGroupId));
     },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    changeContribAnnualAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }, countryGroupId));
     },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    changeContribMonthlyAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }, countryGroupId));
     },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    changeContribOneOffAmount: (value: string, countryGroupId) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }, countryGroupId));
     },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
+    changeContribAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmount({ value, userDefined: true }, countryGroupId));
     },
     payPalErrorHandler: (message: string) => {
       dispatch(payPalError(message));
@@ -114,8 +113,8 @@ function mapDispatchToProps(dispatch) {
 const subHeadingMonthlyText: {[CountryGroupId]: string} = {
   GBPCountries: 'from £5 a month',
   UnitedStates: 'from $5 a month',
-  AUDCountries: 'from $5 a month',
-  EURCountries: 'from €5 a month',
+  AUDCountries: '',
+  EURCountries: '',
   International: '',
 };
 
@@ -131,51 +130,25 @@ const defaultContentText = {
   GBPCountries: 'Support The Guardian’s editorial operations by making a monthly or one-off contribution today',
   UnitedStates: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Make a monthly commitment to support The Guardian long-term or a one-time contribution
+      as and when you feel like it &ndash; choose the option that suits you best.
     </span>
   ),
   AUDCountries: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
     </span>
   ),
   EURCountries: (
     <span>
-      Contributing to The Guardian makes a big impact. If you’re able, please consider
-      <strong> monthly</strong> support &ndash; it will help to fund our journalism for
-      the long term.
+      Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
     </span>
   ),
   International: '',
 };
 
-const upsellRecurringContributionsTestContentText = {
-  control: defaultContentText.UnitedStates,
-  benefitsOfBoth: (
-    <span>
-      Make a monthly commitment to support The Guardian long-term or a one-time contribution
-      as and when you feel like it &ndash; choose the option that suits you best.
-    </span>
-  ),
-  shorterControl: (
-    <span>
-      If you’re able, please consider <strong>monthly</strong> support &ndash;
-      it will help to fund The Guardian’s journalism for the long-term.
-    </span>
-  ),
-};
-
-function getContentText(props: PropTypes) {
-  return upsellRecurringContributionsTestContentText[props.abTests.upsellRecurringContributions] ||
-    defaultContentText[props.countryGroupId];
-}
-
 function ContentText(props: PropTypes) {
-  return <p className="component-bundle__content-intro"> {getContentText(props)} </p>;
+  return <p className="component-bundle__content-intro"> {defaultContentText[props.countryGroupId]} </p>;
 }
 
 function getCtaText(contribType: Contrib, currency: Currency, amounts: Amounts) {
@@ -204,7 +177,6 @@ function contribAttrs(
     modifierClass: 'contributions',
     ctaLink: '',
     showPaymentLogos: false,
-    showSecureLogo: false,
   };
 }
 
@@ -295,7 +267,6 @@ function ContributionsBundle(props: PropTypes) {
   );
 
   attrs.showPaymentLogos = true;
-  attrs.showSecureLogo = props.abTests.usSecureLogoTest === 'logo';
 
   const onClick = () => {
     if (!props.contribError) {

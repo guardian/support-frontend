@@ -9,27 +9,27 @@ import { contributionSelectionActionsFor } from '../contributionSelectionActions
 
 describe('Contributions Selection actions', () => {
 
-  const PREFIX = 'MY_PREFIX';
-  const actions = contributionSelectionActionsFor(PREFIX);
+  const scope = 'MY_SCOPE';
+  const actions = contributionSelectionActionsFor(scope);
 
   it('should create an action to set the contribution type', () => {
 
     const expectedOneOff = {
       type: 'SET_CONTRIBUTION_TYPE',
       contributionType: 'ONE_OFF',
-      scope: PREFIX,
+      scope,
     };
 
     const expectedMonthly = {
       type: 'SET_CONTRIBUTION_TYPE',
       contributionType: 'MONTHLY',
-      scope: PREFIX,
+      scope,
     };
 
     const expectedAnnual = {
       type: 'SET_CONTRIBUTION_TYPE',
       contributionType: 'ANNUAL',
-      scope: PREFIX,
+      scope,
     };
 
     expect(actions.setContributionType('ONE_OFF')).toEqual(expectedOneOff);
@@ -45,7 +45,7 @@ describe('Contributions Selection actions', () => {
     const expectedAction = {
       type: 'SET_AMOUNT',
       amount,
-      scope: PREFIX,
+      scope,
     };
 
     expect(actions.setAmount(amount)).toEqual(expectedAction);
@@ -59,7 +59,7 @@ describe('Contributions Selection actions', () => {
     const expectedAction = {
       type: 'SET_CUSTOM_AMOUNT',
       amount,
-      scope: PREFIX,
+      scope,
     };
 
     expect(actions.setCustomAmount(amount)).toEqual(expectedAction);

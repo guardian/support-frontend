@@ -28,12 +28,13 @@ describe('actions', () => {
   });
 
   it('should create an action to update the sort code', () => {
-    const sortCode: string = '123456';
+    const partialSortCode: string = '12';
     const expectedAction = {
       type: 'DIRECT_DEBIT_UPDATE_SORT_CODE',
-      sortCode,
+      index: 0,
+      partialSortCode,
     };
-    expect(updateSortCode(sortCode)).toEqual(expectedAction);
+    expect(updateSortCode(0, partialSortCode)).toEqual(expectedAction);
   });
 
   it('should create an action to update the account number', () => {

@@ -11,6 +11,11 @@
 .component-country-switcher-header__link {
   float: right;
   height: 100%;
+  padding-right: $gu-h-spacing / 2;
+
+  @include mq($from: tablet) {
+    padding-right: $gu-h-spacing;
+  }
 }
 
 .component-country-group-switcher {
@@ -22,11 +27,12 @@
 }
 
 .component-country-switcher-header__content {
-  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
-  height: 68px;
+  padding: ($gu-v-spacing / 2) 0 ($gu-v-spacing/2);
+  height: 54px;
 
   @include mq($from: mobileMedium) {
     height: 78px;
+    padding-bottom: $gu-v-spacing;
   }
 
   @include mq($from: mobileLandscape) {

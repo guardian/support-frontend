@@ -13,7 +13,7 @@ Welcome to Support Frontend. In this document we will go through the elements th
 7. [Yarn commands](#7-yarn-commands)
 8. [A/B Test framework](#8-ab-test-framework)
 9. [Test environments](#9-test-environments)
-10. [CSS guidelines](#10-css-guidelines)
+10. [CSS](#10-css)
 11. [Payment Diagrams](#11-payment-diagrams)
 
 ## 1. Getting started
@@ -65,15 +65,15 @@ The pieces that make up `support-frontend` are:
 Each page of the support site is a self-contained redux/react application. We use redux to handle the internal state of the page and we use react as the presentation layer.
 
 Every redux application has the following components:
-* [**actions**](http://redux.js.org/docs/basics/Actions.html) are payloads of information that send data from your application to your store.
-* [**reducers**](http://redux.js.org/docs/basics/Reducers.html) specify how the application's state changes in response of an action.
-* [**store**](http://redux.js.org/docs/basics/Store.html) holds the application state.
+* [**actions**](https://redux.js.org/basics/actions) are payloads of information that send data from your application to your store.
+* [**reducers**](https://redux.js.org/basics/reducers) specify how the application's state changes in response of an action.
+* [**store**](https://redux.js.org/basics/store) holds the application state.
 
-Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the presentation layer. More information about React/Redux [here](http://redux.js.org/docs/basics/UsageWithReact.html).
+Additionally, since React allows us to describe the UI as a function of the state of the application, we use it as the presentation layer. More information about React/Redux [here](https://redux.js.org/basics/usage-with-react).
 
 #### Presentational and Container Components
 
-A common pattern in both the vanilla React and the Redux communities is to divide your code into Presentational and Container components. There are good descriptions of how this works in the [Redux docs](https://redux.js.org/docs/basics/UsageWithReact.html#presentational-and-container-components) (the table at the top gives a helpful breakdown), and in [this article](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) by Dan Abramov.
+A common pattern in both the vanilla React and the Redux communities is to divide your code into Presentational and Container components. There are good descriptions of how this works in the [Redux docs](https://redux.js.org/basics/usage-with-react#presentational-and-container-components) (the table at the top gives a helpful breakdown), and in [this article](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) by Dan Abramov.
 
 An example of this can be seen with the shared `ContributionSelection` presentational component, which is wrapped at the page level in `ContributionSelectionContainer` to pass through the Redux state. This way the presentational component can be used anywhere on the site without specific knowledge of a page's state. It can also be used multiple times on the same page when used with scoped actions and reducers, as described below.
 
@@ -106,7 +106,7 @@ However, this results in a problem. While reducers can be compartmentalised in t
 
 ##### The Solution(s)
 
-Fortunately, this topic is covered in the [Redux docs](https://redux.js.org/docs/recipes/reducers/ReusingReducerLogic.html), and there are a couple of different solutions offered. We use the second because it allows us to maintain type safety for our actions. In brief, this method involves using action creator and reducer factories, into which you pass the scope (as a string) and get back scoped actions creators and reducers. To see how this works, have a look at `contributionSelectionReducer` and `contributionSelectionActions`. There's a great [article](https://techblog.appnexus.com/five-tips-for-working-with-redux-in-large-applications-89452af4fdcb) by AppNexus where they describe setting things up in this way.
+Fortunately, this topic is covered in the [Redux docs](https://redux.js.org/recipes/structuring-reducers/reusing-reducer-logic), and there are a couple of different solutions offered. We use the second because it allows us to maintain type safety for our actions. In brief, this method involves using action creator and reducer factories, into which you pass the scope (as a string) and get back scoped actions creators and reducers. To see how this works, have a look at `contributionSelectionReducer` and `contributionSelectionActions`. There's a great [article](https://techblog.appnexus.com/five-tips-for-working-with-redux-in-large-applications-89452af4fdcb) by AppNexus where they describe setting things up in this way.
 
 #### Data flow
 
@@ -117,7 +117,7 @@ The data flows in the following way:
 3. The store saves the new state defined by the reducer in the previous step.
 4. The UI is updated to reflect the last version of the state.
 
-You can find more information about the data flow [here](http://redux.js.org/docs/basics/DataFlow.html).
+You can find more information about the data flow [here](https://redux.js.org/basics/data-flow).
 
 ### Server side architecture
 
@@ -241,7 +241,7 @@ export default combineReducers({
 
 ```
 
-Here we import the scoped reducer for `MyComponent`, and make it part of the page's reducer using Redux's `combineReducers`, described [here](https://redux.js.org/docs/api/combineReducers.html) in their docs. We also retrieve the `State` from the component, to make sure that flow is able to check all the types.
+Here we import the scoped reducer for `MyComponent`, and make it part of the page's reducer using Redux's `combineReducers`, described [here](https://redux.js.org/api-reference/combinereducers) in their docs. We also retrieve the `State` from the component, to make sure that flow is able to check all the types.
 
 ## 5. CI build process
 
@@ -464,8 +464,16 @@ If you are firing a conversion event for a specific test, be sure that the `part
 |   `Prod`  |        `true`       |   `Dev`  | `Dev`    |       `Prod`      | `UAT`   |
 |   `Prod`  | `false` (real user) |  `Prod`  | `Prod`   |       `Prod`      | `Prod`  |
 
-## 10 CSS guidelines
+## 10 CSS
 
+### Can I use flexbox?
+Yes! But since we still support IE11, there are a few caveats (courtesy of caniuse.com):
+
+- IE11 requires a unit to be added to the third argument, the flex-basis property. [see MSFT documentation](https://msdn.microsoft.com/en-us/library/dn254946%28v=vs.85%29.aspx)
+- In IE11, containers with `display: flex` and `flex-direction: column` will not properly calculate their flexed childrens' sizes if the container has `min-height` but no explicit `height` property. See [bug](https://connect.microsoft.com/IE/feedback/details/802625/min-height-and-flexbox-flex-direction-column-dont-work-together-in-ie-10-11-preview).
+- IE 11 does not vertically align items correctly when min-height is used see [bug](https://connect.microsoft.com/IE/feedback/details/816293/ie11-flexbox-with-min-height-not-vertically-aligning-with-align-items-center)
+
+### Coding conventions
 Currently in `support-frontend` there are two types of components.
 
 Shared component: Components that are used in more than one page, they are located inside the global `components` folder. These should only contain rules which are context-independent. For instance, font sizes, colours, padding (since it's internal), margins of child elements. But margin on the parent, for example, should probably be avoided, because it's presupposing that it will be used in a particular place. This kind of positional styling should happen in the page-level CSS.

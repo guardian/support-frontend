@@ -15,6 +15,7 @@ import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';
 
 import type { ListItem } from 'components/featureList/featureList';
+import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import type { Contrib, Amounts, ContribError } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -51,11 +52,11 @@ type PropTypes = {
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
-  toggleContribType: (string) => void,
-  changeContribAnnualAmount: (string) => void,
-  changeContribMonthlyAmount: (string) => void,
-  changeContribOneOffAmount: (string) => void,
-  changeContribAmount: (string) => void,
+  toggleContribType: (string, CountryGroupId) => void,
+  changeContribAnnualAmount: (string, CountryGroupId) => void,
+  changeContribMonthlyAmount: (string, CountryGroupId) => void,
+  changeContribOneOffAmount: (string, CountryGroupId) => void,
+  changeContribAmount: (string, CountryGroupId) => void,
   isoCountry: IsoCountry,
   countryGroupId: CountryGroupId,
   currency: Currency,
@@ -84,20 +85,20 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleContribType: (period: Contrib) => {
-      dispatch(changeContribType(period));
+    toggleContribType: (period: Contrib, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribType(period, countryGroupId));
     },
-    changeContribAnnualAmount: (value: string) => {
-      dispatch(changeContribAmountAnnual({ value, userDefined: false }));
+    changeContribAnnualAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountAnnual({ value, userDefined: false }, countryGroupId));
     },
-    changeContribMonthlyAmount: (value: string) => {
-      dispatch(changeContribAmountMonthly({ value, userDefined: false }));
+    changeContribMonthlyAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountMonthly({ value, userDefined: false }, countryGroupId));
     },
-    changeContribOneOffAmount: (value: string) => {
-      dispatch(changeContribAmountOneOff({ value, userDefined: false }));
+    changeContribOneOffAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmountOneOff({ value, userDefined: false }, countryGroupId));
     },
-    changeContribAmount: (value: string) => {
-      dispatch(changeContribAmount({ value, userDefined: true }));
+    changeContribAmount: (value: string, countryGroupId: CountryGroupId) => {
+      dispatch(changeContribAmount({ value, userDefined: true }, countryGroupId));
     },
   };
 }
@@ -276,23 +277,12 @@ function getDigitalAttrs(subsLinks: SubsUrls): SubscribeAttrs {
   return Object.assign({}, bundles.digital, { ctaLink: subsLinks.digital });
 }
 
-function WhyContribute(props: {shouldEncourageMonthly: boolean}) {
-  if (props.shouldEncourageMonthly) {
-    return (
-      <p>
-        Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
-        If you’re able, please consider
-        <strong> monthly</strong> support – it will help to fund our journalism for the long term.
-      </p>
-    );
-  }
+const WhyContribute = () => (
+  <p className="bundles__why-contribute">
+    Your contribution funds and supports The&nbsp;Guardian&#39;s journalism.
+  </p>
+);
 
-  return (
-    <p>
-      Your contribution funds and supports the&nbsp;Guardian&#39;s journalism.
-    </p>
-  );
-}
 
 function ContributionBundle(props: PropTypes) {
 
@@ -314,10 +304,8 @@ function ContributionBundle(props: PropTypes) {
 
   return (
     <Bundle {...contribAttrs}>
-      <WhyContribute
-        shouldEncourageMonthly={props.abTests.pleaseConsiderMonthly === 'variant'}
-      />
-
+      <InlinePaymentLogos />
+      <WhyContribute />
       <ContribAmounts
         onNumberInputKeyPress={onClick}
         {...props}

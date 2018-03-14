@@ -269,6 +269,10 @@ strong {
     }
   }
 
+  .component-inline-payment-logos {
+    float: right;
+  }
+
   .contributions-bundle__content {
     background-color: gu-colour(multimedia-main-2);
 
@@ -506,4 +510,11 @@ strong {
     }
   }
 
+}
+
+#contributions-landing-page-au,
+#contributions-landing-page-eu {
+  .component-double-heading__subheading {
+    display: none;
+  }
 }

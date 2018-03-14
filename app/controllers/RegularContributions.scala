@@ -34,7 +34,7 @@ class RegularContributions(
 
   implicit val ar = assets
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def displayForm(paypal: Option[Boolean], directDebit: Option[Boolean]): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     identityService.getUser(request.user).semiflatMap { fullUser =>
       isMonthlyContributor(request.user.credentials) map {
         case Some(true) =>
@@ -50,6 +50,7 @@ class RegularContributions(
               user = fullUser,
               uatMode = uatMode,
               payPalButton = paypal.getOrElse(true),
+              directDebitButton = directDebit.getOrElse(false),
               defaultStripeConfig = stripeConfigProvider.get(false),
               uatStripeConfig = stripeConfigProvider.get(true),
               payPalConfig = payPalConfigProvider.get(uatMode)

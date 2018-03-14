@@ -38,11 +38,12 @@ import { parseContrib } from '../../helpers/contributions';
 
 // ----- Page Startup ----- //
 
-const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
-const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType).amount;
 const countryGroup = detectCountryGroup();
 const country = detectCountry();
 const currency = detectCurrency(countryGroup);
+
+const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
+const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType, countryGroup).amount;
 
 const title = {
   annual: 'Make an annual contribution',

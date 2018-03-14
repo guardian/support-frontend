@@ -4,9 +4,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { closeDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { closeDirectDebitPopUp, resetDirectDebitFormError } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-
+import { SvgCross } from 'components/svg/svg';
 
 // ---- Types ----- //
 
@@ -31,6 +31,7 @@ function mapDispatchToProps(dispatch) {
   return {
     closeDirectDebitPopUp: () => {
       dispatch(closeDirectDebitPopUp());
+      dispatch(resetDirectDebitFormError());
     },
   };
 
@@ -46,12 +47,13 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
     content = (
       <div className="component-direct-debit-pop-up-form">
         <div className="component-direct-debit-pop-up-form__content">
+          <h1 className="component-direct-debit-pop-up-form__heading">Please enter your details below</h1>
           <button
             id="qa-pay-with-direct-debit-close-pop-up"
-            className="component-direct-debit-pop-up-form__close-button"
+            className="component-direct-debit-pop-up-form__close-button focus-target"
             onClick={props.closeDirectDebitPopUp}
           >
-            X
+            <SvgCross />
           </button>
           <DirectDebitForm callback={props.callback} />
         </div>

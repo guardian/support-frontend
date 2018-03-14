@@ -97,13 +97,15 @@ function fromString(countryGroup: string): ?CountryGroupId {
 }
 
 function fromCountry(isoCountry: string): ?CountryGroupId {
+  if (isoCountry === 'UK') {
+    return 'GBPCountries';
+  }
 
-  Object.keys(countryGroups).forEach((countryGroupId) => {
-    if (countryGroups[countryGroupId].countries.includes(isoCountry)) {
-      return countryGroupId;
-    }
-    return null;
-  });
+  const countryGroup = Object.keys(countryGroups).find(countryGroupId =>
+    countryGroups[countryGroupId].countries.includes(isoCountry));
+
+  return countryGroup || null;
+
 }
 
 function fromQueryParameter(): ?CountryGroupId {

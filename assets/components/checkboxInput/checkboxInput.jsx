@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 
 
 // ----- Types ----- //
@@ -18,7 +18,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function CheckboxInput(props: PropTypes) {
+const CheckboxInput: (PropTypes) => React.Node = (props: PropTypes) => {
   let labelTitle = '';
   let labelCopy = '';
 
@@ -43,9 +43,11 @@ export default function CheckboxInput(props: PropTypes) {
       {labelCopy}
     </label>
   );
-}
+};
 
 CheckboxInput.defaultProps = {
   labelCopy: '',
   labelTitle: '',
 };
+
+export default CheckboxInput;

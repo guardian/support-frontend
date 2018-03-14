@@ -34,14 +34,19 @@ describe('direct debit reducer tests', () => {
 
   it('should handle DIRECT_DEBIT_UPDATE_SORT_CODE', () => {
     const sortCode = '123456';
-    const action = {
-      type: 'DIRECT_DEBIT_UPDATE_SORT_CODE',
-      sortCode,
-    };
+    function action(index, partialSortCode) {
+      return {
+        type: 'DIRECT_DEBIT_UPDATE_SORT_CODE',
+        index,
+        partialSortCode,
+      };
+    }
 
-    const newState = reducer(undefined, action);
+    const firstUpdate = reducer(undefined, action(0, '12'));
+    const secondUpdate = reducer(firstUpdate, action(1, '34'));
+    const thirdUpdate = reducer(secondUpdate, action(2, '56'));
 
-    expect(newState.bankSortCode).toEqual(sortCode);
+    expect(thirdUpdate.sortCodeArray.join('')).toEqual(sortCode);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', () => {
@@ -54,7 +59,7 @@ describe('direct debit reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.bankAccountNumber).toEqual(accountNumber);
+    expect(newState.accountNumber).toEqual(accountNumber);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', () => {
