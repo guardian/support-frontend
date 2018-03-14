@@ -40,7 +40,12 @@ object RegularContributionsClient {
   sealed trait RegularContributionError
   case object StateMachineFailure extends RegularContributionError
 
-  def apply(arn: String, stateWrapper: StateWrapper, supportUrl: String, call: String => Call)(implicit system: ActorSystem): RegularContributionsClient =
+  def apply(
+    arn: StateMachineArn,
+    stateWrapper: StateWrapper,
+    supportUrl: String,
+    call: String => Call
+  )(implicit system: ActorSystem): RegularContributionsClient =
     new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
@@ -50,7 +55,7 @@ object StatusResponse {
 }
 
 class RegularContributionsClient(
-    arn: String,
+    arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
     statusCall: String => Call

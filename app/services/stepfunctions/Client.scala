@@ -19,7 +19,8 @@ import scala.concurrent.ExecutionContext
 import codecs.CirceDecoders._
 
 object Client {
-  def apply(arn: String)(implicit system: ActorSystem): Client = {
+
+  def apply(arn: StateMachineArn)(implicit system: ActorSystem): Client = {
     implicit val ec = system.dispatcher
 
     val client = AWSStepFunctionsAsyncClientBuilder.standard
@@ -31,7 +32,7 @@ object Client {
   }
 }
 
-class Client(client: AWSStepFunctionsAsync, arn: String) {
+class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
 
   private def startExecution(arn: String, input: String)(implicit ec: ExecutionContext): Response[StartExecutionResult] = convertErrors {
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
@@ -43,18 +44,28 @@ class Client(client: AWSStepFunctionsAsync, arn: String) {
     encoder: Encoder[T],
     stateWrapper: StateWrapper
   ): Response[StateMachineExecution] = {
-    startExecution(arn, stateWrapper.wrap(input, isTestUser))
+    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser))
       .map(StateMachineExecution.fromStartExecution)
   }
 
-  def jobIdFromArn(arn: String): Option[String] = {
-    PartialFunction.condOpt(arn.split(':').toList) {
-      case "arn" :: "aws" :: "states" :: region :: accountId :: "execution" :: stateMachine :: executionId :: Nil =>
+  def jobIdFromArn(executionArn: String): Option[String] = {
+    val region = arn.region
+    val accountId = arn.accountId
+    val stateMachineId = arn.id
+
+    PartialFunction.condOpt(executionArn.split(':').toList) {
+      case "arn" :: "aws" :: "states" :: `region` :: `accountId` :: "execution" :: `stateMachineId` :: executionId :: Nil =>
         executionId
     }
   }
 
-  def arnFromJobId(jobId: String): String = s"$arn:$jobId"
+  def arnFromJobId(jobId: String): String =
+    s"arn:aws:states:${arn.region}:${arn.accountId}:execution:${arn.id}:${convertLegacyJobId(jobId)}"
+
+  private def convertLegacyJobId(legacyJobId: String): String = legacyJobId.split(':').toList match {
+    case _ :: id :: Nil => id
+    case _ => legacyJobId
+  }
 
   def statusFromEvents(events: List[HistoryEvent]): Option[ExecutionStatus] =
     events.view.map(_.getType).collectFirst(ExecutionStatus.all)
@@ -72,6 +83,6 @@ class Client(client: AWSStepFunctionsAsync, arn: String) {
   }
 
   def status()(implicit ec: ExecutionContext): Response[DescribeStateMachineResult] = convertErrors {
-    AwsAsync(client.describeStateMachineAsync, new DescribeStateMachineRequest().withStateMachineArn(arn))
+    AwsAsync(client.describeStateMachineAsync, new DescribeStateMachineRequest().withStateMachineArn(arn.asString))
   }
 }
