@@ -22,8 +22,9 @@ trait Services {
 
   lazy val regularContributionsClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)
+    val regularContributionsStage = if (appConfig.stage == Stages.DEV) Stages.CODE else appConfig.stage
     RegularContributionsClient(
-      appConfig.stepFuctionArn,
+      regularContributionsStage,
       stateWrapper,
       appConfig.supportUrl,
       controllers.routes.RegularContributions.status

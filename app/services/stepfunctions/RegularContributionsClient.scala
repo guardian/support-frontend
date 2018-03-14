@@ -40,8 +40,8 @@ object RegularContributionsClient {
   sealed trait RegularContributionError
   case object StateMachineFailure extends RegularContributionError
 
-  def apply(arn: String, stateWrapper: StateWrapper, supportUrl: String, call: String => Call)(implicit system: ActorSystem): RegularContributionsClient =
-    new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
+  def apply(stage: Stage, stateWrapper: StateWrapper, supportUrl: String, call: String => Call)(implicit system: ActorSystem): RegularContributionsClient =
+    new RegularContributionsClient(stage, stateWrapper, supportUrl, call)
 }
 
 case class StatusResponse(status: Status, trackingUri: String, message: Option[String] = None)
@@ -50,14 +50,14 @@ object StatusResponse {
 }
 
 class RegularContributionsClient(
-    arn: String,
+    stage: Stage,
     stateWrapper: StateWrapper,
     supportUrl: String,
     statusCall: String => Call
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
-  private val underlying = Client(arn)
+  private val underlying = Client(s"MonthlyContributions${stage.toString}-")
 
   def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
@@ -128,8 +128,4 @@ class RegularContributionsClient(
       }
     )
   }
-
-  def healthy(): Future[Boolean] =
-    underlying.status.map(_.getStatus == "ACTIVE").getOrElse(false)
-
 }
