@@ -10,7 +10,6 @@ import com.gu.acquisition.model.errors.OphanServiceError
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
-
 import conf._
 import conf.ConfigLoader._
 import model._
@@ -43,32 +42,40 @@ class PaypalBackend(
       })
   }
 
-  // Convert the result of the identity id operation,
-  // into the monad used by the for comprehension in the createCharge() method.
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Long] =
-    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(PaypalBackendError.fromIdentityError)
-
-  def insertContributionDataToPostgres(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] = {
-    databaseService.insertContributionData(contributionData).leftMap(PaypalBackendError.fromDatabaseError)
-  }
-
-  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] = {
-    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId)).bimap(PaypalBackendError.fromOphanError, _ => ())
-  }
-
-
-  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, signedInUserEmail: Option[String])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit]  = {
-    getOrCreateIdentityIdFromEmail(signedInUserEmail.getOrElse(payment.getPayer.getPayerInfo.getEmail)).map(Option(_))
+  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Option[Long]] =
+    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(PaypalBackendError.fromIdentityError).map(Option(_))
       .recover {
         case err =>
           logger.error("Error getting identityId", err)
           None
       }
-      .flatMap { identityId =>
-        ContributionData.fromPaypalCharge(identityId, payment)
-          .leftMap(_ => PaypalBackendError.fromDatabaseError(null))
-          .toEitherT[Future]
-      }
+
+  def insertContributionDataToPostgres(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] =
+    databaseService.insertContributionData(contributionData).leftMap(PaypalBackendError.fromDatabaseError)
+
+  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] =
+    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId)).bimap(PaypalBackendError.fromOphanError, _ => ())
+
+  def getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData: ExecutePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Payment] =
+    paypalService.executePayment(paypalExecutePaymentData).leftMap(PaypalBackendError.fromPaypalAPIError)
+
+  def getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Payment] =
+    paypalService.capturePayment(capturePaypalPaymentData).leftMap(PaypalBackendError.fromPaypalAPIError)
+
+  def getContributionDataFromPaypalCharge(identityId: Option[Long], payment: Payment)(implicit pool: DefaultThreadPool): Either[PaypalBackendError, ContributionData] =
+    ContributionData.fromPaypalCharge(identityId, payment).leftMap(_ => PaypalBackendError.fromDatabaseError(null))
+
+  /*
+   *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
+   *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
+   */
+  def createPayment(paypalPaymentData: CreatePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Payment] =
+    paypalService.createPayment(paypalPaymentData).leftMap(PaypalBackendError.fromPaypalAPIError)
+
+
+  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit]  = {
+    getContributionDataFromPaypalCharge(identityId, payment)
+      .toEitherT[Future]
       .flatMap { contributionData =>
         combineResults(
           submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId),
@@ -81,33 +88,31 @@ class PaypalBackend(
       }
   }
 
-
-  /*
-   *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
-   *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
-   */
-  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
-    paypalService.createPayment(paypalPaymentData)
-
-
   /*
    *  Use by Apps: Apps have previously created the payment and managed its approval with the customer.
    *  Funds are captured at this stage.
    */
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool):
-  EitherT[Future, PaypalApiError, Payment] = {
+  EitherT[Future, PaypalBackendError, Payment] = {
     for {
-      payment <- paypalService.capturePayment(capturePaypalPaymentData)
-      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, None)
+      payment <- getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData)
+      identityId <- getOrCreateIdentityIdFromEmail(payment.getPayer.getPayerInfo.getEmail)
+      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, identityId)
       _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
 
   def executePayment(paypalExecutePaymentData: ExecutePaypalPaymentData)(implicit pool: DefaultThreadPool):
-  EitherT[Future, PaypalApiError, Payment] = {
+  EitherT[Future, PaypalBackendError, Payment] = {
     for {
-      payment <- paypalService.executePayment(paypalExecutePaymentData)
-      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData, paypalExecutePaymentData.signedInUserEmail)
+      payment <- getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData)
+
+      signedInUserEmail = paypalExecutePaymentData.signedInUserEmail
+      paymentEmail = payment.getPayer.getPayerInfo.getEmail
+      email = signedInUserEmail.getOrElse(paymentEmail)
+
+      identityId <- getOrCreateIdentityIdFromEmail(email)
+      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData, identityId)
       _ = emailService.sendPaypalThankEmail(payment, paypalExecutePaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
@@ -151,6 +156,7 @@ object PaypalBackend {
       case PaypalBackendError.Database(err) => err.getMessage
       case PaypalBackendError.Service(err) => err.getMessage
       case PaypalBackendError.Ophan(err) => err.getMessage
+      case PaypalBackendError.PayPalAPI(err) => err.message
       case PaypalBackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString("&")
     }
   }
@@ -159,6 +165,7 @@ object PaypalBackend {
     final case class Database(error: DatabaseService.Error) extends PaypalBackendError
     final case class Service(error: IdentityClient.Error) extends PaypalBackendError
     final case class Ophan(error: OphanServiceError) extends PaypalBackendError
+    final case class PayPalAPI(error: PaypalApiError) extends PaypalBackendError
     final case class MultipleErrors(errors: List[PaypalBackendError]) extends PaypalBackendError
 
     implicit val payPalBackendSemiGroup: Semigroup[PaypalBackendError] =
@@ -166,7 +173,8 @@ object PaypalBackend {
 
     def fromIdentityError(err: IdentityClient.Error): PaypalBackendError = Service(err)
     def fromDatabaseError(err: DatabaseService.Error): PaypalBackendError= Database(err)
-    def fromOphanError(err: OphanServiceError): PaypalBackendError= Ophan(err)
+    def fromOphanError(err: OphanServiceError): PaypalBackendError = Ophan(err)
+    def fromPaypalAPIError(err: PaypalApiError): PaypalBackendError = PayPalAPI(err)
   }
 }
 

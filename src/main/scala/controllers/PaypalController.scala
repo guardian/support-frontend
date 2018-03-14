@@ -25,7 +25,7 @@ class PaypalController(controllerComponents: ControllerComponents,
       .createPayment(createPaypalPaymentRequest.body)
       .subflatMap(PaypalPaymentSuccess.fromPayment)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.message)),
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
         payment => Ok(ResultBody.Success(payment))
       )
   }
@@ -35,7 +35,7 @@ class PaypalController(controllerComponents: ControllerComponents,
       .getInstanceFor(capturePaypalPaymentRequest)
       .capturePayment(capturePaypalPaymentRequest.body)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.message)),
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
         _ => Ok(ResultBody.Success(()))
       )
   }
@@ -45,7 +45,7 @@ class PaypalController(controllerComponents: ControllerComponents,
       .getInstanceFor(executePaypalPaymentRequest)
       .executePayment(executePaypalPaymentRequest.body)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.message)),
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
         payment => Ok(ResultBody.Success("execute payment success"))
       )
   }

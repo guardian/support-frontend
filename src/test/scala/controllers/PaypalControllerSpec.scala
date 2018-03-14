@@ -2,6 +2,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
+import backend.PaypalBackend.PaypalBackendError
 import backend.{PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
@@ -22,8 +23,10 @@ import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
 import util.RequestBasedProvider
+
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json.Json._
+
 import scala.collection.JavaConverters._
 
 class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
@@ -37,11 +40,11 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val paymentMock: Payment = mock[Payment]
 
-  val paymentServiceResponse: EitherT[Future, PaypalApiError, Payment] =
+  val paymentServiceResponse: EitherT[Future, PaypalBackendError, Payment] =
     EitherT.right(Future.successful(paymentMock))
 
-  val paymentServiceResponseError: EitherT[Future, PaypalApiError, Payment] =
-    EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
+  val paymentServiceResponseError: EitherT[Future, PaypalBackendError, Payment] =
+    EitherT.left(Future.successful(PaypalBackendError.PayPalAPI(PaypalApiError.fromString("Error response"))))
 
   val payPalController: PaypalController =
     new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec))
@@ -88,7 +91,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn("paymentID")
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.createPayment(any()))
+          when(mockPaypalBackend.createPayment(any())(any()))
             .thenReturn(paymentServiceResponse)
         }
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
@@ -159,8 +162,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider
             .getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.createPayment(any()))
-            .thenReturn(paymentServiceResponse)
+          when(mockPaypalBackend.createPayment(any())(any()))
+          .thenReturn(paymentServiceResponse)
         }
 
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
@@ -429,7 +432,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |    "componentType": "AcquisitionsOther",
             |    "source": "GuardianWeb"
             |  },
-            | "signedInUserEmail": "a@b.com"
+            |  "signedInUserEmail": "a@b.com"
             |}
           """.stripMargin))
 
