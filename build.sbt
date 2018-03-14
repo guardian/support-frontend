@@ -33,7 +33,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "0.9.0",
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
-  "com.gu" %% "ophan-event-model" % "0.0.3",
+  "com.gu" %% "ophan-event-model" % "0.0.6",
   "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
   "com.gu" %% "acquisition-event-producer-play26" % "4.0.0",
   akkaHttpServer, // or use nettyServer for Netty
@@ -54,6 +54,7 @@ lazy val root = (project in file("."))
 enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging)
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
+resolvers += Resolver.sonatypeRepo("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 packageName in Debian := name.value

@@ -7,7 +7,7 @@ import model.AcquisitionData
 import ophan.thrift.event._
 import cats.implicits._
 
-case class PaypalAcquisition(payment: Payment, acquisitionData: AcquisitionData)
+case class PaypalAcquisition(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])
 
 object PaypalAcquisition {
 

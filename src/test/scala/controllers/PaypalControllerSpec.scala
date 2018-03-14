@@ -428,7 +428,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |    "componentId": "componentId",
             |    "componentType": "AcquisitionsOther",
             |    "source": "GuardianWeb"
-            |  }
+            |  },
+            | "signedInUserEmail": "a@b.com"
             |}
           """.stripMargin))
 

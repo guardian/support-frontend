@@ -52,13 +52,13 @@ class PaypalBackend(
     databaseService.insertContributionData(contributionData).leftMap(PaypalBackendError.fromDatabaseError)
   }
 
-  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] = {
-    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData)).bimap(PaypalBackendError.fromOphanError, _ => ())
+  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit] = {
+    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId)).bimap(PaypalBackendError.fromOphanError, _ => ())
   }
 
 
-  def trackContribution(payment: Payment, acquisitionData: AcquisitionData)(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit]  = {
-    getOrCreateIdentityIdFromEmail(payment.getPotentialPayerInfo.getEmail).map(Option(_))
+  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, signedInUserEmail: Option[String])(implicit pool: DefaultThreadPool): EitherT[Future, PaypalBackendError, Unit]  = {
+    getOrCreateIdentityIdFromEmail(signedInUserEmail.getOrElse(payment.getPayer.getPayerInfo.getEmail)).map(Option(_))
       .recover {
         case err =>
           logger.error("Error getting identityId", err)
@@ -71,7 +71,7 @@ class PaypalBackend(
       }
       .flatMap { contributionData =>
         combineResults(
-          submitAcquisitionToOphan(payment, acquisitionData),
+          submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId),
           insertContributionDataToPostgres(contributionData)
         )
       }
@@ -98,7 +98,7 @@ class PaypalBackend(
   EitherT[Future, PaypalApiError, Payment] = {
     for {
       payment <- paypalService.capturePayment(capturePaypalPaymentData)
-      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData)
+      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, None)
       _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
     } yield payment
   }
@@ -107,7 +107,7 @@ class PaypalBackend(
   EitherT[Future, PaypalApiError, Payment] = {
     for {
       payment <- paypalService.executePayment(paypalExecutePaymentData)
-      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData)
+      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData, paypalExecutePaymentData.signedInUserEmail)
       _ = emailService.sendPaypalThankEmail(payment, paypalExecutePaymentData.acquisitionData.campaignCodes)
     } yield payment
   }

@@ -81,8 +81,7 @@ object PaypalJsonDecoder {
 
 case class CapturePaypalPaymentData(
   paymentData: CapturePaymentData,
-  acquisitionData: AcquisitionData
-)
+  acquisitionData: AcquisitionData)
 
 @JsonCodec case class ExecutePaymentData(
   paymentId: String,
@@ -91,5 +90,7 @@ case class CapturePaypalPaymentData(
 
 case class ExecutePaypalPaymentData(
   paymentData: ExecutePaymentData,
-  acquisitionData: AcquisitionData
+  acquisitionData: AcquisitionData,
+  signedInUserEmail: Option[String]
+
 )
