@@ -116,6 +116,7 @@ function OneOffCta(props: {
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
+      id="qa-contribute-button"
     />
   );
 
@@ -145,6 +146,7 @@ function RegularCta(props: {
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
+      id="qa-contribute-button"
     />
   );
 
