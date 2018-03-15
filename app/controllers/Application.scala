@@ -86,7 +86,6 @@ class Application(
     AuthenticatedAction.async { implicit request =>
       import cats.implicits._
 
-      val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
       val identityUser = identityService.getUser(request.user)
 
       identityUser.value.foreach({
@@ -95,36 +94,9 @@ class Application(
       })
 
       identityUser.toOption.value.map { maybeUser =>
-        Ok(views.html.monthlyContributionsThankyou(title, updatedId, updatedJs, maybeUser))
+        Ok(views.html.monthlyContributionsThankyou(title, id, js, maybeUser))
       }
     }
-
-  def contributionsLandingUK(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-uk", "contributionsLandingPageUK.js")
-    Ok(views.html.contributionsLanding(
-      title,
-      description = Some(stringsConfig.contributionLandingDescription),
-      updatedId,
-      updatedJs,
-      contributionsPayPalEndpoint
-    ))
-  }
-
-  def contributionsLandingUS(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "contributions-landing-page-us", "contributionsLandingPageUS.js")
-    Ok(views.html.contributionsLanding(
-      title,
-      description = Some(stringsConfig.contributionLandingDescription),
-      updatedId,
-      updatedJs,
-      contributionsPayPalEndpoint
-    ))
-  }
-
-  def regularContributionsPending(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(INTCMP, id, js, "regular-contributions-thank-you-page", "regularContributionsThankYouPage.js")
-    Ok(views.html.react(title, updatedId, updatedJs))
-  }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))
