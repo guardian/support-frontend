@@ -128,6 +128,7 @@ Resources:
                 - states:ListStateMachines
                 - states:StartExecution
                 - states:GetExecutionHistory
+                - states:DescribeStateMachine
                 Resource: arn:aws:states:*:*:*
         - PolicyName: KMSEncryption
           PolicyDocument:
@@ -283,3 +284,29 @@ Resources:
     DependsOn:
     - TargetGroup
     - ElasticLoadBalancer
+
+  StateMachineUnavailableMetric:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      LogGroupName: !Sub support-frontend-${Stage}
+      FilterPattern: "\"regular-contributions-state-machine-unavailable\""
+      MetricTransformations:
+      - MetricNamespace: !Sub support-frontend-${Stage}
+        MetricName: state-machine-unavailable
+        MetricValue: 1
+
+  StateMachineUnavailableAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub Regular contributions state machine unavailable in ${Stage}
+      MetricName: state-machine-unavailable
+      Namespace: !Sub support-frontend-${Stage}
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Sum
+    DependsOn:
+    - StateMachineUnavailableMetric

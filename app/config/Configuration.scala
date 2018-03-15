@@ -6,6 +6,7 @@ import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
+import services.stepfunctions.StateMachineArn
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -39,4 +40,6 @@ class Configuration {
   lazy val regularStripeConfigProvider = new StripeConfigProvider(config, stage)
 
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
+
+  lazy val stepFuctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 }
