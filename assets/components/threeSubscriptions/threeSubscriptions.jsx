@@ -38,7 +38,7 @@ export default function ThreeSubscriptions() {
       <SubscriptionBundle
         modifierClass="paper"
         heading="Paper subscription"
-        subheading="£10.79/month"
+        subheading="£10.36/month"
         benefits={[
           {
             heading: 'Choose your package and delivery method',
@@ -56,7 +56,7 @@ export default function ThreeSubscriptions() {
       <SubscriptionBundle
         modifierClass="paper-digital"
         heading="Paper+digital"
-        subheading="£22.06/month"
+        subheading="£21.62/month"
         benefits={[
           {
             heading: 'Choose your package and delivery method',

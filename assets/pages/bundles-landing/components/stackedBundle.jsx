@@ -183,7 +183,7 @@ const digitalCopy: SubscribeAttrs = {
 
 const paperCopy: SubscribeAttrs = {
   heading: 'Paper subscription',
-  subheading: 'from £10.79/month',
+  subheading: 'from £10.36/month',
   listItems: getPaperItems(),
   ctaText: 'Get a paper subscription',
   ctaId: 'paper-sub structure-test',
@@ -194,7 +194,7 @@ const paperCopy: SubscribeAttrs = {
 
 const paperDigitalCopy: SubscribeAttrs = {
   heading: 'Paper+digital',
-  subheading: 'from £22.06/month',
+  subheading: 'from £21.62/month',
   listItems: getPaperDigitalItems(),
   ctaText: 'Get a paper + digital subscription',
   ctaId: 'paper-digi-sub',
