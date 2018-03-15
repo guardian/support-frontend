@@ -387,6 +387,7 @@ function getContributionTypeRadios(countryGroupId: CountryGroupId) {
       value: 'ONE_OFF',
       text: getOneOffName(countryGroupId),
       accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+      id: 'qa-one-off-toggle',
     },
   ];
 
