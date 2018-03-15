@@ -9,7 +9,7 @@ import model.paypal.PaypalMode
 import model.{Environment, InitializationError}
 
 
-case class PaypalConfig(clientId: String, clientSecret: String, paypalMode: PaypalMode)
+case class PaypalConfig(clientId: String, clientSecret: String, hookId: String, paypalMode: PaypalMode)
 
 object PaypalConfig {
 
@@ -26,6 +26,7 @@ object PaypalConfig {
       (
         validate("client-id"),
         validate("client-secret"),
+        validate("hook-id"),
         validated(PaypalMode.fromEnvironment(environment))
       ).mapN(PaypalConfig.apply)
     }

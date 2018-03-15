@@ -29,3 +29,8 @@ POST     /contribute/one-off/paypal/execute-payment           controllers.Paypal
 # the PayPal API (not via /contribute/one-off/paypal/create-payment in this API).
 # This is only used by the mobile app.
 POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment
+
+# Captures webhooks from PayPal.
+# WEbhooks are HTTP callbacks that receive notification messages for events
+# This is used by the mobile and Web paypal payments but only for Refunds.
+POST     /contribute/one-off/paypal/hook                      controllers.PaypalController.hook

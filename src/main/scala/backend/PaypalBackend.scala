@@ -117,6 +117,14 @@ class PaypalBackend(
     } yield payment
   }
 
+  def processPaymentHook(paypalHook: PaypalHook, headers: Map[String, String], rawJson: String)(implicit pool: DefaultThreadPool):
+  EitherT[Future, PaypalApiError, Unit] = {
+    for {
+      payment <- paypalService.validateEvent(headers, rawJson)
+      _ = databaseService.updatePaymentHook(paypalHook.resource.parent_payment, paypalHook.event_type)
+    } yield payment
+  }
+
 }
 
 object PaypalBackend {

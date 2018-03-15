@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext
 class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar {
 
   trait PaypalServiceTestFixture {
-    val paypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", PaypalMode.Sandbox)
+    val paypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", "hookId", PaypalMode.Sandbox)
     implicit val executionContextTest = PaypalThreadPool(ExecutionContext.global)
     val buildPaypalTransactions = PrivateMethod[java.util.List[Transaction]]('buildPaypalTransactions)
     val buildCaptureByTransaction = PrivateMethod[Capture]('buildCaptureByTransaction)

@@ -5,11 +5,13 @@ import java.util.UUID
 import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments._
+import com.paypal.base.Constants
 import com.paypal.base.rest.APIContext
 import com.typesafe.scalalogging.StrictLogging
 import conf.PaypalConfig
-import model.paypal.{CapturePaypalPaymentData, CreatePaypalPaymentData, PaypalApiError, ExecutePaypalPaymentData}
+import model.paypal._
 import model.PaypalThreadPool
+
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
 import scala.collection.JavaConverters._
@@ -19,6 +21,7 @@ trait Paypal {
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment]
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment]
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment]
+  def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit]
 }
 
 class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) extends Paypal with StrictLogging {
@@ -64,6 +67,19 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
         payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
         validatedPayment <- validatePayment(payment)
       } yield validatedPayment).toEitherT[Future]
+
+
+  def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {
+    Either.catchNonFatal {
+      val context = apiContext.addConfiguration(Constants.PAYPAL_WEBHOOK_ID, config.hookId)
+      if(Event.validateReceivedEvent(context, headers.asJava, body))
+        ()
+      else {
+        logger.error(s"Palpal has invalidated webhook request. Verify config.hookId: ${config.hookId}. JSON: $body")
+        throw new Exception("Invalid hook request")
+      }
+    }.leftMap(PaypalApiError.fromThrowable).toEitherT[Future]
+  }
 
 
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {

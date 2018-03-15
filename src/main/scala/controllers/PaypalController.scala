@@ -9,11 +9,13 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 
+import scala.concurrent.Future
+
 class PaypalController(controllerComponents: ControllerComponents,
-    paypalBackendProvider: RequestBasedProvider[PaypalBackend])(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+  paypalBackendProvider: RequestBasedProvider[PaypalBackend])(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
   // Other considerations:
   // - CORS
-  // - Test users
+  // - Test USERS
   // - Remember that API will change: no redirectUrl!
 
   import util.RequestTypeDecoder.instances._
@@ -50,5 +52,22 @@ class PaypalController(controllerComponents: ControllerComponents,
       )
   }
 
-
+  def hook: Action[String] = Action.async(parse.tolerantText) { paypalHookRequest =>
+    import io.circe.parser._
+    import util.RequestTypeDecoder.hook._
+    val paypalHookJson = paypalHookRequest.body
+    decode[PaypalHook](paypalHookJson)
+      .fold(
+        err => Future.successful(BadRequest(ResultBody.Error(err.getMessage))),
+        paypalHook => {
+          paypalBackendProvider
+            .getInstanceFor(paypalHook)
+            .processPaymentHook(paypalHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
+            .fold(
+              err => InternalServerError(ResultBody.Error(err.message)),
+              payment => Ok(ResultBody.Success("execute hook success"))
+            )
+        }
+      )
+  }
 }

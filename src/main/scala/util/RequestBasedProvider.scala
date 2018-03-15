@@ -2,8 +2,8 @@ package util
 
 import play.api.mvc.Request
 import simulacrum.typeclass
-
 import model.RequestType
+import model.paypal.PaypalHook
 
 // Experimental
 @typeclass trait RequestTypeDecoder[A] {
@@ -19,6 +19,12 @@ object RequestTypeDecoder {
       override def requestType(data: Request[A]): RequestType = RequestType.Test
     }
   }
+  object hook {
+    implicit def requestTypeDecoder: RequestTypeDecoder[PaypalHook] = new RequestTypeDecoder[PaypalHook] {
+      // TODO: implement based on production mode
+      override def requestType(data: PaypalHook): RequestType = RequestType.Test
+    }
+  }
 }
 
 // Get an instance of A for a given request type
@@ -29,6 +35,7 @@ trait RequestBasedProvider[A] {
 
   def getInstanceFor[B : RequestTypeDecoder](data: B): A =
     getInstanceForRequestType(data.requestType)
+
 }
 
 object RequestBasedProvider {

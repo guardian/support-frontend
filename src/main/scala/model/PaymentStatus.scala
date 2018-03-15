@@ -1,14 +1,15 @@
 package model
 
-import enumeratum.{Enum, EnumEntry}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 
 import scala.collection.immutable.IndexedSeq
 
+// Models currencies supported by the API
 sealed trait PaymentStatus extends EnumEntry
 
-object PaymentStatus extends Enum[PaymentProvider] {
+object PaymentStatus extends Enum[PaymentStatus] with CirceEnum[PaymentStatus] {
 
-  override val values: IndexedSeq[PaymentProvider] = findValues
+  override val values: IndexedSeq[PaymentStatus] = findValues
 
   case object Paid extends PaymentStatus
 
