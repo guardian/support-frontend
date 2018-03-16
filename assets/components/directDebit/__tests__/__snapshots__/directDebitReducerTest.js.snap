@@ -6,6 +6,7 @@ Object {
   "accountHolderName": "",
   "accountNumber": "",
   "formError": "",
+  "isDDGuaranteeOpen": false,
   "isPopUpOpen": false,
   "sortCodeArray": Array [
     "",
