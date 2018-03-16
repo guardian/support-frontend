@@ -56,7 +56,8 @@ object StripeJsonDecoder {
           abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
             .getOrElse(Set[AbTest]()))
             .filter(_.nonEmpty)
-        )
+        ),
+        signedInUserEmail = None
       )
     }
   }
@@ -78,5 +79,6 @@ object StripeJsonDecoder {
 // - identityData
 case class StripeChargeData(
     paymentData: StripePaymentData,
-    acquisitionData: AcquisitionData
+    acquisitionData: AcquisitionData,
+    signedInUserEmail: Option[String]
 )

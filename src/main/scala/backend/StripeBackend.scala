@@ -8,61 +8,76 @@ import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
-
-import backend.StripeBackend.StripeBackendError
-import conf.{ConfigLoader, IdentityConfig, StripeConfig}
+import conf.{ConfigLoader, IdentityConfig, OphanConfig, StripeConfig}
 import conf.ConfigLoader._
 import model._
+import model.acquisition.StripeAcquisition
 import model.db.ContributionData
-import model.stripe.{StripeChargeData, StripeChargeError, StripeChargeSuccess}
+import model.stripe.{StripeChargeData, StripeChargeSuccess}
 import services._
 import util.EnvironmentBasedBuilder
 
 // Provides methods required by the Stripe controller
-// TODO: include dependency on acquisition producer service
-class StripeBackend(stripeService: StripeService, databaseService: DatabaseService,
-  identityService: IdentityService) extends StrictLogging {
+class StripeBackend(
+    stripeService: StripeService,
+    databaseService: DatabaseService,
+    identityService: IdentityService,
+    ophanService: OphanService
+) extends StrictLogging {
 
   // Convert the result of the identity id operation,
   // into the monad used by the for comprehension in the createCharge() method.
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool):
-  EitherT[Future, StripeBackendError, Long] =
-    identityService.getOrCreateIdentityIdFromEmail(email)
-      .leftMap(StripeBackendError.fromIdentityError)
-
-  def insertContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool):
-  EitherT[Future, StripeBackendError, Unit] = {
-    databaseService.insertContributionData(contributionData)
-      .leftMap(StripeBackendError.fromDatabaseError)
-  }
-
-  def trackContribution(charge: Charge, data: StripeChargeData)(implicit pool: DefaultThreadPool):
-  EitherT[Future, StripeBackendError, Unit]  = {
-    for {
-      identityId <- getOrCreateIdentityIdFromEmail(data.paymentData.email).map(Option(_)).recover {
+  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Option[Long]] =
+    identityService
+      .getOrCreateIdentityIdFromEmail(email)
+      .leftMap(BackendError.fromIdentityError)
+      .map(Option(_))
+      .recover {
         case err =>
-          logger.error("Error getting Identity Id", err)
+          logger.error("Error getting identityId", err)
           None
       }
-      contributionData <- insertContributionData(ContributionData.fromStripeCharge(identityId, charge))
-    } yield contributionData
-  }
 
-  // TODO: send acquisition event
+  def insertContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool):
+  EitherT[Future, BackendError, Unit] =
+    databaseService.insertContributionData(contributionData)
+      .leftMap(BackendError.fromDatabaseError)
+
+  def submitAcquisitionToOphan(acquisition: StripeAcquisition)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] =
+    ophanService.submitAcquisition(acquisition)
+      .bimap(BackendError.fromOphanError, _ => ())
+
+  def createStripeCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Charge] =
+    stripeService.createCharge(data)
+      .leftMap(BackendError.fromStripeChargeError)
+
+  def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long])(implicit pool: DefaultThreadPool):
+  EitherT[Future, BackendError, Unit]  =
+    BackendError.combineResults(
+      insertContributionData(ContributionData.fromStripeCharge(identityId, charge)),
+      submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId))
+    )
+
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   def createCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool):
-  EitherT[Future, StripeChargeError, StripeChargeSuccess] =
+  EitherT[Future, BackendError, StripeChargeSuccess] =
     for {
-      charge <- stripeService.createCharge(data)
-      _ = trackContribution(charge, data)
+      charge <- createStripeCharge(data)
+
+      signedInUserEmail = data.signedInUserEmail
+      paymentEmail = data.paymentData.email
+      email = signedInUserEmail.getOrElse(paymentEmail)
+
+      identityId <- getOrCreateIdentityIdFromEmail(email)
+      _ = trackContribution(charge, data, identityId)
     } yield StripeChargeSuccess.fromCharge(charge)
 
 }
 
 object StripeBackend {
 
-  private def apply(stripeService: StripeService, databaseService: DatabaseService, identityService: IdentityService): StripeBackend =
-    new StripeBackend(stripeService, databaseService, identityService)
+  private def apply(stripeService: StripeService, databaseService: DatabaseService, identityService: IdentityService, ophanService: OphanService): StripeBackend =
+    new StripeBackend(stripeService, databaseService, identityService, ophanService)
 
   class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
     implicit defaultThreadPool: DefaultThreadPool,
@@ -80,24 +95,11 @@ object StripeBackend {
         .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
-        .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService]
+        .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
+      configLoader
+        .loadConfig[Environment, OphanConfig](env)
+        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService]
     ).mapN(StripeBackend.apply)
   }
-
-  sealed abstract class StripeBackendError extends Exception {
-    override def getMessage: String = this match {
-      case StripeBackendError.Database(err) => err.getMessage
-      case StripeBackendError.Service(err) => err.getMessage
-    }
-  }
-
-  object StripeBackendError {
-    final case class Database(error: DatabaseService.Error) extends StripeBackendError
-    final case class Service(error: IdentityClient.Error) extends StripeBackendError
-
-    def fromIdentityError(err: IdentityClient.Error): StripeBackendError = Service(err)
-    def fromDatabaseError(err: DatabaseService.Error): StripeBackendError = Database(err)
-  }
-
 }
 

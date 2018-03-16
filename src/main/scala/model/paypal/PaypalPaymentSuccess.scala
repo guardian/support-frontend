@@ -2,7 +2,7 @@ package model.paypal
 
 import java.net.URL
 
-import backend.PaypalBackend.PaypalBackendError
+import backend.BackendError
 import com.paypal.api.payments.Payment
 import io.circe.generic.JsonCodec
 
@@ -13,7 +13,7 @@ import scala.util.Try
 
 object PaypalPaymentSuccess {
 
-  def fromPayment(payment: Payment): Either[PaypalBackendError, PaypalPaymentSuccess] = {
+  def fromPayment(payment: Payment): Either[BackendError, PaypalPaymentSuccess] = {
     (for {
       links <- Option(payment.getLinks)
       approvalLinks <- links.asScala.find(_.getRel.equalsIgnoreCase("approval_url"))
@@ -23,7 +23,7 @@ object PaypalPaymentSuccess {
       paymentId <- Option(payment.getId)
     } yield PaypalPaymentSuccess(approvalUrl, paymentId))
       .map(Right(_))
-      .getOrElse(Left(PaypalBackendError.fromPaypalAPIError(PaypalApiError.fromString("Unable to parse payment"))))
+      .getOrElse(Left(BackendError.fromPaypalAPIError(PaypalApiError.fromString("Unable to parse payment"))))
   }
 
 }

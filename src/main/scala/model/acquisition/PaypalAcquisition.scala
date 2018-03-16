@@ -24,6 +24,7 @@ object PaypalAcquisition {
 
       override def buildAcquisition(paypalAcquisition: PaypalAcquisition): Either[String, Acquisition] = {
         Either.catchNonFatal {
+          val acquisitionData = paypalAcquisition.acquisitionData
           val transaction = paypalAcquisition.payment.getTransactions.get(0)
           Acquisition(
             product = Product.Contribution,
@@ -31,15 +32,16 @@ object PaypalAcquisition {
             currency = transaction.getAmount.getCurrency,
             amount = transaction.getAmount.getTotal.toDouble,
             paymentProvider = Some(ophan.thrift.event.PaymentProvider.Paypal),
-            campaignCode = paypalAcquisition.acquisitionData.campaignCodes,
-            abTests = paypalAcquisition.acquisitionData.abTests.map(AbTestInfo(_)),
+            campaignCode = acquisitionData.campaignCodes,
+            abTests = acquisitionData.abTests.map(AbTestInfo(_)),
             countryCode = Some(paypalAcquisition.payment.getPayer.getPayerInfo.getCountryCode),
-            referrerPageViewId = paypalAcquisition.acquisitionData.referrerPageviewId,
-            referrerUrl = paypalAcquisition.acquisitionData.referrerUrl,
-            componentId = paypalAcquisition.acquisitionData.componentId,
-            componentTypeV2 = paypalAcquisition.acquisitionData.componentType,
-            source = paypalAcquisition.acquisitionData.source,
-            platform = paypalAcquisition.acquisitionData.platform.flatMap(Platform.valueOf(_))
+            referrerPageViewId = acquisitionData.referrerPageviewId,
+            referrerUrl = acquisitionData.referrerUrl,
+            componentId = acquisitionData.componentId,
+            componentTypeV2 = acquisitionData.componentType,
+            source = acquisitionData.source,
+            identityId = paypalAcquisition.identityId.map(x => x.toString),
+            platform = acquisitionData.platform.flatMap(Platform.valueOf(_))
           )
         }.leftMap{ error =>
           s"Failed to build an acquisition submission from an instance of PaypalAcquisition - cause: $error"

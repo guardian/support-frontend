@@ -19,11 +19,13 @@ class StripeController(
   import model.stripe.StripeJsonDecoder._
 
   def executePayment: Action[StripeChargeData] = Action(circe.json[StripeChargeData]).async { request =>
-    stripeBackendProvider.getInstanceFor(request)
-      .createCharge(request.body)
-      .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
-        charge => Ok(ResultBody.Success(charge))
-      )
+    {
+      stripeBackendProvider.getInstanceFor(request)
+        .createCharge(request.body)
+        .fold(
+          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          charge => Ok(ResultBody.Success(charge))
+        )
+    }
   }
 }

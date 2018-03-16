@@ -5,6 +5,7 @@ import akka.stream.{ActorMaterializer, Materializer}
 import backend.{PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
+import backend.BackendError
 import com.stripe.model.Charge
 import model.DefaultThreadPool
 import model.stripe.{StripeChargeError, StripeChargeSuccess}
@@ -42,11 +43,11 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val stripeChargeSuccessMock: StripeChargeSuccess = StripeChargeSuccess.fromCharge(mockCharge)
 
-  val stripeServiceResponse: EitherT[Future, StripeChargeError, StripeChargeSuccess] =
-    EitherT.right(Future.successful(stripeChargeSuccessMock))
+  val stripeServiceResponse: EitherT[Future, BackendError, StripeChargeSuccess] =
+    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(BackendError.fromStripeChargeError)
 
-  val stripeServiceResponseError: EitherT[Future, StripeChargeError, StripeChargeSuccess] =
-    EitherT.left(Future.successful(StripeChargeError.fromThrowable(new Exception("error message"))))
+  val stripeServiceResponseError: EitherT[Future, BackendError, StripeChargeSuccess] =
+    EitherT.left(Future.successful(StripeChargeError.fromThrowable(new Exception("error message")))).leftMap(BackendError.fromStripeChargeError)
 
   val stripeController: StripeController =
     new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec))

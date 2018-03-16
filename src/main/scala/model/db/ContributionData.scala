@@ -3,9 +3,11 @@ package model.db
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset}
 import java.util.UUID
+
 import cats.implicits._
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
+import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
 import model.{Currency, PaymentProvider, PaymentStatus}
 
@@ -18,6 +20,7 @@ case class ContributionData private (
     created: LocalDateTime,
     currency: Currency,
     amount: Long,
+    countryCode: Option[String],
     // Used as primary key on current contribution_metadata and payment_hooks table
     // https://github.com/guardian/contributions-platform/blob/master/Postgres/schema.sql
     contributionId: UUID = UUID.randomUUID
@@ -44,7 +47,8 @@ object ContributionData {
       created = LocalDateTime.ofEpochSecond(charge.getCreated, 0, ZoneOffset.UTC),
       // Stripe can return currency in lower case
       currency = Currency.withNameInsensitive(charge.getCurrency),
-      amount = charge.getAmount
+      amount = charge.getAmount,
+      countryCode = StripeSource.getCountryCode(charge)
     )
 
   import scala.collection.JavaConverters._
@@ -64,7 +68,8 @@ object ContributionData {
       receiptEmail = payment.getPayer.getPayerInfo.getEmail,
       created = created,
       currency = currency,
-      amount = amount
+      amount = amount,
+      countryCode = Some(payment.getPayer.getPayerInfo.getCountryCode)
     )
   }
 

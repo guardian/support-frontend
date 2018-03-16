@@ -2,7 +2,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import backend.PaypalBackend.PaypalBackendError
+import backend.BackendError
 import backend.{PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
@@ -40,11 +40,11 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val paymentMock: Payment = mock[Payment]
 
-  val paymentServiceResponse: EitherT[Future, PaypalBackendError, Payment] =
+  val paymentServiceResponse: EitherT[Future, BackendError, Payment] =
     EitherT.right(Future.successful(paymentMock))
 
-  val paymentServiceResponseError: EitherT[Future, PaypalBackendError, Payment] =
-    EitherT.left(Future.successful(PaypalBackendError.PayPalAPI(PaypalApiError.fromString("Error response"))))
+  val paymentServiceResponseError: EitherT[Future, BackendError, Payment] =
+    EitherT.left(Future.successful(BackendError.PaypalApiError(PaypalApiError.fromString("Error response"))))
 
   val paymentHookResponse: EitherT[Future, PaypalApiError, Unit] =
     EitherT.right(Future.successful(()))

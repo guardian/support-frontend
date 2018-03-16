@@ -75,7 +75,8 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
         currency,
         amount,
         status,
-        email
+        email,
+        cardcountry
       ) VALUES (
         ${data.contributionId}::uuid,
         ${data.paymentId},
@@ -84,7 +85,8 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
         ${data.currency.entryName},
         ${data.amount},
         ${data.paymentStatus.entryName}::paymentStatus,
-        ${data.receiptEmail}
+        ${data.receiptEmail},
+        ${data.countryCode}
       );
 
       COMMIT;
