@@ -65,7 +65,7 @@ class PaypalController(controllerComponents: ControllerComponents,
             .processPaymentHook(paypalHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
             .fold(
               err => InternalServerError(ResultBody.Error(err.message)),
-              payment => Ok(ResultBody.Success("execute hook success"))
+              _ => Ok(ResultBody.Success("execute hook success"))
             )
         }
       )

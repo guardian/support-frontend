@@ -6,9 +6,9 @@ import backend.{PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
 import backend.BackendError
-import com.stripe.model.Charge
+import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
-import model.stripe.{StripeChargeError, StripeChargeSuccess}
+import model.stripe.{StripeApiError, StripeChargeSuccess}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -24,6 +24,7 @@ import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
 import util.RequestBasedProvider
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class StripeControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
@@ -44,10 +45,18 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val stripeChargeSuccessMock: StripeChargeSuccess = StripeChargeSuccess.fromCharge(mockCharge)
 
   val stripeServiceResponse: EitherT[Future, BackendError, StripeChargeSuccess] =
-    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(BackendError.fromStripeChargeError)
+    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(BackendError.fromStripeApiError)
 
   val stripeServiceResponseError: EitherT[Future, BackendError, StripeChargeSuccess] =
-    EitherT.left(Future.successful(StripeChargeError.fromThrowable(new Exception("error message")))).leftMap(BackendError.fromStripeChargeError)
+    EitherT.left(Future.successful(StripeApiError.fromThrowable(new Exception("error message")))).leftMap(BackendError.fromStripeApiError)
+
+  val mockEvent: Event = mock[Event]
+
+  val paymentHookResponse: EitherT[Future, StripeApiError, Event] =
+    EitherT.right(Future.successful(mockEvent))
+
+  val paymentHookResponseError: EitherT[Future, StripeApiError, Event] =
+    EitherT.left(Future.successful(StripeApiError.apply("Error response")))
 
   val stripeController: StripeController =
     new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec))
@@ -258,6 +267,309 @@ class StripeControllerSpec extends PlaySpec with Status {
           Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(500)
+      }
+    }
+
+    "a request is made to hook a payment" should {
+
+      "return a 200 response if the request is valid" in {
+
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.processPaymentHook(any())(any()))
+            .thenReturn(paymentHookResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+
+        val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "id": "evt_1C5u5ECbpG0cQtlbRqzhzght",
+              |  "object": "event",
+              |  "api_version": "2016-03-07",
+              |  "created": 1521112640,
+              |  "data": {
+              |    "object": {
+              |      "id": "ch_1C5dM5CbpG0cQtlbH7dCaMmB",
+              |      "object": "charge",
+              |      "amount": 5000,
+              |      "amount_refunded": 5000,
+              |      "application": null,
+              |      "application_fee": null,
+              |      "balance_transaction": "txn_1C5dM5CbpG0cQtlbWHSjLu2H",
+              |      "captured": true,
+              |      "created": 1521048337,
+              |      "currency": "gbp",
+              |      "customer": null,
+              |      "description": "Your contribution",
+              |      "destination": null,
+              |      "dispute": null,
+              |      "failure_code": null,
+              |      "failure_message": null,
+              |      "fraud_details": {},
+              |      "invoice": null,
+              |      "livemode": false,
+              |      "metadata": {
+              |        "contributionId": "67dba1aa-5c4b-4828-a00d-64f82cc7465d",
+              |        "countrySubdivisionCode": "unknown-country-subdivision-code",
+              |        "ophanPageviewId": "jercw9q8cp285gk2o9oz",
+              |        "email": "jsmith@gu.com",
+              |        "name": "john smith",
+              |        "countryCode": "unknown-country-code"
+              |      },
+              |      "on_behalf_of": null,
+              |      "order": null,
+              |      "outcome": {
+              |        "network_status": "approved_by_network",
+              |        "reason": null,
+              |        "risk_level": "normal",
+              |        "seller_message": "Payment complete.",
+              |        "type": "authorized"
+              |      },
+              |      "paid": true,
+              |      "receipt_email": "jsmith@gu.com",
+              |      "receipt_number": null,
+              |      "refunded": true,
+              |      "refunds": {
+              |        "object": "list",
+              |        "data": [
+              |          {
+              |            "id": "re_1C5u5DCbpG0cQtlbdbTu6iWX",
+              |            "object": "refund",
+              |            "amount": 5000,
+              |            "balance_transaction": "txn_1C5u5DCbpG0cQtlbSWmY2OMh",
+              |            "charge": "ch_1C5dM5CbpG0cQtlbH7dCaMmB",
+              |            "created": 1521112639,
+              |            "currency": "gbp",
+              |            "metadata": {},
+              |            "reason": null,
+              |            "receipt_number": null,
+              |            "status": "succeeded"
+              |          }
+              |        ],
+              |        "has_more": false,
+              |        "total_count": 1,
+              |        "url": "/v1/charges/ch_1C5dM5CbpG0cQtlbH7dCaMmB/refunds"
+              |      },
+              |      "review": null,
+              |      "shipping": null,
+              |      "source": {
+              |        "id": "card_1C5dM1CbpG0cQtlbwg3Es6dh",
+              |        "object": "card",
+              |        "address_city": null,
+              |        "address_country": null,
+              |        "address_line1": null,
+              |        "address_line1_check": null,
+              |        "address_line2": null,
+              |        "address_state": null,
+              |        "address_zip": null,
+              |        "address_zip_check": null,
+              |        "brand": "Visa",
+              |        "country": "US",
+              |        "customer": null,
+              |        "cvc_check": "pass",
+              |        "dynamic_last4": null,
+              |        "exp_month": 2,
+              |        "exp_year": 2022,
+              |        "fingerprint": "6Hu7pNVx490p6mah",
+              |        "funding": "credit",
+              |        "last4": "4242",
+              |        "metadata": {},
+              |        "name": "jsmith@gu.com",
+              |        "tokenization_method": null
+              |      },
+              |      "source_transfer": null,
+              |      "statement_descriptor": null,
+              |      "status": "succeeded",
+              |      "transfer_group": null
+              |    },
+              |    "previous_attributes": {
+              |      "amount_refunded": 0,
+              |      "refunded": false,
+              |      "refunds": {
+              |        "data": [],
+              |        "total_count": 0
+              |      }
+              |    }
+              |  },
+              |  "livemode": false,
+              |  "pending_webhooks": 1,
+              |  "request": "req_DlkTIMVC94IJ7X",
+              |  "type": "charge.refunded"
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+
+        status(stripeControllerResult).mustBe(200)
+
+      }
+
+      "return a 400 response if the request contains an invalid JSON" in {
+
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.processPaymentHook(any())(any()))
+            .thenReturn(paymentHookResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+
+        val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "object": "event",
+              |  "api_version": "2016-03-07",
+              |  "created": 1521112640,
+              |  "livemode": false,
+              |  "pending_webhooks": 1,
+              |  "request": "req_DlkTIMVC94IJ7X",
+              |  "type": "charge.refunded"
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+
+        status(stripeControllerResult).mustBe(400)
+
+      }
+
+      "return a 500 response if the response from the service contains an error" in {
+
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.processPaymentHook(any())(any()))
+            .thenReturn(paymentHookResponseError)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+
+        val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "id": "evt_1C5u5ECbpG0cQtlbRqzhzght",
+              |  "object": "event",
+              |  "api_version": "2016-03-07",
+              |  "created": 1521112640,
+              |  "data": {
+              |    "object": {
+              |      "id": "ch_1C5dM5CbpG0cQtlbH7dCaMmB",
+              |      "object": "charge",
+              |      "amount": 5000,
+              |      "amount_refunded": 5000,
+              |      "application": null,
+              |      "application_fee": null,
+              |      "balance_transaction": "txn_1C5dM5CbpG0cQtlbWHSjLu2H",
+              |      "captured": true,
+              |      "created": 1521048337,
+              |      "currency": "gbp",
+              |      "customer": null,
+              |      "description": "Your contribution",
+              |      "destination": null,
+              |      "dispute": null,
+              |      "failure_code": null,
+              |      "failure_message": null,
+              |      "fraud_details": {},
+              |      "invoice": null,
+              |      "livemode": false,
+              |      "metadata": {
+              |        "contributionId": "67dba1aa-5c4b-4828-a00d-64f82cc7465d",
+              |        "countrySubdivisionCode": "unknown-country-subdivision-code",
+              |        "ophanPageviewId": "jercw9q8cp285gk2o9oz",
+              |        "email": "jsmith@gu.com",
+              |        "name": "john smith",
+              |        "countryCode": "unknown-country-code"
+              |      },
+              |      "on_behalf_of": null,
+              |      "order": null,
+              |      "outcome": {
+              |        "network_status": "approved_by_network",
+              |        "reason": null,
+              |        "risk_level": "normal",
+              |        "seller_message": "Payment complete.",
+              |        "type": "authorized"
+              |      },
+              |      "paid": true,
+              |      "receipt_email": "jsmith@gu.com",
+              |      "receipt_number": null,
+              |      "refunded": true,
+              |      "refunds": {
+              |        "object": "list",
+              |        "data": [
+              |          {
+              |            "id": "re_1C5u5DCbpG0cQtlbdbTu6iWX",
+              |            "object": "refund",
+              |            "amount": 5000,
+              |            "balance_transaction": "txn_1C5u5DCbpG0cQtlbSWmY2OMh",
+              |            "charge": "ch_1C5dM5CbpG0cQtlbH7dCaMmB",
+              |            "created": 1521112639,
+              |            "currency": "gbp",
+              |            "metadata": {},
+              |            "reason": null,
+              |            "receipt_number": null,
+              |            "status": "succeeded"
+              |          }
+              |        ],
+              |        "has_more": false,
+              |        "total_count": 1,
+              |        "url": "/v1/charges/ch_1C5dM5CbpG0cQtlbH7dCaMmB/refunds"
+              |      },
+              |      "review": null,
+              |      "shipping": null,
+              |      "source": {
+              |        "id": "card_1C5dM1CbpG0cQtlbwg3Es6dh",
+              |        "object": "card",
+              |        "address_city": null,
+              |        "address_country": null,
+              |        "address_line1": null,
+              |        "address_line1_check": null,
+              |        "address_line2": null,
+              |        "address_state": null,
+              |        "address_zip": null,
+              |        "address_zip_check": null,
+              |        "brand": "Visa",
+              |        "country": "US",
+              |        "customer": null,
+              |        "cvc_check": "pass",
+              |        "dynamic_last4": null,
+              |        "exp_month": 2,
+              |        "exp_year": 2022,
+              |        "fingerprint": "6Hu7pNVx490p6mah",
+              |        "funding": "credit",
+              |        "last4": "4242",
+              |        "metadata": {},
+              |        "name": "jsmith@gu.com",
+              |        "tokenization_method": null
+              |      },
+              |      "source_transfer": null,
+              |      "statement_descriptor": null,
+              |      "status": "succeeded",
+              |      "transfer_group": null
+              |    },
+              |    "previous_attributes": {
+              |      "amount_refunded": 0,
+              |      "refunded": false,
+              |      "refunds": {
+              |        "data": [],
+              |        "total_count": 0
+              |      }
+              |    }
+              |  },
+              |  "livemode": false,
+              |  "pending_webhooks": 1,
+              |  "request": "req_DlkTIMVC94IJ7X",
+              |  "type": "charge.refunded"
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+
+        status(stripeControllerResult).mustBe(500)
+
       }
 
     }

@@ -113,7 +113,7 @@ class PaypalBackend(
   EitherT[Future, PaypalApiError, Unit] = {
     for {
       payment <- paypalService.validateEvent(headers, rawJson)
-      _ = databaseService.updatePaymentHook(paypalHook.resource.parent_payment, paypalHook.event_type)
+      _ = databaseService.updatePaymentHook(paypalHook.resource.parent_payment, paypalHook.event_type.entryName)
     } yield payment
   }
 

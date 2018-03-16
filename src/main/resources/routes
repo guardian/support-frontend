@@ -13,6 +13,10 @@ GET      /healthcheck                                         controllers.AppCon
 # Execute a pre-authorised Stripe payment
 POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
 
+# Captures webhooks from Stripe.
+# Webhooks are events that notify your application any time an event happens on your account
+# This is used by the mobile and Web stripe payments but only for Refunds.
+POST     /contribute/one-off/stripe/hook                      controllers.StripeController.hook
 
 #############################################
 # PAYPAL
@@ -31,6 +35,6 @@ POST     /contribute/one-off/paypal/execute-payment           controllers.Paypal
 POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment
 
 # Captures webhooks from PayPal.
-# WEbhooks are HTTP callbacks that receive notification messages for events
+# Webhooks are HTTP callbacks that receive notification messages for events
 # This is used by the mobile and Web paypal payments but only for Refunds.
 POST     /contribute/one-off/paypal/hook                      controllers.PaypalController.hook

@@ -8,7 +8,6 @@ import ophan.thrift.event.Acquisition
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import model.stripe.StripeChargeData
-import io.circe.parser._
 
 
 case class StripeAcquisition(stripeChargeData: StripeChargeData, charge: Charge, identityId: Option[Long])

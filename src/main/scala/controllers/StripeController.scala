@@ -5,9 +5,8 @@ import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
-
 import backend.StripeBackend
-import model.stripe.StripeChargeData
+import model.stripe.{StripeChargeData, StripeHook}
 import model.{DefaultThreadPool, ResultBody}
 
 class StripeController(
@@ -28,4 +27,14 @@ class StripeController(
         )
     }
   }
+
+  def hook: Action[StripeHook] = Action(circe.json[StripeHook]).async { request =>
+    stripeBackendProvider.getInstanceFor(request)
+      .processPaymentHook(request.body)
+      .fold(
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        _ => Ok(ResultBody.Success("execute hook success"))
+      )
+  }
+
 }

@@ -3,7 +3,7 @@ package backend
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
-import com.stripe.model.Charge
+import com.stripe.model.{Charge, Event}
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 
@@ -13,7 +13,7 @@ import conf.ConfigLoader._
 import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
-import model.stripe.{StripeChargeData, StripeChargeSuccess}
+import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeHook}
 import services._
 import util.EnvironmentBasedBuilder
 
@@ -49,7 +49,7 @@ class StripeBackend(
 
   def createStripeCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Charge] =
     stripeService.createCharge(data)
-      .leftMap(BackendError.fromStripeChargeError)
+      .leftMap(BackendError.fromStripeApiError)
 
   def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long])(implicit pool: DefaultThreadPool):
   EitherT[Future, BackendError, Unit]  =
@@ -71,6 +71,16 @@ class StripeBackend(
       identityId <- getOrCreateIdentityIdFromEmail(email)
       _ = trackContribution(charge, data, identityId)
     } yield StripeChargeSuccess.fromCharge(charge)
+
+
+  def processPaymentHook(stripeHook: StripeHook)(implicit pool: DefaultThreadPool):
+  EitherT[Future, StripeApiError, Event] = {
+    for {
+      event <- stripeService.processPaymentHook(stripeHook)
+      _ = databaseService.updatePaymentHook(stripeHook.data.`object`.id, stripeHook.`type`.entryName)
+    } yield event
+  }
+
 
 }
 

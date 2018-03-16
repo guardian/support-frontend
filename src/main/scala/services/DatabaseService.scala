@@ -8,7 +8,7 @@ import com.typesafe.scalalogging.StrictLogging
 import play.api.db.Database
 
 import scala.concurrent.Future
-import model.{JdbcThreadPool, PaymentStatus}
+import model.JdbcThreadPool
 import model.db.ContributionData
 
 
@@ -19,7 +19,7 @@ trait DatabaseService {
   // since the result of the insert has no dependencies.
   // See e.g. backend.StripeBackend for more context.
   def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit]
-  def updatePaymentHook(paymentId: String, status: PaymentStatus): EitherT[Future, DatabaseService.Error, Unit]
+  def updatePaymentHook(paymentId: String, status: String): EitherT[Future, DatabaseService.Error, Unit]
 }
 
 object DatabaseService {
@@ -35,7 +35,10 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
     Future(database.withConnection { implicit conn => insertStatement.execute() })
       .attemptT
       .bimap(
-        err => DatabaseService.Error("unable to insert contribution into database", Some(err)),
+        err => {
+          logger.error(s"unable to insert contribution into database. Error: $err")
+          DatabaseService.Error("unable to insert contribution into database", Some(err))
+        },
         _ => logger.info("contribution inserted into database")
       )
 
@@ -95,12 +98,14 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
     executeTransaction(transaction)
   }
 
-  override def updatePaymentHook(paymentId: String, status: PaymentStatus): EitherT[Future, DatabaseService.Error, Unit] = {
-    val transaction = SQL"""
-        BEGIN;
-        UPDATE payment_hooks SET status = '${status.entryName}' WHERE paymentid = '${paymentId}';
-        COMMIT;
-      """
+  override def updatePaymentHook(paymentId: String, status: String): EitherT[Future, DatabaseService.Error, Unit] = {
+    val transaction =
+      SQL"""
+           BEGIN;
+           UPDATE payment_hooks SET status = ${status}::paymentStatus WHERE paymentid = ${paymentId};
+           COMMIT;
+        """.on('status -> status).on('paymentId -> paymentId)
+
     executeTransaction(transaction)
   }
 

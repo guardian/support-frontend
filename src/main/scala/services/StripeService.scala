@@ -1,22 +1,22 @@
 package services
 
 import cats.data.EitherT
-import cats.instances.future._
-import cats.syntax.applicativeError._
-import com.stripe.model.Charge
+import cats.implicits._
+import com.stripe.model.{Charge, Event}
 import com.stripe.net.RequestOptions
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
-
 import conf.{StripeAccountConfig, StripeConfig}
 import model._
 import model.stripe._
 
+
 trait StripeService {
 
-  def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge]
+  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge]
+  def processPaymentHook(stripeHook: StripeHook): EitherT[Future, StripeApiError, Event]
 }
 
 class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
@@ -34,19 +34,34 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       "receipt_email" -> data.paymentData.email
     ).asJava
 
-  def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge] =
+  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] =
     Future(Charge.create(getChargeParams(data), requestOptions))
       .attemptT
       .bimap(
         err => {
           logger.error("unable to create Stripe charge", err)
-          StripeChargeError.fromThrowable(err)
+          StripeApiError.fromThrowable(err)
         },
         charge => {
           logger.info("Stripe charge created")
           charge
         }
       )
+
+  def processPaymentHook(stripeHook: StripeHook): EitherT[Future, StripeApiError, Event] = {
+    Future(Event.retrieve(stripeHook.id, requestOptions))
+      .attemptT
+      .bimap(
+        err => {
+          logger.error("unable to retrieve Stripe event", err)
+          StripeApiError.fromThrowable(err)
+        },
+        event => {
+          logger.info("Stripe event retrieved")
+          event
+        }
+      )
+  }
 }
 
 // Create charges against out default Stripe account
@@ -61,13 +76,27 @@ class AustraliaStripeService(config: StripeAccountConfig.Australia)(implicit poo
 // which meant they occurred additional transaction costs.
 // The solution was to setup an Australia specific Stripe account,
 // so that readers could pay in AUD.
-class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStripeService) extends StripeService {
+class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStripeService)
+  (implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
 
   private def getSingleAccountService(currency: Currency): StripeService =
     if (currency == Currency.AUD) au else default
 
-  override def createCharge(data: StripeChargeData): EitherT[Future, StripeChargeError, Charge] =
+  override def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] =
     getSingleAccountService(data.paymentData.currency).createCharge(data)
+
+  override def processPaymentHook(stripeHook: StripeHook): EitherT[Future, StripeApiError, Event] = {
+    val stripeCurrency = stripeHook.data.`object`.currency.toUpperCase
+    Currency.withNameOption(stripeCurrency) match {
+      case Some(currency) => getSingleAccountService(currency).processPaymentHook(stripeHook)
+      case None => {
+        val errorMessage = s"Invalid currency. $stripeCurrency"
+        logger.error(errorMessage)
+        Left(StripeApiError.apply(errorMessage)).toEitherT[Future]
+      }
+    }
+  }
+
 }
 
 object StripeService {

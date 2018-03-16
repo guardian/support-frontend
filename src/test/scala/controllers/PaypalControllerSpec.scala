@@ -279,23 +279,23 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
           .withJsonBody(parse(
-            """
-              |{
-              |  "paymentData": {
-              |    "paymentId": "PAY-4JG67395EA359543HLKKVTFI"
-              |  },
-              |  "acquisitionData": {
-              |    "browserId": "ophanBrowserId",
-              |    "platform": "android",
-              |    "pageviewId": "ophanPageviewId",
-              |    "referrerPageviewId": "refererPageviewId",
-              |    "referrerUrl": "refererUrl",
-              |    "componentId": "componentId",
-              |    "componentType": "AcquisitionsOther",
-              |    "source": "GuardianWeb"
-              |  }
-              |}
-            """.stripMargin))
+          """
+            |{
+            |  "paymentData": {
+            |    "paymentId": "PAY-4JG67395EA359543HLKKVTFI"
+            |  },
+            |  "acquisitionData": {
+            |    "browserId": "ophanBrowserId",
+            |    "platform": "android",
+            |    "pageviewId": "ophanPageviewId",
+            |    "referrerPageviewId": "refererPageviewId",
+            |    "referrerUrl": "refererUrl",
+            |    "componentId": "componentId",
+            |    "componentType": "AcquisitionsOther",
+            |    "source": "GuardianWeb"
+            |  }
+            |}
+          """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
           Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
@@ -313,14 +313,14 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
           .withJsonBody(parse(
-            """
-              |{
-              |  "platform": "android",
-              |  "ophanBrowserId": "6971b20d-d8e0-4bf3-b5cb-37b5be1c0e83",
-              |  "ophanPageviewId": "debug-settings-fragment",
-              |  "intCmp": "test-cmp-code"
-              |}
-            """.stripMargin))
+          """
+            |{
+            |  "platform": "android",
+            |  "ophanBrowserId": "6971b20d-d8e0-4bf3-b5cb-37b5be1c0e83",
+            |  "ophanPageviewId": "debug-settings-fragment",
+            |  "intCmp": "test-cmp-code"
+            |}
+          """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
           Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
