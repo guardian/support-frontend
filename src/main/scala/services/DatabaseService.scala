@@ -63,11 +63,13 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
       INSERT INTO contribution_metadata (
         contributionid,
         created,
-        email
+        email,
+        country
       ) VALUES (
         ${data.contributionId}::uuid,
         ${data.created},
-        ${data.receiptEmail}
+        ${data.receiptEmail},
+        ${data.countryCode}
       );
 
       INSERT INTO payment_hooks (
