@@ -43,9 +43,8 @@ const content = (
       <Contribute
         copy={
           <span>
-            Contributing to The&nbsp;Guardian makes a big impact. If you&#39;re able,
-            please consider <strong>monthly</strong> support - it will help to
-            fund our journalism for the long term.
+            Make a monthly commitment to support The Guardian long-term or a one-time contribution
+            as and when you feel like it – choose the option that suits you best.
           </span>
         }
       >
