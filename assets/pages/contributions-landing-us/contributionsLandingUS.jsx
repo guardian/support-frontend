@@ -41,7 +41,7 @@ const content = (
         highlights={['Support', 'The Guardian']}
       />
       <Contribute
-        copy="Make a monthly commitment to support The Guardian long-term or a one-time contribution
+        copy="Make a monthly commitment to support The Guardian long term or a one-time contribution
             as and when you feel like it – choose the option that suits you best."
       >
         <ContributionSelectionContainer />
