@@ -6,7 +6,6 @@ import {
   setFullName,
   setEmail,
   setStateField,
-  setPostcode,
   setTestUser,
   setPostDeploymentTestUser,
   setGnmMarketing,
@@ -67,15 +66,6 @@ describe('actions', () => {
       stateField,
     };
     expect(setStateField(stateField)).toEqual(expectedAction);
-  });
-
-  it('should create SET_POSTCODE action', () => {
-    const postcode: string = 'N123';
-    const expectedAction = {
-      type: 'SET_POSTCODE',
-      postcode,
-    };
-    expect(setPostcode(postcode)).toEqual(expectedAction);
   });
 
   it('should create SET_TEST_USER action', () => {

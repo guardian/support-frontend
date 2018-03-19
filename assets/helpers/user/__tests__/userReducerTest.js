@@ -107,18 +107,6 @@ describe('user reducer tests', () => {
     expect(newState.stateField).toEqual(stateField);
   });
 
-  it('should handle SET_POSTCODE', () => {
-    const postcode = 'ABC 123';
-
-    const action = {
-      type: 'SET_POSTCODE',
-      postcode,
-    };
-
-    const newState = reducer(undefined, action);
-    expect(newState.postcode).toEqual(postcode);
-  });
-
   it('should handle SET_GNM_MARKETING', () => {
     const preference = true;
 

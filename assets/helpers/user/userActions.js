@@ -12,7 +12,6 @@ export type Action =
   | { type: 'SET_FULL_NAME', name: string }
   | { type: 'SET_EMAIL', email: string }
   | { type: 'SET_STATEFIELD', stateField: string }
-  | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
   | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
   | { type: 'SET_GNM_MARKETING', preference: boolean };
@@ -47,10 +46,6 @@ export function setEmail(email: string): Action {
 
 export function setStateField(stateField: string): Action {
   return { type: 'SET_STATEFIELD', stateField };
-}
-
-export function setPostcode(postcode: string): Action {
-  return { type: 'SET_POSTCODE', postcode };
 }
 
 export function setTestUser(testUser: boolean): Action {
