@@ -2,6 +2,8 @@
 import {
   openDirectDebitPopUp,
   closeDirectDebitPopUp,
+  openDirectDebitGuarantee,
+  closeDirectDebitGuarantee,
   updateSortCode,
   updateAccountNumber,
   updateAccountHolderName,
@@ -25,6 +27,20 @@ describe('actions', () => {
       type: 'DIRECT_DEBIT_POP_UP_CLOSE',
     };
     expect(closeDirectDebitPopUp()).toEqual(expectedAction);
+  });
+
+  it('should create an action to open the direct debit guarantee section', () => {
+    const expectedAction = {
+      type: 'DIRECT_DEBIT_GUARANTEE_OPEN',
+    };
+    expect(openDirectDebitGuarantee()).toEqual(expectedAction);
+  });
+
+  it('should create an action to close the direct debit guarantee section', () => {
+    const expectedAction = {
+      type: 'DIRECT_DEBIT_GUARANTEE_CLOSE',
+    };
+    expect(closeDirectDebitGuarantee()).toEqual(expectedAction);
   });
 
   it('should create an action to update the sort code', () => {

@@ -12,9 +12,11 @@ import {
   updateAccountHolderName,
   updateAccountHolderConfirmation,
   payDirectDebitClicked,
+  openDirectDebitGuarantee,
+  closeDirectDebitGuarantee,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
-import { SvgDirectDebitSymbol, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
+import { SvgDirectDebitSymbol, SvgDirectDebitSymbolAndText, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
 
 
 // ---- Types ----- //
@@ -22,6 +24,7 @@ import { SvgDirectDebitSymbol, SvgArrowRightStraight, SvgExclamationAlternate } 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: Function,
+  isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
   accountHolderName: string,
@@ -31,6 +34,8 @@ type PropTypes = {
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
   payDirectDebitClicked: (callback: Function) => void,
+  openDDGuaranteeClicked: () => void,
+  closeDDGuaranteeClicked: () => void,
   formError: string,
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -39,7 +44,7 @@ type PropTypes = {
 
 function mapStateToProps(state) {
   return {
-    isPopUpOpen: state.page.directDebit.isPopUpOpen,
+    isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
     sortCodeArray: state.page.directDebit.sortCodeArray,
     accountNumber: state.page.directDebit.accountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
@@ -53,6 +58,13 @@ function mapDispatchToProps(dispatch) {
   return {
     payDirectDebitClicked: (callback) => {
       dispatch(payDirectDebitClicked(callback));
+      return false;
+    },
+    openDDGuaranteeClicked: () => {
+      dispatch(openDirectDebitGuarantee());
+    },
+    closeDDGuaranteeClicked: () => {
+      dispatch(closeDirectDebitGuarantee());
     },
     updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => {
       dispatch(updateSortCode(index, event.target.value));
@@ -107,7 +119,11 @@ const DirectDebitForm = (props: PropTypes) => (
       svg={<SvgExclamationAlternate />}
     />
 
-    <LegalNotice />
+    <LegalNotice
+      isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+      openDDGuaranteeClicked={props.openDDGuaranteeClicked}
+      closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
+    />
   </div>
 );
 
@@ -199,16 +215,60 @@ function PaymentButton(props: {onClick: Function}) {
   );
 }
 
-function LegalNotice() {
+function LegalNotice(props: {
+  isDDGuaranteeOpen: boolean,
+  openDDGuaranteeClicked: () => void,
+  closeDDGuaranteeClicked: () => void}) {
   return (
     <div className="component-direct-debit-form__legal-notice">
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
         payment schedule, due date, frequency and amount will be sent to you within three working
-        days.
-        All payments are protected by the&nbsp;
-        <a target="_blank" rel="noopener noreferrer" href="https://www.directdebit.co.uk/DirectDebitExplained/pages/directdebitguarantee.aspx">
+        days. All the normal Direct Debit safeguards and guarantees apply.
+      </p>
+      <strong>Direct Debit</strong>
+      <p>
+        The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch,
+        LE65 1JT United Kingdom<br />
+        Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
+        8am-6pm at weekends (GMT/BST)<br />
+        <a href="mailto:contribution.support@theguardian.com">contribution.support@theguardian.com</a>
+      </p>
+      <SvgDirectDebitSymbolAndText />
+      <p>
+        Your payments are protected by the&nbsp;
+        <button className="component-direct-debit-form__open-link" onClick={props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked}>
           Direct Debit guarantee
-        </a>.
+        </button>.
+        <div>
+          <ul className={`component-direct-debit-form__guarantee-list ${props.isDDGuaranteeOpen ? '' : 'component-direct-debit-form__guarantee-list--closed'}`}>
+            <li>
+              The Guarantee is offered by all banks and building societies that accept instructions
+              to pay Direct Debits
+            </li>
+            <li>
+              If there are any changes to the amount, date or frequency of your Direct Debit
+              Guardian News & Media Ltd will notify you at least three working days in advance of
+              your account being debited or as otherwise agreed.
+            </li>
+            <li>
+              If you ask Guardian News & Media Ltd to collect a payment, confirmation of the amount
+              and date will be given to you at the time of the request.
+            </li>
+            <li>
+              If an error is made in the payment of your Direct Debit by Guardian News & Media Ltd
+              or your bank or building society, you are entitled to a full and immediate refund of
+              the amount paid from your bank or building society.
+            </li>
+            <li>
+              If you receive a refund you are not entitled to, you must pay it back when Guardian
+              News & Media Ltd asks you to.
+            </li>
+            <li>
+              You can cancel a Direct Debit at any time by contacting your bank or building society.
+              Written confirmation may be required. Please also notify us.
+            </li>
+          </ul>
+        </div>
       </p>
     </div>
   );

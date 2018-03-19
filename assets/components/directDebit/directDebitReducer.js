@@ -8,6 +8,7 @@ import type { Action } from './directDebitActions';
 
 export type DirectDebitState = {
   isPopUpOpen: boolean,
+  isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
   accountHolderName: string,
@@ -18,6 +19,7 @@ export type DirectDebitState = {
 
 const initialState: DirectDebitState = {
   isPopUpOpen: false,
+  isDDGuaranteeOpen: false,
   sortCodeArray: Array(3).fill(''),
   accountNumber: '',
   accountHolderName: '',
@@ -45,6 +47,18 @@ const directDebitReducer = (
 
       return Object.assign({}, state, {
         isPopUpOpen: false,
+      });
+
+    case 'DIRECT_DEBIT_GUARANTEE_OPEN':
+
+      return Object.assign({}, state, {
+        isDDGuaranteeOpen: true,
+      });
+
+    case 'DIRECT_DEBIT_GUARANTEE_CLOSE':
+
+      return Object.assign({}, state, {
+        isDDGuaranteeOpen: false,
       });
 
     case 'DIRECT_DEBIT_UPDATE_SORT_CODE':
