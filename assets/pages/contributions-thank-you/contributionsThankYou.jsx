@@ -45,6 +45,7 @@ const content = (
         highlights={['Thank you']}
         headings={['for a valuable', 'contribution']}
       />
+      <div className="multiline-divider" />
       {window.guardian.showSubCopy && <EmailConfirmation />}
       <MarketingConsentContainer />
       <QuestionsContact />
