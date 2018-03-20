@@ -28,7 +28,7 @@ export type State = {
 
 // ----- Functions ----- //
 
-function reducer(initialStateOverrides: Object) {
+function reducer(initialStateOverrides?: Object = {}) {
 
   return combineReducers({
     selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', initialStateOverrides),

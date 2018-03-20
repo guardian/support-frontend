@@ -12,18 +12,19 @@ import Contribute from 'components/contribute/contribute';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import pageReducer from './contributionsLandingUKReducer';
-import ContributionSelectionContainer from './components/contributionSelectionContainer';
-import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
-import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
-import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
+import CountrySwitcherHeaderContainer from 'reducers/contributions-landing/containers/countrySwitcherHeaderContainer';
+import ContributionSelectionContainer from 'reducers/contributions-landing/containers/contributionSelectionContainer';
+import ContributionPaymentCtasContainer from 'reducers/contributions-landing/containers/contributionPaymentCtasContainer';
+import PayPalContributionButtonContainer from 'reducers/contributions-landing/containers/payPalContributionButtonContainer';
+
+import { reducer } from 'reducers/contributions-landing/contributionsLandingReducer';
 
 
 // ----- Redux Store ----- //
 
 /* eslint-disable no-underscore-dangle */
 const store = pageInit(
-  pageReducer,
+  reducer(),
   null,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
