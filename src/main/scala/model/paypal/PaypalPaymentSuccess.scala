@@ -19,7 +19,7 @@ object PaypalPaymentSuccess {
       approvalLinks <- links.asScala.find(_.getRel.equalsIgnoreCase("approval_url"))
       approvalUrl <- Try {
         new URL(approvalLinks.getHref)
-      }.toOption.map(_.getHost)
+      }.toOption.map(_.toString)
       paymentId <- Option(payment.getId)
     } yield PaypalPaymentSuccess(approvalUrl, paymentId))
       .map(Right(_))

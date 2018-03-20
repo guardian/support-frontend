@@ -5,6 +5,9 @@
 # Pinged by load balancer to determine if instance is healthy
 GET      /healthcheck                                         controllers.AppController.healthcheck
 
+# Ophan has no test environment available, only prod, therefore we are using this endpoint to receive the acquisition data and compare manually.
+# The logs are picked up by cloudWatch so the information can be easily accessible.
+GET      /acquisition/a.gif                                   controllers.AppController.acquisition(viewId: String, acquisition: String)
 
 #############################################
 # STRIPE
