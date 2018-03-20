@@ -7,7 +7,7 @@
   }
 
   .component-page-section__body {
-    @include mq($from: desktop) {
+    @include mq($from: leftCol) {
       display: inline-flex;
     }
   }
