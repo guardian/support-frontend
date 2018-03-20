@@ -127,7 +127,7 @@ class RegularContributions(
     case _ => Future.successful(None)
   }
 
-  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] =
+  def regularContributionsThankYou(): Action[AnyContent] =
     AuthenticatedAction.async { implicit request =>
       import cats.implicits._
 
@@ -141,12 +141,13 @@ class RegularContributions(
       identityUser.toOption.value.map { maybeUser =>
         Ok(
           thankYou(
-            title,
-            id,
-            js,
+            title = "Support the Guardian | Thank You",
+            id = "contributions-thank-you-page",
+            js = "contributionsThankYouPage.js",
             maybeUser.map(_.primaryEmailAddress),
             true
-          ))
+          )
+        )
       }
     }
 }

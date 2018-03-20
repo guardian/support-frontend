@@ -36,11 +36,11 @@ GET  /au/contribute                                 controllers.Application.cont
 GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPageEU.js")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thank-you-page", js="regularContributionsThankYouPage.js", INTCMP: String ?= "")
+GET  /contribute/recurring/thankyou                 controllers.RegularContributions.regularContributionsThankYou()
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.regularContributionsThankYou(title="Support the Guardian | Thank You", id="regular-contributions-thank-you-page", js="regularContributionsThankYouPage.js", INTCMP: String ?= "")
+GET  /contribute/recurring/pending                  controllers.RegularContributions.regularContributionsThankYou()
 
 # this endpoint should be removed once identity remove
 # the need for a client token

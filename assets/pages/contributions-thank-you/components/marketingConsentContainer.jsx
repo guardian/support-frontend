@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
         email,
         dispatch,
         csrf,
-        'REGULAR_CONTRIBUTIONS_THANK_YOU',
+        'CONTRIBUTIONS_THANK_YOU',
       );
     },
     marketingPreferenceUpdate: (preference: boolean) => {
