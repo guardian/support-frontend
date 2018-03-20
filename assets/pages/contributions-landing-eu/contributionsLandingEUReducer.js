@@ -25,10 +25,17 @@ export type State = {
   page: PageState,
 };
 
+// ----- Initial State ----- //
+
+const initialStateOverrides = {
+  oneOffAmount: '50',
+  monthlyAmount: '10',
+  annualAmount: '75', // <-- this needs to DIE!
+};
 
 // ----- Reducer ----- //
 
 export default combineReducers({
-  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION'),
+  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', initialStateOverrides),
   payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
 });
