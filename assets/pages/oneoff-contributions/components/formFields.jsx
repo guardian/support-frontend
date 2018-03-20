@@ -4,13 +4,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import TextInput from 'components/textInput/textInput';
 
 import {
   setFullName,
   setEmail,
-  setPostcode,
 } from 'helpers/user/userActions';
 
 
@@ -19,11 +17,8 @@ import {
 type PropTypes = {
   nameUpdate: (name: string) => void,
   emailUpdate: (email: string) => void,
-  postcodeUpdate: (postcode: string) => void,
   name: string,
   email: string,
-  postcode: ?string,
-  isoCountry: IsoCountry,
 };
 
 
@@ -47,12 +42,6 @@ function FormFields(props: PropTypes) {
         onChange={props.emailUpdate}
         required
       />
-      <TextInput
-        id="postcode"
-        placeholder={`${props.isoCountry === 'US' ? 'Zip' : 'Postcode'} (optional)`}
-        value={props.postcode || ''}
-        onChange={props.postcodeUpdate}
-      />
     </form>
   );
 
@@ -66,7 +55,6 @@ function mapStateToProps(state) {
   return {
     name: user.fullName,
     email: user.email,
-    postcode: user.postcode,
     isoCountry: state.common.country,
   };
 
@@ -80,9 +68,6 @@ function mapDispatchToProps(dispatch) {
     },
     emailUpdate: (email: string) => {
       dispatch(setEmail(email));
-    },
-    postcodeUpdate: (postcode: string) => {
-      dispatch(setPostcode(postcode));
     },
   };
 

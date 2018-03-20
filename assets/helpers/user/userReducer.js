@@ -17,7 +17,6 @@ export type User = {
   isPostDeploymentTestUser: boolean,
   fullName?: string,
   stateField?: string,
-  postcode?: string,
   gnmMarketing: boolean,
 };
 
@@ -70,9 +69,6 @@ function userReducer(
 
     case 'SET_STATEFIELD':
       return Object.assign({}, state, { stateField: action.stateField });
-
-    case 'SET_POSTCODE':
-      return Object.assign({}, state, { postcode: action.postcode });
 
     case 'SET_GNM_MARKETING':
       return Object.assign({}, state, { gnmMarketing: action.preference });
