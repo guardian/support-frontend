@@ -43,7 +43,6 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
       )
 
   override def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit] = {
-
     val transaction = SQL"""
       BEGIN;
 

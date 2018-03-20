@@ -7,5 +7,5 @@ import io.circe.generic.JsonCodec
 
 object StripeChargeSuccess {
   def fromCharge(charge: Charge): StripeChargeSuccess =
-    StripeChargeSuccess(charge.getCurrency, charge.getAmount)
+    StripeChargeSuccess(charge.getCurrency, charge.getAmount / 100)
 }

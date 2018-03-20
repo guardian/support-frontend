@@ -28,25 +28,30 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   // https://stripe.com/docs/api/java#create_charge
   private def getChargeParams(data: StripeChargeData) =
     Map[String, AnyRef](
-      "amount" -> new Integer(data.paymentData.amount),
+      "amount" -> new Integer(data.paymentData.amount * 100), //-- stripe amount must be in pence
       "currency" -> data.paymentData.currency.entryName,
       "source" -> data.paymentData.token,
       "receipt_email" -> data.paymentData.email
     ).asJava
 
-  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] =
-    Future(Charge.create(getChargeParams(data), requestOptions))
-      .attemptT
-      .bimap(
-        err => {
-          logger.error("unable to create Stripe charge", err)
-          StripeApiError.fromThrowable(err)
-        },
-        charge => {
-          logger.info("Stripe charge created")
-          charge
-        }
-      )
+  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] = {
+    if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
+      Left(StripeApiError.apply("Amount exceeds the maximum allowed ")).toEitherT[Future]
+    } else {
+      Future(Charge.create(getChargeParams(data), requestOptions))
+        .attemptT
+        .bimap(
+          err => {
+            logger.error("unable to create Stripe charge", err)
+            StripeApiError.fromThrowable(err)
+          },
+          charge => {
+            logger.info("Stripe charge created")
+            charge
+          }
+        )
+    }
+  }
 
   def processPaymentHook(stripeHook: StripeHook): EitherT[Future, StripeApiError, Event] = {
     Future(Event.retrieve(stripeHook.id, requestOptions))

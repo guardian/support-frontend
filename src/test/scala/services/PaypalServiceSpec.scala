@@ -2,17 +2,18 @@ package services
 
 import com.paypal.api.payments.{Transaction, _}
 import conf.PaypalConfig
-import model.PaypalThreadPool
-import model.paypal.{PaypalApiError, PaypalMode}
+import model.{Currency, PaypalThreadPool}
+import model.paypal.{CreatePaypalPaymentData, PaypalApiError, PaypalMode}
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.concurrent.ScalaFutures
 
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
 
-class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar {
+class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar with ScalaFutures {
 
   trait PaypalServiceTestFixture {
     val paypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", "hookId", PaypalMode.Sandbox)
@@ -107,6 +108,20 @@ class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar {
     when(payment.getState).thenReturn("PAYMENT_NOT_APPROVED_FOR_EXECUTION")
     val validateResult = paypalService invokePrivate validatePayment(payment)
     validateResult.isRight shouldBe(false)
+  }
+
+  it should "validate if the payment amount exceed Australia max" in new PaypalServiceTestFixture {
+    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.AUD, BigDecimal(16001), "url", "url")
+    whenReady(paypalService.createPayment(createPaypalPaymentData).value){ result =>
+      result shouldBe(Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
+    }
+  }
+
+  it should "validate if the payment amount exceed non Australia max" in new PaypalServiceTestFixture {
+    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(2001), "url", "url")
+    whenReady(paypalService.createPayment(createPaypalPaymentData).value){ result =>
+      result shouldBe(Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
+    }
   }
 
 }

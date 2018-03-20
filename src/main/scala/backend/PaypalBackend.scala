@@ -53,7 +53,11 @@ class PaypalBackend(
 
   def getContributionDataFromPaypalCharge(identityId: Option[Long], payment: Payment)(implicit pool: DefaultThreadPool): Either[BackendError, ContributionData] =
     ContributionData.fromPaypalCharge(identityId, payment)
-      .leftMap(_ => BackendError.fromDatabaseError(null))
+      .leftMap{ error =>
+        val message = s"Error creating contribution data from paypal. Error: $error"
+        logger.error(message)
+        BackendError.fromDatabaseError(DatabaseService.Error(message, Some(new Exception(error.message))))
+      }
 
   /*
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
@@ -61,7 +65,10 @@ class PaypalBackend(
    */
   def createPayment(paypalPaymentData: CreatePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Payment] =
     paypalService.createPayment(paypalPaymentData)
-      .leftMap(BackendError.fromPaypalAPIError)
+      .leftMap{ error =>
+        logger.error(s"Error creating paypal payment data. Error: $error")
+        BackendError.fromPaypalAPIError(error)
+      }
 
 
   def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit]  = {

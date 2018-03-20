@@ -19,7 +19,7 @@ case class ContributionData private (
     receiptEmail: String,
     created: LocalDateTime,
     currency: Currency,
-    amount: Long,
+    amount: BigDecimal,
     countryCode: Option[String],
     // Used as primary key on current contribution_metadata and payment_hooks table
     // https://github.com/guardian/contributions-platform/blob/master/Postgres/schema.sql
@@ -47,7 +47,7 @@ object ContributionData {
       created = LocalDateTime.ofEpochSecond(charge.getCreated, 0, ZoneOffset.UTC),
       // Stripe can return currency in lower case
       currency = Currency.withNameInsensitive(charge.getCurrency),
-      amount = charge.getAmount,
+      amount = BigDecimal(charge.getAmount, 2),
       countryCode = StripeSource.getCountryCode(charge)
     )
 
@@ -58,7 +58,7 @@ object ContributionData {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
         .fromString(s"Invaid Paypal transactions content."))
       currency <- Either.catchNonFatal(Currency.withNameInsensitive(transactions.getAmount.getCurrency)).leftMap(PaypalApiError.fromThrowable)
-      amount <- Either.catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal).toLong).leftMap(PaypalApiError.fromThrowable)
+      amount <- Either.catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal)).leftMap(PaypalApiError.fromThrowable)
       created <- Either.catchNonFatal(paypalDateToLocalDateTime(payment.getCreateTime)).leftMap(PaypalApiError.fromThrowable)
     } yield ContributionData(
       paymentProvider = PaymentProvider.Paypal,
