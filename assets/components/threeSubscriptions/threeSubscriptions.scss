@@ -6,6 +6,23 @@
     font-weight: bold;
   }
 
+  .component-page-section__body {
+    @include mq($from: desktop) {
+      display: inline-flex;
+    }
+  }
+
+  .component-subscription-bundle {
+    flex: 1 33%;
+    padding: 0 ($gu-h-spacing / 2);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .component-feature-list {
+    flex: 1 0 auto;
+  }
+
   .component-double-heading {
     margin-bottom: $gu-v-spacing * 2;
   }
