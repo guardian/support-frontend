@@ -2,6 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
+import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
@@ -42,6 +43,7 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
       case Some(US) => "/us"
+      case Some(Europe)  => "/eu"
       case _ => "https://membership.theguardian.com/supporter"
     }
 
@@ -53,6 +55,7 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
+      case Some(Europe)  => "/eu/contribute"
       case _ => "https://contribute.theguardian.com"
     }
 
