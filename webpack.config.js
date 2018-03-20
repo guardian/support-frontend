@@ -53,7 +53,7 @@ module.exports = (env) => {
       contributionsLandingPageUK: 'pages/contributions-landing-uk/contributionsLandingUK.jsx',
       contributionsLandingPageUS: 'pages/contributions-landing-us/contributionsLandingUS.jsx',
       contributionsLandingPageAU: 'pages/contributions-landing/contributionsLandingAU.jsx',
-      contributionsLandingPageEU: 'pages/contributions-landing/contributionsLandingEU.jsx',
+      contributionsLandingPageEU: 'pages/contributions-landing-eu/contributionsLandingEU.jsx',
       regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
       regularContributionsThankYouPage: 'pages/regular-contributions-thank-you/regularContributionsThankYou.jsx',
       oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
