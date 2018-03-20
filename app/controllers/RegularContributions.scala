@@ -144,8 +144,8 @@ class RegularContributions(
             title = "Support the Guardian | Thank You",
             id = "contributions-thank-you-page",
             js = "contributionsThankYouPage.js",
-            maybeUser.map(_.primaryEmailAddress),
-            true
+            email = maybeUser.map(_.primaryEmailAddress),
+            showSubCopy = true
           )
         )
       }

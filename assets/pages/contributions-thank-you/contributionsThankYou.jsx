@@ -20,7 +20,7 @@ import * as user from 'helpers/user/user';
 
 import EmailConfirmation from './components/emailConfirmation';
 import MarketingConsentContainer from './components/marketingConsentContainer';
-import reducer from './contributionThankYouReducer';
+import reducer from './contributionsThankYouReducer';
 // ----- Page Startup ----- //
 
 /* eslint-disable no-underscore-dangle */

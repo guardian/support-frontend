@@ -4,7 +4,6 @@ import actions.CustomActionBuilders
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe
-
 import scala.concurrent.ExecutionContext
 import services.{IdentityService, TestUserService}
 import views.html.oneOffContributions
@@ -60,7 +59,7 @@ class OneOffContributions(
         title = "Support the Guardian | Thank You",
         id = "contributions-thank-you-page",
         js = "contributionsThankYouPage.js",
-        request.flash.get("email")
+        email = request.flash.get("email")
       )
     )
   }
