@@ -8,7 +8,7 @@ import PayPalContributionButton from 'containerisableComponents/payPalContributi
 import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 
-import type { State } from '../contributionsLandingUSReducer';
+import type { State } from '../contributionsLandingReducer';
 
 
 // ----- State Maps ----- //

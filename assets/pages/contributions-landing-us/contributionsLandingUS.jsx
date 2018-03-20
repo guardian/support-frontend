@@ -12,11 +12,12 @@ import Contribute from 'components/contribute/contribute';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
+import CountrySwitcherHeaderContainer from 'reducers/contributions-landing/containers/countrySwitcherHeaderContainer';
+import ContributionSelectionContainer from 'reducers/contributions-landing/containers/contributionSelectionContainer';
+import ContributionPaymentCtasContainer from 'reducers/contributions-landing/containers/contributionPaymentCtasContainer';
+import PayPalContributionButtonContainer from 'reducers/contributions-landing/containers/payPalContributionButtonContainer';
+
 import pageReducer from './contributionsLandingUSReducer';
-import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
-import ContributionSelectionContainer from './components/contributionSelectionContainer';
-import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
-import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 
 
 // ----- Redux Store ----- //
