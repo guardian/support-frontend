@@ -48,6 +48,17 @@ class Application(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def contributeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => "/uk/contribute"
+      case Some(US) => "/us/contribute"
+      case _ => "https://contribute.theguardian.com"
+    }
+
+    Redirect(redirectUrl, request.queryString, status = FOUND)
+  }
+
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location, request.queryString, status = FOUND)
   }
