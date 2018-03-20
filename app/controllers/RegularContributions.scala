@@ -12,10 +12,11 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import views.html.monthlyContributions
+import views.html.{monthlyContributions, thankYou}
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
@@ -125,4 +126,27 @@ class RegularContributions(
         }
     case _ => Future.successful(None)
   }
+
+  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] =
+    AuthenticatedAction.async { implicit request =>
+      import cats.implicits._
+
+      val identityUser = identityService.getUser(request.user)
+
+      identityUser.value.foreach({
+        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identity. $error")
+        case Right(_) =>
+      })
+
+      identityUser.toOption.value.map { maybeUser =>
+        Ok(
+          thankYou(
+            title,
+            id,
+            js,
+            maybeUser.map(_.primaryEmailAddress),
+            true
+          ))
+      }
+    }
 }

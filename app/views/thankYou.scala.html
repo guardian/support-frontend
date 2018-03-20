@@ -2,21 +2,23 @@
 @import helper.CSRF
 
 @(
-    title: String,
-    id: String,
-    js: String,
-    description: Option[String] = None
+        title: String,
+        id: String,
+        js: String,
+        email: Option[String],
+        showSubCopy: Boolean = false
 )(implicit assets: AssetsResolver, request: RequestHeader, flash: Flash)
 
-@scripts = {
-    <script type="text/javascript">
+    @scripts = {
+        <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
-        window.guardian.email = "@flash.get("email")";
+        window.guardian.email = "@email.getOrElse("undefined")";
+        window.guardian.showSubCopy = @showSubCopy;
     </script>
-}
+    }
 
 
-@main(title = title, description = description, mainBundleJs = js, scripts = scripts) {
-    <main id="@id" class="gu-content-wrapper"></main>
-}
+    @main(title = title, scripts = scripts, mainBundleJs = js) {
+        <main id="@id" class="gu-content-wrapper"></main>
+    }
