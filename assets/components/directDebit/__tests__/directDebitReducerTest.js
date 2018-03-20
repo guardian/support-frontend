@@ -32,6 +32,30 @@ describe('direct debit reducer tests', () => {
     expect(newState.isPopUpOpen).toEqual(false);
   });
 
+  it('should handle DIRECT_DEBIT_GUARANTEE_OPEN', () => {
+    const action = {
+      type: 'DIRECT_DEBIT_GUARANTEE_OPEN',
+    };
+
+    const newState = reducer(undefined, action);
+    expect(newState.isDDGuaranteeOpen).toEqual(true);
+  });
+
+  it('should handle DIRECT_DEBIT_GUARANTEE_CLOSE', () => {
+    const action1 = {
+      type: 'DIRECT_DEBIT_GUARANTEE_OPEN',
+    };
+    const action2 = {
+      type: 'DIRECT_DEBIT_GUARANTEE_CLOSE',
+    };
+
+    let newState = reducer(undefined, action1);
+    expect(newState.isDDGuaranteeOpen).toEqual(true);
+
+    newState = reducer(newState, action2);
+    expect(newState.isDDGuaranteeOpen).toEqual(false);
+  });
+
   it('should handle DIRECT_DEBIT_UPDATE_SORT_CODE', () => {
     const sortCode = '123456';
     function action(index, partialSortCode) {

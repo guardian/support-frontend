@@ -171,3 +171,28 @@
     color: gu-colour(garnett-neutral-2);
   }
 }
+
+.component-direct-debit-form__open-link {
+  background:none;
+  outline: none;
+  color:inherit;
+  border:none;
+  padding:0;
+  font: inherit;
+  text-decoration:underline;
+  cursor: pointer;
+}
+
+.svg-direct-debit-symbol-and-text {
+  margin-top: $gu-v-spacing;
+  fill: gu-colour(garnett-neutral-2);
+}
+
+.component-direct-debit-form__guarantee-list {
+  list-style-type: disc;
+  margin-left: $gu-h-spacing;
+}
+
+.component-direct-debit-form__guarantee-list--closed {
+  display: none;
+}
