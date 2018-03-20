@@ -86,8 +86,9 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
         throw new Exception("Invalid hook request")
       }
     }.leftMap{ error =>
-      logger.error(s"Invalid validating event. Error: $error")
-      PaypalApiError.fromThrowable(error)
+      val message = s"Invalid validating event. Error: $error"
+      logger.error(message)
+      PaypalApiError.fromString(message)
     }.toEitherT[Future]
   }
 

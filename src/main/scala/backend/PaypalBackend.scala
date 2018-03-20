@@ -94,7 +94,7 @@ class PaypalBackend(
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool):
   EitherT[Future, BackendError, Payment] = {
     for {
-      payment <- capturePayment(capturePaypalPaymentData)
+      payment <- getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData)
       identityId <- getOrCreateIdentityIdFromEmail(payment.getPayer.getPayerInfo.getEmail)
       _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, identityId)
       _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
