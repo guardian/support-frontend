@@ -42,8 +42,8 @@ class Application(
 
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
-      case Some(US) => "/us"
-      case Some(Europe)  => "/eu"
+      case Some(US) => "/us/contribute"
+      case Some(Europe)  => "/eu/contribute"
       case _ => "https://membership.theguardian.com/supporter"
     }
 
