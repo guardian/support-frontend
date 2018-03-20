@@ -58,8 +58,71 @@
 
   .component-cta-link {
     height: 54px;
-    padding: 0 30px;
+    padding: 0 30px 0 25px;
     font-size: 14px;
     line-height: 54px;
+    background-color: transparent;
+    transition: background-color .3s;
+  }
+
+  .component-cta-link--digital-sub {
+    color: gu-colour(lifestyle-garnett-main-1);
+    border: 1px solid gu-colour(lifestyle-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(lifestyle-garnett-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(lifestyle-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--paper-sub {
+    color: gu-colour(sport-garnett-media-main-1);
+    border: 1px solid gu-colour(sport-garnett-media-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(sport-garnett-media-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(sport-garnett-media-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--paper-digi-sub {
+    color: gu-colour(opinion-garnett-main-1);
+    border: 1px solid gu-colour(opinion-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(opinion-garnett-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(opinion-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+  
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+    height: 35%;
+    top: 17px;
+    right: 16px;
   }
 }

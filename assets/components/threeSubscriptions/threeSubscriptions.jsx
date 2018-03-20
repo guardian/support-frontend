@@ -70,7 +70,7 @@ export default function ThreeSubscriptions() {
               heading: 'Get all the benefits of a digital subscription with paper + digital',
             },
           ]}
-          ctaText="Get a paper + digital subscription"
+          ctaText="Get a paper+digital subscription"
           ctaUrl="https://subscribe.theguardian.com/p/GXX83X"
           ctaId="paper-digi-sub"
           ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
