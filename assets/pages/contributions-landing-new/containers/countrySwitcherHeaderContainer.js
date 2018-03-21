@@ -24,10 +24,13 @@ function handleCountryGroupChange(value: string): void {
       window.location.pathname = '/uk/contribute';
       break;
     case 'AUDCountries':
-      window.location.pathname = '/au';
+      window.location.pathname = '/au/contribute';
       break;
     case 'EURCountries':
       window.location.pathname = '/eu/contribute';
+      break;
+    case 'UnitedStates':
+      window.location.pathname = '/us/contribute';
       break;
     default:
   }
