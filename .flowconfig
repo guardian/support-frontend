@@ -10,6 +10,5 @@ assets
 [options]
 module.name_mapper='^containerisableComponents/' -> '<PROJECT_ROOT>/assets/containerisableComponents/'
 module.name_mapper='^components/' -> '<PROJECT_ROOT>/assets/components/'
-module.name_mapper='^reducers/' -> '<PROJECT_ROOT>/assets/reducers/'
 module.name_mapper='^helpers/' -> '<PROJECT_ROOT>/assets/helpers/'
 module.name_mapper='^ophan' -> 'ophan-tracker-js/build/ophan.support'
