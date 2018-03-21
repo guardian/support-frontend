@@ -2,7 +2,10 @@
 
 // ----- Imports ----- //
 
-import { circlesParse as parseContribution } from 'helpers/contributions';
+import {
+  circlesParse as parseContribution,
+  config,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type {
@@ -27,20 +30,22 @@ export type State = {
 };
 
 
-// ----- Setup ----- //
-
-const initialState: State = {
-  contributionType: 'MONTHLY',
-  oneOffAmount: '50',
-  monthlyAmount: '5',
-  annualAmount: '75',
-  customAmount: null,
-  isCustomAmount: false,
-  error: null,
-};
-
-
 // ----- Functions ----- //
+
+// Returns a countryGroupId-specific initial state for the reducer.
+function getInitialState(countryGroupId: CountryGroupId): State {
+
+  return {
+    contributionType: 'MONTHLY',
+    oneOffAmount: config[countryGroupId].ONE_OFF.default.toString(),
+    monthlyAmount: config[countryGroupId].MONTHLY.default.toString(),
+    annualAmount: config[countryGroupId].ANNUAL.default.toString(),
+    customAmount: null,
+    isCustomAmount: false,
+    error: null,
+  };
+
+}
 
 // Changes the amount of the currently selected type of contribution.
 function updatePredefinedAmount(state: State, newAmount: string): State {
@@ -101,11 +106,11 @@ function getAmount(state: State): string {
 
 // ----- Reducer ----- //
 
-function contributionSelectionReducerFor(scope: string, stateOverrides?: Object = {}): Function {
+function contributionSelectionReducerFor(scope: string, countryGroupId: CountryGroupId): Function {
 
-  const updatedInitialState = { ...initialState, ...stateOverrides };
+  const initialState = getInitialState(countryGroupId);
 
-  function contributionSelectionReducer(state: State = updatedInitialState, action: Action): State {
+  function contributionSelectionReducer(state: State = initialState, action: Action): State {
 
     if (action.scope !== scope) {
       return state;

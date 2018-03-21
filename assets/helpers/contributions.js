@@ -92,7 +92,7 @@ const defaultConfig: Config = {
     minInWords: numbersInWords['2'],
     max: 166,
     maxInWords: numbersInWords['166'],
-    default: 10,
+    default: 5,
   },
   ONE_OFF: {
     min: 1,
@@ -104,32 +104,40 @@ const defaultConfig: Config = {
 };
 
 const config: { [CountryGroupId]: Config } = {
+  GBPCountries: defaultConfig,
   AUDCountries: {
-    ANNUAL: {
-      min: 50,
-      minInWords: numbersInWords['50'],
-      max: 2000,
-      maxInWords: numbersInWords['2000'],
-      default: 75,
-    },
+    ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
       min: 10,
       minInWords: numbersInWords['10'],
       max: 166,
       maxInWords: numbersInWords['166'],
+      default: 20,
+    },
+    ONE_OFF: defaultConfig.ONE_OFF,
+  },
+  EURCountries: {
+    ANNUAL: defaultConfig.ANNUAL,
+    MONTHLY: {
+      min: 2,
+      minInWords: numbersInWords['2'],
+      max: 166,
+      maxInWords: numbersInWords['166'],
       default: 10,
     },
-    ONE_OFF: {
-      min: 1,
-      minInWords: numbersInWords['1'],
-      max: 2000,
-      maxInWords: numbersInWords['2000'],
-      default: 50,
-    },
+    ONE_OFF: defaultConfig.ONE_OFF,
   },
-  GBPCountries: defaultConfig,
-  EURCountries: defaultConfig,
-  UnitedStates: defaultConfig,
+  UnitedStates: {
+    ANNUAL: defaultConfig.ANNUAL,
+    MONTHLY: {
+      min: 2,
+      minInWords: numbersInWords['2'],
+      max: 166,
+      maxInWords: numbersInWords['166'],
+      default: 15,
+    },
+    ONE_OFF: defaultConfig.ONE_OFF,
+  },
   International: defaultConfig,
 };
 

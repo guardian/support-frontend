@@ -8,7 +8,7 @@ import ContributionSelection from 'containerisableComponents/contributionSelecti
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import { contributionSelectionActionsFor as actionsFor } from 'containerisableComponents/contributionSelection/contributionSelectionActions';
 
-import type { State } from '../contributionsLandingUKReducer';
+import type { State } from '../contributionsLandingReducer';
 
 
 // ----- State Maps ----- //

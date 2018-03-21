@@ -11,6 +11,7 @@ import type { State as ContributionSelectionState } from 'containerisableCompone
 import type { State as PayPalState } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
 
 import type { CommonState } from 'helpers/page/page';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -26,9 +27,18 @@ export type State = {
 };
 
 
+// ----- Functions ----- //
+
+function createPageReducerFor(countryGroupId: CountryGroupId): PageState {
+
+  return combineReducers({
+    selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', countryGroupId),
+    payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
+  });
+
+}
+
+
 // ----- Reducer ----- //
 
-export default combineReducers({
-  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION'),
-  payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
-});
+export { createPageReducerFor };

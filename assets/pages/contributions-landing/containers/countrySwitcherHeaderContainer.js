@@ -7,24 +7,30 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { State } from '../contributionsLandingUKReducer';
+import type { State } from '../contributionsLandingReducer';
 
+
+// ----- Setup ----- //
 
 const availableCountriesGroups: CountryGroupId[] =
   ['GBPCountries', 'UnitedStates', 'EURCountries'];
+
 
 // ----- Functions ----- //
 
 function handleCountryGroupChange(value: string): void {
   switch (value) {
-    case 'UnitedStates':
-      window.location.pathname = '/us/contribute';
+    case 'GBPCountries':
+      window.location.pathname = '/uk/contribute';
       break;
     case 'AUDCountries':
-      window.location.pathname = '/au';
+      window.location.pathname = '/au/contribute';
       break;
     case 'EURCountries':
       window.location.pathname = '/eu/contribute';
+      break;
+    case 'UnitedStates':
+      window.location.pathname = '/us/contribute';
       break;
     default:
   }

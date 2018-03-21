@@ -47,3 +47,15 @@ Object {
   "oneOffAmount": "50",
 }
 `;
+
+exports[`Contributions Selection reducer should return the initial state for another country group 1`] = `
+Object {
+  "annualAmount": "75",
+  "contributionType": "MONTHLY",
+  "customAmount": null,
+  "error": null,
+  "isCustomAmount": false,
+  "monthlyAmount": "15",
+  "oneOffAmount": "50",
+}
+`;

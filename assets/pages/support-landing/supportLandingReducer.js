@@ -29,6 +29,6 @@ export type State = {
 // ----- Reducer ----- //
 
 export default combineReducers({
-  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION'),
+  selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', 'GBPCountries'),
   payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
 });
