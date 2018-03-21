@@ -20,7 +20,7 @@ import * as user from 'helpers/user/user';
 
 import EmailConfirmation from './components/emailConfirmation';
 import MarketingConsentContainer from './components/marketingConsentContainer';
-import reducer from './regularThankYouReducer';
+import reducer from './contributionsThankYouReducer';
 // ----- Page Startup ----- //
 
 /* eslint-disable no-underscore-dangle */
@@ -35,7 +35,6 @@ const store = pageInit(
 
 user.init(store.dispatch);
 
-
 // ----- Render ----- //
 
 const content = (
@@ -46,7 +45,8 @@ const content = (
         highlights={['Thank you']}
         headings={['for a valuable', 'contribution']}
       />
-      <EmailConfirmation />
+      <div className="multiline-divider" />
+      {window.guardian.showConfirmationEmailCopy && <EmailConfirmation />}
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
@@ -55,4 +55,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content, 'regular-contributions-thank-you-page');
+renderPage(content, 'contributions-thank-you-page');

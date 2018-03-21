@@ -1,14 +1,10 @@
-#regular-contributions-thank-you-page {
+#contributions-thank-you-page {
+
+  .multiline-divider {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+  }
 
   .component-email-confirmation {
-    margin-bottom: $gu-v-spacing * 2;
-
-    &:before {
-      @include multiline(4, gu-colour(garnett-neutral-4));
-      background-color: #fff;
-      display: block;
-      content: '';
-    }
 
     .component-page-section__header {
       @include dropline;
@@ -21,6 +17,10 @@
         padding-left: $gu-h-spacing;
       }
     }
+  }
+
+  .component-page-section--marketing-consent {
+    margin-top: $gu-v-spacing * 2;
   }
 
   .component-spread-the-word {

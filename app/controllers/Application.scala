@@ -43,7 +43,7 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
-      case Some(Europe)  => "/eu/contribute"
+      case Some(Europe) => "/eu/contribute"
       case _ => "https://membership.theguardian.com/supporter"
     }
 
@@ -55,7 +55,7 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
-      case Some(Europe)  => "/eu/contribute"
+      case Some(Europe) => "/eu/contribute"
       case _ => "https://contribute.theguardian.com"
     }
 
@@ -95,22 +95,6 @@ class Application(
       ))
     }
   }
-
-  def regularContributionsThankYou(title: String, id: String, js: String, INTCMP: String): Action[AnyContent] =
-    AuthenticatedAction.async { implicit request =>
-      import cats.implicits._
-
-      val identityUser = identityService.getUser(request.user)
-
-      identityUser.value.foreach({
-        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identity. $error")
-        case Right(_) =>
-      })
-
-      identityUser.toOption.value.map { maybeUser =>
-        Ok(views.html.monthlyContributionsThankyou(title, id, js, maybeUser))
-      }
-    }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))

@@ -13,6 +13,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.play.IdUser
 import models.Autofill
 import io.circe.syntax._
+import views.html.thankYou
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -53,7 +54,14 @@ class OneOffContributions(
   }
 
   def thankYouPage(): Action[AnyContent] = PrivateAction { implicit request =>
-    Ok(views.html.thankYou("Support the Guardian | Thank You", "oneoff-contributions-thankyou-page", "oneoffContributionsThankyouPage.js"))
+    Ok(
+      thankYou(
+        title = "Support the Guardian | Thank You",
+        id = "contributions-thank-you-page",
+        js = "contributionsThankYouPage.js",
+        email = request.flash.get("email")
+      )
+    )
   }
 
   private def fullNameFor(user: IdUser): Option[String] = {
