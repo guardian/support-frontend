@@ -13,7 +13,7 @@ import type { State } from '../contributionsLandingReducer';
 // ----- Setup ----- //
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'EURCountries'];
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'International'];
 
 
 // ----- Functions ----- //
@@ -31,6 +31,9 @@ function handleCountryGroupChange(value: string): void {
       break;
     case 'UnitedStates':
       window.location.pathname = '/us/contribute';
+      break;
+    case 'International':
+      window.location.pathname = '/int/contribute';
       break;
     default:
   }
