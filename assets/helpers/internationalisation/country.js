@@ -399,22 +399,22 @@ function handleCountryForCountryGroup(
   targetCountryGroup: 'International' | 'EURCountries',
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
-  const path = window.location.pathname;
 
-  const constants = {
-    International: {
-      paths: ['/int', '/int/'],
-      defaultCountry: 'AR',
-    },
-    EURCountries: {
-      paths: ['/eu', '/eu/'],
-      defaultCountry: 'DE',
-    },
+  const paths = {
+    International: ['/int', '/int/'],
+    EURCountries: ['/eu', '/eu/'],
   };
 
+  const defaultCountry = {
+    International: 'AR',
+    EURCountries: 'DE',
+  };
+
+  const path = window.location.pathname;
+
   if (
-    path !== constants[targetCountryGroup].paths[0] &&
-    !path.startsWith(constants[targetCountryGroup].paths[1]) &&
+    path !== paths[targetCountryGroup][0] &&
+    !path.startsWith(paths[targetCountryGroup][1]) &&
     countryGroupId !== targetCountryGroup
   ) {
     return null;
@@ -426,7 +426,7 @@ function handleCountryForCountryGroup(
     return candidateCountry;
   }
 
-  return constants[targetCountryGroup].defaultCountry;
+  return defaultCountry[targetCountryGroup];
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
