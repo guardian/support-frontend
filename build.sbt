@@ -7,7 +7,7 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:imports"
 )
 
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 val circeVersion = "0.9.1"
@@ -28,7 +28,6 @@ libraryDependencies ++= Seq(
   "org.playframework.anorm" %% "anorm" % "2.6.0",
   "org.postgresql" % "postgresql" % "42.2.1",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-  "org.spire-math" %% "kind-projector" % "0.9.6",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.typelevel" %% "cats-core" % "0.9.0",
