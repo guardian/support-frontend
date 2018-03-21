@@ -12,10 +12,15 @@ describe('Contributions Selection reducer', () => {
 
   const PREFIX = 'MY_PREFIX';
   const reducer = contributionSelectionReducerFor(PREFIX, 'GBPCountries');
+  const usReducer = contributionSelectionReducerFor(PREFIX, 'UnitedStates');
   const actions = contributionSelectionActionsFor(PREFIX);
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
+  });
+
+  it('should return the initial state for another country group', () => {
+    expect(usReducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should not change the state for an action with the wrong scope', () => {
