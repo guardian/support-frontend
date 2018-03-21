@@ -46,7 +46,7 @@ const content = (
         headings={['for a valuable', 'contribution']}
       />
       <div className="multiline-divider" />
-      {window.guardian.showSubCopy && <EmailConfirmation />}
+      {window.guardian.showConfirmationEmailCopy && <EmailConfirmation />}
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />

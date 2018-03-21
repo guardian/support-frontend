@@ -127,7 +127,7 @@ class RegularContributions(
     case _ => Future.successful(None)
   }
 
-  def regularContributionsThankYou(): Action[AnyContent] =
+  def thankYouPage(): Action[AnyContent] =
     AuthenticatedAction.async { implicit request =>
       import cats.implicits._
 
@@ -145,7 +145,7 @@ class RegularContributions(
             id = "contributions-thank-you-page",
             js = "contributionsThankYouPage.js",
             email = maybeUser.map(_.primaryEmailAddress),
-            showSubCopy = true
+            showConfirmationEmailCopy = true
           )
         )
       }

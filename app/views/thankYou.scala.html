@@ -6,7 +6,7 @@
         id: String,
         js: String,
         email: Option[String],
-        showSubCopy: Boolean = false
+        showConfirmationEmailCopy: Boolean = false
 )(implicit assets: AssetsResolver, request: RequestHeader, flash: Flash)
 
 @scripts = {
@@ -14,7 +14,7 @@
         window.guardian = window.guardian || {};
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
         window.guardian.email = "@email.getOrElse("undefined")";
-        window.guardian.showSubCopy = @showSubCopy;
+        window.guardian.showConfirmationEmailCopy = @showConfirmationEmailCopy;
     </script>
 }
 
