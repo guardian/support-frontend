@@ -23,17 +23,19 @@ import PayPalContributionButtonContainer from './containers/payPalContributionBu
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
-// ----- Redux Store ----- //
+// ----- Internationalisation ----- //
 
-const countryGroupSpecific: {
+const defaultContributeCopy = 'Your contribution funds and supports The Guardian\'s journalism.';
+
+const countryGroupSpecificDetails: {
   [CountryGroupId]: { contributeCopy: string, reactElementId: string }
 } = {
   GBPCountries: {
-    contributeCopy: 'Your contribution funds and supports The Guardian\'s journalism.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-uk',
   },
   EURCountries: {
-    contributeCopy: 'Your contribution funds and supports The Guardian\'s journalism.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-eu',
   },
   UnitedStates: {
@@ -41,14 +43,17 @@ const countryGroupSpecific: {
     reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
-    contributeCopy: 'Your contribution funds and supports The Guardian\'s journalism.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-au',
   },
   International: {
-    contributeCopy: 'Your contribution funds and supports The Guardian\'s journalism.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-int',
   },
 };
+
+
+// ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
 
@@ -72,7 +77,7 @@ const content = (
         highlights={['Support', 'The Guardian']}
       />
       <Contribute
-        copy={countryGroupSpecific[countryGroupId].contributeCopy}
+        copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
       >
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
@@ -84,4 +89,4 @@ const content = (
   </Provider>
 );
 
-renderPage(content, countryGroupSpecific[countryGroupId].reactElementId);
+renderPage(content, countryGroupSpecificDetails[countryGroupId].reactElementId);
