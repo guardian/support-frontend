@@ -1,4 +1,10 @@
 .component-three-subscriptions {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+
+  .component-page-section__header {
+    @include dropline;
+  }
+
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
     font-size: 24px;
@@ -7,6 +13,8 @@
   }
 
   .component-page-section__body {
+    padding-left: $gu-h-spacing / 2;
+
     @include mq($from: leftCol) {
       display: inline-flex;
     }

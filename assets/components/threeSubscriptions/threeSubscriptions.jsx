@@ -17,7 +17,7 @@ export default function ThreeSubscriptions() {
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
         <SubscriptionBundle
           modifierClass="digital"
-          heading="Digital subscription"
+          heading="Digital"
           subheading="£11.99/month"
           benefits={[
             {
@@ -38,8 +38,8 @@ export default function ThreeSubscriptions() {
         />
         <SubscriptionBundle
           modifierClass="paper"
-          heading="Paper subscription"
-          subheading="£10.36/month"
+          heading="Paper"
+          subheading="from £10.36/month"
           benefits={[
             {
               heading: 'Choose your package and delivery method',
@@ -57,7 +57,7 @@ export default function ThreeSubscriptions() {
         <SubscriptionBundle
           modifierClass="paper-digital"
           heading="Paper+digital"
-          subheading="£21.62/month"
+          subheading="from £21.62/month"
           benefits={[
             {
               heading: 'Choose your package and delivery method',
