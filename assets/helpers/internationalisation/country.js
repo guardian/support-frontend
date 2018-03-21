@@ -395,24 +395,42 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
-function handleEuroCountry(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
+function handleCountryForCountryGroup(
+  targetCountryGroup: CountryGroupId,
+  countryGroupId: ?CountryGroupId = null,
+): ?IsoCountry {
   const path = window.location.pathname;
 
-  if (path !== '/eu' && !path.startsWith('/eu/') && countryGroupId !== 'EURCountries') {
+  const constants = {
+    International: {
+      paths: ['/int', '/int/'],
+      defaultCountry: 'AR',
+    },
+    EURCountries: {
+      paths: ['/eu', '/eu/'],
+      defaultCountry: 'DE',
+    },
+  };
+
+  if (
+    path !== constants[targetCountryGroup].paths[0] &&
+    !path.startsWith(constants[targetCountryGroup].paths[1]) &&
+    countryGroupId !== targetCountryGroup
+  ) {
     return null;
   }
 
   const candidateCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
 
-  if (candidateCountry && countryGroups.EURCountries.countries.includes(candidateCountry)) {
+  if (candidateCountry && countryGroups[targetCountryGroup].countries.includes(candidateCountry)) {
     return candidateCountry;
   }
 
-  return 'DE';
+  return constants[targetCountryGroup].defaultCountry;
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-  const country = handleEuroCountry(countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) || handleCountryForCountryGroup('International', countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
   setCountry(country);
   return country;
 }
