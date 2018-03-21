@@ -11,7 +11,7 @@ import { contributionSelectionActionsFor } from '../contributionSelectionActions
 describe('Contributions Selection reducer', () => {
 
   const PREFIX = 'MY_PREFIX';
-  const reducer = contributionSelectionReducerFor(PREFIX);
+  const reducer = contributionSelectionReducerFor(PREFIX, 'GBPCountries');
   const actions = contributionSelectionActionsFor(PREFIX);
 
   it('should return the initial state', () => {
