@@ -396,7 +396,7 @@ function setCountry(country: IsoCountry) {
 }
 
 function handleCountryForCountryGroup(
-  targetCountryGroup: CountryGroupId,
+  targetCountryGroup: 'International' | 'EURCountries',
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
   const path = window.location.pathname;
