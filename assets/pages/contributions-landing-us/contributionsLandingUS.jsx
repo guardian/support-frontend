@@ -17,14 +17,14 @@ import ContributionSelectionContainer from 'reducers/contributions-landing/conta
 import ContributionPaymentCtasContainer from 'reducers/contributions-landing/containers/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from 'reducers/contributions-landing/containers/payPalContributionButtonContainer';
 
-import pageReducer from './contributionsLandingUSReducer';
+import { createPageReducerFor } from 'reducers/contributions-landing/contributionsLandingReducer';
 
 
 // ----- Redux Store ----- //
 
 /* eslint-disable no-underscore-dangle */
 const store = pageInit(
-  pageReducer,
+  createPageReducerFor('UnitedStates'),
   null,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
