@@ -35,6 +35,9 @@ export default function ThreeSubscriptions() {
           ctaUrl="https://subscribe.theguardian.com/p/DXX83X"
           ctaId="digital-sub"
           ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
+          gridImage={{
+            gridId: 'digitalCircle', srcSizes: [825, 500, 140], sizes: '(max-width: 480px) 90vw, (max-width: 660px) 400px, 165px', altText: 'digital subscription', imgType: 'png',
+          }}
         />
         <SubscriptionBundle
           modifierClass="paper"
@@ -53,6 +56,9 @@ export default function ThreeSubscriptions() {
           ctaUrl="https://subscribe.theguardian.com/p/GXX83P"
           ctaId="paper-sub"
           ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
+          gridImage={{
+            gridId: 'paperCircle', srcSizes: [825, 500, 140], sizes: '(max-width: 480px) 90vw, (max-width: 660px) 400px, 165px', altText: 'digital subscription', imgType: 'png',
+          }}
         />
         <SubscriptionBundle
           modifierClass="paper-digital"
@@ -74,6 +80,9 @@ export default function ThreeSubscriptions() {
           ctaUrl="https://subscribe.theguardian.com/p/GXX83X"
           ctaId="paper-digi-sub"
           ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
+          gridImage={{
+            gridId: 'paperDigitalCircle', srcSizes: [825, 500, 140], sizes: '(max-width: 480px) 90vw, (max-width: 660px) 400px, 165px', altText: 'digital subscription', imgType: 'png',
+          }}
         />
       </PageSection>
     </div>

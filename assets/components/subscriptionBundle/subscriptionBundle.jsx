@@ -7,10 +7,12 @@ import React from 'react';
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
+import GridImage from 'components/gridImage/gridImage';
 
 import { generateClassName } from 'helpers/utilities';
 
 import type { ListItem } from 'components/featureList/featureList';
+import type { GridImg } from 'components/gridImage/gridImage';
 
 
 // ----- Props ----- //
@@ -24,6 +26,7 @@ type PropTypes = {
   ctaUrl: string,
   ctaId: string,
   ctaAccessibilityHint: string,
+  gridImage: GridImg,
 };
 
 
@@ -33,6 +36,7 @@ export default function SubscriptionBundle(props: PropTypes) {
 
   return (
     <div className={generateClassName('component-subscription-bundle', props.modifierClass)}>
+      <GridImage {...props.gridImage} />
       <DoubleHeading
         heading={props.heading}
         subheading={props.subheading}
