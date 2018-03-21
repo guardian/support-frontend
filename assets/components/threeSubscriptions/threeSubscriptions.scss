@@ -27,10 +27,18 @@
   }
 
   .component-subscription-bundle {
-    flex: 1 33%;
-    padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2);
-    display: flex;
-    flex-direction: column;
+    @include mq($from: leftCol) {
+      flex: 1 33%;
+      padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2) 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-subscription-bundle--paper, .component-subscription-bundle--paper-digital {
+    @include mq($from: leftCol) {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
   }
 
   .component-feature-list {
