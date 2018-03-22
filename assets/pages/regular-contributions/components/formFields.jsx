@@ -88,13 +88,13 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: UsState => voi
   return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
 }
 
-function euroCountryDropdown(
+function countriesDropdown(
   countryGroup: CountryGroupId,
   countryUpdate: string => void,
   country: IsoCountry,
 ) {
 
-  if (countryGroup !== 'EURCountries') {
+  if (countryGroup !== 'EURCountries' && countryGroup !== 'International') {
     return null;
   }
 
@@ -131,7 +131,7 @@ function NameForm(props: PropTypes) {
         required
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
-      {euroCountryDropdown(props.countryGroup, props.countryUpdate, props.country)}
+      {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
     </form>
   );
 }
