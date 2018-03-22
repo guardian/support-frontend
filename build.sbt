@@ -1,4 +1,3 @@
-import Dependencies._
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import sbt.Keys.{libraryDependencies, resolvers}
 
@@ -25,12 +24,45 @@ lazy val root =
     )
     .aggregate(common, `monthly-contributions`)
 
+lazy val circeVersion = "0.8.0"
+lazy val awsVersion = "1.11.131"
+lazy val okhttpVersion = "3.9.0"
+
 lazy val common = project
   .configs(IntegrationTest)
   .settings(
     name := "guardian-support-common",
     description := "Common code for the support-workers project",
-    libraryDependencies ++= commonDependencies,
+    libraryDependencies ++= Seq(
+      "com.typesafe" % "config" % "1.3.1",
+      "org.joda" % "joda-convert" % "1.8.1",
+      "org.typelevel" %% "cats" % "0.9.0",
+      "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0",
+      "ch.qos.logback" % "logback-classic" % "1.2.3",
+      "io.symphonia" % "lambda-logging" % "1.0.0",
+      "com.gu" %% "support-internationalisation" % "0.9",
+      "com.gu" %% "support-models" % "0.22",
+      "com.gu" %% "support-config" % "0.12",
+      "com.gu" %% "acquisition-event-producer" % "2.0.1",
+      "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
+      "com.netaporter" %% "scala-uri" % "0.4.16",
+      "com.amazonaws" % "aws-lambda-java-core" % "1.1.0",
+      "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
+      "com.amazonaws" % "aws-java-sdk-sqs" % awsVersion,
+      "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
+      "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
+      "org.scalatest" %% "scalatest" % "3.0.1" % "it,test",
+      "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-generic-extras" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
+      "net.databinder.dispatch" %% "dispatch-core" % "0.11.3",
+      "org.scala-stm" %% "scala-stm" % "0.8",
+      "com.getsentry.raven" % "raven-logback" % "8.0.3",
+      "com.google.code.findbugs" % "jsr305" % "3.0.2",
+      "com.google.guava" % "guava" % "23.6-jre"
+    ),
     resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
     scalaStyleSettings
   )
@@ -59,7 +91,9 @@ lazy val `monthly-contributions` = project
         val oldStrategy = (assemblyMergeStrategy in assembly).value
         oldStrategy(x)
     },
-    libraryDependencies ++= monthlyContributionsDependencies,
+    libraryDependencies ++= Seq(
+      "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test"
+    ),
     scalaStyleSettings
   )
   .settings(Settings.testSettings: _*)
