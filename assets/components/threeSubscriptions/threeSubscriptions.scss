@@ -190,5 +190,18 @@
     height: 35%;
     top: 17px;
     right: 16px;
+
+    // Fixes for IE.
+    @include mq($from: tablet) {
+      left: 92%;
+    }
+
+    @include mq($from: leftCol) {
+      left: 86%;
+    }
+
+    @include mq($from: wide) {
+      left: 88%;
+    }
   }
 }
