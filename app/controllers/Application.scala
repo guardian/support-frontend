@@ -29,7 +29,7 @@ class Application(
 
   private def applyCircles(intCmp: String, id: String, js: String, modifiedId: String, modifiedJs: String): (String, String) = {
     intCmp match {
-      case "gdnwb_copts_memco_sandc_circles_variant" => (modifiedId, modifiedJs)
+      case "true" => (modifiedId, modifiedJs)
       case _ => (id, js)
     }
   }
@@ -76,24 +76,14 @@ class Application(
   }
 
   def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (newDesigns == "circles") {
-      Ok(views.html.bundleLanding(
-        title,
-        "support-landing-page-old",
-        "supportLandingPageOld.js",
-        contributionsPayPalEndpoint,
-        description = Some(stringsConfig.bundleLandingDescription)
-      ))
-    } else {
-      val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
-      Ok(views.html.bundleLanding(
-        title,
-        updatedId,
-        updatedJs,
-        contributionsPayPalEndpoint,
-        description = Some(stringsConfig.bundleLandingDescription)
-      ))
-    }
+    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
+    Ok(views.html.bundleLanding(
+      title,
+      updatedId,
+      updatedJs,
+      contributionsPayPalEndpoint,
+      description = Some(stringsConfig.bundleLandingDescription)
+    ))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
