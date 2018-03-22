@@ -25,7 +25,7 @@ lazy val root =
     .aggregate(common, `monthly-contributions`)
 
 lazy val circeVersion = "0.8.0"
-lazy val awsVersion = "1.11.131"
+lazy val awsVersion = "1.11.161"
 lazy val okhttpVersion = "3.9.0"
 
 lazy val common = project
@@ -57,7 +57,7 @@ lazy val common = project
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-generic-extras" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "net.databinder.dispatch" %% "dispatch-core" % "0.11.3",
+      "net.databinder.dispatch" %% "dispatch-core" % "0.11.4",
       "org.scala-stm" %% "scala-stm" % "0.8",
       "com.getsentry.raven" % "raven-logback" % "8.0.3",
       "com.google.code.findbugs" % "jsr305" % "3.0.2",
