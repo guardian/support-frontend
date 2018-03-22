@@ -37,17 +37,19 @@ export default function SubscriptionBundle(props: PropTypes) {
   return (
     <div className={generateClassName('component-subscription-bundle', props.modifierClass)}>
       <GridImage {...props.gridImage} />
-      <DoubleHeading
-        heading={props.heading}
-        subheading={props.subheading}
-      />
-      <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
-      <CtaLink
-        text={props.ctaText}
-        url={props.ctaUrl}
-        ctaId={props.ctaId}
-        accessibilityHint={props.ctaAccessibilityHint}
-      />
+      <div className="component-subscription-bundle__content">
+        <DoubleHeading
+          heading={props.heading}
+          subheading={props.subheading}
+        />
+        <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
+        <CtaLink
+          text={props.ctaText}
+          url={props.ctaUrl}
+          ctaId={props.ctaId}
+          accessibilityHint={props.ctaAccessibilityHint}
+        />
+      </div>
     </div>
   );
 

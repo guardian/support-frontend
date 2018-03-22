@@ -20,18 +20,44 @@
     }
   }
 
-  .component-grid-image {
-    width: 165px;
-    height: 165px;
-    margin: $gu-v-spacing auto;
-  }
-
   .component-subscription-bundle {
+    padding: $gu-v-spacing 0;
+
     @include mq($from: leftCol) {
       flex: 1 33%;
       padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2) 0;
       display: flex;
       flex-direction: column;
+    }
+  }
+
+  .component-subscription-bundle__content {
+    @include mq($from: phablet, $until: leftCol) {
+      display: inline-block;
+      width: 70%;
+      vertical-align: top;
+    }
+
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-grid-image {
+    width: 165px;
+    height: 165px;
+    margin: $gu-v-spacing auto;
+    display: block;
+
+    @include mq($from: phablet, $until: leftCol) {
+      width: 28%;
+      height: 28%;
+      padding-right: 2%;
+      margin: 0;
+      display: inline-block;
+      vertical-align: top;
     }
   }
 
@@ -42,11 +68,17 @@
   }
 
   .component-feature-list {
-    flex: 1 0 auto;
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+    }
   }
 
   .component-double-heading {
     margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: phablet, $until: leftCol) {
+      padding-left: 30px;
+    }
   }
 
   .component-double-heading__heading {
