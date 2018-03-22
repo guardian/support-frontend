@@ -64,9 +64,9 @@
     }
   }
 
-  .component-subscription-bundle--paper, .component-subscription-bundle--paper-digital {
+  .component-subscription-bundle--digital, .component-subscription-bundle--paper {
     @include mq($from: leftCol) {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+      @include dropline;
     }
   }
 
