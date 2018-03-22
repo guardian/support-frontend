@@ -3,7 +3,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 
@@ -16,10 +16,8 @@ module.exports = (env) => {
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
-    new ExtractTextPlugin({
-      filename: getPath => getPath(`javascripts/[name]${isProd ? '.[contenthash]' : ''}.css`)
-        .replace('javascripts', 'stylesheets'),
-      allChunks: true,
+    new MiniCssExtractPlugin({
+      filename: path.join('stylesheets', `[name]${isProd ? '.[contenthash]' : ''}.css`),
     }),
   ];
   let devServer = {};
@@ -92,25 +90,24 @@ module.exports = (env) => {
         },
         {
           test: /\.scss$/,
-          use: ExtractTextPlugin.extract({
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  minimize: isProd,
-                },
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: isProd,
               },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
-                },
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
               },
-              {
-                loader: 'sass-loader',
-              },
-            ],
-          }),
+            },
+            {
+              loader: 'sass-loader',
+            },
+          ],
         },
       ],
     },
