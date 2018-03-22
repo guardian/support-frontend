@@ -49,7 +49,6 @@ module.exports = (env) => {
       styles: 'stylesheets/garnett.scss',
       supportLandingPage: 'pages/support-landing/supportLanding.jsx',
       bundlesLandingPage: 'pages/bundles-landing/bundlesLanding.jsx',
-      supportLandingPageOld: 'pages/bundles-landing/support-landing-ab-test/supportLandingOld.jsx',
       contributionsLandingPageAU: 'pages/contributions-landing-au/contributionsLandingAU.jsx',
       contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
       regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
