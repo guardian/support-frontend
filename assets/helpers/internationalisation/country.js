@@ -406,7 +406,7 @@ function handleCountryForCountryGroup(
   };
 
   const defaultCountry = {
-    International: 'AR',
+    International: 'IN',
     EURCountries: 'DE',
   };
 
