@@ -9,9 +9,8 @@
     "lint": "eslint --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",
     "build-prod": "npm-run-all clean validate test 'webpack --config webpack.config.js --env.prod'",
-    "test-prod": "webpack --config webpack.prod.js",
     "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server --port 9211 --public support.thegulocal.com",
+    "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u"
