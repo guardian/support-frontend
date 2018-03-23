@@ -9,7 +9,6 @@ import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
-import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';

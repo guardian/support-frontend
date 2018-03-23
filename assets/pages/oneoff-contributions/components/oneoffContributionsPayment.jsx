@@ -31,8 +31,8 @@ type PropTypes = {
   isFormEmpty: boolean,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  isoCountry: IsoCountry,
-  countryGroupId: CountryGroupId,
+  isoCountry: IsoCountry, // eslint-disable-line react/no-unused-prop-types
+  countryGroupId: CountryGroupId, // eslint-disable-line react/no-unused-prop-types
   checkoutError: (?string) => void,
   abParticipations: Participations,
   currency: Currency,

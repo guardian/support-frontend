@@ -70,10 +70,6 @@ export default function ContributionPaymentCtas(props: PropTypes) {
     return (
       <div className={generateClassName(baseClassName, props.isDisabled ? 'disabled' : null)}>
         <OneOffCta {...props} />
-        <props.PayPalButton
-          buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
-          onClick={props.resetError}
-        />
         <ErrorMessage message={props.error} />
         <TermsPrivacy country={props.country} />
       </div>
