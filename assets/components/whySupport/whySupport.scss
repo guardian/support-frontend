@@ -1,5 +1,6 @@
 .component-why-support {
   border-top: 1px solid gu-colour(garnett-neutral-4);
+  padding-bottom: $gu-v-spacing * 3;
 
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
@@ -23,8 +24,7 @@
 }
 
 .component-why-support__heading {
-  margin-bottom: $gu-v-spacing * 2;
-
+  margin: $gu-v-spacing * 2 0;
 }
 
 .svg-advertising-graph-mobile {
@@ -41,6 +41,7 @@
 
 .component-why-support__copy {
   border-top: 1px solid gu-colour(garnett-neutral-4);
+  padding-top: 3px;
   font-size: 16px;
   line-height: 1.25;
 }
