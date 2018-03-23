@@ -318,20 +318,6 @@ function ContributionBundle(props: PropTypes) {
         onClick={onClick}
       />
 
-      {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
-      <PayPalContributionButton
-        buttonText={contribAttrs.paypalCta.text}
-        amount={Number(props.contribAmount.oneOff.value)}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        // eslint-disable-next-line no-alert
-        errorHandler={e => alert(e)}
-        abParticipations={props.abTests}
-        additionalClass={props.contribError ? 'contrib-error' : ''}
-        canClick={!props.contribError}
-      />
-      }
 
       <TermsPrivacy country={props.isoCountry} />
 
