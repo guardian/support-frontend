@@ -1,6 +1,7 @@
 .component-why-support {
   border-top: 1px solid gu-colour(garnett-neutral-4);
   padding-bottom: $gu-v-spacing * 3;
+  overflow: hidden;
 
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
@@ -21,22 +22,59 @@
       width: 50%;
     }
   }
+
+  .svg-advertising-graph-mobile {
+    @include mq($from: tablet) {
+      display: none;
+    }
+  }
+
+  .svg-advertising-graph-desktop {
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  .svg-paywall-mobile {
+    width: 100vw;
+    margin-left: -$gu-h-spacing / 2;
+
+    @include mq($from: mobileLandscape) {
+      display: none;
+    }
+  }
+  
+  .svg-paywall-desktop {
+    margin-left: -42vw;
+    width: 1000px;
+
+    @include mq($until: mobileLandscape) {
+      display: none;
+    }
+
+    @include mq($from: phablet) {
+      margin-left: -50vw;
+      width: 1400px;
+    }
+
+    @include mq($from: tablet) {
+      margin-left: -37vw;
+    }
+
+    @include mq($from: desktop) {
+      margin-left: -30vw;
+      width: 110vw;
+    }
+    
+    @include mq($from: leftCol) {
+      margin-left: -27vw;
+      width: 105vw;
+    }
+  }
 }
 
 .component-why-support__heading {
   margin: $gu-v-spacing * 2 0;
-}
-
-.svg-advertising-graph-mobile {
-  @include mq($from: tablet) {
-    display: none;
-  }
-}
-
-.svg-advertising-graph-desktop {
-  @include mq($until: tablet) {
-    display: none;
-  }
 }
 
 .component-why-support__copy {

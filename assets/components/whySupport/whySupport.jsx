@@ -8,6 +8,8 @@ import PageSection from 'components/pageSection/pageSection';
 import { SvgScribble } from 'components/svg/svg';
 import { SvgAdvertisingGraphMobile } from 'components/svg/svg';
 import { SvgAdvertisingGraphDesktop } from 'components/svg/svg';
+import { SvgPaywallMobile } from 'components/svg/svg';
+import { SvgPaywallDesktop } from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -35,6 +37,10 @@ export default function WhySupport() {
           incredibly challenging commercial environment, and the advertising
           that we used to rely on to fund our work continues to fall.
         </p>
+        <h1 className="component-why-support__heading component-why-support__heading--paywall">
+          <SvgPaywallMobile />
+          <SvgPaywallDesktop />
+        </h1>
         <p className="component-why-support__copy">
           We want to keep our journalism as open as we can.
         </p>
