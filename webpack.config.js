@@ -21,14 +21,13 @@ module.exports = (env) => {
     }),
   ];
   let devServer = {};
-
+  let mode = 'production';
   if (isProd) {
-    const uglifyOpts = { compress: { warnings: false }, sourceMap: true };
-    plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyOpts));
 
     const defineOpts = { 'process.env': { NODE_ENV: JSON.stringify('production') } };
     plugins.push(new webpack.DefinePlugin(defineOpts));
   } else {
+    mode = 'development';
     devServer = {
       proxy: {
         '**': {
@@ -113,6 +112,8 @@ module.exports = (env) => {
     },
 
     devtool: 'source-map',
+
+    mode,
 
     plugins,
 

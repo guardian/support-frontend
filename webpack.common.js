@@ -1,22 +1,19 @@
 'use-strict';
 
 const path = require('path');
-const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 
-module.exports = {
-
-
+module.exports = (cssFilename, outputFilename) => ({
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
     new MiniCssExtractPlugin({
-      filename: path.join('stylesheets', `[name]${isProd ? '.[contenthash]' : ''}.css`),
+      filename: path.join('stylesheets', cssFilename),
     }),
   ],
 
@@ -41,7 +38,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public/compiled-assets'),
     chunkFilename: 'webpack/[chunkhash].js',
-    filename: `javascripts/[name]${isProd ? '.[chunkhash]' : ''}.js`,
+    filename: `javascripts/${outputFilename}`,
     publicPath: '/assets/',
   },
 
@@ -76,7 +73,7 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              minimize: isProd,
+              minimize: false,
             },
           },
           {
@@ -92,6 +89,4 @@ module.exports = {
       },
     ],
   },
-
-  devtool: 'source-map',
-};
+});
