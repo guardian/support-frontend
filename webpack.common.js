@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 
-module.exports = (cssFilename, outputFilename) => ({
+module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
@@ -72,7 +72,7 @@ module.exports = (cssFilename, outputFilename) => ({
           {
             loader: 'css-loader',
             options: {
-              minimize: false,
+              minimize: minimizeCss,
             },
           },
           {
