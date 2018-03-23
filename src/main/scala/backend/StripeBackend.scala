@@ -23,11 +23,11 @@ class StripeBackend(
     databaseService: DatabaseService,
     identityService: IdentityService,
     ophanService: OphanService
-) extends StrictLogging {
+)(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Convert the result of the identity id operation,
   // into the monad used by the for comprehension in the createCharge() method.
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Option[Long]] =
+  def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .leftMap(BackendError.fromIdentityError)
@@ -38,20 +38,20 @@ class StripeBackend(
           None
       }
 
-  def insertContributionData(contributionData: ContributionData)(implicit pool: DefaultThreadPool):
+  def insertContributionData(contributionData: ContributionData):
   EitherT[Future, BackendError, Unit] =
     databaseService.insertContributionData(contributionData)
       .leftMap(BackendError.fromDatabaseError)
 
-  def submitAcquisitionToOphan(acquisition: StripeAcquisition)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] =
+  def submitAcquisitionToOphan(acquisition: StripeAcquisition): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(acquisition)
       .bimap(BackendError.fromOphanError, _ => ())
 
-  def createStripeCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Charge] =
+  def createStripeCharge(data: StripeChargeData): EitherT[Future, BackendError, Charge] =
     stripeService.createCharge(data)
       .leftMap(BackendError.fromStripeApiError)
 
-  def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long])(implicit pool: DefaultThreadPool):
+  def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long]):
   EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
       insertContributionData(ContributionData.fromStripeCharge(identityId, charge)),
@@ -59,7 +59,7 @@ class StripeBackend(
     )
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(data: StripeChargeData)(implicit pool: DefaultThreadPool):
+  def createCharge(data: StripeChargeData):
   EitherT[Future, BackendError, StripeChargeSuccess] =
     for {
       charge <- createStripeCharge(data)
@@ -73,7 +73,7 @@ class StripeBackend(
     } yield StripeChargeSuccess.fromCharge(charge)
 
 
-  def processPaymentHook(stripeHook: StripeHook)(implicit pool: DefaultThreadPool):
+  def processPaymentHook(stripeHook: StripeHook):
   EitherT[Future, StripeApiError, Event] = {
     for {
       event <- stripeService.processPaymentHook(stripeHook)
@@ -86,7 +86,8 @@ class StripeBackend(
 
 object StripeBackend {
 
-  private def apply(stripeService: StripeService, databaseService: DatabaseService, identityService: IdentityService, ophanService: OphanService): StripeBackend =
+  private def apply(stripeService: StripeService, databaseService: DatabaseService,
+    identityService: IdentityService, ophanService: OphanService)(implicit pool: DefaultThreadPool): StripeBackend =
     new StripeBackend(stripeService, databaseService, identityService, ophanService)
 
   class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(

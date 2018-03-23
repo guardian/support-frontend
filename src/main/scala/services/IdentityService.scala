@@ -20,12 +20,8 @@ trait IdentityService extends StrictLogging {
   // TODO: better method name
   // Look up the identity id for the given email address.
   // If one exists then return it, otherwise create a guest account and return the associated identity id.
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): IdentityClient.Result[Long] =
-    for {
-      preExistingIdentityId <- getIdentityIdFromEmail(email)
-      // pure lifts the identity id into the monadic context.
-      identityId <- preExistingIdentityId.fold(createGuestAccount(email))(Monad[IdentityClient.Result].pure(_))
-    } yield identityId
+  def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[Long]
+
 }
 
 // Default implementation of the IdentityService trait using the client to the Guardian identity API.
@@ -45,8 +41,12 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
       response.guestRegistrationRequest.userId
     }
 
-  override def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): IdentityClient.Result[Long] =
-    super.getOrCreateIdentityIdFromEmail(email).leftMap { err =>
+  override def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[Long] =
+    (for {
+      preExistingIdentityId <- getIdentityIdFromEmail(email)
+      // pure lifts the identity id into the monadic context.
+      identityId <- preExistingIdentityId.fold(createGuestAccount(email))(Monad[IdentityClient.Result].pure(_))
+    } yield identityId).leftMap { err =>
       logger.error("error getting or creating identity id", err)
       err
     }

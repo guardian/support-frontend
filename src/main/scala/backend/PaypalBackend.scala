@@ -23,9 +23,9 @@ class PaypalBackend(
     identityService: IdentityService,
     ophanService: OphanService,
     emailService: EmailService
-) extends StrictLogging {
+)(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def getOrCreateIdentityIdFromEmail(email: String)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Option[Long]] =
+  def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
     identityService.getOrCreateIdentityIdFromEmail(email)
       .leftMap(BackendError.fromIdentityError)
       .map(Option(_))
@@ -35,23 +35,23 @@ class PaypalBackend(
           None
       }
 
-  def insertContributionDataToPostgres(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] =
+  def insertContributionDataToPostgres(contributionData: ContributionData): EitherT[Future, BackendError, Unit] =
     databaseService.insertContributionData(contributionData)
       .leftMap(BackendError.fromDatabaseError)
 
-  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] =
+  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId))
       .bimap(BackendError.fromOphanError, _ => ())
 
-  def getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData: ExecutePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Payment] =
+  def getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData: ExecutePaypalPaymentData): EitherT[Future, BackendError, Payment] =
     paypalService.executePayment(paypalExecutePaymentData)
       .leftMap(BackendError.fromPaypalAPIError)
 
-  def getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Payment] =
+  def getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData: CapturePaypalPaymentData): EitherT[Future, BackendError, Payment] =
     paypalService.capturePayment(capturePaypalPaymentData)
       .leftMap(BackendError.fromPaypalAPIError)
 
-  def getContributionDataFromPaypalCharge(identityId: Option[Long], payment: Payment)(implicit pool: DefaultThreadPool): Either[BackendError, ContributionData] =
+  def getContributionDataFromPaypalCharge(identityId: Option[Long], payment: Payment): Either[BackendError, ContributionData] =
     ContributionData.fromPaypalCharge(identityId, payment)
       .leftMap{ error =>
         val message = s"Error creating contribution data from paypal. Error: $error"
@@ -63,7 +63,7 @@ class PaypalBackend(
    *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
    *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
    */
-  def createPayment(paypalPaymentData: CreatePaypalPaymentData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Payment] =
+  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, BackendError, Payment] =
     paypalService.createPayment(paypalPaymentData)
       .leftMap{ error =>
         logger.error(s"Error creating paypal payment data. Error: $error")
@@ -71,7 +71,7 @@ class PaypalBackend(
       }
 
 
-  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit]  = {
+  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit]  = {
     getContributionDataFromPaypalCharge(identityId, payment)
       .toEitherT[Future]
       .flatMap { contributionData =>
@@ -91,7 +91,7 @@ class PaypalBackend(
    *  Use by Apps: Apps have previously created the payment and managed its approval with the customer.
    *  Funds are captured at this stage.
    */
-  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData)(implicit pool: DefaultThreadPool):
+  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData):
   EitherT[Future, BackendError, Payment] = {
     for {
       payment <- getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData)
@@ -101,7 +101,7 @@ class PaypalBackend(
     } yield payment
   }
 
-  def executePayment(paypalExecutePaymentData: ExecutePaypalPaymentData)(implicit pool: DefaultThreadPool):
+  def executePayment(paypalExecutePaymentData: ExecutePaypalPaymentData):
   EitherT[Future, BackendError, Payment] = {
     for {
       payment <- getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData)
@@ -116,7 +116,7 @@ class PaypalBackend(
     } yield payment
   }
 
-  def processPaymentHook(paypalHook: PaypalHook, headers: Map[String, String], rawJson: String)(implicit pool: DefaultThreadPool):
+  def processPaymentHook(paypalHook: PaypalHook, headers: Map[String, String], rawJson: String):
   EitherT[Future, PaypalApiError, Unit] = {
     for {
       payment <- paypalService.validateEvent(headers, rawJson)
@@ -129,7 +129,7 @@ class PaypalBackend(
 object PaypalBackend {
 
   private def apply(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService,
-    ophanService: OphanService, emailService: EmailService): PaypalBackend =
+    ophanService: OphanService, emailService: EmailService)(implicit pool: DefaultThreadPool): PaypalBackend =
     new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService)
 
   class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
