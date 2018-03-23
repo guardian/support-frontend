@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
@@ -32,8 +31,8 @@ type PropTypes = {
   isFormEmpty: boolean,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  isoCountry: IsoCountry,
-  countryGroupId: CountryGroupId,
+  isoCountry: IsoCountry, // eslint-disable-line react/no-unused-prop-types
+  countryGroupId: CountryGroupId, // eslint-disable-line react/no-unused-prop-types
   checkoutError: (?string) => void,
   abParticipations: Participations,
   currency: Currency,
@@ -133,14 +132,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
-      />
-      <PayPalContributionButton
-        amount={props.amount}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        errorHandler={props.checkoutError}
-        abParticipations={props.abParticipations}
       />
     </section>
   );

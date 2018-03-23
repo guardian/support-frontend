@@ -10,7 +10,6 @@ import Bundle from 'components/bundle/bundle';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import { routes } from 'helpers/routes';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
-import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import { getContribKey } from 'helpers/contributions';
@@ -182,16 +181,7 @@ function contribAttrs(
 
 function showPayPal(props: PropTypes) {
   if (props.contribType === 'ONE_OFF') {
-    return (<PayPalContributionButton
-      amount={Number(props.contribAmount.oneOff.value)}
-      abParticipations={props.abTests}
-      referrerAcquisitionData={props.referrerAcquisitionData}
-      isoCountry={props.isoCountry}
-      countryGroupId={props.countryGroupId}
-      errorHandler={props.payPalErrorHandler}
-      canClick={!props.contribError}
-      buttonText={`Contribute ${props.currency.glyph}${props.contribAmount.oneOff.value} with PayPal`}
-    />);
+    return null;
   }
   return null;
 }

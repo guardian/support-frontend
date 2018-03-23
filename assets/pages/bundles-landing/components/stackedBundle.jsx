@@ -9,7 +9,6 @@ import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import Bundle from 'components/bundle/bundle';
 import ContribAmounts from 'components/contribAmounts/contribAmounts';
-import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';
@@ -318,20 +317,6 @@ function ContributionBundle(props: PropTypes) {
         onClick={onClick}
       />
 
-      {props.contribType === 'ONE_OFF' && !!contribAttrs.paypalCta &&
-      <PayPalContributionButton
-        buttonText={contribAttrs.paypalCta.text}
-        amount={Number(props.contribAmount.oneOff.value)}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        // eslint-disable-next-line no-alert
-        errorHandler={e => alert(e)}
-        abParticipations={props.abTests}
-        additionalClass={props.contribError ? 'contrib-error' : ''}
-        canClick={!props.contribError}
-      />
-      }
 
       <TermsPrivacy country={props.isoCountry} />
 
