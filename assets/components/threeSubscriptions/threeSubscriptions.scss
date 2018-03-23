@@ -1,4 +1,10 @@
-.component-page-section--three-subscriptions {
+.component-three-subscriptions {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+
+  .component-page-section__header {
+    @include dropline;
+  }
+
   .component-page-section__heading {
     font-family: $gu-egyptian-web;
     font-size: 24px;
@@ -6,20 +12,97 @@
     font-weight: bold;
   }
 
+  .component-page-section__body {
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: $gu-h-spacing / 2;
+      display: inline-flex;
+    }
+  }
+
+  .component-subscription-bundle {
+    padding: $gu-v-spacing 0;
+
+    @include mq($from: leftCol) {
+      flex: 1 33%;
+      padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2) 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-subscription-bundle__content {
+    @include mq($from: phablet, $until: leftCol) {
+      display: inline-block;
+      width: 70%;
+      vertical-align: top;
+    }
+
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-grid-image {
+    width: 165px;
+    height: 165px;
+    margin: $gu-v-spacing auto;
+    display: block;
+
+    @include mq($from: phablet, $until: leftCol) {
+      width: 28%;
+      height: 28%;
+      padding-right: 2%;
+      margin: 0;
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  .component-subscription-bundle--digital, .component-subscription-bundle--paper {
+    @include mq($from: leftCol) {
+      @include dropline;
+    }
+  }
+
+  .component-feature-list {
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+    }
+  }
+
   .component-double-heading {
     margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: phablet, $until: leftCol) {
+      padding-left: 30px;
+    }
   }
 
   .component-double-heading__heading {
     font-size: 36px;
-    line-height: 1;
+    line-height: 1.1;
+
+    @include mq($from: phablet, $until: leftCol) {
+      font-size: 30px;
+    }
   }
 
   .component-double-heading__subheading {
     font-size: 30px;
     line-height: 1;
-    font-weight: 200;
+    font-weight: 400;
     font-family: $gu-egyptian-web;
+
+    @include mq($from: phablet, $until: leftCol) {
+      font-size: 24px;
+      line-height: 1.17;
+    }
   }
 
   .component-feature-list {
@@ -41,8 +124,84 @@
 
   .component-cta-link {
     height: 54px;
-    padding: 0 30px;
+    padding: 0 30px 0 25px;
     font-size: 14px;
     line-height: 54px;
+    background-color: transparent;
+    transition: background-color .3s;
+  }
+
+  .component-cta-link--digital-sub {
+    color: gu-colour(lifestyle-garnett-main-1);
+    border: 1px solid gu-colour(lifestyle-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(lifestyle-garnett-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(lifestyle-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--paper-sub {
+    color: gu-colour(sport-garnett-media-main-1);
+    border: 1px solid gu-colour(sport-garnett-media-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(sport-garnett-media-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(sport-garnett-media-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--paper-digi-sub {
+    color: gu-colour(opinion-garnett-main-1);
+    border: 1px solid gu-colour(opinion-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(opinion-garnett-main-1); 
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(opinion-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+  
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+    height: 35%;
+    top: 17px;
+    right: 16px;
+
+    // Fixes for IE.
+    @include mq($from: tablet) {
+      left: 92%;
+    }
+
+    @include mq($from: leftCol) {
+      left: 86%;
+    }
+
+    @include mq($from: wide) {
+      left: 88%;
+    }
   }
 }

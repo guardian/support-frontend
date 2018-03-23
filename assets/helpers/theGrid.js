@@ -20,6 +20,9 @@ export const imageCatalogue: {
   paperDigitalBundle: '1199912112859eecf3f2d94edc6fdd73843d10e9/0_0_600_360',
   protestorsWide: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720',
   protestorsNarrow: 'd1a7088f8f2a367b0321528f081777c9b5618412/0_0_3578_2013',
+  digitalCircle: '639c3abc4c09281aedb515d684ac4053ef38a1df/0_0_825_825',
+  paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
+  paperDigitalCircle: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
