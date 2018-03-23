@@ -5,6 +5,7 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
+import { SvgScribbleDesktop } from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -14,6 +15,9 @@ export default function WhySupport() {
   return (
     <div className="component-why-support">
       <PageSection heading="Why support?" modifierClass="why-support">
+        <h1 className="component-why-support__heading">
+          <SvgScribbleDesktop />
+        </h1>
         <p className="component-why-support__copy">
           Your support is vital in helping the Guardian do the most important
           journalism of all: that which takes time and effort. More people
