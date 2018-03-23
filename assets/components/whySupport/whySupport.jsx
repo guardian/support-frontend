@@ -5,7 +5,9 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
-import { SvgScribbleDesktop } from 'components/svg/svg';
+import { SvgScribble } from 'components/svg/svg';
+import { SvgAdvertisingGraphMobile } from 'components/svg/svg';
+import { SvgAdvertisingGraphDesktop } from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -16,7 +18,7 @@ export default function WhySupport() {
     <div className="component-why-support">
       <PageSection heading="Why support?" modifierClass="why-support">
         <h1 className="component-why-support__heading">
-          <SvgScribbleDesktop />
+          <SvgScribble />
         </h1>
         <p className="component-why-support__copy">
           Your support is vital in helping the Guardian do the most important
@@ -24,6 +26,10 @@ export default function WhySupport() {
           than ever now read and support the Guardian&#39;s independent,
           quality and investigative journalism.
         </p>
+        <h1 className="component-why-support__heading">
+          <SvgAdvertisingGraphMobile />
+          <SvgAdvertisingGraphDesktop />
+        </h1>
         <p className="component-why-support__copy">
           Like many media organisations, the Guardian is operating in an
           incredibly challenging commercial environment, and the advertising
