@@ -434,7 +434,7 @@ function handleCountryForCountryGroup(
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-  const country = handleCountryForCountryGroup('EURCountries', countryGroupId)  ||
+  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) ||
                   handleCountryForCountryGroup('International', countryGroupId) ||
                   handleCountryForCountryGroup('NZDCountries', countryGroupId) ||
                   fromCountryGroup(countryGroupId) ||
