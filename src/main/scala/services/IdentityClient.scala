@@ -116,7 +116,13 @@ object IdentityClient extends StrictLogging {
   // - an 'underlying' error occurred e.g. network error
   // - the client failed to correctly deserialize the JSON result
   // - the API reported an error in JSON format which was successfully deserialized.
-  sealed trait Error extends Exception
+  sealed trait Error extends Exception {
+    override def getMessage: String = this match {
+      case ApiError(errors) => errors.map(_.message).mkString(" and ")
+      case UnderlyingError(err) => err.getMessage
+      case UnknownJsonFormat(err) => err.getMessage
+    }
+  }
 
   object Error {
     def fromThrowable(err: Throwable): Error = UnderlyingError(err)
