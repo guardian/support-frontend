@@ -76,6 +76,8 @@ const countries = {
   GB: 'United Kingdom',
   US: 'United States',
   AU: 'Australia',
+  NZ: 'New Zealand',
+  CK: 'Cook Islands',
   AD: 'Andorra',
   AL: 'Albania',
   AT: 'Austria',
