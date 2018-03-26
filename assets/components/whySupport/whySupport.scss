@@ -70,6 +70,19 @@
       margin-left: -27vw;
       width: 105vw;
     }
+
+    @include mq($from: wide) {
+      display: none;
+    }
+  }
+
+  .svg-paywall-wide {
+    margin-left: -25%;
+    width: 150%;
+
+    @include mq($until: wide) {
+      display: none;
+    }
   }
 }
 

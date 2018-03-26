@@ -5,11 +5,14 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
-import { SvgScribble } from 'components/svg/svg';
-import { SvgAdvertisingGraphMobile } from 'components/svg/svg';
-import { SvgAdvertisingGraphDesktop } from 'components/svg/svg';
-import { SvgPaywallMobile } from 'components/svg/svg';
-import { SvgPaywallDesktop } from 'components/svg/svg';
+import {
+  SvgScribble,
+  SvgAdvertisingGraphMobile,
+  SvgAdvertisingGraphDesktop,
+  SvgPaywallMobile,
+  SvgPaywallDesktop,
+  SvgPaywallWide,
+} from 'components/svg/svg';
 
 
 // ----- Component ----- //
@@ -40,6 +43,7 @@ export default function WhySupport() {
         <h1 className="component-why-support__heading component-why-support__heading--paywall">
           <SvgPaywallMobile />
           <SvgPaywallDesktop />
+          <SvgPaywallWide />
         </h1>
         <p className="component-why-support__copy">
           We want to keep our journalism as open as we can.
