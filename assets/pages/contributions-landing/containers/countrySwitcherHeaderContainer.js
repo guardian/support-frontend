@@ -18,7 +18,7 @@ const availableCountriesGroups: CountryGroupId[] =
 
 // ----- Functions ----- //
 
-function handleCountryGroupChange(value: CountryGroupId): void {
+function handleCountryGroupChange(value: string): void {
   switch (value) {
     case 'GBPCountries':
       window.location.pathname = '/uk/contribute';

@@ -398,7 +398,7 @@ function setCountry(country: IsoCountry) {
 }
 
 function handleCountryForCountryGroup(
-  targetCountryGroup: 'International' | 'EURCountries',
+  targetCountryGroup: 'International' | 'EURCountries' | 'NZDCountries',
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
 
