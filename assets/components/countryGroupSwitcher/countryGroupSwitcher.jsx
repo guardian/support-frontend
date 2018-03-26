@@ -30,7 +30,7 @@ function CountryGroupSwitcher(props: PropTypes) {
     props.countryGroupIds.map((countryGroupId: CountryGroupId) =>
       ({
         value: countryGroupId,
-        text: `${countryGroups[countryGroupId].name} (${currencies[countryGroups[countryGroupId].currency].clarificationCode})`,
+        text: `${countryGroups[countryGroupId].name} (${currencies[countryGroups[countryGroupId].currency].extendedGlyph})`,
         selected: countryGroupId === props.selectedCountryGroup,
       }));
 

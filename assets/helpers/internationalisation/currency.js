@@ -16,37 +16,37 @@ export type IsoCurrency =
 export type Currency = {
   iso: IsoCurrency,
   glyph: string,
-  clarificationCode: string,
+  extendedGlyph: string,
 };
 
 export const GBP: Currency = {
   iso: 'GBP',
   glyph: '£',
-  clarificationCode: '£',
+  extendedGlyph: '£',
 };
 
 export const USD: Currency = {
   iso: 'USD',
   glyph: '$',
-  clarificationCode: 'US$',
+  extendedGlyph: 'US$',
 };
 
 export const AUD: Currency = {
   iso: 'AUD',
   glyph: '$',
-  clarificationCode: 'AU$',
+  extendedGlyph: 'AU$',
 };
 
 export const EUR: Currency = {
   iso: 'EUR',
   glyph: '€',
-  clarificationCode: '€',
+  extendedGlyph: '€',
 };
 
 export const NZD: Currency = {
   iso: 'NZD',
   glyph: '$',
-  clarificationCode: 'NZ$',
+  extendedGlyph: 'NZ$',
 };
 
 const currencies = {
