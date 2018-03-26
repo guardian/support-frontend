@@ -11,7 +11,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type PropTypes = {
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: (string) => void,
+  onCountryGroupSelect: (CountryGroupId) => void,
 };
 
 

@@ -405,11 +405,13 @@ function handleCountryForCountryGroup(
   const paths = {
     International: ['/int', '/int/'],
     EURCountries: ['/eu', '/eu/'],
+    NZDCountries: ['/nz', '/nz/'],
   };
 
   const defaultCountry = {
     International: 'IN',
     EURCountries: 'DE',
+    NZDCountries: 'NZ',
   };
 
   const path = window.location.pathname;
@@ -432,7 +434,16 @@ function handleCountryForCountryGroup(
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) || handleCountryForCountryGroup('International', countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+  const country = handleCountryForCountryGroup('EURCountries', countryGroupId)  ||
+                  handleCountryForCountryGroup('International', countryGroupId) ||
+                  handleCountryForCountryGroup('NZDCountries', countryGroupId) ||
+                  fromCountryGroup(countryGroupId) ||
+                  fromPath() ||
+                  fromQueryParameter() ||
+                  fromCookie() ||
+                  fromGeolocation() ||
+                  'GB';
+
   setCountry(country);
   return country;
 }
