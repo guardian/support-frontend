@@ -19,7 +19,7 @@
   .component-page-section__body {
     @include mq($from: desktop) {
       padding-left: $gu-h-spacing;
-      width: 50%;
+      width: 640px;
     }
   }
 
@@ -77,8 +77,8 @@
   }
 
   .svg-paywall-wide {
-    margin-left: -25%;
-    width: 150%;
+    margin-left: -140px;
+    width: 900px;
 
     @include mq($until: wide) {
       display: none;
