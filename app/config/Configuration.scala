@@ -27,7 +27,7 @@ class Configuration {
 
   lazy val contributionsStripeEndpoint = config.getString("contributions.stripe.url")
 
-  lazy val paymentApiPayPalAuthEndpoint = config.getString("paymentApi.paypal.url")
+  lazy val paymentApiPayPalAuthEndpoint = config.getString("contributions.paypal.url")
 
   lazy val contributionsFrontendUrl = config.getString("contribution.url")
 

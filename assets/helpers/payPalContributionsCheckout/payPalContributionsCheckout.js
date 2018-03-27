@@ -5,6 +5,7 @@
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamToURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -88,8 +89,8 @@ export function paypalContributionsRedirect(
   const postData: PayPalPaymentAPIPostData = {
     amount,
     currency,
-    returnURL: 'example',
-    cancelURL: 'example2',
+    returnURL: routes.payPalRestReturnURL,
+    cancelURL: routes.payPalRestCancelURL,
   };
 
   const fetchOptions: Object = {
