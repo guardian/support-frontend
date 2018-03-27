@@ -4,28 +4,27 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { SvgUser } from 'components/svg/svg';
-
 
 // ---- Types ----- //
 
 type PropTypes = {
   name: string,
+  isSignedIn: boolean,
 };
 
 
 // ----- Component ----- //
 
 function DisplayName(props: PropTypes) {
-
-  return (
-    <div className="component-display-name">
-      <SvgUser />
-      <span className="component-display-name__name">{props.name}</span>
-    </div>
-  );
-
+  if (props.isSignedIn) {
+    return (
+      <div className="component-display-name">
+        <SvgUser />
+        <span className="component-display-name__name">{props.name}</span>
+      </div>
+    );
+  }
 }
 
 
@@ -35,6 +34,7 @@ function mapStateToProps(state) {
 
   return {
     name: state.page.user.displayName,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }

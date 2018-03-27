@@ -15,6 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
+  type OptionalAuthRequest[A] = AuthenticatedRequest[A, Option[AuthenticatedIdUser]]
 }
 
 class CustomActionBuilders(
@@ -39,6 +40,9 @@ class CustomActionBuilders(
 
   private val chooseRegister = (request: RequestHeader) => SeeOther(idWebAppRegisterUrl(request.uri))
 
+  private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[OptionalAuthRequest, AnyContent] =
+    new AuthenticatedBuilder(authenticatedIdUserProvider.andThen(Some.apply), cc.parsers.defaultBodyParser, onUnauthenticated)
+
   private def authenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[AuthRequest, AnyContent] =
     new AuthenticatedBuilder(authenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
 
@@ -54,6 +58,8 @@ class CustomActionBuilders(
   val AuthenticatedAction = PrivateAction andThen authenticated()
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
+
+  val MaybeAuthenticatedAction = PrivateAction andThen maybeAuthenticated()
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 

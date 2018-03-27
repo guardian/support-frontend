@@ -15,6 +15,8 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
+import DisplayName from 'components/displayName/displayName';
+import Signout from 'components/signout/signout';
 
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -76,7 +78,8 @@ const content = (
             currency={state.page.oneoffContrib.currency}
           />
         </InfoSection>
-        <InfoSection heading="Your details" className="oneoff-contrib__your-details">
+        <InfoSection heading="Your details" headingContent={<Signout />} className="oneoff-contrib__your-details">
+          <DisplayName />
           <FormFields />
         </InfoSection>
         <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
