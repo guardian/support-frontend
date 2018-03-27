@@ -14,6 +14,7 @@
   width: 100%;
   height: 100%;
   text-align: center;
+  background:rgba(0,0,0,0.6);
 }
 
 .focus-target:focus {
@@ -31,6 +32,8 @@
   }
   @include mq($from: mobileLandscape) {
     width: 475px;
+  }
+  @media(min-height: 732px) {
     top: 50%;
     transform: translateY(-50%);
   }
@@ -67,14 +70,4 @@
     padding-top: 3px;
     height: 19px;
   }
-}
-
-.component-direct-debit-pop-up-form__background {
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background:rgba(0,0,0,0.6);
 }

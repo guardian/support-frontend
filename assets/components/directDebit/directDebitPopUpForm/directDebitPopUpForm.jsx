@@ -57,7 +57,6 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
           </button>
           <DirectDebitForm callback={props.callback} />
         </div>
-        <div className="component-direct-debit-pop-up-form__background" />
       </div>
     );
   }
