@@ -85,21 +85,22 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
   "Paypal Controller" when {
 
-    "a request is made to creates a payment" should {
+    "a request is made to create a payment" should {
 
-      "return a 200 response if the request is valid" in {
-        val fixture = new PaypalControllerFixture()(executionContext, context) {
-          val link = new Links("http://return-url.com", "approval_url")
-          val links: java.util.List[Links] = List(link).asJava
-          when(paymentMock.getLinks)
-            .thenReturn(links)
-          when(paymentMock.getId)
-            .thenReturn("paymentID")
-          when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.createPayment(any()))
-            .thenReturn(paymentServiceResponse)
-        }
+      val fixtureFor200Response = new PaypalControllerFixture()(executionContext, context) {
+        val link = new Links("http://return-url.com", "approval_url")
+        val links: java.util.List[Links] = List(link).asJava
+        when(paymentMock.getLinks)
+          .thenReturn(links)
+        when(paymentMock.getId)
+          .thenReturn("paymentID")
+        when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
+          .thenReturn(mockPaypalBackend)
+        when(mockPaypalBackend.createPayment(any()))
+          .thenReturn(paymentServiceResponse)
+      }
+
+      "return a 200 response if the request is valid and the amount is an integer" in {
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
           .withJsonBody(parse(
             """
@@ -112,7 +113,25 @@ class PaypalControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.createPayment, createPaymentRequest)
+          Helpers.call(fixtureFor200Response.payPalController.createPayment, createPaymentRequest)
+
+        status(paypalControllerResult).mustBe(200)
+      }
+
+      "return a 200 response if the request is valid and the amount has a decimal point" in {
+        val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "currency": "GBP",
+              |  "amount": 1.23,
+              |  "returnURL": "http://return-url.com/return",
+              |  "cancelURL": "http://return-url.com"
+              |}
+            """.stripMargin))
+
+        val paypalControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixtureFor200Response.payPalController.createPayment, createPaymentRequest)
 
         status(paypalControllerResult).mustBe(200)
       }
@@ -154,6 +173,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
         status(paypalControllerResult).mustBe(400)
       }
+
       "return a 500 response if the response contains an invalid return url" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
 

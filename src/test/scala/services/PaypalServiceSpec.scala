@@ -82,43 +82,43 @@ class PaypalServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sc
     relatedResourcesResult.isRight shouldBe(false)
   }
 
-  it should "validate if the capture status is completed" in new PaypalServiceTestFixture {
+  it should "return success if the capture status is completed" in new PaypalServiceTestFixture {
     val capture = mock[Capture]
     when(capture.getState).thenReturn("COMPLETED")
     val validateResult = paypalService invokePrivate validateCapture(capture)
     validateResult.isRight shouldBe(true)
   }
 
-  it should "validate if the capture status is not completed" in new PaypalServiceTestFixture {
+  it should "return an error if the capture status is not completed" in new PaypalServiceTestFixture {
     val capture = mock[Capture]
     when(capture.getState).thenReturn("PAYMENT_NOT_APPROVED")
     val validateResult = paypalService invokePrivate validateCapture(capture)
     validateResult.isRight shouldBe(false)
   }
 
-  it should "validate if the payment status is approved" in new PaypalServiceTestFixture {
+  it should "return success if the payment status is approved" in new PaypalServiceTestFixture {
     val payment = mock[Payment]
     when(payment.getState).thenReturn("APPROVED")
     val validateResult = paypalService invokePrivate validatePayment(payment)
     validateResult.isRight shouldBe(true)
   }
 
-  it should "validate if the payment status is not approved" in new PaypalServiceTestFixture {
+  it should "return an error if the payment status is not approved" in new PaypalServiceTestFixture {
     val payment = mock[Payment]
     when(payment.getState).thenReturn("PAYMENT_NOT_APPROVED_FOR_EXECUTION")
     val validateResult = paypalService invokePrivate validatePayment(payment)
     validateResult.isRight shouldBe(false)
   }
 
-  it should "validate if the payment amount exceed Australia max" in new PaypalServiceTestFixture {
-    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.AUD, BigDecimal(16001), "url", "url")
+  it should "return an error if the payment amount exceeds Australia max" in new PaypalServiceTestFixture {
+    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.AUD, 16000.50, "url", "url")
     whenReady(paypalService.createPayment(createPaypalPaymentData).value){ result =>
       result shouldBe(Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
     }
   }
 
-  it should "validate if the payment amount exceed non Australia max" in new PaypalServiceTestFixture {
-    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(2001), "url", "url")
+  it should "return an error if the payment amount exceeds non-Australia max" in new PaypalServiceTestFixture {
+    val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, 2000.50, "url", "url")
     whenReady(paypalService.createPayment(createPaypalPaymentData).value){ result =>
       result shouldBe(Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
     }

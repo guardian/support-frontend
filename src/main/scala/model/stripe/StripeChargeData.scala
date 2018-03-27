@@ -16,7 +16,7 @@ object StripeJsonDecoder {
     import cursor._
     for {
       currency <- downField("currency").as[String]
-      amount <- downField("amount").as[Int]
+      amount <- downField("amount").as[BigDecimal]
       token <- downField("token").as[String]
       email <- downField("email").as[String]
       browserId <- downField("ophanBrowserId").as[Option[String]]
@@ -69,7 +69,7 @@ object StripeJsonDecoder {
 @JsonCodec case class StripePaymentData(
     email: String,
     currency: Currency,
-    amount: Int,
+    amount: BigDecimal,
     token: String
 )
 

@@ -29,7 +29,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   val apiContext: APIContext = new APIContext(config.clientId, config.clientSecret, config.paypalMode.entryName)
 
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment] = {
-    if (model.Currency.exceedsMaxAmount(createPaypalPaymentData.amount.toInt, createPaypalPaymentData.currency)) {
+    if (model.Currency.exceedsMaxAmount(createPaypalPaymentData.amount, createPaypalPaymentData.currency)) {
       Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
     } else {
       Either.catchNonFatal {
@@ -71,9 +71,9 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
     (for {
-        payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
-        validatedPayment <- validatePayment(payment)
-      } yield validatedPayment).toEitherT[Future]
+      payment <- executePayment(executePaymentData.paymentData.paymentId, executePaymentData.paymentData.payerId)
+      validatedPayment <- validatePayment(payment)
+    } yield validatedPayment).toEitherT[Future]
 
 
   def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {

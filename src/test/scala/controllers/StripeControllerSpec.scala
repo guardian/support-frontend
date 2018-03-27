@@ -219,6 +219,54 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(200)
       }
 
+      "return a 200 response if the request is valid and the amount contains a decimal point" in {
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.createCharge(any()))
+            .thenReturn(stripeServiceResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "paymentData": {
+              |    "currency": "GBP",
+              |    "amount": 1.23,
+              |    "token": "token",
+              |    "email": "email@theguardian.com"
+              |  },
+              |  "acquisitionData": {
+              |    "platform": "android",
+              |    "visitId": "visitId",
+              |    "browserId": "ophanBrowserId",
+              |    "pageviewId": "ophanPageviewId",
+              |    "referrerPageviewId": "refererPageviewId",
+              |    "referrerUrl": "refererUrl",
+              |    "componentId": "componentId",
+              |    "campaignCodes" : ["code", "code2"],
+              |    "componentType": "AcquisitionsOther",
+              |    "source": "GuardianWeb",
+              |    "nativeAbTests":[
+              |       {
+              |         "name":"a-checkout",
+              |         "variant":"a-stripe"
+              |       },
+              |       {
+              |         "name":"b-checkout",
+              |         "variant":"b-stripe"
+              |       }
+              |     ]
+              |  }
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+
+        status(stripeControllerResult).mustBe(200)
+      }
+
       "return a 400 response if the request contains an invalid JSON" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any()))

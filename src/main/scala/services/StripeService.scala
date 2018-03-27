@@ -28,7 +28,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   // https://stripe.com/docs/api/java#create_charge
   private def getChargeParams(data: StripeChargeData) =
     Map[String, AnyRef](
-      "amount" -> new Integer(data.paymentData.amount * 100), //-- stripe amount must be in pence
+      "amount" -> new Integer((data.paymentData.amount * 100).toInt), //-- stripe amount must be in pence
       "currency" -> data.paymentData.currency.entryName,
       "source" -> data.paymentData.token,
       "receipt_email" -> data.paymentData.email
