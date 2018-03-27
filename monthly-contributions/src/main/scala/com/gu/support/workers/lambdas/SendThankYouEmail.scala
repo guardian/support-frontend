@@ -9,12 +9,14 @@ import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
-import scala.concurrent.ExecutionContext.Implicits.global
+import com.gu.threadpools.CustomPool.ec
 
 class SendThankYouEmail(thankYouEmailService: EmailService)
     extends FutureHandler[SendThankYouEmailState, Unit] with LazyLogging {
 
-  def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, global))
+  def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, ec))
+
+  logger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
 
   override protected def handlerFuture(
     state: SendThankYouEmailState,
