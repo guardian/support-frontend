@@ -11,6 +11,7 @@ import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpe
 import type { Participations } from 'helpers/abTests/abtest';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -30,6 +31,13 @@ type PayPalPostData = {|
   source: ?string,
   refererAbTest: ?AcquisitionABTest,
   nativeAbTests: ?AcquisitionABTest[],
+|}
+
+type PayPalPaymentAPIPostData = {|
+  currency: IsoCurrency,
+  amount: number,
+  returnURL: string,
+  cancelURL: string,
 |}
 
 // ----- Functions ----- //
@@ -55,24 +63,33 @@ export function paypalContributionsRedirect(
   nativeAbParticipations: Participations,
 ): void {
 
-  const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
-  const ophanIds: OphanIds = getOphanIds();
-  const postData: PayPalPostData = {
-    countryGroup,
+  const currency = countryGroups[countryGroupId].currency;
+  // const ophanIds: OphanIds = getOphanIds();
+  /*
+    const postData: PayPalPostData = {
+      countryGroup,
+      amount,
+      cmp: null,
+      intCmp: referrerAcquisitionData.campaignCode,
+      refererPageviewId: referrerAcquisitionData.referrerPageviewId,
+      refererUrl: referrerAcquisitionData.referrerUrl,
+      ophanPageviewId: ophanIds.pageviewId,
+      ophanBrowserId: ophanIds.browserId,
+      ophanVisitId: ophanIds.visitId,
+      supportRedirect: true,
+      componentId: referrerAcquisitionData.componentId,
+      componentType: referrerAcquisitionData.componentType,
+      source: referrerAcquisitionData.source,
+      refererAbTest: referrerAcquisitionData.abTest,
+      nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+    };
+   */
+
+  const postData: PayPalPaymentAPIPostData = {
     amount,
-    cmp: null,
-    intCmp: referrerAcquisitionData.campaignCode,
-    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
-    refererUrl: referrerAcquisitionData.referrerUrl,
-    ophanPageviewId: ophanIds.pageviewId,
-    ophanBrowserId: ophanIds.browserId,
-    ophanVisitId: ophanIds.visitId,
-    supportRedirect: true,
-    componentId: referrerAcquisitionData.componentId,
-    componentType: referrerAcquisitionData.componentType,
-    source: referrerAcquisitionData.source,
-    refererAbTest: referrerAcquisitionData.abTest,
-    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+    currency,
+    returnURL: 'example',
+    cancelURL: 'example2',
   };
 
   const fetchOptions: Object = {
