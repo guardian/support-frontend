@@ -16,13 +16,12 @@ import services.{ContributionsFrontendService, PayPalService, TestUserService}
 import services.ContributionsFrontendService.Email
 import scala.concurrent.ExecutionContext
 
-class PayPal(
+class PayPalNvp(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
     payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents,
-    contributionsFrontendService: ContributionsFrontendService
+    components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
@@ -35,8 +34,8 @@ class PayPal(
 
     withPaypalServiceForUser(request.user) { service =>
       service.retrieveToken(
-        returnUrl = routes.PayPal.returnUrl().absoluteURL(secure = true),
-        cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
+        returnUrl = routes.PayPalNvp.returnUrl().absoluteURL(secure = true),
+        cancelUrl = routes.PayPalNvp.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
       Ok(Token(response).asJson)
@@ -47,24 +46,6 @@ class PayPal(
     withPaypalServiceForUser(request.user) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
-  }
-
-  def resultFromEmailOption(email: Option[Email]): Result = {
-    val redirect = Redirect("/contribute/one-off/thankyou")
-    email.fold(redirect)(e => {
-      SafeLogger.info("Redirecting to thank you page with email in flash session")
-      redirect.flashing("email" -> e.value)
-    })
-  }
-
-  def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    contributionsFrontendService.execute(request).fold(
-      e => {
-        SafeLogger.error(scrub"Error making paypal payment", e)
-        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
-      },
-      resultFromEmailOption
-    )
   }
 
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {

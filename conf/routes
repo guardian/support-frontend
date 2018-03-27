@@ -64,11 +64,14 @@ GET  /test-users                                    controllers.TestUsersManagem
 
 # ----- PayPal (NVP Endpoints) ----- #
 
-POST /paypal/setup-payment                          controllers.PayPal.setupPayment
-POST /paypal/create-agreement                       controllers.PayPal.createAgreement
-GET  /paypal/return                                 controllers.PayPal.returnUrl
-GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
-GET  /paypal/execute                                controllers.PayPal.execute
+POST /paypal/setup-payment                          controllers.PayPalNvp.setupPayment
+POST /paypal/create-agreement                       controllers.PayPalNvp.createAgreement
+GET  /paypal/return                                 controllers.PayPalNvp.returnUrl
+GET  /paypal/cancel                                 controllers.PayPalNvp.cancelUrl
+
+# ----- PayPal (REST Endpoints) ----- #
+
+GET  /paypal/execute                                controllers.PayPalRest.execute
 
 # ----- Direct Debit ----- #
 
