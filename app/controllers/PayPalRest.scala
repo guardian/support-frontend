@@ -17,12 +17,12 @@ import services.PaymentAPIService.Email
 import scala.concurrent.ExecutionContext
 
 class PayPalRest(
-  actionBuilders: CustomActionBuilders,
-  assets: AssetsResolver,
-  payPalServiceProvider: PayPalServiceProvider,
-  testUsers: TestUserService,
-  components: ControllerComponents,
-  PaymentAPIService: PaymentAPIService
+    actionBuilders: CustomActionBuilders,
+    assets: AssetsResolver,
+    payPalServiceProvider: PayPalServiceProvider,
+    testUsers: TestUserService,
+    components: ControllerComponents,
+    PaymentAPIService: PaymentAPIService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
@@ -37,7 +37,17 @@ class PayPalRest(
     })
   }
 
-  def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
+  def returnURL(): Action[AnyContent] = PrivateAction.async { implicit request =>
+    PaymentAPIService.execute(request).fold(
+      e => {
+        SafeLogger.error(scrub"Error making paypal payment", e)
+        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+      },
+      resultFromEmailOption
+    )
+  }
+
+  def cancelURL(): Action[AnyContent] = PrivateAction.async { implicit request =>
     PaymentAPIService.execute(request).fold(
       e => {
         SafeLogger.error(scrub"Error making paypal payment", e)

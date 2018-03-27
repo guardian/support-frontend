@@ -71,7 +71,8 @@ GET  /paypal/cancel                                 controllers.PayPalNvp.cancel
 
 # ----- PayPal (REST Endpoints) ----- #
 
-GET  /paypal/execute                                controllers.PayPalRest.execute
+GET  /paypal/rest/return                                controllers.PayPalRest.returnURL
+GET  /paypal/rest/cancel                                controllers.PayPalRest.cancelURL
 
 # ----- Direct Debit ----- #
 
