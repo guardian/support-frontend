@@ -19,17 +19,14 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function NameFormField(props: PropTypes) {
-
-  return (
-    <TextInput
-      id="name"
-      placeholder="Full name"
-      value={props.name}
-      onChange={props.nameUpdate}
-      required
-    />);
-}
+const NameFormField = (props: PropTypes) =>
+  (<TextInput
+    id="name"
+    placeholder="Full name"
+    value={props.name}
+    onChange={props.nameUpdate}
+    required
+  />);
 
 
 // ----- Map State/Props ----- //

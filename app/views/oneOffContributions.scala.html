@@ -21,7 +21,6 @@
         @idUser.map { user =>
             window.guardian.user = {
                 id: "@user.id",
-                isSignedIn: true,
                 email: "@user.primaryEmailAddress",
                 @user.publicFields.displayName.map { displayName =>
                 displayName: "@displayName",

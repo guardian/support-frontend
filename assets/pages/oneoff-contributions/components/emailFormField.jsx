@@ -20,18 +20,21 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function EmailFormField(props: PropTypes) {
+const EmailFormField = (props: PropTypes) => {
 
-  if (!props.isSignedIn) {
-    return (<TextInput
-      id="email"
-      value={props.email}
-      placeholder="Email"
-      onChange={props.emailUpdate}
-      required
-    />);
+  if (props.isSignedIn) {
+    return null;
   }
-}
+
+  return (<TextInput
+    id="email"
+    value={props.email}
+    placeholder="Email"
+    onChange={props.emailUpdate}
+    required
+  />);
+
+};
 
 
 // ----- Map State/Props ----- //

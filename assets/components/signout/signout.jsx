@@ -25,34 +25,39 @@ function buildUrl(returnUrl: ?string): string {
 
 }
 
-function Signout(props: PropTypes) {
-  if (props.isSignedIn) {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        Not you? Sign out
-      </a>
-    );
+// ----- Component ----- //
+
+const Signout = (props: PropTypes) => {
+  if (!props.isSignedIn) {
+    return null;
   }
-}
+  return (
+    <a className="component-signout" href={buildUrl(props.returnUrl)}>
+      Not you? Sign out
+    </a>
+  );
+};
+
 
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
 
   return {
-    email: state.page.user.email,
     isSignedIn: state.page.user.isSignedIn,
   };
 
 }
-// ----- Component ----- //
-
-export default connect(mapStateToProps)(Signout);
 
 
 // ----- Default Props ----- //
 
 Signout.defaultProps = {
   returnUrl: '',
-  email: null,
 };
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(Signout);
+

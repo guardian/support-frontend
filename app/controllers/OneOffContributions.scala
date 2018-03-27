@@ -40,7 +40,7 @@ class OneOffContributions(
     )
   }
 
-  def getOneOffContributions(idUser: Option[IdUser], paypal: Option[Boolean])(implicit request: RequestHeader): Html = {
+  def formHtml(idUser: Option[IdUser], paypal: Option[Boolean])(implicit request: RequestHeader): Html = {
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
@@ -55,14 +55,16 @@ class OneOffContributions(
   }
 
   def displayForm(paypal: Option[Boolean]): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
-    request.user.fold(
-      Future.successful(Ok(getOneOffContributions(None, paypal)))
-    )(u => {
-        identityService.getUser(u).fold(
-          _ => Ok(Autofill.empty.asJson),
-          user => Ok(getOneOffContributions(Some(user), paypal))
+    request.user.fold {
+      Future.successful(Ok(formHtml(None, paypal)))
+    } { minimalUser =>
+      {
+        identityService.getUser(minimalUser).fold(
+          _ => Ok(formHtml(None, paypal)),
+          user => Ok(formHtml(Some(user), paypal))
         )
-      })
+      }
+    }
   }
 
   def thankYouPage(): Action[AnyContent] = PrivateAction { implicit request =>

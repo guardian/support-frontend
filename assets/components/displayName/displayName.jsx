@@ -16,16 +16,17 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function DisplayName(props: PropTypes) {
-  if (props.isSignedIn) {
-    return (
-      <div className="component-display-name">
-        <SvgUser />
-        <span className="component-display-name__name">{props.name}</span>
-      </div>
-    );
+const DisplayName = (props: PropTypes) => {
+  if (!props.isSignedIn) {
+    return null;
   }
-}
+  return (
+    <div className="component-display-name">
+      <SvgUser />
+      <span className="component-display-name__name">{props.name}</span>
+    </div>
+  );
+};
 
 
 // ----- Map State/Props ----- //

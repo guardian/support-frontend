@@ -56,12 +56,13 @@ const init = (dispatch: Function) => {
     dispatch(setFirstName(window.guardian.user.firstName));
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
-    dispatch(setIsSignedIn(window.guardian.user.isSignedIn));
+    dispatch(setIsSignedIn(true));
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
           if (data.id) {
+            dispatch(setIsSignedIn(true));
             dispatch(setId(data.id));
           }
           if (data.name) {
