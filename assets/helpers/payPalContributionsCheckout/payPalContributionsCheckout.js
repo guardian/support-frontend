@@ -110,6 +110,6 @@ export function paypalContributionsRedirect(
       }
       throw response;
     })
-    .then((res) => { window.location = res.approvalUrl; })
+    .then((res) => { window.location = res.data.approvalUrl; })
     .catch(() => errorHandler('Sorry, an error occurred, please try again or use another payment method.'));
 }
