@@ -50,10 +50,6 @@ const countryGroupSpecificDetails: {
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-int',
   },
-  NZDCountries: {
-    contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-nz',
-  },
 };
 
 
