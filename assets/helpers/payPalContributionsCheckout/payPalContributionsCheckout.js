@@ -26,12 +26,25 @@ type PayPalPostData = {|
   ophanPageviewId: string,
   ophanBrowserId: ?string,
   ophanVisitId: ?string,
-  supportRedirect: boolean,
   componentId: ?string,
   componentType: ?string,
   source: ?string,
   refererAbTest: ?AcquisitionABTest,
   nativeAbTests: ?AcquisitionABTest[],
+|}
+
+type AcquisitionData = {|
+  pageviewId: string,
+  visitId: ?string,
+  browserId: ?string,
+  platform: ?string,
+  referrerPageviewId: ?string,
+  referrerUrl: string,
+  campaignCodes: ?string[],
+  componentId: ?string,
+  componentType: ?string,
+  source: ?string,
+  abTests: ?AcquisitionABTest[],
 |}
 
 type PayPalPaymentAPIPostData = {|
@@ -65,26 +78,22 @@ export function paypalContributionsRedirect(
 ): void {
 
   const currency = countryGroups[countryGroupId].currency;
-  // const ophanIds: OphanIds = getOphanIds();
-  /*
-    const postData: PayPalPostData = {
-      countryGroup,
-      amount,
-      cmp: null,
-      intCmp: referrerAcquisitionData.campaignCode,
-      refererPageviewId: referrerAcquisitionData.referrerPageviewId,
-      refererUrl: referrerAcquisitionData.referrerUrl,
-      ophanPageviewId: ophanIds.pageviewId,
-      ophanBrowserId: ophanIds.browserId,
-      ophanVisitId: ophanIds.visitId,
-      supportRedirect: true,
-      componentId: referrerAcquisitionData.componentId,
-      componentType: referrerAcquisitionData.componentType,
-      source: referrerAcquisitionData.source,
-      refererAbTest: referrerAcquisitionData.abTest,
-      nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
-    };
-   */
+  const ophanIds: OphanIds = getOphanIds();
+
+  const acquisitionData: AcquisitionData = {
+    cmp: null,
+    intCmp: referrerAcquisitionData.campaignCode,
+    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
+    refererUrl: referrerAcquisitionData.referrerUrl,
+    ophanPageviewId: ophanIds.pageviewId,
+    ophanBrowserId: ophanIds.browserId,
+    ophanVisitId: ophanIds.visitId,
+    componentId: referrerAcquisitionData.componentId,
+    componentType: referrerAcquisitionData.componentType,
+    source: referrerAcquisitionData.source,
+    refererAbTest: referrerAcquisitionData.abTest,
+    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+  };
 
   const postData: PayPalPaymentAPIPostData = {
     amount,
