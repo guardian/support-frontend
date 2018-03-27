@@ -10,43 +10,31 @@ export type IsoCurrency =
   | 'GBP'
   | 'USD'
   | 'AUD'
-  | 'EUR'
-  | 'NZD';
+  | 'EUR';
 
 export type Currency = {
   iso: IsoCurrency,
   glyph: string,
-  extendedGlyph: string,
 };
 
 export const GBP: Currency = {
   iso: 'GBP',
   glyph: '£',
-  extendedGlyph: '£',
 };
 
 export const USD: Currency = {
   iso: 'USD',
   glyph: '$',
-  extendedGlyph: 'US$',
 };
 
 export const AUD: Currency = {
   iso: 'AUD',
   glyph: '$',
-  extendedGlyph: 'AU$',
 };
 
 export const EUR: Currency = {
   iso: 'EUR',
   glyph: '€',
-  extendedGlyph: '€',
-};
-
-export const NZD: Currency = {
-  iso: 'NZD',
-  glyph: '$',
-  extendedGlyph: 'NZ$',
 };
 
 const currencies = {
@@ -54,7 +42,6 @@ const currencies = {
   USD,
   AUD,
   EUR,
-  NZD,
 };
 
 const spokenCurrencies = {
@@ -74,10 +61,6 @@ const spokenCurrencies = {
     singular: 'euro',
     plural: 'euros',
   },
-  NZD: {
-    singular: 'dollar',
-    plural: 'dollars',
-  },
 };
 
 
@@ -87,7 +70,6 @@ function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
     case 'GBP': return GBP;
     case 'AUD': return AUD;
     case 'EUR': return EUR;
-    case 'NZD': return NZD;
     default: return null;
   }
 }
@@ -109,7 +91,6 @@ function fromString(s: string): ?Currency {
     case 'usd': return USD;
     case 'aud': return AUD;
     case 'eur': return EUR;
-    case 'nzd': return NZD;
     default: return null;
   }
 }

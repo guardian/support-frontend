@@ -149,17 +149,6 @@ const config: { [CountryGroupId]: Config } = {
     },
     ONE_OFF: defaultConfig.ONE_OFF,
   },
-  NZDCountries: {
-    ANNUAL: defaultConfig.ANNUAL,
-    MONTHLY: {
-      min: 5,
-      minInWords: numbersInWords['5'],
-      max: 166,
-      maxInWords: numbersInWords['166'],
-      default: 10,
-    },
-    ONE_OFF: defaultConfig.ONE_OFF,
-  },
 };
 
 const defaultOneOffAmount = [
@@ -193,7 +182,6 @@ const amounts = {
       { value: '500', spoken: numbersInWords['500'] },
     ],
     International: defaultOneOffAmount,
-    NZDCountries: defaultOneOffAmount,
   },
   MONTHLY: {
     UnitedStates: defaultMonthlyAmount,
@@ -217,11 +205,6 @@ const amounts = {
       { value: '10', spoken: numbersInWords['10'] },
       { value: '20', spoken: numbersInWords['20'] },
     ],
-    NZDCountries: [
-      { value: '5', spoken: numbersInWords['5'] },
-      { value: '10', spoken: numbersInWords['10'] },
-      { value: '20', spoken: numbersInWords['20'] },
-    ],
   },
   ANNUAL: {
     GBPCountries: defaultAnnualAmount,
@@ -229,7 +212,6 @@ const amounts = {
     AUDCountries: defaultAnnualAmount,
     EURCountries: defaultAnnualAmount,
     International: defaultAnnualAmount,
-    NZDCountries: defaultAnnualAmount,
   },
 };
 

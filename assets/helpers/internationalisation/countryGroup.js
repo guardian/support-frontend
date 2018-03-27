@@ -8,7 +8,7 @@ import { getQueryParameter } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries';
+export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International';
 
 /*
   Note: supportInternationalizationId should match an existing
@@ -68,12 +68,6 @@ const countryGroups: CountryGroups = {
       'TO', 'TT', 'TW', 'TZ', 'UA', 'UG', 'UM', 'UY', 'UZ', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZA', 'ZM', 'ZW'],
     supportInternationalisationId: 'int',
   },
-  NZDCountries: {
-    name: 'New Zealand',
-    currency: 'NZD',
-    countries: ['NZ', 'CK'],
-    supportInternationalisationId: 'nz',
-  },
 };
 
 function fromPath(path: string = window.location.pathname): ?CountryGroupId {
@@ -87,8 +81,6 @@ function fromPath(path: string = window.location.pathname): ?CountryGroupId {
     return 'EURCountries';
   } else if (path === '/int' || path.startsWith('/int/')) {
     return 'International';
-  } else if (path === '/nz' || path.startsWith('/nz/')) {
-    return 'NZDCountries';
   }
   return null;
 }
@@ -100,7 +92,6 @@ function fromString(countryGroup: string): ?CountryGroupId {
     case 'AUDCountries': return 'AUDCountries';
     case 'EURCountries': return 'EURCountries';
     case 'International': return 'International';
-    case 'NZDCountries': return 'NZDCountries';
     default: return null;
   }
 }
