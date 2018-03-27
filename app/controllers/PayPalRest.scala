@@ -12,8 +12,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{ContributionsFrontendService, PayPalService, TestUserService}
-import services.ContributionsFrontendService.Email
+import services.{PaymentAPIService, PayPalService, TestUserService}
+import services.PaymentAPIService.Email
 import scala.concurrent.ExecutionContext
 
 class PayPalRest(
@@ -22,7 +22,7 @@ class PayPalRest(
   payPalServiceProvider: PayPalServiceProvider,
   testUsers: TestUserService,
   components: ControllerComponents,
-  contributionsFrontendService: ContributionsFrontendService
+  PaymentAPIService: PaymentAPIService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
@@ -38,7 +38,7 @@ class PayPalRest(
   }
 
   def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    contributionsFrontendService.execute(request).fold(
+    PaymentAPIService.execute(request).fold(
       e => {
         SafeLogger.error(scrub"Error making paypal payment", e)
         Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))

@@ -12,8 +12,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{ContributionsFrontendService, PayPalService, TestUserService}
-import services.ContributionsFrontendService.Email
+import services.{PaymentAPIService, PayPalService, TestUserService}
+import services.PaymentAPIService.Email
 import scala.concurrent.ExecutionContext
 
 class PayPalNvp(

@@ -8,7 +8,7 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object ContributionsFrontendService {
+object PaymentAPIService {
   case class Email(value: String)
   object Email {
     def fromResponse(resp: WSResponse): Either[Throwable, Option[Email]] = {
@@ -21,8 +21,8 @@ object ContributionsFrontendService {
   }
 }
 
-class ContributionsFrontendService(wsClient: WSClient, contributionsFrontendUrl: String) {
-  import ContributionsFrontendService._
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
+  import PaymentAPIService._
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
     queryString.foldLeft(List.empty[(String, String)]) {
@@ -38,7 +38,7 @@ class ContributionsFrontendService(wsClient: WSClient, contributionsFrontendUrl:
       DefaultWSCookie(c.name, c.value, c.domain, Some(c.path), c.maxAge.map(_.toLong), c.secure, c.httpOnly)
     }
     val endpoint = "/paypal/uk/execute"
-    wsClient.url(s"$contributionsFrontendUrl/$endpoint")
+    wsClient.url(s"$paymentAPIUrl/$endpoint")
       .withQueryStringParameters(convertQueryString(request.queryString): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withCookies(wcCookies: _*)
