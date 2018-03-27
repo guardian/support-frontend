@@ -13,7 +13,7 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
-    appConfig.contributionsPayPalAuthEndpoint,
+    appConfig.paymentApiPayPalAuthEndpoint,
     stringsConfig
   )
 
@@ -53,7 +53,7 @@ trait Controllers {
     testUsers,
     appConfig.oneOffStripeConfigProvider,
     appConfig.contributionsStripeEndpoint,
-    appConfig.contributionsPayPalAuthEndpoint,
+    appConfig.paymentApiPayPalAuthEndpoint,
     authAction,
     controllerComponents
   )
