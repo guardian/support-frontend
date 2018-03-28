@@ -9,6 +9,7 @@ import {
   setTestUser,
   setPostDeploymentTestUser,
   setGnmMarketing,
+  setIsSignedIn,
 } from '../userActions';
 
 
@@ -93,5 +94,14 @@ describe('actions', () => {
       preference,
     };
     expect(setGnmMarketing(preference)).toEqual(expectedAction);
+  });
+
+  it('should create SET_IS_SIGNED_IN action', () => {
+    const isSignedIn: boolean = true;
+    const expectedAction = {
+      type: 'SET_IS_SIGNED_IN',
+      isSignedIn,
+    };
+    expect(setIsSignedIn(isSignedIn)).toEqual(expectedAction);
   });
 });

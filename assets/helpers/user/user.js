@@ -15,6 +15,7 @@ import {
   setTestUser,
   setPostDeploymentTestUser,
   setFullName,
+  setIsSignedIn,
 } from './userActions';
 
 
@@ -55,11 +56,13 @@ const init = (dispatch: Function) => {
     dispatch(setFirstName(window.guardian.user.firstName));
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
+    dispatch(setIsSignedIn(true));
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
           if (data.id) {
+            dispatch(setIsSignedIn(true));
             dispatch(setId(data.id));
           }
           if (data.name) {
@@ -67,6 +70,9 @@ const init = (dispatch: Function) => {
           }
           if (data.email) {
             dispatch(setEmail(data.email));
+          }
+          if (data.displayName) {
+            dispatch(setDisplayName(data.displayName));
           }
         });
       }

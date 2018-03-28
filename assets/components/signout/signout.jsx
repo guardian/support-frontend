@@ -3,14 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
+import { connect } from 'react-redux';
 import { getBaseDomain } from 'helpers/url';
-
 
 // ---- Types ----- //
 
 type PropTypes = {
   returnUrl?: string,
+  isSignedIn: boolean
 };
 
 
@@ -25,16 +25,27 @@ function buildUrl(returnUrl: ?string): string {
 
 }
 
-
 // ----- Component ----- //
 
-export default function Signout(props: PropTypes) {
-
+const Signout = (props: PropTypes) => {
+  if (!props.isSignedIn) {
+    return null;
+  }
   return (
     <a className="component-signout" href={buildUrl(props.returnUrl)}>
       Not you? Sign out
     </a>
   );
+};
+
+
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+
+  return {
+    isSignedIn: state.page.user.isSignedIn,
+  };
 
 }
 
@@ -44,3 +55,9 @@ export default function Signout(props: PropTypes) {
 Signout.defaultProps = {
   returnUrl: '',
 };
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(Signout);
+
