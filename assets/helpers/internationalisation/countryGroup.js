@@ -8,7 +8,7 @@ import { getQueryParameter } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries';
+export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
 
 /*
   Note: supportInternationalizationId should match an existing
@@ -73,6 +73,12 @@ const countryGroups: CountryGroups = {
     currency: 'NZD',
     countries: ['NZ', 'CK'],
     supportInternationalisationId: 'nz',
+  },
+  Canada: {
+    name: 'Canada',
+    currency: 'CAD',
+    countries: ['CA'],
+    supportInternationalisationId: 'ca',
   },
 };
 

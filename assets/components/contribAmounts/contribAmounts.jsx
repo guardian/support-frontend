@@ -378,6 +378,7 @@ const contribCaptionRadios = {
   ],
   International: [],
   NZDCountries: [],
+  Canada: [],
 };
 
 // ----- Functions ----- //

@@ -11,7 +11,8 @@ export type IsoCurrency =
   | 'USD'
   | 'AUD'
   | 'EUR'
-  | 'NZD';
+  | 'NZD'
+  | 'CAD';
 
 export type Currency = {
   iso: IsoCurrency,
@@ -49,12 +50,19 @@ export const NZD: Currency = {
   extendedGlyph: 'NZ$',
 };
 
+export const CAD: Currency = {
+  iso: 'CAD',
+  glyph: '$',
+  extendedGlyph: 'CA$',
+};
+
 const currencies = {
   GBP,
   USD,
   AUD,
   EUR,
   NZD,
+  CAD,
 };
 
 const spokenCurrencies = {
@@ -78,6 +86,10 @@ const spokenCurrencies = {
     singular: 'dollar',
     plural: 'dollars',
   },
+  CAD: {
+    singular: 'dollar',
+    plural: 'dollars',
+  },
 };
 
 
@@ -88,6 +100,7 @@ function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
     case 'AUD': return AUD;
     case 'EUR': return EUR;
     case 'NZD': return NZD;
+    case 'CAD': return CAD;
     default: return null;
   }
 }
@@ -110,6 +123,7 @@ function fromString(s: string): ?Currency {
     case 'aud': return AUD;
     case 'eur': return EUR;
     case 'nzd': return NZD;
+    case 'cad': return CAD;
     default: return null;
   }
 }

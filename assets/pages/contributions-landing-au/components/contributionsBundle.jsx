@@ -117,6 +117,7 @@ const subHeadingMonthlyText: {[CountryGroupId]: string} = {
   EURCountries: '',
   International: '',
   NZDCountries: '',
+  Canada: '',
 };
 
 const subHeadingOneOffText = {
@@ -126,6 +127,7 @@ const subHeadingOneOffText = {
   EURCountries: '',
   International: '',
   NZDCountries: '',
+  Canada: '',
 };
 
 const defaultContentText = {
@@ -148,6 +150,7 @@ const defaultContentText = {
   ),
   International: '',
   NZDCountries: '',
+  Canada: '',
 };
 
 function ContentText(props: PropTypes) {

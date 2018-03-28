@@ -78,6 +78,7 @@ const countries = {
   AU: 'Australia',
   NZ: 'New Zealand',
   CK: 'Cook Islands',
+  CA: 'Canada',
   AD: 'Andorra',
   AL: 'Albania',
   AT: 'Austria',
@@ -365,6 +366,8 @@ function fromPath(path: string = window.location.pathname): ?IsoCountry {
     return 'US';
   } else if (path === '/au' || path.startsWith('/au/')) {
     return 'AU';
+  } else if (path === '/ca' || path.startsWith('/ca/')) {
+    return 'CA';
   }
   return null;
 }
