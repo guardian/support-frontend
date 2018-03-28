@@ -72,6 +72,24 @@ const usStates: {
   AP: 'Armed Forces Pacific',
 };
 
+const caStates: {
+  [string]: string,
+} = {
+  AB: 'Alberta',
+  BC: 'British Columbia',
+  MB: 'Manitoba',
+  NB: 'New Brunswick',
+  NL: 'Newfoundland and Labrador',
+  NS: 'Nova Scotia',
+  NT: 'Northwest Territories',
+  NU: 'Nunavut',
+  ON: 'Ontario',
+  PE: 'Prince Edward Island',
+  QC: 'Quebec',
+  SK: 'Saskatchewan',
+  YT: 'Yukon',
+};
+
 const countries = {
   GB: 'United Kingdom',
   US: 'United States',
@@ -328,6 +346,7 @@ const countries = {
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
+export type CaState = $Keys<typeof usStates>;
 export type IsoCountry = $Keys<typeof countries>;
 
 
@@ -458,5 +477,6 @@ export {
   detect,
   setCountry,
   usStates,
+  caStates,
   countries,
 };
