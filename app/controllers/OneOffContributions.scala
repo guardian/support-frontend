@@ -40,7 +40,7 @@ class OneOffContributions(
     )
   }
 
-  def formHtml(idUser: Option[IdUser], paypal: Option[Boolean])(implicit request: RequestHeader): Html = {
+  private def formHtml(idUser: Option[IdUser], paypal: Option[Boolean])(implicit request: RequestHeader) =
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
@@ -52,7 +52,6 @@ class OneOffContributions(
       contributionsPayPalEndpoint = contributionsPayPalEndpoint,
       idUser = idUser
     )
-  }
 
   def displayForm(paypal: Option[Boolean]): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
     request.user.fold {
