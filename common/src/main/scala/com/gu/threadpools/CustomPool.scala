@@ -1,11 +1,10 @@
 package com.gu.threadpools
 
 import java.util.concurrent.Executors
-import com.typesafe.scalalogging.StrictLogging
 import scala.concurrent.ExecutionContext
 
-object CustomPool extends StrictLogging {
+object CustomPool {
 
-  implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
+  implicit val executionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
 
 }
