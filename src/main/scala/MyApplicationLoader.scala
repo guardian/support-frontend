@@ -7,10 +7,9 @@ import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import util.RequestBasedProvider
-
 import aws.AWSClientBuilder
 import backend.{PaypalBackend, StripeBackend}
-import _root_.controllers.{AppController, PaypalController, StripeController}
+import _root_.controllers.{AppController, PaypalController, StripeController, ErrorHandler}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
 import services.DatabaseProvider
@@ -53,6 +52,8 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
 
   implicit val _wsClient: WSClient = wsClient
 
+  override lazy val httpErrorHandler =  new ErrorHandler(environment, configuration, sourceMapper, Some(router))
+
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     new StripeBackend.Builder(configLoader, databaseProvider)
       .buildRequestBasedProvider(requestEnvironments)
@@ -70,4 +71,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new StripeController(controllerComponents, stripeBackendProvider),
       new PaypalController(controllerComponents, paypalBackendProvider)
     )
+
+
 }
