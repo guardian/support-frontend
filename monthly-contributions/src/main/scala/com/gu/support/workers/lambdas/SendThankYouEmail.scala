@@ -16,15 +16,15 @@ class SendThankYouEmail(thankYouEmailService: EmailService)
 
   def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, executionContext))
 
-  logger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
-
   override protected def handlerFuture(
     state: SendThankYouEmailState,
     error: Option[ExecutionError],
     requestInfo: RequestInfo,
     context: Context
-  ): FutureHandlerResult =
+  ): FutureHandlerResult = {
+    logger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
     sendEmail(state, requestInfo)
+  }
 
   def sendEmail(state: SendThankYouEmailState, requestInfo: RequestInfo): FutureHandlerResult = {
     thankYouEmailService.send(EmailFields(
