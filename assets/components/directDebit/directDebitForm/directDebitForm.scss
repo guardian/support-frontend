@@ -43,14 +43,20 @@
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
   height: 41px;
-  width: 57px;
+  width: 47px;
+  @include mq($from: mobileMedium) {
+    width: 57px;
+  }
   padding: 0 15px;
   margin-bottom: 25px;
 }
 
 .component-direct-debit-form__sort-code-separator {
-  margin: 0 10px;
+  margin: 6px;
   font-size: 18px;
+  @include mq($from: mobileMedium) {
+    margin: 10px;
+  }
 }
 
 .component-direct-debit-form__text-field {
@@ -62,7 +68,10 @@
   border: 1px solid gu-colour(garnett-neutral-1);
   border-radius: 25px;
   height: 40px;
-  width: 313px;
+  width: 266px;
+  @include mq($from: mobileMedium) {
+    width: 313px;
+  }
   @include mq($from: mobileLandscape) {
     width: 405px;
   }
@@ -162,7 +171,10 @@
     margin: 8px 8px 0 8px;
     float: left;
   }
-  width: 343px;
+  width: 300px;
+  @include mq($from: mobileMedium) {
+    width: 343px;
+  }
   @include mq($from: mobileLandscape) {
     width: 435px;
   }
@@ -206,13 +218,13 @@
 }
 
 .component-direct-debit-form__open-link {
-  background:none;
+  background: none;
   outline: none;
-  color:inherit;
-  border:none;
-  padding:0;
+  color: inherit;
+  border: none;
+  padding: 0;
   font: inherit;
-  text-decoration:underline;
+  text-decoration: underline;
   cursor: pointer;
 }
 

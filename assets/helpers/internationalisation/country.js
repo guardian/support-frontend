@@ -76,6 +76,8 @@ const countries = {
   GB: 'United Kingdom',
   US: 'United States',
   AU: 'Australia',
+  NZ: 'New Zealand',
+  CK: 'Cook Islands',
   AD: 'Andorra',
   AL: 'Albania',
   AT: 'Austria',
@@ -396,18 +398,20 @@ function setCountry(country: IsoCountry) {
 }
 
 function handleCountryForCountryGroup(
-  targetCountryGroup: 'International' | 'EURCountries',
+  targetCountryGroup: 'International' | 'EURCountries' | 'NZDCountries',
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
 
   const paths = {
     International: ['/int', '/int/'],
     EURCountries: ['/eu', '/eu/'],
+    NZDCountries: ['/nz', '/nz/'],
   };
 
   const defaultCountry = {
     International: 'IN',
     EURCountries: 'DE',
+    NZDCountries: 'NZ',
   };
 
   const path = window.location.pathname;
@@ -430,7 +434,16 @@ function handleCountryForCountryGroup(
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) || handleCountryForCountryGroup('International', countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) ||
+                  handleCountryForCountryGroup('International', countryGroupId) ||
+                  handleCountryForCountryGroup('NZDCountries', countryGroupId) ||
+                  fromCountryGroup(countryGroupId) ||
+                  fromPath() ||
+                  fromQueryParameter() ||
+                  fromCookie() ||
+                  fromGeolocation() ||
+                  'GB';
+
   setCountry(country);
   return country;
 }

@@ -23,6 +23,11 @@ import PayPalContributionButtonContainer from './components/payPalContributionBu
 import PatronsEventsContainer from './components/patronsEventsContainer';
 
 
+// ----- Setup ----- //
+
+const supporterSectionId = 'supporter-options';
+
+
 // ----- Redux Store ----- //
 
 /* eslint-disable no-underscore-dangle */
@@ -44,17 +49,19 @@ const content = (
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
       />
-      <Contribute
-        copy="Your contribution funds and supports The Guardian's journalism."
-      >
-        <ContributionSelectionContainer />
-        <ContributionPaymentCtasContainer
-          PayPalButton={PayPalContributionButtonContainer}
-        />
-      </Contribute>
-      <ThreeSubscriptions />
+      <section id={supporterSectionId}>
+        <Contribute
+          copy="Your contribution funds and supports The Guardian's journalism."
+        >
+          <ContributionSelectionContainer />
+          <ContributionPaymentCtasContainer
+            PayPalButton={PayPalContributionButtonContainer}
+          />
+        </Contribute>
+        <ThreeSubscriptions />
+      </section>
       <WhySupport />
-      <ReadyToSupport ctaUrl="#" />
+      <ReadyToSupport ctaUrl={`#${supporterSectionId}`} />
       <PatronsEventsContainer />
       <Footer disclaimer privacyPolicy />
     </div>

@@ -7,10 +7,11 @@ import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import {
   SvgScribble,
-  SvgGraphLine,
-  SvgGraphLineMobile,
-  SvgWallDesktop,
-  SvgWallMobile,
+  SvgAdvertisingGraphMobile,
+  SvgAdvertisingGraphDesktop,
+  SvgPaywallMobile,
+  SvgPaywallDesktop,
+  SvgPaywallWide,
 } from 'components/svg/svg';
 
 
@@ -19,16 +20,10 @@ import {
 export default function WhySupport() {
 
   return (
-    <PageSection heading="Why support?" modifierClass="why-support">
-      <div className="component-why-support">
-        <h1 className="component-why-support__heading component-why-support__heading--edits">
+    <div className="component-why-support">
+      <PageSection heading="Why support?" modifierClass="why-support">
+        <h1 className="component-why-support__heading">
           <SvgScribble />
-          <div className="component-why-support__heading-text-wrapper">
-            <span className="component-why-support__subheading">No one edits</span>
-            <span className="component-why-support__subheading component-why-support__subheading--edits-indented">
-              our editor
-            </span>
-          </div>
         </h1>
         <p className="component-why-support__copy">
           Your support is vital in helping the Guardian do the most important
@@ -36,13 +31,9 @@ export default function WhySupport() {
           than ever now read and support the Guardian&#39;s independent,
           quality and investigative journalism.
         </p>
-        <h1 className="component-why-support__heading component-why-support__heading--advertising">
-          <span className="component-why-support__subheading">Advertising revenues</span>
-          <span className="component-why-support__subheading component-why-support__subheading--advertising-indented">
-            are falling
-          </span>
-          <SvgGraphLine />
-          <SvgGraphLineMobile />
+        <h1 className="component-why-support__heading">
+          <SvgAdvertisingGraphMobile />
+          <SvgAdvertisingGraphDesktop />
         </h1>
         <p className="component-why-support__copy">
           Like many media organisations, the Guardian is operating in an
@@ -50,20 +41,15 @@ export default function WhySupport() {
           that we used to rely on to fund our work continues to fall.
         </p>
         <h1 className="component-why-support__heading component-why-support__heading--paywall">
-          <span className="component-why-support__subheading">We haven&#39;t put up </span>
-          <span className="component-why-support__subheading component-why-support__subheading--paywall-indented">
-            a paywall
-          </span>
-          <div className="component-why-support__paywall-svg ">
-            <SvgWallDesktop />
-            <SvgWallMobile />
-          </div>
+          <SvgPaywallMobile />
+          <SvgPaywallDesktop />
+          <SvgPaywallWide />
         </h1>
         <p className="component-why-support__copy">
           We want to keep our journalism as open as we can.
         </p>
-      </div>
-    </PageSection>
+      </PageSection>
+    </div>
   );
 
 }
