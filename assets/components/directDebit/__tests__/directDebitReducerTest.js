@@ -135,5 +135,25 @@ describe('direct debit reducer tests', () => {
 
     expect(newState.formError).toEqual('');
   });
+
+  it('should handle DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW', () => {
+    const action = {
+      type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW',
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.phase).toEqual('confirmation');
+  });
+
+  it('should handle DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW', () => {
+    const action = {
+      type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW',
+    };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.phase).toEqual('entry');
+  });
 });
 
