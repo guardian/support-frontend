@@ -110,21 +110,25 @@ const DirectDebitForm = (props: PropTypes) => (
   <div className="component-direct-debit-form">
 
     <AccountHolderNameInput
+      phase={props.phase}
       onChange={props.updateAccountHolderName}
       value={props.accountHolderName}
     />
 
     <AccountNumberInput
+      phase={props.phase}
       onChange={props.updateAccountNumber}
       value={props.accountNumber}
     />
 
     <SortCodeInput
+      phase={props.phase}
       onChange={props.updateSortCode}
       sortCodeArray={props.sortCodeArray}
     />
 
     <ConfirmationInput
+      phase={props.phase}
       onChange={props.updateAccountHolderConfirmation}
       checked={props.accountHolderConfirmation}
     />
@@ -151,21 +155,29 @@ const DirectDebitForm = (props: PropTypes) => (
 
 // ----- Auxiliary components ----- //
 
-function AccountNumberInput(props: {onChange: Function, value: string}) {
+function AccountNumberInput(props: {phase: string, onChange: Function, value: string}) {
+  const editable = (
+    <input
+      id="account-number-input"
+      value={props.value}
+      onChange={props.onChange}
+      pattern="[0-9]*"
+      minLength="6"
+      maxLength="10"
+      className="component-direct-debit-form__text-field focus-target"
+    />
+  );
+  const locked = (
+    <span>
+      {props.value}
+    </span>
+  );
   return (
     <div className="component-direct-debit-form__account-number">
       <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
         Account number
       </label>
-      <input
-        id="account-number-input"
-        value={props.value}
-        onChange={props.onChange}
-        pattern="[0-9]*"
-        minLength="6"
-        maxLength="10"
-        className="component-direct-debit-form__text-field focus-target"
-      />
+      {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
@@ -177,41 +189,55 @@ function AccountNumberInput(props: {onChange: Function, value: string}) {
  transliterated, upcased and truncated to 18 characters."
  https://developer.gocardless.com/api-reference/
  * */
-function AccountHolderNameInput(props: {value: string, onChange: Function}) {
+function AccountHolderNameInput(props: {phase: string, value: string, onChange: Function}) {
+  const editable = (
+    <input
+      id="account-holder-name-input"
+      value={props.value}
+      onChange={props.onChange}
+      maxLength="18"
+      className="component-direct-debit-form__text-field focus-target"
+    />
+  );
+
+  const locked = (
+    <span>
+      {props.value}
+    </span>
+  );
+
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
         Name
       </label>
-      <input
-        id="account-holder-name-input"
-        value={props.value}
-        onChange={props.onChange}
-        maxLength="18"
-        className="component-direct-debit-form__text-field focus-target"
-      />
+      {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
 
-function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
+function ConfirmationInput(props: {phase: string, checked: boolean, onChange: Function }) {
+  const editable = (
+    <div className="component-direct-debit-form__confirmation-css-checkbox">
+      <input
+        className="component-direct-debit-form__confirmation-input"
+        id="confirmation-input"
+        type="checkbox"
+        onChange={props.onChange}
+        checked={props.checked}
+      />
+      <label
+        className="component-direct-debit-form__confirmation-label"
+        htmlFor="confirmation-input"
+      />
+    </div>
+  );
+
   return (
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          <div className="component-direct-debit-form__confirmation-css-checkbox">
-            <input
-              className="component-direct-debit-form__confirmation-input"
-              id="confirmation-input"
-              type="checkbox"
-              onChange={props.onChange}
-              checked={props.checked}
-            />
-            <label
-              className="component-direct-debit-form__confirmation-label"
-              htmlFor="confirmation-input"
-            />
-          </div>
+          {props.phase === 'entry' ? editable : ''}
           <span className="component-direct-debit-form__confirmation-text">
             I confirm that I am the account holder and I am solely able to authorise debit from
             the account
