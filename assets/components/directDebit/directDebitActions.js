@@ -56,15 +56,19 @@ const setDirectDebitFormError = (message: string): Action =>
 const resetDirectDebitFormError = (): Action =>
   ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
 
+const transitionConfirmationView = (): Action =>
+  ({ type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW' });
 
-function payDirectDebitClicked(callback: Function): Function {
+const transitionEntryView = (): Action =>
+  ({ type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW' });
 
+
+function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
       sortCodeArray,
       accountNumber,
-      accountHolderName,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
@@ -90,8 +94,7 @@ function payDirectDebitClicked(callback: Function): Function {
         if (!response.accountValid) {
           throw new Error('incorrect_input');
         }
-        callback(undefined, accountNumber, sortCode, accountHolderName);
-        dispatch(closeDirectDebitPopUp());
+        dispatch(transitionConfirmationView());
       })
       .catch((e) => {
         let msg = '';
@@ -105,6 +108,25 @@ function payDirectDebitClicked(callback: Function): Function {
         }
         dispatch(setDirectDebitFormError(msg));
       });
+  };
+}
+
+function confirmDirectDebitClicked(callback: Function): Function {
+
+  return (dispatch: Function, getState: Function) => {
+
+    const {
+      sortCodeArray,
+      accountNumber,
+      accountHolderName,
+    } = getState().page.directDebit;
+
+    const sortCode = sortCodeArray.join('');
+
+    callback(undefined, accountNumber, sortCode, accountHolderName);
+
+    dispatch(closeDirectDebitPopUp());
+
   };
 }
 
@@ -122,4 +144,7 @@ export {
   setDirectDebitFormError,
   resetDirectDebitFormError,
   payDirectDebitClicked,
+  confirmDirectDebitClicked,
+  transitionConfirmationView,
+  transitionEntryView,
 };

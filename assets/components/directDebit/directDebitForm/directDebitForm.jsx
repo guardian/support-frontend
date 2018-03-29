@@ -11,9 +11,11 @@ import {
   updateAccountNumber,
   updateAccountHolderName,
   updateAccountHolderConfirmation,
-  payDirectDebitClicked,
+  confirmDirectDebitClicked,
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,
+  payDirectDebitClicked,
+  transitionEntryView,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
 import { SvgDirectDebitSymbol, SvgDirectDebitSymbolAndText, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
@@ -33,10 +35,13 @@ type PropTypes = {
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
-  payDirectDebitClicked: (callback: Function) => void,
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void,
   formError: string,
+  phase: string,
+  payDirectDebitClicked: () => void,
+  editDirectDebitClicked: () => void,
+  confirmDirectDebitClicked: (callback: Function) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,14 +55,22 @@ function mapStateToProps(state) {
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
     formError: state.page.directDebit.formError,
+    phase: state.page.directDebit.phase,
   };
 }
 
 function mapDispatchToProps(dispatch) {
 
   return {
-    payDirectDebitClicked: (callback) => {
-      dispatch(payDirectDebitClicked(callback));
+    payDirectDebitClicked: () => {
+      dispatch(payDirectDebitClicked());
+      return false;
+    },
+    editDirectDebitClicked: () => {
+      dispatch(transitionEntryView());
+    },
+    confirmDirectDebitClicked: (callback) => {
+      dispatch(confirmDirectDebitClicked(callback));
       return false;
     },
     openDDGuaranteeClicked: () => {
@@ -111,9 +124,11 @@ const DirectDebitForm = (props: PropTypes) => (
     />
 
     <PaymentButton
-      onClick={() => props.payDirectDebitClicked(props.callback)}
+      phase={props.phase}
+      onPayClick={() => props.payDirectDebitClicked()}
+      onEditClick={() => props.editDirectDebitClicked()}
+      onConfirmClick={() => props.confirmDirectDebitClicked(props.callback)}
     />
-
     <ErrorMessage
       message={props.formError}
       svg={<SvgExclamationAlternate />}
@@ -201,18 +216,47 @@ function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
   );
 }
 
-function PaymentButton(props: {onClick: Function}) {
-  return (
-    <button
-      id="qa-pay-with-direct-debit-pay"
-      className="component-direct-debit-form__pay-button focus-target"
-      onClick={props.onClick}
-    >
-      <SvgDirectDebitSymbol />
-      <span>Contribute with Direct Debit</span>
-      <SvgArrowRightStraight />
-    </button>
-  );
+function PaymentButton(props: {
+  phase: string,
+  onPayClick: Function,
+  onEditClick: Function,
+  onConfirmClick: Function
+}) {
+  if (props.phase === 'entry') {
+    return (
+      <button
+        id="qa-pay-with-direct-debit-pay"
+        className="component-direct-debit-form__pay-button focus-target"
+        onClick={props.onPayClick}
+      >
+        <SvgDirectDebitSymbol />
+        <span>Contribute with Direct Debit</span>
+        <SvgArrowRightStraight />
+      </button>
+    );
+  }
+  if (props.phase === 'confirmation') {
+    return (
+      <span>
+        <button
+          id="qa-pay-with-direct-debit-edit"
+          className="component-direct-debit-form__edit-button focus-target"
+          onClick={props.onEditClick}
+        >
+          <span>Edit</span>
+        </button>
+        <button
+          id="qa-pay-with-direct-debit-confirm"
+          className="component-direct-debit-form__confirm-button focus-target"
+          onClick={props.onConfirmClick}
+        >
+          <SvgDirectDebitSymbol />
+          <span>Confirm</span>
+          <SvgArrowRightStraight />
+        </button>
+      </span>
+    );
+  }
 }
 
 function LegalNotice(props: {
