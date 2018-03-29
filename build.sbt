@@ -58,7 +58,8 @@ lazy val root = (project in file("."))
     testOptions in TeamCityTest += Tests.Argument("-l", "tags.RequiresMembershipCredentials"),
     buildInfoKeys := Seq[BuildInfoKey](
       name,
-      BuildInfoKey.constant("gitCommitId", git.gitHeadCommit.value.getOrElse("Unknown Head Commit"))
+      BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER"))
+        .getOrElse(git.gitHeadCommit.value.getOrElse("Unknown Head Commit")))
     ),
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap
