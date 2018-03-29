@@ -92,6 +92,14 @@ function getBaseDomain(): Domain {
 
 }
 
+function getAbsoluteURL(path: string): string{
+  const loc = window.location;
+  const origin = window.location.origin ||
+    `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
+
+  return `${origin}${path}`;
+}
+
 
 // ----- Exports ----- //
 
@@ -101,4 +109,5 @@ export {
   addQueryParamToURL,
   getBaseDomain,
   addQueryParamsToURL,
+  getAbsoluteURL,
 };

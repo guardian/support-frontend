@@ -4,7 +4,7 @@
 
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamToURL } from 'helpers/url';
+import { addQueryParamToURL, getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -68,18 +68,8 @@ function payalContributionEndpoint(testUser) {
   return window.guardian.contributionsPayPalEndpoint;
 }
 
-export function paypalContributionsRedirect(
-  amount: number,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  isoCountry: IsoCountry,
-  countryGroupId: CountryGroupId,
-  errorHandler: (string) => void,
-  nativeAbParticipations: Participations,
-): void {
-
-  const currency = countryGroups[countryGroupId].currency;
+function storeAcquisitionData(referrerAcquisitionData: ReferrerAcquisitionData, nativeAbParticipations: Participations): void {
   const ophanIds: OphanIds = getOphanIds();
-
   const acquisitionData: AcquisitionData = {
     cmp: null,
     intCmp: referrerAcquisitionData.campaignCode,
@@ -95,11 +85,25 @@ export function paypalContributionsRedirect(
     nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
   };
 
+  cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
+}
+
+export function paypalContributionsRedirect(
+  amount: number,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  isoCountry: IsoCountry,
+  countryGroupId: CountryGroupId,
+  errorHandler: (string) => void,
+  nativeAbParticipations: Participations,
+): void {
+
+  storeAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  const currency = countryGroups[countryGroupId].currency;
   const postData: PayPalPaymentAPIPostData = {
     amount,
     currency,
-    returnURL: routes.payPalRestReturnURL,
-    cancelURL: routes.payPalRestCancelURL,
+    returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+    cancelURL: getAbsoluteURL(routes.payPalRestCancelURL),
   };
 
   const fetchOptions: Object = {

@@ -38,22 +38,16 @@ class PayPalRest(
   }
 
   def returnURL(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    PaymentAPIService.execute(request).fold(
-      e => {
-        SafeLogger.error(scrub"Error making paypal payment", e)
+
+    PaymentAPIService.execute(request).map { success =>
+      if (success)
+        Redirect("/contribute/one-off/thankyou")
+      else {
+        SafeLogger.error(scrub"Error making paypal payment")
         Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
-      },
-      resultFromEmailOption
-    )
+      }
+    }
   }
 
-  def cancelURL(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    PaymentAPIService.execute(request).fold(
-      e => {
-        SafeLogger.error(scrub"Error making paypal payment", e)
-        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
-      },
-      resultFromEmailOption
-    )
-  }
+  def cancelURL(): Action[AnyContent] = ???
 }

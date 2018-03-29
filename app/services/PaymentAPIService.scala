@@ -3,6 +3,7 @@ package services
 import java.io.IOException
 
 import cats.data.EitherT
+import play.api.libs.json.Json
 import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
 import play.api.mvc._
 
@@ -30,22 +31,30 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     }
   }
 
-  def execute(request: Request[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, Throwable, Option[Email]] = {
+  def execute(request: Request[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] = {
     import cats.syntax.applicativeError._
     import cats.instances.future._
 
-    val wcCookies = request.cookies.toSeq.map { c =>
-      DefaultWSCookie(c.name, c.value, c.domain, Some(c.path), c.maxAge.map(_.toLong), c.secure, c.httpOnly)
-    }
-    val endpoint = "/paypal/uk/execute"
+    val endpoint = "/contribute/one-off/paypal/execute-payment"
+    val cookieString = request.cookies.get("acquisition_data").get.value
+    val acquisitionData = Json.parse(java.net.URLDecoder.decode(cookieString, "UTF-8"))
+
+    val paymentJSON = Json.obj(
+      "paymentId" -> request.getQueryString("paymentId").get,
+      "payerId" -> request.getQueryString("PayerID").get
+    )
+
+    val data = Json.obj(
+      "paymentData" -> paymentJSON,
+      "acquisitionData" -> acquisitionData
+    )
+
     wsClient.url(s"$paymentAPIUrl/$endpoint")
       .withQueryStringParameters(convertQueryString(request.queryString): _*)
       .withHttpHeaders("Accept" -> "application/json")
-      .withCookies(wcCookies: _*)
-      .withMethod("GET")
-      .execute()
-      .attemptT
-      .subflatMap(Email.fromResponse)
+      .withBody(data)
+      .withMethod("POST")
+      .execute().map(_.status == 200)
   }
 }
 
