@@ -18,7 +18,13 @@ import {
   transitionEntryView,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
-import { SvgDirectDebitSymbol, SvgDirectDebitSymbolAndText, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
+import {
+  SvgDirectDebitSymbol,
+  SvgDirectDebitSymbolAndText,
+  SvgArrowRightStraight,
+  SvgArrowLeftStraight,
+  SvgExclamationAlternate,
+} from 'components/svg/svg';
 
 
 // ---- Types ----- //
@@ -226,11 +232,11 @@ function PaymentButton(props: {
     return (
       <button
         id="qa-pay-with-direct-debit-pay"
-        className="component-direct-debit-form__pay-button focus-target"
+        className="component-direct-debit-form__cta component-direct-debit-form__pay-button focus-target"
         onClick={props.onPayClick}
       >
         <SvgDirectDebitSymbol />
-        <span>Contribute with Direct Debit</span>
+        <span className="component-direct-debit-form__cta-text">Contribute with Direct Debit</span>
         <SvgArrowRightStraight />
       </button>
     );
@@ -240,18 +246,18 @@ function PaymentButton(props: {
       <span>
         <button
           id="qa-pay-with-direct-debit-edit"
-          className="component-direct-debit-form__edit-button focus-target"
+          className="component-direct-debit-form__cta component-direct-debit-form__edit-button focus-target"
           onClick={props.onEditClick}
         >
-          <span>Edit</span>
+          <SvgArrowLeftStraight />
+          <span className="component-direct-debit-form__cta-text inverse">Edit</span>
         </button>
         <button
           id="qa-pay-with-direct-debit-confirm"
-          className="component-direct-debit-form__confirm-button focus-target"
+          className="component-direct-debit-form__cta component-direct-debit-form__confirm-button focus-target"
           onClick={props.onConfirmClick}
         >
-          <SvgDirectDebitSymbol />
-          <span>Confirm</span>
+          <span className="component-direct-debit-form__cta-text">Confirm</span>
           <SvgArrowRightStraight />
         </button>
       </span>
