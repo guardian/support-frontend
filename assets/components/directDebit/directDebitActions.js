@@ -19,7 +19,9 @@ export type Action =
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
   | { type: 'DIRECT_DEBIT_SET_FORM_ERROR', message: string }
-  | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' };
+  | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' }
+  | { type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW' }
+  | { type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW' };
 
 
 // ----- Actions ----- //
