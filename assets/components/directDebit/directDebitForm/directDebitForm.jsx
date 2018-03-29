@@ -139,6 +139,7 @@ const DirectDebitForm = (props: PropTypes) => (
       onEditClick={() => props.editDirectDebitClicked()}
       onConfirmClick={() => props.confirmDirectDebitClicked(props.callback)}
     />
+
     <ErrorMessage
       message={props.formError}
       svg={<SvgExclamationAlternate />}

@@ -6,37 +6,38 @@ import React from 'react';
 import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
 
 type SortCodePropTypes = {
+  phase: string,
   sortCodeArray: Array<string>,
   onChange: (SortCodeIndex, SyntheticInputEvent<HTMLInputElement>) => void,
 };
 
-function SortCodeInput(props: {phase: string, sortCode: SortCodePropTypes}) {
+function SortCodeInput(props: SortCodePropTypes) {
   const editable = (
     <span>
       <SortCodeField
-        value={props.sortCode.sortCodeArray[0]}
-        onChange={event => props.sortCode.onChange(0, event)}
+        value={props.sortCodeArray[0]}
+        onChange={event => props.onChange(0, event)}
       />
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
-        value={props.sortCode.sortCodeArray[1]}
-        onChange={event => props.sortCode.onChange(1, event)}
+        value={props.sortCodeArray[1]}
+        onChange={event => props.onChange(1, event)}
       />
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
-        value={props.sortCode.sortCodeArray[2]}
-        onChange={event => props.sortCode.onChange(2, event)}
+        value={props.sortCodeArray[2]}
+        onChange={event => props.onChange(2, event)}
       />
     </span>
   );
 
   const locked = (
     <span>
-      {props.sortCode.sortCodeArray[0]}
+      {props.sortCodeArray[0]}
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
-      {props.sortCode.sortCodeArray[1]}
+      {props.sortCodeArray[1]}
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
-      {props.sortCode.sortCodeArray[2]}
+      {props.sortCodeArray[2]}
     </span>
   );
 
