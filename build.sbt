@@ -47,14 +47,22 @@ libraryDependencies ++= Seq(
 
 lazy val TeamCityTest = config("teamcity").extend(Test)
 
+enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin, GitVersioning)
+
 lazy val root = (project in file("."))
   .configs(TeamCityTest)
   .settings(inConfig(TeamCityTest)(Defaults.testTasks))
   // Allows us to not run tests which require membership credentials in TeamCity - teamcity:test
   // Stop gap until we decide how to handle integration tests.
-  .settings(testOptions in TeamCityTest += Tests.Argument("-l", "tags.RequiresMembershipCredentials"))
-
-enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging)
+  .settings(
+    testOptions in TeamCityTest += Tests.Argument("-l", "tags.RequiresMembershipCredentials"),
+    buildInfoKeys := Seq[BuildInfoKey](
+      name,
+      BuildInfoKey.constant("gitCommitId", git.gitHeadCommit.value.getOrElse("Unknown Head Commit"))
+    ),
+    buildInfoPackage := "app",
+    buildInfoOptions += BuildInfoOption.ToMap
+  )
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 resolvers += Resolver.sonatypeRepo("releases")
