@@ -11,11 +11,13 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 val circeVersion = "0.9.1"
+val AWSJavaSDKVersion = "1.11.295"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.289",
-  "com.amazonaws" % "aws-java-sdk-sqs" % "1.11.289",
+  "com.amazonaws" % "aws-java-sdk-ssm" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-ec2" % AWSJavaSDKVersion,
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
   "com.dripower" %% "play-circe" % "2609.0",

@@ -13,13 +13,22 @@ import _root_.controllers.{AppController, PaypalController, StripeController, Er
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
 import services.DatabaseProvider
+import com.typesafe.scalalogging.StrictLogging
 
-class MyApplicationLoader extends ApplicationLoader {
+class MyApplicationLoader extends ApplicationLoader with StrictLogging {
   def load(context: Context): Application = {
     LoggerConfigurator(context.environment.classLoader).foreach {
       _.configure(context.environment, context.initialConfiguration, Map.empty)
     }
-    new MyComponents(context).application
+
+    try {
+      new MyComponents(context).application
+    } catch {
+      case err: Throwable => {
+        logger.error("Could not start application", err)
+        throw err
+      }
+    }
   }
 }
 
@@ -30,13 +39,13 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
   with AhcWSComponents
   with AppThreadPoolsProvider {
 
-  // TODO: is prod value should be set in public Play configuration
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
   // This will determine, later on, whether passing the "?mode=test" param has any effect
-  val requestEnvironments: RequestEnvironments = RequestEnvironments.forAppMode(isProd = false)
+  val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
 
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
+
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
   val playConfigUpdater = new PlayConfigUpdater(configLoader)
 

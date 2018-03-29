@@ -23,7 +23,9 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
   import IdentityClient._
 
   private def requestForPath(path: String): WSRequest =
-    ws.url(s"${config.endpoint}$path").withHttpHeaders("x-gu-id-client-access-token" -> config.accessToken)
+    ws
+      .url(s"${config.endpoint}$path")
+      .withHttpHeaders("x-gu-id-client-access-token" -> s"Bearer ${config.accessToken}")
 
   private def decodeIdentityClientResponse[A : Decoder](response: WSResponse): Either[Error, A] =
     // Attempt to decode the response as an instance of A
@@ -64,7 +66,7 @@ object IdentityClient extends StrictLogging {
   object CreateGuestAccountRequestBody {
 
     def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
-    
+
     def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(guestDisplayName(email)))
 
     implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](

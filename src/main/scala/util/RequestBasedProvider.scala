@@ -5,18 +5,20 @@ import simulacrum.typeclass
 import model.RequestType
 import model.paypal.PaypalHook
 
-// Experimental
 @typeclass trait RequestTypeDecoder[A] {
   def requestType(data: A): RequestType
 }
 
-// Experimental
 object RequestTypeDecoder {
   object instances {
-    // Trivial example until way of specifying test requests is decided
     implicit def requestTypeDecoder[A]: RequestTypeDecoder[Request[A]] = new RequestTypeDecoder[Request[A]] {
-      // TODO: implement
-      override def requestType(data: Request[A]): RequestType = RequestType.Test
+      override def requestType(data: Request[A]): RequestType = {
+        if (data.getQueryString("mode").contains("test")) {
+          RequestType.Test
+        } else {
+          RequestType.Live
+        }
+      }
     }
   }
   object hook {

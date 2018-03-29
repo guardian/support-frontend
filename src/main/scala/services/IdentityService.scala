@@ -36,7 +36,7 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
 
   override def createGuestAccount(email: String): IdentityClient.Result[Long] =
     client.createGuestAccount(email).map { response =>
-      // TODO: we might not be able to include email address in log message
+      // Logs are only retained for 14 days so we're OK to log email address
       logger.info(s"guest account created for email address: $email")
       response.guestRegistrationRequest.userId
     }

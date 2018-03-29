@@ -91,7 +91,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
   "StripeController" when {
 
-    "a request is made to creates a payment" should {
+    "a request is made to create a payment" should {
 
       "return a 200 response if the request is valid and sent using the old format" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {

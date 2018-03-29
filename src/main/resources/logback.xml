@@ -6,7 +6,13 @@
 <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>${application.home:-.}/logs/application.log</file>
     <encoder>
-        <pattern>%date [%level] from %logger in %thread - %message%n%xException</pattern>
+        <!--
+        We keep the exception on the same line so it appears in the same CloudWatch event.
+        Lines in the stack trace start with a tab, which means CloudWatch treats them as
+        part of the same event too.
+        https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html
+         -->
+        <pattern>%date [%level] from %logger in %thread - %message. %xException%n</pattern>
     </encoder>
 </appender>
 

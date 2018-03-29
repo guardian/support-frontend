@@ -57,7 +57,7 @@ class IdentityClientSpec extends WordSpec
       }
     }
 
-    "it used to create a new guest account, the account" should {
+    "used to create a new guest account, the account" should {
 
       "be able to be looked up by email address" in {
         val emailAddress = generateEmailAddressWithNoIdentityAccount()

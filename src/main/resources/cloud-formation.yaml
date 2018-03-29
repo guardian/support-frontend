@@ -34,8 +34,11 @@ Parameters:
   AMI:
     Description: AMI ID
     Type: String
-  EmailSqsQueueArn:
-    Description: The ARN of the email SQS queue
+  EmailSqsQueueLiveArn:
+    Description: The ARN of the email SQS queue for prod
+    Type: String
+  EmailSqsQueueTestArn:
+    Description: The ARN of the email SQS queue for dev/testing
     Type: String
 
 Conditions:
@@ -98,6 +101,11 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -ev
           mkdir /etc/gu
+
+          cat > /etc/gu/stage <<'EOF'
+          ${Stage}
+          EOF
+
           aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/${ProjectName}_${ProjectVersion}_all.deb /tmp
           dpkg -i /tmp/${ProjectName}_${ProjectVersion}_all.deb
           /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/${App}/application.log
@@ -142,7 +150,8 @@ Resources:
                   - sqs:GetQueueUrl
                   - sqs:SendMessage
                 Resource:
-                  - !Ref EmailSqsQueueArn
+                  - !Ref EmailSqsQueueLiveArn
+                  - !Ref EmailSqsQueueTestArn
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile

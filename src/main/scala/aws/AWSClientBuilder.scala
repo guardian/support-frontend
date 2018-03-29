@@ -1,10 +1,9 @@
 package aws
 
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
-import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
 
 object AWSClientBuilder {
@@ -24,7 +23,7 @@ object AWSClientBuilder {
       .withCredentials(credentialsProvider)
       .build()
 
-  def buildAmazonSQSAsyncClientBuilder(queueName: String): AmazonSQSAsync =
+  def buildAmazonSQSAsyncClient(queueName: String): AmazonSQSAsync =
     AmazonSQSAsyncClientBuilder
       .standard()
       .withCredentials(credentialsProvider)
