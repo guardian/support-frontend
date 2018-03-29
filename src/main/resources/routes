@@ -15,6 +15,7 @@ GET      /acquisition/a.gif                                   controllers.AppCon
 
 # Execute a pre-authorised Stripe payment
 POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
+OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.PaypalController.corsOptions
 
 # Captures webhooks from Stripe.
 # Webhooks are events that notify your application any time an event happens on your account
@@ -27,10 +28,12 @@ POST     /contribute/one-off/stripe/hook                      controllers.Stripe
 
 # Create a payment which can then be authorised via the PayPal web interface
 POST     /contribute/one-off/paypal/create-payment            controllers.PaypalController.createPayment
+OPTIONS  /contribute/one-off/paypal/create-payment            controllers.PaypalController.corsOptions
 
 # Execute a payment created with /contribute/one-off/paypal/create-payment
 # and authorised via the PayPal web interface
 POST     /contribute/one-off/paypal/execute-payment           controllers.PaypalController.executePayment
+OPTIONS  /contribute/one-off/paypal/execute-payment           controllers.PaypalController.corsOptions
 
 # Captures the funds from a payment which has been created & authorised directly via
 # the PayPal API (not via /contribute/one-off/paypal/create-payment in this API).

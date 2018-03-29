@@ -59,7 +59,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.left(Future.successful(StripeApiError.apply("Error response")))
 
   val stripeController: StripeController =
-    new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec))
+    new StripeController(controllerComponents, mockStripeRequestBasedProvider, List("https://cors.com"))(DefaultThreadPool(ec))
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
@@ -68,7 +68,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     httpErrorHandler,
     new AppController(controllerComponents),
     stripeController,
-    new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec))
+    new PaypalController(controllerComponents, paypalBackendProvider, List.empty)(DefaultThreadPool(ec))
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -100,7 +100,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{
@@ -154,7 +154,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{
@@ -178,7 +178,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{
@@ -226,7 +226,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{
@@ -267,6 +267,38 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(200)
       }
 
+      "return cors headers if origin matches existing config definition" in {
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.createCharge(any()))
+            .thenReturn(stripeServiceResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "paymentData": {
+              |    "currency": "GBP",
+              |    "amount": 1.23,
+              |    "token": "token",
+              |    "email": "email@theguardian.com"
+              |  },
+              |  "acquisitionData": {
+              |    "platform": "android"
+              |  }
+              |}
+            """.stripMargin)).withHeaders("origin" -> "https://cors.com")
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+
+        val headerResponse = headers(stripeControllerResult)
+        headerResponse.get("Access-Control-Allow-Origin").mustBe(Some("https://cors.com"))
+        headerResponse.get("Access-Control-Allow-Headers").mustBe(Some("Origin, Content-Type, Accept"))
+        headerResponse.get("Access-Control-Allow-Credentials").mustBe(Some("true"))
+      }
+
       "return a 400 response if the request contains an invalid JSON" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any()))
@@ -274,7 +306,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{
@@ -300,7 +332,7 @@ class StripeControllerSpec extends PlaySpec with Status {
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
           .withJsonBody(parse(
             """
               |{

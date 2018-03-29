@@ -12,43 +12,47 @@ import util.RequestBasedProvider
 import scala.concurrent.Future
 
 class PaypalController(controllerComponents: ControllerComponents,
-  paypalBackendProvider: RequestBasedProvider[PaypalBackend])(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
-  // Other considerations:
-  // - CORS
-  // - Test USERS
-  // - Remember that API will change: no redirectUrl!
+  paypalBackendProvider: RequestBasedProvider[PaypalBackend], corsUrls: List[String])(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
 
   import util.RequestTypeDecoder.instances._
   import PaypalJsonDecoder._
 
-  def createPayment: Action[CreatePaypalPaymentData] = Action.async(circe.json[CreatePaypalPaymentData]) { createPaypalPaymentRequest =>
+  def corsOptions() = Action { request =>
+    NoContent.withHeaders(("Vary" -> "Origin") :: CorsControllerHelper.corsHeaders(request, corsUrls): _*)
+  }
+
+  def createPayment: Action[CreatePaypalPaymentData] = Action.async(circe.json[CreatePaypalPaymentData]) { createRequest =>
     paypalBackendProvider
-      .getInstanceFor(createPaypalPaymentRequest)
-      .createPayment(createPaypalPaymentRequest.body)
+      .getInstanceFor(createRequest)
+      .createPayment(createRequest.body)
       .subflatMap(PaypalPaymentSuccess.fromPayment)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        err => InternalServerError(ResultBody.Error(err.getMessage))
+          .withHeaders(CorsControllerHelper.corsHeaders(createRequest, corsUrls): _*),
         payment => Ok(ResultBody.Success(payment))
+          .withHeaders(CorsControllerHelper.corsHeaders(createRequest, corsUrls): _*)
       )
   }
 
-  def capturePayment(): Action[CapturePaypalPaymentData] = Action.async(circe.json[CapturePaypalPaymentData]) { capturePaypalPaymentRequest =>
+  def capturePayment(): Action[CapturePaypalPaymentData] = Action.async(circe.json[CapturePaypalPaymentData]) { captureRequest =>
     paypalBackendProvider
-      .getInstanceFor(capturePaypalPaymentRequest)
-      .capturePayment(capturePaypalPaymentRequest.body)
+      .getInstanceFor(captureRequest)
+      .capturePayment(captureRequest.body)
       .fold(
         err => InternalServerError(ResultBody.Error(err.getMessage)),
         _ => Ok(ResultBody.Success(()))
       )
   }
 
-  def executePayment: Action[ExecutePaypalPaymentData] = Action.async(circe.json[ExecutePaypalPaymentData]) { executePaypalPaymentRequest =>
+  def executePayment: Action[ExecutePaypalPaymentData] = Action.async(circe.json[ExecutePaypalPaymentData]) { executeRequest =>
     paypalBackendProvider
-      .getInstanceFor(executePaypalPaymentRequest)
-      .executePayment(executePaypalPaymentRequest.body)
+      .getInstanceFor(executeRequest)
+      .executePayment(executeRequest.body)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        err => InternalServerError(ResultBody.Error(err.getMessage))
+          .withHeaders(CorsControllerHelper.corsHeaders(executeRequest, corsUrls): _*),
         payment => Ok(ResultBody.Success("execute payment success"))
+          .withHeaders(CorsControllerHelper.corsHeaders(executeRequest, corsUrls): _*)
       )
   }
 

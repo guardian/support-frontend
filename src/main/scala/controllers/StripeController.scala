@@ -11,19 +11,22 @@ import model.{DefaultThreadPool, ResultBody}
 
 class StripeController(
     controllerComponents: ControllerComponents,
-    stripeBackendProvider: RequestBasedProvider[StripeBackend]
+    stripeBackendProvider: RequestBasedProvider[StripeBackend], corsUrls: List[String]
   )(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
 
   import util.RequestTypeDecoder.instances._
   import model.stripe.StripeJsonDecoder._
+
 
   def executePayment: Action[StripeChargeData] = Action(circe.json[StripeChargeData]).async { request =>
     {
       stripeBackendProvider.getInstanceFor(request)
         .createCharge(request.body)
         .fold(
-          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          err => InternalServerError(ResultBody.Error(err.getMessage))
+            .withHeaders(CorsControllerHelper.corsHeaders(request, corsUrls): _*),
           charge => Ok(ResultBody.Success(charge))
+            .withHeaders(CorsControllerHelper.corsHeaders(request, corsUrls): _*)
         )
     }
   }

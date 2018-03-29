@@ -53,7 +53,7 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
 
   val payPalController: PaypalController =
-    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec))
+    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider, List("https://cors.com"))(DefaultThreadPool(ec))
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
@@ -61,7 +61,7 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents),
-    new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec)),
+    new StripeController(controllerComponents, stripeBackendProvider, List.empty)(DefaultThreadPool(ec)),
     payPalController
   )
 
@@ -526,6 +526,46 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
         status(paypalControllerResult).mustBe(500)
       }
+
+
+      "return cors headers if origin matches existing config definition" in {
+        val fixture = new PaypalControllerFixture()(executionContext, context) {
+          when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockPaypalBackend)
+          when(mockPaypalBackend.executePayment(any()))
+            .thenReturn(paymentServiceResponse)
+        }
+
+        val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "paymentData": {
+              |    "paymentId": "PAY-3JE44966X7714540ELKLL2YY",
+              |    "payerId": "3VNCN9NDEGRGW"
+              |  },
+              |  "acquisitionData": {
+              |    "browserId": "ophanBrowserId",
+              |    "platform": "android",
+              |    "pageviewId": "ophanPageviewId",
+              |    "referrerPageviewId": "refererPageviewId",
+              |    "referrerUrl": "refererUrl",
+              |    "componentId": "componentId",
+              |    "componentType": "AcquisitionsOther",
+              |    "source": "GuardianWeb"
+              |  }
+              |}
+            """.stripMargin)).withHeaders("origin" -> "https://cors.com")
+
+        val paypalControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.payPalController.executePayment, executePaymentRequest)
+
+        val headerResponse = headers(paypalControllerResult)
+        headerResponse.get("Access-Control-Allow-Origin").mustBe(Some("https://cors.com"))
+        headerResponse.get("Access-Control-Allow-Headers").mustBe(Some("Origin, Content-Type, Accept"))
+        headerResponse.get("Access-Control-Allow-Credentials").mustBe(Some("true"))
+      }
+
     }
 
     "a request is made to hook a payment" should {
