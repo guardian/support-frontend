@@ -76,6 +76,8 @@ const countries = {
   GB: 'United Kingdom',
   US: 'United States',
   AU: 'Australia',
+  NZ: 'New Zealand',
+  CK: 'Cook Islands',
   AD: 'Andorra',
   AL: 'Albania',
   AT: 'Austria',
@@ -346,8 +348,6 @@ function fromString(s: string): ?IsoCountry {
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
   switch (countryGroupId) {
-    case 'GBPCountries':
-      return 'GB';
     case 'AUDCountries':
       return 'AU';
     case 'UnitedStates':
@@ -357,13 +357,12 @@ function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
 }
 
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
-  if (path === '/uk' || path.startsWith('/uk/')) {
-    return 'GB';
-  } else if (path === '/us' || path.startsWith('/us/')) {
+  if (path === '/us' || path.startsWith('/us/')) {
     return 'US';
   } else if (path === '/au' || path.startsWith('/au/')) {
     return 'AU';
   }
+
   return null;
 }
 
@@ -395,19 +394,25 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
+type TargetCountryGroups = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries';
+
 function handleCountryForCountryGroup(
-  targetCountryGroup: 'International' | 'EURCountries',
+  targetCountryGroup: TargetCountryGroups,
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
 
-  const paths = {
+  const paths: {[TargetCountryGroups]: string[]} = {
     International: ['/int', '/int/'],
     EURCountries: ['/eu', '/eu/'],
+    NZDCountries: ['/nz', '/nz/'],
+    GBPCountries: ['/uk', '/uk/'],
   };
 
-  const defaultCountry = {
+  const defaultCountry: {[TargetCountryGroups]: IsoCountry} = {
     International: 'IN',
     EURCountries: 'DE',
+    NZDCountries: 'NZ',
+    GBPCountries: 'GB',
   };
 
   const path = window.location.pathname;
@@ -430,7 +435,26 @@ function handleCountryForCountryGroup(
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-  const country = handleCountryForCountryGroup('EURCountries', countryGroupId) || handleCountryForCountryGroup('International', countryGroupId) || fromCountryGroup(countryGroupId) || fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GB';
+
+  const targetCountryGroups: TargetCountryGroups[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries'];
+  let country = null;
+
+  targetCountryGroups.forEach((targetCountryGroupId) => {
+    const candidateCountry = handleCountryForCountryGroup(targetCountryGroupId, countryGroupId);
+    if (candidateCountry !== null && country === null) {
+      country = candidateCountry;
+    }
+  });
+
+  if (country === null) {
+    country = fromCountryGroup(countryGroupId) ||
+      fromPath() ||
+      fromQueryParameter() ||
+      fromCookie() ||
+      fromGeolocation() ||
+      'GB';
+  }
+
   setCountry(country);
   return country;
 }

@@ -14,7 +14,8 @@ export type Action =
   | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
   | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
-  | { type: 'SET_GNM_MARKETING', preference: boolean };
+  | { type: 'SET_GNM_MARKETING', preference: boolean }
+  | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
 
 
 // ----- Actions Creators ----- //
@@ -37,6 +38,10 @@ export function setLastName(name: string): Action {
 
 export function setFullName(name: string): Action {
   return { type: 'SET_FULL_NAME', name };
+}
+
+export function setIsSignedIn(isSignedIn: boolean): Action {
+  return { type: 'SET_IS_SIGNED_IN', isSignedIn };
 }
 
 export function setEmail(email: string): Action {

@@ -13,6 +13,7 @@ GET /us                                             controllers.Application.redi
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
 GET /int                                            controllers.Application.redirect(location="/int/contribute")
+GET /nz                                            controllers.Application.redirect(location="/nz/contribute")
 GET /                                               controllers.Application.geoRedirect()
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
@@ -36,6 +37,7 @@ GET  /us/contribute                                 controllers.Application.cont
 GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPageAU.js")
 GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPage.js")
 GET  /int/contribute                                controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-int", js="contributionsLandingPage.js")
+GET  /nz/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-nz", js="contributionsLandingPage.js")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
 GET  /contribute/recurring/thankyou                 controllers.RegularContributions.thankYouPage()

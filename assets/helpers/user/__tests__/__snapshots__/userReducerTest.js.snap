@@ -8,6 +8,7 @@ Object {
   "gnmMarketing": false,
   "id": "",
   "isPostDeploymentTestUser": false,
+  "isSignedIn": false,
   "isTestUser": null,
   "lastName": "",
 }
