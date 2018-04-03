@@ -22,8 +22,7 @@ export type Action =
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
   | { type: 'DIRECT_DEBIT_SET_FORM_ERROR', message: string }
   | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' }
-  | { type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW' }
-  | { type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW' };
+  | { type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase: Phase };
 
 
 // ----- Actions ----- //
@@ -60,11 +59,8 @@ const setDirectDebitFormError = (message: string): Action =>
 const resetDirectDebitFormError = (): Action =>
   ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
 
-const transitionConfirmationView = (): Action =>
-  ({ type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW' });
-
-const transitionEntryView = (): Action =>
-  ({ type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW' });
+const setDirectDebitFormPhase = (phase: Phase): Action =>
+  ({ type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase });
 
 
 function payDirectDebitClicked(): Function {
@@ -98,7 +94,7 @@ function payDirectDebitClicked(): Function {
         if (!response.accountValid) {
           throw new Error('incorrect_input');
         }
-        dispatch(transitionConfirmationView());
+        dispatch(setDirectDebitFormPhase('confirmation'));
       })
       .catch((e) => {
         let msg = '';
@@ -149,6 +145,5 @@ export {
   resetDirectDebitFormError,
   payDirectDebitClicked,
   confirmDirectDebitClicked,
-  transitionConfirmationView,
-  transitionEntryView,
+  setDirectDebitFormPhase,
 };

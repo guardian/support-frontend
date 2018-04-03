@@ -15,9 +15,9 @@ import {
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,
   payDirectDebitClicked,
-  transitionEntryView,
+  setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
-import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
+import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
 import {
   SvgDirectDebitSymbol,
   SvgDirectDebitSymbolAndText,
@@ -44,7 +44,7 @@ type PropTypes = {
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void,
   formError: string,
-  phase: string,
+  phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
   confirmDirectDebitClicked: (callback: Function) => void,
@@ -73,7 +73,7 @@ function mapDispatchToProps(dispatch) {
       return false;
     },
     editDirectDebitClicked: () => {
-      dispatch(transitionEntryView());
+      dispatch(setDirectDebitFormPhase('entry'));
     },
     confirmDirectDebitClicked: (callback) => {
       dispatch(confirmDirectDebitClicked(callback));

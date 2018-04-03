@@ -97,15 +97,9 @@ const directDebitReducer = (
       });
     }
 
-    case 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW': {
+    case 'DIRECT_DEBIT_SET_FORM_PHASE': {
       return Object.assign({}, state, {
-        phase: 'confirmation',
-      });
-    }
-
-    case 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW': {
-      return Object.assign({}, state, {
-        phase: 'entry',
+        phase: action.phase,
       });
     }
 

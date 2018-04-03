@@ -136,9 +136,10 @@ describe('direct debit reducer tests', () => {
     expect(newState.formError).toEqual('');
   });
 
-  it('should handle DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW', () => {
+  it('should handle DIRECT_DEBIT_SET_FORM_PHASE to confirmation mode', () => {
     const action = {
-      type: 'DIRECT_DEBIT_TRANSITION_TO_CONFIRMATION_VIEW',
+      type: 'DIRECT_DEBIT_SET_FORM_PHASE',
+      phase: 'confirmation',
     };
 
     const newState = reducer(undefined, action);
@@ -146,9 +147,10 @@ describe('direct debit reducer tests', () => {
     expect(newState.phase).toEqual('confirmation');
   });
 
-  it('should handle DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW', () => {
+  it('should handle DIRECT_DEBIT_SET_FORM_PHASE to entry mode', () => {
     const action = {
-      type: 'DIRECT_DEBIT_TRANSITION_TO_ENTRY_VIEW',
+      type: 'DIRECT_DEBIT_SET_FORM_PHASE',
+      phase: 'entry',
     };
 
     const newState = reducer(undefined, action);
