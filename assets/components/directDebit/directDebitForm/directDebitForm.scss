@@ -143,7 +143,13 @@
   text-align: left;
 }
 
-.component-direct-debit-form__cta-text.inverse {
+.component-direct-debit-form__cta-text--variable-left-margin {
+  @include mq($until: mobileMedium) {
+    margin-left: -24px;
+  }
+}
+
+.component-direct-debit-form__cta-text--inverse {
   color: white;
 }
 
@@ -171,12 +177,14 @@
   }
 }
 
-.component-direct-debit-form__pay-button {
+.component-direct-debit-form__cta--pay-button {
   .svg-direct-debit-symbol {
     margin: 8px 8px 0 8px;
     float: left;
   }
-  width: 300px;
+  @include mq($until: mobileMedium) {
+    width: 300px;
+  }
   @include mq($from: mobileMedium) {
     width: 343px;
   }
@@ -185,7 +193,7 @@
   }
 }
 
-.component-direct-debit-form__edit-button {
+.component-direct-debit-form__cta--edit-button {
   background-color: gu-colour(garnett-neutral-1);
   border: solid 1px gu-colour(garnett-neutral-1);
   color: white;
@@ -211,7 +219,7 @@
   }
 }
 
-.component-direct-debit-form__confirm-button {
+.component-direct-debit-form__cta--confirm-button {
   margin-right: 20px;
   float: right;
 

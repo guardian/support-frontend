@@ -277,11 +277,13 @@ function PaymentButton(props: {
     return (
       <button
         id="qa-pay-with-direct-debit-pay"
-        className="component-direct-debit-form__cta component-direct-debit-form__pay-button focus-target"
+        className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
         onClick={props.onPayClick}
       >
         <SvgDirectDebitSymbol />
-        <span className="component-direct-debit-form__cta-text">Contribute with Direct Debit</span>
+        <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--variable-left-margin">
+          Contribute with Direct Debit
+        </span>
         <SvgArrowRightStraight />
       </button>
     );
@@ -291,15 +293,15 @@ function PaymentButton(props: {
       <span>
         <button
           id="qa-pay-with-direct-debit-edit"
-          className="component-direct-debit-form__cta component-direct-debit-form__edit-button focus-target"
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
           onClick={props.onEditClick}
         >
           <SvgArrowLeftStraight />
-          <span className="component-direct-debit-form__cta-text inverse">Back</span>
+          <span className="component-direct-debit-form__cta-text--inverse">Back</span>
         </button>
         <button
           id="qa-pay-with-direct-debit-confirm"
-          className="component-direct-debit-form__cta component-direct-debit-form__confirm-button focus-target"
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
           onClick={props.onConfirmClick}
         >
           <span className="component-direct-debit-form__cta-text">Confirm</span>
