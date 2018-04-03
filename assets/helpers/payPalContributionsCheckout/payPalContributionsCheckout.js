@@ -16,23 +16,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
-type PayPalPostData = {|
-  countryGroup: string,
-  amount: number,
-  cmp: ?string,
-  intCmp: ?string,
-  refererPageviewId: ?string,
-  refererUrl: ?string,
-  ophanPageviewId: string,
-  ophanBrowserId: ?string,
-  ophanVisitId: ?string,
-  componentId: ?string,
-  componentType: ?string,
-  source: ?string,
-  refererAbTest: ?AcquisitionABTest,
-  nativeAbTests: ?AcquisitionABTest[],
-|}
-
 type AcquisitionData = {|
   pageviewId: string,
   visitId: ?string,
@@ -68,7 +51,10 @@ function payalContributionEndpoint(testUser) {
   return window.guardian.contributionsPayPalEndpoint;
 }
 
-function storeAcquisitionData(referrerAcquisitionData: ReferrerAcquisitionData, nativeAbParticipations: Participations): void {
+function storeAcquisitionData(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+): void {
   const ophanIds: OphanIds = getOphanIds();
   const acquisitionData: AcquisitionData = {
     cmp: null,
@@ -98,7 +84,7 @@ export function paypalContributionsRedirect(
 ): void {
 
   storeAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
-  const currency = countryGroups[countryGroupId].currency;
+  const { currency } = countryGroups[countryGroupId];
   const postData: PayPalPaymentAPIPostData = {
     amount,
     currency,
