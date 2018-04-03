@@ -31,6 +31,8 @@ class Configuration {
 
   lazy val contributionsFrontendUrl = config.getString("contribution.url")
 
+  lazy val paymentApiUrl = config.getString("paymentApi.url");
+
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
