@@ -36,6 +36,7 @@
 }
 
 .component-direct-debit-form__sort-code-field {
+  text-align: center;
   font-family: $gu-sans-web;
   font-size: 14px;
   background-color: gu-colour(garnett-neutral-3);
@@ -127,6 +128,10 @@
   &:checked + label:after {
     opacity: 1;
   }
+}
+
+.component-direct-debit-form__confirmation-guidance {
+  margin-top: 1.2rem;
 }
 
 .component-direct-debit-form__cta-text {

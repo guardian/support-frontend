@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Action } from './directDebitActions';
+import type { Action, Phase } from './directDebitActions';
 
 // ----- Setup ----- //
 
@@ -14,7 +14,7 @@ export type DirectDebitState = {
   accountHolderName: string,
   accountHolderConfirmation: boolean,
   formError: string,
-  phase: string
+  phase: Phase
 };
 
 

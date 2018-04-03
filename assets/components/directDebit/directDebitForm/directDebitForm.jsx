@@ -219,30 +219,48 @@ function AccountHolderNameInput(props: {phase: string, value: string, onChange: 
 
 function ConfirmationInput(props: {phase: string, checked: boolean, onChange: Function }) {
   const editable = (
-    <div className="component-direct-debit-form__confirmation-css-checkbox">
-      <input
-        className="component-direct-debit-form__confirmation-input"
-        id="confirmation-input"
-        type="checkbox"
-        onChange={props.onChange}
-        checked={props.checked}
-      />
-      <label
-        className="component-direct-debit-form__confirmation-label"
-        htmlFor="confirmation-input"
-      />
-    </div>
+    <span>
+      <div className="component-direct-debit-form__confirmation-css-checkbox">
+        <input
+          className="component-direct-debit-form__confirmation-input"
+          id="confirmation-input"
+          type="checkbox"
+          onChange={props.onChange}
+          checked={props.checked}
+        />
+        <label
+          className="component-direct-debit-form__confirmation-label"
+          htmlFor="confirmation-input"
+        />
+      </div>
+      <span className="component-direct-debit-form__confirmation-text">
+        I confirm that I am the account holder and I am solely able to authorise debit from
+        the account
+      </span>
+    </span>
+  );
+
+  const locked = (
+    <span>
+      <label htmlFor="confirmation-text__locked" className="component-direct-debit-form__field-label">
+        Declaration
+      </label>
+      <div id="confirmation-text__locked" className="component-direct-debit-form__confirmation-text__locked">
+        I have confirmed that I am the account holder and that I am solely able to authorise debit
+        from the account
+      </div>
+      <div className="component-direct-debit-form__confirmation-guidance">
+        If the details above are correct press confirm to set up your direct debit, otherwise press
+        edit to go back and make changes
+      </div>
+    </span>
   );
 
   return (
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          {props.phase === 'entry' ? editable : ''}
-          <span className="component-direct-debit-form__confirmation-text">
-            I confirm that I am the account holder and I am solely able to authorise debit from
-            the account
-          </span>
+          {props.phase === 'entry' ? editable : locked}
         </label>
       </div>
     </div>

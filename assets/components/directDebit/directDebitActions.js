@@ -9,6 +9,8 @@ import { checkAccount } from './helpers/ajax';
 
 export type SortCodeIndex = 0 | 1 | 2;
 
+export type Phase = 'entry' | 'confirmation';
+
 export type Action =
   | { type: 'DIRECT_DEBIT_POP_UP_OPEN' }
   | { type: 'DIRECT_DEBIT_POP_UP_CLOSE' }

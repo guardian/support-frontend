@@ -33,11 +33,7 @@ function SortCodeInput(props: SortCodePropTypes) {
 
   const locked = (
     <span>
-      {props.sortCodeArray[0]}
-      <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
-      {props.sortCodeArray[1]}
-      <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
-      {props.sortCodeArray[2]}
+      {props.sortCodeArray[0]}-{props.sortCodeArray[1]}-{props.sortCodeArray[2]}
     </span>
   );
 
