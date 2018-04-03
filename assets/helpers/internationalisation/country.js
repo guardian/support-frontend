@@ -421,8 +421,7 @@ function handleCountryForCountryGroup(
     return null;
   }
 
-  const candidateCountry: ?IsoCountry =
-    fromQueryParameter() || fromCookie() || fromGeolocation() || fromPath();
+  const candidateCountry: ?IsoCountry = fromQueryParameter() || fromCookie() || fromGeolocation();
 
   if (candidateCountry && countryGroups[targetCountryGroup].countries.includes(candidateCountry)) {
     return candidateCountry;
