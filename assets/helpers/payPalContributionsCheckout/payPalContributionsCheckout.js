@@ -56,6 +56,13 @@ function storeAcquisitionData(
   nativeAbParticipations: Participations,
 ): void {
   const ophanIds: OphanIds = getOphanIds();
+
+  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+
+  if (referrerAcquisitionData.abTest) {
+    abTests.push(referrerAcquisitionData.abTest);
+  }
+
   const acquisitionData: AcquisitionData = {
     cmp: null,
     intCmp: referrerAcquisitionData.campaignCode,
@@ -67,8 +74,7 @@ function storeAcquisitionData(
     componentId: referrerAcquisitionData.componentId,
     componentType: referrerAcquisitionData.componentType,
     source: referrerAcquisitionData.source,
-    refererAbTest: referrerAcquisitionData.abTest,
-    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+    abTests,
   };
 
   cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
