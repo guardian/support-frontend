@@ -189,7 +189,14 @@
   background-color: gu-colour(garnett-neutral-1);
   border: solid 1px gu-colour(garnett-neutral-1);
   color: white;
-  width: 160px;
+
+  @include mq($until: mobileMedium) {
+    width: 140px;
+  }
+
+  @include mq($from: mobileMedium) {
+    width: 160px;
+  }
 
   .svg-arrow-left-straight {
     width: 24px;
@@ -207,7 +214,14 @@
 .component-direct-debit-form__confirm-button {
   margin-right: 20px;
   float: right;
-  width: 160px;
+
+  @include mq($until: mobileMedium) {
+    width: 140px;
+  }
+
+  @include mq($from: mobileMedium) {
+    width: 160px;
+  }
 }
 
 .component-direct-debit-form__legal-notice {

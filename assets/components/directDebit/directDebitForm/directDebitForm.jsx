@@ -251,7 +251,7 @@ function ConfirmationInput(props: {phase: string, checked: boolean, onChange: Fu
       </div>
       <div className="component-direct-debit-form__confirmation-guidance">
         If the details above are correct press confirm to set up your direct debit, otherwise press
-        edit to go back and make changes
+        back to make changes
       </div>
     </span>
   );
@@ -295,7 +295,7 @@ function PaymentButton(props: {
           onClick={props.onEditClick}
         >
           <SvgArrowLeftStraight />
-          <span className="component-direct-debit-form__cta-text inverse">Edit</span>
+          <span className="component-direct-debit-form__cta-text inverse">Back</span>
         </button>
         <button
           id="qa-pay-with-direct-debit-confirm"
