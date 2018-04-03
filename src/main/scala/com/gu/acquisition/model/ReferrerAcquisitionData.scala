@@ -3,7 +3,7 @@ package com.gu.acquisition.model
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 import play.api.libs.json.{Reads, Writes, Json => PlayJson}
 
 /**
@@ -17,7 +17,8 @@ case class ReferrerAcquisitionData(
     componentType: Option[ComponentType],
     source: Option[AcquisitionSource],
     abTest: Option[AbTest], //Deprecated, please use abTests
-    abTests: Option[Set[AbTest]]
+    abTests: Option[Set[AbTest]],
+    queryParameters: Option[Set[QueryParameter]]
 )
 
 object ReferrerAcquisitionData {
@@ -25,6 +26,8 @@ object ReferrerAcquisitionData {
   import com.gu.acquisition.instances.abTest._
   import com.gu.acquisition.instances.acquisitionSource._
   import com.gu.acquisition.instances.componentType._
+  import com.gu.acquisition.instances.componentType._
+  import com.gu.acquisition.instances.queryParamter._
 
   implicit val referrerAcquisitionDataDecoder: Decoder[ReferrerAcquisitionData] = deriveDecoder[ReferrerAcquisitionData]
 

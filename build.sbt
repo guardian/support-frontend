@@ -7,7 +7,7 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.github.mpilquist" %% "simulacrum" % "0.10.0",
     "com.gu" %% "fezziwig" % "0.8",
-    "com.gu" %% "ophan-event-model" % "0.0.3" excludeAll(ExclusionRule(organization = "com.typesafe.play")),
+    "com.gu" %% "ophan-event-model" % "0.0.6" excludeAll(ExclusionRule(organization = "com.typesafe.play")),
     "com.squareup.okhttp3" % "okhttp" % "3.9.0",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
     "io.circe" %% "circe-core" % "0.9.1",
