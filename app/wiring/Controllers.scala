@@ -43,7 +43,7 @@ trait Controllers {
     payPalServiceProvider,
     testUsers,
     controllerComponents,
-    contributionsFrontendService
+    paymentAPIService
   )
 
   lazy val oneOffContributions = new OneOffContributions(

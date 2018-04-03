@@ -34,5 +34,5 @@ trait Services {
 
   lazy val authenticationService = AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
 
-  lazy val contributionsFrontendService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
+  lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 }
