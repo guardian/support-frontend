@@ -348,6 +348,8 @@ function fromString(s: string): ?IsoCountry {
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
   switch (countryGroupId) {
+    case 'AUDCountries':
+      return 'AU';
     case 'UnitedStates':
       return 'US';
     default: return null;
@@ -357,6 +359,8 @@ function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
   if (path === '/us' || path.startsWith('/us/')) {
     return 'US';
+  } else if (path === '/au' || path.startsWith('/au/')) {
+    return 'AU';
   }
 
   return null;
@@ -391,7 +395,7 @@ function setCountry(country: IsoCountry) {
 }
 
 function handleCountryForCountryGroup(
-  targetCountryGroup: 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries' | 'AUDCountries',
+  targetCountryGroup: 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries',
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
 
@@ -400,7 +404,6 @@ function handleCountryForCountryGroup(
     EURCountries: ['/eu', '/eu/'],
     NZDCountries: ['/nz', '/nz/'],
     GBPCountries: ['/uk', '/uk/'],
-    AUDCountries: ['/au', '/au/'],
   };
 
   const defaultCountry = {
@@ -408,7 +411,6 @@ function handleCountryForCountryGroup(
     EURCountries: 'DE',
     NZDCountries: 'NZ',
     GBPCountries: 'GB',
-    AUDCountries: 'AU',
   };
 
   const path = window.location.pathname;
@@ -432,7 +434,7 @@ function handleCountryForCountryGroup(
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
 
-  const targetCountryGroups = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries', 'AUDCountries'];
+  const targetCountryGroups = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries'];
   let country = null;
 
   targetCountryGroups.forEach((targetCountryGroupId) => {
