@@ -394,21 +394,21 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
-type TargetCountries = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries';
+type TargetCountryGroups = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries';
 
 function handleCountryForCountryGroup(
-  targetCountryGroup: TargetCountries,
+  targetCountryGroup: TargetCountryGroups,
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
 
-  const paths: {[TargetCountries]: string[]} = {
+  const paths: {[TargetCountryGroups]: string[]} = {
     International: ['/int', '/int/'],
     EURCountries: ['/eu', '/eu/'],
     NZDCountries: ['/nz', '/nz/'],
     GBPCountries: ['/uk', '/uk/'],
   };
 
-  const defaultCountry: {[TargetCountries]: IsoCountry} = {
+  const defaultCountry: {[TargetCountryGroups]: IsoCountry} = {
     International: 'IN',
     EURCountries: 'DE',
     NZDCountries: 'NZ',
@@ -436,7 +436,7 @@ function handleCountryForCountryGroup(
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
 
-  const targetCountryGroups: TargetCountries[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries'];
+  const targetCountryGroups: TargetCountryGroups[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries'];
   let country = null;
 
   targetCountryGroups.forEach((targetCountryGroupId) => {
