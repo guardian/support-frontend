@@ -9,6 +9,7 @@ package object instances {
     with ComponentTypeInstances
     with PaymentFrequencyInstances
     with PaymentProviderInstances
+    with QueryParameterInstances
 
   object abTest extends AbTestInstances
   object abTestInfo extends AbTestInfoInstances
@@ -17,4 +18,5 @@ package object instances {
   object componentType extends ComponentTypeInstances
   object paymentFrequency extends PaymentFrequencyInstances
   object paymentProvider extends PaymentProviderInstances
+  object queryParamter extends QueryParameterInstances
 }

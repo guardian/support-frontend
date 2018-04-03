@@ -3,7 +3,7 @@ package com.gu.acquisition.model
 import io.circe.{Json => CJson}
 import play.api.libs.json.{JsObject, Json => PJson}
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 import org.scalatest.{EitherValues, Matchers, WordSpecLike}
 
 class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValues {
@@ -16,7 +16,8 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     componentType = Some(ComponentType.AcquisitionsEpic),
     source = Some(AcquisitionSource.GuardianWeb),
     abTest = Some(AbTest("test_name", "variant_name")),
-    abTests = Some(Set(AbTest("test_name", "variant_name"), AbTest("test_name2", "variant_name2")))
+    abTests = Some(Set(AbTest("test_name", "variant_name"), AbTest("test_name2", "variant_name2"))),
+    queryParameters = Some(Set(QueryParameter("param1", "val1"), QueryParameter("param2", "val2")))
   )
 
   val referrerAcquisitionCJson: CJson = CJson.obj(
@@ -38,6 +39,16 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
       CJson.obj(
         "name" -> CJson.fromString("test_name2"),
         "variant" -> CJson.fromString("variant_name2")
+      )
+    ),
+    "queryParameters" -> CJson.arr(
+      CJson.obj(
+        "name" -> CJson.fromString("param1"),
+        "value" -> CJson.fromString("val1")
+      ),
+      CJson.obj(
+        "name" -> CJson.fromString("param2"),
+        "value" -> CJson.fromString("val2")
       )
     )
   )
@@ -61,6 +72,16 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
       PJson.obj(
         "name" -> "test_name2",
         "variant" -> "variant_name2"
+      )
+    ),
+    "queryParameters" -> PJson.arr(
+      PJson.obj(
+        "name" -> "param1",
+        "value" -> "val1"
+      ),
+      PJson.obj(
+        "name" -> "param2",
+        "value" -> "val2"
       )
     )
   )
