@@ -3,10 +3,10 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
+import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
 
 type SortCodePropTypes = {
-  phase: string,
+  phase: Phase,
   sortCodeArray: Array<string>,
   onChange: (SortCodeIndex, SyntheticInputEvent<HTMLInputElement>) => void,
 };

@@ -156,7 +156,7 @@ const DirectDebitForm = (props: PropTypes) => (
 
 // ----- Auxiliary components ----- //
 
-function AccountNumberInput(props: {phase: string, onChange: Function, value: string}) {
+function AccountNumberInput(props: {phase: Phase, onChange: Function, value: string}) {
   const editable = (
     <input
       id="account-number-input"
@@ -190,7 +190,7 @@ function AccountNumberInput(props: {phase: string, onChange: Function, value: st
  transliterated, upcased and truncated to 18 characters."
  https://developer.gocardless.com/api-reference/
  * */
-function AccountHolderNameInput(props: {phase: string, value: string, onChange: Function}) {
+function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: Function}) {
   const editable = (
     <input
       id="account-holder-name-input"
@@ -217,7 +217,7 @@ function AccountHolderNameInput(props: {phase: string, value: string, onChange: 
   );
 }
 
-function ConfirmationInput(props: {phase: string, checked: boolean, onChange: Function }) {
+function ConfirmationInput(props: {phase: Phase, checked: boolean, onChange: Function }) {
   const editable = (
     <span>
       <div className="component-direct-debit-form__confirmation-css-checkbox">
@@ -268,7 +268,7 @@ function ConfirmationInput(props: {phase: string, checked: boolean, onChange: Fu
 }
 
 function PaymentButton(props: {
-  phase: string,
+  phase: Phase,
   onPayClick: Function,
   onEditClick: Function,
   onConfirmClick: Function
