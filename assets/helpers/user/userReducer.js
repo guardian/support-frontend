@@ -18,6 +18,7 @@ export type User = {
   fullName?: string,
   stateField?: string,
   gnmMarketing: boolean,
+  isSignedIn: boolean,
 };
 
 
@@ -32,6 +33,7 @@ const initialState: User = {
   isTestUser: null,
   isPostDeploymentTestUser: false,
   gnmMarketing: false,
+  isSignedIn: false,
 };
 
 
@@ -72,6 +74,9 @@ function userReducer(
 
     case 'SET_GNM_MARKETING':
       return Object.assign({}, state, { gnmMarketing: action.preference });
+
+    case 'SET_IS_SIGNED_IN':
+      return Object.assign({}, state, { isSignedIn: action.isSignedIn });
 
     default:
       return state;
