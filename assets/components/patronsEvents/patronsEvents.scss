@@ -114,5 +114,10 @@
     height: 35%;
     top: 17px;
     right: 13px;
+
+    // Fix for IE.
+    @include mq($from: tablet) {
+      left: 89%;
+    }
   }
 }
