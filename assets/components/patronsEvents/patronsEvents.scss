@@ -34,8 +34,12 @@
     padding-top: $gu-v-spacing * 3;
 
     @include mq($from: phablet) {
-      width: 300px;
+      width: 280px;
       padding-left: $gu-h-spacing / 2;
+    }
+
+    @include mq($from: tablet) {
+      width: 300px;
     }
   }
 
@@ -51,10 +55,6 @@
   }
 
   .component-other-product--live-events {
-    @include mq($from: phablet) {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
-    }
-
     .component-grid-image {
       margin-left: -120px;
     }
