@@ -152,11 +152,11 @@ const config: { [CountryGroupId]: Config } = {
   NZDCountries: {
     ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
-      min: 5,
-      minInWords: numbersInWords['5'],
+      min: 10,
+      minInWords: numbersInWords['10'],
       max: 166,
       maxInWords: numbersInWords['166'],
-      default: 10,
+      default: 20,
     },
     ONE_OFF: defaultConfig.ONE_OFF,
   },
@@ -204,7 +204,12 @@ const amounts = {
       { value: '500', spoken: numbersInWords['500'] },
     ],
     International: defaultOneOffAmount,
-    NZDCountries: defaultOneOffAmount,
+    NZDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
     Canada: defaultOneOffAmount,
   },
   MONTHLY: {
@@ -230,9 +235,9 @@ const amounts = {
       { value: '20', spoken: numbersInWords['20'] },
     ],
     NZDCountries: [
-      { value: '5', spoken: numbersInWords['5'] },
       { value: '10', spoken: numbersInWords['10'] },
       { value: '20', spoken: numbersInWords['20'] },
+      { value: '50', spoken: numbersInWords['50'] },
     ],
     Canada: [
       { value: '5', spoken: numbersInWords['5'] },
