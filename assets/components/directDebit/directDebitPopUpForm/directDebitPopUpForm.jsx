@@ -43,8 +43,8 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Utility ----- //
 
-function PageTitle(phase: Phase) {
-  if (phase === 'confirmation') {
+function PageTitle(props: { phase: Phase }) {
+  if (props.phase === 'confirmation') {
     return (
       <span>
         <span className="component-direct-debit-pop-up-form__heading--title">
