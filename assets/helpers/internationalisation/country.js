@@ -346,7 +346,7 @@ const countries = {
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
-export type CaState = $Keys<typeof usStates>;
+export type CaState = $Keys<typeof caStates>;
 export type IsoCountry = $Keys<typeof countries>;
 
 
