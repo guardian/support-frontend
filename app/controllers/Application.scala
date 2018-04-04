@@ -44,6 +44,9 @@ class Application(
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
       case Some(Europe) => "/eu/contribute"
+      case Some(Canada) => "/ca/contribute"
+      case Some(NewZealand) => "/nz/contribute"
+      case Some(RestOfTheWorld) => "/int/contribute"
       case _ => "https://membership.theguardian.com/supporter"
     }
 
@@ -56,6 +59,9 @@ class Application(
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
       case Some(Europe) => "/eu/contribute"
+      case Some(Canada) => "/eu/contribute"
+      case Some(NewZealand) => "/nz/contribute"
+      case Some(RestOfTheWorld) => "/int/contribute"
       case _ => "https://contribute.theguardian.com"
     }
 
