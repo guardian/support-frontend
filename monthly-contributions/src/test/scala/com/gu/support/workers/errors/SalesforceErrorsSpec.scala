@@ -5,15 +5,16 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
+import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.Request
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.Matchers
 
 import scala.concurrent.duration._
 
 @IntegrationTest
-class SalesforceErrorsSpec extends AsyncFlatSpec with Matchers with LazyLogging {
+class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers with LazyLogging {
   "AuthService" should "throw a SalesforceAuthenticationErrorResponse" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)

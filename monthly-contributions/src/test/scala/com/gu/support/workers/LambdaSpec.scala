@@ -14,7 +14,9 @@ abstract class LambdaSpec extends FlatSpec with Matchers with MockContext with L
   def assertUnit(output: ByteArrayOutputStream): Assertion =
     Encoding.in[Unit](output.toInputStream).isSuccess should be(true)
 }
-abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers with MockContext with LazyLogging
+abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers with LazyLogging {
+  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
+}
 
 trait MockContext extends MockitoSugar {
   val context = mock[Context]
