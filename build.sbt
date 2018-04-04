@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
   scalaVersion {
     case "2.11.8" => "com.gu" %% "acquisition-event-producer" % "2.0.1"
-    case "2.12.4" => "com.gu" %% "acquisition-event-producer-play26" % "4.0.2"
+    case "2.12.4" => "com.gu" %% "acquisition-event-producer-play26" % "4.0.3"
   }.value
 )
 
