@@ -43,7 +43,7 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Utility ----- //
 
-function pageTitle(phase: Phase) {
+function PageTitle(phase: Phase) {
   if (phase === 'confirmation') {
     return (
       <span>
@@ -79,7 +79,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
       <div className="component-direct-debit-pop-up-form">
         <div className="component-direct-debit-pop-up-form__content">
           <h1 className="component-direct-debit-pop-up-form__heading">
-            {pageTitle(props.phase)}
+            <PageTitle phase={props.phase} />
           </h1>
           <button
             id="qa-pay-with-direct-debit-close-pop-up"
