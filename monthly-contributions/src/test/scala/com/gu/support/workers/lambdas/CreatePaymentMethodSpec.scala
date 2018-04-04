@@ -23,7 +23,6 @@ import com.gu.zuora.encoding.CustomCodecs._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 

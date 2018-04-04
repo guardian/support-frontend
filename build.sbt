@@ -24,7 +24,7 @@ lazy val root =
     )
     .aggregate(common, `monthly-contributions`)
 
-lazy val circeVersion = "0.8.0"
+lazy val circeVersion = "0.9.0"
 lazy val awsVersion = "1.11.161"
 lazy val okhttpVersion = "3.9.0"
 

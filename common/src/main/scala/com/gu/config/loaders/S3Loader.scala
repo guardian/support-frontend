@@ -1,5 +1,6 @@
 package com.gu.config.loaders
 
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.{AmazonS3ClientBuilder, AmazonS3URI}
 import com.gu.aws.CredentialsProvider
@@ -16,6 +17,7 @@ class S3Loader extends PrivateConfigLoader with LazyLogging {
     val s3Client = AmazonS3ClientBuilder
       .standard()
       .withCredentials(CredentialsProvider)
+      .withRegion(Regions.EU_WEST_1)
       .build()
 
     val s3Object: S3Object = s3Client.getObject(uri.getBucket, uri.getKey)
