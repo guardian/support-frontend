@@ -41,19 +41,46 @@ function mapDispatchToProps(dispatch) {
 
 }
 
+// ----- Utility ----- //
+
+function pageTitle(phase: Phase) {
+  if (phase === 'confirmation') {
+    return (
+      <span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          Please confirm
+        </span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          your details
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        Please enter
+      </span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        your details below
+      </span>
+    </span>
+  );
+}
+
 // ----- Component ----- //
 
 const DirectDebitPopUpForm = (props: PropTypes) => {
 
   let content = null;
 
-  const title = props.phase === 'confirmation' ? 'Please confirm your details' : 'Please enter your details below';
-
   if (props.isPopUpOpen) {
     content = (
       <div className="component-direct-debit-pop-up-form">
         <div className="component-direct-debit-pop-up-form__content">
-          <h1 className="component-direct-debit-pop-up-form__heading">{title}</h1>
+          <h1 className="component-direct-debit-pop-up-form__heading">
+            {pageTitle(props.phase)}
+          </h1>
           <button
             id="qa-pay-with-direct-debit-close-pop-up"
             className="component-direct-debit-pop-up-form__close-button focus-target"
