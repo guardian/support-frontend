@@ -20,7 +20,7 @@ object CapitalizationEncoder {
     deriveEncoder[A].mapJsonObject(capitalizeFields)
 
   def modifyFields(json: JsonObject)(f: String => String): JsonObject = {
-    val newFields = json.fields.map(str => f(str)).zip(json.values)
+    val newFields = json.keys.map(str => f(str)).zip(json.values)
     val newObject = JsonObject.from(newFields)
     newObject
   }
