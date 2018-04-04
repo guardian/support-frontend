@@ -82,6 +82,7 @@ function requestData(
       nativeAbTests: participationsToAcquisitionABTest(abParticipations),
       refererAbTest: referrerAcquisitionData.abTest,
       isSupport: true,
+      queryParameters: referrerAcquisitionData.queryParameters,
     };
 
     return {

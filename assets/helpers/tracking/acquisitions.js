@@ -9,6 +9,7 @@ import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
+import { getAllQueryParamsWithExclusions } from 'helpers/url';
 
 
 // ----- Types ----- //
@@ -17,6 +18,13 @@ export type AcquisitionABTest = {
   name: string,
   variant: string,
 };
+
+export type QueryParameter = {
+  name: string,
+  value: string,
+};
+
+export type AcquisitionQueryParameters = Array<QueryParameter>
 
 export type OphanIds = {|
   pageviewId: string,
@@ -33,6 +41,7 @@ export type ReferrerAcquisitionData = {|
   source: ?string,
   abTest: ?AcquisitionABTest,
   abTests: ?Array<AcquisitionABTest>,
+  queryParameters: ?AcquisitionQueryParameters,
 |};
 
 
@@ -118,6 +127,16 @@ function readAcquisition(): ?ReferrerAcquisitionData {
 
 }
 
+const toAcquisitionQueryParameters
+  = (parameters: Array<[string, string]>): AcquisitionQueryParameters =>
+    parameters.reduce((array, item) => {
+      array.push({
+        name: item[0],
+        value: item[1],
+      });
+      return array;
+    }, []);
+
 const participationsToAcquisitionABTest = (participations: Participations): AcquisitionABTest[] => {
   const response: AcquisitionABTest[] = [];
 
@@ -143,6 +162,12 @@ function buildAcquisition(
   const campaignCode = acquisitionData.campaignCode ||
     getQueryParameter('INTCMP');
 
+  const parameterExclusions = ['REFPVID', 'INTCMP', 'acquisitionData'];
+
+  const queryParameters =
+    acquisitionData.queryParameters ||
+    toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
+
   const abTests = participationsToAcquisitionABTest(abParticipations);
 
   if (acquisitionData.abTest) {
@@ -158,6 +183,7 @@ function buildAcquisition(
     source: acquisitionData.source,
     abTest: acquisitionData.abTest,
     abTests: abTests.length > 0 ? abTests : undefined,
+    queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
   };
 
 }
