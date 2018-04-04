@@ -11,20 +11,29 @@ import type { State } from '../bundlesLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'EURCountries', 'AUDCountries'];
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'AUDCountries', 'NZDCountries', 'Canada', 'International'];
 
 // ----- Functions ----- //
 
 function handleCountryGroupChange(value: string): void {
   switch (value) {
     case 'UnitedStates':
-      window.location.pathname = '/us';
+      window.location.pathname = '/us/contribute';
       break;
     case 'AUDCountries':
       window.location.pathname = '/au';
       break;
     case 'EURCountries':
-      window.location.pathname = '/eu';
+      window.location.pathname = '/eu/contribute';
+      break;
+    case 'NZDCountries':
+      window.location.pathname = '/nz/contribute';
+      break;
+    case 'Canada':
+      window.location.pathname = '/ca/contribute';
+      break;
+    case 'International':
+      window.location.pathname = '/int/contribute';
       break;
     default:
   }
