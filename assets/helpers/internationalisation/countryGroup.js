@@ -95,7 +95,9 @@ function fromPath(path: string = window.location.pathname): ?CountryGroupId {
     return 'International';
   } else if (path === '/nz' || path.startsWith('/nz/')) {
     return 'NZDCountries';
-  }
+  } else if (path === '/ca' || path.startsWith('/ca/')) {
+  return 'Canada';
+}
   return null;
 }
 
@@ -107,6 +109,7 @@ function fromString(countryGroup: string): ?CountryGroupId {
     case 'EURCountries': return 'EURCountries';
     case 'International': return 'International';
     case 'NZDCountries': return 'NZDCountries';
+    case 'Canada': return 'Canada';
     default: return null;
   }
 }
