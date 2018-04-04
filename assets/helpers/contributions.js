@@ -193,7 +193,12 @@ const amounts = {
       { value: '500', spoken: numbersInWords['500'] },
     ],
     International: defaultOneOffAmount,
-    NZDCountries: defaultOneOffAmount,
+    NZDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
   },
   MONTHLY: {
     UnitedStates: defaultMonthlyAmount,
@@ -220,7 +225,7 @@ const amounts = {
     NZDCountries: [
       { value: '10', spoken: numbersInWords['10'] },
       { value: '20', spoken: numbersInWords['20'] },
-      { value: '45', spoken: numbersInWords['45'] },
+      { value: '50', spoken: numbersInWords['50'] },
     ],
   },
   ANNUAL: {
