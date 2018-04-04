@@ -276,7 +276,6 @@ function PaymentButton(props: {
   if (props.phase === 'entry') {
     return (
       <button
-        id="qa-pay-with-direct-debit-pay"
         className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
         onClick={props.onPayClick}
       >
@@ -292,7 +291,6 @@ function PaymentButton(props: {
     return (
       <span>
         <button
-          id="qa-pay-with-direct-debit-edit"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
           onClick={props.onEditClick}
         >
@@ -300,7 +298,6 @@ function PaymentButton(props: {
           <span className="component-direct-debit-form__cta-text--inverse">Back</span>
         </button>
         <button
-          id="qa-pay-with-direct-debit-confirm"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
           onClick={props.onConfirmClick}
         >
