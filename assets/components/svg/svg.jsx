@@ -50,22 +50,6 @@ function SvgArrowRightStraight() {
 
 }
 
-// A left-pointing version of the CTA arrow
-function SvgArrowLeftStraight() {
-
-  return (
-    <svg
-      className="svg-arrow-left-straight"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 17.89"
-      preserveAspectRatio="xMinYMid"
-    >
-      <path d="M-20 9.35l-9.08 8.54-.86-.81 6.54-7.31H-40V8.12h16.6L-29.94.81l.86-.81L-20 8.51v.84zm20-.81L9.08 0l.86.81L3.4 8.12H20v1.65H3.4l6.54 7.31-.86.81L0 9.39v-.85z" />
-    </svg>
-  );
-
-}
-
 // The generic credit card logo used on checkouts.
 function SvgCreditCard() {
 

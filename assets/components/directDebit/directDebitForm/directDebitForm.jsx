@@ -294,8 +294,8 @@ function PaymentButton(props: {
           className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
           onClick={props.onEditClick}
         >
-          <SvgArrowLeftStraight />
-          <span className="component-direct-debit-form__cta-text--inverse">Back</span>
+          <SvgArrowRightStraight />
+          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Back</span>
         </button>
         <button
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"

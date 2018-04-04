@@ -206,12 +206,13 @@
     width: 160px;
   }
 
-  .svg-arrow-left-straight {
+  .svg-arrow-right-straight {
     width: 24px;
     fill: white;
     position: absolute;
     left: 15px;
-    top: 1rem;
+    top: 50%;
+    transform: scaleX(-1) translateY(-50%);
   }
 
   &:hover {
