@@ -96,8 +96,8 @@ function fromPath(path: string = window.location.pathname): ?CountryGroupId {
   } else if (path === '/nz' || path.startsWith('/nz/')) {
     return 'NZDCountries';
   } else if (path === '/ca' || path.startsWith('/ca/')) {
-  return 'Canada';
-}
+    return 'Canada';
+  }
   return null;
 }
 
