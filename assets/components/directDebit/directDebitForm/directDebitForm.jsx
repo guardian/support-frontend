@@ -22,7 +22,6 @@ import {
   SvgDirectDebitSymbol,
   SvgDirectDebitSymbolAndText,
   SvgArrowRightStraight,
-  SvgArrowLeftStraight,
   SvgExclamationAlternate,
 } from 'components/svg/svg';
 

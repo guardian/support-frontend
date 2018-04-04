@@ -781,7 +781,6 @@ function SvgPaywallWide() {
 export {
   SvgAmexLogo,
   SvgArrowRightStraight,
-  SvgArrowLeftStraight,
   SvgCreditCard,
   SvgExclamation,
   SvgExclamationAlternate,
