@@ -10,12 +10,12 @@ import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncoder}
 import io.circe.parser._
+import scala.concurrent.ExecutionContext.Implicits.global
 
-import scala.concurrent.ExecutionContext
 import scala.io.Source
 
 @IntegrationTest
-class EndToEndSpec(implicit ec: ExecutionContext) extends LambdaSpec {
+class EndToEndSpec extends LambdaSpec {
 
   "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
 
