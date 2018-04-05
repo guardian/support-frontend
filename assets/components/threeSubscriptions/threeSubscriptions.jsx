@@ -4,8 +4,20 @@
 
 import React from 'react';
 
+import { getSubsLinks } from 'helpers/externalLinks';
+import { getCampaign } from 'helpers/tracking/acquisitions';
+
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
+
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+
+
+// ----- Types ----- //
+
+type PropTypes = {
+  referrerAcquisitionData: ReferrerAcquisitionData,
+};
 
 
 // ----- Setup ----- //
@@ -19,14 +31,21 @@ const gridImageProperties = {
 
 // ----- Component ----- //
 
-export default function ThreeSubscriptions() {
+export default function ThreeSubscriptions(props: PropTypes) {
+
+  const subsLinks = getSubsLinks(
+    props.referrerAcquisitionData.campaignCode,
+    getCampaign(props.referrerAcquisitionData),
+    [],
+    props.referrerAcquisitionData,
+  );
 
   return (
     <div className="component-three-subscriptions">
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
-        <DigitalBundle />
-        <PaperBundle />
-        <PaperDigitalBundle />
+        <DigitalBundle url={subsLinks.digital} />
+        <PaperBundle url={subsLinks.paper} />
+        <PaperDigitalBundle url={subsLinks.paperDig} />
       </PageSection>
     </div>
   );
@@ -36,7 +55,7 @@ export default function ThreeSubscriptions() {
 
 // ----- Auxiliary Components ----- //
 
-function DigitalBundle() {
+function DigitalBundle(props: { url: string }) {
 
   return (
     <SubscriptionBundle
@@ -56,7 +75,7 @@ function DigitalBundle() {
         },
       ]}
       ctaText="Start your 14 day trial"
-      ctaUrl="https://subscribe.theguardian.com/p/DXX83X"
+      ctaUrl={props.url}
       ctaId="digital-sub"
       ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
@@ -69,7 +88,7 @@ function DigitalBundle() {
 
 }
 
-function PaperBundle() {
+function PaperBundle(props: { url: string }) {
 
   return (
     <SubscriptionBundle
@@ -86,7 +105,7 @@ function PaperBundle() {
         },
       ]}
       ctaText="Get a paper subscription"
-      ctaUrl="https://subscribe.theguardian.com/p/GXX83P"
+      ctaUrl={props.url}
       ctaId="paper-sub"
       ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
       gridImage={{
@@ -99,7 +118,7 @@ function PaperBundle() {
 
 }
 
-function PaperDigitalBundle() {
+function PaperDigitalBundle(props: { url: string }) {
 
   return (
     <SubscriptionBundle
@@ -119,7 +138,7 @@ function PaperDigitalBundle() {
         },
       ]}
       ctaText="Get a paper+digital subscription"
-      ctaUrl="https://subscribe.theguardian.com/p/GXX83X"
+      ctaUrl={props.url}
       ctaId="paper-digi-sub"
       ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
       gridImage={{
