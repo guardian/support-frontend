@@ -30,10 +30,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       val testUser = new TestUser(driverConfig)
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
-
-      Then("test code remove this later")
-      assert(landingPage.pageHasLoaded)
-
+      
       When("they select to contribute the default amount")
       landingPage.clickContribute
 
@@ -101,7 +98,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       recurringContributionForm.selectPayPalPayment
 
       Then("the PayPal Express Checkout mini-browser should display")
-      payPalCheckout.switchToPayPalPopUp()
+      payPalCheckout.switchToPayPalPopUp
       assert(payPalCheckout.hasLoaded)
 
       Given("that the user fills in their PayPal credentials correctly")
