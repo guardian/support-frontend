@@ -13,7 +13,7 @@ import com.gu.support.workers.model.User
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 import com.typesafe.scalalogging.LazyLogging
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class StepFunctionsService extends LazyLogging {
@@ -35,6 +35,7 @@ class StepFunctionsService extends LazyLogging {
     client.listStateMachines.map { response =>
       response
         .getStateMachines
+        .asScala
         .toList
         .filter(_.getName.startsWith(prefix))
     }
@@ -44,7 +45,7 @@ class StepFunctionsService extends LazyLogging {
 
     for {
       response <- client.listExecutions(arn, nextToken)
-      maybeUser <- findUserDataInExecutions(userId, response.getExecutions.toList)
+      maybeUser <- findUserDataInExecutions(userId, response.getExecutions.asScala.toList)
       // scalastyle:off null
       result <- if (maybeUser.isDefined || response.getNextToken == null)
         Future.successful(maybeUser)

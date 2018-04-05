@@ -10,11 +10,13 @@ import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncoder}
 import io.circe.parser._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.io.Source
 
 @IntegrationTest
 class EndToEndSpec extends LambdaSpec {
+
   "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
 
   they should "work with other currencies" in runSignupWithCurrency(EUR)

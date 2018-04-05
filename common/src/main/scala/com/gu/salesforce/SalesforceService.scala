@@ -14,7 +14,6 @@ import io.circe.parser._
 import io.circe.syntax._
 import okhttp3.Request
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -56,6 +55,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
  * is stale a new one is fetched
  */
 object AuthService extends LazyLogging {
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   private val authRef = Ref[Map[String, Authentication]](Map())
 

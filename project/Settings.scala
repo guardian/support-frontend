@@ -7,7 +7,7 @@ object Settings {
   val shared: Seq[Def.Setting[_]] = Seq(
     version := appVersion,
     organization := "com.gu",
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.12.4",
     scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
   )
 

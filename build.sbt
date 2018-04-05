@@ -3,7 +3,7 @@ import sbt.Keys.{libraryDependencies, resolvers}
 
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.4"
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
@@ -24,7 +24,7 @@ lazy val root =
     )
     .aggregate(common, `monthly-contributions`)
 
-lazy val circeVersion = "0.8.0"
+lazy val circeVersion = "0.9.0"
 lazy val awsVersion = "1.11.161"
 lazy val okhttpVersion = "3.9.0"
 
@@ -37,13 +37,12 @@ lazy val common = project
       "com.typesafe" % "config" % "1.3.1",
       "org.joda" % "joda-convert" % "1.8.1",
       "org.typelevel" %% "cats" % "0.9.0",
-      "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0",
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.0",
       "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.22",
-      "com.gu" %% "support-config" % "0.12",
-      "com.gu" %% "acquisition-event-producer" % "2.0.1",
+      "com.gu" %% "support-models" % "0.25",
+      "com.gu" %% "support-config" % "0.16",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",
       "com.amazonaws" % "aws-lambda-java-core" % "1.1.0",
@@ -57,7 +56,7 @@ lazy val common = project
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-generic-extras" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "net.databinder.dispatch" %% "dispatch-core" % "0.11.4",
+      "net.databinder.dispatch" %% "dispatch-core" % "0.12.3",
       "org.scala-stm" %% "scala-stm" % "0.8",
       "com.getsentry.raven" % "raven-logback" % "8.0.3",
       "com.google.code.findbugs" % "jsr305" % "3.0.2",

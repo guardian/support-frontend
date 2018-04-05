@@ -10,7 +10,6 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.{StripeError, StripeList}
 import com.gu.stripe.{Stripe, StripeService}
-import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -18,16 +17,18 @@ import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.model.monthlyContributions.state.CreateSalesforceContactState
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class CreatePaymentMethodSpec extends AsyncLambdaSpec {
+class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
+
+  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" taggedAs IntegrationTest in {
     val createPaymentMethod = new CreatePaymentMethod()
