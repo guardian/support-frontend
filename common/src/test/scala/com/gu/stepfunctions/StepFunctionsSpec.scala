@@ -5,9 +5,10 @@ import com.amazonaws.services.stepfunctions.AWSStepFunctionsAsyncClientBuilder
 import com.gu.aws.CredentialsProvider
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.{AsyncFlatSpec, Ignore, Matchers}
 
 @IntegrationTest
+@Ignore //ignore this by default because it takes a very long time to run
 class StepFunctionsSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val client = AWSStepFunctionsAsyncClientBuilder.standard
     .withCredentials(CredentialsProvider)
