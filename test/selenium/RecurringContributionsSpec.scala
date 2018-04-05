@@ -30,7 +30,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       val testUser = new TestUser(driverConfig)
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
-      
+
       When("they select to contribute the default amount")
       landingPage.clickContribute
 
