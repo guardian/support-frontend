@@ -9,6 +9,7 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
   val container = name("injectedUl")
   val loginButton = name("btnLogin")
   val nextButton = name("btnNext")
+  val emailField = id("login_emaildiv")
   val emailInput = name("login_email")
   val passwordInput = name("login_password")
   val agreeAndPay = id("confirmButtonTop")
@@ -16,10 +17,10 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def fillIn(): Unit = {
     setValueSlowly(emailInput, Config.paypalBuyerEmail)
-    if(pageHasElement(nextButton)) {
+    if (pageHasElement(nextButton)) {
       clickNext()
     }
-    if(pageHasElement(loginButton)) {
+    if (pageHasElement(loginButton)) {
       setValueSlowly(passwordInput, Config.paypalBuyerPassword)
     }
   }
@@ -34,7 +35,9 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
-  def hasLoaded: Boolean = pageHasElement(loginButton) || pageHasElement(nextButton)
+  def hasLoaded: Boolean = {
+    pageHasElement(emailField)
+  }
 
   def switchToPayPalPage(): Unit = {
     switchFrame(container)
