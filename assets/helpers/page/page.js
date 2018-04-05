@@ -20,7 +20,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 
-import { getQueryParams } from 'helpers/url';
+import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { Action } from './pageActions';
 
 
@@ -71,8 +71,8 @@ function buildInitialState(
   currency: Currency,
 ): CommonState {
   const acquisition = getAcquisition(abParticipations);
-  // note: getQueryParams takes a list of parameters to exclude
-  const otherQueryParams = getQueryParams(['REFPVID', 'INTCMP', 'acquisitionData']);
+  const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
+  const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
