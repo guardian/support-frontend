@@ -9,6 +9,8 @@ import { checkAccount } from './helpers/ajax';
 
 export type SortCodeIndex = 0 | 1 | 2;
 
+export type Phase = 'entry' | 'confirmation';
+
 export type Action =
   | { type: 'DIRECT_DEBIT_POP_UP_OPEN' }
   | { type: 'DIRECT_DEBIT_POP_UP_CLOSE' }
@@ -19,7 +21,8 @@ export type Action =
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
   | { type: 'DIRECT_DEBIT_SET_FORM_ERROR', message: string }
-  | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' };
+  | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' }
+  | { type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase: Phase };
 
 
 // ----- Actions ----- //
@@ -56,15 +59,16 @@ const setDirectDebitFormError = (message: string): Action =>
 const resetDirectDebitFormError = (): Action =>
   ({ type: 'DIRECT_DEBIT_RESET_FORM_ERROR' });
 
+const setDirectDebitFormPhase = (phase: Phase): Action =>
+  ({ type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase });
 
-function payDirectDebitClicked(callback: Function): Function {
 
+function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
       sortCodeArray,
       accountNumber,
-      accountHolderName,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
@@ -90,8 +94,7 @@ function payDirectDebitClicked(callback: Function): Function {
         if (!response.accountValid) {
           throw new Error('incorrect_input');
         }
-        callback(undefined, accountNumber, sortCode, accountHolderName);
-        dispatch(closeDirectDebitPopUp());
+        dispatch(setDirectDebitFormPhase('confirmation'));
       })
       .catch((e) => {
         let msg = '';
@@ -105,6 +108,25 @@ function payDirectDebitClicked(callback: Function): Function {
         }
         dispatch(setDirectDebitFormError(msg));
       });
+  };
+}
+
+function confirmDirectDebitClicked(callback: Function): Function {
+
+  return (dispatch: Function, getState: Function) => {
+
+    const {
+      sortCodeArray,
+      accountNumber,
+      accountHolderName,
+    } = getState().page.directDebit;
+
+    const sortCode = sortCodeArray.join('');
+
+    callback(undefined, accountNumber, sortCode, accountHolderName);
+
+    dispatch(closeDirectDebitPopUp());
+
   };
 }
 
@@ -122,4 +144,6 @@ export {
   setDirectDebitFormError,
   resetDirectDebitFormError,
   payDirectDebitClicked,
+  confirmDirectDebitClicked,
+  setDirectDebitFormPhase,
 };

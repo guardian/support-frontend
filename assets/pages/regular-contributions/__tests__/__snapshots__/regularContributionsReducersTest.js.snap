@@ -18,6 +18,7 @@ Object {
     "formError": "",
     "isDDGuaranteeOpen": false,
     "isPopUpOpen": false,
+    "phase": "entry",
     "sortCodeArray": Array [
       "",
       "",

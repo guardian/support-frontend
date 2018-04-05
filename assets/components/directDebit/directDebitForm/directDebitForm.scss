@@ -36,6 +36,7 @@
 }
 
 .component-direct-debit-form__sort-code-field {
+  text-align: center;
   font-family: $gu-sans-web;
   font-size: 14px;
   background-color: gu-colour(garnett-neutral-3);
@@ -129,34 +130,38 @@
   }
 }
 
-.component-direct-debit-form__pay-button {
-  background-color: gu-colour(news-garnett-highlight);
-  border: solid 1px lighten(gu-colour(news-garnett-highlight), 15%);
-  border-radius: 100px;
+.component-direct-debit-form__confirmation-guidance {
+  margin-top: 18px;
+}
+
+.component-direct-debit-form__cta-text {
   color: gu-colour(neutral-1);
-  cursor: pointer;
-  display: block;
   font-family: $gu-text-sans-web;
   font-size: 14px;
   font-weight: bold;
   line-height: 3;
-  position: relative;
   text-align: left;
+}
+
+.component-direct-debit-form__cta-text--variable-left-margin {
+  @include mq($until: mobileMedium) {
+    margin-left: -24px;
+  }
+}
+
+.component-direct-debit-form__cta-text--inverse {
+  color: white;
+}
+
+.component-direct-debit-form__cta {
+  background-color: gu-colour(news-garnett-highlight);
+  border: solid 1px lighten(gu-colour(news-garnett-highlight), 15%);
+  border-radius: 100px;
+  cursor: pointer;
+  position: relative;
   height: 54px;
-  width: 300px;
-  @include mq($from: mobileMedium) {
-    width: 343px;
-  }
-  @include mq($from: mobileLandscape) {
-    width: 435px;
-  }
   margin-top: 35px;
   margin-bottom: 10px;
-
-  .svg-direct-debit-symbol {
-    margin: 8px 8px 0 8px;
-    float: left;
-  }
 
   .svg-arrow-right-straight {
     width: 24px;
@@ -169,6 +174,62 @@
 
   &:hover {
     background-color: lighten(gu-colour(news-garnett-highlight), 15%);
+  }
+}
+
+.component-direct-debit-form__cta--pay-button {
+  .svg-direct-debit-symbol {
+    margin: 8px 8px 0 8px;
+    float: left;
+  }
+  @include mq($until: mobileMedium) {
+    width: 300px;
+  }
+  @include mq($from: mobileMedium) {
+    width: 343px;
+  }
+  @include mq($from: mobileLandscape) {
+    width: 435px;
+  }
+}
+
+.component-direct-debit-form__cta--edit-button {
+  background-color: gu-colour(garnett-neutral-1);
+  border: solid 1px gu-colour(garnett-neutral-1);
+  color: white;
+
+  @include mq($until: mobileMedium) {
+    width: 140px;
+  }
+
+  @include mq($from: mobileMedium) {
+    width: 160px;
+  }
+
+  .svg-arrow-right-straight {
+    width: 24px;
+    fill: white;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: scaleX(-1) translateY(-50%);
+  }
+
+  &:hover {
+    background-color: #000;
+  }
+}
+
+.component-direct-debit-form__cta--confirm-button {
+  margin-right: 20px;
+  float: right;
+
+  @include mq($until: mobileMedium) {
+    width: 140px;
+  }
+
+  @include mq($from: mobileMedium) {
+    width: 160px;
   }
 }
 
