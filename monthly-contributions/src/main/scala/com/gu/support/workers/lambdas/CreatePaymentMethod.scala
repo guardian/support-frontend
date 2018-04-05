@@ -12,12 +12,13 @@ import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
 import com.typesafe.scalalogging.LazyLogging
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)(implicit ec: ExecutionContext)
+class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
-  def this()(implicit ec: ExecutionContext) = this(ServiceProvider)
+  def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
     logger.debug(s"CreatePaymentMethod state: $state")
