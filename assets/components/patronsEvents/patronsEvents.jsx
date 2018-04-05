@@ -7,7 +7,7 @@ import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import OtherProduct from 'components/otherProduct/otherProduct';
 
-import { getMemLink } from '../../pages/bundles-landing/helpers/externalLinks';
+import { getMemLink } from 'helpers/externalLinks';
 
 
 // ----- Types ----- //

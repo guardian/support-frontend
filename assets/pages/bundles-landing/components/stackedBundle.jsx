@@ -13,6 +13,7 @@ import PayPalContributionButton from 'containerisableComponents/payPalContributi
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { routes } from 'helpers/routes';
 import { getContribKey } from 'helpers/contributions';
+import { getSubsLinks } from 'helpers/externalLinks';
 
 import type { ListItem } from 'components/featureList/featureList';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
@@ -23,8 +24,9 @@ import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { SubsUrls } from 'helpers/externalLinks';
 
-import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from '../helpers/flashSale';
+import { getDigiPackItems, getPaperItems, getPaperDigitalItems } from 'helpers/flashSale';
 
 import {
   changeContribType,
@@ -33,9 +35,6 @@ import {
   changeContribAmountMonthly,
   changeContribAmountOneOff,
 } from '../bundlesLandingActions';
-import { getSubsLinks } from '../helpers/externalLinks';
-
-import type { SubsUrls } from '../helpers/externalLinks';
 
 
 // ----- Types ----- //
