@@ -4,18 +4,23 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.support.workers.model.{DirectDebitPaymentMethod, PaymentMethod}
 import com.typesafe.scalalogging.StrictLogging
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+
 import scala.concurrent.{ExecutionContext, Future}
 
 case class EmailFields(
-    email: String,
-    created: DateTime,
-    amount: BigDecimal,
-    currency: String,
-    edition: String,
-    name: String,
-    product: String
+  email: String,
+  created: DateTime,
+  amount: BigDecimal,
+  currency: String,
+  edition: String,
+  name: String,
+  product: String,
+  paymentMethod: Option[PaymentMethod] = None,
+  directDebitMandateId: Option[String] = None,
 ) {
   def payload(dataExtensionName: String): String =
     s"""
@@ -32,12 +37,29 @@ case class EmailFields(
        |        "edition": "$edition",
        |        "name": "$name",
        |        "product": "$product"
+       |        $paymentMethodJson
        |      }
        |    }
        |  },
        |  "DataExtensionName": "$dataExtensionName"
        |}
     """.stripMargin
+
+  def paymentMethodJson = paymentMethod match {
+    case Some(dd@DirectDebitPaymentMethod(_, _, _, _, _, _, _, _)) => s"""
+      ,"account name": "${dd.bankTransferAccountName}",
+      "account number": "${dd.bankTransferAccountNumber}",
+      "sort code": "${dd.bankCode}",
+      "Mandate ID": "${directDebitMandateId.getOrElse("")}",
+      "first payment date": "$firstPaymentDate"
+     """
+    case _ => ""
+  }
+
+  def firstPaymentDate = DateTimeFormat
+    .forPattern("EEEE, d MMMM yyyy")
+    .print(created.plusDays(10))
+
 }
 
 class EmailService(config: EmailConfig, implicit val executionContext: ExecutionContext) extends StrictLogging {
