@@ -5,7 +5,7 @@ import model.{AcquisitionData, Currency}
 import io.circe.Decoder
 import io.circe.generic.semiauto._
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 object PaypalJsonDecoder {
 
@@ -33,6 +33,7 @@ object PaypalJsonDecoder {
       abTest <- downField("abTest").as[Option[AbTest]]
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
+      queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
     } yield {
       CapturePaypalPaymentData(
         paymentData = CapturePaymentData(
@@ -51,7 +52,8 @@ object PaypalJsonDecoder {
           source = source,
           abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
             .getOrElse(Set[AbTest]()))
-            .filter(_.nonEmpty)
+            .filter(_.nonEmpty),
+          queryParameters = queryParameters
         )
       )
     }

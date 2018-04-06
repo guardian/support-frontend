@@ -23,7 +23,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- entities
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None)
+  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token")
   val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData, None)
   val stripeHookObject = StripeHookObject("id", "GBP")

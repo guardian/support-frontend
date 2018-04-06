@@ -137,6 +137,16 @@ class StripeControllerSpec extends PlaySpec with Status {
               |      "name":"b-checkout",
               |      "variant":"b-stripe"
               |    }
+              |  ],
+              |  "queryParameters": [
+              |   {
+              |      "name":"param1",
+              |      "value":"val1"
+              |    },
+              |    {
+              |      "name":"param2",
+              |      "value":"val2"
+              |    }
               |  ]
               |}
             """.stripMargin))

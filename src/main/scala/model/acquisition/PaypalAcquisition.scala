@@ -41,7 +41,8 @@ object PaypalAcquisition {
             componentTypeV2 = acquisitionData.componentType,
             source = acquisitionData.source,
             identityId = paypalAcquisition.identityId.map(x => x.toString),
-            platform = acquisitionData.platform.flatMap(Platform.valueOf(_))
+            platform = acquisitionData.platform.flatMap(Platform.valueOf(_)),
+            queryParameters = paypalAcquisition.acquisitionData.queryParameters
           )
         }.leftMap{ error =>
           s"Failed to build an acquisition submission from an instance of PaypalAcquisition - cause: $error"

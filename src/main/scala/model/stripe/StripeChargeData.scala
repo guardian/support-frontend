@@ -5,7 +5,7 @@ import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
 import model.{AcquisitionData, Currency}
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 object StripeJsonDecoder {
 
@@ -34,6 +34,7 @@ object StripeJsonDecoder {
       abTest <- downField("abTest").as[Option[AbTest]]
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
+      queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
     } yield {
       StripeChargeData(
         paymentData = StripePaymentData(
@@ -55,7 +56,8 @@ object StripeJsonDecoder {
           source = source,
           abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
             .getOrElse(Set[AbTest]()))
-            .filter(_.nonEmpty)
+            .filter(_.nonEmpty),
+          queryParameters = queryParameters
         ),
         signedInUserEmail = None
       )

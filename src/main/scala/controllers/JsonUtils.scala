@@ -11,7 +11,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{Result, Results}
 import model.{AcquisitionData, ResultBody}
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 object JsonReadableOps {
   implicit val componentTypeDecoder: Decoder[ComponentType] =
@@ -20,6 +20,8 @@ object JsonReadableOps {
     decodeThriftEnum[AcquisitionSource]
   implicit val abTestDecoder: Decoder[AbTest] =
     decodeThriftStruct[AbTest]
+  implicit val queryParameterDecoder: Decoder[QueryParameter] =
+    decodeThriftStruct[QueryParameter]
   implicit val acquisitionPaypalDataDecoder: Decoder[AcquisitionData] =
     deriveDecoder[AcquisitionData]
 }

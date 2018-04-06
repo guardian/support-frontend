@@ -1,7 +1,7 @@
 package model
 
 import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource}
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 //-- common for stripe and paypal
 case class AcquisitionData(
@@ -15,5 +15,6 @@ case class AcquisitionData(
   campaignCodes: Option[Set[String]],
   componentType: Option[ComponentType],
   source: Option[AcquisitionSource],
-  abTests: Option[Set[AbTest]]
+  abTests: Option[Set[AbTest]],
+  queryParameters: Option[Set[QueryParameter]]
 )
