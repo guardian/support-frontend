@@ -27,7 +27,7 @@ class IdentityController(
         Ok
       } else {
         SafeLogger.error(scrub"Failed to send consents preferences email")
-        InternalServerError
+        BadRequest
       }
     }
   }
