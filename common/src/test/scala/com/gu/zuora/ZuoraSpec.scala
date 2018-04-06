@@ -69,7 +69,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   it should "retrieve a default paymentMethodId from an account number" in {
     val accountNumber = "A00072689"
-    val defaultPaymentMethodId = "2c92c0f9624bbc6c01624eac30f86724"
+    val defaultPaymentMethodId = Some("2c92c0f9624bbc6c01624eac30f86724")
     uatService.getDefaultPaymentMethodId(accountNumber).map {
       response =>
         response should be(defaultPaymentMethodId)
@@ -95,7 +95,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   it should "retrieve a Direct Debit mandateId from a valid account number" in {
     val accountNumber = "A00072689"
-    val mandateId = "65HK26E"
+    val mandateId = Some("65HK26E")
     uatService.getMandateIdFromAccountNumber(accountNumber).map {
       response =>
         response should be(mandateId)

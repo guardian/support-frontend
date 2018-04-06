@@ -12,15 +12,15 @@ import org.joda.time.format.DateTimeFormat
 import scala.concurrent.{ExecutionContext, Future}
 
 case class EmailFields(
-  email: String,
-  created: DateTime,
-  amount: BigDecimal,
-  currency: String,
-  edition: String,
-  name: String,
-  product: String,
-  paymentMethod: Option[PaymentMethod] = None,
-  directDebitMandateId: Option[String] = None,
+    email: String,
+    created: DateTime,
+    amount: BigDecimal,
+    currency: String,
+    edition: String,
+    name: String,
+    product: String,
+    paymentMethod: Option[PaymentMethod] = None,
+    directDebitMandateId: Option[String] = None
 ) {
   def payload(dataExtensionName: String): String =
     s"""
@@ -45,10 +45,10 @@ case class EmailFields(
        |}
     """.stripMargin
 
-  def paymentMethodJson = paymentMethod match {
-    case Some(dd@DirectDebitPaymentMethod(_, _, _, _, _, _, _, _)) => s"""
+  def paymentMethodJson: String = paymentMethod match {
+    case Some(dd @ DirectDebitPaymentMethod(_, _, _, _, _, _, _, _)) => s"""
       ,"account name": "${dd.bankTransferAccountName}",
-      "account number": "${dd.bankTransferAccountNumber}",
+      "account number": "${mask(dd.bankTransferAccountNumber)}",
       "sort code": "${dd.bankCode}",
       "Mandate ID": "${directDebitMandateId.getOrElse("")}",
       "first payment date": "$firstPaymentDate",
@@ -57,9 +57,11 @@ case class EmailFields(
     case _ => ""
   }
 
-  def firstPaymentDate = DateTimeFormat
+  def firstPaymentDate: String = DateTimeFormat
     .forPattern("EEEE, d MMMM yyyy")
     .print(created.plusDays(10))
+
+  def mask(s: String): String = s.replace(s.substring(0, 6), "******")
 
 }
 

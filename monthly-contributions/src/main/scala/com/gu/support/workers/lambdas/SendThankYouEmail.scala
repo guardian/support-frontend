@@ -1,6 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.services.{ServiceProvider, Services}
@@ -32,12 +33,12 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
       .map(_ => HandlerResult(Unit, requestInfo))
   }
 
-  def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService) = state.paymentMethod match {
+  def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
     case _: DirectDebitPaymentMethod =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future(None)
   }
-  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None) =
+  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] =
     thankYouEmailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),

@@ -31,7 +31,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   ignore should "send an email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates@theguardian.com"
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "20202020", "55779911")
+    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
     val ef = EmailFields(
       addressToSendTo,
@@ -45,7 +45,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   }
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "20202020", "55779911")
+    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
     val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP.iso, "UK", "", "monthly-contribution", Some(dd), Some(mandateId))
     val resultJson = parse(ef.payload("test"))
@@ -55,7 +55,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     new JsonValidater(resultJson.right.get)
       .validate("Mandate ID", mandateId)
       .validate("account name", dd.bankTransferAccountName)
-      .validate("account number", dd.bankTransferAccountNumber)
+      .validate("account number", "******11")
       .validate("sort code", dd.bankCode)
       .validate("first payment date", "Monday, 10 January 2000")
       .validate("payment method", "Direct Debit")
