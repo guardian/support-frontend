@@ -73,14 +73,14 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
-  val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
+  implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   override val router =
     new Routes(
       httpErrorHandler,
       new AppController(controllerComponents),
-      new StripeController(controllerComponents, stripeBackendProvider, allowedCorsUrl),
-      new PaypalController(controllerComponents, paypalBackendProvider, allowedCorsUrl)
+      new StripeController(controllerComponents, stripeBackendProvider),
+      new PaypalController(controllerComponents, paypalBackendProvider)
     )
 
 

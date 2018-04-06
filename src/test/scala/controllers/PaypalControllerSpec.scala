@@ -53,15 +53,15 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
 
   val payPalController: PaypalController =
-    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider, List("https://cors.com"))(DefaultThreadPool(ec))
+    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
   override def router: Router = new Routes(
     httpErrorHandler,
-    new AppController(controllerComponents),
-    new StripeController(controllerComponents, stripeBackendProvider, List.empty)(DefaultThreadPool(ec)),
+    new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
+    new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec), List.empty),
     payPalController
   )
 
@@ -213,7 +213,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
     "a request is made to capture a payment" should {
 
-      "return a 200 response if the request is valid using the old format" in {
+      "return a 200 response if the request is valid using the old format - full request" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
@@ -299,7 +299,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         status(paypalControllerResult).mustBe(200)
       }
 
-      "return a 200 response if the request is valid using the new format" in {
+      "return a 200 response if the request is valid using the new format - full request" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
@@ -315,14 +315,26 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |    "paymentId": "PAY-4JG67395EA359543HLKKVTFI"
             |  },
             |  "acquisitionData": {
-            |    "browserId": "ophanBrowserId",
             |    "platform": "android",
-            |    "pageviewId": "ophanPageviewId",
+            |    "visitId": "ophanVisitId",
+            |    "browserId": "ophanBrowserId",
+            |    "pageviewId": "jducx5kjl3u7cwf5ocud",
             |    "referrerPageviewId": "refererPageviewId",
             |    "referrerUrl": "refererUrl",
             |    "componentId": "componentId",
-            |    "componentType": "AcquisitionsOther",
-            |    "source": "GuardianWeb"
+            |    "campaignCodes": ["cmp", "intCmp"],
+            |    "componentType": "AcquisitionsEditorialLink",
+            |    "source": "GuardianWeb",
+            |    "abTests": [
+            |        {
+            |          "name":"a-checkout",
+            |          "variant":"a-stripe"
+            |        },
+            |        {
+            |          "name":"b-checkout",
+            |          "variant":"b-stripe"
+            |        }
+            |      ]
             |  }
             |}
           """.stripMargin))
@@ -442,7 +454,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
     "a request is made to execute a payment" should {
 
-      "return a 200 response if the request is valid" in {
+      "return a 200 response if the request is valid - full request" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
@@ -459,14 +471,26 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |    "payerId": "3VNCN9NDEGRGW"
             |  },
             |  "acquisitionData": {
-            |    "browserId": "ophanBrowserId",
             |    "platform": "android",
-            |    "pageviewId": "ophanPageviewId",
+            |    "visitId": "ophanVisitId",
+            |    "browserId": "ophanBrowserId",
+            |    "pageviewId": "jducx5kjl3u7cwf5ocud",
             |    "referrerPageviewId": "refererPageviewId",
             |    "referrerUrl": "refererUrl",
             |    "componentId": "componentId",
-            |    "componentType": "AcquisitionsOther",
-            |    "source": "GuardianWeb"
+            |    "campaignCodes": ["cmp", "intCmp"],
+            |    "componentType": "AcquisitionsEditorialLink",
+            |    "source": "GuardianWeb",
+            |    "abTests": [
+            |        {
+            |          "name":"a-checkout",
+            |          "variant":"a-stripe"
+            |        },
+            |        {
+            |          "name":"b-checkout",
+            |          "variant":"b-stripe"
+            |        }
+            |      ]
             |  },
             | "signedInUserEmail": "a@b.com"
             |}

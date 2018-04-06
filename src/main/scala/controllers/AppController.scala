@@ -2,6 +2,7 @@ package controllers
 
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.JsonCodec
+import model.DefaultThreadPool
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
@@ -9,7 +10,8 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 
 class AppController(
   controllerComponents: ControllerComponents
-) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+)(implicit pool: DefaultThreadPool, val corsUrls: List[String])
+  extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
 
   def healthcheck: Action[AnyContent] = Action {
     Ok(HealthCheckResponse("Everything is super", app.BuildInfo.gitCommitId))
@@ -19,4 +21,9 @@ class AppController(
     logger.info(s"Acquisition data. viewId: ${viewId} - acquisition: ${acquisition}")
     Ok("Acquisition received ")
   }
+
+  def corsOptions() = Action { request =>
+    NoContent.withHeaders("Vary" -> "Origin")
+  }
+
 }

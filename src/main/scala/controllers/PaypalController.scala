@@ -1,5 +1,6 @@
 package controllers
 
+import actions.CorsActionProvider
 import cats.implicits._
 import backend.PaypalBackend
 import com.typesafe.scalalogging.StrictLogging
@@ -11,50 +12,49 @@ import util.RequestBasedProvider
 
 import scala.concurrent.Future
 
-class PaypalController(controllerComponents: ControllerComponents,
-  paypalBackendProvider: RequestBasedProvider[PaypalBackend], corsUrls: List[String])(implicit pool: DefaultThreadPool) extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+class PaypalController(
+  cc: ControllerComponents,
+  paypalBackendProvider: RequestBasedProvider[PaypalBackend]
+)(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
+    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
   import util.RequestTypeDecoder.instances._
   import PaypalJsonDecoder._
 
-  def corsOptions() = Action { request =>
-    NoContent.withHeaders(("Vary" -> "Origin") :: CorsControllerHelper.corsHeaders(request, corsUrls): _*)
-  }
+  def createPayment: Action[CreatePaypalPaymentData] = CorsAction.async(circe.json[CreatePaypalPaymentData]) {
+    createRequest =>
+      paypalBackendProvider
+        .getInstanceFor(createRequest)
+        .createPayment(createRequest.body)
+        .subflatMap(PaypalPaymentSuccess.fromPayment)
+        .fold(
+          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          payment => Ok(ResultBody.Success(payment))
+        )
+    }
 
-  def createPayment: Action[CreatePaypalPaymentData] = Action.async(circe.json[CreatePaypalPaymentData]) { createRequest =>
-    paypalBackendProvider
-      .getInstanceFor(createRequest)
-      .createPayment(createRequest.body)
-      .subflatMap(PaypalPaymentSuccess.fromPayment)
-      .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage))
-          .withHeaders(CorsControllerHelper.corsHeaders(createRequest, corsUrls): _*),
-        payment => Ok(ResultBody.Success(payment))
-          .withHeaders(CorsControllerHelper.corsHeaders(createRequest, corsUrls): _*)
-      )
-  }
+  def capturePayment(): Action[CapturePaypalPaymentData] = Action.async(circe.json[CapturePaypalPaymentData]) {
+    captureRequest =>
+      paypalBackendProvider
+        .getInstanceFor(captureRequest)
+        .capturePayment(captureRequest.body)
+        .fold(
+          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          _ => Ok(ResultBody.Success(()))
+        )
+    }
 
-  def capturePayment(): Action[CapturePaypalPaymentData] = Action.async(circe.json[CapturePaypalPaymentData]) { captureRequest =>
-    paypalBackendProvider
-      .getInstanceFor(captureRequest)
-      .capturePayment(captureRequest.body)
-      .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
-        _ => Ok(ResultBody.Success(()))
-      )
-  }
+  def executePayment: Action[ExecutePaypalPaymentData] = CorsAction.async(circe.json[ExecutePaypalPaymentData]) {
+    executeRequest =>
+      paypalBackendProvider
+        .getInstanceFor(executeRequest)
+        .executePayment(executeRequest.body)
+        .fold(
+          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          payment => Ok(ResultBody.Success("execute payment success"))
+        )
+      }
 
-  def executePayment: Action[ExecutePaypalPaymentData] = Action.async(circe.json[ExecutePaypalPaymentData]) { executeRequest =>
-    paypalBackendProvider
-      .getInstanceFor(executeRequest)
-      .executePayment(executeRequest.body)
-      .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage))
-          .withHeaders(CorsControllerHelper.corsHeaders(executeRequest, corsUrls): _*),
-        payment => Ok(ResultBody.Success("execute payment success"))
-          .withHeaders(CorsControllerHelper.corsHeaders(executeRequest, corsUrls): _*)
-      )
-  }
 
   def hook: Action[String] = Action.async(parse.tolerantText) { paypalHookRequest =>
     import io.circe.parser._
@@ -73,5 +73,9 @@ class PaypalController(controllerComponents: ControllerComponents,
             )
         }
       )
-  }
+    }
+
+
+  override implicit val controllerComponents: ControllerComponents = cc
+  override implicit val corsUrls: List[String] = allowedCorsUrls
 }

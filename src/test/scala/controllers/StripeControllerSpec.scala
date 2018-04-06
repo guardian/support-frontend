@@ -59,16 +59,16 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.left(Future.successful(StripeApiError.apply("Error response")))
 
   val stripeController: StripeController =
-    new StripeController(controllerComponents, mockStripeRequestBasedProvider, List("https://cors.com"))(DefaultThreadPool(ec))
+    new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
 
   override def router: Router = new Routes(
     httpErrorHandler,
-    new AppController(controllerComponents),
+    new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
     stripeController,
-    new PaypalController(controllerComponents, paypalBackendProvider, List.empty)(DefaultThreadPool(ec))
+    new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty)
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -93,7 +93,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
     "a request is made to create a payment" should {
 
-      "return a 200 response if the request is valid and sent using the old format" in {
+      "return a 200 response if the request is valid and sent using the old format - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any()))
             .thenReturn(stripeServiceResponse)
@@ -181,7 +181,7 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(200)
       }
 
-      "return a 200 response if the request is valid and sent using the new format" in {
+      "return a 200 response if the request is valid and sent using the new format - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any()))
             .thenReturn(stripeServiceResponse)
@@ -229,7 +229,7 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(200)
       }
 
-      "return a 200 response if the request is valid and the amount contains a decimal point" in {
+      "return a 200 response if the request is valid and the amount contains a decimal point - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any()))
             .thenReturn(stripeServiceResponse)
