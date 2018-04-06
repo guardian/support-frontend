@@ -51,7 +51,8 @@ case class EmailFields(
       "account number": "${dd.bankTransferAccountNumber}",
       "sort code": "${dd.bankCode}",
       "Mandate ID": "${directDebitMandateId.getOrElse("")}",
-      "first payment date": "$firstPaymentDate"
+      "first payment date": "$firstPaymentDate",
+      "payment method": "Direct Debit"
      """
     case _ => ""
   }
