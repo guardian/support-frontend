@@ -5,6 +5,7 @@
 import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
+import { isSome } from 'helpers/utilities';
 
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -57,8 +58,7 @@ function requestData(
   const ophanIds: OphanIds = getOphanIds();
   const { user } = getState().page;
 
-  if (user.fullName !== null && user.fullName !== undefined &&
-    user.email !== null && user.email !== undefined) {
+  if (isSome(user.fullName) && isSome(user.email)) {
 
     const oneOffContribFields: OneOffContribFields = {
       name: user.fullName,

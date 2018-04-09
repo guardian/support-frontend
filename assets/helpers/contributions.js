@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { roundDp } from 'helpers/utilities';
+import { roundDp, isNoneString } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { spokenCurrencies } from 'helpers/internationalisation/currency';
@@ -263,7 +263,7 @@ function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId)
   let error = null;
   const numericAmount = Number(input);
 
-  if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
+  if (isNoneString(input) || Number.isNaN(numericAmount)) {
     error = 'invalidEntry';
   } else if (numericAmount < config[countryGroupId][contrib].min) {
     error = 'tooLittle';

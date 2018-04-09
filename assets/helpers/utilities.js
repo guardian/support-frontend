@@ -115,6 +115,7 @@ function emptyInputField(input: ?string): boolean {
   return input === undefined || input === null || input === '' || input.trim().length === 0;
 }
 
+
 // ----- Exports ----- //
 
 export {

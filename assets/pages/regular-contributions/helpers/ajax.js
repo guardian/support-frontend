@@ -13,6 +13,7 @@ import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
+import { isSome } from 'helpers/utilities';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkoutError, creatingContributor } from '../regularContributionsActions';
@@ -63,10 +64,8 @@ type RegularContribFields = {|
 
 // ----- Functions ----- //
 
-const isUserValid = (user: UserState) =>
-  user.firstName !== null && user.firstName !== undefined &&
-  user.lastName !== null && user.lastName !== undefined &&
-  user.email !== null && user.email !== undefined;
+const isUserValid = (user: UserState): boolean =>
+  isSome(user.firstName) && isSome(user.lastName) && isSome(user.email);
 
 const getPaymentFields =
   (
