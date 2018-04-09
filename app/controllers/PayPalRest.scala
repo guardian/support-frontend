@@ -36,7 +36,7 @@ class PayPalRest(
     })
   }
 
-  def returnURL(): Action[AnyContent] = PrivateAction.async { implicit request =>
+  def returnURL(): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
 
     PaymentAPIService.execute(request).map { success =>
       if (success)

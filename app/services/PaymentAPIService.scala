@@ -2,8 +2,9 @@ package services
 
 import java.io.IOException
 
+import actions.CustomActionBuilders.OptionalAuthRequest
 import cats.data.EitherT
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
 import play.api.mvc._
 
@@ -22,7 +23,7 @@ object PaymentAPIService {
   }
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String, identityService: IdentityService) {
   import PaymentAPIService._
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
@@ -31,30 +32,56 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPay
     }
   }
 
-  def execute(request: Request[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] = {
+  private def getData(
+    request: OptionalAuthRequest[AnyContent],
+    acquisitionData: JsValue,
+    paymentJSON: JsObject
+  )(implicit req: RequestHeader, ec: ExecutionContext): Future[JsObject] = {
+
     import cats.syntax.applicativeError._
     import cats.instances.future._
 
-    val endpoint = "/contribute/one-off/paypal/execute-payment"
+    val defaultValue = Json.obj(
+      "paymentData" -> paymentJSON,
+      "acquisitionData" -> acquisitionData
+    )
+
+    request.user.fold {
+      Future.successful(defaultValue)
+    } { minimalUser =>
+      {
+        identityService.getUser(minimalUser).fold(
+          _ => defaultValue,
+          user => Json.obj(
+            "paymentData" -> paymentJSON,
+            "acquisitionData" -> acquisitionData,
+            "signedInUserEmail" -> user.primaryEmailAddress
+          )
+        )
+      }
+    }
+  }
+
+  def execute(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] = {
+    import cats.syntax.applicativeError._
+    import cats.instances.future._
+
     val cookieString = request.cookies.get("acquisition_data").get.value
     val acquisitionData = Json.parse(java.net.URLDecoder.decode(cookieString, "UTF-8"))
-
     val paymentJSON = Json.obj(
       "paymentId" -> request.getQueryString("paymentId").get,
       "payerId" -> request.getQueryString("PayerID").get
     )
 
-    val data = Json.obj(
-      "paymentData" -> paymentJSON,
-      "acquisitionData" -> acquisitionData
-    )
-
-    wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
-      .withQueryStringParameters(convertQueryString(request.queryString): _*)
-      .withHttpHeaders("Accept" -> "application/json")
-      .withBody(data)
-      .withMethod("POST")
-      .execute().map(_.status == 200)
+    for {
+      data <- getData(request, acquisitionData, paymentJSON)
+      response <- wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
+        .withQueryStringParameters(convertQueryString(request.queryString): _*)
+        .withHttpHeaders("Accept" -> "application/json")
+        .withBody(data)
+        .withMethod("POST")
+        .execute()
+    } yield response.status == 200
   }
 }
 
