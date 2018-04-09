@@ -15,8 +15,6 @@ import {
   isNone,
   isSomeString,
   isNoneString,
-  getOrElse,
-  getStringOrElse,
   emptyInputField,
 } from '../utilities';
 
@@ -271,59 +269,6 @@ describe('utilities', () => {
       expect(isNoneString('CP Scott')).toBe(false);
       expect(isNoneString('  CP Scott  ')).toBe(false);
       expect(isNoneString(' ')).toBe(false);
-    });
-
-  });
-
-  describe('getOrElse', () => {
-
-    const fallbackString = 'fallbackString';
-    const fallbackNum = 42;
-    const fallbackArray = [42, 42, 42];
-    const fallbackObject = { name: 'CP Scott' };
-
-    it('should return the value if it exists', () => {
-      expect(getOrElse('CP Scott', fallbackString)).toBe('CP Scott');
-      expect(getOrElse('', fallbackString)).toBe('');
-      expect(getOrElse(50, fallbackNum)).toBe(50);
-      expect(getOrElse(0, fallbackNum)).toBe(0);
-      expect(getOrElse([1, 2, 3], fallbackArray)).toEqual([1, 2, 3]);
-      expect(getOrElse([], fallbackArray)).toEqual([]);
-      expect(getOrElse({ a: 1 }, fallbackObject)).toEqual({ a: 1 });
-      expect(getOrElse({}, fallbackObject)).toEqual({});
-      expect(getOrElse(true, false)).toBe(true);
-      expect(getOrElse(false, true)).toBe(false);
-    });
-
-    it('should return the fallback if the value does not exist', () => {
-      expect(getOrElse(null, fallbackString)).toBe(fallbackString);
-      expect(getOrElse(undefined, fallbackString)).toBe(fallbackString);
-      expect(getOrElse(null, fallbackNum)).toBe(fallbackNum);
-      expect(getOrElse(undefined, fallbackNum)).toBe(fallbackNum);
-      expect(getOrElse(null, fallbackArray)).toEqual(fallbackArray);
-      expect(getOrElse(undefined, fallbackArray)).toEqual(fallbackArray);
-      expect(getOrElse(null, fallbackObject)).toEqual(fallbackObject);
-      expect(getOrElse(undefined, fallbackObject)).toEqual(fallbackObject);
-      expect(getOrElse(null, true)).toBe(true);
-      expect(getOrElse(undefined, false)).toBe(false);
-    });
-
-  });
-
-  describe('getStringOrElse', () => {
-
-    const fallbackString = 'fallbackString';
-
-    it('should return the string if it exists', () => {
-      expect(getStringOrElse('CP Scott', fallbackString)).toBe('CP Scott');
-      expect(getStringOrElse('  CP Scott  ', fallbackString)).toBe('  CP Scott  ');
-      expect(getStringOrElse(' ', fallbackString)).toBe(' ');
-    });
-
-    it('should return the fallback if the string is null, undefined or empty', () => {
-      expect(getStringOrElse(null, fallbackString)).toBe(fallbackString);
-      expect(getStringOrElse(undefined, fallbackString)).toBe(fallbackString);
-      expect(getStringOrElse('', fallbackString)).toBe(fallbackString);
     });
 
   });
