@@ -6,7 +6,7 @@ import React from 'react';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
-import { classNameWithOptModifier } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { Node } from 'react';
 
@@ -27,7 +27,7 @@ type PropTypes = {
 
 export default function Bundle(props: PropTypes) {
 
-  const className = classNameWithOptModifier('component-bundle', props.modifierClass);
+  const className = classNameWithModifiers('component-bundle', [props.modifierClass]);
 
   return (
     <div className={className}>

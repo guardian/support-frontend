@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { classNameWithOptModifier } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Types ----- //
@@ -37,7 +37,7 @@ function FeatureList(props: PropTypes) {
   ));
 
   return (
-    <ul className={classNameWithOptModifier('component-feature-list', props.modifierClass)}>
+    <ul className={classNameWithModifiers('component-feature-list', [props.modifierClass])}>
       { items }
     </ul>
   );

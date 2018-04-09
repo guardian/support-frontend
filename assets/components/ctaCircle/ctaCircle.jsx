@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { SvgArrowRightStraight } from 'components/svg/svg';
-import { classNameWithOptModifier } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 
 // ----- Types ----- //
@@ -22,7 +22,7 @@ type PropTypes = {
 
 const CtaCircle = (props: PropTypes) => {
 
-  const className = classNameWithOptModifier('component-cta-circle', props.modifierClass);
+  const className = classNameWithModifiers('component-cta-circle', [props.modifierClass]);
 
   return (
     <a

@@ -9,7 +9,7 @@ import FeatureList from 'components/featureList/featureList';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridImage from 'components/gridImage/gridImage';
 
-import { classNameWithOptModifier } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { ListItem } from 'components/featureList/featureList';
 import type { GridImg } from 'components/gridImage/gridImage';
@@ -35,7 +35,7 @@ type PropTypes = {
 export default function SubscriptionBundle(props: PropTypes) {
 
   return (
-    <div className={classNameWithOptModifier('component-subscription-bundle', props.modifierClass)}>
+    <div className={classNameWithModifiers('component-subscription-bundle', [props.modifierClass])}>
       <GridImage {...props.gridImage} />
       <div className="component-subscription-bundle__content">
         <DoubleHeading
