@@ -7,7 +7,6 @@ import {
   descending,
   roundDp,
   classNameWithModifiers,
-  classNameWithOptModifier,
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
@@ -98,8 +97,8 @@ describe('utilities', () => {
 
   describe('classNameWithModifiers', () => {
 
-    it('should create the same classname if no modifier is passed', () => {
-      expect(classNameWithModifiers('made-up-class')).toBe('made-up-class');
+    it('should create the same classname if no modifiers are passed', () => {
+      expect(classNameWithModifiers('made-up-class', [])).toBe('made-up-class');
     });
 
     it('should return a classname with a modifier attached', () => {
@@ -112,21 +111,9 @@ describe('utilities', () => {
         .toBe('made-up-class made-up-class--fake-modifier made-up-class--pseudo-modifier');
     });
 
-  });
-
-  describe('classNameWithModifier', () => {
-
-    it('should create the same classname if no modifier is passed', () => {
-      expect(classNameWithOptModifier('made-up-class')).toBe('made-up-class');
-    });
-
-    it('should create the same classname if a null modifier is passed', () => {
-      expect(classNameWithOptModifier('made-up-class', null)).toBe('made-up-class');
-    });
-
-    it('should return a classname with a modifier attached', () => {
-      expect(classNameWithOptModifier('made-up-class', 'fake-modifier'))
-        .toBe('made-up-class made-up-class--fake-modifier');
+    it('should not add modifiers for null, undefined or empty strings', () => {
+      expect(classNameWithModifiers('made-up-class', [null, undefined, 'pseudo-modifier', '']))
+        .toBe('made-up-class made-up-class--pseudo-modifier');
     });
 
   });
