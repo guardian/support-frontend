@@ -54,6 +54,10 @@ const countryGroupSpecificDetails: {
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-nz',
   },
+  Canada: {
+    contributeCopy: defaultContributeCopy,
+    reactElementId: 'contributions-landing-page-ca',
+  },
 };
 
 

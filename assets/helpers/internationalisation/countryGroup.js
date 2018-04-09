@@ -8,7 +8,7 @@ import { getQueryParameter } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries';
+export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
 
 /*
   Note: supportInternationalizationId should match an existing
@@ -74,6 +74,12 @@ const countryGroups: CountryGroups = {
     countries: ['NZ', 'CK'],
     supportInternationalisationId: 'nz',
   },
+  Canada: {
+    name: 'Canada',
+    currency: 'CAD',
+    countries: ['CA'],
+    supportInternationalisationId: 'ca',
+  },
 };
 
 function fromPath(path: string = window.location.pathname): ?CountryGroupId {
@@ -89,6 +95,8 @@ function fromPath(path: string = window.location.pathname): ?CountryGroupId {
     return 'International';
   } else if (path === '/nz' || path.startsWith('/nz/')) {
     return 'NZDCountries';
+  } else if (path === '/ca' || path.startsWith('/ca/')) {
+    return 'Canada';
   }
   return null;
 }
@@ -101,6 +109,7 @@ function fromString(countryGroup: string): ?CountryGroupId {
     case 'EURCountries': return 'EURCountries';
     case 'International': return 'International';
     case 'NZDCountries': return 'NZDCountries';
+    case 'Canada': return 'Canada';
     default: return null;
   }
 }

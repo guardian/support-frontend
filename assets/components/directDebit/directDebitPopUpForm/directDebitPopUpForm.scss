@@ -41,6 +41,7 @@
   background-color: gu-colour(garnett-neutral-3);
   text-align: left;
   border-top: 1px solid gu-colour(garnett-neutral-1);
+  border-radius: 20px;
 }
 
 .component-direct-debit-pop-up-form__heading {
@@ -56,6 +57,11 @@
   @include mq($from: mobileLandscape) {
     max-width: 400px;
   }
+}
+
+.component-direct-debit-pop-up-form__heading--title {
+  display: block;
+  margin-left: 20px;
 }
 
 .component-direct-debit-pop-up-form__close-button {

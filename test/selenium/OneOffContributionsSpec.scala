@@ -39,7 +39,6 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       landingPage.clickContributePayPalButton
 
       Then("they should be redirected to PayPal Checkout")
-      payPalCheckout.switchToPayPalPage()
       assert(payPalCheckout.hasLoaded)
 
       Given("that the user fills in their PayPal credentials correctly")

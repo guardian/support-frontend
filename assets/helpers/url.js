@@ -34,7 +34,7 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 
 };
 
-const getQueryParams = (excluded: string[]): Array<[string, string]> => Array
+const getAllQueryParamsWithExclusions = (excluded: string[]): Array<[string, string]> => Array
   .from(new URL(window.location).searchParams.entries())
   .filter(p => excluded.indexOf(p[0]) === -1);
 
@@ -105,7 +105,7 @@ function getAbsoluteURL(path: string): string {
 
 export {
   getQueryParameter,
-  getQueryParams,
+  getAllQueryParamsWithExclusions,
   addQueryParamToURL,
   getBaseDomain,
   addQueryParamsToURL,

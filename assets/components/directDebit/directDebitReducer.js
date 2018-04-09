@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Action } from './directDebitActions';
+import type { Action, Phase } from './directDebitActions';
 
 // ----- Setup ----- //
 
@@ -13,7 +13,8 @@ export type DirectDebitState = {
   accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
-  formError: string
+  formError: string,
+  phase: Phase
 };
 
 
@@ -25,6 +26,7 @@ const initialState: DirectDebitState = {
   accountHolderName: '',
   accountHolderConfirmation: false,
   formError: '',
+  phase: 'entry',
 };
 
 
@@ -92,6 +94,12 @@ const directDebitReducer = (
     case 'DIRECT_DEBIT_RESET_FORM_ERROR': {
       return Object.assign({}, state, {
         formError: '',
+      });
+    }
+
+    case 'DIRECT_DEBIT_SET_FORM_PHASE': {
+      return Object.assign({}, state, {
+        phase: action.phase,
       });
     }
 

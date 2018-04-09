@@ -27,13 +27,6 @@ class Application(
 
   implicit val ar = assets
 
-  private def applyCircles(intCmp: String, id: String, js: String, modifiedId: String, modifiedJs: String): (String, String) = {
-    intCmp match {
-      case "true" => (modifiedId, modifiedJs)
-      case _ => (id, js)
-    }
-  }
-
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
   }
@@ -44,6 +37,9 @@ class Application(
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
       case Some(Europe) => "/eu/contribute"
+      case Some(Canada) => "/ca/contribute"
+      case Some(NewZealand) => "/nz/contribute"
+      case Some(RestOfTheWorld) => "/int/contribute"
       case _ => "https://membership.theguardian.com/supporter"
     }
 
@@ -56,6 +52,9 @@ class Application(
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
       case Some(Europe) => "/eu/contribute"
+      case Some(Canada) => "/ca/contribute"
+      case Some(NewZealand) => "/nz/contribute"
+      case Some(RestOfTheWorld) => "/int/contribute"
       case _ => "https://contribute.theguardian.com"
     }
 
@@ -75,14 +74,13 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def bundleLanding(title: String, id: String, js: String, newDesigns: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val (updatedId, updatedJs) = applyCircles(newDesigns, id, js, "support-landing-page", "supportLandingPage.js")
-    Ok(views.html.bundleLanding(
+  def supportLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.supportLanding(
       title,
-      updatedId,
-      updatedJs,
+      id,
+      js,
       contributionsPayPalEndpoint,
-      description = Some(stringsConfig.bundleLandingDescription)
+      description = Some(stringsConfig.supportLandingDescription)
     ))
   }
 

@@ -1,12 +1,14 @@
 package selenium.util
 
 import org.openqa.selenium.WebDriver
+import play.api.test.FutureAwaits
 
 // Handles interaction with the PayPal Express Checkout overlay.
 class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   val container = name("injectedUl")
   val loginButton = name("btnLogin")
+  val nextButton = name("btnNext")
   val emailInput = name("login_email")
   val passwordInput = name("login_password")
   val agreeAndPay = id("confirmButtonTop")
@@ -14,8 +16,15 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def fillIn(): Unit = {
     setValueSlowly(emailInput, Config.paypalBuyerEmail)
-    setValueSlowly(passwordInput, Config.paypalBuyerPassword)
+    if (pageHasElement(nextButton)) {
+      clickNext()
+    }
+    if (pageHasElement(loginButton)) {
+      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
+    }
   }
+
+  def clickNext(): Unit = clickOn(nextButton)
 
   def logIn(): Unit = clickOn(loginButton)
 
@@ -25,7 +34,9 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
-  def hasLoaded: Boolean = pageHasElement(loginButton)
+  def hasLoaded: Boolean = {
+    pageHasElement(emailInput)
+  }
 
   def switchToPayPalPage(): Unit = {
     switchFrame(container)
@@ -38,7 +49,6 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def switchToPayPalPopUp(): Unit = {
     switchWindow
-    switchFrame(container)
   }
 
   def acceptPayPalPaymentPopUp(): Unit = {

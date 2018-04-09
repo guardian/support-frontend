@@ -8,6 +8,8 @@ import { closeDirectDebitPopUp, resetDirectDebitFormError } from 'components/dir
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { SvgCross } from 'components/svg/svg';
 
+import type { Phase } from 'components/directDebit/directDebitActions';
+
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
@@ -15,6 +17,7 @@ type PropTypes = {
   callback: Function,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
+  phase: Phase,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -23,6 +26,7 @@ type PropTypes = {
 function mapStateToProps(state) {
   return {
     isPopUpOpen: state.page.directDebit.isPopUpOpen,
+    phase: state.page.directDebit.phase,
   };
 }
 
@@ -37,6 +41,33 @@ function mapDispatchToProps(dispatch) {
 
 }
 
+// ----- Utility ----- //
+
+function PageTitle(props: { phase: Phase }) {
+  if (props.phase === 'confirmation') {
+    return (
+      <span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          Please confirm
+        </span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          your details
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        Please enter
+      </span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        your details below
+      </span>
+    </span>
+  );
+}
+
 // ----- Component ----- //
 
 const DirectDebitPopUpForm = (props: PropTypes) => {
@@ -47,7 +78,9 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
     content = (
       <div className="component-direct-debit-pop-up-form">
         <div className="component-direct-debit-pop-up-form__content">
-          <h1 className="component-direct-debit-pop-up-form__heading">Please enter your details below</h1>
+          <h1 className="component-direct-debit-pop-up-form__heading">
+            <PageTitle phase={props.phase} />
+          </h1>
           <button
             id="qa-pay-with-direct-debit-close-pop-up"
             className="component-direct-debit-pop-up-form__close-button focus-target"

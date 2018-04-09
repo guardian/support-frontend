@@ -730,6 +730,8 @@ function SvgPaywallDesktop() {
       className="svg-paywall-desktop"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1400 360"
+      width="1400"
+      height="360"
       preserveAspectRatio="xMinYMid"
       aria-labelledby="title"
     >
@@ -756,6 +758,8 @@ function SvgPaywallWide() {
       className="svg-paywall-wide"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 890 360"
+      width="890"
+      height="360"
       preserveAspectRatio="xMinYMid"
       aria-labelledby="title"
     >

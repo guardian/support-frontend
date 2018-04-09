@@ -1,0 +1,12 @@
+#contributions-landing-page-ca,
+#contributions-landing-page-eu,
+#contributions-landing-page-int,
+#contributions-landing-page-nz,
+#contributions-landing-page-uk,
+#contributions-landing-page-us {
+
+  .component-contribute {
+    @include gu-content-filler;
+  }
+
+}

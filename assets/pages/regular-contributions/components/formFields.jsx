@@ -16,11 +16,10 @@ import {
 
 import { setCountry } from 'helpers/page/pageActions';
 
-import { usStates } from 'helpers/internationalisation/country';
-import { countries } from 'helpers/internationalisation/country';
+import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
+import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -30,7 +29,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type PropTypes = {
   firstNameUpdate: (name: string) => void,
   lastNameUpdate: (name: string) => void,
-  stateUpdate: (value: UsState) => void,
+  stateUpdate: (value: UsState | CaState) => void,
   countryUpdate: (value: string) => void,
   firstName: string,
   lastName: string,
@@ -60,7 +59,7 @@ function mapDispatchToProps(dispatch) {
     lastNameUpdate: (name: string) => {
       dispatch(setLastName(name));
     },
-    stateUpdate: (value: UsState) => {
+    stateUpdate: (value: UsState | CaState) => {
       dispatch(setStateField(value));
     },
     countryUpdate: (value: IsoCountry) => {
@@ -73,14 +72,15 @@ function mapDispatchToProps(dispatch) {
 
 // ----- Functions ----- //
 
-function stateDropdown(countryGroup: CountryGroupId, stateUpdate: UsState => void) {
+function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaState) => void) {
 
-  if (countryGroup !== 'UnitedStates') {
+  if (countryGroup !== 'UnitedStates' && countryGroup !== 'Canada') {
     return null;
   }
+  const states = countryGroup === 'Canada' ? caStates : usStates;
 
-  const options: SelectOption[] = Object.keys(usStates).map((stateCode: UsState) =>
-    ({ value: stateCode, text: usStates[stateCode] }));
+  const options: SelectOption[] = Object.keys(states).map((stateCode: UsState | CaState) =>
+    ({ value: stateCode, text: states[stateCode] }));
 
   // Sets the initial state to the first in the dropdown.
   stateUpdate(options[0].value);

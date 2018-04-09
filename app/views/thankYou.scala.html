@@ -13,7 +13,9 @@
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.csrf = { token: "@CSRF.getToken.value" };
-        window.guardian.email = "@email.getOrElse("undefined")";
+        @email.map { e => {
+            window.guardian.email = "@e";
+        }}
         window.guardian.showConfirmationEmailCopy = @showConfirmationEmailCopy;
     </script>
 }

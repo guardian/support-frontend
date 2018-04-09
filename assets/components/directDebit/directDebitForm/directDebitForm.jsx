@@ -11,12 +11,19 @@ import {
   updateAccountNumber,
   updateAccountHolderName,
   updateAccountHolderConfirmation,
-  payDirectDebitClicked,
+  confirmDirectDebitClicked,
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,
+  payDirectDebitClicked,
+  setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
-import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
-import { SvgDirectDebitSymbol, SvgDirectDebitSymbolAndText, SvgArrowRightStraight, SvgExclamationAlternate } from 'components/svg/svg';
+import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
+import {
+  SvgDirectDebitSymbol,
+  SvgDirectDebitSymbolAndText,
+  SvgArrowRightStraight,
+  SvgExclamationAlternate,
+} from 'components/svg/svg';
 
 
 // ---- Types ----- //
@@ -33,10 +40,13 @@ type PropTypes = {
   updateAccountNumber: (accountNumber: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
-  payDirectDebitClicked: (callback: Function) => void,
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void,
   formError: string,
+  phase: Phase,
+  payDirectDebitClicked: () => void,
+  editDirectDebitClicked: () => void,
+  confirmDirectDebitClicked: (callback: Function) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,14 +60,22 @@ function mapStateToProps(state) {
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
     formError: state.page.directDebit.formError,
+    phase: state.page.directDebit.phase,
   };
 }
 
 function mapDispatchToProps(dispatch) {
 
   return {
-    payDirectDebitClicked: (callback) => {
-      dispatch(payDirectDebitClicked(callback));
+    payDirectDebitClicked: () => {
+      dispatch(payDirectDebitClicked());
+      return false;
+    },
+    editDirectDebitClicked: () => {
+      dispatch(setDirectDebitFormPhase('entry'));
+    },
+    confirmDirectDebitClicked: (callback) => {
+      dispatch(confirmDirectDebitClicked(callback));
       return false;
     },
     openDDGuaranteeClicked: () => {
@@ -91,27 +109,34 @@ const DirectDebitForm = (props: PropTypes) => (
   <div className="component-direct-debit-form">
 
     <AccountHolderNameInput
+      phase={props.phase}
       onChange={props.updateAccountHolderName}
       value={props.accountHolderName}
     />
 
     <AccountNumberInput
+      phase={props.phase}
       onChange={props.updateAccountNumber}
       value={props.accountNumber}
     />
 
     <SortCodeInput
+      phase={props.phase}
       onChange={props.updateSortCode}
       sortCodeArray={props.sortCodeArray}
     />
 
     <ConfirmationInput
+      phase={props.phase}
       onChange={props.updateAccountHolderConfirmation}
       checked={props.accountHolderConfirmation}
     />
 
     <PaymentButton
-      onClick={() => props.payDirectDebitClicked(props.callback)}
+      phase={props.phase}
+      onPayClick={() => props.payDirectDebitClicked()}
+      onEditClick={() => props.editDirectDebitClicked()}
+      onConfirmClick={() => props.confirmDirectDebitClicked(props.callback)}
     />
 
     <ErrorMessage
@@ -130,21 +155,29 @@ const DirectDebitForm = (props: PropTypes) => (
 
 // ----- Auxiliary components ----- //
 
-function AccountNumberInput(props: {onChange: Function, value: string}) {
+function AccountNumberInput(props: {phase: Phase, onChange: Function, value: string}) {
+  const editable = (
+    <input
+      id="account-number-input"
+      value={props.value}
+      onChange={props.onChange}
+      pattern="[0-9]*"
+      minLength="6"
+      maxLength="10"
+      className="component-direct-debit-form__text-field focus-target"
+    />
+  );
+  const locked = (
+    <span>
+      {props.value}
+    </span>
+  );
   return (
     <div className="component-direct-debit-form__account-number">
       <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
         Account number
       </label>
-      <input
-        id="account-number-input"
-        value={props.value}
-        onChange={props.onChange}
-        pattern="[0-9]*"
-        minLength="6"
-        maxLength="10"
-        className="component-direct-debit-form__text-field focus-target"
-      />
+      {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
@@ -156,63 +189,123 @@ function AccountNumberInput(props: {onChange: Function, value: string}) {
  transliterated, upcased and truncated to 18 characters."
  https://developer.gocardless.com/api-reference/
  * */
-function AccountHolderNameInput(props: {value: string, onChange: Function}) {
+function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: Function}) {
+  const editable = (
+    <input
+      id="account-holder-name-input"
+      value={props.value}
+      onChange={props.onChange}
+      maxLength="18"
+      className="component-direct-debit-form__text-field focus-target"
+    />
+  );
+
+  const locked = (
+    <span>
+      {props.value}
+    </span>
+  );
+
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
         Name
       </label>
-      <input
-        id="account-holder-name-input"
-        value={props.value}
-        onChange={props.onChange}
-        maxLength="18"
-        className="component-direct-debit-form__text-field focus-target"
-      />
+      {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
 
-function ConfirmationInput(props: { checked: boolean, onChange: Function }) {
+function ConfirmationInput(props: {phase: Phase, checked: boolean, onChange: Function }) {
+  const editable = (
+    <span>
+      <div className="component-direct-debit-form__confirmation-css-checkbox">
+        <input
+          className="component-direct-debit-form__confirmation-input"
+          id="confirmation-input"
+          type="checkbox"
+          onChange={props.onChange}
+          checked={props.checked}
+        />
+        <label
+          className="component-direct-debit-form__confirmation-label"
+          htmlFor="confirmation-input"
+        />
+      </div>
+      <span className="component-direct-debit-form__confirmation-text">
+        I confirm that I am the account holder and I am solely able to authorise debit from
+        the account
+      </span>
+    </span>
+  );
+
+  const locked = (
+    <span>
+      <label htmlFor="confirmation-text__locked" className="component-direct-debit-form__field-label">
+        Declaration
+      </label>
+      <div id="confirmation-text__locked" className="component-direct-debit-form__confirmation-text__locked">
+        I have confirmed that I am the account holder and that I am solely able to authorise debit
+        from the account
+      </div>
+      <div className="component-direct-debit-form__confirmation-guidance">
+        If the details above are correct press confirm to set up your direct debit, otherwise press
+        back to make changes
+      </div>
+    </span>
+  );
+
   return (
     <div className="component-direct-debit-form__account-holder-confirmation">
       <div>
         <label htmlFor="confirmation-input">
-          <div className="component-direct-debit-form__confirmation-css-checkbox">
-            <input
-              className="component-direct-debit-form__confirmation-input"
-              id="confirmation-input"
-              type="checkbox"
-              onChange={props.onChange}
-              checked={props.checked}
-            />
-            <label
-              className="component-direct-debit-form__confirmation-label"
-              htmlFor="confirmation-input"
-            />
-          </div>
-          <span className="component-direct-debit-form__confirmation-text">
-            I confirm that I am the account holder and I am solely able to authorise debit from
-            the account
-          </span>
+          {props.phase === 'entry' ? editable : locked}
         </label>
       </div>
     </div>
   );
 }
 
-function PaymentButton(props: {onClick: Function}) {
-  return (
-    <button
-      id="qa-pay-with-direct-debit-pay"
-      className="component-direct-debit-form__pay-button focus-target"
-      onClick={props.onClick}
-    >
-      <SvgDirectDebitSymbol />
-      <span>Contribute with Direct Debit</span>
-      <SvgArrowRightStraight />
-    </button>
-  );
+function PaymentButton(props: {
+  phase: Phase,
+  onPayClick: Function,
+  onEditClick: Function,
+  onConfirmClick: Function
+}) {
+  if (props.phase === 'entry') {
+    return (
+      <button
+        className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
+        onClick={props.onPayClick}
+      >
+        <SvgDirectDebitSymbol />
+        <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--variable-left-margin">
+          Contribute with Direct Debit
+        </span>
+        <SvgArrowRightStraight />
+      </button>
+    );
+  }
+  if (props.phase === 'confirmation') {
+    return (
+      <span>
+        <button
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
+          onClick={props.onEditClick}
+        >
+          <SvgArrowRightStraight />
+          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Back</span>
+        </button>
+        <button
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
+          onClick={props.onConfirmClick}
+        >
+          <span className="component-direct-debit-form__cta-text">Confirm</span>
+          <SvgArrowRightStraight />
+        </button>
+      </span>
+    );
+  }
 }
 
 function LegalNotice(props: {

@@ -3,20 +3,17 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { SortCodeIndex } from 'components/directDebit/directDebitActions';
+import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
 
 type SortCodePropTypes = {
+  phase: Phase,
   sortCodeArray: Array<string>,
   onChange: (SortCodeIndex, SyntheticInputEvent<HTMLInputElement>) => void,
 };
 
 function SortCodeInput(props: SortCodePropTypes) {
-
-  return (
-    <div className="component-direct-debit-form__sort-code">
-      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
-        Sort Code
-      </label>
+  const editable = (
+    <span>
       <SortCodeField
         value={props.sortCodeArray[0]}
         onChange={event => props.onChange(0, event)}
@@ -31,6 +28,21 @@ function SortCodeInput(props: SortCodePropTypes) {
         value={props.sortCodeArray[2]}
         onChange={event => props.onChange(2, event)}
       />
+    </span>
+  );
+
+  const locked = (
+    <span>
+      {props.sortCodeArray[0]}-{props.sortCodeArray[1]}-{props.sortCodeArray[2]}
+    </span>
+  );
+
+  return (
+    <div className="component-direct-debit-form__sort-code">
+      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
+        Sort Code
+      </label>
+      {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
