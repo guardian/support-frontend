@@ -1,7 +1,7 @@
 package com.gu.zuora
 
+import cats.data.OptionT
 import cats.implicits._
-import cats.syntax.either._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.model.BillingPeriod
@@ -29,7 +29,7 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
 
   def getAccountIds(identityId: String): Future[List[String]] = {
     val queryData = QueryData(s"select AccountNumber from account where IdentityId__c = '${identityId.toLong}'")
-    postJson[QueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(_.AccountNumber))
+    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(_.AccountNumber))
   }
 
   def getSubscriptions(accountId: String): Future[List[Subscription]] =
@@ -43,6 +43,26 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
       accountIds <- getAccountIds(identityId)
       subscriptions <- accountIds.map(getSubscriptions).combineAll
     } yield subscriptions.find(sub => sub.hasContributorPlan(config, billingPeriod) && sub.isActive)
+
+  def getDefaultPaymentMethodId(accountNumber: String): Future[Option[String]] = {
+    val queryData = QueryData(s"select defaultPaymentMethodId from Account where AccountNumber = '$accountNumber'")
+    postJson[PaymentMethodQueryResponse](s"action/query", queryData.asJson, authHeaders)
+      .map(r => Some(r.records.head.DefaultPaymentMethodId))
+      .fallbackTo(Future.successful(None))
+  }
+
+  def getDirectDebitMandateId(paymentMethodId: String): Future[Option[String]] = {
+    get[PaymentMethodDetailResponse](s"object/payment-method/$paymentMethodId", authHeaders)
+      .map(p => Some(p.MandateID))
+      .fallbackTo(Future.successful(None))
+  }
+
+  def getMandateIdFromAccountNumber(accountNumber: String): Future[Option[String]] = {
+    (for {
+      pmId <- OptionT(getDefaultPaymentMethodId(accountNumber))
+      ddId <- OptionT(getDirectDebitMandateId(pmId))
+    } yield ddId).value
+  }
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
     //The Zuora api docs say that the subscribe action returns

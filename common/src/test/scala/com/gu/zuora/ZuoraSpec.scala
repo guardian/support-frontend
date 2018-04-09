@@ -67,6 +67,49 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
+  it should "retrieve a default paymentMethodId from an account number" in {
+    val accountNumber = "A00072689"
+    val defaultPaymentMethodId = Some("2c92c0f9624bbc6c01624eac30f86724")
+    uatService.getDefaultPaymentMethodId(accountNumber).map {
+      response =>
+        response should be(defaultPaymentMethodId)
+    }
+  }
+
+  it should "retrieve a Direct Debit mandateId from a valid paymentMethodId" in {
+    val defaultPaymentMethodId = "2c92c0f9624bbc6c01624eac30f86724"
+    val mandateId = "65HK26E"
+    uatService.getDirectDebitMandateId(defaultPaymentMethodId).map {
+      response =>
+        response should be(Some(mandateId))
+    }
+  }
+
+  it should "return None when given an invalid paymentMethodId" in {
+    val invalidPaymentMethodId = "xxxx"
+    uatService.getDirectDebitMandateId(invalidPaymentMethodId).map {
+      response =>
+        response should be(None)
+    }
+  }
+
+  it should "retrieve a Direct Debit mandateId from a valid account number" in {
+    val accountNumber = "A00072689"
+    val mandateId = Some("65HK26E")
+    uatService.getMandateIdFromAccountNumber(accountNumber).map {
+      response =>
+        response should be(mandateId)
+    }
+  }
+
+  it should "return None when given an invalid account number" in {
+    val invalidAccountNumber = "xxxx"
+    uatService.getMandateIdFromAccountNumber(invalidAccountNumber).map {
+      response =>
+        response should be(None)
+    }
+  }
+
   "Subscribe request" should "succeed" in doRequest(creditCardSubscriptionRequest(GBP))
 
   it should "work for $USD contributions" in doRequest(creditCardSubscriptionRequest(USD))

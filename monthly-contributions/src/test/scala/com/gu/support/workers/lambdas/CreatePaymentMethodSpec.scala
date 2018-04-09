@@ -28,8 +28,6 @@ import scala.concurrent.duration._
 
 class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
-  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
-
   "CreatePaymentMethod" should "retrieve a valid PayPalReferenceTransaction when given a valid baid" taggedAs IntegrationTest in {
     val createPaymentMethod = new CreatePaymentMethod()
 
