@@ -87,6 +87,30 @@ function validateEmailAddress(email: string): boolean {
   return emailValidationRegex.test(email);
 }
 
+function isSome<A>(value: ?A): boolean {
+  return value !== null && value !== undefined;
+}
+
+function isNone<A>(value: ?A): boolean {
+  return !isSome(value);
+}
+
+function isSomeString(value: ?string): boolean {
+  return isSome(value) && value !== '';
+}
+
+function isNoneString(value: ?string): boolean {
+  return !isSomeString(value);
+}
+
+function getOrElse<A>(value: ?A, fallback: A): A {
+  return value !== null && value !== undefined ? value : fallback;
+}
+
+function getStringOrElse(value: ?string, fallback: string): string {
+  return value !== null && value !== undefined && value !== '' ? value : fallback;
+}
+
 function emptyInputField(input: ?string): boolean {
   return input === undefined || input === null || input === '' || input.trim().length === 0;
 }
@@ -102,5 +126,11 @@ export {
   parseBoolean,
   deserialiseJsonObject,
   validateEmailAddress,
+  isSome,
+  isNone,
+  isSomeString,
+  isNoneString,
+  getOrElse,
+  getStringOrElse,
   emptyInputField,
 };
