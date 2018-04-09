@@ -61,7 +61,8 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment] =
     (for {
-      transaction <- getTransaction(Payment.get(apiContext, capturePaypalPaymentData.paymentData.paymentId))
+      paypalPayment <- getPayment(capturePaypalPaymentData.paymentData.paymentId)
+      transaction <- getTransaction(paypalPayment)
       relatedResources <- getRelatedResources(transaction)
       capture <- getCapture(relatedResources, transaction)
       captureResult <- validateCapture(capture)

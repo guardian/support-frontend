@@ -48,4 +48,7 @@ class ErrorHandler(
   override def onOtherClientError(request: RequestHeader,
     statusCode: Int, message: String = "UnknownError"): Future[Result] =
     fillInEmptyMessage(message, InternalServerError)
+
+  override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] =
+    fillInEmptyMessage(exception.getMessage, InternalServerError)
 }

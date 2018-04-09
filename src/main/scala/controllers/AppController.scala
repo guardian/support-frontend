@@ -1,5 +1,6 @@
 package controllers
 
+import actions.CorsActionProvider
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.JsonCodec
 import model.DefaultThreadPool
@@ -9,9 +10,9 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 @JsonCodec case class HealthCheckResponse(status: String, gitCommitId: String)
 
 class AppController(
-  controllerComponents: ControllerComponents
-)(implicit pool: DefaultThreadPool, val corsUrls: List[String])
-  extends AbstractController(controllerComponents) with Circe with JsonUtils with StrictLogging {
+  cc: ControllerComponents
+)(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
+  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
   def healthcheck: Action[AnyContent] = Action {
     Ok(HealthCheckResponse("Everything is super", app.BuildInfo.gitCommitId))
@@ -22,8 +23,11 @@ class AppController(
     Ok("Acquisition received ")
   }
 
-  def corsOptions() = Action { request =>
+  def corsOptions() = CorsAction { request =>
     NoContent.withHeaders("Vary" -> "Origin")
   }
+
+  override implicit val controllerComponents: ControllerComponents = cc
+  override implicit val corsUrls: List[String] = allowedCorsUrls
 
 }
