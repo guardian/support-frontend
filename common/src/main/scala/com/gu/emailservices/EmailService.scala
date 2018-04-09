@@ -46,7 +46,7 @@ case class EmailFields(
     """.stripMargin
 
   def paymentMethodJson: String = paymentMethod match {
-    case Some(dd @ DirectDebitPaymentMethod(_, _, _, _, _, _, _, _)) => s"""
+    case Some(dd: DirectDebitPaymentMethod) => s"""
       ,"account name": "${dd.bankTransferAccountName}",
       "account number": "${mask(dd.bankTransferAccountNumber)}",
       "sort code": "${dd.bankCode}",

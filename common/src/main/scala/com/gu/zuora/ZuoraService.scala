@@ -2,7 +2,6 @@ package com.gu.zuora
 
 import cats.data.OptionT
 import cats.implicits._
-import cats.syntax.either._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.model.BillingPeriod
@@ -49,13 +48,13 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
     val queryData = QueryData(s"select defaultPaymentMethodId from Account where AccountNumber = '$accountNumber'")
     postJson[PaymentMethodQueryResponse](s"action/query", queryData.asJson, authHeaders)
       .map(r => Some(r.records.head.DefaultPaymentMethodId))
-      .fallbackTo(Future(None))
+      .fallbackTo(Future.successful(None))
   }
 
   def getDirectDebitMandateId(paymentMethodId: String): Future[Option[String]] = {
     get[PaymentMethodDetailResponse](s"object/payment-method/$paymentMethodId", authHeaders)
       .map(p => Some(p.MandateID))
-      .fallbackTo(Future(None))
+      .fallbackTo(Future.successful(None))
   }
 
   def getMandateIdFromAccountNumber(accountNumber: String): Future[Option[String]] = {
