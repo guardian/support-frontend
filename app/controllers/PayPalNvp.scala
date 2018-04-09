@@ -11,15 +11,15 @@ import monitoring.SafeLogger
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
-import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{PaymentAPIService, PayPalService, TestUserService}
+import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
+import services.{PaymentAPIService, PayPalNvpService, TestUserService}
 import services.PaymentAPIService.Email
 import scala.concurrent.ExecutionContext
 
 class PayPalNvp(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
-    payPalServiceProvider: PayPalServiceProvider,
+    payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
@@ -48,8 +48,8 @@ class PayPalNvp(
     }.map(token => Ok(Token(token).asJson))
   }
 
-  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {
-    val service = payPalServiceProvider.forUser(testUsers.isTestUser(user))
+  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalNvpService => T): T = {
+    val service = payPalNvpServiceProvider.forUser(testUsers.isTestUser(user))
     fn(service)
   }
 

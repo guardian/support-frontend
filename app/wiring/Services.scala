@@ -4,7 +4,7 @@ import com.gu.support.config.Stages
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.paypal.PayPalServiceProvider
+import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}
 
 trait Services {
@@ -14,7 +14,7 @@ trait Services {
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
 
-  lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider, wsClient)
+  lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.payPalConfigProvider, wsClient)
 
   lazy val identityService = IdentityService(appConfig.identity)
 

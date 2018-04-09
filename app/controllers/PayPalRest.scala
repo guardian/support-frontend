@@ -11,15 +11,14 @@ import monitoring.SafeLogger
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
-import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{PaymentAPIService, PayPalService, TestUserService}
+import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
+import services.{PaymentAPIService, PayPalNvpService, TestUserService}
 import services.PaymentAPIService.Email
 import scala.concurrent.ExecutionContext
 
 class PayPalRest(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
-    payPalServiceProvider: PayPalServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
     PaymentAPIService: PaymentAPIService
