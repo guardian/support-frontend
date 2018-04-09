@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithOptModifier } from 'helpers/utilities';
 
 import type { Node } from 'react';
 
@@ -24,7 +24,7 @@ type PropTypes = {
 function PageSection(props: PropTypes) {
 
   return (
-    <section className={generateClassName('component-page-section', props.modifierClass)}>
+    <section className={classNameWithOptModifier('component-page-section', props.modifierClass)}>
       <div className="component-page-section__content gu-content-margin">
         <div className="component-page-section__header">
           <Heading heading={props.heading} />

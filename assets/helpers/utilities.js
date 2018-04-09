@@ -24,7 +24,7 @@ function classNameWithModifiers(className: string, modifiers?: string[] = []): s
 }
 
 // Generates a className with an optional modifier (common pattern convenience function).
-function classNameWithModifier(className: string, modifier: ?string): string {
+function classNameWithOptModifier(className: string, modifier: ?string): string {
   return classNameWithModifiers(className, modifier ? [modifier] : undefined);
 }
 
@@ -96,7 +96,7 @@ export {
   ascending,
   descending,
   roundDp,
-  classNameWithModifier,
+  classNameWithOptModifier,
   classNameWithModifiers,
   clickSubstituteKeyPressHandler,
   parseBoolean,

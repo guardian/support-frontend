@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithOptModifier } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
@@ -42,7 +42,7 @@ export default function NumberInput(props: PropTypes) {
   const selectedClass = props.selected ? 'selected' : null;
 
   return (
-    <div className={generateClassName('component-number-input', selectedClass)}>
+    <div className={classNameWithOptModifier('component-number-input', selectedClass)}>
       {getLabel(props.labelText)}
       <input
         className="component-number-input__input"

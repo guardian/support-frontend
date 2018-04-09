@@ -5,7 +5,7 @@
 import React from 'react';
 import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithOptModifier } from 'helpers/utilities';
 import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -62,7 +62,7 @@ const PayPalContributionButton = (props: PropTypes) =>
   (
     <button
       id="qa-contribute-paypal-button"
-      className={generateClassName('component-paypal-contribution-button', props.additionalClass)}
+      className={classNameWithOptModifier('component-paypal-contribution-button', props.additionalClass)}
       onClick={payWithPayPal(props)}
     >
 

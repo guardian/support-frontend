@@ -14,7 +14,7 @@ import {
   getSpokenType,
   getOneOffSpokenName,
 } from 'helpers/contributions';
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithOptModifier } from 'helpers/utilities';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 
@@ -68,7 +68,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
 
     return (
-      <div className={generateClassName(baseClassName, props.isDisabled ? 'disabled' : null)}>
+      <div className={classNameWithOptModifier(baseClassName, props.isDisabled ? 'disabled' : null)}>
         <OneOffCta {...props} />
         <props.PayPalButton
           buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
@@ -82,7 +82,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
   }
 
   return (
-    <div className={generateClassName(baseClassName, props.isDisabled ? 'disabled' : null)}>
+    <div className={classNameWithOptModifier(baseClassName, props.isDisabled ? 'disabled' : null)}>
       <RegularCta {...props} />
     </div>
   );

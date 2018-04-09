@@ -7,7 +7,7 @@ import {
   descending,
   roundDp,
   classNameWithModifiers,
-  classNameWithModifier,
+  classNameWithOptModifier,
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
@@ -117,15 +117,15 @@ describe('utilities', () => {
   describe('classNameWithModifier', () => {
 
     it('should create the same classname if no modifier is passed', () => {
-      expect(classNameWithModifier('made-up-class')).toBe('made-up-class');
+      expect(classNameWithOptModifier('made-up-class')).toBe('made-up-class');
     });
 
     it('should create the same classname if a null modifier is passed', () => {
-      expect(classNameWithModifier('made-up-class', null)).toBe('made-up-class');
+      expect(classNameWithOptModifier('made-up-class', null)).toBe('made-up-class');
     });
 
     it('should return a classname with a modifier attached', () => {
-      expect(classNameWithModifier('made-up-class', 'fake-modifier'))
+      expect(classNameWithOptModifier('made-up-class', 'fake-modifier'))
         .toBe('made-up-class made-up-class--fake-modifier');
     });
 
