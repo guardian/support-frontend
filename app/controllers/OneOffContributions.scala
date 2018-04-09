@@ -24,7 +24,8 @@ class OneOffContributions(
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     contributionsStripeEndpoint: String,
-    contributionsPayPalEndpoint: String,
+    paymentApiUrl: String,
+    paymentApiPayPalCreatePaymentPath: String,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
@@ -49,7 +50,7 @@ class OneOffContributions(
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = contributionsPayPalEndpoint,
+      contributionsPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
       idUser = idUser
     )
 

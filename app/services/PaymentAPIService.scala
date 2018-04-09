@@ -22,7 +22,7 @@ object PaymentAPIService {
   }
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String) {
   import PaymentAPIService._
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
@@ -49,7 +49,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       "acquisitionData" -> acquisitionData
     )
 
-    wsClient.url(s"$paymentAPIUrl/$endpoint")
+    wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
       .withQueryStringParameters(convertQueryString(request.queryString): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withBody(data)

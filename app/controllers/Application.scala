@@ -19,7 +19,8 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    contributionsPayPalEndpoint: String,
+    paymentApiUrl: String,
+    paymentApiPayPalCreatePaymentPath: String,
     stringsConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
@@ -79,13 +80,21 @@ class Application(
       title,
       id,
       js,
-      contributionsPayPalEndpoint,
+      paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))
+    Ok(
+      views.html.contributionsLanding(
+        title,
+        description = Some(stringsConfig.contributionLandingDescription),
+        id,
+        js,
+        paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath)
+      )
+    )
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
