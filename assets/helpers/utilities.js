@@ -20,7 +20,7 @@ function roundDp(num: number, dps: number = 2) {
 
 // Generates the "class modifier-class" string for HTML elements
 function classNameWithModifiers(className: string, modifiers?: string[] = []): string {
-  return modifiers.reduce((acc, m) => `${acc} ${className}--${m}`, className);
+  return modifiers.reduce((acc, modifier) => `${acc} ${className}--${modifier}`, className);
 }
 
 // Generates a className with an optional modifier (common pattern convenience function).
