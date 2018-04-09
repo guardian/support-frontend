@@ -11,6 +11,12 @@ import {
   parseBoolean,
   deserialiseJsonObject,
   validateEmailAddress,
+  isSome,
+  isNone,
+  isSomeString,
+  isNoneString,
+  getOrElse,
+  getStringOrElse,
   emptyInputField,
 } from '../utilities';
 
@@ -191,6 +197,135 @@ describe('utilities', () => {
     it('should return true for test@gu.co.uk', () => {
       expect(validateEmailAddress('test@gu.co.uk')).toEqual(true);
     });
+  });
+
+  describe('isSome', () => {
+
+    it('should return true for values that exist', () => {
+      expect(isSome('CP Scott')).toBe(true);
+      expect(isSome('')).toBe(true);
+      expect(isSome(50)).toBe(true);
+      expect(isSome(0)).toBe(true);
+      expect(isSome([1, 2, 3])).toBe(true);
+      expect(isSome([])).toBe(true);
+      expect(isSome({ a: 1 })).toBe(true);
+      expect(isSome({})).toBe(true);
+      expect(isSome(true)).toBe(true);
+      expect(isSome(false)).toBe(true);
+    });
+
+    it('should return false for null and undefined', () => {
+      expect(isSome(null)).toBe(false);
+      expect(isSome(undefined)).toBe(false);
+    });
+
+  });
+
+  describe('isNone', () => {
+
+    it('should return true for null and undefined', () => {
+      expect(isNone(null)).toBe(true);
+      expect(isNone(undefined)).toBe(true);
+    });
+
+    it('should return false for values that exist', () => {
+      expect(isNone('CP Scott')).toBe(false);
+      expect(isNone('')).toBe(false);
+      expect(isNone(50)).toBe(false);
+      expect(isNone(0)).toBe(false);
+      expect(isNone([1, 2, 3])).toBe(false);
+      expect(isNone([])).toBe(false);
+      expect(isNone({ a: 1 })).toBe(false);
+      expect(isNone({})).toBe(false);
+      expect(isNone(true)).toBe(false);
+      expect(isNone(false)).toBe(false);
+    });
+
+  });
+
+  describe('isSomeString', () => {
+
+    it('should return true for strings that exist', () => {
+      expect(isSomeString('CP Scott')).toBe(true);
+      expect(isSomeString('  CP Scott  ')).toBe(true);
+      expect(isSomeString(' ')).toBe(true);
+    });
+
+    it('should return false for null, undefined and empty strings', () => {
+      expect(isSomeString(null)).toBe(false);
+      expect(isSomeString(undefined)).toBe(false);
+      expect(isSomeString('')).toBe(false);
+    });
+
+  });
+
+  describe('isNoneString', () => {
+
+    it('should return true for null, undefined and empty strings', () => {
+      expect(isNoneString(null)).toBe(true);
+      expect(isNoneString(undefined)).toBe(true);
+      expect(isNoneString('')).toBe(true);
+    });
+
+    it('should return false for strings that exist', () => {
+      expect(isNoneString('CP Scott')).toBe(false);
+      expect(isNoneString('  CP Scott  ')).toBe(false);
+      expect(isNoneString(' ')).toBe(false);
+    });
+
+  });
+
+  describe('getOrElse', () => {
+
+    const fallbackString = 'fallbackString';
+    const fallbackNum = 42;
+    const fallbackArray = [42, 42, 42];
+    const fallbackObject = { name: 'CP Scott' };
+
+    it('should return the value if it exists', () => {
+      expect(getOrElse('CP Scott', fallbackString)).toBe('CP Scott');
+      expect(getOrElse('', fallbackString)).toBe('');
+      expect(getOrElse(50, fallbackNum)).toBe(50);
+      expect(getOrElse(0, fallbackNum)).toBe(0);
+      expect(getOrElse([1, 2, 3], fallbackArray)).toEqual([1, 2, 3]);
+      expect(getOrElse([], fallbackArray)).toEqual([]);
+      expect(getOrElse({ a: 1 }, fallbackObject)).toEqual({ a: 1 });
+      expect(getOrElse({}, fallbackObject)).toEqual({});
+      expect(getOrElse(true, false)).toBe(true);
+      expect(getOrElse(false, true)).toBe(false);
+    });
+
+    it('should return the fallback if the value does not exist', () => {
+      expect(getOrElse(null, fallbackString)).toBe(fallbackString);
+      expect(getOrElse(undefined, fallbackString)).toBe(fallbackString);
+      expect(getOrElse(null, fallbackNum)).toBe(fallbackNum);
+      expect(getOrElse(undefined, fallbackNum)).toBe(fallbackNum);
+      expect(getOrElse(null, fallbackArray)).toEqual(fallbackArray);
+      expect(getOrElse(undefined, fallbackArray)).toEqual(fallbackArray);
+      expect(getOrElse(null, fallbackObject)).toEqual(fallbackObject);
+      expect(getOrElse(undefined, fallbackObject)).toEqual(fallbackObject);
+      expect(getOrElse(null, true)).toBe(true);
+      expect(getOrElse(undefined, false)).toBe(false);
+    });
+
+  });
+
+  describe('getStringOrElse', () => {
+
+    const fallbackString = 'fallbackString';
+
+    it('should return the string if it exists', () => {
+      expect(getStringOrElse('CP Scott', fallbackString)).toBe('CP Scott');
+      expect(getStringOrElse('  CP Scott  ', fallbackString)).toBe('  CP Scott  ');
+      expect(getStringOrElse(' ', fallbackString)).toBe(' ');
+    });
+
+    it('should return the fallback if the string is null, undefined or empty', () => {
+      expect(getStringOrElse(null, fallbackString)).toBe(fallbackString);
+      expect(getStringOrElse(undefined, fallbackString)).toBe(fallbackString);
+      expect(getStringOrElse('', fallbackString)).toBe(fallbackString);
+    });
+
   });
 
   describe('emptyInputField', () => {
