@@ -5,6 +5,7 @@
 import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
+import { isNone } from 'helpers/utilities';
 
 import {
   setId,
@@ -37,9 +38,7 @@ const init = (dispatch: Function) => {
 
   const emailFromBrowser = getEmailFromBrowser();
 
-  const isUndefinedOrNull = x => x === null || x === undefined;
-
-  const testUserCondition = (isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode;
+  const testUserCondition = (isNone(uatMode) && cookie.get('_test_username')) || uatMode;
 
   if (testUserCondition) {
     dispatch(setTestUser(true));

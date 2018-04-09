@@ -3,6 +3,9 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
+
+import { isSome } from 'helpers/utilities';
+
 import CtaLink from 'components/ctaLink/ctaLink';
 import CheckboxInput from 'components/checkboxInput/checkboxInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -32,7 +35,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
     return content;
   }
 
-  if (props.confirmOptIn === null && props.email !== null && props.email !== undefined) {
+  if (props.confirmOptIn === null && isSome(props.email)) {
     content = (
       <ChooseMarketingPreference
         marketingPreferencesOptIn={props.marketingPreferencesOptIn}
