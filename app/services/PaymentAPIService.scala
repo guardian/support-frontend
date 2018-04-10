@@ -28,9 +28,12 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPay
     }
   }
 
-  private def postData(data: JsObject, queryStrings: Map[String, Seq[String]]) = {
+  private def postData(data: JsObject, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
 
-    wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
+    val testQueryParam = if (isTestUser) "?mode=test" else ""
+    val endpoint = s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath$testQueryParam"
+
+    wsClient.url(endpoint)
       .withQueryStringParameters(convertQueryString(queryStrings): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withBody(data)
@@ -65,10 +68,11 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPay
     paymentJSON: JsObject,
     acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
-    email: Option[String]
+    email: Option[String],
+    isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = getData(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings).map(_.status == 200)
+    postData(data, queryStrings, isTestUser).map(_.status == 200)
   }
 }
 

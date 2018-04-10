@@ -4,6 +4,7 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
+import com.gu.identity.play.IdUser
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
@@ -36,7 +37,6 @@ class PayPalRest(
   }
 
   def returnURL(): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
-
     val cookieString = request.cookies.get("acquisition_data").get.value
     val acquisitionData = Json.parse(java.net.URLDecoder.decode(cookieString, "UTF-8"))
     val queryStrings = request.queryString
@@ -44,6 +44,7 @@ class PayPalRest(
       "paymentId" -> request.getQueryString("paymentId").get,
       "payerId" -> request.getQueryString("PayerID").get
     )
+    val testUsername = request.cookies.get("_test_username");
 
     def processPaymentApiResponse(success: Boolean): Result = {
       if (success)
@@ -55,15 +56,13 @@ class PayPalRest(
     }
 
     val maybeEmail: Future[Option[String]] =
-      request.user.fold {
-        Future.successful(None: Option[String])
-      } { minimalUser =>
-        {
-          identityService.getUser(minimalUser).value.map(_.toOption.map(_.primaryEmailAddress))
-        }
-      }
+      request.user.map { minimalUser =>
+        identityService.getUser(minimalUser).value.map(_.toOption.map(_.primaryEmailAddress))
+      }.getOrElse(Future.successful(None: Option[String]))
 
-    maybeEmail.flatMap(email => paymentAPIService.execute(paymentJSON, acquisitionData, queryStrings, email).map(processPaymentApiResponse))
+    val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
+
+    maybeEmail.flatMap(email => paymentAPIService.execute(paymentJSON, acquisitionData, queryStrings, email, isTestUser).map(processPaymentApiResponse))
 
   }
 
