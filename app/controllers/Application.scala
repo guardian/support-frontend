@@ -80,7 +80,7 @@ class Application(
       title,
       id,
       js,
-      paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
+      paymentApiPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
@@ -92,7 +92,7 @@ class Application(
         description = Some(stringsConfig.contributionLandingDescription),
         id,
         js,
-        paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath)
+        paymentApiPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath)
       )
     )
   }

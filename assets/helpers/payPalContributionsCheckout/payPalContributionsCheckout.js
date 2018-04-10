@@ -42,13 +42,13 @@ type PayPalPaymentAPIPostData = {|
 function payalContributionEndpoint(testUser) {
   if (testUser) {
     return addQueryParamToURL(
-      window.guardian.contributionsPayPalEndpoint,
+      window.guardian.paymentApiPayPalEndpoint,
       'mode',
       'test',
     );
   }
 
-  return window.guardian.contributionsPayPalEndpoint;
+  return window.guardian.paymentApiPayPalEndpoint;
 }
 
 function storeAcquisitionData(

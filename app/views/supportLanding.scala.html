@@ -3,14 +3,14 @@
     title: String,
     id: String,
     js: String,
-    contributionsPayPalEndpoint: String,
+    paymentApiPayPalEndpoint: String,
     description: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
-        window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
+        window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
     </script>
 }
 

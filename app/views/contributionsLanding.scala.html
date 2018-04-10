@@ -1,10 +1,10 @@
 @import assets.AssetsResolver
-@(title: String, description: Option[String], id: String, js: String, contributionsPayPalEndpoint: String)(implicit assets: AssetsResolver, request: RequestHeader)
+@(title: String, description: Option[String], id: String, js: String, paymentApiPayPalEndpoint: String)(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
-        window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
+        window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
     </script>
 }
 

@@ -42,7 +42,7 @@ export function paypalContributionsRedirect(
   errorHandler: (string) => void,
 ): void {
 
-  const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.contributionsPayPalEndpoint;
+  const PAYPAL_CONTRIBUTION_ENDPOINT:string = window.guardian.paymentApiPayPalEndpoint;
 
   const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
   const postData: PayPalPostData = {
