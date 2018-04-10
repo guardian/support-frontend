@@ -32,19 +32,20 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
     csrfConfig = csrfConfig
   )
 
-  val contributionsPayPalEndpoint = ""
+  val paymentApiUrl = ""
+  val paymentApiPayPalCreatePaymentPath = ""
 
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint, mock[StringsConfig]
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), paymentApiUrl, paymentApiPayPalCreatePaymentPath, mock[StringsConfig]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), contributionsPayPalEndpoint, mock[StringsConfig]
+        actionRefiner, mock[AssetsResolver], mock[IdentityService], stubControllerComponents(), paymentApiUrl, paymentApiPayPalCreatePaymentPath, mock[StringsConfig]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

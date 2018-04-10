@@ -90,6 +90,7 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
           mock[StripeConfigProvider],
           "",
           "",
+          "",
           mock[AuthAction[AnyContent]],
           stubControllerComponents()
         ).autofill(FakeRequest())
