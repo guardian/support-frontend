@@ -4,7 +4,7 @@
 
 import type { Contrib, Amount } from 'helpers/contributions';
 
-import { createContributionLandingReducer } from '../contributionsLandingReducers';
+import { createContributionsLandingReducer } from '../contributionsLandingReducers';
 
 
 // ----- Tests ----- //
@@ -15,14 +15,14 @@ describe('reducer tests', () => {
 
   it('should return the initial state', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
 
     expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle CHANGE_CONTRIB_TYPE to ONE_OFF', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const contribType: Contrib = 'ONE_OFF';
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
@@ -39,7 +39,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_TYPE to MONTHLY', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const contribType: Contrib = 'MONTHLY';
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
@@ -56,7 +56,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_TYPE to ANNUAL', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const contribType: Contrib = 'ANNUAL';
     const action = {
       type: 'CHANGE_CONTRIB_TYPE',
@@ -73,7 +73,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_AMOUNT', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const amount: Amount = {
       value: '50',
       userDefined: true,
@@ -94,7 +94,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_AMOUNT_MONTHLY', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const amount: Amount = {
       value: '45',
       userDefined: true,
@@ -115,7 +115,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ANNUAL', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const amount: Amount = {
       value: '50',
       userDefined: false,
@@ -136,7 +136,7 @@ describe('reducer tests', () => {
 
   it('should handle CHANGE_CONTRIB_AMOUNT_ONEOFF', () => {
 
-    const reducer = createContributionLandingReducer('10');
+    const reducer = createContributionsLandingReducer('10');
     const amount: Amount = {
       value: '45',
       userDefined: true,

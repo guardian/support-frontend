@@ -6,5 +6,6 @@ class StringsConfig {
   val config = ConfigFactory.load("strings.conf")
 
   val supportLandingDescription = config.getString("supportLanding.description")
-  val contributionLandingDescription = config.getString("contributionLanding.description")
+  val contributionsLandingDescription = config.getString("contributionsLanding.description")
+  val subscriptionsLandingDescription = config.getString("subscriptionsLanding.description")
 }

@@ -57,6 +57,12 @@ GET  /contribute/one-off                            controllers.OneOffContributi
 GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.thankYouPage
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
+# ----- Subscriptions ----- #
+
+GET  /subscribe                                    controllers.Application.subscribeGeoRedirect()
+GET  /uk/subscribe                                 controllers.Application.subscriptionsLanding(title="Support the Guardian | Get a Subscription", id="subscriptions-landing-page", js="subscriptionsLandingPage.js")
+
+
 # ----- Authentication ----- #
 
 GET  /login                                         controllers.Login.login

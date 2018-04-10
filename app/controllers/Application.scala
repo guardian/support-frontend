@@ -32,7 +32,6 @@ class Application(
   }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
@@ -47,7 +46,6 @@ class Application(
   }
 
   def contributeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
@@ -56,6 +54,15 @@ class Application(
       case Some(NewZealand) => "/nz/contribute"
       case Some(RestOfTheWorld) => "/int/contribute"
       case _ => "https://contribute.theguardian.com"
+    }
+
+    Redirect(redirectUrl, request.queryString, status = FOUND)
+  }
+
+  def subscribeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => "/uk/subscribe"
+      case _ => "https://subscribe.theguardian.com"
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
@@ -85,7 +92,11 @@ class Application(
   }
 
   def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionLandingDescription), id, js, contributionsPayPalEndpoint))
+    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionsLandingDescription), id, js, contributionsPayPalEndpoint))
+  }
+
+  def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.subscriptionsLanding(title, description = Some(stringsConfig.subscriptionsLandingDescription), id, js))
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>

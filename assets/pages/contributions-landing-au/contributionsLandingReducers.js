@@ -27,7 +27,7 @@ export type State ={
 
 // ----- Reducers ----- //
 
-function createContributionLandingReducer(amountMonthly: string) {
+function createContributionsLandingReducer(amountMonthly: string) {
 
   const initialContrib: ContribState = {
     type: 'MONTHLY',
@@ -50,7 +50,7 @@ function createContributionLandingReducer(amountMonthly: string) {
     context: false,
   };
 
-  return function contributionLandingReducer(
+  return function contributionsLandingReducer(
     state: ContribState = initialContrib,
     action: Action,
   ): ContribState {
@@ -136,4 +136,4 @@ function createContributionLandingReducer(amountMonthly: string) {
 
 // ----- Exports ----- //
 
-export { createContributionLandingReducer };
+export { createContributionsLandingReducer };
