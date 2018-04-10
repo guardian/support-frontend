@@ -43,7 +43,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
       amount = state.contribution.amount,
-      currency = state.contribution.currency.iso,
+      currency = state.contribution.currency,
       edition = state.user.country.alpha2,
       name = state.user.firstName,
       product = "monthly-contribution",
