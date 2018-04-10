@@ -64,7 +64,6 @@ object Fixtures {
   val stripeJson =
     s"""
                 {
-                  "userId": "12345",
                   "stripeToken": "$stripeToken"
                 }
                 """

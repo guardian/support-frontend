@@ -15,10 +15,9 @@ class StripeService(config: StripeConfig, client: FutureHttpClient, baseUrl: Str
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def createCustomer(description: String, card: String, currency: Currency): Future[Customer] =
+  def createCustomer(token: String, currency: Currency): Future[Customer] =
     postForm[Customer]("customers", Map(
-      "description" -> Seq(description),
-      "card" -> Seq(card)
+      "card" -> Seq(token)
     ), getHeaders(currency))
 
   private def getHeaders(currency: Currency) =

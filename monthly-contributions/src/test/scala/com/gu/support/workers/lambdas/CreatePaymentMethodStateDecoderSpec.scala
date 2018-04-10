@@ -43,7 +43,6 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val stripe = decode[StripePaymentFields](stripeJson)
     val stripePaymentFields = stripe.right.get
 
-    stripePaymentFields.userId should be("12345")
     stripePaymentFields.stripeToken should be(stripeToken)
 
     val payPal = decode[PayPalPaymentFields](payPalJson)
