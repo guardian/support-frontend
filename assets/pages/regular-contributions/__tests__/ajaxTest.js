@@ -9,7 +9,6 @@ describe('Regular Contributions Payment fields', () => {
     const accountNumber = '55779911';
     const accountHolderName = 'Bart Simpson';
     const paymentFieldName = 'directDebitData';
-    const userId = '123456';
 
     const expectedPaymentFields = {
       accountHolderName,
@@ -22,7 +21,6 @@ describe('Regular Contributions Payment fields', () => {
       sortCode,
       accountHolderName,
       paymentFieldName,
-      userId,
     );
 
     expect(paymentFields.accountHolderName).toEqual(expectedPaymentFields.accountHolderName);
@@ -34,7 +32,6 @@ describe('Regular Contributions Payment fields', () => {
   it('should create the correct payment field to handle PayPal', () => {
 
     const paymentFieldName = 'baid';
-    const userId = '123456';
     const token = 'PayPalToken';
 
     const expectedPaymentFields = {
@@ -46,7 +43,6 @@ describe('Regular Contributions Payment fields', () => {
       undefined,
       undefined,
       paymentFieldName,
-      userId,
     );
 
     expect(paymentFields.baid).toEqual(expectedPaymentFields.baid);
@@ -57,12 +53,10 @@ describe('Regular Contributions Payment fields', () => {
   it('should create the correct payment field to handle Stripe', () => {
 
     const paymentFieldName = 'stripeToken';
-    const userId = '123456';
     const token = 'StripeToken';
 
     const expectedPaymentFields = {
       stripeToken: token,
-      userId,
     };
     const paymentFields = getPaymentFields(
       token,
@@ -70,18 +64,15 @@ describe('Regular Contributions Payment fields', () => {
       undefined,
       undefined,
       paymentFieldName,
-      userId,
     );
 
     expect(paymentFields.stripeToken).toEqual(expectedPaymentFields.stripeToken);
-    expect(paymentFields.userId).toEqual(expectedPaymentFields.userId);
-    expect(Object.keys(paymentFields).length).toEqual(2);
+    expect(Object.keys(paymentFields).length).toEqual(1);
   });
 
   it('should return null if a unknown payment field name is passed', () => {
 
     const paymentFieldName = 'helloWorld';
-    const userId = '123456';
     const token = 'PayPalToken';
 
     const paymentFields = getPaymentFields(
@@ -90,7 +81,6 @@ describe('Regular Contributions Payment fields', () => {
       undefined,
       undefined,
       paymentFieldName,
-      userId,
     );
 
     expect(paymentFields).toEqual(null);
