@@ -7,7 +7,7 @@ import React from 'react';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridImage from 'components/gridImage/gridImage';
 
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Props ----- //
@@ -30,7 +30,7 @@ type PropTypes = {
 export default function OtherProduct(props: PropTypes) {
 
   return (
-    <div className={generateClassName('component-other-product', props.modifierClass)}>
+    <div className={classNameWithModifiers('component-other-product', [props.modifierClass])}>
       <div className="component-other-product__image">
         <GridImage
           gridId={props.gridImg}

@@ -12,7 +12,7 @@ import {
   errorMessage as contributionsErrorMessage,
   getContributionTypeClassName,
 } from 'helpers/contributions';
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -53,7 +53,7 @@ function ContributionSelection(props: PropTypes) {
   const modifierClass = getContributionTypeClassName(props.contributionType);
 
   return (
-    <div className={generateClassName('component-contribution-selection', modifierClass)}>
+    <div className={classNameWithModifiers('component-contribution-selection', [modifierClass])}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"

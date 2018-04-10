@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ---- Types ----- //
@@ -19,7 +19,7 @@ type PropTypes = {
 
 export default function DoubleHeading(props: PropTypes) {
 
-  const className = generateClassName('component-double-heading', props.modifierClass);
+  const className = classNameWithModifiers('component-double-heading', [props.modifierClass]);
 
   return (
     <div className={className}>

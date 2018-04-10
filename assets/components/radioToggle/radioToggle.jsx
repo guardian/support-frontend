@@ -5,7 +5,7 @@
 import React from 'react';
 import uuidv4 from 'uuid';
 
-import { generateClassName } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
@@ -50,7 +50,7 @@ function getRadioButtons(props: PropTypes) {
     return (
       <span
         id={radio.id}
-        className={generateClassName('component-radio-toggle__button', props.modifierClass)}
+        className={classNameWithModifiers('component-radio-toggle__button', [props.modifierClass])}
         key={radioId}
       >
         <A11yHint id={a11yHintId} hint={radio.accessibilityHint} />
@@ -67,7 +67,7 @@ function getRadioButtons(props: PropTypes) {
         />
         <label
           htmlFor={radioId}
-          className={generateClassName('component-radio-toggle__label', labelModifier)}
+          className={classNameWithModifiers('component-radio-toggle__label', [labelModifier])}
         >
           {radio.text}
         </label>

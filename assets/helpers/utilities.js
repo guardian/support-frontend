@@ -18,15 +18,12 @@ function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
 }
 
-// Generates the "class modifier-class" string for HTML elements
-function generateClassName(className: string, modifierClass: ?string): string {
-  let response = className;
-
-  if (modifierClass) {
-    response = `${className} ${className}--${modifierClass}`;
-  }
-
-  return response;
+// Generates the "class class-modifier" string for HTML elements.
+// Does not add null, undefined and empty string.
+function classNameWithModifiers(className: string, modifiers: Array<?string>): string {
+  return modifiers
+    .filter(Boolean)
+    .reduce((acc, modifier) => `${acc} ${className}--${modifier}`, className);
 }
 
 // Generates a key handler that only trigger a function if the
@@ -97,7 +94,7 @@ export {
   ascending,
   descending,
   roundDp,
-  generateClassName,
+  classNameWithModifiers,
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
