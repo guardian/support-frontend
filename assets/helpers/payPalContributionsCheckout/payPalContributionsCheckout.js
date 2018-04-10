@@ -43,8 +43,8 @@ function payalContributionEndpoint(testUser) {
   if (testUser) {
     return addQueryParamToURL(
       window.guardian.contributionsPayPalEndpoint,
-      '_test_username',
-      testUser,
+      'mode',
+      'test',
     );
   }
 
