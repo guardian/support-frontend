@@ -4,7 +4,7 @@ sealed trait PaymentFields
 
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
-case class StripePaymentFields(userId: String, stripeToken: String) extends PaymentFields
+case class StripePaymentFields(stripeToken: String) extends PaymentFields
 
 case class DirectDebitPaymentFields(
   accountHolderName: String,
