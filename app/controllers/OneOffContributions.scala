@@ -50,7 +50,7 @@ class OneOffContributions(
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
+      paymentApiPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
       idUser = idUser
     )
 
