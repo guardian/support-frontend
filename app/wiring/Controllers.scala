@@ -43,7 +43,8 @@ trait Controllers {
     assetsResolver,
     testUsers,
     controllerComponents,
-    paymentAPIService
+    paymentAPIService,
+    identityService
   )
 
   lazy val oneOffContributions = new OneOffContributions(

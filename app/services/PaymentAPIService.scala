@@ -23,7 +23,7 @@ object PaymentAPIService {
   }
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String, identityService: IdentityService) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String) {
   import PaymentAPIService._
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
@@ -32,56 +32,47 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPay
     }
   }
 
+  private def postData(data: JsObject, queryStrings: Map[String, Seq[String]]) = {
+
+    wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
+      .withQueryStringParameters(convertQueryString(queryStrings): _*)
+      .withHttpHeaders("Accept" -> "application/json")
+      .withBody(data)
+      .withMethod("POST")
+      .execute()
+  }
+
   private def getData(
-    request: OptionalAuthRequest[AnyContent],
+    emailOpt: Option[String],
     acquisitionData: JsValue,
     paymentJSON: JsObject
-  )(implicit req: RequestHeader, ec: ExecutionContext): Future[JsObject] = {
-
-    import cats.syntax.applicativeError._
-    import cats.instances.future._
+  ): JsObject = {
 
     val defaultValue = Json.obj(
       "paymentData" -> paymentJSON,
       "acquisitionData" -> acquisitionData
     )
 
-    request.user.fold {
-      Future.successful(defaultValue)
-    } { minimalUser =>
-      {
-        identityService.getUser(minimalUser).fold(
-          _ => defaultValue,
-          user => Json.obj(
-            "paymentData" -> paymentJSON,
-            "acquisitionData" -> acquisitionData,
-            "signedInUserEmail" -> user.primaryEmailAddress
-          )
+    emailOpt.fold {
+      defaultValue
+    } {
+      email =>
+        Json.obj(
+          "paymentData" -> paymentJSON,
+          "acquisitionData" -> acquisitionData,
+          "signedInUserEmail" -> email
         )
-      }
     }
   }
 
-  def execute(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] = {
-    import cats.syntax.applicativeError._
-    import cats.instances.future._
-
-    val cookieString = request.cookies.get("acquisition_data").get.value
-    val acquisitionData = Json.parse(java.net.URLDecoder.decode(cookieString, "UTF-8"))
-    val paymentJSON = Json.obj(
-      "paymentId" -> request.getQueryString("paymentId").get,
-      "payerId" -> request.getQueryString("PayerID").get
-    )
-
-    for {
-      data <- getData(request, acquisitionData, paymentJSON)
-      response <- wsClient.url(s"$paymentAPIUrl$paymentApiPayPalExecutePaymentPath")
-        .withQueryStringParameters(convertQueryString(request.queryString): _*)
-        .withHttpHeaders("Accept" -> "application/json")
-        .withBody(data)
-        .withMethod("POST")
-        .execute()
-    } yield response.status == 200
+  def execute(
+    paymentJSON: JsObject,
+    acquisitionData: JsValue,
+    queryStrings: Map[String, Seq[String]],
+    email: Option[String]
+  )(implicit ec: ExecutionContext): Future[Boolean] = {
+    val data = getData(email, acquisitionData, paymentJSON)
+    postData(data, queryStrings).map(_.status == 200)
   }
 }
 
