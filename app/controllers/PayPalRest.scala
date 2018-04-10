@@ -3,19 +3,14 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import com.gu.identity.play.AuthenticatedIdUser
-import io.circe.syntax._
 import cats.implicits._
-import monitoring.SafeLogger._
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.paypal.PayPalBillingDetails.codec
-import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
-import services.{IdentityService, PayPalNvpService, PaymentAPIService, TestUserService}
 import services.PaymentAPIService.Email
-import views.html.monthlyContributions
+import services.{IdentityService, PaymentAPIService, TestUserService}
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -2,11 +2,8 @@ package services
 
 import java.io.IOException
 
-import actions.CustomActionBuilders.OptionalAuthRequest
-import cats.data.EitherT
 import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
-import play.api.mvc._
+import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,7 +21,6 @@ object PaymentAPIService {
 }
 
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String) {
-  import PaymentAPIService._
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
     queryString.foldLeft(List.empty[(String, String)]) {
