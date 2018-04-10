@@ -37,7 +37,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       addressToSendTo,
       new DateTime(1999, 12, 31, 11, 59),
       20,
-      Currency.GBP.iso,
+      Currency.GBP,
       "UK", "", "monthly-contribution", Some(dd), Some(mandateId)
     )
     val service = new EmailService(Configuration.emailServicesConfig.thankYou, executionContext)
@@ -45,9 +45,9 @@ class SendThankYouEmailSpec extends LambdaSpec {
   }
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
+    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
-    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP.iso, "UK", "", "monthly-contribution", Some(dd), Some(mandateId))
+    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", "monthly-contribution", Some(dd), Some(mandateId))
     val resultJson = parse(ef.payload("test"))
 
     resultJson.isRight should be(true)
@@ -56,13 +56,14 @@ class SendThankYouEmailSpec extends LambdaSpec {
       .validate("Mandate ID", mandateId)
       .validate("account name", dd.bankTransferAccountName)
       .validate("account number", "******11")
-      .validate("sort code", dd.bankCode)
+      .validate("sort code", "12-34-56")
       .validate("first payment date", "Monday, 10 January 2000")
       .validate("payment method", "Direct Debit")
+      .validate("currency", "£")
   }
 
   it should "still work without a Payment Method" in {
-    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP.iso, "UK", "", "")
+    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", "")
     val resultJson = parse(ef.payload("test"))
     resultJson.isRight should be(true)
     (resultJson.right.get \\ "payment method").isEmpty should be(true)

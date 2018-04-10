@@ -1,6 +1,5 @@
 package com.gu.support.workers.lambdas
 
-import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
@@ -43,7 +42,7 @@ class FailureHandler(emailService: EmailService)
     email = state.user.primaryEmailAddress,
     created = DateTime.now(),
     amount = state.contribution.amount,
-    currency = state.contribution.currency.iso,
+    currency = state.contribution.currency,
     edition = state.user.country.alpha2,
     name = state.user.firstName,
     product = "monthly-contribution"

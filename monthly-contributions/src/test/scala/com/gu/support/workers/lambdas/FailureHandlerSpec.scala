@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.i18n.Currency
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -17,6 +18,7 @@ import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.parser.decode
 import org.joda.time.DateTime
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
 
@@ -27,7 +29,7 @@ class FailureHandlerSpec extends LambdaSpec {
     val service = new EmailService(Configuration.emailServicesConfig.failed, global)
     val email = "rupert.bates@theguardian.com"
     service
-      .send(EmailFields(email, DateTime.now(), 5, "GBP", "UK", "", "monthly-contribution"))
+      .send(EmailFields(email, DateTime.now(), 5, Currency.GBP, "UK", "", "monthly-contribution"))
       .map(result => result.getMessageId should not be "")
   }
 

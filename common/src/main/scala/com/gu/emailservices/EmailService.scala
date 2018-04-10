@@ -4,6 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.i18n.Currency
 import com.gu.support.workers.model.{DirectDebitPaymentMethod, PaymentMethod}
 import com.typesafe.scalalogging.StrictLogging
 import org.joda.time.DateTime
@@ -15,7 +16,7 @@ case class EmailFields(
     email: String,
     created: DateTime,
     amount: BigDecimal,
-    currency: String,
+    currency: Currency,
     edition: String,
     name: String,
     product: String,
@@ -33,7 +34,7 @@ case class EmailFields(
        |        "EmailAddress": "$email",
        |        "created": "$created",
        |        "amount": $amount,
-       |        "currency": "$currency",
+       |        "currency": "${currency.glyph}",
        |        "edition": "$edition",
        |        "name": "$name",
        |        "product": "$product"
@@ -49,7 +50,7 @@ case class EmailFields(
     case Some(dd: DirectDebitPaymentMethod) => s"""
       ,"account name": "${dd.bankTransferAccountName}",
       "account number": "${mask(dd.bankTransferAccountNumber)}",
-      "sort code": "${dd.bankCode}",
+      "sort code": "${hyphenate(dd.bankCode)}",
       "Mandate ID": "${directDebitMandateId.getOrElse("")}",
       "first payment date": "$firstPaymentDate",
       "payment method": "Direct Debit"
@@ -62,6 +63,8 @@ case class EmailFields(
     .print(created.plusDays(10))
 
   def mask(s: String): String = s.replace(s.substring(0, 6), "******")
+
+  def hyphenate(s: String): String = s"${s.substring(0, 2)}-${s.substring(2, 4)}-${s.substring(4, 6)}"
 
 }
 
