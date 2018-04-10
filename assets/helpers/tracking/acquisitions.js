@@ -35,7 +35,7 @@ export type OphanIds = {|
 export type ReferrerAcquisitionData = {|
   campaignCode: ?string,
   referrerPageviewId: ?string,
-  referrerUrl: ?string,
+  referrerUrl?: string,
   componentId: ?string,
   componentType: ?string,
   source: ?string,

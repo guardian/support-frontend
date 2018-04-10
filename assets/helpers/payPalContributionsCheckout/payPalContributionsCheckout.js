@@ -22,7 +22,7 @@ type AcquisitionData = {|
   browserId: ?string,
   platform: ?string,
   referrerPageviewId: ?string,
-  referrerUrl: string,
+  referrerUrl: ?string,
   campaignCodes: ?string[],
   componentId: ?string,
   componentType: ?string,
@@ -58,20 +58,22 @@ function storeAcquisitionData(
   const ophanIds: OphanIds = getOphanIds();
 
   const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+  const campaignCodes = referrerAcquisitionData.campaignCode ?
+    [referrerAcquisitionData.campaignCode] : [];
 
   if (referrerAcquisitionData.abTest) {
     abTests.push(referrerAcquisitionData.abTest);
   }
 
   const acquisitionData: AcquisitionData = {
-    cmp: null,
-    intCmp: referrerAcquisitionData.campaignCode,
-    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
-    refererUrl: referrerAcquisitionData.referrerUrl,
-    ophanPageviewId: ophanIds.pageviewId,
-    ophanBrowserId: ophanIds.browserId,
-    ophanVisitId: ophanIds.visitId,
+    platform: 'SUPPORT',
+    visitId: ophanIds.visitId,
+    browserId: ophanIds.browserId,
+    pageviewId: ophanIds.pageviewId,
+    referrerPageviewId: referrerAcquisitionData.referrerPageviewId,
+    referrerUrl: referrerAcquisitionData.referrerUrl,
     componentId: referrerAcquisitionData.componentId,
+    campaignCodes,
     componentType: referrerAcquisitionData.componentType,
     source: referrerAcquisitionData.source,
     abTests,

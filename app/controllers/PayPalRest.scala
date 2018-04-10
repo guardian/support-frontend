@@ -67,5 +67,8 @@ class PayPalRest(
 
   }
 
-  def cancelURL(): Action[AnyContent] = ???
+  def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
+    SafeLogger.error(scrub"The user selected cancel payment and decided not to contribute.")
+    Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+  }
 }
