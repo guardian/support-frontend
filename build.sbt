@@ -1,6 +1,5 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import sbt.Keys.{libraryDependencies, resolvers}
-
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
 scalaVersion := "2.12.4"
@@ -41,7 +40,7 @@ lazy val common = project
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.0",
       "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.25",
+      "com.gu" %% "support-models" % "0.26",
       "com.gu" %% "support-config" % "0.16",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",

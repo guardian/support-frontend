@@ -56,7 +56,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def createStripePaymentMethod(stripe: StripePaymentFields, currency: Currency, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
     stripeService
-      .createCustomer(stripe.userId, stripe.stripeToken, currency)
+      .createCustomer(stripe.stripeToken, currency)
       .map { stripeCustomer =>
         val card = stripeCustomer.source
         CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
