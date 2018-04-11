@@ -11,7 +11,7 @@ import { userReducer as user } from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import type { PayPalButtonType } from './components/oneoffContributionsPayment';
 import type { Action } from './oneoffContributionsActions';
@@ -21,7 +21,7 @@ import type { Action } from './oneoffContributionsActions';
 
 export type State = {
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   error: ?string,
   payPalType: PayPalButtonType,
 };
@@ -40,11 +40,11 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createOneOffContribReducer(amount: number, currency: Currency) {
+function createOneOffContribReducer(amount: number, currencyId: IsoCurrency) {
 
   const initialState: State = {
     amount,
-    currency,
+    currencyId,
     error: null,
     payPalType: 'NotSet',
   };

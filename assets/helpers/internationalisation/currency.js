@@ -105,30 +105,25 @@ function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
   }
 }
 
-function fromCountryGroupId(countryGroupId: CountryGroupId): ?Currency {
+function fromCountryGroupId(countryGroupId: CountryGroupId): ?IsoCurrency {
   const countryGroup: ?CountryGroup = countryGroups[countryGroupId];
 
   if (!countryGroup) {
     return null;
   }
 
-  return fromIsoCurrency(countryGroup.currency);
+  return countryGroup.currency;
 }
 
 
-function fromString(s: string): ?Currency {
-  switch (s.toLowerCase()) {
-    case 'gbp': return GBP;
-    case 'usd': return USD;
-    case 'aud': return AUD;
-    case 'eur': return EUR;
-    case 'nzd': return NZD;
-    case 'cad': return CAD;
-    default: return null;
+function fromString(s: string): ?IsoCurrency {
+  if (Object.keys(currencies).includes(s.toUpperCase())) {
+    return s.toUpperCase();
   }
+  return null;
 }
 
-function fromQueryParameter(): ?Currency {
+function fromQueryParameter(): ?IsoCurrency {
   const currency = getQueryParameter('currency');
   if (currency) {
     return fromString(currency);
@@ -136,8 +131,8 @@ function fromQueryParameter(): ?Currency {
   return null;
 }
 
-function detect(countryGroup: CountryGroupId): Currency {
-  return fromQueryParameter() || fromCountryGroupId(countryGroup) || GBP;
+function detect(countryGroup: CountryGroupId): IsoCurrency {
+  return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
 }
 
 export {

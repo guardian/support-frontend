@@ -52,7 +52,7 @@ function mapStateToProps(state: State) {
 
   return {
     countryGroupIds: availableCountriesGroups,
-    selectedCountryGroup: state.common.countryGroup,
+    selectedCountryGroup: state.common.internationalisation.countryGroupId,
     onCountryGroupSelect: handleCountryGroupChange,
   };
 }
