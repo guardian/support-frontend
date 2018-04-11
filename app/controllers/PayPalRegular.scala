@@ -15,7 +15,7 @@ import services.{PayPalNvpService, TestUserService}
 
 import scala.concurrent.ExecutionContext
 
-class PayPalNvp(
+class PayPalRegular(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
@@ -33,8 +33,8 @@ class PayPalNvp(
 
     withPaypalServiceForUser(request.user) { service =>
       service.retrieveToken(
-        returnUrl = routes.PayPalNvp.returnUrl().absoluteURL(secure = true),
-        cancelUrl = routes.PayPalNvp.cancelUrl().absoluteURL(secure = true)
+        returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
+        cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
       Ok(Token(response).asJson)

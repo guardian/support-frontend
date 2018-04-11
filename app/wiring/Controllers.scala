@@ -29,7 +29,7 @@ trait Controllers {
     controllerComponents
   )
 
-  lazy val payPalNvpController = new PayPalNvp(
+  lazy val payPalNvpController = new PayPalRegular(
     actionRefiners,
     assetsResolver,
     payPalNvpServiceProvider,
@@ -37,7 +37,7 @@ trait Controllers {
     controllerComponents
   )
 
-  lazy val payPalRestController = new PayPalRest(
+  lazy val payPalRestController = new PayPalOneOff(
     actionRefiners,
     assetsResolver,
     testUsers,

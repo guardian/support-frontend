@@ -15,7 +15,7 @@ import services.{IdentityService, PaymentAPIService, TestUserService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PayPalRest(
+class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
     testUsers: TestUserService,
