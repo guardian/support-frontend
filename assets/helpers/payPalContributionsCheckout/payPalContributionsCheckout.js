@@ -39,7 +39,7 @@ type PayPalPaymentAPIPostData = {|
 
 // ----- Functions ----- //
 
-function payalContributionEndpoint(testUser) {
+function payPalContributionEndpoint(testUser) {
   if (testUser) {
     return addQueryParamToURL(
       window.guardian.paymentApiPayPalEndpoint,
@@ -110,7 +110,7 @@ export function paypalContributionsRedirect(
     body: JSON.stringify(postData),
   };
 
-  fetch(payalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
+  fetch(payPalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
     .then((response) => {
       if (response.ok) {
         return response.json();
