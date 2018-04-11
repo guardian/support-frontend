@@ -19,8 +19,6 @@ import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContai
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import pageReducer from './subscriptionsLandingReducer';
-
 
 // ----- Setup ----- //
 
@@ -31,7 +29,7 @@ const supporterSectionId = 'supporter-options';
 
 /* eslint-disable no-underscore-dangle */
 const store = pageInit(
-  pageReducer,
+  {},
   null,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
