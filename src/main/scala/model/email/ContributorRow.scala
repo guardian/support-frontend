@@ -8,17 +8,7 @@ import io.circe.generic.JsonCodec
  * {
  *    "To":{
  *       "Address":"email@email.com",
- *       "SubscriberKey":"email@email.com",
- *       "ContactAttributes":{
- *          "SubscriberAttributes":{
- *             "EmailAddress":"email@email.com",
- *             "created":"2018-03-06T09:02:52.000Z",
- *             "amount":25,
- *             "currency":"EUR",
- *             "edition":"international",
- *             "name":"A-Willem Hartman"
- *          }
- *       }
+ *       "SubscriberKey":"email@email.com"
  *    },
  *    "DataExtensionName":"contribution-thank-you"
  * }
@@ -33,58 +23,16 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec case class ToSqsMessage(
   Address: String,
-  SubscriberKey: String,
-  ContactAttributes:
-  ContactAttributesSqsMessage
+  SubscriberKey: String
 )
 
-@JsonCodec case class ContactAttributesSqsMessage(
-  SubscriberAttributes: SubscriberAttributesSqsMessage
-)
-
-@JsonCodec case class SubscriberAttributesSqsMessage(
-  EmailAddress: String,
-  created: String,
-  amount: String,
-  currency: String,
-  edition: String,
-  name: String
-)
-
-case class ContributorRow(
-  email: String,
-  created: String,
-  amount: BigDecimal,
-  currency: String,
-  name: String,
-  cmp: Option[String]
-) {
-  def edition: String = currency match {
-    case "GBP" => "uk"
-    case "USD" => "us"
-    case "AUD" => "au"
-    case _ => "international"
-  }
+case class ContributorRow(email: String) {
 
   def toJsonContributorRowSqsMessage: String = {
 
-    val subscriberAttributesSqsMessage = SubscriberAttributesSqsMessage(
-      EmailAddress = email,
-      created = created,
-      amount = amount.toString(),
-      currency = currency,
-      edition = edition,
-      name = name
-    )
-
-    val contactAttributesSqsMessage = ContactAttributesSqsMessage(
-      SubscriberAttributes = subscriberAttributesSqsMessage
-    )
-
     val toSqsMessage = ToSqsMessage(
       Address = email,
-      SubscriberKey = email,
-      ContactAttributes = contactAttributesSqsMessage
+      SubscriberKey = email
     )
 
     ContributorRowSqsMessage(

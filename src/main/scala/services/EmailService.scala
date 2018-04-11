@@ -2,28 +2,22 @@ package services
 
 import aws.AWSClientBuilder
 import cats.data.{EitherT, Validated}
-import cats.implicits._
-import com.amazonaws.services.sqs.model.{SendMessageRequest, _}
 import com.amazonaws.services.sqs.AmazonSQSAsync
-import com.paypal.api.payments.{PayerInfo, Payment}
+import com.amazonaws.services.sqs.model.{SendMessageRequest, _}
 import com.typesafe.scalalogging.StrictLogging
 import conf.EmailConfig
 import model.email.ContributorRow
 import model.{DefaultThreadPool, InitializationError, InitializationResult}
 
-import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendPaypalThankEmail(payment: Payment, cmp: Option[Set[String]]):
+  def sendThankYouEmail(email: String):
   EitherT[Future, Throwable, SendMessageResult] = {
-    for {
-      row <- buildContributorRow(payment, cmp.map(_.toString))
-      emailResult <- sendEmailToQueue(thankYouQueueUrl, row)
-    } yield emailResult
+    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email))
   }
 
   /*
@@ -39,28 +33,6 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
       case _ => Left(new Exception("Unknown error while sending message to SQS."))
     })
   }
-
-  private def fullName(payerInfo: PayerInfo): Option[String] = {
-    val firstName = Option(payerInfo.getFirstName)
-    val lastName = Option(payerInfo.getLastName)
-    Seq(firstName, lastName).flatten match {
-      case Nil => None
-      case names => Some(names.mkString(" "))
-    }
-  }
-
-  private def buildContributorRow(payment: Payment, cmp: Option[String]):
-  EitherT[Future, Throwable, ContributorRow] = Either.catchNonFatal {
-    val transaction = payment.getTransactions.asScala.head
-    ContributorRow(
-      email = payment.getPayer.getPayerInfo.getEmail,
-      created = payment.getCreateTime,
-      amount = BigDecimal(transaction.getAmount.getTotal),
-      currency = transaction.getAmount.getCurrency,
-      name = fullName(payment.getPayer.getPayerInfo).getOrElse(""),
-      cmp = cmp
-    )
-  }.toEitherT[Future]
 }
 
 object EmailService {

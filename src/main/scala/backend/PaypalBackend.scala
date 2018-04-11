@@ -95,9 +95,11 @@ class PaypalBackend(
   EitherT[Future, BackendError, Payment] = {
     for {
       payment <- getPaymentFromCapturePaypalPaymentData(capturePaypalPaymentData)
-      identityId <- getOrCreateIdentityIdFromEmail(payment.getPayer.getPayerInfo.getEmail)
+      paymentEmail <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail)
+        .leftMap(error => BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))).toEitherT
+      identityId <- getOrCreateIdentityIdFromEmail(paymentEmail)
       _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, identityId)
-      _ = emailService.sendPaypalThankEmail(payment, capturePaypalPaymentData.acquisitionData.campaignCodes)
+      _ = emailService.sendThankYouEmail(capturePaypalPaymentData.signedInUserEmail.getOrElse(paymentEmail))
     } yield payment
   }
 
@@ -105,14 +107,12 @@ class PaypalBackend(
   EitherT[Future, BackendError, Payment] = {
     for {
       payment <- getPaymentFromPaypalExecutePaymentData(paypalExecutePaymentData)
-
-      signedInUserEmail = paypalExecutePaymentData.signedInUserEmail
-      paymentEmail = payment.getPayer.getPayerInfo.getEmail
-      email = signedInUserEmail.getOrElse(paymentEmail)
-
+      paymentEmail <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail)
+        .leftMap(error => BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))).toEitherT
+      email = paypalExecutePaymentData.signedInUserEmail.getOrElse(paymentEmail)
       identityId <- getOrCreateIdentityIdFromEmail(email)
       _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData, identityId)
-      _ = emailService.sendPaypalThankEmail(payment, paypalExecutePaymentData.acquisitionData.campaignCodes)
+      _ = emailService.sendThankYouEmail(email)
     } yield payment
   }
 

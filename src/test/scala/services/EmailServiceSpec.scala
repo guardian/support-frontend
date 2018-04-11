@@ -51,7 +51,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendPaypalThankEmail(payment, None)
+    val emailResult = emailService.sendThankYouEmail("email@email.com")
     whenReady(emailResult.value) { result =>
       result shouldBe Right(new SendMessageResult)
     }
@@ -80,7 +80,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendPaypalThankEmail(payment, None).value) { result =>
+    whenReady(emailService.sendThankYouEmail("email@email.com").value) { result =>
       result.fold(
         error => {
           error.getCause.getMessage shouldBe exception.getMessage

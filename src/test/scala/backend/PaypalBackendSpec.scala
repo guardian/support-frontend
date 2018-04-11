@@ -25,7 +25,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- entities
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None)
-  val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData)
+  val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, None)
   val executePaypalPaymentData = ExecutePaypalPaymentData(
     ExecutePaymentData("paymentId", "payerId"), acquisitionData, None
   )
@@ -150,7 +150,7 @@ class PaypalBackendSpec
         when(paymentMock.getPayer).thenReturn(payer)
         when(payer.getPayerInfo).thenReturn(payerInfo)
         when(payerInfo.getEmail).thenReturn("email@email.com")
-        when(mockEmailService.sendPaypalThankEmail(any(), any())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
@@ -176,7 +176,7 @@ class PaypalBackendSpec
         when(paymentMock.getPayer).thenReturn(payer)
         when(payer.getPayerInfo).thenReturn(payerInfo)
         when(payerInfo.getEmail).thenReturn("email@email.com")
-        when(mockEmailService.sendPaypalThankEmail(any(), any())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)

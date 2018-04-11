@@ -8,7 +8,7 @@ import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
-import conf.{ConfigLoader, IdentityConfig, OphanConfig, StripeConfig}
+import conf._
 import conf.ConfigLoader._
 import model._
 import model.acquisition.StripeAcquisition
@@ -22,7 +22,8 @@ class StripeBackend(
     stripeService: StripeService,
     databaseService: DatabaseService,
     identityService: IdentityService,
-    ophanService: OphanService
+    ophanService: OphanService,
+    emailService: EmailService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Convert the result of the identity id operation,
@@ -70,6 +71,7 @@ class StripeBackend(
 
       identityId <- getOrCreateIdentityIdFromEmail(email)
       _ = trackContribution(charge, data, identityId)
+      _ = emailService.sendThankYouEmail(email)
     } yield StripeChargeSuccess.fromCharge(charge)
 
 
@@ -87,8 +89,8 @@ class StripeBackend(
 object StripeBackend {
 
   private def apply(stripeService: StripeService, databaseService: DatabaseService,
-    identityService: IdentityService, ophanService: OphanService)(implicit pool: DefaultThreadPool): StripeBackend =
-    new StripeBackend(stripeService, databaseService, identityService, ophanService)
+    identityService: IdentityService, ophanService: OphanService, emailService: EmailService)(implicit pool: DefaultThreadPool): StripeBackend =
+    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService)
 
   class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
     implicit defaultThreadPool: DefaultThreadPool,
@@ -109,7 +111,10 @@ object StripeBackend {
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       configLoader
         .loadConfig[Environment, OphanConfig](env)
-        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService]
+        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
+      configLoader
+        .loadConfig[Environment, EmailConfig](env)
+        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService]
     ).mapN(StripeBackend.apply)
   }
 }

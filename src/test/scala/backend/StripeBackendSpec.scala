@@ -62,13 +62,15 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockDatabaseService: DatabaseService = mock[DatabaseService]
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: OphanService = mock[OphanService]
+  val mockEmailService: EmailService = mock[EmailService]
 
   //-- test obj
   val stripeBackend = new StripeBackend(
     mockStripeService,
     mockDatabaseService,
     mockIdentityService,
-    mockOphanService)(new DefaultThreadPool(ec))
+    mockOphanService,
+    mockEmailService)(new DefaultThreadPool(ec))
 }
 
 

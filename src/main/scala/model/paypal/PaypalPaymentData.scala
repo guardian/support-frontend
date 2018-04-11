@@ -54,7 +54,8 @@ object PaypalJsonDecoder {
             .getOrElse(Set[AbTest]()))
             .filter(_.nonEmpty),
           queryParameters = queryParameters
-        )
+        ),
+        signedInUserEmail = None
       )
     }
   }
@@ -83,7 +84,9 @@ object PaypalJsonDecoder {
 
 case class CapturePaypalPaymentData(
   paymentData: CapturePaymentData,
-  acquisitionData: AcquisitionData)
+  acquisitionData: AcquisitionData,
+  signedInUserEmail: Option[String]
+)
 
 @JsonCodec case class ExecutePaymentData(
   paymentId: String,
@@ -94,5 +97,4 @@ case class ExecutePaypalPaymentData(
   paymentData: ExecutePaymentData,
   acquisitionData: AcquisitionData,
   signedInUserEmail: Option[String]
-
 )

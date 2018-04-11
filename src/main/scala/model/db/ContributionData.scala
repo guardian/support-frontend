@@ -56,20 +56,22 @@ object ContributionData {
   def fromPaypalCharge(identityId: Option[Long], payment: Payment): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
-        .fromString(s"Invaid Paypal transactions content."))
+        .fromString(s"Invalid Paypal transactions content."))
       currency <- Either.catchNonFatal(Currency.withNameInsensitive(transactions.getAmount.getCurrency)).leftMap(PaypalApiError.fromThrowable)
       amount <- Either.catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal)).leftMap(PaypalApiError.fromThrowable)
       created <- Either.catchNonFatal(paypalDateToLocalDateTime(payment.getCreateTime)).leftMap(PaypalApiError.fromThrowable)
+      email <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail).leftMap(PaypalApiError.fromThrowable)
+      countryCode <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getCountryCode).leftMap(PaypalApiError.fromThrowable)
     } yield ContributionData(
       paymentProvider = PaymentProvider.Paypal,
       paymentStatus = PaymentStatus.Paid,
       paymentId = payment.getId,
       identityId = identityId,
-      receiptEmail = payment.getPayer.getPayerInfo.getEmail,
+      receiptEmail = email,
       created = created,
       currency = currency,
       amount = amount,
-      countryCode = Some(payment.getPayer.getPayerInfo.getCountryCode)
+      countryCode = Some(countryCode)
     )
   }
 

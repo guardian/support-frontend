@@ -83,7 +83,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       if(Event.validateReceivedEvent(context, headers.asJava, body))
         ()
       else {
-        logger.error(s"Palpal has invalidated webhook request. Verify config.hookId: ${config.hookId}. JSON: $body")
+        logger.error(s"Paypal has invalidated webhook request. Verify config.hookId: ${config.hookId}. JSON: $body")
         throw new Exception("Invalid hook request")
       }
     }.leftMap{ error =>
@@ -124,12 +124,12 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   private def getTransaction(payment: Payment): Either[PaypalApiError, Transaction] =
     Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
-      .fromString(s"Invaid Paypal transactions content. Verify payment"))
+      .fromString(s"Invalid Paypal transactions content. Verify payment"))
 
 
   private def getRelatedResources(transaction: Transaction): Either[PaypalApiError, RelatedResources] =
     Either.fromOption(transaction.getRelatedResources.asScala.headOption, PaypalApiError
-      .fromString(s"Invaid Paypal payment status. Payer has not approved payment"))
+      .fromString(s"Invalid Paypal payment status. Payer has not approved payment"))
 
 
   private def getCapture(relatedResources: RelatedResources, transaction: Transaction): Either[PaypalApiError, Capture] =
@@ -182,7 +182,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
     val payment = new Payment().setId(paymentId)
     val paymentExecution = new PaymentExecution().setPayerId(payerId)
     Either.catchNonFatal(payment.execute(apiContext, paymentExecution)).leftMap{ error =>
-      logger.error(s"Error calling exexute paypal payment. Error: $error")
+      logger.error(s"Error calling execute paypal payment. Error: $error")
       PaypalApiError.fromThrowable(error)
     }
   }
