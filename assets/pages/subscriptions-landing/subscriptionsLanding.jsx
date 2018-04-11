@@ -10,9 +10,9 @@ import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
+import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 
 // React components connected to redux store
-import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
@@ -43,7 +43,7 @@ const store = pageInit(
 const content = (
   <Provider store={store}>
     <div>
-      <CountrySwitcherHeaderContainer />
+      <SimpleHeader />
       <CirclesIntroduction
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
