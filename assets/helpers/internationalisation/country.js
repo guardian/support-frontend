@@ -368,10 +368,10 @@ function fromString(s: string): ?IsoCountry {
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
   switch (countryGroupId) {
-    case 'AUDCountries':
-      return 'AU';
     case 'UnitedStates':
       return 'US';
+    case 'Canada':
+      return 'CA';
     default: return null;
   }
 }
@@ -379,8 +379,6 @@ function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
 function fromPath(path: string = window.location.pathname): ?IsoCountry {
   if (path === '/us' || path.startsWith('/us/')) {
     return 'US';
-  } else if (path === '/au' || path.startsWith('/au/')) {
-    return 'AU';
   } else if (path === '/ca' || path.startsWith('/ca/')) {
     return 'CA';
   }
@@ -416,7 +414,7 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
-type TargetCountryGroups = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries';
+type TargetCountryGroups = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries' | 'AUDCountries';
 
 function handleCountryForCountryGroup(
   targetCountryGroup: TargetCountryGroups,
@@ -428,6 +426,7 @@ function handleCountryForCountryGroup(
     EURCountries: ['/eu', '/eu/'],
     NZDCountries: ['/nz', '/nz/'],
     GBPCountries: ['/uk', '/uk/'],
+    AUDCountries: ['/au', '/au/'],
   };
 
   const defaultCountry: {[TargetCountryGroups]: IsoCountry} = {
@@ -435,6 +434,7 @@ function handleCountryForCountryGroup(
     EURCountries: 'DE',
     NZDCountries: 'NZ',
     GBPCountries: 'GB',
+    AUDCountries: 'AU',
   };
 
   const path = window.location.pathname;
@@ -458,7 +458,7 @@ function handleCountryForCountryGroup(
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
 
-  const targetCountryGroups: TargetCountryGroups[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries'];
+  const targetCountryGroups: TargetCountryGroups[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries', 'AUDCountries'];
   let country = null;
 
   targetCountryGroups.forEach((targetCountryGroupId) => {
