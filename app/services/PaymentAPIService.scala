@@ -24,10 +24,10 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   private val createPaymentPath = "/contribute/one-off/paypal/create-payment"
   private val executePaymentPath = "/contribute/one-off/paypal/execute-payment"
 
-  def getCreatePaymentURL: String = paymentAPIUrl.concat(createPaymentPath)
-  def getExecutePaymentURL: String = paymentAPIUrl.concat(executePaymentPath)
+  val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$createPaymentPath"
+  val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$executePaymentPath"
 
-  def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
+  private def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
     queryString.foldLeft(List.empty[(String, String)]) {
       case (list, (key, values)) => list ::: values.map(x => (key, x)).toList
     }
@@ -59,7 +59,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   private def postData(data: JsObject, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
-    wsClient.url(getExecutePaymentURL)
+    wsClient.url(payPalExecutePaymentEndpoint)
       .withQueryStringParameters(convertQueryString(allQueryParams): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withBody(data)

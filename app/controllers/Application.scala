@@ -76,7 +76,7 @@ class Application(
       title,
       id,
       js,
-      paymentApiPayPalEndpoint = paymentAPIService.getCreatePaymentURL,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
@@ -88,7 +88,7 @@ class Application(
         description = Some(stringsConfig.contributionLandingDescription),
         id,
         js,
-        paymentApiPayPalEndpoint = paymentAPIService.getCreatePaymentURL
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint
       )
     )
   }

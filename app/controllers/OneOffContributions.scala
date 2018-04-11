@@ -49,7 +49,7 @@ class OneOffContributions(
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      paymentApiPayPalEndpoint = paymentAPIService.getCreatePaymentURL,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
 
