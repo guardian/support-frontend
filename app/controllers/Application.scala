@@ -66,6 +66,8 @@ class Application(
   }
 
   def subscribeRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    // Country code is required here because it's a parameter in the route.
+    // But we don't actually use it.
     Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
