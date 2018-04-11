@@ -7,19 +7,6 @@ import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object PaymentAPIService {
-  case class Email(value: String)
-  object Email {
-    def fromResponse(resp: WSResponse): Either[Throwable, Option[Email]] = {
-      if (resp.status == 200) {
-        Right((resp.json \ "email").validate[String].asOpt.map(Email.apply))
-      } else {
-        Left(new IOException(resp.toString))
-      }
-    }
-  }
-}
-
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String, paymentApiPayPalExecutePaymentPath: String) {
 
   def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
