@@ -74,7 +74,7 @@ const content = (
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={state.page.oneoffContrib.amount}
-            currency={state.page.oneoffContrib.currency}
+            currency={state.page.oneoffContrib.currencyId}
           />
           <Secure />
         </InfoSection>

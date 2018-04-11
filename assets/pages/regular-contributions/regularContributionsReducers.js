@@ -10,7 +10,7 @@ import { userReducer as user } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
 
@@ -19,7 +19,7 @@ import type { PaymentStatus, PayPalButtonType } from './components/regularContri
 
 export type State = {
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   error: ?string,
   paymentStatus: PaymentStatus,
   payPalType: PayPalButtonType,
@@ -41,11 +41,11 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createRegularContribReducer(amount: number, currency: Currency) {
+function createRegularContribReducer(amount: number, currencyId: IsoCurrency) {
 
   const initialState: State = {
     amount,
-    currency,
+    currencyId,
     error: null,
     paymentStatus: 'NotStarted',
     payPalType: 'NotSet',
@@ -79,9 +79,9 @@ function createRegularContribReducer(amount: number, currency: Currency) {
 
 // ----- Exports ----- //
 
-export default function createRootRegularContributionsReducer(amount: number, currency: Currency) {
+export default function createRootRegularContributionsReducer(amount: number, currencyId: IsoCurrency) {
   return combineReducers({
-    regularContrib: createRegularContribReducer(amount, currency),
+    regularContrib: createRegularContribReducer(amount, currencyId),
     user,
     csrf,
     directDebit,

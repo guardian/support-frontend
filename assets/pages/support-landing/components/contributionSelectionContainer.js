@@ -16,9 +16,9 @@ import type { State } from '../supportLandingReducer';
 function mapStateToProps(state: State) {
 
   return {
-    country: state.common.country,
-    countryGroupId: state.common.countryGroup,
-    currency: state.common.currency,
+    country: state.common.internationalisation.countryId,
+    countryGroupId: state.common.internationalisation.countryGroupId,
+    currency: state.common.internationalisation.currencyId,
     contributionType: state.page.selection.contributionType,
     selectedAmount: getAmount(state.page.selection),
     isCustomAmount: state.page.selection.isCustomAmount,

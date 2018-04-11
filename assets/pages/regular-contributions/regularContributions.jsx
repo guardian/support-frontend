@@ -80,7 +80,7 @@ const content = (
         <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
           <PaymentAmount
             amount={state.page.regularContrib.amount}
-            currency={state.page.regularContrib.currency}
+            currency={state.page.regularContrib.currencyId}
           />
           <Secure />
         </InfoSection>

@@ -8,6 +8,7 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Functions ----- //
 
@@ -20,8 +21,8 @@ function getDataValue(name, generator) {
   return value;
 }
 
-function getCurrency() {
-  return detectCurrency(detectCountryGroup()).iso;
+function getCurrency(): IsoCurrency {
+  return detectCurrency(detectCountryGroup());
 }
 
 function getContributionValue() {
