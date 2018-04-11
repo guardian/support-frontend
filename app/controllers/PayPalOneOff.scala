@@ -58,7 +58,7 @@ class PayPalOneOff(
     val maybeEmail: Future[Option[String]] =
       request.user.map { minimalUser =>
         identityService.getUser(minimalUser).value.map(_.toOption.map(_.primaryEmailAddress))
-      }.getOrElse(Future.successful(None: Option[String]))
+      }.getOrElse(Future.successful(None))
 
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
