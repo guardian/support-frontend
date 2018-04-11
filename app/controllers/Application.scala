@@ -65,6 +65,10 @@ class Application(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def subscribeRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
+  }
+
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location, request.queryString, status = FOUND)
   }
