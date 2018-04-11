@@ -4,7 +4,7 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
-import com.gu.identity.play.IdUser
+import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
@@ -14,6 +14,7 @@ import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -36,14 +37,21 @@ class PayPalOneOff(
     })
   }
 
-  def returnURL(): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
-    val cookieString = request.cookies.get("acquisition_data").get.value
-    val acquisitionData = Json.parse(java.net.URLDecoder.decode(cookieString, "UTF-8"))
+  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
+    val maybeAcquisitionData = for {
+      cookie <- request.cookies.get("acquisition_data")
+      acquisitionData <- Try { Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8")) }.toOption
+    } yield acquisitionData
+
     val queryStrings = request.queryString
+    val maybePaymentId = request.getQueryString("paymentId")
+    val maybePayerId = request.getQueryString("PayerID")
+
     val paymentJSON = Json.obj(
-      "paymentId" -> request.getQueryString("paymentId").get,
-      "payerId" -> request.getQueryString("PayerID").get
+      "paymentId" -> paymentId,
+      "payerId" -> PayerID
     )
+
     val testUsername = request.cookies.get("_test_username");
 
     def processPaymentApiResponse(success: Boolean): Result = {
@@ -55,14 +63,15 @@ class PayPalOneOff(
       }
     }
 
-    val maybeEmail: Future[Option[String]] =
-      request.user.map { minimalUser =>
-        identityService.getUser(minimalUser).value.map(_.toOption.map(_.primaryEmailAddress))
-      }.getOrElse(Future.successful(None))
+    def emailForUser(user: AuthenticatedIdUser): Future[Option[String]] =
+      identityService.getUser(user).value.map(_.toOption.map(_.primaryEmailAddress))
 
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
-    maybeEmail.flatMap(email => paymentAPIService.execute(paymentJSON, acquisitionData, queryStrings, email, isTestUser).map(processPaymentApiResponse))
+    for {
+      maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
+      result <- paymentAPIService.execute(paymentJSON, maybeAcquisitionData, queryStrings, maybeEmail, isTestUser)
+    } yield processPaymentApiResponse(result)
 
   }
 

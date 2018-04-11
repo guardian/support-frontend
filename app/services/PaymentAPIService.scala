@@ -34,26 +34,26 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   }
 
   private def getData(
-    emailOpt: Option[String],
-    acquisitionData: JsValue,
+    maybeEmail: Option[String],
+    maybeAcquisitionData: Option[JsValue],
     paymentJSON: JsObject
-  ): JsObject = {
-
-    val defaultValue = Json.obj(
+  ): JsObject = (maybeEmail, maybeAcquisitionData) match {
+    case (Some(email), Some(acquisitionData)) => Json.obj(
+      "paymentData" -> paymentJSON,
+      "acquisitionData" -> acquisitionData,
+      "signedInUserEmail" -> email
+    )
+    case (None, Some(acquisitionData)) => Json.obj(
       "paymentData" -> paymentJSON,
       "acquisitionData" -> acquisitionData
     )
-
-    emailOpt.fold {
-      defaultValue
-    } {
-      email =>
-        Json.obj(
-          "paymentData" -> paymentJSON,
-          "acquisitionData" -> acquisitionData,
-          "signedInUserEmail" -> email
-        )
-    }
+    case (Some(email), None) => Json.obj(
+      "paymentData" -> paymentJSON,
+      "signedInUserEmail" -> email
+    )
+    case _ => Json.obj(
+      "paymentData" -> paymentJSON
+    )
   }
 
   private def postData(data: JsObject, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
@@ -69,7 +69,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
 
   def execute(
     paymentJSON: JsObject,
-    acquisitionData: JsValue,
+    acquisitionData: Option[JsValue],
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
     isTestUser: Boolean
