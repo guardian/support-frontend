@@ -17,7 +17,7 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
@@ -26,20 +26,24 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
+export type Internationalisation = {|
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+|}
+
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  currency: Currency,
   otherQueryParams: Array<[string, string]>,
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
+  internationalisation: Internationalisation,
   abParticipations: Participations,
 };
 
 export type PreloadedState = {
   campaign?: $PropertyType<CommonState, 'campaign'>,
   referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  country?: $PropertyType<CommonState, 'country'>,
+  country?: $PropertyType<Internationalisation, 'countryId'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
 
@@ -66,22 +70,25 @@ function analyticsInitialisation(participations: Participations): void {
 function buildInitialState(
   abParticipations: Participations,
   preloadedState: ?PreloadedState = {},
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+  currencyId: IsoCurrency,
 ): CommonState {
   const acquisition = getAcquisition(abParticipations);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
+  const internationalisation = {
+    countryGroupId,
+    countryId,
+    currencyId,
+  };
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
-    countryGroup,
-    country,
+    internationalisation,
     abParticipations,
-    currency,
   }, preloadedState);
 
 }
@@ -128,7 +135,7 @@ function init(
 
   const countryGroup: CountryGroupId = detectCountryGroup();
   const country: IsoCountry = detectCountry();
-  const currency: Currency = detectCurrency(countryGroup);
+  const currency: IsoCurrency = detectCurrency(countryGroup);
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
 
