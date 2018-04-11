@@ -1,9 +1,7 @@
 package services
 
-import java.io.IOException
-
 import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
