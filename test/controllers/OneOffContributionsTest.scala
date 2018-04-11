@@ -18,7 +18,7 @@ import assets.AssetsResolver
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.{PrivateFields, PublicFields}
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
 import fixtures.TestCSRFComponents
 import play.api.libs.json.JsString
@@ -89,8 +89,7 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
           testUsers,
           mock[StripeConfigProvider],
           "",
-          "",
-          "",
+          mock[PaymentAPIService],
           mock[AuthAction[AnyContent]],
           stubControllerComponents()
         ).autofill(FakeRequest())

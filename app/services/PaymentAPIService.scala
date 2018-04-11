@@ -57,11 +57,10 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   }
 
   private def postData(data: JsObject, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
-    val testQueryParam = if (isTestUser) "?mode=test" else ""
-    val endpoint = s"$getExecutePaymentURL$testQueryParam"
+    val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
-    wsClient.url(endpoint)
-      .withQueryStringParameters(convertQueryString(queryStrings): _*)
+    wsClient.url(getExecutePaymentURL)
+      .withQueryStringParameters(convertQueryString(allQueryParams): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withBody(data)
       .withMethod("POST")
