@@ -2,14 +2,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import play.api.mvc._
 import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
 import utils.BrowserCheck
 
 import scala.concurrent.ExecutionContext

@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 
 import PatronsEvents from 'components/patronsEvents/patronsEvents';
 
-import type { State } from '../supportLandingReducer';
+import type { CommonState } from 'helpers/page/page';
 
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: { common: CommonState }) {
 
   return {
     campaignCode: state.common.referrerAcquisitionData.campaignCode,

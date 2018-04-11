@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { State } from '../subscriptionsLandingReducer';
+import type { CommonState } from 'helpers/page/page';
 
 
 const availableCountriesGroups: CountryGroupId[] =
@@ -42,7 +42,7 @@ function handleCountryGroupChange(value: string): void {
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: { common: CommonState }) {
 
   return {
     countryGroupIds: availableCountriesGroups,

@@ -5,18 +5,21 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+// React components
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 
+// React components connected to redux store
+import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
+import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
+
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import pageReducer from './subscriptionsLandingReducer';
-import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
-import ThreeSubscriptionsContainer from './components/threeSubscriptionsContainer';
-import PatronsEventsContainer from './components/patronsEventsContainer';
 
 
 // ----- Setup ----- //

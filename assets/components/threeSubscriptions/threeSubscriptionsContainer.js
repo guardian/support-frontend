@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 
-import type { State } from '../subscriptionsLandingReducer';
+import type { CommonState } from 'helpers/page/page';
 
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: { common: CommonState }) {
 
   return {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
