@@ -30,7 +30,7 @@ class PayPalOneOff(
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")
-    email.fold(redirect)(e => {
+    email.fold(redirect)({ e =>
       SafeLogger.info("Redirecting to thank you page with email in flash session")
       redirect.flashing("email" -> e.value)
     })
