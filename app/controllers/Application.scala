@@ -2,15 +2,12 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
-import play.api.mvc._
-import services.IdentityService
-import utils.RequestCountry._
 import config.StringsConfig
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import play.api.mvc._
+import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
+import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
 
@@ -19,8 +16,7 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    paymentApiUrl: String,
-    paymentApiPayPalCreatePaymentPath: String,
+    paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
@@ -80,7 +76,7 @@ class Application(
       title,
       id,
       js,
-      paymentApiPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath),
+      paymentApiPayPalEndpoint = paymentAPIService.getCreatePaymentURL,
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
@@ -92,7 +88,7 @@ class Application(
         description = Some(stringsConfig.contributionLandingDescription),
         id,
         js,
-        paymentApiPayPalEndpoint = paymentApiUrl.concat(paymentApiPayPalCreatePaymentPath)
+        paymentApiPayPalEndpoint = paymentAPIService.getCreatePaymentURL
       )
     )
   }
@@ -108,5 +104,4 @@ class Application(
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
-
 }

@@ -29,10 +29,6 @@ class Configuration {
 
   lazy val paymentApiUrl = config.getString("paymentApi.url");
 
-  lazy val paymentApiPayPalCreatePaymentPath = config.getString("paymentApi.paypal.createPayment")
-
-  lazy val paymentApiPayPalExecutePaymentPath = config.getString("paymentApi.paypal.executePayment")
-
   lazy val contributionsFrontendUrl = config.getString("contribution.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
