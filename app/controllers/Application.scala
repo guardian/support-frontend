@@ -96,7 +96,7 @@ class Application(
   }
 
   def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.subscriptionsLanding(title, description = Some(stringsConfig.subscriptionsLandingDescription), id, js))
+    Ok(views.html.react(title, id, js, Some(stringsConfig.subscriptionsLandingDescription)))
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
