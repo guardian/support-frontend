@@ -6,7 +6,7 @@ import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
 
-function mask(s: String): String {
+function mask(s: string): string {
   return `******${s.substring(6)}`;
 }
 
