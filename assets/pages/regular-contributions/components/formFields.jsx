@@ -94,7 +94,7 @@ function countriesDropdown(
   country: IsoCountry,
 ) {
 
-  const askForCountryCountryGroups = ['EURCountries', 'International', 'NZDCountries', 'GBPCountries'];
+  const askForCountryCountryGroups = ['EURCountries', 'International', 'NZDCountries', 'GBPCountries', 'AUDCountries'];
 
   if (!askForCountryCountryGroups.includes(countryGroup)) {
     return null;

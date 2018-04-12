@@ -7,7 +7,7 @@ import React from 'react';
 import RadioToggle from 'components/radioToggle/radioToggle';
 import NumberInput from 'components/numberInput/numberInput';
 import {
-  generateClassName,
+  classNameWithModifiers,
   clickSubstituteKeyPressHandler,
 } from 'helpers/utilities';
 import { errorMessage as contributionErrorMessage } from 'helpers/contributions';
@@ -468,9 +468,9 @@ function getClassName(contribType: Contrib): string {
   switch (contribType) {
     case 'ANNUAL':
     case 'MONTHLY':
-      return generateClassName('component-contrib-amounts__amounts', 'recurring');
+      return classNameWithModifiers('component-contrib-amounts__amounts', ['recurring']);
     default:
-      return generateClassName('component-contrib-amounts__amounts', 'one-off');
+      return classNameWithModifiers('component-contrib-amounts__amounts', ['one-off']);
   }
 }
 

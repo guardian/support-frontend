@@ -39,7 +39,6 @@ type PayPalDetails = {|
 |};
 
 type StripeDetails = {|
-  userId: string,
   stripeToken: string,
 |};
 
@@ -75,7 +74,6 @@ const getPaymentFields =
     sortCode?: string,
     accountHolderName?: string,
     paymentFieldName: string,
-    userId: string,
   ): ?(PayPalDetails | StripeDetails | DirectDebitDetails
     ) => {
     let response = null;
@@ -90,7 +88,6 @@ const getPaymentFields =
       case 'stripeToken':
         if (token) {
           response = {
-            userId,
             [paymentFieldName]: token,
           };
         }
@@ -144,7 +141,6 @@ function requestData(
     sortCode,
     accountHolderName,
     paymentFieldName,
-    user.id,
   );
 
   if (!paymentFields) {

@@ -17,6 +17,7 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
+import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -46,8 +47,8 @@ const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType, countryGroup).amount;
 
 const title = {
-  annual: 'Make an annual contribution',
-  monthly: 'Make a monthly contribution',
+  annual: ['Make an annual', 'contribution'],
+  monthly: ['Make a monthly', 'contribution'],
 };
 
 /* eslint-disable no-underscore-dangle */
@@ -73,16 +74,15 @@ const content = (
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
+      <CirclesIntroduction headings={title[contributionType.toLowerCase()]} />
+      <hr className="regular-contrib__multiline" />
       <div className="regular-contrib gu-content-margin">
-        <InfoSection className="regular-contrib__header">
-          <h1 className="regular-contrib__heading">{title[contributionType.toLowerCase()]}</h1>
-          <Secure />
-        </InfoSection>
         <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
           <PaymentAmount
             amount={state.page.regularContrib.amount}
             currency={state.page.regularContrib.currency}
           />
+          <Secure />
         </InfoSection>
         <InfoSection heading="Your details" headingContent={<Signout />} className="regular-contrib__your-details">
           <DisplayName />
