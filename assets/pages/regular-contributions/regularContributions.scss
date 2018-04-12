@@ -246,7 +246,10 @@
 	}
 
 	.component-direct-debit-confirmation__details__item-name {
-		padding-left: $gu-h-spacing;
+
+		@include mq($from: desktop) {
+			padding-left: $gu-h-spacing;
+		}
 		margin-top: $gu-v-spacing;
 		display: inline-block;
 		width: 170px;
