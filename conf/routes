@@ -61,7 +61,6 @@ GET  /contribute/one-off/autofill                   controllers.OneOffContributi
 
 GET  /subscribe                                    controllers.Application.subscribeGeoRedirect()
 GET  /uk/subscribe                                 controllers.Application.subscriptionsLanding(title="Support the Guardian | Get a Subscription", id="subscriptions-landing-page", js="subscriptionsLandingPage.js")
-GET  /:unsupportedCountry/subscribe                controllers.Application.subscribeGeoRedirect()
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
