@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
@@ -22,7 +23,7 @@ import { emptyInputField } from '../../../helpers/utilities';
 
 // ----- Types ----- //
 
-export type PaymentStatus = 'NotStarted' | 'Pending' | 'Failed';
+export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
 export type PayPalButtonType = 'ExpressCheckout' | 'NotSet';
 
@@ -88,6 +89,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.contributionType,
           props.dispatch,
           'directDebitData',
+          'directDebit',
           props.referrerAcquisitionData,
           context.store.getState,
       )}
@@ -104,6 +106,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.contributionType,
       props.dispatch,
       'stripeToken',
+      'stripe',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
@@ -125,6 +128,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.contributionType,
       props.dispatch,
       'baid',
+      'paypal',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
@@ -140,6 +144,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="regular-contribution-payment">
+      { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: '/contribute/recurring/thankyou' }} /> : null }
+      { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: '/contribute/recurring/pending' }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {directDebitButton}
       {stripeButton}

@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 
-import { addQueryParamToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { BillingPeriod, Contrib } from 'helpers/contributions';
@@ -15,7 +14,7 @@ import type { IsoCurrency, Currency } from 'helpers/internationalisation/currenc
 import type { Participations } from 'helpers/abTests/abtest';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { checkoutError, creatingContributor } from '../regularContributionsActions';
+import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
 // ----- Setup ----- //
@@ -184,11 +183,12 @@ function statusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  paymentMethod: PaymentMethod,
 ) {
 
   if (pollCount >= MAX_POLLS) {
-    const url: string = addQueryParamToURL(routes.recurringContribPending, 'INTCMP', referrerAcquisitionData.campaignCode);
-    window.location.assign(url);
+    dispatch(checkoutPending(paymentMethod));
+    return null;
   }
 
   pollCount += 1;
@@ -201,7 +201,7 @@ function statusPoll(
   if (trackingURI != null) {
     return fetch(trackingURI, request).then((response) => {
       // eslint-disable-next-line no-use-before-define
-      handleStatus(response, dispatch, csrf, referrerAcquisitionData);
+      handleStatus(response, dispatch, csrf, referrerAcquisitionData, paymentMethod);
     });
   }
 
@@ -212,8 +212,12 @@ function delayedStatusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  paymentMethod: PaymentMethod,
 ) {
-  setTimeout(() => statusPoll(dispatch, csrf, referrerAcquisitionData), POLLING_INTERVAL);
+  setTimeout(
+    () => statusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod),
+    POLLING_INTERVAL,
+  );
 }
 
 
@@ -222,6 +226,7 @@ function handleStatus(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  paymentMethod: PaymentMethod,
 ) {
 
   if (response.ok) {
@@ -230,20 +235,20 @@ function handleStatus(
 
       switch (status.status) {
         case 'pending':
-          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
+          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod);
           break;
         case 'failure':
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          window.location.assign(addQueryParamToURL(routes.recurringContribThankyou, 'INTCMP', referrerAcquisitionData.campaignCode));
+          dispatch(checkoutSuccess(paymentMethod));
           break;
         default:
-          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
+          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod);
       }
     });
   } else if (trackingURI) {
-    delayedStatusPoll(dispatch, csrf, referrerAcquisitionData);
+    delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod);
   } else {
     dispatch(checkoutError());
   }
@@ -258,6 +263,7 @@ function postCheckout(
   contributionType: Contrib,
   dispatch: Function,
   paymentFieldName: PaymentFieldName,
+  paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {
@@ -287,7 +293,7 @@ function postCheckout(
     );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {
-      handleStatus(response, dispatch, csrf, referrerAcquisitionData);
+      handleStatus(response, dispatch, csrf, referrerAcquisitionData, paymentMethod);
     });
   };
 }

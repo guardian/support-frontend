@@ -7,17 +7,8 @@ import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
-import Footer from 'components/footer/footer';
-import InfoSection from 'components/infoSection/infoSection';
-import DisplayName from 'components/displayName/displayName';
-import Secure from 'components/secure/secure';
-import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
-import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import PaymentAmount from 'components/paymentAmount/paymentAmount';
-import ContribLegal from 'components/legal/contribLegal/contribLegal';
-import Signout from 'components/signout/signout';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import { Route } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -28,8 +19,9 @@ import { parse as parseAmount } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import FormFields from './components/formFields';
-import RegularContributionsPayment from './components/regularContributionsPayment';
+import DirectDebitContributionsThankYouPage from './components/directDebitContributionsThankYou';
+import DefaultContributionsThankYouPage from './components/defaultContributionsThankYou';
+import RegularContributionsPage from './components/regularContributionsPage';
 import reducer from './regularContributionsReducers';
 import type { PageState } from './regularContributionsReducers';
 
@@ -45,11 +37,6 @@ const currency = detectCurrency(countryGroup);
 
 const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
 const contributionAmount = parseAmount(getQueryParameter('contributionValue'), contributionType, countryGroup).amount;
-
-const title = {
-  annual: ['Make an annual', 'contribution'],
-  monthly: ['Make a monthly', 'contribution'],
-};
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -69,38 +56,39 @@ const state: PageState = store.getState();
 
 // ----- Render ----- //
 
-const content = (
-  <Provider store={store}>
-    <div className="gu-content">
-      <TestUserBanner />
-      <SimpleHeader />
-      <CirclesIntroduction headings={title[contributionType.toLowerCase()]} />
-      <hr className="regular-contrib__multiline" />
-      <div className="regular-contrib gu-content-margin">
-        <InfoSection heading={`Your ${contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
-          <PaymentAmount
-            amount={state.page.regularContrib.amount}
-            currency={state.page.regularContrib.currency}
-          />
-          <Secure />
-        </InfoSection>
-        <InfoSection heading="Your details" headingContent={<Signout />} className="regular-contrib__your-details">
-          <DisplayName />
-          <FormFields />
-        </InfoSection>
-        <InfoSection heading="Payment methods" className="regular-contrib__payment-methods">
-          <RegularContributionsPayment contributionType={contributionType} />
-        </InfoSection>
-      </div>
-      <div className="terms-privacy gu-content-filler">
-        <InfoSection className="terms-privacy__content gu-content-filler__inner">
-          <TermsPrivacy country={country} />
-          <ContribLegal />
-        </InfoSection>
-      </div>
-      <Footer />
-    </div>
-  </Provider>
+const CheckoutPage = () => (
+  <RegularContributionsPage
+    amount={state.page.regularContrib.amount}
+    currency={state.page.regularContrib.currency}
+    contributionType={contributionType}
+    country={country}
+  />
 );
 
-renderPage(content, 'regular-contributions-page');
+const ThankYouPage = () => {
+  const current: PageState = store.getState();
+  if (current.page.regularContrib.paymentMethod === 'directDebit') {
+    return (
+      <DirectDebitContributionsThankYouPage
+        accountHolderName={current.page.directDebit.accountHolderName}
+        accountNumber={current.page.directDebit.accountNumber}
+        sortCodeArray={current.page.directDebit.sortCodeArray}
+      />
+    );
+  }
+  return (<DefaultContributionsThankYouPage />);
+};
+
+const router = (
+  <BrowserRouter>
+    <Provider store={store}>
+      <div>
+        <Route exact path="/contribute/recurring" component={CheckoutPage} />
+        <Route exact path="/contribute/recurring/thankyou" component={ThankYouPage} />
+        <Route exact path="/contribute/recurring/pending" component={ThankYouPage} />
+      </div>
+    </Provider>
+  </BrowserRouter>
+);
+
+renderPage(router, 'regular-contributions-page');

@@ -42,11 +42,11 @@ GET  /nz/contribute                                 controllers.Application.cont
 GET  /ca/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-ca", js="contributionsLandingPage.js")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.thankYouPage()
+GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.thankYouPage()
+GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm(paypal: Option[Boolean], directDebit: Option[Boolean])
 
 # this endpoint should be removed once identity remove
 # the need for a client token
