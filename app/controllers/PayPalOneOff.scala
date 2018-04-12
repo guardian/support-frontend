@@ -43,16 +43,10 @@ class PayPalOneOff(
       acquisitionData <- Try { Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8")) }.toOption
     } yield acquisitionData
 
-    val queryStrings = request.queryString
-    val maybePaymentId = request.getQueryString("paymentId")
-    val maybePayerId = request.getQueryString("PayerID")
-
     val paymentJSON = Json.obj(
       "paymentId" -> paymentId,
       "payerId" -> PayerID
     )
-
-    val testUsername = request.cookies.get("_test_username");
 
     def processPaymentApiResponse(success: Boolean): Result = {
       if (success)
@@ -66,6 +60,8 @@ class PayPalOneOff(
     def emailForUser(user: AuthenticatedIdUser): Future[Option[String]] =
       identityService.getUser(user).value.map(_.toOption.map(_.primaryEmailAddress))
 
+    val queryStrings = request.queryString
+    val testUsername = request.cookies.get("_test_username");
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
     for {

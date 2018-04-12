@@ -2,10 +2,21 @@ package services
 
 import java.io.IOException
 
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
+import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
+
+case class ExecutePaymentBody(
+    signedInUserEmail: Option[String],
+    acquisitionData: Option[JsValue],
+    paymentData: JsObject
+)
+
+object ExecutePaymentBody {
+  implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
+}
 
 object PaymentAPIService {
   case class Email(value: String)
@@ -33,36 +44,13 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     }
   }
 
-  private def getData(
-    maybeEmail: Option[String],
-    maybeAcquisitionData: Option[JsValue],
-    paymentJSON: JsObject
-  ): JsObject = (maybeEmail, maybeAcquisitionData) match {
-    case (Some(email), Some(acquisitionData)) => Json.obj(
-      "paymentData" -> paymentJSON,
-      "acquisitionData" -> acquisitionData,
-      "signedInUserEmail" -> email
-    )
-    case (None, Some(acquisitionData)) => Json.obj(
-      "paymentData" -> paymentJSON,
-      "acquisitionData" -> acquisitionData
-    )
-    case (Some(email), None) => Json.obj(
-      "paymentData" -> paymentJSON,
-      "signedInUserEmail" -> email
-    )
-    case _ => Json.obj(
-      "paymentData" -> paymentJSON
-    )
-  }
-
-  private def postData(data: JsObject, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
+  private def postData(data: ExecutePaymentBody, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
     wsClient.url(payPalExecutePaymentEndpoint)
       .withQueryStringParameters(convertQueryString(allQueryParams): _*)
       .withHttpHeaders("Accept" -> "application/json")
-      .withBody(data)
+      .withBody(Json.toJson(data))
       .withMethod("POST")
       .execute()
   }
@@ -74,7 +62,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     email: Option[String],
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
-    val data = getData(email, acquisitionData, paymentJSON)
+    val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
     postData(data, queryStrings, isTestUser).map(_.status == 200)
   }
 }
