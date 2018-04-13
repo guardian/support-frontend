@@ -55,12 +55,7 @@
     }
   }
 
-  &:before {
-    @include multiline(4, gu-colour(garnett-neutral-4));
-    background-color: #fff;
-    display: block;
-    content: '';
-  }
+  @include multiline-top-border;
 }
 
 .component-contribute__description {

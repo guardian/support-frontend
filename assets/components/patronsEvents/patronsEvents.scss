@@ -3,12 +3,7 @@
   background-color: gu-colour(garnett-neutral-3);
   padding-bottom: $gu-v-spacing * 4;
 
-  &:before {
-    @include multiline(4, gu-colour(garnett-neutral-4));
-    background-color: #fff;
-    display: block;
-    content: '';
-  }
+  @include multiline-top-border;
 
   .component-page-section__header {
     @include dropline;

@@ -12,7 +12,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import { createContributionLandingReducer } from './contributionsLandingReducers';
+import { createContributionsLandingReducer } from './contributionsLandingReducers';
 import { saveContext } from './helpers/context';
 
 import CountrySwitcherHeaderContainer from './components/countrySwitcherHeaderContainer';
@@ -24,7 +24,7 @@ import ContributionsBundleContent from './components/contributionsBundleContent'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
-const store = pageInit(createContributionLandingReducer('20'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
+const store = pageInit(createContributionsLandingReducer('20'), undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 saveContext(store.dispatch);
 
