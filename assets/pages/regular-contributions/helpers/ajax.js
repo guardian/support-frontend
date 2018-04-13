@@ -33,6 +33,8 @@ type ContributionRequest = {
 
 type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
 
+export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
+
 type PayPalDetails = {|
   'baid': string
 |};
@@ -183,7 +185,7 @@ function statusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: string,
+  paymentMethod: PaymentMethod,
 ) {
 
   if (pollCount >= MAX_POLLS) {
@@ -212,7 +214,7 @@ function delayedStatusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: string,
+  paymentMethod: PaymentMethod,
 ) {
   setTimeout(
     () => statusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod),
@@ -226,7 +228,7 @@ function handleStatus(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: string,
+  paymentMethod: PaymentMethod,
 ) {
 
   if (response.ok) {
@@ -263,7 +265,7 @@ function postCheckout(
   contributionType: Contrib,
   dispatch: Function,
   paymentFieldName: PaymentFieldName,
-  paymentMethod: string,
+  paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {

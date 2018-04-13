@@ -26,8 +26,6 @@ import {
   SvgExclamationAlternate,
 } from 'components/svg/svg';
 
-
-
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */

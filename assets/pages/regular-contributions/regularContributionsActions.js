@@ -3,13 +3,14 @@
 // ----- Imports ----- //
 
 import type { PayPalButtonType } from './components/regularContributionsPayment';
+import type { PaymentMethod } from './helpers/ajax';
 
 
 // ----- Types ----- //
 
 export type Action =
-  | { type: 'CHECKOUT_PENDING', paymentMethod: string }
-  | { type: 'CHECKOUT_SUCCESS', paymentMethod: string }
+  | { type: 'CHECKOUT_PENDING', paymentMethod: PaymentMethod }
+  | { type: 'CHECKOUT_SUCCESS', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_ERROR', message: string }
   | { type: 'SET_PAYPAL_BUTTON', value: PayPalButtonType }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -18,11 +19,11 @@ export type Action =
 
 // ----- Actions ----- //
 
-function checkoutPending(paymentMethod: string): Action {
+function checkoutPending(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_PENDING', paymentMethod };
 }
 
-function checkoutSuccess(paymentMethod: string): Action {
+function checkoutSuccess(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_SUCCESS', paymentMethod };
 }
 

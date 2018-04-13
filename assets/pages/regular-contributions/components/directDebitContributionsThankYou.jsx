@@ -9,12 +9,26 @@ import Footer from 'components/footer/footer';
 import ThankYouIntroduction from 'components/thankYouIntroduction/thankYouIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 
 import EmailConfirmation from './emailConfirmation';
 import MarketingConsentContainer from './marketingConsentContainer';
 import DirectDebitPaymentMethodDetails from './directDebitPaymentMethodDetails';
 
-export default function DirectDebitContributionsThankYouPage(props: Object) {
+// ---- Types ----- //
+
+/* eslint-disable react/no-unused-prop-types */
+type PropTypes = {
+  isDDGuaranteeOpen: boolean,
+  accountNumber: string,
+  accountHolderName: string,
+  sortCodeArray: string[],
+  openDDGuaranteeClicked: () => void,
+  closeDDGuaranteeClicked: () => void,
+};
+/* eslint-enable react/no-unused-prop-types */
+
+function DirectDebitContributionsThankYouPage(props: PropTypes) {
   return (
     <div className="gu-content">
       <SimpleHeader />
@@ -29,6 +43,11 @@ export default function DirectDebitContributionsThankYouPage(props: Object) {
         sortCodeArray={props.sortCodeArray}
         accountNumber={props.accountNumber}
       />
+      <DirectDebitGuarantee
+        isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+        openDDGuaranteeClicked={props.openDDGuaranteeClicked}
+        closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
+      />
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
@@ -36,3 +55,5 @@ export default function DirectDebitContributionsThankYouPage(props: Object) {
     </div>
   );
 }
+
+export default DirectDebitContributionsThankYouPage;

@@ -67,7 +67,7 @@ const CheckoutPage = () => (
 
 const ThankYouPage = () => {
   const current: PageState = store.getState();
-  if (current.page.regularContrib.paymentMethod === 'directDebit') {
+  if (current.page.regularContrib.paymentMethod === 'DirectDebit') {
     return (
       <DirectDebitContributionsThankYouPage
         accountHolderName={current.page.directDebit.accountHolderName}

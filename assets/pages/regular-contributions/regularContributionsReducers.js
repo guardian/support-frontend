@@ -4,6 +4,7 @@
 
 import { combineReducers } from 'redux';
 
+import * as storage from 'helpers/storage';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
@@ -15,6 +16,7 @@ import type { CommonState } from 'helpers/page/page';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
+import type { PaymentMethod } from './helpers/ajax';
 
 
 // ----- Types ----- //
@@ -24,7 +26,7 @@ export type State = {
   currency: Currency,
   error: ?string,
   paymentStatus: PaymentStatus,
-  paymentMethod: ?string,
+  paymentMethod: ?PaymentMethod,
   payPalType: PayPalButtonType,
   payPalHasLoaded: boolean,
   statusUri: ?string,
@@ -48,12 +50,20 @@ export type PageState = {
 
 function createRegularContribReducer(amount: number, currency: Currency) {
 
+  function getPaymentMethod(): ?PaymentMethod {
+    const pm: ?string = storage.getSession('paymentMethod');
+    if (pm && (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal')) {
+      return (pm: PaymentMethod);
+    }
+    return null;
+  }
+
   const initialState: State = {
     amount,
     currency,
     error: null,
     paymentStatus: 'NotStarted',
-    paymentMethod: null,
+    paymentMethod: getPaymentMethod(),
     payPalType: 'NotSet',
     payPalHasLoaded: false,
     statusUri: null,

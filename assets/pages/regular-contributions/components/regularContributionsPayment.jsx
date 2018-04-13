@@ -89,7 +89,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.contributionType,
           props.dispatch,
           'directDebitData',
-          'directDebit',
+          'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
       )}
@@ -106,7 +106,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.contributionType,
       props.dispatch,
       'stripeToken',
-      'stripe',
+      'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
@@ -128,7 +128,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.contributionType,
       props.dispatch,
       'baid',
-      'paypal',
+      'PayPal',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
