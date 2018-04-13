@@ -12,31 +12,35 @@ import type { State } from '../contributionsLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'EURCountries', 'AUDCountries'];
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'];
 
 // ----- Functions ----- //
 
-function handleCountryGroupChange(dispatch) {
-  return (value: string) => {
-
-    if (value === 'GBPCountries') {
-      window.location.pathname = '/uk';
-    }
-
-    switch (value) {
-      case 'UnitedStates':
-        dispatch(setCountryGroup('UnitedStates'));
-        break;
-      case 'AUDCountries':
-        dispatch(setCountryGroup('AUDCountries'));
-        break;
-      case 'EURCountries':
-        dispatch(setCountryGroup('EURCountries'));
-        break;
-      default:
-    }
-
-  };
+function handleCountryGroupChange(value: string): void {
+  switch (value) {
+    case 'UnitedStates':
+      window.location.pathname = '/us/contribute';
+      break;
+    case 'GBPCountries':
+      window.location.pathname = '/uk/contribute';
+      break;
+    case 'EURCountries':
+      window.location.pathname = '/eu/contribute';
+      break;
+    case 'NZDCountries':
+      window.location.pathname = '/nz/contribute';
+      break;
+    case 'Canada':
+      window.location.pathname = '/ca/contribute';
+      break;
+    case 'International':
+      window.location.pathname = '/int/contribute';
+      break;
+    case 'AUDCountries':
+      window.location.pathname = '/au/contribute';
+      break;
+    default:
+  }
 }
 
 // ----- State Maps ----- //
@@ -46,17 +50,10 @@ function mapStateToProps(state: State) {
   return {
     countryGroupIds: availableCountriesGroups,
     selectedCountryGroup: state.common.countryGroup,
+    onCountryGroupSelect: handleCountryGroupChange,
   };
 }
-
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onCountryGroupSelect: handleCountryGroupChange(dispatch),
-  };
-}
-
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(CountrySwitcherHeader);
+export default connect(mapStateToProps)(CountrySwitcherHeader);
