@@ -183,7 +183,7 @@ function statusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: PaymentMethod,
+  paymentMethod: string,
 ) {
 
   if (pollCount >= MAX_POLLS) {
@@ -212,7 +212,7 @@ function delayedStatusPoll(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: PaymentMethod,
+  paymentMethod: string,
 ) {
   setTimeout(
     () => statusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod),
@@ -226,7 +226,7 @@ function handleStatus(
   dispatch: Function,
   csrf: CsrfState,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  paymentMethod: PaymentMethod,
+  paymentMethod: string,
 ) {
 
   if (response.ok) {
@@ -263,7 +263,7 @@ function postCheckout(
   contributionType: Contrib,
   dispatch: Function,
   paymentFieldName: PaymentFieldName,
-  paymentMethod: PaymentMethod,
+  paymentMethod: string,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): Function {
