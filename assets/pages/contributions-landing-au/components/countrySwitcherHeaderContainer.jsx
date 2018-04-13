@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { setCountryGroup } from 'helpers/page/pageActions';
 import type { State } from '../contributionsLandingReducers';
 
 
