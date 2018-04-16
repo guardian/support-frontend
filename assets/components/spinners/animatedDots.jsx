@@ -7,7 +7,7 @@ import React from 'react';
 
 // ----- Component ----- //
 
-export default function ProgressMessage() {
+export default function AnimatedDots() {
   return (
     <div className="component-animated-dots">
       <div className="component-animated-dots__bounce1" />

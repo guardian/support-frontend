@@ -29,7 +29,6 @@ class Application(
   }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
@@ -44,7 +43,6 @@ class Application(
   }
 
   def contributeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
@@ -56,6 +54,21 @@ class Application(
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
+  }
+
+  def subscribeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => "/uk/subscribe"
+      case _ => "https://subscribe.theguardian.com"
+    }
+
+    Redirect(redirectUrl, request.queryString, status = FOUND)
+  }
+
+  def subscribeRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    // Country code is required here because it's a parameter in the route.
+    // But we don't actually use it.
+    Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -85,12 +98,16 @@ class Application(
     Ok(
       views.html.contributionsLanding(
         title,
-        description = Some(stringsConfig.contributionLandingDescription),
+        description = Some(stringsConfig.contributionsLandingDescription),
         id,
         js,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint
       )
     )
+  }
+
+  def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.react(title, id, js, Some(stringsConfig.subscriptionsLandingDescription)))
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>

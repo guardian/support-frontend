@@ -23,6 +23,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     favicons: 'images/favicons.js',
     styles: 'stylesheets/garnett.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
+    subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
     contributionsLandingPageAU: 'pages/contributions-landing-au/contributionsLandingAU.jsx',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',

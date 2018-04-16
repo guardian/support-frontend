@@ -7,39 +7,33 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { State } from '../contributionsLandingReducer';
+import type { CommonState } from 'helpers/page/page';
 
-
-// ----- Setup ----- //
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'EURCountries', 'International', 'Canada', 'NZDCountries'];
-
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International'];
 
 // ----- Functions ----- //
 
 function handleCountryGroupChange(value: string): void {
   switch (value) {
+    case 'UnitedStates':
+      window.location.pathname = '/us/contribute';
+      break;
     case 'GBPCountries':
       window.location.pathname = '/uk/contribute';
-      break;
-    case 'AUDCountries':
-      window.location.pathname = '/au/contribute';
       break;
     case 'EURCountries':
       window.location.pathname = '/eu/contribute';
       break;
-    case 'UnitedStates':
-      window.location.pathname = '/us/contribute';
-      break;
-    case 'International':
-      window.location.pathname = '/int/contribute';
+    case 'NZDCountries':
+      window.location.pathname = '/nz/contribute';
       break;
     case 'Canada':
       window.location.pathname = '/ca/contribute';
       break;
-    case 'NZDCountries':
-      window.location.pathname = '/nz/contribute';
+    case 'International':
+      window.location.pathname = '/int/contribute';
       break;
     default:
   }
@@ -48,7 +42,7 @@ function handleCountryGroupChange(value: string): void {
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: { common: CommonState }) {
 
   return {
     countryGroupIds: availableCountriesGroups,
