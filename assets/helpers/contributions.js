@@ -11,6 +11,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
 
+
 // ----- Types ----- //
 
 export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
@@ -245,6 +246,7 @@ const amounts = {
   },
 };
 
+
 // ----- Functions ----- //
 
 function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
@@ -360,8 +362,6 @@ function getSpokenType(
 
 }
 
-/* ------- contributionAmounts functions -----*/
-
 function getCustomAmountA11yHint(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
@@ -398,7 +398,6 @@ function getAmountA11yHint(
 
 }
 
-
 function getContributionTypeRadios(countryGroupId: CountryGroupId) {
 
   return [
@@ -416,7 +415,6 @@ function getContributionTypeRadios(countryGroupId: CountryGroupId) {
   ];
 
 }
-
 
 function getContributionAmountRadios(
   contributionType: Contrib,
