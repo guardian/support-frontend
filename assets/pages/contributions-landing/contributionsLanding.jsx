@@ -29,36 +29,44 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 
 // ----- Internationalisation ----- //
 
+const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
 const defaultContributeCopy = 'Your contribution funds and supports The Guardian\'s journalism.';
 
 const countryGroupSpecificDetails: {
-  [CountryGroupId]: { contributeCopy: string, reactElementId: string }
+  [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
 } = {
   GBPCountries: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-uk',
   },
   EURCountries: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-eu',
   },
   UnitedStates: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.',
     reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
+    headerCopy: ['Help us deliver', 'the independent', 'journalism', 'Australia needs'],
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-au',
   },
   International: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-int',
   },
   NZDCountries: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-nz',
   },
   Canada: {
+    headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-ca',
   },
@@ -85,7 +93,7 @@ const content = (
     <div className="gu-content">
       <CountrySwitcherHeaderContainer />
       <CirclesIntroduction
-        headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
+        headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
       />
       <Contribute
