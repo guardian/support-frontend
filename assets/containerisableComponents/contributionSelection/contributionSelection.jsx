@@ -11,6 +11,9 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import {
   errorMessage as contributionsErrorMessage,
   getContributionTypeClassName,
+  getContributionTypeRadios,
+  getContributionAmountRadios,
+  getCustomAmountA11yHint,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -20,12 +23,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
   ContribError as ContributionError,
-} from 'helpers/contributions';
-
-import {
-  getContributionTypeRadios,
-  getContributionAmountRadios,
-  getCustomAmountA11yHint,
 } from 'helpers/contributions';
 
 
