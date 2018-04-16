@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import InfoSection from 'components/infoSection/infoSection';
@@ -14,10 +15,23 @@ import TestUserBanner from 'components/testUserBanner/testUserBanner';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
+import { getQueryParameter } from 'helpers/url';
+import { parseContrib } from 'helpers/contributions';
 
 import FormFields from './formFields';
 import RegularContributionsPayment from './regularContributionsPayment';
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state) {
+  const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
+  return {
+    amount: state.page.regularContrib.amount,
+    currency: state.common.currency,
+    contributionType,
+    country: state.common.country,
+  };
+}
 
 // ----- Page Startup ----- //
 
@@ -28,7 +42,7 @@ const title = {
 
 // ----- Render ----- //
 
-export default function RegularContributionsPage(props: Object) {
+function RegularContributionsPage(props: Object) {
   return (
     <div className="gu-content">
       <TestUserBanner />
@@ -60,3 +74,7 @@ export default function RegularContributionsPage(props: Object) {
     </div>
   );
 }
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(RegularContributionsPage);

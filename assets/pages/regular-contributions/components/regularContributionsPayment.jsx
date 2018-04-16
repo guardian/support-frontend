@@ -165,7 +165,7 @@ function mapStateToProps(state) {
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
-    currency: state.page.regularContrib.currency,
+    currency: state.common.currency,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
     country: state.common.country,

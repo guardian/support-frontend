@@ -4,7 +4,6 @@
 
 import { combineReducers } from 'redux';
 
-import * as storage from 'helpers/storage';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
@@ -13,17 +12,14 @@ import { directDebitReducer as directDebit } from 'components/directDebit/direct
 import { marketingConsentReducerFor } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
-import type { Currency } from 'helpers/internationalisation/currency';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
 import type { PaymentMethod } from './helpers/ajax';
-
 
 // ----- Types ----- //
 
 export type State = {
   amount: number,
-  currency: Currency,
   error: ?string,
   paymentStatus: PaymentStatus,
   paymentMethod: ?PaymentMethod,
@@ -48,22 +44,13 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createRegularContribReducer(amount: number, currency: Currency) {
-
-  function getPaymentMethod(): ?PaymentMethod {
-    const pm: ?string = storage.getSession('paymentMethod');
-    if (pm && (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal')) {
-      return (pm: PaymentMethod);
-    }
-    return null;
-  }
+function createRegularContribReducer(amount: number, paymentMethod: ?PaymentMethod) {
 
   const initialState: State = {
     amount,
-    currency,
     error: null,
     paymentStatus: 'NotStarted',
-    paymentMethod: getPaymentMethod(),
+    paymentMethod,
     payPalType: 'NotSet',
     payPalHasLoaded: false,
     statusUri: null,
@@ -101,9 +88,12 @@ function createRegularContribReducer(amount: number, currency: Currency) {
 
 // ----- Exports ----- //
 
-export default function createRootRegularContributionsReducer(amount: number, currency: Currency) {
+export default function createRootRegularContributionsReducer(
+  amount: number,
+  paymentMethod: ?PaymentMethod,
+) {
   return combineReducers({
-    regularContrib: createRegularContribReducer(amount, currency),
+    regularContrib: createRegularContribReducer(amount, paymentMethod),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user,
     csrf,

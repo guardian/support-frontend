@@ -8,7 +8,7 @@ function DirectDebitGuarantee(props: {
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void}) {
   return (
-    <div className="component-direct-debit-form__guarantee">
+    <div className="component-direct-debit-form__guarantee gu-content-margin">
       <p>
         Your payments are protected by the&nbsp;
         <button className="component-direct-debit-form__open-link" onClick={props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked}>

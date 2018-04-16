@@ -259,4 +259,13 @@
 	.component-direct-debit-confirmation__details__item-value {
 		display: inline;
 	}
+
+	.component-direct-debit-guarantee_background{
+		background: gu-colour(garnett-neutral-3);
+		margin-top: $gu-v-spacing * 2;
+	}
+
+	.component-direct-debit-form__guarantee {
+		color: #000;
+	}
 }
