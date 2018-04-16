@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CommonState } from 'helpers/page/page';
+import type { State } from '../contributionsLandingReducers';
 
 
 const availableCountriesGroups: CountryGroupId[] =
@@ -42,10 +42,9 @@ function handleCountryGroupChange(value: string): void {
   }
 }
 
-
 // ----- State Maps ----- //
 
-function mapStateToProps(state: { common: CommonState }) {
+function mapStateToProps(state: State) {
 
   return {
     countryGroupIds: availableCountriesGroups,
@@ -53,7 +52,6 @@ function mapStateToProps(state: { common: CommonState }) {
     onCountryGroupSelect: handleCountryGroupChange,
   };
 }
-
 
 // ----- Exports ----- //
 
