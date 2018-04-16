@@ -76,14 +76,14 @@ GET  /logout                                        controllers.Login.logout
 GET  /test-users                                    controllers.TestUsersManagement.createTestUser
 
 
-# ----- PayPal (NVP Endpoints) ----- #
+# ----- PayPal (Recurring Endpoints) ----- #
 
 POST /paypal/setup-payment                          controllers.PayPalRegular.setupPayment
 POST /paypal/create-agreement                       controllers.PayPalRegular.createAgreement
 GET  /paypal/return                                 controllers.PayPalRegular.returnUrl
 GET  /paypal/cancel                                 controllers.PayPalRegular.cancelUrl
 
-# ----- PayPal (REST Endpoints) ----- #
+# ----- PayPal (One-off Endpoints) ----- #
 
 GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
