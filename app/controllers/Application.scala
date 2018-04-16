@@ -32,11 +32,12 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk"
       case Some(US) => "/us/contribute"
+      case Some(Australia) => "/au/contribute"
       case Some(Europe) => "/eu/contribute"
       case Some(Canada) => "/ca/contribute"
       case Some(NewZealand) => "/nz/contribute"
       case Some(RestOfTheWorld) => "/int/contribute"
-      case _ => "https://membership.theguardian.com/supporter"
+      case _ => "/uk/contribute"
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
@@ -46,11 +47,12 @@ class Application(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
+      case Some(Australia) => "/au/contribute"
       case Some(Europe) => "/eu/contribute"
       case Some(Canada) => "/ca/contribute"
       case Some(NewZealand) => "/nz/contribute"
       case Some(RestOfTheWorld) => "/int/contribute"
-      case _ => "https://contribute.theguardian.com"
+      case _ => "/uk/contribute"
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
