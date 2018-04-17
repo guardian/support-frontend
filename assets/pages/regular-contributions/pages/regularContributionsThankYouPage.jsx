@@ -13,14 +13,16 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/directDebit/directDebitActions';
 
-import EmailConfirmation from './emailConfirmation';
-import MarketingConsentContainer from './marketingConsentContainer';
-import DirectDebitPaymentMethodDetails from './directDebitPaymentMethodDetails';
+import EmailConfirmation from '../components/emailConfirmation';
+import MarketingConsentContainer from '../components/marketingConsentContainer';
+import DirectDebitPaymentMethodDetails from '../components/directDebitPaymentMethodDetails';
+import PageSection from '../../../components/pageSection/pageSection';
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
+  isDirectDebit: boolean,
   isDDGuaranteeOpen: boolean,
   accountNumber: string,
   accountHolderName: string,
@@ -34,6 +36,7 @@ type PropTypes = {
 
 function mapStateToProps(state) {
   return {
+    isDirectDebit: state.page.regularContrib.paymentMethod === 'DirectDebit',
     isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
     accountNumber: state.page.directDebit.accountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
@@ -52,9 +55,9 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function DirectDebitContributionsThankYouPage(props: PropTypes) {
+function RegularContributionsThankYouPage(props: PropTypes) {
   return (
-    <div className="gu-content">
+    <div id="regular-contributions-thank-you-page">
       <SimpleHeader />
       <ThankYouIntroduction
         highlights={['Thank you']}
@@ -62,18 +65,24 @@ function DirectDebitContributionsThankYouPage(props: PropTypes) {
       />
       <div className="multiline-divider" />
       <EmailConfirmation />
-      <DirectDebitPaymentMethodDetails
-        accountHolderName={props.accountHolderName}
-        sortCodeArray={props.sortCodeArray}
-        accountNumber={props.accountNumber}
-      />
-      <div className="component-direct-debit-guarantee_background">
-        <DirectDebitGuarantee
-          isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-          openDDGuaranteeClicked={props.openDDGuaranteeClicked}
-          closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
-        />
-      </div>
+      {props.isDirectDebit &&
+        <div className="direct-debit-details">
+          <DirectDebitPaymentMethodDetails
+            accountHolderName={props.accountHolderName}
+            sortCodeArray={props.sortCodeArray}
+            accountNumber={props.accountNumber}
+          />
+          <div className="component-direct-debit-guarantee_background">
+            <PageSection>
+              <DirectDebitGuarantee
+                isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+                openDDGuaranteeClicked={props.openDDGuaranteeClicked}
+                closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
+              />
+            </PageSection>
+          </div>
+        </div>
+      }
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
@@ -84,4 +93,4 @@ function DirectDebitContributionsThankYouPage(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitContributionsThankYouPage);
+export default connect(mapStateToProps, mapDispatchToProps)(RegularContributionsThankYouPage);

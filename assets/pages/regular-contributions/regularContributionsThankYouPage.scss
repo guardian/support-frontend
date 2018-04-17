@@ -1,0 +1,58 @@
+#regular-contributions-thank-you-page {
+  .multiline-divider {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+  }
+
+  .component-email-confirmation {
+
+    .component-page-section__header {
+      @include dropline;
+    }
+
+    .component-page-section__body {
+      padding-top: $gu-v-spacing / 2;
+
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
+    }
+  }
+
+  .component-page-section--marketing-consent {
+    margin-top: $gu-v-spacing * 2;
+  }
+
+  .component-spread-the-word {
+    @include gu-content-filler;
+  }
+
+  .component-direct-debit-confirmation__details__item-name {
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+    margin-top: $gu-v-spacing;
+    display: inline-block;
+    width: 170px;
+    font-weight: bold;
+  }
+
+  .component-direct-debit-confirmation__details__item-value {
+    display: inline;
+  }
+
+  .component-direct-debit-guarantee_background {
+    background: gu-colour(garnett-neutral-3);
+    margin-top: $gu-v-spacing * 2;
+    width: 100%;
+  }
+
+  .component-direct-debit-guarantee {
+    color: gu-colour(garnett-neutral-6);
+    font-size: 11pt;
+  }
+
+  .component-direct-debit-guarantee__intro--open {
+    color: gu-colour(garnett-neutral-1);
+  }
+}

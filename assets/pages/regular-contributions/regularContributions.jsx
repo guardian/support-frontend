@@ -18,11 +18,9 @@ import { renderPage } from 'helpers/render';
 
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
-import DirectDebitContributionsThankYouPage from './components/directDebitContributionsThankYou';
-import DefaultContributionsThankYouPage from './components/defaultContributionsThankYou';
-import RegularContributionsPage from './components/regularContributionsPage';
+import ContributionsThankYouPage from './pages/regularContributionsThankYouPage';
+import RegularContributionsPage from './pages/regularContributionsPage';
 import reducer from './regularContributionsReducers';
-import type { PageState } from './regularContributionsReducers';
 import { setPayPalButton } from './regularContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
 import type { PaymentMethod } from './helpers/ajax';
@@ -55,26 +53,13 @@ const store = pageInit(
 user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
-const state: PageState = store.getState();
-
-// ----- Render ----- //
-
-const ThankYouPage = () => {
-  if (state.page.regularContrib.paymentMethod === 'DirectDebit') {
-    return (
-      <DirectDebitContributionsThankYouPage />
-    );
-  }
-  return (<DefaultContributionsThankYouPage />);
-};
-
 const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
         <Route exact path="/contribute/recurring" component={RegularContributionsPage} />
-        <Route exact path="/contribute/recurring/thankyou" component={ThankYouPage} />
-        <Route exact path="/contribute/recurring/pending" component={ThankYouPage} />
+        <Route exact path="/contribute/recurring/thankyou" component={ContributionsThankYouPage} />
+        <Route exact path="/contribute/recurring/pending" component={ContributionsThankYouPage} />
       </div>
     </Provider>
   </BrowserRouter>

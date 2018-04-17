@@ -7,15 +7,23 @@ function DirectDebitGuarantee(props: {
   isDDGuaranteeOpen: boolean,
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void}) {
+  const introStateClass = props.isDDGuaranteeOpen ? 'component-direct-debit-guarantee__intro--open' : '';
+  // eslint-disable-next-line max-len
+  const onClick = props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked;
   return (
-    <div className="component-direct-debit-form__guarantee gu-content-margin">
+    <div className="component-direct-debit-guarantee">
       <p>
-        Your payments are protected by the&nbsp;
-        <button className="component-direct-debit-form__open-link" onClick={props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked}>
-          Direct Debit guarantee
-        </button>.
+        <span className={`component-direct-debit-guarantee__intro ${introStateClass}`}>
+          Your payments are protected by the&nbsp;
+          <button
+            className="component-direct-debit-form__open-link"
+            onClick={onClick}
+          >
+            Direct Debit guarantee
+          </button>.
+        </span>
         <div>
-          <ul className={`component-direct-debit-form__guarantee-list ${props.isDDGuaranteeOpen ? '' : 'component-direct-debit-form__guarantee-list--closed'}`}>
+          <ul className={`component-direct-debit-guarantee__list ${props.isDDGuaranteeOpen ? '' : 'component-direct-debit-guarantee__list--closed'}`}>
             <li>
               The Guarantee is offered by all banks and building societies that accept instructions
               to pay Direct Debits
