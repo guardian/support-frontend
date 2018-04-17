@@ -13,7 +13,10 @@ function mask(s: string): string {
 export default function DirectDebitPaymentMethodDetails(props: Object) {
   return (
     <div className="component-direct-debit-confirmation">
-      <PageSection modifierClass="email-confirmation">
+      <PageSection modifierClass="email-confirmation" heading="Your contribution">
+        <p className="component-email-confirmation__copy">
+          Look out for an email confirming your recurring payment.
+        </p>
         <ul className="component-direct-debit-confirmation__details">
           <li className="component-direct-debit-confirmation__details__item">
             <div className="component-direct-debit-confirmation__details__item-name">Payment Method:</div>

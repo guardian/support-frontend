@@ -56,6 +56,27 @@ function mapDispatchToProps(dispatch) {
 }
 
 function RegularContributionsThankYouPage(props: PropTypes) {
+  const bodyCopy = props.isDirectDebit ? (
+    <div className="direct-debit-details">
+      <DirectDebitPaymentMethodDetails
+        accountHolderName={props.accountHolderName}
+        sortCodeArray={props.sortCodeArray}
+        accountNumber={props.accountNumber}
+      />
+      <div className="component-direct-debit-guarantee_background">
+        <PageSection>
+          <DirectDebitGuarantee
+            isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+            openDDGuaranteeClicked={props.openDDGuaranteeClicked}
+            closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
+          />
+        </PageSection>
+      </div>
+    </div>
+  ) : (
+    <EmailConfirmation />
+  );
+
   return (
     <div id="regular-contributions-thank-you-page">
       <SimpleHeader />
@@ -64,25 +85,7 @@ function RegularContributionsThankYouPage(props: PropTypes) {
         headings={['for a valuable', 'contribution']}
       />
       <div className="multiline-divider" />
-      <EmailConfirmation />
-      {props.isDirectDebit &&
-        <div className="direct-debit-details">
-          <DirectDebitPaymentMethodDetails
-            accountHolderName={props.accountHolderName}
-            sortCodeArray={props.sortCodeArray}
-            accountNumber={props.accountNumber}
-          />
-          <div className="component-direct-debit-guarantee_background">
-            <PageSection>
-              <DirectDebitGuarantee
-                isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-                openDDGuaranteeClicked={props.openDDGuaranteeClicked}
-                closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
-              />
-            </PageSection>
-          </div>
-        </div>
-      }
+      {bodyCopy}
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
