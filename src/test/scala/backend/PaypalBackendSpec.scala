@@ -189,13 +189,13 @@ class PaypalBackendSpec
 
       "return error if payment is not valid" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponseError)
-        when(mockDatabaseService.updatePaymentHook(any(), any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
         paypalBackend.processPaymentHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe paymentError
       }
 
       "return successful response even if databaseService fails" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponse)
-        when(mockDatabaseService.updatePaymentHook(any(), any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
         paypalBackend.processPaymentHook(paypalHook, Map.empty, "JSON").futureRight shouldBe (())
       }
     }

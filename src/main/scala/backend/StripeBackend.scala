@@ -79,7 +79,7 @@ class StripeBackend(
   EitherT[Future, StripeApiError, Event] = {
     for {
       event <- stripeService.processPaymentHook(stripeHook)
-      _ = databaseService.updatePaymentHook(stripeHook.data.`object`.id, stripeHook.`type`.entryName)
+      _ = databaseService.flagContributionAsRefunded(stripeHook.data.`object`.id)
     } yield event
   }
 

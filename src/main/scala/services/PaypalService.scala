@@ -78,7 +78,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {
     Either.catchNonFatal {
       val context = buildAPIContext.addConfiguration(Constants.PAYPAL_WEBHOOK_ID, config.hookId)
-      if(Event.validateReceivedEvent(context, headers.asJava, body))
+      if (Event.validateReceivedEvent(context, headers.asJava, body))
         ()
       else {
         logger.error(s"Paypal has invalidated webhook request. Verify config.hookId: ${config.hookId}. JSON: $body")

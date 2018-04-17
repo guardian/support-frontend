@@ -132,13 +132,13 @@ class StripeBackendSpec
 
       "return error if payment is not valid" in new StripeBackendFixture {
         when(mockStripeService.processPaymentHook(stripeHook)).thenReturn(eventResponseError)
-        when(mockDatabaseService.updatePaymentHook(any(), any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
         stripeBackend.processPaymentHook(stripeHook).futureLeft shouldBe stripeApiError
       }
 
       "return successful response even if databaseService fails" in new StripeBackendFixture {
         when(mockStripeService.processPaymentHook(stripeHook)).thenReturn(eventResponse)
-        when(mockDatabaseService.updatePaymentHook(any(), any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
         stripeBackend.processPaymentHook(stripeHook).futureRight shouldBe eventMock
       }
     }

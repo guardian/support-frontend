@@ -19,7 +19,7 @@ trait DatabaseService {
   // since the result of the insert has no dependencies.
   // See e.g. backend.StripeBackend for more context.
   def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit]
-  def updatePaymentHook(paymentId: String, status: String): EitherT[Future, DatabaseService.Error, Unit]
+  def flagContributionAsRefunded(paymentId: String): EitherT[Future, DatabaseService.Error, Unit]
 }
 
 object DatabaseService {
@@ -31,7 +31,7 @@ object DatabaseService {
 class PostgresDatabaseService private (database: Database)(implicit pool: JdbcThreadPool)
   extends DatabaseService with StrictLogging {
 
-  private def executeTransaction(insertStatement: SimpleSql[Row]): EitherT[Future, DatabaseService.Error, Unit] =
+  private def executeQuery(insertStatement: SimpleSql[Row]): EitherT[Future, DatabaseService.Error, Unit] =
     Future(database.withConnection { implicit conn => insertStatement.execute() })
       .attemptT
       .bimap(
@@ -43,69 +43,40 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
       )
 
   override def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit] = {
-    val transaction = SQL"""
-      BEGIN;
-
-      INSERT INTO live_contributors AS lc (
-        receipt_email,
-        iduser,
-        updated
-      ) VALUES (
-        ${data.receiptEmail},
-        ${data.identityId},
-        ${data.created}
-      ) ON CONFLICT (receipt_email) DO
-      UPDATE SET
-        iduser = COALESCE(EXCLUDED.iduser, lc.iduser),
-        updated = EXCLUDED.updated;
-
-      INSERT INTO contribution_metadata (
-        contributionid,
-        created,
-        email,
-        country
-      ) VALUES (
-        ${data.contributionId}::uuid,
-        ${data.created},
-        ${data.receiptEmail},
-        ${data.countryCode}
-      );
-
-      INSERT INTO payment_hooks (
-        contributionid,
-        paymentid,
-        provider,
-        created,
+    val query = SQL"""
+      INSERT INTO contributions (
+        id,
+        payment_provider,
+        payment_id,
+        received_timestamp,
         currency,
+        country_code,
         amount,
         status,
-        email
+        email,
+        identity_id
       ) VALUES (
         ${data.contributionId}::uuid,
-        ${data.paymentId},
         ${data.paymentProvider.entryName}::paymentProvider,
+        ${data.paymentId},
         ${data.created},
         ${data.currency.entryName},
+        ${data.countryCode},
         ${data.amount},
         ${data.paymentStatus.entryName}::paymentStatus,
-        ${data.receiptEmail}
+        ${data.receiptEmail},
+        ${data.identityId}
       );
-
-      COMMIT;
     """
-
-    executeTransaction(transaction)
+    executeQuery(query)
   }
 
-  override def updatePaymentHook(paymentId: String, status: String): EitherT[Future, DatabaseService.Error, Unit] = {
-    val transaction =
-      SQL"""
-           BEGIN;
-           UPDATE payment_hooks SET status = ${status}::paymentStatus WHERE paymentid = ${paymentId};
-           COMMIT;
-        """.on('status -> status).on('paymentId -> paymentId)
+  override def flagContributionAsRefunded(paymentId: String): EitherT[Future, DatabaseService.Error, Unit] = {
+    val query = SQL"""
+      UPDATE contributions SET status = 'Refunded'::paymentStatus WHERE paymentid = $paymentId;
+    """
 
-    executeTransaction(transaction)
+    executeQuery(query)
   }
 
 }
