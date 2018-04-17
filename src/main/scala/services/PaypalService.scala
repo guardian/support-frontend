@@ -26,8 +26,6 @@ trait Paypal {
 
 class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) extends Paypal with StrictLogging {
 
-  val apiContext: APIContext = new APIContext(config.clientId, config.clientSecret, config.paypalMode.entryName)
-
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment] = {
     if (model.Currency.exceedsMaxAmount(createPaypalPaymentData.amount, createPaypalPaymentData.currency)) {
       Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
@@ -50,7 +48,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
           .setTransactions(transactions)
           .setRedirectUrls(redirectUrls)
 
-        paypalPayment.create(apiContext)
+        paypalPayment.create(buildAPIContext)
 
       }.leftMap{ error =>
         logger.error(s"Error creating paypal payment. Error: $error")
@@ -79,7 +77,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {
     Either.catchNonFatal {
-      val context = apiContext.addConfiguration(Constants.PAYPAL_WEBHOOK_ID, config.hookId)
+      val context = buildAPIContext.addConfiguration(Constants.PAYPAL_WEBHOOK_ID, config.hookId)
       if(Event.validateReceivedEvent(context, headers.asJava, body))
         ()
       else {
@@ -93,6 +91,10 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
     }.toEitherT[Future]
   }
 
+
+  private def buildAPIContext: APIContext = {
+    new APIContext(config.clientId, config.clientSecret, config.paypalMode.entryName)
+  }
 
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
     import scala.collection.JavaConverters._
@@ -132,15 +134,16 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       .fromString(s"Invalid Paypal payment status. Payer has not approved payment"))
 
 
-  private def getCapture(relatedResources: RelatedResources, transaction: Transaction): Either[PaypalApiError, Capture] =
+  private def getCapture(relatedResources: RelatedResources, transaction: Transaction): Either[PaypalApiError, Capture] = {
     Either.catchNonFatal(
       relatedResources
         .getAuthorization
-        .capture(apiContext, buildCaptureByTransaction(transaction))
+        .capture(buildAPIContext, buildCaptureByTransaction(transaction))
     ).leftMap { error =>
       logger.error(s"Error getting capture from related resources. Error: $error")
       PaypalApiError.fromThrowable(error)
     }
+  }
 
 
   private def validateCapture(capture: Capture): Either[PaypalApiError, Capture] = {
@@ -153,9 +156,9 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   }
 
-  private def getPayment(paymentId: String): Either[PaypalApiError, Payment] =
-    Either.catchNonFatal(Payment.get(apiContext, paymentId)).leftMap(PaypalApiError.fromThrowable)
-
+  private def getPayment(paymentId: String): Either[PaypalApiError, Payment] ={
+    Either.catchNonFatal(Payment.get(buildAPIContext, paymentId)).leftMap(PaypalApiError.fromThrowable)
+  }
 
   private def buildCaptureByTransaction(transaction: Transaction): Capture = {
     val amount = transaction.getAmount
@@ -181,7 +184,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   private def executePayment(paymentId: String, payerId: String): Either[PaypalApiError, Payment] = {
     val payment = new Payment().setId(paymentId)
     val paymentExecution = new PaymentExecution().setPayerId(payerId)
-    Either.catchNonFatal(payment.execute(apiContext, paymentExecution)).leftMap{ error =>
+    Either.catchNonFatal(payment.execute(buildAPIContext, paymentExecution)).leftMap{ error =>
       logger.error(s"Error calling execute paypal payment. Error: $error")
       PaypalApiError.fromThrowable(error)
     }
