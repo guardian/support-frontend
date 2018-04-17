@@ -5,8 +5,9 @@
 import React from 'react';
 
 import {
-  SvgThankYouHeroDesktop,
-  SvgThankYouHeroMobile,
+  SvgCirclesHeroDesktop,
+  SvgCirclesHeroMobileLandscape,
+  SvgCirclesHeroMobile,
 } from 'components/svg/svg';
 import Highlights from 'components/highlights/highlights';
 
@@ -24,8 +25,9 @@ type PropTypes = {
 function ThankYouIntroduction(props: PropTypes) {
   return (
     <section className="component-thank-you-introduction">
-      <SvgThankYouHeroDesktop />
-      <SvgThankYouHeroMobile />
+      <SvgCirclesHeroDesktop />
+      <SvgCirclesHeroMobileLandscape />
+      <SvgCirclesHeroMobile />
       <div className="component-thank-you-introduction__content gu-content-margin">
         <div id="qa-thank-you-message" className="component-thank-you-introduction__display-copy">
           <Highlights highlights={props.highlights} />

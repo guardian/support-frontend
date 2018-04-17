@@ -24,33 +24,36 @@
     }
   }
 
-  .svg-thank-you-hero-desktop {
+  .svg-circles-hero-desktop {
     position: absolute;
     top: 0;
     min-height: 100%;
     display: none;
 
-    @include mq($from: phablet) {
-      display: inline;
-      margin-left: -350px;
-    }
-
     @include mq($from: desktop) {
-      margin-left: -120px;
-    }
-
-    @include mq($from: wide) {
-      margin-left: 0;
+      display: inline;
     }
   }
 
-  .svg-thank-you-hero-mobile {
+  .svg-circles-hero-mobile-landscape {
     position: absolute;
     top: 0;
     min-height: 100%;
     display: none;
 
-    @include mq($until: phablet) {
+    @include mq($from: mobileLandscape, $until: desktop) {
+      display: inline;
+    }
+  }
+
+  .svg-circles-hero-mobile {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    display: none;
+
+    @include mq($until: mobileLandscape) {
       display: inline;
     }
   }
