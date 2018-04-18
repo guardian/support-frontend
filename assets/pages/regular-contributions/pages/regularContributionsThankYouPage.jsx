@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import PageSection from 'components/pageSection/pageSection';
 import Footer from 'components/footer/footer';
 import ThankYouIntroduction from 'components/thankYouIntroduction/thankYouIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
@@ -16,7 +17,6 @@ import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/
 import EmailConfirmation from '../components/emailConfirmation';
 import MarketingConsentContainer from '../components/marketingConsentContainer';
 import DirectDebitPaymentMethodDetails from '../components/directDebitPaymentMethodDetails';
-import PageSection from '../../../components/pageSection/pageSection';
 
 // ---- Types ----- //
 
