@@ -196,7 +196,7 @@ function statusPoll(
 
   if (pollCount >= MAX_POLLS) {
     dispatch(checkoutPending(paymentMethod));
-    return null;
+    return;
   }
 
   pollCount += 1;
@@ -212,8 +212,6 @@ function statusPoll(
       handleStatus(response, dispatch, csrf, referrerAcquisitionData, paymentMethod);
     });
   }
-
-  return null;
 }
 
 function delayedStatusPoll(
