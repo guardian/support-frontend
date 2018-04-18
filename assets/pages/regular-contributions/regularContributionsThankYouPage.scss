@@ -33,7 +33,7 @@
     @include gu-content-filler;
   }
 
-  .component-direct-debit-confirmation__details__item-name {
+  .component-direct-debit-confirmation__item-name {
     @include mq($from: desktop) {
       padding-left: $gu-h-spacing;
     }
@@ -43,7 +43,7 @@
     font-weight: bold;
   }
 
-  .component-direct-debit-confirmation__details__item-value {
+  .component-direct-debit-confirmation__item-value {
     display: inline;
   }
 
