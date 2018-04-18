@@ -18,8 +18,8 @@ import Signout from 'components/signout/signout';
 import { getQueryParameter } from 'helpers/url';
 import { parseContrib } from 'helpers/contributions';
 
-import FormFields from '../components/formFields';
-import RegularContributionsPayment from '../components/regularContributionsPayment';
+import FormFields from './formFields';
+import RegularContributionsPayment from './regularContributionsPayment';
 
 // ----- Map State/Props ----- //
 

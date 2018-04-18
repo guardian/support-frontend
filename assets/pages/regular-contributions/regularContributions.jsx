@@ -18,8 +18,8 @@ import { renderPage } from 'helpers/render';
 
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
-import ContributionsThankYouPage from './pages/regularContributionsThankYouPage';
-import RegularContributionsPage from './pages/regularContributionsPage';
+import ContributionsThankYouPage from './components/regularContributionsThankYouPage';
+import RegularContributionsPage from './components/regularContributionsPage';
 import reducer from './regularContributionsReducers';
 import { setPayPalButton } from './regularContributionsActions';
 import { parseContrib } from '../../helpers/contributions';
