@@ -68,6 +68,12 @@ const isUserValid = (user: UserState) =>
   user.lastName !== null && user.lastName !== undefined &&
   user.email !== null && user.email !== undefined;
 
+const paymentMethodToPaymentFieldMap = {
+  DirectDebit: 'directDebitData',
+  PayPal: 'baid',
+  Stripe: 'stripeToken',
+};
+
 const getPaymentFields =
   (
     token?: string,
@@ -256,7 +262,6 @@ function handleStatus(
   }
 }
 
-
 function postCheckout(
   abParticipations: Participations,
   amount: number,
@@ -264,7 +269,6 @@ function postCheckout(
   currency: Currency,
   contributionType: Contrib,
   dispatch: Function,
-  paymentFieldName: PaymentFieldName,
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
@@ -285,7 +289,7 @@ function postCheckout(
       contributionType,
       currency.iso,
       csrf,
-      paymentFieldName,
+      paymentMethodToPaymentFieldMap[paymentMethod],
       referrerAcquisitionData,
       getState,
       token,
