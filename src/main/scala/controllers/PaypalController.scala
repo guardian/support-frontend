@@ -56,17 +56,17 @@ class PaypalController(
       }
 
 
-  def hook: Action[String] = Action.async(parse.tolerantText) { paypalHookRequest =>
+  def processRefund: Action[String] = Action.async(parse.tolerantText) { paypalHookRequest =>
     import io.circe.parser._
     import util.RequestTypeDecoder.hook._
     val paypalHookJson = paypalHookRequest.body
-    decode[PaypalHook](paypalHookJson)
+    decode[PaypalRefundHook](paypalHookJson)
       .fold(
         err => Future.successful(BadRequest(ResultBody.Error(err.getMessage))),
-        paypalHook => {
+        refundHook => {
           paypalBackendProvider
-            .getInstanceFor(paypalHook)
-            .processPaymentHook(paypalHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
+            .getInstanceFor(refundHook)
+            .processRefundHook(refundHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
             .fold(
               err => InternalServerError(ResultBody.Error(err.message)),
               _ => Ok(ResultBody.Success("execute hook success"))

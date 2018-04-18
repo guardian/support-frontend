@@ -116,11 +116,11 @@ class PaypalBackend(
     } yield payment
   }
 
-  def processPaymentHook(paypalHook: PaypalHook, headers: Map[String, String], rawJson: String):
+  def processRefundHook(refundHook: PaypalRefundHook, headers: Map[String, String], rawJson: String):
   EitherT[Future, PaypalApiError, Unit] = {
     for {
       payment <- paypalService.validateEvent(headers, rawJson)
-      _ = databaseService.flagContributionAsRefunded(paypalHook.resource.parent_payment)
+      _ = databaseService.flagContributionAsRefunded(refundHook.resource.parent_payment)
     } yield payment
   }
 

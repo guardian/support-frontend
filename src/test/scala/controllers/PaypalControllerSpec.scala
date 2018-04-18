@@ -608,7 +608,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.processPaymentHook(any(), any(), any()))
+          when(mockPaypalBackend.processRefundHook(any(), any(), any()))
             .thenReturn(paymentHookResponse)
         }
 
@@ -677,7 +677,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.hook, paypalHookRequest)
+          Helpers.call(fixture.payPalController.processRefund, paypalHookRequest)
 
         status(paypalControllerResult).mustBe(200)
       }
@@ -686,7 +686,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.processPaymentHook(any(), any(), any()))
+          when(mockPaypalBackend.processRefundHook(any(), any(), any()))
             .thenReturn(paymentHookResponse)
         }
 
@@ -711,7 +711,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.hook, paypalHookRequest)
+          Helpers.call(fixture.payPalController.processRefund, paypalHookRequest)
 
         status(paypalControllerResult).mustBe(400)
       }
@@ -720,7 +720,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.processPaymentHook(any(), any(), any()))
+          when(mockPaypalBackend.processRefundHook(any(), any(), any()))
             .thenReturn(paymentHookResponseError)
         }
 
@@ -790,7 +790,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.hook, paypalHookRequest)
+          Helpers.call(fixture.payPalController.processRefund, paypalHookRequest)
 
         status(paypalControllerResult).mustBe(500)
       }

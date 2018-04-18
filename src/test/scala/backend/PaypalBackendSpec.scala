@@ -6,7 +6,7 @@ import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mockito.MockitoSugar
 import model.{AcquisitionData, _}
-import model.paypal.{HookAmount, PaypalHook, Resource, _}
+import model.paypal.{HookAmount, PaypalRefundHook, Resource, _}
 import org.scalatest.PrivateMethodTester._
 
 import scala.collection.JavaConverters._
@@ -31,7 +31,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   )
   val hookAmount = HookAmount(BigDecimal(1), "GBP")
   val resource = Resource(DateTime.now(), hookAmount, None, "parent_payment")
-  val paypalHook = PaypalHook(PaymentStatus.Paid, resource)
+  val paypalHook = PaypalRefundHook(PaymentStatus.Paid, resource)
   val ophanError = OphanServiceError.BuildError("Ophan error response")
   val dbError = DatabaseService.Error("DB error response", None)
   val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
@@ -190,13 +190,13 @@ class PaypalBackendSpec
       "return error if payment is not valid" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponseError)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        paypalBackend.processPaymentHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe paymentError
+        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe paymentError
       }
 
       "return successful response even if databaseService fails" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponse)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        paypalBackend.processPaymentHook(paypalHook, Map.empty, "JSON").futureRight shouldBe (())
+        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureRight shouldBe (())
       }
     }
   }

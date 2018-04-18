@@ -22,13 +22,13 @@ object StripeHookData {
   implicit val stripeHookDataDecoder: Decoder[StripeHookData] = deriveDecoder[StripeHookData]
 }
 
-case class StripeHook(
+case class StripeRefundHook(
   id: String, // eventId, used to validate the event webhook
   `type`: PaymentStatus,
   data: StripeHookData
 )
 
-object StripeHook {
+object StripeRefundHook {
 
   implicit val paymentStatusDecoder: Decoder[PaymentStatus] = decodePaymentStatus()
 
@@ -45,5 +45,5 @@ object StripeHook {
     }
   }
 
-  implicit val stripeHookDecoder: Decoder[StripeHook] = deriveDecoder[StripeHook]
+  implicit val stripeHookDecoder: Decoder[StripeRefundHook] = deriveDecoder[StripeRefundHook]
 }

@@ -17,10 +17,8 @@ GET      /acquisition/a.gif                                   controllers.AppCon
 POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
 OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.AppController.corsOptions
 
-# Captures webhooks from Stripe.
-# Webhooks are events that notify your application any time an event happens on your account
-# This is used by the mobile and Web stripe payments but only for Refunds.
-POST     /contribute/one-off/stripe/hook                      controllers.StripeController.hook
+# This endpoint is called by Stripe via a webhook to notify us of refunds
+POST     /contribute/one-off/stripe/refund                    controllers.StripeController.processRefund
 
 #############################################
 # PAYPAL
@@ -40,7 +38,5 @@ OPTIONS  /contribute/one-off/paypal/execute-payment           controllers.AppCon
 # This is only used by the mobile app.
 POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment
 
-# Captures webhooks from PayPal.
-# Webhooks are HTTP callbacks that receive notification messages for events
-# This is used by the mobile and Web paypal payments but only for Refunds.
-POST     /contribute/one-off/paypal/hook                      controllers.PaypalController.hook
+# This endpoint is called by PayPal via a webhook to notify us of refunds
+POST     /contribute/one-off/paypal/refund                    controllers.PaypalController.processRefund

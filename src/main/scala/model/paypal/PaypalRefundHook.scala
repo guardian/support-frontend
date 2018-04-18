@@ -33,9 +33,9 @@ object Resource {
   implicit val resourceDecoder: Decoder[Resource] = deriveDecoder[Resource]
 }
 
-case class PaypalHook(event_type: PaymentStatus, resource: Resource)
+case class PaypalRefundHook(event_type: PaymentStatus, resource: Resource)
 
-object PaypalHook {
+object PaypalRefundHook {
 
   implicit val paymentStatusDecoder: Decoder[PaymentStatus] = decodePaymentStatus()
 
@@ -53,5 +53,5 @@ object PaypalHook {
     }
   }
 
-  implicit val webhookEventDecoder: Decoder[PaypalHook] = deriveDecoder[PaypalHook]
+  implicit val webhookEventDecoder: Decoder[PaypalRefundHook] = deriveDecoder[PaypalRefundHook]
 }

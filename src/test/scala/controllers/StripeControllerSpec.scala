@@ -365,7 +365,7 @@ class StripeControllerSpec extends PlaySpec with Status {
       "return a 200 response if the request is valid" in {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.processPaymentHook(any()))
+          when(mockStripeBackend.processRefundHook(any()))
             .thenReturn(paymentHookResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -491,7 +491,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+          Helpers.call(fixture.stripeController.processRefund, stripeHookRequest)
 
         status(stripeControllerResult).mustBe(200)
 
@@ -500,7 +500,7 @@ class StripeControllerSpec extends PlaySpec with Status {
       "return a 400 response if the request contains an invalid JSON" in {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.processPaymentHook(any()))
+          when(mockStripeBackend.processRefundHook(any()))
             .thenReturn(paymentHookResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -521,7 +521,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+          Helpers.call(fixture.stripeController.processRefund, stripeHookRequest)
 
         status(stripeControllerResult).mustBe(400)
 
@@ -530,7 +530,7 @@ class StripeControllerSpec extends PlaySpec with Status {
       "return a 500 response if the response from the service contains an error" in {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.processPaymentHook(any()))
+          when(mockStripeBackend.processRefundHook(any()))
             .thenReturn(paymentHookResponseError)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -656,7 +656,7 @@ class StripeControllerSpec extends PlaySpec with Status {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.hook, stripeHookRequest)
+          Helpers.call(fixture.stripeController.processRefund, stripeHookRequest)
 
         status(stripeControllerResult).mustBe(500)
 

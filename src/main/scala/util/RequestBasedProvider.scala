@@ -3,7 +3,7 @@ package util
 import play.api.mvc.Request
 import simulacrum.typeclass
 import model.RequestType
-import model.paypal.PaypalHook
+import model.paypal.PaypalRefundHook
 
 @typeclass trait RequestTypeDecoder[A] {
   def requestType(data: A): RequestType
@@ -22,9 +22,9 @@ object RequestTypeDecoder {
     }
   }
   object hook {
-    implicit def requestTypeDecoder: RequestTypeDecoder[PaypalHook] = new RequestTypeDecoder[PaypalHook] {
+    implicit def requestTypeDecoder: RequestTypeDecoder[PaypalRefundHook] = new RequestTypeDecoder[PaypalRefundHook] {
       // TODO: implement based on production mode
-      override def requestType(data: PaypalHook): RequestType = RequestType.Test
+      override def requestType(data: PaypalRefundHook): RequestType = RequestType.Test
     }
   }
 }

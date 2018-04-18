@@ -13,7 +13,7 @@ import conf.ConfigLoader._
 import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
-import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeHook}
+import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeRefundHook}
 import services._
 import util.EnvironmentBasedBuilder
 
@@ -75,11 +75,11 @@ class StripeBackend(
     } yield StripeChargeSuccess.fromCharge(charge)
 
 
-  def processPaymentHook(stripeHook: StripeHook):
+  def processRefundHook(refundHook: StripeRefundHook):
   EitherT[Future, StripeApiError, Event] = {
     for {
-      event <- stripeService.processPaymentHook(stripeHook)
-      _ = databaseService.flagContributionAsRefunded(stripeHook.data.`object`.id)
+      event <- stripeService.processRefundHook(refundHook)
+      _ = databaseService.flagContributionAsRefunded(refundHook.data.`object`.id)
     } yield event
   }
 

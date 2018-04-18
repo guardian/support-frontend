@@ -28,7 +28,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData, None)
   val stripeHookObject = StripeHookObject("id", "GBP")
   val stripeHookData = StripeHookData(stripeHookObject)
-  val stripeHook = StripeHook("id", PaymentStatus.Paid, stripeHookData)
+  val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
   val ophanError = OphanServiceError.BuildError("Ophan error response")
   val dbError = DatabaseService.Error("DB error response", None)
   val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
@@ -131,15 +131,15 @@ class StripeBackendSpec
     "a request is made to a payment hook" should {
 
       "return error if payment is not valid" in new StripeBackendFixture {
-        when(mockStripeService.processPaymentHook(stripeHook)).thenReturn(eventResponseError)
+        when(mockStripeService.processRefundHook(stripeHook)).thenReturn(eventResponseError)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        stripeBackend.processPaymentHook(stripeHook).futureLeft shouldBe stripeApiError
+        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe stripeApiError
       }
 
       "return successful response even if databaseService fails" in new StripeBackendFixture {
-        when(mockStripeService.processPaymentHook(stripeHook)).thenReturn(eventResponse)
+        when(mockStripeService.processRefundHook(stripeHook)).thenReturn(eventResponse)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        stripeBackend.processPaymentHook(stripeHook).futureRight shouldBe eventMock
+        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe eventMock
       }
     }
   }

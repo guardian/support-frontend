@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 import backend.StripeBackend
-import model.stripe.{StripeChargeData, StripeHook}
+import model.stripe.{StripeChargeData, StripeRefundHook}
 import model.{DefaultThreadPool, ResultBody}
 
 class StripeController(
@@ -29,12 +29,12 @@ class StripeController(
       }
     }
 
-  def hook: Action[StripeHook] = Action(circe.json[StripeHook]).async { request =>
+  def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook]).async { request =>
     stripeBackendProvider.getInstanceFor(request)
-      .processPaymentHook(request.body)
+      .processRefundHook(request.body)
       .fold(
         err => InternalServerError(ResultBody.Error(err.getMessage)),
-        _ => Ok(ResultBody.Success("execute hook success"))
+        _ => Ok(ResultBody.Success("successfully processed Stripe refund webhook"))
       )
   }
 
