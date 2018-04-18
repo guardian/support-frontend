@@ -6,7 +6,7 @@ import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import ThankYouIntroduction from 'components/thankYouIntroduction/thankYouIntroduction';
+import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import { Provider } from 'react-redux';
@@ -41,9 +41,8 @@ const content = (
   <Provider store={store}>
     <div className="gu-content">
       <SimpleHeader />
-      <ThankYouIntroduction
-        highlights={['Thank you']}
-        headings={['for a valuable', 'contribution']}
+      <CirclesIntroduction
+        headings={['Thank you', 'for a valuable', 'contribution']}
       />
       <div className="multiline-divider" />
       {window.guardian.showConfirmationEmailCopy && <EmailConfirmation />}

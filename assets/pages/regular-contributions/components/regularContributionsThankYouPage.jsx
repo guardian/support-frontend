@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import PageSection from 'components/pageSection/pageSection';
 import Footer from 'components/footer/footer';
-import ThankYouIntroduction from 'components/thankYouIntroduction/thankYouIntroduction';
+import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
@@ -80,9 +80,8 @@ function RegularContributionsThankYouPage(props: PropTypes) {
   return (
     <div id="regular-contributions-thank-you-page">
       <SimpleHeader />
-      <ThankYouIntroduction
-        highlights={['Thank you']}
-        headings={['for a valuable', 'contribution']}
+      <CirclesIntroduction
+        headings={['Thank you', 'for a valuable', 'contribution']}
       />
       <div className="multiline-divider" />
       {bodyCopy}
