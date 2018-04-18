@@ -83,4 +83,12 @@
       margin-bottom: $gu-v-spacing;
     }
   }
+
+  .svg-direct-debit-symbol-and-text {
+    float: right;
+    margin-top: $gu-v-spacing;
+    fill: gu-colour(garnett-neutral-1);
+    transform: scale(1.2);
+  }
+
 }

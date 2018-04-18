@@ -5,6 +5,7 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
+import { SvgDirectDebitSymbolAndText } from 'components/svg/svg';
 
 type PropTypes = {
   accountHolderName: string,
@@ -20,6 +21,7 @@ export default function DirectDebitPaymentMethodDetails(props: PropTypes) {
   return (
     <div className="component-direct-debit-confirmation">
       <PageSection modifierClass="email-confirmation" heading="Your contribution">
+        <SvgDirectDebitSymbolAndText />
         <p className="component-email-confirmation__copy">
           Look out for an email confirming your recurring payment.
         </p>
