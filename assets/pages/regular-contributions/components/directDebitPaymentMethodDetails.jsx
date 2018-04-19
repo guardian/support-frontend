@@ -22,7 +22,7 @@ export default function DirectDebitPaymentMethodDetails(props: PropTypes) {
     <div className="component-direct-debit-confirmation">
       <PageSection modifierClass="email-confirmation" heading="Your contribution">
         <SvgDirectDebitSymbolAndText />
-        <p className="component-email-confirmation__copy">
+        <p className="component-email-confirmation__copy component-email-confirmation__copy--with-dd">
           Look out for an email confirming your recurring payment.
         </p>
         <ul className="component-direct-debit-confirmation__details">
