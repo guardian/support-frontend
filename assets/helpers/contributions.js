@@ -279,9 +279,9 @@ function circlesParse(
   if (input === '' || Number.isNaN(customAmount)) {
     return { error: 'invalidEntry', customAmount: null };
   } else if (customAmount < config[countryGroupId][contributionType].min) {
-    return { error: 'tooLittle', customAmount };
+    return { error: 'tooLittle', customAmount: null };
   } else if (customAmount > config[countryGroupId][contributionType].max) {
-    return { error: 'tooMuch', customAmount };
+    return { error: 'tooMuch', customAmount: null };
   }
 
   return { error: null, customAmount };
