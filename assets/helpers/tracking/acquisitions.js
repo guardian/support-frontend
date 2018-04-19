@@ -162,7 +162,8 @@ function buildAcquisition(
   const campaignCode = acquisitionData.campaignCode ||
     getQueryParameter('INTCMP');
 
-  const parameterExclusions = ['REFPVID', 'INTCMP', 'acquisitionData'];
+  const parameterExclusions =
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
 
   const queryParameters =
     acquisitionData.queryParameters ||

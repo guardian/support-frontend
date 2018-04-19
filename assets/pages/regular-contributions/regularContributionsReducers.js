@@ -37,7 +37,8 @@ export type CombinedState = {
 export type PageState = {
   common: CommonState,
   page: CombinedState,
-}
+};
+
 
 // ----- Reducers ----- //
 

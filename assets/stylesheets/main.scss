@@ -15,7 +15,6 @@
 @import '../components/directDebit/directDebitForm/directDebitForm';
 @import '../components/checkboxInput/checkboxInput';
 @import '../components/circlesIntroduction/circlesIntroduction';
-@import '../components/contribAmounts/contribAmounts';
 @import '../components/contribute/contribute';
 @import '../components/contributionPaymentCtas/contributionPaymentCtas';
 @import '../containerisableComponents/contributionSelection/contributionSelection';
@@ -62,7 +61,6 @@
 
 // ----- Pages ----- //
 
-@import '../pages/contributions-landing-au/contributionsLandingAU';
 @import '../pages/contributions-landing/contributionsLanding';
 @import '../pages/subscriptions-landing/subscriptionsLanding';
 @import '../pages/regular-contributions/regularContributions';

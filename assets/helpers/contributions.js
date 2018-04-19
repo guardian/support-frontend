@@ -11,6 +11,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { Currency } from 'helpers/internationalisation/currency';
 
+
 // ----- Types ----- //
 
 export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
@@ -21,17 +22,6 @@ export type ContribError =
   | 'tooLittle'
   | 'tooMuch'
   | 'invalidEntry';
-
-export type Amount = {
-  value: string,
-  userDefined: boolean,
-};
-
-export type Amounts = {
-  annual: Amount,
-  monthly: Amount,
-  oneOff: Amount,
-};
 
 export type ParsedContrib = {
   amount: number,
@@ -256,6 +246,7 @@ const amounts = {
   },
 };
 
+
 // ----- Functions ----- //
 
 function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
@@ -336,16 +327,6 @@ function errorMessage(
 
 }
 
-function getContribKey(contrib: Contrib): string {
-
-  switch (contrib) {
-    case 'ANNUAL': return 'annual';
-    case 'MONTHLY': return 'monthly';
-    default: return 'oneOff';
-  }
-
-}
-
 function getOneOffName(countryGroupId: CountryGroupId) {
   return countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
 }
@@ -378,26 +359,6 @@ function getSpokenType(
   }
 
   return 'annual';
-
-}
-
-/* ------- contributionAmounts functions -----*/
-
-function getA11yHint(
-  contributionType: Contrib,
-  currency: Currency,
-  spokenAmount: string,
-): string {
-
-  const spokenCurrency = spokenCurrencies[currency.iso].plural;
-
-  if (contributionType === 'ONE_OFF') {
-    return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
-  } else if (contributionType === 'MONTHLY') {
-    return `contribute ${spokenAmount} ${spokenCurrency} per month`;
-  }
-
-  return `contribute ${spokenAmount} ${spokenCurrency} annually`;
 
 }
 
@@ -437,7 +398,6 @@ function getAmountA11yHint(
 
 }
 
-
 function getContributionTypeRadios(countryGroupId: CountryGroupId) {
 
   return [
@@ -456,7 +416,6 @@ function getContributionTypeRadios(countryGroupId: CountryGroupId) {
 
 }
 
-
 function getContributionAmountRadios(
   contributionType: Contrib,
   currency: Currency,
@@ -472,51 +431,6 @@ function getContributionAmountRadios(
 }
 
 
-function getContributionAmounts(
-  contributionType: Contrib,
-  currency: Currency,
-  countryGroupId: CountryGroupId,
-): Radio[] {
-
-  return amounts[contributionType][countryGroupId].map(amount => ({
-    value: amount.value,
-    text: `${currency.glyph}${amount.value}`,
-    accessibilityHint: getA11yHint(contributionType, currency, amount.spoken),
-  }));
-}
-
-
-/* ------ getContributionsType Functions -----*/
-
-function getClassName(contributionType: Contrib) {
-
-  if (contributionType === 'ONE_OFF') {
-    return 'one-off';
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
-  }
-
-  return 'annual';
-
-}
-
-function getContributionTypes(countryGroupId: CountryGroupId) {
-
-  return [
-    {
-      value: 'MONTHLY',
-      text: 'Monthly',
-      accessibilityHint: 'Make a regular monthly contribution',
-    },
-    {
-      value: 'ONE_OFF',
-      text: getOneOffName(countryGroupId),
-      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
-    },
-  ];
-
-}
-
 // ----- Exports ----- //
 
 export {
@@ -526,14 +440,10 @@ export {
   circlesParse,
   billingPeriodFromContrib,
   errorMessage,
-  getContribKey,
   getOneOffName,
   getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
-  getContributionAmounts,
-  getClassName,
-  getContributionTypes,
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,

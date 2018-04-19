@@ -11,7 +11,7 @@ import type { CommonState } from 'helpers/page/page';
 
 
 const availableCountriesGroups: CountryGroupId[] =
-  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International'];
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'];
 
 // ----- Functions ----- //
 
@@ -34,6 +34,9 @@ function handleCountryGroupChange(value: string): void {
       break;
     case 'International':
       window.location.pathname = '/int/contribute';
+      break;
+    case 'AUDCountries':
+      window.location.pathname = '/au/contribute';
       break;
     default:
   }
