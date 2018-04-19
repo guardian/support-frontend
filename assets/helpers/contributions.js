@@ -284,7 +284,7 @@ function circlesParse(
     return { error: 'tooMuch', customAmount: null };
   }
 
-  return { error: null, customAmount };
+  return { error: null, customAmount: roundDp(customAmount) };
 
 }
 
