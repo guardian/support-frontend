@@ -118,9 +118,6 @@ describe('url', () => {
 
       expect(getAbsoluteURL('/example')).toEqual(expectedURL);
     });
-
-
-
   });
 
 });
