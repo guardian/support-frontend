@@ -95,7 +95,7 @@ function getBaseDomain(): Domain {
   return DOMAINS.PROD;
 }
 
-function getAbsoluteURL(path: string): string {
+function getAbsoluteURL(path: string = ''): string {
   return `${getOrigin()}${path}`;
 }
 
