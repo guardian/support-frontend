@@ -2,18 +2,25 @@
 
 // ----- Imports ----- //
 import React from 'react';
+import { classNameWithModifiers } from 'helpers/utilities';
 
-function DirectDebitGuarantee(props: {
+type PropTypes = {
   isDDGuaranteeOpen: boolean,
   openDDGuaranteeClicked: () => void,
-  closeDDGuaranteeClicked: () => void}) {
-  const introStateClass = props.isDDGuaranteeOpen ? 'component-direct-debit-guarantee__intro--open' : '';
+  closeDDGuaranteeClicked: () => void
+};
+
+function className(baseClass: string, open: boolean) {
+  return classNameWithModifiers(baseClass, open ? ['open'] : ['closed']);
+}
+
+function DirectDebitGuarantee(props: PropTypes) {
   // eslint-disable-next-line max-len
   const onClick = props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked;
   return (
     <div className="component-direct-debit-guarantee">
       <p>
-        <span className={`component-direct-debit-guarantee__intro ${introStateClass}`}>
+        <span className={className('component-direct-debit-guarantee__intro', props.isDDGuaranteeOpen)}>
           Your payments are protected by the&nbsp;
           <button
             className="component-direct-debit-form__open-link"
@@ -23,7 +30,7 @@ function DirectDebitGuarantee(props: {
           </button>.
         </span>
         <div>
-          <ul className={`component-direct-debit-guarantee__list ${props.isDDGuaranteeOpen ? '' : 'component-direct-debit-guarantee__list--closed'}`}>
+          <ul className={className('component-direct-debit-guarantee__list', props.isDDGuaranteeOpen)}>
             <li>
               The Guarantee is offered by all banks and building societies that accept instructions
               to pay Direct Debits

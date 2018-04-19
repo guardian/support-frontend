@@ -194,7 +194,7 @@ function statusPoll(
   referrerAcquisitionData: ReferrerAcquisitionData,
   paymentMethod: PaymentMethod,
   participations: Participations,
-) {
+): ?Promise<void> {
 
   if (pollCount >= MAX_POLLS) {
     successfulConversion(participations);
@@ -209,7 +209,7 @@ function statusPoll(
     headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
     credentials: 'same-origin',
   };
-  if (trackingURI != null) {
+  if (trackingURI !== null) {
     return fetch(trackingURI, request).then((response) => {
       // eslint-disable-next-line no-use-before-define
       handleStatus(
@@ -218,7 +218,6 @@ function statusPoll(
       );
     });
   }
-
   return undefined;
 }
 

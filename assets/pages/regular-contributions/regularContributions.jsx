@@ -15,10 +15,10 @@ import * as user from 'helpers/user/user';
 import * as storage from 'helpers/storage';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-
+import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
-import ContributionsThankYouPage from './components/regularContributionsThankYouPage';
+import RegularContributionsThankYouPage from './components/regularContributionsThankYouPage';
 import RegularContributionsPage from './components/regularContributionsPage';
 import reducer from './regularContributionsReducers';
 import { setPayPalButton } from './regularContributionsActions';
@@ -33,7 +33,7 @@ const { amount } = parseAmount(getQueryParameter('contributionValue'), contribut
 
 function getPaymentMethod(): ?PaymentMethod {
   const pm: ?string = storage.getSession('paymentMethod');
-  if (pm && (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal')) {
+  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
     return (pm: PaymentMethod);
   }
   return null;
@@ -57,9 +57,9 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route exact path="/contribute/recurring" component={RegularContributionsPage} />
-        <Route exact path="/contribute/recurring/thankyou" component={ContributionsThankYouPage} />
-        <Route exact path="/contribute/recurring/pending" component={ContributionsThankYouPage} />
+        <Route exact path={routes.recurringContribCheckout} component={RegularContributionsPage} />
+        <Route exact path={routes.recurringContribThankyou} component={RegularContributionsThankYouPage} />
+        <Route exact path={routes.recurringContribPending} component={RegularContributionsThankYouPage} />
       </div>
     </Provider>
   </BrowserRouter>

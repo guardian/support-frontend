@@ -26,24 +26,21 @@ export default function DirectDebitPaymentMethodDetails(props: PropTypes) {
           Look out for an email confirming your recurring payment.
         </p>
         <ul className="component-direct-debit-confirmation__details">
-          <li className="component-direct-debit-confirmation__item">
-            <div className="component-direct-debit-confirmation__item-name">Payment Method:</div>
-            <div className="component-direct-debit-confirmation__item-value">Direct Debit</div>
-          </li>
-          <li className="component-direct-debit-confirmation__item">
-            <div className="component-direct-debit-confirmation__item-name">Account Name:</div>
-            <div className="component-direct-debit-confirmation__item-value">{props.accountHolderName}</div>
-          </li>
-          <li className="component-direct-debit-confirmation__item">
-            <div className="component-direct-debit-confirmation__item-name">Account number:</div>
-            <div className="component-direct-debit-confirmation__item-value">{mask(props.accountNumber)}</div>
-          </li>
-          <li className="component-direct-debit-confirmation__item">
-            <div className="component-direct-debit-confirmation__item-name">Sort Code:</div>
-            <div className="component-direct-debit-confirmation__item-value">{props.sortCodeArray[0]}-{props.sortCodeArray[1]}-{props.sortCodeArray[2]}</div>
-          </li>
+          <DirectDebitItem name="Payment Method:" value="Direct Debit" />
+          <DirectDebitItem name="Account Name:" value={props.accountHolderName} />
+          <DirectDebitItem name="Account number:" value={mask(props.accountNumber)} />
+          <DirectDebitItem name="Sort Code:" value={`${props.sortCodeArray[0]}-${props.sortCodeArray[1]}-${props.sortCodeArray[2]}`} />
         </ul>
       </PageSection>
     </div>
+  );
+}
+
+function DirectDebitItem(props: {name: string, value: string}) {
+  return (
+    <li className="component-direct-debit-confirmation__item">
+      <div className="component-direct-debit-confirmation__item-name">{props.name}</div>
+      <div className="component-direct-debit-confirmation__item-value">{props.value}</div>
+    </li>
   );
 }

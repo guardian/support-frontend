@@ -78,7 +78,7 @@ function RegularContributionsThankYouPage(props: PropTypes) {
   );
 
   return (
-    <div id="regular-contributions-thank-you-page">
+    <div id="regular-contributions-thank-you-page" className="gu-content">
       <SimpleHeader />
       <CirclesIntroduction
         headings={['Thank you', 'for a valuable', 'contribution']}
