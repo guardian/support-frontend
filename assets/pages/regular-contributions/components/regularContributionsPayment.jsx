@@ -10,6 +10,7 @@ import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/p
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
@@ -141,8 +142,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="regular-contribution-payment">
-      { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: '/contribute/recurring/thankyou' }} /> : null }
-      { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: '/contribute/recurring/pending' }} /> : null }
+      { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
+      { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {directDebitButton}
       {stripeButton}

@@ -16,10 +16,21 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
 import { getQueryParameter } from 'helpers/url';
-import { parseContrib } from 'helpers/contributions';
+import { parseContrib, type Contrib } from 'helpers/contributions';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 
 import FormFields from './formFields';
 import RegularContributionsPayment from './regularContributionsPayment';
+import type { Currency } from '../../../helpers/internationalisation/currency';
+
+// ----- Types ----- //
+
+type PropTypes = {
+  amount: number,
+  currency: Currency,
+  contributionType: Contrib,
+  country: IsoCountry,
+};
 
 // ----- Map State/Props ----- //
 
@@ -42,7 +53,7 @@ const title = {
 
 // ----- Render ----- //
 
-function RegularContributionsPage(props: Object) {
+function RegularContributionsPage(props: PropTypes) {
   return (
     <div className="gu-content">
       <TestUserBanner />
