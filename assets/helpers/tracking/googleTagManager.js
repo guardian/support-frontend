@@ -9,6 +9,9 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 
+// ----- Types ----- //
+type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+
 // ----- Functions ----- //
 
 function getDataValue(name, generator) {
@@ -34,7 +37,7 @@ function getContributionValue() {
 
 // ----- Exports ---//
 
-function pushToDataLayer(event: string, participations: Participations) {
+function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
 
   window.googleTagManagerDataLayer.push({
