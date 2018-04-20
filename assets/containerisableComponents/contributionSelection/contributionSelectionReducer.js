@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import {
-  circlesParse as parseContribution,
+  parseAndValidateContribution,
+  validateContribution,
   config,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -11,7 +12,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
   ContribError as ContributionError,
-  ParsedAmount,
+  ParsedContribution,
 } from 'helpers/contributions';
 
 import type { Action } from './contributionSelectionActions';
@@ -71,10 +72,10 @@ function checkCustomAmount(
   customAmount: ?number,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-): ?ParsedAmount {
+): ?ParsedContribution {
 
   if (isCustomAmount && customAmount) {
-    return parseContribution(customAmount.toString(), contributionType, countryGroupId);
+    return validateContribution(customAmount, contributionType, countryGroupId);
   }
 
   return null;
@@ -137,7 +138,7 @@ function contributionSelectionReducerFor(scope: string, countryGroupId: CountryG
         return {
           ...state,
           isCustomAmount: true,
-          ...parseContribution(action.amount, state.contributionType, action.countryGroupId),
+          ...parseAndValidateContribution(action.amount, state.contributionType, action.countryGroupId),
         };
 
       default:

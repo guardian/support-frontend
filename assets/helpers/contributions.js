@@ -28,7 +28,7 @@ export type ParsedContrib = {
   error: ?ContribError,
 };
 
-export type ParsedAmount = {
+export type ParsedContribution = {
   error: ?ContribError,
   customAmount: ?number,
 };
@@ -268,23 +268,47 @@ function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId)
 
 }
 
-function circlesParse(
-  input: string,
+function validateContribution(
+  input: number,
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
-): ParsedAmount {
+): ParsedContribution {
 
-  const customAmount = Number(input);
-
-  if (input === '' || Number.isNaN(customAmount)) {
-    return { error: 'invalidEntry', customAmount: null };
-  } else if (customAmount < config[countryGroupId][contributionType].min) {
+  if (input < config[countryGroupId][contributionType].min) {
     return { error: 'tooLittle', customAmount: null };
-  } else if (customAmount > config[countryGroupId][contributionType].max) {
+  } else if (input > config[countryGroupId][contributionType].max) {
     return { error: 'tooMuch', customAmount: null };
   }
 
-  return { error: null, customAmount: roundDp(customAmount) };
+  return { error: null, customAmount: roundDp(input) };
+
+}
+
+function parseContribution(input: string): ParsedContribution {
+
+  const amount = Number(input);
+
+  if (input === '' || Number.isNaN(amount)) {
+    return { error: 'invalidEntry', customAmount: null };
+  }
+
+  return { error: null, customAmount: amount };
+
+}
+
+function parseAndValidateContribution(
+  input: string,
+  contributionType: Contrib,
+  countryGroupId: CountryGroupId,
+): ParsedContribution {
+
+  const parsed = parseContribution(input);
+
+  if (parsed.customAmount) {
+    return validateContribution(parsed.customAmount, contributionType, countryGroupId);
+  }
+
+  return parsed;
 
 }
 
@@ -437,7 +461,8 @@ export {
   config,
   parse,
   parseContrib,
-  circlesParse,
+  validateContribution,
+  parseAndValidateContribution,
   billingPeriodFromContrib,
   errorMessage,
   getOneOffName,
