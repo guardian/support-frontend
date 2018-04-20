@@ -33,7 +33,7 @@
   @include mq($from: mobileLandscape) {
     width: 445px;
   }
-  @media(min-height: 732px) {
+  @media(min-height: 780px) {
     top: 25%;
     transform: translateY(-25%);
   }
