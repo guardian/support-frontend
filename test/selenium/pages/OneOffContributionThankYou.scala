@@ -8,7 +8,7 @@ class OneOffContributionThankYou(implicit val webDriver: WebDriver) extends Page
 
   val url = s"${Config.supportFrontendUrl}/contribute/one-off/thankyou"
 
-  private val thankYouHeader = id("qa-thank-you-message")
+  private val thankYouHeader = id("contributions-thank-you-page")
 
   def pageHasLoaded: Boolean = pageHasElement(thankYouHeader) && pageHasUrl("/contribute/one-off/thankyou")
 
