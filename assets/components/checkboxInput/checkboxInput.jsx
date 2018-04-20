@@ -30,18 +30,19 @@ const CheckboxInput: (PropTypes) => React.Node = (props: PropTypes) => {
   }
 
   return (
-    // eslint-disable-next-line jsx-a11y/label-has-for
-    <label className="component-checkbox">
-      <input
-        className="component-checkbox__checkbox"
-        id={props.id}
-        type="checkbox"
-        onChange={e => props.onChange(e.target.checked)}
-        checked={props.checked}
-      />
+    <span>
       {labelTitle}
-      {labelCopy}
-    </label>
+      <label htmlFor={props.id}>
+        <input
+          className="component-checkbox__checkbox"
+          id={props.id}
+          type="checkbox"
+          onChange={e => props.onChange(e.target.checked)}
+          checked={props.checked}
+        />
+        {labelCopy}
+      </label>
+    </span>
   );
 };
 

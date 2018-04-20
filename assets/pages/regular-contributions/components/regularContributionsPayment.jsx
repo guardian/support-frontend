@@ -4,11 +4,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
@@ -22,7 +24,7 @@ import { emptyInputField } from '../../../helpers/utilities';
 
 // ----- Types ----- //
 
-export type PaymentStatus = 'NotStarted' | 'Pending' | 'Failed';
+export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
 export type PayPalButtonType = 'ExpressCheckout' | 'NotSet';
 
@@ -87,7 +89,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.currency,
           props.contributionType,
           props.dispatch,
-          'directDebitData',
+          'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
       )}
@@ -103,7 +105,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.currency,
       props.contributionType,
       props.dispatch,
-      'stripeToken',
+      'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
@@ -124,7 +126,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.currency,
       props.contributionType,
       props.dispatch,
-      'baid',
+      'PayPal',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
@@ -140,6 +142,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="regular-contribution-payment">
+      { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
+      { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {directDebitButton}
       {stripeButton}
@@ -159,7 +163,7 @@ function mapStateToProps(state) {
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
-    currency: state.page.regularContrib.currency,
+    currency: state.common.currency,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
     country: state.common.country,
