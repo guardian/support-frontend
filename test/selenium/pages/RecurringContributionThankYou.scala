@@ -8,7 +8,7 @@ class RecurringContributionThankYou(implicit val webDriver: WebDriver) extends P
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring/thankyou"
 
-  private val thankYouHeader = id("qa-thank-you-message")
+  private val thankYouHeader = id("regular-contributions-thank-you-page")
 
   def pageHasLoaded: Boolean = pageHasElement(thankYouHeader) && (pageHasUrl("/contribute/recurring/thankyou") || pageHasUrl("/contribute/recurring/pending"))
 
