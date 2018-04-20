@@ -302,6 +302,10 @@ function parseContribution(input: string): ParsedContribution {
 
 }
 
+function getMinContribution(contributionType: Contrib, countryGroupId: CountryGroupId): number {
+  return config[countryGroupId][contributionType].min;
+}
+
 function parseContrib(s: ?string, contrib: Contrib): Contrib {
   switch ((s || contrib).toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
@@ -453,6 +457,7 @@ export {
   parseContrib,
   validateContribution,
   parseContribution,
+  getMinContribution,
   billingPeriodFromContrib,
   errorMessage,
   getOneOffName,
