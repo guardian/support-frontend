@@ -25,17 +25,18 @@
 .component-direct-debit-pop-up-form__content {
   position: relative;
   display: inline-block;
-  width: 305px;
+  width: 296px;
   padding: 10px;
   @include mq($from: mobileMedium) {
     width: 345px;
   }
   @include mq($from: mobileLandscape) {
-    width: 475px;
+    width: 445px;
   }
-  @media(min-height: 732px) {
-    top: 50%;
-    transform: translateY(-50%);
+  top: 2px;
+  @media(min-height: 780px) {
+    top: 25%;
+    transform: translateY(-25%);
   }
   min-height: 566px;
   background-color: gu-colour(garnett-neutral-3);
@@ -51,6 +52,8 @@
   font-size: 24px;
   line-height: 30px;
   max-width: 260px;
+  margin-top: $gu-v-spacing;
+  margin-bottom: $gu-v-spacing;
   @include mq($from: mobileMedium) {
     max-width: 280px;
   }
@@ -68,11 +71,11 @@
   border: solid 1px gu-colour(garnett-neutral-1);
   border-radius: 800px;
   background-color: gu-colour(garnett-neutral-3);
-  height: 44px;
-  width: 44px;
+  height: 40px;
+  width: 40px;
   float: right;
   .svg-cross {
-    padding-left: 2px;
+    padding-left: 1px;
     padding-top: 3px;
     height: 19px;
   }
