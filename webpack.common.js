@@ -28,7 +28,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
-    contributionsThankYouPage: 'pages/contributions-thank-you/contributionsThankYou.jsx',
     regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
