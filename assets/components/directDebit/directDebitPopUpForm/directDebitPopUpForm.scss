@@ -25,7 +25,7 @@
 .component-direct-debit-pop-up-form__content {
   position: relative;
   display: inline-block;
-  width: 298px;
+  width: 296px;
   padding: 10px;
   @include mq($from: mobileMedium) {
     width: 345px;
@@ -33,6 +33,7 @@
   @include mq($from: mobileLandscape) {
     width: 445px;
   }
+  top: 2px;
   @media(min-height: 780px) {
     top: 25%;
     transform: translateY(-25%);
