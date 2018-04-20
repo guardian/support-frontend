@@ -23,6 +23,10 @@ export type ContribError =
   | 'tooMuch'
   | 'invalidEntry';
 
+type ParseError = 'ParseError';
+export type ValidationError = 'TooMuch' | 'TooLittle';
+export type ContributionError = ParseError | ValidationError;
+
 export type ParsedContrib = {
   amount: number,
   error: ?ContribError,
@@ -32,7 +36,7 @@ export type ParsedContribution = {|
   valid: true,
   amount: number,
 |} | {|
-  error: ContribError,
+  error: ParseError,
 |};
 
 type Config = {
@@ -274,15 +278,15 @@ function validateContribution(
   input: number,
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
-): ParsedContribution {
+): ?ValidationError {
 
   if (input < config[countryGroupId][contributionType].min) {
-    return { error: 'tooLittle' };
+    return 'TooLittle';
   } else if (input > config[countryGroupId][contributionType].max) {
-    return { error: 'tooMuch' };
+    return 'TooMuch';
   }
 
-  return { valid: true, amount: roundDp(input) };
+  return null;
 
 }
 
@@ -291,26 +295,10 @@ function parseContribution(input: string): ParsedContribution {
   const amount = Number(input);
 
   if (input === '' || Number.isNaN(amount)) {
-    return { error: 'invalidEntry' };
+    return { error: 'ParseError' };
   }
 
-  return { valid: true, amount };
-
-}
-
-function parseAndValidateContribution(
-  input: string,
-  contributionType: Contrib,
-  countryGroupId: CountryGroupId,
-): ParsedContribution {
-
-  const parsed = parseContribution(input);
-
-  if (parsed.valid) {
-    return validateContribution(parsed.amount, contributionType, countryGroupId);
-  }
-
-  return parsed;
+  return { valid: true, amount: roundDp(amount) };
 
 }
 
@@ -464,7 +452,7 @@ export {
   parse,
   parseContrib,
   validateContribution,
-  parseAndValidateContribution,
+  parseContribution,
   billingPeriodFromContrib,
   errorMessage,
   getOneOffName,

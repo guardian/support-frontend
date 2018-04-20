@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import {
-  parseAndValidateContribution,
+  parseContribution,
   validateContribution,
   config,
 } from 'helpers/contributions';
@@ -11,7 +11,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type {
   Contrib as ContributionType,
-  ContribError as ContributionError,
+  ContributionError,
+  ValidationError,
 } from 'helpers/contributions';
 
 import type { Action } from './contributionSelectionActions';
@@ -71,14 +72,12 @@ function checkCustomAmount(
   customAmount: ?number,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-): ?{ customAmount: ?number, error: ?ContributionError } {
+): ?{ error: ?ValidationError } {
 
   if (isCustomAmount && customAmount) {
-    const validated = validateContribution(customAmount, contributionType, countryGroupId);
 
-    if (validated.valid) {
-      return { customAmount: validated.amount, error: null };
-    }
+    const error = validateContribution(customAmount, contributionType, countryGroupId);
+    return { error };
 
   }
 
@@ -92,13 +91,16 @@ function parseCustomAmount(
   countryGroupId: CountryGroupId,
 ): { customAmount: ?number, error: ?ContributionError } {
 
-  const parsed = parseAndValidateContribution(amount, contributionType, countryGroupId);
+  const parsed = parseContribution(amount);
 
-  if (parsed.valid) {
-    return { customAmount: parsed.amount, error: null };
+  if (!parsed.valid) {
+    return { customAmount: null, error: parsed.error };
   }
 
-  return { customAmount: null, error: parsed.error };
+  return {
+    customAmount: parsed.amount,
+    error: validateContribution(parsed.amount, contributionType, countryGroupId),
+  };
 
 }
 
