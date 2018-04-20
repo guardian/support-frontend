@@ -3,10 +3,11 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getMinContribution, parseContribution, validateContribution } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
-import { parseContrib } from 'helpers/contributions';
+
+import type { Contrib } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -16,10 +17,7 @@ export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
 
 // ----- Functions ----- //
 
-function getAmount(): number {
-
-  const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
-  const countryGroup = detectCountryGroup();
+function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): number {
 
   const contributionValue = getQueryParameter('contributionValue');
 

@@ -13,15 +13,13 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
-import { getQueryParameter } from 'helpers/url';
-import { parse as parseContrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
+import { getAmount } from 'helpers/checkouts';
+
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
-
 import reducer from './oneOffContributionsReducers';
-
 import { setPayPalButton } from './oneoffContributionsActions';
 import OneOffContributionsPage from './components/oneOffContributionsPage';
 
@@ -29,14 +27,13 @@ import OneOffContributionsPage from './components/oneOffContributionsPage';
 // ----- Page Startup ----- //
 
 const countryGroup = detectCountryGroup();
-const contributionAmount = parseContrib(getQueryParameter('contributionValue'), 'ONE_OFF', countryGroup).amount;
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
 const store = pageInit(
-  reducer(contributionAmount),
+  reducer(getAmount('ONE_OFF', countryGroup)),
   undefined,
   composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
