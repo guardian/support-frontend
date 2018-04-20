@@ -12,9 +12,9 @@ import { directDebitReducer as directDebit } from 'components/directDebit/direct
 import { marketingConsentReducerFor } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
+import type { PaymentMethod } from 'helpers/checkouts';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
-import type { PaymentMethod } from './helpers/ajax';
 
 // ----- Types ----- //
 
