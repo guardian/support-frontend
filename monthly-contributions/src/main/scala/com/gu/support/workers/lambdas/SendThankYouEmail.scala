@@ -28,9 +28,10 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     services: Services
   ): FutureHandlerResult = {
     logger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
-    fetchDirectDebitMandateId(state, services.zuoraService)
-      .map(id => sendEmail(state, id))
-      .map(_ => HandlerResult(Unit, requestInfo))
+    for {
+      mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
+      emailResult <- sendEmail(state, mandateId)
+    } yield HandlerResult(Unit, requestInfo)
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
