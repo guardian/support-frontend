@@ -27,11 +27,6 @@ type ParseError = 'ParseError';
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
 
-export type ParsedContrib = {
-  amount: number,
-  error: ?ContribError,
-};
-
 export type ParsedContribution = {|
   valid: true,
   amount: number,
@@ -255,25 +250,6 @@ const amounts = {
 
 // ----- Functions ----- //
 
-function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
-
-  let error = null;
-  const numericAmount = Number(input);
-
-  if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
-    error = 'invalidEntry';
-  } else if (numericAmount < config[countryGroupId][contrib].min) {
-    error = 'tooLittle';
-  } else if (numericAmount > config[countryGroupId][contrib].max) {
-    error = 'tooMuch';
-  }
-
-  const amount = error ? config[countryGroupId][contrib].default : roundDp(numericAmount);
-
-  return { error, amount };
-
-}
-
 function validateContribution(
   input: number,
   contributionType: Contrib,
@@ -453,7 +429,6 @@ function getContributionAmountRadios(
 
 export {
   config,
-  parse,
   parseContrib,
   validateContribution,
   parseContribution,
