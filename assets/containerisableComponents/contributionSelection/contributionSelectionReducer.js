@@ -12,7 +12,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
   ContribError as ContributionError,
-  ParsedContribution,
 } from 'helpers/contributions';
 
 import type { Action } from './contributionSelectionActions';
@@ -72,13 +71,34 @@ function checkCustomAmount(
   customAmount: ?number,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-): ?ParsedContribution {
+): ?{ customAmount: ?number, error: ?ContributionError } {
 
   if (isCustomAmount && customAmount) {
-    return validateContribution(customAmount, contributionType, countryGroupId);
+    const validated = validateContribution(customAmount, contributionType, countryGroupId);
+
+    if (validated.valid) {
+      return { customAmount: validated.amount, error: null };
+    }
+
   }
 
   return null;
+
+}
+
+function parseCustomAmount(
+  amount: string,
+  contributionType: ContributionType,
+  countryGroupId: CountryGroupId,
+): { customAmount: ?number, error: ?ContributionError } {
+
+  const parsed = parseAndValidateContribution(amount, contributionType, countryGroupId);
+
+  if (parsed.valid) {
+    return { customAmount: parsed.amount, error: null };
+  }
+
+  return { customAmount: null, error: parsed.error };
 
 }
 
@@ -138,7 +158,7 @@ function contributionSelectionReducerFor(scope: string, countryGroupId: CountryG
         return {
           ...state,
           isCustomAmount: true,
-          ...parseAndValidateContribution(action.amount, state.contributionType, action.countryGroupId),
+          ...parseCustomAmount(action.amount, state.contributionType, action.countryGroupId),
         };
 
       default:

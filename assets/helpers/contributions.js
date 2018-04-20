@@ -28,10 +28,12 @@ export type ParsedContrib = {
   error: ?ContribError,
 };
 
-export type ParsedContribution = {
-  error: ?ContribError,
-  customAmount: ?number,
-};
+export type ParsedContribution = {|
+  valid: true,
+  amount: number,
+|} | {|
+  error: ContribError,
+|};
 
 type Config = {
   [Contrib]: {
@@ -275,12 +277,12 @@ function validateContribution(
 ): ParsedContribution {
 
   if (input < config[countryGroupId][contributionType].min) {
-    return { error: 'tooLittle', customAmount: null };
+    return { error: 'tooLittle' };
   } else if (input > config[countryGroupId][contributionType].max) {
-    return { error: 'tooMuch', customAmount: null };
+    return { error: 'tooMuch' };
   }
 
-  return { error: null, customAmount: roundDp(input) };
+  return { valid: true, amount: roundDp(input) };
 
 }
 
@@ -289,10 +291,10 @@ function parseContribution(input: string): ParsedContribution {
   const amount = Number(input);
 
   if (input === '' || Number.isNaN(amount)) {
-    return { error: 'invalidEntry', customAmount: null };
+    return { error: 'invalidEntry' };
   }
 
-  return { error: null, customAmount: amount };
+  return { valid: true, amount };
 
 }
 
@@ -304,8 +306,8 @@ function parseAndValidateContribution(
 
   const parsed = parseContribution(input);
 
-  if (parsed.customAmount) {
-    return validateContribution(parsed.customAmount, contributionType, countryGroupId);
+  if (parsed.valid) {
+    return validateContribution(parsed.amount, contributionType, countryGroupId);
   }
 
   return parsed;
