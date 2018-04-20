@@ -239,7 +239,6 @@
   color: gu-colour(garnett-neutral-2);
   padding-top: $gu-v-spacing;
   margin-top: 30px;
-  margin-bottom: 20px;
   a {
     color: gu-colour(garnett-neutral-2);
   }
@@ -261,11 +260,20 @@
   fill: gu-colour(garnett-neutral-2);
 }
 
-.component-direct-debit-form__guarantee-list {
+.component-direct-debit-guarantee {
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
+  color: gu-colour(garnett-neutral-2);
+  margin-bottom: 20px;
+  a {
+    color: gu-colour(garnett-neutral-2);
+  }
+}
+.component-direct-debit-guarantee__list {
   list-style-type: disc;
   margin-left: $gu-h-spacing;
 }
 
-.component-direct-debit-form__guarantee-list--closed {
+.component-direct-debit-guarantee__list--closed {
   display: none;
 }

@@ -25,12 +25,16 @@ Object {
       "",
     ],
   },
+  "marketingConsent": Object {
+    "confirmOptIn": null,
+    "error": false,
+  },
   "regularContrib": Object {
     "amount": 20,
-    "currency": "GBP",
     "error": null,
     "payPalHasLoaded": false,
     "payPalType": "NotSet",
+    "paymentMethod": "GBP",
     "paymentStatus": "NotStarted",
     "pollCount": 0,
     "statusUri": null,

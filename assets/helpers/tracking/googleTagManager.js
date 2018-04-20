@@ -9,6 +9,9 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 
+// ----- Types ----- //
+type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+
 // ----- Functions ----- //
 
 function getDataValue(name, generator) {
@@ -34,11 +37,11 @@ function getContributionValue() {
 
 // ----- Exports ---//
 
-export function init(participations: Participations) {
+function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
 
   window.googleTagManagerDataLayer.push({
-    event: 'DataLayerReady',
+    event,
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
@@ -52,3 +55,16 @@ export function init(participations: Participations) {
     ophanBrowserID: getOphanIds().browserId,
   });
 }
+
+function init(participations: Participations) {
+  pushToDataLayer('DataLayerReady', participations);
+}
+
+function successfulConversion(participations: Participations) {
+  pushToDataLayer('SuccessfulConversion', participations);
+}
+
+export {
+  init,
+  successfulConversion,
+};
