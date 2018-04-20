@@ -54,7 +54,7 @@ POST  /contribute/send-marketing                     controllers.IdentityControl
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.thankYouPage
+GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 # ----- Subscriptions ----- #
