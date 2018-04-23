@@ -96,8 +96,8 @@ class Application(
     ))
   }
 
-  def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionsLandingDescription), id, js, contributionsPayPalEndpoint))
+  def contributionsLanding(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionsLandingDescription), id, js, css, contributionsPayPalEndpoint))
   }
 
   def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
