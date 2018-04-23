@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { SvgGuardianLogo } from 'components/svg/svg';
+import { SvgGuardianLogo } from 'components/svgs/guardianLogo';
 
 
 // ----- Component ----- //

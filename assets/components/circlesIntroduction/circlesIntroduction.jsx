@@ -4,11 +4,9 @@
 
 import React from 'react';
 
-import {
-  SvgCirclesHeroDesktop,
-  SvgCirclesHeroMobileLandscape,
-  SvgCirclesHeroMobile,
-} from 'components/svg/svg';
+import { SvgCirclesHeroDesktop } from 'components/svgs/circlesHeroDesktop';
+import { SvgCirclesHeroMobileLandscape } from 'components/svgs/circlesHeroMobileLandscape';
+import { SvgCirclesHeroMobile } from 'components/svgs/circlesHeroMobile';
 import Highlights from 'components/highlights/highlights';
 
 

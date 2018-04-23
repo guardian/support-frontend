@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { SvgGuardianLogo } from 'components/svg/svg';
+import { SvgGuardianLogo } from 'components/svgs/guardianLogo';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 

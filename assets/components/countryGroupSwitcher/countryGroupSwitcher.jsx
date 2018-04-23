@@ -6,7 +6,7 @@ import React from 'react';
 
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import SelectInput from 'components/selectInput/selectInput';
-import { SvgGlobe } from 'components/svg/svg';
+import { SvgGlobe } from 'components/svgs/globe';
 import { currencies } from 'helpers/internationalisation/currency';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

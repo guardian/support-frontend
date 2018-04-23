@@ -5,7 +5,7 @@
 import React from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
-import { SvgChevronUp } from 'components/svg/svg';
+import { SvgChevronUp } from 'components/svgs/chevronUp';
 
 
 // ----- Props ----- //

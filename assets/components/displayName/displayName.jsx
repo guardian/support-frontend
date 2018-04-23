@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { SvgUser } from 'components/svg/svg';
+import { SvgUser } from 'components/svgs/user';
 
 // ---- Types ----- //
 
