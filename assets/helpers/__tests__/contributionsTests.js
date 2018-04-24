@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import {
-  config,
   validateContribution,
   parseContribution,
   getMinContribution,
