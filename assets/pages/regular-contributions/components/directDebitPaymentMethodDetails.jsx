@@ -5,7 +5,7 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
-import { SvgDirectDebitSymbolAndText } from 'components/svgs/directDebitSymbolAndText';
+import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 
 type PropTypes = {
   accountHolderName: string,

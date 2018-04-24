@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The mastercard logo.
-function SvgMastercardLogo() {
+export default function SvgMastercardLogo() {
 
   return (
     <svg
@@ -22,5 +22,3 @@ function SvgMastercardLogo() {
     </svg>
   );
 }
-
-export { SvgMastercardLogo };

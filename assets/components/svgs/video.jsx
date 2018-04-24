@@ -3,7 +3,7 @@
 import React from 'react';
 
 // A video camera icon.
-function SvgVideo() {
+export default function SvgVideo() {
 
   return (
     <svg className="svg-video" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 12.728" preserveAspectRatio="xMinYMid">
@@ -12,5 +12,3 @@ function SvgVideo() {
   );
 
 }
-
-export { SvgVideo };

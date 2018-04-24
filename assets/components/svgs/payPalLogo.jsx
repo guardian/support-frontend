@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The standard PayPal logo.
-function SvgPaypalLogo() {
+export default function SvgPaypalLogo() {
 
   return (
     <svg
@@ -20,7 +20,4 @@ function SvgPaypalLogo() {
       </g>
     </svg>
   );
-
 }
-
-export { SvgPaypalLogo };

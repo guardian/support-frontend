@@ -4,7 +4,7 @@ import React from 'react';
 
 
 // Alternate error exclamation mark, used on Direct Debit pop up.
-function SvgExclamationAlternate() {
+export default function SvgExclamationAlternate() {
 
   return (
     <svg
@@ -23,5 +23,3 @@ function SvgExclamationAlternate() {
     </svg>
   );
 }
-
-export { SvgExclamationAlternate };

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgAdvertisingGraphMobile() {
+export default function SvgAdvertisingGraphMobile() {
 
   return (
     <svg
@@ -29,5 +29,3 @@ function SvgAdvertisingGraphMobile() {
     </svg>
   );
 }
-
-export { SvgAdvertisingGraphMobile };

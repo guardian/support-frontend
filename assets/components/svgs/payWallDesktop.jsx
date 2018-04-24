@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgPaywallDesktop() {
+export default function SvgPaywallDesktop() {
 
   return (
     <svg
@@ -28,5 +28,3 @@ function SvgPaywallDesktop() {
     </svg>
   );
 }
-
-export { SvgPaywallDesktop };

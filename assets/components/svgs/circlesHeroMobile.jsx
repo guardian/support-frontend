@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgCirclesHeroMobile() {
+export default function SvgCirclesHeroMobile() {
 
   return (
     <svg
@@ -34,5 +34,3 @@ function SvgCirclesHeroMobile() {
   );
 
 }
-
-export { SvgCirclesHeroMobile };

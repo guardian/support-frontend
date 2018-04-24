@@ -3,7 +3,7 @@
 import React from 'react';
 
 // Just the 'P' of the PayPal logo.
-function SvgPaypalPLogo() {
+export default function SvgPaypalPLogo() {
 
   return (
     <svg className="svg-paypal-p-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 23" preserveAspectRatio="xMinYMid">
@@ -14,5 +14,3 @@ function SvgPaypalPLogo() {
   );
 
 }
-
-export { SvgPaypalPLogo };

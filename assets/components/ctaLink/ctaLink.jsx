@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { SvgArrowRightStraight } from 'components/svgs/arrowRightStraight';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
 import { addQueryParamToURL } from 'helpers/url';

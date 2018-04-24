@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgCirclesHeroDesktop() {
+export default function SvgCirclesHeroDesktop() {
 
   return (
     <svg
@@ -52,5 +52,3 @@ function SvgCirclesHeroDesktop() {
   );
 
 }
-
-export { SvgCirclesHeroDesktop };

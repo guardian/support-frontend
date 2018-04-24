@@ -3,7 +3,7 @@
 import React from 'react';
 
 // A chevron symbol pointing up, used on buttons.
-function SvgChevronUp() {
+export default function SvgChevronUp() {
 
   return (
     <svg className="svg-chevron-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" preserveAspectRatio="xMinYMid">
@@ -12,5 +12,3 @@ function SvgChevronUp() {
   );
 
 }
-
-export { SvgChevronUp };

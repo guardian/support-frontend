@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgAdvertisingGraphDesktop() {
+export default function SvgAdvertisingGraphDesktop() {
 
   return (
     <svg
@@ -25,7 +25,4 @@ function SvgAdvertisingGraphDesktop() {
       </g>
     </svg>
   );
-
 }
-
-export { SvgAdvertisingGraphDesktop };

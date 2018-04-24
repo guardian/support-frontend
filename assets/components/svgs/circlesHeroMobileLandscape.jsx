@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgCirclesHeroMobileLandscape() {
+export default function SvgCirclesHeroMobileLandscape() {
 
   return (
     <svg
@@ -39,7 +39,4 @@ function SvgCirclesHeroMobileLandscape() {
       </g>
     </svg>
   );
-
 }
-
-export { SvgCirclesHeroMobileLandscape };

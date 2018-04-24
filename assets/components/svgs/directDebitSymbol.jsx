@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgDirectDebitSymbol() {
+export default function SvgDirectDebitSymbol() {
   return (
     <svg
       className="svg-direct-debit-symbol"
@@ -17,5 +17,3 @@ function SvgDirectDebitSymbol() {
     </svg>
   );
 }
-
-export { SvgDirectDebitSymbol };

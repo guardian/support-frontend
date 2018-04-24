@@ -3,7 +3,7 @@
 import React from 'react';
 
 // A Visa logo.
-function SvgVisaLogo() {
+export default function SvgVisaLogo() {
 
   return (
     <svg
@@ -26,5 +26,3 @@ function SvgVisaLogo() {
     </svg>
   );
 }
-
-export { SvgVisaLogo };

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import type { Node } from 'react';
-import { SvgExclamation } from 'components/svgs/exclamation';
+import SvgExclamation from 'components/svgs/exclamation';
 
 
 // ---- Types ----- //

@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The right-pointing arrow commonly used on CTAs.
-function SvgArrowRightStraight() {
+export default function SvgArrowRightStraight() {
 
   return (
     <svg
@@ -16,5 +16,3 @@ function SvgArrowRightStraight() {
     </svg>
   );
 }
-
-export { SvgArrowRightStraight };

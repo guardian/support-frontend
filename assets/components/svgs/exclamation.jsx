@@ -3,7 +3,7 @@
 import React from 'react';
 
 // Exclamation mark, used on error messages.
-function SvgExclamation() {
+export default function SvgExclamation() {
 
   return (
     <svg
@@ -17,5 +17,3 @@ function SvgExclamation() {
   );
 
 }
-
-export { SvgExclamation };

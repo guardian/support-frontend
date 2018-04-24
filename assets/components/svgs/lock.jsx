@@ -3,7 +3,7 @@
 import React from 'react';
 
 // A padlock icon used to signify that checkouts are secure.
-function SvgLock() {
+export default function SvgLock() {
 
   return (
     <svg className="svg-lock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 10.57" preserveAspectRatio="xMinYMid">
@@ -12,5 +12,3 @@ function SvgLock() {
   );
 
 }
-
-export { SvgLock };

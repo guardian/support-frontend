@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgThankYouHeroMobile() {
+export default function SvgThankYouHeroMobile() {
 
   return (
     <svg
@@ -53,5 +53,3 @@ function SvgThankYouHeroMobile() {
     </svg>
   );
 }
-
-export { SvgThankYouHeroMobile };

@@ -6,8 +6,8 @@ import React from 'react';
 
 import type { Node } from 'react';
 
-import { SvgFacebook } from 'components/svgs/facebook';
-import { SvgTwitter } from 'components/svgs/twitter';
+import SvgFacebook from 'components/svgs/facebook';
+import SvgTwitter from 'components/svgs/twitter';
 
 
 // ---- Types ----- //

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgMovingCircle() {
+export default function SvgMovingCircle() {
 
   return (
     <svg
@@ -19,7 +19,4 @@ function SvgMovingCircle() {
       </g>
     </svg>
   );
-
 }
-
-export { SvgMovingCircle };

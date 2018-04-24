@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgCross() {
+export default function SvgCross() {
   return (
     <svg
       className="svg-cross"
@@ -14,5 +14,3 @@ function SvgCross() {
     </svg>
   );
 }
-
-export { SvgCross };

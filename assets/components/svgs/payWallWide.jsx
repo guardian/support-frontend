@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgPaywallWide() {
+export default function SvgPaywallWide() {
 
   return (
     <svg
@@ -29,5 +29,3 @@ function SvgPaywallWide() {
   );
 
 }
-
-export { SvgPaywallWide };

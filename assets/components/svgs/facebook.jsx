@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The Facebook logo, in monochrome.
-function SvgFacebook() {
+export default function SvgFacebook() {
 
   return (
     <svg className="svg-facebook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" preserveAspectRatio="xMinYMid">
@@ -12,5 +12,3 @@ function SvgFacebook() {
   );
 
 }
-
-export { SvgFacebook };

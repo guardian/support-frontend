@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { SvgLock } from 'components/svgs/lock';
+import SvgLock from 'components/svgs/lock';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 

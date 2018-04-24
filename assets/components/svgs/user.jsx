@@ -3,7 +3,7 @@
 import React from 'react';
 
 // A user icon, with a head and body.
-function SvgUser() {
+export default function SvgUser() {
 
   return (
     <svg className="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid">
@@ -11,5 +11,3 @@ function SvgUser() {
     </svg>
   );
 }
-
-export { SvgUser };

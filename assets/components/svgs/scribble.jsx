@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgScribble() {
+export default function SvgScribble() {
 
   return (
     <svg
@@ -39,7 +39,4 @@ function SvgScribble() {
       </g>
     </svg>
   );
-
 }
-
-export { SvgScribble };

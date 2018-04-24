@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The Globe
-function SvgGlobe() {
+export default function SvgGlobe() {
 
   return (
     <svg className="svg-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" preserveAspectRatio="xMinYMid">
@@ -26,5 +26,3 @@ function SvgGlobe() {
     </svg>
   );
 }
-
-export { SvgGlobe };

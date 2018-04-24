@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgThankYouHeroDesktop() {
+export default function SvgThankYouHeroDesktop() {
 
   return (
     <svg
@@ -70,5 +70,3 @@ function SvgThankYouHeroDesktop() {
     </svg>
   );
 }
-
-export { SvgThankYouHeroDesktop };

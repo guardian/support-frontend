@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The generic credit card logo used on checkouts.
-function SvgCreditCard() {
+export default function SvgCreditCard() {
 
   return (
     <svg
@@ -17,5 +17,3 @@ function SvgCreditCard() {
   );
 
 }
-
-export { SvgCreditCard };

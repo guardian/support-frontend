@@ -3,7 +3,7 @@
 import React from 'react';
 
 // The main guardian logo.
-function SvgGuardianLogo() {
+export default function SvgGuardianLogo() {
 
   return (
     <svg className="svg-guardian-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.999 104.42" preserveAspectRatio="xMinYMid">
@@ -12,5 +12,3 @@ function SvgGuardianLogo() {
   );
 
 }
-
-export { SvgGuardianLogo };

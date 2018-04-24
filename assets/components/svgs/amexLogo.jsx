@@ -3,7 +3,7 @@
 import React from 'react';
 
 // American Express credit card logo.
-function SvgAmexLogo() {
+export default function SvgAmexLogo() {
 
   return (
     <svg
@@ -27,5 +27,3 @@ function SvgAmexLogo() {
     </svg>
   );
 }
-
-export { SvgAmexLogo };

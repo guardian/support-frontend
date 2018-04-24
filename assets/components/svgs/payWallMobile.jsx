@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function SvgPaywallMobile() {
+export default function SvgPaywallMobile() {
 
   return (
     <svg
@@ -27,5 +27,3 @@ function SvgPaywallMobile() {
   );
 
 }
-
-export { SvgPaywallMobile };
