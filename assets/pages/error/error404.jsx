@@ -6,7 +6,7 @@ import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/introduction/circlesIntroduction';
+import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 
@@ -24,7 +24,7 @@ pageInit();
 const content = (
   <div className="gu-content">
     <SimpleHeader />
-    <CirclesIntroduction
+    <SquaresIntroduction
       headings={['the page you', 'have requested', 'does not exist']}
       highlights={['Error 404']}
     />
