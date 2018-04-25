@@ -52,11 +52,11 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val mockEvent: Event = mock[Event]
 
-  val paymentHookResponse: EitherT[Future, StripeApiError, Event] =
-    EitherT.right(Future.successful(mockEvent))
+  val processRefundHookSuccess: EitherT[Future, BackendError, Unit] =
+    EitherT.right(Future.successful(()))
 
-  val paymentHookResponseError: EitherT[Future, StripeApiError, Event] =
-    EitherT.left(Future.successful(StripeApiError.apply("Error response")))
+  val processRefundHookFailure: EitherT[Future, BackendError, Unit] =
+    EitherT.left(Future.successful(BackendError.fromStripeApiError(StripeApiError("Error response"))))
 
   val stripeController: StripeController =
     new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
@@ -366,7 +366,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.processRefundHook(any()))
-            .thenReturn(paymentHookResponse)
+            .thenReturn(processRefundHookSuccess)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
@@ -501,7 +501,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.processRefundHook(any()))
-            .thenReturn(paymentHookResponse)
+            .thenReturn(processRefundHookSuccess)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
@@ -531,7 +531,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.processRefundHook(any()))
-            .thenReturn(paymentHookResponseError)
+            .thenReturn(processRefundHookFailure)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }

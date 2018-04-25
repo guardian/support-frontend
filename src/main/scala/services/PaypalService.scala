@@ -99,7 +99,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
     import scala.collection.JavaConverters._
 
-    val Description = "Contribution to the guardian"
+    val description = "Contribution to the guardian"
     val stringAmount = amount.setScale(2, RoundingMode.HALF_UP).toString
 
     val paypalAmount = new Amount()
@@ -107,7 +107,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       .setTotal(stringAmount)
 
     val item = new Item()
-      .setDescription(Description)
+      .setDescription(description)
       .setCurrency(currencyCode)
       .setPrice(stringAmount)
       .setQuantity("1")
@@ -117,8 +117,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
     val transaction = new Transaction
     transaction.setAmount(paypalAmount)
-    transaction.setDescription(Description)
-    transaction.setCustom(UUID.randomUUID().toString)
+    transaction.setDescription(description)
     transaction.setItemList(itemList)
 
     List(transaction).asJava

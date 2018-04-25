@@ -31,16 +31,9 @@ object DatabaseService {
 class PostgresDatabaseService private (database: Database)(implicit pool: JdbcThreadPool)
   extends DatabaseService with StrictLogging {
 
-  private def executeQuery(insertStatement: SimpleSql[Row]): EitherT[Future, DatabaseService.Error, Unit] =
+  private def executeQuery(insertStatement: SimpleSql[Row]): EitherT[Future, Throwable, Boolean] =
     Future(database.withConnection { implicit conn => insertStatement.execute() })
       .attemptT
-      .bimap(
-        err => {
-          logger.error(s"unable to insert contribution into database. Error: $err")
-          DatabaseService.Error("unable to insert contribution into database", Some(err))
-        },
-        _ => logger.info("contribution inserted into database")
-      )
 
   override def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit] = {
     val query = SQL"""
@@ -69,14 +62,30 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
       );
     """
     executeQuery(query)
+      .bimap(
+        err => {
+          val msg = "unable to insert contribution into database"
+          logger.error(s"$msg. Error: $err")
+          DatabaseService.Error(msg, Some(err))
+        },
+        _ => logger.info("contribution inserted into database")
+      )
   }
 
   override def flagContributionAsRefunded(paymentId: String): EitherT[Future, DatabaseService.Error, Unit] = {
     val query = SQL"""
-      UPDATE contributions SET status = 'Refunded'::paymentStatus WHERE paymentid = $paymentId;
+      UPDATE contributions SET status = 'Refunded'::paymentStatus WHERE payment_id = $paymentId;
     """
 
     executeQuery(query)
+      .bimap(
+        err => {
+          val msg = "unable to flag contribution as refunded"
+          logger.error(msg, err)
+          DatabaseService.Error(msg, Some(err))
+        },
+        _ => logger.info(s"contribution with payment_id $paymentId was flagged as refunded")
+      )
   }
 
 }

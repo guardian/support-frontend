@@ -52,6 +52,14 @@ class StripeBackend(
     stripeService.createCharge(data)
       .leftMap(BackendError.fromStripeApiError)
 
+  def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
+    stripeService.validateRefundHook(refundHook)
+      .leftMap(BackendError.fromStripeApiError)
+
+  def flagContributionAsRefunded(stripePaymentId: String): EitherT[Future, BackendError, Unit] =
+    databaseService.flagContributionAsRefunded(stripePaymentId)
+      .leftMap(BackendError.fromDatabaseError)
+
   def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long]):
   EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
@@ -76,11 +84,11 @@ class StripeBackend(
 
 
   def processRefundHook(refundHook: StripeRefundHook):
-  EitherT[Future, StripeApiError, Event] = {
+  EitherT[Future, BackendError, Unit] = {
     for {
-      event <- stripeService.processRefundHook(refundHook)
-      _ = databaseService.flagContributionAsRefunded(refundHook.data.`object`.id)
-    } yield event
+      _ <- validateRefundHook(refundHook)
+      dbUpdateResult <- flagContributionAsRefunded(refundHook.data.`object`.id)
+    } yield dbUpdateResult
   }
 
 

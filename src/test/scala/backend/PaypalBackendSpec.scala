@@ -36,6 +36,8 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val dbError = DatabaseService.Error("DB error response", None)
   val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
   val paymentError = PaypalApiError.fromString("Error response")
+  val backendPaymentError = BackendError.fromPaypalAPIError(paymentError)
+  val backendDbError = BackendError.fromDatabaseError(dbError)
 
   //-- mocks
   val paymentMock: Payment = mock[Payment]
@@ -57,9 +59,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(paymentError))
   val acquisitionResponseError: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val unitResponse: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseSuccess: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.right(Future.successful(()))
-  val unitResponseError: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseFailure: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
   val identityResponse: EitherT[Future, IdentityClient.Error, Long] =
     EitherT.right(Future.successful(1L))
@@ -125,7 +127,7 @@ class PaypalBackendSpec
         when(paymentMock.getTransactions).thenReturn(transactions)
         when(paymentMock.getCreateTime).thenReturn("2018-02-22T11:51:00Z")
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
         val error = BackendError.MultipleErrors(List(BackendError.fromOphanError(
           OphanServiceError.BuildError("Ophan error response")),
@@ -152,7 +154,7 @@ class PaypalBackendSpec
         when(payerInfo.getEmail).thenReturn("email@email.com")
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         paypalBackend.capturePayment(capturePaypalPaymentData).futureRight shouldBe paymentMock
@@ -178,7 +180,7 @@ class PaypalBackendSpec
         when(payerInfo.getEmail).thenReturn("email@email.com")
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         paypalBackend.executePayment(executePaypalPaymentData).futureRight shouldBe paymentMock
@@ -187,16 +189,22 @@ class PaypalBackendSpec
 
     "a request is made to a payment hook" should {
 
-      "return error if payment is not valid" in new PaypalBackendFixture {
+      "return error if refund hook is not valid" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponseError)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe paymentError
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe backendPaymentError
       }
 
-      "return successful response even if databaseService fails" in new PaypalBackendFixture {
+      "return error if databaseService fails" in new PaypalBackendFixture {
         when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponse)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureRight shouldBe (())
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe backendDbError
+      }
+
+      "return success if refund hook is valid and databaseService succeeds" in new PaypalBackendFixture {
+        when(mockPaypalService.validateEvent(any(), any())).thenReturn(unitPaymentResponse)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseSuccess)
+        paypalBackend.processRefundHook(paypalHook, any(), any()).futureRight shouldBe(())
       }
     }
   }

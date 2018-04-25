@@ -16,7 +16,7 @@ import model.stripe._
 trait StripeService {
 
   def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge]
-  def processRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Event]
+  def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit]
 }
 
 class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
@@ -53,7 +53,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     }
   }
 
-  def processRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Event] = {
+  def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     Future(Event.retrieve(stripeHook.id, requestOptions))
       .attemptT
       .bimap(
@@ -63,7 +63,6 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
         },
         event => {
           logger.info("Stripe event retrieved")
-          event
         }
       )
   }
@@ -90,10 +89,10 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
   override def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] =
     getSingleAccountService(data.paymentData.currency).createCharge(data)
 
-  override def processRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Event] = {
+  override def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     val stripeCurrency = stripeHook.data.`object`.currency.toUpperCase
     Currency.withNameOption(stripeCurrency) match {
-      case Some(currency) => getSingleAccountService(currency).processRefundHook(stripeHook)
+      case Some(currency) => getSingleAccountService(currency).validateRefundHook(stripeHook)
       case None => {
         val errorMessage = s"Invalid currency. $stripeCurrency"
         logger.error(errorMessage)

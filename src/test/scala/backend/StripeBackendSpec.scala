@@ -34,6 +34,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
   val paymentError = PaypalApiError.fromString("Error response")
   val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"))
+  val backendError = BackendError.fromStripeApiError(stripeApiError)
 
   //-- mocks
   val chargeMock: Charge = mock[Charge]
@@ -50,12 +51,14 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(1L))
   val identityResponseError: EitherT[Future, IdentityClient.Error, Long] =
     EitherT.left(Future.successful(identityError))
-  val eventResponse: EitherT[Future, StripeApiError,Event] =
-    EitherT.right(Future.successful(eventMock))
-  val eventResponseError: EitherT[Future, StripeApiError,Event] =
+  val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
+    EitherT.right(Future.successful(()))
+  val validateRefundHookFailure: EitherT[Future, StripeApiError, Unit] =
     EitherT.left(Future.successful(stripeApiError))
-  val unitResponseError: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseFailure: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
+  val databaseSuccess: EitherT[Future, DatabaseService.Error, Unit] =
+    EitherT.right(Future.successful(()))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
@@ -95,7 +98,7 @@ class StripeBackendSpec
         when(chargeMock.getAmount).thenReturn(12L)
         when(chargeMock.getSource).thenReturn(externalAccount)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None)
         val error = BackendError.MultipleErrors(List(
@@ -121,7 +124,7 @@ class StripeBackendSpec
         when(chargeMock.getAmount).thenReturn(12L)
         when(chargeMock.getSource).thenReturn(externalAccount)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(unitResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         stripeBackend.createCharge(stripeChargeData).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
@@ -130,17 +133,24 @@ class StripeBackendSpec
 
     "a request is made to a payment hook" should {
 
-      "return error if payment is not valid" in new StripeBackendFixture {
-        when(mockStripeService.processRefundHook(stripeHook)).thenReturn(eventResponseError)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe stripeApiError
+      "return error if refund hook is not valid" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookFailure)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe backendError
       }
 
-      "return successful response even if databaseService fails" in new StripeBackendFixture {
-        when(mockStripeService.processRefundHook(stripeHook)).thenReturn(eventResponse)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(unitResponseError)
-        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe eventMock
+      "return error if databaseService fails" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe BackendError.fromDatabaseError(dbError)
       }
+
+      "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseSuccess)
+        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe(())
+      }
+
     }
   }
 }

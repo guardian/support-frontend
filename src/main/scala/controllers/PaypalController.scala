@@ -68,7 +68,7 @@ class PaypalController(
             .getInstanceFor(refundHook)
             .processRefundHook(refundHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
             .fold(
-              err => InternalServerError(ResultBody.Error(err.message)),
+              err => InternalServerError(ResultBody.Error(err.getMessage)),
               _ => Ok(ResultBody.Success("execute hook success"))
             )
         }

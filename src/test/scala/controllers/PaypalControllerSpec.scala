@@ -46,11 +46,11 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val paymentServiceResponseError: EitherT[Future, BackendError, Payment] =
     EitherT.left(Future.successful(BackendError.PaypalApiError(PaypalApiError.fromString("Error response"))))
 
-  val paymentHookResponse: EitherT[Future, PaypalApiError, Unit] =
+  val paymentHookResponse: EitherT[Future, BackendError, Unit] =
     EitherT.right(Future.successful(()))
 
-  val paymentHookResponseError: EitherT[Future, PaypalApiError, Unit] =
-    EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
+  val paymentHookResponseError: EitherT[Future, BackendError, Unit] =
+    EitherT.left(Future.successful(BackendError.fromPaypalAPIError(PaypalApiError.fromString("Error response"))))
 
   val payPalController: PaypalController =
     new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
