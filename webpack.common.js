@@ -62,8 +62,12 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
         loader: 'babel-loader',
       },
       {
-        test: /\.(png|jpg|gif|ico|eot|ttf|woff|woff2)$/,
+        test: /\.(png|jpg|gif|ico)$/,
         loader: 'file-loader?name=[path][name].[hash].[ext]',
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=[path][name].[ext]',
       },
       {
         test: /\.scss$/,
