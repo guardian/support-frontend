@@ -3,9 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { applyMiddleware, compose } from 'redux';
-import { connect, Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
+import { connect } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
@@ -18,14 +16,11 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import DisplayName from 'components/displayName/displayName';
 import Signout from 'components/signout/signout';
 import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
-
+import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import OneoffContributionsPayment from './oneoffContributionsPayment';
 import FormFields from './formFields';
-import type { PageState } from '../oneOffContributionsReducers';
-
-import { setPayPalButton } from '../oneoffContributionsActions';
-import type { Currency } from '../../../helpers/internationalisation/currency';
 
 // ----- Types ----- //
 

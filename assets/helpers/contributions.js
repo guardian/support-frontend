@@ -431,10 +431,7 @@ function getContributionAmountRadios(
 }
 
 function isRegularContribution(contrib: Contrib): boolean {
-  if (contrib === 'ONE_OFF'){
-    return false;
-  }
-  return true;
+  return contrib !== 'ONE_OFF';
 }
 
 

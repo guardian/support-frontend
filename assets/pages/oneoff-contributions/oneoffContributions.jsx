@@ -23,7 +23,7 @@ import ContributionsThankYouPage from 'components/contributionsThankYou/contribu
 import reducer from './oneOffContributionsReducers';
 
 import { setPayPalButton } from './oneoffContributionsActions';
-import OneOffContributionsPage from './components/oneOffContributionsPages';
+import OneOffContributionsPage from './components/oneOffContributionsPage';
 
 
 // ----- Page Startup ----- //
@@ -45,7 +45,6 @@ user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const router = (
-  /* eslint-disable max-len */
   <BrowserRouter>
     <Provider store={store}>
       <div>

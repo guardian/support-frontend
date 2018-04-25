@@ -52,7 +52,9 @@ function getDirectDebitDetails(state) {
 
 function mapStateToProps(state) {
   const contributionType = state.page.regularContrib ? state.page.regularContrib.contributionType : 'ONE_OFF';
+  // eslint-disable-next-line max-len
   const directDebitFields = isRegularContribution(contributionType) ? getDirectDebitDetails(state) : null;
+
   return {
     contributionType,
     directDebitFields,
@@ -94,7 +96,7 @@ function DirectDebitDetails(props: DirectDebitFields) {
 function getBodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
     return '';
-  } else if (props.directDebitFields.isDirectDebit) {
+  } else if (props.directDebitFields && props.directDebitFields.isDirectDebit) {
     return DirectDebitDetails(props.directDebitFields);
   }
   return <EmailConfirmation />;
