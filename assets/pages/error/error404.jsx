@@ -29,10 +29,10 @@ const content = (
       highlights={['Error 404']}
     />
     <PageSection modifierClass="ctas">
-      <div className="error-copy">
-        <p>You may have followed an outdated link, or have mistyped a URL.</p>
-        <p>If you believe this to be an error, please report it.</p>
-      </div>
+      <p className="error-copy">
+        You may have followed an outdated link, or have mistyped a URL.
+        If you believe this to be an error, please report it.
+      </p>
       <CtaLink
         text="Support The Guardian"
         accessibilityHint="click here to support The Guardian"
