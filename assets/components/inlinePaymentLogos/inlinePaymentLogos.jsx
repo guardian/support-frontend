@@ -4,13 +4,10 @@
 
 import React from 'react';
 
-import {
-  SvgVisaLogo,
-  SvgMastercardLogo,
-  SvgPaypalLogo,
-  SvgAmexLogo,
-} from 'components/svg/svg';
-
+import SvgVisaLogo from 'components/svgs/visaLogo';
+import SvgMastercardLogo from 'components/svgs/mastercardLogo';
+import SvgPaypalLogo from 'components/svgs/payPalLogo';
+import SvgAmexLogo from 'components/svgs/amexLogo';
 
 // ----- Component ----- //
 

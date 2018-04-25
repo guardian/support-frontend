@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { SvgCreditCard } from 'components/svg/svg';
+import SvgCreditCard from 'components/svgs/creditCard';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 
