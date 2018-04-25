@@ -21,6 +21,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
   entry: {
     favicons: 'images/favicons.js',
+    fonts: 'fonts/fonts.js',
     styles: 'stylesheets/garnett.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
@@ -61,7 +62,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
         loader: 'babel-loader',
       },
       {
-        test: /\.(png|jpg|gif|ico)$/,
+        test: /\.(png|jpg|gif|ico|eot|ttf|woff|woff2)$/,
         loader: 'file-loader?name=[path][name].[hash].[ext]',
       },
       {
