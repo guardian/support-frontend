@@ -16,7 +16,6 @@ GET /int                                            controllers.Application.redi
 GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
 GET /                                               controllers.Application.geoRedirect()
-GET /error                                          controllers.Application.reactTemplate(title="Error 404", id="error-404-page", js="error404Page.js")
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
 

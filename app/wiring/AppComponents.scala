@@ -23,7 +23,13 @@ trait AppComponents extends PlayComponents
   with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
-  override lazy val httpErrorHandler = new CustomHttpErrorHandler(environment, configuration, sourceMapper, Some(router))
+  override lazy val httpErrorHandler = new CustomHttpErrorHandler(
+    environment,
+    configuration,
+    sourceMapper,
+    Some(router),
+    assetsResolver
+  )
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     new SetCookiesCheck(),
