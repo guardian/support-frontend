@@ -44,7 +44,7 @@ class PaypalBackend(
       .bimap(BackendError.fromOphanError, _ => ())
 
   def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
-    paypalService.validateEvent(headers, rawJson)
+    paypalService.validateWebhookEvent(headers, rawJson)
       .leftMap(BackendError.fromPaypalAPIError)
 
   def flagContributionAsRefunded(paypalPaymentId: String): EitherT[Future, BackendError, Unit] =

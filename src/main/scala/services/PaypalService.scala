@@ -1,7 +1,5 @@
 package services
 
-import java.util.UUID
-
 import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments._
@@ -21,7 +19,7 @@ trait Paypal {
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment]
   def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment]
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment]
-  def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit]
+  def validateWebhookEvent(headers: Map[String, String], body: String): PaypalResult[Unit]
 }
 
 class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) extends Paypal with StrictLogging {
@@ -75,17 +73,20 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
     } yield validatedPayment).toEitherT[Future]
 
 
-  def validateEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {
+  def validateWebhookEvent(headers: Map[String, String], body: String): PaypalResult[Unit] = {
     Either.catchNonFatal {
       val context = buildAPIContext.addConfiguration(Constants.PAYPAL_WEBHOOK_ID, config.hookId)
-      if (Event.validateReceivedEvent(context, headers.asJava, body))
+      if (Event.validateReceivedEvent(context, headers.asJava, body)) {
         ()
-      else {
-        logger.error(s"Paypal has invalidated webhook request. Verify config.hookId: ${config.hookId}. JSON: $body")
-        throw new Exception("Invalid hook request")
+      } else {
+        val msg = "Webhook event is not valid. " +
+          s"Does the hook id from your config (${config.hookId}) match the id received from PayPal? " +
+          s"PayPal sent: $body"
+
+        throw new Exception(msg)
       }
-    }.leftMap{ error =>
-      val message = s"Invalid validating event. Error: $error"
+    }.leftMap { error =>
+      val message = s"Could not validate PayPal webhook event. Error: $error"
       logger.error(message)
       PaypalApiError.fromString(message)
     }.toEitherT[Future]

@@ -58,11 +58,12 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       .attemptT
       .bimap(
         err => {
-          logger.error("unable to retrieve Stripe event", err)
+          logger.error(s"Refund webhook event is not valid. Stripe sent $stripeHook. " +
+            s"Attempting to retrieve a matching event gave: ", err)
           StripeApiError.fromThrowable(err)
         },
         event => {
-          logger.info("Stripe event retrieved")
+          logger.info("Refund webhook event is valid")
         }
       )
   }
