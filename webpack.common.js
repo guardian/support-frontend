@@ -31,6 +31,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
+    error404Page: 'pages/error/error404.jsx',
   },
 
   output: {

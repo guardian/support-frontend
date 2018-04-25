@@ -1,0 +1,62 @@
+#error-404-page {
+  .component-page-section--ctas {
+    @include multiline-top-border;
+
+    @include gu-content-filler;
+
+    .component-page-section__header {
+      @include dropline;
+    }
+
+    .component-page-section__body {
+      padding-top: $gu-v-spacing / 2;
+
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
+    }
+
+    .component-cta-link {
+      box-sizing: border-box;
+      height: 46px;
+      line-height: 46px;
+      padding: 0 $gu-h-spacing;
+
+      @include mq($from: phablet) {
+        width: 292px;
+      }
+    }
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      height: 35%;
+      top: 14px;
+      right: 15px;
+
+      // Fix for IE.
+      @include mq($from: phablet) {
+        left: 258px;
+      }
+    }
+  }
+
+  .component-cta-link--support-the-guardian {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+  }
+
+  .component-cta-link--guardian-home-page {
+    background-color: #fff;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+
+    &:hover {
+      color: darken(gu-colour(garnett-neutral-1), 5%);
+      border-color: darken(gu-colour(garnett-neutral-1), 5%);
+    }
+  }
+}
