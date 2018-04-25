@@ -1,67 +1,20 @@
 .component-circles-introduction {
-  background-color: gu-colour(nav-background-colour);
-  color: gu-colour(garnett-neutral-1);
-  position: relative;
-  overflow: hidden;
-  font-family: $gu-egyptian-web;
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 30px;
-
-  @include mq($from: mobileMedium) {
-    font-size: 30px;
-    line-height: 32px;
-  }
-
-  @include mq($from: phablet) {
-    font-size: 46px;
-    line-height: 50px;
-  }
-
-  @include mq($from: desktop) {
-    font-size: 48px;
-    line-height: 52px;
-  }
-
-  .component-highlights {
-    @include mq($from: desktop) {
-      padding-left: $gu-h-spacing;
-      margin-left: 20%;
-    }
-  }
+  @include introduction;
 
   .svg-circles-hero-desktop {
-    position: absolute;
-    top: 0;
-    min-height: 100%;
-    display: none;
-
-    @include mq($from: desktop) {
-      display: inline;
-    }
+    @include introduction-svg("desktop");
   }
 
   .svg-circles-hero-mobile-landscape {
-    position: absolute;
-    top: 0;
-    min-height: 100%;
-    display: none;
-
-    @include mq($from: mobileLandscape, $until: desktop) {
-      display: inline;
-    }
+    @include introduction-svg("tablet");
   }
 
   .svg-circles-hero-mobile {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    min-height: 100%;
-    display: none;
+    @include introduction-svg;
+  }
 
-    @include mq($until: mobileLandscape) {
-      display: inline;
-    }
+  .component-highlights {
+    @include introduction-left-spacing;
   }
 }
 
@@ -88,10 +41,7 @@
     padding-bottom: $gu-v-spacing * 2;
   }
 
-  @include mq($from: desktop) {
-    padding-left: $gu-h-spacing;
-    margin-left: 20%
-  }
+  @include introduction-left-spacing;
 
   @include mq($from: leftCol) {
     padding-bottom: $gu-v-spacing * 3;
