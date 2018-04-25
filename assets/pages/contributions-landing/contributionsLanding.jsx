@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 // React components
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Contribute from 'components/contribute/contribute';
 
 // React components connected to redux store

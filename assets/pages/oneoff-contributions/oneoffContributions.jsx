@@ -17,7 +17,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import DisplayName from 'components/displayName/displayName';
 import Signout from 'components/signout/signout';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountry } from 'helpers/internationalisation/country';

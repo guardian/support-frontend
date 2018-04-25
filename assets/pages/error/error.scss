@@ -40,6 +40,10 @@
     }
   }
 
+  .error-copy {
+    margin-bottom: $gu-v-spacing * 2;
+  }
+
   .component-cta-link--support-the-guardian {
     background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);

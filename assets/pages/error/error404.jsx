@@ -6,7 +6,7 @@ import React from 'react';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 
@@ -29,8 +29,10 @@ const content = (
       highlights={['Error 404']}
     />
     <PageSection modifierClass="ctas">
-      <p>You may have followed an outdated link, or have mistyped a URL.</p>
-      <p>If you believe this to be an error, please report it.</p>
+      <div className="error-copy">
+        <p>You may have followed an outdated link, or have mistyped a URL.</p>
+        <p>If you believe this to be an error, please report it.</p>
+      </div>
       <CtaLink
         text="Support The Guardian"
         accessibilityHint="click here to support The Guardian"

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 // React components
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
