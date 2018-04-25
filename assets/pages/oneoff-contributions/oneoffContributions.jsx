@@ -18,12 +18,12 @@ import { parse as parseContrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
+import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 
 import reducer from './oneOffContributionsReducers';
 
 import { setPayPalButton } from './oneoffContributionsActions';
 import OneOffContributionsPage from './components/oneOffContributionsPages';
-import RegularContributionsThankYouPage from '../regular-contributions/components/regularContributionsThankYouPage';
 
 
 // ----- Page Startup ----- //
@@ -50,7 +50,7 @@ const router = (
     <Provider store={store}>
       <div>
         <Route exact path={routes.oneOffContribCheckout} component={OneOffContributionsPage} />
-        <Route exact path={routes.oneOffContribThankyou} component={RegularContributionsThankYouPage} />
+        <Route exact path={routes.oneOffContribThankyou} component={ContributionsThankYouPage} />
       </div>
     </Provider>
   </BrowserRouter>

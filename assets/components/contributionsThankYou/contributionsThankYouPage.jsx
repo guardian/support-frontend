@@ -15,9 +15,9 @@ import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directD
 import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/directDebit/directDebitActions';
 import { type Contrib, isRegularContribution } from 'helpers/contributions';
 
-import EmailConfirmation from './emailConfirmation';
-import MarketingConsentContainer from './marketingConsentContainer';
-import DirectDebitPaymentMethodDetails from './directDebitPaymentMethodDetails';
+import EmailConfirmation from '../../pages/regular-contributions/components/emailConfirmation';
+import MarketingConsentContainer from '../../pages/regular-contributions/components/marketingConsentContainer';
+import DirectDebitPaymentMethodDetails from '../../pages/regular-contributions/components/directDebitPaymentMethodDetails';
 
 
 // ---- Types ----- //
@@ -100,9 +100,9 @@ function getBodyCopy(props: PropTypes) {
   return <EmailConfirmation />;
 }
 
-function RegularContributionsThankYouPage(props: PropTypes) {
+function ContributionsThankYouPage(props: PropTypes) {
   return (
-    <div id="regular-contributions-thank-you-page" className="gu-content">
+    <div id="contributions-thank-you-page" className="gu-content">
       <SimpleHeader />
       <CirclesIntroduction
         headings={['Thank you', 'for a valuable', 'contribution']}
@@ -119,4 +119,4 @@ function RegularContributionsThankYouPage(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegularContributionsThankYouPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionsThankYouPage);
