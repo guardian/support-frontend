@@ -16,3 +16,10 @@ require('./GHGuardianHeadline-Semibold.ttf');
 require('./GHGuardianHeadline-SemiboldItalic.woff');
 require('./GHGuardianHeadline-SemiboldItalic.woff2');
 require('./GHGuardianHeadline-SemiboldItalic.ttf');
+require('./GHGuardianHeadline-Light.woff');
+require('./GHGuardianHeadline-Light.woff2');
+require('./GHGuardianHeadline-Light.ttf');
+require('./GHGuardianHeadline-LightItalic.woff');
+require('./GHGuardianHeadline-LightItalic.woff2');
+require('./GHGuardianHeadline-LightItalic.ttf');
+
