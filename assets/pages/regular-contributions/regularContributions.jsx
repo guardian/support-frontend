@@ -54,7 +54,6 @@ user.init(store.dispatch);
 store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const router = (
-  /* eslint-disable max-len */
   <BrowserRouter>
     <Provider store={store}>
       <div>
