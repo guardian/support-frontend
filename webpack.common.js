@@ -66,7 +66,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
         loader: 'file-loader?name=[path][name].[hash].[ext]',
       },
       {
-        test: /\.(eot|ttf|woff|woff2)$/,
+        test: /\.(ttf|woff|woff2)$/,
         loader: 'file-loader?name=[path][name].[ext]',
       },
       {
