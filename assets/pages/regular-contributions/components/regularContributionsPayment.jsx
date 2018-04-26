@@ -77,9 +77,8 @@ function getStatusMessage(
  */
 function RegularContributionsPayment(props: PropTypes, context) {
   let directDebitButton = null;
-  const isDirectDebitEnabled = props.abParticipations.directDebitTest === 'directDebit' || (window.guardian && window.guardian.directDebitEnable);
 
-  if (props.country === 'GB' && isDirectDebitEnabled) {
+  if (props.country === 'GB') {
     directDebitButton = (
       <DirectDebitPopUpButton
         callback={postCheckout(

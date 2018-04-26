@@ -15,7 +15,6 @@ function className(baseClass: string, open: boolean) {
 }
 
 function DirectDebitGuarantee(props: PropTypes) {
-  // eslint-disable-next-line max-len
   const onClick = props.isDDGuaranteeOpen ? props.closeDDGuaranteeClicked : props.openDDGuaranteeClicked;
   return (
     <div className="component-direct-debit-guarantee">

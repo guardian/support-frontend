@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { SvgPaypalPLogo, SvgArrowRightStraight } from 'components/svg/svg';
+import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
 import * as storage from 'helpers/storage';

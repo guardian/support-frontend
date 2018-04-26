@@ -6,7 +6,6 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
@@ -73,7 +72,6 @@ export default function createRootOneOffContribReducer(amount: number, currency:
   return combineReducers({
     oneoffContrib: createOneOffContribReducer(amount, currency),
     user,
-    payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),
     csrf,
   });
 }

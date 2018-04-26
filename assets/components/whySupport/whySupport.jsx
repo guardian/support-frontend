@@ -5,14 +5,12 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
-import {
-  SvgScribble,
-  SvgAdvertisingGraphMobile,
-  SvgAdvertisingGraphDesktop,
-  SvgPaywallMobile,
-  SvgPaywallDesktop,
-  SvgPaywallWide,
-} from 'components/svg/svg';
+import SvgScribble from 'components/svgs/scribble';
+import SvgAdvertisingGraphMobile from 'components/svgs/advertisingGraphMobile';
+import SvgAdvertisingGraphDesktop from 'components/svgs/advertisingGraphDesktop';
+import SvgPaywallMobile from 'components/svgs/payWallMobile';
+import SvgPaywallDesktop from 'components/svgs/payWallDesktop';
+import SvgPaywallWide from 'components/svgs/payWallWide';
 
 
 // ----- Component ----- //

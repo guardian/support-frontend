@@ -19,12 +19,10 @@ import {
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
-import {
-  SvgDirectDebitSymbol,
-  SvgDirectDebitSymbolAndText,
-  SvgArrowRightStraight,
-  SvgExclamationAlternate,
-} from 'components/svg/svg';
+import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
+import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 
 // ---- Types ----- //
 
@@ -197,7 +195,7 @@ function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: F
       id="account-holder-name-input"
       value={props.value}
       onChange={props.onChange}
-      maxLength="18"
+      maxLength="40"
       className="component-direct-debit-form__text-field focus-target"
     />
   );
@@ -281,7 +279,7 @@ function PaymentButton(props: {
         onClick={props.onPayClick}
       >
         <SvgDirectDebitSymbol />
-        <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--variable-left-margin">
+        <span className="component-direct-debit-form__cta-text">
           Contribute with Direct Debit
         </span>
         <SvgArrowRightStraight />

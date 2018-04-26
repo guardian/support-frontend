@@ -165,7 +165,12 @@
   .regular-contrib__payment-methods {
 
     .component-direct-debit-pop-up-button {
-      margin-bottom: $gu-v-spacing * 2;
+		margin-bottom: $gu-v-spacing;
+		width: 100%;
+
+		@include mq($from: phablet) {
+			width: 304px;
+		}
     }
 
     .component-stripe-pop-up-button {
