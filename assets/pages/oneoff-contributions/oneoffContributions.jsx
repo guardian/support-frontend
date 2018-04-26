@@ -18,7 +18,7 @@ import { parse as parseContrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
-import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
+import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 
 import reducer from './oneOffContributionsReducers';
 
@@ -49,7 +49,7 @@ const router = (
     <Provider store={store}>
       <div>
         <Route exact path={routes.oneOffContribCheckout} component={OneOffContributionsPage} />
-        <Route exact path={routes.oneOffContribThankyou} component={ContributionsThankYouPage} />
+        <Route exact path={routes.oneOffContribThankyou} component={ContributionsThankYouPageContainer} />
       </div>
     </Provider>
   </BrowserRouter>

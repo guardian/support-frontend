@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import PageSection from 'components/pageSection/pageSection';
@@ -12,8 +11,7 @@ import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduct
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
-import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/directDebit/directDebitActions';
-import { type Contrib, isRegularContribution } from 'helpers/contributions';
+import { type Contrib } from 'helpers/contributions';
 
 import EmailConfirmation from '../../pages/regular-contributions/components/emailConfirmation';
 import MarketingConsentContainer from '../../pages/regular-contributions/components/marketingConsentContainer';
@@ -23,7 +21,8 @@ import DirectDebitPaymentMethodDetails from '../../pages/regular-contributions/c
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type DirectDebitFields = {
+type PropTypes = {
+  contributionType: Contrib,
   isDirectDebit: boolean,
   isDDGuaranteeOpen: boolean,
   accountNumber: string,
@@ -31,47 +30,9 @@ type DirectDebitFields = {
   sortCodeArray: string[],
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void,
-}
-type PropTypes = {
-  contributionType: Contrib,
-  directDebitFields: ?DirectDebitFields,
 };
-/* eslint-enable react/no-unused-prop-types */
 
-// ----- Map State/Props ----- //
-
-function getDirectDebitDetails(state) {
-  return {
-    isDirectDebit: state.page.regularContrib.paymentMethod === 'DirectDebit',
-    isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
-    accountNumber: state.page.directDebit.accountNumber,
-    accountHolderName: state.page.directDebit.accountHolderName,
-    sortCodeArray: state.page.directDebit.sortCodeArray,
-  };
-}
-
-function mapStateToProps(state) {
-  const contributionType = state.page.regularContrib ? state.page.regularContrib.contributionType : 'ONE_OFF';
-  const directDebitFields = isRegularContribution(contributionType) ? getDirectDebitDetails(state) : null;
-
-  return {
-    contributionType,
-    directDebitFields,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    openDDGuaranteeClicked: () => {
-      dispatch(openDirectDebitGuarantee());
-    },
-    closeDDGuaranteeClicked: () => {
-      dispatch(closeDirectDebitGuarantee());
-    },
-  };
-}
-
-function DirectDebitDetails(props: DirectDebitFields) {
+function DirectDebitDetails(props: PropTypes) {
   return (
     <div className="direct-debit-details">
       <DirectDebitPaymentMethodDetails
@@ -95,8 +56,8 @@ function DirectDebitDetails(props: DirectDebitFields) {
 function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
     return null;
-  } else if (props.directDebitFields && props.directDebitFields.isDirectDebit) {
-    return <DirectDebitDetails {...props.directDebitFields} />;
+  } else if (props.isDirectDebit) {
+    return <DirectDebitDetails {...props} />;
   }
   return <EmailConfirmation />;
 }
@@ -120,4 +81,4 @@ function ContributionsThankYouPage(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionsThankYouPage);
+export default ContributionsThankYouPage;

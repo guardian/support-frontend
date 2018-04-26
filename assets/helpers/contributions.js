@@ -430,10 +430,6 @@ function getContributionAmountRadios(
 
 }
 
-function isRegularContribution(contrib: Contrib): boolean {
-  return contrib !== 'ONE_OFF';
-}
-
 
 // ----- Exports ----- //
 
@@ -451,5 +447,4 @@ export {
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,
-  isRegularContribution,
 };

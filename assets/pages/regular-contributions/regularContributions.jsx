@@ -18,7 +18,7 @@ import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { parse as parseAmount } from 'helpers/contributions';
-import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
+import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import RegularContributionsPage from './components/regularContributionsPage';
 import reducer from './regularContributionsReducers';
 import { setPayPalButton } from './regularContributionsActions';
@@ -58,8 +58,8 @@ const router = (
     <Provider store={store}>
       <div>
         <Route exact path={routes.recurringContribCheckout} component={RegularContributionsPage} />
-        <Route exact path={routes.recurringContribThankyou} component={ContributionsThankYouPage} />
-        <Route exact path={routes.recurringContribPending} component={ContributionsThankYouPage} />
+        <Route exact path={routes.recurringContribThankyou} component={ContributionsThankYouPageContainer} />
+        <Route exact path={routes.recurringContribPending} component={ContributionsThankYouPageContainer} />
       </div>
     </Provider>
   </BrowserRouter>
