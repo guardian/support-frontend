@@ -52,7 +52,6 @@ function getDirectDebitDetails(state) {
 
 function mapStateToProps(state) {
   const contributionType = state.page.regularContrib ? state.page.regularContrib.contributionType : 'ONE_OFF';
-  // eslint-disable-next-line max-len
   const directDebitFields = isRegularContribution(contributionType) ? getDirectDebitDetails(state) : null;
 
   return {
@@ -93,11 +92,11 @@ function DirectDebitDetails(props: DirectDebitFields) {
   );
 }
 
-function getBodyCopy(props: PropTypes) {
+function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
-    return '';
+    return null;
   } else if (props.directDebitFields && props.directDebitFields.isDirectDebit) {
-    return DirectDebitDetails(props.directDebitFields);
+    return <DirectDebitDetails {...props.directDebitFields} />;
   }
   return <EmailConfirmation />;
 }
@@ -110,7 +109,7 @@ function ContributionsThankYouPage(props: PropTypes) {
         headings={['Thank you', 'for a valuable', 'contribution']}
       />
       <div className="multiline-divider" />
-      {getBodyCopy(props)}
+      <BodyCopy {...props} />
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
