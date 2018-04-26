@@ -158,7 +158,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           stripeConfigProvider,
           payPalConfigProvider,
           stubControllerComponents()
-        ).displayForm(paypal = None, directDebit = None)(FakeRequest())
+        ).displayForm(paypal = None)(FakeRequest())
       }
     }
   }

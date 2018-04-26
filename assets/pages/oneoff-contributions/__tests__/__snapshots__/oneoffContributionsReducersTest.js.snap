@@ -15,11 +15,6 @@ Object {
     "error": null,
     "payPalType": "NotSet",
   },
-  "payPalContributionsCheckout": Object {
-    "amount": 20,
-    "currency": undefined,
-    "payPalPayClicked": false,
-  },
   "user": Object {
     "displayName": "",
     "email": "",

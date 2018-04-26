@@ -19,12 +19,10 @@ import {
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
-import {
-  SvgDirectDebitSymbol,
-  SvgDirectDebitSymbolAndText,
-  SvgArrowRightStraight,
-  SvgExclamationAlternate,
-} from 'components/svg/svg';
+import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
+import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 
 // ---- Types ----- //
 
