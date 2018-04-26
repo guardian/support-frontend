@@ -22,7 +22,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
-  ContribError as ContributionError,
+  ContributionError,
 } from 'helpers/contributions';
 
 

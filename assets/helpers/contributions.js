@@ -18,11 +18,6 @@ export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
 
 export type BillingPeriod = 'Monthly' | 'Annual';
 
-export type ContribError =
-  | 'tooLittle'
-  | 'tooMuch'
-  | 'invalidEntry';
-
 type ParseError = 'ParseError';
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
@@ -299,7 +294,7 @@ function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
 }
 
 function errorMessage(
-  error: ContribError,
+  error: ContributionError,
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
 ): ?string {
@@ -309,11 +304,11 @@ function errorMessage(
   const currency = currencies[countryGroups[countryGroupId].currency];
 
   switch (error) {
-    case 'tooLittle':
+    case 'TooLittle':
       return `Please enter at least ${currency.glyph}${minContrib}`;
-    case 'tooMuch':
+    case 'TooMuch':
       return `${currency.glyph}${maxContrib} is the maximum we can accept`;
-    case 'invalidEntry':
+    case 'ParseError':
       return 'Please enter a numeric amount';
     default:
       return null;
