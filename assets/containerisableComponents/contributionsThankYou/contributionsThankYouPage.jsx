@@ -13,9 +13,9 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import { type Contrib } from 'helpers/contributions';
 
-import EmailConfirmation from '../../pages/regular-contributions/components/emailConfirmation';
-import MarketingConsentContainer from '../../pages/regular-contributions/components/marketingConsentContainer';
-import DirectDebitPaymentMethodDetails from '../../pages/regular-contributions/components/directDebitPaymentMethodDetails';
+import EmailConfirmation from './emailConfirmation';
+import MarketingConsentContainer from './marketingConsentContainer';
+import DirectDebitPaymentMethodDetails from './directDebitPaymentMethodDetails';
 
 
 // ---- Types ----- //

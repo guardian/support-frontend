@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
+import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
 import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/directDebit/directDebitActions';
 
 // ----- Map State/Props ----- //
