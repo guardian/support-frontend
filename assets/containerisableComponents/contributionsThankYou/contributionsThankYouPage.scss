@@ -1,4 +1,4 @@
-#regular-contributions-thank-you-page {
+#contributions-thank-you-page {
   .multiline-divider {
     @include multiline(4, gu-colour(garnett-neutral-4));
   }
@@ -7,6 +7,10 @@
     @include mq($from: desktop) {
       @include dropline;
     }
+  }
+
+  .component-email-confirmation {
+    border-bottom: 1px solid gu-colour(garnett-neutral-4);
   }
 
   .component-email-confirmation__copy {
@@ -54,6 +58,7 @@
     padding-top: $gu-v-spacing / 2;
     padding-bottom: $gu-v-spacing;
     width: 100%;
+    border-bottom: 1px solid gu-colour(garnett-neutral-4);
     .component-page-section__header {
       &:after {
         border-right: none; //Clear the dropline
@@ -99,7 +104,6 @@
   }
 
   .component-page-section--marketing-consent {
-    border-top: 1px solid gu-colour(garnett-neutral-4);
     padding-top: 1px;
   }
 
