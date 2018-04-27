@@ -97,16 +97,12 @@ class Application(
   }
 
   def contributionsLanding(id: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val title = "Support the Guardian | Make a Contribution"
-    val jsFile = "contributionsLandingPage.js"
-    val cssFile = "contributionsLandingPageStyles.css"
-
     Ok(views.html.contributionsLanding(
-      title,
+      title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
       id,
-      jsFile,
-      cssFile,
+      js = "contributionsLandingPage.js",
+      css = "contributionsLandingPageStyles.css",
       contributionsPayPalEndpoint)
     )
   }
