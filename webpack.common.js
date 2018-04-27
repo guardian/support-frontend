@@ -22,11 +22,11 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   entry: {
     favicons: 'images/favicons.js',
     fonts: 'fonts/fonts.js',
-    styles: 'stylesheets/garnett.scss',
+    styles: 'stylesheets/main.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
-    contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLandingStyles.scss',
+    contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
     contributionsThankYouPage: 'pages/contributions-thank-you/contributionsThankYou.jsx',
