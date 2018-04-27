@@ -8,7 +8,7 @@ import play.api.{Configuration, Environment, UsefulException}
 import play.api.http.DefaultHttpErrorHandler
 import play.api.routing.Router
 import play.api.mvc.{RequestHeader, Result}
-import play.api.mvc.Results.NotFound
+import play.api.mvc.Results.{NotFound, InternalServerError}
 import assets.AssetsResolver
 
 import play.core.SourceMapper
@@ -35,7 +35,10 @@ class CustomHttpErrorHandler(
     )
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] =
-    super.onProdServerError(request, exception).map(_.withHeaders(CacheControl.noCache))
+    Future.successful(
+      InternalServerError(views.html.react("Error 500", "error-500-page", "error500Page.js")(ar, request))
+        .withHeaders(CacheControl.noCache)
+    )
 
   override protected def onBadRequest(request: RequestHeader, message: String): Future[Result] =
     super.onBadRequest(request, message).map(_.withHeaders(CacheControl.noCache))

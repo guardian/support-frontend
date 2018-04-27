@@ -19,10 +19,10 @@ pageInit();
 
 const content = (
   <ErrorContent
-    errorCode="404"
-    headings={['the page you', 'have requested', 'does not exist']}
-    copy="You may have followed an outdated link, or have mistyped a URL. If you believe this to be an error, please report it."
+    errorCode="500"
+    headings={['we haven\'t', 'been able to', 'serve the page', 'you asked for']}
+    copy="Something went wrong. If the problem persists, please report it."
   />
 );
 
-renderPage(content, 'error-404-page');
+renderPage(content, 'error-500-page');

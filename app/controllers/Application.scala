@@ -8,6 +8,7 @@ import services.IdentityService
 import utils.RequestCountry._
 import config.StringsConfig
 import utils.BrowserCheck
+import play.api.mvc.Results.{NotFound, InternalServerError}
 
 import scala.concurrent.ExecutionContext
 
@@ -114,6 +115,10 @@ class Application(
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
+  }
+
+  def throwError: Action[AnyContent] = CachedAction() { implicit request =>
+    throw new Error("hi")
   }
 
 }
