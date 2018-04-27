@@ -103,8 +103,8 @@ class Application(
       id,
       js = "contributionsLandingPage.js",
       css = "contributionsLandingPageStyles.css",
-      contributionsPayPalEndpoint)
-    )
+      contributionsPayPalEndpoint
+    ))
   }
 
   def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
