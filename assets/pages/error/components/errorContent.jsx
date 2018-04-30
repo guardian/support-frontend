@@ -9,6 +9,7 @@ import Footer from 'components/footer/footer';
 import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
+import { contributionsEmail } from 'helpers/legal';
 
 
 // ----- Types ----- //
@@ -17,6 +18,7 @@ type PropTypes = {
   errorCode: string,
   headings: string[],
   copy: string,
+  reportLink?: boolean,
 };
 
 
@@ -32,7 +34,10 @@ export default function ErrorContent(props: PropTypes) {
         highlights={[`Error ${props.errorCode}`]}
       />
       <PageSection modifierClass="ctas">
-        <p className="error-copy">{props.copy}</p>
+        <p className="error-copy">
+          <span className="error-copy__text">{props.copy} </span>
+          <ReportLink show={props.reportLink} />
+        </p>
         <CtaLink
           text="Support The Guardian"
           accessibilityHint="click here to support The Guardian"
@@ -51,3 +56,27 @@ export default function ErrorContent(props: PropTypes) {
   );
 
 }
+
+
+// ----- Auxiliary Components ----- //
+
+function ReportLink(props: { show: boolean }) {
+
+  if (props.show) {
+    return (
+      <span className="error-copy__text">
+        please <a className="error-copy__link" href={contributionsEmail}>report it</a>.
+      </span>
+    );
+  }
+
+  return null;
+
+}
+
+
+// ----- Default Props ----- //
+
+ErrorContent.defaultProps = {
+  reportLink: false,
+};

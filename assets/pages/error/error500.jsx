@@ -21,7 +21,8 @@ const content = (
   <ErrorContent
     errorCode="500"
     headings={['sorry - we seem', 'to be having a', 'problem completing', 'your request']}
-    copy="Please try again. If the problem persists, please report it."
+    copy="Please try again. If the problem persists, "
+    reportLink
   />
 );
 

@@ -21,7 +21,8 @@ const content = (
   <ErrorContent
     errorCode="404"
     headings={['the page you', 'have requested', 'does not exist']}
-    copy="You may have followed an outdated link, or have mistyped a URL. If you believe this to be an error, please report it."
+    copy="You may have followed an outdated link, or have mistyped a URL. If you believe this to be an error, "
+    reportLink
   />
 );
 
