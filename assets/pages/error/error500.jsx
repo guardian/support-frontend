@@ -20,8 +20,8 @@ pageInit();
 const content = (
   <ErrorContent
     errorCode="500"
-    headings={['we haven\'t', 'been able to', 'serve the page', 'you asked for']}
-    copy="Something went wrong. If the problem persists, please report it."
+    headings={['sorry - we seem', 'to be having a', 'problem completing', 'your request']}
+    copy="Please try again. If the problem persists, please report it."
   />
 );
 
