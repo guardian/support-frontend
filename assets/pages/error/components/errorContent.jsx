@@ -36,7 +36,7 @@ export default function ErrorContent(props: PropTypes) {
       <PageSection modifierClass="ctas">
         <p className="error-copy">
           <span className="error-copy__text">{props.copy} </span>
-          <ReportLink show={props.reportLink} />
+          <ReportLink show={props.reportLink || false} />
         </p>
         <CtaLink
           text="Support The Guardian"
