@@ -24,6 +24,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     fonts: 'fonts/fonts.js',
     styles: 'stylesheets/main.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
+    supportLandingPageStyles: 'pages/support-landing/supportLanding.scss',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',

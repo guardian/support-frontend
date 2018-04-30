@@ -86,11 +86,12 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def supportLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.supportLanding(
-      title,
-      id,
-      js,
+      title = "Support the Guardian",
+      id = "support-landing-page",
+      js = "supportLandingPage.js",
+      css = "supportLandingPageStyles.css",
       contributionsPayPalEndpoint,
       description = Some(stringsConfig.supportLandingDescription)
     ))
