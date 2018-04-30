@@ -12,6 +12,7 @@ import InfoSection from 'components/infoSection/infoSection';
 import { routes } from 'helpers/routes';
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { contributionsEmail } from 'helpers/legal';
 
 
 // ----- Page Startup ----- //
@@ -43,7 +44,7 @@ const content = (
         <InfoSection heading="Questions?" className="existing__questions">
           <p>
             If you have any questions about contributing to the Guardian,
-            please <a href="mailto:contribution.support@theguardian.com">contact us</a>
+            please <a href={contributionsEmail}>contact us</a>
           </p>
         </InfoSection>
       </div>

@@ -19,6 +19,8 @@ const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const copyrightNotice = `\u00A9 ${(new Date()).getFullYear()} Guardian News and Media Limited or its
   affiliated companies. All rights reserved.`;
 
+const contributionsEmail = 'mailto:contribution.support@theguardian.com';
+
 
 // ----- Exports ----- //
 
@@ -26,4 +28,5 @@ export {
   termsLinks,
   privacyLink,
   copyrightNotice,
+  contributionsEmail,
 };

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
@@ -23,6 +24,8 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
+import { contributionsEmail } from 'helpers/legal';
+
 
 // ---- Types ----- //
 
@@ -321,7 +324,7 @@ function LegalNotice() {
         LE65 1JT United Kingdom<br />
         Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
         8am-6pm at weekends (GMT/BST)<br />
-        <a href="mailto:contribution.support@theguardian.com">contribution.support@theguardian.com</a>
+        <a href={contributionsEmail}>contribution.support@theguardian.com</a>
       </p>
       <SvgDirectDebitSymbolAndText />
     </div>
