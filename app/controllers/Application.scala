@@ -87,18 +87,26 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def supportLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.supportLanding(
-      title,
-      id,
-      js,
+      title = "Support the Guardian",
+      id = "support-landing-page",
+      js = "supportLandingPage.js",
+      css = "supportLandingPageStyles.css",
       contributionsPayPalEndpoint,
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
 
-  def contributionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.contributionsLanding(title, description = Some(stringsConfig.contributionsLandingDescription), id, js, contributionsPayPalEndpoint))
+  def contributionsLanding(id: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.contributionsLanding(
+      title = "Support the Guardian | Make a Contribution",
+      description = Some(stringsConfig.contributionsLandingDescription),
+      id,
+      js = "contributionsLandingPage.js",
+      css = "contributionsLandingPageStyles.css",
+      contributionsPayPalEndpoint
+    ))
   }
 
   def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>

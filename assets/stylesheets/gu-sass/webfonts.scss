@@ -234,12 +234,6 @@ $guss-webfonts: (
             (weight: 'regular', style: 'italic'),
             (weight: 'medium', style: 'normal', use-as: (weight: 'bold', style: 'normal')),
         ),
-        'Guardian Egyptian Web': (
-            (weight: 'light', style: 'normal'),
-            (weight: 'regular', style: 'normal'),
-            (weight: 'medium', style: 'normal'),
-            (weight: 'semibold', style: 'normal', use-as: (weight: 'ultrablack', style: 'normal')),
-        ),
         'Guardian Text Sans Web': (
             (weight: 'regular', style: 'normal'),
             (weight: 'regular', style: 'italic'),
@@ -253,3 +247,56 @@ $guss-webfonts: (
         )
     )
 );
+
+
+// ----- Guardian Egyptian Web Fonts ----- //
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-Light.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-Light.woff") format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-Light.ttf") format("ttf");
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-LightItalic.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-LightItalic.woff") format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-LightItalic.ttf") format("ttf");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-Regular.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-Regular.woff") format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-Regular.ttf") format("ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-RegularItalic.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-RegularItalic.woff") format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-RegularItalic.ttf") format("ttf");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-Semibold.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-Semibold.woff")  format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-Semibold.ttf")   format("ttf");;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("/assets/fonts/GHGuardianHeadline-Bold.woff2") format("woff2"),
+    url("/assets/fonts/GHGuardianHeadline-Bold.woff") format("woff"),
+    url("/assets/fonts/GHGuardianHeadline-Bold.ttf") format("ttf");
+    font-weight: 900;
+}

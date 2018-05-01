@@ -62,7 +62,7 @@ describe('Contributions Selection reducer', () => {
 
     const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
     const newState = reducer(initialState, changeContributionType);
-    expect(newState.error).toEqual('tooLittle');
+    expect(newState.error).toEqual('TooLittle');
 
   });
 
@@ -76,7 +76,7 @@ describe('Contributions Selection reducer', () => {
       annualAmount: '75',
       customAmount: '1',
       isCustomAmount: true,
-      error: 'tooLittle',
+      error: 'TooLittle',
     };
 
     const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
@@ -191,7 +191,7 @@ describe('Contributions Selection reducer', () => {
     const newState = reducer(initialState, actions.setCustomAmount(amount, 'GBPCountries'));
 
     expect(newState.customAmount).toBeNull();
-    expect(newState.error).toEqual('invalidEntry');
+    expect(newState.error).toEqual('ParseError');
 
   });
 

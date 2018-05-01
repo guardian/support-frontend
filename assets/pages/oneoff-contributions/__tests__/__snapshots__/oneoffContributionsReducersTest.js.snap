@@ -9,16 +9,14 @@ Object {
   "csrf": Object {
     "token": null,
   },
+  "marketingConsent": Object {
+    "confirmOptIn": null,
+    "error": false,
+  },
   "oneoffContrib": Object {
     "amount": 20,
-    "currency": "GBP",
     "error": null,
     "payPalType": "NotSet",
-  },
-  "payPalContributionsCheckout": Object {
-    "amount": 20,
-    "currency": undefined,
-    "payPalPayClicked": false,
   },
   "user": Object {
     "displayName": "",

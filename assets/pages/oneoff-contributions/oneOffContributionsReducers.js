@@ -6,12 +6,11 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import createPayPalContributionsCheckoutReducer from 'helpers/payPalContributionsCheckout/payPalContributionsCheckoutReducer';
 import { userReducer as user } from 'helpers/user/userReducer';
+import { marketingConsentReducerFor } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
-import type { Currency } from 'helpers/internationalisation/currency';
 
 import type { PayPalButtonType } from './components/oneoffContributionsPayment';
 import type { Action } from './oneoffContributionsActions';
@@ -21,7 +20,6 @@ import type { Action } from './oneoffContributionsActions';
 
 export type State = {
   amount: number,
-  currency: Currency,
   error: ?string,
   payPalType: PayPalButtonType,
 };
@@ -40,11 +38,10 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createOneOffContribReducer(amount: number, currency: Currency) {
+function createOneOffContribReducer(amount: number) {
 
   const initialState: State = {
     amount,
-    currency,
     error: null,
     payPalType: 'NotSet',
   };
@@ -69,11 +66,11 @@ function createOneOffContribReducer(amount: number, currency: Currency) {
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(amount: number, currency: Currency) {
+export default function createRootOneOffContribReducer(amount: number) {
   return combineReducers({
-    oneoffContrib: createOneOffContribReducer(amount, currency),
+    oneoffContrib: createOneOffContribReducer(amount),
+    marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user,
-    payPalContributionsCheckout: createPayPalContributionsCheckoutReducer(amount, currency.iso),
     csrf,
   });
 }

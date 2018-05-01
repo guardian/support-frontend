@@ -5,7 +5,8 @@
 	description: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
-	mainBundleJs: String
+	mainJsBundle: String,
+	mainStyleBundle: String = "styles.css"
 )(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
@@ -23,7 +24,7 @@
 	<title>@title</title>
 	<meta property="og:title" content="@title"/>
 
-	<link rel="stylesheet" href="@assets("styles.css")">
+	<link rel="stylesheet" href="@assets(mainStyleBundle)">
 	<link rel="shortcut icon" type="image/png" href="@assets("images/favicons/32x32.ico")">
 	<link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
 	<link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
@@ -31,6 +32,13 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
 	<link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
 	<link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
+
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Bold.woff2")" as="font">
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-BoldItalic.woff2")" as="font">
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Light.woff2")" as="font">
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-LightItalic.woff2")" as="font">
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Regular.woff2")" as="font">
+	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Semibold.woff2")" as="font">
 
 
 	<script type="application/ld+json">
@@ -47,7 +55,7 @@
 		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 	}
 
-	<link rel="preload"  as="script" href="@assets(mainBundleJs)">
+	<link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
 
 	@styles
@@ -73,7 +81,7 @@
 	@scripts
 	 <!-- This script is intentionally at the bottom of the file. Please check
 	      all the critical flows work correctly if you change its position -->
-	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
+	<script type="text/javascript" src="@assets(mainJsBundle)"></script>
 	<!-- build-commit-id: @app.BuildInfo.gitCommitId -->
 </body>
 </html>

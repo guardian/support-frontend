@@ -1,5 +1,11 @@
 @import assets.AssetsResolver
-@(title: String, description: Option[String], id: String, js: String, contributionsPayPalEndpoint: String)(implicit assets: AssetsResolver, request: RequestHeader)
+@(
+  title: String,
+  description: Option[String],
+  id: String,
+  js: String,
+  css: String,
+  contributionsPayPalEndpoint: String)(implicit assets: AssetsResolver, request: RequestHeader)
 
 @scripts = {
     <script type="text/javascript">
@@ -8,6 +14,6 @@
     </script>
 }
 
-@main(title = title, scripts = scripts, description = description, mainBundleJs = js) {
+@main(title = title, scripts = scripts, description = description, mainJsBundle = js, mainStyleBundle = css) {
     <main id="@id" class="gu-content-wrapper"></main>
 }

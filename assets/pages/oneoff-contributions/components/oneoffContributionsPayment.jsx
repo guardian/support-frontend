@@ -55,7 +55,7 @@ function mapStateToProps(state) {
     isoCountry: state.common.country,
     countryGroupId: state.common.countryGroup,
     abParticipations: state.common.abParticipations,
-    currency: state.page.oneoffContrib.currency,
+    currency: state.common.currency,
   };
 }
 

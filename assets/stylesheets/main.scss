@@ -1,13 +1,6 @@
 // -----  gu-sass ----- //
 
-@import 'gu-sass/reset-src';
-@import 'gu-sass/breakpoints';
-@import 'gu-sass/colours';
-@import 'gu-sass/layout';
-@import 'gu-sass/webfonts';
-@import 'gu-sass/typography';
-@import 'gu-sass/helpers';
-@import 'gu-sass/accessibility';
+@import 'gu-sass/gu-sass';
 
 // ----- Shared Components ----- //
 
@@ -62,12 +55,10 @@
 
 // ----- Pages ----- //
 
-@import '../pages/contributions-landing/contributionsLanding';
 @import '../pages/subscriptions-landing/subscriptionsLanding';
 @import '../pages/regular-contributions/regularContributions';
-@import '../pages/regular-contributions/regularContributionsThankYouPage';
+@import '../containerisableComponents/contributionsThankYou/contributionsThankYouPage';
 @import '../pages/oneoff-contributions/oneoffContributions';
 @import '../pages/regular-contributions-existing/regularContributionsExisting';
-@import '../pages/contributions-thank-you/contributionsThankYou';
 @import '../pages/paypal-error/payPalError';
 @import '../pages/error/error';

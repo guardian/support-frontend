@@ -11,7 +11,6 @@
   user: IdUser,
   uatMode: Boolean,
   payPalButton: Boolean,
-  directDebitButton: Boolean,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
@@ -33,7 +32,6 @@
             }
         };
         window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
-        window.guardian.directDebitEnable = @directDebitButton;
         window.guardian.stripeKeyDefaultCurrencies = {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
           uat: "@uatStripeConfig.forCurrency(None).publicKey"
@@ -47,6 +45,6 @@
     </script>
 }
 
-@main(title = title, scripts = scripts, mainBundleJs = js) {
+@main(title = title, scripts = scripts, mainJsBundle = js) {
     <main id="@id" class="gu-content-wrapper"></main>
 }
