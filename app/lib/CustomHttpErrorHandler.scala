@@ -23,20 +23,18 @@ class CustomHttpErrorHandler(
     val assets: AssetsResolver
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging {
 
-  implicit val ar = assets
-
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
     super.onClientError(request, statusCode, message).map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(views.html.react("Error 404", "error-404-page", "error404Page.js")(ar, request))
+      NotFound(views.html.react("Error 404", "error-404-page", "error404Page.js")(assets, request))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
     )
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] =
     Future.successful(
-      InternalServerError(views.html.react("Error 500", "error-500-page", "error500Page.js")(ar, request))
+      InternalServerError(views.html.react("Error 500", "error-500-page", "error500Page.js")(assets, request))
         .withHeaders(CacheControl.noCache)
     )
 
