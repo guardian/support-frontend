@@ -31,12 +31,15 @@ class CustomActionBuilders(
 
   import CustomActionBuilders._
 
+  // Tells identity to send users back to the checkout immediately after sign-up.
   private val idSkipConfirmation: (String, String) = "skipConfirmation" -> "true"
+  // Prevents the identity validation email sending users back to our checkout.
+  private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
   private val idMember = "clientId" -> "members"
 
   private def idWebAppRegisterUrl(path: String): String =
-    idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idMember
+    idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & idMember
 
   private val chooseRegister = (request: RequestHeader) => SeeOther(idWebAppRegisterUrl(request.uri))
 

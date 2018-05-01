@@ -6,38 +6,26 @@
 
 @import '../../components/headers/countrySwitcherHeader/countrySwitcherHeader';
 @import '../../components/countryGroupSwitcher/countryGroupSwitcher';
-@import '../../components/selectInput/selectInput';
 @import '../../components/circlesIntroduction/circlesIntroduction';
-@import '../../components/highlights/highlights';
 @import '../../components/contribute/contribute';
+@import '../../components/highlights/highlights';
+@import '../../components/legal/contribLegal/contribLegal';
+@import '../../components/radioToggle/radioToggle';
 @import '../../components/pageSection/pageSection';
+@import '../../components/doubleHeading/doubleHeading';
 @import '../../components/secure/secure';
 @import '../../components/inlinePaymentLogos/inlinePaymentLogos';
 @import '../../containerisableComponents/contributionSelection/contributionSelection';
-@import '../../components/radioToggle/radioToggle';
 @import '../../components/numberInput/numberInput';
 @import '../../components/errorMessage/errorMessage';
 @import '../../components/contributionPaymentCtas/contributionPaymentCtas';
-@import '../../components/legal/termsPrivacy/termsPrivacy';
-@import '../../components/footer/footer';
-@import '../../components/svgs/svg';
+@import '../../components/featureList/featureList';
 @import '../../components/ctaLink/ctaLink';
-@import '../../components/legal/contribLegal/contribLegal';
 @import '../../containerisableComponents/payPalContributionButton/payPalContributionButton';
-
-// ----- Page Specific Styles ----- //
-
-
-#contributions-landing-page-ca,
-#contributions-landing-page-eu,
-#contributions-landing-page-int,
-#contributions-landing-page-nz,
-#contributions-landing-page-uk,
-#contributions-landing-page-us,
-#contributions-landing-page-au {
-
-  .component-contribute {
-    @include gu-content-filler;
-  }
-
-}
+@import '../../components/legal/termsPrivacy/termsPrivacy';
+@import '../../components/threeSubscriptions/threeSubscriptions';
+@import '../../components/svgs/svg';
+@import '../../components/whySupport/whySupport';
+@import '../../components/patronsEvents/patronsEvents';
+@import '../../components/readyToSupport/readyToSupport';
+@import '../../components/footer/footer';

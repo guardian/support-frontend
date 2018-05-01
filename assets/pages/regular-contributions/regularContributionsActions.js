@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
+import type { PaymentMethod } from 'helpers/checkouts';
 import type { PayPalButtonType } from './components/regularContributionsPayment';
-import type { PaymentMethod } from './helpers/ajax';
 
 
 // ----- Types ----- //

@@ -15,6 +15,8 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { successfulConversion } from 'helpers/tracking/googleTagManager';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { PaymentMethod } from 'helpers/checkouts';
+
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
 import { billingPeriodFromContrib } from '../../../helpers/contributions';
 
@@ -33,8 +35,6 @@ type ContributionRequest = {
 };
 
 type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
-
-export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
 
 type PayPalDetails = {|
   'baid': string

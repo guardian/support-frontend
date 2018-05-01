@@ -8,7 +8,7 @@ GET /unsupported-browser                            controllers.Application.unsu
 
 # ----- Bundles Landing Page ----- #
 
-GET /uk                                             controllers.Application.supportLanding(title="Support the Guardian", id="support-landing-page", js="supportLandingPage.js")
+GET /uk                                             controllers.Application.supportLanding()
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
@@ -33,13 +33,13 @@ GET  /monthly-contributions                         controllers.Application.cont
 # ----- Contributions ----- #
 
 GET  /contribute                                    controllers.Application.contributeGeoRedirect()
-GET  /uk/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-uk", js="contributionsLandingPage.js")
-GET  /us/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-us", js="contributionsLandingPage.js")
-GET  /au/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-au", js="contributionsLandingPage.js")
-GET  /eu/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-eu", js="contributionsLandingPage.js")
-GET  /int/contribute                                controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-int", js="contributionsLandingPage.js")
-GET  /nz/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-nz", js="contributionsLandingPage.js")
-GET  /ca/contribute                                 controllers.Application.contributionsLanding(title="Support the Guardian | Make a Contribution", id="contributions-landing-page-ca", js="contributionsLandingPage.js")
+GET  /uk/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-uk")
+GET  /us/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-us")
+GET  /au/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-au")
+GET  /eu/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-eu")
+GET  /int/contribute                                controllers.Application.contributionsLanding(id="contributions-landing-page-int")
+GET  /nz/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-nz")
+GET  /ca/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-ca")
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm(paypal: Option[Boolean])
@@ -54,7 +54,7 @@ POST  /contribute/send-marketing                     controllers.IdentityControl
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.thankYouPage
+GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 # ----- Subscriptions ----- #

@@ -66,17 +66,6 @@ class OneOffContributions(
     }
   }
 
-  def thankYouPage(): Action[AnyContent] = PrivateAction { implicit request =>
-    Ok(
-      thankYou(
-        title = "Support the Guardian | Thank You",
-        id = "contributions-thank-you-page",
-        js = "contributionsThankYouPage.js",
-        email = request.flash.get("email")
-      )
-    )
-  }
-
   private def fullNameFor(user: IdUser): Option[String] = {
     for {
       privateFields <- user.privateFields

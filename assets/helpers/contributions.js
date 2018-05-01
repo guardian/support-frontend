@@ -18,20 +18,16 @@ export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
 
 export type BillingPeriod = 'Monthly' | 'Annual';
 
-export type ContribError =
-  | 'tooLittle'
-  | 'tooMuch'
-  | 'invalidEntry';
+type ParseError = 'ParseError';
+export type ValidationError = 'TooMuch' | 'TooLittle';
+export type ContributionError = ParseError | ValidationError;
 
-export type ParsedContrib = {
+export type ParsedContribution = {|
+  valid: true,
   amount: number,
-  error: ?ContribError,
-};
-
-export type ParsedAmount = {
-  error: ?ContribError,
-  customAmount: ?number,
-};
+|} | {|
+  error: ParseError,
+|};
 
 type Config = {
   [Contrib]: {
@@ -249,43 +245,36 @@ const amounts = {
 
 // ----- Functions ----- //
 
-function parse(input: ?string, contrib: Contrib, countryGroupId: CountryGroupId): ParsedContrib {
+function validateContribution(
+  input: number,
+  contributionType: Contrib,
+  countryGroupId: CountryGroupId,
+): ?ValidationError {
 
-  let error = null;
-  const numericAmount = Number(input);
-
-  if (input === undefined || input === null || input === '' || Number.isNaN(numericAmount)) {
-    error = 'invalidEntry';
-  } else if (numericAmount < config[countryGroupId][contrib].min) {
-    error = 'tooLittle';
-  } else if (numericAmount > config[countryGroupId][contrib].max) {
-    error = 'tooMuch';
+  if (input < config[countryGroupId][contributionType].min) {
+    return 'TooLittle';
+  } else if (input > config[countryGroupId][contributionType].max) {
+    return 'TooMuch';
   }
 
-  const amount = error ? config[countryGroupId][contrib].default : roundDp(numericAmount);
-
-  return { error, amount };
+  return null;
 
 }
 
-function circlesParse(
-  input: string,
-  contributionType: Contrib,
-  countryGroupId: CountryGroupId,
-): ParsedAmount {
+function parseContribution(input: string): ParsedContribution {
 
-  const customAmount = Number(input);
+  const amount = Number(input);
 
-  if (input === '' || Number.isNaN(customAmount)) {
-    return { error: 'invalidEntry', customAmount: null };
-  } else if (customAmount < config[countryGroupId][contributionType].min) {
-    return { error: 'tooLittle', customAmount };
-  } else if (customAmount > config[countryGroupId][contributionType].max) {
-    return { error: 'tooMuch', customAmount };
+  if (input === '' || Number.isNaN(amount)) {
+    return { error: 'ParseError' };
   }
 
-  return { error: null, customAmount };
+  return { valid: true, amount: roundDp(amount) };
 
+}
+
+function getMinContribution(contributionType: Contrib, countryGroupId: CountryGroupId): number {
+  return config[countryGroupId][contributionType].min;
 }
 
 function parseContrib(s: ?string, contrib: Contrib): Contrib {
@@ -305,7 +294,7 @@ function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
 }
 
 function errorMessage(
-  error: ContribError,
+  error: ContributionError,
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
 ): ?string {
@@ -315,11 +304,11 @@ function errorMessage(
   const currency = currencies[countryGroups[countryGroupId].currency];
 
   switch (error) {
-    case 'tooLittle':
+    case 'TooLittle':
       return `Please enter at least ${currency.glyph}${minContrib}`;
-    case 'tooMuch':
+    case 'TooMuch':
       return `${currency.glyph}${maxContrib} is the maximum we can accept`;
-    case 'invalidEntry':
+    case 'ParseError':
       return 'Please enter a numeric amount';
     default:
       return null;
@@ -435,9 +424,10 @@ function getContributionAmountRadios(
 
 export {
   config,
-  parse,
   parseContrib,
-  circlesParse,
+  validateContribution,
+  parseContribution,
+  getMinContribution,
   billingPeriodFromContrib,
   errorMessage,
   getOneOffName,
