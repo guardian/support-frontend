@@ -5,7 +5,7 @@
 	description: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
-	mainBundleJs: String,
+	mainJsBundle: String,
 	mainStyleBundle: String = "styles.css"
 )(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
 
@@ -55,7 +55,7 @@
 		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 	}
 
-	<link rel="preload"  as="script" href="@assets(mainBundleJs)">
+	<link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
 
 	@styles
@@ -81,7 +81,7 @@
 	@scripts
 	 <!-- This script is intentionally at the bottom of the file. Please check
 	      all the critical flows work correctly if you change its position -->
-	<script type="text/javascript" src="@assets(mainBundleJs)"></script>
+	<script type="text/javascript" src="@assets(mainJsBundle)"></script>
 	<!-- build-commit-id: @app.BuildInfo.gitCommitId -->
 </body>
 </html>
