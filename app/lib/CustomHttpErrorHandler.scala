@@ -10,6 +10,7 @@ import play.api.routing.Router
 import play.api.mvc.{RequestHeader, Result}
 import play.api.mvc.Results.{NotFound, InternalServerError}
 import assets.AssetsResolver
+import views.html.react
 
 import play.core.SourceMapper
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,13 +29,13 @@ class CustomHttpErrorHandler(
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(views.html.react("Error 404", "error-404-page", "error404Page.js")(assets, request))
+      NotFound(react("Error 404", "error-404-page", "error404Page.js")(assets, request))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
     )
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] =
     Future.successful(
-      InternalServerError(views.html.react("Error 500", "error-500-page", "error500Page.js")(assets, request))
+      InternalServerError(react("Error 500", "error-500-page", "error500Page.js")(assets, request))
         .withHeaders(CacheControl.noCache)
     )
 
