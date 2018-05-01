@@ -52,7 +52,6 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.oneOffStripeConfigProvider,
-    appConfig.contributionsStripeEndpoint,
     paymentAPIService,
     authAction,
     controllerComponents

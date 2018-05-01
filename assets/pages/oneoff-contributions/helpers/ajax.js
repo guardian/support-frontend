@@ -14,7 +14,7 @@ import { checkoutError } from '../oneoffContributionsActions';
 
 // ----- Setup ----- //
 
-const ONEOFF_CONTRIB_ENDPOINT = window.guardian.contributionsStripeEndpoint;
+const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 
 // ----- Types ----- //
