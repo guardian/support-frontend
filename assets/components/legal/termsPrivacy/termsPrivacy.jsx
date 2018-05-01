@@ -25,7 +25,8 @@ function TermsPrivacy(props: PropTypes) {
 
   return (
     <div className="component-terms-privacy">
-      By proceeding, you are agreeing to our {terms} and {privacy}.
+      By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
+        please visit our {privacy}.
     </div>
   );
 
