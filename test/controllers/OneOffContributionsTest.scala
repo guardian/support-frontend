@@ -88,7 +88,6 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
           identityService,
           testUsers,
           mock[StripeConfigProvider],
-          "",
           mock[PaymentAPIService],
           mock[AuthAction[AnyContent]],
           stubControllerComponents()
