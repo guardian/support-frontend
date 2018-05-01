@@ -10,7 +10,7 @@
         payPalButton: Boolean,
         defaultStripeConfig: StripeConfig,
         uatStripeConfig: StripeConfig,
-        contributionsStripeEndpoint: String,
+        paymentApiStripeEndpoint: String,
         paymentApiPayPalEndpoint: String,
         idUser: Option[IdUser]
 )(implicit assets: AssetsResolver, request: RequestHeader)
@@ -39,7 +39,7 @@
           default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
           uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         };
-        window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
+        window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
         window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
         window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
     </script>
