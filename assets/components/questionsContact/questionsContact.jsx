@@ -5,6 +5,7 @@
 import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
+import { contributionsEmail } from 'helpers/legal';
 
 
 // ----- Component ----- //
@@ -22,7 +23,7 @@ export default function QuestionsContact() {
           please&nbsp;
           <a
             className="component-questions-contact__link"
-            href="mailto:contribution.support@theguardian.com"
+            href={contributionsEmail}
           >
             contact us
           </a>

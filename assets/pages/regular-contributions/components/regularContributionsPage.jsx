@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
