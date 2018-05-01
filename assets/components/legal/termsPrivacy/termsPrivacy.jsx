@@ -20,13 +20,13 @@ type PropTypes = {
 
 function TermsPrivacy(props: PropTypes) {
 
-  const terms = <a href={termsLinks[props.country]}>Terms of Service</a>;
+  const terms = <a href={termsLinks[props.country]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
   return (
     <div className="component-terms-privacy">
-      By proceeding, you agree to our {terms}. To find out what personal data we collect and how we use it, please
-        visit our {privacy}.
+      By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
+        please visit our {privacy}.
     </div>
   );
 
