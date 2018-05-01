@@ -25,8 +25,6 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val contributionsStripeEndpoint = config.getString("contributions.stripe.url")
-
   lazy val paymentApiUrl = config.getString("paymentApi.url");
 
   lazy val contributionsFrontendUrl = config.getString("contribution.url")

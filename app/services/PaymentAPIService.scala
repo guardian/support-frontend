@@ -32,11 +32,13 @@ object PaymentAPIService {
 
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
 
-  private val createPaymentPath = "/contribute/one-off/paypal/create-payment"
-  private val executePaymentPath = "/contribute/one-off/paypal/execute-payment"
+  private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
+  private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
+  private val stripeExecutePaymentPath = "/contribute/one-off/stripe/execute-payment"
 
-  val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$createPaymentPath"
-  val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$executePaymentPath"
+  val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
+  val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
+  val stripeExecutePaymentEndpoint: String = s"$paymentAPIUrl$stripeExecutePaymentPath"
 
   private def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
     queryString.foldLeft(List.empty[(String, String)]) {
