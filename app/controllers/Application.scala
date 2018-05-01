@@ -117,8 +117,4 @@ class Application(
     Ok("healthy")
   }
 
-  def throwError: Action[AnyContent] = CachedAction() { implicit request =>
-    throw new Error("hi")
-  }
-
 }
