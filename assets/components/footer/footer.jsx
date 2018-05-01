@@ -22,10 +22,10 @@ function PrivacyPolicy(props: { privacyPolicy: boolean }) {
 
   if (props.privacyPolicy) {
     return (
-        <div className="component-footer__privacy-policy-text">
-          To find out what personal data we collect and how we use it, please visit our
-          <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
-        </div>
+      <div className="component-footer__privacy-policy-text">
+        To find out what personal data we collect and how we use it, please visit our
+        <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
+      </div>
     );
   }
 
