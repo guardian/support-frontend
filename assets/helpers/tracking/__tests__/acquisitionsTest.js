@@ -5,6 +5,7 @@
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
+  participationsToAcquisitionABTest,
 } from '../acquisitions';
 
 // ----- Tests ----- //
@@ -69,6 +70,27 @@ describe('acquisitions', () => {
       expect(pageviewId).toBe('123456');
       expect(browserId).toBe('123');
       expect(visitId).toBe('456');
+    });
+  });
+
+  describe('participationsToAcquisitionABTest', () => {
+
+    it('should return an empty array in the presence of a empty object as its input', () => {
+      const participations = {};
+      const acquisitionABTest = participationsToAcquisitionABTest(participations);
+      expect(acquisitionABTest).toEqual([]);
+    });
+
+    it('should return an array of AcquisitionAbTests', () => {
+      const participations = {
+        test0: 'variant0',
+        test1: 'variant1',
+        test2: 'variant2',
+      };
+      const acquisitionABTests = participationsToAcquisitionABTest(participations);
+
+      expect(acquisitionABTests.length).toEqual(3);
+      expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0'});
     });
   });
 });
