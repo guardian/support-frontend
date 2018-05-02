@@ -90,7 +90,7 @@ describe('acquisitions', () => {
       const acquisitionABTests = participationsToAcquisitionABTest(participations);
 
       expect(acquisitionABTests.length).toEqual(3);
-      expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0'});
+      expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0' });
     });
   });
 });
