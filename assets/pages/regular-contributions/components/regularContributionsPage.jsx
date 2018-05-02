@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
 import DisplayName from 'components/displayName/displayName';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
@@ -82,6 +83,7 @@ function RegularContributionsPage(props: PropTypes) {
           <ContribLegal />
         </InfoSection>
       </div>
+      <Footer />
     </div>
   );
 }
