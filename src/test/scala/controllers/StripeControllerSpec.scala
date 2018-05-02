@@ -360,7 +360,7 @@ class StripeControllerSpec extends PlaySpec with Status {
       }
     }
 
-    "a request is made to hook a payment" should {
+    "a request is made to refund a payment" should {
 
       "return a 200 response if the request is valid" in {
 
@@ -371,7 +371,8 @@ class StripeControllerSpec extends PlaySpec with Status {
             .thenReturn(mockStripeBackend)
         }
 
-        val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
+        // TODO: seems like the route in FakeRequest can be anything and test will pass. Find out why!
+        val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/refund")
           .withJsonBody(parse(
             """
               |{

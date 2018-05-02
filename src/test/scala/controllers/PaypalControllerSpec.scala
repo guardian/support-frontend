@@ -602,7 +602,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
     }
 
-    "a request is made to hook a payment" should {
+    "a request is made to refund a payment" should {
 
       "return a 200 response if the request is valid" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
@@ -612,7 +612,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn(paymentHookResponse)
         }
 
-        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/hook")
+        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
           .withJsonBody(parse(
             """
               |{
@@ -690,7 +690,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn(paymentHookResponse)
         }
 
-        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/hook")
+        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
           .withJsonBody(parse(
             """
               |{
@@ -724,7 +724,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn(paymentHookResponseError)
         }
 
-        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/hook")
+        val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
           .withJsonBody(parse(
             """
               |{

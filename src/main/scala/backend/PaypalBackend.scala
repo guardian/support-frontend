@@ -4,6 +4,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.either._
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
@@ -15,7 +16,9 @@ import model.db.ContributionData
 import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
+
 import scala.concurrent.Future
+import scala.collection.JavaConverters._
 
 class PaypalBackend(
     paypalService: PaypalService,
@@ -25,45 +28,87 @@ class PaypalBackend(
     emailService: EmailService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
-    identityService.getOrCreateIdentityIdFromEmail(email)
-      .leftMap(BackendError.fromIdentityError)
-      .map(Option(_))
-      .recover {
-        case err =>
-          logger.error("Error getting identityId", err)
-          None
-      }
-
-  def insertContributionDataToPostgres(contributionData: ContributionData): EitherT[Future, BackendError, Unit] =
-    databaseService.insertContributionData(contributionData)
-      .leftMap(BackendError.fromDatabaseError)
-
-  def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId))
-      .bimap(BackendError.fromOphanError, _ => ())
-
-  def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
-    paypalService.validateWebhookEvent(headers, rawJson)
-      .leftMap(BackendError.fromPaypalAPIError)
-
-  def flagContributionAsRefunded(paypalPaymentId: String): EitherT[Future, BackendError, Unit] =
-    databaseService.flagContributionAsRefunded(paypalPaymentId)
-      .leftMap(BackendError.fromDatabaseError)
-
   /*
-   *  Use by Webs: First stage to create a paypal payment. Using -sale- paypal flow combining authorization
-   *  and capture process in one transaction. Sale option, PayPal processes the payment without holding funds.
+   * Used by web clients.
+   * Creates a payment which must be authorised by the user via PayPal's web UI.
+   * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
-  def createPayment(paypalPaymentData: CreatePaypalPaymentData): EitherT[Future, BackendError, Payment] =
-    paypalService.createPayment(paypalPaymentData)
+  def createPayment(c: CreatePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+    paypalService.createPayment(c)
       .leftMap { error =>
         logger.error(s"Error creating paypal payment data. Error: $error")
         BackendError.fromPaypalAPIError(error)
       }
 
+  /*
+   * Used by Android app clients.
+   * The Android app creates and approves the payment directly via PayPal.
+   * Funds are captured via this endpoint.
+   */
+  def capturePayment(c: CapturePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+    paypalService.capturePayment(c)
+      .bimap(
+        err => BackendError.fromPaypalAPIError(err),
+        payment => {
+          postPaymentTasks(payment, c.signedInUserEmail, c.acquisitionData)
+            .leftMap { err =>
+              logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
+                s"Payment: ${payment.toString}. " +
+                s"Error(s): ${err.getMessage}")
 
-  def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit]  = {
+              err
+            }
+
+          payment
+        }
+      )
+
+  def executePayment(e: ExecutePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+    paypalService.executePayment(e)
+      .bimap(
+        err => BackendError.fromPaypalAPIError(err),
+        payment => {
+          postPaymentTasks(payment, e.signedInUserEmail, e.acquisitionData)
+            .leftMap { err =>
+              logger.error(s"Didn't complete post-payment tasks after executing PayPal payment. " +
+                s"Payment: ${payment.toString}. " +
+                s"Error(s): ${err.getMessage}")
+
+              err
+            }
+
+          payment
+        }
+      )
+
+  def processRefundHook(refundHook: PaypalRefundHook, headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] = {
+    for {
+      _ <- validateRefundHook(headers, rawJson)
+      dbUpdateResult <- flagContributionAsRefunded(refundHook.resource.parent_payment)
+    } yield dbUpdateResult
+  }
+
+  // Success or failure of these steps shouldn't affect the response to the client
+  private def postPaymentTasks(payment: Payment, signedInUserEmail: Option[String], acquisitionData: AcquisitionData): EitherT[Future, BackendError, Unit] = {
+    val trackContributionResult = for {
+      paymentEmail <- emailFromPayment(payment)
+      identityId <- getOrCreateIdentityIdFromEmail(signedInUserEmail.getOrElse(paymentEmail))
+      _ <- trackContribution(payment, acquisitionData, identityId)
+    } yield ()
+
+    val sendThankYouEmailResult = for {
+      paymentEmail <- emailFromPayment(payment)
+      currency <- currencyFromPayment(payment)
+      _ <- sendThankYouEmail(signedInUserEmail, paymentEmail, currency)
+    } yield ()
+
+    BackendError.combineResults(
+      trackContributionResult,
+      sendThankYouEmailResult
+    )
+  }
+
+  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit]  = {
     ContributionData.fromPaypalCharge(identityId, payment)
       .leftMap { error =>
         logger.error(s"Error creating contribution data from paypal. Error: $error")
@@ -73,7 +118,7 @@ class PaypalBackend(
       .flatMap { contributionData =>
         BackendError.combineResults(
           submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId),
-          insertContributionDataToPostgres(contributionData)
+          insertContributionDataIntoDatabase(contributionData)
         )
       }
       .leftMap { err =>
@@ -82,49 +127,49 @@ class PaypalBackend(
       }
   }
 
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
+    identityService.getOrCreateIdentityIdFromEmail(email)
+      .leftMap(BackendError.fromIdentityError)
+      .map(Option(_))
+      .recover {
+        case err =>
+          logger.error("Error getting identityId", err)
+          None
+      }
 
-  /*
-   *  Use by Apps: Apps have previously created the payment and managed its approval with the customer.
-   *  Funds are captured at this stage.
-   */
-  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData):
-  EitherT[Future, BackendError, Payment] = {
-    for {
-      payment <- paypalService.capturePayment(capturePaypalPaymentData)
-        .leftMap(BackendError.fromPaypalAPIError)
+  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] =
+    databaseService.insertContributionData(contributionData)
+      .leftMap(BackendError.fromDatabaseError)
 
-      paymentEmail <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail)
-        .leftMap(error => BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))).toEitherT
+  private def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit] =
+    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId))
+      .bimap(BackendError.fromOphanError, _ => ())
 
-      identityId <- getOrCreateIdentityIdFromEmail(paymentEmail)
-      _ = trackContribution(payment, capturePaypalPaymentData.acquisitionData, identityId)
-      _ = emailService.sendThankYouEmail(capturePaypalPaymentData.signedInUserEmail.getOrElse(paymentEmail))
-    } yield payment
-  }
+  private def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
+    paypalService.validateWebhookEvent(headers, rawJson)
+      .leftMap(BackendError.fromPaypalAPIError)
 
-  def executePayment(paypalExecutePaymentData: ExecutePaypalPaymentData):
-  EitherT[Future, BackendError, Payment] = {
-    for {
-      payment <- paypalService.executePayment(paypalExecutePaymentData)
-        .leftMap(BackendError.fromPaypalAPIError)
+  private def flagContributionAsRefunded(paypalPaymentId: String): EitherT[Future, BackendError, Unit] =
+    databaseService.flagContributionAsRefunded(paypalPaymentId)
+      .leftMap(BackendError.fromDatabaseError)
 
-      paymentEmail <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail)
-        .leftMap(error => BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))).toEitherT
+  private def sendThankYouEmail(signedInUserEmail: Option[String], paymentEmail: String, currency: String): EitherT[Future, BackendError, SendMessageResult] =
+    emailService.sendThankYouEmail(signedInUserEmail.getOrElse(paymentEmail), currency)
+      .leftMap(BackendError.fromEmailError)
 
-      email = paypalExecutePaymentData.signedInUserEmail.getOrElse(paymentEmail)
-      identityId <- getOrCreateIdentityIdFromEmail(email)
-      _ = trackContribution(payment, paypalExecutePaymentData.acquisitionData, identityId)
-      _ = emailService.sendThankYouEmail(email)
-    } yield payment
-  }
+  private def emailFromPayment(p: Payment): EitherT[Future, BackendError, String] =
+    Either.catchNonFatal(p.getPayer.getPayerInfo.getEmail)
+      .leftMap(error => {
+        logger.error("Could not get email from payment object in PayPal SDK", error)
+        BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))
+      }).toEitherT
 
-  def processRefundHook(refundHook: PaypalRefundHook, headers: Map[String, String], rawJson: String):
-  EitherT[Future, BackendError, Unit] = {
-    for {
-      _ <- validateRefundHook(headers, rawJson)
-      dbUpdateResult <- flagContributionAsRefunded(refundHook.resource.parent_payment)
-    } yield dbUpdateResult
-  }
+  private def currencyFromPayment(p: Payment): EitherT[Future, BackendError, String] =
+    Either.catchNonFatal(p.getTransactions.asScala.head.getAmount.getCurrency)
+      .leftMap(error => {
+        logger.error("Could not get currency from payment object in PayPal SDK", error)
+        BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))
+      }).toEitherT
 
 }
 

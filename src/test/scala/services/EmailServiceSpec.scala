@@ -51,7 +51,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendThankYouEmail("email@email.com")
+    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP")
     whenReady(emailResult.value) { result =>
       result shouldBe Right(new SendMessageResult)
     }
@@ -74,16 +74,19 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
     when(payment.getTransactions).thenReturn(transactions)
     when(payment.getCreateTime).thenReturn("01-01-2018T12:12:12")
 
-    val exception = new Exception("Any sqs client error")
+    val errorString = "Any sqs client error"
+    val exception = new Exception(errorString)
+    val emailError = EmailService.Error(exception)
     val scalaFuture = Future.failed[SendMessageResult](exception)
     val javaFuture: CompletableFuture[SendMessageResult] = scalaFuture.toJava.toCompletableFuture
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail("email@email.com").value) { result =>
+    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP").value) { result =>
       result.fold(
         error => {
-          error.getCause.getMessage shouldBe exception.getMessage
+          // TODO: understand how this java.lang.Exception bit gets added
+          error.getMessage shouldBe s"java.lang.Exception: $errorString"
         },
         success => fail
       )

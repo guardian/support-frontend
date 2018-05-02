@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.kernel.Semigroup
 import com.gu.acquisition.model.errors.OphanServiceError
 import model.DefaultThreadPool
-import services.{DatabaseService, IdentityClient}
+import services.{DatabaseService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
 import model.stripe.{StripeApiError => StripeError}
@@ -18,6 +18,7 @@ sealed abstract class BackendError extends Exception {
     case BackendError.Ophan(err) => err.getMessage
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
+    case BackendError.Email(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
   }
 }
@@ -28,6 +29,7 @@ object BackendError {
   final case class Ophan(error: OphanServiceError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
+  final case class Email(error: EmailService.Error) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
 
   implicit val backendSemiGroup: Semigroup[BackendError] =
@@ -49,5 +51,6 @@ object BackendError {
   def fromOphanError(err: OphanServiceError): BackendError = Ophan(err)
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
+  def fromEmailError(err: EmailService.Error): BackendError = Email(err)
 
 }

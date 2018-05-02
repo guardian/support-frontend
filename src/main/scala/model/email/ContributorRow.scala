@@ -9,6 +9,12 @@ import io.circe.generic.JsonCodec
  *    "To":{
  *       "Address":"email@email.com",
  *       "SubscriberKey":"email@email.com"
+ *       "ContactAttributes":{
+ *          "SubscriberAttributes":{
+ *             "EmailAddress":"email@email.com",
+ *             "edition":"international"
+ *          }
+ *       }
  *    },
  *    "DataExtensionName":"contribution-thank-you"
  * }
@@ -23,20 +29,40 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec case class ToSqsMessage(
   Address: String,
-  SubscriberKey: String
+  SubscriberKey: String,
+  ContactAttributes: ContactAttributesSqsMessage
 )
 
-case class ContributorRow(email: String) {
+@JsonCodec case class ContactAttributesSqsMessage(
+  SubscriberAttributes: SubscriberAttributesSqsMessage
+)
+
+@JsonCodec case class SubscriberAttributesSqsMessage(
+  EmailAddress: String,
+  edition: String
+)
+
+case class ContributorRow(email: String, currency: String) {
+  def edition: String = currency match {
+    case "GBP" => "uk"
+    case "USD" => "us"
+    case "AUD" => "au"
+    case _ => "international"
+  }
 
   def toJsonContributorRowSqsMessage: String = {
-
-    val toSqsMessage = ToSqsMessage(
-      Address = email,
-      SubscriberKey = email
-    )
-
     ContributorRowSqsMessage(
-      To = toSqsMessage,
-      DataExtensionName = "contribution-thank-you").asJson.toString()
+      To = ToSqsMessage(
+        Address = email,
+        SubscriberKey = email,
+        ContactAttributes = ContactAttributesSqsMessage(
+          SubscriberAttributes = SubscriberAttributesSqsMessage(
+            EmailAddress = email,
+            edition = edition
+          )
+        )
+      ),
+      DataExtensionName = "contribution-thank-you"
+    ).asJson.toString()
   }
 }

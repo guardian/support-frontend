@@ -1,25 +1,25 @@
 package backend
 
 import cats.data.EitherT
+import cats.implicits._
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
+import com.gu.acquisition.model.errors.OphanServiceError
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
-import org.scalatest.{Matchers, WordSpec}
-import org.scalatest.mockito.MockitoSugar
-import model.{AcquisitionData, _}
 import model.paypal.{HookAmount, PaypalRefundHook, Resource, _}
+import model.{AcquisitionData, _}
+import org.joda.time.DateTime
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
+import org.scalatest.concurrent.IntegrationPatience
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{Matchers, WordSpec}
+import services._
+import util.FutureEitherValues
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
-import org.mockito.Mockito._
-import org.mockito.Matchers._
-import org.scalatest.concurrent.IntegrationPatience
-import services._
-import util.FutureEitherValues
-import cats.implicits._
-import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.acquisition.model.errors.OphanServiceError
-import org.joda.time.DateTime
 
 class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
@@ -38,6 +38,8 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val paymentError = PaypalApiError.fromString("Error response")
   val backendPaymentError = BackendError.fromPaypalAPIError(paymentError)
   val backendDbError = BackendError.fromDatabaseError(dbError)
+  val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
+
 
   //-- mocks
   val paymentMock: Payment = mock[Payment]
@@ -57,18 +59,20 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val unitPaymentResponseError: EitherT[Future, PaypalApiError, Unit] =
     EitherT.left(Future.successful(paymentError))
+  val acquisitionResponse: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
+    EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val databaseSuccess: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponse: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.right(Future.successful(()))
-  val databaseFailure: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponseError: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
   val identityResponse: EitherT[Future, IdentityClient.Error, Long] =
     EitherT.right(Future.successful(1L))
   val identityResponseError: EitherT[Future, IdentityClient.Error, Long] =
     EitherT.left(Future.successful(identityError))
-  val emailResponseError: EitherT[Future, Throwable, SendMessageResult] =
-    EitherT.left(Future.successful(new Exception("Email error response")))
+  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
+    EitherT.left(Future.successful(emailError))
 
   //-- service mocks
   val mockPaypalService: PaypalService = mock[PaypalService]
@@ -84,6 +88,20 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockIdentityService,
     mockOphanService,
     mockEmailService)(new DefaultThreadPool(ec))
+
+  // This is only needed if testing code which depends on extracting data from Payment object
+  def populatePaymentMock(): Unit = {
+    when(paymentMock.getPayer).thenReturn(payer)
+    when(paymentMock.getTransactions).thenReturn(transactions)
+    when(paymentMock.getCreateTime).thenReturn("2018-02-22T11:51:00Z")
+    when(transaction.getAmount).thenReturn(amount)
+    when(amount.getCurrency).thenReturn("GBP")
+    when(amount.getTotal).thenReturn("2")
+    when(payer.getPayerInfo).thenReturn(payerInfo)
+    when(payerInfo.getCountryCode).thenReturn("uk")
+    when(payerInfo.getEmail).thenReturn("email@email.com")
+    ()
+  }
 }
 
 
@@ -116,45 +134,18 @@ class PaypalBackendSpec
 
     "a request is made to capture a payment" should {
 
-      "return combined error while tracking contribution if ophan and db fail" in new PaypalBackendFixture {
-        when(transaction.getAmount).thenReturn(amount)
-        when(amount.getCurrency).thenReturn("GBP")
-        when(amount.getTotal).thenReturn("2")
-        when(payerInfo.getCountryCode).thenReturn("uk")
-        when(payerInfo.getEmail).thenReturn("email@email.com")
-        when(payer.getPayerInfo).thenReturn(payerInfo)
-        when(paymentMock.getPayer).thenReturn(payer)
-        when(paymentMock.getTransactions).thenReturn(transactions)
-        when(paymentMock.getCreateTime).thenReturn("2018-02-22T11:51:00Z")
-        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
-        val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
-        val error = BackendError.MultipleErrors(List(BackendError.fromOphanError(
-          OphanServiceError.BuildError("Ophan error response")),
-          BackendError.Database(DatabaseService.Error("DB error response", None)))
-        )
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, None)
-        result.futureLeft shouldBe error
-      }
-
       "return error if paypal service fails" in new PaypalBackendFixture {
-        when(paymentMock.getPayer).thenReturn(payer)
-        when(payer.getPayerInfo).thenReturn(payerInfo)
-        when(payerInfo.getEmail).thenReturn("email@email.com")
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.capturePayment(capturePaypalPaymentData).futureLeft shouldBe
           BackendError.fromPaypalAPIError(paymentError)
 
       }
 
-      "return successful payment response even if identityService - ophanService " +
-        "- databaseService - emailService fail" in new PaypalBackendFixture {
-        when(paymentMock.getPayer).thenReturn(payer)
-        when(payer.getPayerInfo).thenReturn(payerInfo)
-        when(payerInfo.getEmail).thenReturn("email@email.com")
-        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
+      "return successful payment response even if identityService, ophanService, " +
+        "databaseService and emailService fail" in new PaypalBackendFixture {
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         paypalBackend.capturePayment(capturePaypalPaymentData).futureRight shouldBe paymentMock
@@ -164,48 +155,118 @@ class PaypalBackendSpec
     "a request is made to execute a payment" should {
 
       "return error if paypal service fails" in new PaypalBackendFixture {
-        when(paymentMock.getPayer).thenReturn(payer)
-        when(payer.getPayerInfo).thenReturn(payerInfo)
-        when(payerInfo.getEmail).thenReturn("email@email.com")
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.executePayment(executePaypalPaymentData)
           .futureLeft shouldBe BackendError.fromPaypalAPIError(paymentError)
 
       }
 
-      "return successful payment response even if identityService " +
-        "- ophanService - databaseService - emailService fail" in new PaypalBackendFixture {
-        when(paymentMock.getPayer).thenReturn(payer)
-        when(payer.getPayerInfo).thenReturn(payerInfo)
-        when(payerInfo.getEmail).thenReturn("email@email.com")
-        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
+      "return successful payment response even if identityService, " +
+        "ophanService, databaseService and emailService fail" in new PaypalBackendFixture {
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         paypalBackend.executePayment(executePaypalPaymentData).futureRight shouldBe paymentMock
       }
     }
 
-    "a request is made to a payment hook" should {
+    "a request is made to process a refund hook" should {
 
       "return error if refund hook is not valid" in new PaypalBackendFixture {
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponseError)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
         paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe backendPaymentError
       }
 
       "return error if databaseService fails" in new PaypalBackendFixture {
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponse)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
         paypalBackend.processRefundHook(paypalHook, Map.empty, "JSON").futureLeft shouldBe backendDbError
       }
 
       "return success if refund hook is valid and databaseService succeeds" in new PaypalBackendFixture {
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponse)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseSuccess)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
         paypalBackend.processRefundHook(paypalHook, any(), any()).futureRight shouldBe(())
       }
     }
+
+    "executing post-payment tasks" should {
+
+      "return just an email send error if tracking succeeds but email send fails" in new PaypalBackendFixture {
+        populatePaymentMock()
+
+        // All tracking-related services OK
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
+
+        // But email fails
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+
+        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
+        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData)
+
+        result.futureLeft shouldBe BackendError.Email(emailError)
+      }
+
+      "return combined error if tracking and email send fail" in new PaypalBackendFixture {
+        populatePaymentMock()
+
+        // Identity and Ophan are  OK
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+
+        // But DB - and thus tracking - fails
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+
+        // And email fails
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+
+        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
+        val errors = BackendError.MultipleErrors(List(
+          BackendError.Database(DatabaseService.Error("DB error response", None)),
+          BackendError.Email(emailError)
+        ))
+        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData)
+
+        result.futureLeft shouldBe errors
+      }
+    }
+
+    "tracking the contribution" should {
+
+      "return just a DB error if Ophan succeeds but DB fails" in new PaypalBackendFixture {
+        populatePaymentMock()
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+
+        val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, None)
+
+        result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
+      }
+
+      "return a combined error if Ophan and DB fail" in new PaypalBackendFixture {
+        populatePaymentMock()
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+
+        val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
+        val errors = BackendError.MultipleErrors(List(
+          BackendError.fromOphanError(
+            OphanServiceError.BuildError("Ophan error response")
+          ),
+          BackendError.Database(DatabaseService.Error("DB error response", None))
+        ))
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, None)
+        result.futureLeft shouldBe errors
+      }
+    }
+
   }
 }

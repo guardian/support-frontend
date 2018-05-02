@@ -2,6 +2,7 @@ package backend
 
 import cats.data.EitherT
 import cats.implicits._
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.stripe.model.{Charge, Event, ExternalAccount}
@@ -35,6 +36,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val paymentError = PaypalApiError.fromString("Error response")
   val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"))
   val backendError = BackendError.fromStripeApiError(stripeApiError)
+  val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
+
 
   //-- mocks
   val chargeMock: Charge = mock[Charge]
@@ -45,6 +48,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(chargeMock))
   val paymentServiceResponseError: EitherT[Future, StripeApiError, Charge] =
     EitherT.left(Future.successful(stripeApiError))
+  val acquisitionResponse: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
+    EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
   val identityResponse: EitherT[Future, IdentityClient.Error, Long] =
@@ -55,10 +60,12 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val validateRefundHookFailure: EitherT[Future, StripeApiError, Unit] =
     EitherT.left(Future.successful(stripeApiError))
-  val databaseFailure: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponseError: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val databaseSuccess: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponse: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.right(Future.successful(()))
+  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
+    EitherT.left(Future.successful(emailError))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
@@ -74,6 +81,17 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockIdentityService,
     mockOphanService,
     mockEmailService)(new DefaultThreadPool(ec))
+
+  def populateChargeMock(): Unit = {
+    val externalAccount = new ExternalAccount()
+    when(chargeMock.getId).thenReturn("id")
+    when(chargeMock.getReceiptEmail).thenReturn("email@email.com")
+    when(chargeMock.getCreated).thenReturn(123123123132L)
+    when(chargeMock.getCurrency).thenReturn("GBP")
+    when(chargeMock.getAmount).thenReturn(12L)
+    when(chargeMock.getSource).thenReturn(externalAccount)
+    ()
+  }
 }
 
 
@@ -89,16 +107,105 @@ class StripeBackendSpec
 
     "a request is made to create a charge/payment" should {
 
-      "return combined error while tracking contribution if ophan and db fail" in new StripeBackendFixture {
-        val externalAccount = new ExternalAccount()
-        when(chargeMock.getId).thenReturn("id")
-        when(chargeMock.getReceiptEmail).thenReturn("email@email.com")
-        when(chargeMock.getCreated).thenReturn(123123123132L)
-        when(chargeMock.getCurrency).thenReturn("GBP")
-        when(chargeMock.getAmount).thenReturn(12L)
-        when(chargeMock.getSource).thenReturn(externalAccount)
+      "return error if stripe service fails" in new StripeBackendFixture {
+        when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponseError)
+        stripeBackend.createCharge(stripeChargeData).futureLeft shouldBe BackendError.fromStripeApiError(stripeApiError)
+
+      }
+
+      "return successful payment response even if identityService, " +
+        "ophanService, databaseService and emailService all fail" in new StripeBackendFixture {
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+        stripeBackend.createCharge(stripeChargeData).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
+      }
+    }
+
+    "a request is made to process a refund hook" should {
+
+      "return error if refund hook is not valid" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookFailure)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
+        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe backendError
+      }
+
+      "return error if databaseService fails" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
+        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe BackendError.fromDatabaseError(dbError)
+      }
+
+      "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
+        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
+        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
+        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe(())
+      }
+
+    }
+
+
+    "executing post-payment tasks" should {
+
+      "return just an email send error if tracking succeeds but email send fails" in new StripeBackendFixture {
+        populateChargeMock()
+
+        // Tracking services all OK
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
+
+        // But email fails
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+
+        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
+        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock)
+
+        result.futureLeft shouldBe BackendError.Email(emailError)
+      }
+
+      "return a combined error if tracking and email send fail" in new StripeBackendFixture {
+        populateChargeMock()
+
+        // Identity and Ophan are  OK
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+
+        // But DB - and thus tracking - fails
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+
+        // And email fails
+        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+
+        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
+        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock)
+        val errors = BackendError.MultipleErrors(List(
+          BackendError.Database(DatabaseService.Error("DB error response", None)),
+          BackendError.Email(emailError)
+        ))
+        result.futureLeft shouldBe errors
+      }
+    }
+
+    "tracking the contribution" should {
+
+      "return just a DB error if Ophan succeeds but DB fails" in new StripeBackendFixture {
+        populateChargeMock()
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
+        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None)
+        result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
+      }
+
+      "return a combined error if Ophan and DB fail" in new StripeBackendFixture {
+        populateChargeMock()
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None)
         val error = BackendError.MultipleErrors(List(
@@ -107,50 +214,6 @@ class StripeBackendSpec
         )
         result.futureLeft shouldBe error
       }
-
-      "return error if stripe service fails" in new StripeBackendFixture {
-        when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeData).futureLeft shouldBe BackendError.fromStripeApiError(stripeApiError)
-
-      }
-
-      "return successful payment response even if identityService - " +
-        "ophanService - databaseService - emailService fail" in new StripeBackendFixture {
-        val externalAccount = new ExternalAccount()
-        when(chargeMock.getId).thenReturn("id")
-        when(chargeMock.getReceiptEmail).thenReturn("email@email.com")
-        when(chargeMock.getCreated).thenReturn(123123123132L)
-        when(chargeMock.getCurrency).thenReturn("GBP")
-        when(chargeMock.getAmount).thenReturn(12L)
-        when(chargeMock.getSource).thenReturn(externalAccount)
-        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseFailure)
-        when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        stripeBackend.createCharge(stripeChargeData).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
-      }
-    }
-
-    "a request is made to a payment hook" should {
-
-      "return error if refund hook is not valid" in new StripeBackendFixture {
-        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookFailure)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
-        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe backendError
-      }
-
-      "return error if databaseService fails" in new StripeBackendFixture {
-        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseFailure)
-        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe BackendError.fromDatabaseError(dbError)
-      }
-
-      "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
-        when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
-        when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseSuccess)
-        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe(())
-      }
-
     }
   }
 }

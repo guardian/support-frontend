@@ -15,9 +15,9 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendThankYouEmail(email: String):
-  EitherT[Future, Throwable, SendMessageResult] = {
-    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email))
+  def sendThankYouEmail(email: String, currency: String):
+  EitherT[Future, EmailService.Error, SendMessageResult] = {
+    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email, currency))
   }
 
   /*
@@ -25,12 +25,12 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
    * cannot be process by the subscriber.
    */
   private def sendEmailToQueue(queueUrl: String, row: ContributorRow):
-  EitherT[Future, Throwable, SendMessageResult] = {
+  EitherT[Future, EmailService.Error, SendMessageResult] = {
     EitherT(Future {
       sqsClient.sendMessageAsync(new SendMessageRequest(queueUrl, row.toJsonContributorRowSqsMessage)).get
     }.map(Right.apply).recover {
-      case err: Throwable => Left(err)
-      case _ => Left(new Exception("Unknown error while sending message to SQS."))
+      case err: Throwable => Left(EmailService.Error(err))
+      case _ => Left(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
     })
   }
 }
@@ -42,5 +42,9 @@ object EmailService {
     }.leftMap { err =>
       InitializationError(s"unable to instantiate EmailService for config: ${config}. Error trace: ${err.getMessage}")
     }
+  }
+
+  case class Error(err: Throwable) extends Exception {
+    override def getMessage: String = err.getMessage
   }
 }
