@@ -199,7 +199,43 @@ function buildAcquisition(
     abTests: abTests.length > 0 ? abTests : undefined,
     queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
   };
+}
 
+const getOphanIds = (): OphanIds => ({
+  pageviewId: ophan.viewId,
+  browserId: getCookie('bwid'),
+  visitId: getCookie('vsid'),
+});
+
+function derivePaymentApiAcquisitionData(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+): PaymentAPIAcquisitionData {
+  const ophanIds: OphanIds = getOphanIds();
+
+  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+  const campaignCodes = referrerAcquisitionData.campaignCode ?
+    [referrerAcquisitionData.campaignCode] : [];
+
+  if (referrerAcquisitionData.abTest) {
+    abTests.push(referrerAcquisitionData.abTest);
+  }
+
+  const response: PaymentAPIAcquisitionData = {
+    platform: 'SUPPORT',
+    visitId: ophanIds.visitId,
+    browserId: ophanIds.browserId,
+    pageviewId: ophanIds.pageviewId,
+    referrerPageviewId: referrerAcquisitionData.referrerPageviewId,
+    referrerUrl: referrerAcquisitionData.referrerUrl,
+    componentId: referrerAcquisitionData.componentId,
+    campaignCodes,
+    componentType: referrerAcquisitionData.componentType,
+    source: referrerAcquisitionData.source,
+    abTests,
+  };
+
+  return response;
 }
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
@@ -217,11 +253,6 @@ function getAcquisition(abParticipations: Participations): ReferrerAcquisitionDa
 
 }
 
-const getOphanIds = (): OphanIds => ({
-  pageviewId: ophan.viewId,
-  browserId: getCookie('bwid'),
-  visitId: getCookie('vsid'),
-});
 
 // ----- Exports ----- //
 
@@ -230,4 +261,5 @@ export {
   getAcquisition,
   getOphanIds,
   participationsToAcquisitionABTest,
+  derivePaymentApiAcquisitionData,
 };
