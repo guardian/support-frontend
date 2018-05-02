@@ -17,6 +17,11 @@
     }
   }
 
+  .component-cta-link--contribute-one-off--variant {
+    background-color: gu-colour(garnett-neutral-5);
+    border: solid 1px gu-colour(neutral-1);
+  }
+
   .svg-arrow-right-straight {
     fill: gu-colour(garnett-neutral-1);
     height: 35%;

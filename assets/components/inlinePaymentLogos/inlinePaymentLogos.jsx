@@ -14,7 +14,7 @@ import SvgAmexLogo from 'components/svgs/amexLogo';
 export default function InlinePaymentLogos() {
 
   return (
-    <div className="component-inline-payment-logos">
+    <div className="component-inline-payment-logos component-inline-payment-logos-variant--one-off">
       <SvgVisaLogo />
       <SvgMastercardLogo />
       <SvgAmexLogo />

@@ -7,3 +7,20 @@
     width: 30px;
   }
 }
+
+// AB Test payment logo placement
+.component-inline-payment-logos-variant--one-off{
+  position:  relative;
+  top:  161px;
+  left: 40px;
+  .svg-paypal-logo {
+    position: relative;
+    top: -69px;
+  }
+
+  svg {
+    width: 44px;
+    height: 29px;
+  }
+
+}
