@@ -2,12 +2,12 @@
 @import views.ViewHelpers._
 @(
 	title: String,
-	description: Option[String] = None,
-	styles: Html = Html(""),
-	scripts: Html = Html(""),
+	mainId: String,
 	mainJsBundle: String,
 	mainStyleBundle: String = "styles.css",
-	mainId: String
+	description: Option[String] = None,
+	styles: Html = Html(""),
+	scripts: Html = Html("")
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
