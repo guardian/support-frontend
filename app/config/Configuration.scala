@@ -42,4 +42,5 @@ class Configuration {
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 
   lazy val stepFuctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
+
 }

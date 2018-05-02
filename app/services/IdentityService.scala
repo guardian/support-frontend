@@ -45,7 +45,7 @@ object IdentityService {
     apiClientToken = config.apiClientToken
   )
 }
-class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityServiceInterface {
 
   import IdentityServiceEnrichers._
 
@@ -110,4 +110,9 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}")
     }
   }
+}
+
+trait IdentityServiceInterface {
+  def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
+  def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
 }

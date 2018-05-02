@@ -13,4 +13,6 @@ class Identity(config: Config) {
   lazy val apiClientToken = config.getString("api.token")
 
   lazy val testUserSecret = config.getString("test.users.secret")
+
+  lazy val useStub = if (config.hasPath("useStub")) config.getBoolean("useStub") else false
 }

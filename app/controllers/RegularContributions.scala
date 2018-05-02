@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, IdUser}
+import com.gu.identity.play.{AccessCredentials, IdUser, PublicFields, PrivateFields}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
 import lib.PlayImplicits._
@@ -11,7 +11,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
-import services.{IdentityService, MembersDataService, TestUserService}
+import services.{IdentityServiceInterface, MembersDataService, TestUserService}
 import views.html.{monthlyContributions, thankYou}
 import io.circe.syntax._
 import monitoring.SafeLogger
@@ -24,7 +24,7 @@ class RegularContributions(
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
-    identityService: IdentityService,
+    identityService: IdentityServiceInterface,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
