@@ -6,6 +6,4 @@
     description: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
-@main(title = title, description = description, mainJsBundle = js) {
-    <main id="@id" class="gu-content-wrapper"></main>
-}
+@main(title = title, description = description, mainJsBundle = js, mainId = id)

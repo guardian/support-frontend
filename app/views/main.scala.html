@@ -6,8 +6,9 @@
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
 	mainJsBundle: String,
-	mainStyleBundle: String = "styles.css"
-)(content: Html)(implicit assets: AssetsResolver, request: RequestHeader)
+	mainStyleBundle: String = "styles.css",
+	mainId: String
+)(implicit assets: AssetsResolver, request: RequestHeader)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +41,6 @@
 	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Regular.woff2")" as="font">
 	<link rel="preload" href="@assets("fonts/GHGuardianHeadline-Semibold.woff2")" as="font">
 
-
 	<script type="application/ld+json">
 		{
 			"@@context": "http://schema.org",
@@ -57,28 +57,31 @@
 
 	<link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
-
 	@styles
 </head>
 <body>
 	<noscript>
-        <div style="text-align: center;
-                    font-size: 30px;
-                    padding-left: 20px;
-                    padding-right: 20px;
-                    background-color: #e9e939;">
-            Please enable JavaScript - we use it to provide the best experience for Guardian&nbsp;Supporters.<br/>
-            <a href="https://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
-        </div>
-    </noscript>
-	@content
+    <div style="text-align: center;
+                font-size: 30px;
+                padding-left: 20px;
+                padding-right: 20px;
+                background-color: #e9e939;">
+      Please enable JavaScript - we use it to provide the best experience for Guardian&nbsp;Supporters.<br/>
+      <a href="https://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
+    </div>
+  </noscript>
+
+	<main id="@mainId" class="gu-content-wrapper"></main>
+
 	<script src="https://polyfill.guim.co.uk/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes"></script>
 	<script defer src="https://js.stripe.com/v3/"></script>
 	<script type="text/javascript">
-		window.guardian = window.guardian || {};
-        window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
+    window.guardian = window.guardian || {};
+    window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
 	</script>
+
 	@scripts
+
 	 <!-- This script is intentionally at the bottom of the file. Please check
 	      all the critical flows work correctly if you change its position -->
 	<script type="text/javascript" src="@assets(mainJsBundle)"></script>
