@@ -44,6 +44,19 @@ export type ReferrerAcquisitionData = {|
   queryParameters: ?AcquisitionQueryParameters,
 |};
 
+export type PaymentAPIAcquisitionData = {|
+  pageviewId: string,
+  visitId: ?string,
+  browserId: ?string,
+  platform: ?string,
+  referrerPageviewId: ?string,
+  referrerUrl: ?string,
+  campaignCodes: ?string[],
+  componentId: ?string,
+  componentType: ?string,
+  source: ?string,
+  abTests: ?AcquisitionABTest[],
+|};
 
 // ----- Setup ----- //
 

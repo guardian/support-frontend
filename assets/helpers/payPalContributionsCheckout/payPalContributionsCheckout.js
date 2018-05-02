@@ -13,22 +13,10 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
-type AcquisitionData = {|
-  pageviewId: string,
-  visitId: ?string,
-  browserId: ?string,
-  platform: ?string,
-  referrerPageviewId: ?string,
-  referrerUrl: ?string,
-  campaignCodes: ?string[],
-  componentId: ?string,
-  componentType: ?string,
-  source: ?string,
-  abTests: ?AcquisitionABTest[],
-|}
 
 type PayPalPaymentAPIPostData = {|
   currency: IsoCurrency,
@@ -65,7 +53,7 @@ function storeAcquisitionData(
     abTests.push(referrerAcquisitionData.abTest);
   }
 
-  const acquisitionData: AcquisitionData = {
+  const acquisitionData: PaymentAPIAcquisitionData = {
     platform: 'SUPPORT',
     visitId: ophanIds.visitId,
     browserId: ophanIds.browserId,
