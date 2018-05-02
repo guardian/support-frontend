@@ -53,7 +53,7 @@ class PayPalOneOff(
         Redirect("/contribute/one-off/thankyou")
       else {
         SafeLogger.error(scrub"Error making paypal payment")
-        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+        Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
       }
     }
 
@@ -73,6 +73,6 @@ class PayPalOneOff(
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"The user selected cancel payment and decided not to contribute.")
-    Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+    Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
   }
 }

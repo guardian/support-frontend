@@ -47,7 +47,6 @@ class PayPalRegular(
     }.map(token => Ok(Token(token).asJson))
   }
 
-
   private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalNvpService => T): T = {
     val service = payPalNvpServiceProvider.forUser(testUsers.isTestUser(user))
     fn(service)
