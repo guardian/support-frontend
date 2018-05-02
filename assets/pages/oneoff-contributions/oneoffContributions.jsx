@@ -6,8 +6,6 @@ import React from 'react';
 import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
-
-
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 

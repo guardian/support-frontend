@@ -15,7 +15,6 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import views.html.thankYou
 
 class OneOffContributions(
     val assets: AssetsResolver,
