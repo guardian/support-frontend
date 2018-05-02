@@ -61,7 +61,7 @@ class PayPal(
     contributionsFrontendService.execute(request).fold(
       e => {
         SafeLogger.error(scrub"Error making paypal payment", e)
-        Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+        Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
       },
       resultFromEmailOption
     )
@@ -76,13 +76,13 @@ class PayPal(
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
-    Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+    Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
-    Ok(views.html.react("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+    Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
   }
 }
