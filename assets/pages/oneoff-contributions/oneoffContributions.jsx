@@ -18,7 +18,6 @@ import { getAmount } from 'helpers/checkouts';
 
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import reducer from './oneOffContributionsReducers';
-import { setPayPalButton } from './oneoffContributionsActions';
 import OneOffContributionsPage from './components/oneOffContributionsPage';
 
 
@@ -37,7 +36,6 @@ const store = pageInit(
 );
 
 user.init(store.dispatch);
-store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 const router = (
   <BrowserRouter>

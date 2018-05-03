@@ -19,7 +19,6 @@ describe('One-off Reducer', () => {
     const newState = reducer(20, 'GBP')(undefined, action);
 
     expect(newState.regularContrib.error).toEqual(message);
-    expect(newState.regularContrib.payPalType).toMatchSnapshot();
     expect(newState.regularContrib.paymentStatus).toMatchSnapshot();
   });
 
@@ -33,7 +32,6 @@ describe('One-off Reducer', () => {
 
     const newState = reducer(20, 'GBP')(undefined, action);
 
-    expect(newState.regularContrib.payPalType).toEqual(value);
     expect(newState.regularContrib.error).toMatchSnapshot();
   });
 

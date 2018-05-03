@@ -14,7 +14,7 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
 import type { Action } from './regularContributionsActions';
-import type { PaymentStatus, PayPalButtonType } from './components/regularContributionsPayment';
+import type { PaymentStatus } from './components/regularContributionsPayment';
 
 // ----- Types ----- //
 
@@ -23,7 +23,6 @@ export type State = {
   error: ?string,
   paymentStatus: PaymentStatus,
   paymentMethod: ?PaymentMethod,
-  payPalType: PayPalButtonType,
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
@@ -51,7 +50,6 @@ function createRegularContribReducer(amount: number, paymentMethod: ?PaymentMeth
     error: null,
     paymentStatus: 'NotStarted',
     paymentMethod,
-    payPalType: 'NotSet',
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
@@ -71,9 +69,6 @@ function createRegularContribReducer(amount: number, paymentMethod: ?PaymentMeth
 
       case 'CREATING_CONTRIBUTOR':
         return Object.assign({}, state, { paymentStatus: 'Pending' });
-
-      case 'SET_PAYPAL_BUTTON':
-        return Object.assign({}, state, { payPalType: action.value });
 
       case 'SET_PAYPAL_HAS_LOADED':
         return Object.assign({}, state, { payPalHasLoaded: true });
