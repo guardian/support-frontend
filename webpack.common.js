@@ -35,6 +35,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
     error404Page: 'pages/error/error404.jsx',
     error500Page: 'pages/error/error500.jsx',
+    errorPageStyles: 'pages/error/error.scss',
   },
 
   output: {
