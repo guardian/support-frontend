@@ -7,6 +7,7 @@ import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { inPaymentLogosTest } from 'helpers/abTests/helpers';
 import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -59,19 +60,21 @@ function payWithPayPal(props: PropTypes) {
 
 // ----- Component ----- //
 
-const PayPalContributionButton = (props: PropTypes) =>
-  (
+function PayPalContributionButton(props: PropTypes) {
+  const inLogosTest = inPaymentLogosTest(props.abParticipations);
+  const modifiers = inLogosTest ? [props.additionalClass, 'variant'] : [props.additionalClass];
+  return (
     <button
       id="qa-contribute-paypal-button"
-      className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
+      className={classNameWithModifiers('component-paypal-contribution-button', modifiers)}
       onClick={payWithPayPal(props)}
     >
-
-      <SvgPaypalPLogo />
+      {inLogosTest ? null : <SvgPaypalPLogo />}
       <span>{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>
   );
+}
 
 
 // ----- Default Props ----- //

@@ -48,3 +48,15 @@
     }
   }
 }
+
+// AB test paymentLogosTest
+.component-paypal-contribution-button--variant {
+  border: none;
+  background-color: gu-colour(news-garnett-highlight);
+  &:hover {
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
+  }
+  span {
+    padding-left: 0;
+  }
+}

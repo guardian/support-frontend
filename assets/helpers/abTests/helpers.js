@@ -6,12 +6,17 @@ function getVariantForTest(participations: Participations, test: string) {
   return participations ? participations[test] : null;
 }
 
-function inRepositionPaymentLogosTest(participations: Participations) {
-  return getVariantForTest(participations, 'repositionPaymentLogosTest') === 'variant';
+function getPaymentLogosTestVariant(participations: Participations) {
+  return getVariantForTest(participations, 'paymentLogosTest');
+}
+
+function inPaymentLogosTest(participations: Participations) {
+  return getPaymentLogosTestVariant(participations) === 'variant';
 }
 
 export {
   getVariantForTest,
-  inRepositionPaymentLogosTest,
+  getPaymentLogosTestVariant,
+  inPaymentLogosTest,
 };
 

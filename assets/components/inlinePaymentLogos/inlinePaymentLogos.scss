@@ -8,15 +8,28 @@
   }
 }
 
-// AB Test payment logo placement
-.component-inline-payment-logos-variant--one-off{
+// AB test paymentLogosTest
+.component-inline-payment-logos--one_off-variant {
   position:  relative;
-  top:  161px;
-  left: 40px;
+  top:  235px;
+  left: 65px;
   .svg-paypal-logo {
     position: relative;
-    top: -69px;
+    top: -64px;
+    left: -48px;
   }
+
+  svg {
+    width: 44px;
+    height: 29px;
+  }
+
+}
+
+.component-inline-payment-logos--monthly-variant {
+  position:  relative;
+  top:  162px;
+  left: 17px;
 
   svg {
     width: 44px;

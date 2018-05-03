@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 export const tests: Tests = {
-  repositionPaymentLogosTest: {
+  paymentLogosTest: {
     variants: ['control', 'variant'],
     audiences: {
       GB: {
