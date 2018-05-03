@@ -9,18 +9,20 @@ import { payPalContributionButtonActionsFor } from 'containerisableComponents/pa
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 
 import type { State } from '../contributionsLandingReducer';
+import { inPaymentLogosTest } from '../../../helpers/abTests/helpers';
 
 
 // ----- State Maps ----- //
 
 function mapStateToProps(state: State) {
-
+  const inLogosTest = inPaymentLogosTest(state.common.abParticipations);
   return {
     amount: getAmount(state.page.selection),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     countryGroupId: state.common.countryGroup,
     abParticipations: state.common.abParticipations,
     isoCountry: state.common.country,
+    inPaymentLogosTest: inLogosTest,
     canClick: !state.page.selection.error,
   };
 
