@@ -7,9 +7,8 @@ import { connect } from 'react-redux';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
-
+import { inPaymentLogosTest } from 'helpers/abTests/helpers';
 import type { State } from '../contributionsLandingReducer';
-import { inPaymentLogosTest } from '../../../helpers/abTests/helpers';
 
 
 // ----- State Maps ----- //
