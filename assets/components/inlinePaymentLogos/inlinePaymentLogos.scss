@@ -12,12 +12,12 @@
 .component-inline-payment-logos--one_off-variant {
   @include mq($from: desktop) {
     position: relative;
-    top: 235px;
+    top: 222px;
     left: 45px;
     float: right;
     .svg-paypal-logo {
       position: relative;
-      top: -64px;
+      top: -56px;
       left: -48px;
     }
 
@@ -31,7 +31,7 @@
 .component-inline-payment-logos--monthly-variant {
   @include mq($from: desktop) {
     position: relative;
-    top: 162px;
+    top: 158px;
     float: right;
     svg {
       width: 42px;
