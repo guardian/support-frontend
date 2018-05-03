@@ -3,11 +3,11 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
-import play.api.mvc._
-import services.{IdentityService, IdentityServiceOrStub}
-import utils.RequestCountry._
 import config.StringsConfig
+import play.api.mvc._
+import services.IdentityServiceOrStub
 import utils.BrowserCheck
+import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
 
