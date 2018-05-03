@@ -10,30 +10,32 @@
 
 // AB test paymentLogosTest
 .component-inline-payment-logos--one_off-variant {
-  position:  relative;
-  top:  235px;
-  left: 65px;
-  .svg-paypal-logo {
+  @include mq($from: desktop) {
     position: relative;
-    top: -64px;
-    left: -48px;
-  }
+    top: 235px;
+    left: 45px;
+    float: right;
+    .svg-paypal-logo {
+      position: relative;
+      top: -64px;
+      left: -48px;
+    }
 
-  svg {
-    width: 44px;
-    height: 29px;
+    svg {
+      width: 42px;
+      height: 27px;
+    }
   }
-
 }
 
 .component-inline-payment-logos--monthly-variant {
-  position:  relative;
-  top:  162px;
-  left: 17px;
-
-  svg {
-    width: 44px;
-    height: 29px;
+  @include mq($from: desktop) {
+    position: relative;
+    top: 162px;
+    float: right;
+    svg {
+      width: 42px;
+      height: 27px;
+    }
   }
-
 }
