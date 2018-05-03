@@ -6,12 +6,12 @@ import io.circe.generic.semiauto.deriveDecoder
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.mvc._
-import services.IdentityServiceInterface
+import services.IdentityServiceOrStub
 import play.api.libs.circe.Circe
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
-    identityService: IdentityServiceInterface,
+    identityService: IdentityServiceOrStub,
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders
 )(implicit ec: ExecutionContext)

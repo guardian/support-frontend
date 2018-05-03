@@ -40,12 +40,16 @@ object IdentityServiceEnrichers {
 }
 
 object IdentityService {
-  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = new IdentityService(
-    apiUrl = config.apiUrl,
-    apiClientToken = config.apiClientToken
-  )
+  def apply(config: Identity)(implicit wsClient: WSClient): IdentityServiceOrStub = {
+    if (config.useStub) new StubIdentityService else {
+      new IdentityService(
+        apiUrl = config.apiUrl,
+        apiClientToken = config.apiClientToken
+      )
+    }
+  }
 }
-class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityServiceInterface {
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityServiceOrStub {
 
   import IdentityServiceEnrichers._
 
@@ -112,7 +116,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   }
 }
 
-trait IdentityServiceInterface {
+trait IdentityServiceOrStub {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
 }

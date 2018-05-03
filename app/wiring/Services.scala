@@ -16,7 +16,7 @@ trait Services {
 
   lazy val payPalServiceProvider = new PayPalServiceProvider(appConfig.payPalConfigProvider, wsClient)
 
-  lazy val identityService = if (appConfig.identity.useStub) new StubIdentityService else IdentityService(appConfig.identity)
+  lazy val identityService = IdentityService(appConfig.identity)
 
   lazy val goCardlessServiceProvider = new GoCardlessServiceProvider(appConfig.goCardlessConfigProvider)
 

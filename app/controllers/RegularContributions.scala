@@ -11,7 +11,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
-import services.{IdentityServiceInterface, MembersDataService, TestUserService}
+import services.{IdentityServiceOrStub, MembersDataService, TestUserService}
 import views.html.{monthlyContributions, thankYou}
 import io.circe.syntax._
 import monitoring.SafeLogger
@@ -24,7 +24,7 @@ class RegularContributions(
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
-    identityService: IdentityServiceInterface,
+    identityService: IdentityServiceOrStub,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,

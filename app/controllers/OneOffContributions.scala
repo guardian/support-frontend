@@ -6,7 +6,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
-import services.{IdentityServiceInterface, TestUserService}
+import services.{IdentityServiceOrStub, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
@@ -20,7 +20,7 @@ import views.html.thankYou
 class OneOffContributions(
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
-    identityService: IdentityServiceInterface,
+    identityService: IdentityServiceOrStub,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     contributionsStripeEndpoint: String,

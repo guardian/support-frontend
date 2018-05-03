@@ -8,7 +8,7 @@ import cats.implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StubIdentityService extends IdentityServiceInterface {
+class StubIdentityService extends IdentityServiceOrStub {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
     val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
     val stubTestUser = IdUser("123456", "fakeemail@gu.com", PublicFields(None), Some(privateFields), None)
