@@ -1,0 +1,53 @@
+.component-circles-introduction {
+  @include introduction;
+
+  .svg-circles-hero-desktop {
+    @include introduction-svg("desktop");
+  }
+
+  .svg-circles-hero-mobile-landscape {
+    @include introduction-svg("tablet");
+  }
+
+  .svg-circles-hero-mobile {
+    @include introduction-svg;
+  }
+
+  .component-highlights {
+    @include introduction-left-spacing;
+  }
+}
+
+.component-circles-introduction__content {
+  padding-bottom: 100px;
+
+  @include mq($from: mobileMedium) {
+    padding-bottom: 50px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    padding-bottom: $gu-v-spacing * 2.5;
+  }
+
+  @include mq($from: phablet) {
+    padding-bottom: $gu-v-spacing * 3.5;
+  }
+}
+
+.component-circles-introduction__heading {
+  padding-bottom: $gu-v-spacing;
+
+  @include mq($from: mobileLandscape) {
+    padding-bottom: $gu-v-spacing * 2;
+  }
+
+  @include introduction-left-spacing;
+
+  @include mq($from: leftCol) {
+    padding-bottom: $gu-v-spacing * 3;
+  }
+}
+
+.component-circles-introduction__heading-line {
+  display: block;
+}

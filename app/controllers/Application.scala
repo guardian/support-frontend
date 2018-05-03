@@ -109,15 +109,15 @@ class Application(
   }
 
   def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js, Some(stringsConfig.subscriptionsLandingDescription)))
+    Ok(views.html.main(title, id, js, description = Some(stringsConfig.subscriptionsLandingDescription)))
   }
 
   def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.react(title, id, js))
+    Ok(views.html.main(title, id, js))
   }
 
   def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { implicit request =>
-    Ok(views.html.react(title, id, js))
+    Ok(views.html.main(title, id, js))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

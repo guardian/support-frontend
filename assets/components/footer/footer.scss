@@ -7,7 +7,6 @@
 
   .component-footer__privacy-policy {
     text-decoration: none;
-    display: block;
     color: gu-colour(neutral-4);
     padding: 5px 0;
   }
@@ -16,7 +15,7 @@
     text-decoration: underline;
   }
 
-  .component-footer__copyright, .component-contrib-legal {
+  .component-footer__copyright, .component-contrib-legal, .component-footer__privacy-policy-text {
     font-weight: 400;
     display: block;
     padding: 3px 0;

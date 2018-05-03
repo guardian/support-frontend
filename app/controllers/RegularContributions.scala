@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityServiceOrStub, MembersDataService, TestUserService}
-import views.html.{monthlyContributions, thankYou}
+import views.html.monthlyContributions
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
@@ -126,27 +126,4 @@ class RegularContributions(
     case _ => Future.successful(None)
   }
 
-  def thankYouPage(): Action[AnyContent] =
-    AuthenticatedAction.async { implicit request =>
-      import cats.implicits._
-
-      val identityUser = identityService.getUser(request.user)
-
-      identityUser.value.foreach({
-        case Left(error) => SafeLogger.error(scrub"Failed to retrieve a user from identity. $error")
-        case Right(_) =>
-      })
-
-      identityUser.toOption.value.map { maybeUser =>
-        Ok(
-          thankYou(
-            title = "Support the Guardian | Thank You",
-            id = "contributions-thank-you-page",
-            js = "contributionsThankYouPage.js",
-            email = maybeUser.map(_.primaryEmailAddress),
-            showConfirmationEmailCopy = true
-          )
-        )
-      }
-    }
 }

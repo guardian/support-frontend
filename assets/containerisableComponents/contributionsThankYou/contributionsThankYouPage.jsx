@@ -7,7 +7,7 @@ import React from 'react';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import PageSection from 'components/pageSection/pageSection';
 import Footer from 'components/footer/footer';
-import CirclesIntroduction from 'components/circlesIntroduction/circlesIntroduction';
+import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
