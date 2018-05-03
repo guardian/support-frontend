@@ -4,18 +4,18 @@ import cats.data.EitherT
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
-import cats.implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class StubIdentityService extends IdentityServiceOrStub {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
     val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
-    val stubTestUser = IdUser("123456", "fakeemail@gu.com", PublicFields(None), Some(privateFields), None)
+    val stubTestUser: IdUser = IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None)
 
     SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
 
-    EitherT.right(Future.successful(stubTestUser)).ensure("nonsense")(id => true) //always return the iduser todo: how to actually do this properly
+    val stubResponse = if(true) Right(stubTestUser) else Left("Stubs should always give a right")
+    EitherT(Future.successful(stubResponse))
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
