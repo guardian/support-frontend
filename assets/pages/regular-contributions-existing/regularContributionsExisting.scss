@@ -1,4 +1,7 @@
 #regular-contributions-existing-page {
+	.multiline-divider {
+		@include multiline(4, gu-colour(garnett-neutral-4));
+	}
 
 	a {
 		color: gu-colour(neutral-1);
@@ -7,11 +10,12 @@
 	// ----- Headings
 
 	.existing {
-		background-color: darken(gu-colour(multimedia-main-2), 5%);
+		//background-color: darken(gu-colour(garnett-neutral-3), 5%);
+		background-color: gu-colour(garnett-neutral-5);
 	}
-
+    //
 	.existing__content {
-		background-color: gu-colour(multimedia-main-2);
+		background-color: gu-colour(garnett-neutral-5);
 		padding: $gu-v-spacing $gu-h-spacing;
 	}
 
@@ -23,55 +27,41 @@
 		}
 	}
 
-	.existing__heading {
-		font-family: $gu-egyptian-web;
-		color: gu-colour(neutral-1);
-		font-size: 28px;
-		line-height: 32px;
-		font-weight: bold;
+	.component-existing-contribution {
+      @include mq($from: desktop) {
+        //margin-left: 20%;
+        margin-right: 20%;
+      }
+
+	}
+
+	.component-existing-contribution__copy {
+		padding-top: $gu-v-spacing / 2;
+		padding-bottom: $gu-v-spacing * 2;
 
 		@include mq($from: desktop) {
-			font-size: 36px;
-			line-height: 40px;
+			padding-left: $gu-h-spacing;
 		}
 	}
 
-	.existing__subheading {
-		font-family: $gu-egyptian-web;
-		font-size: 28px;
-		line-height: 32px;
-		font-weight: lighter;
-		color: gu-colour(neutral-1);
-
-		@include mq($from: desktop) {
-			font-size: 36px;
-			line-height: 40px;
-		}
-	}
-
+	//todo I just copied this from marketingConsent.scss
 	.component-cta-link {
-		color: gu-colour(neutral-1);
-		background: transparent;
-		display: inline-block;
-		width: 200px;
-		border: 1px solid gu-colour(neutral-1);
-		font-weight: normal;
-		margin-bottom: $gu-v-spacing * 4;
-		margin-top: 2 * $gu-v-spacing;
+		background-color: gu-colour(garnett-neutral-1);
+		border: 1px solid gu-colour(garnett-neutral-1);
+		color: #fff;
+		height: 54px;
+		line-height: 54px;
+		padding: 0 30px 0 25px;
+		transition: background-color .3s;
+		margin-bottom: $gu-v-spacing * 3;
+		margin-top: $gu-v-spacing * 2;
 
-		svg {
-			fill: gu-colour(neutral-1);
-			// Fix for IE10.
-			left: 210px;
+		@include mq($from: mobileMedium) {
+			width: 300px;
 		}
 
 		&:hover {
-			border-color: #000;
-			color: #000;
-
-			svg {
-				fill: #000;
-			}
+			background-color: darken(gu-colour(garnett-neutral-1), 10%);
 		}
 	}
 
