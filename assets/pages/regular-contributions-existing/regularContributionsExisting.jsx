@@ -42,14 +42,14 @@ const content = (
                     Guardian - thank you. If you&#39;re feeling generous, there is
                     another way you can&nbsp;help.
                 </p>
+                <CtaLink
+                    ctaId="contribute-one-off-again"
+                    text="Make a one-off contribution"
+                    url={routes.oneOffContribCheckout}
+                    accessibilityHint="Further support the guardian over and above your current regular contribution"
+                />
             </PageSection>
         </div>
-        <CtaLink
-          ctaId="contribute-one-off-again"
-          text="Make a one-off contribution"
-          url={routes.oneOffContribCheckout}
-          accessibilityHint="Further support the guardian over and above your current regular contribution"
-        />
         <QuestionsContact />
       </div>
     </section>
