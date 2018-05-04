@@ -1,6 +1,7 @@
 package services
 
 import cats.data.EitherT
+import cats.implicits._
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
@@ -13,7 +14,7 @@ class StubIdentityService extends IdentityService {
     val stubTestUser: IdUser = IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None)
 
     SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
-    EitherT(Future.successful(Either.cond(true, stubTestUser, "This stub should always give a right")))
+    EitherT.rightT[Future, String](stubTestUser)
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
