@@ -34,9 +34,14 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 
 };
 
-const getAllQueryParamsWithExclusions = (excluded: string[]): Array<[string, string]> => Array
-  .from(new URL(window.location).searchParams.entries())
-  .filter(p => excluded.indexOf(p[0]) === -1);
+// Drop leading '?'
+// Turn into array of 'param=value'
+// Turn each param into array of '[param, value]'
+const getAllQueryParams = (): Array<[string, string]> =>
+  window.location.search.slice(1).split('&').map(a => a.split('='));
+
+const getAllQueryParamsWithExclusions = (excluded: string[]): Array<[string, string]> =>
+  getAllQueryParams().filter(p => excluded.indexOf(p[0]) === -1);
 
 const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?string): string => {
 
