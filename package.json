@@ -92,7 +92,7 @@
     "postcss": "^6.0.20",
     "postcss-loader": "^2.1.4",
     "postcss-pxtorem": "^4.0.1",
-    "preact": "^8.2.7",
+    "preact": "^8.2.9",
     "preact-compat": "^3.18.0",
     "redux-mock-store": "^1.5.1",
     "rimraf": "^2.6.2",
