@@ -7,13 +7,12 @@ import play.api.mvc.RequestHeader
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StubIdentityService extends IdentityServiceOrStub {
+class StubIdentityService extends IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
     val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
     val stubTestUser: IdUser = IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None)
 
     SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
-
     EitherT(Future.successful(Either.cond(true, stubTestUser, "This stub should always give a right")))
   }
 

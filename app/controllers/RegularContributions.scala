@@ -14,7 +14,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
-import services.{IdentityServiceOrStub, MembersDataService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,7 +24,7 @@ class RegularContributions(
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
-    identityService: IdentityServiceOrStub,
+    identityService: IdentityService,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,

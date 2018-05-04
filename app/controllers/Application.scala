@@ -5,7 +5,7 @@ import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
 import config.StringsConfig
 import play.api.mvc._
-import services.IdentityServiceOrStub
+import services.IdentityService
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext
 class Application(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
-    identityService: IdentityServiceOrStub,
+    identityService: IdentityService,
     components: ControllerComponents,
     contributionsPayPalEndpoint: String,
     stringsConfig: StringsConfig

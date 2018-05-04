@@ -19,7 +19,7 @@ import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import services.stepfunctions.RegularContributionsClient
-import services.{IdentityService, MembersDataService, TestUserService}
+import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config._
 import fixtures.TestCSRFComponents
@@ -120,8 +120,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         membersDataService
       }
 
-      def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): IdentityService = {
-        val m = mock[IdentityService]
+      def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
+        val m = mock[HttpIdentityService]
         when(
           m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
         ).thenReturn(EitherT.fromEither[Future](data._2))
@@ -130,7 +130,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
       def fakeRequestWith(
         actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-        identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+        identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
         membersDataService: MembersDataService = mock[MembersDataService]
       ): Future[Result] = {
         val stripeConfigProvider = mock[StripeConfigProvider]
