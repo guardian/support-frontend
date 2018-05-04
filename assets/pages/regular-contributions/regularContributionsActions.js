@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { PaymentMethod } from 'helpers/checkouts';
-import type { PayPalButtonType } from './components/regularContributionsPayment';
 
 
 // ----- Types ----- //
@@ -12,7 +11,6 @@ export type Action =
   | { type: 'CHECKOUT_PENDING', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_SUCCESS', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_ERROR', message: string }
-  | { type: 'SET_PAYPAL_BUTTON', value: PayPalButtonType }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'CREATING_CONTRIBUTOR' };
 
@@ -33,10 +31,6 @@ function checkoutError(specificError: ?string): Action {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
-function setPayPalButton(value: PayPalButtonType): Action {
-  return { type: 'SET_PAYPAL_BUTTON', value };
-}
-
 function setPayPalHasLoaded(): Action {
   return { type: 'SET_PAYPAL_HAS_LOADED' };
 }
@@ -51,7 +45,6 @@ export {
   checkoutPending,
   checkoutSuccess,
   checkoutError,
-  setPayPalButton,
   setPayPalHasLoaded,
   creatingContributor,
 };

@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`One-off Reducer should handle CHECKOUT_ERROR 1`] = `"NotSet"`;
-
 exports[`One-off Reducer should handle SET_PAYPAL_BUTTON 1`] = `null`;
 
 exports[`One-off Reducer should return the initial state 1`] = `
@@ -16,7 +14,6 @@ Object {
   "oneoffContrib": Object {
     "amount": 20,
     "error": null,
-    "payPalType": "NotSet",
   },
   "user": Object {
     "displayName": "",

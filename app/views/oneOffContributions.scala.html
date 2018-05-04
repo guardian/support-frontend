@@ -7,7 +7,6 @@
         title: String,
         id: String,
         js: String,
-        payPalButton: Boolean,
         defaultStripeConfig: StripeConfig,
         uatStripeConfig: StripeConfig,
         contributionsStripeEndpoint: String,
@@ -41,7 +40,6 @@
         };
         window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
         window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
-        window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
     </script>
 }
 

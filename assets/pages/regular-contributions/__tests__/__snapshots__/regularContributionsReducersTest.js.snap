@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`One-off Reducer should handle CHECKOUT_ERROR 1`] = `"NotSet"`;
-
-exports[`One-off Reducer should handle CHECKOUT_ERROR 2`] = `"Failed"`;
+exports[`One-off Reducer should handle CHECKOUT_ERROR 1`] = `"Failed"`;
 
 exports[`One-off Reducer should handle SET_PAYPAL_BUTTON 1`] = `null`;
 
@@ -33,7 +31,6 @@ Object {
     "amount": 20,
     "error": null,
     "payPalHasLoaded": false,
-    "payPalType": "NotSet",
     "paymentMethod": "GBP",
     "paymentStatus": "NotStarted",
     "pollCount": 0,

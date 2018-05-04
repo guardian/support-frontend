@@ -19,7 +19,6 @@ describe('One-off Reducer', () => {
     const newState = reducer(20, 'GBP')(undefined, action);
 
     expect(newState.oneoffContrib.error).toEqual(message);
-    expect(newState.oneoffContrib.payPalType).toMatchSnapshot();
   });
 
   it('should handle SET_PAYPAL_BUTTON', () => {
@@ -32,7 +31,6 @@ describe('One-off Reducer', () => {
 
     const newState = reducer(20, 'GBP')(undefined, action);
 
-    expect(newState.oneoffContrib.payPalType).toEqual(value);
     expect(newState.oneoffContrib.error).toMatchSnapshot();
   });
 
