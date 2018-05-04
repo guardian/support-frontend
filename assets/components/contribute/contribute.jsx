@@ -41,7 +41,7 @@ export default function Contribute(props: PropTypes) {
   return (
     <div className="component-contribute">
       <PageSection
-        modifierClass="contribute"
+        modifierClass={getModifier(props)}
         heading="Contribute"
         headingChildren={paymentImages}
       >
