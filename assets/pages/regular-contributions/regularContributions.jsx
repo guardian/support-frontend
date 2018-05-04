@@ -21,7 +21,6 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import RegularContributionsPage from './components/regularContributionsPage';
 import reducer from './regularContributionsReducers';
-import { setPayPalButton } from './regularContributionsActions';
 
 
 // ----- Page Startup ----- //
@@ -40,7 +39,6 @@ const store = pageInit(
 );
 
 user.init(store.dispatch);
-store.dispatch(setPayPalButton(window.guardian.payPalType));
 
 
 // ----- Render ----- //

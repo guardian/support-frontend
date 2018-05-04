@@ -10,7 +10,6 @@
   js: String,
   user: IdUser,
   uatMode: Boolean,
-  payPalButton: Boolean,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
@@ -31,7 +30,6 @@
                 lastName: "@lastName",
             }
         };
-        window.guardian.payPalType = @payPalButton? 'ExpressCheckout' : 'NotSet';
         window.guardian.stripeKeyDefaultCurrencies = {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
           uat: "@uatStripeConfig.forCurrency(None).publicKey"
