@@ -1,17 +1,15 @@
 .component-contribution-payment-ctas {
-  $button-height: 44px;
-  $button-width: 301px;
 
   .component-cta-link {
     background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);
-    height: $button-height;
-    line-height: $button-height;
+    height: $cta-height;
+    line-height: $cta-height;
     box-sizing: border-box;
     padding: 0 $gu-h-spacing;
 
     @include mq($from: mobileMedium) {
-      width: $button-width;
+      width: $cta-width;
     }
 
     &:hover {
@@ -41,11 +39,11 @@
   }
 
   .component-paypal-contribution-button {
-    height: $button-height;
+    height: $cta-height;
     width: 100%;
 
     @include mq($from: mobileMedium) {
-      width: $button-width;
+      width: $cta-width;
     }
 
     .svg-arrow-right-straight {
@@ -58,7 +56,7 @@
   .component-error-message {
     margin-top: 20px;
     box-sizing: border-box;
-    height: 54px;
+    height: $cta-height;
     width: 100%;
 
     @include mq($from: mobileMedium) {
