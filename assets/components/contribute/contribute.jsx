@@ -8,6 +8,7 @@ import PageSection from 'components/pageSection/pageSection';
 import Secure from 'components/secure/secure';
 import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import type { Node } from 'react';
+import type { Contrib as ContributionType } from 'helpers/contributions';
 
 
 // ----- Types ----- //
@@ -23,8 +24,9 @@ type PropTypes = {
 // ----- Component ----- //
 
 function getModifier(props: PropTypes) {
-  if (props.contributionType && props.paymentLogosVariant)
-    return `${props.contributionType.toLowerCase()}-${props.paymentLogosVariant}`;
+  if (props.paymentLogosVariant !== 'notintest') {
+    return `${String(props.contributionType.toLowerCase())}-${String(props.paymentLogosVariant)}`;
+  }
   return '';
 }
 

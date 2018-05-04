@@ -7,7 +7,6 @@ import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { inPaymentLogosTest } from 'helpers/abTests/helpers';
 import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
