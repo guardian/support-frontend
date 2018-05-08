@@ -1,26 +1,67 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: payment-api
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Tags"
+        Parameters:
+          - Stack
+          - App
+          - Stage
+      - Label:
+          default: "AMI"
+        Parameters:
+          - AMI
+      - Label:
+          default: "Used to fetch RiffRaff artifact"
+        Parameters:
+          - ProjectName
+          - ProjectVersion
+      - Label:
+          default: "Networking"
+        Parameters:
+          - SiteDomain
+          - VpcId
+          - Subnets
+          - KingsPlaceIpRange
+      - Label:
+          default: "Security Group IDs for Database Access"
+        Parameters:
+          - SecurityGroupForCodeDb
+          - SecurityGroupForProdDb
+      - Label:
+          default: "AWS Resources"
+        Parameters:
+          - EmailSqsQueueCodeArn
+          - EmailSqsQueueProdArn
+          - CertificateArn
+
 Parameters:
   VpcId:
     Type: String
-    Description: VpcId of your existing Virtual Private Cloud (VPC)
-    # membership-vpc
-    Default: vpc-e6e00183
+    Description: VpcId of your Virtual Private Cloud (VPC)
   Subnets:
     Type: CommaDelimitedList
     Description: The list of SubnetIds in your Virtual Private Cloud (VPC)
-    # membership public subnet A, membership public subnet B, membership public subnet C
-    Default: subnet-cb91ae8d, subnet-a7b74ac2, subnet-179e8063
+  KingsPlaceIpRange:
+    Description: CIDR description of the IP range of the Guardian office at Kings Place
+    Type: String
   Stack:
-    Description: Applied directly as a tag
+    Description: Should never change
     Type: String
-  Stage:
-    Description: Applied directly as a tag
-    Type: String
+    Default: support
   App:
-    Description: Applied directly as a tag
+    Description: Should never change
     Type: String
     Default: payment-api
+  Stage:
+    Description: Set by RiffRaff on each deploy
+    Type: String
+    AllowedValues:
+      - CODE
+      - PROD
   ProjectName:
     Description: >
       This must match the name key in your build.sbt.
@@ -31,39 +72,52 @@ Parameters:
     Description: This must match the version key in your build.sbt
     Type: String
     Default: 0.1
+  SiteDomain:
+    Description: Route53 CNAME for load balancer (pointed to by NS1 domain name)
+    Type: String
   AMI:
-    Description: AMI ID
+    Description: AMI ID. Set by RiffRaff on each deploy
     Type: String
-  EmailSqsQueueLiveArn:
-    Description: The ARN of the email SQS queue for prod
+  EmailSqsQueueCodeArn:
+    Description: >
+     For the PROD stack you still need to supply this,
+     because PROD instances need access to both PROD and CODE email queues.
     Type: String
-  EmailSqsQueueTestArn:
-    Description: The ARN of the email SQS queue for dev/testing
+  EmailSqsQueueProdArn:
+    Description: >
+      For the CODE stack you can leave this empty since it won't be used.
+      For the PROD stack you need to set it.
     Type: String
+  CertificateArn:
+    Description: The ARN of the HTTPS certificate
+    Type: String
+  SecurityGroupForCodeDb:
+    Description: >
+      For the PROD stack you still need to supply this,
+      because PROD instances need access to both PROD and CODE DBs.
+    Type: String
+  SecurityGroupForProdDb:
+    Description: >
+      For the CODE stack you can leave this empty since it won't be used.
+      For the PROD stack you need to set it.
+    Type: String
+
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
 
 Mappings:
-  Constants:
-    PostgresSecurityGroupId:
-      Value: sg-927bc3f5
   StageVariables:
     CODE:
       MaxInstances: 2
       MinInstances: 1
       InstanceType: t2.small
-      # Certificate for payment.code.dev-guardianapis.com
-      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/b22661b3-379d-4ddb-a26c-5ca9888a0eb2
-      SiteDomain: payment.code.dev-guardianapis.com.origin.membership.guardianapis.com
+
     PROD:
       MaxInstances: 6
       MinInstances: 3
       InstanceType: t2.small
-      # Certificate for payment.guardianapis.com
-      CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/b2eb2e0f-6885-4fb0-a10a-15fb848f1f66
-      SiteDomain: payment.guardianapis.com.origin.membership.guardianapis.com
 
 Resources:
   AutoScalingGroup:
@@ -92,8 +146,11 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
-      SecurityGroups:
-        - !Ref InstanceSecurityGroup
+      SecurityGroups: !If [CreateProdResources,
+        # The PROD instance needs access to PROD & CODE DBs because it can accept requests in test mode
+        [ !Ref InstanceSecurityGroup, !Ref SecurityGroupForProdDb, !Ref SecurityGroupForCodeDb ],
+        [ !Ref InstanceSecurityGroup, !Ref SecurityGroupForCodeDb ]
+      ]
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: true
@@ -149,9 +206,11 @@ Resources:
                 Action:
                   - sqs:GetQueueUrl
                   - sqs:SendMessage
-                Resource:
-                  - !Ref EmailSqsQueueLiveArn
-                  - !Ref EmailSqsQueueTestArn
+                Resource: !If [CreateProdResources,
+                  # The PROD instance needs access to PROD & CODE email queues because it can accept requests in test mode
+                  [ !Ref EmailSqsQueueCodeArn, !Ref EmailSqsQueueProdArn],
+                  [ !Ref EmailSqsQueueCodeArn]
+                ]
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -185,7 +244,7 @@ Resources:
       LoadBalancerArn:
         Ref: ElasticLoadBalancer
       Certificates:
-        - CertificateArn: !FindInMap [ StageVariables, !Ref Stage, CertificateARN ]
+        - CertificateArn: !Ref CertificateArn
       Port: 443
       Protocol: HTTPS
 
@@ -233,13 +292,13 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 77.91.248.0/21
+          CidrIp: !Ref KingsPlaceIpRange
           # the below rule is for debug purposes, allowing us to make
           # requests from Guardian IPs directly to an app running on an instance
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
-          CidrIp: 77.91.248.0/21
+          CidrIp: !Ref KingsPlaceIpRange
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
@@ -252,10 +311,6 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
-          SourceSecurityGroupId: !FindInMap [ Constants, PostgresSecurityGroupId, Value ]
-        - IpProtocol: udp
-          FromPort: 123
-          ToPort: 123
           CidrIp: 0.0.0.0/0
 
   PaymentAPILogGroup:
@@ -269,34 +324,34 @@ Resources:
     Properties:
       HostedZoneId: /hostedzone/Z1E4V12LQGXFEC
       Comment: CNAME for AWS ELB
-      Name: !FindInMap [StageVariables, !Ref Stage, SiteDomain]
+      Name: !Ref SiteDomain
       Type: CNAME
       TTL: 120
       ResourceRecords:
       - !GetAtt ElasticLoadBalancer.DNSName
-
-  NoHealthyInstancesAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
-      MetricName: HealthyHostCount
-      Namespace: AWS/ApplicationELB
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
-        - Name: TargetGroup
-          Value: !GetAtt TargetGroup.TargetGroupFullName
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Threshold: 0.5
-      Period: 60
-      EvaluationPeriods: 2
-      Statistic: Average
-    DependsOn:
-      - TargetGroup
-      - ElasticLoadBalancer
+#  TODO: enable when support-frontend integrates with the app
+#  NoHealthyInstancesAlarm:
+#    Type: AWS::CloudWatch::Alarm
+#    Condition: CreateProdResources
+#    Properties:
+#      AlarmActions:
+#      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+#      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
+#      MetricName: HealthyHostCount
+#      Namespace: AWS/ApplicationELB
+#      Dimensions:
+#        - Name: LoadBalancer
+#          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+#        - Name: TargetGroup
+#          Value: !GetAtt TargetGroup.TargetGroupFullName
+#      ComparisonOperator: LessThanOrEqualToThreshold
+#      Threshold: 0.5
+#      Period: 60
+#      EvaluationPeriods: 2
+#      Statistic: Average
+#    DependsOn:
+#      - TargetGroup
+#      - ElasticLoadBalancer
 
   High5XXRateAlarm:
     Type: AWS::CloudWatch::Alarm
