@@ -6,6 +6,7 @@ import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.gu.acquisition.services.DefaultOphanService
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder.ops._
 import com.typesafe.scalalogging.StrictLogging
 import conf.OphanConfig
 import model.{DefaultThreadPool, InitializationError, InitializationResult}
@@ -17,7 +18,7 @@ class OphanService(val ophanClient: DefaultOphanService)(implicit pool: DefaultT
 
   def submitAcquisition[A : AcquisitionSubmissionBuilder](acquisition: A):
   EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
-    logger.info(s"Sending acquisition event to ophan: ${acquisition.toString}")
+    logger.info(s"Sending acquisition event to ophan: ${acquisition.asAcquisitionSubmission}")
     ophanClient.submit(acquisition).leftMap { error =>
       logger.error("Error sending acquisition.", error)
       error
