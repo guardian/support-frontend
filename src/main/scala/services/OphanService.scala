@@ -17,8 +17,9 @@ class OphanService(val ophanClient: DefaultOphanService)(implicit pool: DefaultT
 
   def submitAcquisition[A : AcquisitionSubmissionBuilder](acquisition: A):
   EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
-    ophanClient.submit(acquisition).leftMap{ error =>
-      logger.error("Error sending acquisition. Error",error)
+    logger.info(s"Sending acquisition event to ophan: ${acquisition.toString}")
+    ophanClient.submit(acquisition).leftMap { error =>
+      logger.error("Error sending acquisition.", error)
       error
     }
   }
@@ -30,7 +31,7 @@ object OphanService {
       implicit val client = new OkHttpClient()
       new OphanService(new DefaultOphanService(HttpUrl.parse(config.ophanEndpoint)))
     }.leftMap { err =>
-      InitializationError(s"unable to instanciate OphanService for config: ${config}. Error trace: ${err.getMessage}")
+      InitializationError(s"unable to instantiate OphanService for config: ${config}. Error trace: ${err.getMessage}")
     }
   }
 }

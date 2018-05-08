@@ -264,6 +264,9 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
       VpcId: !Ref VpcId
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
     DependsOn:
     - ElasticLoadBalancer
 
@@ -329,29 +332,29 @@ Resources:
       TTL: 120
       ResourceRecords:
       - !GetAtt ElasticLoadBalancer.DNSName
-#  TODO: enable when support-frontend integrates with the app
-#  NoHealthyInstancesAlarm:
-#    Type: AWS::CloudWatch::Alarm
-#    Condition: CreateProdResources
-#    Properties:
-#      AlarmActions:
-#      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-#      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
-#      MetricName: HealthyHostCount
-#      Namespace: AWS/ApplicationELB
-#      Dimensions:
-#        - Name: LoadBalancer
-#          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
-#        - Name: TargetGroup
-#          Value: !GetAtt TargetGroup.TargetGroupFullName
-#      ComparisonOperator: LessThanOrEqualToThreshold
-#      Threshold: 0.5
-#      Period: 60
-#      EvaluationPeriods: 2
-#      Statistic: Average
-#    DependsOn:
-#      - TargetGroup
-#      - ElasticLoadBalancer
+
+  NoHealthyInstancesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
+      MetricName: HealthyHostCount
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0.5
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Average
+    DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
 
   High5XXRateAlarm:
     Type: AWS::CloudWatch::Alarm
