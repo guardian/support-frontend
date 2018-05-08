@@ -5,7 +5,7 @@
 import { connect } from 'react-redux';
 
 import Contribute from 'components/contribute/contribute';
-import { getPaymentLogosTestVariant } from 'helpers/abTests/helpers';
+import { getPaymentLogosTestVariant } from 'helpers/abTests/abtest';
 import type { State } from '../supportLandingReducer';
 
 
