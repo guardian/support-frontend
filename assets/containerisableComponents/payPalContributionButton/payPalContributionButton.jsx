@@ -69,7 +69,7 @@ function PayPalContributionButton(props: PropTypes) {
       onClick={payWithPayPal(props)}
     >
       {props.inPaymentLogosTest ? null : <SvgPaypalPLogo />}
-      <span>{props.buttonText}</span>
+      <span className="component-paypal-contribution-button__text">{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>
   );

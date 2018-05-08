@@ -25,7 +25,7 @@ type PropTypes = {
 
 function getModifier(props: PropTypes) {
   if (props.paymentLogosVariant !== 'notintest') {
-    return `${String(props.contributionType.toLowerCase())}-${String(props.paymentLogosVariant)}`;
+    return `${String(props.contributionType.toLowerCase())}--one${String(props.paymentLogosVariant)}`;
   }
   return '';
 }

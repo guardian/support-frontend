@@ -112,7 +112,7 @@ function OneOffCta(props: {
     currency: props.currency.iso,
   });
 
-  const className = props.isInPaymentLogosVariant ? 'contribute-one-off--variant' : 'contribute-one-off';
+  const className = props.isInPaymentLogosVariant ? 'contribute-one-off-variant' : 'contribute-one-off';
 
   return (
     <CtaLink

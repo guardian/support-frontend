@@ -14,7 +14,7 @@
   width: 100%;
   margin-top: 20px;
 
-  span {
+  .component-paypal-contribution-button__text {
     padding-left: $gu-h-spacing * 2;
   }
 
@@ -55,7 +55,7 @@
   &:hover {
     background-color: darken(gu-colour(news-garnett-highlight), 5%);
   }
-  span {
+  .component-paypal-contribution-button__text {
     padding-left: 0;
   }
 }

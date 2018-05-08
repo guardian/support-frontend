@@ -15,7 +15,6 @@ function inPaymentLogosTest(participations: Participations) {
 }
 
 export {
-  getVariantForTest,
   getPaymentLogosTestVariant,
   inPaymentLogosTest,
 };
