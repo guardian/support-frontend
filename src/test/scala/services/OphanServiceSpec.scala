@@ -28,8 +28,7 @@ class OphanServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
   it should "return an error if the config is invalid" in new OphanServiceTestFixture {
     val result = OphanService.fromOphanConfig(OphanConfig(null))
-    result shouldBe(Invalid(InitializationError("unable to instanciate OphanService for config: " +
-      "OphanConfig(null). Error trace: null")))
+    result shouldBe an [Invalid[InitializationError]]
   }
 
   it should "return an error while submitting acquisition if the client throws an exception" in new OphanServiceTestFixture {
