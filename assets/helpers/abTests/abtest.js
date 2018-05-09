@@ -148,10 +148,10 @@ function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): 
       return;
     }
 
-    if (test.customSegmentCondition && !test.customSegmentCondition()) {
-      participations[testId] = notintest;
-    } else if (testId in currentParticipation) {
+    if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
+    } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
+      participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
