@@ -1,16 +1,6 @@
 #regular-contributions-existing-page {
-	.multiline-divider {
-		@include multiline(4, gu-colour(garnett-neutral-4));
-	}
-
-	.component-existing-contribution {
-
-      .component-page-section__heading {
-        font-family: $gu-egyptian-web;
-        font-size: 24px;
-        line-height: 1.17;
-        font-weight: bold;
-      }
+	.component-page-section--existing-contribution {
+      @include multiline-top-border;
 
       .component-page-section__header {
         position: relative;
@@ -33,7 +23,7 @@
 
 	}
 
-	.component-existing-contribution__copy {
+	.existing-contribution-copy {
 		padding-top: $gu-v-spacing / 2;
 		padding-bottom: $gu-v-spacing * 2;
 
