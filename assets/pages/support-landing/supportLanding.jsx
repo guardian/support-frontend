@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 // React components
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
-import Contribute from 'components/contribute/contribute';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 
@@ -26,6 +25,7 @@ import pageReducer from './supportLandingReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
+import ContributeContainer from './components/contributeContainer';
 
 
 // ----- Setup ----- //
@@ -55,14 +55,14 @@ const content = (
         highlights={['Support', 'The Guardian']}
       />
       <section id={supporterSectionId}>
-        <Contribute
+        <ContributeContainer
           copy="Your contribution funds and supports The Guardian's journalism."
         >
           <ContributionSelectionContainer />
           <ContributionPaymentCtasContainer
             PayPalButton={PayPalContributionButtonContainer}
           />
-        </Contribute>
+        </ContributeContainer>
         <ThreeSubscriptionsContainer />
       </section>
       <WhySupport />

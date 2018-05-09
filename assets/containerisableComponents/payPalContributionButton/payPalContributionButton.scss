@@ -7,7 +7,6 @@
   display: block;
   font-family: $gu-sans-web;
   font-size: 14px;
-  font-weight: bold;
   height: $gu-v-spacing * 4;
   padding-left: $gu-h-spacing;
   position: relative;
@@ -15,7 +14,7 @@
   width: 100%;
   margin-top: 20px;
 
-  span {
+  .component-paypal-contribution-button__text {
     padding-left: $gu-h-spacing * 2;
   }
 
@@ -46,5 +45,17 @@
     .svg-arrow-right-straight {
       fill: #000;
     }
+  }
+}
+
+// AB test paymentLogosTest
+.component-paypal-contribution-button--variant {
+  border: none;
+  background-color: gu-colour(news-garnett-highlight);
+  &:hover {
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
+  }
+  .component-paypal-contribution-button__text {
+    padding-left: 0;
   }
 }
