@@ -9,7 +9,7 @@ export default function SvgPaypalLogo() {
     <svg
       className="svg-paypal-logo"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 37 24"
+      viewBox="0 0 36 24"
       preserveAspectRatio="xMinYMid"
     >
       <g fillRule="nonzero" fill="none">

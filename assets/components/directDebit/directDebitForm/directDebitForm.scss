@@ -139,7 +139,6 @@
   color: gu-colour(neutral-1);
   font-family: $gu-text-sans-web;
   font-size: 14px;
-  font-weight: bold;
   line-height: 3;
   text-align: left;
   float: left;
@@ -155,7 +154,7 @@
   border-radius: 100px;
   cursor: pointer;
   position: relative;
-  height: 54px;
+  height: $cta-height;
   margin-top: 20px;
   margin-bottom: 10px;
 
