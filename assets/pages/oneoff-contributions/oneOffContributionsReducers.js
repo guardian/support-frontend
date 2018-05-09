@@ -12,7 +12,6 @@ import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
 
-import type { PayPalButtonType } from './components/oneoffContributionsPayment';
 import type { Action } from './oneoffContributionsActions';
 
 
@@ -21,7 +20,6 @@ import type { Action } from './oneoffContributionsActions';
 export type State = {
   amount: number,
   error: ?string,
-  payPalType: PayPalButtonType,
 };
 
 export type CombinedState = {
@@ -43,7 +41,6 @@ function createOneOffContribReducer(amount: number) {
   const initialState: State = {
     amount,
     error: null,
-    payPalType: 'NotSet',
   };
 
   return function oneOffContribReducer(state: State = initialState, action: Action): State {
@@ -52,9 +49,6 @@ function createOneOffContribReducer(amount: number) {
 
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
-
-      case 'SET_PAYPAL_BUTTON':
-        return Object.assign({}, state, { payPalType: action.value });
 
       default:
         return state;

@@ -6,7 +6,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
@@ -23,7 +23,7 @@ class OneOffContributions(
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     contributionsStripeEndpoint: String,
-    contributionsPayPalEndpoint: String,
+    paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
@@ -39,27 +39,26 @@ class OneOffContributions(
     )
   }
 
-  private def formHtml(idUser: Option[IdUser], paypal: Option[Boolean])(implicit request: RequestHeader) =
+  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader) =
     oneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
-      payPalButton = paypal.getOrElse(true),
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = contributionsPayPalEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
 
-  def displayForm(paypal: Option[Boolean]): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
+  def displayForm(): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
     request.user.fold {
-      Future.successful(Ok(formHtml(None, paypal)))
+      Future.successful(Ok(formHtml(None)))
     } { minimalUser =>
       {
         identityService.getUser(minimalUser).fold(
-          _ => Ok(formHtml(None, paypal)),
-          user => Ok(formHtml(Some(user), paypal))
+          _ => Ok(formHtml(None)),
+          user => Ok(formHtml(Some(user)))
         )
       }
     }

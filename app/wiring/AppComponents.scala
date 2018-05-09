@@ -47,7 +47,8 @@ trait AppComponents extends PlayComponents
     oneOffContributions,
     loginController,
     testUsersController,
-    payPalController,
+    payPalNvpController,
+    payPalRestController,
     directDebitController,
     assetController
   )

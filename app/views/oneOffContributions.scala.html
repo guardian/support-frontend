@@ -7,11 +7,10 @@
         title: String,
         id: String,
         js: String,
-        payPalButton: Boolean,
         defaultStripeConfig: StripeConfig,
         uatStripeConfig: StripeConfig,
         contributionsStripeEndpoint: String,
-        contributionsPayPalEndpoint: String,
+        paymentApiPayPalEndpoint: String,
         idUser: Option[IdUser]
 )(implicit assets: AssetsResolver, request: RequestHeader)
 
@@ -40,8 +39,8 @@
           uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         };
         window.guardian.contributionsStripeEndpoint = "@contributionsStripeEndpoint";
-        window.guardian.contributionsPayPalEndpoint = "@contributionsPayPalEndpoint";
-        window.guardian.payPalType = @payPalButton ? 'ContributionsCheckout' : 'NotSet';
+        window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
     </script>
 }
 

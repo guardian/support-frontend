@@ -26,8 +26,6 @@ import { emptyInputField } from '../../../helpers/utilities';
 
 export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
-export type PayPalButtonType = 'ExpressCheckout' | 'NotSet';
-
 type PropTypes = {
   dispatch: Function,
   email: string,

@@ -124,10 +124,10 @@
   }
 
   .component-cta-link {
-    height: 54px;
+    height: $cta-height;
     padding: 0 30px 0 25px;
     font-size: 14px;
-    line-height: 54px;
+    line-height: $cta-height;
     background-color: transparent;
     transition: background-color .3s;
   }
@@ -137,7 +137,7 @@
     border: 1px solid gu-colour(lifestyle-garnett-main-1);
 
     .svg-arrow-right-straight {
-      fill: gu-colour(lifestyle-garnett-main-1); 
+      fill: gu-colour(lifestyle-garnett-main-1);
     }
 
     &:hover {
@@ -155,7 +155,7 @@
     border: 1px solid gu-colour(sport-garnett-media-main-1);
 
     .svg-arrow-right-straight {
-      fill: gu-colour(sport-garnett-media-main-1); 
+      fill: gu-colour(sport-garnett-media-main-1);
     }
 
     &:hover {
@@ -173,7 +173,7 @@
     border: 1px solid gu-colour(opinion-garnett-main-1);
 
     .svg-arrow-right-straight {
-      fill: gu-colour(opinion-garnett-main-1); 
+      fill: gu-colour(opinion-garnett-main-1);
     }
 
     &:hover {
@@ -185,7 +185,7 @@
       }
     }
   }
-  
+
   .svg-arrow-right-straight {
     fill: gu-colour(garnett-neutral-1);
     height: 35%;

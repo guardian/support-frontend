@@ -75,12 +75,16 @@ function addQueryParamsToURL(
 
 }
 
+function getOrigin(): string {
+  const loc = window.location;
+
+  return window.location.origin ||
+    `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
+}
+
 // Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
 function getBaseDomain(): Domain {
-
-  const loc = window.location;
-  const origin = window.location.origin ||
-    `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
+  const origin = getOrigin();
 
   if (origin.includes(DOMAINS.DEV)) {
     return DOMAINS.DEV;
@@ -89,9 +93,11 @@ function getBaseDomain(): Domain {
   }
 
   return DOMAINS.PROD;
-
 }
 
+function getAbsoluteURL(path: string = ''): string {
+  return `${getOrigin()}${path}`;
+}
 
 // ----- Exports ----- //
 
@@ -101,4 +107,5 @@ export {
   addQueryParamToURL,
   getBaseDomain,
   addQueryParamsToURL,
+  getAbsoluteURL,
 };

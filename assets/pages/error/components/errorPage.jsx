@@ -24,7 +24,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function ErrorContent(props: PropTypes) {
+export default function ErrorPage(props: PropTypes) {
 
   return (
     <div className="component-error-content gu-content">
@@ -77,6 +77,6 @@ function ReportLink(props: { show: boolean }) {
 
 // ----- Default Props ----- //
 
-ErrorContent.defaultProps = {
+ErrorPage.defaultProps = {
   reportLink: false,
 };

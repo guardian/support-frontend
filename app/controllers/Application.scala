@@ -5,7 +5,7 @@ import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
 import config.StringsConfig
 import play.api.mvc._
-import services.IdentityService
+import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -16,7 +16,7 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    contributionsPayPalEndpoint: String,
+    paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
@@ -92,7 +92,7 @@ class Application(
       id = "support-landing-page",
       js = "supportLandingPage.js",
       css = "supportLandingPageStyles.css",
-      contributionsPayPalEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
@@ -104,7 +104,7 @@ class Application(
       id,
       js = "contributionsLandingPage.js",
       css = "contributionsLandingPageStyles.css",
-      contributionsPayPalEndpoint
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint
     ))
   }
 
@@ -123,5 +123,4 @@ class Application(
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
-
 }

@@ -41,20 +41,20 @@ GET  /int/contribute                                controllers.Application.cont
 GET  /nz/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-nz")
 GET  /ca/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-ca")
 
-GET  /contribute/recurring                          controllers.RegularContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/recurring                          controllers.RegularContributions.displayForm()
+GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm()
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm()
 
 # this endpoint should be removed once identity remove
 # the need for a client token
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
 
 
-GET  /contribute/one-off                            controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
-GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm(paypal: Option[Boolean])
+GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
+GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm()
 GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 # ----- Subscriptions ----- #
@@ -76,13 +76,17 @@ GET  /logout                                        controllers.Login.logout
 GET  /test-users                                    controllers.TestUsersManagement.createTestUser
 
 
-# ----- PayPal (NVP Endpoints) ----- #
+# ----- PayPal (Recurring Endpoints) ----- #
 
-POST /paypal/setup-payment                          controllers.PayPal.setupPayment
-POST /paypal/create-agreement                       controllers.PayPal.createAgreement
-GET  /paypal/return                                 controllers.PayPal.returnUrl
-GET  /paypal/cancel                                 controllers.PayPal.cancelUrl
-GET  /paypal/execute                                controllers.PayPal.execute
+POST /paypal/setup-payment                          controllers.PayPalRegular.setupPayment
+POST /paypal/create-agreement                       controllers.PayPalRegular.createAgreement
+GET  /paypal/return                                 controllers.PayPalRegular.returnUrl
+GET  /paypal/cancel                                 controllers.PayPalRegular.cancelUrl
+
+# ----- PayPal (One-off Endpoints) ----- #
+
+GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
+GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
 
 # ----- Direct Debit ----- #
 

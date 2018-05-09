@@ -11,7 +11,7 @@ import services.touchpoint.TouchpointService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PayPalService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService {
+class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService {
 
   val defaultNVPParams = Map(
     "USER" -> apiConfig.user,
