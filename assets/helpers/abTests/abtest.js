@@ -31,7 +31,7 @@ type OphanABPayload = {
 };
 
 type Audiences = {
-  [IsoCountry]: {
+  [IsoCountry | 'ALL']: {
     offset: number,
     size: number,
   },
@@ -106,7 +106,7 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
     return false;
   }
 
-  const audience = audiences[country];
+  const audience = audiences[country] || audiences.ALL;
 
   if (!audience) {
     return false;
@@ -148,10 +148,10 @@ function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): 
       return;
     }
 
-    if (test.customSegmentCondition && !test.customSegmentCondition()) {
-      participations[testId] = notintest;
-    } else if (testId in currentParticipation) {
+    if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
+    } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
+      participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
