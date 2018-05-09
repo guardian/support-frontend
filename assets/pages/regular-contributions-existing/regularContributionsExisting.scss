@@ -24,32 +24,34 @@
 	}
 
 	.existing-contribution-copy {
-		padding-top: $gu-v-spacing / 2;
-		padding-bottom: $gu-v-spacing * 2;
+      padding-top: $gu-v-spacing / 2;
+      padding-bottom: $gu-v-spacing * 2;
 
-		@include mq($from: desktop) {
-			padding-left: $gu-h-spacing;
-		}
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
 	}
 
 	.component-cta-link {
-		background-color: gu-colour(garnett-neutral-1);
-		border: 1px solid gu-colour(garnett-neutral-1);
-		color: #fff;
-		height: 54px;
-		line-height: 54px;
-		padding: 0 30px 0 25px;
-		transition: background-color .3s;
-		margin-bottom: $gu-v-spacing * 3;
-		margin-top: $gu-v-spacing * 2;
+      background-color: gu-colour(garnett-neutral-1);
+      border: 1px solid gu-colour(garnett-neutral-1);
+      color: #fff;
+      height: 54px;
+      line-height: 54px;
+      padding: 0 30px 0 25px;
+      transition: background-color .3s;
+      margin-bottom: $gu-v-spacing * 3;
+      margin-top: $gu-v-spacing * 2;
 
-		@include mq($from: mobileMedium) {
-			width: 300px;
-		}
+      @include mq($from: mobileMedium) {
+        width: 300px;
+      }
 
-		&:hover {
-			background-color: darken(gu-colour(garnett-neutral-1), 10%);
-		}
+      &:hover {
+        background-color: darken(gu-colour(garnett-neutral-1), 10%);
+      }
 	}
-
+  .component-questions-contact {
+    @include gu-content-filler;
+  }
 }
