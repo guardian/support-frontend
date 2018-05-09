@@ -39,7 +39,7 @@ object IdentityServiceEnrichers {
   }
 }
 
-object HttpIdentityService {
+object IdentityService {
   def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = {
     if (config.useStub) new StubIdentityService else {
       new HttpIdentityService(
