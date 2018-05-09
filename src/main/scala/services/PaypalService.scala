@@ -81,7 +81,8 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
       } else {
         val msg = "Webhook event is not valid. " +
           s"Does the hook id from your config (${config.hookId}) match the id received from PayPal? " +
-          s"PayPal sent: $body"
+          s"If not, check in the PayPal developer console for the correct hook id for your app. " +
+          s"PayPal sent headers: $headers, body: $body"
 
         throw new Exception(msg)
       }
