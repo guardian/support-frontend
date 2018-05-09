@@ -17,7 +17,7 @@ export const tests: Tests = {
       },
     },
     customSegmentCondition: () => window.matchMedia('(min-width: 980px)').matches, // matches the 'desktop' breakpoint defined in breakpoints.scss
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 0,
   },
