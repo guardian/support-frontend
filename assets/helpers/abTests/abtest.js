@@ -31,7 +31,7 @@ type OphanABPayload = {
 };
 
 type Audiences = {
-  [IsoCountry]: {
+  [IsoCountry | 'ALL']: {
     offset: number,
     size: number,
   },
@@ -106,7 +106,7 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
     return false;
   }
 
-  const audience = audiences[country];
+  const audience = audiences[country] || audiences.ALL;
 
   if (!audience) {
     return false;
