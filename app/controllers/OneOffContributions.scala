@@ -6,7 +6,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
@@ -23,7 +23,7 @@ class OneOffContributions(
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     contributionsStripeEndpoint: String,
-    contributionsPayPalEndpoint: String,
+    paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
@@ -47,7 +47,7 @@ class OneOffContributions(
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       contributionsStripeEndpoint = contributionsStripeEndpoint,
-      contributionsPayPalEndpoint = contributionsPayPalEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
 

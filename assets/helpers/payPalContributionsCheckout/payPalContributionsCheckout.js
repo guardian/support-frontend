@@ -4,46 +4,82 @@
 
 import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamToURL } from 'helpers/url';
+import { addQueryParamToURL, getAbsoluteURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
-type PayPalPostData = {|
-  countryGroup: string,
-  amount: number,
-  cmp: ?string,
-  intCmp: ?string,
-  refererPageviewId: ?string,
-  refererUrl: ?string,
-  ophanPageviewId: string,
-  ophanBrowserId: ?string,
-  ophanVisitId: ?string,
-  supportRedirect: boolean,
+type AcquisitionData = {|
+  pageviewId: string,
+  visitId: ?string,
+  browserId: ?string,
+  platform: ?string,
+  referrerPageviewId: ?string,
+  referrerUrl: ?string,
+  campaignCodes: ?string[],
   componentId: ?string,
   componentType: ?string,
   source: ?string,
-  refererAbTest: ?AcquisitionABTest,
-  nativeAbTests: ?AcquisitionABTest[],
+  abTests: ?AcquisitionABTest[],
+|}
+
+type PayPalPaymentAPIPostData = {|
+  currency: IsoCurrency,
+  amount: number,
+  returnURL: string,
+  cancelURL: string,
 |}
 
 // ----- Functions ----- //
 
-function payalContributionEndpoint(testUser) {
+function payPalContributionEndpoint(testUser) {
   if (testUser) {
     return addQueryParamToURL(
-      window.guardian.contributionsPayPalEndpoint,
-      '_test_username',
-      testUser,
+      window.guardian.paymentApiPayPalEndpoint,
+      'mode',
+      'test',
     );
   }
 
-  return window.guardian.contributionsPayPalEndpoint;
+  return window.guardian.paymentApiPayPalEndpoint;
+}
+
+function storeAcquisitionData(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+): void {
+  const ophanIds: OphanIds = getOphanIds();
+
+  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+  const campaignCodes = referrerAcquisitionData.campaignCode ?
+    [referrerAcquisitionData.campaignCode] : [];
+
+  if (referrerAcquisitionData.abTest) {
+    abTests.push(referrerAcquisitionData.abTest);
+  }
+
+  const acquisitionData: AcquisitionData = {
+    platform: 'SUPPORT',
+    visitId: ophanIds.visitId,
+    browserId: ophanIds.browserId,
+    pageviewId: ophanIds.pageviewId,
+    referrerPageviewId: referrerAcquisitionData.referrerPageviewId,
+    referrerUrl: referrerAcquisitionData.referrerUrl,
+    componentId: referrerAcquisitionData.componentId,
+    campaignCodes,
+    componentType: referrerAcquisitionData.componentType,
+    source: referrerAcquisitionData.source,
+    abTests,
+  };
+
+  cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
 }
 
 export function paypalContributionsRedirect(
@@ -55,24 +91,13 @@ export function paypalContributionsRedirect(
   nativeAbParticipations: Participations,
 ): void {
 
-  const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
-  const ophanIds: OphanIds = getOphanIds();
-  const postData: PayPalPostData = {
-    countryGroup,
+  storeAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  const { currency } = countryGroups[countryGroupId];
+  const postData: PayPalPaymentAPIPostData = {
     amount,
-    cmp: null,
-    intCmp: referrerAcquisitionData.campaignCode,
-    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
-    refererUrl: referrerAcquisitionData.referrerUrl,
-    ophanPageviewId: ophanIds.pageviewId,
-    ophanBrowserId: ophanIds.browserId,
-    ophanVisitId: ophanIds.visitId,
-    supportRedirect: true,
-    componentId: referrerAcquisitionData.componentId,
-    componentType: referrerAcquisitionData.componentType,
-    source: referrerAcquisitionData.source,
-    refererAbTest: referrerAcquisitionData.abTest,
-    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+    currency,
+    returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+    cancelURL: getAbsoluteURL(routes.payPalRestCancelURL),
   };
 
   const fetchOptions: Object = {
@@ -85,13 +110,13 @@ export function paypalContributionsRedirect(
     body: JSON.stringify(postData),
   };
 
-  fetch(payalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
+  fetch(payPalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
       throw response;
     })
-    .then((res) => { window.location = res.approvalUrl; })
+    .then((res) => { window.location = res.data.approvalUrl; })
     .catch(() => errorHandler('Sorry, an error occurred, please try again or use another payment method.'));
 }
