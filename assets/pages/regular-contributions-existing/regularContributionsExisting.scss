@@ -1,56 +1,67 @@
 #regular-contributions-existing-page {
-	.component-page-section--existing-contribution {
-      @include multiline-top-border;
 
-      .component-page-section__header {
-        position: relative;
+  .component-page-section--existing-contribution {
+    @include multiline-top-border;
 
-        @include dropline;
-      }
+    .component-page-section__header {
+      position: relative;
+      @include dropline;
+    }
 
-      .component-page-section__body {
-        padding-top: $gu-v-spacing / 2;
-        padding-bottom: $gu-v-spacing * 2;
-
-        @include mq($from: desktop) {
-          padding-left: $gu-h-spacing;
-        }
-
-        @include mq($from: phablet) {
-          width: 500px;
-        }
-      }
-
-	}
-
-	.existing-contribution-copy {
+    .component-page-section__body {
       padding-top: $gu-v-spacing / 2;
       padding-bottom: $gu-v-spacing * 2;
 
       @include mq($from: desktop) {
         padding-left: $gu-h-spacing;
       }
-	}
 
-	.component-cta-link {
-      background-color: gu-colour(garnett-neutral-1);
-      border: 1px solid gu-colour(garnett-neutral-1);
-      color: #fff;
-      height: 54px;
-      line-height: 54px;
-      padding: 0 30px 0 25px;
-      transition: background-color .3s;
-      margin-bottom: $gu-v-spacing * 3;
-      margin-top: $gu-v-spacing * 2;
-
-      @include mq($from: mobileMedium) {
-        width: 300px;
+      @include mq($from: phablet) {
+        width: 500px;
       }
+    }
+  }
 
-      &:hover {
-        background-color: darken(gu-colour(garnett-neutral-1), 10%);
-      }
-	}
+  .existing-contribution-copy {
+    padding-top: $gu-v-spacing / 2;
+    padding-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+
+  .component-cta-link {
+    background-color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    color: #fff;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing * 2;
+
+    @include mq($from: mobileMedium) {
+      width: 300px;
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(garnett-neutral-1), 10%);
+    }
+  }
+
+  .svg-arrow-right-straight {
+    height: 35%;
+    top: 17px;
+    right: 13px;
+
+    // Fix for IE.
+    @include mq($from: mobileMedium) {
+      left: 321px;
+    }
+  }
+
   .component-questions-contact {
     @include gu-content-filler;
   }
