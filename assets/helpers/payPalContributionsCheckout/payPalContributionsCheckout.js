@@ -2,33 +2,19 @@
 
 // ----- Imports ----- //
 
-import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
+import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamToURL, getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
-
-type AcquisitionData = {|
-  pageviewId: string,
-  visitId: ?string,
-  browserId: ?string,
-  platform: ?string,
-  referrerPageviewId: ?string,
-  referrerUrl: ?string,
-  campaignCodes: ?string[],
-  componentId: ?string,
-  componentType: ?string,
-  source: ?string,
-  abTests: ?AcquisitionABTest[],
-|}
 
 type PayPalPaymentAPIPostData = {|
   currency: IsoCurrency,
@@ -51,37 +37,6 @@ function payPalContributionEndpoint(testUser) {
   return window.guardian.paymentApiPayPalEndpoint;
 }
 
-function storeAcquisitionData(
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  nativeAbParticipations: Participations,
-): void {
-  const ophanIds: OphanIds = getOphanIds();
-
-  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
-  const campaignCodes = referrerAcquisitionData.campaignCode ?
-    [referrerAcquisitionData.campaignCode] : [];
-
-  if (referrerAcquisitionData.abTest) {
-    abTests.push(referrerAcquisitionData.abTest);
-  }
-
-  const acquisitionData: AcquisitionData = {
-    platform: 'SUPPORT',
-    visitId: ophanIds.visitId,
-    browserId: ophanIds.browserId,
-    pageviewId: ophanIds.pageviewId,
-    referrerPageviewId: referrerAcquisitionData.referrerPageviewId,
-    referrerUrl: referrerAcquisitionData.referrerUrl,
-    componentId: referrerAcquisitionData.componentId,
-    campaignCodes,
-    componentType: referrerAcquisitionData.componentType,
-    source: referrerAcquisitionData.source,
-    abTests,
-  };
-
-  cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
-}
-
 export function paypalContributionsRedirect(
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -91,7 +46,9 @@ export function paypalContributionsRedirect(
   nativeAbParticipations: Participations,
 ): void {
 
-  storeAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  const acquisitionData = derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
+
   const { currency } = countryGroups[countryGroupId];
   const postData: PayPalPaymentAPIPostData = {
     amount,

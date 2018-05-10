@@ -22,7 +22,6 @@ class OneOffContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
-    contributionsStripeEndpoint: String,
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents
@@ -46,7 +45,7 @@ class OneOffContributions(
       js = "oneoffContributionsPage.js",
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
-      contributionsStripeEndpoint = contributionsStripeEndpoint,
+      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
