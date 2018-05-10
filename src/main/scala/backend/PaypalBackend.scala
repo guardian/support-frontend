@@ -81,10 +81,10 @@ class PaypalBackend(
         }
       )
 
-  def processRefundHook(refundHook: PaypalRefundHook, headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] = {
+  def processRefundHook(data: PaypalRefundWebHookData): EitherT[Future, BackendError, Unit] = {
     for {
-      _ <- validateRefundHook(headers, rawJson)
-      dbUpdateResult <- flagContributionAsRefunded(refundHook.resource.parent_payment)
+      _ <- validateRefundHook(data.headers, data.body.rawBody)
+      dbUpdateResult <- flagContributionAsRefunded(data.body.parentPaymentId)
     } yield dbUpdateResult
   }
 

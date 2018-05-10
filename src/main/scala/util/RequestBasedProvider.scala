@@ -3,14 +3,15 @@ package util
 import play.api.mvc.Request
 import simulacrum.typeclass
 import model.RequestType
-import model.paypal.PaypalRefundHook
 
 @typeclass trait RequestTypeDecoder[A] {
   def requestType(data: A): RequestType
 }
 
 object RequestTypeDecoder {
+
   object instances {
+
     implicit def requestTypeDecoder[A]: RequestTypeDecoder[Request[A]] = new RequestTypeDecoder[Request[A]] {
       override def requestType(data: Request[A]): RequestType = {
         if (data.getQueryString("mode").contains("test")) {
@@ -19,12 +20,6 @@ object RequestTypeDecoder {
           RequestType.Live
         }
       }
-    }
-  }
-  object hook {
-    implicit def requestTypeDecoder: RequestTypeDecoder[PaypalRefundHook] = new RequestTypeDecoder[PaypalRefundHook] {
-      // TODO: implement based on production mode
-      override def requestType(data: PaypalRefundHook): RequestType = RequestType.Test
     }
   }
 }

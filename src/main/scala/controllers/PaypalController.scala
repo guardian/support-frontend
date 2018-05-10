@@ -10,8 +10,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 
-import scala.concurrent.Future
-
 class PaypalController(
   cc: ControllerComponents,
   paypalBackendProvider: RequestBasedProvider[PaypalBackend]
@@ -55,26 +53,14 @@ class PaypalController(
         )
       }
 
-
-  def processRefund: Action[String] = Action.async(parse.tolerantText) { paypalHookRequest =>
-    import io.circe.parser._
-    import util.RequestTypeDecoder.hook._
-    val paypalHookJson = paypalHookRequest.body
-    decode[PaypalRefundHook](paypalHookJson)
+  def processRefund: Action[PaypalRefundWebHookBody] = Action.async(circe.json[PaypalRefundWebHookBody]) { request =>
+    paypalBackendProvider.getInstanceFor(request)
+      .processRefundHook(PaypalRefundWebHookData.fromRequest(request))
       .fold(
-        err => Future.successful(BadRequest(ResultBody.Error(err.getMessage))),
-        refundHook => {
-          paypalBackendProvider
-            .getInstanceFor(refundHook)
-            .processRefundHook(refundHook, paypalHookRequest.headers.toSimpleMap, paypalHookJson)
-            .fold(
-              err => InternalServerError(ResultBody.Error(err.getMessage)),
-              _ => Ok(ResultBody.Success("execute hook success"))
-            )
-        }
+        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        _ => Ok(ResultBody.Success("paypal payment successfully refunded"))
       )
-    }
-
+  }
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls
