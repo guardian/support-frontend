@@ -16,7 +16,7 @@ case class ContributionData private (
     paymentStatus: PaymentStatus,
     paymentId: String,
     identityId: Option[Long],
-    receiptEmail: String,
+    email: String,
     created: LocalDateTime,
     currency: Currency,
     amount: BigDecimal,
@@ -41,7 +41,7 @@ object ContributionData {
       paymentStatus = PaymentStatus.Paid,
       paymentId = charge.getId,
       identityId = identityId,
-      receiptEmail = charge.getReceiptEmail,
+      email = charge.getReceiptEmail,
       // From the Stripe documentation for charge.created
       // Time at which the object was created. Measured in seconds since the Unix epoch.
       created = LocalDateTime.ofEpochSecond(charge.getCreated, 0, ZoneOffset.UTC),
@@ -53,21 +53,20 @@ object ContributionData {
 
   import scala.collection.JavaConverters._
 
-  def fromPaypalCharge(identityId: Option[Long], payment: Payment): Either[PaypalApiError, ContributionData] = {
+  def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long]): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
         .fromString(s"Invalid Paypal transactions content."))
       currency <- Either.catchNonFatal(Currency.withNameInsensitive(transactions.getAmount.getCurrency)).leftMap(PaypalApiError.fromThrowable)
       amount <- Either.catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal)).leftMap(PaypalApiError.fromThrowable)
       created <- Either.catchNonFatal(paypalDateToLocalDateTime(payment.getCreateTime)).leftMap(PaypalApiError.fromThrowable)
-      email <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getEmail).leftMap(PaypalApiError.fromThrowable)
       countryCode <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getCountryCode).leftMap(PaypalApiError.fromThrowable)
     } yield ContributionData(
       paymentProvider = PaymentProvider.Paypal,
       paymentStatus = PaymentStatus.Paid,
       paymentId = payment.getId,
       identityId = identityId,
-      receiptEmail = email,
+      email = email,
       created = created,
       currency = currency,
       amount = amount,

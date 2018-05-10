@@ -57,7 +57,7 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
         ${data.countryCode},
         ${data.amount},
         ${data.paymentStatus.entryName}::paymentStatus,
-        ${data.receiptEmail},
+        ${data.email},
         ${data.identityId}
       );
     """

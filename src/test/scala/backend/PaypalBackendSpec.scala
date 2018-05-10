@@ -245,7 +245,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, None)
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None)
 
         result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
       }
@@ -263,7 +263,7 @@ class PaypalBackendSpec
           ),
           BackendError.Database(DatabaseService.Error("DB error response", None))
         ))
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, None)
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None)
         result.futureLeft shouldBe errors
       }
     }

@@ -15,8 +15,7 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendThankYouEmail(email: String, currency: String):
-  EitherT[Future, EmailService.Error, SendMessageResult] = {
+  def sendThankYouEmail(email: String, currency: String): EitherT[Future, EmailService.Error, SendMessageResult] = {
     sendEmailToQueue(thankYouQueueUrl, ContributorRow(email, currency))
   }
 
@@ -24,8 +23,7 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
    * No need to provide an AsyncHandler as the process is fire and forget and it's not required any action if the message
    * cannot be process by the subscriber.
    */
-  private def sendEmailToQueue(queueUrl: String, row: ContributorRow):
-  EitherT[Future, EmailService.Error, SendMessageResult] = {
+  private def sendEmailToQueue(queueUrl: String, row: ContributorRow): EitherT[Future, EmailService.Error, SendMessageResult] = {
     EitherT(Future {
       sqsClient.sendMessageAsync(new SendMessageRequest(queueUrl, row.toJsonContributorRowSqsMessage)).get
     }.map(Right.apply).recover {

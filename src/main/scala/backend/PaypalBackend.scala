@@ -90,26 +90,28 @@ class PaypalBackend(
 
   // Success or failure of these steps shouldn't affect the response to the client
   private def postPaymentTasks(payment: Payment, signedInUserEmail: Option[String], acquisitionData: AcquisitionData): EitherT[Future, BackendError, Unit] = {
-    val trackContributionResult = for {
-      paymentEmail <- emailFromPayment(payment)
-      identityId <- getOrCreateIdentityIdFromEmail(signedInUserEmail.getOrElse(paymentEmail))
-      _ <- trackContribution(payment, acquisitionData, identityId)
-    } yield ()
+    emailFromPayment(payment).flatMap { paymentEmail =>
+      val email = signedInUserEmail.getOrElse(paymentEmail)
 
-    val sendThankYouEmailResult = for {
-      paymentEmail <- emailFromPayment(payment)
-      currency <- currencyFromPayment(payment)
-      _ <- sendThankYouEmail(signedInUserEmail, paymentEmail, currency)
-    } yield ()
+      val trackContributionResult = for {
+        identityId <- getOrCreateIdentityIdFromEmail(email)
+        _ <- trackContribution(payment, acquisitionData, email, identityId)
+      } yield ()
 
-    BackendError.combineResults(
-      trackContributionResult,
-      sendThankYouEmailResult
-    )
+      val sendThankYouEmailResult = for {
+        currency <- currencyFromPayment(payment)
+        _ <- sendThankYouEmail(email, currency)
+      } yield ()
+
+      BackendError.combineResults(
+        trackContributionResult,
+        sendThankYouEmailResult
+      )
+    }
   }
 
-  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit]  = {
-    ContributionData.fromPaypalCharge(identityId, payment)
+  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long]): EitherT[Future, BackendError, Unit] = {
+    ContributionData.fromPaypalCharge(payment, email, identityId)
       .leftMap { error =>
         logger.error(s"Error creating contribution data from paypal. Error: $error")
         BackendError.fromPaypalAPIError(error)
@@ -153,8 +155,8 @@ class PaypalBackend(
     databaseService.flagContributionAsRefunded(paypalPaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(signedInUserEmail: Option[String], paymentEmail: String, currency: String): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(signedInUserEmail.getOrElse(paymentEmail), currency)
+  private def sendThankYouEmail(email: String, currency: String): EitherT[Future, BackendError, SendMessageResult] =
+    emailService.sendThankYouEmail(email, currency)
       .leftMap(BackendError.fromEmailError)
 
   private def emailFromPayment(p: Payment): EitherT[Future, BackendError, String] =
