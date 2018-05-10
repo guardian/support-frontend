@@ -59,10 +59,10 @@
 }
 
 .component-cta-link--see-supporter-options {
-  height: 54px;
+  height: $cta-height;
   padding: 0 30px;
   font-size: 14px;
-  line-height: 54px;
+  line-height: $cta-height;
   background-color: gu-colour(lifestyle-garnett-main-1);
   transition: background-color .3s;
 

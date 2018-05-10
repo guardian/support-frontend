@@ -28,6 +28,7 @@ type PropTypes = {
   canClick?: boolean,
   buttonText?: string,
   additionalClass?: string,
+  inPaymentLogosTest?: boolean,
   onClick?: ?(void => void),
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -59,19 +60,20 @@ function payWithPayPal(props: PropTypes) {
 
 // ----- Component ----- //
 
-const PayPalContributionButton = (props: PropTypes) =>
-  (
+function PayPalContributionButton(props: PropTypes) {
+  const modifiers = props.inPaymentLogosTest ? [props.additionalClass, 'variant'] : [props.additionalClass];
+  return (
     <button
       id="qa-contribute-paypal-button"
-      className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
+      className={classNameWithModifiers('component-paypal-contribution-button', modifiers)}
       onClick={payWithPayPal(props)}
     >
-
-      <SvgPaypalPLogo />
-      <span>{props.buttonText}</span>
+      {props.inPaymentLogosTest ? null : <SvgPaypalPLogo />}
+      <span className="component-paypal-contribution-button__text">{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>
   );
+}
 
 
 // ----- Default Props ----- //
@@ -80,6 +82,7 @@ PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
   additionalClass: '',
+  inPaymentLogosTest: false,
   onClick: null,
 };
 

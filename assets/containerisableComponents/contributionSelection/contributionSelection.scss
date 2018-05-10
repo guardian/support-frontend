@@ -3,7 +3,6 @@
 
   .component-radio-toggle__label {
     font-family: $gu-text-sans-web;
-    font-weight: bold;
     color: rgba(gu-colour(garnett-neutral-1), 0.5);
   }
 
@@ -36,14 +35,14 @@
     width: 100%;
 
     @include mq($from: mobileMedium) {
-      width: 317px;
+      width: 161px;
     }
   }
 }
 
 .component-contribution-selection--one-off {
   .component-number-input {
-    width: 261px;
+    width: 161px;
   }
 }
 
@@ -103,12 +102,10 @@
   .component-number-input__label {
     top: 10px;
     color: rgba(gu-colour(garnett-neutral-1), 0.5);
-    font-weight: bold;
   }
 
   .component-number-input__input {
     font-size: 14px;
-    font-weight: bold;
     color: rgba(gu-colour(garnett-neutral-1), 0.5);
 
     &::-moz-placeholder {
