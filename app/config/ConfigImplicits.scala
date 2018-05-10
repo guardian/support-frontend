@@ -9,5 +9,11 @@ object ConfigImplicits {
     } else {
       None
     }
+
+    def getOptionalBoolean(path: String): Option[Boolean] = if (underlying.hasPath(path)) {
+      Some(underlying.getBoolean(path))
+    } else {
+      None
+    }
   }
 }

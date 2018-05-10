@@ -18,7 +18,7 @@ import assets.AssetsResolver
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.{PrivateFields, PublicFields}
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import services.{IdentityService, PaymentAPIService, TestUserService}
+import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
 import fixtures.TestCSRFComponents
 import play.api.libs.json.JsString
@@ -71,8 +71,8 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
         csrfConfig = csrfConfig
       )
 
-      private def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): IdentityService = {
-        val m = mock[IdentityService]
+      private def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
+        val m = mock[HttpIdentityService]
         when(
           m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
         ).thenReturn(EitherT.fromEither[Future](data._2))
