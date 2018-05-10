@@ -17,6 +17,13 @@ trait Controllers {
     stringsConfig
   )
 
+  lazy val subscriptionsController = new Subscriptions(
+    actionRefiners,
+    assetsResolver,
+    controllerComponents,
+    stringsConfig
+  )
+
   lazy val regularContributionsController = new RegularContributions(
     regularContributionsClient,
     assetsResolver,
