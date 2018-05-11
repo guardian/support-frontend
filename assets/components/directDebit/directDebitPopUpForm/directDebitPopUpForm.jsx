@@ -4,7 +4,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { closeDirectDebitPopUp, resetDirectDebitFormError } from 'components/directDebit/directDebitActions';
+import type { Dispatch } from 'redux';
+
+import {
+  closeDirectDebitPopUp,
+  resetDirectDebitFormError,
+  type Action,
+} from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
 
@@ -21,6 +27,7 @@ type PropTypes = {
 };
 /* eslint-enable react/no-unused-prop-types */
 
+
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
@@ -30,7 +37,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
     closeDirectDebitPopUp: () => {
@@ -40,6 +47,7 @@ function mapDispatchToProps(dispatch) {
   };
 
 }
+
 
 // ----- Utility ----- //
 

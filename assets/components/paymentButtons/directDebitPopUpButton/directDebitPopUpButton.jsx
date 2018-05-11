@@ -4,7 +4,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import type { Dispatch } from 'redux';
+
+import { openDirectDebitPopUp, type Action } from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
 
@@ -26,7 +28,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
     openDirectDebitPopUp: () => {
