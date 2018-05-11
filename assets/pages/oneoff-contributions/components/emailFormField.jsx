@@ -4,9 +4,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import TextInput from 'components/textInput/textInput';
+import type { Dispatch } from 'redux';
 
-import { setEmail } from 'helpers/user/userActions';
+import TextInput from 'components/textInput/textInput';
+import { setEmail, type Action } from 'helpers/user/userActions';
 
 
 // ----- Types ----- //
@@ -49,7 +50,7 @@ function mapStateToProps(state) {
 
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
     emailUpdate: (email: string) => {

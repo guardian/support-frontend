@@ -3,9 +3,11 @@
 // ----- Imports ----- //
 
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
 import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
-import { openDirectDebitGuarantee, closeDirectDebitGuarantee } from 'components/directDebit/directDebitActions';
+import { openDirectDebitGuarantee, closeDirectDebitGuarantee, type Action } from 'components/directDebit/directDebitActions';
+
 
 // ----- Map State/Props ----- //
 
@@ -32,7 +34,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     openDDGuaranteeClicked: () => {
       dispatch(openDirectDebitGuarantee());
