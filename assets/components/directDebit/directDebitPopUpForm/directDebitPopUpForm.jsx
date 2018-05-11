@@ -16,6 +16,7 @@ import SvgCross from 'components/svgs/cross';
 
 import type { Phase } from 'components/directDebit/directDebitActions';
 
+
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
@@ -49,33 +50,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 
-// ----- Utility ----- //
-
-function PageTitle(props: { phase: Phase }) {
-  if (props.phase === 'confirmation') {
-    return (
-      <span>
-        <span className="component-direct-debit-pop-up-form__heading--title">
-          Please confirm
-        </span>
-        <span className="component-direct-debit-pop-up-form__heading--title">
-          your details
-        </span>
-      </span>
-    );
-  }
-  return (
-    <span>
-      <span className="component-direct-debit-pop-up-form__heading--title">
-        Please enter
-      </span>
-      <span className="component-direct-debit-pop-up-form__heading--title">
-        your details below
-      </span>
-    </span>
-  );
-}
-
 // ----- Component ----- //
 
 const DirectDebitPopUpForm = (props: PropTypes) => {
@@ -105,6 +79,35 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
   return content;
 
 };
+
+
+// ----- Auxiliary Components ----- //
+
+function PageTitle(props: { phase: Phase }) {
+  if (props.phase === 'confirmation') {
+    return (
+      <span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          Please confirm
+        </span>
+        <span className="component-direct-debit-pop-up-form__heading--title">
+          your details
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        Please enter
+      </span>
+      <span className="component-direct-debit-pop-up-form__heading--title">
+        your details below
+      </span>
+    </span>
+  );
+}
+
 
 // ----- Exports ----- //
 
