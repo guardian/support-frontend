@@ -3,9 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -25,15 +23,7 @@ import OneOffContributionsPage from './components/oneOffContributionsPage';
 
 const countryGroup = detectCountryGroup();
 
-/* eslint-disable no-underscore-dangle */
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-/* eslint-enable */
-
-const store = pageInit(
-  reducer(getAmount('ONE_OFF', countryGroup)),
-  undefined,
-  composeEnhancers(applyMiddleware(thunkMiddleware)),
-);
+const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup)), true);
 
 user.init(store.dispatch);
 

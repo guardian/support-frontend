@@ -2,8 +2,17 @@
 
 // ----- Imports ----- //
 
-import { createStore, combineReducers } from 'redux';
 import 'ophan';
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware,
+  compose,
+  type Reducer,
+  type CombinedReducer,
+  type StoreEnhancer,
+} from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
 import * as abTest from 'helpers/abTests/abtest';
 import * as logger from 'helpers/logger';
@@ -116,14 +125,29 @@ function statelessInit() {
   const country: IsoCountry = detectCountry();
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-
 }
 
+// Enables redux devtools extension and optional redux-thunk.
+/* eslint-disable no-underscore-dangle */
+function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undefined {
+
+  if (thunk) {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    return composeEnhancers(applyMiddleware(thunkMiddleware));
+  }
+
+  return window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__()
+    : undefined;
+
+}
+/* eslint-enable no-underscore-dangle */
+
 // Initialises the page.
-function init(
-  pageReducer: Object,
+function init<S, A>(
+  pageReducer: Reducer<S, A>,
+  thunk?: boolean = false,
   preloadedState: ?PreloadedState = null,
-  middleware: ?Function,
 ) {
 
   const countryGroup: CountryGroupId = detectCountryGroup();
@@ -143,8 +167,7 @@ function init(
 
   return createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
-    undefined,
-    middleware,
+    storeEnhancer(thunk),
   );
 }
 

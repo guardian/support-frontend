@@ -77,13 +77,7 @@ const countryGroupSpecificDetails: {
 
 const countryGroupId: CountryGroupId = detect();
 
-/* eslint-disable no-underscore-dangle */
-const store = pageInit(
-  createPageReducerFor(countryGroupId),
-  null,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
-/* eslint-enable */
+const store = pageInit(createPageReducerFor(countryGroupId));
 
 
 // ----- Render ----- //
