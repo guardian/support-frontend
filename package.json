@@ -13,7 +13,8 @@
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
-    "jest-update-snapshot": "echo 'Updating JS tests' && jest -u"
+    "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
+    "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
   },
   "browserslist": [
     "Chrome >= 38",
