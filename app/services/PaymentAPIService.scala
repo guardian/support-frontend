@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
-    acquisitionData: Option[JsValue],
+    acquisitionData: JsValue,
     paymentData: JsObject
 )
 
@@ -59,7 +59,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
 
   def execute(
     paymentJSON: JsObject,
-    acquisitionData: Option[JsValue],
+    acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
     isTestUser: Boolean
