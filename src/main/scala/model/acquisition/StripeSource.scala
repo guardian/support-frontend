@@ -2,7 +2,6 @@ package model.acquisition
 
 import com.stripe.model.Charge
 import io.circe.parser.decode
-import cats.implicits._
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.JsonCodec
 
@@ -11,11 +10,10 @@ import io.circe.generic.JsonCodec
 object StripeSource extends StrictLogging {
 
   def getCountryCode(charge: Charge): Option[String] = {
-    decode[StripeSource](charge.getSource.toJson)
-      .bimap(
-        err =>
-          logger.error("Could not extract country code from Stripe charge: " + err.toString),
-        source => source.country
-      ).toOption
+    // Some Stripe charges have the country field set to null.
+    // In this instance decoding will fail
+    // and the respective record in Postgres and the data lake
+    // won't have a country code field
+    decode[StripeSource](charge.getSource.toJson).map(_.country).toOption
   }
 }
