@@ -8,11 +8,11 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
+
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -37,11 +37,14 @@ class PayPalOneOff(
     })
   }
 
+  private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
+
   def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
-    val maybeAcquisitionData = for {
+
+    val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
-      acquisitionData <- Try { Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8")) }.toOption
-    } yield acquisitionData
+      cookieAcquisitionData <- Try { Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8")) }.toOption
+    } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
 
     val paymentJSON = Json.obj(
       "paymentId" -> paymentId,
@@ -66,7 +69,7 @@ class PayPalOneOff(
 
     for {
       maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
-      result <- paymentAPIService.execute(paymentJSON, maybeAcquisitionData, queryStrings, maybeEmail, isTestUser)
+      result <- paymentAPIService.execute(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
     } yield processPaymentApiResponse(result)
 
   }
