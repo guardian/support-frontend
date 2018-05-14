@@ -9,7 +9,6 @@ import {
   applyMiddleware,
   compose,
   type Reducer,
-  type CombinedReducer,
   type StoreEnhancer,
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
