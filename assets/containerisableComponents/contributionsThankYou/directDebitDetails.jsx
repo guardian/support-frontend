@@ -26,21 +26,19 @@ export type PropTypes = {
 
 export default function DirectDebitDetails(props: PropTypes) {
   return (
-    <div className="direct-debit-details">
+    <div className="component-direct-debit-details">
       <DirectDebitPaymentMethodDetails
         accountHolderName={props.accountHolderName}
         sortCodeArray={props.sortCodeArray}
         accountNumber={props.accountNumber}
       />
-      <div className="component-direct-debit-guarantee_background">
-        <PageSection>
-          <DirectDebitGuarantee
-            isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-            openDDGuaranteeClicked={props.openDDGuaranteeClicked}
-            closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
-          />
-        </PageSection>
-      </div>
+      <PageSection modifierClass="direct-debit-guarantee">
+        <DirectDebitGuarantee
+          isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+          openDDGuaranteeClicked={props.openDDGuaranteeClicked}
+          closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
+        />
+      </PageSection>
     </div>
   );
 }
