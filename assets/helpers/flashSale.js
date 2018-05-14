@@ -23,16 +23,32 @@ function inOfferPeriod(product: ProductType): boolean {
 
 // Promo codes
 const promoCodes = {
-  digital: 'p/DXX83X',
-  paper: 'p/GST80F',
-  paperAndDigital: 'p/GST80G',
+  digital: {
+    promoCode: 'p/DXX83X',
+    price: '11.99',
+  },
+  paper: {
+    promoCode: 'p/GST80F',
+    price: '5.18',
+  },
+  paperAndDigital: {
+    promoCode: 'p/GST80G',
+    price: '10.81',
+  },
 };
 
 function getPromoCode(product: ProductType, defaultCode: string) {
   if (inOfferPeriod(product)) {
-    return promoCodes[product];
+    return promoCodes[product].promoCode;
   }
   return defaultCode;
+}
+
+function getPrice(product: ProductType, defaultPrice: string) {
+  if (inOfferPeriod(product)) {
+    return promoCodes[product].price;
+  }
+  return defaultPrice;
 }
 
 // Copy text
@@ -44,7 +60,7 @@ const chooseYourPackage = {
   text: 'Everyday, Sixday, Weekend, Saturday and Sunday; redeem paper vouchers or get home delivery',
 };
 
-function getDigiPackItems() {
+function getDigitalBenefits() {
   const items = [
     {
       heading: 'Premium experience on the Guardian app',
@@ -62,14 +78,14 @@ function getDigiPackItems() {
   return items;
 }
 
-function getPaperItems() {
+function getPaperBenefits() {
   if (inOfferPeriod('paper')) {
     return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice];
   }
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
-function getPaperDigitalItems() {
+function getPaperDigitalBenefits() {
   if (inOfferPeriod('paperAndDigital')) {
     return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
   }
@@ -77,8 +93,9 @@ function getPaperDigitalItems() {
 }
 
 export {
-  getDigiPackItems,
-  getPaperItems,
-  getPaperDigitalItems,
+  getDigitalBenefits,
+  getPaperBenefits,
+  getPaperDigitalBenefits,
   getPromoCode,
+  getPrice,
 };

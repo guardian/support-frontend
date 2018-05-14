@@ -6,7 +6,7 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPaperItems, getDigiPackItems, getPaperDigitalItems } from 'helpers/flashSale';
+import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits, getPrice } from 'helpers/flashSale';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -62,8 +62,8 @@ function DigitalBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital"
-      subheading="£11.99/month"
-      benefits={getDigiPackItems()}
+      subheading={`£${getPrice('digital', '11.99')}/month`}
+      benefits={getDigitalBenefits()}
       ctaText="Start your 14 day trial"
       ctaUrl={props.url}
       ctaId="digital-sub"
@@ -84,8 +84,8 @@ function PaperBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading="from £10.36/month"
-      benefits={getPaperItems()}
+      subheading={`£${getPrice('paper', '10.36')}/month`}
+      benefits={getPaperBenefits()}
       ctaText="Get a paper subscription"
       ctaUrl={props.url}
       ctaId="paper-sub"
@@ -106,8 +106,8 @@ function PaperDigitalBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+digital"
-      subheading="from £21.62/month"
-      benefits={getPaperDigitalItems()}
+      subheading={`£${getPrice('paperAndDigital', '21.62')}/month`}
+      benefits={getPaperDigitalBenefits()}
       ctaText="Get a paper+digital subscription"
       ctaUrl={props.url}
       ctaId="paper-digi-sub"
