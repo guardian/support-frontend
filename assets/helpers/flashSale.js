@@ -6,8 +6,8 @@ type ProductType = 'digital' | 'paper' | 'paperAndDigital';
 
 function inOfferPeriod(product: ProductType): boolean {
   // Days are 1 based, months are 0 based
-  const startTime = new Date(2018, 0, 29, 0, 0).getTime(); // 29th Jan 2018
-  const endTime = new Date(2018, 1, 25, 0, 0).getTime(); // 25th Feb 2018
+  const startTime = new Date(2018, 4, 15, 0, 0).getTime(); // 15th May 2018
+  const endTime = new Date(2018, 4, 29, 0, 0).getTime(); // 29th May 2018
 
   // The current sale is paper & paper + digital only, digital is unaffected
   const included = {
@@ -23,28 +23,44 @@ function inOfferPeriod(product: ProductType): boolean {
 
 // Promo codes
 const promoCodes = {
-  digital: 'p/DXX83X',
-  paper: 'p/GRB80P',
-  paperAndDigital: 'p/GRB80X',
+  digital: {
+    promoCode: 'p/DXX83X',
+    price: '11.99',
+  },
+  paper: {
+    promoCode: 'p/GST80F',
+    price: '5.18',
+  },
+  paperAndDigital: {
+    promoCode: 'p/GST80G',
+    price: '10.81',
+  },
 };
 
 function getPromoCode(product: ProductType, defaultCode: string) {
   if (inOfferPeriod(product)) {
-    return promoCodes[product];
+    return promoCodes[product].promoCode;
   }
   return defaultCode;
 }
 
+function getPrice(product: ProductType, defaultPrice: string) {
+  if (inOfferPeriod(product)) {
+    return promoCodes[product].price;
+  }
+  return defaultPrice;
+}
+
 // Copy text
-const offerItem = { heading: 'Subscribe today and save 50% for your first three months' };
+const offerItem = { heading: 'Subscribe today and save an extra 50% for three months' };
 const saveMoneyOnRetailPrice = { heading: 'Save money on the retail price' };
-const getAllBenefits = { heading: 'Get all the benefits of a digital subscription' };
+const getAllBenefits = { heading: 'Get all the benefits of a digital subscription with paper + digital' };
 const chooseYourPackage = {
   heading: 'Choose your package and delivery method',
-  text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
+  text: 'Everyday, Sixday, Weekend, Saturday and Sunday; redeem paper vouchers or get home delivery',
 };
 
-function getDigiPackItems() {
+function getDigitalBenefits() {
   const items = [
     {
       heading: 'Premium experience on the Guardian app',
@@ -62,23 +78,24 @@ function getDigiPackItems() {
   return items;
 }
 
-function getPaperItems() {
+function getPaperBenefits() {
   if (inOfferPeriod('paper')) {
-    return [offerItem, chooseYourPackage];
+    return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice];
   }
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
-function getPaperDigitalItems() {
+function getPaperDigitalBenefits() {
   if (inOfferPeriod('paperAndDigital')) {
-    return [offerItem, chooseYourPackage, getAllBenefits];
+    return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
   }
   return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
 }
 
 export {
-  getDigiPackItems,
-  getPaperItems,
-  getPaperDigitalItems,
+  getDigitalBenefits,
+  getPaperBenefits,
+  getPaperDigitalBenefits,
   getPromoCode,
+  getPrice,
 };

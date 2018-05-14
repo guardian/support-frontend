@@ -6,6 +6,7 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
+import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits, getPrice } from 'helpers/flashSale';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -61,19 +62,8 @@ function DigitalBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital"
-      subheading="£11.99/month"
-      benefits={[
-        {
-          heading: 'Premium experience on the Guardian app',
-          text: `No adverts means faster loading pages and a clearer reading experience.
-                Play our daily crosswords offline wherever you are`,
-        },
-        {
-          heading: 'Daily Tablet Edition app',
-          text: `Read the Guardian, the Observer and all the Weekend supplements in an
-                optimised tablet app; available on iPad`,
-        },
-      ]}
+      subheading={`£${getPrice('digital', '11.99')}/month`}
+      benefits={getDigitalBenefits()}
       ctaText="Start your 14 day trial"
       ctaUrl={props.url}
       ctaId="digital-sub"
@@ -94,16 +84,8 @@ function PaperBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading="from £10.36/month"
-      benefits={[
-        {
-          heading: 'Choose your package and delivery method',
-          text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-        },
-        {
-          heading: 'Save money on the retail price',
-        },
-      ]}
+      subheading={`£${getPrice('paper', '10.36')}/month`}
+      benefits={getPaperBenefits()}
       ctaText="Get a paper subscription"
       ctaUrl={props.url}
       ctaId="paper-sub"
@@ -124,19 +106,8 @@ function PaperDigitalBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+digital"
-      subheading="from £21.62/month"
-      benefits={[
-        {
-          heading: 'Choose your package and delivery method',
-          text: 'Everyday, Sixday, Weekend and Sunday; redeem paper vouchers or get home delivery',
-        },
-        {
-          heading: 'Save money on the retail price',
-        },
-        {
-          heading: 'Get all the benefits of a digital subscription with paper + digital',
-        },
-      ]}
+      subheading={`£${getPrice('paperAndDigital', '21.62')}/month`}
+      benefits={getPaperDigitalBenefits()}
       ctaText="Get a paper+digital subscription"
       ctaUrl={props.url}
       ctaId="paper-digi-sub"
