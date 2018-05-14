@@ -27,7 +27,7 @@ const supporterSectionId = 'supporter-options';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(s => s);
+const store = pageInit();
 
 
 // ----- Render ----- //

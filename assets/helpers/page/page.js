@@ -144,7 +144,7 @@ function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undef
 
 // Initialises the page.
 function init<S, A>(
-  pageReducer: Reducer<S, A>,
+  pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
   preloadedState: ?PreloadedState = null,
 ) {
