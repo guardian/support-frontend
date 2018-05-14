@@ -84,7 +84,7 @@ function PaperBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`£${getPrice('paper', '10.36')}/month`}
+      subheading={`from £${getPrice('paper', '10.36')}/month`}
       benefits={getPaperBenefits()}
       ctaText="Get a paper subscription"
       ctaUrl={props.url}
@@ -106,7 +106,7 @@ function PaperDigitalBundle(props: { url: string }) {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+digital"
-      subheading={`£${getPrice('paperAndDigital', '21.62')}/month`}
+      subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
       benefits={getPaperDigitalBenefits()}
       ctaText="Get a paper+digital subscription"
       ctaUrl={props.url}
