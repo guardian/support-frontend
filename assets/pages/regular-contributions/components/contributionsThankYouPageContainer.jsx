@@ -6,7 +6,11 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
-import { openDirectDebitGuarantee, closeDirectDebitGuarantee, type Action } from 'components/directDebit/directDebitActions';
+import {
+  openDirectDebitGuarantee,
+  closeDirectDebitGuarantee,
+  type Action,
+} from 'components/directDebit/directDebitActions';
 
 
 // ----- Map State/Props ----- //

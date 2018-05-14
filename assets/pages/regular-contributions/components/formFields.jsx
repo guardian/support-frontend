@@ -13,10 +13,10 @@ import {
   setFirstName,
   setLastName,
   setStateField,
-  type Action as UA,
+  type Action as UserAction,
 } from 'helpers/user/userActions';
 
-import { setCountry, type Action as PA } from 'helpers/page/pageActions';
+import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
 
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -52,7 +52,7 @@ function mapStateToProps(state) {
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UA | PA>) {
+function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction>) {
 
   return {
     firstNameUpdate: (name: string) => {
