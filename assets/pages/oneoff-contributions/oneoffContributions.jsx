@@ -14,7 +14,7 @@ import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 import { getAmount } from 'helpers/checkouts';
 
-import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
+import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
 import reducer from './oneOffContributionsReducers';
 import OneOffContributionsPage from './components/oneOffContributionsPage';
 
@@ -31,8 +31,18 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route exact path={routes.oneOffContribCheckout} component={OneOffContributionsPage} />
-        <Route exact path={routes.oneOffContribThankyou} component={ContributionsThankYouPageContainer} />
+        <Route
+          exact
+          path={routes.oneOffContribCheckout}
+          component={() => <OneOffContributionsPage />}
+        />
+        <Route
+          exact
+          path={routes.oneOffContribThankyou}
+          component={() =>
+            <ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />
+          }
+        />
       </div>
     </Provider>
   </BrowserRouter>

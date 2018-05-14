@@ -37,9 +37,21 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route exact path={routes.recurringContribCheckout} component={RegularContributionsPage} />
-        <Route exact path={routes.recurringContribThankyou} component={ContributionsThankYouPageContainer} />
-        <Route exact path={routes.recurringContribPending} component={ContributionsThankYouPageContainer} />
+        <Route
+          exact
+          path={routes.recurringContribCheckout}
+          component={() => <RegularContributionsPage />}
+        />
+        <Route
+          exact
+          path={routes.recurringContribThankyou}
+          component={() => <ContributionsThankYouPageContainer />}
+        />
+        <Route
+          exact
+          path={routes.recurringContribPending}
+          component={() => <ContributionsThankYouPageContainer />}
+        />
       </div>
     </Provider>
   </BrowserRouter>

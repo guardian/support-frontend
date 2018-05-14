@@ -14,7 +14,6 @@ import { openDirectDebitGuarantee, closeDirectDebitGuarantee, type Action } from
 function getDirectDebitDetails(state) {
   if (state.page.regularContrib.paymentMethod === 'DirectDebit') {
     return {
-      isDirectDebit: true,
       isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
       accountNumber: state.page.directDebit.accountNumber,
       accountHolderName: state.page.directDebit.accountHolderName,
@@ -25,12 +24,9 @@ function getDirectDebitDetails(state) {
 }
 
 function mapStateToProps(state) {
-  const { contributionType } = state.page.regularContrib;
-  const directDebitFields = getDirectDebitDetails(state);
-
   return {
-    contributionType,
-    ...directDebitFields,
+    contributionType: state.page.regularContrib,
+    directDebit: getDirectDebitDetails(state),
   };
 }
 
@@ -45,4 +41,21 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionsThankYouPage);
+function mergeProps(stateProps, dispatchProps, ownProps) {
+
+  const directDebit = stateProps.directDebit ?
+    { ...stateProps.directDebit, ...dispatchProps } :
+    null;
+
+  return {
+    ...ownProps,
+    contributionType: stateProps.contributionType,
+    directDebit,
+  };
+
+}
+
+
+// ----- Export ----- //
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionsThankYouPage);
