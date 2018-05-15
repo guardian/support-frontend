@@ -20,7 +20,7 @@ class Subscriptions(
 
   implicit val ar = assets
 
-  def subscribeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+  def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/subscribe"
       case _ => "https://subscribe.theguardian.com"
@@ -29,13 +29,13 @@ class Subscriptions(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
-  def subscribeRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     // Country code is required here because it's a parameter in the route.
     // But we don't actually use it.
     Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
-  def subscriptionsLanding(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def landing(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(title, id, js, description = Some(stringsConfig.subscriptionsLandingDescription)))
   }
 }
