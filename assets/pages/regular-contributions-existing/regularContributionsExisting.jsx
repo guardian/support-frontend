@@ -37,14 +37,16 @@ const content = (
     />
     <PageSection modifierClass="existing-contribution">
       <p className="existing-contribition-copy">
-          Looks like you are already making a regular contribution to the
-          Guardian - thank you. If you&#39;re feeling generous, there is
-          another way you can&nbsp;help.
+          It looks like you are already making a regular financial
+          contribution to the Guardian - thank you! If you would like to
+          help fund our journalism further, you can increase the amount
+          you give via your account. It only takes two minutes,
+          and it makes a world of difference.
       </p>
       <div className="manage-contribution-cta">
         <CtaLink
           ctaId="manage-contribution"
-          text="Update your recurring contribution"
+          text="Amend your recurring contribution"
           url={buildMMAUrl()}
           accessibilityHint="Further support the guardian by increasing your regular contribution"
         />
