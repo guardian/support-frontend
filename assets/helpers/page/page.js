@@ -14,21 +14,23 @@ import {
 import thunkMiddleware from 'redux-thunk';
 
 import * as abTest from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-
-import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-
-import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency } from 'helpers/internationalisation/currency';
-import type { Participations } from 'helpers/abTests/abtest';
-
+import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency, type Currency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import {
+  getCampaign,
+  getAcquisition,
+  type Campaign,
+  type ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
+import {
+  detect as detectCountryGroup,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+
 import type { Action } from './pageActions';
 
 
