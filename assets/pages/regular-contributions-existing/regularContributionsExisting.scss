@@ -31,7 +31,11 @@
     }
   }
 
-  .component-cta-link {
+  .component-questions-contact {
+    @include gu-content-filler;
+  }
+
+  .component-cta-link--manage-contribution {
     background-color: gu-colour(garnett-neutral-1);
     border: 1px solid gu-colour(garnett-neutral-1);
     color: #fff;
@@ -45,24 +49,19 @@
     @include mq($from: mobileMedium) {
       width: 300px;
     }
+  }
 
-    &:hover {
-      background-color: darken(gu-colour(garnett-neutral-1), 10%);
+  .manage-contribution-cta {
+    .svg-arrow-right-straight {
+      height: 35%;
+      top: 17px;
+      right: 13px;
+
+      // Fix for IE.
+      @include mq($from: mobileMedium) {
+        left: 321px;
+      }
     }
   }
 
-  .svg-arrow-right-straight {
-    height: 35%;
-    top: 17px;
-    right: 13px;
-
-    // Fix for IE.
-    @include mq($from: mobileMedium) {
-      left: 321px;
-    }
-  }
-
-  .component-questions-contact {
-    @include gu-content-filler;
-  }
 }
