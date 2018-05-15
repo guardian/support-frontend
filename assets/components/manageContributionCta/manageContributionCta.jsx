@@ -8,8 +8,7 @@ import { getBaseDomain } from 'helpers/url';
 
 // ----- Functions ----- //
 
-// Build MMA url
-function buildUrl(): string {
+function buildMMAUrl(): string {
   return `https://profile.${getBaseDomain()}/contribution/recurring/edit`;
 }
 
@@ -21,7 +20,7 @@ export default function ManageContributionCta() {
       <CtaLink
         ctaId="manage-contribution"
         text="Update your recurring contribution"
-        url={buildUrl()}
+        url={buildMMAUrl()}
         accessibilityHint="Further support the guardian by increasing your regular contribution"
       />
     </div>
