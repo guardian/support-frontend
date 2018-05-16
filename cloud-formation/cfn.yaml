@@ -20,7 +20,7 @@ Parameters:
     Type: String
     Default: frontend
   AMI:
-    Description: AMI ID
+    Description: AMI ID (may be replaced by RiffRaff for latest baked AMI)
     Type: String
     Default: ami-0eb88168
 Conditions:
