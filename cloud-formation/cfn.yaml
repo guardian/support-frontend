@@ -84,7 +84,8 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: "/"
-      ManagedPolicyArns: [ "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM" ]
+      ManagedPolicyArns:
+      - !Sub arn:aws:iam::${AWS::AccountId}:policy/guardian-ec2-role-for-ssm
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
