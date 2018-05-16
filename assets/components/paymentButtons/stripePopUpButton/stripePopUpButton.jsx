@@ -5,6 +5,8 @@
 import React from 'react';
 
 import SvgCreditCard from 'components/svgs/creditCard';
+import Switchable, { type Switch } from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import {
@@ -15,21 +17,19 @@ import {
 
 // ---- Types ----- //
 
-type Switch = 'Hide' | 'HideWithError' | 'Show';
-
-/* eslint-disable react/no-unused-prop-types, react/require-default-props */
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: number,
   callback: Function,
-  closeHandler?: Function,
+  closeHandler: Function,
   currency: Currency,
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  canOpen?: Function,
-  switch?: Switch,
+  canOpen: Function,
+  switch: Switch,
 };
-/* eslint-enable react/no-unused-prop-types, react/require-default-props */
+/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Functions ----- //
@@ -41,31 +41,16 @@ function isStripeSetup(): boolean {
 
 // ----- Component ----- //
 
-const StripePopUpButton = (props: PropTypes) => {
-
-  if (props.switch === 'Hide') {
-    return null;
-  } else if (props.switch === 'HideWithError') {
-    return <ErrorMessage />;
-  }
-
-  return <Button {...props} />;
-
-};
+const StripePopUpButton = (props: PropTypes) => (
+  <Switchable
+    switch={props.switch}
+    component={() => <Button {...props} />}
+    errorComponent={() => <PaymentError paymentMethod="credit/debit card" />}
+  />
+);
 
 
 // ----- Auxiliary Components ----- //
-
-function ErrorMessage() {
-  return (
-    <div className="component-stripe-pop-up-button component-stripe-pop-up-button--hidden-error">
-      <p className="component-stripe-pop-up-button__error-message">
-        We are currently experiencing issues with credit/debit card payments.
-        Please use another payment method or try again later.
-      </p>
-    </div>
-  );
-}
 
 function Button(props: PropTypes) {
 
@@ -99,11 +84,13 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
-  switch: 'Show',
+  switch: 'On',
 };
+/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

@@ -6,22 +6,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { openDirectDebitPopUp, type Action } from 'components/directDebit/directDebitActions';
+import Switchable, { type Switch } from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
+import {
+  openDirectDebitPopUp,
+  type Action,
+} from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
 
 // ---- Types ----- //
 
-type Switch = 'Hide' | 'HideWithError' | 'Show';
-
-/* eslint-disable react/no-unused-prop-types, react/require-default-props */
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: Function,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
-  switch?: Switch,
+  switch: Switch,
 };
-/* eslint-enable react/no-unused-prop-types, react/require-default-props */
+/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Map State/Props ----- //
@@ -45,31 +48,16 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 // ----- Component ----- //
 
-const DirectDebitPopUpButton = (props: PropTypes) => {
-
-  if (props.switch === 'Hide') {
-    return null;
-  } else if (props.switch === 'HideWithError') {
-    return <ErrorMessage />;
-  }
-
-  return <ButtonAndForm {...props} />;
-
-};
+const DirectDebitPopUpButton = (props: PropTypes) => (
+  <Switchable
+    switch={props.switch}
+    component={() => <ButtonAndForm {...props} />}
+    errorComponent={() => <PaymentError paymentMethod="direct debit" />}
+  />
+);
 
 
 // ----- Auxiliary Components ----- //
-
-function ErrorMessage() {
-  return (
-    <div className="component-direct-debit-pop-up-button">
-      <p className="component-direct-debit-pop-up-butto__error-message">
-        We are currently experiencing issues with direct debit payments.
-        Please use another payment method or try again later.
-      </p>
-    </div>
-  );
-}
 
 function ButtonAndForm(props: PropTypes) {
 
@@ -101,9 +89,11 @@ function Button(props: { openPopUp: () => void }) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 DirectDebitPopUpButton.defaultProps = {
-  switch: 'Show',
+  switch: 'On',
 };
+/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

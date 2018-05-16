@@ -3,6 +3,9 @@
 // ----- Imports ----- //
 
 import React from 'react';
+
+import Switchable, { type Switch } from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
 import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
@@ -17,8 +20,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
-type Switch = 'Hide' | 'HideWithError' | 'Show';
-
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: number,
@@ -27,12 +28,12 @@ type PropTypes = {
   isoCountry: IsoCountry,
   countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
-  canClick?: boolean,
-  buttonText?: string,
-  additionalClass?: string,
-  inPaymentLogosTest?: boolean,
-  onClick?: ?(void => void),
-  switch?: Switch,
+  canClick: boolean,
+  buttonText: string,
+  additionalClass: string,
+  inPaymentLogosTest: boolean,
+  onClick: ?(void => void),
+  switch: Switch,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -65,29 +66,18 @@ function payWithPayPal(props: PropTypes) {
 
 function PayPalContributionButton(props: PropTypes) {
 
-  if (props.switch === 'Hide') {
-    return null;
-  } else if (props.switch === 'HideWithError') {
-    return <ErrorMessage />;
-  }
-
-  return <Button {...props} />;
+  return (
+    <Switchable
+      switch={props.switch}
+      component={() => <Button {...props} />}
+      errorComponent={() => <PaymentError paymentMethod="PayPal" />}
+    />
+  );
 
 }
 
 
 // ----- Auxiliary Components ----- //
-
-function ErrorMessage() {
-  return (
-    <div className="component-paypal-contribution-buttonr">
-      <p className="component-paypal-contribution-button__error-message">
-        We are currently experiencing issues with credit/debit card payments.
-        Please use another payment method or try again later.
-      </p>
-    </div>
-  );
-}
 
 function Button(props: PropTypes) {
 
@@ -112,14 +102,16 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
   additionalClass: '',
   inPaymentLogosTest: false,
   onClick: null,
-  switch: 'Show',
+  switch: 'On',
 };
+/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

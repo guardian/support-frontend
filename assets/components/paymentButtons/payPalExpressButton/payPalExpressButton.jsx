@@ -4,6 +4,9 @@
 
 import ReactDOM from 'react-dom';
 import React from 'react';
+
+import Switchable, { type Switch } from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { loadPayPalExpress, setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -11,9 +14,6 @@ import type { Currency } from 'helpers/internationalisation/currency';
 
 // ---- Types ----- //
 
-type Switch = 'Hide' | 'HideWithError' | 'Show';
-
-/* eslint-disable react/require-default-props */
 type PropTypes = {
   amount: number,
   currency: Currency,
@@ -21,38 +21,26 @@ type PropTypes = {
   callback: Function,
   setHasLoaded: Function,
   hasLoaded: boolean,
-  switch?: Switch,
+  switch: Switch,
 };
-/* eslint-enable react/require-default-props */
 
 
 // ----- Component ----- //
 
 function PayPalExpressButton(props: PropTypes) {
 
-  if (props.switch === 'Hide') {
-    return null;
-  } else if (props.switch === 'HideWithError') {
-    return <ErrorMessage />;
-  }
-
-  return <Button {...props} />;
+  return (
+    <Switchable
+      switch={props.switch}
+      component={() => <Button {...props} />}
+      errorComponent={() => <PaymentError paymentMethod="PayPal" />}
+    />
+  );
 
 }
 
 
 // ----- Auxiliary Components ----- //
-
-function ErrorMessage() {
-  return (
-    <div className="component-paypal-button-checkout">
-      <p className="component-paypal-button-checkout__error-message">
-        We are currently experiencing issues with PayPal payments.
-        Please use another payment method or try again later.
-      </p>
-    </div>
-  );
-}
 
 function Button(props: PropTypes) {
 
@@ -81,9 +69,11 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 PayPalExpressButton.defaultProps = {
-  switch: 'Show',
+  switch: 'On',
 };
+/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Export ----- //
