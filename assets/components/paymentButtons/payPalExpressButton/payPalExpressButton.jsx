@@ -33,7 +33,7 @@ function PayPalExpressButton(props: PropTypes) {
     <Switchable
       switch={props.switch}
       component={() => <Button {...props} />}
-      errorComponent={() => <PaymentError paymentMethod="PayPal" />}
+      errorComponent={() => <PaymentError paymentMethod="PayPal" modifierClass="paypal-express" />}
     />
   );
 

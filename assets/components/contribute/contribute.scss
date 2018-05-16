@@ -56,6 +56,10 @@
   }
 
   @include multiline-top-border;
+
+  .component-payment-error {
+    margin-top: $gu-v-spacing;
+  }
 }
 
 .component-contribute__description {

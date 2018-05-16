@@ -4,19 +4,22 @@
 
 import React from 'react';
 
+import { classNameWithModifiers } from 'helpers/utilities';
+
 
 // ----- Types ----- //
 
 type PropTypes = {
   paymentMethod: string,
+  modifierClass: string,
 };
 
 
 // ----- Component ----- //
 
-export default function PaymentError(props: PropTypes) {
+function PaymentError(props: PropTypes) {
   return (
-    <div className="component-payment-error">
+    <div className={classNameWithModifiers('component-payment-error', [props.modifierClass])}>
       <p className="component-payment-error__message">
         We are currently experiencing issues with {props.paymentMethod} payments.
         Please use another payment method or try again later.
@@ -24,3 +27,17 @@ export default function PaymentError(props: PropTypes) {
     </div>
   );
 }
+
+
+// ----- Default Props ----- //
+
+/* eslint-disable react/default-props-match-prop-types */
+PaymentError.defaultProps = {
+  modifierClass: '',
+};
+/* eslint-enable react/default-props-match-prop-types */
+
+
+// ----- Export ----- //
+
+export default PaymentError;
