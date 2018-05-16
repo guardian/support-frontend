@@ -17,6 +17,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
+type Switch = 'Hide' | 'HideWithError' | 'Show';
+
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   amount: number,
@@ -30,6 +32,7 @@ type PropTypes = {
   additionalClass?: string,
   inPaymentLogosTest?: boolean,
   onClick?: ?(void => void),
+  switch?: Switch,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -61,7 +64,37 @@ function payWithPayPal(props: PropTypes) {
 // ----- Component ----- //
 
 function PayPalContributionButton(props: PropTypes) {
-  const modifiers = props.inPaymentLogosTest ? [props.additionalClass, 'variant'] : [props.additionalClass];
+
+  if (props.switch === 'Hide') {
+    return null;
+  } else if (props.switch === 'HideWithError') {
+    return <ErrorMessage />;
+  }
+
+  return <Button {...props} />;
+
+}
+
+
+// ----- Auxiliary Components ----- //
+
+function ErrorMessage() {
+  return (
+    <div className="component-paypal-contribution-buttonr">
+      <p className="component-paypal-contribution-button__error-message">
+        We are currently experiencing issues with credit/debit card payments.
+        Please use another payment method or try again later.
+      </p>
+    </div>
+  );
+}
+
+function Button(props: PropTypes) {
+
+  const modifiers = props.inPaymentLogosTest ?
+    [props.additionalClass, 'variant'] :
+    [props.additionalClass];
+
   return (
     <button
       id="qa-contribute-paypal-button"
@@ -73,6 +106,7 @@ function PayPalContributionButton(props: PropTypes) {
       <SvgArrowRightStraight />
     </button>
   );
+
 }
 
 
@@ -84,6 +118,7 @@ PayPalContributionButton.defaultProps = {
   additionalClass: '',
   inPaymentLogosTest: false,
   onClick: null,
+  switch: 'Show',
 };
 
 

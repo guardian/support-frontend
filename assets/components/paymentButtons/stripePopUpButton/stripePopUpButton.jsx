@@ -3,18 +3,21 @@
 // ----- Imports ----- //
 
 import React from 'react';
+
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
-
 import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/stripeCheckout/stripeCheckout';
 
+
 // ---- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
+type Switch = 'Hide' | 'HideWithError' | 'Show';
+
+/* eslint-disable react/no-unused-prop-types, react/require-default-props */
 type PropTypes = {
   amount: number,
   callback: Function,
@@ -24,9 +27,12 @@ type PropTypes = {
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   canOpen?: Function,
+  switch?: Switch,
 };
-/* eslint-enable react/no-unused-prop-types */
+/* eslint-enable react/no-unused-prop-types, react/require-default-props */
 
+
+// ----- Functions ----- //
 
 function isStripeSetup(): boolean {
   return window.StripeCheckout !== undefined;
@@ -36,6 +42,32 @@ function isStripeSetup(): boolean {
 // ----- Component ----- //
 
 const StripePopUpButton = (props: PropTypes) => {
+
+  if (props.switch === 'Hide') {
+    return null;
+  } else if (props.switch === 'HideWithError') {
+    return <ErrorMessage />;
+  }
+
+  return <Button {...props} />;
+
+};
+
+
+// ----- Auxiliary Components ----- //
+
+function ErrorMessage() {
+  return (
+    <div className="component-stripe-pop-up-button component-stripe-pop-up-button--hidden-error">
+      <p className="component-stripe-pop-up-button__error-message">
+        We are currently experiencing issues with credit/debit card payments.
+        Please use another payment method or try again later.
+      </p>
+    </div>
+  );
+}
+
+function Button(props: PropTypes) {
 
   if (!isStripeSetup()) {
     setupStripeCheckout(props.callback, props.closeHandler, props.currency.iso, props.isTestUser);
@@ -62,14 +94,17 @@ const StripePopUpButton = (props: PropTypes) => {
     </button>
   );
 
-};
+}
+
 
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
+  switch: 'Show',
 };
+
 
 // ----- Exports ----- //
 
