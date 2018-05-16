@@ -45,7 +45,7 @@ const StripePopUpButton = (props: PropTypes) => (
   <Switchable
     switch={props.switch}
     component={() => <Button {...props} />}
-    errorComponent={() => <PaymentError paymentMethod="credit/debit card" />}
+    fallback={() => <PaymentError paymentMethod="credit/debit card" />}
   />
 );
 

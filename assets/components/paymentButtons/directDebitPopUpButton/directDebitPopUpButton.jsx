@@ -52,7 +52,7 @@ const DirectDebitPopUpButton = (props: PropTypes) => (
   <Switchable
     switch={props.switch}
     component={() => <ButtonAndForm {...props} />}
-    errorComponent={() => <PaymentError paymentMethod="direct debit" />}
+    fallback={() => <PaymentError paymentMethod="direct debit" />}
   />
 );
 

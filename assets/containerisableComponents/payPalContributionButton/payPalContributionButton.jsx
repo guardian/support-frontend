@@ -70,7 +70,7 @@ function PayPalContributionButton(props: PropTypes) {
     <Switchable
       switch={props.switch}
       component={() => <Button {...props} />}
-      errorComponent={() => <PaymentError paymentMethod="PayPal" />}
+      fallback={() => <PaymentError paymentMethod="PayPal" />}
     />
   );
 
