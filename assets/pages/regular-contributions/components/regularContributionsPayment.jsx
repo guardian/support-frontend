@@ -93,6 +93,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       />);
   }
 
+  /* eslint-disable no-unused-vars */
   let stripeButton = (<StripePopUpButton
     email={props.email}
     callback={postCheckout(
@@ -111,6 +112,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
   />);
+  /* eslint-enable no-unused-vars */
 
   let payPalButton = (<PayPalExpressButton
     amount={props.amount}
@@ -143,8 +145,15 @@ function RegularContributionsPayment(props: PropTypes, context) {
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {directDebitButton}
-      {stripeButton}
       {payPalButton}
+      <div>
+        <p>
+          We are currently experiencing issues with our provider for credit/debit card payments.
+        </p>
+        <p>
+          Please use PayPal or try again later.
+        </p>
+      </div>
     </section>
   );
 }

@@ -69,7 +69,16 @@ export default function ContributionPaymentCtas(props: PropTypes) {
     buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
     onClick={props.resetError}
   />);
-  const stripe = <OneOffCta {...props} />;
+  const stripe = (
+    <div>
+      <p>
+        We are currently experiencing issues with our provider for credit/debit card payments.
+      </p>
+      <p>
+        Please use PayPal or try again later.
+      </p>
+    </div>
+  );
 
   if (props.contributionType === 'ONE_OFF') {
     return (
@@ -95,6 +104,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 // Build the one-off payment button.
+/* eslint-disable no-unused-vars */
 function OneOffCta(props: {
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
@@ -126,6 +136,7 @@ function OneOffCta(props: {
   );
 
 }
+/* eslint-enable no-unused-vars */
 
 // Build the regular payment button.
 function RegularCta(props: {
