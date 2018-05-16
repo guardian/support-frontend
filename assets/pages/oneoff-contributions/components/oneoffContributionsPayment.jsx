@@ -6,11 +6,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
-import { validateEmailAddress } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -19,11 +17,11 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { checkoutError, type Action } from '../oneoffContributionsActions';
-import postCheckout from '../helpers/ajax';
 
 
 // ----- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   dispatch: Function,
   email: string,
@@ -39,6 +37,7 @@ type PropTypes = {
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
 };
+/* eslint-enable react/no-unused-prop-types */
 
 // ----- Map State/Props ----- //
 
@@ -70,6 +69,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Functions ----- //
 
 // If the form is valid, calls the given callback, otherwise sets an error.
+/* eslint-disable no-unused-vars */
 function formValidation(
   isFormEmpty: boolean,
   validEmail: boolean,
@@ -96,6 +96,7 @@ function formValidation(
   };
 
 }
+/* eslint-enable no-unused-vars */
 
 
 // ----- Component ----- //
@@ -107,32 +108,20 @@ function formValidation(
  * More information here:https://reactjs.org/docs/context.html
  * You should not use context for other purposes. Please use redux.
  */
-function OneoffContributionsPayment(props: PropTypes, context) {
+function OneoffContributionsPayment(props: PropTypes) {
 
   return (
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
 
-      <StripePopUpButton
-        email={props.email}
-        callback={postCheckout(
-          props.abParticipations,
-          props.dispatch,
-          props.amount,
-          props.currency,
-          props.referrerAcquisitionData,
-          context.store.getState,
-        )}
-        canOpen={formValidation(
-          props.isFormEmpty,
-          validateEmailAddress(props.email),
-          props.checkoutError,
-        )}
-        currency={props.currency}
-        isTestUser={props.isTestUser}
-        isPostDeploymentTestUser={props.isPostDeploymentTestUser}
-        amount={props.amount}
-      />
+      <div>
+        <p>
+          We are currently experiencing issues with our provider for credit/debit card payments.
+        </p>
+        <p>
+          Please use PayPal or try again later.
+        </p>
+      </div>
       <PayPalContributionButton
         amount={props.amount}
         referrerAcquisitionData={props.referrerAcquisitionData}
