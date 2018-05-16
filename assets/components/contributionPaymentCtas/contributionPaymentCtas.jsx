@@ -35,7 +35,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: Currency,
   isDisabled: boolean,
-  PayPalButton: React$ComponentType<{buttonText?: string, onClick?: ?() => void, additionalClass?: string}>,
+  PayPalButton: React$ComponentType<{buttonText: string, onClick: ?() => void}>,
   error: ?string,
   isInPaymentLogosVariant: boolean,
   resetError: void => void,

@@ -95,7 +95,7 @@ const content = (
       >
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
-          PayPalButton={PayPalContributionButtonContainer}
+          PayPalButton={() => <PayPalContributionButtonContainer />}
         />
       </ContributeContainer>
       <Footer disclaimer />
