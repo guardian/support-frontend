@@ -2,13 +2,15 @@
 
 // ----- Imports ----- //
 
-import { combineReducers } from 'redux';
+import { combineReducers, type CombinedReducer } from 'redux';
 
 import { contributionSelectionReducerFor } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import { payPalContributionButtonReducerFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
 
 import type { State as ContributionSelectionState } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
+import type { Action as ContributionSelectionAction } from 'containerisableComponents/contributionSelection/contributionSelectionActions';
 import type { State as PayPalState } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
+import type { Action as PayPalAction } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
 
 import type { CommonState } from 'helpers/page/page';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -26,10 +28,12 @@ export type State = {
   page: PageState,
 };
 
+type PageReducer = CombinedReducer<PageState, ContributionSelectionAction | PayPalAction>;
+
 
 // ----- Functions ----- //
 
-function createPageReducerFor(countryGroupId: CountryGroupId): PageState {
+function createPageReducerFor(countryGroupId: CountryGroupId): PageReducer {
 
   return combineReducers({
     selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', countryGroupId),

@@ -2,25 +2,35 @@
 
 // ----- Imports ----- //
 
-import { createStore, combineReducers } from 'redux';
 import 'ophan';
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware,
+  compose,
+  type Reducer,
+  type StoreEnhancer,
+} from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
 import * as abTest from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-
-import { getCampaign, getAcquisition } from 'helpers/tracking/acquisitions';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-
-import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency } from 'helpers/internationalisation/currency';
-import type { Participations } from 'helpers/abTests/abtest';
-
+import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
+import { detect as detectCurrency, type Currency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import {
+  getCampaign,
+  getAcquisition,
+  type Campaign,
+  type ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
+import {
+  detect as detectCountryGroup,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+
 import type { Action } from './pageActions';
 
 
@@ -116,14 +126,29 @@ function statelessInit() {
   const country: IsoCountry = detectCountry();
   const participations: Participations = abTest.init(country);
   analyticsInitialisation(participations);
-
 }
 
+// Enables redux devtools extension and optional redux-thunk.
+/* eslint-disable no-underscore-dangle */
+function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undefined {
+
+  if (thunk) {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    return composeEnhancers(applyMiddleware(thunkMiddleware));
+  }
+
+  return window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__()
+    : undefined;
+
+}
+/* eslint-enable no-underscore-dangle */
+
 // Initialises the page.
-function init(
-  pageReducer: Object,
+function init<S, A>(
+  pageReducer: Reducer<S, A> | null = null,
+  thunk?: boolean = false,
   preloadedState: ?PreloadedState = null,
-  middleware: ?Function,
 ) {
 
   const countryGroup: CountryGroupId = detectCountryGroup();
@@ -143,8 +168,7 @@ function init(
 
   return createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
-    undefined,
-    middleware,
+    storeEnhancer(thunk),
   );
 }
 

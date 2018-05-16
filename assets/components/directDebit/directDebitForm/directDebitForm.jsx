@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
@@ -19,7 +20,7 @@ import {
   payDirectDebitClicked,
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
-import type { SortCodeIndex, Phase } from 'components/directDebit/directDebitActions';
+import type { SortCodeIndex, Phase, Action } from 'components/directDebit/directDebitActions';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -38,9 +39,9 @@ type PropTypes = {
   accountHolderName: string,
   accountHolderConfirmation: boolean,
   updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountNumber: (accountNumber: string) => void,
-  updateAccountHolderName: (accountHolderName: string) => void,
-  updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
+  updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
+  updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
+  updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void,
   formError: string,
@@ -65,7 +66,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
     payDirectDebitClicked: () => {
