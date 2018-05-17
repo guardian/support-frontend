@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import Switchable, { type Switch } from 'components/switchable/switchable';
+import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -21,7 +21,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+export type PropTypes = {
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -33,7 +33,7 @@ type PropTypes = {
   additionalClass: string,
   inPaymentLogosTest: boolean,
   onClick: ?(void => void),
-  switch: Switch,
+  switchedOff: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -68,7 +68,7 @@ function PayPalContributionButton(props: PropTypes) {
 
   return (
     <Switchable
-      switch={props.switch}
+      off={props.switchedOff}
       component={() => <Button {...props} />}
       fallback={() => <PaymentError paymentMethod="PayPal" modifierClass="paypal" />}
     />
@@ -109,7 +109,7 @@ PayPalContributionButton.defaultProps = {
   additionalClass: '',
   inPaymentLogosTest: false,
   onClick: null,
-  switch: 'On',
+  switchedOff: false,
 };
 /* eslint-enable react/default-props-match-prop-types */
 

@@ -5,7 +5,7 @@
 import React from 'react';
 
 import SvgCreditCard from 'components/svgs/creditCard';
-import Switchable, { type Switch } from 'components/switchable/switchable';
+import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
@@ -27,7 +27,7 @@ type PropTypes = {
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   canOpen: Function,
-  switch: Switch,
+  switchedOff: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -43,7 +43,7 @@ function isStripeSetup(): boolean {
 
 const StripePopUpButton = (props: PropTypes) => (
   <Switchable
-    switch={props.switch}
+    off={props.switchedOff}
     component={() => <Button {...props} />}
     fallback={() => <PaymentError paymentMethod="credit/debit card" />}
   />
@@ -88,7 +88,7 @@ function Button(props: PropTypes) {
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
-  switch: 'On',
+  switchedOff: false,
 };
 /* eslint-enable react/default-props-match-prop-types */
 

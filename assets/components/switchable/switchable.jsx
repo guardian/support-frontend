@@ -7,11 +7,9 @@ import React from 'react';
 
 // ----- Types ----- //
 
-export type Switch = 'On' | 'Off';
-
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  switch: Switch,
+  off: boolean,
   component: React$ComponentType<*>,
   fallback: React$ComponentType<*>,
 };
@@ -22,7 +20,7 @@ type PropTypes = {
 
 function Switchable(props: PropTypes) {
 
-  if (props.switch === 'Off') {
+  if (props.off) {
     return <props.fallback />;
   }
 

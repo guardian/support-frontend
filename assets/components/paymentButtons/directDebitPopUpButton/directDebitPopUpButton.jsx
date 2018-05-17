@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import Switchable, { type Switch } from 'components/switchable/switchable';
+import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import {
   openDirectDebitPopUp,
@@ -22,7 +22,7 @@ type PropTypes = {
   callback: Function,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
-  switch: Switch,
+  switchedOff: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,7 +50,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 const DirectDebitPopUpButton = (props: PropTypes) => (
   <Switchable
-    switch={props.switch}
+    off={props.switchedOff}
     component={() => <ButtonAndForm {...props} />}
     fallback={() => <PaymentError paymentMethod="direct debit" />}
   />
@@ -91,7 +91,7 @@ function Button(props: { openPopUp: () => void }) {
 
 /* eslint-disable react/default-props-match-prop-types */
 DirectDebitPopUpButton.defaultProps = {
-  switch: 'On',
+  switchedOff: false,
 };
 /* eslint-enable react/default-props-match-prop-types */
 
