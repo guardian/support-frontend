@@ -32,7 +32,7 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.regularStripeConfigProvider,
-    appConfig.payPalNvpConfigProvider,
+    appConfig.regularPayPalConfigProvider,
     controllerComponents
   )
 

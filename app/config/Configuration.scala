@@ -31,7 +31,7 @@ class Configuration {
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
-  lazy val payPalNvpConfigProvider = new PayPalConfigProvider(config, stage)
+  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
 
   lazy val regularStripeConfigProvider = new StripeConfigProvider(config, stage)
 
