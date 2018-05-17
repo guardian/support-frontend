@@ -23,10 +23,6 @@ object Dependencies {
     val url = s"${Config.identityFrontendUrl}/signin"
   }
 
-  object ContributionFrontend extends Availability {
-    val url = s"${Config.contributionFrontend}"
-  }
-
   def dependencyCheck: Unit = {
     assume(
       SupportFrontend.isAvailable,
@@ -35,10 +31,6 @@ object Dependencies {
     assume(
       IdentityFrontend.isAvailable,
       s"- ${Dependencies.IdentityFrontend.url} is unavailable! Please run identity-frontend locally before running these tests."
-    )
-    assume(
-      ContributionFrontend.isAvailable,
-      s"${Dependencies.ContributionFrontend.url} is unavailable! Please run contribution-frontend locally before running these tests."
     )
   }
 
