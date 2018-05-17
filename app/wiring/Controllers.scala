@@ -32,11 +32,11 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.regularStripeConfigProvider,
-    appConfig.payPalConfigProvider,
+    appConfig.payPalNvpConfigProvider,
     controllerComponents
   )
 
-  lazy val payPalNvpController = new PayPalRegular(
+  lazy val payPalRegularController = new PayPalRegular(
     actionRefiners,
     assetsResolver,
     payPalNvpServiceProvider,
@@ -44,7 +44,7 @@ trait Controllers {
     controllerComponents
   )
 
-  lazy val payPalRestController = new PayPalOneOff(
+  lazy val payPalOneOffController = new PayPalOneOff(
     actionRefiners,
     assetsResolver,
     testUsers,

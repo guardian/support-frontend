@@ -48,8 +48,8 @@ trait AppComponents extends PlayComponents
     subscriptionsController,
     loginController,
     testUsersController,
-    payPalNvpController,
-    payPalRestController,
+    payPalRegularController,
+    payPalOneOffController,
     directDebitController,
     assetController
   )
