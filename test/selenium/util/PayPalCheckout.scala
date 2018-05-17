@@ -1,9 +1,6 @@
 package selenium.util
 
-import java.time.ZoneOffset
-import java.util.Date
 import org.openqa.selenium.WebDriver
-import selenium.pages.ContributionsLanding
 
 // Handles interaction with the PayPal Express Checkout overlay.
 class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {

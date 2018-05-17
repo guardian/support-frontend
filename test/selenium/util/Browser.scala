@@ -1,11 +1,9 @@
 package selenium.util
 
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.ui
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatest.selenium.WebBrowser
-
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
 

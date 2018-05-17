@@ -25,7 +25,6 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("us")
       val payPalCheckout = new PayPalCheckout
-
       val oneOffContributionThankYou = new OneOffContributionThankYou
       val expectedPayment = "50.00"
 
