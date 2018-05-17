@@ -1,7 +1,9 @@
 package selenium.util
 
+import java.time.ZoneOffset
+import java.util.Date
 import org.openqa.selenium.WebDriver
-import play.api.test.FutureAwaits
+import selenium.pages.ContributionsLanding
 
 // Handles interaction with the PayPal Express Checkout overlay.
 class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
@@ -13,6 +15,24 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
   val passwordInput = name("login_password")
   val agreeAndPay = id("confirmButtonTop")
   val paymentAmount = className("formatCurrency")
+  val guestRegistrationUrlFragment = "#/checkout/guest"
+  val loginUrlFragment = "https://www.sandbox.paypal.com/webapps/hermes?country.x=US&hermesLoginRedirect=xoon&locale.x=en_US"
+
+  def addPaypalCookie()(implicit landing: ContributionsLanding): Unit = {
+    val cookieName: String = "tsrce"
+    val cookieValue: String = "authchallengenodeweb"
+    val path: String = "/"
+    val domain: String = ".paypal.com"
+    val isSecure: Boolean = true
+
+    /*Note: The very convoluted creation of the expiry Date is due to the fact that
+    most of the creation methods for Date.java are deprecated. */
+    val expiry = java.time.LocalDateTime.now().plusMonths(1)
+    val expiryAsInstant = expiry.toInstant(ZoneOffset.MIN)
+    val expiryAsDate = Date.from(expiryAsInstant)
+
+    landing.addCookie(cookieName, cookieValue, path, expiryAsDate, domain, isSecure)
+  }
 
   def fillIn(): Unit = {
     setValueSlowly(emailInput, Config.paypalBuyerEmail)
@@ -34,7 +54,11 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
-  def hasLoaded: Boolean = {
+  def initialPageHasLoaded: Boolean = {
+    pageHasUrlOrElement(guestRegistrationUrlFragment, emailInput)
+  }
+
+  def loginContainerHasLoaded: Boolean = {
     pageHasElement(emailInput)
   }
 
@@ -44,16 +68,16 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def acceptPayPalPaymentPage(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    acceptPayment
+    acceptPayment()
   }
 
   def switchToPayPalPopUp(): Unit = {
-    switchWindow
+    switchWindow()
   }
 
   def acceptPayPalPaymentPopUp(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    acceptPayment
-    switchToParentWindow
+    acceptPayment()
+    switchToParentWindow()
   }
 }

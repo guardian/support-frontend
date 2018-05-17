@@ -1,5 +1,6 @@
 package selenium
 
+import com.twitter.conversions.thread
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
 import selenium.pages.{ContributionsLanding, OneOffContributionThankYou}
 import selenium.util._
@@ -25,6 +26,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("us")
       val payPalCheckout = new PayPalCheckout
+
       val oneOffContributionThankYou = new OneOffContributionThankYou
       val expectedPayment = "50.00"
 
@@ -36,10 +38,17 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       landingPage.clickOneOff
 
       And("he/she selects to contribute via PayPal")
+      payPalCheckout.addPaypalCookie()(landingPage)
       landingPage.clickContributePayPalButton
 
       Then("they should be redirected to PayPal Checkout")
-      assert(payPalCheckout.hasLoaded)
+      assert(payPalCheckout.initialPageHasLoaded)
+      val url = webDriver.getCurrentUrl
+      if (url.contains(payPalCheckout.guestRegistrationUrlFragment)) {
+        val token = url.substring(url.indexOf("&token="), url.indexOf(payPalCheckout.guestRegistrationUrlFragment))
+        webDriver.navigate().to(payPalCheckout.loginUrlFragment + token)
+        assert(payPalCheckout.loginContainerHasLoaded)
+      }
 
       Given("that the user fills in their PayPal credentials correctly")
       payPalCheckout.fillIn()

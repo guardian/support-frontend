@@ -95,11 +95,19 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       And("they select to pay with PayPal")
 
       When("they press the PayPal payment button")
+      payPalCheckout.addPaypalCookie()(landingPage)
       recurringContributionForm.selectPayPalPayment
 
       Then("the PayPal Express Checkout mini-browser should display")
       payPalCheckout.switchToPayPalPopUp
-      assert(payPalCheckout.hasLoaded)
+      assert(payPalCheckout.initialPageHasLoaded)
+      val url = webDriver.getCurrentUrl
+      if (url.contains(payPalCheckout.guestRegistrationUrlFragment)) {
+        val token = url.substring(url.indexOf("&token="), url.indexOf(payPalCheckout.guestRegistrationUrlFragment))
+        webDriver.navigate().to(payPalCheckout.loginUrlFragment + token)
+        payPalCheckout.switchToPayPalPopUp
+        assert(payPalCheckout.loginContainerHasLoaded)
+      }
 
       Given("that the user fills in their PayPal credentials correctly")
       payPalCheckout.fillIn()

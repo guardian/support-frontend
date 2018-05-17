@@ -1,9 +1,11 @@
 package selenium.util
 
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatest.selenium.WebBrowser
+
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
 
@@ -25,6 +27,14 @@ trait Browser extends WebBrowser {
 
   def pageHasUrl(urlFraction: String): Boolean =
     waitUntil(ExpectedConditions.urlContains(urlFraction))
+
+  def pageHasUrlOrElement(urlFraction: String, q: Query): Boolean =
+    waitUntil(
+      ExpectedConditions.or(
+        ExpectedConditions.urlContains(urlFraction),
+        ExpectedConditions.visibilityOfElementLocated(q.by)
+      )
+    )
 
   def clickOn(q: Query) {
     if (pageHasElement(q))
