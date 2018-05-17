@@ -35,7 +35,12 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: Currency,
   isDisabled: boolean,
-  PayPalButton: React$ComponentType<{buttonText: string, onClick: ?() => void}>,
+  PayPalButton: React$ComponentType<{
+    buttonText?: string,
+    onClick?: ?(void => void),
+    additionalClass?: string,
+    switchedOff?: boolean,
+  }>,
   error: ?string,
   isInPaymentLogosVariant: boolean,
   resetError: void => void,
@@ -65,10 +70,12 @@ function onCtaClick(isDisabled: boolean, resetError: void => void): Function {
 export default function ContributionPaymentCtas(props: PropTypes) {
 
   const baseClassName = 'component-contribution-payment-ctas';
-  const paypal = (<props.PayPalButton
-    buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
-    onClick={props.resetError}
-  />);
+  const paypal = (
+    <props.PayPalButton
+      buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
+      onClick={props.resetError}
+    />
+  );
   const stripe = <OneOffCta {...props} />;
 
   if (props.contributionType === 'ONE_OFF') {
