@@ -18,32 +18,6 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
   val guestRegistrationUrlFragment = "#/checkout/guest"
   val loginUrlFragment = "https://www.sandbox.paypal.com/webapps/hermes?country.x=US&hermesLoginRedirect=xoon&locale.x=en_US"
 
-  def addPaypalCookie()(implicit landing: ContributionsLanding): Unit = {
-    val cookieName: String = "tsrce"
-    val cookieValue: String = "authchallengenodeweb"
-    val path: String = "/"
-    val domain: String = ".paypal.com"
-    val isSecure: Boolean = true
-
-    /*Note: The very convoluted creation of the expiry Date is due to the fact that
-    most of the creation methods for Date.java are deprecated. */
-    val expiry = java.time.LocalDateTime.now().plusMonths(1)
-    val expiryAsInstant = expiry.toInstant(ZoneOffset.MIN)
-    val expiryAsDate = Date.from(expiryAsInstant)
-
-    landing.addCookie(cookieName, cookieValue, path, expiryAsDate, domain, isSecure)
-  }
-
-  def fillIn(): Unit = {
-    setValueSlowly(emailInput, Config.paypalBuyerEmail)
-    if (pageHasElement(nextButton)) {
-      clickNext()
-    }
-    if (pageHasElement(loginButton)) {
-      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
-    }
-  }
-
   def clickNext(): Unit = clickOn(nextButton)
 
   def logIn(): Unit = clickOn(loginButton)
@@ -79,5 +53,23 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
     pageDoesNotHaveElement(id("spinner"))
     acceptPayment()
     switchToParentWindow()
+  }
+
+  def handleGuestRegistrationPage(): Unit = {
+    val url = webDriver.getCurrentUrl
+    if (url.contains(guestRegistrationUrlFragment)) {
+      val token = url.substring(url.indexOf("&token="), url.indexOf(guestRegistrationUrlFragment))
+      webDriver.navigate().to(loginUrlFragment + token)
+    }
+  }
+
+  def enterLoginDetails(): Unit = {
+    setValueSlowly(emailInput, Config.paypalBuyerEmail)
+    if (pageHasElement(nextButton)) {
+      clickNext()
+    }
+    if (pageHasElement(loginButton)) {
+      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
+    }
   }
 }
