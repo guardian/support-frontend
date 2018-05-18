@@ -4,7 +4,7 @@
 
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamToURL, getAbsoluteURL } from 'helpers/url';
+import { addQueryParamsToURL, getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
@@ -27,10 +27,9 @@ type PayPalPaymentAPIPostData = {|
 
 function payPalContributionEndpoint(testUser) {
   if (testUser) {
-    return addQueryParamToURL(
+    return addQueryParamsToURL(
       window.guardian.paymentApiPayPalEndpoint,
-      'mode',
-      'test',
+      { mode: 'test' },
     );
   }
 

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { addQueryParamToURL } from 'helpers/url';
+import { addQueryParamsToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 
@@ -10,14 +10,24 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
+import * as cookie from 'helpers/cookie';
 
 import { checkoutError } from '../oneoffContributionsActions';
-
 
 // ----- Setup ----- //
 
 const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
+function stripeOneOffContributionEndpoint(testUser: ?string) {
+  if (testUser) {
+    return addQueryParamsToURL(
+      ONEOFF_CONTRIB_ENDPOINT,
+      { mode: 'test' },
+    );
+  }
+
+  return ONEOFF_CONTRIB_ENDPOINT;
+}
 
 // ----- Types ----- //
 
@@ -88,12 +98,11 @@ export default function postCheckout(
       getState,
     );
 
-    return fetch(ONEOFF_CONTRIB_ENDPOINT, request).then((response) => {
+    return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
 
-      const url: string = addQueryParamToURL(
+      const url: string = addQueryParamsToURL(
         routes.oneOffContribThankyou,
-        'INTCMP',
-        referrerAcquisitionData.campaignCode,
+        { INTCMP: referrerAcquisitionData.campaignCode },
       );
 
       if (response.ok) {
