@@ -62,14 +62,17 @@ const addQueryParamToURL = (urlOrPath: string, paramsKey: string, paramsValue: ?
 // Takes a mapping of query params and adds to an absolute or relative URL.
 function addQueryParamsToURL(
   urlString: string,
-  params: { [string]: string },
+  params: { [string]: ?string },
 ): string {
 
   const [baseUrl, ...oldParams] = urlString.split('?');
   const searchParams = new URLSearchParams(oldParams.join('&'));
 
-  Object.keys(params).forEach(key =>
-    searchParams.set(key, params[key]));
+  Object.keys(params).forEach((key) => {
+    if (params[key] !== undefined && params[key] !== null) {
+      searchParams.set(key, params[key]);
+    }
+  });
 
   return `${baseUrl}?${searchParams.toString()}`;
 
