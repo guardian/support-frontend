@@ -3,14 +3,17 @@
 // ----- Imports ----- //
 
 import React from 'react';
+
 import SvgCreditCard from 'components/svgs/creditCard';
+import Switchable from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Currency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
-
 import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/stripeCheckout/stripeCheckout';
+
 
 // ---- Types ----- //
 
@@ -18,15 +21,18 @@ import {
 type PropTypes = {
   amount: number,
   callback: Function,
-  closeHandler?: Function,
+  closeHandler: Function,
   currency: Currency,
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  canOpen?: Function,
+  canOpen: Function,
+  switchedOff: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
+
+// ----- Functions ----- //
 
 function isStripeSetup(): boolean {
   return window.StripeCheckout !== undefined;
@@ -35,7 +41,18 @@ function isStripeSetup(): boolean {
 
 // ----- Component ----- //
 
-const StripePopUpButton = (props: PropTypes) => {
+const StripePopUpButton = (props: PropTypes) => (
+  <Switchable
+    off={props.switchedOff}
+    component={() => <Button {...props} />}
+    fallback={() => <PaymentError paymentMethod="credit/debit card" />}
+  />
+);
+
+
+// ----- Auxiliary Components ----- //
+
+function Button(props: PropTypes) {
 
   if (!isStripeSetup()) {
     setupStripeCheckout(props.callback, props.closeHandler, props.currency.iso, props.isTestUser);
@@ -62,14 +79,19 @@ const StripePopUpButton = (props: PropTypes) => {
     </button>
   );
 
-};
+}
+
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
+  switchedOff: false,
 };
+/* eslint-enable react/default-props-match-prop-types */
+
 
 // ----- Exports ----- //
 

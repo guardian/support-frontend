@@ -201,6 +201,14 @@
 		}
   }
 
+  .component-payment-error {
+		margin-bottom: $gu-v-spacing;
+	}
+
+	.component-payment-error--paypal-express {
+		margin-top: $gu-v-spacing;
+	}
+
 	// ----- Legal ----- //
 
 	.terms-privacy {
