@@ -75,7 +75,7 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-play-auth" % "2.4",
   "com.gu" %% "identity-test-users" % "0.6",
-  "com.google.guava" % "guava" % "23.0",
+  "com.google.guava" % "guava" % "25.0-jre",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.1",
   "io.github.bonigarcia" % "webdrivermanager" % "2.1.0" % "test",
