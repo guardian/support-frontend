@@ -37,8 +37,13 @@ const getQueryParameter = (paramName: string, defaultValue?: string): ?string =>
 // Drop leading '?'
 // Turn into array of 'param=value'
 // Turn each param into array of '[param, value]'
+// Filter out items that are not key-value pairs
 const getAllQueryParams = (): Array<[string, string]> =>
-  window.location.search.slice(1).split('&').map(a => a.split('='));
+  window.location.search
+    .slice(1)
+    .split('&')
+    .map(a => a.split('='))
+    .filter(a => a.length === 2 && a.every(e => e !== ''));
 
 const getAllQueryParamsWithExclusions = (excluded: string[]): Array<[string, string]> =>
   getAllQueryParams().filter(p => excluded.indexOf(p[0]) === -1);
@@ -111,6 +116,7 @@ function getAbsoluteURL(path: string = ''): string {
 
 export {
   getQueryParameter,
+  getAllQueryParams,
   getAllQueryParamsWithExclusions,
   addQueryParamToURL,
   getBaseDomain,
