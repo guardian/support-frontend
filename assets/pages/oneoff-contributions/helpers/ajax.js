@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { addQueryParamToURL } from 'helpers/url';
+import { addQueryParamsToURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 
@@ -14,17 +14,15 @@ import * as cookie from 'helpers/cookie';
 
 import { checkoutError } from '../oneoffContributionsActions';
 
-
 // ----- Setup ----- //
 
 const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 function stripeOneOffContributionEndpoint(testUser: ?string) {
   if (testUser) {
-    return addQueryParamToURL(
+    return addQueryParamsToURL(
       ONEOFF_CONTRIB_ENDPOINT,
-      'mode',
-      'test',
+      { mode: 'test' },
     );
   }
 
@@ -102,10 +100,9 @@ export default function postCheckout(
 
     return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
 
-      const url: string = addQueryParamToURL(
+      const url: string = addQueryParamsToURL(
         routes.oneOffContribThankyou,
-        'INTCMP',
-        referrerAcquisitionData.campaignCode,
+        { INTCMP : referrerAcquisitionData.campaignCode },
       );
 
       if (response.ok) {
