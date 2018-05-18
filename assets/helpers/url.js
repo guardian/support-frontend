@@ -68,11 +68,14 @@ function addQueryParamsToURL(
   const [baseUrl, ...oldParams] = urlString.split('?');
   const searchParams = new URLSearchParams(oldParams.join('&'));
 
-  Object.keys(params)
-    .filter(key => params[key] !== undefined && params[key] !== null)
-    .forEach(key => searchParams.set(key, params[key]));
+  Object.keys(params).forEach((key) => {
+    if (params[key] !== undefined && params[key] !== null) {
+      searchParams.set(key, params[key]);
+    }
+  });
 
   return `${baseUrl}?${searchParams.toString()}`;
+
 }
 
 function getOrigin(): string {

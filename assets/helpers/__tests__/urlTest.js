@@ -61,6 +61,15 @@ describe('url', () => {
 
     });
 
+    it('should not change a URL with null params', () => {
+
+      const startingUrl = 'https://gu.com?hello=world';
+      const params = { spam: null };
+
+      expect(addQueryParamsToURL(startingUrl, params)).toEqual(startingUrl);
+
+    });
+
     it('should add multiple query params to a relative URL', () => {
 
       const startingUrl = '/index?hello=world';
