@@ -102,7 +102,7 @@ export default function postCheckout(
 
       const url: string = addQueryParamsToURL(
         routes.oneOffContribThankyou,
-        { INTCMP : referrerAcquisitionData.campaignCode },
+        { INTCMP: referrerAcquisitionData.campaignCode },
       );
 
       if (response.ok) {
