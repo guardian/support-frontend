@@ -21,10 +21,30 @@ describe('url', () => {
 
     });
 
+    it('should add a query param to an absolute URL [undefined case]', () => {
+
+      const startingUrl = 'https://gu.com/index?hello=world';
+      const params = { spam: 'eggs', homer: undefined };
+      const expectedUrl = `${startingUrl}&spam=eggs`;
+
+      expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
+
+    });
+
     it('should add multiple query params to an absolute URL', () => {
 
       const startingUrl = 'https://gu.com/index?hello=world';
       const params = { spam: 'eggs', answer: '42' };
+      const expectedUrl = `${startingUrl}&spam=eggs&answer=42`;
+
+      expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
+
+    });
+
+    it('should add multiple query params to an absolute URL [null case]', () => {
+
+      const startingUrl = 'https://gu.com/index?hello=world';
+      const params = { spam: 'eggs', homer: null, answer: '42' };
       const expectedUrl = `${startingUrl}&spam=eggs&answer=42`;
 
       expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
