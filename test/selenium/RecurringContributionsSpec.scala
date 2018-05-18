@@ -98,9 +98,9 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       recurringContributionForm.selectPayPalPayment
 
       Then("the PayPal Express Checkout mini-browser should display")
+      payPalCheckout.switchToPayPalPopUp
       assert(payPalCheckout.initialPageHasLoaded)
       payPalCheckout.handleGuestRegistrationPage()
-      payPalCheckout.switchToPayPalPopUp
       assert(payPalCheckout.loginContainerHasLoaded)
 
       Given("that the user fills in their PayPal credentials correctly")
