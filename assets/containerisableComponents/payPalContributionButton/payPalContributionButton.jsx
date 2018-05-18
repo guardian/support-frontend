@@ -21,7 +21,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-export type PropTypes = {
+type PropTypes = {
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
