@@ -17,16 +17,6 @@
     }
   }
 
-  // AB test paymentLogosTest
-  .component-cta-link--contribute-one-off-variant {
-    background-color: gu-colour(garnett-neutral-5);
-    border: solid 1px gu-colour(neutral-1);
-
-    &:hover {
-      background-color: darken(gu-colour(garnett-neutral-5), 5%);
-    }
-  }
-
   .svg-arrow-right-straight {
     fill: gu-colour(garnett-neutral-1);
     height: 35%;

@@ -42,7 +42,6 @@ type PropTypes = {
     switchedOff?: boolean,
   }>,
   error: ?string,
-  isInPaymentLogosVariant: boolean,
   resetError: void => void,
 };
 
@@ -70,19 +69,16 @@ function onCtaClick(isDisabled: boolean, resetError: void => void): Function {
 export default function ContributionPaymentCtas(props: PropTypes) {
 
   const baseClassName = 'component-contribution-payment-ctas';
-  const paypal = (
-    <props.PayPalButton
-      buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
-      onClick={props.resetError}
-    />
-  );
   const stripe = <OneOffCta {...props} />;
 
   if (props.contributionType === 'ONE_OFF') {
     return (
       <div className={classNameWithModifiers(baseClassName, props.isDisabled ? ['disabled'] : [])}>
-        {props.isInPaymentLogosVariant ? paypal : stripe}
-        {props.isInPaymentLogosVariant ? stripe : paypal}
+        <OneOffCta {...props} />
+        <props.PayPalButton
+          buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
+          onClick={props.resetError}
+        />
         <ErrorMessage message={props.error} />
         <TermsPrivacy country={props.country} />
       </div>
@@ -108,7 +104,6 @@ function OneOffCta(props: {
   amount: number,
   currency: Currency,
   isDisabled: boolean,
-  isInPaymentLogosVariant: boolean,
   resetError: void => void,
 }): Node {
 
@@ -119,11 +114,9 @@ function OneOffCta(props: {
     currency: props.currency.iso,
   });
 
-  const className = props.isInPaymentLogosVariant ? 'contribute-one-off-variant' : 'contribute-one-off';
-
   return (
     <CtaLink
-      ctaId={className}
+      ctaId="contribute-one-off"
       text={`Contribute ${props.currency.glyph}${props.amount} with card`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
