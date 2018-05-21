@@ -8,8 +8,8 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
 
   val url = s"${Config.supportFrontendUrl}/contribute/one-off?contributionValue=${amount}&contribType=ONE_OFF&currency=${currency}"
 
+  private val paymentAmountDisplay = className("component-payment-amount")
   private val payWithCard = id("qa-pay-with-card")
-
   private val contributePayPalButton = id("qa-contribute-paypal-button")
 
   private object RegisterFields {
@@ -24,10 +24,14 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
 
   def pageHasLoaded: Boolean = pageHasElement(payWithCard)
 
+  def getAmountDisplayed(): Int = webDriver.findElement(paymentAmountDisplay.by).getText.tail.trim.toInt
+
+  def compareAmountDisplayed(expectedAmount: Int): Boolean = expectedAmount == getAmountDisplayed()
+
   def fillInPersonalDetails() { RegisterFields.fillIn() }
 
-  def clickContributeByCard: Unit = clickOn(payWithCard)
+  def clickContributeByCard(): Unit = clickOn(payWithCard)
 
-  def clickContributePayPalButton: Unit = clickOn(contributePayPalButton)
+  def clickContributePayPalButton(): Unit = clickOn(contributePayPalButton)
 
 }

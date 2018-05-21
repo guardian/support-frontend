@@ -14,6 +14,8 @@ case class ContributionsLanding(region: String)(implicit val webDriver: WebDrive
 
   private val oneOffButton = id("qa-one-off-toggle")
 
+  private val otherAmountField = className("component-number-input__input")
+
   def pageHasLoaded: Boolean = pageHasElement(contributeButton)
 
   def clickContribute: Unit = clickOn(contributeButton)
@@ -21,5 +23,7 @@ case class ContributionsLanding(region: String)(implicit val webDriver: WebDrive
   def clickOneOff: Unit = clickOn(oneOffButton)
 
   def clickContributePayPalButton: Unit = clickOn(contributePayPalButton)
+
+  def enterAmount(amount: Double): Unit = setValueSlowly(otherAmountField, amount.toString)
 
 }
