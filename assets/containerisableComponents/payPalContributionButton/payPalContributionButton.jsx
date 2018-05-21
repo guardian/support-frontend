@@ -82,7 +82,7 @@ function Button(props: PropTypes) {
   return (
     <button
       id="qa-contribute-paypal-button"
-      className={classNameWithModifiers('component-paypal-contribution-button')}
+      className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
       onClick={payWithPayPal(props)}
     >
       <SvgPaypalPLogo />
