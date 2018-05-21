@@ -2,7 +2,12 @@
 
 // ----- Imports ----- //
 
-import { addQueryParamsToURL, getAbsoluteURL } from '../url';
+import {
+  addQueryParamsToURL,
+  getAbsoluteURL,
+  getAllQueryParams,
+  getAllQueryParamsWithExclusions,
+} from '../url';
 
 
 // ----- Tests ----- //
@@ -96,6 +101,49 @@ describe('url', () => {
       const expectedUrl = `${startingUrl}?spam=eggs&answer=42`;
 
       expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
+
+    });
+
+  });
+
+  describe('getAllQueryParams', () => {
+
+    const baseUrl = 'https://support.thegulocal.com/uk';
+
+    it('should return an array of query params', () => {
+
+      jsdom.reconfigure({ url: `${baseUrl}?foo=bar&spam=eggs` });
+      expect(getAllQueryParams()).toEqual([['foo', 'bar'], ['spam', 'eggs']]);
+
+    });
+
+    it('should return an empty array if there are no params', () => {
+
+      jsdom.reconfigure({ url: `${baseUrl}` });
+      expect(getAllQueryParams()).toEqual([]);
+
+      jsdom.reconfigure({ url: `${baseUrl}?` });
+      expect(getAllQueryParams()).toEqual([]);
+
+    });
+
+    it('should ignore malformed params', () => {
+
+      jsdom.reconfigure({ url: `${baseUrl}?foo&spam=eggs` });
+      expect(getAllQueryParams()).toEqual([['spam', 'eggs']]);
+
+    });
+
+  });
+
+  describe('getAllQueryParamsWithExclusions', () => {
+
+    const baseUrl = 'https://support.thegulocal.com/uk';
+
+    it('should exclude query params', () => {
+
+      jsdom.reconfigure({ url: `${baseUrl}?foo=bar&spam=eggs` });
+      expect(getAllQueryParamsWithExclusions('foo')).toEqual([['spam', 'eggs']]);
 
     });
 
