@@ -69,7 +69,6 @@ function onCtaClick(isDisabled: boolean, resetError: void => void): Function {
 export default function ContributionPaymentCtas(props: PropTypes) {
 
   const baseClassName = 'component-contribution-payment-ctas';
-  const stripe = <OneOffCta {...props} />;
 
   if (props.contributionType === 'ONE_OFF') {
     return (

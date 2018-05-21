@@ -202,10 +202,6 @@ const getVariantsAsString = (participation: Participations): string => {
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
 
-function getVariantForTest(participations: Participations, test: string) {
-  return participations ? participations[test] : null;
-}
-
 // ----- Exports ----- //
 
 export {
