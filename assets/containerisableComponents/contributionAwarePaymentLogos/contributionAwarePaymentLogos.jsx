@@ -16,10 +16,7 @@ import type { Contrib as ContributionType } from 'helpers/contributions';
 // ----- Component ----- //
 
 export default function ContributionAwarePaymentLogos(props: { contributionType: ContributionType }) {
-  let modifierClass = '';
-  if (props.contributionType === 'ONE_OFF') {
-    modifierClass = 'one-off';
-  }
+  const modifierClass = props.contributionType === 'ONE_OFF' ? 'one-off' : '';
 
   return (
     <div className={classNameWithModifiers('contribution-aware-payment-logos', [modifierClass])}>
