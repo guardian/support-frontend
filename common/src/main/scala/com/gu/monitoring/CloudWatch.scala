@@ -6,12 +6,10 @@ import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatc
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.config.Configuration
 import com.gu.monitoring.CloudWatch.client
-import com.typesafe.scalalogging.LazyLogging
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CloudWatch(metrics: Dimension*) extends LazyLogging {
+class CloudWatch(metrics: Dimension*) {
 
   val application = "SupportWorkers"
   val stageDimension: Dimension = new Dimension().withName("Stage").withValue(Configuration.stage.toString)
@@ -31,11 +29,11 @@ class CloudWatch(metrics: Dimension*) extends LazyLogging {
         .withMetricData(metric)
 
     AwsAsync(client.putMetricDataAsync, request).map { response =>
-      logger.info("CloudWatch PutMetricDataRequest - success")
+      SafeLogger.info("CloudWatch PutMetricDataRequest - success")
       response
     } recoverWith {
       case exception =>
-        logger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
+        SafeLogger.info(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
         Future.failed(exception)
     }
   }

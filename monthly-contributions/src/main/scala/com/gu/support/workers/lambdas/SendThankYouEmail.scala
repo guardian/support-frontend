@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
@@ -11,13 +12,12 @@ import com.gu.support.workers.model.{DirectDebitPaymentMethod, RequestInfo}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import com.gu.zuora.encoding.CustomCodecs._
-import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
 
 import scala.concurrent.Future
 
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[SendThankYouEmailState, Unit](servicesProvider) with LazyLogging {
+    extends ServicesHandler[SendThankYouEmailState, Unit](servicesProvider) {
 
   def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, executionContext))
 
@@ -27,7 +27,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    logger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
+    SafeLogger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
     for {
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
       emailResult <- sendEmail(state, mandateId)

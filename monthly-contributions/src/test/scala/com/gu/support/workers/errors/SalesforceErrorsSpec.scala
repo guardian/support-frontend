@@ -1,25 +1,25 @@
 package com.gu.support.workers.errors
 
 import com.gu.config.Configuration
+import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
-import com.typesafe.scalalogging.LazyLogging
 import okhttp3.Request
 import org.scalatest.Matchers
 
 import scala.concurrent.duration._
 
 @IntegrationTest
-class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers with LazyLogging {
+class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
   "AuthService" should "throw a SalesforceAuthenticationErrorResponse" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)
     recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      authService.authorize.map(auth => logger.info(s"Got an auth: $auth"))
+      authService.authorize.map(auth => SafeLogger.info(s"Got an auth: $auth"))
     }
   }
 
@@ -29,7 +29,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers with LazyLoggin
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
     assertThrows[SalesforceAuthenticationErrorResponse] {
-      service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
     }
   }
 
@@ -42,7 +42,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers with LazyLoggin
     val upsertData = UpsertData.create(idId, email, name, name, None, us, allowMail, allowMail, allowMail)
 
     recoverToSucceededIf[SalesforceErrorResponse] {
-      service.upsert(upsertData).map(response => logger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
     }
   }
 

@@ -2,15 +2,15 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.emailservices.EmailServicesConfig
+import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
 import com.gu.zuora.ZuoraConfigProvider
 import com.typesafe.config.ConfigFactory
-import com.typesafe.scalalogging.LazyLogging
 
 import scala.util.Try
 
-object Configuration extends LazyLogging {
+object Configuration {
   val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
@@ -19,7 +19,7 @@ object Configuration extends LazyLogging {
     .getOrElse("DEV"))
     .getOrElse(Stages.DEV)
 
-  logger.info(s"Load from S3: $loadFromS3, Stage: $stage")
+  SafeLogger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
   val config = PrivateConfigLoader
     .forEnvironment(loadFromS3)

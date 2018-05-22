@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import cats.syntax.either._
 import com.gu.config.Configuration
+import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.support.workers.Fixtures.{createZuoraSubscriptionJson, wrapFixture}
@@ -17,7 +18,6 @@ import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest
 import com.gu.zuora.ZuoraService
 import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
 import com.gu.zuora.model.response.ZuoraErrorResponse
-import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser.decode
 import org.scalatest.RecoverMethods
 
@@ -25,13 +25,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 @IntegrationTest
-class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods with LazyLogging {
+class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods {
   "Subscribe request with invalid term type" should "fail with a ZuoraErrorResponse" in {
     val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(invalidSubscriptionRequest).map {
         response =>
-          logger.info(s"response: $response")
+          SafeLogger.info(s"response: $response")
       }
     }
   }
@@ -41,7 +41,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(incorrectPaymentMethod).map {
         response =>
-          logger.info(s"response: $response")
+          SafeLogger.info(s"response: $response")
       }
     }
   }

@@ -5,13 +5,13 @@ import com.gu.support.workers.model.PaymentFields
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response._
-import com.typesafe.scalalogging.LazyLogging
 import io.circe
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
+import com.gu.monitoring.SafeLogger
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
+class SerialisationSpec extends FlatSpec with Matchers {
 
   "Account" should "serialise to correct json" in {
     val json = account(GBP).asJson
@@ -67,8 +67,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     //but actually it returns a list of those.
     val decodeResult = decode[List[ZuoraErrorResponse]](Fixtures.errorResponse)
     decodeResult match {
-      case r: Right[circe.Error, List[ZuoraErrorResponse]] => logger.info("right")
-      case l: Left[circe.Error, List[ZuoraErrorResponse]] => logger.info("left")
+      case r: Right[circe.Error, List[ZuoraErrorResponse]] => SafeLogger.info("right")
+      case l: Left[circe.Error, List[ZuoraErrorResponse]] => SafeLogger.info("left")
     }
     decodeResult.isRight should be(true)
     decodeResult.right.get.head.errors.size should be(1)

@@ -1,19 +1,19 @@
 package com.gu.helpers
 
-import com.typesafe.scalalogging.LazyLogging
+import com.gu.monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object Timing extends LazyLogging {
+object Timing {
 
   def record[T](service: String, metricName: String)(block: => Future[T])(implicit ec: ExecutionContext): Future[T] = {
     val fullName = s"$service $metricName"
-    logger.trace(s"$fullName started...")
+    SafeLogger.debug(s"$fullName started...")
     val startTime = System.currentTimeMillis()
 
     def recordEnd[A](name: String)(a: A): A = {
       val duration = System.currentTimeMillis() - startTime
-      logger.debug(s"$name completed in $duration ms")
+      SafeLogger.debug(s"$name completed in $duration ms")
 
       a
     }

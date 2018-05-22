@@ -7,7 +7,7 @@ import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.zuora.encoding.CustomCodecs
-import com.typesafe.scalalogging.LazyLogging
+import com.gu.monitoring.SafeLogger
 import io.circe
 import io.circe.Decoder
 import io.circe.parser._
@@ -19,8 +19,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse]
-    with LazyLogging {
+    extends WebServiceHelper[SalesforceErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -54,7 +53,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
  * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If the token
  * is stale a new one is fetched
  */
-object AuthService extends LazyLogging {
+object AuthService {
   import scala.concurrent.ExecutionContext.Implicits.global
 
   private val authRef = Ref[Map[String, Authentication]](Map())
@@ -72,7 +71,7 @@ object AuthService extends LazyLogging {
   })
 
   private def storeAuth(authentication: Authentication, stage: String) = atomic { implicit txn =>
-    logger.info(s"Successfully retrieved Salesforce authentication token for $stage")
+    SafeLogger.info(s"Successfully retrieved Salesforce authentication token for $stage")
     val newAuths = authRef().updated(stage, authentication)
     authRef() = newAuths
   }
@@ -80,13 +79,13 @@ object AuthService extends LazyLogging {
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceAuthenticationErrorResponse]
-    with LazyLogging with CustomCodecs {
+    with CustomCodecs {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
   def authorize: Future[Authentication] = {
-    logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
+    SafeLogger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
       postForm[Authentication]("services/oauth2/token", Map(
