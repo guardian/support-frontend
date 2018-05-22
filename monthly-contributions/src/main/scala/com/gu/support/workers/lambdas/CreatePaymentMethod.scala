@@ -11,17 +11,21 @@ import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) {
+    extends ServicesHandler[CreatePaymentMethodState, CreateSalesforceContactState](servicesProvider) with LazyLogging {
 
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
+    SafeLogger.info(s"CreatePaymentMethod state: $state")
+    val someTestVariable = "Happy Tuesday, pal!"
+    logger.error(s"JUST A TEST. Leigh-Anne is learning how to scrub logs sent to sentry. Here is a message-in-a-variable: $someTestVariable")
 
     for {
       paymentMethod <- createPaymentMethod(state, services)
