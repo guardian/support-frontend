@@ -85,7 +85,6 @@ function Button(props: PropTypes) {
       className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
       onClick={payWithPayPal(props)}
     >
-      <SvgPaypalPLogo />
       <span className="component-paypal-contribution-button__text">{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>
