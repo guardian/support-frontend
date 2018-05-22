@@ -11,6 +11,7 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
   private val paymentAmountDisplay = className("component-payment-amount")
   private val payWithCard = id("qa-pay-with-card")
   private val contributePayPalButton = id("qa-contribute-paypal-button")
+  val url2 = s"https://q.stripe.com/?event=checkout.outer.open&rf="
 
   private object RegisterFields {
     val fullName = id("name")
@@ -24,9 +25,9 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
 
   def pageHasLoaded: Boolean = pageHasElement(payWithCard)
 
-  def getAmountDisplayed(): Int = webDriver.findElement(paymentAmountDisplay.by).getText.tail.trim.toInt
+  def getAmountDisplayed(): Double = webDriver.findElement(paymentAmountDisplay.by).getText.tail.trim.toDouble
 
-  def compareAmountDisplayed(expectedAmount: Int): Boolean = expectedAmount == getAmountDisplayed()
+  def compareAmountDisplayed(expectedAmount: Double): Boolean = expectedAmount == getAmountDisplayed()
 
   def fillInPersonalDetails() { RegisterFields.fillIn() }
 

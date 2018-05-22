@@ -22,7 +22,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
     scenario("One-off contribution sign-up with Stripe - GBP") {
 
-      val stripePayment = 22.00
+      val stripePayment = 22.55
       val currency = "AUD"
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("au")
@@ -46,7 +46,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       assert(oneOffContributionForm.pageHasLoaded)
 
       And("The payment amount on the personal details page is correct")
-      assert(oneOffContributionForm.compareAmountDisplayed(stripePayment.toInt))
+      assert(oneOffContributionForm.compareAmountDisplayed(stripePayment))
 
       Given("The user fills in their name and email correctly")
       oneOffContributionForm.fillInPersonalDetails()
