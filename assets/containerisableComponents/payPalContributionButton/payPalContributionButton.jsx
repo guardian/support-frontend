@@ -31,7 +31,6 @@ type PropTypes = {
   canClick: boolean,
   buttonText: string,
   additionalClass: string,
-  inPaymentLogosTest: boolean,
   onClick: ?(void => void),
   switchedOff: boolean,
 };
@@ -80,18 +79,13 @@ function PayPalContributionButton(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function Button(props: PropTypes) {
-
-  const modifiers = props.inPaymentLogosTest ?
-    [props.additionalClass, 'variant'] :
-    [props.additionalClass];
-
   return (
     <button
       id="qa-contribute-paypal-button"
-      className={classNameWithModifiers('component-paypal-contribution-button', modifiers)}
+      className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
       onClick={payWithPayPal(props)}
     >
-      {props.inPaymentLogosTest ? null : <SvgPaypalPLogo />}
+      <SvgPaypalPLogo />
       <span className="component-paypal-contribution-button__text">{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>
@@ -107,7 +101,6 @@ PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
   additionalClass: '',
-  inPaymentLogosTest: false,
   onClick: null,
   switchedOff: false,
 };

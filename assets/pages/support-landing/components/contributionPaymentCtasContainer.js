@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import ContributionPaymentCtas from 'components/contributionPaymentCtas/contributionPaymentCtas';
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
-import { inPaymentLogosTest } from 'helpers/abTests/abtest';
 import type { State } from '../supportLandingReducer';
 
 
@@ -24,7 +23,6 @@ function mapStateToProps(state: State) {
     currency: state.common.currency,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
-    isInPaymentLogosVariant: inPaymentLogosTest(state.common.abParticipations),
   };
 
 }

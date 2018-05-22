@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 // React components
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
+import Contribute from 'components/contribute/contribute';
 
 // React components connected to redux store
 import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
@@ -22,7 +23,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ContributionSelectionContainer from './containers/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './containers/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './containers/payPalContributionButtonContainer';
-import ContributeContainer from './containers/contributeContainer';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
 
@@ -90,14 +90,14 @@ const content = (
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
       />
-      <ContributeContainer
+      <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
       >
         <ContributionSelectionContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}
         />
-      </ContributeContainer>
+      </Contribute>
       <Footer disclaimer />
     </div>
   </Provider>
