@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
@@ -25,7 +26,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
     SafeLogger.info(s"CreatePaymentMethod state: $state")
     val someTestVariable = "Happy Tuesday, pal!"
-    logger.error(s"JUST A TEST. Leigh-Anne is learning how to scrub logs sent to sentry. Here is a message-in-a-variable: $someTestVariable")
+    SafeLogger.error(scrub"JUST A TEST. Leigh-Anne is learning how to scrub logs sent to sentry. Here is a message-in-a-variable: $someTestVariable")
 
     for {
       paymentMethod <- createPaymentMethod(state, services)
