@@ -6,7 +6,6 @@ import React from 'react';
 
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
-import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
