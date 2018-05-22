@@ -22,7 +22,6 @@ export default function Contribute(props: PropTypes) {
   const paymentImages = (
     <div className="component-contribute__payment-images">
       <Secure modifierClass="contribute-header" />
-      <InlinePaymentLogos />
     </div>
   );
 
