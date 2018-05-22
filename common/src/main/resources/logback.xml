@@ -13,7 +13,7 @@
             <level>ERROR</level>
         </filter>
         <!-- Only send events to the Sentry appender if they've been scrubbed -->
-        <filter class="com.gu.monitoring.SentryFilters.PiiFilter" />
+        <filter class="com.gu.monitoring.PiiFilter" />
     </appender>
 
     <root level="info">
