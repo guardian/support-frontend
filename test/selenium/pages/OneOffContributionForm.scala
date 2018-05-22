@@ -11,7 +11,6 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
   private val paymentAmountDisplay = className("component-payment-amount")
   private val payWithCard = id("qa-pay-with-card")
   private val contributePayPalButton = id("qa-contribute-paypal-button")
-  val url2 = s"https://q.stripe.com/?event=checkout.outer.open&rf="
 
   private object RegisterFields {
     val fullName = id("name")
