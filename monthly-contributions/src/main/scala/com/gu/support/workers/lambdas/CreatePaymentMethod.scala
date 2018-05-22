@@ -23,11 +23,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
-    SafeLogger.debug(s"CreatePaymentMethod state: $state")
-    SafeLogger.info(s"CreatePaymentMethod state: $state")
-    val someTestVariable = "<Why, you look utterly radiant on this sunny Tuesday!>"
-    SafeLogger.error(scrub"IGNORE ME. Leigh-Anne is learning how to scrub logs sent to sentry. Look at this variable I've logged: $someTestVariable")
-
     for {
       paymentMethod <- createPaymentMethod(state, services)
       _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)
