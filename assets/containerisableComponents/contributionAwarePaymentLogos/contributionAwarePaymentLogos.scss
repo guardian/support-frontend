@@ -1,14 +1,25 @@
 .contribution-aware-payment-logos {
   position: absolute;
 
-  left: -151px;
+  left: -197px;
   top: 86%;
 
 
   height: 20px;
   svg {
-    height: 100%;
+    height: 27px;
+    width: 42px;
     margin-left: 4px;
-    width: 30px;
+  }
+}
+
+.contribution-aware-payment-logos--one-off {
+  top: 70%;
+  left: -150px;
+
+  .svg-paypal-logo {
+    position: relative;
+    top: -56px;
+    left: -46px;
   }
 }
