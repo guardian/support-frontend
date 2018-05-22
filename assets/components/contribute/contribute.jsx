@@ -6,7 +6,6 @@ import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
 import Secure from 'components/secure/secure';
-import InlinePaymentLogos from 'components/inlinePaymentLogos/inlinePaymentLogos';
 import type { Node } from 'react';
 
 
