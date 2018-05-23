@@ -112,7 +112,14 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
-
+      <PayPalContributionButton
+        amount={props.amount}
+        referrerAcquisitionData={props.referrerAcquisitionData}
+        isoCountry={props.isoCountry}
+        countryGroupId={props.countryGroupId}
+        errorHandler={props.checkoutError}
+        abParticipations={props.abParticipations}
+      />
       <StripePopUpButton
         email={props.email}
         callback={postCheckout(
@@ -132,14 +139,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
-      />
-      <PayPalContributionButton
-        amount={props.amount}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        errorHandler={props.checkoutError}
-        abParticipations={props.abParticipations}
       />
     </section>
   );
