@@ -1,0 +1,19 @@
+.component-circles-introduction__heading--variant {
+  margin-top: $gu-v-spacing;
+  font-size: 30px;
+  line-height: 35px;
+}
+
+.component-highlights__highlight--variant {
+  font-size: 24px;
+  line-height: 35px;
+}
+
+.component-circles-introduction__content--variant {
+  padding-bottom: 0;
+  margin-bottom: -10px;
+}
+
+.component-contribute--variant::before {
+  display: none;
+}
