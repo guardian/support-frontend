@@ -18,18 +18,12 @@ type PropTypes = {
 // ----- Component ----- //
 
 export default function Contribute(props: PropTypes) {
-  const paymentImages = (
-    <div className="component-contribute__payment-images">
-      <Secure modifierClass="contribute-header" />
-    </div>
-  );
-
   return (
     <div className="component-contribute">
       <PageSection
         modifierClass="contribute"
         heading="Contribute"
-        headingChildren={paymentImages}
+        headingChildren={<Secure modifierClass="contribute-header" />}
       >
         <Secure modifierClass="contribute-body" />
         <p className="component-contribute__description">{props.copy}</p>
