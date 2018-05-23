@@ -83,6 +83,8 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Render ----- //
 
+const aboveTheFoldVariant = store.getState().common.abParticipations['desktopAboveTheFold'];
+
 const content = (
   <Provider store={store}>
     <div className="gu-content">
@@ -90,9 +92,11 @@ const content = (
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
+        desktopAboveTheFoldVariant={aboveTheFoldVariant}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
+        desktopAboveTheFoldVariant={aboveTheFoldVariant}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
