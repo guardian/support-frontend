@@ -19,7 +19,7 @@ export default function ContributionAwarePaymentLogos(props: { contributionType:
   const modifierClass = props.contributionType === 'ONE_OFF' ? 'one-off' : '';
 
   return (
-    <div className={classNameWithModifiers('contribution-aware-payment-logos', [modifierClass])}>
+    <div className={classNameWithModifiers('component-contribution-aware-payment-logos', [modifierClass])}>
       <SvgVisaLogo />
       <SvgMastercardLogo />
       <SvgAmexLogo />
