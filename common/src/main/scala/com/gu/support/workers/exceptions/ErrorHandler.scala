@@ -7,14 +7,14 @@ import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.Stripe
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.zuora.model.response.ZuoraErrorResponse
-import com.typesafe.scalalogging.LazyLogging
-
+import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
 /**
  * Maps exceptions from the application to either fatal or non fatal exceptions
  * based on whether we think retrying them has a chance of succeeding
  * see support-workers/docs/error-handling.md
  */
-object ErrorHandler extends LazyLogging {
+object ErrorHandler {
   val handleException: PartialFunction[Throwable, Any] = {
     //Stripe
     case e: Stripe.StripeError => logAndRethrow(e.asRetryException)
@@ -33,7 +33,7 @@ object ErrorHandler extends LazyLogging {
   }
 
   def logAndRethrow(t: RetryException): Unit = {
-    logger.error(s"${t.getMessage}", t)
+    SafeLogger.error(scrub"${t.getMessage}", t)
     throw t
   }
 }

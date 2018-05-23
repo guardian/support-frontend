@@ -2,6 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
+import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
@@ -21,8 +22,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
-    logger.debug(s"CreatePaymentMethod state: $state")
-
+    SafeLogger.debug(s"CreatePaymentMethod state: $state")
     for {
       paymentMethod <- createPaymentMethod(state, services)
       _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)

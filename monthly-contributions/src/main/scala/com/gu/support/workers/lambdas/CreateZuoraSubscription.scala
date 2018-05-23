@@ -2,6 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
@@ -9,15 +10,13 @@ import com.gu.support.workers.model.RequestInfo
 import com.gu.support.workers.model.monthlyContributions.state.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.model._
 import com.gu.zuora.model.response.{Subscription => SubscriptionResponse}
-import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider)
-    with LazyLogging {
+    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -34,7 +33,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: SubscriptionResponse): FutureHandlerResult = {
     val message = "Skipping subscribe for user because they are already an active contributor"
-    logger.info(message)
+    SafeLogger.info(message)
     FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
   }
 

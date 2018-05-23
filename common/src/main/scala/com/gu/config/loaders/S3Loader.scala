@@ -4,16 +4,16 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.{AmazonS3ClientBuilder, AmazonS3URI}
 import com.gu.aws.CredentialsProvider
+import com.gu.monitoring.SafeLogger
 import com.gu.support.config.Stage
 import com.typesafe.config.{Config, ConfigFactory}
-import com.typesafe.scalalogging.LazyLogging
 
 import scala.io.{BufferedSource, Source}
 
-class S3Loader extends PrivateConfigLoader with LazyLogging {
+class S3Loader extends PrivateConfigLoader {
   override def load(stage: Stage, public: Config): Config = {
     val uri: AmazonS3URI = new AmazonS3URI(public.getString(s"config.private.s3.$stage"))
-    logger.info(s"Loading config from S3 for stage: $stage from $uri")
+    SafeLogger.info(s"Loading config from S3 for stage: $stage from $uri")
     val s3Client = AmazonS3ClientBuilder
       .standard()
       .withCredentials(CredentialsProvider)

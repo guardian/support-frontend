@@ -6,7 +6,8 @@ import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.i18n.Currency
 import com.gu.support.workers.model.{DirectDebitPaymentMethod, PaymentMethod}
-import com.typesafe.scalalogging.StrictLogging
+import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -68,7 +69,7 @@ case class EmailFields(
 
 }
 
-class EmailService(config: EmailConfig, implicit val executionContext: ExecutionContext) extends StrictLogging {
+class EmailService(config: EmailConfig, implicit val executionContext: ExecutionContext) {
 
   private val sqsClient = AmazonSQSAsyncClientBuilder
     .standard
@@ -79,14 +80,14 @@ class EmailService(config: EmailConfig, implicit val executionContext: Execution
   private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
-    logger.info(s"Sending message to SQS queue $queueUrl")
+    SafeLogger.info(s"Sending message to SQS queue $queueUrl")
     val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload(config.dataExtensionName)))
     messageResult.recover {
       case throwable =>
-        logger.error(s"Failed to send message due to $queueUrl due to:", throwable)
+        SafeLogger.error(scrub"Failed to send message due to $queueUrl due to:", throwable)
         throw throwable
     }.map { result =>
-      logger.info(s"Successfully sent message to $queueUrl: $result")
+      SafeLogger.info(s"Successfully sent message to $queueUrl: $result")
       result
     }
   }

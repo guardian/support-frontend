@@ -1,7 +1,7 @@
 package com.gu.helpers
 
+import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.typesafe.scalalogging.LazyLogging
 import io.circe
 import io.circe.parser._
 import io.circe.{Decoder, Json, Printer}
@@ -23,7 +23,7 @@ case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: S
  * @tparam Error The type that will attempt to be extracted if extracting the expected object fails.
  *               This is useful when a web service has a standard error format
  */
-trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
+trait WebServiceHelper[Error <: Throwable] {
   val wsUrl: String
   val httpClient: FutureHttpClient
 
@@ -51,12 +51,12 @@ trait WebServiceHelper[Error <: Throwable] extends LazyLogging {
    */
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
-    logger.debug(s"Issuing request ${req.method} ${req.url}")
+    SafeLogger.debug(s"Issuing request ${req.method} ${req.url}")
     for {
       response <- httpClient(req)
     } yield {
       val responseBody = response.body.string()
-      logger.debug(responseBody)
+      SafeLogger.debug(responseBody)
       decode[A](responseBody) match {
         case Left(err) => throw decodeError(responseBody).right.getOrElse(
           WebServiceHelperError[A](response.code(), responseBody)

@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
+import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
@@ -11,7 +12,6 @@ import com.gu.support.workers.model.monthlyContributions.Status
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
 import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
-import com.typesafe.scalalogging.LazyLogging
 import io.circe.Decoder
 import io.circe.parser.decode
 import org.joda.time.DateTime
@@ -19,8 +19,7 @@ import org.joda.time.DateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class FailureHandler(emailService: EmailService)
-    extends FutureHandler[FailureHandlerState, CompletedState]
-    with LazyLogging {
+    extends FutureHandler[FailureHandlerState, CompletedState] {
   def this() = this(new EmailService(Configuration.emailServicesConfig.failed, global))
 
   override protected def handlerFuture(
@@ -29,7 +28,7 @@ class FailureHandler(emailService: EmailService)
     requestInfo: RequestInfo,
     context: Context
   ): FutureHandlerResult = {
-    logger.info(
+    SafeLogger.info(
       s"FAILED contribution_amount: ${state.contribution.amount}\n" +
         s"contribution_currency: ${state.contribution.currency.iso}\n" +
         s"test_user: ${state.user.isTestUser}\n" +
@@ -49,7 +48,7 @@ class FailureHandler(emailService: EmailService)
   ))
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
-    logger.info(s"Attempting to handle error $error")
+    SafeLogger.info(s"Attempting to handle error $error")
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => returnState(
         state,
@@ -69,7 +68,7 @@ class FailureHandler(emailService: EmailService)
     requestInfo: RequestInfo,
     message: String = "There was an error processing your payment. Please\u00a0try\u00a0again."
   ) = {
-    logger.info(s"Returning completed state...")
+    SafeLogger.info(s"Returning completed state...")
     HandlerResult(
       CompletedState(
         requestId = state.requestId,

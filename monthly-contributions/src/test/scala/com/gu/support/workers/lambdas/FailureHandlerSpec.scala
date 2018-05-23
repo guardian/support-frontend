@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.i18n.Currency
+import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -53,7 +54,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
-    logger.info(outState.right.get.requestInfo.messages.head)
+    SafeLogger.info(outState.right.get.requestInfo.messages.head)
   }
 
   it should "return a non failed JsonWrapper for Stripe payment errors" in {
@@ -65,7 +66,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
-    logger.info(outState.right.get.requestInfo.messages.head)
+    SafeLogger.info(outState.right.get.requestInfo.messages.head)
   }
 
   it should "return a Status.Failure for a Zuora card declined error" in {

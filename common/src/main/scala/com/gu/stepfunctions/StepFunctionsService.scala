@@ -11,12 +11,12 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.createPaymentMethodState
 import com.gu.support.workers.model.User
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
-import com.typesafe.scalalogging.LazyLogging
+import com.gu.monitoring.SafeLogger
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
-class StepFunctionsService extends LazyLogging {
+class StepFunctionsService {
   private val prefix = if (stage == Stages.DEV)
     s"MonthlyContributions${Stages.CODE.toString}-" //There is no DEV state machine
   else
@@ -41,7 +41,7 @@ class StepFunctionsService extends LazyLogging {
     }
 
   private def findUserDataInStateMachine(userId: String, arn: String, nextToken: Option[String] = None)(implicit ec: ExecutionContext): Future[Option[User]] = {
-    logger.info(s"Searching for user in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
+    SafeLogger.info(s"Searching for user in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
 
     for {
       response <- client.listExecutions(arn, nextToken)

@@ -2,19 +2,20 @@ package com.gu.zuora
 
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.model.SubscribeRequest
 import com.gu.zuora.model.response.ZuoraErrorResponse
-import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
 import scala.concurrent.duration._
 
 @IntegrationTest
-class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
+class ZuoraSpec extends AsyncFlatSpec with Matchers {
 
   def uatService: ZuoraService = new ZuoraService(zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
 
@@ -127,7 +128,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       response =>
         response.head.success should be(true)
     }.recover {
-      case e: ZuoraErrorResponse => logger.error(s"Zuora error: $e", e); fail()
+      case e: ZuoraErrorResponse => SafeLogger.error(scrub"Zuora error: $e", e); fail()
     }
   }
 }
