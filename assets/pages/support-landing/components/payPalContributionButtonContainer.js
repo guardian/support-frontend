@@ -14,7 +14,6 @@ import type { State } from '../supportLandingReducer';
 // ----- State Maps ----- //
 
 function mapStateToProps(state: State) {
-
   return {
     amount: getAmount(state.page.selection),
     countryGroupId: state.common.countryGroup,

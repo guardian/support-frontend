@@ -189,20 +189,20 @@
   .svg-arrow-right-straight {
     fill: gu-colour(garnett-neutral-1);
     height: 35%;
-    top: 17px;
+    top: 14px;
     right: 16px;
 
     // Fixes for IE.
     @include mq($from: tablet) {
-      left: 92%;
+      left: 93%;
     }
 
     @include mq($from: leftCol) {
-      left: 86%;
+      left: 88%;
     }
 
     @include mq($from: wide) {
-      left: 88%;
+      left: 90%;
     }
   }
 }

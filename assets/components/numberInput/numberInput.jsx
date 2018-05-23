@@ -45,6 +45,7 @@ export default function NumberInput(props: PropTypes) {
     <div className={classNameWithModifiers('component-number-input', [selectedClass])}>
       {getLabel(props.labelText)}
       <input
+        id="qa-payment-amount-input"
         className="component-number-input__input"
         type="number"
         placeholder={props.placeholder}

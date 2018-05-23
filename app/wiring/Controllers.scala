@@ -13,7 +13,14 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
-    appConfig.contributionsPayPalAuthEndpoint,
+    paymentAPIService,
+    stringsConfig
+  )
+
+  lazy val subscriptionsController = new Subscriptions(
+    actionRefiners,
+    assetsResolver,
+    controllerComponents,
     stringsConfig
   )
 
@@ -25,17 +32,25 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.regularStripeConfigProvider,
-    appConfig.payPalConfigProvider,
+    appConfig.regularPayPalConfigProvider,
     controllerComponents
   )
 
-  lazy val payPalController = new PayPal(
+  lazy val payPalRegularController = new PayPalRegular(
     actionRefiners,
     assetsResolver,
-    payPalServiceProvider,
+    payPalNvpServiceProvider,
+    testUsers,
+    controllerComponents
+  )
+
+  lazy val payPalOneOffController = new PayPalOneOff(
+    actionRefiners,
+    assetsResolver,
     testUsers,
     controllerComponents,
-    contributionsFrontendService
+    paymentAPIService,
+    identityService
   )
 
   lazy val oneOffContributions = new OneOffContributions(
@@ -44,8 +59,7 @@ trait Controllers {
     identityService,
     testUsers,
     appConfig.oneOffStripeConfigProvider,
-    appConfig.contributionsStripeEndpoint,
-    appConfig.contributionsPayPalAuthEndpoint,
+    paymentAPIService,
     authAction,
     controllerComponents
   )

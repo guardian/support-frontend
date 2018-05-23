@@ -27,13 +27,7 @@ const supporterSectionId = 'supporter-options';
 
 // ----- Redux Store ----- //
 
-/* eslint-disable no-underscore-dangle */
-const store = pageInit(
-  {},
-  null,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
-/* eslint-enable */
+const store = pageInit();
 
 
 // ----- Render ----- //

@@ -1,7 +1,6 @@
 package selenium.util
 
 import org.openqa.selenium.WebDriver
-import play.api.test.FutureAwaits
 
 // Handles interaction with the PayPal Express Checkout overlay.
 class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
@@ -13,16 +12,8 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
   val passwordInput = name("login_password")
   val agreeAndPay = id("confirmButtonTop")
   val paymentAmount = className("formatCurrency")
-
-  def fillIn(): Unit = {
-    setValueSlowly(emailInput, Config.paypalBuyerEmail)
-    if (pageHasElement(nextButton)) {
-      clickNext()
-    }
-    if (pageHasElement(loginButton)) {
-      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
-    }
-  }
+  val guestRegistrationUrlFragment = "#/checkout/guest"
+  val loginUrlFragment = "https://www.sandbox.paypal.com/webapps/hermes?country.x=US&hermesLoginRedirect=xoon&locale.x=en_US"
 
   def clickNext(): Unit = clickOn(nextButton)
 
@@ -34,7 +25,11 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
-  def hasLoaded: Boolean = {
+  def initialPageHasLoaded: Boolean = {
+    pageHasUrlOrElement(guestRegistrationUrlFragment, emailInput)
+  }
+
+  def loginContainerHasLoaded: Boolean = {
     pageHasElement(emailInput)
   }
 
@@ -44,16 +39,34 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def acceptPayPalPaymentPage(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    acceptPayment
+    acceptPayment()
   }
 
   def switchToPayPalPopUp(): Unit = {
-    switchWindow
+    switchWindow()
   }
 
   def acceptPayPalPaymentPopUp(): Unit = {
     pageDoesNotHaveElement(id("spinner"))
-    acceptPayment
-    switchToParentWindow
+    acceptPayment()
+    switchToParentWindow()
+  }
+
+  def handleGuestRegistrationPage(): Unit = {
+    val url = webDriver.getCurrentUrl
+    if (url.contains(guestRegistrationUrlFragment)) {
+      val token = url.substring(url.indexOf("&token="), url.indexOf(guestRegistrationUrlFragment))
+      webDriver.navigate().to(loginUrlFragment + token)
+    }
+  }
+
+  def enterLoginDetails(): Unit = {
+    setValueSlowly(emailInput, Config.paypalBuyerEmail)
+    if (pageHasElement(nextButton)) {
+      clickNext()
+    }
+    if (pageHasElement(loginButton)) {
+      setValueSlowly(passwordInput, Config.paypalBuyerPassword)
+    }
   }
 }

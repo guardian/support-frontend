@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
@@ -17,7 +18,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { checkoutError } from '../oneoffContributionsActions';
+import { checkoutError, type Action } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
 
 
@@ -57,7 +58,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     dispatch,
     checkoutError: (message: ?string) => {

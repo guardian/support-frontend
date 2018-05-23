@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import ContributionPaymentCtas from 'components/contributionPaymentCtas/contributionPaymentCtas';
 import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
 import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
-
 import type { State } from '../supportLandingReducer';
 
 
@@ -20,6 +19,7 @@ function mapStateToProps(state: State) {
     amount: getAmount(state.page.selection),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     country: state.common.country,
+    countryGroupId: state.common.countryGroup,
     currency: state.common.currency,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,

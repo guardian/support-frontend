@@ -35,9 +35,6 @@ class DriverConfig {
     webDriver.get(Config.paypalSandbox)
     webDriver.manage.deleteAllCookies()
 
-    webDriver.get(Config.contributionFrontend)
-    webDriver.manage.deleteAllCookies()
-
     webDriver.get(Config.identityFrontendUrl)
     webDriver.manage.deleteAllCookies()
 

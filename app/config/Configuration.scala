@@ -25,17 +25,13 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val contributionsStripeEndpoint = config.getString("contributions.stripe.url")
-
-  lazy val contributionsPayPalAuthEndpoint = config.getString("contributions.paypal.url")
-
-  lazy val contributionsFrontendUrl = config.getString("contribution.url")
+  lazy val paymentApiUrl = config.getString("paymentApi.url");
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
-  lazy val payPalConfigProvider = new PayPalConfigProvider(config, stage)
+  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
 
   lazy val regularStripeConfigProvider = new StripeConfigProvider(config, stage)
 

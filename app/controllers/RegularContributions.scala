@@ -6,16 +6,16 @@ import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
+import io.circe.syntax._
 import lib.PlayImplicits._
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.monthlyContributions
-import io.circe.syntax._
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
 
 import scala.concurrent.{ExecutionContext, Future}
 

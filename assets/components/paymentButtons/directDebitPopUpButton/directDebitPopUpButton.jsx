@@ -4,7 +4,14 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import type { Dispatch } from 'redux';
+
+import Switchable from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
+import {
+  openDirectDebitPopUp,
+  type Action,
+} from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
 
@@ -15,8 +22,10 @@ type PropTypes = {
   callback: Function,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
+  switchedOff: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
+
 
 // ----- Map State/Props ----- //
 
@@ -26,7 +35,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
     openDirectDebitPopUp: () => {
@@ -36,29 +45,56 @@ function mapDispatchToProps(dispatch) {
 
 }
 
+
 // ----- Component ----- //
 
-const DirectDebitPopUpButton = (props: PropTypes) => {
+const DirectDebitPopUpButton = (props: PropTypes) => (
+  <Switchable
+    off={props.switchedOff}
+    component={() => <ButtonAndForm {...props} />}
+    fallback={() => <PaymentError paymentMethod="direct debit" />}
+  />
+);
 
-  const button = (
-    <button
-      id="qa-pay-with-direct-debit"
-      className="component-direct-debit-pop-up-button"
-      onClick={props.openDirectDebitPopUp}
-    >
-    Pay with direct debit
-    </button>);
+
+// ----- Auxiliary Components ----- //
+
+function ButtonAndForm(props: PropTypes) {
 
   if (props.isPopUpOpen) {
     return (
       <div>
-        {button}
+        <Button openPopUp={props.openDirectDebitPopUp} />
         <DirectDebitPopUpForm callback={props.callback} />
-      </div>);
+      </div>
+    );
   }
-  return button;
 
+  return <Button openPopUp={props.openDirectDebitPopUp} />;
+
+}
+
+function Button(props: { openPopUp: () => void }) {
+  return (
+    <button
+      id="qa-pay-with-direct-debit"
+      className="component-direct-debit-pop-up-button"
+      onClick={props.openPopUp}
+    >
+      Pay with direct debit
+    </button>
+  );
+}
+
+
+// ----- Default Props ----- //
+
+/* eslint-disable react/default-props-match-prop-types */
+DirectDebitPopUpButton.defaultProps = {
+  switchedOff: false,
 };
+/* eslint-enable react/default-props-match-prop-types */
+
 
 // ----- Exports ----- //
 

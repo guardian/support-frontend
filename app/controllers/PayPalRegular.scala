@@ -5,24 +5,22 @@ import actions.CustomActionBuilders
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
 import io.circe.syntax._
-import cats.implicits._
-import monitoring.SafeLogger._
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
-import services.paypal.{PayPalBillingDetails, PayPalServiceProvider, Token}
-import services.{ContributionsFrontendService, PayPalService, TestUserService}
-import services.ContributionsFrontendService.Email
+import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
+import services.{PayPalNvpService, TestUserService}
+
 import scala.concurrent.ExecutionContext
 
-class PayPal(
+class PayPalRegular(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
-    payPalServiceProvider: PayPalServiceProvider,
+    payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents,
-    contributionsFrontendService: ContributionsFrontendService
+    components: ControllerComponents
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
@@ -35,8 +33,8 @@ class PayPal(
 
     withPaypalServiceForUser(request.user) { service =>
       service.retrieveToken(
-        returnUrl = routes.PayPal.returnUrl().absoluteURL(secure = true),
-        cancelUrl = routes.PayPal.cancelUrl().absoluteURL(secure = true)
+        returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
+        cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
       Ok(Token(response).asJson)
@@ -49,26 +47,8 @@ class PayPal(
     }.map(token => Ok(Token(token).asJson))
   }
 
-  def resultFromEmailOption(email: Option[Email]): Result = {
-    val redirect = Redirect("/contribute/one-off/thankyou")
-    email.fold(redirect)(e => {
-      SafeLogger.info("Redirecting to thank you page with email in flash session")
-      redirect.flashing("email" -> e.value)
-    })
-  }
-
-  def execute(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    contributionsFrontendService.execute(request).fold(
-      e => {
-        SafeLogger.error(scrub"Error making paypal payment", e)
-        Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
-      },
-      resultFromEmailOption
-    )
-  }
-
-  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalService => T): T = {
-    val service = payPalServiceProvider.forUser(testUsers.isTestUser(user))
+  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalNvpService => T): T = {
+    val service = payPalNvpServiceProvider.forUser(testUsers.isTestUser(user))
     fn(service)
   }
 

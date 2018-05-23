@@ -3,9 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -25,18 +23,10 @@ import reducer from './regularContributionsReducers';
 
 // ----- Page Startup ----- //
 
-/* eslint-disable no-underscore-dangle */
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-/* eslint-enable */
-
-const store = pageInit(
-  reducer(
-    getAmount(parseContrib(getQueryParameter('contribType'), 'MONTHLY'), detectCountryGroup()),
-    getPaymentMethod(),
-  ),
-  undefined,
-  composeEnhancers(applyMiddleware(thunkMiddleware)),
-);
+const store = pageInit(reducer(
+  getAmount(parseContrib(getQueryParameter('contribType'), 'MONTHLY'), detectCountryGroup()),
+  getPaymentMethod(),
+), true);
 
 user.init(store.dispatch);
 
@@ -47,9 +37,21 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route exact path={routes.recurringContribCheckout} component={RegularContributionsPage} />
-        <Route exact path={routes.recurringContribThankyou} component={ContributionsThankYouPageContainer} />
-        <Route exact path={routes.recurringContribPending} component={ContributionsThankYouPageContainer} />
+        <Route
+          exact
+          path={routes.recurringContribCheckout}
+          component={() => <RegularContributionsPage />}
+        />
+        <Route
+          exact
+          path={routes.recurringContribThankyou}
+          component={() => <ContributionsThankYouPageContainer />}
+        />
+        <Route
+          exact
+          path={routes.recurringContribPending}
+          component={() => <ContributionsThankYouPageContainer />}
+        />
       </div>
     </Provider>
   </BrowserRouter>

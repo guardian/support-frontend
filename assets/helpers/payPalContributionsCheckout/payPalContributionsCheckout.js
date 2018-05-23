@@ -2,48 +2,38 @@
 
 // ----- Imports ----- //
 
-import { participationsToAcquisitionABTest, getOphanIds } from 'helpers/tracking/acquisitions';
+import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamToURL } from 'helpers/url';
+import { addQueryParamsToURL, getAbsoluteURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { OphanIds, AcquisitionABTest, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
-type PayPalPostData = {|
-  countryGroup: string,
+type PayPalPaymentAPIPostData = {|
+  currency: IsoCurrency,
   amount: number,
-  cmp: ?string,
-  intCmp: ?string,
-  refererPageviewId: ?string,
-  refererUrl: ?string,
-  ophanPageviewId: string,
-  ophanBrowserId: ?string,
-  ophanVisitId: ?string,
-  supportRedirect: boolean,
-  componentId: ?string,
-  componentType: ?string,
-  source: ?string,
-  refererAbTest: ?AcquisitionABTest,
-  nativeAbTests: ?AcquisitionABTest[],
+  returnURL: string,
+  cancelURL: string,
 |}
 
 // ----- Functions ----- //
 
-function payalContributionEndpoint(testUser) {
+function payPalContributionEndpoint(testUser) {
   if (testUser) {
-    return addQueryParamToURL(
-      window.guardian.contributionsPayPalEndpoint,
-      '_test_username',
-      testUser,
+    return addQueryParamsToURL(
+      window.guardian.paymentApiPayPalEndpoint,
+      { mode: 'test' },
     );
   }
 
-  return window.guardian.contributionsPayPalEndpoint;
+  return window.guardian.paymentApiPayPalEndpoint;
 }
 
 export function paypalContributionsRedirect(
@@ -55,24 +45,15 @@ export function paypalContributionsRedirect(
   nativeAbParticipations: Participations,
 ): void {
 
-  const countryGroup = countryGroups[countryGroupId].supportInternationalisationId;
-  const ophanIds: OphanIds = getOphanIds();
-  const postData: PayPalPostData = {
-    countryGroup,
+  const acquisitionData = derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
+
+  const { currency } = countryGroups[countryGroupId];
+  const postData: PayPalPaymentAPIPostData = {
     amount,
-    cmp: null,
-    intCmp: referrerAcquisitionData.campaignCode,
-    refererPageviewId: referrerAcquisitionData.referrerPageviewId,
-    refererUrl: referrerAcquisitionData.referrerUrl,
-    ophanPageviewId: ophanIds.pageviewId,
-    ophanBrowserId: ophanIds.browserId,
-    ophanVisitId: ophanIds.visitId,
-    supportRedirect: true,
-    componentId: referrerAcquisitionData.componentId,
-    componentType: referrerAcquisitionData.componentType,
-    source: referrerAcquisitionData.source,
-    refererAbTest: referrerAcquisitionData.abTest,
-    nativeAbTests: participationsToAcquisitionABTest(nativeAbParticipations),
+    currency,
+    returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+    cancelURL: getAbsoluteURL(routes.payPalRestCancelURL),
   };
 
   const fetchOptions: Object = {
@@ -85,13 +66,13 @@ export function paypalContributionsRedirect(
     body: JSON.stringify(postData),
   };
 
-  fetch(payalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
+  fetch(payPalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
       throw response;
     })
-    .then((res) => { window.location = res.approvalUrl; })
+    .then((res) => { window.location = res.data.approvalUrl; })
     .catch(() => errorHandler('Sorry, an error occurred, please try again or use another payment method.'));
 }

@@ -26,6 +26,14 @@ trait Browser extends WebBrowser {
   def pageHasUrl(urlFraction: String): Boolean =
     waitUntil(ExpectedConditions.urlContains(urlFraction))
 
+  def pageHasUrlOrElement(urlFraction: String, q: Query): Boolean =
+    waitUntil(
+      ExpectedConditions.or(
+        ExpectedConditions.urlContains(urlFraction),
+        ExpectedConditions.visibilityOfElementLocated(q.by)
+      )
+    )
+
   def clickOn(q: Query) {
     if (pageHasElement(q))
       click.on(q)

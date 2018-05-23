@@ -20,7 +20,7 @@ Parameters:
     Type: String
     Default: frontend
   AMI:
-    Description: AMI ID
+    Description: AMI ID (may be replaced by RiffRaff for latest baked AMI)
     Type: String
     Default: ami-0eb88168
 Conditions:
@@ -84,7 +84,8 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: "/"
-      ManagedPolicyArns: [ "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM" ]
+      ManagedPolicyArns:
+      - !Sub arn:aws:iam::${AWS::AccountId}:policy/guardian-ec2-role-for-ssm
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow

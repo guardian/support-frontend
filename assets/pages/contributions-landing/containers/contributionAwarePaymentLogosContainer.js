@@ -4,8 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import Contribute from 'components/contribute/contribute';
-import { getPaymentLogosTestVariant } from 'helpers/abTests/abtest';
+import ContributionAwarePaymentLogos from 'containerisableComponents/contributionAwarePaymentLogos/contributionAwarePaymentLogos';
 import type { State } from '../contributionsLandingReducer';
 
 
@@ -15,7 +14,6 @@ function mapStateToProps(state: State) {
 
   return {
     contributionType: state.page.selection.contributionType,
-    paymentLogosVariant: getPaymentLogosTestVariant(state.common.abParticipations),
   };
 
 }
@@ -23,4 +21,4 @@ function mapStateToProps(state: State) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(Contribute);
+export default connect(mapStateToProps)(ContributionAwarePaymentLogos);

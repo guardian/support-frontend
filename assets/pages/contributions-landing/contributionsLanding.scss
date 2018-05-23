@@ -13,7 +13,7 @@
 @import '../../components/contribute/contribute';
 @import '../../components/pageSection/pageSection';
 @import '../../components/secure/secure';
-@import '../../components/inlinePaymentLogos/inlinePaymentLogos';
+@import '../../containerisableComponents/contributionAwarePaymentLogos/contributionAwarePaymentLogos';
 @import '../../containerisableComponents/contributionSelection/contributionSelection';
 @import '../../components/radioToggle/radioToggle';
 @import '../../components/numberInput/numberInput';
@@ -25,6 +25,7 @@
 @import '../../components/ctaLink/ctaLink';
 @import '../../components/legal/contribLegal/contribLegal';
 @import '../../containerisableComponents/payPalContributionButton/payPalContributionButton';
+@import '../../components/switchable/errorComponents/paymentError';
 
 // ----- Page Specific Styles ----- //
 
@@ -41,4 +42,15 @@
     @include gu-content-filler;
   }
 
+}
+
+#contributions-landing-page-us {
+  .component-contribution-aware-payment-logos--one-off {
+    @include mq($from: desktop) {
+      top: 72.5%;
+    }
+    @include mq($from: wide) {
+      top: 76%;
+    }
+  }
 }

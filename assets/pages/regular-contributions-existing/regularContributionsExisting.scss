@@ -1,82 +1,67 @@
 #regular-contributions-existing-page {
 
-	a {
-		color: gu-colour(neutral-1);
-	}
+  .component-page-section--existing-contribution {
+    @include multiline-top-border;
 
-	// ----- Headings
+    .component-page-section__header {
+      position: relative;
+      @include dropline;
+    }
 
-	.existing {
-		background-color: darken(gu-colour(multimedia-main-2), 5%);
-	}
+    .component-page-section__body {
+      padding-top: $gu-v-spacing / 2;
+      padding-bottom: $gu-v-spacing * 2;
 
-	.existing__content {
-		background-color: gu-colour(multimedia-main-2);
-		padding: $gu-v-spacing $gu-h-spacing;
-	}
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
+      }
 
-	.existing__wrapper {
+      @include mq($from: phablet) {
+        width: 500px;
+      }
+    }
+  }
 
-		@include mq($from: desktop) {
-			margin-left: 20%;
-			margin-right: 20%;
-		}
-	}
+  .existing-contribution-copy {
+    padding-top: $gu-v-spacing / 2;
+    padding-bottom: $gu-v-spacing * 2;
 
-	.existing__heading {
-		font-family: $gu-egyptian-web;
-		color: gu-colour(neutral-1);
-		font-size: 28px;
-		line-height: 32px;
-		font-weight: bold;
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+  }
 
-		@include mq($from: desktop) {
-			font-size: 36px;
-			line-height: 40px;
-		}
-	}
+  .component-questions-contact {
+    @include gu-content-filler;
+  }
 
-	.existing__subheading {
-		font-family: $gu-egyptian-web;
-		font-size: 28px;
-		line-height: 32px;
-		font-weight: lighter;
-		color: gu-colour(neutral-1);
+  .component-cta-link--manage-contribution {
+    background-color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    color: #fff;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 30px 0 25px;
+    transition: background-color .3s;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing * 2;
 
-		@include mq($from: desktop) {
-			font-size: 36px;
-			line-height: 40px;
-		}
-	}
+    @include mq($from: mobileMedium) {
+      width: 300px;
+    }
+  }
 
-	.component-cta-link {
-		color: gu-colour(neutral-1);
-		background: transparent;
-		display: inline-block;
-		width: 200px;
-		border: 1px solid gu-colour(neutral-1);
-		font-weight: normal;
-		margin-bottom: $gu-v-spacing * 4;
-		margin-top: 2 * $gu-v-spacing;
+  .manage-contribution-cta {
+    .svg-arrow-right-straight {
+      height: 35%;
+      top: 17px;
+      right: 13px;
 
-		svg {
-			fill: gu-colour(neutral-1);
-			// Fix for IE10.
-			left: 210px;
-		}
-
-		&:hover {
-			border-color: #000;
-			color: #000;
-
-			svg {
-				fill: #000;
-			}
-		}
-	}
-
-	.help-further {
-		margin-top: $gu-v-spacing * 4;
-	}
+      // Fix for IE.
+      @include mq($from: mobileMedium) {
+        left: 321px;
+      }
+    }
+  }
 
 }

@@ -1,0 +1,43 @@
+.component-contribution-aware-payment-logos {
+  height: 20px;
+
+  @include mq($until: desktop) {
+    margin-top: 30px;
+  }
+
+  @include mq($from: desktop) {
+    position: absolute;
+    top: 86%;
+    left: -197px;
+  }
+
+  @include mq($from: wide) {
+    top: 87%;
+  }
+
+  svg {
+    height: 27px;
+    width: 42px;
+    margin-left: 4px;
+  }
+}
+
+.component-contribution-aware-payment-logos--one-off {
+
+  @include mq($from: desktop) {
+    top: 70%;
+    left: -150px;
+  }
+
+  @include mq($from: wide) {
+    top: 72%;
+  }
+
+  .svg-paypal-logo {
+    @include mq($from: desktop) {
+      position: relative;
+      top: -56px;
+      left: -46px;
+    }
+  }
+}

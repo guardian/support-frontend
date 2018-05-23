@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
@@ -12,9 +13,10 @@ import {
   setFirstName,
   setLastName,
   setStateField,
+  type Action as UserAction,
 } from 'helpers/user/userActions';
 
-import { setCountry } from 'helpers/page/pageActions';
+import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
 
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -50,7 +52,7 @@ function mapStateToProps(state) {
 
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction>) {
 
   return {
     firstNameUpdate: (name: string) => {

@@ -10,6 +10,7 @@ import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
+import Contribute from 'components/contribute/contribute';
 
 // React components connected to redux store
 import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
@@ -25,8 +26,7 @@ import pageReducer from './supportLandingReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
-import ContributeContainer from './components/contributeContainer';
-
+import ContributionAwarePaymentLogosContainer from './components/contributionAwarePaymentLogosContainer';
 
 // ----- Setup ----- //
 
@@ -35,13 +35,7 @@ const supporterSectionId = 'supporter-options';
 
 // ----- Redux Store ----- //
 
-/* eslint-disable no-underscore-dangle */
-const store = pageInit(
-  pageReducer,
-  null,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
-/* eslint-enable */
+const store = pageInit(pageReducer);
 
 
 // ----- Render ----- //
@@ -55,14 +49,15 @@ const content = (
         highlights={['Support', 'The Guardian']}
       />
       <section id={supporterSectionId}>
-        <ContributeContainer
+        <Contribute
           copy="Your contribution funds and supports The Guardian's journalism."
         >
           <ContributionSelectionContainer />
+          <ContributionAwarePaymentLogosContainer />
           <ContributionPaymentCtasContainer
             PayPalButton={PayPalContributionButtonContainer}
           />
-        </ContributeContainer>
+        </Contribute>
         <ThreeSubscriptionsContainer />
       </section>
       <WhySupport />

@@ -16,7 +16,7 @@ export const init = () => {
 
 export const logException = (ex: string, context?: Object): void => {
   Raven.captureException(
-    ex,
+    new Error(ex),
     {
       extra: context,
     },
