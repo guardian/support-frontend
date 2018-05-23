@@ -23,6 +23,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ContributionSelectionContainer from './containers/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './containers/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './containers/payPalContributionButtonContainer';
+import ContributionAwarePaymentLogosContainer from './containers/contributionAwarePaymentLogosContainer';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
 
@@ -94,6 +95,7 @@ const content = (
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
       >
         <ContributionSelectionContainer />
+        <ContributionAwarePaymentLogosContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}
         />

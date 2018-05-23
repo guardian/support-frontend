@@ -6,7 +6,6 @@ import React from 'react';
 
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
-import SvgPaypalPLogo from 'components/svgs/payPalPLogo';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -85,7 +84,6 @@ function Button(props: PropTypes) {
       className={classNameWithModifiers('component-paypal-contribution-button', [props.additionalClass])}
       onClick={payWithPayPal(props)}
     >
-      <SvgPaypalPLogo />
       <span className="component-paypal-contribution-button__text">{props.buttonText}</span>
       <SvgArrowRightStraight />
     </button>

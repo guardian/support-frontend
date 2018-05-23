@@ -1,7 +1,10 @@
 .component-contribution-payment-ctas {
 
+  @include mq($until: desktop) {
+    margin-top: 20px;
+  }
+
   .component-cta-link {
-    background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);
     height: $cta-height;
     line-height: $cta-height;
@@ -11,9 +14,23 @@
     @include mq($from: mobileMedium) {
       width: $cta-width;
     }
+  }
+
+  .component-cta-link--contribute-regular {
+    margin-top: $gu-v-spacing;
+    background-color: gu-colour(news-garnett-highlight);
 
     &:hover {
       background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+  }
+
+  .component-cta-link--contribute-one-off {
+    background-color: transparent;
+    border: 1px solid;
+
+    &:hover {
+      background-color: transparent;
     }
   }
 
@@ -79,3 +96,4 @@
     opacity: 0.5;
   }
 }
+

@@ -26,7 +26,7 @@ import pageReducer from './supportLandingReducer';
 import ContributionSelectionContainer from './components/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
-
+import ContributionAwarePaymentLogosContainer from './components/contributionAwarePaymentLogosContainer';
 
 // ----- Setup ----- //
 
@@ -53,6 +53,7 @@ const content = (
           copy="Your contribution funds and supports The Guardian's journalism."
         >
           <ContributionSelectionContainer />
+          <ContributionAwarePaymentLogosContainer />
           <ContributionPaymentCtasContainer
             PayPalButton={PayPalContributionButtonContainer}
           />

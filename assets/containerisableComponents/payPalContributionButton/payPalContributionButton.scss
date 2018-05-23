@@ -1,7 +1,7 @@
 .component-paypal-contribution-button {
-  background-color: transparent;
-  border: solid 1px gu-colour(neutral-1);
+  background-color: gu-colour(news-garnett-highlight);
   border-radius: 600px;
+  border: none;
   color: gu-colour(neutral-1);
   cursor: pointer;
   display: block;
@@ -12,11 +12,7 @@
   position: relative;
   text-align: left;
   width: 100%;
-  margin-top: 20px;
-
-  .component-paypal-contribution-button__text {
-    padding-left: $gu-h-spacing * 2;
-  }
+  margin-top: $gu-v-spacing;
 
   @include mq($from: mobileMedium) {
     width: 304px;
@@ -31,17 +27,8 @@
     transform: translateY(-50%);
   }
 
-  .svg-paypal-p-logo {
-    width: 24px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
   &:hover {
-    border-color: #000;
     color: #000;
-
     .svg-arrow-right-straight {
       fill: #000;
     }
