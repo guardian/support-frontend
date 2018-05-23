@@ -195,7 +195,7 @@ Resources:
       VpcId: !Ref VpcId
       TargetGroupAttributes:
       - Key: deregistration_delay.timeout_seconds
-        Value: '30'
+        Value: '20'
     DependsOn:
     - ElasticLoadBalancer
 
