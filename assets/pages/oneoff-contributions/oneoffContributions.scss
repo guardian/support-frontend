@@ -147,9 +147,11 @@
 		.component-stripe-pop-up-button {
 			box-sizing: border-box;
 			height: $cta-height;
-			background-color: gu-colour(news-garnett-highlight);
+			background-color: #fff;
       color: gu-colour(garnett-neutral-1);
+      border: 1px solid gu-colour(garnett-neutral-1);
       width: 100%;
+      margin-top: $gu-v-spacing;
 
       svg {
       	fill: gu-colour(garnett-neutral-1);
@@ -160,14 +162,14 @@
 			}
 
 			&:hover {
-				background-color: darken(gu-colour(news-garnett-highlight), 5%);
+				color: #000;
+				border-color: #000;
 			}
 		}
 	}
 
 	.component-paypal-contribution-button {
 		height: $cta-height;
-		margin-top: $gu-v-spacing;
 		width: 100%;
 
 		@include mq($from: phablet) {
