@@ -1,5 +1,9 @@
 .component-contribution-payment-ctas {
 
+  @include mq($until: desktop) {
+    margin-top: 20px;
+  }
+
   .component-cta-link {
     color: gu-colour(garnett-neutral-1);
     height: $cta-height;

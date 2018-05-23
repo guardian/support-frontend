@@ -1,6 +1,10 @@
 .contribution-aware-payment-logos {
   height: 20px;
 
+  @include mq($until: desktop) {
+    margin-top: 30px;
+  }
+
   @include mq($from: desktop) {
     position: absolute;
     top: 86%;
