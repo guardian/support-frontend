@@ -16,11 +16,12 @@ class AppController(
 
   def healthcheck: Action[AnyContent] = Action {
     Ok(HealthCheckResponse("Everything is super", app.BuildInfo.gitCommitId))
+      .withHeaders("Cache-Control" -> "no-cache")
   }
 
   def acquisition(viewId: String, acquisition: String): Action[AnyContent] = Action {
     logger.info(s"Acquisition data. viewId: ${viewId} - acquisition: ${acquisition}")
-    Ok("Acquisition received ")
+    Ok("Acquisition received")
   }
 
   def corsOptions() = CorsAction { request =>
