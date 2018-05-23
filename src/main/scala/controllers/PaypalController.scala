@@ -14,7 +14,7 @@ class PaypalController(
   cc: ControllerComponents,
   paypalBackendProvider: RequestBasedProvider[PaypalBackend]
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider with RequestSyntax  {
 
   import util.RequestTypeDecoder.instances._
   import PaypalJsonDecoder._
@@ -35,7 +35,7 @@ class PaypalController(
     captureRequest =>
       paypalBackendProvider
         .getInstanceFor(captureRequest)
-        .capturePayment(captureRequest.body)
+        .capturePayment(captureRequest.body, captureRequest.countrySubdivisionCode)
         .fold(
           err => InternalServerError(ResultBody.Error(err.getMessage)),
           _ => Ok(ResultBody.Success(()))
@@ -46,7 +46,7 @@ class PaypalController(
     executeRequest =>
       paypalBackendProvider
         .getInstanceFor(executeRequest)
-        .executePayment(executeRequest.body)
+        .executePayment(executeRequest.body, executeRequest.countrySubdivisionCode)
         .fold(
           err => InternalServerError(ResultBody.Error(err.getMessage)),
           payment => Ok(ResultBody.Success("execute payment success"))

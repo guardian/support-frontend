@@ -25,6 +25,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   //-- entities
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None)
   val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, None)
+  val countrySubdivisionCode = Some("NY")
   val executePaypalPaymentData = ExecutePaypalPaymentData(
     ExecutePaymentData("paymentId", "payerId"), acquisitionData, None
   )
@@ -136,7 +137,7 @@ class PaypalBackendSpec
 
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponseError)
-        paypalBackend.capturePayment(capturePaypalPaymentData).futureLeft shouldBe
+        paypalBackend.capturePayment(capturePaypalPaymentData, countrySubdivisionCode).futureLeft shouldBe
           BackendError.fromPaypalAPIError(paymentError)
 
       }
@@ -148,7 +149,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        paypalBackend.capturePayment(capturePaypalPaymentData).futureRight shouldBe paymentMock
+        paypalBackend.capturePayment(capturePaypalPaymentData, countrySubdivisionCode).futureRight shouldBe paymentMock
       }
     }
 
@@ -156,7 +157,7 @@ class PaypalBackendSpec
 
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponseError)
-        paypalBackend.executePayment(executePaypalPaymentData)
+        paypalBackend.executePayment(executePaypalPaymentData, countrySubdivisionCode)
           .futureLeft shouldBe BackendError.fromPaypalAPIError(paymentError)
 
       }
@@ -168,7 +169,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        paypalBackend.executePayment(executePaypalPaymentData).futureRight shouldBe paymentMock
+        paypalBackend.executePayment(executePaypalPaymentData, countrySubdivisionCode).futureRight shouldBe paymentMock
       }
     }
 
@@ -207,7 +208,7 @@ class PaypalBackendSpec
         when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
-        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData)
+        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData, countrySubdivisionCode)
 
         result.futureLeft shouldBe BackendError.Email(emailError)
       }
@@ -230,7 +231,7 @@ class PaypalBackendSpec
           BackendError.Database(DatabaseService.Error("DB error response", None)),
           BackendError.Email(emailError)
         ))
-        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData)
+        val result = paypalBackend invokePrivate postPaymentTasks(paymentMock, None, mockAcquisitionData, countrySubdivisionCode)
 
         result.futureLeft shouldBe errors
       }
@@ -245,7 +246,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None)
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, countrySubdivisionCode)
 
         result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
       }
@@ -263,7 +264,7 @@ class PaypalBackendSpec
           ),
           BackendError.Database(DatabaseService.Error("DB error response", None))
         ))
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None)
+        val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, countrySubdivisionCode)
         result.futureLeft shouldBe errors
       }
     }

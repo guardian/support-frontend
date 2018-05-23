@@ -28,14 +28,14 @@ class StripeBackend(
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(data: StripeChargeData): EitherT[Future, BackendError, StripeChargeSuccess] =
+  def createCharge(data: StripeChargeData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, StripeChargeSuccess] =
     stripeService.createCharge(data)
       .bimap(
         err => BackendError.fromStripeApiError(err),
         charge => {
           val email = data.signedInUserEmail.getOrElse(data.paymentData.email)
 
-          postPaymentTasks(email, data, charge)
+          postPaymentTasks(email, data, charge, countrySubdivisionCode)
             .leftMap { err =>
               logger.error(s"Didn't complete post-payment tasks after creating Stripe charge. " +
                 s"Charge: ${charge.toString}. " +
@@ -55,10 +55,10 @@ class StripeBackend(
     } yield dbUpdateResult
   }
 
-  private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge): EitherT[Future, BackendError, Unit] = {
+  private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
     val trackContributionResult = for {
       identityId <- getOrCreateIdentityIdFromEmail(email)
-      _ <- trackContribution(charge, data, identityId)
+      _ <- trackContribution(charge, data, identityId, countrySubdivisionCode)
     } yield ()
 
     val sendThankYouEmailResult = for {
@@ -71,9 +71,9 @@ class StripeBackend(
     )
   }
 
-  private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long]): EitherT[Future, BackendError, Unit]  =
+  private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
-      insertContributionDataIntoDatabase(ContributionData.fromStripeCharge(identityId, charge)),
+      insertContributionDataIntoDatabase(ContributionData.fromStripeCharge(identityId, charge, countrySubdivisionCode)),
       submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId))
     )
 

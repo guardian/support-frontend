@@ -95,7 +95,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return a 200 response if the request is valid and sent using the old format - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -159,7 +159,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return a 200 response if the request is valid and sent using the old format with the minimal params" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -183,7 +183,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return a 200 response if the request is valid and sent using the new format - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -231,7 +231,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return a 200 response if the request is valid and the amount contains a decimal point - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -279,7 +279,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return cors headers if origin matches existing config definition" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -311,7 +311,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return a 400 response if the request contains an invalid JSON" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
@@ -337,7 +337,7 @@ class StripeControllerSpec extends PlaySpec with Status {
 
       "return 500 response if the response from the service contains an error" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any()))
+          when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponseError)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)

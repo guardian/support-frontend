@@ -27,6 +27,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token")
   val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData, None)
+  val countrySubdivisionCode = Some("NY")
   val stripeHookObject = StripeHookObject("id", "GBP")
   val stripeHookData = StripeHookData(stripeHookObject)
   val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
@@ -109,7 +110,7 @@ class StripeBackendSpec
 
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeData).futureLeft shouldBe BackendError.fromStripeApiError(stripeApiError)
+        stripeBackend.createCharge(stripeChargeData, countrySubdivisionCode).futureLeft shouldBe BackendError.fromStripeApiError(stripeApiError)
 
       }
 
@@ -120,7 +121,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        stripeBackend.createCharge(stripeChargeData).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
+        stripeBackend.createCharge(stripeChargeData, countrySubdivisionCode).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
       }
     }
 
@@ -161,7 +162,7 @@ class StripeBackendSpec
         when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
-        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock)
+        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)
 
         result.futureLeft shouldBe BackendError.Email(emailError)
       }
@@ -180,7 +181,7 @@ class StripeBackendSpec
         when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
-        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock)
+        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)
         val errors = BackendError.MultipleErrors(List(
           BackendError.Database(DatabaseService.Error("DB error response", None)),
           BackendError.Email(emailError)
@@ -197,7 +198,7 @@ class StripeBackendSpec
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
-        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None)
+        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None, countrySubdivisionCode)
         result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
       }
 
@@ -207,7 +208,7 @@ class StripeBackendSpec
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
-        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None)
+        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None, countrySubdivisionCode)
         val error = BackendError.MultipleErrors(List(
           BackendError.Database(DatabaseService.Error("DB error response", None)),
           BackendError.fromOphanError(OphanServiceError.BuildError("Ophan error response")))

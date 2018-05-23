@@ -45,12 +45,12 @@ class PaypalBackend(
    * The Android app creates and approves the payment directly via PayPal.
    * Funds are captured via this endpoint.
    */
-  def capturePayment(c: CapturePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
     paypalService.capturePayment(c)
       .bimap(
         err => BackendError.fromPaypalAPIError(err),
         payment => {
-          postPaymentTasks(payment, c.signedInUserEmail, c.acquisitionData)
+          postPaymentTasks(payment, c.signedInUserEmail, c.acquisitionData, countrySubdivisionCode)
             .leftMap { err =>
               logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
                 s"Payment: ${payment.toString}. " +
@@ -63,12 +63,12 @@ class PaypalBackend(
         }
       )
 
-  def executePayment(e: ExecutePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
     paypalService.executePayment(e)
       .bimap(
         err => BackendError.fromPaypalAPIError(err),
         payment => {
-          postPaymentTasks(payment, e.signedInUserEmail, e.acquisitionData)
+          postPaymentTasks(payment, e.signedInUserEmail, e.acquisitionData, countrySubdivisionCode)
             .leftMap { err =>
               logger.error(s"Didn't complete post-payment tasks after executing PayPal payment. " +
                 s"Payment: ${payment.toString}. " +
@@ -89,13 +89,13 @@ class PaypalBackend(
   }
 
   // Success or failure of these steps shouldn't affect the response to the client
-  private def postPaymentTasks(payment: Payment, signedInUserEmail: Option[String], acquisitionData: AcquisitionData): EitherT[Future, BackendError, Unit] = {
+  private def postPaymentTasks(payment: Payment, signedInUserEmail: Option[String], acquisitionData: AcquisitionData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
     emailFromPayment(payment).flatMap { paymentEmail =>
       val email = signedInUserEmail.getOrElse(paymentEmail)
 
       val trackContributionResult = for {
         identityId <- getOrCreateIdentityIdFromEmail(email)
-        _ <- trackContribution(payment, acquisitionData, email, identityId)
+        _ <- trackContribution(payment, acquisitionData, email, identityId, countrySubdivisionCode)
       } yield ()
 
       val sendThankYouEmailResult = for {
@@ -110,8 +110,8 @@ class PaypalBackend(
     }
   }
 
-  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long]): EitherT[Future, BackendError, Unit] = {
-    ContributionData.fromPaypalCharge(payment, email, identityId)
+  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
+    ContributionData.fromPaypalCharge(payment, email, identityId, countrySubdivisionCode)
       .leftMap { error =>
         logger.error(s"Error creating contribution data from paypal. Error: $error")
         BackendError.fromPaypalAPIError(error)

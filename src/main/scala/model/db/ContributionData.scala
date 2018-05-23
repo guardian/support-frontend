@@ -7,6 +7,9 @@ import java.util.UUID
 import cats.implicits._
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
+
+import scala.util.Try
+
 import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
 import model.{Currency, PaymentProvider, PaymentStatus}
@@ -21,6 +24,7 @@ case class ContributionData private (
     currency: Currency,
     amount: BigDecimal,
     countryCode: Option[String],
+    countrySubdivisionCode: Option[String],
     // Used as primary key on current contribution_metadata and payment_hooks table
     // https://github.com/guardian/contributions-platform/blob/master/Postgres/schema.sql
     contributionId: UUID = UUID.randomUUID
@@ -34,7 +38,7 @@ object ContributionData {
     LocalDateTime.parse(dateTime, formatter)
   }
 
-  def fromStripeCharge(identityId: Option[Long], charge: Charge): ContributionData =
+  def fromStripeCharge(identityId: Option[Long], charge: Charge, countrySubdivisionCode: Option[String]): ContributionData =
     // TODO: error handling
     ContributionData(
       paymentProvider = PaymentProvider.Stripe,
@@ -48,12 +52,13 @@ object ContributionData {
       // Stripe can return currency in lower case
       currency = Currency.withNameInsensitive(charge.getCurrency),
       amount = BigDecimal(charge.getAmount, 2),
-      countryCode = StripeSource.getCountryCode(charge)
+      countryCode = StripeSource.getCountryCode(charge),
+      countrySubdivisionCode = countrySubdivisionCode
     )
 
   import scala.collection.JavaConverters._
 
-  def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long]): Either[PaypalApiError, ContributionData] = {
+  def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
         .fromString(s"Invalid Paypal transactions content."))
@@ -70,7 +75,8 @@ object ContributionData {
       created = created,
       currency = currency,
       amount = amount,
-      countryCode = Some(countryCode)
+      countryCode = Some(countryCode),
+      countrySubdivisionCode = Try(payment.getPayer.getPayerInfo.getBillingAddress.getState).toOption.orElse(countrySubdivisionCode)
     )
   }
 

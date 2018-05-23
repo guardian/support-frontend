@@ -14,14 +14,14 @@ class StripeController(
   cc: ControllerComponents,
   stripeBackendProvider: RequestBasedProvider[StripeBackend],
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider with RequestSyntax {
 
   import util.RequestTypeDecoder.instances._
   import model.stripe.StripeJsonDecoder._
 
   def executePayment: Action[StripeChargeData] = CorsAction.async(circe.json[StripeChargeData]) { request => {
       stripeBackendProvider.getInstanceFor(request)
-        .createCharge(request.body)
+        .createCharge(request.body, request.countrySubdivisionCode)
         .fold(
           err => InternalServerError(ResultBody.Error(err.getMessage)),
           charge => Ok(ResultBody.Success(charge))

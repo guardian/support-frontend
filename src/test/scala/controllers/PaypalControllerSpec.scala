@@ -217,7 +217,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -278,7 +278,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -303,7 +303,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -349,7 +349,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -374,7 +374,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -413,7 +413,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.capturePayment(any()))
+          when(mockPaypalBackend.capturePayment(any(), any()))
             .thenReturn(paymentServiceResponseError)
         }
 
@@ -458,7 +458,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.executePayment(any()))
+          when(mockPaypalBackend.executePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -506,7 +506,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.executePayment(any()))
+          when(mockPaypalBackend.executePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
@@ -530,7 +530,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.executePayment(any()))
+          when(mockPaypalBackend.executePayment(any(), any()))
             .thenReturn(paymentServiceResponseError)
         }
 
@@ -566,7 +566,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
-          when(mockPaypalBackend.executePayment(any()))
+          when(mockPaypalBackend.executePayment(any(), any()))
             .thenReturn(paymentServiceResponse)
         }
 
