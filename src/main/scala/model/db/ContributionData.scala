@@ -7,8 +7,7 @@ import java.util.UUID
 import cats.implicits._
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
-
-import scala.util.Try
+import com.typesafe.scalalogging.StrictLogging
 
 import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
@@ -30,7 +29,7 @@ case class ContributionData private (
     contributionId: UUID = UUID.randomUUID
 )
 
-object ContributionData {
+object ContributionData extends StrictLogging {
 
   private def paypalDateToLocalDateTime(dateTime: String): LocalDateTime = {
     //-- paypal date example 2018-02-22T11:51:00Z -> DateTimeFormatter.ISO_INSTANT
@@ -58,6 +57,17 @@ object ContributionData {
 
   import scala.collection.JavaConverters._
 
+  private def getPaypalCountrySubdivisionCode(payment: Payment, countrySubdivisionCode: Option[String]): Option[String] = {
+    Either.catchNonFatal(payment.getPayer.getPayerInfo.getBillingAddress.getState)
+      .fold(
+        err => {
+          logger.warn("unable to get state from Paypal payment, using fallback", err)
+          countrySubdivisionCode
+        },
+        state => Some(state)
+      )
+  }
+
   def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
@@ -76,8 +86,7 @@ object ContributionData {
       currency = currency,
       amount = amount,
       countryCode = Some(countryCode),
-      countrySubdivisionCode = Try(payment.getPayer.getPayerInfo.getBillingAddress.getState).toOption.orElse(countrySubdivisionCode)
+      countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment, countrySubdivisionCode)
     )
   }
-
 }
