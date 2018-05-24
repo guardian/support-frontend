@@ -26,11 +26,9 @@ function CirclesIntroduction(props: PropTypes) {
   let { highlights } = props;
   const modifiers = [];
 
-  if (props.desktopAboveTheFoldVariant) {
-    if (props.desktopAboveTheFoldVariant === 'variant') {
-      highlights = ['Your contribution'];
-      modifiers.push('variant');
-    }
+  if (props.desktopAboveTheFoldVariant && props.desktopAboveTheFoldVariant === 'variant') {
+    highlights = ['Your contribution'];
+    modifiers.push('variant');
   }
 
   return (

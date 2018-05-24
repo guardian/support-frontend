@@ -22,11 +22,9 @@ export default function Contribute(props: PropTypes) {
   let modifiers = [];
   let heading = 'Contribute';
 
-  if (props.desktopAboveTheFoldVariant) {
-    if (props.desktopAboveTheFoldVariant === 'variant') {
-      modifiers = ['variant'];
-      heading = '';
-    }
+  if (props.desktopAboveTheFoldVariant && props.desktopAboveTheFoldVariant === 'variant') {
+    modifiers = ['variant'];
+    heading = '';
   }
 
   return (
