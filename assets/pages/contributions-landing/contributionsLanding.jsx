@@ -18,6 +18,7 @@ import { renderPage } from 'helpers/render';
 import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getDesktopAboveTheFoldTestVariant } from 'helpers/abTests/abtest';
 
 // Page-specific react components connected to redux store
 import ContributionSelectionContainer from './containers/contributionSelectionContainer';
@@ -83,7 +84,7 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Render ----- //
 
-const { desktopAboveTheFold } = store.getState().common.abParticipations;
+const desktopAboveTheFold = store && store.getState().common.abParticipations.desktopAboveTheFold;
 const variantHeader = ['Help us deliver the', 'independent journalism', 'the world needs'];
 
 if (desktopAboveTheFold === 'variant') {
