@@ -2,6 +2,7 @@
 
 @import '../../stylesheets/gu-sass/gu-sass';
 
+
 // ----- Shared Components ----- //
 
 @import '../../components/headers/countrySwitcherHeader/countrySwitcherHeader';
@@ -31,3 +32,12 @@
 @import '../../components/patronsEvents/patronsEvents';
 @import '../../components/readyToSupport/readyToSupport';
 @import '../../components/footer/footer';
+
+
+// ----- Page-Specific Styles ----- //
+
+#support-landing-page {
+  .component-paypal-contribution-button {
+    margin-top: $gu-v-spacing;
+  }
+}

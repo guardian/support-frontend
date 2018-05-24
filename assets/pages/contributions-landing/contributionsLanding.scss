@@ -42,6 +42,10 @@
     @include gu-content-filler;
   }
 
+  .component-paypal-contribution-button {
+    margin-top: $gu-v-spacing;
+  }
+
 }
 
 #contributions-landing-page-us {

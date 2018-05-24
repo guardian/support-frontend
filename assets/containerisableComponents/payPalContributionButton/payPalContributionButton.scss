@@ -2,7 +2,7 @@
   background-color: gu-colour(news-garnett-highlight);
   border-radius: 600px;
   border: none;
-  color: gu-colour(neutral-1);
+  color: gu-colour(garnett-neutral-1);
   cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
@@ -12,15 +12,14 @@
   position: relative;
   text-align: left;
   width: 100%;
-  margin-top: $gu-v-spacing;
 
   @include mq($from: mobileMedium) {
     width: 304px;
   }
 
   .svg-arrow-right-straight {
-    width: 24px;
-    fill: gu-colour(neutral-1);
+    width: 20px;
+    fill: gu-colour(garnett-neutral-1);
     position: absolute;
     right: 15px;
     top: 50%;
@@ -28,9 +27,6 @@
   }
 
   &:hover {
-    color: #000;
-    .svg-arrow-right-straight {
-      fill: #000;
-    }
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
   }
 }
