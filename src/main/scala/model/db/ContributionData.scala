@@ -9,6 +9,8 @@ import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 
+import scala.util.Try
+
 import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
 import model.{Currency, PaymentProvider, PaymentStatus}
@@ -57,16 +59,15 @@ object ContributionData extends StrictLogging {
 
   import scala.collection.JavaConverters._
 
-  private def getPaypalCountrySubdivisionCode(payment: Payment, countrySubdivisionCode: Option[String]): Option[String] = {
-    Either.catchNonFatal(payment.getPayer.getPayerInfo.getBillingAddress.getState)
-      .fold(
-        err => {
-          logger.warn(s"unable to get state from Paypal payment: ${payment.toJSON}", err)
-          countrySubdivisionCode
-        },
-        state => Some(state)
-      )
-  }
+  // Couple of notes:
+  // - using (deprecated) shipping address as unable to get state from billing address
+  // - on event of not being able to get state from shipping address,
+  //   don't fallback to region header set by Fastly,
+  //   since currently the only client of the payment API is support-frontend
+  //   and this service makes the request to execute the payment server side,
+  //   resulting in the region header always being Dublin i.e. where the server is hosted.
+  private def getPaypalCountrySubdivisionCode(payment: Payment): Option[String] =
+    Try(payment.getPayer.getPayerInfo.getShippingAddress.getState).toOption.flatMap(Option(_))
 
   def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): Either[PaypalApiError, ContributionData] = {
     for {
@@ -86,7 +87,7 @@ object ContributionData extends StrictLogging {
       currency = currency,
       amount = amount,
       countryCode = Some(countryCode),
-      countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment, countrySubdivisionCode)
+      countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment)
     )
   }
 }
