@@ -31,14 +31,14 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
-const defaultContributeCopy = 'Your contribution funds and supports The Guardian\'s journalism.';
+const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
 } = {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-uk',
   },
   EURCountries: {
@@ -48,7 +48,7 @@ const countryGroupSpecificDetails: {
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
