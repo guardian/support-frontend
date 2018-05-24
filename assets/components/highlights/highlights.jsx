@@ -32,7 +32,3 @@ export default function Highlights(props: PropTypes) {
   );
 
 }
-
-Highlights.defaultProps = {
-  modifiers: [],
-};
