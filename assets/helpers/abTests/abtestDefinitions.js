@@ -7,11 +7,7 @@ export const tests: Tests = {
   desktopAboveTheFold: {
     variants: ['control', 'variant'],
     audiences: {
-      GB: {
-        offset: 0,
-        size: 1,
-      },
-      US: {
+      ALL: {
         offset: 0,
         size: 1,
       },
