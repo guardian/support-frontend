@@ -18,7 +18,6 @@ import { renderPage } from 'helpers/render';
 import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getDesktopAboveTheFoldTestVariant } from 'helpers/abTests/abtest';
 
 // Page-specific react components connected to redux store
 import ContributionSelectionContainer from './containers/contributionSelectionContainer';
