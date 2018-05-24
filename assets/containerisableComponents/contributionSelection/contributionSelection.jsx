@@ -40,6 +40,7 @@ type PropTypes = {
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
+  oneOffOnly: ('control' | 'oneOffOnly' | 'notintest'),
 };
 
 
@@ -49,8 +50,14 @@ function ContributionSelection(props: PropTypes) {
 
   const modifierClass = getContributionTypeClassName(props.contributionType);
 
+  let oneOffModifierClass = '';
+  if (props.oneOffOnly && props.oneOffOnly === 'oneOffOnly') {
+    props.setContributionType('ONE_OFF', props.countryGroupId);
+    oneOffModifierClass = 'one-off-only';
+  }
+
   return (
-    <div className={classNameWithModifiers('component-contribution-selection', [modifierClass])}>
+    <div className={classNameWithModifiers('component-contribution-selection', [modifierClass, oneOffModifierClass])}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
@@ -133,8 +140,6 @@ function CustomAmountInput(props: {
   );
 
 }
-
-
 // ----- Exports ----- //
 
 export default ContributionSelection;

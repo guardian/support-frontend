@@ -18,16 +18,16 @@ export const tests: Tests = {
     seed: 0,
   },
   oneOffOnlyTest: {
-      variants: ['control', 'oneOffOnly'],
-      audiences: {
-        ALL: {
-            offset: 0,
-            size: 1,
-        },
+    variants: ['control', 'oneOffOnly'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
       },
-      customSegmentCondition: () => window.matchMedia('(max-width: 320px)').matches, // matches the 'mobile' breakpoint defined in breakpoints.scss
-      isActive: true,
-      independent: true,
-      seed: 1,
+    },
+    customSegmentCondition: () => window.matchMedia('(max-width: 660px)').matches, // matches the 'phablet' breakpoint defined in breakpoints.scss
+    isActive: true,
+    independent: true,
+    seed: 1,
   },
 };
