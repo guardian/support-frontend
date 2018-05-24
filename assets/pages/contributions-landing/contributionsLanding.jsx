@@ -88,7 +88,13 @@ const variantHeader = ['Help us deliver the', 'independent journalism', 'the wor
 
 if (desktopAboveTheFold === 'variant') {
   countryGroupSpecificDetails.GBPCountries.headerCopy = variantHeader;
+  countryGroupSpecificDetails.EURCountries.headerCopy = variantHeader;
   countryGroupSpecificDetails.UnitedStates.headerCopy = variantHeader;
+  countryGroupSpecificDetails.AUDCountries.headerCopy = variantHeader;
+  countryGroupSpecificDetails.International.headerCopy = variantHeader;
+  countryGroupSpecificDetails.NZDCountries.headerCopy = variantHeader;
+  countryGroupSpecificDetails.Canada.headerCopy = variantHeader;
+
 }
 
 const content = (
