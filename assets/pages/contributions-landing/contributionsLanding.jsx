@@ -38,7 +38,7 @@ const countryGroupSpecificDetails: {
 } = {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
+    contributeCopy: 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.',
     reactElementId: 'contributions-landing-page-uk',
   },
   EURCountries: {
@@ -83,7 +83,13 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Render ----- //
 
-const aboveTheFoldVariant = store.getState().common.abParticipations['desktopAboveTheFold'];
+const { desktopAboveTheFold } = store.getState().common.abParticipations;
+const variantHeader = ['Help us deliver the', 'independent journalism', 'the world needs'];
+
+if (desktopAboveTheFold === 'variant') {
+  countryGroupSpecificDetails.GBPCountries.headerCopy = variantHeader;
+  countryGroupSpecificDetails.UnitedStates.headerCopy = variantHeader;
+}
 
 const content = (
   <Provider store={store}>
@@ -92,11 +98,11 @@ const content = (
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
-        desktopAboveTheFoldVariant={aboveTheFoldVariant}
+        desktopAboveTheFoldVariant={desktopAboveTheFold}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
-        desktopAboveTheFoldVariant={aboveTheFoldVariant}
+        desktopAboveTheFoldVariant={desktopAboveTheFold}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
