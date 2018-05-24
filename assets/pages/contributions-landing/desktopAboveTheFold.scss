@@ -1,0 +1,57 @@
+.component-circles-introduction__heading--variant {
+  z-index: 10000;
+  @include mq($from: desktop) {
+    margin-top: $gu-v-spacing;
+    font-size: 32px;
+    line-height: 38px;
+  }
+  @include mq($from:leftCol) {
+    font-size: 38px;
+    line-height: 44px;
+  }
+}
+
+.component-highlights__highlight--variant {
+  @include mq($from: desktop) {
+    font-size: 18px;
+    line-height: 20px;
+    padding: 4px;
+  }
+
+  @include mq($from:leftCol) {
+    font-size: 24px;
+    line-height: 35px;
+  }
+}
+
+.component-circles-introduction__content--variant {
+  @include mq($from: desktop) {
+    padding-bottom: 0;
+    margin-bottom: -24px;
+  }
+
+  @include mq($from: leftCol) {
+    padding-bottom: 0;
+    margin-bottom: -10px;
+  }
+}
+
+.component-contribute--variant::before {
+  @include mq($from: desktop) {
+    display: none;
+  }
+}
+
+.component-circles-introduction {
+  .component-highlights--variant {
+    @include mq($from: desktop) {
+      padding-left: 16px;
+    }
+  }
+}
+
+.component-contribute__description {
+  @include mq($from: desktop) {
+    width: 610px;
+  }
+}

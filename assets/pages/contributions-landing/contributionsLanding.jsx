@@ -31,7 +31,7 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
-const defaultContributeCopy = 'Your contribution funds and supports The Guardian\'s journalism.';
+const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
@@ -48,7 +48,7 @@ const countryGroupSpecificDetails: {
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.',
+    contributeCopy: defaultContributeCopy,
     reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
@@ -83,6 +83,14 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Render ----- //
 
+const desktopAboveTheFold = store && store.getState().common.abParticipations.desktopAboveTheFold;
+const variantHeader = ['Help us deliver the', 'independent journalism', 'the world needs'];
+
+if (desktopAboveTheFold === 'variant') {
+  countryGroupSpecificDetails.GBPCountries.headerCopy = variantHeader;
+  countryGroupSpecificDetails.UnitedStates.headerCopy = variantHeader;
+}
+
 const content = (
   <Provider store={store}>
     <div className="gu-content">
@@ -90,9 +98,11 @@ const content = (
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
+        desktopAboveTheFoldVariant={desktopAboveTheFold}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
+        desktopAboveTheFoldVariant={desktopAboveTheFold}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
