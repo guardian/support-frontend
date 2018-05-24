@@ -61,7 +61,7 @@ object ContributionData extends StrictLogging {
     Either.catchNonFatal(payment.getPayer.getPayerInfo.getBillingAddress.getState)
       .fold(
         err => {
-          logger.warn("unable to get state from Paypal payment, using fallback", err)
+          logger.warn(s"unable to get state from Paypal payment: ${payment.toJSON}", err)
           countrySubdivisionCode
         },
         state => Some(state)
