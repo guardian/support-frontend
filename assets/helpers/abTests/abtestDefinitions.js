@@ -17,7 +17,7 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-  oneOffOnlyTest: {
+  ContributeLandingOneOffOnlyTest: {
     variants: ['control', 'oneOffOnly'],
     audiences: {
       ALL: {
@@ -25,7 +25,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    customSegmentCondition: () => window.matchMedia('(max-width: 660px)').matches, // matches the 'phablet' breakpoint defined in breakpoints.scss
+    customSegmentCondition: () => window.matchMedia('(max-width: 660px)').matches && (window.location.pathname.indexOf('contribute') > 0), // matches the 'phablet' breakpoint defined in breakpoints.scss
     isActive: true,
     independent: true,
     seed: 1,

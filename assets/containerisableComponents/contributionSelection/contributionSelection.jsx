@@ -40,7 +40,7 @@ type PropTypes = {
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
-  oneOffOnly: ('control' | 'oneOffOnly' | 'notintest'),
+  oneOffOnlyVariant: ('control' | 'oneOffOnly' | 'notintest'),
 };
 
 
@@ -51,7 +51,7 @@ function ContributionSelection(props: PropTypes) {
   const modifierClass = getContributionTypeClassName(props.contributionType);
 
   let oneOffModifierClass = '';
-  if (props.oneOffOnly && props.oneOffOnly === 'oneOffOnly') {
+  if (props.oneOffOnlyVariant === 'oneOffOnly') {
     props.setContributionType('ONE_OFF', props.countryGroupId);
     oneOffModifierClass = 'one-off-only';
   }
