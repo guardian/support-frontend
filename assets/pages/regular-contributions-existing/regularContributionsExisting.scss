@@ -67,9 +67,11 @@
     @include mq($from: mobileMedium) {
       width: 300px;
     }
-  }
 
-  .manage-contribution-cta {
+    &:hover {
+      background-color: darken(gu-colour(garnett-neutral-1), 5%);
+    }
+
     .svg-arrow-right-straight {
       height: 35%;
       top: 17px;
@@ -81,5 +83,4 @@
       }
     }
   }
-
 }
