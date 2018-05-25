@@ -34,12 +34,12 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(createPageReducerFor(countryGroupId));
 
-const oneOffOnly = (store && store.getState().common.abParticipations.oneOffOnlyTest) || 'notintest';
+const oneOffOnlyVariant = (store && store.getState().common.abParticipations.ContributeLandingOneOffOnlyTest) || 'notintest';
 
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
-const defaultContributeCopy = oneOffOnly && oneOffOnly === 'oneOffOnly'
+const defaultContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
   ? 'Your contribution funds and supports The Guardian\'s journalism.'
   : 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
@@ -115,7 +115,7 @@ const content = (
         desktopAboveTheFoldVariant={desktopAboveTheFold}
       >
         <ContributionSelectionContainer
-          oneOffOnly={oneOffOnly}
+          oneOffOnlyVariant={oneOffOnlyVariant}
         />
         <ContributionAwarePaymentLogosContainer />
         <ContributionPaymentCtasContainer
