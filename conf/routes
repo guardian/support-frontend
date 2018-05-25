@@ -43,7 +43,7 @@ GET  /ca/contribute                                 controllers.Application.cont
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm()
 GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm()
-GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js")
+GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
 GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm()

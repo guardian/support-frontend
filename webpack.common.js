@@ -34,6 +34,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
     oneoffContributionsPageStyles: 'pages/oneoff-contributions/oneoffContributions.scss',
     regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
+    regularContributionsExistingPageStyles: 'pages/regular-contributions-existing/regularContributionsExisting.scss',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
     error404Page: 'pages/error/error404.jsx',
