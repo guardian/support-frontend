@@ -82,7 +82,9 @@ object Salesforce {
     implicit val codec: Codec[SalesforceAuthenticationErrorResponse] = deriveCodec
   }
 
-  case class SalesforceAuthenticationErrorResponse(error: String, error_description: String) extends Throwable
+  case class SalesforceAuthenticationErrorResponse(error: String, error_description: String) extends Throwable {
+    override def getMessage: String = s"error: $error + error_description: $error_description"
+  }
 
   object Authentication {
     implicit val codec: Codec[Authentication] = deriveCodec
