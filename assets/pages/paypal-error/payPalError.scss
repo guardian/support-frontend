@@ -68,14 +68,19 @@
   .component-cta-link {
     color: #fff;
     background: gu-colour(neutral-1);
+    box-sizing: border-box;
     display: inline-block;
-    width: 180px;
+    width: 230px;
+    line-height: 40px;
     border: 1px solid gu-colour(neutral-1);
     font-weight: normal;
     margin-bottom: $gu-v-spacing * 4;
+    padding-top: 0;
+    padding-bottom: 0;
 
     svg {
       fill: #fff;
+      top: 10px;
       // Fix for IE10.
       left: 190px;
     }
