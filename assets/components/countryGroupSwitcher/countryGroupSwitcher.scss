@@ -12,6 +12,7 @@
 }
 
 .component-country-group-switcher__selector {
+  margin-top: 8px;
   font-size: 12px;
 
   @include mq($from: mobileLandscape) {
