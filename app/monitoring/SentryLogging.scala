@@ -1,31 +1,31 @@
 package monitoring
 
-import ch.qos.logback.classic.{Logger, LoggerContext}
-import com.getsentry.raven.RavenFactory
-import com.getsentry.raven.dsn.Dsn
-import com.getsentry.raven.logback.SentryAppender
-import org.slf4j.Logger.ROOT_LOGGER_NAME
-import org.slf4j.LoggerFactory
-import com.gu.support.config.Stage
-import app.BuildInfo
+import monitoring.SafeLogger._
+
+import config.Configuration
+import io.sentry.Sentry
+
+import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 object SentryLogging {
-  val AllMDCTags = Seq()
-}
-
-class SentryLogging(dsnConfig: String, stage: Stage) {
-  val dsn = new Dsn(dsnConfig)
-  SafeLogger.info(s"Initialising Sentry logging for ${dsn.getHost}")
-  val tags = Map("stage" -> stage.toString) ++ BuildInfo.toMap
-  val tagsString = tags.map { case (k, v) => s"$k:$v" }.mkString(",")
-  val sentryAppender = new SentryAppender(RavenFactory.ravenInstance(dsn)) {
-    addFilter(SentryFilters.errorLevelFilter)
-    addFilter(SentryFilters.piiFilter)
-    setTags(tagsString)
-    setRelease(BuildInfo.gitCommitId)
-    setExtraTags(SentryLogging.AllMDCTags.mkString(","))
-    setContext(LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext])
+  def init(config: Configuration) {
+    config.sentryDsn match {
+      case None => SafeLogger.warn("No Sentry logging configured (OK for dev)")
+      case Some(sentryDSN) =>
+        SafeLogger.info(s"Initialising Sentry logging with $sentryDSN")
+        Try {
+          val sentryClient = Sentry.init(sentryDSN)
+          SafeLogger.info("Initialised! Adding tags.")
+          val buildInfo: Map[String, String] = app.BuildInfo.toMap.mapValues(_.toString)
+          val tags = Map("stage" -> config.stage.toString) ++ buildInfo
+          SafeLogger.info(s"tagmap $tags")
+          sentryClient.setTags(tags.asJava)
+        } match {
+          case Success(_) => SafeLogger.debug("Sentry logging configured.")
+          case Failure(e) => SafeLogger.error(scrub"Something went wrong when setting up Sentry logging ${e.getStackTrace}")
+        }
+    }
+    SafeLogger.error(scrub"*TEST* more spam from Leigh-Anne. Why, you look radiant today! ^-^ ")
   }
-  sentryAppender.start()
-  LoggerFactory.getLogger(ROOT_LOGGER_NAME).asInstanceOf[Logger].addAppender(sentryAppender)
 }

@@ -54,6 +54,6 @@ trait AppComponents extends PlayComponents
     assetController
   )
 
-  appConfig.sentryDsn foreach { dsn => new SentryLogging(dsn, appConfig.stage) }
+  SentryLogging.init(appConfig)
   new StateMachineMonitor(regularContributionsClient, actorSystem).start()
 }

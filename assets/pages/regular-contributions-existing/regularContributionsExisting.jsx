@@ -12,20 +12,25 @@ import QuestionsContact from 'components/questionsContact/questionsContact';
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { getBaseDomain } from 'helpers/url';
+import { logException } from 'helpers/logger';
 
 import CirclesIntroduction from '../../components/introduction/circlesIntroduction';
 import PageSection from '../../components/pageSection/pageSection';
+import Raven from "raven-js/typescript/raven";
+
 
 // ----- Functions ----- //
 
 function buildMMAUrl(): string {
+  Raven.captureMessage('*TEST*: Leigh-Anne still making Sentry changes. By the way, reader, it is a delight to work with you.');
+
+  logException('*TEST*: Leigh-Anne still making Sentry changes. By the way, reader, it is a delight to work with you.');
   return `https://profile.${getBaseDomain()}/contribution/recurring/edit`;
 }
 
 // ----- Page Startup ----- //
 
 pageInit();
-
 
 // ----- Render ----- //
 
