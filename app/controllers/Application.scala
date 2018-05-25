@@ -72,12 +72,12 @@ class Application(
   }
 
   def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.supportLanding(
+    Ok(views.html.main(
       title = "Support the Guardian",
-      id = "support-landing-page",
-      js = "supportLandingPage.js",
-      css = "supportLandingPageStyles.css",
-      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      mainId = "support-landing-page",
+      mainJsBundle = "supportLandingPage.js",
+      mainStyleBundle = "supportLandingPageStyles.css",
+      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
       description = Some(stringsConfig.supportLandingDescription)
     ))
   }
