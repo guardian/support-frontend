@@ -97,10 +97,6 @@ class Application(
     Ok(views.html.main(title, id, js, css))
   }
 
-  def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { implicit request =>
-    Ok(views.html.main(title, id, js))
-  }
-
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
