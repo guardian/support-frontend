@@ -28,6 +28,8 @@
 
   .component-three-subscriptions {
     @include multiline-top-border;
+
+    border-top: none;
   }
 
 }
