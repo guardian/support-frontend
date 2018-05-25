@@ -193,6 +193,9 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
       VpcId: !Ref VpcId
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
     DependsOn:
     - ElasticLoadBalancer
 
