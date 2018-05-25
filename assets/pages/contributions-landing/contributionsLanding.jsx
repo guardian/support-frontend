@@ -28,10 +28,21 @@ import ContributionAwarePaymentLogosContainer from './containers/contributionAwa
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
+// ----- Redux Store ----- //
+
+const countryGroupId: CountryGroupId = detect();
+
+const store = pageInit(createPageReducerFor(countryGroupId));
+
+const oneOffOnlyVariant = (store && store.getState().common.abParticipations.ContributeLandingOneOffOnlyTest) || 'notintest';
+
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
-const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
+const defaultContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
+  ? 'Your contribution funds and supports The Guardian\'s journalism.'
+  : 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
+
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
@@ -74,13 +85,6 @@ const countryGroupSpecificDetails: {
 };
 
 
-// ----- Redux Store ----- //
-
-const countryGroupId: CountryGroupId = detect();
-
-const store = pageInit(createPageReducerFor(countryGroupId));
-
-
 // ----- Render ----- //
 
 const desktopAboveTheFold = store && store.getState().common.abParticipations.desktopAboveTheFold;
@@ -110,7 +114,9 @@ const content = (
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
         desktopAboveTheFoldVariant={desktopAboveTheFold}
       >
-        <ContributionSelectionContainer />
+        <ContributionSelectionContainer
+          oneOffOnlyVariant={oneOffOnlyVariant}
+        />
         <ContributionAwarePaymentLogosContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}
