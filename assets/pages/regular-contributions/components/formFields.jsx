@@ -87,7 +87,12 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
   // Sets the initial state to the first in the dropdown.
   stateUpdate(options[0].value);
 
-  return <SelectInput id="qa-state-dropdown" onChange={stateUpdate} options={options} />;
+  return (<SelectInput
+    id="qa-state-dropdown"
+    onChange={stateUpdate}
+    options={options}
+    label="Select your state"
+  />);
 }
 
 function countriesDropdown(
@@ -110,7 +115,12 @@ function countriesDropdown(
         selected: countryCode === country,
       }));
 
-  return <SelectInput id="qa-country-dropdown" onChange={countryUpdate} options={options} />;
+  return (<SelectInput
+    id="qa-country-dropdown"
+    onChange={countryUpdate}
+    options={options}
+    label="Select your country"
+  />);
 }
 
 

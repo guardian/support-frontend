@@ -23,7 +23,8 @@ type PropTypes = {
   options: SelectOption[],
   onChange: (string) => void,
   required?: boolean,
-  id?: string,
+  id: string,
+  label: string,
   className?: string,
 };
 
@@ -36,14 +37,20 @@ export default function SelectInput(props: PropTypes) {
     <option value={option.value} selected={option.selected}>{option.text}</option>);
 
   return (
-    <select
-      id={props.id}
-      className={props.className}
-      required={props.required}
-      onChange={event => props.onChange(event.target.value)}
-    >
-      {options}
-    </select>
+    <div>
+      <label htmlFor={props.id} className="accessibility-hint">
+        {props.label}
+      </label>
+      <select
+        id={props.id}
+        name={props.id}
+        className={props.className}
+        required={props.required}
+        onChange={event => props.onChange(event.target.value)}
+      >
+        {options}
+      </select>
+    </div>
   );
 
 }
@@ -53,6 +60,5 @@ export default function SelectInput(props: PropTypes) {
 
 SelectInput.defaultProps = {
   required: false,
-  id: null,
   className: 'component-select-input',
 };

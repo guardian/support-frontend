@@ -37,7 +37,13 @@ function CountryGroupSwitcher(props: PropTypes) {
   return (
     <div className="component-country-group-switcher">
       <SvgGlobe />
-      <SelectInput id="qa-country-group-dropdown" className="component-country-group-switcher__selector" onChange={props.onCountryGroupSelect} options={options} />
+      <SelectInput
+        id="qa-country-group-dropdown"
+        className="component-country-group-switcher__selector"
+        onChange={props.onCountryGroupSelect}
+        options={options}
+        label="Select your region"
+      />
     </div>
   );
 }
