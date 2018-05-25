@@ -22,7 +22,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   entry: {
     favicons: 'images/favicons.js',
     fonts: 'fonts/fonts.js',
-    styles: 'stylesheets/main.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
     supportLandingPageStyles: 'pages/support-landing/supportLanding.scss',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
