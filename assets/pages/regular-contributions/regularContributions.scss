@@ -7,6 +7,8 @@
 
 @import '~components/checkboxInput/checkboxInput';
 @import '~components/ctaLink/ctaLink';
+@import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+@import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/displayName/displayName';
 @import '~components/dotcomCta/dotcomCta';
 @import '~components/errorMessage/errorMessage';
@@ -19,6 +21,7 @@
 @import '~components/legal/termsPrivacy/termsPrivacy';
 @import '~components/pageSection/pageSection';
 @import '~components/paymentAmount/paymentAmount';
+@import '~components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 @import '~components/paymentButtons/payPalExpressButton/payPalExpressButton';
 @import '~components/paymentButtons/stripePopUpButton/stripePopUpButton';
 @import '~components/progressMessage/progressMessage';
