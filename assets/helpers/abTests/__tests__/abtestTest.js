@@ -118,6 +118,189 @@ describe('basic behaviour of init', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
+  it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
+
+    window.matchMedia = window.matchMedia || jest.fn(() => {
+      return {
+        matches: false,
+      };
+    });
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+              maxWidth: 'desktop',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only min is provided', () => {
+
+    window.matchMedia = window.matchMedia || jest.fn(() => {
+      return {
+        matches: false,
+      };
+    });
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
+
+    window.matchMedia = window.matchMedia || jest.fn(() => {
+      return {
+        matches: false,
+      };
+    });
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+              maxWidth: undefined,
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for max breakpoints if only max is provided', () => {
+
+    window.matchMedia = window.matchMedia || jest.fn(() => {
+      return {
+        matches: false,
+      };
+    });
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              maxWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(max-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
+
+    window.matchMedia = window.matchMedia || jest.fn(() => {
+      return {
+        matches: false,
+      };
+    });
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: undefined,
+              maxWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
   it('A post-deployment test user should not be allocated into a test', () => {
 
     const postDeploymentTestCookie = '_post_deploy_user=true; path=/;';
