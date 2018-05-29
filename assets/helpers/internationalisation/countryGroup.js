@@ -157,4 +157,5 @@ function detect(): CountryGroupId {
 export {
   countryGroups,
   detect,
+  fromString,
 };

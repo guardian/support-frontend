@@ -8,10 +8,10 @@ import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-type PropTypes = {
+export type PropTypes = {
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: (string) => void,
+  onCountryGroupSelect: CountryGroupId => void,
 };
 
 

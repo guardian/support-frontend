@@ -36,6 +36,7 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 const oneOffOnlyVariant = (store && store.getState().common.abParticipations.ContributeLandingOneOffOnlyTest) || 'notintest';
 
+
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
@@ -87,6 +88,11 @@ const countryGroupSpecificDetails: {
   },
 };
 
+const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
+  '/contribute',
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
+);
+
 
 // ----- Render ----- //
 
@@ -107,7 +113,7 @@ if (desktopAboveTheFold === 'variant') {
 const content = (
   <Provider store={store}>
     <div className="gu-content">
-      <CountrySwitcherHeaderContainer />
+      <CountrySwitcherHeader />
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
