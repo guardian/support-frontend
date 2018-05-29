@@ -93,7 +93,7 @@ class Application(
     ))
   }
 
-  def reactTemplate(title: String, id: String, js: String, css: String = "styles.css"): Action[AnyContent] = CachedAction() { implicit request =>
+  def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(title, id, js, css))
   }
 
