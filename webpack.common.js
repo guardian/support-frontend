@@ -41,6 +41,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     error500Page: 'pages/error/error500.jsx',
     errorPageStyles: 'pages/error/error.scss',
     unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
+    contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
   },
 
   output: {
