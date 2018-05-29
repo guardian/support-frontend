@@ -8,6 +8,7 @@
   title: String,
   id: String,
   js: String,
+  css: String,
   user: IdUser,
   uatMode: Boolean,
   defaultStripeConfig: StripeConfig,
@@ -43,4 +44,4 @@
     </script>
 }
 
-@main(title = title, scripts = scripts, mainJsBundle = js, mainId = id)
+@main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css)

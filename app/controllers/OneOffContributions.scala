@@ -43,6 +43,7 @@ class OneOffContributions(
       title = "Support the Guardian | One-off Contribution",
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
+      css = "oneoffContributionsPageStyles.css",
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,

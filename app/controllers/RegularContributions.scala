@@ -48,6 +48,7 @@ class RegularContributions(
               title = "Support the Guardian | Monthly Contributions",
               id = "regular-contributions-page",
               js = "regularContributionsPage.js",
+              css = "regularContributionsPageStyles.css",
               user = fullUser,
               uatMode = uatMode,
               defaultStripeConfig = stripeConfigProvider.get(false),
