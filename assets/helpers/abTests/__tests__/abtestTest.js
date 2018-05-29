@@ -120,11 +120,7 @@ describe('basic behaviour of init', () => {
 
   it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
 
-    window.matchMedia = window.matchMedia || jest.fn(() => {
-      return {
-        matches: false,
-      };
-    });
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
     document.cookie = 'GU_mvt_id=12346';
 
     const tests = {
@@ -157,11 +153,7 @@ describe('basic behaviour of init', () => {
 
   it('The ab test framework should check for min breakpoints if only min is provided', () => {
 
-    window.matchMedia = window.matchMedia || jest.fn(() => {
-      return {
-        matches: false,
-      };
-    });
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
     document.cookie = 'GU_mvt_id=12346';
 
     const tests = {
@@ -193,11 +185,7 @@ describe('basic behaviour of init', () => {
 
   it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
 
-    window.matchMedia = window.matchMedia || jest.fn(() => {
-      return {
-        matches: false,
-      };
-    });
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
     document.cookie = 'GU_mvt_id=12346';
 
     const tests = {
@@ -230,11 +218,7 @@ describe('basic behaviour of init', () => {
 
   it('The ab test framework should check for max breakpoints if only max is provided', () => {
 
-    window.matchMedia = window.matchMedia || jest.fn(() => {
-      return {
-        matches: false,
-      };
-    });
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
     document.cookie = 'GU_mvt_id=12346';
 
     const tests = {
@@ -266,11 +250,7 @@ describe('basic behaviour of init', () => {
 
   it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
 
-    window.matchMedia = window.matchMedia || jest.fn(() => {
-      return {
-        matches: false,
-      };
-    });
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
     document.cookie = 'GU_mvt_id=12346';
 
     const tests = {
