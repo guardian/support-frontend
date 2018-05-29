@@ -33,11 +33,13 @@ class CustomHttpErrorHandler(
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
     )
 
-  override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] =
+  override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
+    logServerError(request, exception)
     Future.successful(
       InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "errorPageStyles.css")(assets, request))
         .withHeaders(CacheControl.noCache)
     )
+  }
 
   override protected def onBadRequest(request: RequestHeader, message: String): Future[Result] =
     super.onBadRequest(request, message).map(_.withHeaders(CacheControl.noCache))
