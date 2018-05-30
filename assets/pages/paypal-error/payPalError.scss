@@ -1,3 +1,19 @@
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+// ----- Shared Components ----- //
+
+@import '~components/ctaLink/ctaLink';
+@import '~components/footer/footer';
+@import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/infoSection/infoSection';
+@import '~components/socialShare/socialShare';
+
+
+// ----- Page-Specific Styles ----- //
+
 #paypal-error-page {
 
   a {
@@ -52,14 +68,19 @@
   .component-cta-link {
     color: #fff;
     background: gu-colour(neutral-1);
+    box-sizing: border-box;
     display: inline-block;
-    width: 180px;
+    width: 230px;
+    line-height: 40px;
     border: 1px solid gu-colour(neutral-1);
     font-weight: normal;
     margin-bottom: $gu-v-spacing * 4;
+    padding-top: 0;
+    padding-bottom: 0;
 
     svg {
       fill: #fff;
+      top: 10px;
       // Fix for IE10.
       left: 190px;
     }

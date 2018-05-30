@@ -43,14 +43,12 @@ const content = (
           you give via your account. It only takes two minutes,
           and it makes a world of difference.
       </p>
-      <div className="manage-contribution-cta">
-        <CtaLink
-          ctaId="manage-contribution"
-          text="Amend your recurring contribution"
-          url={buildMMAUrl()}
-          accessibilityHint="Further support the guardian by increasing your regular contribution"
-        />
-      </div>
+      <CtaLink
+        ctaId="manage-contribution"
+        text="Amend your recurring contribution"
+        url={buildMMAUrl()}
+        accessibilityHint="Further support the guardian by increasing your regular contribution"
+      />
     </PageSection>
     <QuestionsContact />
     <Footer />

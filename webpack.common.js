@@ -22,10 +22,10 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   entry: {
     favicons: 'images/favicons.js',
     fonts: 'fonts/fonts.js',
-    styles: 'stylesheets/main.scss',
     supportLandingPage: 'pages/support-landing/supportLanding.jsx',
     supportLandingPageStyles: 'pages/support-landing/supportLanding.scss',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
+    subscriptionsLandingPageStyles: 'pages/subscriptions-landing/subscriptionsLanding.scss',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
@@ -33,11 +33,15 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
     oneoffContributionsPageStyles: 'pages/oneoff-contributions/oneoffContributions.scss',
     regularContributionsExistingPage: 'pages/regular-contributions-existing/regularContributionsExisting.jsx',
+    regularContributionsExistingPageStyles: 'pages/regular-contributions-existing/regularContributionsExisting.scss',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
+    payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
     error404Page: 'pages/error/error404.jsx',
     error500Page: 'pages/error/error500.jsx',
     errorPageStyles: 'pages/error/error.scss',
+    unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
+    contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
   },
 
   output: {

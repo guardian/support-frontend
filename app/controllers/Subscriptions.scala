@@ -36,6 +36,12 @@ class Subscriptions(
   }
 
   def landing(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(title, id, js, description = Some(stringsConfig.subscriptionsLandingDescription)))
+    Ok(views.html.main(
+      title,
+      id,
+      js,
+      "subscriptionsLandingPageStyles.css",
+      description = Some(stringsConfig.subscriptionsLandingDescription)
+    ))
   }
 }

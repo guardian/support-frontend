@@ -93,12 +93,8 @@ class Application(
     ))
   }
 
-  def reactTemplate(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(title, id, js))
-  }
-
-  def authenticatedReactTemplate(title: String, id: String, js: String): Action[AnyContent] = AuthenticatedAction { implicit request =>
-    Ok(views.html.main(title, id, js))
+  def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.main(title, id, js, css))
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

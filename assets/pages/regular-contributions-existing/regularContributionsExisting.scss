@@ -1,3 +1,21 @@
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+// ----- Shared Components ----- //
+
+@import '~components/ctaLink/ctaLink';
+@import '~components/footer/footer';
+@import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/introduction/introduction';
+@import '~components/introduction/circlesIntroduction';
+@import '~components/pageSection/pageSection';
+@import '~components/questionsContact/questionsContact';
+
+
+// ----- Page-Specific Styles ----- //
+
 #regular-contributions-existing-page {
 
   .component-page-section--existing-contribution {
@@ -49,9 +67,11 @@
     @include mq($from: mobileMedium) {
       width: 300px;
     }
-  }
 
-  .manage-contribution-cta {
+    &:hover {
+      background-color: darken(gu-colour(garnett-neutral-1), 5%);
+    }
+
     .svg-arrow-right-straight {
       height: 35%;
       top: 17px;
@@ -63,5 +83,4 @@
       }
     }
   }
-
 }

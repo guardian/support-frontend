@@ -56,13 +56,23 @@ class PayPalRegular(
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
-    Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+    Ok(views.html.main(
+      "Support the Guardian | PayPal Error",
+      "paypal-error-page",
+      "payPalErrorPage.js",
+      "payPalErrorPageStyles.css"
+    ))
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
-    Ok(views.html.main("Support the Guardian | PayPal Error", "paypal-error-page", "payPalErrorPage.js"))
+    Ok(views.html.main(
+      "Support the Guardian | PayPal Error",
+      "paypal-error-page",
+      "payPalErrorPage.js",
+      "payPalErrorPageStyles.css"
+    ))
   }
 }
