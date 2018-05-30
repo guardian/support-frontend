@@ -3,13 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { compose } from 'redux';
 
 import SelectInput from 'components/selectInput/selectInput';
 import SvgGlobe from 'components/svgs/globe';
 
 import {
   countryGroups,
-  fromString,
+  stringToCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -24,13 +25,6 @@ type PropTypes = {
   selectedCountryGroup: CountryGroupId,
   onCountryGroupSelect: CountryGroupId => void,
 };
-
-
-// ----- Functions ----- //
-
-function stringToCountryGroup(cg: string): CountryGroupId {
-  return fromString(cg) || 'GBPCountries';
-}
 
 
 // ----- Component ----- //
@@ -51,7 +45,7 @@ function CountryGroupSwitcher(props: PropTypes) {
       <SelectInput
         id="qa-country-group-dropdown"
         className="component-country-group-switcher__selector"
-        onChange={cg => props.onCountryGroupSelect(stringToCountryGroup(cg))}
+        onChange={compose(props.onCountryGroupSelect, stringToCountryGroup)}
         options={options}
         label="Select your region"
       />

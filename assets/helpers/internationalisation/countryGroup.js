@@ -8,6 +8,9 @@ import { getQueryParameter } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
+
+// ----- Types ----- //
+
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
 
 /*
@@ -82,6 +85,9 @@ const countryGroups: CountryGroups = {
   },
 };
 
+
+// ----- Functions ----- //
+
 function fromPath(path: string = window.location.pathname): ?CountryGroupId {
   if (path === '/uk' || path.startsWith('/uk/')) {
     return 'GBPCountries';
@@ -154,8 +160,15 @@ function detect(): CountryGroupId {
   return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GBPCountries';
 }
 
+function stringToCountryGroup(cg: string): CountryGroupId {
+  return fromString(cg) || 'GBPCountries';
+}
+
+
+// ----- Exports ----- //
+
 export {
   countryGroups,
   detect,
-  fromString,
+  stringToCountryGroup,
 };
