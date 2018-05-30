@@ -2,12 +2,12 @@
 
 The payment service provides an API for creating PayPal and Stripe payments.
 
-### URL Healthcheack
+## URL Healthcheack
 
 * Production: https://payment.guardianapis.com/healthcheck
 * CODE: https://payment.code.dev-guardianapis.com/healthcheck
 
-### Running Locally
+## Running Locally
 
 Get AWS credentials from Janus
 
@@ -15,7 +15,22 @@ Run `sbt run` and the project will start up locally under:
 
 `http://localhost:9000/healthcheck`
 
-### Running tests
+### Connecting to the test database
+
+In order to connect to the test database, before running the app:
+
+- configure `Membership` credentials using Janus
+- update (or create) the file `/etc/hosts` with the line:
+  ```
+  127.0.0.1   contributions-store-code.c0gunnrs6vkk.eu-west-1.rds.amazonaws.com
+  ```
+- clone the repo [contributions-platform](https://github.com/guardian/contributions-platform) and from the root 
+  directory of the project run:
+  ```
+  ./contributions-store/contributions-store-bastion/scripts/open_ssh_tunnel.sh -s CODE
+  ```
+
+## Running tests
 
 Run `sbt run`. No integration test provided so far.
 
