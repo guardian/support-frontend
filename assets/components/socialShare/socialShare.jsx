@@ -45,8 +45,15 @@ const socialMedia: {
 export default function SocialShare(props: PropTypes) {
 
   return (
-    <a className="component-social-share" href={socialMedia[props.name].link}>
+    <a
+      className="component-social-share"
+      href={socialMedia[props.name].link}
+      aria-labelledby="component-social-share-a11y-hint"
+    >
       {socialMedia[props.name].svg}
+      <p id="component-social-share-a11y-hint" className="accessibility-hint">
+        Share on social media
+      </p>
     </a>
   );
 
