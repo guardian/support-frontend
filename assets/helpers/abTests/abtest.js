@@ -127,15 +127,14 @@ function userInBreakpoint(audience: Audience): boolean {
     return true;
   }
 
-  const { minWidth } = audience.breakpoint;
-  const minWidthMediaQuery = minWidth ? `(min-width:${breakpoints[minWidth]}px)` : null;
-
-  const { maxWidth } = audience.breakpoint;
-  const maxWidthMediaQuery = maxWidth ? `(max-width:${breakpoints[maxWidth]}px)` : null;
+  const { minWidth, maxWidth } = audience.breakpoint;
 
   if (!(minWidth || maxWidth)) {
     return true;
   }
+
+  const minWidthMediaQuery = minWidth ? `(min-width:${breakpoints[minWidth]}px)` : null;
+  const maxWidthMediaQuery = maxWidth ? `(max-width:${breakpoints[maxWidth]}px)` : null;
 
   const mediaQuery = minWidthMediaQuery && maxWidthMediaQuery ?
     `${minWidthMediaQuery} and ${maxWidthMediaQuery}` :
