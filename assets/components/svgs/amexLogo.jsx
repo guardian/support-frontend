@@ -11,7 +11,9 @@ export default function SvgAmexLogo() {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 36 24"
       preserveAspectRatio="xMinYMid"
+      aria-labelledby="svg-amex-logo-title"
     >
+      <title id="svg-amex-logo-title">American Express</title>
       <defs>
         <path id="a" d="M36.125 30.18H0V15h36.125z" />
       </defs>
