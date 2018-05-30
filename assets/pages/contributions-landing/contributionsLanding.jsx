@@ -41,8 +41,11 @@ const oneOffOnlyVariant = (store && store.getState().common.abParticipations.Con
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
 const defaultContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
   ? 'Your contribution funds and supports The Guardian\'s journalism.'
-  : 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
+  : 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
 
+const usContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
+  ? 'Your contribution funds and supports The Guardian\'s journalism.'
+  : 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
@@ -59,7 +62,7 @@ const countryGroupSpecificDetails: {
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
+    contributeCopy: usContributeCopy,
     reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
