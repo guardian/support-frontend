@@ -35,10 +35,10 @@ const breakpoints = {
 
 type Breakpoint = $Keys<typeof breakpoints>;
 
-type BreakpointRange = {
+type BreakpointRange = {|
   minWidth?: Breakpoint,
   maxWidth?: Breakpoint,
-}
+|}
 
 export type Participations = {
   [TestId]: string,
