@@ -15,7 +15,7 @@ jest.mock('ophan', () => ({
 describe('basic behaviour of init', () => {
 
   beforeEach(() => {
-    window.matchMedia = window.matchMedia || jest.fn(() => ({matches: false}));
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
   });
 
   it('The user should be allocated in the control bucket', () => {
