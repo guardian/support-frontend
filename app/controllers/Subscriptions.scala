@@ -52,7 +52,8 @@ class Subscriptions(
         val title = "Support the Guardian | Digital Subscription"
         val id = "digital-subscription-landing-page-" + countryCode
         val js = "digitalSubscriptionLandingPage.js"
-        Ok(views.html.main(title, id, js))
+        val css = "digitalSubscriptionLandingPageStyles.css"
+        Ok(views.html.main(title, id, js, css))
       } else {
         Redirect(urlWhenDisabled)
       }
