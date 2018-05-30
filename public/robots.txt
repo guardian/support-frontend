@@ -1,5 +1,11 @@
 User-agent: *
 
+Disallow: /subscribe/digital
+Disallow: /uk/subscribe/digital
+Disallow: /us/subscribe/digital
+Disallow: /au/subscribe/digital
+Disallow: /int/subscribe/digital
+
 Allow: /
 
 Sitemap: https://support.theguardian.com/sitemap.xml
