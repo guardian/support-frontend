@@ -46,16 +46,17 @@ class Subscriptions(
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    request.headers.get("enableDigipack").map { header =>
-      if (header == "true") {
+    val urlWhenDisabled = s"/$countryCode/subscribe"
+    request.headers.get("enableDigipack").map { headerValue =>
+      if (headerValue == "true") {
         val title = "Support the Guardian | Digital Subscription"
         val id = "digital-subscription-landing-page-" + countryCode
         val js = "digitalSubscriptionLandingPage.js"
         Ok(views.html.main(title, id, js))
       } else {
-        Redirect("/subscribe")
+        Redirect(urlWhenDisabled)
       }
-    }.getOrElse(Redirect("/subscribe"))
+    }.getOrElse(Redirect(urlWhenDisabled))
   }
 
 }
