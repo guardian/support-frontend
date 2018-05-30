@@ -43,7 +43,10 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
 const content = (
   <Provider store={store}>
     <div>
-      <CountrySwitcherHeader />
+      <CountrySwitcherHeader /> { /* https://trello.com/c/IrhfApmz/1456-digital-pack-product-page-aus */ }
+      { /* <DigipackHeaderBlock /> (https://trello.com/c/LDgBVJWi/1601-digital-pack-header-block) */ }
+      { /* <DigipackProductBlock /> (https://trello.com/c/8UBqJMTP/1532-digital-pack-product-block) */ }
+      { /* <DigipackJournalismBlock /> (https://trello.com/c/owe2K3bS/1533-independent-journalism-block) */ }
       <Footer />
     </div>
   </Provider>
