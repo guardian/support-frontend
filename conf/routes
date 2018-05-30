@@ -66,10 +66,10 @@ GET  /uk/subscribe                                 controllers.Subscriptions.lan
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
 GET  /:countryCode/subscribe                       controllers.Subscriptions.legacyRedirect(countryCode: String)
 
-GET  /uk/subscribe/digital                         controllers.Application.reactTemplate(title="Support the Guardian | Digital Subscription", id="digital-subscription-landing-page-uk", js="digitalSubscriptionLandingPage.js")
-GET  /us/subscribe/digital                         controllers.Application.reactTemplate(title="Support the Guardian | Digital Subscription", id="digital-subscription-landing-page-us", js="digitalSubscriptionLandingPage.js")
-GET  /au/subscribe/digital                         controllers.Application.reactTemplate(title="Support the Guardian | Digital Subscription", id="digital-subscription-landing-page-au", js="digitalSubscriptionLandingPage.js")
-GET  /int/subscribe/digital                        controllers.Application.reactTemplate(title="Support the Guardian | Digital Subscription", id="digital-subscription-landing-page-int", js="digitalSubscriptionLandingPage.js")
+GET  /uk/subscribe/digital                         controllers.Subscriptions.digital(countryCode="uk")
+GET  /us/subscribe/digital                         controllers.Subscriptions.digital(countryCode="us")
+GET  /au/subscribe/digital                         controllers.Subscriptions.digital(countryCode="au")
+GET  /int/subscribe/digital                        controllers.Subscriptions.digital(countryCode="int")
 
 # ----- Authentication ----- #
 

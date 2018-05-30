@@ -44,4 +44,18 @@ class Subscriptions(
       description = Some(stringsConfig.subscriptionsLandingDescription)
     ))
   }
+
+  def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    request.headers.get("enableDigipack").map { header =>
+      if (header == "true") {
+        val title = "Support the Guardian | Digital Subscription"
+        val id = "digital-subscription-landing-page-" + countryCode
+        val js = "digitalSubscriptionLandingPage.js"
+        Ok(views.html.main(title, id, js))
+      } else {
+        Redirect("/subscribe")
+      }
+    }.getOrElse(Redirect("/subscribe"))
+  }
+
 }
