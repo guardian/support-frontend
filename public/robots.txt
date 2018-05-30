@@ -1,12 +1,5 @@
 User-agent: *
 
-Disallow: /uk/contribute
-Disallow: /contribute
-Disallow: /au
-Disallow: /au/contribute
-Disallow: /eu
-Disallow: /eu/contribute
-
 Allow: /
 
 Sitemap: https://support.theguardian.com/sitemap.xml
