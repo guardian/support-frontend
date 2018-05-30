@@ -47,8 +47,8 @@ class Subscriptions(
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val urlWhenDisabled = s"/$countryCode/subscribe"
-    request.headers.get("enableDigipack").map { headerValue =>
-      if (headerValue == "true") {
+    request.getQueryString("digiSub").map { queryValue =>
+      if (queryValue == "true") {
         val title = "Support the Guardian | Digital Subscription"
         val id = "digital-subscription-landing-page-" + countryCode
         val js = "digitalSubscriptionLandingPage.js"
