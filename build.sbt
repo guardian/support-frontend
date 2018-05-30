@@ -34,6 +34,7 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.typelevel" %% "cats-core" % "0.9.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
+  "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "ophan-event-model" % "0.0.6",
