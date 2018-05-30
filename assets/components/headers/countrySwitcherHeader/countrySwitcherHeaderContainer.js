@@ -15,8 +15,8 @@ import type { PropTypes } from './countrySwitcherHeader';
 
 export default function (subPath: string, listOfCountries: CountryGroupId[]) {
 
-  function handleChange(cg: CountryGroupId): void {
-    window.location.pathname = `/${countryGroups[cg].supportInternationalisationId}${subPath}`;
+  function handleChange(cgId: CountryGroupId): void {
+    window.location.pathname = `/${countryGroups[cgId].supportInternationalisationId}${subPath}`;
   }
 
   function mapStateToProps(state: { common: CommonState }): PropTypes {
