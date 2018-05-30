@@ -21,7 +21,7 @@ export type GridImg = {
   gridId: ImageId,
   srcSizes: number[],
   sizes: string,
-  altText: ?string,
+  altText: string,
   imgType?: ImageType,
 }
 
@@ -57,6 +57,9 @@ export default function GridImage(props: PropTypes) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 GridImage.defaultProps = {
   imgType: 'jpg',
+  altText: '',
 };
+/* eslint-enable react/default-props-match-prop-types */
