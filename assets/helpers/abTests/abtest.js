@@ -83,7 +83,7 @@ function getMvtId(): number {
 
   let mvtId = cookie.get(MVT_COOKIE);
 
-  if (!mvtId) {
+  if (mvtId === null || mvtId === undefined) {
 
     mvtId = String(Math.floor(Math.random() * (MVT_MAX)));
     cookie.set(MVT_COOKIE, mvtId);
@@ -159,7 +159,7 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   const testMin: number = MVT_MAX * audience.offset;
   const testMax: number = testMin + (MVT_MAX * audience.size);
 
-  return (mvtId > testMin) && (mvtId < testMax) && userInBreakpoint(audience);
+  return (mvtId >= testMin) && (mvtId < testMax) && userInBreakpoint(audience);
 }
 
 function randomNumber(mvtId: number, independent: boolean, seed: number): number {
