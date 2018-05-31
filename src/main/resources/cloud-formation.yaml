@@ -211,6 +211,14 @@ Resources:
                   [ !Ref EmailSqsQueueCodeArn, !Ref EmailSqsQueueProdArn],
                   [ !Ref EmailSqsQueueCodeArn]
                 ]
+        - PolicyName: CloudWatchMetrics
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - cloudwatch:PutMetricData
+                Resource: '*'
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile

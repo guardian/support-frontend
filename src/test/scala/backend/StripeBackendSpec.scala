@@ -74,6 +74,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: OphanService = mock[OphanService]
   val mockEmailService: EmailService = mock[EmailService]
+  val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   //-- test obj
   val stripeBackend = new StripeBackend(
@@ -81,7 +82,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockDatabaseService,
     mockIdentityService,
     mockOphanService,
-    mockEmailService)(new DefaultThreadPool(ec))
+    mockEmailService,
+    mockCloudWatchService)(new DefaultThreadPool(ec))
 
   def populateChargeMock(): Unit = {
     val externalAccount = new ExternalAccount()

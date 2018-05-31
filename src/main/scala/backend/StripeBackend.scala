@@ -3,6 +3,8 @@ package backend
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
+import cats.syntax.validated._
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
@@ -24,7 +26,8 @@ class StripeBackend(
     databaseService: DatabaseService,
     identityService: IdentityService,
     ophanService: OphanService,
-    emailService: EmailService
+    emailService: EmailService,
+    cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
@@ -44,6 +47,7 @@ class StripeBackend(
               err
             }
 
+          cloudWatchService.logPaymentSuccess(PaymentProvider.Stripe)
           StripeChargeSuccess.fromCharge(charge)
         }
       )
@@ -114,11 +118,18 @@ class StripeBackend(
 
 object StripeBackend {
 
-  private def apply(stripeService: StripeService, databaseService: DatabaseService,
-    identityService: IdentityService, ophanService: OphanService, emailService: EmailService)(implicit pool: DefaultThreadPool): StripeBackend =
-    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService)
+  private def apply(
+    stripeService: StripeService,
+    databaseService: DatabaseService,
+    identityService: IdentityService,
+    ophanService: OphanService,
+    emailService: EmailService,
+    cloudWatchService: CloudWatchService
+  )(implicit pool: DefaultThreadPool): StripeBackend = {
+    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, cloudWatchService)
+  }
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
+  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     stripeThreadPool: StripeThreadPool,
     jdbcThreadPool: JdbcThreadPool,
@@ -140,7 +151,8 @@ object StripeBackend {
         .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
-        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService]
+        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
+      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
     ).mapN(StripeBackend.apply)
   }
 }

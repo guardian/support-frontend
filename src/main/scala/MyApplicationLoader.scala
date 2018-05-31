@@ -9,7 +9,8 @@ import router.Routes
 import util.RequestBasedProvider
 import aws.AWSClientBuilder
 import backend.{PaypalBackend, StripeBackend}
-import _root_.controllers.{AppController, PaypalController, StripeController, ErrorHandler}
+import _root_.controllers.{AppController, ErrorHandler, PaypalController, StripeController}
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
 import services.DatabaseProvider
@@ -63,13 +64,15 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
 
   override lazy val httpErrorHandler =  new ErrorHandler(environment, configuration, sourceMapper, Some(router))
 
+  val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
+
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
-    new StripeBackend.Builder(configLoader, databaseProvider)
+    new StripeBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
-    new PaypalBackend.Builder(configLoader, databaseProvider)
+    new PaypalBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
@@ -82,6 +85,4 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new StripeController(controllerComponents, stripeBackendProvider),
       new PaypalController(controllerComponents, paypalBackendProvider)
     )
-
-
 }

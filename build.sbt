@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ssm" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % AWSJavaSDKVersion,
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
   "com.dripower" %% "play-circe" % "2609.0",

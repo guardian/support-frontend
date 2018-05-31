@@ -4,6 +4,8 @@ import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.either._
+import cats.syntax.validated._
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
@@ -25,7 +27,8 @@ class PaypalBackend(
     databaseService: DatabaseService,
     identityService: IdentityService,
     ophanService: OphanService,
-    emailService: EmailService
+    emailService: EmailService,
+    cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   /*
@@ -58,6 +61,7 @@ class PaypalBackend(
 
               err
             }
+           cloudWatchService.logPaymentSuccess(PaymentProvider.Paypal)
 
           payment
         }
@@ -76,6 +80,7 @@ class PaypalBackend(
 
               err
             }
+          cloudWatchService.logPaymentSuccess(PaymentProvider.Paypal)
 
           payment
         }
@@ -177,11 +182,18 @@ class PaypalBackend(
 
 object PaypalBackend {
 
-  private def apply(paypalService: PaypalService, databaseService: DatabaseService, identityService: IdentityService,
-    ophanService: OphanService, emailService: EmailService)(implicit pool: DefaultThreadPool): PaypalBackend =
-    new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService)
+  private def apply(
+      paypalService: PaypalService,
+      databaseService: DatabaseService,
+      identityService: IdentityService,
+      ophanService: OphanService,
+      emailService: EmailService,
+      cloudWatchService: CloudWatchService
+  )(implicit pool: DefaultThreadPool): PaypalBackend = {
+    new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService, cloudWatchService)
+  }
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider)(
+  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     paypalThreadPool: PaypalThreadPool,
     jdbcThreadPool: JdbcThreadPool,
@@ -203,7 +215,8 @@ object PaypalBackend {
         .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
-        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService]
+        .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
+      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
     ).mapN(PaypalBackend.apply)
   }
 }
