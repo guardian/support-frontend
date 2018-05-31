@@ -146,7 +146,7 @@ function RegularCta(props: {
   return (
     <CtaLink
       ctaId="contribute-regular"
-      text={`Contribute ${props.currency.glyph}${props.amount} with card or PayPal`}
+      text={`Contribute ${props.currency.glyph}${props.amount} a month`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
