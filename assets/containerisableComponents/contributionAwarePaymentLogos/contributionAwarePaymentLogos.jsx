@@ -19,11 +19,17 @@ export default function ContributionAwarePaymentLogos(props: { contributionType:
   const modifierClass = props.contributionType === 'ONE_OFF' ? 'one-off' : '';
 
   return (
-    <div className={classNameWithModifiers('component-contribution-aware-payment-logos', [modifierClass])}>
+    <div
+      className={classNameWithModifiers('component-contribution-aware-payment-logos', [modifierClass])}
+      aria-labelledby="component-contribution-aware-payment-logos-a11y-hint"
+    >
       <SvgVisaLogo />
       <SvgMastercardLogo />
       <SvgAmexLogo />
       <SvgPaypalLogo />
+      <p id="component-contribution-aware-payment-logos-a11y-hint" className="accessibility-hint">
+        We accept Visa, Mastercard, American Express and PayPal
+      </p>
     </div>
   );
 }

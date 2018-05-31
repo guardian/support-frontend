@@ -10,7 +10,9 @@ export default function SvgVisaLogo() {
       className="svg-visa-logo"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 36 24"
+      aria-labelledby="svg-visa-logo-title"
     >
+      <title id="svg-amex-logo-title">Visa</title>
       <defs>
         <rect id="a" width="35.25" height="23.25" rx="2.25" />
       </defs>
