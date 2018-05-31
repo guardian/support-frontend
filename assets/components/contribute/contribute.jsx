@@ -7,28 +7,19 @@ import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import Secure from 'components/secure/secure';
 import type { Node } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 type PropTypes = {
   copy: string | Node,
   children: Node,
-  desktopAboveTheFoldVariant?: ?('control' | 'variant' | 'notintest'),
+  heading?: string,
 };
 
 // ----- Component ----- //
 
 export default function Contribute(props: PropTypes) {
-  let modifiers = [];
-  let heading = 'Contribute';
-
-  if (props.desktopAboveTheFoldVariant && props.desktopAboveTheFoldVariant === 'variant') {
-    modifiers = ['variant'];
-    heading = '';
-  }
-
   return (
-    <div className={classNameWithModifiers('component-contribute', modifiers)}>
+    <div className={'component-contribute'}>
       <PageSection
         modifierClass="contribute"
         heading={heading}
@@ -44,5 +35,5 @@ export default function Contribute(props: PropTypes) {
 }
 
 Contribute.defaultProps = {
-  desktopAboveTheFoldVariant: null,
+  heading: 'Contribute',
 };
