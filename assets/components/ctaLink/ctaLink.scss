@@ -1,5 +1,6 @@
 .component-cta-link {
-  background-color: gu-colour(neutral-1);
+  background-color: gu-colour(garnett-neutral-1);
+  transition: background-color .3s;
   border: none;
   border-radius: 600px;
   color: #fff;
@@ -8,23 +9,20 @@
   font-family: $gu-text-sans-web;
   font-size: 14px;
   height: $cta-height;
-  line-height: 180%;
-  margin-top: 12px;
-  padding: 6px 20px;
+  line-height: $cta-height;
+  padding: 0 $gu-h-spacing;
   position: relative;
-  text-align: left;
   text-decoration: none;
-  vertical-align: bottom;
 
   &:hover {
-    background-color: #000;
+    background-color: darken(gu-colour(garnett-neutral-1), 5%);
   }
 
   svg {
-    height: 50%;
+    height: 16px;
     position: absolute;
-    right: 8px;
-    top: 9px;
+    left: calc(100% - 34px);
+    top: 14px;
     fill: #fff;
   }
 }

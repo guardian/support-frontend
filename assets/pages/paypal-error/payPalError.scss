@@ -59,22 +59,11 @@
   .component-cta-link {
     color: gu-colour(garnett-neutral-1);
     background-color: gu-colour(news-garnett-highlight);
-    box-sizing: border-box;
-    display: inline-block;
     width: 230px;
-    line-height: 44px;
-    font-weight: normal;
     margin-bottom: $gu-v-spacing * 4;
-    padding-top: 0;
-    padding-bottom: 0;
-    transition: background-color .3s;
 
     .svg-arrow-right-straight {
-      fill: gu-colour(garnett-neutral-1);;
-      top: 14px;
-      height: 35%;
-      // Fix for IE10.
-      left: 197px;
+      fill: gu-colour(garnett-neutral-1);
     }
 
     &:hover {
