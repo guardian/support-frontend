@@ -47,17 +47,15 @@ class Subscriptions(
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val urlWhenDisabled = s"/$countryCode/subscribe"
-    request.getQueryString("digiSub").map { queryValue =>
-      if (queryValue == "true") {
-        val title = "Support the Guardian | Digital Subscription"
-        val id = "digital-subscription-landing-page-" + countryCode
-        val js = "digitalSubscriptionLandingPage.js"
-        val css = "digitalSubscriptionLandingPageStyles.css"
-        Ok(views.html.main(title, id, js, css))
-      } else {
-        Redirect(urlWhenDisabled)
-      }
-    }.getOrElse(Redirect(urlWhenDisabled))
+    if (request.getQueryString("digiSub").contains("true")) {
+      val title = "Support the Guardian | Digital Subscription"
+      val id = "digital-subscription-landing-page-" + countryCode
+      val js = "digitalSubscriptionLandingPage.js"
+      val css = "digitalSubscriptionLandingPageStyles.css"
+      Ok(views.html.main(title, id, js, css))
+    } else {
+      Redirect(urlWhenDisabled)
+    }
   }
 
 }
