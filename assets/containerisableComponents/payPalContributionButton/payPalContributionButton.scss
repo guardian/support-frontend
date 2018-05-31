@@ -5,25 +5,21 @@
   color: gu-colour(garnett-neutral-1);
   cursor: pointer;
   display: block;
-  font-family: $gu-sans-web;
+  font-family: $gu-text-sans-web;
   font-size: 14px;
-  height: $gu-v-spacing * 4;
-  padding-left: $gu-h-spacing;
+  height: $cta-height;
+  line-height: $cta-height;
+  padding: 0 $gu-h-spacing;
   position: relative;
   text-align: left;
   width: 100%;
 
-  @include mq($from: mobileMedium) {
-    width: 304px;
-  }
-
   .svg-arrow-right-straight {
-    width: 20px;
     fill: gu-colour(garnett-neutral-1);
+    height: 16px;
     position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: calc(100% - 34px);
+    top: 14px;
   }
 
   &:hover {
