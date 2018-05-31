@@ -38,12 +38,20 @@ const supporterSectionId = 'supporter-options';
 const store = pageInit(pageReducer);
 
 
+// ----- Internationalisation ----- //
+
+const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
+  '/contribute',
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
+);
+
+
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <div>
-      <CountrySwitcherHeaderContainer />
+      <CountrySwitcherHeader />
       <CirclesIntroduction
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}

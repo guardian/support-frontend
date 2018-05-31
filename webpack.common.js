@@ -28,6 +28,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     subscriptionsLandingPageStyles: 'pages/subscriptions-landing/subscriptionsLanding.scss',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',
+    digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
+    digitalSubscriptionLandingPageStyles: 'pages/digital-subscription-landing/digitalSubscriptionLanding.scss',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
     regularContributionsPageStyles: 'pages/regular-contributions/regularContributions.scss',
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
