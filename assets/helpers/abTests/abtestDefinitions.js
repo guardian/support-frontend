@@ -26,7 +26,7 @@ export const tests: Tests = {
       },
     },
     customSegmentCondition: () => window.matchMedia('(max-width: 660px)').matches && (window.location.pathname.indexOf('contribute') > 0), // matches the 'phablet' breakpoint defined in breakpoints.scss
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 1,
   },
