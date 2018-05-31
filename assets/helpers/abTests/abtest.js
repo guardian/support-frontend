@@ -22,6 +22,24 @@ type OphanABEvent = {
   campaignCodes?: string[],
 };
 
+const breakpoints = {
+  mobile: 320,
+  mobileMedium: 375,
+  mobileLandscape: 480,
+  phablet: 660,
+  tablet: 740,
+  desktop: 980,
+  leftCol: 1140,
+  wide: 1300,
+};
+
+type Breakpoint = $Keys<typeof breakpoints>;
+
+type BreakpointRange = {|
+  minWidth?: Breakpoint,
+  maxWidth?: Breakpoint,
+|}
+
 export type Participations = {
   [TestId]: string,
 }
@@ -30,11 +48,14 @@ type OphanABPayload = {
   [TestId]: OphanABEvent,
 };
 
+type Audience = {
+  offset: number,
+  size: number,
+  breakpoint?: BreakpointRange,
+};
+
 type Audiences = {
-  [IsoCountry | 'ALL']: {
-    offset: number,
-    size: number,
-  },
+  [IsoCountry | 'ALL']: Audience
 };
 
 export type Test = {|
@@ -60,16 +81,14 @@ const MVT_MAX: number = 1000000;
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
 
-  let mvtId = cookie.get(MVT_COOKIE);
+  let mvtId = Number(cookie.get(MVT_COOKIE));
 
-  if (!mvtId) {
-
-    mvtId = String(Math.floor(Math.random() * (MVT_MAX)));
-    cookie.set(MVT_COOKIE, mvtId);
-
+  if (Number.isNaN(mvtId) || mvtId >= MVT_MAX || mvtId < 0) {
+    mvtId = Math.floor(Math.random() * (MVT_MAX));
+    cookie.set(MVT_COOKIE, String(mvtId));
   }
 
-  return Number(mvtId);
+  return mvtId;
 }
 
 function getLocalStorageParticipation(): Participations {
@@ -100,6 +119,29 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
+function userInBreakpoint(audience: Audience): boolean {
+
+  if (!audience.breakpoint) {
+    return true;
+  }
+
+  const { minWidth, maxWidth } = audience.breakpoint;
+
+  if (!(minWidth || maxWidth)) {
+    return true;
+  }
+
+  const minWidthMediaQuery = minWidth ? `(min-width:${breakpoints[minWidth]}px)` : null;
+  const maxWidthMediaQuery = maxWidth ? `(max-width:${breakpoints[maxWidth]}px)` : null;
+
+  const mediaQuery = minWidthMediaQuery && maxWidthMediaQuery ?
+    `${minWidthMediaQuery} and ${maxWidthMediaQuery}` :
+    (minWidthMediaQuery || maxWidthMediaQuery);
+
+  return window.matchMedia(mediaQuery).matches;
+
+}
+
 function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
 
   if (cookie.get('_post_deploy_user')) {
@@ -115,7 +157,7 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
   const testMin: number = MVT_MAX * audience.offset;
   const testMax: number = testMin + (MVT_MAX * audience.size);
 
-  return (mvtId > testMin) && (mvtId < testMax);
+  return (mvtId >= testMin) && (mvtId < testMax) && userInBreakpoint(audience);
 }
 
 function randomNumber(mvtId: number, independent: boolean, seed: number): number {

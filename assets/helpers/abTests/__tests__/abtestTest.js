@@ -14,6 +14,10 @@ jest.mock('ophan', () => ({
 
 describe('basic behaviour of init', () => {
 
+  beforeEach(() => {
+    window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
+  });
+
   it('The user should be allocated in the control bucket', () => {
 
     document.cookie = 'GU_mvt_id=12346';
@@ -115,6 +119,163 @@ describe('basic behaviour of init', () => {
     const participations: Participations = abInit(country, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
 
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+              maxWidth: 'desktop',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only min is provided', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: 'tablet',
+              maxWidth: undefined,
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for max breakpoints if only max is provided', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              maxWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(max-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
+    expect(participations).toEqual(expectedParticipations);
+  });
+
+  it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          US: {
+            offset: 0,
+            size: 1,
+            breakpoint: {
+              minWidth: undefined,
+              maxWidth: 'tablet',
+            },
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'US';
+    const participations: Participations = abInit(country, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest' };
+    const expectedMediaQuery = '(min-width:740px)';
+
+    expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
     expect(participations).toEqual(expectedParticipations);
   });
 
