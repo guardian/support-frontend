@@ -26,3 +26,14 @@
     fill: #fff;
   }
 }
+
+.component-cta-link--border {
+  border: 1px solid;
+  height: $cta-height - 2;
+  line-height: $cta-height - 2;
+
+  svg {
+    top: 13px;
+    left: calc(100% - 33px);
+  }
+}

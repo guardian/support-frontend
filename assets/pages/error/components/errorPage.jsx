@@ -50,7 +50,7 @@ export default function ErrorPage(props: PropTypes) {
           accessibilityHint="click here to return to The Guardian home page"
           ctaId="guardian-home-page"
           url="https://www.theguardian.com"
-          modifierClasses={['guardian-home-page']}
+          modifierClasses={['guardian-home-page', 'border']}
         />
       </PageSection>
       <Footer />

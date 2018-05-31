@@ -28,14 +28,8 @@
   .component-cta-link--contribute-one-off {
     background-color: transparent;
     margin-top: $gu-v-spacing;
-    border: 1px solid gu-colour(garnett-neutral-1);
-    height: $cta-height - 2;
-    line-height: $cta-height - 2;
+    border-color: gu-colour(garnett-neutral-1);
     width: 258px;
-
-    svg {
-      top: 13px;
-    }
 
     &:hover {
       background-color: transparent;
