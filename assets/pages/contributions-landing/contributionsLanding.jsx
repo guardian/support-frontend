@@ -34,18 +34,13 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(createPageReducerFor(countryGroupId));
 
-const oneOffOnlyVariant = (store && store.getState().common.abParticipations.ContributeLandingOneOffOnlyTest) || 'notintest';
 
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
-const defaultContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
-  ? 'Your contribution funds and supports The Guardian\'s journalism.'
-  : 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
+const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
 
-const usContributeCopy = oneOffOnlyVariant && oneOffOnlyVariant === 'oneOffOnly'
-  ? 'Your contribution funds and supports The Guardian\'s journalism.'
-  : 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
+const usContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
@@ -87,13 +82,18 @@ const countryGroupSpecificDetails: {
   },
 };
 
+const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
+  '/contribute',
+  ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
+);
+
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <div className="gu-content">
-      <CountrySwitcherHeaderContainer />
+      <CountrySwitcherHeader />
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
@@ -101,9 +101,7 @@ const content = (
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
       >
-        <ContributionSelectionContainer
-          oneOffOnlyVariant={oneOffOnlyVariant}
-        />
+        <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
         <ContributionPaymentCtasContainer
           PayPalButton={PayPalContributionButtonContainer}
