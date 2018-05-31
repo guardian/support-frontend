@@ -19,14 +19,14 @@ type PropTypes = {
 
 export default function Contribute(props: PropTypes) {
   return (
-    <div className={'component-contribute'}>
+    <div className="component-contribute">
       <PageSection
         modifierClass="contribute"
-        heading={heading}
+        heading={props.heading}
         headingChildren={<Secure modifierClass="contribute-header" />}
       >
         <Secure modifierClass="contribute-body" />
-        <p className={classNameWithModifiers('component-contribute__description', modifiers)}>{props.copy}</p>
+        <p className="component-contribute__description">{props.copy}</p>
         {props.children}
       </PageSection>
     </div>
