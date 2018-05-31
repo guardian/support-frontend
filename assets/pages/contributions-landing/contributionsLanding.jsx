@@ -90,20 +90,6 @@ const countryGroupSpecificDetails: {
 
 // ----- Render ----- //
 
-const desktopAboveTheFold = store && store.getState().common.abParticipations.desktopAboveTheFold;
-const variantHeader = ['Help us deliver the', 'independent journalism', 'the world needs'];
-
-if (desktopAboveTheFold === 'variant') {
-  countryGroupSpecificDetails.GBPCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.EURCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.UnitedStates.headerCopy = variantHeader;
-  countryGroupSpecificDetails.AUDCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.International.headerCopy = variantHeader;
-  countryGroupSpecificDetails.NZDCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.Canada.headerCopy = variantHeader;
-
-}
-
 const content = (
   <Provider store={store}>
     <div className="gu-content">
@@ -111,11 +97,9 @@ const content = (
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Support', 'The Guardian']}
-        desktopAboveTheFoldVariant={desktopAboveTheFold}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
-        desktopAboveTheFoldVariant={desktopAboveTheFold}
       >
         <ContributionSelectionContainer
           oneOffOnlyVariant={oneOffOnlyVariant}
