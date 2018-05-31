@@ -10,7 +10,7 @@ import SvgGlobe from 'components/svgs/globe';
 
 import {
   countryGroups,
-  stringToCountryGroup,
+  stringToCountryGroupId,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -45,7 +45,7 @@ function CountryGroupSwitcher(props: PropTypes) {
       <SelectInput
         id="qa-country-group-dropdown"
         className="component-country-group-switcher__selector"
-        onChange={compose(props.onCountryGroupSelect, stringToCountryGroup)}
+        onChange={compose(props.onCountryGroupSelect, stringToCountryGroupId)}
         options={options}
         label="Select your region"
       />

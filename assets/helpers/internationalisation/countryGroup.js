@@ -160,8 +160,8 @@ function detect(): CountryGroupId {
   return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GBPCountries';
 }
 
-function stringToCountryGroup(cgId: string): CountryGroupId {
-  return fromString(cgId) || 'GBPCountries';
+function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
+  return fromString(countryGroupId) || 'GBPCountries';
 }
 
 
@@ -170,5 +170,5 @@ function stringToCountryGroup(cgId: string): CountryGroupId {
 export {
   countryGroups,
   detect,
-  stringToCountryGroup,
+  stringToCountryGroupId,
 };
