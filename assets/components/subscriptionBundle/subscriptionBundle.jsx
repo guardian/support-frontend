@@ -48,6 +48,7 @@ export default function SubscriptionBundle(props: PropTypes) {
           url={props.ctaUrl}
           ctaId={props.ctaId}
           accessibilityHint={props.ctaAccessibilityHint}
+          modifierClasses={[props.modifierClass]}
         />
       </div>
     </div>

@@ -43,12 +43,14 @@ export default function ErrorPage(props: PropTypes) {
           accessibilityHint="click here to support The Guardian"
           ctaId="support-the-guardian"
           url="/"
+          modifierClasses={['support-the-guardian']}
         />
         <CtaLink
           text="Go to The Guardian home page"
           accessibilityHint="click here to return to The Guardian home page"
           ctaId="guardian-home-page"
           url="https://www.theguardian.com"
+          modifierClasses={['guardian-home-page']}
         />
       </PageSection>
       <Footer />

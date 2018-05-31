@@ -26,6 +26,7 @@ type PropTypes = {
   id?: ?string,
   svg?: Node,
   acquisitionData?: ?ReferrerAcquisitionData,
+  modifierClasses: Array<?string>,
 };
 
 // ----- Component ----- //
@@ -38,7 +39,7 @@ export default function CtaLink(props: PropTypes) {
   return (
     <a
       id={props.id}
-      className={classNameWithModifiers('component-cta-link', [props.ctaId])}
+      className={classNameWithModifiers('component-cta-link', props.modifierClasses)}
       href={props.acquisitionData ?
         addQueryParamToURL(urlString, 'acquisitionData', JSON.stringify(props.acquisitionData))
          : props.url
@@ -68,6 +69,7 @@ export default function CtaLink(props: PropTypes) {
 
 // ----- Default Props ----- //
 
+/* eslint-disable react/default-props-match-prop-types */
 CtaLink.defaultProps = {
   url: null,
   trackComponentEvent: () => {},
@@ -76,4 +78,6 @@ CtaLink.defaultProps = {
   id: null,
   svg: <SvgArrowRightStraight />,
   acquisitionData: null,
+  modifierClasses: [],
 };
+/* eslint-enable react/default-props-match-prop-types */

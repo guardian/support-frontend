@@ -32,6 +32,7 @@ export default function ReadyToSupport(props: PropTypes) {
           ctaId="see-supporter-options"
           accessibilityHint="See the options for becoming a supporter"
           svg={<SvgChevronUp />}
+          modifierClasses={['see-supporter-options']}
         />
       </div>
     </section>
