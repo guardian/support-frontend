@@ -81,16 +81,14 @@ const MVT_MAX: number = 1000000;
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
 
-  let mvtId = cookie.get(MVT_COOKIE);
+  let mvtId = Number(cookie.get(MVT_COOKIE));
 
-  if (mvtId === null || mvtId === undefined) {
-
-    mvtId = String(Math.floor(Math.random() * (MVT_MAX)));
-    cookie.set(MVT_COOKIE, mvtId);
-
+  if (Number.isNaN(mvtId) || mvtId >= MVT_MAX || mvtId < 0) {
+    mvtId = Math.floor(Math.random() * (MVT_MAX));
+    cookie.set(MVT_COOKIE, String(mvtId));
   }
 
-  return Number(mvtId);
+  return mvtId;
 }
 
 function getLocalStorageParticipation(): Participations {
