@@ -55,6 +55,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
+    "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -68,7 +69,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "autoprefixer": "^8.5.0",
+    "autoprefixer": "^8.5.2",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^23.0.1",
     "babel-loader": "^7.1.4",
