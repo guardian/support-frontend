@@ -16,7 +16,6 @@ import { getBaseDomain } from 'helpers/url';
 import CirclesIntroduction from '../../components/introduction/circlesIntroduction';
 import PageSection from '../../components/pageSection/pageSection';
 
-
 // ----- Functions ----- //
 
 function buildMMAUrl(): string {
@@ -26,6 +25,7 @@ function buildMMAUrl(): string {
 // ----- Page Startup ----- //
 
 pageInit();
+
 
 // ----- Render ----- //
 
