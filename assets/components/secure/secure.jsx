@@ -12,7 +12,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 // ----- Props ----- //
 
 type PropTypes = {
-  modifierClass?: string,
+  modifiers: Array<?string>,
 };
 
 
@@ -20,8 +20,9 @@ type PropTypes = {
 
 export default function Secure(props: PropTypes) {
 
+
   return (
-    <div className={classNameWithModifiers('component-secure', [props.modifierClass])}>
+    <div className={classNameWithModifiers('component-secure', props.modifiers)}>
       <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
@@ -33,5 +34,5 @@ export default function Secure(props: PropTypes) {
 // ----- Default Props ----- //
 
 Secure.defaultProps = {
-  modifierClass: '',
+  modifiers: [],
 };
