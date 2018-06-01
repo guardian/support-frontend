@@ -37,7 +37,7 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Internationalisation ----- //
 
-const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
+const defaultHeaderCopy = ['Help us deliver the', 'independent journalism', 'the world needs'];
 const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
 
 const usContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
@@ -96,10 +96,12 @@ const content = (
       <CountrySwitcherHeader />
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
-        highlights={['Support', 'The Guardian']}
+        highlights={['Your contribution']}
+        modifiers={['compact']}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
+        modifiers={['compact']}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
