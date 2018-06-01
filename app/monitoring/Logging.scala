@@ -1,12 +1,12 @@
 package monitoring
 
-import ch.qos.logback.classic.filter.ThresholdFilter
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import com.typesafe.scalalogging.LazyLogging
 import org.slf4j.{Marker, MarkerFactory}
 
+// This filter is referenced in logback.xml
 class PiiFilter extends Filter[ILoggingEvent] {
   override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SafeLogger.sanitizedLogMessage)) FilterReply.ACCEPT
   else FilterReply.DENY
@@ -14,6 +14,7 @@ class PiiFilter extends Filter[ILoggingEvent] {
 
 object SafeLogger extends LazyLogging {
 
+  // Used to mark scrubbed messages suitable to be sent to Sentry.
   val sanitizedLogMessage: Marker = MarkerFactory.getMarker("SENTRY")
 
   case class LogMessage(raw: String, sanitized: String) {
@@ -50,12 +51,3 @@ object SafeLogger extends LazyLogging {
 
 }
 
-object SentryFilters {
-
-  val errorLevelFilter = new ThresholdFilter { setLevel("ERROR") }
-  val piiFilter = new PiiFilter
-
-  errorLevelFilter.start()
-  piiFilter.start()
-
-}
