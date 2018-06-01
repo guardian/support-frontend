@@ -18,6 +18,10 @@
   }
 
   .component-highlights--compact {
+    @include mq($from: mobile, $until: desktop) {
+      margin-left: -4px;
+    }
+
     @include mq($from: desktop) {
       padding-left: 16px;
     }
