@@ -25,4 +25,6 @@ object SentryLogging {
         }
     }
   }
+
+  SafeLogger.error(scrub"*TEST* Why hello there, you clever thing you. ")
 }
