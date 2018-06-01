@@ -32,7 +32,8 @@ export default function Secure(props: PropTypes) {
 
 
 // ----- Default Props ----- //
-
+/* eslint-disable react/default-props-match-prop-types */
 Secure.defaultProps = {
   modifiers: [],
 };
+/* eslint-enable react/default-props-match-prop-types */
