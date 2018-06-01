@@ -16,6 +16,16 @@
   .component-highlights {
     @include introduction-left-spacing;
   }
+
+  .component-highlights--compact {
+    @include mq($from: mobile, $until: desktop) {
+      margin-left: -4px;
+    }
+
+    @include mq($from: desktop) {
+      padding-left: 16px;
+    }
+  }
 }
 
 .component-circles-introduction__content {
@@ -50,4 +60,47 @@
 
 .component-circles-introduction__heading-line {
   display: block;
+}
+
+.component-circles-introduction__content--compact {
+  padding-bottom: 0;
+  margin-bottom: -6px;
+
+  @include mq($from: phablet) {
+    margin-bottom: -24px;
+  }
+
+  @include mq($from: leftCol) {
+    padding-bottom: 0;
+    margin-bottom: -16px;
+  }
+}
+
+.component-circles-introduction__heading--compact {
+  font-size: 24px;
+  line-height: 28px;
+  padding-bottom: $gu-v-spacing;
+
+  @include mq($from: mobileLandscape) {
+    font-size: 22px;
+    line-height: 26px;
+    padding-bottom: $gu-v-spacing * 2;
+  }
+
+  @include mq($from: phablet) {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  @include mq($from: desktop) {
+    margin-top: $gu-v-spacing;
+    font-size: 32px;
+    line-height: 38px;
+  }
+
+  @include mq($from:leftCol) {
+    font-size: 38px;
+    line-height: 44px;
+    padding-bottom: $gu-v-spacing * 3;
+  }
 }

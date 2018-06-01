@@ -8,3 +8,24 @@
   padding: 4px;
   background-color: gu-colour(news-garnett-highlight);
 }
+
+.component-highlights__highlight--compact {
+
+  font-size: 16px;
+  line-height: 18px;
+
+  @include mq($from: phablet) {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 18px;
+  }
+
+  @include mq($from:leftCol) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+

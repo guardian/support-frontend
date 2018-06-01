@@ -37,7 +37,7 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 
 // ----- Internationalisation ----- //
 
-const defaultHeaderCopy = ['Help us deliver', 'the independent', 'journalism the', 'world needs'];
+const defaultHeaderCopy = ['Help us deliver the', 'independent journalism', 'the world needs'];
 const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
 
 const usContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
@@ -90,32 +90,18 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 // ----- Render ----- //
 
-const desktopAboveTheFold = store && store.getState().common.abParticipations.desktopAboveTheFold;
-const variantHeader = ['Help us deliver the', 'independent journalism', 'the world needs'];
-
-if (desktopAboveTheFold === 'variant') {
-  countryGroupSpecificDetails.GBPCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.EURCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.UnitedStates.headerCopy = variantHeader;
-  countryGroupSpecificDetails.AUDCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.International.headerCopy = variantHeader;
-  countryGroupSpecificDetails.NZDCountries.headerCopy = variantHeader;
-  countryGroupSpecificDetails.Canada.headerCopy = variantHeader;
-
-}
-
 const content = (
   <Provider store={store}>
     <div className="gu-content">
       <CountrySwitcherHeader />
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
-        highlights={['Support', 'The Guardian']}
-        desktopAboveTheFoldVariant={desktopAboveTheFold}
+        highlights={['Your contribution']}
+        modifiers={['compact']}
       />
       <Contribute
         copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
-        desktopAboveTheFoldVariant={desktopAboveTheFold}
+        modifiers={['compact']}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />

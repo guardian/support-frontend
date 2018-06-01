@@ -51,8 +51,6 @@
     }
   }
 
-  @include multiline-top-border;
-
   .component-payment-error {
     margin-top: $gu-v-spacing;
   }
@@ -67,5 +65,16 @@
 
   @include mq($from: tablet) {
     width: 600px;
+  }
+}
+
+.component-contribute__description--compact {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.component-secure--contribute-header.component-secure--compact  {
+  @include mq($until: tablet) {
+    display: none;
   }
 }
