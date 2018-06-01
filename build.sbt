@@ -56,7 +56,7 @@ val awsVersion = "1.11.221"
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.11.0" % Test,
-  "com.getsentry.raven" % "raven-logback" % "8.0.3",
+  "io.sentry" % "sentry-logback" % "1.7.5",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,

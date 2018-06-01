@@ -4,7 +4,7 @@ import Raven from 'raven-js';
 // ----- Functions ----- //
 
 export const init = () => {
-  const dsn: string = 'https://dc13eb8698614a8081ce6a139d9f4aab@sentry.io/171710';
+  const dsn: string = 'https://65f7514888b6407881f34a6cf1320d06@sentry.io/1213654';
   const { gitCommitId } = window.guardian;
 
   Raven.config(dsn, {
