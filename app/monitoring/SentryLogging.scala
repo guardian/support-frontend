@@ -13,19 +13,16 @@ object SentryLogging {
     config.sentryDsn match {
       case None => SafeLogger.warn("No Sentry logging configured (OK for dev)")
       case Some(sentryDSN) =>
-        SafeLogger.info(s"Initialising Sentry logging with $sentryDSN")
+        SafeLogger.info(s"Initialising Sentry logging")
         Try {
           val sentryClient = Sentry.init(sentryDSN)
-          SafeLogger.info("Initialised! Adding tags.")
           val buildInfo: Map[String, String] = app.BuildInfo.toMap.mapValues(_.toString)
           val tags = Map("stage" -> config.stage.toString) ++ buildInfo
-          SafeLogger.info(s"tagmap $tags")
           sentryClient.setTags(tags.asJava)
         } match {
           case Success(_) => SafeLogger.debug("Sentry logging configured.")
           case Failure(e) => SafeLogger.error(scrub"Something went wrong when setting up Sentry logging ${e.getStackTrace}")
         }
     }
-    SafeLogger.error(scrub"*TEST* Why hello there, you clever thing you. ")
   }
 }
