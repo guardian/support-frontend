@@ -16,21 +16,14 @@ import { classNameWithModifiers } from 'helpers/utilities';
 type PropTypes = {
   headings: string[],
   highlights?: ?string[],
-  desktopAboveTheFoldVariant?: ?('control' | 'variant' | 'notintest'),
+  modifiers?: Array<?string>,
 };
 
 
 // ----- Component ----- //
 
 function CirclesIntroduction(props: PropTypes) {
-  let { highlights } = props;
-  const modifiers = [];
-
-  if (props.desktopAboveTheFoldVariant && props.desktopAboveTheFoldVariant === 'variant') {
-    highlights = ['Your contribution'];
-    modifiers.push('variant');
-  }
-
+  const modifiers = props.modifiers || [];
   return (
     <section className="component-circles-introduction">
       <SvgCirclesHeroDesktop />
@@ -41,7 +34,7 @@ function CirclesIntroduction(props: PropTypes) {
           {props.headings.map(heading =>
             <span className="component-circles-introduction__heading-line">{heading}</span>)}
         </h1>
-        <Highlights highlights={highlights} modifiers={modifiers} />
+        <Highlights highlights={props.highlights} modifiers={modifiers} />
       </div>
     </section>
   );
@@ -52,7 +45,7 @@ function CirclesIntroduction(props: PropTypes) {
 
 CirclesIntroduction.defaultProps = {
   highlights: null,
-  desktopAboveTheFoldVariant: null,
+  modifiers: [],
 };
 
 
