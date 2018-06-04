@@ -87,7 +87,8 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );
 
-
+const dropIntroTextTestVariant = store && store.getState().common.abParticipations.dropIntroText;
+const copyText = dropIntroTextTestVariant === 'variant' ? '' : countryGroupSpecificDetails[countryGroupId].contributeCopy;
 // ----- Render ----- //
 
 const content = (
@@ -100,7 +101,7 @@ const content = (
         modifiers={['compact']}
       />
       <Contribute
-        copy={countryGroupSpecificDetails[countryGroupId].contributeCopy}
+        copy={copyText}
         modifiers={['compact']}
       >
         <ContributionSelectionContainer />
