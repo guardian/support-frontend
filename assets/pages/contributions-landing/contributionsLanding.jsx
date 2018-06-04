@@ -88,7 +88,7 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 );
 
 const dropIntroTextTestVariant = store && store.getState().common.abParticipations.dropIntroText;
-const copyText = dropIntroTextTestVariant === 'variant'? '' : countryGroupSpecificDetails[countryGroupId].contributeCopy;
+const copyText = dropIntroTextTestVariant === 'variant' ? '' : countryGroupSpecificDetails[countryGroupId].contributeCopy;
 // ----- Render ----- //
 
 const content = (
