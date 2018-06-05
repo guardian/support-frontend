@@ -38,8 +38,6 @@ object SentryLogging {
           case Failure(e) => SafeLogger.error(scrub"Something went wrong when setting up Sentry logging ${e.getStackTrace}")
         }
     }
-    val compliment = "bee's knees"
-    SafeLogger.error(scrub"Why, you are just the bee's knees! again, $compliment!")
   }
 }
 
