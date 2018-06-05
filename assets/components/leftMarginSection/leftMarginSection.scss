@@ -1,0 +1,25 @@
+.component-left-margin-section {
+  display: flex;
+
+  @include mq($from: tablet) {
+    &:before {
+      content: "";
+      flex-basis: 0;
+      flex-grow: 1;
+      // Fix for IE11, it doesn't treat inline elements as flex items.
+      display: block;
+    }
+  }
+}
+
+.component-left-margin-section__content {
+  flex-grow: 1;
+
+  @include mq($from: tablet) {
+    flex-basis: 730px;
+  }
+
+  @include mq($from: desktop) {
+    flex-basis: 970px;
+  }
+}
