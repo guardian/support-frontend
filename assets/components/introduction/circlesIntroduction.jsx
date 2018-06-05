@@ -44,12 +44,10 @@ function CirclesIntroduction(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 CirclesIntroduction.defaultProps = {
   highlights: null,
   modifierClasses: [],
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

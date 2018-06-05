@@ -84,13 +84,11 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
   switchedOff: false,
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

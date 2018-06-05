@@ -58,8 +58,6 @@ export default function GridPicture(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 GridPicture.defaultProps = {
   altText: '',
 };
-/* eslint-enable react/default-props-match-prop-types */

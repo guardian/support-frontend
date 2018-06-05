@@ -31,11 +31,9 @@ function Switchable(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 Switchable.defaultProps = {
   fallback: null,
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

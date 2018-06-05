@@ -51,9 +51,7 @@ export default function Contribute(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 Contribute.defaultProps = {
   heading: '',
   modifierClasses: [],
 };
-/* eslint-enable react/default-props-match-prop-types */

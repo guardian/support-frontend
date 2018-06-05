@@ -69,11 +69,9 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 PayPalExpressButton.defaultProps = {
   switchedOff: false,
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Export ----- //

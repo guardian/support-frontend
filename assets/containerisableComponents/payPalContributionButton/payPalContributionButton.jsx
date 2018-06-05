@@ -94,7 +94,6 @@ function Button(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 PayPalContributionButton.defaultProps = {
   canClick: true,
   buttonText: 'Pay with PayPal',
@@ -102,7 +101,6 @@ PayPalContributionButton.defaultProps = {
   onClick: null,
   switchedOff: false,
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //

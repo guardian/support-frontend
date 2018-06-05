@@ -37,8 +37,6 @@ export default function Highlights(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 Highlights.defaultProps = {
   modifierClasses: [],
 };
-/* eslint-enable react/default-props-match-prop-types */
