@@ -10,20 +10,22 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { Node } from 'react';
 
+
 // ----- Types ----- //
+
 type PropTypes = {
   copy: string | Node,
   children: Node,
   heading?: string,
-  modifiers?: Array<?string>,
+  modifierClasses: Array<?string>,
 };
+
 
 // ----- Component ----- //
 
 export default function Contribute(props: PropTypes) {
-  const modifiers = props.modifiers || [];
-  const secureHeadingModifiers = modifiers.slice(0);
-  const secureBodyModifiers = modifiers.slice(0);
+  const secureHeadingModifiers = props.modifierClasses.slice(0);
+  const secureBodyModifiers = props.modifierClasses.slice(0);
 
   secureHeadingModifiers.push('contribute-header');
   secureBodyModifiers.push('contribute-body');
@@ -33,10 +35,12 @@ export default function Contribute(props: PropTypes) {
       <PageSection
         modifierClass="contribute"
         heading={props.heading}
-        headingChildren={<Secure modifiers={secureHeadingModifiers} />}
+        headingChildren={<Secure modifierClasses={secureHeadingModifiers} />}
       >
-        <Secure modifiers={secureBodyModifiers} />
-        <p className={classNameWithModifiers('component-contribute__description', modifiers)}>{props.copy}</p>
+        <Secure modifierClasses={secureBodyModifiers} />
+        <p className={classNameWithModifiers('component-contribute__description', props.modifierClasses)}>
+          {props.copy}
+        </p>
         {props.children}
       </PageSection>
     </div>
@@ -44,7 +48,12 @@ export default function Contribute(props: PropTypes) {
 
 }
 
+
+// ----- Default Props ----- //
+
+/* eslint-disable react/default-props-match-prop-types */
 Contribute.defaultProps = {
   heading: '',
-  modifiers: [],
+  modifierClasses: [],
 };
+/* eslint-enable react/default-props-match-prop-types */
