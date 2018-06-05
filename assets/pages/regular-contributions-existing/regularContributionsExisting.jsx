@@ -48,6 +48,7 @@ const content = (
         text="Amend your recurring contribution"
         url={buildMMAUrl()}
         accessibilityHint="Further support the guardian by increasing your regular contribution"
+        modifierClasses={['manage-contribution']}
       />
     </PageSection>
     <QuestionsContact />

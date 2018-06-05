@@ -59,12 +59,7 @@
 }
 
 .component-cta-link--see-supporter-options {
-  height: $cta-height;
-  padding: 0 30px;
-  font-size: 14px;
-  line-height: $cta-height;
   background-color: gu-colour(lifestyle-garnett-main-1);
-  transition: background-color .3s;
 
   @include mq($from: tablet) {
     width: 500px;
@@ -77,11 +72,6 @@
   .svg-chevron-up {
     height: 70%;
     top: 8px;
-    right: 15px;
-
-    // Fix for IE.
-    @include mq($from: tablet) {
-      left: 91%;
-    }
+    left: calc(100% - 44px);
   }
 }

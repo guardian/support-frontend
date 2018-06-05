@@ -27,6 +27,7 @@ type PropTypes = {
   ctaId: string,
   ctaAccessibilityHint: string,
   gridImage: GridImg,
+  ctaModifiers?: Array<?string>,
 };
 
 
@@ -48,6 +49,7 @@ export default function SubscriptionBundle(props: PropTypes) {
           url={props.ctaUrl}
           ctaId={props.ctaId}
           accessibilityHint={props.ctaAccessibilityHint}
+          modifierClasses={props.ctaModifiers}
         />
       </div>
     </div>
@@ -60,4 +62,5 @@ export default function SubscriptionBundle(props: PropTypes) {
 
 SubscriptionBundle.defaultProps = {
   modifierClass: '',
+  ctaModifiers: [],
 };

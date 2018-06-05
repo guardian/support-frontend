@@ -86,6 +86,7 @@ function ChooseMarketingPreference(props: {
         ctaId="next"
         text="Next"
         accessibilityHint="Go to the guardian dot com front page"
+        modifierClasses={['next']}
       />
     </PageSection>
   );

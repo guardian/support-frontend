@@ -6,14 +6,14 @@
 
   .component-cta-link {
     color: gu-colour(garnett-neutral-1);
-    height: $cta-height;
-    line-height: $cta-height;
-    box-sizing: border-box;
-    padding: 0 $gu-h-spacing;
 
     @include mq($from: mobileMedium) {
-      width: $cta-width;
+      width: 260px;
     }
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
   }
 
   .component-cta-link--contribute-regular {
@@ -27,31 +27,18 @@
 
   .component-cta-link--contribute-one-off {
     background-color: transparent;
-    border: 1px solid;
+    margin-top: $gu-v-spacing;
+    border-color: gu-colour(garnett-neutral-1);
+    width: 258px;
 
     &:hover {
       background-color: transparent;
     }
   }
 
-  .svg-arrow-right-straight {
-    fill: gu-colour(garnett-neutral-1);
-    width: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
-
-    @include mq($from: mobileMedium) {
-      left: 268px;
-    }
-  }
-
   .component-paypal-contribution-button {
-    height: $cta-height;
-    width: 100%;
-
     @include mq($from: mobileMedium) {
-      width: $cta-width;
+      width: 300px;
     }
   }
 

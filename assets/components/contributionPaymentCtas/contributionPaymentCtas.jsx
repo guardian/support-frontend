@@ -121,6 +121,7 @@ function OneOffCta(props: {
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
       id="qa-contribute-button"
+      modifierClasses={['contribute-one-off', 'border']}
     />
   );
 
@@ -151,6 +152,7 @@ function RegularCta(props: {
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
       id="qa-contribute-button"
+      modifierClasses={['contribute-regular']}
     />
   );
 

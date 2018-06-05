@@ -73,6 +73,7 @@ function DigitalBundle(props: { url: string }) {
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
+      ctaModifiers={['digital', 'border']}
     />
   );
 
@@ -95,6 +96,7 @@ function PaperBundle(props: { url: string }) {
         altText: 'paper subscription',
         ...gridImageProperties,
       }}
+      ctaModifiers={['paper', 'border']}
     />
   );
 
@@ -117,6 +119,7 @@ function PaperDigitalBundle(props: { url: string }) {
         altText: 'paper + digital subscription',
         ...gridImageProperties,
       }}
+      ctaModifiers={['paper-digital', 'border']}
     />
   );
 
