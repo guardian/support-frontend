@@ -57,7 +57,7 @@ lazy val common = project
       "io.circe" %% "circe-parser" % circeVersion,
       "net.databinder.dispatch" %% "dispatch-core" % "0.13.3",
       "org.scala-stm" %% "scala-stm" % "0.8",
-      "com.getsentry.raven" % "raven-logback" % "8.0.3",
+      "io.sentry" % "sentry-logback" % "1.7.4",
       "com.google.code.findbugs" % "jsr305" % "3.0.2"
     ),
     resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
