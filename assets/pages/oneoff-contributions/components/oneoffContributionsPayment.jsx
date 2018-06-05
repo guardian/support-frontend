@@ -17,6 +17,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Status } from 'helpers/switch';
 
 import { checkoutError, type Action } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
@@ -38,6 +39,8 @@ type PropTypes = {
   currency: Currency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
+  stripeSwitchStatus: Status,
+  payPalSwitchStatus: Status,
 };
 
 // ----- Map State/Props ----- //
@@ -55,6 +58,8 @@ function mapStateToProps(state) {
     countryGroupId: state.common.countryGroup,
     abParticipations: state.common.abParticipations,
     currency: state.common.currency,
+    stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
+    payPalSwitchStatus: state.common.switches.oneOffPaymentMethods.payPal,
   };
 }
 
@@ -119,6 +124,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         countryGroupId={props.countryGroupId}
         errorHandler={props.checkoutError}
         abParticipations={props.abParticipations}
+        switchStatus={props.payPalSwitchStatus}
       />
       <StripePopUpButton
         email={props.email}
@@ -139,6 +145,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
+        switchStatus={props.stripeSwitchStatus}
       />
     </section>
   );
