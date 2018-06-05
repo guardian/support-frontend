@@ -13,6 +13,7 @@ import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Status } from 'helpers/switch';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -31,7 +32,7 @@ type PropTypes = {
   buttonText: string,
   additionalClass: string,
   onClick: ?(void => void),
-  switchedOff: boolean,
+  switchStatus: Status,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -66,7 +67,7 @@ function PayPalContributionButton(props: PropTypes) {
 
   return (
     <Switchable
-      off={props.switchedOff}
+      status={props.switchStatus}
       component={() => <Button {...props} />}
       fallback={() => <PaymentError paymentMethod="PayPal" modifierClass="paypal" />}
     />
@@ -100,7 +101,7 @@ PayPalContributionButton.defaultProps = {
   buttonText: 'Pay with PayPal',
   additionalClass: '',
   onClick: null,
-  switchedOff: false,
+  switchStatus: 'ON',
 };
 /* eslint-enable react/default-props-match-prop-types */
 
