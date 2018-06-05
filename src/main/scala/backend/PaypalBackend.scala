@@ -144,9 +144,12 @@ class PaypalBackend(
           None
       }
 
-  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] =
+  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
+    // log so that if something goes wrong we can reconstruct the missing data from the logs
+    logger.info(s"about to insert contribution into database: $contributionData")
     databaseService.insertContributionData(contributionData)
       .leftMap(BackendError.fromDatabaseError)
+  }
 
   private def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId))
