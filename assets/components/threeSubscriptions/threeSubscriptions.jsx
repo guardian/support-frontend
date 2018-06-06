@@ -66,7 +66,6 @@ function DigitalBundle(props: { url: string }) {
       benefits={getDigitalBenefits()}
       ctaText="Start your 14 day trial"
       ctaUrl={props.url}
-      ctaId="digital-sub"
       ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
@@ -89,7 +88,6 @@ function PaperBundle(props: { url: string }) {
       benefits={getPaperBenefits()}
       ctaText="Get a paper subscription"
       ctaUrl={props.url}
-      ctaId="paper-sub"
       ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
       gridImage={{
         gridId: 'paperCircle',
@@ -112,7 +110,6 @@ function PaperDigitalBundle(props: { url: string }) {
       benefits={getPaperDigitalBenefits()}
       ctaText="Get a paper+digital subscription"
       ctaUrl={props.url}
-      ctaId="paper-digi-sub"
       ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
       gridImage={{
         gridId: 'paperDigitalCircle',

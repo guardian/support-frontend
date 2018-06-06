@@ -116,7 +116,6 @@ function OneOffCta(props: {
 
   return (
     <CtaLink
-      ctaId="contribute-one-off"
       text={`Contribute ${props.currency.glyph}${props.amount} with card`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
@@ -147,7 +146,6 @@ function RegularCta(props: {
 
   return (
     <CtaLink
-      ctaId="contribute-regular"
       text={`Contribute ${props.currency.glyph}${props.amount} a month`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}

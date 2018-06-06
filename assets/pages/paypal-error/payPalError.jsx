@@ -33,7 +33,6 @@ const content = (
         Sorry, there was a problem completing your PayPal payment. Please try again:
       </p>
       <CtaLink
-        ctaId="become-supporter-paypal"
         text="Become a Supporter"
         url="/"
         accessibilityHint="Restart your journey to become a guardian supporter"

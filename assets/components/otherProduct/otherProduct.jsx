@@ -20,7 +20,6 @@ type PropTypes = {
   copy: string,
   ctaText: string,
   ctaUrl: string,
-  ctaId: string,
   ctaAccessibilityHint: string,
 };
 
@@ -44,7 +43,6 @@ export default function OtherProduct(props: PropTypes) {
       <CtaLink
         text={props.ctaText}
         url={props.ctaUrl}
-        ctaId={props.ctaId}
         accessibilityHint={props.ctaAccessibilityHint}
       />
     </div>

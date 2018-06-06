@@ -44,7 +44,6 @@ const content = (
           and it makes a world of difference.
       </p>
       <CtaLink
-        ctaId="manage-contribution"
         text="Amend your recurring contribution"
         url={buildMMAUrl()}
         accessibilityHint="Further support the guardian by increasing your regular contribution"
