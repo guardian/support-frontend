@@ -30,6 +30,7 @@ export default function PriceCta(props: PropTypes) {
         text={props.ctaText}
         url={props.url}
         accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
+        ctaId="price-cta"
       />
       <p className="component-price-cta__price">
         <span className="component-price-cta__price-copy">for only</span>
