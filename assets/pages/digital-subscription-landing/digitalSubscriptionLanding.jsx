@@ -7,13 +7,12 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { init as pageInit } from 'helpers/page/page';
 
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import PriceCta from 'components/priceCta/priceCta';
-
-import { init as pageInit } from 'helpers/page/page';
+import PriceCtaContainer from './components/priceCtaContainer';
 
 
 // ----- Redux Store ----- //
@@ -48,28 +47,15 @@ const content = (
       <CountrySwitcherHeader />
       <LeftMarginSection>
         <h1>Support The Guardian with a digital subscription</h1>
-        <PriceCta
-          ctaText="Start a 14 day free trial"
-          price="£11.99"
-          url="/"
-          dark
-        />
+        <PriceCtaContainer dark />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
-        <PriceCta
-          ctaText="Start a 14 day free trial"
-          price="£11.99"
-          url="/"
-        />
+        <PriceCtaContainer />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Your subscription helps support independent investigative journalism</h2>
-        <PriceCta
-          ctaText="Start a 14 day free trial"
-          price="£11.99"
-          url="/"
-        />
+        <PriceCtaContainer />
       </LeftMarginSection>
       <Footer />
     </div>
