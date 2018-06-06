@@ -2,15 +2,19 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.i18n.Currency
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
+import com.gu.support.workers.encoding.Conversions.FromOutputStream
+import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.model.DirectDebitPaymentMethod
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
+import com.gu.zuora.encoding.CustomCodecs._
 import io.circe.Json
 import io.circe.parser._
 import org.joda.time.DateTime
@@ -25,7 +29,8 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     sendThankYouEmail.handleRequest(wrapFixture(thankYouEmailJson), outStream, context)
 
-    assertUnit(outStream)
+    val result = Encoding.in[SendMessageResult](outStream.toInputStream)
+    result.isSuccess should be(true)
   }
 
   ignore should "send an email" in {
