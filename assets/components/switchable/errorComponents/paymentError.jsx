@@ -31,11 +31,9 @@ function PaymentError(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 PaymentError.defaultProps = {
   modifierClass: '',
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Export ----- //

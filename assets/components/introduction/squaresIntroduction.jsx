@@ -27,7 +27,7 @@ function SquaresIntroduction(props: PropTypes) {
       <SvgSquaresHeroTablet />
       <SvgSquaresHeroMobile />
       <div className="component-squares-introduction__content gu-content-margin">
-        <Highlights highlights={props.highlights} modifiers={[]} />
+        <Highlights highlights={props.highlights} />
         <h1 className="component-squares-introduction__heading">
           {props.headings.map(heading =>
             <span className="component-squares-introduction__heading-line">{heading}</span>)}

@@ -12,7 +12,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 // ----- Props ----- //
 
 type PropTypes = {
-  modifiers: Array<?string>,
+  modifierClasses: Array<?string>,
 };
 
 
@@ -22,7 +22,7 @@ export default function Secure(props: PropTypes) {
 
 
   return (
-    <div className={classNameWithModifiers('component-secure', props.modifiers)}>
+    <div className={classNameWithModifiers('component-secure', props.modifierClasses)}>
       <SvgLock />
       <span className="component-secure__text">Secure</span>
     </div>
@@ -32,8 +32,7 @@ export default function Secure(props: PropTypes) {
 
 
 // ----- Default Props ----- //
-/* eslint-disable react/default-props-match-prop-types */
+
 Secure.defaultProps = {
-  modifiers: [],
+  modifierClasses: [],
 };
-/* eslint-enable react/default-props-match-prop-types */

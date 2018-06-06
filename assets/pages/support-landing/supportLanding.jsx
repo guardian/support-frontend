@@ -55,12 +55,12 @@ const content = (
       <CirclesIntroduction
         headings={['Help us deliver the', 'independent journalism', 'the world needs']}
         highlights={['Support The Guardian']}
-        modifiers={['compact']}
+        modifierClasses={['compact']}
       />
       <section id={supporterSectionId}>
         <Contribute
           copy="Your contribution funds and supports The Guardian's journalism."
-          modifiers={['compact']}
+          modifierClasses={['compact']}
         >
           <ContributionSelectionContainer />
           <ContributionAwarePaymentLogosContainer />

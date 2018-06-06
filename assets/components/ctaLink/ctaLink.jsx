@@ -69,7 +69,6 @@ export default function CtaLink(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 CtaLink.defaultProps = {
   url: null,
   trackComponentEvent: () => {},
@@ -80,4 +79,3 @@ CtaLink.defaultProps = {
   acquisitionData: null,
   modifierClasses: [],
 };
-/* eslint-enable react/default-props-match-prop-types */

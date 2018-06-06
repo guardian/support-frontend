@@ -89,6 +89,8 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 const dropIntroTextTestVariant = store && store.getState().common.abParticipations.dropIntroText;
 const copyText = dropIntroTextTestVariant === 'variant' ? '' : countryGroupSpecificDetails[countryGroupId].contributeCopy;
+
+
 // ----- Render ----- //
 
 const content = (
@@ -98,11 +100,11 @@ const content = (
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[countryGroupId].headerCopy}
         highlights={['Your contribution']}
-        modifiers={['compact']}
+        modifierClasses={['compact']}
       />
       <Contribute
         copy={copyText}
-        modifiers={['compact']}
+        modifierClasses={['compact']}
       >
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />

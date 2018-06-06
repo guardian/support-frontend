@@ -55,6 +55,7 @@
         "ignoreTemplateLiterals": true
       }
     ],
+    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
   },
   "settings": {
     "import/resolver": {

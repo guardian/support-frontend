@@ -16,28 +16,29 @@ import { classNameWithModifiers } from 'helpers/utilities';
 type PropTypes = {
   headings: string[],
   highlights?: ?string[],
-  modifiers?: Array<?string>,
+  modifierClasses: Array<?string>,
 };
 
 
 // ----- Component ----- //
 
 function CirclesIntroduction(props: PropTypes) {
-  const modifiers = props.modifiers || [];
+
   return (
     <section className="component-circles-introduction">
       <SvgCirclesHeroDesktop />
       <SvgCirclesHeroMobileLandscape />
       <SvgCirclesHeroMobile />
-      <div className={`${classNameWithModifiers('component-circles-introduction__content', modifiers)} gu-content-margin`}>
-        <h1 className={classNameWithModifiers('component-circles-introduction__heading', modifiers)}>
+      <div className={`${classNameWithModifiers('component-circles-introduction__content', props.modifierClasses)} gu-content-margin`}>
+        <h1 className={classNameWithModifiers('component-circles-introduction__heading', props.modifierClasses)}>
           {props.headings.map(heading =>
             <span className="component-circles-introduction__heading-line">{heading}</span>)}
         </h1>
-        <Highlights highlights={props.highlights} modifiers={modifiers} />
+        <Highlights highlights={props.highlights} modifierClasses={props.modifierClasses} />
       </div>
     </section>
   );
+
 }
 
 
@@ -45,7 +46,7 @@ function CirclesIntroduction(props: PropTypes) {
 
 CirclesIntroduction.defaultProps = {
   highlights: null,
-  modifiers: [],
+  modifierClasses: [],
 };
 
 

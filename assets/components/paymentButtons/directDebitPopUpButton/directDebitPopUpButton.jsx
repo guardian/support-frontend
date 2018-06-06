@@ -90,11 +90,9 @@ function Button(props: { openPopUp: () => void }) {
 
 // ----- Default Props ----- //
 
-/* eslint-disable react/default-props-match-prop-types */
 DirectDebitPopUpButton.defaultProps = {
   switchStatus: 'ON',
 };
-/* eslint-enable react/default-props-match-prop-types */
 
 
 // ----- Exports ----- //
