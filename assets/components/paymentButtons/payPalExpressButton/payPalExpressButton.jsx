@@ -8,6 +8,7 @@ import React from 'react';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { Status } from 'helpers/switch';
 import { loadPayPalExpress, setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
 import type { Currency } from 'helpers/internationalisation/currency';
 
@@ -21,7 +22,7 @@ type PropTypes = {
   callback: Function,
   setHasLoaded: Function,
   hasLoaded: boolean,
-  switchedOff: boolean,
+  switchStatus: Status,
 };
 
 
@@ -31,7 +32,7 @@ function PayPalExpressButton(props: PropTypes) {
 
   return (
     <Switchable
-      off={props.switchedOff}
+      status={props.switchStatus}
       component={() => <Button {...props} />}
       fallback={() => <PaymentError paymentMethod="PayPal" modifierClass="paypal-express" />}
     />
@@ -71,7 +72,7 @@ function Button(props: PropTypes) {
 
 /* eslint-disable react/default-props-match-prop-types */
 PayPalExpressButton.defaultProps = {
-  switchedOff: false,
+  switchStatus: 'ON',
 };
 /* eslint-enable react/default-props-match-prop-types */
 

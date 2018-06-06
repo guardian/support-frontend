@@ -10,6 +10,8 @@ import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/p
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import { emptyInputField } from 'helpers/utilities';
+import type { Status } from 'helpers/switch';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -20,7 +22,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
-import { emptyInputField } from '../../../helpers/utilities';
+
 
 // ----- Types ----- //
 
@@ -42,6 +44,9 @@ type PropTypes = {
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   payPalHasLoaded: boolean,
+  directDebitSwitchStatus: Status,
+  stripeSwitchStatus: Status,
+  payPalSwitchStatus: Status,
 };
 
 
@@ -90,6 +95,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
       )}
+        switchStatus={props.directDebitSwitchStatus}
       />);
   }
 
@@ -110,6 +116,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
+    switchStatus={props.stripeSwitchStatus}
   />);
 
   let payPalButton = (<PayPalExpressButton
@@ -129,6 +136,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     )}
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={() => props.dispatch(setPayPalHasLoaded())}
+    switchStatus={props.payPalSwitchStatus}
   />);
 
   if (props.hide) {
@@ -167,6 +175,9 @@ function mapStateToProps(state) {
     abParticipations: state.common.abParticipations,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     payPalHasLoaded: state.page.regularContrib.payPalHasLoaded,
+    directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
+    stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
+    payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
   };
 }
 

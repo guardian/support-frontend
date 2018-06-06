@@ -15,8 +15,10 @@ import thunkMiddleware from 'redux-thunk';
 
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { Switches } from 'helpers/switch';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
+import * as switchHelper from 'helpers/switch';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency, type Currency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
@@ -44,6 +46,7 @@ export type CommonState = {
   countryGroup: CountryGroupId,
   country: IsoCountry,
   abParticipations: Participations,
+  switches: Switches,
 };
 
 export type PreloadedState = {
@@ -79,6 +82,7 @@ function buildInitialState(
   countryGroup: CountryGroupId,
   country: IsoCountry,
   currency: Currency,
+  switches: Switches,
 ): CommonState {
   const acquisition = getAcquisition(abParticipations);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
@@ -92,6 +96,7 @@ function buildInitialState(
     country,
     abParticipations,
     currency,
+    switches,
   }, preloadedState);
 
 }
@@ -155,6 +160,7 @@ function init<S, A>(
   const country: IsoCountry = detectCountry();
   const currency: Currency = detectCurrency(countryGroup);
   const participations: Participations = abTest.init(country);
+  const switches: Switches = switchHelper.init();
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
@@ -163,6 +169,7 @@ function init<S, A>(
     countryGroup,
     country,
     currency,
+    switches,
   );
   const commonReducer = createCommonReducer(initialState);
 

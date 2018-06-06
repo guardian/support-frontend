@@ -13,6 +13,7 @@ import {
   type Action,
 } from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import type { Status } from 'helpers/switch';
 
 
 // ---- Types ----- //
@@ -22,7 +23,7 @@ type PropTypes = {
   callback: Function,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
-  switchedOff: boolean,
+  switchStatus: Status,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,7 +51,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 const DirectDebitPopUpButton = (props: PropTypes) => (
   <Switchable
-    off={props.switchedOff}
+    status={props.switchStatus}
     component={() => <ButtonAndForm {...props} />}
     fallback={() => <PaymentError paymentMethod="direct debit" />}
   />
@@ -91,7 +92,7 @@ function Button(props: { openPopUp: () => void }) {
 
 /* eslint-disable react/default-props-match-prop-types */
 DirectDebitPopUpButton.defaultProps = {
-  switchedOff: false,
+  switchStatus: 'ON',
 };
 /* eslint-enable react/default-props-match-prop-types */
 

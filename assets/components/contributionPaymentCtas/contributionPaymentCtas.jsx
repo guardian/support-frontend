@@ -20,6 +20,7 @@ import { addQueryParamsToURL } from 'helpers/url';
 
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Contrib as ContributionType } from 'helpers/contributions';
+import type { Status } from 'helpers/switch';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -39,7 +40,7 @@ type PropTypes = {
     buttonText?: string,
     onClick?: ?(void => void),
     additionalClass?: string,
-    switchedOff?: boolean,
+    switchStatus?: Status,
   }>,
   error: ?string,
   resetError: void => void,

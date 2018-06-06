@@ -21,6 +21,7 @@ function mapStateToProps(state: State) {
     abParticipations: state.common.abParticipations,
     isoCountry: state.common.country,
     canClick: !state.page.selection.error,
+    switchStatus: state.common.switches.oneOffPaymentMethods.payPal,
   };
 
 }
