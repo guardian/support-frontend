@@ -2,14 +2,15 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
-import type { Node } from 'react';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Props ----- //
 
 type PropTypes = {
+  modifierClasses: Array<?string>,
   children: Node,
 };
 
@@ -19,7 +20,7 @@ type PropTypes = {
 export default function LeftMarginSection(props: PropTypes) {
 
   return (
-    <section className="component-left-margin-section">
+    <section className={classNameWithModifiers('component-left-margin-section', props.modifierClasses)}>
       <div className="component-left-margin-section__content">
         {props.children}
       </div>
@@ -27,3 +28,10 @@ export default function LeftMarginSection(props: PropTypes) {
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+LeftMarginSection.defaultProps = {
+  modifierClasses: [],
+};
