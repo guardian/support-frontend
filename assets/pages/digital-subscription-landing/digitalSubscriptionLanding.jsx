@@ -52,13 +52,24 @@ const content = (
           ctaText="Start a 14 day free trial"
           price="£11.99"
           url="/"
+          dark
         />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
+        <PriceCta
+          ctaText="Start a 14 day free trial"
+          price="£11.99"
+          url="/"
+        />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Your subscription helps support independent investigative journalism</h2>
+        <PriceCta
+          ctaText="Start a 14 day free trial"
+          price="£11.99"
+          url="/"
+        />
       </LeftMarginSection>
       <Footer />
     </div>
