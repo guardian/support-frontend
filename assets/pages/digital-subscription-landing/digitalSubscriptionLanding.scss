@@ -6,9 +6,11 @@
 // ----- Shared Components ----- //
 
 @import '~components/countryGroupSwitcher/countryGroupSwitcher';
+@import '~components/ctaLink/ctaLink';
 @import '~components/footer/footer';
 @import '~components/headers/countrySwitcherHeader/countrySwitcherHeader';
 @import '~components/leftMarginSection/leftMarginSection';
+@import '~components/priceCta/priceCta';
 
 
 // ----- Page-Specific Styles ----- //
@@ -17,5 +19,7 @@
 #digital-subscription-landing-page-uk,
 #digital-subscription-landing-page-us,
 #digital-subscription-landing-page-au {
-  // your code here
+  .component-left-margin-section__content {
+    overflow-x: hidden;
+  }
 }

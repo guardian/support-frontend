@@ -11,6 +11,7 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import PriceCta from 'components/priceCta/priceCta';
 
 import { init as pageInit } from 'helpers/page/page';
 
@@ -47,6 +48,11 @@ const content = (
       <CountrySwitcherHeader />
       <LeftMarginSection>
         <h1>Support The Guardian with a digital subscription</h1>
+        <PriceCta
+          ctaText="Start a 14 day free trial"
+          price="£11.99"
+          url="/"
+        />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
