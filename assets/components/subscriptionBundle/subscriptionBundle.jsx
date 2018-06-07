@@ -43,7 +43,7 @@ export default function SubscriptionBundle(props: PropTypes) {
           heading={props.heading}
           subheading={props.subheading}
         />
-        <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
+        <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} headingSize={3} />
         <CtaLink
           text={props.ctaText}
           url={props.ctaUrl}
