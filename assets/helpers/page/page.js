@@ -12,6 +12,7 @@ import {
   type StoreEnhancer,
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import type { Store } from 'redux';
 
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -154,7 +155,7 @@ function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
   preloadedState: ?PreloadedState = null,
-) {
+): Store<*, *, *> {
 
   const countryGroup: CountryGroupId = detectCountryGroup();
   const country: IsoCountry = detectCountry();
