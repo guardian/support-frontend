@@ -44,37 +44,30 @@ const countryGroupSpecificDetails: {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-uk',
   },
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-eu',
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: usContributeCopy,
-    reactElementId: 'contributions-landing-page-us',
   },
   AUDCountries: {
     headerCopy: ['Help us deliver', 'the independent', 'journalism', 'Australia needs'],
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-au',
   },
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-int',
   },
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-nz',
   },
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    reactElementId: 'contributions-landing-page-ca',
   },
 };
 
