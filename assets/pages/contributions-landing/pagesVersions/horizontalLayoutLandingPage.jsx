@@ -39,7 +39,7 @@ const defaultContributeCopy = 'Make a monthly commitment to support The Guardian
 const usContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
-  [CountryGroupId]: {headerCopy: string[], contributeCopy: string, reactElementId: string}
+  [CountryGroupId]: {headerCopy: string[], contributeCopy: string}
 } = {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
