@@ -3,6 +3,7 @@ package com.gu.zuora.encoding
 import java.util.UUID
 
 import cats.syntax.functor._
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.helpers.StringExtensions._
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.encoding.Codec
@@ -93,6 +94,8 @@ trait ModelsCodecs {
     import com.gu.acquisition.instances.abTest._
     deriveCodec
   }
+
+  implicit val sendMessageResultCodec: Codec[SendMessageResult] = deriveCodec
 
 }
 

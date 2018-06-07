@@ -17,7 +17,7 @@ import org.joda.time.DateTime
 import scala.concurrent.Future
 
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[SendThankYouEmailState, Unit](servicesProvider) {
+    extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
   def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, executionContext))
 
@@ -31,7 +31,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     for {
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
       emailResult <- sendEmail(state, mandateId)
-    } yield HandlerResult(Unit, requestInfo)
+    } yield HandlerResult(emailResult, requestInfo)
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
