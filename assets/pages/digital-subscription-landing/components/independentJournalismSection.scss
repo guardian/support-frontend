@@ -1,7 +1,15 @@
+.component-independent-journalism {
+  background: gu-colour(neutral-6);
+  border-left: 1px solid #ccc;
+}
+
+.component-independent-journalism__content {
+  padding-left: 11px;
+}
+
 .component-independent-journalism__header {
   width: 620px;
-  height: 124px;
-  font-family: GHGuardianHeadline;
+  font-family: $gu-egyptian-web;
   font-size: 36px;
   font-weight: bold;
   font-style: normal;
@@ -13,8 +21,7 @@
 
 .component-independent-journalism__copy {
   width: 620px;
-  height: 280px;
-  font-family: GHGuardianHeadline;
+  font-family: $gu-egyptian-web;
   font-size: 36px;
   font-weight: 300;
   font-style: normal;
@@ -22,4 +29,17 @@
   line-height: 1.11;
   letter-spacing: normal;
   color: #121212;
+}
+
+.middle {
+  display: -webkit-flex; /* Safari */
+  display: flex;
+}
+
+.amber-rudd {
+  position: relative;
+  top: -81px;
+  margin-left: 20px;
+  margin-bottom: -122px;
+  z-index: 2;
 }
