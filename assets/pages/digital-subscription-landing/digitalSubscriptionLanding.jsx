@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import IndependentJournalismSection from './components/independentJournalismSection';
 import PriceCtaContainer from './components/priceCtaContainer';
 import ProductBlock from './components/productBlock';
 
@@ -51,8 +52,7 @@ const content = (
       </LeftMarginSection>
       <ProductBlock />
       <LeftMarginSection>
-        <h2>Your subscription helps support independent investigative journalism</h2>
-        <PriceCtaContainer />
+        <IndependentJournalismSection />
       </LeftMarginSection>
       <Footer />
     </div>
