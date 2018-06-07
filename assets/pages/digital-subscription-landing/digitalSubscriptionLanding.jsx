@@ -13,6 +13,7 @@ import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHe
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import PriceCtaContainer from './components/priceCtaContainer';
+import ProductBlock from './components/productBlock';
 
 
 // ----- Redux Store ----- //
@@ -49,10 +50,7 @@ const content = (
         <h1>Support The Guardian with a digital subscription</h1>
         <PriceCtaContainer dark />
       </LeftMarginSection>
-      <LeftMarginSection>
-        <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
-        <PriceCtaContainer />
-      </LeftMarginSection>
+      <ProductBlock />
       <LeftMarginSection>
         <h2>Your subscription helps support independent investigative journalism</h2>
         <PriceCtaContainer />

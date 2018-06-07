@@ -22,4 +22,119 @@
   .component-left-margin-section__content {
     overflow-x: hidden;
   }
+
+  // ----- Product Block
+
+  .product-block {
+    .component-grid-image {
+      width: calc(100vw - 20px);
+      display: block;
+    }
+
+    .component-price-cta {
+      margin-top: $gu-v-spacing;
+    }
+  }
+
+  .product-block__image {
+    border-bottom: 1px solid gu-colour(garnett-neutral-2);
+    padding: 0 ($gu-h-spacing / 2);
+    margin-bottom: $gu-v-spacing / 2;
+  }
+
+  .product-block__heading {
+    font-family: $gu-egyptian-web;
+    font-weight: 200;
+    font-size: 22px;
+    line-height: 26px;
+    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+  }
+
+  .product-block__copy {
+    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+  }
+
+  .product-block__product-heading {
+    color: #fff;
+    font-weight: bold;
+    font-family: $gu-egyptian-web;
+    line-height: 1;
+    display: inline;
+    padding: 0 5px 3px;
+  }
+
+  .product-block__product-description {
+    margin: $gu-v-spacing / 2 0 $gu-v-spacing;
+    font-size: 16px;
+    line-height: 1.25;
+    font-family: $gu-egyptian-web;
+  }
+
+  .component-feature-list {
+    font-size: 16px;
+    line-height: 1.25;
+    font-family: $gu-egyptian-web;
+
+    @include mq($from: tablet) {
+      columns: 2;
+    }
+  }
+
+  .component-feature-list__heading {
+    font-weight: bold;
+    display: inline;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+  .component-feature-list__item {
+    margin-top: $gu-v-spacing / 2;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 600px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .component-feature-list__text {
+    margin-left: 23px;
+  }
+
+  .product-block__product--premium-app {
+    .product-block__product-heading {
+      background-color: gu-colour(news-garnett-media-main-1);
+    }
+
+    .component-feature-list__item:before {
+      background-color: gu-colour(news-garnett-media-main-1);
+    }
+  }
+
+  .product-block__product--daily-edition {
+    .product-block__product-heading {
+      background-color: gu-colour(sport-garnett-media-main-1);
+    }
+
+    .component-feature-list__item:before {
+      background-color: gu-colour(sport-garnett-media-main-1);
+    }
+  }
+
+  .product-block__ampersand {
+    border-radius: 600px;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    font-size: 50px;
+    line-height: 80px;
+    font-family: $gu-egyptian-web;
+    font-weight: bold;
+    background-color: gu-colour(news-garnett-highlight);
+    margin: 0 auto -35px;
+    position: relative;
+  }
 }
