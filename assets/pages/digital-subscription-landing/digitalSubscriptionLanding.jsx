@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import PriceCtaContainer from './components/priceCtaContainer';
 
 
@@ -45,10 +46,7 @@ const content = (
   <Provider store={store}>
     <div>
       <CountrySwitcherHeader />
-      <LeftMarginSection>
-        <h1>Support The Guardian with a digital subscription</h1>
-        <PriceCtaContainer dark />
-      </LeftMarginSection>
+      <DigitalSubscriptionLandingHeader />
       <LeftMarginSection>
         <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
         <PriceCtaContainer />
