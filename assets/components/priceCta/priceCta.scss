@@ -1,0 +1,99 @@
+.component-price-cta {
+  padding-left: $gu-h-spacing / 2;
+  padding-top: $gu-v-spacing / 2;
+  background-color: gu-colour(news-garnett-highlight);
+  position: relative;
+  height: 86px;
+
+  .component-cta-link {
+    width: 165px;
+    background-color: #fff;
+    color: gu-colour(garnett-neutral-1);
+
+    &:hover {
+      background-color: darken(#fff, 5%);
+    }
+
+    @include mq($from: mobileMedium) {
+      width: 190px;
+    }
+
+    @include mq($from: desktop) {
+      width: 220px;
+    }
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+  }
+}
+
+.component-price-cta__price {
+  background-color: gu-colour(garnett-neutral-1);
+  width: 105px;
+  height: 105px;
+  border-radius: 600px;
+  position: absolute;
+  left: 225px;
+  top: -28px;
+  padding-top: 20px;
+  box-sizing: border-box;
+
+  @include mq($from: mobileMedium) {
+    left: 260px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    left: 360px;
+  }
+
+  @include mq($from: desktop) {
+    left: 380px;
+  }
+}
+
+.component-price-cta__price-copy {
+  display: block;
+  text-align: center;
+  color: gu-colour(news-garnett-highlight);
+  font-size: 14px;
+  line-height: 14px;
+  font-family: $gu-text-sans-web;
+}
+
+.component-price-cta__price-amount {
+  display: block;
+  text-align: center;
+  color: gu-colour(news-garnett-highlight);
+  font-size: 26px;
+  line-height: 26px;
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.component-price-cta__cancel {
+  background-color: gu-colour(garnett-neutral-3);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 24px;
+  padding-bottom: $gu-v-spacing / 2;
+  padding-left: $gu-h-spacing / 2;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.component-price-cta--dark {
+  background-color: gu-colour(media-garnett-main-1);
+
+  .component-price-cta__price {
+    background-color: gu-colour(news-garnett-highlight);
+  }
+
+  .component-price-cta__price-copy, .component-price-cta__price-amount {
+    color: gu-colour(garnett-neutral-1);
+  }
+}

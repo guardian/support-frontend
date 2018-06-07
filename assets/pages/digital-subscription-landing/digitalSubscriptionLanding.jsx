@@ -7,12 +7,12 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { init as pageInit } from 'helpers/page/page';
 
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-
-import { init as pageInit } from 'helpers/page/page';
+import PriceCtaContainer from './components/priceCtaContainer';
 
 
 // ----- Redux Store ----- //
@@ -47,12 +47,15 @@ const content = (
       <CountrySwitcherHeader />
       <LeftMarginSection>
         <h1>Support The Guardian with a digital subscription</h1>
+        <PriceCtaContainer dark />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
+        <PriceCtaContainer />
       </LeftMarginSection>
       <LeftMarginSection>
         <h2>Your subscription helps support independent investigative journalism</h2>
+        <PriceCtaContainer />
       </LeftMarginSection>
       <Footer />
     </div>
