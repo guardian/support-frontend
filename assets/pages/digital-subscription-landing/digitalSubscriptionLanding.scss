@@ -26,20 +26,45 @@
   // ----- Product Block
 
   .product-block {
+    .component-left-margin-section__content {
+      position: relative;
+    }
+
     .component-grid-image {
-      width: calc(100vw - 20px);
+      width: 100%;
       display: block;
+
+      @include mq($from: mobileLandscape, $until: phablet) {
+        width: 460px;
+        margin: 0 auto;
+      }
     }
 
     .component-price-cta {
-      margin-top: $gu-v-spacing;
+      margin-top: $gu-v-spacing * 2;
+    }
+  }
+
+  .product-block__product {
+    @include mq($from: phablet) {
+      display: inline-block;
+      width: 50%;
+      vertical-align: top;
+    }
+
+    @include mq($from: leftCol) {
+      width: 520px;
     }
   }
 
   .product-block__image {
-    border-bottom: 1px solid gu-colour(garnett-neutral-2);
+    border-bottom: 1px solid gu-colour(garnett-neutral-4);
     padding: 0 ($gu-h-spacing / 2);
     margin-bottom: $gu-v-spacing / 2;
+
+    @include mq($from: tablet) {
+      width: 345px;
+    }
   }
 
   .product-block__heading {
@@ -48,6 +73,19 @@
     font-size: 22px;
     line-height: 26px;
     padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+
+    @include mq($from: phablet) {
+      font-size: 28px;
+      line-height: 1.14;
+      width: 700px;
+    }
+
+    @include mq($from: leftCol) {
+      font-size: 36px;
+      line-height: 1.11;
+      width: 600px;
+      padding-bottom: $gu-v-spacing * 3;
+    }
   }
 
   .product-block__copy {
@@ -75,7 +113,7 @@
     line-height: 1.25;
     font-family: $gu-egyptian-web;
 
-    @include mq($from: tablet) {
+    @include mq($from: leftCol) {
       columns: 2;
     }
   }
@@ -136,5 +174,27 @@
     background-color: gu-colour(news-garnett-highlight);
     margin: 0 auto -35px;
     position: relative;
+
+    @include mq($from: phablet) {
+      position: absolute;
+      left: calc(50% - 40px);
+      top: 90px;
+    }
+
+    @include mq($from: tablet) {
+      left: calc(140px + 25%);
+    }
+
+    @include mq($from: desktop) {
+      width: 100px;
+      height: 100px;
+      font-size: 60px;
+      line-height: 100px;
+    }
+
+    @include mq($from: leftCol) {
+      left: 395px;
+      top: 160px;
+    }
   }
 }
