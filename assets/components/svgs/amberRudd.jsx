@@ -4,7 +4,7 @@ import React from 'react';
 import { gridUrl } from 'helpers/theGrid';
 
 export default function AmberRudd() {
-  const imageUrl = gridUrl('amberRudd', '370', 'png');
+  const imageUrl = gridUrl('amberRudd', '740', 'png');
   return (
     <svg
       className="svg-amber-rudd"
@@ -14,7 +14,7 @@ export default function AmberRudd() {
     >
       <circle cx="273" cy="35" fill="#FFABDB" r="26" />
       <circle cx="349.5" cy="53.5" fill="#FFE501" r="52.5" />
-      <image xlinkHref={imageUrl} y="42" height="370" width="370" />
+      <image href={imageUrl} y="42" height="370" width="370" />
     </svg>
   );
 }

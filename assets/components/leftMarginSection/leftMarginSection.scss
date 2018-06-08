@@ -14,7 +14,7 @@
 
 .component-left-margin-section__content {
   flex-grow: 1;
-
+  border-left: 1px solid #ccc;
   @include mq($from: tablet) {
     flex-basis: 730px;
   }

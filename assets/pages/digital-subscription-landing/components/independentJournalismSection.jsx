@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 import React from 'react';
 import AmberRudd from 'components/svgs/amberRudd';
+import Zuck from 'components/svgs/zuck';
 import PriceCtaContainer from './priceCtaContainer';
 
 export default function IndependentJournalismSection() {
@@ -12,6 +13,7 @@ export default function IndependentJournalismSection() {
       <div className="component-independent-journalism__content">
         <h2 className="component-independent-journalism__header">Your subscription helps support independent investigative journalism</h2>
         <div className="component-independent-journalism__wrapper">
+          <Zuck />
           <p className="component-independent-journalism__copy">
             Independence means we can pursue a story without fear of where it might take us.
             We are dedicated to holding power
