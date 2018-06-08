@@ -21,7 +21,6 @@
 #digital-subscription-landing-page-us,
 #digital-subscription-landing-page-au {
   .component-left-margin-section__content {
-    //overflow-x: hidden;
   }
 
   // ----- Product Block
@@ -231,4 +230,8 @@
       left: 325px;
     }
   }
+}
+
+.component-left-margin-section--grey {
+  background: gu-colour(neutral-6);
 }

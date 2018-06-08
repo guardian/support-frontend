@@ -46,12 +46,12 @@ const content = (
   <Provider store={store}>
     <div>
       <CountrySwitcherHeader />
-      <LeftMarginSection>
+      <LeftMarginSection modifierClasses={['grey']}>
         <h1>Support The Guardian with a digital subscription</h1>
         <PriceCtaContainer dark />
       </LeftMarginSection>
       <ProductBlock />
-      <LeftMarginSection>
+      <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />
       </LeftMarginSection>
       <Footer />
