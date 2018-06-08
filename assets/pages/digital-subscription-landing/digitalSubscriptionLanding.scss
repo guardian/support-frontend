@@ -28,6 +28,10 @@
   .product-block {
     .component-left-margin-section__content {
       position: relative;
+
+      @include mq($from: tablet) {
+        border-left: 1px solid gu-colour(garnett-neutral-4);
+      }
     }
 
     .component-grid-image {
