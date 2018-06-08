@@ -45,7 +45,9 @@
     }
 
     .component-price-cta {
-      margin-top: $gu-v-spacing * 2;
+      @include mq($until: desktop) {
+        margin-top: $gu-v-spacing * 2;
+      }
     }
   }
 
