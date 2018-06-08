@@ -135,6 +135,12 @@
     margin-bottom: $gu-v-spacing / 2;
   }
 
+  .product-block__highlight {
+    font-weight: normal;
+    background-color: gu-colour(news-garnett-highlight);
+    padding: 0 2px;
+  }
+
   .product-block__product--premium-app {
     .product-block__product-heading {
       background-color: gu-colour(news-garnett-media-main-1);

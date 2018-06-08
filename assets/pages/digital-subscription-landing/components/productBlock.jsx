@@ -42,11 +42,11 @@ export default function ProductBlock() {
               headingSize={4}
               listItems={[
                 {
-                  heading: 'Discover',
+                  heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
                   text: 'A selection of long reads, interviews and features to be read at leisure',
                 },
                 {
-                  heading: 'Live',
+                  heading: ['Live ', <mark className="product-block__highlight">New</mark>],
                   text: 'A fast way to catch up on every news story as it breaks',
                 },
                 {

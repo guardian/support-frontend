@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -15,8 +15,8 @@ import Heading, { type HeadingRange } from 'components/heading/heading';
 /* eslint-disable react/no-unused-prop-types */
 
 export type ListItem =
-  | {| heading: string, text: string |}
-  | {| heading: string |}
+  | {| heading: Node, text: string |}
+  | {| heading: Node |}
   | {| text: string |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -50,7 +50,7 @@ function FeatureList(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function ItemHeading(props: { heading: ?string, size: HeadingRange }) {
+function ItemHeading(props: { heading: ?Node, size: HeadingRange }) {
 
   if (props.heading) {
     return (
