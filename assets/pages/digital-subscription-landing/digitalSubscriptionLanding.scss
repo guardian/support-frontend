@@ -112,42 +112,27 @@
     font-size: 16px;
     line-height: 1.25;
     font-family: $gu-egyptian-web;
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ff4e36"/></svg>');
+    margin-left: 26px;
 
     @include mq($from: leftCol) {
       columns: 2;
+      column-gap: 54px;
     }
   }
 
   .component-feature-list__heading {
     font-weight: bold;
     display: inline;
-    vertical-align: middle;
-    margin-left: 5px;
+    vertical-align: top;
   }
 
   .component-feature-list__item {
-    margin-top: $gu-v-spacing / 2;
-
-    &:before {
-      content: " ";
-      display: inline-block;
-      vertical-align: middle;
-      border-radius: 600px;
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  .component-feature-list__text {
-    margin-left: 23px;
+    margin-bottom: $gu-v-spacing / 2;
   }
 
   .product-block__product--premium-app {
     .product-block__product-heading {
-      background-color: gu-colour(news-garnett-media-main-1);
-    }
-
-    .component-feature-list__item:before {
       background-color: gu-colour(news-garnett-media-main-1);
     }
   }
@@ -157,8 +142,8 @@
       background-color: gu-colour(sport-garnett-media-main-1);
     }
 
-    .component-feature-list__item:before {
-      background-color: gu-colour(sport-garnett-media-main-1);
+    .component-feature-list {
+      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#00b2ff"/></svg>');
     }
   }
 
