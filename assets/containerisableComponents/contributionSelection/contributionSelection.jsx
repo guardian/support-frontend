@@ -40,6 +40,7 @@ type PropTypes = {
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
+  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
 };
 
 
@@ -54,7 +55,7 @@ function ContributionSelection(props: PropTypes) {
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
-          radios={getContributionTypeRadios(props.countryGroupId)}
+          radios={getContributionTypeRadios(props.countryGroupId, props.oneOffSingleOneTimeTestVariant)}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
           countryGroupId={props.countryGroupId}
