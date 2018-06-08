@@ -18,9 +18,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 type PropTypes = {
   text: string,
   accessibilityHint: string,
-  ctaId: string,
   url?: ?string,
-  trackComponentEvent?: Function,
   onClick?: ?Function,
   tabIndex?: number,
   id?: ?string,
@@ -44,16 +42,7 @@ export default function CtaLink(props: PropTypes) {
         addQueryParamToURL(urlString, 'acquisitionData', JSON.stringify(props.acquisitionData))
          : props.url
       }
-      onClick={
-        (clickEvent) => {
-          if (props.trackComponentEvent) {
-            props.trackComponentEvent('CLICK', props.ctaId);
-          }
-          if (props.onClick) {
-            props.onClick(clickEvent);
-          }
-        }
-      }
+      onClick={props.onClick}
       onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
       tabIndex={props.tabIndex}
       aria-describedby={accessibilityHintId}
@@ -71,7 +60,6 @@ export default function CtaLink(props: PropTypes) {
 
 CtaLink.defaultProps = {
   url: null,
-  trackComponentEvent: () => {},
   onClick: null,
   tabIndex: 0,
   id: null,

@@ -24,7 +24,6 @@ type PropTypes = {
   benefits: ListItem[],
   ctaText: string,
   ctaUrl: string,
-  ctaId: string,
   ctaAccessibilityHint: string,
   gridImage: GridImg,
   ctaModifiers?: Array<?string>,
@@ -47,7 +46,6 @@ export default function SubscriptionBundle(props: PropTypes) {
         <CtaLink
           text={props.ctaText}
           url={props.ctaUrl}
-          ctaId={props.ctaId}
           accessibilityHint={props.ctaAccessibilityHint}
           modifierClasses={props.ctaModifiers}
         />

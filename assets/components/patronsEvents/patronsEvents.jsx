@@ -31,7 +31,6 @@ export default function PatronsEvents(props: PropTypes) {
         copy="The Patron tier is for those who want a deeper relationship with the Guardian and its journalists"
         ctaText="Find out more"
         ctaUrl={getMemLink('patrons', props.campaignCode)}
-        ctaId="patrons"
         ctaAccessibilityHint="Find out more about becoming a Patron"
       />
       <OtherProduct
@@ -42,7 +41,6 @@ export default function PatronsEvents(props: PropTypes) {
         copy="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
         ctaText="Find out more"
         ctaUrl={getMemLink('events', props.campaignCode)}
-        ctaId="live-events"
         ctaAccessibilityHint="Find out more about Guardian live events"
       />
     </PageSection>

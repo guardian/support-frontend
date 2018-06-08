@@ -18,7 +18,6 @@ export default function DotcomCta() {
         <CtaLink
           text="Return to The Guardian"
           accessibilityHint="click here to return to The Guardian front page"
-          ctaId="return-to-the-guardian"
           url="https://www.theguardian.com"
         />
       </PageSection>
