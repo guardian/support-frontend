@@ -90,8 +90,8 @@ describe('basic behaviour of init', () => {
     };
 
     const country = 'GB';
-    const countryGroupId ='GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId,tests);
+    const countryGroupId = 'GBPCountries';
+    const participations: Participations = abInit(country, countryGroupId, tests);
     const expectedParticipations: Participations = { mockTest: 'variant' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -412,7 +412,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=510001';
-    participations = abInit(country, countryGroupId,tests);
+    participations = abInit(country, countryGroupId, tests);
     expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest', mockTest3: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
