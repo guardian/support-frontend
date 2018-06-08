@@ -12,6 +12,15 @@ import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
 import PriceCtaContainer from './priceCtaContainer';
 
 
+// ----- Setup ----- //
+
+const imageProperties = {
+  srcSizes: [644, 500, 140],
+  sizes: '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px',
+  imgType: 'png',
+};
+
+
 // ----- Component ----- //
 
 export default function ProductBlock() {
@@ -28,9 +37,7 @@ export default function ProductBlock() {
             <GridImage
               gridId="premiumTier"
               altText="the premium tier on the guardian app"
-              srcSizes={[644, 500, 140]}
-              sizes="(max-width: 740px) 100vw, 50vw"
-              imgType="png"
+              {...imageProperties}
             />
           </div>
           <div className="product-block__copy">
@@ -68,9 +75,7 @@ export default function ProductBlock() {
             <GridImage
               gridId="dailyEdition"
               altText="the guardian daily edition app"
-              srcSizes={[644, 500, 140]}
-              sizes="(max-width: 740px) 100vw, 50vw"
-              imgType="png"
+              {...imageProperties}
             />
             <SvgPennyFarthingCircles />
           </div>
