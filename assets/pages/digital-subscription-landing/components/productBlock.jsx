@@ -7,6 +7,7 @@ import React from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import FeatureList from 'components/featureList/featureList';
 import GridImage from 'components/gridImage/gridImage';
+import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
 
 import PriceCtaContainer from './priceCtaContainer';
 
@@ -71,6 +72,7 @@ export default function ProductBlock() {
               sizes="(max-width: 740px) 100vw, 50vw"
               imgType="png"
             />
+            <SvgPennyFarthingCircles />
           </div>
           <div className="product-block__copy">
             <h3 className="product-block__product-heading">iPad daily edition</h3>

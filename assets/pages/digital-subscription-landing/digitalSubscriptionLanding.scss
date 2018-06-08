@@ -71,6 +71,26 @@
     border-bottom: 1px solid gu-colour(garnett-neutral-4);
     padding: 0 ($gu-h-spacing / 2);
     margin-bottom: $gu-v-spacing / 2;
+
+    @include mq($from: desktop) {
+      position: relative;
+    }
+
+    .svg-penny-farthing-circles {
+      display: none;
+
+      @include mq($from: desktop) {
+        display: block;
+        position: absolute;
+        width: 250px;
+        bottom: 0;
+        left: 255px;
+      }
+
+      @include mq($from: leftCol) {
+        left: 220px;        
+      }
+    }
   }
 
   .product-block__heading {
