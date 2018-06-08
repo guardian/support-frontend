@@ -110,7 +110,7 @@
       width: 700px;
     }
 
-    @include mq($from: leftCol) {
+    @include mq($from: desktop) {
       font-size: 36px;
       line-height: 1.11;
       width: 600px;
@@ -222,12 +222,8 @@
       height: 100px;
       font-size: 60px;
       line-height: 100px;
-      top: 88px;
-      left: 325px;
-    }
-
-    @include mq($from: leftCol) {
       top: 167px;
+      left: 325px;
     }
   }
 }
