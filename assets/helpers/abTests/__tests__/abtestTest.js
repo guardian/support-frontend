@@ -253,6 +253,33 @@ describe('basic behaviour of init', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
+  it('The ab test framework should be able to differentiate country groups', () => {
+
+    document.cookie = 'GU_mvt_id=12346';
+
+    const tests = {
+      mockTest: {
+        variants: ['control', 'variant'],
+        audiences: {
+          GBPCountries: {
+            offset: 0,
+            size: 1,
+          },
+        },
+        isActive: true,
+        independent: false,
+        seed: 0,
+      },
+    };
+
+    const country = 'GI';
+    const countryGroupId = 'GBPCountries';
+    const participations: Participations = abInit(country, countryGroupId, tests);
+    const expectedParticipations: Participations = { mockTest: 'control' };
+
+    expect(participations).toEqual(expectedParticipations);
+  });
+
   it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
 
     document.cookie = 'GU_mvt_id=12346';
