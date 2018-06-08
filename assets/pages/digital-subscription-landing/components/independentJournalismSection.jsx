@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 import React from 'react';
 import AmberRudd from 'components/svgs/amberRudd';
+import AmberZuck from 'components/svgs/amberZuck';
 import Zuck from 'components/svgs/zuck';
 import PriceCtaContainer from './priceCtaContainer';
 
@@ -23,6 +24,7 @@ export default function IndependentJournalismSection() {
           </p>
           <AmberRudd />
         </div>
+        <AmberZuck />
       </div>
       <PriceCtaContainer />
     </div>
