@@ -23,12 +23,15 @@
     overflow-x: hidden;
   }
 
-  .gridImage {
+  .gridPicture {
     margin-top: 37px;
     margin-left: 12px;
-    display: block;
   }
 
+  .component-grid-picture__image {
+    display: block;
+  }
+  
   .headerTitle {
     width: 100%;
     height: 101px;

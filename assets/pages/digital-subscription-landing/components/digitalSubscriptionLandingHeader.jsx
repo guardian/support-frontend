@@ -21,7 +21,7 @@ const pictureSources = [
   {
     gridId: 'digitalSubscriptionHeaderTablet',
     sizes: '(min-width: 660px) 407px, (max-width: 1023px) 407px',
-    media: '(min-width: 660px), (max-width: 1023px)',
+    media: '(min-width: 660px) and (max-width: 1023px)',
     srcSizes: [500],
   },
   {
