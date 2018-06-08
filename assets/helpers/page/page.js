@@ -130,7 +130,8 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
 // For pages that don't need Redux.
 function statelessInit() {
   const country: IsoCountry = detectCountry();
-  const participations: Participations = abTest.init(country);
+  const countryGroupId: CountryGroupId = detectCountryGroup();
+  const participations: Participations = abTest.init(country, countryGroupId);
   analyticsInitialisation(participations);
 }
 
@@ -160,7 +161,7 @@ function init<S, A>(
   const countryGroup: CountryGroupId = detectCountryGroup();
   const country: IsoCountry = detectCountry();
   const currency: Currency = detectCurrency(countryGroup);
-  const participations: Participations = abTest.init(country);
+  const participations: Participations = abTest.init(country, countryGroup);
   const switches: Switches = switchHelper.init();
   analyticsInitialisation(participations);
 
