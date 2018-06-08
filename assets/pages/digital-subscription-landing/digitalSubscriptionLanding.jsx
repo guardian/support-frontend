@@ -29,13 +29,12 @@ const reactElementId: {
 } = {
   GBPCountries: 'digital-subscription-landing-page-uk',
   UnitedStates: 'digital-subscription-landing-page-us',
-  AUDCountries: 'digital-subscription-landing-page-au',
   International: 'digital-subscription-landing-page-int',
 };
 
 const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   '/subscribe/digital',
-  ['GBPCountries', 'UnitedStates', 'AUDCountries', 'International'],
+  ['GBPCountries', 'UnitedStates', 'International'],
 );
 
 
