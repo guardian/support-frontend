@@ -23,9 +23,9 @@ export const imageCatalogue: {
   digitalCircle: '639c3abc4c09281aedb515d684ac4053ef38a1df/0_0_825_825',
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
   paperDigitalCircle: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
-  digitalSubscriptionHeaderDesktop: '6b595c3512012e2810be0aff22faa55c3f34dd6e/0_0_1618_778',
-  digitalSubscriptionHeaderTablet: '6b595c3512012e2810be0aff22faa55c3f34dd6e/0_0_811_779',
-  digitalSubscriptionHeaderMobile: '6b595c3512012e2810be0aff22faa55c3f34dd6e/379_0_432_640',
+  digitalSubscriptionHeaderDesktop: '1c1edff99ab1df4f391d95ef458b0410d3ceb555/0_0_4045_1950',
+  digitalSubscriptionHeaderTablet: 'ad43b51a060641301dff912731bd2a24a9b18523/0_0_2035_1660',
+  digitalSubscriptionHeaderMobile: '3c93c914ea14da695a098bb1712d3bc974d20114/0_0_1200_1755',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

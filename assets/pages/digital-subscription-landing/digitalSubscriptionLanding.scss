@@ -26,28 +26,7 @@
   .gridImage {
     margin-top: 37px;
     margin-left: 12px;
-    margin-bottom: -7px;
-  }
-
-  .gridImage__desktop {
-    display: none;
-    @include mq($from: desktop) {
-      display: block;
-    }
-  }
-
-  .gridImage__tablet {
-    display: none;
-    @include mq($from: tablet, $until: desktop) {
-      display: block;
-    }
-  }
-
-  .gridImage__mobile {
-    display: none;
-    @include mq($until: tablet) {
-      display: block;
-    }
+    display: block;
   }
 
   .headerTitle {
