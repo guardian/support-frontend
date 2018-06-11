@@ -68,7 +68,6 @@ GET  /:countryCode/subscribe                       controllers.Subscriptions.leg
 
 GET  /uk/subscribe/digital                         controllers.Subscriptions.digital(countryCode="uk")
 GET  /us/subscribe/digital                         controllers.Subscriptions.digital(countryCode="us")
-GET  /au/subscribe/digital                         controllers.Subscriptions.digital(countryCode="au")
 GET  /int/subscribe/digital                        controllers.Subscriptions.digital(countryCode="int")
 
 # ----- Authentication ----- #

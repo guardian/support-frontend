@@ -29,7 +29,6 @@ export default function ReadyToSupport(props: PropTypes) {
         <CtaLink
           text="See supporter options"
           url={props.ctaUrl}
-          ctaId="see-supporter-options"
           accessibilityHint="See the options for becoming a supporter"
           svg={<SvgChevronUp />}
           modifierClasses={['see-supporter-options']}

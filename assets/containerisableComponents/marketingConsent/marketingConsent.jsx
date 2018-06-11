@@ -83,7 +83,6 @@ function ChooseMarketingPreference(props: {
         onClick={
           () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
         }
-        ctaId="next"
         text="Next"
         accessibilityHint="Go to the guardian dot com front page"
         modifierClasses={['next']}

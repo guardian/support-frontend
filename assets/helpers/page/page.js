@@ -12,6 +12,7 @@ import {
   type StoreEnhancer,
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import type { Store } from 'redux';
 
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -129,7 +130,8 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
 // For pages that don't need Redux.
 function statelessInit() {
   const country: IsoCountry = detectCountry();
-  const participations: Participations = abTest.init(country);
+  const countryGroupId: CountryGroupId = detectCountryGroup();
+  const participations: Participations = abTest.init(country, countryGroupId);
   analyticsInitialisation(participations);
 }
 
@@ -154,12 +156,12 @@ function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
   preloadedState: ?PreloadedState = null,
-) {
+): Store<*, *, *> {
 
   const countryGroup: CountryGroupId = detectCountryGroup();
   const country: IsoCountry = detectCountry();
   const currency: Currency = detectCurrency(countryGroup);
-  const participations: Participations = abTest.init(country);
+  const participations: Participations = abTest.init(country, countryGroup);
   const switches: Switches = switchHelper.init();
   analyticsInitialisation(participations);
 

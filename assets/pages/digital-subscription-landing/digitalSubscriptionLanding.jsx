@@ -14,6 +14,7 @@ import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import PriceCtaContainer from './components/priceCtaContainer';
+import ProductBlock from './components/productBlock';
 
 
 // ----- Redux Store ----- //
@@ -30,13 +31,12 @@ const reactElementId: {
 } = {
   GBPCountries: 'digital-subscription-landing-page-uk',
   UnitedStates: 'digital-subscription-landing-page-us',
-  AUDCountries: 'digital-subscription-landing-page-au',
   International: 'digital-subscription-landing-page-int',
 };
 
 const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   '/subscribe/digital',
-  ['GBPCountries', 'UnitedStates', 'AUDCountries', 'International'],
+  ['GBPCountries', 'UnitedStates', 'International'],
 );
 
 
@@ -47,10 +47,7 @@ const content = (
     <div>
       <CountrySwitcherHeader />
       <DigitalSubscriptionLandingHeader />
-      <LeftMarginSection>
-        <h2>Enjoy our quality, independent journalism, plus some extra features, on mobile and tablet apps</h2>
-        <PriceCtaContainer />
-      </LeftMarginSection>
+      <ProductBlock />
       <LeftMarginSection>
         <h2>Your subscription helps support independent investigative journalism</h2>
         <PriceCtaContainer />
