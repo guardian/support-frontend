@@ -79,34 +79,28 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 // ----- Render ----- //
 
-const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
-  const dropIntroTextTestVariant = props.store && props.store.getState().common.abParticipations.dropIntroText;
-  const copyText = dropIntroTextTestVariant === 'variant' ? '' : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
-
-
-  return (
-    <Provider store={props.store}>
-      <div className="gu-content">
-        <CountrySwitcherHeader />
-        <CirclesIntroduction
-          headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
-          highlights={['Your contribution']}
-          modifierClasses={['compact']}
+const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => (
+  <Provider store={props.store}>
+    <div className="gu-content">
+      <CountrySwitcherHeader />
+      <CirclesIntroduction
+        headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
+        highlights={['Your contribution']}
+        modifierClasses={['compact']}
+      />
+      <Contribute
+        copy={countryGroupSpecificDetails[props.countryGroupId].contributeCopy}
+        modifierClasses={['compact']}
+      >
+        <ContributionSelectionContainer />
+        <ContributionAwarePaymentLogosContainer />
+        <ContributionPaymentCtasContainer
+          PayPalButton={PayPalContributionButtonContainer}
         />
-        <Contribute
-          copy={copyText}
-          modifierClasses={['compact']}
-        >
-          <ContributionSelectionContainer />
-          <ContributionAwarePaymentLogosContainer />
-          <ContributionPaymentCtasContainer
-            PayPalButton={PayPalContributionButtonContainer}
-          />
-        </Contribute>
-        <Footer disclaimer />
-      </div>
-    </Provider>
-  );
-};
+      </Contribute>
+      <Footer disclaimer />
+    </div>
+  </Provider>
+);
 
 export default HorizontalLayoutLandingPage;
