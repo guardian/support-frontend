@@ -16,7 +16,6 @@
   flex-grow: 1;
   @include mq($from: tablet) {
     flex-basis: 730px;
-    border-left: 1px solid #ccc;
   }
 
   @include mq($from: desktop) {
