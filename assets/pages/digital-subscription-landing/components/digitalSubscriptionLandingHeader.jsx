@@ -45,9 +45,11 @@ export default function DigitalSubscriptionLandingHeader() {
   };
   return (
     <LeftMarginSection {...leftMarginProps}>
+      <CirclesLeft />
       <div className="gridPicture">
         <GridPicture {...gridPicture} />
       </div>
+      <CirclesRight />
       <div className="headerTitle">
         <div className="headerTitleCopy">
           Support The Guardian with a digital subscription
@@ -55,5 +57,37 @@ export default function DigitalSubscriptionLandingHeader() {
       </div>
       <PriceCtaContainer dark />
     </LeftMarginSection>
+  );
+}
+
+// ----- Aux Components ----- //
+
+function CirclesLeft() {
+  return (
+    <svg
+      className="svg-title-circles-left"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 121 158"
+      preserveAspectRatio="xMinYMid"
+    >
+      <circle cx="73" cy="48" r="48" fill="#ffe501" />
+      <circle cx="5" cy="82" r="28" fill="#dcdcdc" />
+      <circle cx="48" cy="125" r="33" fill="#00b2ff" />
+    </svg>
+  );
+}
+
+function CirclesRight() {
+  return (
+    <svg
+      className="svg-title-circles-right"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 74 144"
+      preserveAspectRatio="xMinYMid"
+    >
+      <circle cx="50" cy="38" r="18" fill="#ffe501" />
+      <circle cx="5" cy="28" r="28" fill="#dcdcdc" />
+      <circle cx="28" cy="98" r="46" fill="#ffabdb" />
+    </svg>
   );
 }

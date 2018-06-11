@@ -73,6 +73,21 @@
       background-color: #fff000;
     }
 
+    .svg-title-circles-left {
+      position: absolute;
+      top: 295px;
+      width: 121px;
+      z-index: -1;
+    }
+
+    .svg-title-circles-right {
+      position: absolute;
+      top: 335px;
+      width: 80px;
+      left: 300px;
+      z-index: -1;
+    }
+
     .component-grid-picture__image {
       margin-left: auto;
       margin-right: auto;
