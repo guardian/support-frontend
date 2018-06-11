@@ -40,14 +40,18 @@ const gridPicture = {
 };
 
 export default function DigitalSubscriptionLandingHeader() {
-
+  const leftMarginProps = {
+    modifierClasses: ['headerBlock'],
+  };
   return (
-    <LeftMarginSection>
+    <LeftMarginSection {...leftMarginProps}>
       <div className="gridPicture">
         <GridPicture {...gridPicture} />
       </div>
       <div className="headerTitle">
-        Support The Guardian with<br />a digital subscription
+        <div className="headerTitleCopy">
+          Support The Guardian with a digital subscription
+        </div>
       </div>
       <PriceCtaContainer dark />
     </LeftMarginSection>

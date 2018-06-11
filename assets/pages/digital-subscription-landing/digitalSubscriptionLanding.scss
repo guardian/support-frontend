@@ -23,37 +23,69 @@
     overflow-x: hidden;
   }
 
-  .gridPicture {
-    margin-top: 37px;
-    margin-left: 12px;
-  }
-
   .component-grid-picture__image {
     display: block;
   }
-  
+
   .headerTitle {
     width: 100%;
-    height: 101px;
+    height: 92px;
     background-color: #000000;
+  }
+
+  .headerTitleCopy {
     color: #ffffff;
     font-family: $gu-egyptian-web;
     font-weight: bold;
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    padding-left: 12px;
-    font-size: 28px;
+    margin-left: 10px;
+    padding-top: 2px;
+
+    font-size: 26px;
+    line-height: 29px;
+
+    @include mq($until: mobileMedium) {
+      width: 320px;
+    }
+
+    @include mq($from: mobileMedium, $until: tablet) {
+      width: 330px;
+    }
+
+    @include mq($from: tablet, $until: leftCol) {
+      width: 500px;
+      font-size: 32px;
+      line-height: 36px;
+    }
 
     @include mq($from: leftCol) {
+      width: 490px;
+      margin-left: 12px;
       font-size: 36px;
-    }
-    @include mq($from: desktop, $until: leftCol) {
-      font-size: 32px;
-    }
-    @include mq($from: phablet, $until: desktop) {
-      font-size: 30px;
+      line-height: 42px;
     }
   }
 
+  .component-left-margin-section--headerBlock {
+    .component-price-cta__cancel {
+      background-color: #fff000;
+    }
+
+    .component-grid-picture__image {
+      margin-left: auto;
+      margin-right: auto;
+      @include mq($until: tablet) {
+        margin-top: 16px;
+      }
+      @include mq($from: tablet, $until: leftCol) {
+        margin-top: 35px;
+      }
+      @include mq($from: leftCol) {
+        margin-top: 37px;
+        margin-left: 12px;
+      }
+    }
+  }
 }
