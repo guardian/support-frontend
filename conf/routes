@@ -66,6 +66,7 @@ GET  /uk/subscribe                                 controllers.Subscriptions.lan
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
 GET  /:countryCode/subscribe                       controllers.Subscriptions.legacyRedirect(countryCode: String)
 
+GET  /subscribe/digital                            controllers.Subscriptions.digitalGeoRedirect()
 GET  /uk/subscribe/digital                         controllers.Subscriptions.digital(countryCode="uk")
 GET  /us/subscribe/digital                         controllers.Subscriptions.digital(countryCode="us")
 GET  /int/subscribe/digital                        controllers.Subscriptions.digital(countryCode="int")
