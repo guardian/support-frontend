@@ -4,7 +4,7 @@ import React from 'react';
 import { gridUrl } from 'helpers/theGrid';
 
 export default function Zuck() {
-  const imageUrl = gridUrl('zuck', '500', 'png');
+  const imageUrl = gridUrl('zuck', 500, 'png');
   return (
     <svg className="svg-zuck" height="412" width="404" xmlns="http://www.w3.org/2000/svg">
       <circle cx="236" cy="34" r="33" fill="#00B2FF" />

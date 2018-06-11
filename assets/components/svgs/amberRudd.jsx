@@ -4,7 +4,7 @@ import React from 'react';
 import { gridUrl } from 'helpers/theGrid';
 
 export default function AmberRudd() {
-  const imageUrl = gridUrl('amberRudd', '740', 'png');
+  const imageUrl = gridUrl('amberRudd', 740, 'png');
   return (
     <svg
       className="svg-amber-rudd"
