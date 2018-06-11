@@ -1,12 +1,13 @@
 .component-independent-journalism {
-  background: gu-colour(neutral-6);
+  margin: -1px;
   font-family: $gu-egyptian-web;
   color: #121212;
 }
 
 .component-independent-journalism__content {
   box-sizing: border-box;
-  padding-left: 11px;
+  padding-left: 10px;
+  padding-right: 10px;
   width: 100%;
 }
 
