@@ -4,7 +4,7 @@ import React from 'react';
 import { gridUrl } from 'helpers/theGrid';
 
 export default function AmberZuck() {
-  const amberUrl = gridUrl('amberRudd', '740', 'png');
+  const amberUrl = gridUrl('amberRudd', '500', 'png');
   const zuckUrl = gridUrl('zuck', '500', 'png');
   return (
     <svg className="svg-amber-zuck" xmlns="http://www.w3.org/2000/svg" width="576" height="220" viewBox="0 0 576 220">

@@ -24,9 +24,11 @@ export default function IndependentJournalismSection() {
           </p>
           <AmberRudd />
         </div>
-        <AmberZuck />
       </div>
-      <PriceCtaContainer />
+      <div className="component-independent-journalism__footer">
+        <AmberZuck />
+        <PriceCtaContainer />
+      </div>
     </div>
   );
 }

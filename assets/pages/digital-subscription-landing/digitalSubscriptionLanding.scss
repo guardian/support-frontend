@@ -21,6 +21,10 @@
 #digital-subscription-landing-page-us,
 #digital-subscription-landing-page-au {
   .component-left-margin-section__content {
+    overflow-x: hidden;
+    @include mq($from: leftCol) {
+      overflow-x: visible;
+    }
   }
 
   // ----- Product Block

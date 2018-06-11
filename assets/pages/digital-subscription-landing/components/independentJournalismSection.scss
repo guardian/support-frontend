@@ -1,43 +1,48 @@
 .component-independent-journalism {
   background: gu-colour(neutral-6);
+  font-family: $gu-egyptian-web;
+  color: #121212;
 }
 
 .component-independent-journalism__content {
   padding-left: 11px;
+  width: 100%;
 }
 
 .component-independent-journalism__header {
   width: 100%;
-  font-family: $gu-egyptian-web;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #121212;
+  line-height: 1.12;
+
   @include mq($from: leftCol) {
     width: 620px;
+    font-size: 36px;
+    line-height: 1.17;
   }
 }
 
 .component-independent-journalism__copy {
   width: 100%;
-  font-family: $gu-egyptian-web;
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.11;
-  letter-spacing: normal;
-  color: #121212;
+  line-height: 1.18;
   @include mq($from: leftCol) {
     width: 620px;
+    font-size: 36px;
+    line-height: 1.11;
   }
 }
 
 .component-independent-journalism__wrapper {
   display: flex;
+  position: relative;
+  @include mq($until: leftCol) {
+    padding-bottom: 220px;
+  }
+}
+
+.component-independent-journalism__footer {
   position: relative;
 }
 
@@ -53,7 +58,6 @@
 }
 
 .svg-zuck {
-  float: left;
   position: absolute;
   left: -281px;
   top: -34px;
@@ -64,10 +68,24 @@
   }
 }
 
+
 .svg-amber-zuck {
-  position: relative;
-  left: 152px;
-  top: 7px;
+  left: -112px;
+  position:absolute;
+  top: -220px;
+
+  @include mq($from: mobileMedium) {
+    left: -78px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    left: 24px;
+  }
+
+  @include mq($from: tablet) {
+    left: 163px;
+  }
+
   @include mq($from: leftCol) {
     display: none;
   }
