@@ -14,20 +14,20 @@ import PriceCtaContainer from '../components/priceCtaContainer';
 const pictureSources = [
   {
     gridId: 'digitalSubscriptionHeaderMobile',
-    sizes: '(min-width: 160px) 240px, (max-width: 659px) 240px',
-    media: '(max-width: 659px)',
+    sizes: '(min-width: 160px) 240px, (max-width: 739px) 240px',
+    media: '(max-width: 739px)',
     srcSizes: [342],
   },
   {
     gridId: 'digitalSubscriptionHeaderTablet',
-    sizes: '(min-width: 660px) 407px, (max-width: 1023px) 407px',
-    media: '(min-width: 660px) and (max-width: 1023px)',
+    sizes: '(min-width: 740px) 407px, (max-width: 1139px) 407px',
+    media: '(min-width: 740px) and (max-width: 1139px)',
     srcSizes: [500],
   },
   {
     gridId: 'digitalSubscriptionHeaderDesktop',
-    sizes: '(min-width: 1024px) 809px',
-    media: '(min-width: 1024px)',
+    sizes: '(min-width: 1140px) 809px',
+    media: '(min-width: 1140px)',
     srcSizes: [1000],
   },
 ];
