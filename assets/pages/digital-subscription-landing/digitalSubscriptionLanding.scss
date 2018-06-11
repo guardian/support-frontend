@@ -29,7 +29,7 @@
     .component-left-margin-section__content {
       position: relative;
 
-      @include mq($from: tablet) {
+      @include mq($from: desktop) {
         border-left: 1px solid gu-colour(garnett-neutral-4);
       }
     }
