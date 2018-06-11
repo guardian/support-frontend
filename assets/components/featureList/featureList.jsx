@@ -2,9 +2,11 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
+
+import Heading, { type HeadingRange } from 'components/heading/heading';
 
 
 // ----- Types ----- //
@@ -13,8 +15,8 @@ import { classNameWithModifiers } from 'helpers/utilities';
 /* eslint-disable react/no-unused-prop-types */
 
 export type ListItem =
-  | {| heading: string, text: string |}
-  | {| heading: string |}
+  | {| heading: Node, text: string |}
+  | {| heading: Node |}
   | {| text: string |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -22,6 +24,7 @@ export type ListItem =
 type PropTypes = {
   modifierClass?: string,
   listItems: ListItem[],
+  headingSize: HeadingRange,
 };
 
 
@@ -31,7 +34,7 @@ function FeatureList(props: PropTypes) {
 
   const items = props.listItems.map((item: ListItem) => (
     <li className="component-feature-list__item">
-      <ItemHeading heading={item.heading ? item.heading : null} />
+      <ItemHeading heading={item.heading ? item.heading : null} size={props.headingSize} />
       <ItemText text={item.text ? item.text : null} />
     </li>
   ));
@@ -47,10 +50,17 @@ function FeatureList(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function ItemHeading(props: { heading: ?string }) {
+function ItemHeading(props: { heading: ?Node, size: HeadingRange }) {
 
   if (props.heading) {
-    return <h3 className="component-feature-list__heading">{props.heading}</h3>;
+    return (
+      <Heading
+        className="component-feature-list__heading"
+        size={props.size}
+      >
+        {props.heading}
+      </Heading>
+    );
   }
 
   return null;
