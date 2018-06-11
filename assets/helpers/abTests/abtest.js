@@ -9,6 +9,8 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import { tests } from './abtestDefinitions';
 
 
@@ -55,7 +57,7 @@ type Audience = {
 };
 
 type Audiences = {
-  [IsoCountry | 'ALL']: Audience
+  [IsoCountry | CountryGroupId | 'ALL']: Audience
 };
 
 export type Test = {|
@@ -142,13 +144,13 @@ function userInBreakpoint(audience: Audience): boolean {
 
 }
 
-function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry) {
+function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry, countryGroupId: CountryGroupId) {
 
   if (cookie.get('_post_deploy_user')) {
     return false;
   }
 
-  const audience = audiences[country] || audiences.ALL;
+  const audience = audiences[country] || audiences[countryGroupId] || audiences.ALL;
 
   if (!audience) {
     return false;
@@ -177,7 +179,12 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex];
 }
 
-function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): Participations {
+function getParticipations(
+  abTests: Tests,
+  mvtId: number,
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
+): Participations {
 
   const currentParticipation = getLocalStorageParticipation();
   const participations: Participations = {};
@@ -194,7 +201,7 @@ function getParticipations(abTests: Tests, mvtId: number, country: IsoCountry): 
       participations[testId] = currentParticipation[testId];
     } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
       participations[testId] = notintest;
-    } else if (userInTest(test.audiences, mvtId, country)) {
+    } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
       participations[testId] = notintest;
@@ -221,10 +228,10 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const init = (country: IsoCountry, abTests: Tests = tests): Participations => {
+const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
 
   const mvt: number = getMvtId();
-  const participations: Participations = getParticipations(abTests, mvt, country);
+  const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
   trackABOphan(participations, false);
