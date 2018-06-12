@@ -13,6 +13,7 @@ import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHe
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
+import IndependentJournalismSection from './components/independentJournalismSection';
 import PriceCtaContainer from './components/priceCtaContainer';
 import ProductBlock from './components/productBlock';
 
@@ -48,9 +49,8 @@ const content = (
       <CountrySwitcherHeader />
       <DigitalSubscriptionLandingHeader />
       <ProductBlock />
-      <LeftMarginSection>
-        <h2>Your subscription helps support independent investigative journalism</h2>
-        <PriceCtaContainer />
+      <LeftMarginSection modifierClasses={['grey']}>
+        <IndependentJournalismSection />
       </LeftMarginSection>
       <Footer />
     </div>

@@ -7,7 +7,7 @@ import React from 'react';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { paypalContributionsRedirect } from 'helpers/payPalContributionsCheckout/payPalContributionsCheckout';
+import { paypalPaymentAPIRedirect } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
 import * as storage from 'helpers/storage';
 
@@ -48,7 +48,7 @@ function payWithPayPal(props: PropTypes) {
 
     if (props.canClick) {
       storage.setSession('paymentMethod', 'PayPal');
-      paypalContributionsRedirect(
+      paypalPaymentAPIRedirect(
         props.amount,
         props.referrerAcquisitionData,
         props.isoCountry,

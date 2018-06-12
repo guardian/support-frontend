@@ -25,6 +25,8 @@ export const imageCatalogue: {
   paperDigitalCircle: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
   premiumTier: 'fb0c788ddee28f8e0e66d814595cf81d6aa21ec6/0_0_644_448',
   dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
+  amberRudd: 'dc767dbb97ef1f73d363091805aeb91f19424292/0_0_740_740',
+  zuck: '0146a0c72da8b9bec7c28a3bc277dca1d3c58fb4/0_0_510_510',
   digitalSubscriptionHeaderDesktop: '1c1edff99ab1df4f391d95ef458b0410d3ceb555/0_0_4045_1950',
   digitalSubscriptionHeaderTablet: 'ad43b51a060641301dff912731bd2a24a9b18523/0_0_2035_1660',
   digitalSubscriptionHeaderMobile: '3c93c914ea14da695a098bb1712d3bc974d20114/0_0_1200_1755',
