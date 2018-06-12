@@ -4,7 +4,11 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+
+import { addQueryParamsToURL } from 'helpers/url';
+
 import { getPromoCode } from './flashSale';
+
 
 // ----- Types ----- //
 
@@ -146,10 +150,20 @@ function getSubsLinks(
 
 }
 
+// Builds a link to the digital pack checkout.
+function getDigitalCheckout(referrerAcquisitionData: ReferrerAcquisitionData): string {
+
+  return addQueryParamsToURL(`${subsUrl}/checkout`, {
+    acquisitionData: JSON.stringify(referrerAcquisitionData),
+  });
+
+}
+
 
 // ----- Exports ----- //
 
 export {
   getSubsLinks,
   getMemLink,
+  getDigitalCheckout,
 };
