@@ -281,19 +281,31 @@
       background-color: #fff000;
     }
 
-    .svg-title-circles-left {
+    .svg-title-circles--left__mobile {
       position: absolute;
+      z-index: -1;
       top: 295px;
       width: 121px;
-      z-index: -1;
+      @include mq($from: tablet) {
+        display: none;
+      }
     }
 
-    .svg-title-circles-right {
+    .svg-title-circles--right__mobile {
       position: absolute;
-      top: 335px;
-      width: 80px;
-      left: 300px;
       z-index: -1;
+      top: 335px;
+      @include mq($until: mobileMedium) {
+        width: 60px;
+        left: 265px;
+      }
+      @include mq($from: mobileMedium) {
+        width: 80px;
+        left: 300px;
+      }
+      @include mq($from: tablet) {
+        display: none;
+      }
     }
 
     .component-grid-picture__image {

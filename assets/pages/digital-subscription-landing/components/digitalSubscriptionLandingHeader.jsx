@@ -65,7 +65,7 @@ export default function DigitalSubscriptionLandingHeader() {
 function CirclesLeft() {
   return (
     <svg
-      className="svg-title-circles-left"
+      className="svg-title-circles--left__mobile"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 121 158"
       preserveAspectRatio="xMinYMid"
@@ -80,7 +80,7 @@ function CirclesLeft() {
 function CirclesRight() {
   return (
     <svg
-      className="svg-title-circles-right"
+      className="svg-title-circles--right__mobile"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 74 144"
       preserveAspectRatio="xMinYMid"
