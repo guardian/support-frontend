@@ -240,6 +240,7 @@
   }
 
   .headerTitle {
+    position: relative;
     width: 100%;
     height: 92px;
     background-color: #000000;
@@ -281,13 +282,16 @@
   }
 
   .component-left-margin-section--header-block {
+    picture {
+      position: relative;
+    }
+    
     .component-price-cta__cancel {
       background-color: #f6f6f6;
     }
 
     .svg-title-circles--left__mobile {
       position: absolute;
-      z-index: -1;
       top: 300px;
       height: 140px;
       right: calc(50% + 70px);
@@ -304,7 +308,6 @@
 
     .svg-title-circles--left__tablet {
       position: absolute;
-      z-index: -1;
       @include mq($until: tablet) {
         display: none;
       }
@@ -324,7 +327,6 @@
 
     .svg-title-circles--right__mobile {
       position: absolute;
-      z-index: -1;
       top: 335px;
       left: calc(50% + 120px);
       @include mq($until: mobileMedium) {
@@ -340,7 +342,6 @@
 
     .svg-title-circles--right__tablet {
       position: absolute;
-      z-index: -1;
       @include mq($until: tablet) {
         display: none;
       }

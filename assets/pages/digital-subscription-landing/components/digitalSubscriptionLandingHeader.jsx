@@ -41,15 +41,15 @@ const gridPicture = {
 
 export default function DigitalSubscriptionLandingHeader() {
   const leftMarginProps = {
-    modifierClasses: ['header-block'],
+    modifierClasses: ['header-block', 'grey'],
   };
   return (
     <LeftMarginSection {...leftMarginProps}>
       <CirclesLeft />
+      <CirclesRight />
       <div className="gridPicture">
         <GridPicture {...gridPicture} />
       </div>
-      <CirclesRight />
       <div className="headerTitle">
         <div className="headerTitleCopy">
           Support The Guardian with a digital subscription
