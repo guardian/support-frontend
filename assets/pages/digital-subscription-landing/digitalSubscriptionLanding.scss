@@ -284,8 +284,15 @@
     .svg-title-circles--left__mobile {
       position: absolute;
       z-index: -1;
-      top: 295px;
-      width: 121px;
+      top: 300px;
+      height: 140px;
+      right: calc(50% + 70px);
+
+      @include mq($from: mobileMedium) {
+        top: 310px;
+        height: 150px;
+      }
+
       @include mq($from: tablet) {
         display: none;
       }
@@ -309,13 +316,12 @@
       position: absolute;
       z-index: -1;
       top: 335px;
+      left: calc(50% + 120px);
       @include mq($until: mobileMedium) {
         width: 60px;
-        left: 265px;
       }
       @include mq($from: mobileMedium) {
         width: 80px;
-        left: 300px;
       }
       @include mq($from: tablet) {
         display: none;

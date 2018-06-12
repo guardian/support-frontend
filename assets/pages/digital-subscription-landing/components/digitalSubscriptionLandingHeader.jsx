@@ -64,16 +64,16 @@ export default function DigitalSubscriptionLandingHeader() {
 
 function CirclesLeft() {
   return (
-    <span>
+    <div>
       <svg
         className="svg-title-circles--left__mobile"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 121 158"
+        viewBox="0 0 144 158"
         preserveAspectRatio="xMinYMid"
       >
-        <circle cx="73" cy="48" r="48" fill="#ffe501" />
-        <circle cx="5" cy="82" r="28" fill="#dcdcdc" />
-        <circle cx="48" cy="125" r="33" fill="#00b2ff" />
+        <circle cx="96" cy="48" r="48" fill="#ffe501" />
+        <circle cx="28" cy="82" r="28" fill="#dcdcdc" />
+        <circle cx="71" cy="125" r="33" fill="#00b2ff" />
       </svg>
       <svg
         className="svg-title-circles--left__tablet"
@@ -85,13 +85,13 @@ function CirclesLeft() {
         <circle cx="211" cy="146" r="145" fill="#ff7f0f" />
         <circle cx="83" cy="334" r="83" fill="#ffabdb" />
       </svg>
-    </span>
+    </div>
   );
 }
 
 function CirclesRight() {
   return (
-    <span>
+    <div>
       <svg
         className="svg-title-circles--right__mobile"
         xmlns="http://www.w3.org/2000/svg"
@@ -111,6 +111,6 @@ function CirclesRight() {
         <circle cx="58" cy="35" r="35" fill="#00b2ff" />
         <circle cx="83" cy="150" r="83" fill="#ffef01" />
       </svg>
-    </span>
+    </div>
   );
 }
