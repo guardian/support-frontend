@@ -154,6 +154,7 @@ function getSubsLinks(
 function getDigitalCheckout(referrerAcquisitionData: ReferrerAcquisitionData): string {
 
   return addQueryParamsToURL(`${subsUrl}/checkout`, {
+    promoCode: defaultPromos.digital,
     acquisitionData: JSON.stringify(referrerAcquisitionData),
   });
 
