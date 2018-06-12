@@ -316,8 +316,28 @@ function errorMessage(
 
 }
 
-function getOneOffName(countryGroupId: CountryGroupId) {
-  return countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
+function getOneOffName(countryGroupId: CountryGroupId, oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest') {
+  let response = 'one-time';
+
+  switch (oneOffSingleOneTimeTestVariant) {
+    case 'control':
+      response = 'One-off';
+      break;
+    case 'single':
+      response = 'Single';
+      break;
+    case 'once':
+      response = 'Just once';
+      break;
+    case 'oneTime':
+      response = 'One-time';
+      break;
+    default:
+      response = countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
+      break;
+  }
+
+  return response;
 }
 
 function getOneOffSpokenName(countryGroupId: CountryGroupId) {
@@ -387,7 +407,7 @@ function getAmountA11yHint(
 
 }
 
-function getContributionTypeRadios(countryGroupId: CountryGroupId) {
+function getContributionTypeRadios(countryGroupId: CountryGroupId, oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest') {
 
   return [
     {
@@ -397,7 +417,7 @@ function getContributionTypeRadios(countryGroupId: CountryGroupId) {
     },
     {
       value: 'ONE_OFF',
-      text: getOneOffName(countryGroupId),
+      text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant),
       accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
       id: 'qa-one-off-toggle',
     },
