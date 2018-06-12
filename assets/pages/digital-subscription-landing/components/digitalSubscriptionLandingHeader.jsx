@@ -41,7 +41,7 @@ const gridPicture = {
 
 export default function DigitalSubscriptionLandingHeader() {
   const leftMarginProps = {
-    modifierClasses: ['headerBlock'],
+    modifierClasses: ['header-block'],
   };
   return (
     <LeftMarginSection {...leftMarginProps}>
