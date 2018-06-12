@@ -306,9 +306,15 @@
       }
       @include mq($from: tablet) {
         top: 200px;
-        left: 0px;
+        right: calc(50% + 10px);
         width: 374px;
         height: 418px;
+      }
+      @include mq($from: leftCol) {
+        top: 235px;
+        right: calc(50% + 210px);
+        height: 430px;
+        width: 430px;
       }
     }
 
@@ -336,15 +342,12 @@
       }
       @include mq($from: tablet) {
         top: 300px;
-        left: 547px;
+        left: calc(50% + 177px);
         width: 210px;
       }
       @include mq($from: leftCol) {
         top: 350px;
-        left: 877px;
-      }
-      @include mq($from: wide) {
-        left: 958px;
+        left: calc(50% + 307px);
       }
     }
 
