@@ -10,6 +10,7 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import { init as pageInit } from 'helpers/page/page';
 
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import PriceCtaContainer from './components/priceCtaContainer';
@@ -32,10 +33,14 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
+//TODO: just move customer service text internationalisation here like above???
+
 const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   '/subscribe/digital',
   ['GBPCountries', 'UnitedStates', 'International'],
 );
+
+// const CountrySpecificFooter =
 
 
 // ----- Render ----- //
@@ -56,7 +61,7 @@ const content = (
         <h2>Your subscription helps support independent investigative journalism</h2>
         <PriceCtaContainer />
       </LeftMarginSection>
-      <Footer />
+      <Footer customerService={<CustomerService selectedCountryGroup={countryGroupId}/>}/>
     </div>
   </Provider>
 );

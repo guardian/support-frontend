@@ -5,14 +5,19 @@
 import React from 'react';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
+import CustomerService from 'components/customerService/customerService';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
-
+import {
+  countryGroups,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
 type PropTypes = {
   privacyPolicy: boolean,
   disclaimer: boolean,
+  customerService: CustomerService,
 };
 
 
@@ -37,6 +42,14 @@ function Disclaimer(props: { disclaimer: boolean }) {
   return props.disclaimer ? <ContribLegal /> : null;
 }
 
+function CustomerServiceText(props: {customerService: CustomerService}) {
+
+  if (props.customerService) {
+    return props.customerService;
+  }
+  else return null;
+}
+
 
 // ----- Component ----- //
 
@@ -46,6 +59,7 @@ function Footer(props: PropTypes) {
     <footer className="component-footer">
       <div className="component-footer__content gu-content-margin">
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
+        <CustomerServiceText customerService={props.customerService} />
         <small className="component-footer__copyright">{copyrightNotice}</small>
         <Disclaimer disclaimer={props.disclaimer} />
       </div>
@@ -60,6 +74,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  customerService: null
 };
 
 
