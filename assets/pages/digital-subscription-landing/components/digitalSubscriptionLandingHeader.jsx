@@ -64,16 +64,37 @@ export default function DigitalSubscriptionLandingHeader() {
 
 function CirclesLeft() {
   return (
-    <svg
-      className="svg-title-circles--left__mobile"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 121 158"
-      preserveAspectRatio="xMinYMid"
-    >
-      <circle cx="73" cy="48" r="48" fill="#ffe501" />
-      <circle cx="5" cy="82" r="28" fill="#dcdcdc" />
-      <circle cx="48" cy="125" r="33" fill="#00b2ff" />
-    </svg>
+    <span>
+      <svg
+        className="svg-title-circles--left__mobile"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 121 158"
+        preserveAspectRatio="xMinYMid"
+      >
+        <circle cx="73" cy="48" r="48" fill="#ffe501" />
+        <circle cx="5" cy="82" r="28" fill="#dcdcdc" />
+        <circle cx="48" cy="125" r="33" fill="#00b2ff" />
+      </svg>
+      <svg
+        className="svg-title-circles--left__tablet"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 356 417"
+        preserveAspectRatio="xMinYMid"
+      >
+        <circle cx="48" cy="221" r="35" fill="#ffe501" />
+        <circle cx="211" cy="146" r="145" fill="#ff7f0f" />
+        <circle cx="83" cy="334" r="83" fill="#ffabdb" />
+      </svg>
+      <svg
+        className="svg-title-circles--right__tablet"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 167 234"
+        preserveAspectRatio="xMinYMid"
+      >
+        <circle cx="58" cy="35" r="35" fill="#00b2ff" />
+        <circle cx="83" cy="150" r="83" fill="#ffef01" />
+      </svg>
+    </span>
   );
 }
 

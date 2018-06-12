@@ -291,6 +291,20 @@
       }
     }
 
+    .svg-title-circles--left__tablet {
+      position: absolute;
+      z-index: -1;
+      @include mq($until: tablet) {
+        display: none;
+      }
+      @include mq($from: tablet) {
+        top: 200px;
+        left: 0px;
+        width: 374px;
+        height: 418px;
+      }
+    }
+
     .svg-title-circles--right__mobile {
       position: absolute;
       z-index: -1;
@@ -305,6 +319,19 @@
       }
       @include mq($from: tablet) {
         display: none;
+      }
+    }
+
+    .svg-title-circles--right__tablet {
+      position: absolute;
+      z-index: -1;
+      @include mq($until: tablet) {
+        display: none;
+      }
+      @include mq($from: tablet) {
+        top: 300px;
+        left: 547px;
+        width: 210px;
       }
     }
 
