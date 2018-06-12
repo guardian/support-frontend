@@ -337,6 +337,9 @@
         top: 350px;
         left: 877px;
       }
+      @include mq($from: wide) {
+        left: 958px;
+      }
     }
 
     .component-grid-picture__image {
