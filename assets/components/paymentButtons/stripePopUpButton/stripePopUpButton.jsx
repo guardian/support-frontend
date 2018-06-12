@@ -13,7 +13,7 @@ import * as storage from 'helpers/storage';
 import {
   setupStripeCheckout,
   openDialogBox,
-} from 'helpers/stripeCheckout/stripeCheckout';
+} from 'helpers/paymentIntegrations/stripeCheckout';
 
 
 // ---- Types ----- //

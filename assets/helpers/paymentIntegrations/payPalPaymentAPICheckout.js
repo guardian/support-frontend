@@ -25,7 +25,7 @@ type PayPalPaymentAPIPostData = {|
 
 // ----- Functions ----- //
 
-function payPalContributionEndpoint(testUser) {
+function payPalPaymentAPIEndpoint(testUser) {
   if (testUser) {
     return addQueryParamsToURL(
       window.guardian.paymentApiPayPalEndpoint,
@@ -36,7 +36,7 @@ function payPalContributionEndpoint(testUser) {
   return window.guardian.paymentApiPayPalEndpoint;
 }
 
-export function paypalContributionsRedirect(
+export function paypalPaymentAPIRedirect(
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   isoCountry: IsoCountry,
@@ -66,7 +66,7 @@ export function paypalContributionsRedirect(
     body: JSON.stringify(postData),
   };
 
-  fetch(payPalContributionEndpoint(cookie.get('_test_username')), fetchOptions)
+  fetch(payPalPaymentAPIEndpoint(cookie.get('_test_username')), fetchOptions)
     .then((response) => {
       if (response.ok) {
         return response.json();
