@@ -85,6 +85,23 @@ function CirclesLeft() {
         <circle cx="211" cy="146" r="145" fill="#ff7f0f" />
         <circle cx="83" cy="334" r="83" fill="#ffabdb" />
       </svg>
+    </span>
+  );
+}
+
+function CirclesRight() {
+  return (
+    <span>
+      <svg
+        className="svg-title-circles--right__mobile"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 74 144"
+        preserveAspectRatio="xMinYMid"
+      >
+        <circle cx="50" cy="38" r="18" fill="#ffe501" />
+        <circle cx="5" cy="28" r="28" fill="#dcdcdc" />
+        <circle cx="28" cy="98" r="46" fill="#ffabdb" />
+      </svg>
       <svg
         className="svg-title-circles--right__tablet"
         xmlns="http://www.w3.org/2000/svg"
@@ -95,20 +112,5 @@ function CirclesLeft() {
         <circle cx="83" cy="150" r="83" fill="#ffef01" />
       </svg>
     </span>
-  );
-}
-
-function CirclesRight() {
-  return (
-    <svg
-      className="svg-title-circles--right__mobile"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 74 144"
-      preserveAspectRatio="xMinYMid"
-    >
-      <circle cx="50" cy="38" r="18" fill="#ffe501" />
-      <circle cx="5" cy="28" r="28" fill="#dcdcdc" />
-      <circle cx="28" cy="98" r="46" fill="#ffabdb" />
-    </svg>
   );
 }
