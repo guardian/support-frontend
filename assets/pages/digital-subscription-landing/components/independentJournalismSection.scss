@@ -1,7 +1,9 @@
 .component-independent-journalism {
-  margin: -1px;
   font-family: $gu-egyptian-web;
   color: #121212;
+  @include mq($from: desktop) {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
 }
 
 .component-independent-journalism__content {
