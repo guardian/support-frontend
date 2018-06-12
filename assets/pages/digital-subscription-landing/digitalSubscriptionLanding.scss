@@ -333,6 +333,10 @@
         left: 547px;
         width: 210px;
       }
+      @include mq($from: leftCol) {
+        top: 350px;
+        left: 877px;
+      }
     }
 
     .component-grid-picture__image {
