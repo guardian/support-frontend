@@ -12,6 +12,7 @@
 @import '~components/leftMarginSection/leftMarginSection';
 @import '~components/priceCta/priceCta';
 @import '~components/customerService/customerService';
+@import 'components/independentJournalismSection';
 
 
 // ----- Page-Specific Styles ----- //
@@ -22,6 +23,9 @@
 #digital-subscription-landing-page-au {
   .component-left-margin-section__content {
     overflow-x: hidden;
+    @include mq($from: leftCol) {
+      overflow-x: visible;
+    }
   }
 
   // ----- Product Block
@@ -231,4 +235,8 @@
       left: 325px;
     }
   }
+}
+
+.component-left-margin-section--grey {
+  background: gu-colour(neutral-6);
 }

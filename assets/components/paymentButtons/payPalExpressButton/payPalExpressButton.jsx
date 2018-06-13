@@ -9,7 +9,7 @@ import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/switch';
-import { loadPayPalExpress, setup } from 'helpers/payPalExpressCheckout/payPalExpressCheckout';
+import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { Currency } from 'helpers/internationalisation/currency';
 
 
