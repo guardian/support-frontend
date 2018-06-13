@@ -3,6 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 
 // ----- Props ----- //
 
@@ -12,20 +14,20 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-const DigitalPackEmail = (
-  <a className="component-customer-service__digital-pack-email" href="mailto:digitalpack@theguardian.com">
-    digitalpack@theguardian.com
-  </a>
-);
+function DigitalPackEmail() {
+  return (
+    <a className="component-customer-service__digital-pack-email" href="mailto:digitalpack@theguardian.com">
+      digitalpack@theguardian.com
+    </a>
+  );
+}
 
 
 function FAQBlock() {
   const faqLink = 'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions';
   return (
     <div>You may also find help in our
-      <a className="component-customer-service__faq-href" href={faqLink}>
-        Frequently Asked Questions
-      </a>.
+      <a className="component-customer-service__faq-href" href={faqLink}> Frequently Asked Questions</a>.
     </div>
   );
 }

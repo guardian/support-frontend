@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { Node } from 'react';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
@@ -12,6 +13,7 @@ import { privacyLink, copyrightNotice } from 'helpers/legal';
 type PropTypes = {
   privacyPolicy: boolean,
   disclaimer: boolean,
+  children: Node,
 };
 
 
@@ -59,6 +61,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  children: [],
 };
 
 
