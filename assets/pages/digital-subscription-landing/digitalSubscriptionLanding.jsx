@@ -14,7 +14,6 @@ import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
-import PriceCtaContainer from './components/priceCtaContainer';
 import ProductBlock from './components/productBlock';
 
 

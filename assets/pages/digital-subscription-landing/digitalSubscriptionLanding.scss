@@ -239,23 +239,19 @@
     display: block;
   }
 
-  .headerTitle {
+  .digital-subscription-landing-header__title {
     position: relative;
     width: 100%;
     height: 92px;
     background-color: #000000;
   }
 
-  .headerTitleCopy {
+  .digital-subscription-landing-header__title-copy {
     color: #ffffff;
     font-family: $gu-egyptian-web;
     font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: normal;
     margin-left: 10px;
     padding-top: 2px;
-
     font-size: 26px;
     line-height: 29px;
 
@@ -282,7 +278,7 @@
   }
 
   .component-left-margin-section--header-block {
-    picture {
+    .component-grid-picture {
       position: relative;
     }
     
@@ -290,7 +286,7 @@
       background-color: #f6f6f6;
     }
 
-    .svg-title-circles--left__mobile {
+    .svg-title-circles-left-mobile {
       position: absolute;
       top: 300px;
       height: 140px;
@@ -306,7 +302,7 @@
       }
     }
 
-    .svg-title-circles--left__tablet {
+    .svg-title-circles-left-tablet {
       position: absolute;
       @include mq($until: tablet) {
         display: none;
@@ -325,7 +321,7 @@
       }
     }
 
-    .svg-title-circles--right__mobile {
+    .svg-title-circles-right-mobile {
       position: absolute;
       top: 335px;
       left: calc(50% + 120px);
@@ -340,7 +336,7 @@
       }
     }
 
-    .svg-title-circles--right__tablet {
+    .svg-title-circles-right-tablet {
       position: absolute;
       @include mq($until: tablet) {
         display: none;
