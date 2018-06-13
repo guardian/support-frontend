@@ -69,7 +69,7 @@ function RegularContributionsPage(props: PropTypes) {
       <SimpleHeader />
       <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
       <hr className="regular-contrib__multiline" />
-      <div className="regular-contrib gu-content-margin">
+      <div className="regular-contrib">
         <InfoSection heading={`Your ${props.contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
           <PaymentAmount
             amount={props.amount}

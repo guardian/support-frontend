@@ -19,6 +19,7 @@
 }
 
 .component-squares-introduction__content {
+  @include gu-content-margin;
   padding-top: $gu-v-spacing;
   padding-bottom: 220px;
 

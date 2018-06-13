@@ -13,7 +13,7 @@ export default function SimpleHeader() {
 
   return (
     <header className="component-simple-header">
-      <div className="component-simple-header__content gu-content-margin">
+      <div className="component-simple-header__content">
         <a className="component-simple-header__link" href="https://www.theguardian.com">
           <div className="accessibility-hint">The guardian logo</div>
           <SvgGuardianLogo />

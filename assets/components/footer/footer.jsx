@@ -44,7 +44,7 @@ function Footer(props: PropTypes) {
 
   return (
     <footer className="component-footer">
-      <div className="component-footer__content gu-content-margin">
+      <div className="component-footer__content">
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
         {props.children}
         <small className="component-footer__copyright">{copyrightNotice}</small>

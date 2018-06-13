@@ -57,7 +57,7 @@ function OneOffContributionsPage(props: PropTypes) {
       <SimpleHeader />
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
-      <div className="oneoff-contrib gu-content-margin">
+      <div className="oneoff-contrib">
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={props.amount}

@@ -19,7 +19,7 @@ export type PropTypes = {
 
 const CountrySwitcherHeader = (props: PropTypes) => (
   <header className="component-country-switcher-header">
-    <div className="component-country-switcher-header__content gu-content-margin">
+    <div className="component-country-switcher-header__content">
       <CountryGroupSwitcher
         countryGroupIds={props.countryGroupIds}
         selectedCountryGroup={props.selectedCountryGroup}

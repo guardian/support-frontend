@@ -14,6 +14,10 @@
   }
 }
 
+.component-footer__content {
+  @include gu-content-margin;
+}
+
 .component-footer__privacy-policy {
   text-decoration: none;
   color: gu-colour(neutral-4);

@@ -17,7 +17,7 @@ $cta-height: 44px;
 // =============================================================================
 
 // Standard sizes and margins for the content and headers.
-.gu-content-margin {
+@mixin gu-content-margin {
   box-sizing: border-box;
   padding: 0 ($gu-h-spacing / 2);
 
