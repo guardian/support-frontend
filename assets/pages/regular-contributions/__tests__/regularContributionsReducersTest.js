@@ -2,7 +2,7 @@
 import reducer from '../regularContributionsReducers';
 
 
-describe('One-off Reducer', () => {
+describe('Regular contributions Reducer', () => {
 
   it('should return the initial state', () => {
     expect(reducer(20, 'GBP')(undefined, {})).toMatchSnapshot();
