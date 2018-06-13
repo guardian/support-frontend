@@ -85,8 +85,8 @@ function RegularContributionsPage(props: PropTypes) {
           {contributionsPayment}
         </InfoSection>
       </div>
-      <div className="terms-privacy gu-content-filler">
-        <InfoSection className="terms-privacy__content gu-content-filler__inner">
+      <div className="terms-privacy">
+        <InfoSection className="terms-privacy__content">
           <TermsPrivacy country={props.country} />
           <ContribLegal />
         </InfoSection>

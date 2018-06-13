@@ -255,6 +255,8 @@
 	// ----- Legal ----- //
 
 	.terms-privacy {
+		@include gu-content-filler;
+
 		.component-info-section__content {
 			@include mq($from: desktop) {
 				width: 550px;
@@ -263,6 +265,8 @@
 	}
 
 	.terms-privacy__content {
+		@extend .gu-content-margin;
+    flex: 1 0 auto;
 		background-color: #fff;
 		color: gu-colour(media-garnett-main-1);
 	}

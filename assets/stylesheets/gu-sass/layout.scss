@@ -17,21 +17,25 @@ $cta-height: 44px;
 // =============================================================================
 
 // Standard sizes and margins for the content and headers.
-.gu-content-margin, .gu-header-margin {
+.gu-content-margin {
   box-sizing: border-box;
+  padding: 0 ($gu-h-spacing / 2);
 
   @include mq($from: mobileLandscape) {
     width: gu-breakpoint(mobileLandscape);
     margin: 0 auto;
+    padding: 0 $gu-h-spacing;
   }
 
   @include mq($from: phablet) {
     width: gu-breakpoint(phablet);
     margin: 0 auto;
+    padding: 0 auto;
   }
 
   @include mq($from: tablet) {
     width: gu-breakpoint(tablet);
+    padding: 0 $gu-h-spacing;
   }
 
   @include mq($from: desktop) {
@@ -47,53 +51,16 @@ $cta-height: 44px;
   }
 }
 
-// The paddings at different breakpoints for the content.
-.gu-content-margin {
-  padding: 0 ($gu-h-spacing / 2);
-
-  @include mq($from: mobileLandscape) {
-    padding: 0 $gu-h-spacing;
-  }
-
-  @include mq($from: phablet) {
-    padding: 0 auto;
-  }
-
-  @include mq($from: tablet) {
-    padding: 0 $gu-h-spacing;
-  }
-}
-
-.gu-content-wrapper {
-
-  .gu-content {
-    @supports (display: flex) {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-
-      header, footer {
-        flex: 0 0 auto;
-      }
-
-      .gu-content-filler {
-        flex: 1 0 auto;
-        flex-direction: column;
-        display: flex;
-      }
-
-      .gu-content-filler__inner {
-        @extend .gu-content-margin;
-        flex: 1 0 auto;
-      }
-    }
+.gu-content {
+  @supports (display: flex) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 }
 
 @mixin gu-content-filler {
   @supports (display: flex) {
     flex: 1 0 auto;
-    flex-direction: column;
-    display: flex;
   }
 }
