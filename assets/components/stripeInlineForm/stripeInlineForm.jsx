@@ -7,17 +7,16 @@ import React from 'react';
 import { StripeProvider, Elements, CardElement, injectStripe } from 'react-stripe-elements';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import { type Currency } from 'helpers/internationalisation/currency';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 
 
 // ----- Component ----- //
 
 function checkoutForm(props: {stripe: Object, callback: (token: string) => mixed}) {
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-    // Within the context of `Elements`, this call to createToken knows which Element to
-    // tokenize, since there's only one in this group.
     props
       .stripe
       .createToken()
@@ -29,10 +28,10 @@ function checkoutForm(props: {stripe: Object, callback: (token: string) => mixed
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Card details
-        <CardElement hidePostalCode style={{ base: { fontSize: '18px' } }} />
+        <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
+        <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={{ base: { fontSize: '14px', fontFamily: 'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande', lineHeight: '40px' } }} />
       </label>
-      <button>Confirm order</button>
+      <button className="component-stripe-inline-form__submit-payment">Confirm card payment <SvgArrowRightStraight /></button>
     </form>);
 }
 
