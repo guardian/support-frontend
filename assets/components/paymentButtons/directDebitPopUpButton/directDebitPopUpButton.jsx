@@ -13,6 +13,7 @@ import {
   type Action,
 } from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type { Status } from 'helpers/switch';
 
 
@@ -82,7 +83,8 @@ function Button(props: { openPopUp: () => void }) {
       className="component-direct-debit-pop-up-button"
       onClick={props.openPopUp}
     >
-      Pay with direct debit
+      Pay with Direct Debit
+      <SvgArrowRightStraight />
     </button>
   );
 }
