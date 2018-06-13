@@ -73,7 +73,7 @@ export const setupStripeCheckout = (
   });
 });
 
-export const openDialogBox = (amount: number, email: string) => {
+const openDialogBox = (amount: number, email: string) => {
   if (stripeHandler) {
     stripeHandler.open({
       // Must be passed in pence.
@@ -81,4 +81,9 @@ export const openDialogBox = (amount: number, email: string) => {
       email,
     });
   }
+};
+
+export {
+  openDialogBox,
+  getStripeKey,
 };
