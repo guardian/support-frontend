@@ -13,8 +13,8 @@ import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHe
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
-import PriceCtaContainer from './components/priceCtaContainer';
 import ProductBlock from './components/productBlock';
 
 
@@ -46,10 +46,7 @@ const content = (
   <Provider store={store}>
     <div>
       <CountrySwitcherHeader />
-      <LeftMarginSection modifierClasses={['grey']}>
-        <h1>Support The Guardian with a digital subscription</h1>
-        <PriceCtaContainer dark />
-      </LeftMarginSection>
+      <DigitalSubscriptionLandingHeader />
       <ProductBlock />
       <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />

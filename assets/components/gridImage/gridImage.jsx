@@ -1,5 +1,9 @@
 // @flow
 
+// ----- NOTE ----- //
+// This code is designed to work with a single image at one or more crops
+// If you want to work with multiple (different) images, maybe try gridPicture instead
+
 // ----- Imports ----- //
 
 import React from 'react';
