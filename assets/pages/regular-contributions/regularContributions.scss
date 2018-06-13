@@ -255,8 +255,6 @@
 	// ----- Legal ----- //
 
 	.terms-privacy {
-		@include gu-content-filler;
-
 		.component-info-section__content {
 			@include mq($from: desktop) {
 				width: 550px;

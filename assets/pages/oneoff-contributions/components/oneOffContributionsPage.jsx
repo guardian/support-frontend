@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
@@ -52,9 +53,10 @@ function OneOffContributionsPage(props: PropTypes) {
   const Payment = props.inlineCardPaymentVariant === 'inline' ? OneoffInlineContributionsPayment : OneoffContributionsPayment;
 
   return (
-    <div className="gu-content">
-      <TestUserBanner />
-      <SimpleHeader />
+    <Page
+      header={[<TestUserBanner />, <SimpleHeader />]}
+      footer={<Footer />}
+    >
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
       <div className="oneoff-contrib">
@@ -79,8 +81,7 @@ function OneOffContributionsPage(props: PropTypes) {
           <ContribLegal />
         </InfoSection>
       </div>
-      <Footer />
-    </div>
+    </Page>
   );
 }
 

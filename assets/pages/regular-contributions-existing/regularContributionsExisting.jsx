@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
@@ -30,8 +31,10 @@ pageInit();
 // ----- Render ----- //
 
 const content = (
-  <div className="gu-content">
-    <SimpleHeader />
+  <Page
+    header={<SimpleHeader />}
+    footer={<Footer />}
+  >
     <CirclesIntroduction
       headings={['Whoops!']}
       modifierClasses={['compact']}
@@ -52,8 +55,7 @@ const content = (
       />
     </PageSection>
     <QuestionsContact />
-    <Footer />
-  </div>
+  </Page>
 );
 
 renderPage(content, 'regular-contributions-existing-page');

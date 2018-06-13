@@ -70,8 +70,4 @@
       background-color: darken(gu-colour(news-garnett-highlight), 5%);
     }
   }
-
-  .component-spread-the-word {
-    @include gu-content-filler;
-  }
 }

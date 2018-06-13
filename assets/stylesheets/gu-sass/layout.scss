@@ -59,7 +59,7 @@ $cta-height: 44px;
   }
 }
 
-@mixin gu-content-filler {
+.gu-content__main {
   @supports (display: flex) {
     flex: 1 0 auto;
   }

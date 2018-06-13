@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import SquaresIntroduction from 'components/introduction/squaresIntroduction';
@@ -27,8 +28,10 @@ type PropTypes = {
 export default function ErrorPage(props: PropTypes) {
 
   return (
-    <div className="component-error-content gu-content">
-      <SimpleHeader />
+    <Page
+      header={<SimpleHeader />}
+      footer={<Footer />}
+    >
       <SquaresIntroduction
         headings={props.headings}
         highlights={[`Error ${props.errorCode}`]}
@@ -51,8 +54,7 @@ export default function ErrorPage(props: PropTypes) {
           modifierClasses={['guardian-home-page', 'border']}
         />
       </PageSection>
-      <Footer />
-    </div>
+    </Page>
   );
 
 }
