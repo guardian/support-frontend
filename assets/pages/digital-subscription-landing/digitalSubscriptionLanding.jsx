@@ -10,6 +10,7 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import { init as pageInit } from 'helpers/page/page';
 
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import IndependentJournalismSection from './components/independentJournalismSection';
@@ -39,7 +40,6 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   ['GBPCountries', 'UnitedStates', 'International'],
 );
 
-
 // ----- Render ----- //
 
 const content = (
@@ -54,7 +54,7 @@ const content = (
       <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />
       </LeftMarginSection>
-      <Footer />
+      <Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>
     </div>
   </Provider>
 );
