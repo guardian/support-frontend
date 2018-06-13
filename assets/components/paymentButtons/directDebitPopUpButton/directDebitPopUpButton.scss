@@ -20,4 +20,11 @@
   &:hover {
     background-color: #000;
   }
+
+  svg {
+    height: 16px;
+    position: absolute;
+    left: calc(100% - 34px);
+    fill: #fff;
+  }
 }
