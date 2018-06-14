@@ -121,6 +121,10 @@
 
 	// ----- Your contrib
 
+	.oneoff-contrib {
+		@extend .gu-content-margin;
+	}
+
 	.oneoff-contrib__your-contrib {
 		border: none;
 
