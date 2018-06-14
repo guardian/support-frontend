@@ -240,6 +240,18 @@
     display: block;
   }
 
+  .digital-subscription-landing-header__picture {
+    @include mq($until: tablet) {
+      height: 351px
+    }
+    @include mq($from: tablet) {
+      height: 332px;
+    }
+    @include mq($from: leftCol) {
+      height: 389px;
+    }
+  }
+
   .digital-subscription-landing-header__title {
     position: relative;
     width: 100%;
