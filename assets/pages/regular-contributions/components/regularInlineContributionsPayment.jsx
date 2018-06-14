@@ -103,7 +103,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
   }
 
   let stripeInlineForm = (<StripeInlineForm
-    email={props.email}
     callback={postCheckout(
       props.abParticipations,
       props.amount,
@@ -115,6 +114,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
     )}
+    email={props.email}
     dispatch={props.dispatch}
     stripeIsLoaded={props.stripeIsLoaded}
     isStripeLoaded={props.isStripeLoaded}
@@ -156,7 +156,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {stripeInlineForm}
-      <span>or</span>
+      <span className="regular-contribution-payment__or-label">or</span>
       {directDebitButton}
       {payPalButton}
     </section>
