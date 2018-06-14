@@ -130,7 +130,7 @@ class PaypalBackendSpec
         val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
         when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.createPayment(createPaypalPaymentData).futureLeft shouldBe
-          BackendError.fromPaypalAPIError(PaypalApiError(PaypalErrorType.Other, "Error response"))
+          BackendError.fromPaypalAPIError(PaypalApiError(None, None, "Error response"))
       }
 
     }
