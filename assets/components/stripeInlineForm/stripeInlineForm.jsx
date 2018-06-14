@@ -76,7 +76,7 @@ const stripeElementsStyle = {
   base:
     {
       fontSize: '14px',
-      fontFamily: 'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande',
+      fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\'',
       lineHeight: '40px',
     },
 };
@@ -95,7 +95,7 @@ function checkoutForm(props: {stripe: Object, callback: (token: string) => mixed
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
         <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />

@@ -156,7 +156,9 @@ function RegularContributionsPayment(props: PropTypes, context) {
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.hide, props.error)}
       {stripeInlineForm}
-      <span className="regular-contribution-payment__or-label">or</span>
+
+      <p className="regular-contribution-payment__or-label">or</p>
+
       {directDebitButton}
       {payPalButton}
     </section>

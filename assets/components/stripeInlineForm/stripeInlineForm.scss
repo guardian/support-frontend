@@ -1,6 +1,7 @@
 .component-stripe-inline-form__card-element {
   border: 2px solid gu-colour(news-garnett-highlight);
   height: 40px;
+  margin-top: 4px;
   margin-bottom: $gu-v-spacing;
   border-radius: 600px;
   padding: 0 $gu-h-spacing;
@@ -9,7 +10,7 @@
 }
 
 .component-stripe-inline-form__label-content {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .component-stripe-inline-form__submit-payment {
