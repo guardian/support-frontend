@@ -33,58 +33,58 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  digital: getPromoCode('digital', 'p/DXX83X'),
-  paper: getPromoCode('paper', 'p/GXX83P'),
-  paperDig: getPromoCode('paperAndDigital', 'p/GXX83X'),
+  digital: getPromoCode('digital', 'DXX83X'),
+  paper: getPromoCode('paper', 'GXX83P'),
+  paperDig: getPromoCode('paperAndDigital', 'GXX83X'),
 };
 
 const customPromos : {
   [Campaign]: PromoCodes,
 } = {
   seven_fifty_middle: {
-    digital: 'p/D750MIDDLE',
-    paper: 'p/N750MIDDLE',
-    paperDig: 'p/ND750MIDDLE',
+    digital: 'D750MIDDLE',
+    paper: 'N750MIDDLE',
+    paperDig: 'ND750MIDDLE',
   },
   seven_fifty_end: {
-    digital: 'p/D750END',
-    paper: 'p/N750END',
-    paperDig: 'p/ND750END',
+    digital: 'D750END',
+    paper: 'N750END',
+    paperDig: 'ND750END',
   },
   seven_fifty_email: {
-    digital: 'p/D750EMAIL',
-    paper: 'p/N750EMAIL',
-    paperDig: 'p/ND750EMAIL',
+    digital: 'D750EMAIL',
+    paper: 'N750EMAIL',
+    paperDig: 'ND750EMAIL',
   },
   epic_paradise_paradise_highlight: {
-    digital: 'p/DPARAHIGH',
-    paper: 'p/NPARAHIGH',
-    paperDig: 'p/NDPARAHIGH',
+    digital: 'DPARAHIGH',
+    paper: 'NPARAHIGH',
+    paperDig: 'NDPARAHIGH',
   },
   epic_paradise_control: {
-    digital: 'p/DPARACON',
-    paper: 'p/NPARACON',
-    paperDig: 'p/NDPARACON',
+    digital: 'DPARACON',
+    paper: 'NPARACON',
+    paperDig: 'NDPARACON',
   },
   epic_paradise_different_highlight: {
-    digital: 'p/DPARADIFF',
-    paper: 'p/NPARADIFF',
-    paperDig: 'p/NDPARADIFF',
+    digital: 'DPARADIFF',
+    paper: 'NPARADIFF',
+    paperDig: 'NDPARADIFF',
   },
   epic_paradise_standfirst: {
-    digital: 'p/DPARASTAND',
-    paper: 'p/NPARASTAND',
-    paperDig: 'p/NDPARASTAND',
+    digital: 'DPARASTAND',
+    paper: 'NPARASTAND',
+    paperDig: 'NDPARASTAND',
   },
   banner_just_one_control: {
-    digital: 'p/DBANJUSTCON',
-    paper: 'p/NBANJUSTCON',
-    paperDig: 'p/NDBANJUSTCON',
+    digital: 'DBANJUSTCON',
+    paper: 'NBANJUSTCON',
+    paperDig: 'NDBANJUSTCON',
   },
   banner_just_one_just_one: {
-    digital: 'p/DBANJUSTONE',
-    paper: 'p/NBANJUSTONE',
-    paperDig: 'p/NDBANJUSTONE',
+    digital: 'DBANJUSTONE',
+    paper: 'NBANJUSTONE',
+    paperDig: 'NDBANJUSTONE',
   },
 };
 
@@ -114,9 +114,9 @@ function buildSubsUrls(
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
   params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
-  const paper = `${subsUrl}/${promoCodes.paper}?${params.toString()}`;
-  const paperDig = `${subsUrl}/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `${subsUrl}/${promoCodes.digital}?${params.toString()}`;
+  const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
+  const digital = `${subsUrl}/p/${promoCodes.digital}?${params.toString()}`;
 
   return {
     digital,

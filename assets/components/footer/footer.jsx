@@ -3,16 +3,17 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { Node } from 'react';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
-
 
 // ----- Props ----- //
 
 type PropTypes = {
   privacyPolicy: boolean,
   disclaimer: boolean,
+  children: Node,
 };
 
 
@@ -37,7 +38,6 @@ function Disclaimer(props: { disclaimer: boolean }) {
   return props.disclaimer ? <ContribLegal /> : null;
 }
 
-
 // ----- Component ----- //
 
 function Footer(props: PropTypes) {
@@ -46,6 +46,7 @@ function Footer(props: PropTypes) {
     <footer className="component-footer">
       <div className="component-footer__content gu-content-margin">
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
+        {props.children}
         <small className="component-footer__copyright">{copyrightNotice}</small>
         <Disclaimer disclaimer={props.disclaimer} />
       </div>
@@ -60,6 +61,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  children: [],
 };
 
 

@@ -1,0 +1,24 @@
+.component-customer-service__text {
+  color: gu-colour(neutral-4);
+  font-weight: 400;
+  display: block;
+  padding: 3px 0;
+}
+
+.component-customer-service__digital-pack-email {
+  color: gu-colour(neutral-4);
+  text-decoration: none;
+}
+
+.component-customer-service__faq-href {
+  color: gu-colour(neutral-4);
+  text-decoration: none;
+}
+
+.component-customer-service__digital-pack-email:hover {
+  text-decoration: underline;
+}
+
+.component-customer-service__faq-href:hover {
+  text-decoration: underline;
+}

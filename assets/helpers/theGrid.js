@@ -25,6 +25,11 @@ export const imageCatalogue: {
   paperDigitalCircle: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
   premiumTier: 'fb0c788ddee28f8e0e66d814595cf81d6aa21ec6/0_0_644_448',
   dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
+  amberRudd: '33d55e682e496b355baed45c0d92ca7dedbc6eff/0_0_370_370',
+  zuck: 'e6142101bc909caee866be05ced677c54e9d3b4e/0_0_374_374',
+  digitalSubscriptionHeaderDesktop: '01f9a081d0f78cb057ca585725f2742bed5a98fb/0_0_4045_1945',
+  digitalSubscriptionHeaderTablet: '4d588918cae445d7ded1e68960286fd91217434b/0_0_2035_1660',
+  digitalSubscriptionHeaderMobile: 'ed4028ccd5abd85b330114e3ef48660358f63969/0_0_1200_1755',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
@@ -38,7 +43,7 @@ export type ImageId = $Keys<typeof imageCatalogue>;
 export function gridUrl(
   gridId: ImageId,
   size: number,
-  imgType: ImageType = 'jpg',
+  imgType?: ImageType = 'jpg',
 ): string {
 
   const path = `${imageCatalogue[gridId]}/${size}.${imgType}`;
@@ -56,7 +61,7 @@ export function gridUrl(
 export function gridSrcset(
   gridId: ImageId,
   sizes: number[],
-  imgType: ImageType = 'jpg',
+  imgType?: ImageType,
 ): string {
 
   const sources = sizes.map(size => `${gridUrl(gridId, size, imgType)} ${size}w`);

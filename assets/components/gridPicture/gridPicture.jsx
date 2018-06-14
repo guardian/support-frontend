@@ -1,12 +1,16 @@
 // @flow
 
+// ----- NOTE ----- //
+// This code is designed to work with multiple image sources and crops (different pictures)
+// If you want to work with a single image at different crops, maybe consider gridImage instead
+
 // ----- Imports ----- //
 
 import React from 'react';
 
 import { gridSrcset, gridUrl } from 'helpers/theGrid';
 
-import type { ImageId } from 'helpers/theGrid';
+import type { ImageId, ImageType } from 'helpers/theGrid';
 
 
 // ----- Types ----- //
@@ -19,6 +23,7 @@ type Source = {
   sizes: string,
   media: string,
   srcSizes: number[],
+  imgType: ImageType,
 };
 
 /* eslint-enable react/no-unused-prop-types */
@@ -28,6 +33,7 @@ type PropTypes = {
   fallback: string,
   fallbackSize: number,
   altText: string,
+  fallbackImgType: ImageType,
 };
 
 
@@ -37,7 +43,7 @@ export default function GridPicture(props: PropTypes) {
 
   const sources = props.sources.map((source) => {
 
-    const srcSet = gridSrcset(source.gridId, source.srcSizes);
+    const srcSet = gridSrcset(source.gridId, source.srcSizes, source.imgType);
     return <source sizes={source.sizes} media={source.media} srcSet={srcSet} />;
 
   });
@@ -47,7 +53,7 @@ export default function GridPicture(props: PropTypes) {
       {sources}
       <img
         className="component-grid-picture__image"
-        src={gridUrl(props.fallback, props.fallbackSize)}
+        src={gridUrl(props.fallback, props.fallbackSize, props.fallbackImgType)}
         alt={props.altText}
       />
     </picture>
@@ -60,4 +66,5 @@ export default function GridPicture(props: PropTypes) {
 
 GridPicture.defaultProps = {
   altText: '',
+  fallbackImgType: 'jpg',
 };

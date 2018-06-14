@@ -10,9 +10,11 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import { init as pageInit } from 'helpers/page/page';
 
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import PriceCtaContainer from './components/priceCtaContainer';
+import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
+import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 
 
@@ -38,23 +40,18 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   ['GBPCountries', 'UnitedStates', 'International'],
 );
 
-
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <div>
       <CountrySwitcherHeader />
-      <LeftMarginSection>
-        <h1>Support The Guardian with a digital subscription</h1>
-        <PriceCtaContainer dark />
-      </LeftMarginSection>
+      <DigitalSubscriptionLandingHeader />
       <ProductBlock />
-      <LeftMarginSection>
-        <h2>Your subscription helps support independent investigative journalism</h2>
-        <PriceCtaContainer />
+      <LeftMarginSection modifierClasses={['grey']}>
+        <IndependentJournalismSection />
       </LeftMarginSection>
-      <Footer />
+      <Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>
     </div>
   </Provider>
 );
