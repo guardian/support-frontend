@@ -6,7 +6,7 @@ deployments:
     app: workers
     parameters:
       templatePath: cfn.yaml
-  monthly-contributions:
+  support-workers:
     type: aws-lambda
     parameters:
       bucket: support-workers-dist
@@ -18,5 +18,5 @@ deployments:
         - "-FailureHandlerLambda-"
         - "-ContributionCompletedLambda-"
         - "-SendAcquisitionEventLambda-"
-      fileName: monthly-contributions.jar
+      fileName: support-workers.jar
     dependencies: [cfn]

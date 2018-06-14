@@ -9,6 +9,6 @@
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
     Code:
       S3Bucket: support-workers-dist
-      S3Key: !Sub support/${Stage}/monthly-contributions/monthly-contributions.jar
+      S3Key: !Sub support/${Stage}/support-workers/support-workers.jar
     Runtime: "java8"
     Timeout: "60"

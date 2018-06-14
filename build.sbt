@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
   .configs(IntegrationTest)
   .settings(
-    name := "monthly-contributions",
+    name := "support-workers",
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.3.3",
       "org.joda" % "joda-convert" % "2.0.1",
