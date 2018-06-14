@@ -11,13 +11,14 @@ import { type Status } from 'helpers/switch';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
+import type { Dispatch } from 'redux';
 
 
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  dispatch: () => mixed,
+  dispatch: Dispatch<*>,
   stripeIsLoaded: () => mixed,
   isStripeLoaded: boolean,
   currency: Currency,
