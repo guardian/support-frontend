@@ -22,7 +22,7 @@ type PropTypes = {
   isStripeLoaded: boolean,
   currency: Currency,
   isTestUser: boolean,
-  callback: ()=> mixed,
+  callback: () => mixed,
   switchStatus: Status,
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -31,7 +31,7 @@ type PropTypes = {
 // ---- Auxiliary functions ----- //
 
 const setupStripeInlineForm = (dispatch: Function, stripeIsLoaded: () => mixed) => {
-  const htmlElement = document.querySelector('#stripe-js');
+  const htmlElement = document.getElementById('#stripe-js');
 
   if (htmlElement !== null) {
     htmlElement.addEventListener(
