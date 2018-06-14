@@ -1,3 +1,4 @@
+
 # support.theguardian.com
 
 Frontend for the new supporter platform: [https//support.theguardian.com/](https//support.theguardian.com/)
@@ -22,5 +23,5 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 
 ## Getting started
 
-Follow the instructions in [**setup.md**](https://github.com/guardian/support-frontend/wiki/Getting-Started-(Local-Setup)) to setup your dev environment and
+Follow the instructions in [**setup.md**](https://github.com/guardian/support-frontend/wiki/01.-Getting-Started-(Local-Setup)) to setup your dev environment and
 get `support-frontend` running locally.
