@@ -49,7 +49,7 @@ type PropTypes = {
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
   isStripeLoaded: boolean,
-  stripeIsLoaded: () => mixed,
+  stripeIsLoaded: void => void,
 };
 
 
@@ -115,7 +115,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
       context.store.getState,
     )}
     email={props.email}
-    dispatch={props.dispatch}
     stripeIsLoaded={props.stripeIsLoaded}
     isStripeLoaded={props.isStripeLoaded}
     currency={props.currency}
@@ -186,11 +185,15 @@ function mapStateToProps(state) {
     directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
-    stripeIsLoaded: stripeInlineFormActionsFor('regularContributions').stripeIsLoaded,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
   };
 }
 
+const mapDispatchToProps = {
+  stripeIsLoaded: stripeInlineFormActionsFor('regularContributions').stripeIsLoaded,
+};
+
+
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(RegularContributionsPayment);
+export default connect(mapStateToProps, mapDispatchToProps)(RegularContributionsPayment);

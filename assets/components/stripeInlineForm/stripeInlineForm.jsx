@@ -11,15 +11,13 @@ import { type Status } from 'helpers/switch';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
-import type { Dispatch } from 'redux';
 
 
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  dispatch: Dispatch<*>,
-  stripeIsLoaded: () => mixed,
+  stripeIsLoaded: void => void,
   isStripeLoaded: boolean,
   currency: Currency,
   isTestUser: boolean,
@@ -31,14 +29,14 @@ type PropTypes = {
 
 // ---- Auxiliary functions ----- //
 
-const setupStripeInlineForm = (dispatch: Function, stripeIsLoaded: () => mixed) => {
+const setupStripeInlineForm = (stripeIsLoaded: void => void) => {
   const htmlElement = document.getElementById('#stripe-js');
 
   if (htmlElement !== null) {
     htmlElement.addEventListener(
       'load',
       () => {
-        dispatch(stripeIsLoaded());
+        stripeIsLoaded();
       },
     );
   }
@@ -50,7 +48,7 @@ const setupStripeInlineForm = (dispatch: Function, stripeIsLoaded: () => mixed) 
 function StripeInlineFormComp(props: PropTypes) {
 
   if (props.isStripeLoaded === false && window.Stripe === undefined) {
-    setupStripeInlineForm(props.dispatch, props.stripeIsLoaded);
+    setupStripeInlineForm(props.stripeIsLoaded);
     return null;
   }
 
