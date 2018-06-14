@@ -1,4 +1,6 @@
 .component-stripe-inline-form__card-element {
+  @extend .gu-content-margin;
+
   border: 2px solid gu-colour(news-garnett-highlight);
   height: 40px;
   margin-top: 4px;
@@ -6,7 +8,13 @@
   border-radius: 600px;
   padding: 0 $gu-h-spacing;
   line-height: 40px;
-  width: 260px;
+  width: 100%;
+
+  @include mq($from: desktop) {
+    width: 304px;
+    margin-left: 0;
+  }
+
 }
 
 .component-stripe-inline-form__label-content {
@@ -14,8 +22,9 @@
 }
 
 .component-stripe-inline-form__submit-payment {
-  width: 304px;
+
   text-align: left;
+  background-color: gu-colour(news-garnett-highlight);
   border-radius: 600px;
   font-family: $gu-text-sans-web;
   font-size: 14px;
@@ -26,8 +35,11 @@
   padding-left: 20px;
   cursor: pointer;
   position: relative;
+  width: 100%;
 
-  background-color: gu-colour(news-garnett-highlight);
+  @include mq($from: phablet) {
+    width: 304px;
+  }
 
   &:hover {
     background-color: darken(gu-colour(news-garnett-highlight), 5%);
