@@ -36,7 +36,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
 
   def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] = {
     if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.apply("Amount exceeds the maximum allowed ")).toEitherT[Future]
+      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
     } else {
       Future(Charge.create(getChargeParams(data), requestOptions))
         .attemptT
@@ -97,7 +97,7 @@ class CurrencyBasedStripeService(default: DefaultStripeService, au: AustraliaStr
       case None => {
         val errorMessage = s"Invalid currency. $stripeCurrency"
         logger.error(errorMessage)
-        Left(StripeApiError.apply(errorMessage)).toEitherT[Future]
+        Left(StripeApiError.fromString(errorMessage)).toEitherT[Future]
       }
     }
   }

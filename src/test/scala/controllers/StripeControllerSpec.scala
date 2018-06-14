@@ -56,7 +56,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.right(Future.successful(()))
 
   val processRefundHookFailure: EitherT[Future, BackendError, Unit] =
-    EitherT.left(Future.successful(BackendError.fromStripeApiError(StripeApiError("Error response"))))
+    EitherT.left(Future.successful(BackendError.fromStripeApiError(StripeApiError.fromString("Error response"))))
 
   val stripeController: StripeController =
     new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
