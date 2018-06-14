@@ -7,7 +7,10 @@ import React from 'react';
 import { StripeProvider, Elements, CardElement, injectStripe } from 'react-stripe-elements';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import { type Currency } from 'helpers/internationalisation/currency';
+import { type  Status } from 'helpers/switch';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import Switchable from 'components/switchable/switchable';
+import PaymentError from 'components/switchable/errorComponents/paymentError';
 
 
 // ----- Component ----- //
@@ -45,6 +48,7 @@ type PropTypes = {
   currency: Currency,
   isTestUser: boolean,
   callback: ()=> mixed,
+  switchStatus: Status,
 };
 
 const setupStripeInlineForm = (dispatch: Function, stripeIsLoaded: () => mixed) => {
@@ -59,7 +63,7 @@ const setupStripeInlineForm = (dispatch: Function, stripeIsLoaded: () => mixed) 
     );
   }
 };
-export default function StripeInlineForm(props: PropTypes) {
+export default function StripeInlineFormComp(props: PropTypes) {
 
   if (props.isStripeLoaded === false && window.Stripe === undefined) {
     setupStripeInlineForm(props.dispatch, props.stripeIsLoaded);
@@ -74,3 +78,11 @@ export default function StripeInlineForm(props: PropTypes) {
     </StripeProvider>
   );
 }
+
+const StripeInlineForm = (props: PropTypes) => (
+  <Switchable
+    status={props.switchStatus}
+    component={() => <StripeInlineFormComp {...props} />}
+    fallback={() => <PaymentError paymentMethod="credit/debit card" />}
+  />
+);
