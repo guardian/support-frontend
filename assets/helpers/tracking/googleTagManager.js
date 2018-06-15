@@ -8,9 +8,11 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import { createStripePaymentRequest } from 'helpers/paymentIntegrations/stripeCheckout';
+
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'CanUsePaymentRequestApi';
 
 // ----- Functions ----- //
 
@@ -35,8 +37,6 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
-// ----- Exports ---//
-
 function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
 
@@ -56,8 +56,29 @@ function pushToDataLayer(event: EventType, participations: Participations) {
   });
 }
 
+function trackWhetherBrowserCanUsePaymentRequestApi(participations: Participations) {
+  const currency = getDataValue('currency', getCurrency) || 'GBP';
+
+  const stripePaymentRequest = createStripePaymentRequest(
+    currency,
+    // TODO: pass real value for isTestUser... but how do I get it!?
+    true,
+    // dummy value for amount
+    1,
+  );
+
+  stripePaymentRequest.canMakePayment().then((canUsePaymentRequestApi) => {
+    if (canUsePaymentRequestApi) {
+      pushToDataLayer('CanUsePaymentRequestApi', participations);
+    }
+  });
+}
+
+// ----- Exports ---//
+
 function init(participations: Participations) {
   pushToDataLayer('DataLayerReady', participations);
+  trackWhetherBrowserCanUsePaymentRequestApi(participations);
 }
 
 function successfulConversion(participations: Participations) {

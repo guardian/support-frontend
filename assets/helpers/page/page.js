@@ -175,6 +175,8 @@ function init<S, A>(
   );
   const commonReducer = createCommonReducer(initialState);
 
+
+
   return createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
