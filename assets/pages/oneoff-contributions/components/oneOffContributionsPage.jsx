@@ -20,6 +20,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import OneoffContributionsPayment from './oneoffContributionsPayment';
+import OneoffInlineContributionsPayment from './oneoffInlineContributionsPayment';
 import FormFields from './formFields';
 
 // ----- Types ----- //
@@ -28,6 +29,7 @@ type PropTypes = {
   amount: number,
   currency: Currency,
   country: IsoCountry,
+  inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
 
 // ----- Map State/Props ----- //
@@ -37,6 +39,7 @@ function mapStateToProps(state) {
     amount: state.page.oneoffContrib.amount,
     currency: state.common.currency,
     country: state.common.country,
+    inlineCardPaymentVariant: state.common.abParticipations.inlineCardPayment,
   };
 }
 
@@ -44,6 +47,10 @@ function mapStateToProps(state) {
 
 function OneOffContributionsPage(props: PropTypes) {
   const contribDescription: string = (props.country === 'US' ? 'one-time' : 'one-off');
+
+  const paymentSectionHeading = props.inlineCardPaymentVariant === 'inline' ? 'Payment' : 'Payment methods';
+  const oneOffContributionsPayment = props.inlineCardPaymentVariant === 'inline' ? <OneoffInlineContributionsPayment /> : <OneoffContributionsPayment />;
+
   return (
     <div className="gu-content">
       <TestUserBanner />
@@ -62,8 +69,8 @@ function OneOffContributionsPage(props: PropTypes) {
           <DisplayName />
           <FormFields />
         </InfoSection>
-        <InfoSection heading="Payment methods" className="oneoff-contrib__payment-methods">
-          <OneoffContributionsPayment />
+        <InfoSection heading={paymentSectionHeading} className="oneoff-contrib__payment-methods">
+          {oneOffContributionsPayment}
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">

@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
+import StripeInlineForm from 'components/stripeInlineForm/stripeInlineForm';
 import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
@@ -18,6 +18,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Status } from 'helpers/switch';
+import { stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
 
 import { checkoutError, type Action } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
@@ -41,6 +42,8 @@ type PropTypes = {
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
+  isStripeLoaded: boolean,
+  stripeIsLoaded: () => void,
 };
 
 // ----- Map State/Props ----- //
@@ -60,6 +63,7 @@ function mapStateToProps(state) {
     currency: state.common.currency,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.oneOffPaymentMethods.payPal,
+    isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
   };
 }
 
@@ -68,6 +72,9 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     dispatch,
     checkoutError: (message: ?string) => {
       dispatch(checkoutError(message));
+    },
+    stripeIsLoaded: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').stripeIsLoaded());
     },
   };
 }
@@ -102,7 +109,6 @@ function formValidation(
 
 }
 
-
 // ----- Component ----- //
 
 /*
@@ -117,16 +123,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
-      <PayPalContributionButton
-        amount={props.amount}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        errorHandler={props.checkoutError}
-        abParticipations={props.abParticipations}
-        switchStatus={props.payPalSwitchStatus}
-      />
-      <StripePopUpButton
+      <StripeInlineForm
         email={props.email}
         callback={postCheckout(
           props.abParticipations,
@@ -141,11 +138,23 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           validateEmailAddress(props.email),
           props.checkoutError,
         )}
+        stripeIsLoaded={props.stripeIsLoaded}
+        isStripeLoaded={props.isStripeLoaded}
         currency={props.currency}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
-        amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
+      />
+
+      <p className="oneoff-contribution-payment__or-label">or</p>
+      <PayPalContributionButton
+        amount={props.amount}
+        referrerAcquisitionData={props.referrerAcquisitionData}
+        isoCountry={props.isoCountry}
+        countryGroupId={props.countryGroupId}
+        errorHandler={props.checkoutError}
+        abParticipations={props.abParticipations}
+        switchStatus={props.payPalSwitchStatus}
       />
     </section>
   );
