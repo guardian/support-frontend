@@ -29,15 +29,13 @@ type PropTypes = {
 
 // ---- Auxiliary functions ----- //
 
-const setupStripeInlineForm = (stripeIsLoaded: void => void) => {
+const setupStripeInlineForm = (stripeIsLoaded: () => void) => {
   const htmlElement = document.getElementById('#stripe-js');
 
   if (htmlElement !== null) {
     htmlElement.addEventListener(
       'load',
-      () => {
-        stripeIsLoaded();
-      },
+      stripeIsLoaded,
     );
   }
 };

@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import type { Dispatch } from 'redux';
 import StripeInlineForm from 'components/stripeInlineForm/stripeInlineForm';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
@@ -189,9 +190,14 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  stripeIsLoaded: stripeInlineFormActionsFor('regularContributions').stripeIsLoaded,
-};
+function mapDispatchToProps(dispatch: Dispatch<*>) {
+  return ({
+    stripeIsLoaded: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').stripeIsLoaded());
+    },
+    dispatch,
+  });
+}
 
 
 // ----- Exports ----- //
