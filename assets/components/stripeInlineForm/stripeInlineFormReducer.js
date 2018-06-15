@@ -9,6 +9,7 @@ import type { Action } from './stripeInlineFormActions';
 
 export type State = {|
   isStripeLoaded: boolean,
+  errorMessage: ?string,
 |};
 
 
@@ -16,6 +17,7 @@ export type State = {|
 
 const initialState: State = {
   isStripeLoaded: false,
+  errorMessage: null,
 };
 
 
@@ -32,6 +34,10 @@ function stripeInlineFormReducerFor(scope: string): Function {
     switch (action.type) {
       case 'STRIPE_IS_LOADED':
         return { ...state, isStripeLoaded: true };
+      case 'SET_ERROR':
+        return { ...state, errorMessage: action.message };
+      case 'RESET_ERROR':
+        return { ...state, errorMessage: null };
       default:
         return state;
     }
