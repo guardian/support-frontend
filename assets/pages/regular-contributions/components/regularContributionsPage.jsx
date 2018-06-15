@@ -19,10 +19,12 @@ import Signout from 'components/signout/signout';
 import { getQueryParameter } from 'helpers/url';
 import { parseContrib, type Contrib } from 'helpers/contributions';
 import { type IsoCountry } from 'helpers/internationalisation/country';
+import { type Currency } from 'helpers/internationalisation/currency';
 
 import FormFields from './formFields';
 import RegularContributionsPayment from './regularContributionsPayment';
-import type { Currency } from '../../../helpers/internationalisation/currency';
+import RegularInlineContributionsPayment from './regularInlineContributionsPayment';
+
 
 // ----- Types ----- //
 
@@ -31,6 +33,7 @@ type PropTypes = {
   currency: Currency,
   contributionType: Contrib,
   country: IsoCountry,
+  inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
 
 // ----- Map State/Props ----- //
@@ -42,6 +45,7 @@ function mapStateToProps(state) {
     currency: state.common.currency,
     contributionType,
     country: state.common.country,
+    inlineCardPaymentVariant: state.common.abParticipations.inlineCardPayment,
   };
 }
 
@@ -55,6 +59,10 @@ const title = {
 // ----- Render ----- //
 
 function RegularContributionsPage(props: PropTypes) {
+
+  const paymentSectionHeading = props.inlineCardPaymentVariant === 'inline' ? 'Payment' : 'Payment methods';
+  const contributionsPayment = props.inlineCardPaymentVariant === 'inline' ? <RegularInlineContributionsPayment contributionType={props.contributionType} /> : <RegularContributionsPayment contributionType={props.contributionType} />;
+
   return (
     <div className="gu-content">
       <TestUserBanner />
@@ -73,8 +81,8 @@ function RegularContributionsPage(props: PropTypes) {
           <DisplayName />
           <FormFields />
         </InfoSection>
-        <InfoSection heading="Payment methods" className="regular-contrib__payment-methods">
-          <RegularContributionsPayment contributionType={props.contributionType} />
+        <InfoSection heading={paymentSectionHeading} className="regular-contrib__payment-methods">
+          {contributionsPayment}
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">

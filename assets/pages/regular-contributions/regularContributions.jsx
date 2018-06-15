@@ -30,7 +30,6 @@ const store = pageInit(reducer(
 
 user.init(store.dispatch);
 
-
 // ----- Render ----- //
 
 const router = (

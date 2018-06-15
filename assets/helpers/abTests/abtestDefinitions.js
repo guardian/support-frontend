@@ -36,4 +36,16 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
+  inlineCardPayment: {
+    variants: ['control', 'inline'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    independent: true,
+    seed: 0,
+  },
 };

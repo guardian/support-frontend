@@ -37,7 +37,7 @@
 @import '~components/textInput/textInput';
 @import '~containerisableComponents/contributionsThankYou/contributionsThankYouPage';
 @import '~containerisableComponents/marketingConsent/marketingConsent';
-
+@import '~components/stripeInlineForm/stripeInlineForm';
 
 // ----- Page-Specific Styles ----- //
 
@@ -272,4 +272,13 @@
 		padding-bottom: $gu-v-spacing * 2;
 		font-size: 14px;
 	}
+}
+
+.regular-contribution-payment__or-label {
+	font-size: 12px;
+	margin-bottom: 4px;
+}
+
+.component-stripe-inline-form {
+	margin-top: -5px;
 }

@@ -1,0 +1,54 @@
+.component-stripe-inline-form__card-element {
+  @extend .gu-content-margin;
+
+  border: 2px solid gu-colour(news-garnett-highlight);
+  height: 40px;
+  margin-top: 4px;
+  margin-bottom: $gu-v-spacing;
+  border-radius: 600px;
+  padding: 0 $gu-h-spacing;
+  line-height: 40px;
+  width: 100%;
+
+  @include mq($from: desktop) {
+    width: 304px;
+    margin-left: 0;
+  }
+
+}
+
+.component-stripe-inline-form__label-content {
+  font-size: 12px;
+}
+
+.component-stripe-inline-form__submit-payment {
+
+  text-align: left;
+  background-color: gu-colour(news-garnett-highlight);
+  border-radius: 600px;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  color: gu-colour(garnett-neutral-1);
+  margin: 0 -2px 20px;
+  height: 40px;
+  border:none;
+  padding-left: 20px;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+
+  @include mq($from: phablet) {
+    width: 304px;
+  }
+
+  &:hover {
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
+  }
+
+  .svg-arrow-right-straight {
+    height: 16px;
+    position: absolute;
+    top: 14px;
+    left: calc(100% - 34px);
+  }
+}
