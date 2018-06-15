@@ -27,7 +27,7 @@ type PropTypes = {
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  canOpen: Function,
+  canOpen: () => boolean,
   switchStatus: Status,
 };
 /* eslint-enable react/no-unused-prop-types */
