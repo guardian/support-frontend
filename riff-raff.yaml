@@ -1,0 +1,22 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: workers
+    parameters:
+      templatePath: cfn.yaml
+  support-workers:
+    type: aws-lambda
+    parameters:
+      bucket: support-workers-dist
+      functionNames:
+        - "-CreatePaymentMethodLambda-"
+        - "-CreateSalesforceContactLambda-"
+        - "-CreateZuoraSubscriptionLambda-"
+        - "-SendThankYouEmailLambda-"
+        - "-FailureHandlerLambda-"
+        - "-ContributionCompletedLambda-"
+        - "-SendAcquisitionEventLambda-"
+      fileName: support-workers.jar
+    dependencies: [cfn]

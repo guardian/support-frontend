@@ -1,8 +1,12 @@
+import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import sbt.Keys.{libraryDependencies, resolvers}
 import scalariform.formatter.preferences.SpacesAroundMultiImports
 
 scalaVersion := "2.12.4"
+organization := "com.gu"
+version := "0.1-SNAPSHOT"
+scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
@@ -16,22 +20,21 @@ lazy val scalaStyleSettings = Seq(
     .setPreference(SpacesAroundMultiImports, false)
 )
 
-lazy val root =
-  project.in(file("."))
-    .settings(
-      name := "support-workers"
-    )
-    .aggregate(common, `monthly-contributions`)
+lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+  scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
+  javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
+  testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
+)
 
 lazy val circeVersion = "0.9.3"
 lazy val awsVersion = "1.11.331"
 lazy val okhttpVersion = "3.10.0"
 
-lazy val common = project
+lazy val root = (project in file("."))
+  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
   .configs(IntegrationTest)
   .settings(
-    name := "guardian-support-common",
-    description := "Common code for the support-workers project",
+    name := "support-workers",
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.3.3",
       "org.joda" % "joda-convert" % "2.0.1",
@@ -51,6 +54,7 @@ lazy val common = project
       "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
       "org.scalatest" %% "scalatest" % "3.0.5" % "it,test",
       "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
+      "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -60,19 +64,6 @@ lazy val common = project
       "io.sentry" % "sentry-logback" % "1.7.4",
       "com.google.code.findbugs" % "jsr305" % "3.0.2"
     ),
-    resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
-    scalaStyleSettings
-  )
-  .settings(Settings.testSettings: _*)
-  .settings(Settings.shared: _*)
-
-lazy val `monthly-contributions` = project
-  .in(file("monthly-contributions"))
-  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
-  .configs(IntegrationTest)
-  .settings(
-    name := "monthly-contributions",
-    description := "AWS Lambdas providing implementations of the Monthly Contribution supporter flow for orchestration by step function",
     riffRaffPackageType := assembly.value,
     riffRaffManifestProjectName := s"support:${name.value}",
     riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
@@ -89,11 +80,10 @@ lazy val `monthly-contributions` = project
         val oldStrategy = (assemblyMergeStrategy in assembly).value
         oldStrategy(y)
     },
-    libraryDependencies ++= Seq(
-      "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test"
-    ),
-    scalaStyleSettings
+    resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
   )
-  .settings(Settings.testSettings: _*)
-  .settings(Settings.shared: _*)
-  .dependsOn(common % "compile->compile;test->test;it->test")
+  .settings(scalaStyleSettings: _*)
+  .settings(testSettings: _*)
+
+
+
