@@ -50,7 +50,10 @@ type PropTypes = {
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
   isStripeLoaded: boolean,
-  stripeIsLoaded: void => void,
+  stripeIsLoaded: () => void,
+  stripeInlineErrorMessage: ?string,
+  stripeInlineSetError: (string) => void,
+  stripeInlineResetError: () => void,
 };
 
 
@@ -122,6 +125,9 @@ function RegularContributionsPayment(props: PropTypes, context) {
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     switchStatus={props.stripeSwitchStatus}
+    errorMessage={props.stripeInlineErrorMessage}
+    setError={props.stripeInlineSetError}
+    resetError={props.stripeInlineResetError}
   />);
 
   let payPalButton = (<PayPalExpressButton
@@ -187,6 +193,7 @@ function mapStateToProps(state) {
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
   };
 }
 
@@ -196,6 +203,12 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
       dispatch(stripeInlineFormActionsFor('regularContributions').stripeIsLoaded());
     },
     dispatch,
+    stripeInlineSetError: (message:string) => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').setError(message));
+    },
+    stripeInlineResetError: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').resetError());
+    },
   });
 }
 
