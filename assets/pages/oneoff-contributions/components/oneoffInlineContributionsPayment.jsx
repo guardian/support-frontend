@@ -27,7 +27,7 @@ import postCheckout from '../helpers/ajax';
 // ----- Types ----- //
 
 type PropTypes = {
-  dispatch: Function,
+  dispatch: Dispatch<*>,
   email: string,
   error: ?string,
   isFormEmpty: boolean,
