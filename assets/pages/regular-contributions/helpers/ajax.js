@@ -18,10 +18,7 @@ import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
-
-
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
-
 
 
 // ----- Setup ----- //
