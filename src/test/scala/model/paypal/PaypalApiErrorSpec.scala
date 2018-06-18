@@ -1,10 +1,13 @@
 package model.paypal
 
+import backend.PaypalBackend
 import com.paypal.api.payments.{Error, ErrorDetails}
 import com.paypal.base.rest.PayPalRESTException
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
+import services.CloudWatchService
+
 import scala.collection.JavaConverters._
 
 class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
@@ -15,7 +18,7 @@ class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
       "build a PaypalApiError" in {
         val errorMessage = "error message"
         val testObj = PaypalApiError.fromString(errorMessage)
-        testObj shouldBe PaypalApiError(None, None, errorMessage)
+        testObj shouldBe PaypalApiError(None, None, None, errorMessage)
       }
     }
     "an Exception is given" should {
@@ -34,14 +37,14 @@ class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
         when(payPalRESTException.getDetails).thenReturn(error)
         when(payPalRESTException.getResponsecode).thenReturn(400)
         val testObj = PaypalApiError.fromThrowable(payPalRESTException)
-        testObj shouldBe PaypalApiError(Some(400), Some("PAYMENT_ALREADY_DONE"), "Unknown error message")
+        testObj shouldBe PaypalApiError(Some(400), Some("PAYMENT_ALREADY_DONE"), None, "Unknown error message")
       }
       "build a PaypalApiError if paypal return response status code 401" in {
         val payPalRESTException = mock[PayPalRESTException]
         val error = mock[Error]
         when(payPalRESTException.getResponsecode).thenReturn(401)
         val testObj = PaypalApiError.fromThrowable(payPalRESTException)
-        testObj shouldBe PaypalApiError(Some(401), None, "Unknown error message")
+        testObj shouldBe PaypalApiError(Some(401), None, None, "Unknown error message")
       }
       "build a PaypalApiError if paypal error contains an error message" in {
         val payPalRESTException = mock[PayPalRESTException]
@@ -50,7 +53,7 @@ class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
         when(error.getMessage).thenReturn("Error message from paypal")
         when(payPalRESTException.getDetails).thenReturn(error)
         val testObj = PaypalApiError.fromThrowable(payPalRESTException)
-        testObj shouldBe PaypalApiError(Some(0), None, "Error message from paypal")
+        testObj shouldBe PaypalApiError(Some(0), None, None, "Error message from paypal")
       }
       "build a PaypalApiError if paypal error contains an issue message" in {
         val issueErrorList = List(new ErrorDetails("field1", "issue1"), new ErrorDetails("field2", "issue2")).asJava
@@ -60,7 +63,7 @@ class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
         when(error.getDetails).thenReturn(issueErrorList)
         when(payPalRESTException.getDetails).thenReturn(error)
         val testObj = PaypalApiError.fromThrowable(payPalRESTException)
-        testObj shouldBe PaypalApiError(Some(0), None, "issue1 - issue2")
+        testObj shouldBe PaypalApiError(Some(0), None, None, "issue1 - issue2")
       }
       "build a PaypalApiError if paypal error contains an error & issue message" in {
         val issueErrorList = List(new ErrorDetails("field1", "issue1"), new ErrorDetails("field2", "issue2")).asJava
@@ -71,7 +74,7 @@ class PaypalApiErrorSpec extends WordSpec with Matchers with MockitoSugar {
         when(error.getMessage).thenReturn("Error message from paypal")
         when(payPalRESTException.getDetails).thenReturn(error)
         val testObj = PaypalApiError.fromThrowable(payPalRESTException)
-        testObj shouldBe PaypalApiError(Some(0), None,"Error message from paypal - issue1 - issue2")
+        testObj shouldBe PaypalApiError(Some(0), None, None,"Error message from paypal - issue1 - issue2")
       }
     }
   }

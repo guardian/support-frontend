@@ -34,12 +34,17 @@ class StripeBackend(
   def createCharge(data: StripeChargeData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, StripeChargeSuccess] =
     stripeService.createCharge(data)
       .bimap(
-        err => BackendError.fromStripeApiError(err),
+        err => {
+          cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+          BackendError.fromStripeApiError(err)
+        },
         charge => {
+          cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
           val email = data.signedInUserEmail.getOrElse(data.paymentData.email)
 
           postPaymentTasks(email, data, charge, countrySubdivisionCode)
             .leftMap { err =>
+              cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
               logger.error(s"Didn't complete post-payment tasks after creating Stripe charge. " +
                 s"Charge: ${charge.toString}. " +
                 s"Error(s): ${err.getMessage}")
@@ -47,7 +52,6 @@ class StripeBackend(
               err
             }
 
-          cloudWatchService.logPaymentSuccess(PaymentProvider.Stripe)
           StripeChargeSuccess.fromCharge(charge)
         }
       )

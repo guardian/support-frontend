@@ -43,6 +43,7 @@ class PaypalBackend(
         BackendError.fromPaypalAPIError(error)
       }
 
+
   /*
    * Used by Android app clients.
    * The Android app creates and approves the payment directly via PayPal.
@@ -51,17 +52,21 @@ class PaypalBackend(
   def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
     paypalService.capturePayment(c)
       .bimap(
-        err => BackendError.fromPaypalAPIError(err),
+        err => {
+          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
+          BackendError.fromPaypalAPIError(err)
+        },
         payment => {
+          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
           postPaymentTasks(payment, c.signedInUserEmail, c.acquisitionData, countrySubdivisionCode)
             .leftMap { err =>
+              cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
               logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
                 s"Payment: ${payment.toString}. " +
                 s"Error(s): ${err.getMessage}")
 
               err
             }
-           cloudWatchService.logPaymentSuccess(PaymentProvider.Paypal)
 
           payment
         }
@@ -70,17 +75,23 @@ class PaypalBackend(
   def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
     paypalService.executePayment(e)
       .bimap(
-        err => BackendError.fromPaypalAPIError(err),
+        err => {
+          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
+          BackendError.fromPaypalAPIError(err)
+        },
         payment => {
+          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
           postPaymentTasks(payment, e.signedInUserEmail, e.acquisitionData, countrySubdivisionCode)
-            .leftMap { err =>
-              logger.error(s"Didn't complete post-payment tasks after executing PayPal payment. " +
-                s"Payment: ${payment.toString}. " +
-                s"Error(s): ${err.getMessage}")
+            .leftMap {
+              err => {
+                cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
+                logger.error(s"Didn't complete post-payment tasks after executing PayPal payment. " +
+                  s"Payment: ${payment.toString}. " +
+                  s"Error(s): ${err.getMessage}")
 
-              err
+                err
+              }
             }
-          cloudWatchService.logPaymentSuccess(PaymentProvider.Paypal)
 
           payment
         }
