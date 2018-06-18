@@ -18,19 +18,19 @@ import * as storage from 'helpers/storage';
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   stripeIsLoaded: void => void,
   isStripeLoaded: boolean,
   currency: Currency,
   isTestUser: boolean,
   callback: Function,
   switchStatus: Status,
-  canOpen: () => boolean,
+  canProceed: () => boolean,
   errorMessage: ?string,
   isPostDeploymentTestUser: boolean,
   setError: (message: string) =>void,
   resetError: () =>void,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 
@@ -64,7 +64,7 @@ function StripeInlineFormComp(props: PropTypes) {
           callback={props.callback}
           currency={props.currency}
           isPostDeploymentTestUser={props.isPostDeploymentTestUser}
-          canOpen={props.canOpen}
+          canProceed={props.canProceed}
           errorMessage={props.errorMessage}
           setError={props.setError}
           resetError={props.resetError}
@@ -97,7 +97,7 @@ function checkoutForm(props: {
   stripe: Object,
   callback: (token: string) => mixed,
   isPostDeploymentTestUser: boolean,
-  canOpen: () => boolean,
+  canProceed: () => boolean,
   errorMessage: ?string,
   setError: (string) => void,
   resetError: () => void,
@@ -110,7 +110,7 @@ function checkoutForm(props: {
     if (props.isPostDeploymentTestUser) {
       const testTokenId = 'tok_visa';
       props.callback(testTokenId);
-    } else if (props.canOpen && props.canOpen()) {
+    } else if (props.canProceed && props.canProceed()) {
       storage.setSession('paymentMethod', 'Stripe');
       props
         .stripe
@@ -145,7 +145,7 @@ const InjectedCheckoutForm = injectStripe(checkoutForm);
 // ----- Default props----- //
 
 StripeInlineForm.defaultProps = {
-  canOpen: () => true,
+  canProceed: () => true,
   switchStatus: 'ON',
 };
 

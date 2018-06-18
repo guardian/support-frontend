@@ -96,7 +96,7 @@ function formValidation(
   isFormEmpty: boolean,
   validEmail: boolean,
   error: ?string => void,
-): Function {
+): () => boolean {
 
   return (): boolean => {
 
@@ -134,7 +134,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
       <StripeInlineForm
-        email={props.email}
         callback={postCheckout(
           props.abParticipations,
           props.dispatch,
@@ -143,7 +142,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
         )}
-        canOpen={formValidation(
+        canProceed={formValidation(
           props.isFormEmpty,
           validateEmailAddress(props.email),
           props.checkoutError,

@@ -118,7 +118,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
     )}
-    email={props.email}
     stripeIsLoaded={props.stripeIsLoaded}
     isStripeLoaded={props.isStripeLoaded}
     currency={props.currency}
