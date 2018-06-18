@@ -45,6 +45,7 @@ type PropTypes = {
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   payPalHasLoaded: boolean,
+  payPalSetHasLoaded: () => void,
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
@@ -144,7 +145,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       context.store.getState,
     )}
     hasLoaded={props.payPalHasLoaded}
-    setHasLoaded={() => props.dispatch(setPayPalHasLoaded())}
+    setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
   />);
 
@@ -205,6 +206,9 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
     },
     stripeInlineResetError: () => {
       dispatch(stripeInlineFormActionsFor('regularContributions').resetError());
+    },
+    payPalSetHasLoaded: () => {
+      dispatch(setPayPalHasLoaded());
     },
   });
 }

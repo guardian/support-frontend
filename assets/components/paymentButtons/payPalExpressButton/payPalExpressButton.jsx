@@ -21,7 +21,7 @@ type PropTypes = {|
   csrf: CsrfState,
   currency: Currency,
   hasLoaded: boolean,
-  setHasLoaded: Function,
+  setHasLoaded: () => void,
   switchStatus: Status,
 |};
 
