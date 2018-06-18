@@ -86,7 +86,7 @@ function setup(
   amount: number,
   currency: Currency,
   csrf: CsrfState,
-  callback: Function,
+  callback: (token: string) => Promise<*>,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {

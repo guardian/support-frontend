@@ -21,7 +21,7 @@ import type { Phase } from 'components/directDebit/directDebitActions';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  callback: Function,
+  callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string) => Promise<*>,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,

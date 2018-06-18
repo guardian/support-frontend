@@ -32,7 +32,7 @@ import { contributionsEmail } from 'helpers/legal';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  callback: Function,
+  callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string) => Promise<*>,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,7 +48,9 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (callback: Function) => void,
+  confirmDirectDebitClicked: (
+    callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string
+    ) => Promise<*>) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 

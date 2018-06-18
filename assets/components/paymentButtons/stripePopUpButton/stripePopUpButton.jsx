@@ -19,9 +19,9 @@ import {
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   amount: number,
-  callback: Function,
+  callback: (token: string) => Promise<*>,
   closeHandler: Function,
   currency: Currency,
   email: string,
@@ -29,7 +29,7 @@ type PropTypes = {
   isPostDeploymentTestUser: boolean,
   canOpen: () => boolean,
   switchStatus: Status,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

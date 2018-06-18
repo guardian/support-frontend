@@ -23,7 +23,7 @@ type PropTypes = {|
   isStripeLoaded: boolean,
   currency: Currency,
   isTestUser: boolean,
-  callback: Function,
+  callback: (token: string) => Promise<*>,
   switchStatus: Status,
   canProceed: () => boolean,
   errorMessage: ?string,

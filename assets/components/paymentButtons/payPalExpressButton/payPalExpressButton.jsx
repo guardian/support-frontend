@@ -15,15 +15,15 @@ import type { Currency } from 'helpers/internationalisation/currency';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   amount: number,
-  currency: Currency,
+  callback: (token: string) => Promise<*>,
   csrf: CsrfState,
-  callback: Function,
-  setHasLoaded: Function,
+  currency: Currency,
   hasLoaded: boolean,
+  setHasLoaded: Function,
   switchStatus: Status,
-};
+|};
 
 
 // ----- Component ----- //

@@ -47,7 +47,7 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
 };
 
 export const setupStripeCheckout = (
-  callback: Function,
+  callback: (token: string) => Promise<*>,
   closeHandler: ?Function,
   currency: string,
   isTestUser: boolean,

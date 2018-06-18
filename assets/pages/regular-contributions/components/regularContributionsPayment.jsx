@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import type { Dispatch } from 'redux';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
@@ -29,7 +30,7 @@ import { postCheckout } from '../helpers/ajax';
 export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
 type PropTypes = {
-  dispatch: Function,
+  dispatch: Dispatch<*>,
   email: string,
   hide: boolean,
   error: ?string,
