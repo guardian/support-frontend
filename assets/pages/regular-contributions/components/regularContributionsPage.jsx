@@ -27,7 +27,6 @@ import RegularContributionsPayment from './regularContributionsPayment';
 import RegularInlineContributionsPayment from './regularInlineContributionsPayment';
 
 
-
 // ----- Types ----- //
 
 type PropTypes = {
