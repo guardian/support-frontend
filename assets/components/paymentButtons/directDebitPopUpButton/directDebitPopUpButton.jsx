@@ -15,13 +15,14 @@ import {
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type { Status } from 'helpers/switch';
+import type { RegularCheckoutCallback } from 'helpers/checkouts';
 
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string) => Promise<*>,
+  callback: RegularCheckoutCallback,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
   switchStatus: Status,
