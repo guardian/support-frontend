@@ -21,6 +21,7 @@ import {
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex, Phase, Action } from 'components/directDebit/directDebitActions';
+import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -32,7 +33,7 @@ import { contributionsEmail } from 'helpers/legal';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string) => Promise<*>,
+  callback: RegularCheckoutCallback,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,9 +49,7 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (
-    callback: (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string
-    ) => Promise<*>) => void,
+  confirmDirectDebitClicked: (callback: RegularCheckoutCallback) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 

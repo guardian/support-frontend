@@ -13,6 +13,7 @@ import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -20,6 +21,7 @@ import type { PaymentMethod } from 'helpers/checkouts';
 
 
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
+
 
 
 // ----- Setup ----- //
@@ -279,7 +281,7 @@ function postCheckout(
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-): (token?: string, accountNumber?: string, sortCode?: string, accountHolderName?: string) => Promise<*> {
+): RegularCheckoutCallback {
   return (
     token?: string,
     accountNumber?: string,
