@@ -23,7 +23,7 @@ type PropTypes = {
   isStripeLoaded: boolean,
   currency: Currency,
   isTestUser: boolean,
-  callback: () => mixed,
+  callback: Function,
   switchStatus: Status,
   canOpen: () => boolean,
   errorMessage: ?string,
@@ -127,7 +127,7 @@ function checkoutForm(props: {
     }
   };
 
-  const errorComponent = props.inlineStripeErrorMessage !== null ? <ErrorMessage message={props.errorMessage} /> : null;
+  const errorComponent = props.errorMessage !== null ? <ErrorMessage message={props.errorMessage} /> : null;
 
   return (
     <form className="component-stripe-inline-form" onSubmit={handleSubmit}>

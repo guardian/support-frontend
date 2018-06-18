@@ -44,6 +44,9 @@ type PropTypes = {
   payPalSwitchStatus: Status,
   isStripeLoaded: boolean,
   stripeIsLoaded: () => void,
+  stripeInlineErrorMessage: ?string,
+  stripeInlineSetError: (string) => void,
+  stripeInlineResetError: () => void,
 };
 
 // ----- Map State/Props ----- //
@@ -64,6 +67,7 @@ function mapStateToProps(state) {
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.oneOffPaymentMethods.payPal,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
   };
 }
 
@@ -75,6 +79,12 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     },
     stripeIsLoaded: () => {
       dispatch(stripeInlineFormActionsFor('oneOffContributions').stripeIsLoaded());
+    },
+    stripeInlineSetError: (message: string) => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').setError(message));
+    },
+    stripeInlineResetError: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').resetError());
     },
   };
 }
@@ -144,6 +154,9 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         switchStatus={props.stripeSwitchStatus}
+        errorMessage={props.stripeInlineErrorMessage}
+        setError={props.stripeInlineSetError}
+        resetError={props.stripeInlineResetError}
       />
 
       <p className="oneoff-contribution-payment__or-label">or</p>

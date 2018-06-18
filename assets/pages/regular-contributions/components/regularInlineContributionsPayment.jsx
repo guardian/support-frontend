@@ -203,7 +203,7 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
       dispatch(stripeInlineFormActionsFor('regularContributions').stripeIsLoaded());
     },
     dispatch,
-    stripeInlineSetError: (message:string) => {
+    stripeInlineSetError: (message: string) => {
       dispatch(stripeInlineFormActionsFor('regularContributions').setError(message));
     },
     stripeInlineResetError: () => {

@@ -21,7 +21,7 @@ function stripeInlineFormActionsFor(scope: string): Object {
     },
     resetError(): Action {
       return { type: 'RESET_ERROR', scope };
-    }
+    },
   };
 }
 
