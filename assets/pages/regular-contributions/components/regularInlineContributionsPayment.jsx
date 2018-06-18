@@ -32,7 +32,6 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 
 type PropTypes = {
   dispatch: Function,
-  email: string,
   hide: boolean,
   error: ?string,
   isTestUser: boolean,
@@ -176,7 +175,6 @@ function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: state.page.user.email,
     hide: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
