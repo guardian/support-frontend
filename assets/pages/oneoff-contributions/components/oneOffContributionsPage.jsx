@@ -49,7 +49,7 @@ function OneOffContributionsPage(props: PropTypes) {
   const contribDescription: string = (props.country === 'US' ? 'one-time' : 'one-off');
 
   const paymentSectionHeading = props.inlineCardPaymentVariant === 'inline' ? 'Payment' : 'Payment methods';
-  const oneOffContributionsPayment = props.inlineCardPaymentVariant === 'inline' ? <OneoffInlineContributionsPayment /> : <OneoffContributionsPayment />;
+  const Payment = props.inlineCardPaymentVariant === 'inline' ? OneoffInlineContributionsPayment : OneoffContributionsPayment;
 
   return (
     <div className="gu-content">
@@ -70,7 +70,7 @@ function OneOffContributionsPage(props: PropTypes) {
           <FormFields />
         </InfoSection>
         <InfoSection heading={paymentSectionHeading} className="oneoff-contrib__payment-methods">
-          {oneOffContributionsPayment}
+          <Payment />
         </InfoSection>
       </div>
       <div className="terms-privacy gu-content-filler">
