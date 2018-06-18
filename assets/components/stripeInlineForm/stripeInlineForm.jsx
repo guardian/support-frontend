@@ -28,8 +28,8 @@ type PropTypes = {|
   canProceed: () => boolean,
   errorMessage: ?string,
   isPostDeploymentTestUser: boolean,
-  setError: (message: string) =>void,
-  resetError: () =>void,
+  setError: (message: string) => void,
+  resetError: () => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
