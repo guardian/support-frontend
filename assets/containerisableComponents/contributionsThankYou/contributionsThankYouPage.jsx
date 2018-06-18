@@ -32,6 +32,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       <SimpleHeader />
       <CirclesIntroduction
         headings={['Thank you', 'for a valuable', 'contribution']}
+        modifierClasses={['compact']}
       />
       <div className="multiline-divider" />
       <BodyCopy {...props} />

@@ -67,7 +67,7 @@ function RegularContributionsPage(props: PropTypes) {
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} />
+      <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
       <hr className="regular-contrib__multiline" />
       <div className="regular-contrib gu-content-margin">
         <InfoSection heading={`Your ${props.contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
