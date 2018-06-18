@@ -18,9 +18,9 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Status } from 'helpers/switch';
-import { stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
+import { type Action as StripeInlineFormAction, stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
 
-import { checkoutError, type Action } from '../oneoffContributionsActions';
+import { checkoutError, type Action as OneOffCheckoutAction } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
 
 
@@ -71,7 +71,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(dispatch: Dispatch<OneOffCheckoutAction | StripeInlineFormAction>) {
   return {
     dispatch,
     checkoutError: (message: ?string) => {
