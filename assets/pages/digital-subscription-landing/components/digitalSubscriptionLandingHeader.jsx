@@ -40,7 +40,7 @@ const gridPicture = {
   fallback: 'digitalSubscriptionHeaderDesktop',
   fallbackSize: 500,
   altText: 'digital subscription',
-  fallbackImageType: 'png',
+  fallbackImgType: 'png',
 };
 
 export default function DigitalSubscriptionLandingHeader() {
