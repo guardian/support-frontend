@@ -6,14 +6,14 @@ type ProductType = 'digital' | 'paper' | 'paperAndDigital';
 
 function inOfferPeriod(product: ProductType): boolean {
   // Days are 1 based, months are 0 based
-  const startTime = new Date(2018, 4, 15, 0, 0).getTime(); // 15th May 2018
-  const endTime = new Date(2018, 4, 29, 0, 0).getTime(); // 29th May 2018
+  const startTime = new Date(2018, 5, 18, 0, 0).getTime(); // 18th June 2018
+  const endTime = new Date(2018, 6, 1, 0, 0).getTime(); // 1st July 2018
 
-  // The current sale is paper & paper + digital only, digital is unaffected
+  // The current sale is digital only, paper & paper + digital is unaffected
   const included = {
-    digital: false,
-    paper: true,
-    paperAndDigital: true,
+    digital: true,
+    paper: false,
+    paperAndDigital: false,
   };
 
   const now = Date.now();
@@ -24,15 +24,15 @@ function inOfferPeriod(product: ProductType): boolean {
 // Promo codes
 const promoCodes = {
   digital: {
-    promoCode: 'p/DXX83X',
+    promoCode: 'DPS80S',
     price: '11.99',
   },
   paper: {
-    promoCode: 'p/GST80F',
+    promoCode: 'GST80F',
     price: '5.18',
   },
   paperAndDigital: {
-    promoCode: 'p/GST80G',
+    promoCode: 'GST80G',
     price: '10.81',
   },
 };
