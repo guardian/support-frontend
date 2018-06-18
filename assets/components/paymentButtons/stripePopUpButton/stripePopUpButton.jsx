@@ -22,7 +22,7 @@ import {
 type PropTypes = {|
   amount: number,
   callback: (token: string) => Promise<*>,
-  closeHandler: Function,
+  closeHandler: () => void,
   currency: Currency,
   email: string,
   isTestUser: boolean,

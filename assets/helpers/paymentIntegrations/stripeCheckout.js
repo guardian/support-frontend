@@ -48,7 +48,7 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
 
 export const setupStripeCheckout = (
   callback: (token: string) => Promise<*>,
-  closeHandler: ?Function,
+  closeHandler: ?() => void,
   currency: string,
   isTestUser: boolean,
 ): Promise<void> => loadStripe().then(() => {
@@ -56,7 +56,7 @@ export const setupStripeCheckout = (
   const handleToken = (token) => {
     callback(token.id);
   };
-  const defaultCloseHandler: Function = () => {};
+  const defaultCloseHandler: () => void = () => {};
 
   const stripeKey = getStripeKey(currency, isTestUser);
 
