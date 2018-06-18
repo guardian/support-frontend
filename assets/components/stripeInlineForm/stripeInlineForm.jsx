@@ -127,15 +127,13 @@ function checkoutForm(props: {
     }
   };
 
-  const errorComponent = props.errorMessage !== null ? <ErrorMessage message={props.errorMessage} /> : null;
-
   return (
     <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
         <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />
       </label>
-      {errorComponent}
+      <ErrorMessage message={props.errorMessage} />
       <button className="component-stripe-inline-form__submit-payment">Confirm card payment <SvgArrowRightStraight /></button>
     </form>);
 }
