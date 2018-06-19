@@ -61,9 +61,7 @@ function OneOffContributionsPage(props: PropTypes) {
       <YourDetails>
         <FormFields />
       </YourDetails>
-      <PageSection
-        heading={paymentSectionHeading}
-      >
+      <PageSection heading={paymentSectionHeading}>
         <Payment />
       </PageSection>
       <LegalSectionContainer />
