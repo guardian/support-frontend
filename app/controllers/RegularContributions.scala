@@ -35,41 +35,36 @@ class RegularContributions(
 
   implicit val ar = assets
 
-  def displayForm(useNewSignIn: Option[Boolean] = None): Action[AnyContent] =
-    useNewSignIn.fold(AuthenticatedAction.async { implicit request => displayFormFunciton() })(useNew =>
-      if (useNew)
-        NewSignInFlowAuthenticatedAction.async { implicit request => displayFormFunciton() }
-      else
-        AuthenticatedAction.async { implicit request => displayFormFunciton() })
-
-  def displayFormFunciton()(implicit request: CustomActionBuilders.AuthRequest[AnyContent]): Future[Result] = identityService.getUser(request.user).semiflatMap { fullUser =>
-    isMonthlyContributor(request.user.credentials) map {
-      case Some(true) =>
-        SafeLogger.info(s"Determined that ${request.user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
-        Redirect("/contribute/recurring/existing")
-      case Some(false) | None =>
-        val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-        Ok(
-          monthlyContributions(
-            title = "Support the Guardian | Monthly Contributions",
-            id = "regular-contributions-page",
-            js = "regularContributionsPage.js",
-            css = "regularContributionsPageStyles.css",
-            user = fullUser,
-            uatMode = uatMode,
-            defaultStripeConfig = stripeConfigProvider.get(false),
-            uatStripeConfig = stripeConfigProvider.get(true),
-            payPalConfig = payPalConfigProvider.get(uatMode)
+  def displayForm(useNewSignIn: Option[Boolean] = None): Action[AnyContent] = NewSignInFlowAuthenticatedAction(useNewSignIn).async { implicit request =>
+    identityService.getUser(request.user).semiflatMap { fullUser =>
+      isMonthlyContributor(request.user.credentials) map {
+        case Some(true) =>
+          SafeLogger.info(s"Determined that ${request.user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
+          Redirect("/contribute/recurring/existing")
+        case Some(false) | None =>
+          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
+          Ok(
+            monthlyContributions(
+              title = "Support the Guardian | Monthly Contributions",
+              id = "regular-contributions-page",
+              js = "regularContributionsPage.js",
+              css = "regularContributionsPageStyles.css",
+              user = fullUser,
+              uatMode = uatMode,
+              defaultStripeConfig = stripeConfigProvider.get(false),
+              uatStripeConfig = stripeConfigProvider.get(true),
+              payPalConfig = payPalConfigProvider.get(uatMode)
+            )
           )
-        )
-    }
-  } fold (
-    { error =>
-      SafeLogger.error(scrub"Failed to display recurring contributions form for ${request.user.id} due to error from identityService: $error")
-      InternalServerError
-    },
-    identity
-  )
+      }
+    } fold (
+      { error =>
+        SafeLogger.error(scrub"Failed to display recurring contributions form for ${request.user.id} due to error from identityService: $error")
+        InternalServerError
+      },
+      identity
+    )
+  }
 
   def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     client.status(jobId, request.uuid).fold(

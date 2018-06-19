@@ -65,9 +65,15 @@ class CustomActionBuilders(
 
   val AuthenticatedAction = PrivateAction andThen authenticated()
 
-  val NewSignInFlowAuthenticatedAction = PrivateAction andThen authenticated(newSignInFlowChooseRegister)
-
-  val AuthenticatedActionSignInTest = PrivateAction andThen authenticated()
+  val NewSignInFlowAuthenticatedAction = (useNewSignIn: Option[Boolean]) =>
+    useNewSignIn.fold {
+      AuthenticatedAction
+    } { useNew =>
+      if (useNew)
+        PrivateAction andThen authenticated(newSignInFlowChooseRegister)
+      else
+        AuthenticatedAction
+    }
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
 

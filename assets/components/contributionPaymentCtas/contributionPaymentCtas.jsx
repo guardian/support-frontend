@@ -24,7 +24,6 @@ import type { Status } from 'helpers/switch';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {Test} from "../../helpers/abTests/abtest";
 
 
 // ----- Types ----- //
@@ -45,7 +44,7 @@ type PropTypes = {
   }>,
   error: ?string,
   resetError: void => void,
-  newSignInFlowVariant:  'control' | 'variant' 
+  newSignInFlowVariant: 'control' | 'variant',
 };
 
 
@@ -137,20 +136,19 @@ function RegularCta(props: {
   currency: Currency,
   isDisabled: boolean,
   resetError: void => void,
-  newSignInFlowVariant: Test,
+  newSignInFlowVariant: 'control' | 'variant',
 
 }): Node {
 
-  const useNewSignIn = newSignInFlowVariant === 'variant' ? 'true' : 'false';
+  const useNewSignIn = props.newSignInFlowVariant === 'variant' ? 'true' : 'false';
 
-  console.log(newSignInFlowVariant);
 
   const spokenType = getSpokenType(props.contributionType, props.countryGroupId);
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
     currency: props.currency.iso,
-    useNewSignIn: useNewSignIn
+    useNewSignIn,
   });
 
   return (
