@@ -25,7 +25,8 @@
 	<title>@title</title>
 	<meta property="og:title" content="@title"/>
 
-	<!-- Page-hiding snippet (recommended)  -->
+	<!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->
+	<!-- Page-hiding snippet -->
 	<style>.async-hide { opacity: 0 !important} </style>
 	<script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
 	h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
@@ -43,6 +44,7 @@
 	  ga('create', 'UA-51507017-5', 'auto', {cookieDomain: 'auto', anonymizeIp: true});
 	  ga('require', 'GTM-NZGXNBL');
 	</script>
+	<!-- End Optimize -->
 
 	<link rel="stylesheet" href="@assets(mainStyleBundle)">
 	<link rel="shortcut icon" type="image/png" href="@assets("images/favicons/32x32.ico")">
