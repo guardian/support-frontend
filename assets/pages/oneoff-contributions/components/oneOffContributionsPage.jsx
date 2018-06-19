@@ -40,7 +40,7 @@ function mapStateToProps(state) {
     amount: state.page.oneoffContrib.amount,
     currency: state.common.currency,
     country: state.common.country,
-    inlineCardPaymentVariant: state.common.abParticipations.inlineCardPayment,
+    inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
   };
 }
 
