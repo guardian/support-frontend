@@ -36,7 +36,7 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-  inlineCardPayment: {
+  inlineStripeCardPayment: {
     variants: ['control', 'inline'],
     audiences: {
       ALL: {
