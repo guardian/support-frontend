@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
@@ -36,6 +37,7 @@ type PropTypes = {
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
 
+
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
@@ -49,12 +51,14 @@ function mapStateToProps(state) {
   };
 }
 
+
 // ----- Page Startup ----- //
 
 const title = {
   annual: ['Make an annual', 'contribution'],
   monthly: ['Make a monthly', 'contribution'],
 };
+
 
 // ----- Render ----- //
 
@@ -64,12 +68,13 @@ function RegularContributionsPage(props: PropTypes) {
   const contributionsPayment = props.inlineCardPaymentVariant === 'inline' ? <RegularInlineContributionsPayment contributionType={props.contributionType} /> : <RegularContributionsPayment contributionType={props.contributionType} />;
 
   return (
-    <div className="gu-content">
-      <TestUserBanner />
-      <SimpleHeader />
+    <Page
+      header={[<TestUserBanner />, <SimpleHeader />]}
+      footer={<Footer />}
+    >
       <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
       <hr className="regular-contrib__multiline" />
-      <div className="regular-contrib gu-content-margin">
+      <div className="regular-contrib">
         <InfoSection heading={`Your ${props.contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
           <PaymentAmount
             amount={props.amount}
@@ -85,16 +90,16 @@ function RegularContributionsPage(props: PropTypes) {
           {contributionsPayment}
         </InfoSection>
       </div>
-      <div className="terms-privacy gu-content-filler">
-        <InfoSection className="terms-privacy__content gu-content-filler__inner">
+      <div className="terms-privacy">
+        <InfoSection className="terms-privacy__content">
           <TermsPrivacy country={props.country} />
           <ContribLegal />
         </InfoSection>
       </div>
-      <Footer />
-    </div>
+    </Page>
   );
 }
+
 
 // ----- Exports ----- //
 

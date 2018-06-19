@@ -20,8 +20,6 @@
   .component-page-section--ctas {
     @include multiline-top-border;
 
-    @include gu-content-filler;
-
     .component-page-section__header {
       @include dropline;
     }

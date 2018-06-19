@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import InfoSection from 'components/infoSection/infoSection';
@@ -52,12 +53,13 @@ function OneOffContributionsPage(props: PropTypes) {
   const Payment = props.inlineCardPaymentVariant === 'inline' ? OneoffInlineContributionsPayment : OneoffContributionsPayment;
 
   return (
-    <div className="gu-content">
-      <TestUserBanner />
-      <SimpleHeader />
+    <Page
+      header={[<TestUserBanner />, <SimpleHeader />]}
+      footer={<Footer />}
+    >
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
-      <div className="oneoff-contrib gu-content-margin">
+      <div className="oneoff-contrib">
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
           <PaymentAmount
             amount={props.amount}
@@ -73,14 +75,13 @@ function OneOffContributionsPage(props: PropTypes) {
           <Payment />
         </InfoSection>
       </div>
-      <div className="terms-privacy gu-content-filler">
-        <InfoSection className="terms-privacy__content gu-content-filler__inner">
+      <div className="terms-privacy">
+        <InfoSection className="terms-privacy__content">
           <TermsPrivacy country={props.country} />
           <ContribLegal />
         </InfoSection>
       </div>
-      <Footer />
-    </div>
+    </Page>
   );
 }
 

@@ -21,7 +21,7 @@ export default function ReadyToSupport(props: PropTypes) {
 
   return (
     <section className="component-ready-to-support">
-      <div className="component-ready-to-support__content gu-content-margin">
+      <div className="component-ready-to-support__content">
         <h1 className="component-ready-to-support__heading">
           <span className="component-ready-to-support__heading-line">Ready to support</span>
           <span className="component-ready-to-support__heading-line">The&nbsp;Guardian?</span>

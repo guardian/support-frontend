@@ -9,6 +9,7 @@ import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
+import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
@@ -44,15 +45,16 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
 
 const content = (
   <Provider store={store}>
-    <div>
-      <CountrySwitcherHeader />
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+    >
       <DigitalSubscriptionLandingHeader />
       <ProductBlock />
       <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />
       </LeftMarginSection>
-      <Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>
-    </div>
+    </Page>
   </Provider>
 );
 

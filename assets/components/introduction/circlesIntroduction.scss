@@ -29,6 +29,7 @@
 }
 
 .component-circles-introduction__content {
+  @extend .gu-content-margin;
   padding-bottom: 100px;
 
   @include mq($from: mobileMedium) {

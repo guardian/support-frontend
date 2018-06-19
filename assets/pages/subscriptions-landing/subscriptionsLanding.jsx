@@ -6,6 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 // React components
+import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
@@ -34,8 +35,10 @@ const store = pageInit();
 
 const content = (
   <Provider store={store}>
-    <div>
-      <SimpleHeader />
+    <Page
+      header={<SimpleHeader />}
+      footer={<Footer disclaimer privacyPolicy />}
+    >
       <CirclesIntroduction
         headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
         highlights={['Support', 'The Guardian']}
@@ -47,8 +50,7 @@ const content = (
       <WhySupport />
       <ReadyToSupport ctaUrl={`#${supporterSectionId}`} />
       <PatronsEventsContainer />
-      <Footer disclaimer privacyPolicy />
-    </div>
+    </Page>
   </Provider>
 );
 

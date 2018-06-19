@@ -21,6 +21,7 @@
 }
 
 .unsupported-browser__header-content {
+  @extend .gu-content-margin;
   padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
   height: 68px;
 
@@ -45,6 +46,7 @@
 }
 
 .unsupported-browser__introduction-text {
+  @extend .gu-content-margin;
   background-color: #e9e939;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -53,8 +55,11 @@
 }
 
 .unsupported-browser__why-support {
-  @include gu-content-filler;
   padding-bottom: $gu-v-spacing * 2;
+}
+
+.unsupported-browser__why-support-content {
+  @extend .gu-content-margin;
 }
 
 .unsupported-browser__why-support-heading {
@@ -83,6 +88,10 @@
   font-size: 12px;
   line-height: 16px;
   padding: $gu-v-spacing 0;
+}
+
+.unsupported-browser__footer-content {
+  @extend .gu-content-margin;
 }
 
 .unsupported-browser__footer-privacy-policy {

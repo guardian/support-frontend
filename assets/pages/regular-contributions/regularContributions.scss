@@ -114,6 +114,10 @@
 
 	// ----- Your contrib
 
+	.regular-contrib {
+		@extend .gu-content-margin;
+	}
+
 	.regular-contrib__your-contrib {
 		border: none;
 
@@ -263,6 +267,7 @@
 	}
 
 	.terms-privacy__content {
+		@extend .gu-content-margin;
 		background-color: #fff;
 		color: gu-colour(media-garnett-main-1);
 	}

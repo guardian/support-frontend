@@ -25,7 +25,7 @@ function PageSection(props: PropTypes) {
 
   return (
     <section className={classNameWithModifiers('component-page-section', [props.modifierClass])}>
-      <div className="component-page-section__content gu-content-margin">
+      <div className="component-page-section__content">
         <div className="component-page-section__header">
           <Heading heading={props.heading} />
           {props.headingChildren}
