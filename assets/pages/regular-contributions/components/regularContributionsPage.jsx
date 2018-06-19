@@ -36,7 +36,6 @@ function mapStateToProps(state) {
   const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
   return {
     contributionType,
-    country: state.common.country,
     inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
   };
 }
