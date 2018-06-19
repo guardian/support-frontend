@@ -11,13 +11,11 @@ import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
 import DisplayName from 'components/displayName/displayName';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
-import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
+import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import { getQueryParameter } from 'helpers/url';
 import { parseContrib, type Contrib } from 'helpers/contributions';
-import { type IsoCountry } from 'helpers/internationalisation/country';
 
 import YourContributionContainer from './yourContributionContainer';
 import FormFields from './formFields';
@@ -29,7 +27,6 @@ import RegularInlineContributionsPayment from './regularInlineContributionsPayme
 
 type PropTypes = {
   contributionType: Contrib,
-  country: IsoCountry,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
 
@@ -79,10 +76,7 @@ function RegularContributionsPage(props: PropTypes) {
       <PageSection heading={paymentSectionHeading}>
         {contributionsPayment}
       </PageSection>
-      <PageSection>
-        <TermsPrivacy country={props.country} />
-        <ContribLegal />
-      </PageSection>
+      <LegalSectionContainer />
     </Page>
   );
 }

@@ -9,12 +9,11 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
-import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import DisplayName from 'components/displayName/displayName';
 import Signout from 'components/signout/signout';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
+import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import YourContributionContainer from './yourContributionContainer';
@@ -69,10 +68,7 @@ function OneOffContributionsPage(props: PropTypes) {
       >
         <Payment />
       </PageSection>
-      <PageSection>
-        <TermsPrivacy country={props.country} />
-        <ContribLegal />
-      </PageSection>
+      <LegalSectionContainer />
     </Page>
   );
 }
