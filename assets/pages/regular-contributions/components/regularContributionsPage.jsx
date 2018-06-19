@@ -11,17 +11,15 @@ import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
 import DisplayName from 'components/displayName/displayName';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
-import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import Signout from 'components/signout/signout';
 import { getQueryParameter } from 'helpers/url';
 import { parseContrib, type Contrib } from 'helpers/contributions';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type Currency } from 'helpers/internationalisation/currency';
 
+import YourContributionContainer from './yourContributionContainer';
 import FormFields from './formFields';
 import RegularContributionsPayment from './regularContributionsPayment';
 import RegularInlineContributionsPayment from './regularInlineContributionsPayment';
@@ -30,8 +28,6 @@ import RegularInlineContributionsPayment from './regularInlineContributionsPayme
 // ----- Types ----- //
 
 type PropTypes = {
-  amount: number,
-  currency: Currency,
   contributionType: Contrib,
   country: IsoCountry,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
@@ -43,8 +39,6 @@ type PropTypes = {
 function mapStateToProps(state) {
   const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
   return {
-    amount: state.page.regularContrib.amount,
-    currency: state.common.currency,
     contributionType,
     country: state.common.country,
     inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
@@ -74,13 +68,7 @@ function RegularContributionsPage(props: PropTypes) {
     >
       <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
       <hr className="regular-contrib__multiline" />
-      <PageSection heading={`Your ${props.contributionType.toLowerCase()} contribution`}>
-        <PaymentAmount
-          amount={props.amount}
-          currency={props.currency}
-        />
-        <Secure />
-      </PageSection>
+      <YourContributionContainer contributionType={props.contributionType.toLowerCase()} />
       <PageSection
         heading="Your details"
         headingChildren={<Signout />}

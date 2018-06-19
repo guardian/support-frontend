@@ -9,17 +9,15 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
-import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import DisplayName from 'components/displayName/displayName';
 import Signout from 'components/signout/signout';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
-import type { Currency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import YourContributionContainer from './yourContributionContainer';
 import OneoffContributionsPayment from './oneoffContributionsPayment';
 import OneoffInlineContributionsPayment from './oneoffInlineContributionsPayment';
 import FormFields from './formFields';
@@ -28,8 +26,6 @@ import FormFields from './formFields';
 // ----- Types ----- //
 
 type PropTypes = {
-  amount: number,
-  currency: Currency,
   country: IsoCountry,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
@@ -39,8 +35,6 @@ type PropTypes = {
 
 function mapStateToProps(state) {
   return {
-    amount: state.page.oneoffContrib.amount,
-    currency: state.common.currency,
     country: state.common.country,
     inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
   };
@@ -62,15 +56,7 @@ function OneOffContributionsPage(props: PropTypes) {
     >
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
-      <PageSection
-        heading={`Your ${contribDescription} contribution`}
-      >
-        <PaymentAmount
-          amount={props.amount}
-          currency={props.currency}
-        />
-        <Secure />
-      </PageSection>
+      <YourContributionContainer contributionType={contribDescription} />
       <PageSection
         heading="Your details"
         headingChildren={<Signout />}
