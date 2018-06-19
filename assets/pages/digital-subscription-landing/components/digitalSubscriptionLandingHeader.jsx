@@ -4,7 +4,7 @@
 import React from 'react';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import GridPicture from 'components/gridPicture/gridPicture';
+import GridPicture, { type PropTypes as GridPictureProps } from 'components/gridPicture/gridPicture';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import PriceCtaContainer from './priceCtaContainer';
 
@@ -35,7 +35,7 @@ const pictureSources = [
   },
 ];
 
-const gridPicture = {
+const gridPicture: GridPictureProps = {
   sources: pictureSources,
   fallback: 'digitalSubscriptionHeaderDesktop',
   fallbackSize: 500,
