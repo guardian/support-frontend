@@ -22,6 +22,7 @@ type PropTypes = {|
   stripeIsLoaded: void => void,
   isStripeLoaded: boolean,
   currency: Currency,
+  email: string,
   isTestUser: boolean,
   callback: (token: string) => Promise<*>,
   switchStatus: Status,
@@ -68,6 +69,7 @@ function StripeInlineFormComp(props: PropTypes) {
           errorMessage={props.errorMessage}
           setError={props.setError}
           resetError={props.resetError}
+          email={props.email}
         />
       </Elements>
     </StripeProvider>
@@ -101,6 +103,7 @@ function checkoutForm(props: {
   errorMessage: ?string,
   setError: (string) => void,
   resetError: () => void,
+  email: string,
 }) {
 
   const handleSubmit = (event) => {
@@ -114,7 +117,7 @@ function checkoutForm(props: {
       storage.setSession('paymentMethod', 'Stripe');
       props
         .stripe
-        .createToken()
+        .createToken({ name: props.email })
         .then(({ token, error }) => {
           if (error !== undefined) {
             props.setError(error.message);
