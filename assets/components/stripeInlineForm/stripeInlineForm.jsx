@@ -115,6 +115,12 @@ function checkoutForm(props: {
       props.callback(testTokenId);
     } else if (props.canProceed && props.canProceed()) {
       storage.setSession('paymentMethod', 'Stripe');
+
+      /*
+       * We are passing the email in the name field here because in the StripeCheckout integration Stripe push the
+       * user's email in their internal name field.
+       */
+
       props
         .stripe
         .createToken({ name: props.email })
