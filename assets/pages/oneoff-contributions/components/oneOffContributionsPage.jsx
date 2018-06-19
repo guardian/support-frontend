@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import InfoSection from 'components/infoSection/infoSection';
+import PageSection from 'components/pageSection/pageSection';
 import Secure from 'components/secure/secure';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
@@ -24,6 +24,7 @@ import OneoffContributionsPayment from './oneoffContributionsPayment';
 import OneoffInlineContributionsPayment from './oneoffInlineContributionsPayment';
 import FormFields from './formFields';
 
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -32,6 +33,7 @@ type PropTypes = {
   country: IsoCountry,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
 };
+
 
 // ----- Map State/Props ----- //
 
@@ -43,6 +45,7 @@ function mapStateToProps(state) {
     inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
   };
 }
+
 
 // ----- Render ----- //
 
@@ -59,28 +62,31 @@ function OneOffContributionsPage(props: PropTypes) {
     >
       <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
-      <div className="oneoff-contrib">
-        <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
-          <PaymentAmount
-            amount={props.amount}
-            currency={props.currency}
-          />
-          <Secure />
-        </InfoSection>
-        <InfoSection heading="Your details" headingContent={<Signout />} className="oneoff-contrib__your-details">
-          <DisplayName />
-          <FormFields />
-        </InfoSection>
-        <InfoSection heading={paymentSectionHeading} className="oneoff-contrib__payment-methods">
-          <Payment />
-        </InfoSection>
-      </div>
-      <div className="terms-privacy">
-        <InfoSection className="terms-privacy__content">
-          <TermsPrivacy country={props.country} />
-          <ContribLegal />
-        </InfoSection>
-      </div>
+      <PageSection
+        heading={`Your ${contribDescription} contribution`}
+      >
+        <PaymentAmount
+          amount={props.amount}
+          currency={props.currency}
+        />
+        <Secure />
+      </PageSection>
+      <PageSection
+        heading="Your details"
+        headingChildren={<Signout />}
+      >
+        <DisplayName />
+        <FormFields />
+      </PageSection>
+      <PageSection
+        heading={paymentSectionHeading}
+      >
+        <Payment />
+      </PageSection>
+      <PageSection>
+        <TermsPrivacy country={props.country} />
+        <ContribLegal />
+      </PageSection>
     </Page>
   );
 }

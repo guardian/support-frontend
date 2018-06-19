@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import InfoSection from 'components/infoSection/infoSection';
+import PageSection from 'components/pageSection/pageSection';
 import DisplayName from 'components/displayName/displayName';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Secure from 'components/secure/secure';
@@ -74,28 +74,27 @@ function RegularContributionsPage(props: PropTypes) {
     >
       <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
       <hr className="regular-contrib__multiline" />
-      <div className="regular-contrib">
-        <InfoSection heading={`Your ${props.contributionType.toLowerCase()} contribution`} className="regular-contrib__your-contrib">
-          <PaymentAmount
-            amount={props.amount}
-            currency={props.currency}
-          />
-          <Secure />
-        </InfoSection>
-        <InfoSection heading="Your details" headingContent={<Signout />} className="regular-contrib__your-details">
-          <DisplayName />
-          <FormFields />
-        </InfoSection>
-        <InfoSection heading={paymentSectionHeading} className="regular-contrib__payment-methods">
-          {contributionsPayment}
-        </InfoSection>
-      </div>
-      <div className="terms-privacy">
-        <InfoSection className="terms-privacy__content">
-          <TermsPrivacy country={props.country} />
-          <ContribLegal />
-        </InfoSection>
-      </div>
+      <PageSection heading={`Your ${props.contributionType.toLowerCase()} contribution`}>
+        <PaymentAmount
+          amount={props.amount}
+          currency={props.currency}
+        />
+        <Secure />
+      </PageSection>
+      <PageSection
+        heading="Your details"
+        headingChildren={<Signout />}
+      >
+        <DisplayName />
+        <FormFields />
+      </PageSection>
+      <PageSection heading={paymentSectionHeading}>
+        {contributionsPayment}
+      </PageSection>
+      <PageSection>
+        <TermsPrivacy country={props.country} />
+        <ContribLegal />
+      </PageSection>
     </Page>
   );
 }
