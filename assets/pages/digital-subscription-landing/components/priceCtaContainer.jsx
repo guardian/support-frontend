@@ -19,7 +19,10 @@ function mapStateToProps(state: { common: CommonState }) {
 
   return {
     ctaText: 'Start a 14 day free trial',
-    url: getDigitalCheckout(state.common.referrerAcquisitionData),
+    url: getDigitalCheckout(
+      state.common.referrerAcquisitionData,
+      state.common.countryGroup,
+    ),
     price: `${state.common.currency.glyph}${price}`,
   };
 
