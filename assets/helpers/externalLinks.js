@@ -4,7 +4,10 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  countryGroups,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
 import { addQueryParamsToURL } from 'helpers/url';
 
 import { getPromoCode } from './flashSale';
@@ -150,22 +153,6 @@ function getSubsLinks(
 
 }
 
-// Takes our CountryGroupId and turns it into the query param string that
-// subscriptions-frontend wants.
-function getSubsCountryGroup(cgId: CountryGroupId): string {
-
-  switch (cgId) {
-    case 'UnitedStates':
-      return 'us';
-    case 'International':
-      return 'int';
-    case 'GBPCountries':
-    default:
-      return 'gb';
-  }
-
-}
-
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -174,7 +161,7 @@ function getDigitalCheckout(
 
   return addQueryParamsToURL(`${subsUrl}/checkout`, {
     promoCode: defaultPromos.digital,
-    countryGroup: getSubsCountryGroup(cgId),
+    countryGroup: countryGroups[cgId].supportInternationalisationId,
     acquisitionData: JSON.stringify(referrerAcquisitionData),
   });
 
