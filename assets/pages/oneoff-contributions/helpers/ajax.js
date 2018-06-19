@@ -87,7 +87,7 @@ export default function postCheckout(
   currency: Currency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-) {
+): (string) => Promise<*> {
   return (paymentToken: string) => {
     const request = requestData(
       abParticipations,

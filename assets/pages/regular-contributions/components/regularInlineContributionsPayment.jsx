@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Dispatch } from 'redux';
 import { Redirect } from 'react-router';
-import type { Dispatch } from 'redux';
 import StripeInlineForm from 'components/stripeInlineForm/stripeInlineForm';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
@@ -31,8 +31,7 @@ import { postCheckout } from '../helpers/ajax';
 export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
 type PropTypes = {
-  dispatch: Function,
-  email: string,
+  dispatch: Dispatch<*>,
   hide: boolean,
   error: ?string,
   isTestUser: boolean,
@@ -46,11 +45,15 @@ type PropTypes = {
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   payPalHasLoaded: boolean,
+  payPalSetHasLoaded: () => void,
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
   isStripeLoaded: boolean,
-  stripeIsLoaded: void => void,
+  stripeIsLoaded: () => void,
+  stripeInlineErrorMessage: ?string,
+  stripeInlineSetError: (string) => void,
+  stripeInlineResetError: () => void,
 };
 
 
@@ -115,13 +118,15 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
     )}
-    email={props.email}
     stripeIsLoaded={props.stripeIsLoaded}
     isStripeLoaded={props.isStripeLoaded}
     currency={props.currency}
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     switchStatus={props.stripeSwitchStatus}
+    errorMessage={props.stripeInlineErrorMessage}
+    setError={props.stripeInlineSetError}
+    resetError={props.stripeInlineResetError}
   />);
 
   let payPalButton = (<PayPalExpressButton
@@ -140,7 +145,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       context.store.getState,
     )}
     hasLoaded={props.payPalHasLoaded}
-    setHasLoaded={() => props.dispatch(setPayPalHasLoaded())}
+    setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
   />);
 
@@ -171,7 +176,6 @@ function mapStateToProps(state) {
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: state.page.user.email,
     hide: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
@@ -187,6 +191,7 @@ function mapStateToProps(state) {
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
   };
 }
 
@@ -196,6 +201,15 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
       dispatch(stripeInlineFormActionsFor('regularContributions').stripeIsLoaded());
     },
     dispatch,
+    stripeInlineSetError: (message: string) => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').setError(message));
+    },
+    stripeInlineResetError: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').resetError());
+    },
+    payPalSetHasLoaded: () => {
+      dispatch(setPayPalHasLoaded());
+    },
   });
 }
 

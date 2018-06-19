@@ -14,6 +14,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
 
+export type RegularCheckoutCallback = (
+  token?: string,
+  accountNumber?: string,
+  sortCode?: string,
+  accountHolderName?: string
+) => Promise<*>
 
 // ----- Functions ----- //
 
@@ -44,7 +50,6 @@ function getPaymentMethod(): ?PaymentMethod {
   }
   return null;
 }
-
 
 // ----- Exports ----- //
 
