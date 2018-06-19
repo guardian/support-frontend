@@ -22,6 +22,7 @@ type PropTypes = {|
   stripeIsLoaded: void => void,
   isStripeLoaded: boolean,
   currency: Currency,
+  email: string,
   isTestUser: boolean,
   callback: (token: string) => Promise<*>,
   switchStatus: Status,
@@ -68,6 +69,7 @@ function StripeInlineFormComp(props: PropTypes) {
           errorMessage={props.errorMessage}
           setError={props.setError}
           resetError={props.resetError}
+          email={props.email}
         />
       </Elements>
     </StripeProvider>
@@ -101,6 +103,7 @@ function checkoutForm(props: {
   errorMessage: ?string,
   setError: (string) => void,
   resetError: () => void,
+  email: string,
 }) {
 
   const handleSubmit = (event) => {
@@ -112,9 +115,15 @@ function checkoutForm(props: {
       props.callback(testTokenId);
     } else if (props.canProceed && props.canProceed()) {
       storage.setSession('paymentMethod', 'Stripe');
+
+      /*
+       * We are passing the email in the name field here because in the StripeCheckout integration Stripe push the
+       * user's email in their internal name field.
+       */
+
       props
         .stripe
-        .createToken()
+        .createToken({ name: props.email })
         .then(({ token, error }) => {
           if (error !== undefined) {
             props.setError(error.message);

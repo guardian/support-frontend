@@ -54,6 +54,7 @@ type PropTypes = {
   stripeInlineErrorMessage: ?string,
   stripeInlineSetError: (string) => void,
   stripeInlineResetError: () => void,
+  email: string,
 };
 
 
@@ -107,6 +108,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
   }
 
   let stripeInlineForm = (<StripeInlineForm
+    email={props.email}
     callback={postCheckout(
       props.abParticipations,
       props.amount,
@@ -174,6 +176,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
 function mapStateToProps(state) {
   return {
+    email: state.page.user.email,
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     hide: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),

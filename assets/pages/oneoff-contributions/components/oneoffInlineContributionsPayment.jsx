@@ -134,6 +134,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
       <StripeInlineForm
+        email={props.email}
         callback={postCheckout(
           props.abParticipations,
           props.dispatch,
