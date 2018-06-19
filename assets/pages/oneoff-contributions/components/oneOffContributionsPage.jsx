@@ -53,7 +53,10 @@ function OneOffContributionsPage(props: PropTypes) {
       header={[<TestUserBanner />, <SimpleHeader />]}
       footer={<Footer />}
     >
-      <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
+      <CirclesIntroduction
+        headings={[`Make a ${contribDescription}`, 'contribution']}
+        modifierClasses={['compact']}
+      />
       <hr className="oneoff-contrib__multiline" />
       <YourContributionContainer contributionType={contribDescription} />
       <PageSection

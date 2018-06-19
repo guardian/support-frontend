@@ -63,9 +63,14 @@ function RegularContributionsPage(props: PropTypes) {
       header={[<TestUserBanner />, <SimpleHeader />]}
       footer={<Footer />}
     >
-      <CirclesIntroduction headings={title[props.contributionType.toLowerCase()]} modifierClasses={['compact']} />
+      <CirclesIntroduction
+        headings={title[props.contributionType.toLowerCase()]}
+        modifierClasses={['compact']}
+      />
       <hr className="regular-contrib__multiline" />
-      <YourContributionContainer contributionType={props.contributionType.toLowerCase()} />
+      <YourContributionContainer
+        contributionType={props.contributionType.toLowerCase()}
+      />
       <PageSection
         heading="Your details"
         headingChildren={<Signout />}
