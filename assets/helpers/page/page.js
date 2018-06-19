@@ -48,18 +48,16 @@ export type Internationalisation = {|
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  currency: Currency,
   otherQueryParams: Array<[string, string]>,
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
   abParticipations: Participations,
   switches: Switches,
+  internationalisation: Internationalisation,
 };
 
 export type PreloadedState = {
   campaign?: $PropertyType<CommonState, 'campaign'>,
   referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  country?: $PropertyType<CommonState, 'country'>,
+  country?: $PropertyType<Internationalisation, 'countryId'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
 
