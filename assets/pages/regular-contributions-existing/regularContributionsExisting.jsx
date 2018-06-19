@@ -34,6 +34,7 @@ const content = (
     <SimpleHeader />
     <CirclesIntroduction
       headings={['Whoops!']}
+      modifierClasses={['compact']}
     />
     <PageSection modifierClass="existing-contribution">
       <p className="existing-contribition-copy">

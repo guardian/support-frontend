@@ -48,7 +48,7 @@ function OneOffContributionsPage(props: PropTypes) {
     <div className="gu-content">
       <TestUserBanner />
       <SimpleHeader />
-      <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} />
+      <CirclesIntroduction headings={[`Make a ${contribDescription}`, 'contribution']} modifierClasses={['compact']} />
       <hr className="oneoff-contrib__multiline" />
       <div className="oneoff-contrib gu-content-margin">
         <InfoSection heading={`Your ${contribDescription} contribution`} className="oneoff-contrib__your-contrib">
