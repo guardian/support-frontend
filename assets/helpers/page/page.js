@@ -39,6 +39,12 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
+export type Internationalisation = {|
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+|};
+
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
