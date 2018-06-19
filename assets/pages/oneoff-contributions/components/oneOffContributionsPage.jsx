@@ -10,8 +10,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import DisplayName from 'components/displayName/displayName';
-import Signout from 'components/signout/signout';
+import YourDetails from 'components/yourDetails/yourDetails';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -59,13 +58,9 @@ function OneOffContributionsPage(props: PropTypes) {
       />
       <hr className="oneoff-contrib__multiline" />
       <YourContributionContainer contributionType={contribDescription} />
-      <PageSection
-        heading="Your details"
-        headingChildren={<Signout />}
-      >
-        <DisplayName />
+      <YourDetails>
         <FormFields />
-      </PageSection>
+      </YourDetails>
       <PageSection
         heading={paymentSectionHeading}
       >

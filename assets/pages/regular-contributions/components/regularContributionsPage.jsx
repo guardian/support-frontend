@@ -9,10 +9,9 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
-import DisplayName from 'components/displayName/displayName';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import Signout from 'components/signout/signout';
+import YourDetails from 'components/yourDetails/yourDetails';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import { getQueryParameter } from 'helpers/url';
 import { parseContrib, type Contrib } from 'helpers/contributions';
@@ -71,13 +70,9 @@ function RegularContributionsPage(props: PropTypes) {
       <YourContributionContainer
         contributionType={props.contributionType.toLowerCase()}
       />
-      <PageSection
-        heading="Your details"
-        headingChildren={<Signout />}
-      >
-        <DisplayName />
+      <YourDetails>
         <FormFields />
-      </PageSection>
+      </YourDetails>
       <PageSection heading={paymentSectionHeading}>
         {contributionsPayment}
       </PageSection>
