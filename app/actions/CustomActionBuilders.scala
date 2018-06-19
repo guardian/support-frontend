@@ -41,7 +41,12 @@ class CustomActionBuilders(
   private def idWebAppRegisterUrl(path: String): String =
     idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & idMember
 
+  private def newSignInFlowIdWebAppRegisterUrl(path: String): String =
+    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & idMember
+
   private val chooseRegister = (request: RequestHeader) => SeeOther(idWebAppRegisterUrl(request.uri))
+
+  private val newSignInFlowChooseRegister = (request: RequestHeader) => SeeOther(newSignInFlowIdWebAppRegisterUrl(request.uri))
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result = chooseRegister): ActionBuilder[OptionalAuthRequest, AnyContent] =
     new AuthenticatedBuilder(authenticatedIdUserProvider.andThen(Some.apply), cc.parsers.defaultBodyParser, onUnauthenticated)
@@ -59,6 +64,10 @@ class CustomActionBuilders(
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   val AuthenticatedAction = PrivateAction andThen authenticated()
+
+  val NewSignInFlowAuthenticatedAction = PrivateAction andThen authenticated(newSignInFlowChooseRegister)
+
+  val AuthenticatedActionSignInTest = PrivateAction andThen authenticated()
 
   val AuthenticatedTestUserAction = PrivateAction andThen authenticatedTestUser()
 
