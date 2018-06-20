@@ -52,6 +52,9 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
           case ("CREDIT_CARD_REFUSED") => false
           case ("INSTRUMENT_DECLINED") => false
           case ("INSUFFICIENT_FUNDS") => false
+          //PAYMENT_ALREADY_DONE is a valid error, but currently alerting too often and possibly masking other errors
+          // Adding this error to the filter list until we can get it fixed.
+          case ("PAYMENT_ALREADY_DONE") => false
           case _ => true
         }
       case _ => true
