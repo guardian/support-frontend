@@ -84,23 +84,26 @@ function analyticsInitialisation(participations: Participations): void {
 function buildInitialState(
   abParticipations: Participations,
   preloadedState: ?PreloadedState = {},
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+  currencyId: IsoCurrency,
   switches: Switches,
 ): CommonState {
   const acquisition = getAcquisition(abParticipations);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
+  const internationalisation = {
+    countryGroupId,
+    countryId,
+    currencyId,
+  };
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
-    countryGroup,
-    country,
+    internationalisation,
     abParticipations,
-    currency,
     switches,
   }, preloadedState);
 
