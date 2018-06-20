@@ -65,14 +65,13 @@ function RegularContributionsPage(props: PropTypes) {
         headings={title[props.contributionType.toLowerCase()]}
         modifierClasses={['compact']}
       />
-      <hr className="regular-contrib__multiline" />
       <YourContributionContainer
         contributionType={props.contributionType.toLowerCase()}
       />
       <YourDetails>
         <FormFields />
       </YourDetails>
-      <PageSection heading={paymentSectionHeading}>
+      <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
         {contributionsPayment}
       </PageSection>
       <LegalSectionContainer />
