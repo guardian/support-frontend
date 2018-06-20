@@ -26,6 +26,7 @@ const NameFormField = (props: PropTypes) =>
     placeholder="Full name"
     value={props.name}
     onChange={props.nameUpdate}
+    modifierClasses={['name']}
     required
   />);
 
