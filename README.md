@@ -19,6 +19,7 @@ Frontend for the new supporter platform: [https//support.theguardian.com/](https
 12. [Supported browsers](https://github.com/guardian/support-frontend/wiki/12.-Supported-Browsers)
 13. [Quickstart: Create a component](https://github.com/guardian/support-frontend/wiki/13.-Quickstart:-Create-a-component)
 14. [Tooling](https://github.com/guardian/support-frontend/wiki/14.-Tooling)
+15. [Switch file](https://github.com/guardian/support-frontend/wiki/15.-Switch-file)
 
 
 ## Getting started
