@@ -46,6 +46,8 @@
   // ----- Your contribution
 
   .component-your-contribution {
+    border-top: none;
+
     @include multiline-top-border;
   }
 
@@ -53,10 +55,6 @@
 
   .component-your-details {
     margin-top: $gu-v-spacing * 3;
-
-    .component-page-section {
-      border-top: 1px solid gu-colour(garnett-neutral-4);
-    }
   }
 
   .component-text-input {
@@ -143,7 +141,6 @@
   // ----- Legal ----- //
 
   .component-legal-section {
-    border-top: 1px solid gu-colour(garnett-neutral-4);
     margin-top: $gu-v-spacing * 3;
   }
 
