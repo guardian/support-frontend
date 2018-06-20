@@ -24,6 +24,7 @@ function mapStateToProps(state: State) {
     isCustomAmount: state.page.selection.isCustomAmount,
     error: state.page.selection.error,
     oneOffSingleOneTimeTestVariant: state.common.abParticipations.oneOffOneTimeSingle,
+    usOneOffSingleOneTimeTestVariant: state.common.abParticipations.usOneOffSingleOneTimeTestVariant,
   };
 
 }
