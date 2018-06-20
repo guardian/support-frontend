@@ -18,13 +18,15 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function YourContribution(props: PropTypes) {
+export default function YourDetails(props: PropTypes) {
 
   return (
-    <PageSection heading="Your details" headingChildren={<Signout />}>
-      <DisplayName />
-      {props.children}
-    </PageSection>
+    <div className="component-your-details">
+      <PageSection heading="Your details" headingChildren={<Signout />}>
+        <DisplayName />
+        {props.children}
+      </PageSection>
+    </div>
   );
 
 }

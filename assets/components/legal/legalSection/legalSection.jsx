@@ -23,10 +23,12 @@ type PropTypes = {
 export default function LegalSection(props: PropTypes) {
 
   return (
-    <PageSection>
-      <TermsPrivacy country={props.country} />
-      <ContribLegal />
-    </PageSection>
+    <div className="component-legal-section">
+      <PageSection>
+        <TermsPrivacy country={props.country} />
+        <ContribLegal />
+      </PageSection>
+    </div>
   );
 
 }

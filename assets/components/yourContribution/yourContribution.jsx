@@ -24,13 +24,15 @@ type PropTypes = {
 export default function YourContribution(props: PropTypes) {
 
   return (
-    <PageSection heading={`Your ${props.contributionType} contribution`}>
-      <PaymentAmount
-        amount={props.amount}
-        currency={props.currency}
-      />
-      <Secure />
-    </PageSection>
+    <div className="component-your-contribution">
+      <PageSection heading={`Your ${props.contributionType} contribution`}>
+        <PaymentAmount
+          amount={props.amount}
+          currency={props.currency}
+        />
+        <Secure />
+      </PageSection>
+    </div>
   );
 
 }
