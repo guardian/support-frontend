@@ -56,12 +56,11 @@ function OneOffContributionsPage(props: PropTypes) {
         headings={[`Make a ${contribDescription}`, 'contribution']}
         modifierClasses={['compact']}
       />
-      <hr className="oneoff-contrib__multiline" />
       <YourContributionContainer contributionType={contribDescription} />
       <YourDetails>
         <FormFields />
       </YourDetails>
-      <PageSection heading={paymentSectionHeading}>
+      <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
         <Payment />
       </PageSection>
       <LegalSectionContainer />
