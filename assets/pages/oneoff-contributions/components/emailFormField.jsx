@@ -32,6 +32,7 @@ const EmailFormField = (props: PropTypes) => {
     value={props.email}
     placeholder="Email"
     onChange={props.emailUpdate}
+    modifierClasses={['email']}
     required
   />);
 

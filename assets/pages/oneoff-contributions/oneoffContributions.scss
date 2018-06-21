@@ -12,7 +12,7 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
-@import '~components/infoSection/infoSection';
+@import '~components/pageSection/pageSection';
 @import '~components/introduction/introduction';
 @import '~components/introduction/circlesIntroduction';
 @import '~components/legal/contribLegal/contribLegal';
@@ -34,226 +34,126 @@
 @import '~containerisableComponents/marketingConsent/marketingConsent';
 @import '~containerisableComponents/payPalContributionButton/payPalContributionButton';
 @import '~components/stripeInlineForm/stripeInlineForm';
+@import '~components/yourContribution/yourContribution';
+@import '~components/yourDetails/yourDetails';
+@import '~components/legal/legalSection/legalSection';
 
 
 // ----- Page-Specific Styles ----- //
 
 #oneoff-contributions-page {
 
-	// ----- General ----- //
+  // ----- Your contribution
 
-	color: gu-colour(garnett-neutral-1);
+  .component-your-contribution {
+    border-top: none;
 
-	// ----- Sections ----- //
+    @include multiline-top-border;
+  }
 
-	h2 {
-		margin-top: -2px;
-	}
+  // ----- Your details
 
-	.component-info-section {
-		padding-top: 0;
-		padding-bottom: $gu-v-spacing * 3;
-		border-top: 1px solid gu-colour(garnett-neutral-4);
-	}
+  .component-your-details {
+    margin-top: $gu-v-spacing * 3;
+  }
 
-	.component-info-section__heading {
-		font-family: $gu-egyptian-web;
-		font-size: 24px;
-		line-height: 1.17;
-		padding-top: $gu-v-spacing / 2;
+  .component-text-input {
+    border: 2px solid gu-colour(news-garnett-highlight);
+    font-family: $gu-text-sans-web;
+    height: 44px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
 
-		@include dropline;
-	}
+    &:required {
+      box-shadow: none;
+    }
 
-	.component-info-section__content {
-		padding-top: $gu-v-spacing;
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
 
-		@include mq($from: desktop) {
-			box-sizing: border-box;
-			padding-left: $gu-h-spacing;
-		}
-	}
+  .component-text-input--email {
+    margin-top: $gu-v-spacing;
+  }
 
-	// ----- Header
+  // ----- Payment methods
 
-	.oneoff-contrib__header {
-		border-top: none;
+  .component-page-section--payment-methods {
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+    margin-top: $gu-v-spacing * 3;
 
-		.oneoff-contrib__heading {
-			margin-top: -15px; /* custom size for header at mobile because of padding */
-			font-size: 24px;
-			line-height: 28px;
-			font-weight: bold;
-			font-family: $gu-egyptian-web;
+    .component-page-section__body {
+      padding-top: $gu-v-spacing;
 
-			@include mq($from: desktop) {
-				margin-top: $gu-v-spacing;
-				font-size: 44px;
-				line-height: 44px;
-			}
-		}
-
-		.component-secure {
-			&__text {
-				margin-top: $gu-v-spacing / 2;
-			}
-
-			// Fix for IE.
-			svg {
-				width: 13px;
-			}
-		}
-
-	}
-
-	.oneoff-contrib__multiline {
-		width: 100%;
-		border: none;
-		margin: 0;
-
-		&:after {
-			@include multiline(4, gu-colour(garnett-neutral-4));
-			background-color: #fff;
-			content: '';
-			display: block;
-		}
-	}
-
-	// ----- Your contrib
-
-	.oneoff-contrib {
-		@extend .gu-content-margin;
-	}
-
-	.oneoff-contrib__your-contrib {
-		border: none;
-
-		.component-info-section__content {
-			position: relative;
-		}
-
-		.component-secure {
-			position: absolute;
-			right: 0;
-			top: $gu-v-spacing;
-			color: gu-colour(garnett-neutral-2);
-
-			&__text {
-				margin-top: 2px;
-			}
-
-			// Fix for IE.
-			svg {
-				width: 13px;
-				fill: gu-colour(garnett-neutral-2);
-			}
-		}
-	}
-
-	// ----- Your details
-
-	.oneoff-contrib__your-details {
-
-		#last-name {
-			margin-bottom: 0px;
-		}
-
-		#postcode {
-			@include mq($from: desktop) {
-				width: 174px;
-			}
-		}
-
-		input[type='text'] {
-			width: 100%;
-			box-sizing: border-box;
-
-			&:required {
-				box-shadow: none;
-			}
-
-			@include mq($from: desktop) {
-				width: 304px;
-			}
-		}
-	}
-
-	.component-text-input {
-		border: 2px solid gu-colour(news-garnett-highlight);
-		font-family: $gu-text-sans-web;
-		height: 44px;
-		margin-bottom: $gu-v-spacing;
-	}
-
-	// ----- Payment methods
-
-	.oneoff-contrib__payment-methods {
-		.component-stripe-pop-up-button {
-			box-sizing: border-box;
-			height: $cta-height;
-			background-color: #fff;
-      color: gu-colour(garnett-neutral-1);
-      border: 1px solid gu-colour(garnett-neutral-1);
-      width: 100%;
-      margin-top: $gu-v-spacing;
-
-      svg {
-      	fill: gu-colour(garnett-neutral-1);
+      @include mq($from: desktop) {
+        padding-left: $gu-h-spacing;
       }
+    }
 
-			@include mq($from: phablet) {
-				width: 304px;
-			}
+    .component-page-section__header {
+      font-family: $gu-egyptian-web;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 1.17;
+      padding-top: $gu-v-spacing / 2;
 
-			&:hover {
-				color: #000;
-				border-color: #000;
-			}
-		}
-	}
+      @include dropline;
+    }
+  }
 
-	.component-paypal-contribution-button {
-		height: $cta-height;
-		width: 100%;
+  .component-stripe-pop-up-button {
+    box-sizing: border-box;
+    background-color: #fff;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(garnett-neutral-1);
+    width: 100%;
+    margin-top: $gu-v-spacing;
 
-		@include mq($from: phablet) {
-			width: 304px;
-		}
-	}
+    .svg-credit-card {
+      fill: gu-colour(garnett-neutral-1);
+    }
 
-	.component-payment-error--paypal {
-		margin-top: $gu-v-spacing;
-	}
+    @include mq($from: phablet) {
+      width: 304px;
+    }
 
-	// ----- Legal ----- //
+    &:hover {
+      color: darken(gu-colour(garnett-neutral-1), 5%);
+      border-color: darken(gu-colour(garnett-neutral-1), 5%);
+    }
+  }
 
-	.terms-privacy {
-		.component-info-section__content {
-			@include mq($from: desktop) {
-				width: 550px;
-			}
-		}
-	}
+  .component-paypal-contribution-button {
+    height: $cta-height;
+    width: 100%;
 
-	.terms-privacy__content {
-		@extend .gu-content-margin;
-		background-color: #fff;
-		color: gu-colour(media-garnett-main-1);
-	}
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
 
-	.component-contrib-legal {
-		padding-top: $gu-v-spacing;
-		padding-bottom: $gu-v-spacing * 2;
-		font-size: 14px;
-	}
+  .component-payment-error--paypal {
+    margin-top: $gu-v-spacing;
+  }
+
+  // ----- Legal ----- //
+
+  .component-legal-section {
+    margin-top: $gu-v-spacing * 3;
+    margin-bottom: $gu-v-spacing * 2;
+  }
 
 }
 
 .oneoff-contribution-payment__or-label {
-	font-size: 12px;
-	margin-bottom: 4px;
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-family: $gu-sans-web;
 }
 
 .component-stripe-inline-form {
-	margin-top: -5px;
+  margin-top: -5px;
+  font-family: $gu-sans-web;
 }
