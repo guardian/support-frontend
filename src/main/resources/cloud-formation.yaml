@@ -386,3 +386,136 @@ Resources:
     DependsOn:
     - TargetGroup
     - ElasticLoadBalancer
+
+  NoPaypalPaymentsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} No successful paypal payments via payment-api for an hour
+      MetricName: payment-success
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Paypal
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  NoStripePaymentsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} No successful stripe payments via payment-api for an hour
+      MetricName: payment-success
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Stripe
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  PaymentErrorPaypalAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} Payment error for paypal contribution via the payment-api
+      MetricName: payment-error
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Paypal
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  PaymentErrorStripeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} Payment error for stripe contribution via the payment-api
+      MetricName: payment-error
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Stripe
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  PostPaymentErrorPaypalAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} Error executing post-payment tasks - create identity id and send thankyou email - for paypal contribution via the payment-api
+      MetricName: post-payment-tasks-error
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Paypal
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  PostPaymentErrorStripeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} Error executing post-payment tasks - create identity id and send thankyou email - for stripe contribution via the payment-api
+      MetricName: post-payment-tasks-error
+      Namespace: AWS/support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Stripe
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
