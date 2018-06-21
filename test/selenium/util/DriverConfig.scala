@@ -5,7 +5,7 @@ import java.util.Date
 import io.github.bonigarcia.wdm.ChromeDriverManager
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.RemoteWebDriver
-import org.openqa.selenium.{Cookie, WebDriver}
+import org.openqa.selenium.{Cookie, JavascriptExecutor, WebDriver}
 
 class DriverConfig {
 
@@ -40,6 +40,8 @@ class DriverConfig {
 
     webDriver.get(Config.supportFrontendUrl + "/uk")
     webDriver.manage.deleteAllCookies()
+
+    webDriver.asInstanceOf[JavascriptExecutor].executeScript("window.localStorage.clear();")
   }
 
   def quit(): Unit = webDriver.quit()
