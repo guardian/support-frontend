@@ -27,7 +27,7 @@ const loadStripe = () => new Promise((resolve) => {
 
 });
 
-export const getStripeKey = (currency: string, isTestUser: boolean) => {
+const getStripeKey = (currency: string, isTestUser: boolean) => {
 
   let stripeKey = null;
 
@@ -44,14 +44,6 @@ export const getStripeKey = (currency: string, isTestUser: boolean) => {
   }
 
   return stripeKey;
-};
-
-export const getStripeAccountCountry = (currency: string): string => {
-  if (currency === 'AUD') {
-    return 'AU';
-  }
-
-  return 'GB';
 };
 
 export const setupStripeCheckout = (
@@ -81,25 +73,7 @@ export const setupStripeCheckout = (
   });
 });
 
-export const createStripePaymentRequest = (
-  currency: string,
-  isTestUser: boolean,
-  amount: number,
-): Object => {
-
-  const stripe = window.Stripe(getStripeKey(currency, isTestUser));
-
-  return stripe.paymentRequest({
-    country: getStripeAccountCountry(currency),
-    currency: currency.toLowerCase(),
-    total: {
-      label: 'Please choose a payment method for your contribution',
-      amount,
-    },
-  });
-};
-
-export const openDialogBox = (amount: number, email: string) => {
+const openDialogBox = (amount: number, email: string) => {
   if (stripeHandler) {
     stripeHandler.open({
       // Must be passed in pence.
@@ -108,3 +82,8 @@ export const openDialogBox = (amount: number, email: string) => {
     });
   }
 };
+
+export {
+  openDialogBox,
+  getStripeKey,
+}
