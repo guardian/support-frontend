@@ -1,11 +1,18 @@
 // @flow
-import reducer from '../oneOffContributionsReducer';
 
+// ----- Imports ----- //
+
+import createReducer from '../oneOffContributionsReducer';
+
+
+// ----- Tests ----- //
 
 describe('One-off Reducer', () => {
 
+  const reducer = createReducer(20);
+
   it('should return the initial state', () => {
-    expect(reducer(20, 'GBP')(undefined, {})).toMatchSnapshot();
+    expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle CHECKOUT_ERROR', () => {
@@ -16,7 +23,7 @@ describe('One-off Reducer', () => {
       message,
     };
 
-    const newState = reducer(20, 'GBP')(undefined, action);
+    const newState = reducer(undefined, action);
 
     expect(newState.oneoffContrib.error).toEqual(message);
   });
@@ -29,7 +36,7 @@ describe('One-off Reducer', () => {
       value,
     };
 
-    const newState = reducer(20, 'GBP')(undefined, action);
+    const newState = reducer(undefined, action);
 
     expect(newState.oneoffContrib.error).toMatchSnapshot();
   });
