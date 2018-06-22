@@ -8,11 +8,12 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import { createStripePaymentRequest } from 'helpers/paymentIntegrations/stripeCheckout';
 
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'CanUsePaymentRequestApi';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+
+type PaymentRequestAPIStatus = 'PaymentRequestAPINotAvailable' | 'CanMakePaymentNotAvailable' | 'AvailableNotInUse' | 'AvailableInUse';
 
 // ----- Functions ----- //
 
@@ -23,6 +24,60 @@ function getDataValue(name, generator) {
     storage.setSession(name, value);
   }
   return value;
+}
+
+function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
+  return new Promise((resolve) => {
+
+    if (typeof PaymentRequest !== 'function') {
+      resolve('PaymentRequestAPINotAvailable');
+    }
+
+    const supportedInstruments = [
+      {
+        supportedMethods: 'basic-card',
+        data: {
+          supportedNetworks: ['visa', 'mastercard', 'amex', 'jcb',
+            'diners', 'discover', 'mir', 'unionpay'],
+          supportedTypes: ['credit', 'debit'],
+        },
+      },
+      {
+        supportedMethods: 'basic-card',
+        data: {
+          supportedNetworks: ['visa', 'mastercard', 'amex', 'jcb',
+            'diners', 'discover', 'mir', 'unionpay'],
+          supportedTypes: ['credit', 'debit'],
+        },
+      },
+    ];
+
+    const details = {
+      total: {
+        label: 'test',
+        amount:
+          {
+            value: '1',
+            currency: 'GBP',
+          },
+      },
+    };
+
+    const request = new PaymentRequest(supportedInstruments, details);
+    if (request && !request.canMakePayment) {
+      resolve('CanMakePaymentNotAvailable');
+    }
+
+    request
+      .canMakePayment()
+      .then((result) => {
+        if (result) {
+          resolve('AvailableInUse');
+        } else {
+          resolve('AvailableNotInUse');
+        }
+      });
+  });
 }
 
 function getCurrency() {
@@ -40,50 +95,36 @@ function getContributionValue() {
 function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
 
-  window.googleTagManagerDataLayer.push({
-    event,
-    // orderId anonymously identifies this user in this session.
-    // We need this to prevent page refreshes on conversion pages being
-    // treated as new conversions
-    orderId: getDataValue('orderId', uuidv4),
-    currency: getDataValue('currency', getCurrency),
-    value: getContributionValue(),
-    paymentMethod: storage.getSession('paymentMethod') || undefined,
-    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-    experience: getVariantsAsString(participations),
-    ophanBrowserID: getOphanIds().browserId,
-  });
+
+  getPaymentAPIStatus()
+    .then((paymentRequestApiStatus) => {
+      window.googleTagManagerDataLayer.push({
+        event,
+        // orderId anonymously identifies this user in this session.
+        // We need this to prevent page refreshes on conversion pages being
+        // treated as new conversions
+        orderId: getDataValue('orderId', uuidv4),
+        currency: getDataValue('currency', getCurrency),
+        value: getContributionValue(),
+        paymentMethod: storage.getSession('paymentMethod') || undefined,
+        campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+        campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+        experience: getVariantsAsString(participations),
+        ophanBrowserID: getOphanIds().browserId,
+        paymentRequestApiStatus,
+      });
+    });
 }
-
-function trackWhetherBrowserCanUsePaymentRequestApi(participations: Participations) {
-  const currency = getDataValue('currency', getCurrency) || 'GBP';
-
-  const stripePaymentRequest = createStripePaymentRequest(
-    currency,
-    // TODO: pass real value for isTestUser... but how do I get it!?
-    true,
-    // dummy value for amount
-    1,
-  );
-
-  stripePaymentRequest.canMakePayment().then((canUsePaymentRequestApi) => {
-    if (canUsePaymentRequestApi) {
-      pushToDataLayer('CanUsePaymentRequestApi', participations);
-    }
-  });
-}
-
-// ----- Exports ---//
 
 function init(participations: Participations) {
   pushToDataLayer('DataLayerReady', participations);
-  trackWhetherBrowserCanUsePaymentRequestApi(participations);
 }
 
 function successfulConversion(participations: Participations) {
   pushToDataLayer('SuccessfulConversion', participations);
 }
+
+// ----- Exports ---//
 
 export {
   init,
