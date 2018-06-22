@@ -15,8 +15,10 @@ import { routes } from 'helpers/routes';
 import { getAmount } from 'helpers/checkouts';
 
 import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
+
 import reducer from './oneOffContributionsReducers';
-import OneOffContributionsPage from './components/oneOffContributionsPage';
+import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+import FormFields from './components/formFields';
 
 
 // ----- Page Startup ----- //
@@ -34,7 +36,12 @@ const router = (
         <Route
           exact
           path={routes.oneOffContribCheckout}
-          component={() => <OneOffContributionsPage />}
+          component={() => (
+            <ContributionsCheckoutContainer
+              contributionType="ONE_OFF"
+              form={FormFields}
+            />
+          )}
         />
         <Route
           exact
