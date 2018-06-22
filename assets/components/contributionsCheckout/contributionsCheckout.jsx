@@ -61,28 +61,30 @@ export default function ContributionsCheckout(props: PropTypes) {
   const Payment = props.payment;
 
   return (
-    <Page
-      header={[<TestUserBanner />, <SimpleHeader />]}
-      footer={<Footer />}
-    >
-      <CirclesIntroduction
-        headings={[getTitle(props.contributionType, props.country), 'contribution']}
-        modifierClasses={['compact']}
-      />
-      <YourContribution
-        contributionType={props.contributionType}
-        country={props.country}
-        amount={props.amount}
-        currency={props.currency}
-      />
-      <YourDetails>
-        <Form />
-      </YourDetails>
-      <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
-        <Payment />
-      </PageSection>
-      <LegalSectionContainer />
-    </Page>
+    <div className="component-contributions-checkout">
+      <Page
+        header={[<TestUserBanner />, <SimpleHeader />]}
+        footer={<Footer />}
+      >
+        <CirclesIntroduction
+          headings={[getTitle(props.contributionType, props.country), 'contribution']}
+          modifierClasses={['compact']}
+        />
+        <YourContribution
+          contributionType={props.contributionType}
+          country={props.country}
+          amount={props.amount}
+          currency={props.currency}
+        />
+        <YourDetails>
+          <Form />
+        </YourDetails>
+        <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
+          <Payment />
+        </PageSection>
+        <LegalSectionContainer />
+      </Page>
+    </div>
   );
 
 }
