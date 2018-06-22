@@ -70,9 +70,10 @@ export default function ContributionsCheckout(props: PropTypes) {
         modifierClasses={['compact']}
       />
       <YourContribution
+        contributionType={props.contributionType}
+        country={props.country}
         amount={props.amount}
         currency={props.currency}
-        contributionType={props.contributionType.toLowerCase()}
       />
       <YourDetails>
         <Form />
