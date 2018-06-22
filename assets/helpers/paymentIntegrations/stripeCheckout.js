@@ -86,4 +86,4 @@ const openDialogBox = (amount: number, email: string) => {
 export {
   openDialogBox,
   getStripeKey,
-}
+};
