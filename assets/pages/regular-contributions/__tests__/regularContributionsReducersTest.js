@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import createReducer from '../regularContributionsReducers';
+import createReducer from '../regularContributionsReducer';
 
 
 // ----- Tests ----- //

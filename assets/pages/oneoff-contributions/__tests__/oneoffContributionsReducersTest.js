@@ -1,5 +1,5 @@
 // @flow
-import reducer from '../oneOffContributionsReducers';
+import reducer from '../oneOffContributionsReducer';
 
 
 describe('One-off Reducer', () => {

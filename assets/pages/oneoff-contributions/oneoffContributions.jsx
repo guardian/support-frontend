@@ -16,7 +16,7 @@ import { getAmount } from 'helpers/checkouts';
 
 import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
 
-import reducer from './oneOffContributionsReducers';
+import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
 

@@ -16,7 +16,7 @@ import { parseContrib } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 
-import reducer from './regularContributionsReducers';
+import reducer from './regularContributionsReducer';
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
