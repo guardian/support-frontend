@@ -1,11 +1,18 @@
 // @flow
-import reducer from '../regularContributionsReducers';
 
+// ----- Imports ----- //
+
+import createReducer from '../regularContributionsReducers';
+
+
+// ----- Tests ----- //
 
 describe('Regular contributions Reducer', () => {
 
+  const reducer = createReducer(20, 'GBP', 'MONTHLY');
+
   it('should return the initial state', () => {
-    expect(reducer(20, 'GBP')(undefined, {})).toMatchSnapshot();
+    expect(reducer(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle CHECKOUT_ERROR', () => {
@@ -16,7 +23,7 @@ describe('Regular contributions Reducer', () => {
       message,
     };
 
-    const newState = reducer(20, 'GBP')(undefined, action);
+    const newState = reducer(undefined, action);
 
     expect(newState.regularContrib.error).toEqual(message);
     expect(newState.regularContrib.paymentStatus).toMatchSnapshot();
@@ -30,7 +37,7 @@ describe('Regular contributions Reducer', () => {
       value,
     };
 
-    const newState = reducer(20, 'GBP')(undefined, action);
+    const newState = reducer(undefined, action);
 
     expect(newState.regularContrib.error).toMatchSnapshot();
   });
@@ -41,7 +48,7 @@ describe('Regular contributions Reducer', () => {
       type: 'CREATING_CONTRIBUTOR',
     };
 
-    const newState = reducer(20, 'GBP')(undefined, action);
+    const newState = reducer(undefined, action);
     expect(newState.regularContrib.paymentStatus).toEqual('Pending');
   });
 });
