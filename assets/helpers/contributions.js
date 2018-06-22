@@ -316,13 +316,16 @@ function errorMessage(
 
 }
 
-function getOneOffName(countryGroupId: CountryGroupId, oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest') {
-  let response = 'one-time';
+function getOneOffName(
+  countryGroupId: CountryGroupId,
+  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
+  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
+) {
+  let response = null;
 
-  switch (oneOffSingleOneTimeTestVariant) {
-    case 'control':
-      response = 'One-off';
-      break;
+  const variant = oneOffSingleOneTimeTestVariant === 'notintest' ? usOneOffSingleOneTimeTestVariant : oneOffSingleOneTimeTestVariant;
+
+  switch (variant) {
     case 'single':
       response = 'Single';
       break;
@@ -332,6 +335,10 @@ function getOneOffName(countryGroupId: CountryGroupId, oneOffSingleOneTimeTestVa
     case 'oneTime':
       response = 'One-time';
       break;
+    case 'oneOff':
+      response = 'One-off';
+      break;
+    case 'control':
     default:
       response = countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
       break;
@@ -407,7 +414,11 @@ function getAmountA11yHint(
 
 }
 
-function getContributionTypeRadios(countryGroupId: CountryGroupId, oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest') {
+function getContributionTypeRadios(
+  countryGroupId: CountryGroupId,
+  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
+  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
+) {
 
   return [
     {
@@ -417,7 +428,7 @@ function getContributionTypeRadios(countryGroupId: CountryGroupId, oneOffSingleO
     },
     {
       value: 'ONE_OFF',
-      text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant),
+      text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
       accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
       id: 'qa-one-off-toggle',
     },

@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import { classNameWithModifiers } from 'helpers/utilities';
+
 
 // ----- Types ----- //
 
@@ -18,6 +20,7 @@ type PropTypes = {
   onChange?: (name: string) => void,
   value?: string,
   required?: boolean,
+  modifierClasses: Array<?string>,
 };
 
 /* eslint-enable react/no-unused-prop-types, react/require-default-props */
@@ -25,20 +28,20 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function inputClass(hasLabel: boolean): string {
+function inputClass(hasLabel: boolean, modifierClasses: Array<?string>): string {
 
   if (hasLabel) {
     return 'component-text-input__input';
   }
 
-  return 'component-text-input';
+  return classNameWithModifiers('component-text-input', modifierClasses);
 
 }
 
 function buildInput(props: PropTypes): React$Element<any> {
 
   const attrs = {
-    className: inputClass(!!props.labelText),
+    className: inputClass(!!props.labelText, props.modifierClasses),
     id: props.id,
     type: 'text',
     placeholder: props.placeholder,
@@ -68,7 +71,7 @@ export default function TextInput(props: PropTypes) {
   }
   /* eslint-disable jsx-a11y/label-has-for */
   return (
-    <div className="component-text-input">
+    <div className={classNameWithModifiers('component-text-input', props.modifierClasses)}>
       <label htmlFor={props.id} className="component-text-input__label">
         {props.labelText}
       </label>
@@ -89,4 +92,5 @@ TextInput.defaultProps = {
   onChange: null,
   value: '',
   required: false,
+  modifierClasses: [],
 };

@@ -37,6 +37,7 @@ Object {
     "statusUri": null,
   },
   "stripeInlineForm": Object {
+    "errorMessage": null,
     "isStripeLoaded": false,
   },
   "user": Object {

@@ -3,6 +3,7 @@
 }
 
 .component-ready-to-support__content {
+  @extend .gu-content-margin;
   padding-bottom: $gu-v-spacing * 4;
   position: relative;
 

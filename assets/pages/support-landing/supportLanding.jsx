@@ -6,6 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 // React components
+import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
@@ -27,6 +28,7 @@ import ContributionSelectionContainer from './components/contributionSelectionCo
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 import ContributionAwarePaymentLogosContainer from './components/contributionAwarePaymentLogosContainer';
+
 
 // ----- Setup ----- //
 
@@ -50,8 +52,10 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 const content = (
   <Provider store={store}>
-    <div>
-      <CountrySwitcherHeader />
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={<Footer disclaimer privacyPolicy />}
+    >
       <CirclesIntroduction
         headings={['Help us deliver the', 'independent journalism', 'the world needs']}
         highlights={['Support The Guardian']}
@@ -73,8 +77,7 @@ const content = (
       <WhySupport />
       <ReadyToSupport ctaUrl={`#${supporterSectionId}`} />
       <PatronsEventsContainer />
-      <Footer disclaimer privacyPolicy />
-    </div>
+    </Page>
   </Provider>
 );
 

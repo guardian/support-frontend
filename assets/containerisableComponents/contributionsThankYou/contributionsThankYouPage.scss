@@ -34,10 +34,6 @@
     padding-top: 4px;
   }
 
-  .component-spread-the-word {
-    @include gu-content-filler;
-  }
-
   .component-direct-debit-confirmation__item-name {
     @include mq($from: desktop) {
       padding-left: $gu-h-spacing;

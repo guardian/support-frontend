@@ -29,7 +29,7 @@ function CirclesIntroduction(props: PropTypes) {
       <SvgCirclesHeroDesktop />
       <SvgCirclesHeroMobileLandscape />
       <SvgCirclesHeroMobile />
-      <div className={`${classNameWithModifiers('component-circles-introduction__content', props.modifierClasses)} gu-content-margin`}>
+      <div className={classNameWithModifiers('component-circles-introduction__content', props.modifierClasses)}>
         <h1 className={classNameWithModifiers('component-circles-introduction__heading', props.modifierClasses)}>
           {props.headings.map(heading =>
             <span className="component-circles-introduction__heading-line">{heading}</span>)}

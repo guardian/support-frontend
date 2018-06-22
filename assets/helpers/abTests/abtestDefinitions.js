@@ -36,7 +36,7 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-  inlineCardPayment: {
+  inlineStripeFlowCardPayment: {
     variants: ['control', 'inline'],
     audiences: {
       ALL: {
@@ -44,8 +44,20 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
-    seed: 0,
+    seed: 1,
+  },
+  usOneOffOneTimeSingle: {
+    variants: ['control', 'single', 'once', 'oneOff'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 2,
   },
 };

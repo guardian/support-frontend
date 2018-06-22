@@ -5,24 +5,32 @@
   line-height: 16px;
   padding: $gu-v-spacing 0;
 
-  .component-footer__privacy-policy {
-    text-decoration: none;
-    color: gu-colour(neutral-4);
-    padding: 5px 0;
-  }
-
-  .component-footer__privacy-policy:hover {
-    text-decoration: underline;
-  }
-
-  .component-footer__copyright, .component-contrib-legal, .component-footer__privacy-policy-text {
+  .component-contrib-legal {
+    margin-top: $gu-v-spacing;
     font-weight: 400;
     display: block;
     padding: 3px 0;
     color: gu-colour(neutral-4);
   }
+}
 
-  .component-contrib-legal {
-    margin-top: $gu-v-spacing;
+.component-footer__content {
+  @extend .gu-content-margin;
+}
+
+.component-footer__privacy-policy {
+  text-decoration: none;
+  color: gu-colour(neutral-4);
+  padding: 5px 0;
+
+  &:hover {
+    text-decoration: underline;
   }
+}
+
+.component-footer__privacy-policy-text, .component-footer__copyright {
+  font-weight: 400;
+  display: block;
+  padding: 3px 0;
+  color: gu-colour(neutral-4);
 }

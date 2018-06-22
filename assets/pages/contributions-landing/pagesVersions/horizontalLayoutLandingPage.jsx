@@ -3,12 +3,11 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
-
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-
+import Page from 'components/page/page';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Footer from 'components/footer/footer';
 import Contribute from 'components/contribute/contribute';
@@ -81,8 +80,10 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => (
   <Provider store={props.store}>
-    <div className="gu-content">
-      <CountrySwitcherHeader />
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={<Footer disclaimer />}
+    >
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
         highlights={['Your contribution']}
@@ -98,8 +99,7 @@ const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes
           PayPalButton={PayPalContributionButtonContainer}
         />
       </Contribute>
-      <Footer disclaimer />
-    </div>
+    </Page>
   </Provider>
 );
 

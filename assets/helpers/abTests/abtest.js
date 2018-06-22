@@ -83,9 +83,10 @@ const MVT_MAX: number = 1000000;
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
 
-  let mvtId = Number(cookie.get(MVT_COOKIE));
+  const mvtIdCookieValue = cookie.get(MVT_COOKIE);
+  let mvtId = Number(mvtIdCookieValue);
 
-  if (Number.isNaN(mvtId) || mvtId >= MVT_MAX || mvtId < 0) {
+  if (Number.isNaN(mvtId) || mvtId >= MVT_MAX || mvtId < 0 || mvtIdCookieValue === null) {
     mvtId = Math.floor(Math.random() * (MVT_MAX));
     cookie.set(MVT_COOKIE, String(mvtId));
   }

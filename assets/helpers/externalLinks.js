@@ -4,7 +4,14 @@
 
 import type { Campaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import {
+  countryGroups,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+import { addQueryParamsToURL } from 'helpers/url';
+
 import { getPromoCode } from './flashSale';
+
 
 // ----- Types ----- //
 
@@ -146,10 +153,25 @@ function getSubsLinks(
 
 }
 
+// Builds a link to the digital pack checkout.
+function getDigitalCheckout(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  cgId: CountryGroupId,
+): string {
+
+  return addQueryParamsToURL(`${subsUrl}/checkout`, {
+    promoCode: defaultPromos.digital,
+    countryGroup: countryGroups[cgId].supportInternationalisationId,
+    acquisitionData: JSON.stringify(referrerAcquisitionData),
+  });
+
+}
+
 
 // ----- Exports ----- //
 
 export {
   getSubsLinks,
   getMemLink,
+  getDigitalCheckout,
 };

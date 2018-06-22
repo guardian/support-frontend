@@ -5,6 +5,7 @@
 
 import { routes } from 'helpers/routes';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
+import type { Dispatch } from 'redux';
 import type { BillingPeriod, Contrib } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
@@ -12,13 +13,13 @@ import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import { successfulConversion } from 'helpers/tracking/googleTagManager';
-
+import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
-
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
-import { billingPeriodFromContrib } from '../../../helpers/contributions';
+
 
 // ----- Setup ----- //
 
@@ -273,11 +274,11 @@ function postCheckout(
   csrf: CsrfState,
   currency: Currency,
   contributionType: Contrib,
-  dispatch: Function,
+  dispatch: Dispatch<*>,
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-): Function {
+): RegularCheckoutCallback {
   return (
     token?: string,
     accountNumber?: string,

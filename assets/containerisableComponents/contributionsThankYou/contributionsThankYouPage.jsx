@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
@@ -28,18 +29,21 @@ type PropTypes = {
 
 export default function ContributionsThankYouPage(props: PropTypes) {
   return (
-    <div id="contributions-thank-you-page" className="gu-content">
-      <SimpleHeader />
+    <Page
+      id="contributions-thank-you-page"
+      header={<SimpleHeader />}
+      footer={<Footer />}
+    >
       <CirclesIntroduction
         headings={['Thank you', 'for a valuable', 'contribution']}
+        modifierClasses={['compact']}
       />
       <div className="multiline-divider" />
       <BodyCopy {...props} />
       <MarketingConsentContainer />
       <QuestionsContact />
       <SpreadTheWord />
-      <Footer />
-    </div>
+    </Page>
   );
 }
 
