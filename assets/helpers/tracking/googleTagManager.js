@@ -26,6 +26,10 @@ function getDataValue(name, generator) {
   return value;
 }
 
+function getCurrency() {
+  return detectCurrency(detectCountryGroup()).iso;
+}
+
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   return new Promise((resolve) => {
     try {
@@ -76,10 +80,6 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
       resolve('PaymentRequestAPIError');
     }
   });
-}
-
-function getCurrency() {
-  return detectCurrency(detectCountryGroup()).iso;
 }
 
 function getContributionValue() {
