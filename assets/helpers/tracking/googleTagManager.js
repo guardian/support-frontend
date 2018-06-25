@@ -13,7 +13,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
-type PaymentRequestAPIStatus = 'PaymentRequestAPINotAvailable' | 'CanMakePaymentNotAvailable' | 'AvailableNotInUse' | 'AvailableInUse';
+type PaymentRequestAPIStatus = 'PaymentRequestAPINotAvailable' | 'CanMakePaymentNotAvailable' | 'AvailableNotInUse' | 'AvailableInUse' | 'PaymentRequestAPIError';
 
 // ----- Functions ----- //
 
@@ -28,55 +28,51 @@ function getDataValue(name, generator) {
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   return new Promise((resolve) => {
+    try {
 
-    if (typeof PaymentRequest !== 'function') {
-      resolve('PaymentRequestAPINotAvailable');
-    }
+      if (typeof PaymentRequest !== 'function') {
+        resolve('PaymentRequestAPINotAvailable');
+      }
 
-    const supportedInstruments = [
-      {
-        supportedMethods: 'basic-card',
-        data: {
-          supportedNetworks: ['visa', 'mastercard', 'amex', 'jcb',
-            'diners', 'discover', 'mir', 'unionpay'],
-          supportedTypes: ['credit', 'debit'],
-        },
-      },
-      {
-        supportedMethods: 'basic-card',
-        data: {
-          supportedNetworks: ['visa', 'mastercard', 'amex', 'jcb',
-            'diners', 'discover', 'mir', 'unionpay'],
-          supportedTypes: ['credit', 'debit'],
-        },
-      },
-    ];
-
-    const details = {
-      total: {
-        label: 'test',
-        amount:
-          {
-            value: '1',
-            currency: 'GBP',
+      const supportedInstruments = [
+        {
+          supportedMethods: 'basic-card',
+          data: {
+            supportedNetworks: ['visa', 'mastercard', 'amex', 'jcb',
+              'diners', 'discover', 'mir', 'unionpay'],
+            supportedTypes: ['credit', 'debit'],
           },
-      },
-    };
+        },
+      ];
 
-    const request = new PaymentRequest(supportedInstruments, details);
-    if (request && !request.canMakePayment) {
-      resolve('CanMakePaymentNotAvailable');
+      const details = {
+        total: {
+          label: 'tracking',
+          amount:
+            {
+              value: '1',
+              currency: 'GBP',
+            },
+        },
+      };
+
+      const request = new PaymentRequest(supportedInstruments, details);
+      if (request && !request.canMakePayment) {
+        resolve('CanMakePaymentNotAvailable');
+      }
+
+      request
+        .canMakePayment()
+        .then((result) => {
+          if (result) {
+            resolve('AvailableInUse');
+          } else {
+            resolve('AvailableNotInUse');
+          }
+        });
+    } catch (e) {
+      resolve('PaymentRequestAPIError');
     }
-
-    request
-      .canMakePayment()
-      .then((result) => {
-        if (result) {
-          resolve('AvailableInUse');
-        } else {
-          resolve('AvailableNotInUse');
-        }
-      });
   });
 }
 
