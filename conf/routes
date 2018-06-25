@@ -41,12 +41,12 @@ GET  /int/contribute                                controllers.Application.cont
 GET  /nz/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-nz")
 GET  /ca/contribute                                 controllers.Application.contributionsLanding(id="contributions-landing-page-ca")
 
-GET  /contribute/recurring                          controllers.RegularContributions.displayForm()
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm()
+GET  /contribute/recurring                          controllers.RegularContributions.displayForm(useNewSignIn: Boolean ?= false)
+GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayForm(useNewSignIn: Boolean ?= false)
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm()
+GET  /contribute/recurring/pending                  controllers.RegularContributions.displayForm(useNewSignIn: Boolean ?= false)
 
 # this endpoint should be removed once identity remove
 # the need for a client token

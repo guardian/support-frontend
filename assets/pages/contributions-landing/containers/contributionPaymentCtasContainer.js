@@ -23,6 +23,7 @@ function mapStateToProps(state: State) {
     currency: state.common.currency,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
+    newSignInFlowVariant: state.common.abParticipations.newSignInFlow,
   };
 
 }

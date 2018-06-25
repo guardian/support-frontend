@@ -135,6 +135,7 @@ function NameForm(props: PropTypes) {
         placeholder="First name"
         value={props.firstName}
         onChange={props.firstNameUpdate}
+        modifierClasses={['first-name']}
         required
       />
       <TextInput
@@ -142,6 +143,7 @@ function NameForm(props: PropTypes) {
         placeholder="Last name"
         value={props.lastName}
         onChange={props.lastNameUpdate}
+        modifierClasses={['last-name']}
         required
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}

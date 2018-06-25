@@ -44,6 +44,7 @@ type PropTypes = {
   }>,
   error: ?string,
   resetError: void => void,
+  newSignInFlowVariant: 'control' | 'variant',
 };
 
 
@@ -135,13 +136,19 @@ function RegularCta(props: {
   currency: Currency,
   isDisabled: boolean,
   resetError: void => void,
+  newSignInFlowVariant: 'control' | 'variant',
+
 }): Node {
+
+  const useNewSignIn = props.newSignInFlowVariant === 'variant' ? 'true' : 'false';
+
 
   const spokenType = getSpokenType(props.contributionType, props.countryGroupId);
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
     currency: props.currency.iso,
+    useNewSignIn,
   });
 
   return (

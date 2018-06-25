@@ -48,4 +48,28 @@ export const tests: Tests = {
     independent: true,
     seed: 1,
   },
+  usOneOffOneTimeSingle: {
+    variants: ['control', 'single', 'once', 'oneOff'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 2,
+  },
+  newSignInFlow: {
+    variants: ['control', 'variant'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    independent: true,
+    seed: 1,
+  },
 };

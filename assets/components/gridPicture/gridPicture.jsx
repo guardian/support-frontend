@@ -28,7 +28,7 @@ type Source = {
 
 /* eslint-enable react/no-unused-prop-types */
 
-type PropTypes = {
+export type PropTypes = {
   sources: Source[],
   fallback: string,
   fallbackSize: number,
