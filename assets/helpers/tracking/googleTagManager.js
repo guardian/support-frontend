@@ -53,7 +53,7 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           amount:
             {
               value: '1',
-              currency: 'GBP',
+              currency: getCurrency(),
             },
         },
       };
