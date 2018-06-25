@@ -36,21 +36,17 @@ class CustomActionBuilders(
   // Prevents the identity validation email sending users back to our checkout.
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
-  val idMember = "clientId" -> "members"
+  //this isn't named well - it should really be something like supportDefaultIdentityClientId.
+  //we need to make a change to identity frontend, as "members" doesn't make sense any more
+  val membersIdentityClientId = "clientId" -> "members"
 
   val recurringIdentityClientId = "clientId" -> "recurringContributions"
 
   private def idWebAppRegisterUrl(path: String, clientId: (String, String)): String =
     idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
-  private def newSignInFlowIdWebAppRegisterUrl(path: String, clientId: (String, String)): String =
-    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & idMember
 
   def chooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
     SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
-  }
-
-  def newSignInFlowChooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
-    SeeOther(newSignInFlowIdWebAppRegisterUrl(request.uri, identityClientId))
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
@@ -69,13 +65,6 @@ class CustomActionBuilders(
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   val AuthenticatedAction = (identityClientId: (String, String)) => PrivateAction andThen authenticated(chooseRegister(identityClientId))
-
-  val SignInFlowAuthenticatedAction = (useNewSignIn: Boolean, clientId: (String, String)) =>
-    if (useNewSignIn) {
-      PrivateAction andThen authenticated(newSignInFlowChooseRegister(clientId))
-    } else {
-      AuthenticatedAction
-    }
 
   val AuthenticatedTestUserAction = (identityClientId: (String, String)) => PrivateAction andThen authenticatedTestUser(chooseRegister(identityClientId))
 
