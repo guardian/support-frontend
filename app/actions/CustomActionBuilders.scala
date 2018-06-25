@@ -31,19 +31,20 @@ class CustomActionBuilders(
 
   import CustomActionBuilders._
 
+  val membersIdentityClientId = "clientId" -> "members"
+
+  val recurringIdentityClientId = "clientId" -> "recurringContributions"
+
   // Tells identity to send users back to the checkout immediately after sign-up.
   private val idSkipConfirmation: (String, String) = "skipConfirmation" -> "true"
   // Prevents the identity validation email sending users back to our checkout.
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
-  val idMember = "clientId" -> "members"
-
-  val recurringIdentityClientId = "clientId" -> "recurringContributions"
-
   private def idWebAppRegisterUrl(path: String, clientId: (String, String)): String =
     idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
+
   private def newSignInFlowIdWebAppRegisterUrl(path: String, clientId: (String, String)): String =
-    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & idMember
+    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & membersIdentityClientId
 
   def chooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
     SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
@@ -74,7 +75,7 @@ class CustomActionBuilders(
     if (useNewSignIn) {
       PrivateAction andThen authenticated(newSignInFlowChooseRegister(clientId))
     } else {
-      AuthenticatedAction
+      AuthenticatedAction(clientId)
     }
 
   val AuthenticatedTestUserAction = (identityClientId: (String, String)) => PrivateAction andThen authenticatedTestUser(chooseRegister(identityClientId))
