@@ -30,6 +30,8 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   return new Promise((resolve) => {
     try {
 
+      const { PaymentRequest } = window;
+
       if (typeof PaymentRequest !== 'function') {
         resolve('PaymentRequestAPINotAvailable');
       }

@@ -7,7 +7,6 @@
 assets
 
 [libs]
-./flow-typed/global
 
 [options]
 module.name_mapper='^containerisableComponents/' -> '<PROJECT_ROOT>/assets/containerisableComponents/'
