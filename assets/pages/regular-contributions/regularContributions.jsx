@@ -12,7 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 import { getAmount, getPaymentMethod } from 'helpers/checkouts';
-import { parseContrib } from 'helpers/contributions';
+import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 
@@ -24,7 +24,7 @@ import FormFields from './components/formFields';
 
 // ----- Page Startup ----- //
 
-const contributionType = parseContrib(getQueryParameter('contribType'), 'MONTHLY');
+const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
 
 const store = pageInit(reducer(
   getAmount(contributionType, detectCountryGroup()),
