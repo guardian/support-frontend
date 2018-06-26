@@ -287,14 +287,14 @@ function parseContrib(s: ?string, contrib: Contrib): Contrib {
   }
 }
 
-function parseRegularContributionType(s: ?string): RegularContributionType {
-  switch (s) {
-    case 'ANNUAL':
-      return 'ANNUAL';
-    case 'MONTHLY':
-    default:
-      return 'MONTHLY';
+function parseRegularContributionType(s: string): RegularContributionType {
+
+  if (s === 'ANNUAL') {
+    return 'ANNUAL';
   }
+
+  return 'MONTHLY';
+
 }
 
 function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
