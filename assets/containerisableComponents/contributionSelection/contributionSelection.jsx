@@ -109,7 +109,7 @@ function CustomAmountInput(props: {
   setCustomAmount: (string, CountryGroupId) => void,
   isCustomAmount: boolean,
   onKeyPress: Object => void,
-  currency: Currency,
+  currencyId: IsoCurrency,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   error: ContributionError,
@@ -124,7 +124,7 @@ function CustomAmountInput(props: {
         placeholder="Other amount"
         onKeyPress={props.onKeyPress}
         ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
-        labelText={props.currency.glyph}
+        labelText={currencies[props.currencyId].glyph}
         countryGroupId={props.countryGroupId}
       />
       <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">

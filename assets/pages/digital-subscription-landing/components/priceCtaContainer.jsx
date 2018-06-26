@@ -9,6 +9,7 @@ import PriceCta from 'components/priceCta/priceCta';
 import { digitalSubPrices } from 'helpers/subscriptions';
 import { getDigitalCheckout } from 'helpers/externalLinks';
 import type { CommonState } from 'helpers/page/page';
+import { currencies } from 'helpers/internationalisation/currency';
 
 
 // ----- State Maps ----- //
@@ -23,7 +24,7 @@ function mapStateToProps(state: { common: CommonState }) {
       state.common.referrerAcquisitionData,
       state.common.internationalisation.countryGroupId,
     ),
-    price: `${state.common.currency.glyph}${price}`,
+    price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
 
 }

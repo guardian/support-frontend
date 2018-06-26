@@ -15,7 +15,7 @@ function mapStateToProps(state: State) {
 
   return {
     amount: state.page.oneoffContrib.amount,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
   };
 
 }

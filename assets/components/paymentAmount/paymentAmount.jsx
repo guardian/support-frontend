@@ -4,6 +4,7 @@
 
 import React from 'react';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Setup ----- //
 
@@ -16,7 +17,7 @@ const wideClass = 'component-payment-amount--wide-value';
 
 type PropTypes = {
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
 };
 
 
@@ -39,7 +40,7 @@ export default function PaymentAmount(props: PropTypes) {
   }
 
   return (
-    <div className={className}>{props.currency.glyph}{printedAmount}</div>
+    <div className={className}>{props.currencyId}{printedAmount}</div>
   );
 
 }
