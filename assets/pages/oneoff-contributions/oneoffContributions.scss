@@ -103,6 +103,15 @@
     }
   }
 
+  .component-stripe-pop-up-button {
+    margin-top: $gu-v-spacing;
+
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
+
+
   .component-paypal-contribution-button {
     height: $cta-height;
     width: 100%;

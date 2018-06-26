@@ -126,6 +126,12 @@
     }
   }
 
+  .component-stripe-pop-up-button {
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
+
   .component-paypal-button-checkout {
     margin-top: $gu-v-spacing;
     width: 100%;
