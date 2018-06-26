@@ -21,7 +21,7 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import * as switchHelper from 'helpers/switch';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency, type Currency } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import {
   getCampaign,
@@ -165,19 +165,19 @@ function init<S, A>(
   preloadedState: ?PreloadedState = null,
 ): Store<*, *, *> {
 
-  const countryGroup: CountryGroupId = detectCountryGroup();
-  const country: IsoCountry = detectCountry();
-  const currency: Currency = detectCurrency(countryGroup);
-  const participations: Participations = abTest.init(country, countryGroup);
+  const countryGroupId: CountryGroupId = detectCountryGroup();
+  const countryId: IsoCountry = detectCountry();
+  const currencyId: IsoCurrency = detectCurrency(countryGroupId);
+  const participations: Participations = abTest.init(countryId, countryGroupId);
   const switches: Switches = switchHelper.init();
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
     participations,
     preloadedState,
-    countryGroup,
-    country,
-    currency,
+    countryGroupId,
+    countryId,
+    currencyId,
     switches,
   );
   const commonReducer = createCommonReducer(initialState);
