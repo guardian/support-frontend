@@ -15,7 +15,7 @@ import { emptyInputField } from 'helpers/utilities';
 import type { Status } from 'helpers/switch';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
 import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -29,7 +29,7 @@ import { postCheckout } from '../helpers/ajax';
 
 export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Failed' | 'Success';
 
-type PropTypes = {
+type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
   hide: boolean,
@@ -38,7 +38,7 @@ type PropTypes = {
   isPostDeploymentTestUser: boolean,
   contributionType: Contrib,
   paymentStatus: PaymentStatus,
-  currency: Currency,
+  currencyId: IsoCurrency,
   amount: number,
   csrf: CsrfState,
   country: IsoCountry,
@@ -49,7 +49,7 @@ type PropTypes = {
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
-};
+|};
 
 
 // ----- Functions ----- //
@@ -90,7 +90,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.abParticipations,
           props.amount,
           props.csrf,
-          props.currency,
+          props.currencyId,
           props.contributionType,
           props.dispatch,
           'DirectDebit',
@@ -107,14 +107,14 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.abParticipations,
       props.amount,
       props.csrf,
-      props.currency,
+      props.currencyId,
       props.contributionType,
       props.dispatch,
       'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
     )}
-    currency={props.currency}
+    currencyId={props.currencyId}
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
@@ -123,13 +123,13 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
   let payPalButton = (<PayPalExpressButton
     amount={props.amount}
-    currency={props.currency}
+    currencyId={props.currencyId}
     csrf={props.csrf}
     callback={postCheckout(
       props.abParticipations,
       props.amount,
       props.csrf,
-      props.currency,
+      props.currencyId,
       props.contributionType,
       props.dispatch,
       'PayPal',
@@ -170,7 +170,7 @@ function mapStateToProps(state) {
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
     country: state.common.internationalisation.countryId,

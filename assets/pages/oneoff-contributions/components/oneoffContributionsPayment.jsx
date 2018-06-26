@@ -15,7 +15,7 @@ import { validateEmailAddress } from 'helpers/utilities';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Status } from 'helpers/switch';
 
@@ -25,7 +25,7 @@ import postCheckout from '../helpers/ajax';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   dispatch: Function,
   email: string,
   error: ?string,
@@ -36,12 +36,12 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   checkoutError: (?string) => void,
   abParticipations: Participations,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
-};
+|};
 
 // ----- Map State/Props ----- //
 
@@ -57,7 +57,7 @@ function mapStateToProps(state) {
     isoCountry: state.common.internationalisation.countryId,
     countryGroupId: state.common.internationalisation.countryGroupId,
     abParticipations: state.common.abParticipations,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.oneOffPaymentMethods.payPal,
   };
@@ -132,7 +132,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.abParticipations,
           props.dispatch,
           props.amount,
-          props.currency,
+          props.currencyId,
           props.referrerAcquisitionData,
           context.store.getState,
         )}
@@ -141,7 +141,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           validateEmailAddress(props.email),
           props.checkoutError,
         )}
-        currency={props.currency}
+        currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}

@@ -10,7 +10,7 @@ import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/switch';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ---- Types ----- //
@@ -19,7 +19,7 @@ type PropTypes = {|
   amount: number,
   callback: (token: string) => Promise<*>,
   csrf: CsrfState,
-  currency: Currency,
+  currencyId: IsoCurrency,
   hasLoaded: boolean,
   setHasLoaded: () => void,
   switchStatus: Status,
@@ -52,7 +52,7 @@ function Button(props: PropTypes) {
 
   const payPalOptions = setup(
     props.amount,
-    props.currency,
+    props.currencyId,
     props.csrf,
     props.callback,
   );
