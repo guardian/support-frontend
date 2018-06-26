@@ -186,7 +186,7 @@ function mapStateToProps(state) {
     currency: state.common.currency,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
-    country: state.common.country,
+    country: state.common.internationalisation.countryId,
     abParticipations: state.common.abParticipations,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     payPalHasLoaded: state.page.regularContrib.payPalHasLoaded,

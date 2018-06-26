@@ -19,7 +19,7 @@ function mapStateToProps(state: State) {
     countryGroupId: state.common.countryGroup,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
-    isoCountry: state.common.country,
+    isoCountry: state.common.internationalisation.countryId,
     canClick: !state.page.selection.error,
     switchStatus: state.common.switches.oneOffPaymentMethods.payPal,
   };

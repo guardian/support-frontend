@@ -33,7 +33,7 @@ type PropTypes = {
 
 function mapStateToProps(state) {
   return {
-    country: state.common.country,
+    country: state.common.internationalisation.countryId,
     inlineCardPaymentVariant: state.common.abParticipations.inlineStripeFlowCardPayment,
   };
 }

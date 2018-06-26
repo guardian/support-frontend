@@ -54,7 +54,7 @@ function mapStateToProps(state) {
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
-    isoCountry: state.common.country,
+    isoCountry: state.common.internationalisation.countryId,
     countryGroupId: state.common.countryGroup,
     abParticipations: state.common.abParticipations,
     currency: state.common.currency,

@@ -47,7 +47,7 @@ function mapStateToProps(state) {
     firstName: state.page.user.firstName,
     lastName: state.page.user.lastName,
     countryGroup: state.common.countryGroup,
-    country: state.common.country,
+    country: state.common.internationalisation.countryId,
   };
 
 }
