@@ -47,7 +47,7 @@ const router = (
           component={() => (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
-              form={FormFields}
+              form={<FormFields />}
             />
           )}
         />

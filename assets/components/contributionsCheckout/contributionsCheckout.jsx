@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type ComponentType } from 'react';
+import React, { type Node } from 'react';
 
 import Page from 'components/page/page';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
@@ -27,8 +27,8 @@ type PropTypes = {
   country: IsoCountry,
   contributionType: ContributionType,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
-  form: ComponentType<*>,
-  payment: ComponentType<*>,
+  form: Node,
+  payment: Node,
 };
 
 
@@ -60,9 +60,6 @@ export default function ContributionsCheckout(props: PropTypes) {
     'Payment' :
     'Payment methods';
 
-  const Form = props.form;
-  const Payment = props.payment;
-
   return (
     <div className="component-contributions-checkout">
       <Page
@@ -80,10 +77,10 @@ export default function ContributionsCheckout(props: PropTypes) {
           currency={props.currency}
         />
         <YourDetails>
-          <Form />
+          {props.form}
         </YourDetails>
         <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
-          <Payment />
+          {props.payment}
         </PageSection>
         <LegalSectionContainer />
       </Page>

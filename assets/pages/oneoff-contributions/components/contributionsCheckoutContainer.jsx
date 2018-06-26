@@ -2,13 +2,14 @@
 
 // ----- Imports ----- //
 
+import React from 'react';
 import { connect } from 'react-redux';
 
 import ContributionsCheckout from 'components/contributionsCheckout/contributionsCheckout';
 
-import { type PageState as State } from '../regularContributionsReducer';
-import RegularContributionsPayment from './regularContributionsPayment';
-import RegularInlineContributionsPayment from './regularInlineContributionsPayment';
+import { type PageState as State } from '../oneOffContributionsReducer';
+import OneoffContributionsPayment from './oneoffContributionsPayment';
+import OneoffInlineContributionsPayment from './oneoffInlineContributionsPayment';
 
 
 // ----- State Maps ----- //
@@ -18,13 +19,13 @@ function mapStateToProps(state: State) {
   const inlineCardPaymentVariant = state.common.abParticipations.inlineStripeFlowCardPayment;
 
   return {
-    amount: state.page.regularContrib.amount,
+    amount: state.page.oneoffContrib.amount,
     currency: state.common.currency,
     country: state.common.country,
     inlineCardPaymentVariant,
     payment: inlineCardPaymentVariant === 'inline' ?
-      RegularInlineContributionsPayment :
-      RegularContributionsPayment,
+      <OneoffInlineContributionsPayment /> :
+      <OneoffContributionsPayment />,
   };
 
 }

@@ -39,7 +39,7 @@ const router = (
           component={() => (
             <ContributionsCheckoutContainer
               contributionType="ONE_OFF"
-              form={FormFields}
+              form={<FormFields />}
             />
           )}
         />
