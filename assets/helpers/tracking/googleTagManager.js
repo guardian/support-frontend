@@ -9,6 +9,7 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -35,8 +36,8 @@ function getDataValue(name, generator) {
   return value;
 }
 
-function getCurrency() {
-  return detectCurrency(detectCountryGroup()).iso;
+function getCurrency(): IsoCurrency {
+  return detectCurrency(detectCountryGroup());
 }
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
