@@ -23,7 +23,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
 
   val actionRefiner = new CustomActionBuilders(
     authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-    idWebAppUrl = "",
+    idWebAppDomain = "",
     supportUrl = "",
     testUsers = mock[TestUserService],
     cc = stubControllerComponents(),

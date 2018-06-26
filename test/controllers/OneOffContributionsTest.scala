@@ -62,7 +62,7 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
 
       private val loggedInActionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
-        idWebAppUrl = "",
+        idWebAppDomain = "",
         supportUrl = "",
         testUsers = testUsers,
         cc = stubControllerComponents(),

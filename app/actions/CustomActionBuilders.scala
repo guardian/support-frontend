@@ -20,7 +20,7 @@ object CustomActionBuilders {
 
 class CustomActionBuilders(
     authenticatedIdUserProvider: Provider,
-    idWebAppUrl: String,
+    idWebAppDomain: String,
     supportUrl: String,
     testUsers: TestUserService,
     cc: ControllerComponents,
@@ -40,18 +40,15 @@ class CustomActionBuilders(
   // Prevents the identity validation email sending users back to our checkout.
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
-  private def idWebAppRegisterUrl(path: String, clientId: (String, String)): String =
-    idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
-
-  private def newSignInFlowIdWebAppRegisterUrl(path: String, clientId: (String, String)): String =
-    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
+  private def idWebAppUrl(path: String, clientId: (String, String), idWebAppPath: String): String =
+    idWebAppDomain / idWebAppPath ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
 
   def chooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
-    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
+    SeeOther(idWebAppUrl(request.uri, identityClientId, "register"))
   }
 
-  def newSignInFlowChooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
-    SeeOther(newSignInFlowIdWebAppRegisterUrl(request.uri, identityClientId))
+  def chooseSignInStart(identityClientId: (String, String)): RequestHeader => Result = request => {
+    SeeOther(idWebAppUrl(request.uri, identityClientId, "signin/start"))
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
@@ -73,7 +70,7 @@ class CustomActionBuilders(
 
   val SignInFlowAuthenticatedAction = (useNewSignIn: Boolean, clientId: (String, String)) =>
     if (useNewSignIn) {
-      PrivateAction andThen authenticated(newSignInFlowChooseRegister(clientId))
+      PrivateAction andThen authenticated(chooseSignInStart(clientId))
     } else {
       AuthenticatedAction(clientId)
     }
