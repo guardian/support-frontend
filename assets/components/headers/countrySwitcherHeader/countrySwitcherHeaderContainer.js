@@ -23,7 +23,7 @@ export default function (subPath: string, listOfCountries: CountryGroupId[]) {
 
     return {
       countryGroupIds: listOfCountries,
-      selectedCountryGroup: state.common.countryGroup,
+      selectedCountryGroupId: state.common.internationalisation.countryGroupId,
       onCountryGroupSelect: handleChange,
     };
   }

@@ -10,7 +10,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export type PropTypes = {
   countryGroupIds: CountryGroupId[],
-  selectedCountryGroup: CountryGroupId,
+  selectedCountryGroupId: CountryGroupId,
   onCountryGroupSelect: CountryGroupId => void,
 };
 
@@ -22,7 +22,7 @@ const CountrySwitcherHeader = (props: PropTypes) => (
     <div className="component-country-switcher-header__content">
       <CountryGroupSwitcher
         countryGroupIds={props.countryGroupIds}
-        selectedCountryGroup={props.selectedCountryGroup}
+        selectedCountryGroup={props.selectedCountryGroupId}
         onCountryGroupSelect={props.onCountryGroupSelect}
       />
       <a className="component-country-switcher-header__link" href="https://www.theguardian.com">
