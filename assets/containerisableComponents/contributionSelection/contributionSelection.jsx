@@ -18,7 +18,7 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency } from 'helpers/internationalisation/currency';
+import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
@@ -31,7 +31,7 @@ import type {
 type PropTypes = {
   country: IsoCountry,
   countryGroupId: CountryGroupId,
-  currency: Currency,
+  currencyId: IsoCurrency,
   contributionType: ContributionType,
   selectedAmount: number,
   isCustomAmount: boolean,
@@ -72,7 +72,7 @@ function ContributionSelection(props: PropTypes) {
           radios={
             getContributionAmountRadios(
               props.contributionType,
-              props.currency,
+              currencies[props.currencyId],
               props.countryGroupId,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}

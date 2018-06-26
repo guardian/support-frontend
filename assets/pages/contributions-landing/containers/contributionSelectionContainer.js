@@ -18,7 +18,7 @@ function mapStateToProps(state: State) {
   return {
     country: state.common.internationalisation.countryId,
     countryGroupId: state.common.internationalisation.countryGroupId,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
     contributionType: state.page.selection.contributionType,
     selectedAmount: getAmount(state.page.selection),
     isCustomAmount: state.page.selection.isCustomAmount,
