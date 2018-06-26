@@ -7,13 +7,22 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
+import { logException } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
-type PaymentRequestAPIStatus = 'PaymentRequestAPINotAvailable' | 'CanMakePaymentNotAvailable' | 'AvailableNotInUse' | 'AvailableInUse' | 'PaymentRequestAPIError';
+type PaymentRequestAPIStatus =
+  'PaymentRequestAPINotAvailable' |
+  'CanMakePaymentNotAvailable' |
+  'AvailableNotInUse' |
+  'AvailableInUse' |
+  'PaymentRequestAPIError' |
+  'PromiseNotSupported' |
+  'PromiseRejected' |
+  'PaymentApiPromiseRejected';
 
 // ----- Functions ----- //
 
@@ -75,6 +84,10 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           } else {
             resolve('AvailableNotInUse');
           }
+        })
+        .catch((e) => {
+          logException(e);
+          resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
       resolve('PaymentRequestAPIError');
@@ -90,28 +103,41 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
+function sendData(event: EventType, participations: Participations, paymentRequestApiStatus: PaymentRequestAPIStatus) {
+  window.googleTagManagerDataLayer.push({
+    event,
+    // orderId anonymously identifies this user in this session.
+    // We need this to prevent page refreshes on conversion pages being
+    // treated as new conversions
+    orderId: getDataValue('orderId', uuidv4),
+    currency: getDataValue('currency', getCurrency),
+    value: getContributionValue(),
+    paymentMethod: storage.getSession('paymentMethod') || undefined,
+    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    experience: getVariantsAsString(participations),
+    ophanBrowserID: getOphanIds().browserId,
+    paymentRequestApiStatus,
+  });
+}
+
+
 function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
 
-
-  getPaymentAPIStatus()
-    .then((paymentRequestApiStatus) => {
-      window.googleTagManagerDataLayer.push({
-        event,
-        // orderId anonymously identifies this user in this session.
-        // We need this to prevent page refreshes on conversion pages being
-        // treated as new conversions
-        orderId: getDataValue('orderId', uuidv4),
-        currency: getDataValue('currency', getCurrency),
-        value: getContributionValue(),
-        paymentMethod: storage.getSession('paymentMethod') || undefined,
-        campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-        campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-        experience: getVariantsAsString(participations),
-        ophanBrowserID: getOphanIds().browserId,
-        paymentRequestApiStatus,
+  try {
+    getPaymentAPIStatus()
+      .then((paymentRequestApiStatus) => {
+        sendData(event, participations, paymentRequestApiStatus);
+      })
+      .catch((e) => {
+        logException(e);
+        sendData(event, participations, 'PromiseRejected');
       });
-    });
+  } catch (e) {
+    sendData(event, participations, 'PromiseNotSupported');
+  }
+
 }
 
 function init(participations: Participations) {
