@@ -61,7 +61,7 @@ function mapStateToProps(state) {
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     isoCountry: state.common.internationalisation.countryId,
-    countryGroupId: state.common.countryGroup,
+    countryGroupId: state.common.internationalisation.countryGroupId,
     abParticipations: state.common.abParticipations,
     currency: state.common.currency,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,

@@ -14,14 +14,14 @@ import type { CommonState } from 'helpers/page/page';
 // ----- State Maps ----- //
 
 function mapStateToProps(state: { common: CommonState }) {
-
-  const price = digitalSubPrices[state.common.countryGroup].toFixed(2);
+  const { countryGroupId } = state.common.internationalisation;
+  const price = digitalSubPrices[countryGroupId].toFixed(2);
 
   return {
     ctaText: 'Start a 14 day free trial',
     url: getDigitalCheckout(
       state.common.referrerAcquisitionData,
-      state.common.countryGroup,
+      state.common.internationalisation.countryGroupId,
     ),
     price: `${state.common.currency.glyph}${price}`,
   };

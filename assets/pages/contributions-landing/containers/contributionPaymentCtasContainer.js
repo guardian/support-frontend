@@ -19,7 +19,7 @@ function mapStateToProps(state: State) {
     amount: getAmount(state.page.selection),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     country: state.common.internationalisation.countryId,
-    countryGroupId: state.common.countryGroup,
+    countryGroupId: state.common.internationalisation.countryGroupId,
     currency: state.common.currency,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
