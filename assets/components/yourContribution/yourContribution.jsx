@@ -25,16 +25,19 @@ type PropTypes = {
 
 // ----- Setup ----- //
 
-function getHeading(cT: ContributionType, c: IsoCountry): string {
+function getHeading(
+  contributionType: ContributionType,
+  country: IsoCountry,
+): string {
 
-  switch (cT) {
+  switch (contributionType) {
     case 'ANNUAL':
       return 'Your annual contribution';
     case 'MONTHLY':
       return 'Your monthly contribution';
     case 'ONE_OFF':
     default:
-      return `Your ${c === 'US' ? 'one-time' : 'one-off'} contribution`;
+      return `Your ${country === 'US' ? 'one-time' : 'one-off'} contribution`;
   }
 
 }

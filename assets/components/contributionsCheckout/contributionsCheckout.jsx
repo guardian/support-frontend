@@ -34,16 +34,19 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function getTitle(cT: ContributionType, c: IsoCountry): string {
+function getTitle(
+  contributionType: ContributionType,
+  country: IsoCountry,
+): string {
 
-  switch (cT) {
+  switch (contributionType) {
     case 'ANNUAL':
       return 'Make an annual';
     case 'MONTHLY':
       return 'Make a monthly';
     case 'ONE_OFF':
     default:
-      return `Make a ${c === 'US' ? 'one-time' : 'one-off'}`;
+      return `Make a ${country === 'US' ? 'one-time' : 'one-off'}`;
   }
 
 }
