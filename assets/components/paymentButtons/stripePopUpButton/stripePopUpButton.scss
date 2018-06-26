@@ -8,7 +8,6 @@
   font-family: $gu-sans-web;
   font-size: 14px;
   height: $cta-height;
-  margin-top: $gu-v-spacing;
   padding-left: $gu-h-spacing;
   position: relative;
   text-align: left;
@@ -24,10 +23,6 @@
   }
   .svg-credit-card {
     fill: gu-colour(garnett-neutral-1);
-  }
-
-  @include mq($from: mobileMedium) {
-    width: 304px;
   }
 
   &:hover {
