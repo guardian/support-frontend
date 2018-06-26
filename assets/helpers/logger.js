@@ -27,3 +27,12 @@ export const logException = (ex: string, context?: Object): void => {
   }
 };
 
+export const logInfo = (message: string): void => {
+  Raven.captureMessage(
+    message,
+    {
+      level: 'info',
+    },
+  );
+};
+
