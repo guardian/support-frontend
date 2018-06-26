@@ -44,7 +44,7 @@ class CustomActionBuilders(
     idWebAppUrl / "register" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
 
   private def newSignInFlowIdWebAppRegisterUrl(path: String, clientId: (String, String)): String =
-    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & membersIdentityClientId
+    idWebAppUrl / "signin/start" ? ("returnUrl" -> s"$supportUrl$path") & idSkipConfirmation & idSkipValidationReturn & clientId
 
   def chooseRegister(identityClientId: (String, String)): RequestHeader => Result = request => {
     SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
