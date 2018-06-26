@@ -39,7 +39,7 @@ class PayPalOneOff(
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 
-  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = MaybeAuthenticatedAction(membersIdentityClientId).async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")

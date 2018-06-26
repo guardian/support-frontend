@@ -21,7 +21,7 @@ class SiteMapTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   val actionRefiner = new CustomActionBuilders(
     authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-    idWebAppDomain = "",
+    idWebAppUrl = "",
     supportUrl = "",
     testUsers = mock[TestUserService],
     cc = stubControllerComponents(),

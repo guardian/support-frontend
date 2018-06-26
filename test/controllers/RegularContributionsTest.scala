@@ -92,7 +92,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
       private val loggedInActionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
-        idWebAppDomain = "",
+        idWebAppUrl = "",
         supportUrl = "",
         testUsers = testUsers,
         cc = stubControllerComponents(),
@@ -103,7 +103,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
       val loggedOutActionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => None,
-        idWebAppDomain = "https://identity-url.local",
+        idWebAppUrl = "https://identity-url.local",
         supportUrl = "",
         testUsers = testUsers,
         cc = stubControllerComponents(),

@@ -34,9 +34,9 @@ class RegularContributions(
   import actionRefiners._
 
   implicit val ar = assets
-  
+
   def displayForm(useNewSignIn: Boolean): Action[AnyContent] =
-    SignInFlowAuthenticatedAction(useNewSignIn, recurringIdentityClientId).async { implicit request =>
+    authenticatedAction(recurringIdentityClientId, useNewSignIn).async { implicit request =>
       identityService.getUser(request.user).semiflatMap { fullUser =>
         isMonthlyContributor(request.user.credentials) map {
           case Some(true) =>
@@ -67,7 +67,7 @@ class RegularContributions(
       )
     }
 
-  def status(jobId: String): Action[AnyContent] = AuthenticatedAction(recurringIdentityClientId).async { implicit request =>
+  def status(jobId: String): Action[AnyContent] = authenticatedAction(recurringIdentityClientId).async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
         SafeLogger.error(scrub"Failed to get status of step function execution for user ${request.user.id} due to $error")
@@ -77,7 +77,7 @@ class RegularContributions(
     )
   }
 
-  def create: Action[CreateRegularContributorRequest] = AuthenticatedAction(recurringIdentityClientId).async(circe.json[CreateRegularContributorRequest]) {
+  def create: Action[CreateRegularContributorRequest] = authenticatedAction(recurringIdentityClientId).async(circe.json[CreateRegularContributorRequest]) {
     implicit request =>
       SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 

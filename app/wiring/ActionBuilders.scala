@@ -9,7 +9,7 @@ trait ActionBuilders {
 
   implicit lazy val actionRefiners = new CustomActionBuilders(
     authenticatedIdUserProvider = authenticationService,
-    idWebAppDomain = appConfig.identity.webappUrl,
+    idWebAppUrl = appConfig.identity.webappUrl,
     supportUrl = appConfig.supportUrl,
     testUsers = testUsers,
     cc = controllerComponents,

@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
-  val idApiDomain = "https://id-api-url.local"
+  val idApiUrl = "https://id-api-url.local"
   val supportUrl = "https://support-url.local"
   val path = "/test-path"
   val fakeRequest = FakeRequest("GET", path)
@@ -34,7 +34,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       val actionRefiner = new CustomActionBuilders(
         _ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
       )
-      val result = actionRefiner.AuthenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "authentication-test"
     }
@@ -43,7 +43,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => None,
-        idWebAppDomain = idApiDomain,
+        idWebAppUrl = idApiUrl,
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -51,12 +51,12 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
         checkToken = csrfCheck,
         csrfConfig = csrfConfig
       )
-      val result = actionRefiner.AuthenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
 
       status(result) mustEqual Status.SEE_OTHER
       redirectLocation(result) mustBe defined
       redirectLocation(result) foreach { location =>
-        location must startWith(idApiDomain)
+        location must startWith(idApiUrl)
         location must include(s"returnUrl=$supportUrl$path")
         location must include("skipConfirmation=true")
         location must include("clientId=recurringContributions")
@@ -66,7 +66,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "return a private cache header if user is authenticated" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-        idWebAppDomain = "",
+        idWebAppUrl = "",
         supportUrl = "",
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -74,14 +74,14 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
         checkToken = csrfCheck,
         csrfConfig = csrfConfig
       )
-      val result = actionRefiner.AuthenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
     "return a private cache header if user is not authenticated" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => None,
-        idWebAppDomain = idApiDomain,
+        idWebAppUrl = idApiUrl,
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -89,7 +89,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
         checkToken = csrfCheck,
         csrfConfig = csrfConfig
       )
-      val result = actionRefiner.AuthenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
@@ -108,7 +108,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "respond to request if provider authenticates user and they are a test user" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(testUser),
-        idWebAppDomain = "",
+        idWebAppUrl = "",
         supportUrl = "",
         testUsers = testUsers,
         cc = stubControllerComponents(),
@@ -116,7 +116,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
         checkToken = csrfCheck,
         csrfConfig = csrfConfig
       )
-      val result = actionRefiner.AuthenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "authentication-test"
     }
@@ -125,7 +125,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(normalUser),
-        idWebAppDomain = idApiDomain,
+        idWebAppUrl = idApiUrl,
         supportUrl = supportUrl,
         testUsers = testUsers,
         cc = stubControllerComponents(),
@@ -133,12 +133,12 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
         checkToken = csrfCheck,
         csrfConfig = csrfConfig
       )
-      val result = actionRefiner.AuthenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
 
       status(result) mustEqual Status.SEE_OTHER
       redirectLocation(result) mustBe defined
       redirectLocation(result) foreach { location =>
-        location must startWith(idApiDomain)
+        location must startWith(idApiUrl)
         location must include(s"returnUrl=$supportUrl$path")
         location must include("skipConfirmation=true")
         location must include("clientId=recurringContributions")
@@ -147,7 +147,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return a private cache header if user is an authenticated test user" in {
       val actionRefiner = new CustomActionBuilders(_ => Some(testUser), "", "", testUsers, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
-      val result = actionRefiner.AuthenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.authenticatedTestUserAction(actionRefiner.recurringIdentityClientId)(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
