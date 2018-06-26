@@ -21,7 +21,8 @@ type PaymentRequestAPIStatus =
   'AvailableInUse' |
   'PaymentRequestAPIError' |
   'PromiseNotSupported' |
-  'PromiseRejected';
+  'PromiseRejected' |
+  'PaymentApiPromiseRejected';
 
 // ----- Functions ----- //
 
@@ -83,6 +84,10 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           } else {
             resolve('AvailableNotInUse');
           }
+        })
+        .catch((e) => {
+          logException(e);
+          resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
       resolve('PaymentRequestAPIError');
