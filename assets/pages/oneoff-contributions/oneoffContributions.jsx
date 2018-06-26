@@ -36,7 +36,7 @@ const router = (
         <Route
           exact
           path={routes.oneOffContribCheckout}
-          component={() => (
+          render={() => (
             <ContributionsCheckoutContainer
               contributionType="ONE_OFF"
               form={<FormFields />}
@@ -46,7 +46,7 @@ const router = (
         <Route
           exact
           path={routes.oneOffContribThankyou}
-          component={() =>
+          render={() =>
             <ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />
           }
         />

@@ -44,7 +44,7 @@ const router = (
         <Route
           exact
           path={routes.recurringContribCheckout}
-          component={() => (
+          render={() => (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
@@ -54,12 +54,12 @@ const router = (
         <Route
           exact
           path={routes.recurringContribThankyou}
-          component={() => <ContributionsThankYouPageContainer />}
+          render={() => <ContributionsThankYouPageContainer />}
         />
         <Route
           exact
           path={routes.recurringContribPending}
-          component={() => <ContributionsThankYouPageContainer />}
+          render={() => <ContributionsThankYouPageContainer />}
         />
       </div>
     </Provider>
