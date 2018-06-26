@@ -1,21 +1,19 @@
 .component-stripe-pop-up-button {
-  background-color: gu-colour(neutral-1);
+  box-sizing: border-box;
+  background-color: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 600px;
-  color: #fff;
+  color: gu-colour(garnett-neutral-1);
   cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
   font-size: 14px;
   height: $cta-height;
+  margin-top: $gu-v-spacing;
   padding-left: $gu-h-spacing;
   position: relative;
   text-align: left;
   width: 100%;
-
-  @include mq($from: mobileMedium) {
-    width: 304px;
-  }
 
   svg {
     width: 24px;
@@ -25,8 +23,15 @@
     top: 50%;
     transform: translateY(-50%);
   }
+  .svg-credit-card {
+    fill: gu-colour(garnett-neutral-1);
+  }
+
+  @include mq($from: phablet) {
+    width: 304px;
+  }
 
   &:hover {
-    background-color: #000;
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
   }
 }

@@ -126,25 +126,6 @@
     }
   }
 
-  .component-stripe-pop-up-button {
-    box-sizing: border-box;
-    background-color: gu-colour(news-garnett-highlight);
-    color: gu-colour(garnett-neutral-1);
-    width: 100%;
-
-    .svg-credit-card {
-      fill: gu-colour(garnett-neutral-1);
-    }
-
-    @include mq($from: phablet) {
-      width: 304px;
-    }
-
-    &:hover {
-      background-color: darken(gu-colour(news-garnett-highlight), 5%);
-    }
-  }
-
   .component-paypal-button-checkout {
     margin-top: $gu-v-spacing;
     width: 100%;
