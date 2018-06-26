@@ -67,7 +67,7 @@ class CustomActionBuilders(
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   def authenticatedAction(identityClientId: String = membersIdentityClientId, useNewSignIn: Boolean = false): ActionBuilder[AuthRequest, AnyContent] = {
-    val registerFunction = if (useNewSignIn) chooseRegister(identityClientId) else chooseSignInStart(identityClientId)
+    val registerFunction = if (useNewSignIn) chooseSignInStart(identityClientId) else chooseRegister(identityClientId)
     PrivateAction andThen authenticated(registerFunction)
   }
 
