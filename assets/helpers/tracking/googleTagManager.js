@@ -86,7 +86,7 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           }
         })
         .catch((e) => {
-          logException(e);
+          logException(e.message);
           resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
@@ -131,7 +131,7 @@ function pushToDataLayer(event: EventType, participations: Participations) {
         sendData(event, participations, paymentRequestApiStatus);
       })
       .catch((e) => {
-        logException(e);
+        logException(e.message);
         sendData(event, participations, 'PromiseRejected');
       });
   } catch (e) {
