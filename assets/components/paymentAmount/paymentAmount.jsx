@@ -3,8 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { Currency } from 'helpers/internationalisation/currency';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Setup ----- //
 
@@ -40,7 +39,7 @@ export default function PaymentAmount(props: PropTypes) {
   }
 
   return (
-    <div className={className}>{props.currencyId}{printedAmount}</div>
+    <div className={className}>{currencies[props.currencyId].glyph}{printedAmount}</div>
   );
 
 }
