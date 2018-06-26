@@ -1,8 +1,8 @@
 .component-stripe-pop-up-button {
-  background-color: gu-colour(neutral-1);
+  background-color: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 600px;
-  color: #fff;
+  color: gu-colour(garnett-neutral-1);
   cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
@@ -13,10 +13,6 @@
   text-align: left;
   width: 100%;
 
-  @include mq($from: mobileMedium) {
-    width: 304px;
-  }
-
   svg {
     width: 24px;
     fill: #fff;
@@ -25,8 +21,11 @@
     top: 50%;
     transform: translateY(-50%);
   }
+  .svg-credit-card {
+    fill: gu-colour(garnett-neutral-1);
+  }
 
   &:hover {
-    background-color: #000;
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
   }
 }

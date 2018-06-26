@@ -104,26 +104,13 @@
   }
 
   .component-stripe-pop-up-button {
-    box-sizing: border-box;
-    background-color: #fff;
-    color: gu-colour(garnett-neutral-1);
-    border: 1px solid gu-colour(garnett-neutral-1);
-    width: 100%;
     margin-top: $gu-v-spacing;
-
-    .svg-credit-card {
-      fill: gu-colour(garnett-neutral-1);
-    }
 
     @include mq($from: phablet) {
       width: 304px;
     }
-
-    &:hover {
-      color: darken(gu-colour(garnett-neutral-1), 5%);
-      border-color: darken(gu-colour(garnett-neutral-1), 5%);
-    }
   }
+
 
   .component-paypal-contribution-button {
     height: $cta-height;
