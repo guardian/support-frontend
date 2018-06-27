@@ -13,6 +13,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Types -----//
@@ -31,6 +32,7 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   setError: (message: string) => void,
   resetError: () => void,
+  disable: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,6 +72,7 @@ function StripeInlineFormComp(props: PropTypes) {
           setError={props.setError}
           resetError={props.resetError}
           email={props.email}
+          disable={props.disable}
         />
       </Elements>
     </StripeProvider>
@@ -104,6 +107,7 @@ function checkoutForm(props: {
   setError: (string) => void,
   resetError: () => void,
   email: string,
+  disable: boolean
 }) {
 
   const handleSubmit = (event) => {
@@ -136,14 +140,23 @@ function checkoutForm(props: {
     }
   };
 
+  const disableClass: string = props.disable ? "disable": "";
+  const getDisabled: string = props.disable ? "true": "";
+  const formPointerEvents: string = props.disable ? "none": "all";
+
+
   return (
-    <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
+    <form className="component-stripe-inline-form" onSubmit={handleSubmit} style={"pointer-events:" + formPointerEvents}>
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
-        <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />
+        <CardElement
+          className={classNameWithModifiers('component-stripe-inline-form__card-element', [disableClass])}
+          hidePostalCode style={stripeElementsStyle} />
       </label>
       <ErrorMessage message={props.errorMessage} />
-      <button className="component-stripe-inline-form__submit-payment">Confirm card payment <SvgArrowRightStraight /></button>
+      <button
+        className={classNameWithModifiers('component-stripe-inline-form__submit-payment', [disableClass])}
+        disabled={getDisabled}>Confirm card payment <SvgArrowRightStraight /></button>
     </form>);
 }
 

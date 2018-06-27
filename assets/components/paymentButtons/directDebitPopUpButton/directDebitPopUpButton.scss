@@ -28,3 +28,18 @@
     fill: #fff;
   }
 }
+
+.component-direct-debit-pop-up-button--disable {
+  background-color: gu-colour(garnett-neutral-4);
+  color: gu-colour(garnett-neutral-2);
+  cursor: auto;
+
+  svg {
+    fill: gu-colour(garnett-neutral-2);
+  }
+
+  &:hover {
+    background-color: gu-colour(garnett-neutral-4);
+  }
+
+}

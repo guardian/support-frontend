@@ -9,7 +9,10 @@ import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/switch';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
+import type { Currency } from 'helpers/internationalisation/currency';
+import { classNameWithModifiers } from 'helpers/utilities';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
@@ -23,6 +26,7 @@ type PropTypes = {|
   hasLoaded: boolean,
   setHasLoaded: () => void,
   switchStatus: Status,
+  disable: boolean,
 |};
 
 
@@ -59,11 +63,24 @@ function Button(props: PropTypes) {
 
   const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
 
-  return (
-    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
-      <PayPalButton {...payPalOptions} />
-    </div>
-  );
+  if (props.disable){
+    return (
+    <button
+      id="qa-pay-with-direct-debit"
+      className={classNameWithModifiers('component-paypal-fake-pop-up-button', ["disable"])}
+      disabled="true"
+    >
+      Pay with Paypal
+      <SvgArrowRightStraight />
+    </button>
+    )
+  } else {
+    return (
+      <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
+        <PayPalButton {...payPalOptions} />
+      </div>
+    );
+  }
 
 }
 

@@ -16,6 +16,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type { Status } from 'helpers/switch';
 import type { RegularCheckoutCallback } from 'helpers/checkouts';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ---- Types ----- //
@@ -26,6 +27,7 @@ type PropTypes = {
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
   switchStatus: Status,
+  disable: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -63,26 +65,33 @@ const DirectDebitPopUpButton = (props: PropTypes) => (
 // ----- Auxiliary Components ----- //
 
 function ButtonAndForm(props: PropTypes) {
-
   if (props.isPopUpOpen) {
     return (
       <div>
-        <Button openPopUp={props.openDirectDebitPopUp} />
+        <Button openPopUp={props.openDirectDebitPopUp} disable={props.disable} />
         <DirectDebitPopUpForm callback={props.callback} />
       </div>
     );
   }
 
-  return <Button openPopUp={props.openDirectDebitPopUp} />;
+  return <Button openPopUp={props.openDirectDebitPopUp} disable={props.disable} />;
 
 }
 
-function Button(props: { openPopUp: () => void }) {
+function Button(props: {
+  openPopUp: () => void,
+  disable: boolean
+  }) {
+
+  const disableClass: string = props.disable ? "disable": "";
+  const getDisabled: string = props.disable ? "true": "";
+
   return (
     <button
       id="qa-pay-with-direct-debit"
-      className="component-direct-debit-pop-up-button"
+      className={classNameWithModifiers('component-direct-debit-pop-up-button', [disableClass])}
       onClick={props.openPopUp}
+      disabled={getDisabled}
     >
       Pay with Direct Debit
       <SvgArrowRightStraight />
