@@ -15,6 +15,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
+import switchboard.Switches
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -24,12 +25,14 @@ class OneOffContributions(
     stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
-    components: ControllerComponents
+    components: ControllerComponents,
+    switches: Switches
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
   implicit val ar = assets
+  implicit val sw = switches
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(
