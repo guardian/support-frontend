@@ -28,7 +28,7 @@ class PayPalRegular(
   implicit val assetsResolver = assets
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = AuthenticatedAction.async(circe.json[PayPalBillingDetails]) { implicit request =>
+  def setupPayment: Action[PayPalBillingDetails] = authenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
 
     withPaypalServiceForUser(request.user) { service =>
@@ -41,7 +41,7 @@ class PayPalRegular(
     }
   }
 
-  def createAgreement: Action[Token] = AuthenticatedAction.async(circe.json[Token]) { implicit request =>
+  def createAgreement: Action[Token] = authenticatedAction().async(circe.json[Token]) { implicit request =>
     withPaypalServiceForUser(request.user) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))

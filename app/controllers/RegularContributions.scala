@@ -36,7 +36,7 @@ class RegularContributions(
   implicit val ar = assets
 
   def displayForm(useNewSignIn: Boolean): Action[AnyContent] =
-    SignInFlowAuthenticatedAction(useNewSignIn).async { implicit request =>
+    authenticatedAction(membersIdentityClientId, useNewSignIn).async { implicit request =>
       identityService.getUser(request.user).semiflatMap { fullUser =>
         isMonthlyContributor(request.user.credentials) map {
           case Some(true) =>
@@ -67,7 +67,7 @@ class RegularContributions(
       )
     }
 
-  def status(jobId: String): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def status(jobId: String): Action[AnyContent] = authenticatedAction().async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
         SafeLogger.error(scrub"Failed to get status of step function execution for user ${request.user.id} due to $error")
@@ -77,21 +77,22 @@ class RegularContributions(
     )
   }
 
-  def create: Action[CreateRegularContributorRequest] = AuthenticatedAction.async(circe.json[CreateRegularContributorRequest]) { implicit request =>
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
+  def create: Action[CreateRegularContributorRequest] = authenticatedAction().async(circe.json[CreateRegularContributorRequest]) {
+    implicit request =>
+      SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
-    val result = for {
-      user <- identityService.getUser(request.user)
-      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield response
+      val result = for {
+        user <- identityService.getUser(request.user)
+        response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      } yield response
 
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.user.id}, due to $error")
-        InternalServerError
-      },
-      response => Accepted(response.asJson)
-    )
+      result.fold(
+        { error =>
+          SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.user.id}, due to $error")
+          InternalServerError
+        },
+        response => Accepted(response.asJson)
+      )
   }
 
   private def contributor(user: IdUser, request: CreateRegularContributorRequest) = {

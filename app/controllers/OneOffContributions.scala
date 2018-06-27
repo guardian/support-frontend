@@ -31,7 +31,7 @@ class OneOffContributions(
 
   implicit val ar = assets
 
-  def autofill: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(
       _ => Ok(Autofill.empty.asJson),
       user => Ok(Autofill(id = Some(user.id), name = fullNameFor(user), email = Some(user.primaryEmailAddress)).asJson)
@@ -51,7 +51,7 @@ class OneOffContributions(
       idUser = idUser
     )
 
-  def displayForm(): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
+  def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     request.user.fold {
       Future.successful(Ok(formHtml(None)))
     } { minimalUser =>

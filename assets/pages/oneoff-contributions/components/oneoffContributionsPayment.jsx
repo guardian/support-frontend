@@ -7,16 +7,13 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import PayPalContributionButton from 'containerisableComponents/payPalContributionButton/payPalContributionButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
 
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Status } from 'helpers/switch';
 
 import { checkoutError, type Action } from '../oneoffContributionsActions';
@@ -32,16 +29,14 @@ type PropTypes = {|
   isFormEmpty: boolean,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  isoCountry: IsoCountry,
-  countryGroupId: CountryGroupId,
   checkoutError: (?string) => void,
   abParticipations: Participations,
   currencyId: IsoCurrency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
-  payPalSwitchStatus: Status,
 |};
+
 
 // ----- Map State/Props ----- //
 
@@ -54,12 +49,9 @@ function mapStateToProps(state) {
     isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
-    isoCountry: state.common.internationalisation.countryId,
-    countryGroupId: state.common.internationalisation.countryGroupId,
     abParticipations: state.common.abParticipations,
     currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
-    payPalSwitchStatus: state.common.switches.oneOffPaymentMethods.payPal,
   };
 }
 
@@ -117,15 +109,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
-      <PayPalContributionButton
-        amount={props.amount}
-        referrerAcquisitionData={props.referrerAcquisitionData}
-        isoCountry={props.isoCountry}
-        countryGroupId={props.countryGroupId}
-        errorHandler={props.checkoutError}
-        abParticipations={props.abParticipations}
-        switchStatus={props.payPalSwitchStatus}
-      />
       <StripePopUpButton
         email={props.email}
         callback={postCheckout(
