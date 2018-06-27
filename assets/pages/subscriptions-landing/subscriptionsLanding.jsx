@@ -40,8 +40,8 @@ const content = (
       footer={<Footer disclaimer privacyPolicy />}
     >
       <CirclesIntroduction
-        headings={['Help us deliver', 'the independent', 'journalism the', 'world needs']}
-        highlights={['Support', 'The Guardian']}
+        headings={['Help us deliver the', 'independent journalism', 'the world needs']}
+        highlights={['Support The Guardian']}
         modifierClasses={['compact']}
       />
       <section id={supporterSectionId}>
