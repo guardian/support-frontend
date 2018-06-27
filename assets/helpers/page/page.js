@@ -57,7 +57,6 @@ export type CommonState = {
 export type PreloadedState = {
   campaign?: $PropertyType<CommonState, 'campaign'>,
   referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  country?: $PropertyType<Internationalisation, 'countryId'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
 
