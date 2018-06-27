@@ -72,7 +72,7 @@ function ContributionSelection(props: PropTypes) {
           radios={
             getContributionAmountRadios(
               props.contributionType,
-              currencies[props.currencyId],
+              props.currencyId,
               props.countryGroupId,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}

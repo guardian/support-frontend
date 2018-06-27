@@ -9,7 +9,7 @@ import { spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -409,11 +409,11 @@ function getCustomAmountA11yHint(
 
 function getAmountA11yHint(
   contributionType: Contrib,
-  currency: Currency,
+  currencyId: IsoCurrency,
   spokenAmount: string,
 ): string {
 
-  const spokenCurrency = spokenCurrencies[currency.iso].plural;
+  const spokenCurrency = spokenCurrencies[currencyId].plural;
 
   if (contributionType === 'ONE_OFF') {
     return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
@@ -449,14 +449,14 @@ function getContributionTypeRadios(
 
 function getContributionAmountRadios(
   contributionType: Contrib,
-  currency: Currency,
+  currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
 ): Radio[] {
 
   return amounts[contributionType][countryGroupId].map(amount => ({
     value: amount.value,
-    text: `${currency.glyph}${amount.value}`,
-    accessibilityHint: getAmountA11yHint(contributionType, currency, amount.spoken),
+    text: `${currencies[currencyId].glyph}${amount.value}`,
+    accessibilityHint: getAmountA11yHint(contributionType, currencyId, amount.spoken),
   }));
 
 }

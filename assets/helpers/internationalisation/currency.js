@@ -14,55 +14,36 @@ export type IsoCurrency =
   | 'NZD'
   | 'CAD';
 
-export type Currency = {
-  iso: IsoCurrency,
+export type Currency = {|
   glyph: string,
   extendedGlyph: string,
-};
-
-export const GBP: Currency = {
-  iso: 'GBP',
-  glyph: '£',
-  extendedGlyph: '£',
-};
-
-export const USD: Currency = {
-  iso: 'USD',
-  glyph: '$',
-  extendedGlyph: 'US$',
-};
-
-export const AUD: Currency = {
-  iso: 'AUD',
-  glyph: '$',
-  extendedGlyph: 'AU$',
-};
-
-export const EUR: Currency = {
-  iso: 'EUR',
-  glyph: '€',
-  extendedGlyph: '€',
-};
-
-export const NZD: Currency = {
-  iso: 'NZD',
-  glyph: '$',
-  extendedGlyph: 'NZ$',
-};
-
-export const CAD: Currency = {
-  iso: 'CAD',
-  glyph: '$',
-  extendedGlyph: 'CA$',
-};
+|};
 
 const currencies = {
-  GBP,
-  USD,
-  AUD,
-  EUR,
-  NZD,
-  CAD,
+  GBP: {
+    glyph: '£',
+    extendedGlyph: '£',
+  },
+  USD: {
+    glyph: '$',
+    extendedGlyph: 'US$',
+  },
+  AUD: {
+    glyph: '$',
+    extendedGlyph: 'AU$',
+  },
+  EUR: {
+    glyph: '€',
+    extendedGlyph: '€',
+  },
+  NZD: {
+    glyph: '$',
+    extendedGlyph: 'NZ$',
+  },
+  CAD: {
+    glyph: '$',
+    extendedGlyph: 'CA$',
+  },
 };
 
 const spokenCurrencies = {
