@@ -16,13 +16,14 @@ import { currencies } from 'helpers/internationalisation/currency';
 
 function mapStateToProps(state: { common: CommonState }) {
   const { countryGroupId } = state.common.internationalisation;
+  const { referrerAcquisitionData } = state.common;
   const price = digitalSubPrices[countryGroupId].toFixed(2);
 
   return {
     ctaText: 'Start a 14 day free trial',
     url: getDigitalCheckout(
-      state.common.referrerAcquisitionData,
-      state.common.internationalisation.countryGroupId,
+      referrerAcquisitionData,
+      countryGroupId,
     ),
     price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
