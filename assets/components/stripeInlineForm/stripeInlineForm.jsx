@@ -153,7 +153,7 @@ const InjectedCheckoutForm = injectStripe(checkoutForm);
 
 StripeInlineForm.defaultProps = {
   canProceed: () => true,
-  switchStatus: 'ON',
+  switchStatus: 'On',
 };
 
 export default StripeInlineForm;

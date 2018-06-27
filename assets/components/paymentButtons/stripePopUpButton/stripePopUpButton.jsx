@@ -88,7 +88,7 @@ function Button(props: PropTypes) {
 StripePopUpButton.defaultProps = {
   canOpen: () => true,
   closeHandler: () => {},
-  switchStatus: 'ON',
+  switchStatus: 'On',
 };
 
 

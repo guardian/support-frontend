@@ -94,7 +94,7 @@ function Button(props: { openPopUp: () => void }) {
 // ----- Default Props ----- //
 
 DirectDebitPopUpButton.defaultProps = {
-  switchStatus: 'ON',
+  switchStatus: 'On',
 };
 
 

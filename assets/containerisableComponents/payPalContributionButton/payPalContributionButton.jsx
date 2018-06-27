@@ -100,7 +100,7 @@ PayPalContributionButton.defaultProps = {
   buttonText: 'Pay with PayPal',
   additionalClass: '',
   onClick: null,
-  switchStatus: 'ON',
+  switchStatus: 'On',
 };
 
 

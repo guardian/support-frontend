@@ -1,16 +1,14 @@
 package config
 
-import com.gocardless.GoCardlessClient
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
-import com.typesafe.scalalogging.LazyLogging
 import config.ConfigImplicits._
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
 import switchboard.Switches
 
-class Configuration extends LazyLogging {
+class Configuration {
   val config = ConfigFactory.load()
 
   lazy val stage = Stage.fromString(config.getString("stage")).get
@@ -39,7 +37,7 @@ class Configuration extends LazyLogging {
 
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 
-  lazy val stepFuctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
+  lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
   implicit val switches = new Switches(config.getConfig("switches"))
 
