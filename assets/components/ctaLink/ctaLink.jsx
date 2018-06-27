@@ -6,11 +6,9 @@ import React from 'react';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { clickSubstituteKeyPressHandler } from 'helpers/utilities';
 import uuidv4 from 'uuid';
-import { addQueryParamToURL } from 'helpers/url';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { Node } from 'react';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -23,7 +21,6 @@ type PropTypes = {
   tabIndex?: number,
   id?: ?string,
   svg?: Node,
-  acquisitionData?: ?ReferrerAcquisitionData,
   modifierClasses: Array<?string>,
 };
 
@@ -32,16 +29,12 @@ type PropTypes = {
 export default function CtaLink(props: PropTypes) {
 
   const accessibilityHintId = props.id ? `accessibility-hint-${props.id}` : uuidv4();
-  const urlString = props.url || '';
 
   return (
     <a
       id={props.id}
       className={classNameWithModifiers('component-cta-link', props.modifierClasses)}
-      href={props.acquisitionData ?
-        addQueryParamToURL(urlString, 'acquisitionData', JSON.stringify(props.acquisitionData))
-         : props.url
-      }
+      href={props.url}
       onClick={props.onClick}
       onKeyPress={props.onClick ? clickSubstituteKeyPressHandler(props.onClick) : null}
       tabIndex={props.tabIndex}
@@ -64,6 +57,5 @@ CtaLink.defaultProps = {
   tabIndex: 0,
   id: null,
   svg: <SvgArrowRightStraight />,
-  acquisitionData: null,
   modifierClasses: [],
 };
