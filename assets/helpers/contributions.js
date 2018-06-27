@@ -14,7 +14,8 @@ import type { Currency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
-export type Contrib = 'ANNUAL' | 'MONTHLY' | 'ONE_OFF';
+export type RegularContributionType = 'ANNUAL' | 'MONTHLY';
+export type Contrib = RegularContributionType | 'ONE_OFF';
 
 export type BillingPeriod = 'Monthly' | 'Annual';
 
@@ -286,6 +287,16 @@ function parseContrib(s: ?string, contrib: Contrib): Contrib {
   }
 }
 
+function parseRegularContributionType(s: string): RegularContributionType {
+
+  if (s === 'ANNUAL') {
+    return 'ANNUAL';
+  }
+
+  return 'MONTHLY';
+
+}
+
 function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
   switch (contrib) {
     case 'ANNUAL': return 'Annual';
@@ -468,4 +479,5 @@ export {
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,
+  parseRegularContributionType,
 };

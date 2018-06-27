@@ -14,13 +14,17 @@ import { stripeInlineFormReducerFor } from 'components/stripeInlineForm/stripeIn
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
+import { type RegularContributionType } from 'helpers/contributions';
+
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus } from './components/regularContributionsPayment';
+
 
 // ----- Types ----- //
 
 export type State = {
   amount: number,
+  contributionType: RegularContributionType,
   error: ?string,
   paymentStatus: PaymentStatus,
   paymentMethod: ?PaymentMethod,
@@ -44,10 +48,15 @@ export type PageState = {
 
 // ----- Reducers ----- //
 
-function createRegularContribReducer(amount: number, paymentMethod: ?PaymentMethod) {
+function createRegularContribReducer(
+  amount: number,
+  paymentMethod: ?PaymentMethod,
+  contributionType: RegularContributionType,
+) {
 
   const initialState: State = {
     amount,
+    contributionType,
     error: null,
     paymentStatus: 'NotStarted',
     paymentMethod,
@@ -87,9 +96,10 @@ function createRegularContribReducer(amount: number, paymentMethod: ?PaymentMeth
 export default function createRootRegularContributionsReducer(
   amount: number,
   paymentMethod: ?PaymentMethod,
+  contributionType: RegularContributionType,
 ) {
   return combineReducers({
-    regularContrib: createRegularContribReducer(amount, paymentMethod),
+    regularContrib: createRegularContribReducer(amount, paymentMethod, contributionType),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user,
     csrf,
