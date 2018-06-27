@@ -20,7 +20,7 @@ type PropTypes = {
 
 function Switchable(props: PropTypes) {
 
-  if (props.status === 'OFF') {
+  if (props.status === 'Off') {
     return <props.fallback />;
   }
 

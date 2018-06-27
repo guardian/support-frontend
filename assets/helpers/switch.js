@@ -1,6 +1,6 @@
 // @flow
 
-export type Status = 'ON' | 'OFF';
+export type Status = 'On' | 'Off';
 
 type SwitchObject = {
   [string]: Status,
