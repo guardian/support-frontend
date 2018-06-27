@@ -28,7 +28,7 @@ import type {
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   country: IsoCountry,
   countryGroupId: CountryGroupId,
   currencyId: IsoCurrency,
@@ -42,7 +42,7 @@ type PropTypes = {
   error: ContributionError,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-};
+|};
 
 
 // ----- Component ----- //
