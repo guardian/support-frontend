@@ -40,25 +40,14 @@
 @import '~components/yourContribution/yourContribution';
 @import '~components/yourDetails/yourDetails';
 @import '~components/legal/legalSection/legalSection';
+@import '~components/contributionsCheckout/contributionsCheckout';
 
 
 // ----- Page-Specific Styles ----- //
 
 #regular-contributions-page {
 
-  // ----- Your contribution
-
-  .component-your-contribution {
-    border-top: none;
-
-    @include multiline-top-border;
-  }
-
   // ----- Your details
-
-  .component-your-details {
-    margin-top: $gu-v-spacing * 3;
-  }
 
   .component-text-input {
     border: 2px solid gu-colour(news-garnett-highlight);
@@ -94,29 +83,6 @@
 
   // ----- Payment methods
 
-  .component-page-section--payment-methods {
-    border-top: 1px solid gu-colour(garnett-neutral-4);
-    margin-top: $gu-v-spacing * 3;
-
-    .component-page-section__body {
-      padding-top: $gu-v-spacing;
-
-      @include mq($from: desktop) {
-        padding-left: $gu-h-spacing;
-      }
-    }
-
-    .component-page-section__header {
-      font-family: $gu-egyptian-web;
-      font-weight: bold;
-      font-size: 24px;
-      line-height: 1.17;
-      padding-top: $gu-v-spacing / 2;
-
-      @include dropline;
-    }
-  }
-
   .component-direct-debit-pop-up-button {
     margin-bottom: $gu-v-spacing;
     width: 100%;
@@ -147,13 +113,6 @@
 
   .component-payment-error--paypal-express {
     margin-top: $gu-v-spacing;
-  }
-
-  // ----- Legal ----- //
-
-  .component-legal-section {
-    margin-top: $gu-v-spacing * 3;
-    margin-bottom: $gu-v-spacing * 2;
   }
 }
 

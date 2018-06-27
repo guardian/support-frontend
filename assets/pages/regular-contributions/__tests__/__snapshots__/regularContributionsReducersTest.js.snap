@@ -29,6 +29,7 @@ Object {
   },
   "regularContrib": Object {
     "amount": 20,
+    "contributionType": "MONTHLY",
     "error": null,
     "payPalHasLoaded": false,
     "paymentMethod": "GBP",

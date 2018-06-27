@@ -184,6 +184,7 @@ function mapStateToProps(state) {
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
     currencyId: state.common.internationalisation.currencyId,
+    contributionType: state.page.regularContrib.contributionType,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
     country: state.common.internationalisation.countryId,
