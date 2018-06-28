@@ -133,7 +133,7 @@ function requestData(
 ) {
 
   const { user } = getState().page;
-  const { country } = getState().common;
+  const { country } = getState().common.internationalisation;
 
   if (!isUserValid(user)) {
     return Promise.resolve({
