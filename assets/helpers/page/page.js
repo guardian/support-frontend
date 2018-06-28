@@ -167,7 +167,7 @@ function init<S, A>(
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
   const participations: Participations = abTest.init(countryId, countryGroupId);
-  const { switches } : Switches = guardian;
+  const { switches } = window.guardian;
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
