@@ -19,7 +19,9 @@ export type Currency = {|
   extendedGlyph: string,
 |};
 
-const currencies = {
+const currencies: {
+  [IsoCurrency]: Currency,
+} = {
   GBP: {
     glyph: '£',
     extendedGlyph: '£',
