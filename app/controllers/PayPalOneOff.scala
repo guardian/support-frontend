@@ -10,9 +10,10 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
-
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
+import switchboard.Switches
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -22,12 +23,14 @@ class PayPalOneOff(
     testUsers: TestUserService,
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
-    identityService: IdentityService
+    identityService: IdentityService,
+    switches: Switches
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
 
   implicit val assetsResolver = assets
+  implicit val sw = switches
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")

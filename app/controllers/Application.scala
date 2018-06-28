@@ -6,9 +6,9 @@ import com.gu.i18n.CountryGroup._
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
+import switchboard.Switches
 import utils.BrowserCheck
 import utils.RequestCountry._
-
 import scala.concurrent.ExecutionContext
 
 class Application(
@@ -17,12 +17,14 @@ class Application(
     identityService: IdentityService,
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
-    stringsConfig: StringsConfig
+    stringsConfig: StringsConfig,
+    switches: Switches
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
   implicit val ar = assets
+  implicit val sw = switches
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())

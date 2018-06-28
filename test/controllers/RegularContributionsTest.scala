@@ -23,6 +23,8 @@ import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config._
 import fixtures.TestCSRFComponents
+import switchboard.SwitchState.On
+import switchboard.{PaymentMethodsSwitch, Switches}
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
@@ -157,7 +159,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           testUsers,
           stripeConfigProvider,
           payPalConfigProvider,
-          stubControllerComponents()
+          stubControllerComponents(),
+          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)))
         ).displayForm(false)(FakeRequest())
       }
     }

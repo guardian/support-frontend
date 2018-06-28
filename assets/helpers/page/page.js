@@ -19,7 +19,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Switches } from 'helpers/switch';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-import * as switchHelper from 'helpers/switch';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
@@ -168,7 +167,7 @@ function init<S, A>(
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
   const participations: Participations = abTest.init(countryId, countryGroupId);
-  const switches: Switches = switchHelper.init();
+  const { switches } = window.guardian;
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(

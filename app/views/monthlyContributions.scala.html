@@ -4,6 +4,7 @@
 @import helper.CSRF
 
 @import com.gu.i18n.Currency.AUD
+@import switchboard.Switches
 @(
   title: String,
   id: String,
@@ -14,7 +15,7 @@
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
-)(implicit assets: AssetsResolver, requestHeader: RequestHeader)
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, switches: Switches)
 
 @scripts = {
     <script type="text/javascript">

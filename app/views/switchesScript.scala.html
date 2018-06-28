@@ -1,0 +1,18 @@
+@import switchboard.Switches
+
+@(switches: Switches)
+
+<script type="text/javascript">
+    window.guardian = window.guardian || {};
+    guardian.switches = {
+      oneOffPaymentMethods: {
+        stripe: '@switches.onOffPaymentMethods.stripe',
+        payPal: '@switches.onOffPaymentMethods.payPal',
+      },
+      recurringPaymentMethods: {
+        stripe: '@switches.recurringPaymentMethods.stripe',
+        payPal: '@switches.recurringPaymentMethods.payPal',
+        directDebit: '@switches.recurringPaymentMethods.directDebit',
+      },
+    };
+</script>

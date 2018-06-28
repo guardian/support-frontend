@@ -28,7 +28,8 @@ trait AppComponents extends PlayComponents
     configuration,
     sourceMapper,
     Some(router),
-    assetsResolver
+    assetsResolver,
+    appConfig.switches
   )
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(

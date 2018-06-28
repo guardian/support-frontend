@@ -5,6 +5,7 @@ import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
 import config.StringsConfig
 import play.api.mvc._
+import switchboard.Switches
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -13,12 +14,14 @@ class Subscriptions(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
     components: ControllerComponents,
-    stringsConfig: StringsConfig
+    stringsConfig: StringsConfig,
+    switches: Switches
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
   implicit val ar = assets
+  implicit val sw = switches
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {

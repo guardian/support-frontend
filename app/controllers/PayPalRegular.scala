@@ -12,6 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
+import switchboard.Switches
 
 import scala.concurrent.ExecutionContext
 
@@ -20,12 +21,14 @@ class PayPalRegular(
     assets: AssetsResolver,
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents
+    components: ControllerComponents,
+    switches: Switches
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
 
   implicit val assetsResolver = assets
+  implicit val sw = switches
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = authenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>

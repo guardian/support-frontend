@@ -3,6 +3,7 @@
 @import com.gu.support.config.StripeConfig
 @import helper.CSRF
 @import com.gu.i18n.Currency.AUD
+@import switchboard.Switches
 @(
         title: String,
         id: String,
@@ -13,7 +14,7 @@
         paymentApiStripeEndpoint: String,
         paymentApiPayPalEndpoint: String,
         idUser: Option[IdUser]
-)(implicit assets: AssetsResolver, request: RequestHeader)
+)(implicit assets: AssetsResolver, request: RequestHeader, switches: Switches)
 
 @scripts = {
     <script type="text/javascript">

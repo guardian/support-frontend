@@ -15,6 +15,7 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
+import switchboard.Switches
 import views.html.monthlyContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,12 +29,14 @@ class RegularContributions(
     testUsers: TestUserService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
-    components: ControllerComponents
+    components: ControllerComponents,
+    switches: Switches
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
   implicit val ar = assets
+  implicit val sw = switches
 
   def displayForm(useNewSignIn: Boolean): Action[AnyContent] =
     authenticatedAction(membersIdentityClientId, useNewSignIn).async { implicit request =>

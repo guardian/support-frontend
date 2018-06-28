@@ -71,7 +71,7 @@ function Button(props: PropTypes) {
 // ----- Default Props ----- //
 
 PayPalExpressButton.defaultProps = {
-  switchStatus: 'ON',
+  switchStatus: 'On',
 };
 
 

@@ -1,5 +1,6 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
+@import switchboard.Switches
 @(
 	title: String,
 	mainId: String,
@@ -8,7 +9,7 @@
 	description: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html("")
-)(implicit assets: AssetsResolver, request: RequestHeader)
+)(implicit assets: AssetsResolver, request: RequestHeader, switches: Switches)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +22,8 @@
 		<meta name="description" content="@description" />
 		<meta property="og:description" content="@description" />
 	}
+
+	@switchesScript(switches)
 
 	<title>@title</title>
 	<meta property="og:title" content="@title"/>
