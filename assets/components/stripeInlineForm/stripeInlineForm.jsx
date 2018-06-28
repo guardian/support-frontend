@@ -6,7 +6,7 @@ import React from 'react';
 
 import { StripeProvider, Elements, CardElement, injectStripe } from 'react-stripe-elements';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
-import { type Currency } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Status } from 'helpers/switch';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -21,7 +21,7 @@ import * as storage from 'helpers/storage';
 type PropTypes = {|
   stripeIsLoaded: void => void,
   isStripeLoaded: boolean,
-  currency: Currency,
+  currencyId: IsoCurrency,
   email: string,
   isTestUser: boolean,
   callback: (token: string) => Promise<*>,
@@ -59,11 +59,11 @@ function StripeInlineFormComp(props: PropTypes) {
   }
 
   return (
-    <StripeProvider apiKey={getStripeKey(props.currency.iso, props.isTestUser)}>
+    <StripeProvider apiKey={getStripeKey(props.currencyId, props.isTestUser)}>
       <Elements>
         <InjectedCheckoutForm
           callback={props.callback}
-          currency={props.currency}
+          currencyId={props.currencyId}
           isPostDeploymentTestUser={props.isPostDeploymentTestUser}
           canProceed={props.canProceed}
           errorMessage={props.errorMessage}

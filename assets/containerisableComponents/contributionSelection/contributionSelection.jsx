@@ -18,7 +18,7 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Currency } from 'helpers/internationalisation/currency';
+import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
   Contrib as ContributionType,
@@ -28,10 +28,10 @@ import type {
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   country: IsoCountry,
   countryGroupId: CountryGroupId,
-  currency: Currency,
+  currencyId: IsoCurrency,
   contributionType: ContributionType,
   selectedAmount: number,
   isCustomAmount: boolean,
@@ -42,7 +42,7 @@ type PropTypes = {
   error: ContributionError,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-};
+|};
 
 
 // ----- Component ----- //
@@ -72,7 +72,7 @@ function ContributionSelection(props: PropTypes) {
           radios={
             getContributionAmountRadios(
               props.contributionType,
-              props.currency,
+              props.currencyId,
               props.countryGroupId,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
@@ -109,7 +109,7 @@ function CustomAmountInput(props: {
   setCustomAmount: (string, CountryGroupId) => void,
   isCustomAmount: boolean,
   onKeyPress: Object => void,
-  currency: Currency,
+  currencyId: IsoCurrency,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   error: ContributionError,
@@ -124,7 +124,7 @@ function CustomAmountInput(props: {
         placeholder="Other amount"
         onKeyPress={props.onKeyPress}
         ariaDescribedBy="component-contribution-selection__custom-amount-a11y"
-        labelText={props.currency.glyph}
+        labelText={currencies[props.currencyId].glyph}
         countryGroupId={props.countryGroupId}
       />
       <p className="accessibility-hint" id="component-contribution-selection__custom-amount-a11y">

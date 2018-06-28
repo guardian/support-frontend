@@ -20,8 +20,8 @@ function mapStateToProps(state: State) {
 
   return {
     amount: state.page.regularContrib.amount,
-    currency: state.common.currency,
-    country: state.common.country,
+    currencyId: state.common.internationalisation.currencyId,
+    country: state.common.internationalisation.countryId,
     inlineCardPaymentVariant,
     payment: inlineCardPaymentVariant === 'inline' ?
       <RegularInlineContributionsPayment /> :

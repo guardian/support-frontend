@@ -8,7 +8,7 @@ import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Currency, IsoCurrency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 
@@ -84,7 +84,7 @@ export default function postCheckout(
   abParticipations: Participations,
   dispatch: Function,
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
 ): (string) => Promise<*> {
@@ -92,7 +92,7 @@ export default function postCheckout(
     const request = requestData(
       abParticipations,
       paymentToken,
-      currency.iso,
+      currencyId,
       amount,
       referrerAcquisitionData,
       getState,

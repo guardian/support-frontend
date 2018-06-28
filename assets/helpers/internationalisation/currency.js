@@ -14,55 +14,38 @@ export type IsoCurrency =
   | 'NZD'
   | 'CAD';
 
-export type Currency = {
-  iso: IsoCurrency,
+export type Currency = {|
   glyph: string,
   extendedGlyph: string,
-};
+|};
 
-export const GBP: Currency = {
-  iso: 'GBP',
-  glyph: '£',
-  extendedGlyph: '£',
-};
-
-export const USD: Currency = {
-  iso: 'USD',
-  glyph: '$',
-  extendedGlyph: 'US$',
-};
-
-export const AUD: Currency = {
-  iso: 'AUD',
-  glyph: '$',
-  extendedGlyph: 'AU$',
-};
-
-export const EUR: Currency = {
-  iso: 'EUR',
-  glyph: '€',
-  extendedGlyph: '€',
-};
-
-export const NZD: Currency = {
-  iso: 'NZD',
-  glyph: '$',
-  extendedGlyph: 'NZ$',
-};
-
-export const CAD: Currency = {
-  iso: 'CAD',
-  glyph: '$',
-  extendedGlyph: 'CA$',
-};
-
-const currencies = {
-  GBP,
-  USD,
-  AUD,
-  EUR,
-  NZD,
-  CAD,
+const currencies: {
+  [IsoCurrency]: Currency,
+} = {
+  GBP: {
+    glyph: '£',
+    extendedGlyph: '£',
+  },
+  USD: {
+    glyph: '$',
+    extendedGlyph: 'US$',
+  },
+  AUD: {
+    glyph: '$',
+    extendedGlyph: 'AU$',
+  },
+  EUR: {
+    glyph: '€',
+    extendedGlyph: '€',
+  },
+  NZD: {
+    glyph: '$',
+    extendedGlyph: 'NZ$',
+  },
+  CAD: {
+    glyph: '$',
+    extendedGlyph: 'CA$',
+  },
 };
 
 const spokenCurrencies = {
@@ -92,43 +75,30 @@ const spokenCurrencies = {
   },
 };
 
-
-function fromIsoCurrency(isoCurrency: IsoCurrency): ?Currency {
-  switch (isoCurrency) {
-    case 'USD': return USD;
-    case 'GBP': return GBP;
-    case 'AUD': return AUD;
-    case 'EUR': return EUR;
-    case 'NZD': return NZD;
-    case 'CAD': return CAD;
-    default: return null;
-  }
-}
-
-function fromCountryGroupId(countryGroupId: CountryGroupId): ?Currency {
+function fromCountryGroupId(countryGroupId: CountryGroupId): ?IsoCurrency {
   const countryGroup: ?CountryGroup = countryGroups[countryGroupId];
 
   if (!countryGroup) {
     return null;
   }
 
-  return fromIsoCurrency(countryGroup.currency);
+  return countryGroup.currency;
 }
 
 
-function fromString(s: string): ?Currency {
+function fromString(s: string): ?IsoCurrency {
   switch (s.toLowerCase()) {
-    case 'gbp': return GBP;
-    case 'usd': return USD;
-    case 'aud': return AUD;
-    case 'eur': return EUR;
-    case 'nzd': return NZD;
-    case 'cad': return CAD;
+    case 'gbp': return 'GBP';
+    case 'usd': return 'USD';
+    case 'aud': return 'AUD';
+    case 'eur': return 'EUR';
+    case 'nzd': return 'NZD';
+    case 'cad': return 'CAD';
     default: return null;
   }
 }
 
-function fromQueryParameter(): ?Currency {
+function fromQueryParameter(): ?IsoCurrency {
   const currency = getQueryParameter('currency');
   if (currency) {
     return fromString(currency);
@@ -136,8 +106,8 @@ function fromQueryParameter(): ?Currency {
   return null;
 }
 
-function detect(countryGroup: CountryGroupId): Currency {
-  return fromQueryParameter() || fromCountryGroupId(countryGroup) || GBP;
+function detect(countryGroup: CountryGroupId): IsoCurrency {
+  return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
 }
 
 export {

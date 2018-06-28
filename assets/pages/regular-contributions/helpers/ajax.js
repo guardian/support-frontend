@@ -11,7 +11,7 @@ import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpe
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
-import type { IsoCurrency, Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import { successfulConversion } from 'helpers/tracking/googleTagManager';
@@ -133,7 +133,7 @@ function requestData(
 ) {
 
   const { user } = getState().page;
-  const { country } = getState().common;
+  const country = getState().common.internationalisation.countryId;
 
   if (!isUserValid(user)) {
     return Promise.resolve({
@@ -272,7 +272,7 @@ function postCheckout(
   abParticipations: Participations,
   amount: number,
   csrf: CsrfState,
-  currency: Currency,
+  currencyId: IsoCurrency,
   contributionType: Contrib,
   dispatch: Dispatch<*>,
   paymentMethod: PaymentMethod,
@@ -293,7 +293,7 @@ function postCheckout(
       abParticipations,
       amount,
       contributionType,
-      currency.iso,
+      currencyId,
       csrf,
       paymentMethodToPaymentFieldMap[paymentMethod],
       referrerAcquisitionData,

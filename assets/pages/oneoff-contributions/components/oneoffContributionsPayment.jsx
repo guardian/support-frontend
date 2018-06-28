@@ -13,7 +13,7 @@ import { validateEmailAddress } from 'helpers/utilities';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 
 import { checkoutError, type Action } from '../oneoffContributionsActions';
@@ -22,7 +22,7 @@ import postCheckout from '../helpers/ajax';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   dispatch: Function,
   email: string,
   error: ?string,
@@ -31,11 +31,12 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   checkoutError: (?string) => void,
   abParticipations: Participations,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
-};
+|};
+
 
 // ----- Map State/Props ----- //
 
@@ -49,7 +50,7 @@ function mapStateToProps(state) {
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
   };
 }
@@ -114,7 +115,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.abParticipations,
           props.dispatch,
           props.amount,
-          props.currency,
+          props.currencyId,
           props.referrerAcquisitionData,
           context.store.getState,
         )}
@@ -123,7 +124,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           validateEmailAddress(props.email),
           props.checkoutError,
         )}
-        currency={props.currency}
+        currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}

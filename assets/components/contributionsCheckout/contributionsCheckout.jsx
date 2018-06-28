@@ -15,7 +15,7 @@ import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 
 import { type Contrib as ContributionType } from 'helpers/contributions';
-import { type Currency } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 
 
@@ -23,7 +23,7 @@ import { type IsoCountry } from 'helpers/internationalisation/country';
 
 type PropTypes = {
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   country: IsoCountry,
   contributionType: ContributionType,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
@@ -74,7 +74,7 @@ export default function ContributionsCheckout(props: PropTypes) {
           contributionType={props.contributionType}
           country={props.country}
           amount={props.amount}
-          currency={props.currency}
+          currencyId={props.currencyId}
         />
         <YourDetails>
           {props.form}

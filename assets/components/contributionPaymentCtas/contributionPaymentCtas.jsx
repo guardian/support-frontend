@@ -18,12 +18,12 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 
-import type { Currency } from 'helpers/internationalisation/currency';
-import type { Contrib as ContributionType } from 'helpers/contributions';
-import type { Status } from 'helpers/switch';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type Status } from 'helpers/switch';
+import { type IsoCountry } from 'helpers/internationalisation/country';
+import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -34,7 +34,7 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   country: IsoCountry,
   countryGroupId: CountryGroupId,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isDisabled: boolean,
   PayPalButton: React$ComponentType<{
     buttonText?: string,
@@ -76,7 +76,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
     return (
       <div className={classNameWithModifiers(baseClassName, props.isDisabled ? ['disabled'] : [])}>
         <props.PayPalButton
-          buttonText={`Contribute ${props.currency.glyph}${props.amount} with PayPal`}
+          buttonText={`Contribute ${currencies[props.currencyId].glyph}${props.amount} with PayPal`}
           onClick={props.resetError}
         />
         <OneOffCta {...props} />
@@ -103,7 +103,7 @@ function OneOffCta(props: {
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
 }): Node {
@@ -112,12 +112,12 @@ function OneOffCta(props: {
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
-    currency: props.currency.iso,
+    currency: props.currencyId,
   });
 
   return (
     <CtaLink
-      text={`Contribute ${props.currency.glyph}${props.amount} with card`}
+      text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} with card`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
@@ -133,7 +133,7 @@ function RegularCta(props: {
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
   newSignInFlowVariant: 'control' | 'variant',
@@ -147,13 +147,13 @@ function RegularCta(props: {
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
-    currency: props.currency.iso,
+    currency: props.currencyId,
     useNewSignIn,
   });
 
   return (
     <CtaLink
-      text={`Contribute ${props.currency.glyph}${props.amount} a month`}
+      text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} a month`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}

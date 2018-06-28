@@ -21,7 +21,7 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import * as switchHelper from 'helpers/switch';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency, type Currency } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import {
   getCampaign,
@@ -39,21 +39,24 @@ import type { Action } from './pageActions';
 
 // ----- Types ----- //
 
+export type Internationalisation = {|
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+|};
+
 export type CommonState = {
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  currency: Currency,
   otherQueryParams: Array<[string, string]>,
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
   abParticipations: Participations,
   switches: Switches,
+  internationalisation: Internationalisation,
 };
 
 export type PreloadedState = {
   campaign?: $PropertyType<CommonState, 'campaign'>,
   referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  country?: $PropertyType<CommonState, 'country'>,
   abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
 };
 
@@ -80,23 +83,26 @@ function analyticsInitialisation(participations: Participations): void {
 function buildInitialState(
   abParticipations: Participations,
   preloadedState: ?PreloadedState = {},
-  countryGroup: CountryGroupId,
-  country: IsoCountry,
-  currency: Currency,
+  countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+  currencyId: IsoCurrency,
   switches: Switches,
 ): CommonState {
   const acquisition = getAcquisition(abParticipations);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
+  const internationalisation = {
+    countryGroupId,
+    countryId,
+    currencyId,
+  };
 
   return Object.assign({}, {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
-    countryGroup,
-    country,
+    internationalisation,
     abParticipations,
-    currency,
     switches,
   }, preloadedState);
 
@@ -158,19 +164,19 @@ function init<S, A>(
   preloadedState: ?PreloadedState = null,
 ): Store<*, *, *> {
 
-  const countryGroup: CountryGroupId = detectCountryGroup();
-  const country: IsoCountry = detectCountry();
-  const currency: Currency = detectCurrency(countryGroup);
-  const participations: Participations = abTest.init(country, countryGroup);
+  const countryGroupId: CountryGroupId = detectCountryGroup();
+  const countryId: IsoCountry = detectCountry();
+  const currencyId: IsoCurrency = detectCurrency(countryGroupId);
+  const participations: Participations = abTest.init(countryId, countryGroupId);
   const switches: Switches = switchHelper.init();
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
     participations,
     preloadedState,
-    countryGroup,
-    country,
-    currency,
+    countryGroupId,
+    countryId,
+    currencyId,
     switches,
   );
   const commonReducer = createCommonReducer(initialState);

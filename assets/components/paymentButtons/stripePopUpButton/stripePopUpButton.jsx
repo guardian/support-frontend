@@ -8,7 +8,7 @@ import SvgCreditCard from 'components/svgs/creditCard';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Status } from 'helpers/switch';
-import type { Currency } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import {
   setupStripeCheckout,
@@ -23,7 +23,7 @@ type PropTypes = {|
   amount: number,
   callback: (token: string) => Promise<*>,
   closeHandler: () => void,
-  currency: Currency,
+  currencyId: IsoCurrency,
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
@@ -56,7 +56,7 @@ const StripePopUpButton = (props: PropTypes) => (
 function Button(props: PropTypes) {
 
   if (!isStripeSetup()) {
-    setupStripeCheckout(props.callback, props.closeHandler, props.currency.iso, props.isTestUser);
+    setupStripeCheckout(props.callback, props.closeHandler, props.currencyId, props.isTestUser);
   }
 
   const onClick = () => {

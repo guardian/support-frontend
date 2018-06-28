@@ -6,7 +6,7 @@ import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { Currency } from '../internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Functions ----- //
 
@@ -46,7 +46,7 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 
 function setupPayment(
   amountToPay: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   csrf: CsrfState,
 ) {
   const csrfToken = csrf.token;
@@ -56,7 +56,7 @@ function setupPayment(
     const requestBody = {
       amount: amountToPay,
       billingPeriod: 'monthly',
-      currency: currency.iso,
+      currency: currencyId,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -84,7 +84,7 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
 
 function setup(
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
   csrf: CsrfState,
   callback: (token: string) => Promise<*>,
 ): Promise<Object> {
@@ -109,7 +109,7 @@ function setup(
     commit: true,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currency, csrf),
+    payment: setupPayment(amount, currencyId, csrf),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,

@@ -13,7 +13,8 @@ import { validateEmailAddress } from 'helpers/utilities';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Currency } from 'helpers/internationalisation/currency';
+
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 import { type Action as StripeInlineFormAction, stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
 
@@ -23,7 +24,7 @@ import postCheckout from '../helpers/ajax';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
   error: ?string,
@@ -32,7 +33,7 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   checkoutError: (?string) => void,
   abParticipations: Participations,
-  currency: Currency,
+  currencyId: IsoCurrency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
@@ -41,7 +42,7 @@ type PropTypes = {
   stripeInlineErrorMessage: ?string,
   stripeInlineSetError: (string) => void,
   stripeInlineResetError: () => void,
-};
+|};
 
 // ----- Map State/Props ----- //
 
@@ -55,7 +56,7 @@ function mapStateToProps(state) {
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
-    currency: state.common.currency,
+    currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
     stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
@@ -130,7 +131,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.abParticipations,
           props.dispatch,
           props.amount,
-          props.currency,
+          props.currencyId,
           props.referrerAcquisitionData,
           context.store.getState,
         )}
@@ -141,7 +142,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         )}
         stripeIsLoaded={props.stripeIsLoaded}
         isStripeLoaded={props.isStripeLoaded}
-        currency={props.currency}
+        currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         switchStatus={props.stripeSwitchStatus}

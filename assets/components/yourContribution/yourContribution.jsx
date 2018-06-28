@@ -8,7 +8,7 @@ import PageSection from 'components/pageSection/pageSection';
 import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import Secure from 'components/secure/secure';
 
-import { type Currency } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 
@@ -19,7 +19,7 @@ type PropTypes = {
   contributionType: ContributionType,
   country: IsoCountry,
   amount: number,
-  currency: Currency,
+  currencyId: IsoCurrency,
 };
 
 
@@ -52,7 +52,7 @@ export default function YourContribution(props: PropTypes) {
       <PageSection heading={getHeading(props.contributionType, props.country)}>
         <PaymentAmount
           amount={props.amount}
-          currency={props.currency}
+          currencyId={props.currencyId}
         />
         <Secure />
       </PageSection>

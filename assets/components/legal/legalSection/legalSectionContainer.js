@@ -14,7 +14,7 @@ import LegalSection from './legalSection';
 function mapStateToProps(state: { common: CommonState }) {
 
   return {
-    country: state.common.country,
+    country: state.common.internationalisation.countryId,
   };
 
 }

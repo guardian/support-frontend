@@ -9,21 +9,23 @@ import PriceCta from 'components/priceCta/priceCta';
 import { digitalSubPrices } from 'helpers/subscriptions';
 import { getDigitalCheckout } from 'helpers/externalLinks';
 import type { CommonState } from 'helpers/page/page';
+import { currencies } from 'helpers/internationalisation/currency';
 
 
 // ----- State Maps ----- //
 
 function mapStateToProps(state: { common: CommonState }) {
-
-  const price = digitalSubPrices[state.common.countryGroup].toFixed(2);
+  const { countryGroupId } = state.common.internationalisation;
+  const { referrerAcquisitionData } = state.common;
+  const price = digitalSubPrices[countryGroupId].toFixed(2);
 
   return {
     ctaText: 'Start a 14 day free trial',
     url: getDigitalCheckout(
-      state.common.referrerAcquisitionData,
-      state.common.countryGroup,
+      referrerAcquisitionData,
+      countryGroupId,
     ),
-    price: `${state.common.currency.glyph}${price}`,
+    price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
 
 }

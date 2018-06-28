@@ -45,7 +45,7 @@ function mapStateToProps(state) {
   const { user } = state.page;
   return {
     email: user.email,
-    isoCountry: state.common.country,
+    isoCountry: state.common.internationalisation.countryId,
     isSignedIn: state.page.user.isSignedIn,
   };
 
