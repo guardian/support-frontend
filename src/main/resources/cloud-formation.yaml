@@ -387,6 +387,52 @@ Resources:
     - TargetGroup
     - ElasticLoadBalancer
 
+  NoPaypalPaymentsInTwoHours247Alarm:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+        AlarmName: !Sub ${App} ${Stage} CP One-off contributions with PayPal might be down
+        AlarmDescription: There have been no one-off contributions using paypal in the last 2 hours
+        MetricName: payment-success
+        Namespace: support-payment-api-PROD
+        Dimensions:
+          - Name: payment-provider
+            Value: Paypal
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Threshold: 0
+        Period: 600
+        EvaluationPeriods: 12
+        Statistic: Sum
+        TreatMissingData: breaching
+      DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
+  NoStripePaymentsInThreeHours247Alarm:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+        AlarmName: !Sub ${App} ${Stage} CP One-off contributions with Card might be down
+        AlarmDescription: There have been no one-off contributions using card payment in the last 3 hours
+        MetricName: payment-success
+        Namespace: support-payment-api-PROD
+        Dimensions:
+          - Name: payment-provider
+            Value: Stripe
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Threshold: 0
+        Period: 900
+        EvaluationPeriods: 12
+        Statistic: Sum
+        TreatMissingData: breaching
+      DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
   NoPaypalPaymentsInOneHourAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
