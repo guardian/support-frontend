@@ -39,6 +39,6 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val switches = new Switches(config.getConfig("switches"))
+  implicit val switches = Switches.fromConfig(config.getConfig("switches"))
 
 }
