@@ -2,6 +2,7 @@ package services
 
 import java.io.IOException
 
+import io.circe.generic.JsonCodec
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
@@ -13,6 +14,10 @@ case class ExecutePaymentBody(
     acquisitionData: JsValue,
     paymentData: JsObject
 )
+
+@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+  override val getMessage: String = message
+}
 
 object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
@@ -57,6 +62,14 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
+  def isPaymentSuccessful(response: WSResponse): Boolean = {
+    response match {
+      case err: PaypalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
+      case r: WSResponse => r.status == 200
+      case _ => false
+    }
+  }
+
   def execute(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
@@ -65,6 +78,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(_.status == 200)
+    postData(data, queryStrings, isTestUser).map(response => isPaymentSuccessful(response))
   }
 }
