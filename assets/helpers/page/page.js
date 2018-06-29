@@ -116,6 +116,7 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
   ): CommonState {
     switch (action.type) {
       case 'SET_COUNTRY':
+
         return Object.assign({}, state, { country: action.country });
       case 'SET_COUNTRY_GROUP':
         return {

@@ -24,8 +24,10 @@ describe('detect currency', () => {
     expect(detect('UnitedStates')).toEqual('USD');
   });
 
+
   it('should return GBP if the country group is not recognised', () => {
     mockCurrency = null;
+    // $FlowIgnore: We would like to test the function behaviour with an incorrect input
     expect(detect('ZZ')).toEqual('GBP');
   });
 
