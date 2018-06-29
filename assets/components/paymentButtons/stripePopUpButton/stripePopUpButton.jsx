@@ -16,8 +16,6 @@ import {
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-
-
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
@@ -73,8 +71,8 @@ function Button(props: PropTypes) {
     }
   };
 
-  const disableClass: string = props.disable ? "disable": "";
-  const getDisabled: string = props.disable ? "true": "";
+  const disableClass: string = props.disable ? 'disable' : '';
+  const getDisabled: string = props.disable ? 'true' : '';
 
   return (
     <button

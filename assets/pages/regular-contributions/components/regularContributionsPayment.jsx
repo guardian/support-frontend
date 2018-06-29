@@ -99,7 +99,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       />);
   }
 
-  let stripeButton = (<StripePopUpButton
+  const stripeButton = (<StripePopUpButton
     email={props.email}
     callback={postCheckout(
       props.abParticipations,
@@ -120,7 +120,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     disable={props.disable}
   />);
 
-  let payPalButton = (<PayPalExpressButton
+  const payPalButton = (<PayPalExpressButton
     amount={props.amount}
     currencyId={props.currencyId}
     csrf={props.csrf}

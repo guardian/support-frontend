@@ -140,23 +140,29 @@ function checkoutForm(props: {
     }
   };
 
-  const disableClass: string = props.disable ? "disable": "";
-  const getDisabled: string = props.disable ? "true": "";
-  const formPointerEvents: string = props.disable ? "none": "all";
+  const disableClass: string = props.disable ? 'disable' : '';
+  const getDisabled: string = props.disable ? 'true' : '';
+  const formPointerEvents: string = props.disable ? 'pointer-events: none' : 'pointer-events: all';
 
 
   return (
-    <form className="component-stripe-inline-form" onSubmit={handleSubmit} style={"pointer-events:" + formPointerEvents}>
+    <form className="component-stripe-inline-form" onSubmit={handleSubmit} style={formPointerEvents}>
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
         <CardElement
           className={classNameWithModifiers('component-stripe-inline-form__card-element', [disableClass])}
-          hidePostalCode style={stripeElementsStyle} />
+          hidePostalCode
+          style={stripeElementsStyle}
+        />
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
         className={classNameWithModifiers('component-stripe-inline-form__submit-payment', [disableClass])}
-        disabled={getDisabled}>Confirm card payment <SvgArrowRightStraight /></button>
+        disabled={getDisabled}
+      >
+        Confirm card payment
+        <SvgArrowRightStraight />
+      </button>
     </form>);
 }
 

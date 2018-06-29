@@ -85,8 +85,6 @@ function getStatusMessage(
 function RegularContributionsPayment(props: PropTypes, context) {
   let directDebitButton = null;
 
-  console.log("disable =" + props.disable);
-
   if (props.country === 'GB') {
     directDebitButton = (
       <DirectDebitPopUpButton
@@ -107,7 +105,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       />);
   }
 
-  let stripeInlineForm = (<StripeInlineForm
+  const stripeInlineForm = (<StripeInlineForm
     email={props.email}
     callback={postCheckout(
       props.abParticipations,
@@ -132,7 +130,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     disable={props.disable}
   />);
 
-  let payPalButton = (<PayPalExpressButton
+  const payPalButton = (<PayPalExpressButton
     amount={props.amount}
     currencyId={props.currencyId}
     csrf={props.csrf}

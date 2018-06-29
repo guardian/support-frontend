@@ -129,6 +129,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
+        disable={false}
       />
     </section>
   );

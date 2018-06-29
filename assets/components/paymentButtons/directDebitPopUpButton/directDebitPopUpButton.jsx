@@ -83,8 +83,8 @@ function Button(props: {
   disable: boolean
   }) {
 
-  const disableClass: string = props.disable ? "disable": "";
-  const getDisabled: string = props.disable ? "true": "";
+  const disableClass: string = props.disable ? 'disable' : '';
+  const getDisabled: string = props.disable ? 'true' : '';
 
   return (
     <button
