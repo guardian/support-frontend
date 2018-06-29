@@ -11,7 +11,6 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/switch';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
-import { classNameWithModifiers } from 'helpers/utilities';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
@@ -65,8 +64,7 @@ function Button(props: PropTypes) {
   if (props.disable) {
     return (
       <button
-        id="qa-pay-with-direct-debit"
-        className={classNameWithModifiers('component-paypal-fake-pop-up-button', ['disable'])}
+        className="component-paypal-fake-pop-up-button"
         disabled="true"
       >
         Pay with Paypal
@@ -79,7 +77,6 @@ function Button(props: PropTypes) {
       <PayPalButton {...payPalOptions} />
     </div>
   );
-
 
 }
 

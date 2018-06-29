@@ -71,15 +71,17 @@ function Button(props: PropTypes) {
     }
   };
 
-  const disableClass: string = props.disable ? 'disable' : '';
-  const getDisabled: string = props.disable ? 'true' : '';
+  const baseClass = 'component-stripe-pop-up-button';
+  const className: string = props.disable
+    ? classNameWithModifiers(baseClass, ['disable'])
+    : baseClass;
 
   return (
     <button
       id="qa-pay-with-card"
-      className={classNameWithModifiers('component-stripe-pop-up-button', [disableClass])}
+      className={className}
       onClick={onClick}
-      disabled={getDisabled}
+      disabled={props.disable}
     >
       Pay with debit/credit card <SvgCreditCard />
     </button>
