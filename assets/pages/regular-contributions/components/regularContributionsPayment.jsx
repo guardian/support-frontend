@@ -94,7 +94,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
           context.store.getState,
       )}
         switchStatus={props.directDebitSwitchStatus}
-        error={props.error}
         disable={props.disable}
       />);
   }

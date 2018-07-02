@@ -140,27 +140,21 @@ function checkoutForm(props: {
     }
   };
 
-  const submitPaymentBaseClass = 'component-stripe-inline-form__submit-payment';
-  const cardElementBaseClass = 'component-stripe-inline-form__card-element';
-  const className = baseClass =>
-    (props.disable ? classNameWithModifiers(baseClass, ['disable']) : baseClass);
-
-
-  const formPointerEvents: string = props.disable ? 'pointer-events: none' : 'pointer-events: all';
+  const className = classNameWithModifiers('component-stripe-inline-form', props.disable ? ['disable'] : []);
 
   return (
-    <form className="component-stripe-inline-form" onSubmit={handleSubmit} style={formPointerEvents}>
+    <form className={className} onSubmit={handleSubmit} >
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
         <CardElement
-          className={className(cardElementBaseClass)}
+          className="component-stripe-inline-form__card-element"
           hidePostalCode
           style={stripeElementsStyle}
         />
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
-        className={className(submitPaymentBaseClass)}
+        className="component-stripe-inline-form__submit-payment"
         disabled={props.disable}
       >
         Confirm card payment

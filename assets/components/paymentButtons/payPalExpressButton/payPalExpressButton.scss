@@ -6,7 +6,7 @@
   }
 }
 
-.component-paypal-fake-pop-up-button {
+.component-paypal-button-checkout__disabled-pop-up-button {
   background-color: gu-colour(garnett-neutral-4);
   border: none;
   border-radius: 600px;
@@ -25,7 +25,7 @@
     width: 304px;
   }
 
-  svg {
+  .svg-arrow-right-straight {
     height: 16px;
     position: absolute;
     left: calc(100% - 34px);

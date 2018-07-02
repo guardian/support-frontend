@@ -21,7 +21,7 @@
     background-color: #000;
   }
 
-  svg {
+  .svg-arrow-right-straight {
     height: 16px;
     position: absolute;
     left: calc(100% - 34px);
@@ -34,7 +34,7 @@
   color: gu-colour(garnett-neutral-2);
   cursor: auto;
 
-  svg {
+  .svg-arrow-right-straight {
     fill: gu-colour(garnett-neutral-2);
   }
 

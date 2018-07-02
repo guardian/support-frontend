@@ -42,7 +42,6 @@ function PayPalExpressButton(props: PropTypes) {
 
 }
 
-
 // ----- Auxiliary Components ----- //
 
 function Button(props: PropTypes) {
@@ -59,25 +58,24 @@ function Button(props: PropTypes) {
     props.callback,
   );
 
-  const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
-
-  if (props.disable) {
-    return (
-      <button
-        className="component-paypal-fake-pop-up-button"
-        disabled="true"
-      >
-        Pay with Paypal
-        <SvgArrowRightStraight />
-      </button>
-    );
-  }
-  return (
-    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
-      <PayPalButton {...payPalOptions} />
-    </div>
+  const disabledButton = (
+    <button
+      className="component-paypal-button-checkout__disabled-pop-up-button"
+      disabled
+    >
+      Pay with PayPal
+      <SvgArrowRightStraight />
+    </button>
   );
 
+
+  const ActiveButton = window.paypal.Button.driver('react', { React, ReactDOM });
+
+  return (
+    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
+      { props.disable ? disabledButton : <ActiveButton {...payPalOptions} /> }
+    </div>
+  );
 }
 
 

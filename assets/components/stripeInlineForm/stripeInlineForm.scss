@@ -17,19 +17,6 @@
 
 }
 
-.component-stripe-inline-form__card-element--disable {
-  background-color: gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-2);
-  border: 2px solid gu-colour(garnett-neutral-4);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-
 .component-stripe-inline-form__label-content {
   font-size: 12px;
 }
@@ -66,16 +53,28 @@
   }
 }
 
-.component-stripe-inline-form__submit-payment--disable {
-  background-color: gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-2);
+.component-stripe-inline-form--disable {
+  pointer-events: none;
 
-  svg {
-    fill: gu-colour(garnett-neutral-2);
-  }
-
-  &:hover {
+  .component-stripe-inline-form__submit-payment {
     background-color: gu-colour(garnett-neutral-4);
+    color: gu-colour(garnett-neutral-2);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-2);
+    }
+
+    &:hover {
+      background-color: gu-colour(garnett-neutral-4);
+    }
   }
+
+  .component-stripe-inline-form__card-element {
+    background-color: gu-colour(garnett-neutral-4);
+    color: gu-colour(garnett-neutral-2);
+    border: 2px solid gu-colour(garnett-neutral-4);
+  }
+
+
 }
 
