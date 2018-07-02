@@ -16,7 +16,7 @@ object ResultBody {
 
   case class Success[A](data: A)
 
-  case class Error(errorMessage: String)
+  case class Error[A](error: A)
 
   private def typeDiscriminatorEncoder[A : ClassTag](encoder: ObjectEncoder[A]): ObjectEncoder[A] =
     encoder.mapJsonObject { obj =>
@@ -25,5 +25,5 @@ object ResultBody {
 
   implicit def successEncoder[A : Encoder]: Encoder[Success[A]] = typeDiscriminatorEncoder(deriveEncoder[Success[A]])
 
-  implicit val errorEncoder: Encoder[Error] = typeDiscriminatorEncoder(deriveEncoder[Error])
+  implicit def errorEncoderEncoder[A : Encoder]: Encoder[Error[A]] = typeDiscriminatorEncoder(deriveEncoder[Error[A]])
 }

@@ -40,11 +40,11 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val paymentMock: Payment = mock[Payment]
 
-  val paymentServiceResponse: EitherT[Future, BackendError, Payment] =
+  val paymentServiceResponse: EitherT[Future, PaypalApiError, Payment] =
     EitherT.right(Future.successful(paymentMock))
 
-  val paymentServiceResponseError: EitherT[Future, BackendError, Payment] =
-    EitherT.left(Future.successful(BackendError.PaypalApiError(PaypalApiError.fromString("Error response"))))
+  val paymentServiceResponseError: EitherT[Future, PaypalApiError, Payment] =
+    EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
 
   val paymentHookResponse: EitherT[Future, BackendError, Unit] =
     EitherT.right(Future.successful(()))

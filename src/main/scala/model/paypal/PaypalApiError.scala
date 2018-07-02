@@ -1,16 +1,21 @@
 package model.paypal
 
 import com.paypal.base.rest.PayPalRESTException
+import io.circe.generic.JsonCodec
 import scala.collection.JavaConverters._
 
-
-case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], infoLink: Option[String], message: String) extends Exception {
+// responseCode is the Http status code returned by the Exception.
+// See: https://developer.paypal.com/docs/api/overview/#api-responses for details
+//
+// errorName is the name of the error as defined by Paypal.
+// See: https://developer.paypal.com/docs/api/payments/v1/#errors for a list of these names and their meanings.
+@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
   override val getMessage: String = message
 }
 
 object PaypalApiError {
 
-  def fromString(message: String): PaypalApiError = PaypalApiError(None, None, None, message)
+  def fromString(message: String): PaypalApiError = PaypalApiError(None, None, message)
 
   def fromThrowable(exception: Throwable): PaypalApiError = exception match {
 
@@ -20,17 +25,12 @@ object PaypalApiError {
         code <- Option(paypalException.getResponsecode)
       } yield code
 
+      // See: https://developer.paypal.com/docs/api/payments/v1/#errors
       val errorName: Option[String] = for {
         details <- Option(paypalException.getDetails)
         name <- Option(details.getName)
         if name != ""
       } yield name
-
-      val infoLink: Option[String] = for {
-        details <- Option(paypalException.getDetails)
-        link <- Option(details.getInformationLink)
-        if link != ""
-      } yield link
 
       val error: Option[String] = for {
         error <- Option(paypalException.getDetails)
@@ -53,10 +53,10 @@ object PaypalApiError {
         case (_, _) => "Unknown error message"
       }
 
-      PaypalApiError(responseCode, errorName, infoLink ,errorMessage)
+      PaypalApiError(responseCode, errorName, errorMessage)
     }
 
-    case throwable: Throwable => PaypalApiError(None, None, None, throwable.getMessage)
+    case throwable: Throwable => PaypalApiError(None, None, throwable.getMessage)
   }
 
 }

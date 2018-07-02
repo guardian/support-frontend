@@ -2,12 +2,12 @@ package controllers
 
 import actions.CorsActionProvider
 import cats.implicits._
-import backend.PaypalBackend
+import backend.{BackendError, PaypalBackend}
 import com.typesafe.scalalogging.StrictLogging
 import model.{DefaultThreadPool, ResultBody}
 import model.paypal._
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
 import util.RequestBasedProvider
 
 class PaypalController(
@@ -19,6 +19,10 @@ class PaypalController(
   import util.RequestTypeDecoder.instances._
   import PaypalJsonDecoder._
 
+  def toErrorResult(error: PaypalApiError): Result = {
+    new Status(error.responseCode.getOrElse(INTERNAL_SERVER_ERROR))(ResultBody.Error(error))
+  }
+
   def createPayment: Action[CreatePaypalPaymentData] = CorsAction.async(circe.json[CreatePaypalPaymentData]) {
     createRequest =>
       paypalBackendProvider
@@ -26,7 +30,7 @@ class PaypalController(
         .createPayment(createRequest.body)
         .subflatMap(PaypalPaymentSuccess.fromPayment)
         .fold(
-          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          err => toErrorResult(err),
           payment => Ok(ResultBody.Success(payment))
         )
     }
@@ -37,7 +41,7 @@ class PaypalController(
         .getInstanceFor(captureRequest)
         .capturePayment(captureRequest.body, captureRequest.countrySubdivisionCode)
         .fold(
-          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          err => toErrorResult(err),
           _ => Ok(ResultBody.Success(()))
         )
     }
@@ -48,7 +52,7 @@ class PaypalController(
         .getInstanceFor(executeRequest)
         .executePayment(executeRequest.body, executeRequest.countrySubdivisionCode)
         .fold(
-          err => InternalServerError(ResultBody.Error(err.getMessage)),
+          err => toErrorResult(err),
           payment => Ok(ResultBody.Success("execute payment success"))
         )
       }
@@ -56,8 +60,10 @@ class PaypalController(
   def processRefund: Action[PaypalRefundWebHookBody] = Action.async(circe.json[PaypalRefundWebHookBody]) { request =>
     paypalBackendProvider.getInstanceFor(request)
       .processRefundHook(PaypalRefundWebHookData.fromRequest(request))
-      .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
+      .fold({
+          case err: BackendError.PaypalApiError => toErrorResult(err.error)
+          case err: BackendError => InternalServerError(ResultBody.Error(err.getMessage))
+        },
         _ => Ok(ResultBody.Success("paypal payment successfully refunded"))
       )
   }

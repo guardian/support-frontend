@@ -130,7 +130,7 @@ class PaypalBackendSpec
         val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
         when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.createPayment(createPaypalPaymentData).futureLeft shouldBe
-          BackendError.fromPaypalAPIError(PaypalApiError(None, None, None, "Error response"))
+          PaypalApiError(None, None, "Error response")
       }
 
     }
@@ -140,7 +140,7 @@ class PaypalBackendSpec
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.capturePayment(capturePaypalPaymentData, countrySubdivisionCode).futureLeft shouldBe
-          BackendError.fromPaypalAPIError(paymentError)
+          paymentError
 
       }
 
@@ -160,7 +160,7 @@ class PaypalBackendSpec
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.executePayment(executePaypalPaymentData, countrySubdivisionCode)
-          .futureLeft shouldBe BackendError.fromPaypalAPIError(paymentError)
+          .futureLeft shouldBe paymentError
 
       }
 

@@ -36,11 +36,11 @@ class PaypalBackend(
    * Creates a payment which must be authorised by the user via PayPal's web UI.
    * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
-  def createPayment(c: CreatePaypalPaymentData): EitherT[Future, BackendError, Payment] =
+  def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
     paypalService.createPayment(c)
       .leftMap { error =>
         logger.error(s"Error creating paypal payment data. Error: $error")
-        BackendError.fromPaypalAPIError(error)
+        error
       }
 
 
@@ -49,12 +49,12 @@ class PaypalBackend(
    * The Android app creates and approves the payment directly via PayPal.
    * Funds are captured via this endpoint.
    */
-  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
+  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, Payment] =
     paypalService.capturePayment(c)
       .bimap(
         err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-          BackendError.fromPaypalAPIError(err)
+          err
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
@@ -72,12 +72,12 @@ class PaypalBackend(
         }
       )
 
-  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Payment] =
+  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, Payment] =
     paypalService.executePayment(e)
       .bimap(
         err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-          BackendError.fromPaypalAPIError(err)
+          err
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
