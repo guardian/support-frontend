@@ -93,7 +93,7 @@ export default function ProductBlock() {
             },
           ]}
         />
-        <PriceCtaContainer intcmp="support_digipack_page_product_benefits_section" />
+        <PriceCtaContainer referringCta="support_digipack_page_product_benefits_section" />
       </LeftMarginSection>
     </div>
   );

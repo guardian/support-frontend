@@ -14,7 +14,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: { common: CommonState }, ownProps: { intcmp: ?string }) {
+function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string }) {
   const { countryGroupId } = state.common.internationalisation;
   const { referrerAcquisitionData } = state.common;
   const price = digitalSubPrices[countryGroupId].toFixed(2);
@@ -24,7 +24,7 @@ function mapStateToProps(state: { common: CommonState }, ownProps: { intcmp: ?st
     url: getDigitalCheckout(
       referrerAcquisitionData,
       countryGroupId,
-      ownProps.intcmp,
+      ownProps.referringCta,
     ),
     price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
