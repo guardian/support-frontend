@@ -45,16 +45,16 @@ describe('reducer tests', () => {
 
   it('should handle SET_COUNTRY to US', () => {
 
-    const countryId: IsoCountry = 'US';
+    const country: IsoCountry = 'US';
     const action = {
       type: 'SET_COUNTRY',
-      countryId,
+      country,
     };
 
     const newState = reducer(undefined, action);
 
 
-    expect(newState.internationalisation.countryId).toEqual(countryId);
+    expect(newState.internationalisation.countryId).toEqual(country);
     expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
     expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();

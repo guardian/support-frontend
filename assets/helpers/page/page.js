@@ -117,14 +117,8 @@ function createCommonReducer(initialState: CommonState): (CommonState, Action) =
     const { internationalisation } = state;
     switch (action.type) {
       case 'SET_COUNTRY':
-<<<<<<< HEAD
-
-        return Object.assign({}, state, { country: action.country });
-=======
         internationalisation.countryId = action.country;
         return Object.assign({}, state, { internationalisation });
-
->>>>>>> master
       case 'SET_COUNTRY_GROUP':
         internationalisation.countryGroupId = action.countryGroup;
         internationalisation.currencyId = detectCurrency(action.countryGroup);
