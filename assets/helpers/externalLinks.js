@@ -157,12 +157,14 @@ function getSubsLinks(
 function getDigitalCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   cgId: CountryGroupId,
+  intcmp: ?string,
 ): string {
 
   return addQueryParamsToURL(`${subsUrl}/checkout`, {
     promoCode: defaultPromos.digital,
     countryGroup: countryGroups[cgId].supportInternationalisationId,
     acquisitionData: JSON.stringify(referrerAcquisitionData),
+    INTCMP: intcmp,
   });
 
 }
