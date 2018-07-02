@@ -63,7 +63,7 @@ export type PreloadedState = {
 // ----- Functions ----- //
 
 function doNotTrack(): boolean {
-  // $FlowFixMe
+  // $FlowIgnore
   const doNotTrackFlag = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
 
   return doNotTrackFlag === '1' || doNotTrackFlag === 'yes';
@@ -108,10 +108,10 @@ function buildInitialState(
 }
 
 // Sets up the common reducer with its initial state.
-function createCommonReducer(initialState: CommonState): (CommonState, Action) => CommonState {
+function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
 
   function commonReducer(
-    state: CommonState = initialState,
+    state?: CommonState = initialState,
     action: Action,
   ): CommonState {
     const { internationalisation } = state;

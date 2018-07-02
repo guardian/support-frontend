@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { detect, IsoCurrency } from '../currency';
+import { detect, type IsoCurrency } from '../currency';
 
 let mockCurrency: ?IsoCurrency = null;
 

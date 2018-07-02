@@ -12,7 +12,7 @@ import {
 
 // ----- Tests ----- //
 
-const jsdom = global.jsdom;
+const { jsdom } = global;
 
 describe('url', () => {
 
