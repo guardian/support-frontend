@@ -13,7 +13,7 @@ import conf._
 import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
-import model.stripe.{StripeChargeData, StripeChargeSuccess, StripeRefundHook}
+import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeRefundHook}
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
@@ -31,12 +31,12 @@ class StripeBackend(
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(data: StripeChargeData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, StripeChargeSuccess] =
+  def createCharge(data: StripeChargeData, countrySubdivisionCode: Option[String]): EitherT[Future, StripeApiError, StripeChargeSuccess] =
     stripeService.createCharge(data)
       .bimap(
         err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
-          BackendError.fromStripeApiError(err)
+          err
         },
         charge => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)

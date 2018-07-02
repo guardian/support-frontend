@@ -1,10 +1,12 @@
 package model.stripe
 
 import com.stripe.exception._
+import io.circe.generic.JsonCodec
+
 import PartialFunction.condOpt
 
 
-case class StripeApiError private (exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends Exception {
+@JsonCodec case class StripeApiError private (exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends Exception {
   override val getMessage: String = message
 }
 

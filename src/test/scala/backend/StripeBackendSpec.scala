@@ -112,7 +112,7 @@ class StripeBackendSpec
 
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeData, countrySubdivisionCode).futureLeft shouldBe BackendError.fromStripeApiError(stripeApiError)
+        stripeBackend.createCharge(stripeChargeData, countrySubdivisionCode).futureLeft shouldBe stripeApiError
 
       }
 
