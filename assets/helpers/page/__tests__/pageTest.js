@@ -29,7 +29,9 @@ describe('reducer tests', () => {
         source: null,
         abTests: [],
       },
-      country: 'GB',
+      internationalisation: {
+        countryId: 'GB',
+      },
       abParticipations: {},
     };
 
@@ -51,7 +53,8 @@ describe('reducer tests', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.internationalisation.country).toEqual(countryId);
+
+    expect(newState.internationalisation.countryId).toEqual(countryId);
     expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
     expect(newState.campaign).toMatchSnapshot();
     expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
