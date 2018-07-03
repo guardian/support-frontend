@@ -57,7 +57,7 @@ export default function DigitalSubscriptionLandingHeader() {
             <h1>Support The Guardian with a digital subscription</h1>
           </div>
         </div>
-        <PriceCtaContainer dark />
+        <PriceCtaContainer dark referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>
   );
