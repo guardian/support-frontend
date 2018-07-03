@@ -1,5 +1,4 @@
 [ignore]
-.*/__tests__/.*
 .*/node_modules/preact/.*
 .*node_modules/webpack-cli/.*
 
@@ -13,3 +12,4 @@ module.name_mapper='^containerisableComponents/' -> '<PROJECT_ROOT>/assets/conta
 module.name_mapper='^components/' -> '<PROJECT_ROOT>/assets/components/'
 module.name_mapper='^helpers/' -> '<PROJECT_ROOT>/assets/helpers/'
 module.name_mapper='^ophan' -> 'ophan-tracker-js/build/ophan.support'
+suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore

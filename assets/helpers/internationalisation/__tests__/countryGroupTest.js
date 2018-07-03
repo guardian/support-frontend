@@ -4,6 +4,7 @@
 
 import { detect } from '../countryGroup';
 
+const { jsdom } = global;
 
 // ----- Tests ----- //
 

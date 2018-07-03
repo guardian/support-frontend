@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Country } from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import { createCommonReducer } from '../page';
 
@@ -13,8 +13,6 @@ jest.mock('ophan', () => {});
 
 describe('reducer tests', () => {
 
-  let reducer = () => {};
-
   beforeEach(() => {
 
     const initialState = {
@@ -22,41 +20,48 @@ describe('reducer tests', () => {
       referrerAcquisitionData: {
         referrerPageviewId: null,
         campaignCode: null,
-        referrerUrl: null,
         componentId: null,
         componentType: null,
         source: null,
+        abTest: null,
         abTests: [],
+        queryParameters: [],
       },
       internationalisation: {
         countryId: 'GB',
+        countryGroupId: 'GBPCountries',
+        currencyId: 'GBP',
       },
       abParticipations: {},
+      otherQueryParams: [],
+      switches: {},
     };
 
-    reducer = createCommonReducer(initialState);
+    global.reducer = createCommonReducer(initialState);
 
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toMatchSnapshot();
+    expect(global.reducer(undefined, { type: 'SET_COUNTRY', country: 'GB' })).toMatchSnapshot();
   });
 
   it('should handle SET_COUNTRY to US', () => {
 
-    const country: Country = 'US';
+    const country: IsoCountry = 'US';
     const action = {
       type: 'SET_COUNTRY',
       country,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = global.reducer(undefined, action);
 
-    expect(newState.internationalisation.countryId).toEqual(country);
-    expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
-    expect(newState.campaign).toMatchSnapshot();
-    expect(newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
-    expect(newState.abParticipations).toMatchSnapshot();
+    expect(newState && newState.internationalisation.countryId).toEqual(country);
+    expect(newState && newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
+    expect(newState && newState.campaign).toMatchSnapshot();
+    expect(newState &&
+      newState.referrerAcquisitionData &&
+      newState.referrerAcquisitionData.campaignCode).toMatchSnapshot();
+    expect(newState && newState.abParticipations).toMatchSnapshot();
   });
 
 });

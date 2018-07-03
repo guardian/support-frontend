@@ -32,7 +32,7 @@ Object {
     "contributionType": "MONTHLY",
     "error": null,
     "payPalHasLoaded": false,
-    "paymentMethod": "GBP",
+    "paymentMethod": "DirectDebit",
     "paymentStatus": "NotStarted",
     "pollCount": 0,
     "statusUri": null,

@@ -12,6 +12,8 @@ import {
 
 // ----- Tests ----- //
 
+const { jsdom } = global;
+
 describe('url', () => {
 
   describe('addQueryParamsToURL', () => {
@@ -143,7 +145,7 @@ describe('url', () => {
     it('should exclude query params', () => {
 
       jsdom.reconfigure({ url: `${baseUrl}?foo=bar&spam=eggs` });
-      expect(getAllQueryParamsWithExclusions('foo')).toEqual([['spam', 'eggs']]);
+      expect(getAllQueryParamsWithExclusions(['foo'])).toEqual([['spam', 'eggs']]);
 
     });
 

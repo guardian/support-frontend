@@ -44,8 +44,8 @@ describe('acquisitions', () => {
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 
       // The abTests array should be a combination of supportAbTests and the source tests
-      expect(paymentApiAcquisitionData.abTests.length).toEqual(4);
-      expect(paymentApiAcquisitionData.campaignCodes.length).toEqual(1);
+      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(4);
+      expect(paymentApiAcquisitionData.campaignCodes && paymentApiAcquisitionData.campaignCodes.length).toEqual(1);
     });
   });
 
