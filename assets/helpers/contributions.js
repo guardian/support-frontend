@@ -63,6 +63,7 @@ const numbersInWords = {
   '250': 'two hundred and fifty',
   '500': 'five hundred',
   '2000': 'two thousand',
+  '16000': 'sixteen thousand',
 };
 /* eslint-enable  quote-props */
 
@@ -101,7 +102,13 @@ const config: { [CountryGroupId]: Config } = {
       maxInWords: numbersInWords['166'],
       default: 20,
     },
-    ONE_OFF: defaultConfig.ONE_OFF,
+    ONE_OFF: {
+      min: 1,
+      minInWords: numbersInWords['1'],
+      max: 16000,
+      maxInWords: numbersInWords['16000'],
+      default: 50,
+    },
   },
   EURCountries: {
     ANNUAL: defaultConfig.ANNUAL,
