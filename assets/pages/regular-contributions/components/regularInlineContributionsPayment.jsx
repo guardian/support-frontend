@@ -200,9 +200,9 @@ function mapStateToProps(state) {
     directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
-    stripeInlineIsSubmitButtonDisable: state.page.stripeInlineForm.isStripeLoaded,
+    isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
     stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
-    stripeInlineSubmitButtonDisable: state.page.stripeInlineForm.isSubmitButtonDisable,
+    stripeInlineIsSubmitButtonDisable: state.page.stripeInlineForm.isSubmitButtonDisable,
   };
 }
 
