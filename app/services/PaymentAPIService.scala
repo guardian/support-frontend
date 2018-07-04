@@ -2,12 +2,16 @@ package services
 
 import java.io.IOException
 
+import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.JsonCodec
+import io.circe.parser.parse
+import codecs.CirceDecoders._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
+import monitoring.SafeLogger
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -35,7 +39,7 @@ object PaymentAPIService {
   }
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) extends LazyLogging {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
@@ -62,9 +66,12 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
+
   def isPaymentSuccessful(response: WSResponse): Boolean = {
     response match {
-      case err: PaypalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
+      case err: PaypalApiError => {
+        logger.info(s"Paypal Api Error detected is type ${err.errorName.getOrElse("unknown")} ")
+        err.errorName.contains("PAYMENT_ALREADY_DONE")}
       case r: WSResponse => r.status == 200
       case _ => false
     }
