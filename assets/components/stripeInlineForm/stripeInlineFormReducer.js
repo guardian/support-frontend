@@ -19,7 +19,6 @@ export type State = {|
 const initialState: State = {
   isStripeLoaded: false,
   errorMessage: null,
-  isSubmitButtonDisable: false,
 };
 
 
