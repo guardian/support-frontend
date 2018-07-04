@@ -60,7 +60,6 @@ function mapStateToProps(state) {
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
     stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
-    stripeInlineIsSubmitButtonDisable: state.page.stripeInlineForm.isSubmitButtonDisable,
   };
 }
 
