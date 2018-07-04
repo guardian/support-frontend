@@ -66,13 +66,20 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) extends LazyL
       .execute()
   }
 
-
   def isPaymentSuccessful(response: WSResponse): Boolean = {
     response match {
-      case err: PaypalApiError => {
-        logger.info(s"Paypal Api Error detected is type ${err.errorName.getOrElse("unknown")} ")
-        err.errorName.contains("PAYMENT_ALREADY_DONE")}
       case r: WSResponse => r.status == 200
+      case r: WSResponse if r.status == 400 => {
+        val paypalAPIError: Option[PaypalApiError] = paypalApiErrorCodec.decodeJson(parse(r.json.toString()).toOption.get).right.toOption
+        paypalAPIError match {
+          case Some(err) => {
+            logger.error(s"PaypalAPIError returned of type: ${err.errorName}")
+            err.errorName.contains("PAYMENT_ALREADY_DONE")
+          }
+          case None => false
+
+        }
+      }
       case _ => false
     }
   }
