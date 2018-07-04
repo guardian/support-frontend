@@ -13,7 +13,8 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
-
+import { classNameWithModifiers } from 'helpers/utilities';
+import AnimatedDots from 'components/spinners/animatedDots';
 
 // ----- Types -----//
 
@@ -31,6 +32,9 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   setError: (message: string) => void,
   resetError: () => void,
+  isSubmitButtonDisable: boolean,
+  disableSubmitButton: () => void,
+  enableSubmitButton: () => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,6 +74,7 @@ function StripeInlineFormComp(props: PropTypes) {
           setError={props.setError}
           resetError={props.resetError}
           email={props.email}
+          isSubmitButtonDisable={props.isSubmitButtonDisable}
         />
       </Elements>
     </StripeProvider>
@@ -104,10 +109,14 @@ function checkoutForm(props: {
   setError: (string) => void,
   resetError: () => void,
   email: string,
+  isSubmitButtonDisable: boolean,
+  disableSubmitButton: () => void,
+  enableSubmitButton: () => void,
 }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    props.disableSubmitButton();
 
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
@@ -127,6 +136,7 @@ function checkoutForm(props: {
         .then(({ token, error }) => {
           if (error !== undefined) {
             props.setError(error.message);
+            props.enableSubmitButton();
           } else {
             props.resetError();
             props.callback(token.id);
@@ -136,6 +146,16 @@ function checkoutForm(props: {
     }
   };
 
+  let className = '';
+  let spinner = null;
+
+  if (props.isSubmitButtonDisable) {
+    className = classNameWithModifiers('component-stripe-inline-form__submit-payment', ['disabled']);
+    spinner = <AnimatedDots />;
+  } else {
+    className = 'component-stripe-inline-form__submit-payment';
+  }
+
   return (
     <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
       <label>
@@ -143,8 +163,14 @@ function checkoutForm(props: {
         <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />
       </label>
       <ErrorMessage message={props.errorMessage} />
-      <button className="component-stripe-inline-form__submit-payment">Confirm card payment <SvgArrowRightStraight /></button>
-    </form>);
+      <button
+        className={className}
+        disabled={props.isSubmitButtonDisable}
+      >
+        Confirm card payment <SvgArrowRightStraight />
+      </button> {spinner}
+    </form>
+  );
 }
 
 const InjectedCheckoutForm = injectStripe(checkoutForm);

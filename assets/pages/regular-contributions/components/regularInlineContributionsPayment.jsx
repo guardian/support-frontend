@@ -55,6 +55,9 @@ type PropTypes = {|
   stripeInlineSetError: (string) => void,
   stripeInlineResetError: () => void,
   email: string,
+  stripeInlineIsSubmitButtonDisable: boolean,
+  stripeInlineDisableSubmitButton: () => void,
+  stripeInlineEnableSubmitButton: () => void,
 |};
 
 
@@ -129,6 +132,9 @@ function RegularContributionsPayment(props: PropTypes, context) {
     errorMessage={props.stripeInlineErrorMessage}
     setError={props.stripeInlineSetError}
     resetError={props.stripeInlineResetError}
+    isSubmitButtonDisable={props.stripeInlineIsSubmitButtonDisable}
+    disableSubmitButton={props.stripeInlineDisableSubmitButton}
+    enableSubmitButton={props.stripeInlineEnableSubmitButton}
   />);
 
   let payPalButton = (<PayPalExpressButton
@@ -194,8 +200,9 @@ function mapStateToProps(state) {
     directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
-    isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineIsSubmitButtonDisable: state.page.stripeInlineForm.isStripeLoaded,
     stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
+    stripeInlineSubmitButtonDisable: state.page.stripeInlineForm.isSubmitButtonDisable,
   };
 }
 
@@ -213,6 +220,12 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
     },
     payPalSetHasLoaded: () => {
       dispatch(setPayPalHasLoaded());
+    },
+    stripeInlineDisableSubmitButton: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').disableSubmitButton());
+    },
+    stripeInlineEnableSubmitButton: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').enableSubmitButton());
     },
   });
 }

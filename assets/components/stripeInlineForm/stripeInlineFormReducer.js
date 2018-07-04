@@ -10,7 +10,7 @@ import type { Action } from './stripeInlineFormActions';
 export type State = {|
   isStripeLoaded: boolean,
   errorMessage: ?string,
-  submitButtonDisable: boolean,
+  isSubmitButtonDisable: boolean,
 |};
 
 

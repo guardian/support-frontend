@@ -42,6 +42,9 @@ type PropTypes = {|
   stripeInlineErrorMessage: ?string,
   stripeInlineSetError: (string) => void,
   stripeInlineResetError: () => void,
+  stripeInlineIsSubmitButtonDisable: boolean,
+  stripeInlineDisableSubmitButton: () => void,
+  stripeInlineEnableSubmitButton: () => void,
 |};
 
 // ----- Map State/Props ----- //
@@ -60,6 +63,7 @@ function mapStateToProps(state) {
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
     stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
+    stripeInlineIsSubmitButtonDisable: state.page.stripeInlineForm.isSubmitButtonDisable,
   };
 }
 
@@ -77,6 +81,12 @@ function mapDispatchToProps(dispatch: Dispatch<OneOffCheckoutAction | StripeInli
     },
     stripeInlineResetError: () => {
       dispatch(stripeInlineFormActionsFor('oneOffContributions').resetError());
+    },
+    stripeInlineDisableSubmitButton: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').disableSubmitButton());
+    },
+    stripeInlineEnableSubmitButton: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').enableSubmitButton());
     },
   };
 }
@@ -149,6 +159,9 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         errorMessage={props.stripeInlineErrorMessage}
         setError={props.stripeInlineSetError}
         resetError={props.stripeInlineResetError}
+        isSubmitButtonDisable={props.stripeInlineIsSubmitButtonDisable}
+        disableSubmitButton={props.stripeInlineDisableSubmitButton}
+        enableSubmitButton={props.stripeInlineEnableSubmitButton}
       />
     </section>
   );
