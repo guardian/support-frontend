@@ -13,8 +13,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
-import { classNameWithModifiers } from 'helpers/utilities';
-import AnimatedDots from 'components/spinners/animatedDots';
+import { logException } from 'helpers/logger';
 
 // ----- Types -----//
 
@@ -32,9 +31,6 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   setError: (message: string) => void,
   resetError: () => void,
-  isSubmitButtonDisable: boolean,
-  disableSubmitButton: () => void,
-  enableSubmitButton: () => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -74,7 +70,6 @@ function StripeInlineFormComp(props: PropTypes) {
           setError={props.setError}
           resetError={props.resetError}
           email={props.email}
-          isSubmitButtonDisable={props.isSubmitButtonDisable}
         />
       </Elements>
     </StripeProvider>
@@ -100,6 +95,21 @@ const stripeElementsStyle = {
     },
 };
 
+const submitClassName = 'component-stripe-inline-form__submit-payment';
+const submitClassNameDisabled = `${submitClassName}--disabled`;
+
+function disableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  element.setAttribute('disabled','');
+  element.classList.add(submitClassNameDisabled);
+}
+
+function enableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  element.removeAttribute('disabled');
+  element.classList.remove(submitClassNameDisabled);
+}
+
 function checkoutForm(props: {
   stripe: Object,
   callback: (token: string) => mixed,
@@ -109,14 +119,11 @@ function checkoutForm(props: {
   setError: (string) => void,
   resetError: () => void,
   email: string,
-  isSubmitButtonDisable: boolean,
-  disableSubmitButton: () => void,
-  enableSubmitButton: () => void,
 }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.disableSubmitButton();
+    disableSubmitButton();
 
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
@@ -134,27 +141,21 @@ function checkoutForm(props: {
         .stripe
         .createToken({ name: props.email })
         .then(({ token, error }) => {
+
           if (error !== undefined) {
             props.setError(error.message);
-            props.enableSubmitButton();
+            enableSubmitButton();
           } else {
             props.resetError();
             props.callback(token.id);
           }
 
+        }).catch((e) => {
+          logException(`Stripe Elements failed: ${e.message}`);
         });
+
     }
   };
-
-  let className = '';
-  let spinner = null;
-
-  if (props.isSubmitButtonDisable) {
-    className = classNameWithModifiers('component-stripe-inline-form__submit-payment', ['disabled']);
-    spinner = <AnimatedDots />;
-  } else {
-    className = 'component-stripe-inline-form__submit-payment';
-  }
 
   return (
     <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
@@ -164,11 +165,10 @@ function checkoutForm(props: {
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
-        className={className}
-        disabled={props.isSubmitButtonDisable}
+        className={submitClassName}
       >
         Confirm card payment <SvgArrowRightStraight />
-      </button> {spinner}
+      </button>
     </form>
   );
 }
