@@ -13,7 +13,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
-
+import { logException } from 'helpers/logger';
 
 // ----- Types -----//
 
@@ -95,6 +95,21 @@ const stripeElementsStyle = {
     },
 };
 
+const submitClassName = 'component-stripe-inline-form__submit-payment';
+const submitClassNameDisabled = `${submitClassName}--disabled`;
+
+function disableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  element.setAttribute('disabled','');
+  element.classList.add(submitClassNameDisabled);
+}
+
+function enableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  element.removeAttribute('disabled');
+  element.classList.remove(submitClassNameDisabled);
+}
+
 function checkoutForm(props: {
   stripe: Object,
   callback: (token: string) => mixed,
@@ -108,6 +123,7 @@ function checkoutForm(props: {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    disableSubmitButton();
 
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
@@ -125,14 +141,19 @@ function checkoutForm(props: {
         .stripe
         .createToken({ name: props.email })
         .then(({ token, error }) => {
+
           if (error !== undefined) {
             props.setError(error.message);
+            enableSubmitButton();
           } else {
             props.resetError();
             props.callback(token.id);
           }
 
+        }).catch((e) => {
+          logException(`Stripe Elements failed: ${e.message}`);
         });
+
     }
   };
 
@@ -143,8 +164,13 @@ function checkoutForm(props: {
         <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />
       </label>
       <ErrorMessage message={props.errorMessage} />
-      <button className="component-stripe-inline-form__submit-payment">Confirm card payment <SvgArrowRightStraight /></button>
-    </form>);
+      <button
+        className={submitClassName}
+      >
+        Confirm card payment <SvgArrowRightStraight />
+      </button>
+    </form>
+  );
 }
 
 const InjectedCheckoutForm = injectStripe(checkoutForm);
