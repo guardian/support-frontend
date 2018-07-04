@@ -100,7 +100,7 @@ const submitClassNameDisabled = `${submitClassName}--disabled`;
 
 function disableSubmitButton() {
   const element = document.getElementsByClassName(submitClassName)[0];
-  element.setAttribute('disabled','');
+  element.setAttribute('disabled', '');
   element.classList.add(submitClassNameDisabled);
 }
 
