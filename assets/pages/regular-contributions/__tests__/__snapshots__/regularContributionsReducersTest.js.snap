@@ -40,6 +40,7 @@ Object {
   "stripeInlineForm": Object {
     "errorMessage": null,
     "isStripeLoaded": false,
+    "isSubmitButtonDisable": false,
   },
   "user": Object {
     "displayName": "",
