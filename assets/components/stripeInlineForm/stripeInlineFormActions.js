@@ -6,7 +6,8 @@ export type Action =
   | { type: 'STRIPE_IS_LOADED', scope: string }
   | { type: 'SET_ERROR', scope: string, message: string }
   | { type: 'RESET_ERROR', scope: string }
-  | { type: 'DISABLE_SUBMIT_BUTTON', scope: string };
+  | { type: 'DISABLE_SUBMIT_BUTTON', scope: string }
+  | { type: 'ENABLE_SUBMIT_BUTTON', scope: string };
 
 
 // ----- Action Creators ----- //

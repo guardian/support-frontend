@@ -10,6 +10,7 @@ import type { Action } from './stripeInlineFormActions';
 export type State = {|
   isStripeLoaded: boolean,
   errorMessage: ?string,
+  submitButtonDisable: boolean,
 |};
 
 
@@ -18,6 +19,7 @@ export type State = {|
 const initialState: State = {
   isStripeLoaded: false,
   errorMessage: null,
+  isSubmitButtonDisable: false,
 };
 
 
@@ -38,6 +40,10 @@ function stripeInlineFormReducerFor(scope: string): Function {
         return { ...state, errorMessage: action.message };
       case 'RESET_ERROR':
         return { ...state, errorMessage: null };
+      case 'DISABLE_SUBMIT_BUTTON':
+        return { ...state, isSubmitButtonDisable: true };
+      case 'ENABLE_SUBMIT_BUTTON':
+        return { ...state, isSubmitButtonDisable: false };
       default:
         return state;
     }
