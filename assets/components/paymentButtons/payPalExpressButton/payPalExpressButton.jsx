@@ -9,6 +9,7 @@ import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/switch';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -23,6 +24,7 @@ type PropTypes = {|
   hasLoaded: boolean,
   setHasLoaded: () => void,
   switchStatus: Status,
+  disable: boolean,
 |};
 
 
@@ -40,7 +42,6 @@ function PayPalExpressButton(props: PropTypes) {
 
 }
 
-
 // ----- Auxiliary Components ----- //
 
 function Button(props: PropTypes) {
@@ -57,14 +58,24 @@ function Button(props: PropTypes) {
     props.callback,
   );
 
-  const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
+  const disabledButton = (
+    <button
+      className="component-paypal-button-checkout__disabled-pop-up-button"
+      disabled
+    >
+      Pay with PayPal
+      <SvgArrowRightStraight />
+    </button>
+  );
+
+
+  const ActiveButton = window.paypal.Button.driver('react', { React, ReactDOM });
 
   return (
     <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
-      <PayPalButton {...payPalOptions} />
+      { props.disable ? disabledButton : <ActiveButton {...payPalOptions} /> }
     </div>
   );
-
 }
 
 

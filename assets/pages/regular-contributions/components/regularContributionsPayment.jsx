@@ -32,7 +32,7 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
-  hide: boolean,
+  disable: boolean,
   error: ?string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
@@ -57,16 +57,12 @@ type PropTypes = {|
 // Shows a message about the status of the form or the payment.
 function getStatusMessage(
   paymentStatus: PaymentStatus,
-  hide: boolean,
   error: ?string,
 ): Node {
 
   if (paymentStatus === 'Pending') {
     return <ProgressMessage message={['Processing transaction', 'Please wait']} />;
-  } else if (hide) {
-    return <ErrorMessage message="Please fill in all the fields above." />;
   }
-
   return <ErrorMessage message={error} />;
 
 }
@@ -98,10 +94,11 @@ function RegularContributionsPayment(props: PropTypes, context) {
           context.store.getState,
       )}
         switchStatus={props.directDebitSwitchStatus}
+        disable={props.disable}
       />);
   }
 
-  let stripeButton = (<StripePopUpButton
+  const stripeButton = (<StripePopUpButton
     email={props.email}
     callback={postCheckout(
       props.abParticipations,
@@ -119,9 +116,10 @@ function RegularContributionsPayment(props: PropTypes, context) {
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
+    disable={props.disable}
   />);
 
-  let payPalButton = (<PayPalExpressButton
+  const payPalButton = (<PayPalExpressButton
     amount={props.amount}
     currencyId={props.currencyId}
     csrf={props.csrf}
@@ -139,19 +137,14 @@ function RegularContributionsPayment(props: PropTypes, context) {
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
+    disable={props.disable}
   />);
-
-  if (props.hide) {
-    directDebitButton = null;
-    stripeButton = null;
-    payPalButton = null;
-  }
 
   return (
     <section className="regular-contribution-payment">
       { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
-      {getStatusMessage(props.paymentStatus, props.hide, props.error)}
+      {getStatusMessage(props.paymentStatus, props.error)}
       {directDebitButton}
       {stripeButton}
       {payPalButton}
@@ -166,7 +159,7 @@ function mapStateToProps(state) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    hide: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),
+    disable: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,

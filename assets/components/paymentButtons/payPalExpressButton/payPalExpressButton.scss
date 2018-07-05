@@ -5,3 +5,30 @@
     width: 304px;
   }
 }
+
+.component-paypal-button-checkout__disabled-pop-up-button {
+  background-color: gu-colour(garnett-neutral-4);
+  border: none;
+  border-radius: 600px;
+  color: gu-colour(garnett-neutral-2);
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  height: $cta-height;
+  padding-left: $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  margin-top: $gu-v-spacing;
+
+  @include mq($from: mobileMedium) {
+    width: 304px;
+  }
+
+  .svg-arrow-right-straight {
+    height: 16px;
+    position: absolute;
+    left: calc(100% - 34px);
+    fill: gu-colour(garnett-neutral-2);
+  }
+}

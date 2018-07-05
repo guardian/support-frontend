@@ -52,3 +52,29 @@
     left: calc(100% - 34px);
   }
 }
+
+.component-stripe-inline-form--disable {
+  pointer-events: none;
+
+  .component-stripe-inline-form__submit-payment {
+    background-color: gu-colour(garnett-neutral-4);
+    color: gu-colour(garnett-neutral-2);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-2);
+    }
+
+    &:hover {
+      background-color: gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .component-stripe-inline-form__card-element {
+    background-color: gu-colour(garnett-neutral-4);
+    color: gu-colour(garnett-neutral-2);
+    border: 2px solid gu-colour(garnett-neutral-4);
+  }
+
+
+}
+
