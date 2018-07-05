@@ -123,7 +123,7 @@ function buildSubsUrls(
 
   const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `${subsUrl}/p/${promoCodes.digital}?${params.toString()}`;
+  const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
 
   return {
     digital,
@@ -157,12 +157,14 @@ function getSubsLinks(
 function getDigitalCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   cgId: CountryGroupId,
+  referringCta: ?string,
 ): string {
 
   return addQueryParamsToURL(`${subsUrl}/checkout`, {
     promoCode: defaultPromos.digital,
     countryGroup: countryGroups[cgId].supportInternationalisationId,
     acquisitionData: JSON.stringify(referrerAcquisitionData),
+    startTrialButton: referringCta,
   });
 
 }

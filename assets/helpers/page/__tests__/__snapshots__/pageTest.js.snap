@@ -13,16 +13,21 @@ Object {
   "abParticipations": Object {},
   "campaign": "dummy_campaign",
   "internationalisation": Object {
+    "countryGroupId": "GBPCountries",
     "countryId": "GB",
+    "currencyId": "GBP",
   },
+  "otherQueryParams": Array [],
   "referrerAcquisitionData": Object {
+    "abTest": null,
     "abTests": Array [],
     "campaignCode": null,
     "componentId": null,
     "componentType": null,
+    "queryParameters": Array [],
     "referrerPageviewId": null,
-    "referrerUrl": null,
     "source": null,
   },
+  "switches": Object {},
 }
 `;

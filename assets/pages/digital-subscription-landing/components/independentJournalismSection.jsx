@@ -27,7 +27,7 @@ export default function IndependentJournalismSection() {
       </div>
       <div className="component-independent-journalism__footer">
         <AmberZuck />
-        <PriceCtaContainer />
+        <PriceCtaContainer referringCta="support_digipack_page_independent_journalism_section" />
       </div>
     </div>
   );
