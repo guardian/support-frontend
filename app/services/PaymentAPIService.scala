@@ -2,17 +2,26 @@ package services
 
 import java.io.IOException
 
+import com.typesafe.scalalogging.LazyLogging
+import io.circe.generic.JsonCodec
+import io.circe.parser.parse
+import codecs.CirceDecoders._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
+import monitoring.SafeLogger
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
     acquisitionData: JsValue,
     paymentData: JsObject
 )
+
+@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+  override val getMessage: String = message
+}
 
 object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
@@ -30,7 +39,7 @@ object PaymentAPIService {
   }
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) extends LazyLogging {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
@@ -57,6 +66,24 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
+  def isPaymentSuccessful(response: WSResponse): Boolean = {
+    response match {
+      case r: WSResponse => r.status == 200
+      case r: WSResponse if r.status == 400 => {
+        val paypalAPIError: Option[PaypalApiError] = paypalApiErrorCodec.decodeJson(parse(r.json.toString()).toOption.get).right.toOption
+        paypalAPIError match {
+          case Some(err) => {
+            logger.error(s"PaypalAPIError returned of type: ${err.errorName}")
+            err.errorName.contains("PAYMENT_ALREADY_DONE")
+          }
+          case None => false
+
+        }
+      }
+      case _ => false
+    }
+  }
+
   def execute(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
@@ -65,6 +92,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(_.status == 200)
+    postData(data, queryStrings, isTestUser).map(response => isPaymentSuccessful(response))
   }
 }

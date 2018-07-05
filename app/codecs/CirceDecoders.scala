@@ -16,6 +16,7 @@ import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
+import services.PaypalApiError
 
 object CirceDecoders {
 
@@ -41,6 +42,7 @@ object CirceDecoders {
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
   implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
+  implicit val paypalApiErrorCodec: Codec[PaypalApiError] = deriveCodec
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
     override final def apply(a: PaymentFields): Json = a match {
