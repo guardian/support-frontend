@@ -164,9 +164,12 @@ function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
   return fromString(countryGroupId) || 'GBPCountries';
 }
 
-function internationalisationId() {
-  const countryCodeId = fromPath();
-  return countryGroups[countryCodeId] ? countryGroups[countryCodeId].supportInternationalisationId : 'uk';
+function internationalisationId(): string {
+  const countryGroupId = fromPath();
+  if (countryGroupId) {
+    return countryGroups[countryGroupId].supportInternationalisationId;
+  }
+  return 'uk';
 }
 
 // ----- Exports ----- //
