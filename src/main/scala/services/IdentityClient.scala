@@ -35,8 +35,13 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
       decode[ApiError](response.body).fold(Error.fromCirceError, identity)
     }
 
-  private def executeRequest[A : Decoder](request: WSRequest): Result[A] =
-    request.execute().attemptT.leftMap(Error.fromThrowable).subflatMap(decodeIdentityClientResponse[A])
+  private def executeRequest[A : Decoder](request: WSRequest): Result[A] = {
+    logger.info(s"Identity request: $request")
+    request.execute().map(resp => {
+      logger.info(s"Identity response: $resp")
+      resp
+    }).attemptT.leftMap(Error.fromThrowable).subflatMap(decodeIdentityClientResponse[A])
+  }
 
   def getUser(emailAddress: String): Result[UserResponse] =
     executeRequest[UserResponse] {
