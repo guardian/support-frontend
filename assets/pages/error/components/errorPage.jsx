@@ -45,7 +45,7 @@ export default function ErrorPage(props: PropTypes) {
         <CtaLink
           text="Support The Guardian"
           accessibilityHint="click here to support The Guardian"
-          url={"/" + internationalisationId()}
+          url={`/${internationalisationId()}`}
           modifierClasses={['support-the-guardian']}
         />
         <CtaLink

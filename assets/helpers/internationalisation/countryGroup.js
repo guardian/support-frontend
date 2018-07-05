@@ -166,7 +166,7 @@ function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
 
 function internationalisationId() {
   const countryCodeId = fromPath();
-  return countryGroups[countryCodeId] ? countryGroups[countryCodeId].supportInternationalisationId : 'uk'
+  return countryGroups[countryCodeId] ? countryGroups[countryCodeId].supportInternationalisationId : 'uk';
 }
 
 // ----- Exports ----- //
