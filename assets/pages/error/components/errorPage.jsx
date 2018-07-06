@@ -11,6 +11,7 @@ import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import { contributionsEmail } from 'helpers/legal';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -62,12 +63,12 @@ export default function ErrorPage(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function ReportLink(props: { show: boolean }) {
+function ReportLink(props: { show: boolean, countryGroupId: CountryGroupId}) {
 
   if (props.show) {
     return (
       <span className="error-copy__text">
-        please <a className="error-copy__link" href={contributionsEmail}>report it</a>.
+        please <a className="error-copy__link" href={contributionsEmail[props.countryGroupId]}>report it</a>.
       </span>
     );
   }
@@ -81,4 +82,8 @@ function ReportLink(props: { show: boolean }) {
 
 ErrorPage.defaultProps = {
   reportLink: false,
+};
+
+ReportLink.defaultProps = {
+  countryGroupId: 'GBPCountries',
 };

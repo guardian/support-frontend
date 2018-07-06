@@ -27,7 +27,7 @@ import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndTex
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { contributionsEmail } from 'helpers/legal';
-
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
@@ -50,6 +50,7 @@ type PropTypes = {
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
   confirmDirectDebitClicked: (callback: RegularCheckoutCallback) => void,
+  countryGroupId: CountryGroupId,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -64,6 +65,7 @@ function mapStateToProps(state) {
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
     formError: state.page.directDebit.formError,
     phase: state.page.directDebit.phase,
+    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 }
 
@@ -313,7 +315,7 @@ function PaymentButton(props: {
   }
 }
 
-function LegalNotice() {
+function LegalNotice(props: { countryGroupId: CountryGroupId }) {
   return (
     <div className="component-direct-debit-form__legal-notice">
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
@@ -326,7 +328,7 @@ function LegalNotice() {
         LE65 1JT United Kingdom<br />
         Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
         8am-6pm at weekends (GMT/BST)<br />
-        <a href={contributionsEmail}>contribution.support@theguardian.com</a>
+        <a href={contributionsEmail[props.countryGroupId]}>{contributionsEmail[props.countryGroupId].replace('mailto:', '')}</a>
       </p>
       <SvgDirectDebitSymbolAndText />
     </div>
@@ -336,3 +338,7 @@ function LegalNotice() {
 // ----- Exports ----- //
 
 export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
+
+LegalNotice.defaultProps = {
+  countryGroupId: 'GBPCountries',
+};

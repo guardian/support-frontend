@@ -164,7 +164,6 @@ function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
   return fromString(countryGroupId) || 'GBPCountries';
 }
 
-
 // ----- Exports ----- //
 
 export {
