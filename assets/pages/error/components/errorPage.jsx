@@ -11,6 +11,7 @@ import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import { contributionsEmail } from 'helpers/legal';
+import { internationalisationId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -44,7 +45,7 @@ export default function ErrorPage(props: PropTypes) {
         <CtaLink
           text="Support The Guardian"
           accessibilityHint="click here to support The Guardian"
-          url="/"
+          url={`/${internationalisationId()}`}
           modifierClasses={['support-the-guardian']}
         />
         <CtaLink
