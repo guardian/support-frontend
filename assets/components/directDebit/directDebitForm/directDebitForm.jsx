@@ -149,7 +149,7 @@ const DirectDebitForm = (props: PropTypes) => (
       svg={<SvgExclamationAlternate />}
     />
 
-    <LegalNotice />
+    <LegalNotice countryGroupId={props.countryGroupId} />
 
     <DirectDebitGuarantee
       isDDGuaranteeOpen={props.isDDGuaranteeOpen}
@@ -339,6 +339,3 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
 
-LegalNotice.defaultProps = {
-  countryGroupId: 'GBPCountries',
-};
