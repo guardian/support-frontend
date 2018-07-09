@@ -6,10 +6,19 @@ import React from 'react';
 
 import { contributionsEmail } from 'helpers/legal';
 
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
+
+// ---- Types ----- //
+
+type PropTypes = {
+    countryGroupId: CountryGroupId,
+};
+
 
 // ----- Component ----- //
 
-export default function ContribLegal() {
+export default function ContribLegal(props: PropTypes) {
 
   return (
     <p className="component-contrib-legal">
@@ -20,7 +29,7 @@ export default function ContribLegal() {
       journalism does not constitute a charitable donation, as such your
       contribution is not eligible for Gift Aid in the UK nor a tax-deduction
       elsewhere. If you have any questions about contributing to the Guardian,
-      please <a href={contributionsEmail}>contact us here</a>.
+      please <a href={contributionsEmail[props.countryGroupId]}>contact us here</a>.
     </p>
   );
 

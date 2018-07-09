@@ -82,7 +82,7 @@ const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes
   <Provider store={props.store}>
     <Page
       header={<CountrySwitcherHeader />}
-      footer={<Footer disclaimer />}
+      footer={<Footer disclaimer countryGroupId={props.countryGroupId} />}
     >
       <CirclesIntroduction
         headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}

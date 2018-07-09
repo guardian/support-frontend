@@ -7,12 +7,14 @@ import type { Node } from 'react';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
 type PropTypes = {
   privacyPolicy: boolean,
   disclaimer: boolean,
+  countryGroupId: CountryGroupId,
   children: Node,
 };
 
@@ -34,8 +36,8 @@ function PrivacyPolicy(props: { privacyPolicy: boolean }) {
 
 }
 
-function Disclaimer(props: { disclaimer: boolean }) {
-  return props.disclaimer ? <ContribLegal /> : null;
+function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId }) {
+  return props.disclaimer ? <ContribLegal countryGroupId={props.countryGroupId} /> : null;
 }
 
 // ----- Component ----- //
@@ -48,7 +50,7 @@ function Footer(props: PropTypes) {
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
         {props.children}
         <small className="component-footer__copyright">{copyrightNotice}</small>
-        <Disclaimer disclaimer={props.disclaimer} />
+        <Disclaimer disclaimer={props.disclaimer} countryGroupId={props.countryGroupId} />
       </div>
     </footer>
   );
@@ -61,6 +63,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  countryGroupId: 'GBPCountries',
   children: [],
 };
 

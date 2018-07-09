@@ -67,7 +67,7 @@ function ReportLink(props: { show: boolean }) {
   if (props.show) {
     return (
       <span className="error-copy__text">
-        please <a className="error-copy__link" href={contributionsEmail}>report it</a>.
+        please <a className="error-copy__link" href={contributionsEmail.GBPCountries}>report it</a>.
       </span>
     );
   }
