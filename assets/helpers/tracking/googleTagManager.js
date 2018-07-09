@@ -117,6 +117,7 @@ function sendData(event: EventType, participations: Participations, paymentReque
     paymentMethod: storage.getSession('paymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
     campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
     experience: getVariantsAsString(participations),
     ophanBrowserID: getOphanIds().browserId,
     paymentRequestApiStatus,
