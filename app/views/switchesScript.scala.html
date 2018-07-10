@@ -1,9 +1,19 @@
 @import switchboard.Switches
-@import views.ViewHelpers.printSwitches
 
 @(switches: Switches)
 
 <script type="text/javascript">
     window.guardian = window.guardian || {};
-    guardian.switches = @Html(printSwitches(switches));
+    guardian.switches = {
+      oneOffPaymentMethods: {
+        stripe: '@switches.onOffPaymentMethods.stripe',
+        payPal: '@switches.onOffPaymentMethods.payPal',
+      },
+      recurringPaymentMethods: {
+        stripe: '@switches.recurringPaymentMethods.stripe',
+        payPal: '@switches.recurringPaymentMethods.payPal',
+        directDebit: '@switches.recurringPaymentMethods.directDebit',
+      },
+      optimize: '@switches.optimize',
+    };
 </script>
