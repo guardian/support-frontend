@@ -23,7 +23,7 @@ function mapStateToProps(state: State) {
     currencyId: state.common.internationalisation.currencyId,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
-    newSignInFlowVariant: state.common.abParticipations.newSignInFlow,
+    newSignInFlowRebootVariant: state.common.abParticipations.newSignInFlowReboot,
   };
 
 }
