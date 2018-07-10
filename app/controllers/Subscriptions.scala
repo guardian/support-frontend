@@ -60,6 +60,7 @@ class Subscriptions(
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/subscribe/digital"
       case Some(US) => "/us/subscribe/digital"
+      case Some(Australia) => "/au/subscribe/digital"
       case Some(RestOfTheWorld) => "/int/subscribe/digital"
       case _ => "https://subscribe.theguardian.com/digital"
     }

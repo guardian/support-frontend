@@ -14,10 +14,11 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function DigitalPackEmail() {
+function DigitalPackEmail(props: {email: string}) {
+  const email = props.email || 'digitalpack@theguardian.com';
   return (
-    <a className="component-customer-service__digital-pack-email" href="mailto:digitalpack@theguardian.com">
-      digitalpack@theguardian.com
+    <a className="component-customer-service__digital-pack-email" href={`mailto:${email}`}>
+      {email}
     </a>
   );
 }
@@ -51,6 +52,17 @@ function CustomerService(props: PropTypes) {
         <div className="component-customer-service__text">
           For help with Guardian and Observer subscription services please email <DigitalPackEmail /> or
           call 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays, 8am-6pm at weekends (GMT/BST).
+          <FAQBlock />
+        </div>
+      </div>
+    );
+    case 'AUDCountries': return (
+      <div className="component-customer-service">
+        <div className="component-customer-service__text">
+          For help with Guardian and Observer subscription services please
+          email <DigitalPackEmail email="apac.help@theguardian.com" /> or
+          call 1800 773 766 (within Australia) or +61 2076 8599 (outside Australia).
+          Lines are open 9am-5pm Monday-Friday (AEDT)
           <FAQBlock />
         </div>
       </div>
