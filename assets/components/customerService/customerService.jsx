@@ -15,13 +15,16 @@ type PropTypes = {
 // ----- Functions ----- //
 
 function DigitalPackEmail(props: {email: string}) {
-  const email = props.email || 'digitalpack@theguardian.com';
   return (
-    <a className="component-customer-service__digital-pack-email" href={`mailto:${email}`}>
-      {email}
+    <a className="component-customer-service__digital-pack-email" href={`mailto:${props.email}`}>
+      {props.email}
     </a>
   );
 }
+
+DigitalPackEmail.defaultProps = {
+  email: 'digitalpack@theguardian.com',
+};
 
 
 function FAQBlock() {
