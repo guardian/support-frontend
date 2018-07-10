@@ -2,7 +2,7 @@ package switchboard
 
 import com.typesafe.config.Config
 
-case class Switches(onOffPaymentMethods: PaymentMethodsSwitch, recurringPaymentMethods: PaymentMethodsSwitch, optimize: SwitchState)
+case class Switches(oneOffPaymentMethods: PaymentMethodsSwitch, recurringPaymentMethods: PaymentMethodsSwitch, optimize: SwitchState)
 
 object Switches {
   def fromConfig(config: Config): Switches =
