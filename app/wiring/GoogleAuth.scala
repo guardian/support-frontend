@@ -1,6 +1,6 @@
 package wiring
 
-import com.gu.googleauth.{AuthAction, GoogleAuthConfig}
+import com.gu.googleauth.{AntiForgeryChecker, AuthAction, GoogleAuthConfig}
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.filters.HttpFiltersComponents
@@ -14,7 +14,8 @@ trait GoogleAuth { self: BuiltInComponentsFromContext with AhcWSComponents with 
     appConfig.googleAuth.clientId,
     appConfig.googleAuth.clientSecret,
     appConfig.googleAuth.redirectUrl,
-    appConfig.googleAuth.domain
+    appConfig.googleAuth.domain,
+    antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration)
   )
 
   val authAction = new AuthAction[AnyContent](googleAuthConfig, routes.Login.loginAction(), controllerComponents.parsers.default)
