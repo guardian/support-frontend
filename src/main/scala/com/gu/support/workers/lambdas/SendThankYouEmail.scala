@@ -7,7 +7,7 @@ import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.monthlyContributions.state.SendThankYouEmailState
+import com.gu.support.workers.model.states.SendThankYouEmailState
 import com.gu.support.workers.model.{DirectDebitPaymentMethod, RequestInfo}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
@@ -43,11 +43,11 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     thankYouEmailService.send(EmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
-      amount = state.contribution.amount,
-      currency = state.contribution.currency,
+      amount = 0, //TODO It's not actually used by the email, maybe remove it?
+      currency = state.product.currency,
       edition = state.user.country.alpha2,
       name = state.user.firstName,
-      product = "monthly-contribution",
+      product = "monthly-contribution", //TODO send the right email for digital pack
       paymentMethod = Some(state.paymentMethod),
       directDebitMandateId = directDebitMandateId
     ))

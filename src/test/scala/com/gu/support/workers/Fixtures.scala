@@ -54,34 +54,83 @@ object Fixtures {
       }
     """
 
+  val digitalPackJson =
+    """
+      {
+        "currency": "GBP",
+        "billingPeriod" : "Annual"
+      }
+    """
+
+  val digitalPackProductJson =
+    s"""
+      "product": $digitalPackJson
+    """
+
   val payPalJson =
     s"""
-                {
-                  "baid": "$validBaid"
-                }
-                """
+      {
+        "baid": "$validBaid"
+      }
+    """
+
+  val mickeyMouse = "Mickey Mouse"
+  val directDebitJson =
+    s"""
+      {
+        "accountHolderName": "$mickeyMouse",
+        "sortCode": "111111",
+        "accountNumber": "99999999"
+      }
+    """
+
   val stripeToken = "tok_AXY4M16p60c2sg"
   val stripeJson =
     s"""
-                {
-                  "stripeToken": "$stripeToken"
-                }
-                """
+      {
+        "userId": "12345",
+        "stripeToken": "$stripeToken"
+      }
+    """
 
-  def createPayPalPaymentMethodJson(currency: Currency = GBP) =
+  def createPayPalPaymentMethodContributionJson(currency: Currency = GBP) =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": ${contribution(currency = currency)},
+          "product": ${contribution(currency = currency)},
           "paymentFields": $payPalJson
         }"""
 
-  def createStripePaymentMethodJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5) =
+  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5) =
     s"""{
           $requestIdJson,
           $userJson,
-          "contribution": ${contribution(amount = amount, billingPeriod = billingPeriod)},
+          "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
           "paymentFields": $stripeJson
+        }"""
+
+  val oldSchemaContributionJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          "contribution": ${contribution()},
+          "paymentFields": $stripeJson
+        }"""
+
+  val createPayPalPaymentMethodDigitalPackJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          $digitalPackProductJson,
+          "paymentFields": $payPalJson
+        }"""
+
+  val createDirectDebitDigitalPackJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          $digitalPackProductJson,
+          "paymentFields": $directDebitJson
         }"""
 
   val createSalesForceContactJson =
@@ -89,7 +138,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": ${contribution()},
+            "product": ${contribution()},
             "paymentMethod": $payPalPaymentMethod
           }
         """
@@ -98,7 +147,7 @@ object Fixtures {
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "contribution": ${contribution()},
+       |  "product": ${contribution()},
        |  "paymentMethod": $payPalPaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
@@ -121,7 +170,7 @@ object Fixtures {
           {
             $requestIdJson,
             $userJson,
-            "contribution": ${contribution(billingPeriod = billingPeriod)},
+            "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }

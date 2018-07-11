@@ -8,9 +8,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.monthlyContributions.Status
-import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, FailureHandlerState}
-import com.gu.support.workers.model.{ExecutionError, RequestInfo}
+import com.gu.support.workers.model.states.{CompletedState, FailureHandlerState}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo, Status}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -29,10 +28,9 @@ class FailureHandler(emailService: EmailService)
     context: Context
   ): FutureHandlerResult = {
     SafeLogger.info(
-      s"FAILED contribution_amount: ${state.contribution.amount}\n" +
-        s"contribution_currency: ${state.contribution.currency.iso}\n" +
+      s"FAILED product: ${state.product.describe}\n " +
         s"test_user: ${state.user.isTestUser}\n" +
-        s"error: $error"
+        s"error: $error\n"
     )
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
@@ -40,11 +38,11 @@ class FailureHandler(emailService: EmailService)
   private def sendEmail(state: FailureHandlerState) = emailService.send(EmailFields(
     email = state.user.primaryEmailAddress,
     created = DateTime.now(),
-    amount = state.contribution.amount,
-    currency = state.contribution.currency,
+    amount = 0, //TODO: Not used by email & digital pack doesn't have it
+    currency = state.product.currency,
     edition = state.user.country.alpha2,
     name = state.user.firstName,
-    product = "monthly-contribution"
+    product = "monthly-contribution" //TODO: Adjust for DigiPack
   ))
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
@@ -73,7 +71,7 @@ class FailureHandler(emailService: EmailService)
       CompletedState(
         requestId = state.requestId,
         user = state.user,
-        contribution = state.contribution,
+        product = state.product,
         status = Status.Failure,
         message = Some(message)
       ), requestInfo

@@ -9,7 +9,6 @@ import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.model._
-import com.gu.support.workers.model.monthlyContributions.Contribution
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -73,13 +72,29 @@ trait ModelsCodecs {
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
+  //Products
+  implicit val codecDigitalPack: Codec[DigitalPack] = deriveCodec
+  implicit val codecContribution: Codec[Contribution] = deriveCodec
+
+  implicit val encodeProduct: Encoder[ProductType] = Encoder.instance {
+    case d: DigitalPack => d.asJson
+    case c: Contribution => c.asJson
+  }
+
+  implicit val decodeProduct: Decoder[ProductType] =
+    List[Decoder[ProductType]](
+      Decoder[Contribution].widen,
+      Decoder[DigitalPack].widen
+    ).reduceLeft(_ or _)
+  //end
+
   implicit val codecUser: Codec[User] = deriveCodec
 
   //There is a configuration option in Circe to allow the use of Scala default parameters, but unfortunately
   //it doesn't seem to work in version 0.8.0 so we'll have to use this more verbose approach
   implicit val decodeContribution: Decoder[Contribution] = Decoder
     .forProduct3("amount", "currency", "billingPeriod")(Contribution.apply)
-    .or(Decoder.forProduct2("amount", "currency")((a: BigDecimal, c: Currency) => Contribution(a, c)))
+    .or(Decoder.forProduct2("amount", "currency")((a: BigDecimal, c: Currency) => Contribution(a, c, Monthly)))
   implicit val encodeContribution: Encoder[Contribution] = deriveEncoder
 
   implicit val executionErrorCodec: Codec[ExecutionError] = deriveCodec

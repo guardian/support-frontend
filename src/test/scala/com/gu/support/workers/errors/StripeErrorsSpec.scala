@@ -7,7 +7,7 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.stripe.Stripe.StripeError
 import com.gu.stripe.{Stripe, StripeService}
-import com.gu.support.workers.Fixtures.{createStripePaymentMethodJson, wrapFixture}
+import com.gu.support.workers.Fixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
@@ -27,7 +27,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
     }
   }
 
@@ -41,7 +41,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
     }
 
     // Shut down the server. Instances cannot be reused.
@@ -60,7 +60,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryNone] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
     }
 
     server.shutdown()

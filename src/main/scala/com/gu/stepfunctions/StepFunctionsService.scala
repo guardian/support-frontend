@@ -9,9 +9,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.config.Stages
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs.createPaymentMethodState
+import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.User
-import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
+import com.gu.support.workers.model.states.CreatePaymentMethodState
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
