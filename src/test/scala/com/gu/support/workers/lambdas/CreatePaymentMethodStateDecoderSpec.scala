@@ -21,7 +21,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     /*
     {
       "currency" : "GBP",
-      "period" : "Monthly",
+      "billingPeriod" : "Monthly",
       "amount" : 5,
       "type" : "Contribution"
     }
@@ -34,7 +34,7 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     /*
     {
       "currency" : "GBP",
-      "period" : "Annual",
+      "billingPeriod" : "Annual",
       "type" : "DigitalPack"
     }
      */

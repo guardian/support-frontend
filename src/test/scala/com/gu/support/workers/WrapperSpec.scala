@@ -18,8 +18,7 @@ class WrapperSpec extends FlatSpec with Matchers {
     result.isSuccess should be(true)
   }
 
-  //TODO: This fixture is in the old format, upgrade it
-  ignore should "be able to handle a JsonWrapper with messages" in {
+  it should "be able to handle a JsonWrapper with messages" in {
     val result = Encoding.in[CreateSalesforceContactState](Fixtures.wrapperWithMessages.asInputStream)
     SafeLogger.info(s"$result")
     result.isSuccess should be(true)
