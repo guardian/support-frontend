@@ -23,7 +23,6 @@ import ProductBlock from './components/productBlock';
 
 const store = pageInit();
 
-
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
@@ -33,12 +32,18 @@ const reactElementId: {
 } = {
   GBPCountries: 'digital-subscription-landing-page-uk',
   UnitedStates: 'digital-subscription-landing-page-us',
+  AUDCountries: 'digital-subscription-landing-page-au',
   International: 'digital-subscription-landing-page-int',
 };
 
 const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   '/subscribe/digital',
-  ['GBPCountries', 'UnitedStates', 'International'],
+  [
+    'GBPCountries',
+    'UnitedStates',
+    'AUDCountries',
+    'International',
+  ],
 );
 
 // ----- Render ----- //
