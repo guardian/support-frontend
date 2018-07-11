@@ -109,10 +109,16 @@ class PaypalBackend(
     emailFromPayment(payment).flatMap { paymentEmail =>
       val email = signedInUserEmail.getOrElse(paymentEmail)
 
-      val trackContributionResult = for {
-        identityId <- getOrCreateIdentityIdFromEmail(email)
-        _ <- trackContribution(payment, acquisitionData, email, identityId, countrySubdivisionCode)
-      } yield ()
+      val trackContributionResult: EitherT[Future, BackendError, Unit] = getOrCreateIdentityIdFromEmail(email)
+        .flatMap { identityId =>
+          trackContribution(payment, acquisitionData, email, Option(identityId), countrySubdivisionCode)
+        }
+        .leftMap { err =>
+          logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
+          trackContribution(payment, acquisitionData, email, identityId = None, countrySubdivisionCode)
+            .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
+          err
+        }
 
       val sendThankYouEmailResult = for {
         currency <- currencyFromPayment(payment)
@@ -145,14 +151,12 @@ class PaypalBackend(
       }
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
+
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
     identityService.getOrCreateIdentityIdFromEmail(email)
-      .leftMap(BackendError.fromIdentityError)
-      .map(Option(_))
-      .recover {
-        case err =>
-          logger.error("Error getting identityId", err)
-          None
+      .leftMap { err =>
+        logger.error("Error getting identityId", err.getMessage)
+        BackendError.fromIdentityError(err)
       }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
