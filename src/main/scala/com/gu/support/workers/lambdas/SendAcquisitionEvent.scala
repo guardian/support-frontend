@@ -7,6 +7,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.states.SendAcquisitionEventState
+import ophan.thrift.event.{Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -56,14 +57,19 @@ object SendAcquisitionEvent {
           case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
-      override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] =
+      override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] = {
+        val (productType, productAmount) = state.product match {
+          case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
+          case d: DigitalPack => (OphanProduct.DigitalSubscription, 0D)
+          case _ => throw new Exception("Invalid product type")
+        }
         Either.fromOption(
           state.acquisitionData.map { data =>
             thrift.Acquisition(
-              product = ophan.thrift.event.Product.RecurringContribution,
-              paymentFrequency = paymentFrequencyFromBillingPeriod(state.contribution.billingPeriod),
-              currency = state.contribution.currency.iso,
-              amount = state.contribution.amount.toDouble,
+              product = productType,
+              paymentFrequency = paymentFrequencyFromBillingPeriod(state.product.billingPeriod),
+              currency = state.product.currency.iso,
+              amount = productAmount,
               paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
@@ -82,5 +88,6 @@ object SendAcquisitionEvent {
           },
           "acquisition data not included"
         )
+      }
     }
 }
