@@ -2,11 +2,26 @@ package services
 
 import java.io.IOException
 
+import io.circe.generic.JsonCodec
+import io.circe.parser.parse
+import codecs.CirceDecoders.paypalApiErrorCodec
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
+
+@JsonCodec case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends Exception {
+  override val getMessage: String = message
+}
+
+@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+  override val getMessage: String = message
+}
+
+//@JsonCodec case class Success[A](data: A)
+
+@JsonCodec case class Error[A](error: A)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -57,6 +72,23 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
+  def getPaypalApiError(body: String): Option[PaypalApiError] = {
+    val bodyJson = parse(body)
+    val error = bodyJson.map(_.\\("error").headOption).toOption.flatten
+    error.flatMap(json => paypalApiErrorCodec.decodeJson(json).toOption)
+  }
+
+  def showAsSuccessful(response: WSResponse): Boolean = {
+    response match {
+      case response: WSResponse if response.status == 200 => true
+      case response: WSResponse if response.status == 400 => {
+        val error = getPaypalApiError(response.body)
+        error.exists(err => err.errorName.contains("PAYMENT_ALREADY_DONE"))
+      }
+      case _ => false
+    }
+  }
+
   def execute(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
@@ -65,6 +97,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(_.status == 200)
+    postData(data, queryStrings, isTestUser).map(showAsSuccessful(_))
   }
 }
