@@ -2,7 +2,7 @@ package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers.model._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder, Json, ObjectEncoder}
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState, FailureHandlerState}
@@ -16,7 +16,10 @@ import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
-import services.PaypalApiError
+import play.shaded.ahc.io.netty.handler.codec.serialization.ObjectDecoder
+import services.{MyError, PaypalApiError, StripeApiError}
+
+import scala.reflect.{ClassTag, classTag}
 
 object CirceDecoders {
 
@@ -42,7 +45,6 @@ object CirceDecoders {
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
   implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
-  implicit val paypalApiErrorCodec: Codec[PaypalApiError] = deriveCodec
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = new Encoder[PaymentFields] {
     override final def apply(a: PaymentFields): Json = a match {
@@ -83,5 +85,17 @@ object CirceDecoders {
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec
+
+  //Payment Errors are received form Payment-API
+  implicit val stripeApiErrorCodec: Codec[StripeApiError] = deriveCodec
+  implicit val paypalApiErrorCodec: Codec[PaypalApiError] = deriveCodec
+
+  // case class MyError(error: Exception, responseType: String)
+
+  //implicit val errorCodec: Codec[MyError] = deriveCodec
+
+  //case class Error[A](error: A)
+
+  //implicit val errorCodec: Codec[Error[A]] = deriveCodec[Error[A]]
 }
 
