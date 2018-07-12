@@ -8,11 +8,13 @@ import com.gu.support.workers.Fixtures.sendAcquisitionEventJson
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
+import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.Matchers._
+import org.mockito.Mockito.when
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
-  "SendAcquisitionEvent" should "work with a valid input" in {
+  "SendAcquisitionEvent" should "work with a valid input" taggedAs IntegrationTest in {
     val sendAcquisitionEvent = new SendAcquisitionEvent(mockServices)
 
     val outStream = new ByteArrayOutputStream()
@@ -26,7 +28,6 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
   }
 
   private lazy val mockServices = {
-    import org.mockito.Mockito.when
     //Mock the Ophan service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
