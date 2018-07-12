@@ -1,4 +1,4 @@
-package com.gu.support.workers.model.monthlyContributions
+package com.gu.support.workers.model
 
 sealed trait Status {
   def asString: String
