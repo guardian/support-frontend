@@ -11,19 +11,19 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // Disabling the linter here because it's just buggy...
 // It can't handle props being passed to another function.
-/* eslint-disable react/no-unused-prop-types, react/require-default-props */
+/* eslint-disable react/no-unused-prop-types */
 
 type PropTypes = {
-  placeholder?: string,
-  labelText?: string,
-  id?: string,
-  onChange?: (name: string) => void,
-  value?: string,
-  required?: boolean,
+  id: string,
+  labelText: string,
+  onChange: (name: string) => void,
+  value: string,
+  placeholder: string,
+  required: boolean,
   modifierClasses: Array<?string>,
 };
 
-/* eslint-enable react/no-unused-prop-types, react/require-default-props */
+/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Functions ----- //
@@ -69,7 +69,6 @@ export default function TextInput(props: PropTypes) {
   if (!props.labelText) {
     return input;
   }
-  /* eslint-disable jsx-a11y/label-has-for */
   return (
     <div className={classNameWithModifiers('component-text-input', props.modifierClasses)}>
       <label htmlFor={props.id} className="component-text-input__label">
@@ -78,7 +77,6 @@ export default function TextInput(props: PropTypes) {
       {input}
     </div>
   );
-  /* eslint-enable jsx-a11y/label-has-for */
 
 }
 
@@ -86,11 +84,9 @@ export default function TextInput(props: PropTypes) {
 // ----- Proptypes ----- //
 
 TextInput.defaultProps = {
-  placeholder: null,
+  placeholder: '',
   labelText: '',
   id: null,
-  onChange: null,
-  value: '',
   required: false,
   modifierClasses: [],
 };
