@@ -30,4 +30,8 @@
       text-decoration: underline;
     }
   }
+
+  .component-select-input__label {
+    @include accessibility-hint;
+  }
 }

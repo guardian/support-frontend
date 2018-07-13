@@ -37,7 +37,7 @@ export default function SelectInput(props: PropTypes) {
 
   return (
     <div className="component-select-input">
-      <label htmlFor={props.id} className="accessibility-hint">
+      <label htmlFor={props.id} className="component-select-input__label">
         {props.label}
       </label>
       <select
