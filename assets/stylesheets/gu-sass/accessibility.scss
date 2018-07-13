@@ -1,10 +1,14 @@
 // ----- Assistive technologies guidance (non-visible) ----- //
 
+@mixin accessibility-hint {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .accessibility-hint {
-  position:absolute;
-  left:-10000px;
-  top:auto;
-  width:1px;
-  height:1px;
-  overflow:hidden;
+  @include accessibility-hint;
 }
