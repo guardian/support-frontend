@@ -4,10 +4,11 @@ import java.io.IOException
 
 import io.circe.generic.JsonCodec
 import io.circe.parser.parse
-import codecs.CirceDecoders.paypalApiErrorCodec
+import codecs.CirceDecoders.{paypalApiErrorCodec, errorWrapperCodec}
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
+import monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -21,7 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 //@JsonCodec case class Success[A](data: A)
 
-@JsonCodec case class Error[A](error: A)
+@JsonCodec case class ErrorWrapper(error: PaypalApiError)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -74,8 +75,9 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
 
   def getPaypalApiError(body: String): Option[PaypalApiError] = {
     val bodyJson = parse(body)
-    val error = bodyJson.map(_.\\("error").headOption).toOption.flatten
-    error.flatMap(json => paypalApiErrorCodec.decodeJson(json).toOption)
+    val error = bodyJson.toOption
+    val paypalApiError = error.flatMap(json => errorWrapperCodec.decodeJson(json).toOption)
+    paypalApiError.map(_.error)
   }
 
   def showAsSuccessful(response: WSResponse): Boolean = {

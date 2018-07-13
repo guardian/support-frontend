@@ -17,7 +17,7 @@ import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
 import switchboard.{PaymentMethodsSwitch, SwitchState, Switches}
-import services.{PaypalApiError, StripeApiError}
+import services.{ErrorWrapper, PaypalApiError, StripeApiError}
 
 object CirceDecoders {
 
@@ -89,5 +89,6 @@ object CirceDecoders {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
   implicit val stripeApiErrorCodec: Codec[StripeApiError] = deriveCodec
   implicit val paypalApiErrorCodec: Codec[PaypalApiError] = deriveCodec
+  implicit val errorWrapperCodec: Codec[ErrorWrapper] = deriveCodec
 }
 
