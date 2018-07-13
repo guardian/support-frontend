@@ -54,7 +54,6 @@ export default function TextInput(props: PropTypes) {
 
 TextInput.defaultProps = {
   placeholder: '',
-  labelText: '',
   required: false,
   modifierClasses: [],
 };
