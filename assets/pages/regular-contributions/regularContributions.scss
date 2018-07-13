@@ -66,10 +66,12 @@
     }
   }
 
+  .component-select-input {
+    margin-top: $gu-v-spacing;
+  }
+
   .component-select-input__select {
     width: 100%;
-    margin-top: $gu-v-spacing;
-    margin-bottom: 0;
     border: 2px solid gu-colour(news-garnett-highlight);
 
     @include mq($from: desktop) {
