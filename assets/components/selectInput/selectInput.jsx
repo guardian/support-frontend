@@ -9,7 +9,7 @@ import React from 'react';
 
 // Disabling the linter here because it's just buggy...
 // It can't handle props being passed to another function.
-/* eslint-disable react/no-unused-prop-types, react/require-default-props */
+/* eslint-disable react/no-unused-prop-types */
 
 export type SelectOption = {
   text: string,
@@ -17,15 +17,14 @@ export type SelectOption = {
   selected?: boolean,
 };
 
-/* eslint-enable react/no-unused-prop-types, react/require-default-props */
+/* eslint-enable react/no-unused-prop-types */
 
 type PropTypes = {
   options: SelectOption[],
   onChange: (string) => void,
-  required?: boolean,
+  required: boolean,
   id: string,
   label: string,
-  className?: string,
 };
 
 
@@ -37,14 +36,14 @@ export default function SelectInput(props: PropTypes) {
     <option value={option.value} selected={option.selected}>{option.text}</option>);
 
   return (
-    <div>
+    <div className="component-select-input">
       <label htmlFor={props.id} className="accessibility-hint">
         {props.label}
       </label>
       <select
         id={props.id}
         name={props.id}
-        className={props.className}
+        className="component-select-input__select"
         required={props.required}
         onChange={event => props.onChange(event.target.value)}
       >
@@ -60,5 +59,4 @@ export default function SelectInput(props: PropTypes) {
 
 SelectInput.defaultProps = {
   required: false,
-  className: 'component-select-input',
 };
