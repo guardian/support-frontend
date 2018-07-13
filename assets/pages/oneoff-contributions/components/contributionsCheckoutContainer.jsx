@@ -26,6 +26,8 @@ function mapStateToProps(state: State) {
     payment: inlineCardPaymentVariant === 'inline' ?
       <OneoffInlineContributionsPayment /> :
       <OneoffContributionsPayment />,
+    name: state.page.user.displayName,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }

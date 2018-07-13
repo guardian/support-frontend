@@ -26,6 +26,8 @@ function mapStateToProps(state: State) {
     payment: inlineCardPaymentVariant === 'inline' ?
       <RegularInlineContributionsPayment /> :
       <RegularContributionsPayment />,
+    name: state.page.user.displayName,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }
