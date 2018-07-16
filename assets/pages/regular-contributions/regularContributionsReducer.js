@@ -17,7 +17,7 @@ import type { PaymentMethod } from 'helpers/checkouts';
 import { type RegularContributionType } from 'helpers/contributions';
 
 import type { Action } from './regularContributionsActions';
-import type { PaymentStatus } from './components/regularContributionsPayment';
+import type { PaymentStatus } from './components/regularInlineContributionsPayment';
 
 
 // ----- Types ----- //
