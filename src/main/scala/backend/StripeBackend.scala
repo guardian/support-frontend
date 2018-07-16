@@ -64,10 +64,16 @@ class StripeBackend(
   }
 
   private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
-    val trackContributionResult = for {
-      identityId <- getOrCreateIdentityIdFromEmail(email)
-      _ <- trackContribution(charge, data, identityId, countrySubdivisionCode)
-    } yield ()
+    val trackContributionResult = {
+      getOrCreateIdentityIdFromEmail(email)
+        .flatMap(identityId => trackContribution(charge, data, Option(identityId), countrySubdivisionCode))
+        .leftMap { err =>
+          logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
+          trackContribution(charge, data, identityId = None, countrySubdivisionCode)
+            .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
+          err
+        }
+    }
 
     val sendThankYouEmailResult = for {
       _ <- sendThankYouEmail(email, data)
@@ -87,15 +93,11 @@ class StripeBackend(
 
   // Convert the result of the identity id operation,
   // into the monad used by the for comprehension in the createCharge() method.
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Option[Long]] =
-    identityService
-      .getOrCreateIdentityIdFromEmail(email)
-      .leftMap(BackendError.fromIdentityError)
-      .map(Option(_))
-      .recover {
-        case err =>
-          logger.error("Error getting identityId", err)
-          None
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
+    identityService.getOrCreateIdentityIdFromEmail(email)
+      .leftMap { err =>
+        logger.error("Error getting identityId", err.getMessage)
+        BackendError.fromIdentityError(err)
       }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
