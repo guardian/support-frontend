@@ -7,17 +7,11 @@ import React from 'react';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-// It can't handle props being passed to another function.
-/* eslint-disable react/no-unused-prop-types */
-
 export type SelectOption = {
   text: string,
   value: string,
   selected?: boolean,
 };
-
-/* eslint-enable react/no-unused-prop-types */
 
 type PropTypes = {
   options: SelectOption[],
