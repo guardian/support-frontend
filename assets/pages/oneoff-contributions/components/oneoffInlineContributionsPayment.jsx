@@ -149,6 +149,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         errorMessage={props.stripeInlineErrorMessage}
         setError={props.stripeInlineSetError}
         resetError={props.stripeInlineResetError}
+        disable={false}
       />
     </section>
   );

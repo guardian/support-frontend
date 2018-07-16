@@ -14,6 +14,8 @@ import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
 import { logException } from 'helpers/logger';
+import { classNameWithModifiers } from 'helpers/utilities';
+
 
 // ----- Types -----//
 
@@ -31,6 +33,7 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   setError: (message: string) => void,
   resetError: () => void,
+  disable: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,6 +73,7 @@ function StripeInlineFormComp(props: PropTypes) {
           setError={props.setError}
           resetError={props.resetError}
           email={props.email}
+          disable={props.disable}
         />
       </Elements>
     </StripeProvider>
@@ -119,6 +123,7 @@ function checkoutForm(props: {
   setError: (string) => void,
   resetError: () => void,
   email: string,
+  disable: boolean
 }) {
 
   const handleSubmit = (event) => {
@@ -157,15 +162,23 @@ function checkoutForm(props: {
     }
   };
 
+  const formClassName = classNameWithModifiers('component-stripe-inline-form', props.disable ? ['disable'] : []);
+  const submitButtonClassName = classNameWithModifiers(submitClassName, props.disable ? ['disable'] : []);
+
   return (
-    <form className="component-stripe-inline-form" onSubmit={handleSubmit}>
+    <form className={formClassName} onSubmit={handleSubmit} >
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
-        <CardElement className="component-stripe-inline-form__card-element" hidePostalCode style={stripeElementsStyle} />
+        <CardElement
+          className="component-stripe-inline-form__card-element"
+          hidePostalCode
+          style={stripeElementsStyle}
+        />
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
-        className={submitClassName}
+        className={submitButtonClassName}
+        disabled={props.disable}
       >
         Confirm card payment <SvgArrowRightStraight />
       </button>

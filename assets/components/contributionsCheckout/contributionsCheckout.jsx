@@ -26,6 +26,8 @@ type PropTypes = {
   currencyId: IsoCurrency,
   country: IsoCountry,
   contributionType: ContributionType,
+  name: string,
+  isSignedIn: boolean,
   form: Node,
   payment: Node,
 };
@@ -71,7 +73,7 @@ export default function ContributionsCheckout(props: PropTypes) {
           amount={props.amount}
           currencyId={props.currencyId}
         />
-        <YourDetails>
+        <YourDetails name={props.name} isSignedIn={props.isSignedIn}>
           {props.form}
         </YourDetails>
         <PageSection heading="Payment" modifierClass="payment-methods">

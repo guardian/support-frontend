@@ -12,6 +12,8 @@ import DisplayName from 'components/displayName/displayName';
 // ----- Types ----- //
 
 type PropTypes = {
+  name: string,
+  isSignedIn: boolean,
   children: Node,
 };
 
@@ -23,7 +25,8 @@ export default function YourDetails(props: PropTypes) {
   return (
     <div className="component-your-details">
       <PageSection heading="Your details" headingChildren={<Signout />}>
-        <DisplayName />
+        <DisplayName name={props.name} isSignedIn={props.isSignedIn} />
+        <p className="component-your-details__text">All fields are required.</p>
         {props.children}
       </PageSection>
     </div>

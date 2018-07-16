@@ -123,7 +123,7 @@ function buildSubsUrls(
 
   const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `${subsUrl}/p/${promoCodes.digital}?${params.toString()}`;
+  const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
 
   return {
     digital,

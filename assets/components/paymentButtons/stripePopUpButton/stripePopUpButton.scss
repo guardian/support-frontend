@@ -13,19 +13,31 @@
   text-align: left;
   width: 100%;
 
-  svg {
+  .svg-credit-card {
     width: 24px;
-    fill: #fff;
+    fill: gu-colour(garnett-neutral-1);
     position: absolute;
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-  }
-  .svg-credit-card {
-    fill: gu-colour(garnett-neutral-1);
   }
 
   &:hover {
     background-color: darken(gu-colour(news-garnett-highlight), 5%);
   }
 }
+
+.component-stripe-pop-up-button--disable {
+  background-color: gu-colour(garnett-neutral-4);
+  color: gu-colour(garnett-neutral-2);
+  cursor: auto;
+
+  .svg-credit-card {
+    fill: gu-colour(garnett-neutral-2);
+  }
+
+  &:hover {
+    background-color: gu-colour(garnett-neutral-4);
+  }
+}
+

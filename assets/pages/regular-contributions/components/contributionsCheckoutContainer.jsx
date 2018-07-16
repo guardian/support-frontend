@@ -19,6 +19,8 @@ function mapStateToProps(state: State) {
     currencyId: state.common.internationalisation.currencyId,
     country: state.common.internationalisation.countryId,
     payment: <RegularInlineContributionsPayment />,
+    name: state.page.user.displayName,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }

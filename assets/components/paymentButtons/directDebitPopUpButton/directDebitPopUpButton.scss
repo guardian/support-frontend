@@ -21,10 +21,25 @@
     background-color: #000;
   }
 
-  svg {
+  .svg-arrow-right-straight {
     height: 16px;
     position: absolute;
     left: calc(100% - 34px);
     fill: #fff;
   }
+}
+
+.component-direct-debit-pop-up-button--disable {
+  background-color: gu-colour(garnett-neutral-4);
+  color: gu-colour(garnett-neutral-2);
+  cursor: auto;
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-2);
+  }
+
+  &:hover {
+    background-color: gu-colour(garnett-neutral-4);
+  }
+
 }

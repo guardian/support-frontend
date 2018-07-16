@@ -16,6 +16,7 @@ import com.gu.support.workers.model.monthlyContributions.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
+import switchboard.{PaymentMethodsSwitch, SwitchState, Switches}
 
 object CirceDecoders {
 
@@ -81,5 +82,9 @@ object CirceDecoders {
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
   implicit val failureHandlerStateCodec: Codec[FailureHandlerState] = deriveCodec
   implicit val completedStateCodec: Codec[CompletedState] = deriveCodec
+  implicit val switchStateEncode: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](s => s"'${s.toString}'")
+  implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
+  implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
+  implicit val switchesCodec: Codec[Switches] = deriveCodec
 }
 

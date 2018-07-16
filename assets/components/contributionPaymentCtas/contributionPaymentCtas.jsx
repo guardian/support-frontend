@@ -44,7 +44,7 @@ type PropTypes = {
   }>,
   error: ?string,
   resetError: void => void,
-  newSignInFlowVariant: 'control' | 'variant',
+  newSignInFlowRebootVariant: 'control' | 'variant',
 };
 
 
@@ -81,7 +81,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
         />
         <OneOffCta {...props} />
         <ErrorMessage message={props.error} />
-        <TermsPrivacy country={props.country} />
+        <TermsPrivacy countryGroupId={props.countryGroupId} />
       </div>
     );
 
@@ -136,11 +136,11 @@ function RegularCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
-  newSignInFlowVariant: 'control' | 'variant',
+  newSignInFlowRebootVariant: 'control' | 'variant',
 
 }): Node {
 
-  const useNewSignIn = props.newSignInFlowVariant === 'variant' ? 'true' : 'false';
+  const useNewSignIn = props.newSignInFlowRebootVariant === 'variant' ? 'true' : 'false';
 
 
   const spokenType = getSpokenType(props.contributionType, props.countryGroupId);

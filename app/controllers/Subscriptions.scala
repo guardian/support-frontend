@@ -49,21 +49,18 @@ class Subscriptions(
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (request.getQueryString("digiSub").contains("true")) {
-      val title = "Support the Guardian | Digital Subscription"
-      val id = "digital-subscription-landing-page-" + countryCode
-      val js = "digitalSubscriptionLandingPage.js"
-      val css = "digitalSubscriptionLandingPageStyles.css"
-      Ok(views.html.main(title, id, js, css))
-    } else {
-      Redirect(s"/$countryCode/subscribe")
-    }
+    val title = "Support the Guardian | Digital Subscription"
+    val id = "digital-subscription-landing-page-" + countryCode
+    val js = "digitalSubscriptionLandingPage.js"
+    val css = "digitalSubscriptionLandingPageStyles.css"
+    Ok(views.html.main(title, id, js, css))
   }
 
   def digitalGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/subscribe/digital"
       case Some(US) => "/us/subscribe/digital"
+      case Some(Australia) => "/au/subscribe/digital"
       case Some(RestOfTheWorld) => "/int/subscribe/digital"
       case _ => "https://subscribe.theguardian.com/digital"
     }

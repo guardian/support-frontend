@@ -6,11 +6,19 @@ import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
 import { contributionsEmail } from 'helpers/legal';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
+
+// ---- Types ----- //
+
+type PropTypes = {
+    countryGroupId: CountryGroupId,
+};
 
 
 // ----- Component ----- //
 
-export default function QuestionsContact() {
+function QuestionsContact(props: PropTypes) {
 
   return (
     <div className="component-questions-contact">
@@ -23,7 +31,7 @@ export default function QuestionsContact() {
           please&nbsp;
           <a
             className="component-questions-contact__link"
-            href={contributionsEmail}
+            href={contributionsEmail[props.countryGroupId]}
           >
             contact us
           </a>
@@ -33,3 +41,13 @@ export default function QuestionsContact() {
   );
 
 }
+// ----- Default Props ----- //
+
+QuestionsContact.defaultProps = {
+  countryGroupId: 'GBPCountries',
+};
+
+
+// ----- Exports ----- //
+
+export default QuestionsContact;
