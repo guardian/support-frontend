@@ -2,6 +2,8 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
+import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -16,14 +18,17 @@ import com.gu.zuora.ZuoraService
 import com.gu.zuora.model.SubscribeRequest
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
+import org.mockito.invocation.InvocationOnMock
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
-    val createZuora = new CreateZuoraSubscription()
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -34,7 +39,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
   }
 
   "CreateZuoraSubscription lambda" should "create an annual Zuora subscription" in {
-    val createZuora = new CreateZuoraSubscription()
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -55,12 +60,16 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     sendThankYouEmail._1.accountNumber.length should be > 0
   }
 
+  val realService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+
   val mockService = {
     val z = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
-    when(z.getRecurringSubscription(any[String], any[BillingPeriod])).thenReturn(Future.successful(None))
-    when(z.subscribe(any[SubscribeRequest])).thenCallRealMethod()
+    when(z.getRecurringSubscription(any[String], any[BillingPeriod]))
+      .thenReturn(Future.successful(None))
+    when(z.subscribe(any[SubscribeRequest]))
+      .thenAnswer((invocation: InvocationOnMock) => realService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
     z
   }
 
