@@ -6,8 +6,6 @@ packageSummary := "Support Play APP"
 
 scalaVersion := "2.12.4"
 
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-
 import scala.sys.process._
 
 def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)

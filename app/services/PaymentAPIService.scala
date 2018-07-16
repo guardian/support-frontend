@@ -4,7 +4,7 @@ import java.io.IOException
 
 import io.circe.generic.JsonCodec
 import io.circe.parser.parse
-import codecs.CirceDecoders.{paypalApiErrorCodec, errorWrapperCodec}
+import codecs.CirceDecoders.decodeErrorWrapper
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
@@ -12,17 +12,17 @@ import monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@JsonCodec case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends Exception {
+class PaymentApiError extends Exception
+
+case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends PaymentApiError() {
   override val getMessage: String = message
 }
 
-@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
   override val getMessage: String = message
 }
 
-//@JsonCodec case class Success[A](data: A)
-
-@JsonCodec case class ErrorWrapper(error: PaypalApiError)
+case class ErrorWrapper(error: PaymentApiError, responseType: String)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -73,10 +73,10 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def getPaypalApiError(body: String): Option[PaypalApiError] = {
+  def getPaypalApiError(body: String): Option[PaymentApiError] = {
     val bodyJson = parse(body)
     val error = bodyJson.toOption
-    val paypalApiError = error.flatMap(json => errorWrapperCodec.decodeJson(json).toOption)
+    val paypalApiError = error.flatMap(json => decodeErrorWrapper(json.hcursor).toOption)
     paypalApiError.map(_.error)
   }
 
@@ -85,7 +85,9 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       case response: WSResponse if response.status == 200 => true
       case response: WSResponse if response.status == 400 => {
         val error = getPaypalApiError(response.body)
-        error.exists(err => err.errorName.contains("PAYMENT_ALREADY_DONE"))
+        PartialFunction.cond(error) {
+          case Some(err: PaypalApiError) => err.errorName.contains("PAYMENT_ALREADY_DONE")
+        }
       }
       case _ => false
     }
@@ -99,6 +101,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(showAsSuccessful(_))
+    postData(data, queryStrings, isTestUser).map(response => showAsSuccessful(response))
   }
 }
