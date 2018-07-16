@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import ContributionsCheckout from 'components/contributionsCheckout/contributionsCheckout';
 
 import { type PageState as State } from '../oneOffContributionsReducer';
-import OneoffInlineContributionsPayment from './oneoffInlineContributionsPayment';
+import OneoffInlineContributionsPayment from './oneoffContributionsPayment';
 
 
 // ----- State Maps ----- //
