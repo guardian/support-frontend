@@ -165,12 +165,22 @@ object Fixtures {
         }
       """
 
-  def createZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly) =
+  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly) =
     s"""
           {
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
+            "paymentMethod": $payPalPaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
+  def createDigiPackZuoraSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "product": ${digitalPackJson},
             "paymentMethod": $payPalPaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
