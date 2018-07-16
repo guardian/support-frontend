@@ -32,6 +32,7 @@ States:
           Type: Task
           Resource: "${ContributionCompletedLambda.Arn}"
           End: True
+          {{> retry}}
     - StartAt: SendThankYouEmail
       States:
         SendThankYouEmail:
@@ -70,6 +71,7 @@ States:
       detects that the execution is complete.  This could happen during a deployment when a new state machine
       is created and the old is terminated.
     End: True
+    {{> retry}}
 
   FailState:
     Type: Fail
