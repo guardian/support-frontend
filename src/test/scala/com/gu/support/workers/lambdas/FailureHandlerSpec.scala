@@ -10,9 +10,8 @@ import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJson
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
-import com.gu.support.workers.model.JsonWrapper
-import com.gu.support.workers.model.monthlyContributions.Status
-import com.gu.support.workers.model.monthlyContributions.state.CompletedState
+import com.gu.support.workers.model.states.CompletedState
+import com.gu.support.workers.model.{JsonWrapper, Status}
 import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._

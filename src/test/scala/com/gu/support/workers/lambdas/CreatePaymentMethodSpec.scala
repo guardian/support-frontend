@@ -15,7 +15,7 @@ import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInpu
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.exceptions.RetryNone
-import com.gu.support.workers.model.monthlyContributions.state.CreateSalesforceContactState
+import com.gu.support.workers.model.states.CreateSalesforceContactState
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, PayPalReferenceTransaction, PaymentMethod}
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.objects.IntegrationTest
@@ -33,7 +33,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodJson()), outStream, context)
+    createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context)
 
     //Check the output
     val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
@@ -53,7 +53,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodJson()), outStream, context)
+    createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
 
     //Check the output
     val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)

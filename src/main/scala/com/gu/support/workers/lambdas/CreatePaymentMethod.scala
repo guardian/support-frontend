@@ -10,7 +10,7 @@ import com.gu.stripe.StripeService
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.model._
-import com.gu.support.workers.model.monthlyContributions.state.{CreatePaymentMethodState, CreateSalesforceContactState}
+import com.gu.support.workers.model.states.{CreatePaymentMethodState, CreateSalesforceContactState}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, state.contribution.currency, services.stripeService)
+        createStripePaymentMethod(stripe, state.product.currency, services.stripeService)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -48,7 +48,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     CreateSalesforceContactState(
       state.requestId,
       state.user,
-      state.contribution,
+      state.product,
       paymentMethod,
       state.acquisitionData
     )

@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.model.monthlyContributions.state.StepFunctionUserState
+import com.gu.support.workers.model.states.StepFunctionUserState
 import com.gu.support.workers.model.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
 
