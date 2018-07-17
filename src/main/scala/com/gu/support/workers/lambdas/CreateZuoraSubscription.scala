@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -14,7 +13,6 @@ import com.gu.zuora.model.response.{Subscription => SubscriptionResponse}
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -39,10 +37,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
-    for {
-      response <- services.zuoraService.subscribe(buildSubscribeRequest(state))
-      _ <- putMetric(state.paymentMethod.`type`)
-    } yield HandlerResult(getEmailState(state, response.head.accountNumber), requestInfo)
+    services.zuoraService.subscribe(buildSubscribeRequest(state))
+      .map(response =>
+        HandlerResult(getEmailState(state, response.head.accountNumber), requestInfo))
 
   private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
     SendThankYouEmailState(
@@ -119,14 +116,4 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state.user.id,
     PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency)
   )
-
-  private def putMetric(paymentType: String) =
-    if (paymentType == "PayPal")
-      putCloudWatchMetrics("paypal")
-    else
-      putCloudWatchMetrics("stripe")
-
-  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putZuoraAccountCreated().recover({ case _ => () })
 }
