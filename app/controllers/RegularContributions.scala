@@ -17,6 +17,8 @@ import services.stepfunctions.{CreateRegularContributorRequest, RegularContribut
 import services.{IdentityService, MembersDataService, TestUserService}
 import switchboard.Switches
 import views.html.monthlyContributions
+import views.html.monthlyContributionsGuestCheckout
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -69,6 +71,28 @@ class RegularContributions(
         identity
       )
     }
+
+
+
+  def displayFormGuestCheckout(useNewSignIn: Boolean): Action[AnyContent] =
+    maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
+      val maybeUser = request.user
+      val uatMod = maybeUser.fold(false)(fullUser => testUsers.isTestUser(fullUser.publicFields.displayName))
+      Ok(
+        monthlyContributionsGuestCheckout(
+          title = "Support the Guardian | Monthly Contributions",
+          id = "regular-contributions-page",
+          js = "regularContributionsPage.js",
+          css = "regularContributionsPageStyles.css",
+          user = maybeUser,
+          uatMode = uatMod,
+          defaultStripeConfig = stripeConfigProvider.get(false),
+          uatStripeConfig = stripeConfigProvider.get(true),
+          payPalConfig = payPalConfigProvider.get(uatMode)
+        )
+      )
+    }
+
 
   def status(jobId: String): Action[AnyContent] = authenticatedAction().async { implicit request =>
     client.status(jobId, request.uuid).fold(
