@@ -202,6 +202,22 @@ object Fixtures {
         }
      """
 
+  val oldSchemaFailureJson =
+    """{
+          "state": "eyJyZXF1ZXN0SWQiOiIyOTlmMDIwNC04ZjgyLWY0NzktMDAwMC0wMDAwMDAwMGUzM2QiLCJ1c2VyIjp7ImlkIjoiMzAwMDE2NDQiLCJwcmltYXJ5RW1haWxBZGRyZXNzIjoiZnlneGlsbXhiNXFtb2FrbXVpY0BndS5jb20iLCJmaXJzdE5hbWUiOiJGeWd4aWxNeEI1UU1vQWttdUljIiwibGFzdE5hbWUiOiJGeWd4aWxNeEI1UU1vQWttdUljIiwiY291bnRyeSI6IkdCIiwic3RhdGUiOm51bGwsImFsbG93TWVtYmVyc2hpcE1haWwiOmZhbHNlLCJhbGxvd1RoaXJkUGFydHlNYWlsIjpmYWxzZSwiYWxsb3dHVVJlbGF0ZWRNYWlsIjpmYWxzZSwiaXNUZXN0VXNlciI6ZmFsc2V9LCJjb250cmlidXRpb24iOnsiYW1vdW50Ijo1LCJjdXJyZW5jeSI6IkdCUCIsImJpbGxpbmdQZXJpb2QiOiJNb250aGx5In0sInBheW1lbnRNZXRob2QiOnsiVG9rZW5JZCI6ImNhcmRfQnF1eWozRlZWUzhienQiLCJTZWNvbmRUb2tlbklkIjoiY3VzX0JxdXlJdjA2YWlOOTJlIiwiQ3JlZGl0Q2FyZE51bWJlciI6IjAzNDEiLCJDcmVkaXRDYXJkQ291bnRyeSI6IlVTIiwiQ3JlZGl0Q2FyZEV4cGlyYXRpb25Nb250aCI6OCwiQ3JlZGl0Q2FyZEV4cGlyYXRpb25ZZWFyIjoyMDE5LCJDcmVkaXRDYXJkVHlwZSI6IlZpc2EiLCJUeXBlIjoiQ3JlZGl0Q2FyZFJlZmVyZW5jZVRyYW5zYWN0aW9uIn0sInNhbGVzRm9yY2VDb250YWN0Ijp7IklkIjoiMDAzZzAwMDAwMWNVeWkxQUFDIiwiQWNjb3VudElkIjoiMDAxZzAwMDAwMW5Ic3BkQUFDIn0sImFjcXVpc2l0aW9uRGF0YSI6eyJvcGhhbklkcyI6eyJwYWdldmlld0lkIjoiamFpZ254OG1sd2F6aGhwYXE5dGsiLCJ2aXNpdElkIjpudWxsLCJicm93c2VySWQiOm51bGx9LCJyZWZlcnJlckFjcXVpc2l0aW9uRGF0YSI6eyJjYW1wYWlnbkNvZGUiOm51bGwsInJlZmVycmVyUGFnZXZpZXdJZCI6bnVsbCwicmVmZXJyZXJVcmwiOm51bGwsImNvbXBvbmVudElkIjpudWxsLCJjb21wb25lbnRUeXBlIjpudWxsLCJzb3VyY2UiOm51bGwsImFiVGVzdCI6bnVsbH0sInN1cHBvcnRBYlRlc3RzIjpbeyJuYW1lIjoidXNSZWN1cnJpbmdDb3B5VGVzdCIsInZhcmlhbnQiOiJub3RpbnRlc3QifSx7Im5hbWUiOiJ1a1JlY3VycmluZ0Ftb3VudHNUZXN0IiwidmFyaWFudCI6Imxvd2VyIn0seyJuYW1lIjoidXNSZWN1cnJpbmdBbW91bnRzVGVzdCIsInZhcmlhbnQiOiJub3RpbnRlc3QifV19fQ==",
+          "error": {
+            "Error": "com.example.SomeError",
+            "Cause": "Oh no! It's on fire!"
+          },
+          "requestInfo": {
+            "encrypted": false,
+            "testUser": false,
+            "failed": false,
+            "messages": []
+          }
+        }
+     """
+
   //This Json uses a test Stripe token which causes Stripe to return a card_declined response
   val forceCardDeclined =
     """
