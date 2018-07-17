@@ -5,6 +5,7 @@
 import React from 'react';
 
 import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
+import DigitalSubscriptionsContainer from 'components/digitalSubscriptions/digitalSubscriptionsContainer';
 
 
 // ----- Types ----- //
@@ -25,6 +26,7 @@ export default function SplitSubscriptionsTest(props: PropTypes) {
         paperHeadingSize={3}
         paperDigitalHeadingSize={3}
       />
+      <DigitalSubscriptionsContainer />
     </section>
   );
 
