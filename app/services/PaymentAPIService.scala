@@ -13,11 +13,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait PaymentApiError extends Exception
 
-case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends PaymentApiError() {
+case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends PaymentApiError {
   override val getMessage: String = message
 }
 
-case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
+case class PayPalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
   override val getMessage: String = message
 }
 
@@ -89,16 +89,16 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       },
       errorWrapper => {
         PartialFunction.cond(errorWrapper.error) {
-          case err: PaypalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
+          case err: PayPalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
         }
       }
     )
   }
 
   def isSuccessful(response: WSResponse): Boolean = {
-    PartialFunction.cond(response) {
-      case resp if resp.status == 200 => true
-      case resp if isDuplicatePayment(resp.body) => true
+    PartialFunction.cond(response.status) {
+      case 200 => true
+      case 400 => isDuplicatePayment(response.body)
     }
   }
 
