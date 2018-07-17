@@ -177,6 +177,7 @@ function checkoutForm(props: {
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
+        id="qa-pay-with-card"
         className={submitButtonClassName}
         disabled={props.disable}
       >
