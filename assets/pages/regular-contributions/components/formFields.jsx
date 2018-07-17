@@ -132,6 +132,7 @@ function NameForm(props: PropTypes) {
     <form className="regular-contrib__name-form">
       <TextInput
         id="first-name"
+        labelText="First name"
         placeholder="First name"
         value={props.firstName}
         onChange={props.firstNameUpdate}
@@ -140,6 +141,7 @@ function NameForm(props: PropTypes) {
       />
       <TextInput
         id="last-name"
+        labelText="Last name"
         placeholder="Last name"
         value={props.lastName}
         onChange={props.lastNameUpdate}

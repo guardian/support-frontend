@@ -9,33 +9,33 @@
     padding: 7px;
     margin-right: 5px;
   }
-}
 
-.component-country-group-switcher__selector {
-  margin-top: 8px;
-  font-size: 12px;
-
-  @include mq($from: mobileLandscape) {
-    font-size: 14px;
-  }
-
-  font-family: $gu-egyptian-web;
-  font-weight: 500;
-  line-height: 20px;
-
-  cursor: pointer;
-  color: gu-colour(neutral-1);
-  border: none;
-  appearance: none;
-  background-color: transparent;
-
-  // Fix for IE.
-  &::-ms-expand {
-    border: none;
+  .component-select-input__select {
+    margin-top: 8px;
+    font-size: 12px;
+    font-family: $gu-egyptian-web;
+    font-weight: 500;
+    line-height: 20px;
+    cursor: pointer;
     background-color: transparent;
+    background: none;
+    padding: 0;
+    height: auto;
+
+    @include mq($from: mobileLandscape) {
+      font-size: 14px;
+    }    
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &::-ms-expand {
+      background-color: transparent;
+    }
   }
 
-  &:hover {
-    text-decoration: underline;
+  .component-select-input__label {
+    @include accessibility-hint;
   }
 }
