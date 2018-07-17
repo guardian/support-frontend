@@ -47,6 +47,7 @@ object SendAcquisitionEvent {
         // Don't match on this as its not a valid billing period.
         (billingPeriod: @unchecked) match {
           case Monthly => thrift.PaymentFrequency.Monthly
+          case Quarterly => thrift.PaymentFrequency.Quarterly
           case Annual => thrift.PaymentFrequency.Annually
         }
 
@@ -60,8 +61,7 @@ object SendAcquisitionEvent {
       override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] = {
         val (productType, productAmount) = state.product match {
           case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
-          case d: DigitalPack => (OphanProduct.DigitalSubscription, 0D)
-          case _ => throw new Exception("Invalid product type")
+          case _: DigitalPack => (OphanProduct.DigitalSubscription, 0D)
         }
         Either.fromOption(
           state.acquisitionData.map { data =>
