@@ -38,8 +38,8 @@ class RegularContributions(
   implicit val ar = assets
   implicit val sw = switches
 
-  def displayForm(useNewSignIn: Boolean): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId, useNewSignIn).async { implicit request =>
+  def displayForm(): Action[AnyContent] =
+    authenticatedAction(recurringIdentityClientId).async { implicit request =>
       identityService.getUser(request.user).semiflatMap { fullUser =>
         isMonthlyContributor(request.user.credentials) map {
           case Some(true) =>
