@@ -39,7 +39,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
     services.zuoraService.subscribe(buildSubscribeRequest(state))
       .map(response =>
-        HandlerResult(getEmailState(state, response.head.accountNumber), requestInfo))
+        HandlerResult(getEmailState(state, response.headOption.map(_.accountNumber).getOrElse("")), requestInfo))
 
   private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: String) =
     SendThankYouEmailState(
