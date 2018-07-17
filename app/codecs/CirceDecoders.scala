@@ -9,7 +9,6 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import cats.syntax.either._
 import cats.syntax.functor._
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
@@ -87,15 +86,12 @@ object CirceDecoders {
   implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
-  implicit val stripeApiErrorCodec: Codec[StripeApiError] = deriveCodec
-  implicit val paypalApiErrorCodec: Codec[PaypalApiError] = deriveCodec
+  implicit val stripeApiErrorDecoder: Decoder[StripeApiError] = deriveDecoder
+  implicit val paypalApiErrorDecoder: Decoder[PaypalApiError] = deriveDecoder
   implicit val decodeErrorWrapper: Decoder[ErrorWrapper] = Decoder.forProduct2("error", "type")(ErrorWrapper.apply)
 
   implicit def decodePaymentApiError: Decoder[PaymentApiError] =
-    List[Decoder[PaymentApiError]](
-      Decoder[PaypalApiError].widen,
-      Decoder[StripeApiError].widen
-    ).reduceLeft(_ or _)
+    Decoder[PaypalApiError].widen.or(Decoder[StripeApiError].widen)
 
 }
 

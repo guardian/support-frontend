@@ -2,17 +2,16 @@ package services
 
 import java.io.IOException
 
-import io.circe.generic.JsonCodec
 import io.circe.parser.parse
-import codecs.CirceDecoders.decodeErrorWrapper
+import codecs.CirceDecoders.{decodeErrorWrapper}
+import monitoring.SafeLogger
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
-import monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaymentApiError extends Exception
+sealed trait PaymentApiError extends Exception
 
 case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends PaymentApiError() {
   override val getMessage: String = message
@@ -73,23 +72,33 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def getPaypalApiError(body: String): Option[PaymentApiError] = {
-    val bodyJson = parse(body)
-    val error = bodyJson.toOption
-    val paypalApiError = error.flatMap(json => decodeErrorWrapper(json.hcursor).toOption)
-    paypalApiError.map(_.error)
-  }
+  def isDuplicatePayment(body: String): Boolean = {
+    val decoderResult = for {
+      cursor <- parse(body)
+      errorWrapper <- decodeErrorWrapper(cursor.hcursor)
+    } yield errorWrapper
 
-  def showAsSuccessful(response: WSResponse): Boolean = {
-    response match {
-      case response: WSResponse if response.status == 200 => true
-      case response: WSResponse if response.status == 400 => {
-        val error = getPaypalApiError(response.body)
-        PartialFunction.cond(error) {
-          case Some(err: PaypalApiError) => err.errorName.contains("PAYMENT_ALREADY_DONE")
+    decoderResult.fold(
+      failure => {
+        val failureMessage = new SafeLogger.LogMessage(
+          s"Unable to decode PaymentAPIError: $body. Message is ${failure.getMessage}",
+          "Unable to decode PaymentAPIError. See logs for details"
+        )
+        SafeLogger.error(failureMessage)
+        false
+      },
+      errorWrapper => {
+        PartialFunction.cond(errorWrapper.error) {
+          case err: PaypalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
         }
       }
-      case _ => false
+    )
+  }
+
+  def isSuccessful(response: WSResponse): Boolean = {
+    PartialFunction.cond(response) {
+      case resp if resp.status == 200 => true
+      case resp if isDuplicatePayment(resp.body) => true
     }
   }
 
@@ -101,6 +110,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(response => showAsSuccessful(response))
+    postData(data, queryStrings, isTestUser).map(response => isSuccessful(response))
   }
 }
