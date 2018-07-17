@@ -29,6 +29,10 @@
     &:hover {
       text-decoration: underline;
     }
+
+    &::-ms-expand {
+      background-color: transparent;
+    }
   }
 
   .component-select-input__label {
