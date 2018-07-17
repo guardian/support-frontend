@@ -81,7 +81,7 @@ case class SubscribeResponseAccount(
   gatewayResponse: String,
   paymentId: String,
   invoiceResult: InvoiceResult,
-  totalTcv: Int,
+  totalTcv: Float,
   subscriptionId: String,
   totalMrr: Float,
   paymentTransactionNumber: String,

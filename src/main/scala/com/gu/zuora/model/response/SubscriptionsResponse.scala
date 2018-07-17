@@ -22,7 +22,7 @@ case class SubscriptionsResponse(subscriptions: List[Subscription])
 case class Subscription(accountNumber: String, status: String, ratePlans: List[RatePlan]) {
   def isActive: Boolean = status == "Active"
   def hasContributorPlan(config: ZuoraConfig, billingPeriod: BillingPeriod): Boolean = {
-    ratePlans.exists(_.productRatePlanId == config.configForBillingPeriod(billingPeriod).productRatePlanId)
+    ratePlans.exists(_.productRatePlanId == config.contributionConfig(billingPeriod).productRatePlanId)
   }
 }
 

@@ -6,8 +6,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.support.workers.model.{Contribution, RequestInfo}
-import com.gu.zuora.ZuoraContributionConfig
+import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
+import com.gu.zuora.ZuoraConfig.RatePlanId
 import com.gu.zuora.model._
 import com.gu.zuora.model.response.{Subscription => SubscriptionResponse}
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -54,49 +54,49 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
   private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
-    val config = zuoraConfigProvider
-      .get(state.user.isTestUser)
-      .configForBillingPeriod(state.product.billingPeriod)
-
-    //TODO: Implement DigiPack
-    val product = state.product match {
-      case m: Contribution => m
-      case _ => throw new NotImplementedError("Monthly contributions are the only implemented product")
-    }
-
-    val account = buildAccount(state)
-
-    val contactDetails = buildContactDetails(state)
-
-    val date = LocalDate.now(DateTimeZone.UTC)
-
-    val subscriptionData = buildSubscriptionData(config, product, date)
-
     SubscribeRequest(List(
       SubscribeItem(
-        account,
-        contactDetails,
+        buildAccount(state),
+        buildContactDetails(state),
         state.paymentMethod,
-        subscriptionData,
+        buildSubscriptionData(state),
         SubscribeOptions()
       )
     ))
   }
 
-  private def buildSubscriptionData(config: ZuoraContributionConfig, product: Contribution, date: LocalDate) = {
+  private def buildSubscriptionData(state: CreateZuoraSubscriptionState) = {
+    val config = zuoraConfigProvider.get(state.user.isTestUser)
+    state.product match {
+      case c: Contribution =>
+        val contributionConfig = config.contributionConfig(c.billingPeriod)
+        buildProductSubscription(
+          contributionConfig.productRatePlanId,
+          List(
+            RatePlanChargeData(
+              RatePlanCharge(contributionConfig.productRatePlanChargeId, Some(c.amount)) //Pass the amount the user selected into Zuora
+            )
+          )
+        )
+      case d: DigitalPack => buildProductSubscription(config.digitalPackRatePlan(d.billingPeriod))
+    }
+  }
+
+  private def buildProductSubscription(
+    ratePlanId: RatePlanId,
+    ratePlanCharges: List[RatePlanChargeData] = Nil,
+    date: LocalDate = LocalDate.now(DateTimeZone.UTC)
+  ) =
     SubscriptionData(
       List(
         RatePlanData(
-          RatePlan(config.productRatePlanId),
-          List(RatePlanChargeData(
-            RatePlanCharge(config.productRatePlanChargeId, Some(product.amount)) //Pass the amount the user selected into Zuora
-          )),
+          RatePlan(ratePlanId),
+          ratePlanCharges,
           Nil
         )
       ),
       Subscription(date, date, date)
     )
-  }
 
   private def buildContactDetails(state: CreateZuoraSubscriptionState) = {
     ContactDetails(
