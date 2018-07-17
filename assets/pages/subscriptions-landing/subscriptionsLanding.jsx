@@ -14,11 +14,12 @@ import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 
 // React components connected to redux store
-import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+
+import SplitSubscriptionsTest from './components/splitSubscriptionsTest';
 
 
 // ----- Setup ----- //
@@ -45,13 +46,7 @@ const content = (
         modifierClasses={['compact']}
         highlightsHeadingSize={2}
       />
-      <section id={supporterSectionId}>
-        <ThreeSubscriptionsContainer
-          digitalHeadingSize={3}
-          paperHeadingSize={3}
-          paperDigitalHeadingSize={3}
-        />
-      </section>
+      <SplitSubscriptionsTest sectionId={supporterSectionId} />
       <WhySupport headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
