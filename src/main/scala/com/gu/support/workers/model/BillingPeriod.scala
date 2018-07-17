@@ -9,4 +9,6 @@ object BillingPeriod extends BillingPeriod
 
 case object Monthly extends BillingPeriod
 
+case object Quarterly extends BillingPeriod
+
 case object Annual extends BillingPeriod
