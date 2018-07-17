@@ -20,6 +20,7 @@ import reducer from './regularContributionsReducer';
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
+import RegularContributionsPayment from './components/regularContributionsPayment';
 
 
 // ----- Page Startup ----- //
@@ -48,6 +49,7 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
+              payment={<RegularContributionsPayment />}
             />
           )}
         />
