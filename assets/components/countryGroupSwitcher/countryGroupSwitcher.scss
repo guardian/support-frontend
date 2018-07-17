@@ -20,7 +20,7 @@
     background-color: transparent;
     background: none;
     padding: 0;
-    height: unset;
+    height: auto;
 
     @include mq($from: mobileLandscape) {
       font-size: 14px;
