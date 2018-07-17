@@ -20,6 +20,7 @@
 @import '~components/svgs/svg';
 @import '~components/threeSubscriptions/threeSubscriptions';
 @import '~components/digitalSubscriptions/digitalSubscriptions';
+@import '~components/paperSubscriptions/paperSubscriptions';
 @import '~components/whySupport/whySupport';
 
 
@@ -27,7 +28,7 @@
 
 #subscriptions-landing-page {
 
-  .component-three-subscriptions {
+  .component-digital-subscriptions, .component-three-subscriptions {
     @include multiline-top-border;
 
     border-top: none;
