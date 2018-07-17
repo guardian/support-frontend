@@ -104,14 +104,23 @@ const submitClassNameDisabled = `${submitClassName}--disabled`;
 
 function disableSubmitButton() {
   const element = document.getElementsByClassName(submitClassName)[0];
-  element.setAttribute('disabled', '');
-  element.classList.add(submitClassNameDisabled);
+
+  try {
+    element.setAttribute('disabled', '');
+    element.classList.add(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Disable submit button failed: ${e.message}`);
+  }
 }
 
 function enableSubmitButton() {
   const element = document.getElementsByClassName(submitClassName)[0];
-  element.removeAttribute('disabled');
-  element.classList.remove(submitClassNameDisabled);
+  try {
+    element.removeAttribute('disabled');
+    element.classList.remove(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Enable submit button failed: ${e.message}`);
+  }
 }
 
 function checkoutForm(props: {
