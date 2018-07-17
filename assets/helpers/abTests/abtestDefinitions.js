@@ -60,16 +60,4 @@ export const tests: Tests = {
     independent: true,
     seed: 2,
   },
-  newSignInFlowReboot: {
-    variants: ['control', 'variant'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-  },
 };
