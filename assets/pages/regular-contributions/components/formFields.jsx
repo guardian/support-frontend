@@ -80,6 +80,7 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
     return null;
   }
   const states = countryGroup === 'Canada' ? caStates : usStates;
+  const stateLabel = countryGroup === 'Canada' ? 'province/territory' : 'state';
 
   const options: SelectOption[] = Object.keys(states).map((stateCode: UsState | CaState) =>
     ({ value: stateCode, text: states[stateCode] }));
@@ -91,7 +92,7 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
     id="qa-state-dropdown"
     onChange={stateUpdate}
     options={options}
-    label="Select your state"
+    label={`Select your ${stateLabel}`}
   />);
 }
 
@@ -132,6 +133,7 @@ function NameForm(props: PropTypes) {
     <form className="regular-contrib__name-form">
       <TextInput
         id="first-name"
+        labelText="First name"
         placeholder="First name"
         value={props.firstName}
         onChange={props.firstNameUpdate}
@@ -140,6 +142,7 @@ function NameForm(props: PropTypes) {
       />
       <TextInput
         id="last-name"
+        labelText="Last name"
         placeholder="Last name"
         value={props.lastName}
         onChange={props.lastNameUpdate}

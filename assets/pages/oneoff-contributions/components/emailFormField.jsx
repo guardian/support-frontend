@@ -30,6 +30,7 @@ const EmailFormField = (props: PropTypes) => {
   return (<TextInput
     id="email"
     value={props.email}
+    labelText="Email"
     placeholder="Email"
     onChange={props.emailUpdate}
     modifierClasses={['email']}

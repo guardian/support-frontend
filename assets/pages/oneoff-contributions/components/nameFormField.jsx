@@ -24,6 +24,7 @@ const NameFormField = (props: PropTypes) =>
   (<TextInput
     id="name"
     placeholder="Full name"
+    labelText="Full name"
     value={props.name}
     onChange={props.nameUpdate}
     modifierClasses={['name']}

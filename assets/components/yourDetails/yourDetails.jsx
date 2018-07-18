@@ -26,8 +26,10 @@ export default function YourDetails(props: PropTypes) {
     <div className="component-your-details">
       <PageSection heading="Your details" headingChildren={<Signout />}>
         <DisplayName name={props.name} isSignedIn={props.isSignedIn} />
-        <p className="component-your-details__text">All fields are required.</p>
         {props.children}
+        <p className="component-your-details__info">
+          <small>All fields are required.</small>
+        </p>
       </PageSection>
     </div>
   );

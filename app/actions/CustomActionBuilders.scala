@@ -40,20 +40,15 @@ class CustomActionBuilders(
   // Prevents the identity validation email sending users back to our checkout.
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
-  private def idWebAppRegisterUrl(path: String, clientId: String, idWebAppRegisterPath: String, campaignCode: Option[String]): String =
+  private def idWebAppRegisterUrl(path: String, clientId: String, idWebAppRegisterPath: String): String =
     idWebAppUrl / idWebAppRegisterPath ?
       ("returnUrl" -> s"$supportUrl$path") &
       idSkipConfirmation &
       idSkipValidationReturn &
-      "clientId" -> clientId &
-      "INTCMP" -> campaignCode
+      "clientId" -> clientId
 
-  def chooseRegister(identityClientId: String): RequestHeader => Result = request => {
-    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "register", Some("recurring-contributions-control")))
-  }
-
-  def chooseSignInStart(identityClientId: String): RequestHeader => Result = request => {
-    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin/start", Some("recurring-contributions-variant")))
+  def onUnauthenticated(identityClientId: String): RequestHeader => Result = request => {
+    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin/start"))
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
@@ -71,16 +66,15 @@ class CustomActionBuilders(
 
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
-  def authenticatedAction(identityClientId: String = membersIdentityClientId, useNewSignIn: Boolean = false): ActionBuilder[AuthRequest, AnyContent] = {
-    val registerFunction = if (useNewSignIn) chooseSignInStart(identityClientId) else chooseRegister(identityClientId)
-    PrivateAction andThen authenticated(registerFunction)
+  def authenticatedAction(identityClientId: String = membersIdentityClientId): ActionBuilder[AuthRequest, AnyContent] = {
+    PrivateAction andThen authenticated(onUnauthenticated(identityClientId))
   }
 
   def authenticatedTestUserAction(identityClientId: String = membersIdentityClientId): ActionBuilder[AuthRequest, AnyContent] =
-    PrivateAction andThen authenticatedTestUser(chooseRegister(identityClientId))
+    PrivateAction andThen authenticatedTestUser(onUnauthenticated(identityClientId))
 
   def maybeAuthenticatedAction(identityClientId: String = membersIdentityClientId): ActionBuilder[OptionalAuthRequest, AnyContent] =
-    PrivateAction andThen maybeAuthenticated(chooseRegister(identityClientId))
+    PrivateAction andThen maybeAuthenticated(onUnauthenticated(identityClientId))
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
