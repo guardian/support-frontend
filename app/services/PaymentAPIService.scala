@@ -2,8 +2,7 @@ package services
 
 import java.io.IOException
 
-import io.circe.parser.parse
-import codecs.CirceDecoders.{decodeErrorWrapper}
+import io.circe.parser.decode
 import monitoring.SafeLogger
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
@@ -11,17 +10,13 @@ import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-sealed trait PaymentApiError extends Exception
+sealed trait PaymentProviderError
 
-case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
-  override val getMessage: String = message
-}
+case class StripeError(exceptionType: Option[String], responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
 
-case class PayPalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
-  override val getMessage: String = message
-}
+case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
 
-case class ErrorWrapper(error: PaymentApiError, responseType: String)
+case class PaymentApiError(error: PaymentProviderError)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -72,33 +67,31 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def isDuplicatePayment(body: String): Boolean = {
-    val decoderResult = for {
-      cursor <- parse(body)
-      errorWrapper <- decodeErrorWrapper(cursor.hcursor)
-    } yield errorWrapper
-
-    decoderResult.fold(
+  def isDuplicatePaymentResponse(response: WSResponse): Boolean = {
+    import codecs.CirceDecoders.paymentApiError
+    decode[PaymentApiError](response.body).fold(
       failure => {
-        val failureMessage = new SafeLogger.LogMessage(
-          s"Unable to decode PaymentAPIError: $body. Message is ${failure.getMessage}",
+        val failureMessage = SafeLogger.LogMessage(
+          s"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}",
           "Unable to decode PaymentAPIError. See logs for details"
         )
         SafeLogger.error(failureMessage)
         false
       },
-      errorWrapper => {
-        PartialFunction.cond(errorWrapper.error) {
-          case err: PayPalApiError => err.errorName.contains("PAYMENT_ALREADY_DONE")
+      paymentApiError => {
+        paymentApiError.error match {
+          case err: PayPalError => err.errorName.contains("PAYMENT_ALREADY_DONE")
+          case _ => false
         }
       }
     )
   }
 
   def isSuccessful(response: WSResponse): Boolean = {
-    PartialFunction.cond(response.status) {
+    response.status match {
       case 200 => true
-      case 400 => isDuplicatePayment(response.body)
+      case 400 => isDuplicatePaymentResponse(response)
+      case _ => false
     }
   }
 
@@ -110,6 +103,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(response => isSuccessful(response))
+    postData(data, queryStrings, isTestUser).map(isSuccessful)
   }
 }
