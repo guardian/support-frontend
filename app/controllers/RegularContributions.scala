@@ -19,7 +19,6 @@ import switchboard.Switches
 import views.html.monthlyContributions
 import views.html.monthlyContributionsGuestCheckout
 
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
@@ -40,6 +39,20 @@ class RegularContributions(
   implicit val ar = assets
   implicit val sw = switches
 
+  val monthlyContributionsPage = (maybeUser: Option[IdUser], uatMode: Boolean) =>
+    monthlyContributions(
+      title = "Support the Guardian | Monthly Contributions",
+      id = "regular-contributions-page",
+      js = "regularContributionsPage.js",
+      css = "regularContributionsPageStyles.css",
+      user = maybeUser,
+      uatMode,
+      defaultStripeConfig = stripeConfigProvider.get(false),
+      uatStripeConfig = stripeConfigProvider.get(true),
+      payPalConfig = payPalConfigProvider.get(uatMode)
+    )
+
+
   def displayForm(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       identityService.getUser(request.user).semiflatMap { fullUser =>
@@ -49,19 +62,7 @@ class RegularContributions(
             Redirect("/contribute/recurring/existing")
           case Some(false) | None =>
             val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-            Ok(
-              monthlyContributions(
-                title = "Support the Guardian | Monthly Contributions",
-                id = "regular-contributions-page",
-                js = "regularContributionsPage.js",
-                css = "regularContributionsPageStyles.css",
-                user = fullUser,
-                uatMode = uatMode,
-                defaultStripeConfig = stripeConfigProvider.get(false),
-                uatStripeConfig = stripeConfigProvider.get(true),
-                payPalConfig = payPalConfigProvider.get(uatMode)
-              )
-            )
+            Ok(monthlyContributionsPage(Some(fullUser), uatMode))
         }
       } fold (
         { error =>
@@ -72,27 +73,25 @@ class RegularContributions(
       )
     }
 
-
-
   def displayFormGuestCheckout(useNewSignIn: Boolean): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      val maybeUser = request.user
-      val uatMod = maybeUser.fold(false)(fullUser => testUsers.isTestUser(fullUser.publicFields.displayName))
-      Ok(
-        monthlyContributionsGuestCheckout(
-          title = "Support the Guardian | Monthly Contributions",
-          id = "regular-contributions-page",
-          js = "regularContributionsPage.js",
-          css = "regularContributionsPageStyles.css",
-          user = maybeUser,
-          uatMode = uatMod,
-          defaultStripeConfig = stripeConfigProvider.get(false),
-          uatStripeConfig = stripeConfigProvider.get(true),
-          payPalConfig = payPalConfigProvider.get(uatMode)
+      request.user.fold {
+        val uatMode = true
+        Future(
+          Ok(monthlyContributionsPage(None, uatMode)))
+      } { fUser =>
+        identityService.getUser(fUser).semiflatMap { fullUser =>
+          val uatMode = true
+          Future(Ok(monthlyContributionsPage(Some(fullUser), uatMode)))
+        } fold (
+          { error =>
+            SafeLogger.error(scrub"Failed to display recurring contributions form for ${fUser.id} due to error from identityService: $error")
+            InternalServerError
+          },
+          identity
         )
-      )
+      }
     }
-
 
   def status(jobId: String): Action[AnyContent] = authenticatedAction().async { implicit request =>
     client.status(jobId, request.uuid).fold(

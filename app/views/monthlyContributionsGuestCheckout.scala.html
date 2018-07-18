@@ -10,7 +10,6 @@
   id: String,
   js: String,
   css: String,
-  user: Option[IdUser],
   uatMode: Boolean,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
@@ -21,17 +20,6 @@
     <script type="text/javascript">
         window.guardian = window.guardian || {};
         window.guardian.uatMode = @uatMode;
-        window.guardian.user = {
-            @*id: "@user.id",*@
-            @*email: "@user.primaryEmailAddress",*@
-            @*@user.publicFields.displayName.map { displayName =>*@
-            @*displayName: "@displayName",*@
-            @*}*@
-            @*@for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {*@
-                @*firstName: "@firstName",*@
-                @*lastName: "@lastName",*@
-            @*}*@
-        };
         window.guardian.stripeKeyDefaultCurrencies = {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
           uat: "@uatStripeConfig.forCurrency(None).publicKey"

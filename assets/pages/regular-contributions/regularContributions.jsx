@@ -53,6 +53,16 @@ const router = (
         />
         <Route
           exact
+          path={routes.recurringContribCheckoutGuest}
+          render={() => (
+            <ContributionsCheckoutContainer
+              contributionType={contributionType}
+              form={<FormFields />}
+            />
+          )}
+        />
+        <Route
+          exact
           path={routes.recurringContribThankyou}
           render={() => <ContributionsThankYouPageContainer />}
         />
