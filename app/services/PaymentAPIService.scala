@@ -12,7 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait PaymentProviderError
 
-case class StripeError(exceptionType: Option[String], responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
+case class StripeError(exceptionType: String, responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
 
 case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
 
