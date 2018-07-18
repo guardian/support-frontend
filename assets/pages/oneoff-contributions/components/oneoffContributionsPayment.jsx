@@ -6,24 +6,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
+import StripeInlineForm from 'components/stripeInlineForm/stripeInlineForm';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
 import { validateEmailAddress } from 'helpers/utilities';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
+import { type Action as StripeInlineFormAction, stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
 
-import { checkoutError, type Action } from '../oneoffContributionsActions';
+import { checkoutError, type Action as OneOffCheckoutAction } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
 
 
 // ----- Types ----- //
 
 type PropTypes = {|
-  dispatch: Function,
+  dispatch: Dispatch<*>,
   email: string,
   error: ?string,
   isFormEmpty: boolean,
@@ -35,8 +37,12 @@ type PropTypes = {|
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
+  isStripeLoaded: boolean,
+  stripeIsLoaded: () => void,
+  stripeInlineErrorMessage: ?string,
+  stripeInlineSetError: (string) => void,
+  stripeInlineResetError: () => void,
 |};
-
 
 // ----- Map State/Props ----- //
 
@@ -52,14 +58,25 @@ function mapStateToProps(state) {
     abParticipations: state.common.abParticipations,
     currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
+    isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(dispatch: Dispatch<OneOffCheckoutAction | StripeInlineFormAction>) {
   return {
     dispatch,
     checkoutError: (message: ?string) => {
       dispatch(checkoutError(message));
+    },
+    stripeIsLoaded: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').stripeIsLoaded());
+    },
+    stripeInlineSetError: (message: string) => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').setError(message));
+    },
+    stripeInlineResetError: () => {
+      dispatch(stripeInlineFormActionsFor('oneOffContributions').resetError());
     },
   };
 }
@@ -71,7 +88,7 @@ function formValidation(
   isFormEmpty: boolean,
   validEmail: boolean,
   error: ?string => void,
-): Function {
+): () => boolean {
 
   return (): boolean => {
 
@@ -94,7 +111,6 @@ function formValidation(
 
 }
 
-
 // ----- Component ----- //
 
 /*
@@ -109,7 +125,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       <ErrorMessage message={props.error} />
-      <StripePopUpButton
+      <StripeInlineForm
         email={props.email}
         callback={postCheckout(
           props.abParticipations,
@@ -119,16 +135,20 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
         )}
-        canOpen={formValidation(
+        canProceed={formValidation(
           props.isFormEmpty,
           validateEmailAddress(props.email),
           props.checkoutError,
         )}
+        stripeIsLoaded={props.stripeIsLoaded}
+        isStripeLoaded={props.isStripeLoaded}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
-        amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
+        errorMessage={props.stripeInlineErrorMessage}
+        setError={props.stripeInlineSetError}
+        resetError={props.stripeInlineResetError}
         disable={false}
       />
     </section>

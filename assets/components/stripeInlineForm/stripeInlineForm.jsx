@@ -13,6 +13,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import * as storage from 'helpers/storage';
+import { logException } from 'helpers/logger';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 
@@ -98,6 +99,30 @@ const stripeElementsStyle = {
     },
 };
 
+const submitClassName = 'component-stripe-inline-form__submit-payment';
+const submitClassNameDisabled = `${submitClassName}--disabled`;
+
+function disableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+
+  try {
+    element.setAttribute('disabled', '');
+    element.classList.add(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Disable submit button failed: ${e.message}`);
+  }
+}
+
+function enableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  try {
+    element.removeAttribute('disabled');
+    element.classList.remove(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Enable submit button failed: ${e.message}`);
+  }
+}
+
 function checkoutForm(props: {
   stripe: Object,
   callback: (token: string) => mixed,
@@ -112,6 +137,7 @@ function checkoutForm(props: {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    disableSubmitButton();
 
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
@@ -129,21 +155,27 @@ function checkoutForm(props: {
         .stripe
         .createToken({ name: props.email })
         .then(({ token, error }) => {
+
           if (error !== undefined) {
             props.setError(error.message);
+            enableSubmitButton();
           } else {
             props.resetError();
             props.callback(token.id);
           }
 
+        }).catch((e) => {
+          logException(`Stripe Elements failed: ${e.message}`);
         });
+
     }
   };
 
-  const className = classNameWithModifiers('component-stripe-inline-form', props.disable ? ['disable'] : []);
+  const formClassName = classNameWithModifiers('component-stripe-inline-form', props.disable ? ['disable'] : []);
+  const submitButtonClassName = classNameWithModifiers(submitClassName, props.disable ? ['disable'] : []);
 
   return (
-    <form className={className} onSubmit={handleSubmit} >
+    <form className={formClassName} onSubmit={handleSubmit} >
       <label>
         <span className="component-stripe-inline-form__label-content">Enter credit/debit card details</span>
         <CardElement
@@ -154,13 +186,14 @@ function checkoutForm(props: {
       </label>
       <ErrorMessage message={props.errorMessage} />
       <button
-        className="component-stripe-inline-form__submit-payment"
+        id="qa-pay-with-card"
+        className={submitButtonClassName}
         disabled={props.disable}
       >
-        Confirm card payment
-        <SvgArrowRightStraight />
+        Confirm card payment <SvgArrowRightStraight />
       </button>
-    </form>);
+    </form>
+  );
 }
 
 const InjectedCheckoutForm = injectStripe(checkoutForm);

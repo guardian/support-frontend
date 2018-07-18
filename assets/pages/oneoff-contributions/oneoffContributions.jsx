@@ -15,8 +15,8 @@ import { routes } from 'helpers/routes';
 import { getAmount } from 'helpers/checkouts';
 
 import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
-
 import reducer from './oneOffContributionsReducer';
+import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
 
@@ -40,6 +40,7 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType="ONE_OFF"
               form={<FormFields />}
+              payment={<OneoffContributionsPayment />}
             />
           )}
         />
