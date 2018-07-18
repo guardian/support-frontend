@@ -3,6 +3,7 @@ package services
 import java.io.IOException
 
 import io.circe.parser.decode
+import codecs.CirceDecoders.paymentApiError
 import monitoring.SafeLogger
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
@@ -68,7 +69,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   }
 
   def isDuplicatePaymentResponse(response: WSResponse): Boolean = {
-    import codecs.CirceDecoders.paymentApiError
     decode[PaymentApiError](response.body).fold(
       failure => {
         val failureMessage = SafeLogger.LogMessage(
