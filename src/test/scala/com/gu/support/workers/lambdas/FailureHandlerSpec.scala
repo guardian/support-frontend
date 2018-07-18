@@ -6,7 +6,7 @@ import com.gu.config.Configuration
 import com.gu.emailservices.{EmailFields, EmailService}
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson}
+import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
@@ -39,6 +39,17 @@ class FailureHandlerSpec extends LambdaSpec {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequest(failureJson.asInputStream, outStream, context)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInfo.failed should be(true)
+  }
+
+  "FailureHandler lambda" should "still return a failed JsonWrapper if it receives the old schema" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(oldSchemaFailureJson.asInputStream, outStream, context)
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(true)
