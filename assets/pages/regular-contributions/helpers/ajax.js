@@ -172,6 +172,7 @@ function requestData(
     ophanIds,
     referrerAcquisitionData,
     supportAbTests,
+    email: user.email,
   };
 
   if (user.stateField) {

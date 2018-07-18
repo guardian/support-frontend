@@ -21,4 +21,12 @@ class StubIdentityService extends IdentityService {
     SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
     Future.successful(true)
   }
+
+  def getOrCreateUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
+    val stubTestUser: IdUser = IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None)
+
+    SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
+    EitherT.rightT[Future, String](stubTestUser)
+  }
 }

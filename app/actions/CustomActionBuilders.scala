@@ -16,6 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
   type OptionalAuthRequest[A] = AuthenticatedRequest[A, Option[AuthenticatedIdUser]]
+
 }
 
 class CustomActionBuilders(

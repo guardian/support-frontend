@@ -4,14 +4,18 @@ import cats.data.EitherT
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
+
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
+
+import cats.Monad
 import com.google.common.net.InetAddresses
 import config.Identity
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.Json
+
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -90,6 +94,22 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
+  def getUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    get(s"user/", headers(req), List("emailAddress" -> email)) { resp =>
+      (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
+    }
+  }
+
+  def createUserFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    get(s"guest/", headers(req), List("emailAddress" -> email)) { resp =>
+      (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
+    }
+  }
+
+  def getOrCreateUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    getUserFromEmail(email).leftFlatMap(_ => createUserFromEmailUser(email))
+  }
+
   private def get[A](
     endpoint: String,
     headers: List[(String, String)],
@@ -119,4 +139,5 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def getOrCreateUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
 }
