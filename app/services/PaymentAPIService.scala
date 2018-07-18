@@ -13,7 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait PaymentApiError extends Exception
 
-case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], requestId: Option[String], message: String) extends PaymentApiError {
+case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentApiError {
   override val getMessage: String = message
 }
 
