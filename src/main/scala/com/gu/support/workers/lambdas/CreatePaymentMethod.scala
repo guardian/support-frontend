@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.products.RecurringContributionsMetrics
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
@@ -22,13 +21,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
-    for {
-      paymentMethod <- createPaymentMethod(state, services)
-      _ <- putCloudWatchMetrics(paymentMethod.toFriendlyString)
-    } yield HandlerResult(
-      getCreateSalesforceContactState(state, paymentMethod),
-      requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
-    )
+    createPaymentMethod(state, services)
+      .map(paymentMethod =>
+        HandlerResult(
+          getCreateSalesforceContactState(state, paymentMethod),
+          requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+        ))
   }
 
   private def createPaymentMethod(
@@ -76,9 +74,4 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       dd.accountNumber,
       user.country
     ))
-
-  def putCloudWatchMetrics(paymentMethod: String): Future[Unit] =
-    new RecurringContributionsMetrics(paymentMethod, "monthly")
-      .putContributionSignUpStartProcess().recover({ case _ => () })
-
 }

@@ -50,7 +50,6 @@ lazy val root = (project in file("."))
       "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
       "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
       "com.amazonaws" % "aws-java-sdk-sqs" % awsVersion,
-      "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
       "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
       "org.scalatest" %% "scalatest" % "3.0.5" % "it,test",
       "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
