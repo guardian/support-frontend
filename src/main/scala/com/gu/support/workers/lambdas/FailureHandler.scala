@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
-import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState] {
-  def this() = this(new EmailService(Configuration.emailServicesConfig.failed, global))
+  def this() = this(new EmailService(Configuration.contributionEmailServicesConfig.failed, global))
 
   override protected def handlerFuture(
     state: FailureHandlerState,
@@ -35,7 +35,7 @@ class FailureHandler(emailService: EmailService)
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState) = emailService.send(EmailFields(
+  private def sendEmail(state: FailureHandlerState) = emailService.send(ContributionEmailFields(
     email = state.user.primaryEmailAddress,
     created = DateTime.now(),
     amount = 0, //TODO: Not used by email & digital pack doesn't have it

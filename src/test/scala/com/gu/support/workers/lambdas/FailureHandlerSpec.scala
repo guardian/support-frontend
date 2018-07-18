@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
-import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
@@ -26,10 +26,10 @@ import scala.io.Source
 class FailureHandlerSpec extends LambdaSpec {
 
   "EmailService" should "send a failure email" in {
-    val service = new EmailService(Configuration.emailServicesConfig.failed, global)
+    val service = new EmailService(Configuration.contributionEmailServicesConfig.failed, global)
     val email = "rupert.bates@theguardian.com"
     service
-      .send(EmailFields(email, DateTime.now(), 5, Currency.GBP, "UK", "", "monthly-contribution"))
+      .send(ContributionEmailFields(email, DateTime.now(), 5, Currency.GBP, "UK", "", "monthly-contribution"))
       .map(result => result.getMessageId should not be "")
   }
 

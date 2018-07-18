@@ -30,5 +30,6 @@ object Configuration {
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
-  val emailServicesConfig = EmailServicesConfig.fromConfig(config)
+  val contributionEmailServicesConfig = EmailServicesConfig.fromConfig(config.getConfig("email.contribution"))
+  val digitalPackEmailServicesConfig = EmailServicesConfig.fromConfig(config.getConfig("email.digitalpack"))
 }

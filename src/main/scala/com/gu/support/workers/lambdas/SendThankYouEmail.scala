@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
-import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
@@ -19,7 +19,7 @@ import scala.concurrent.Future
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
-  def this() = this(new EmailService(Configuration.emailServicesConfig.thankYou, executionContext))
+  def this() = this(new EmailService(Configuration.contributionEmailServicesConfig.thankYou, executionContext))
 
   override protected def servicesHandler(
     state: SendThankYouEmailState,
@@ -40,7 +40,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] =
-    thankYouEmailService.send(EmailFields(
+    thankYouEmailService.send(ContributionEmailFields(
       email = state.user.primaryEmailAddress,
       created = DateTime.now(),
       amount = 0, //TODO It's not actually used by the email, maybe remove it?

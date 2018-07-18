@@ -9,8 +9,8 @@ case class EmailConfig(queueName: String, dataExtensionName: String)
 object EmailServicesConfig {
   def fromConfig(config: Config): EmailServicesConfig =
     EmailServicesConfig(
-      fromEmailConfig(config.getConfig("email.thankYou")),
-      fromEmailConfig(config.getConfig("email.failed"))
+      fromEmailConfig(config.getConfig("thankYou")),
+      fromEmailConfig(config.getConfig("failed"))
     )
 
   private def fromEmailConfig(config: Config): EmailConfig =

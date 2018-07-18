@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
-import com.gu.emailservices.{EmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.i18n.Currency
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
@@ -38,21 +38,21 @@ class SendThankYouEmailSpec extends LambdaSpec {
     val addressToSendTo = "rupert.bates@theguardian.com"
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
-    val ef = EmailFields(
+    val ef = ContributionEmailFields(
       addressToSendTo,
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
       "UK", "", "monthly-contribution", Some(dd), Some(mandateId)
     )
-    val service = new EmailService(Configuration.emailServicesConfig.thankYou, executionContext)
+    val service = new EmailService(Configuration.contributionEmailServicesConfig.thankYou, executionContext)
     service.send(ef)
   }
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
-    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", "monthly-contribution", Some(dd), Some(mandateId))
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", "monthly-contribution", Some(dd), Some(mandateId))
     val resultJson = parse(ef.payload("test"))
 
     resultJson.isRight should be(true)
@@ -68,7 +68,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   }
 
   it should "still work without a Payment Method" in {
-    val ef = EmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", "")
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", "")
     val resultJson = parse(ef.payload("test"))
     resultJson.isRight should be(true)
     (resultJson.right.get \\ "payment method").isEmpty should be(true)
