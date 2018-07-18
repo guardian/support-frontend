@@ -11,13 +11,9 @@ import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-sealed trait PaymentProviderError
+case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
 
-case class StripeError(exceptionType: String, responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
-
-case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String) extends PaymentProviderError
-
-case class PaymentApiError(error: PaymentProviderError)
+case class PaymentApiError(error: PayPalError)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -78,12 +74,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
         SafeLogger.error(failureMessage)
         false
       },
-      paymentApiError => {
-        paymentApiError.error match {
-          case err: PayPalError => err.errorName.contains("PAYMENT_ALREADY_DONE")
-          case _ => false
-        }
-      }
+      paymentApiError => paymentApiError.error.errorName.contains("PAYMENT_ALREADY_DONE")
     )
   }
 
