@@ -77,7 +77,7 @@ class PayPalOneOff(
 
     for {
       maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
-      result <- paymentAPIService.execute(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
+      result <- paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
     } yield processPaymentApiResponse(result)
 
   }
