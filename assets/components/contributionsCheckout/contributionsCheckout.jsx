@@ -27,6 +27,8 @@ type PropTypes = {
   country: IsoCountry,
   contributionType: ContributionType,
   inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
+  name: string,
+  isSignedIn: boolean,
   form: Node,
   payment: Node,
 };
@@ -76,7 +78,7 @@ export default function ContributionsCheckout(props: PropTypes) {
           amount={props.amount}
           currencyId={props.currencyId}
         />
-        <YourDetails>
+        <YourDetails name={props.name} isSignedIn={props.isSignedIn}>
           {props.form}
         </YourDetails>
         <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">

@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 import SvgUser from 'components/svgs/user';
+
 
 // ---- Types ----- //
 
@@ -29,18 +29,6 @@ const DisplayName = (props: PropTypes) => {
 };
 
 
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-
-  return {
-    name: state.page.user.displayName,
-    isSignedIn: state.page.user.isSignedIn,
-  };
-
-}
-
-
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(DisplayName);
+export default DisplayName;

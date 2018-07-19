@@ -7,25 +7,18 @@ import React from 'react';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-// It can't handle props being passed to another function.
-/* eslint-disable react/no-unused-prop-types, react/require-default-props */
-
 export type SelectOption = {
   text: string,
   value: string,
   selected?: boolean,
 };
 
-/* eslint-enable react/no-unused-prop-types, react/require-default-props */
-
 type PropTypes = {
   options: SelectOption[],
   onChange: (string) => void,
-  required?: boolean,
+  required: boolean,
   id: string,
   label: string,
-  className?: string,
 };
 
 
@@ -37,14 +30,14 @@ export default function SelectInput(props: PropTypes) {
     <option value={option.value} selected={option.selected}>{option.text}</option>);
 
   return (
-    <div>
-      <label htmlFor={props.id} className="accessibility-hint">
+    <div className="component-select-input">
+      <label htmlFor={props.id} className="component-select-input__label">
         {props.label}
       </label>
       <select
         id={props.id}
         name={props.id}
-        className={props.className}
+        className="component-select-input__select"
         required={props.required}
         onChange={event => props.onChange(event.target.value)}
       >
@@ -60,5 +53,4 @@ export default function SelectInput(props: PropTypes) {
 
 SelectInput.defaultProps = {
   required: false,
-  className: 'component-select-input',
 };

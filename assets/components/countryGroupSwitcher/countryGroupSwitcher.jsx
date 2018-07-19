@@ -44,7 +44,6 @@ function CountryGroupSwitcher(props: PropTypes) {
       <SvgGlobe />
       <SelectInput
         id="qa-country-group-dropdown"
-        className="component-country-group-switcher__selector"
         onChange={compose(props.onCountryGroupSelect, stringToCountryGroupId)}
         options={options}
         label="Select your region"

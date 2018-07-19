@@ -35,14 +35,24 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       landingPage.clickContribute
 
       Then("they should be redirected to register as an Identity user")
-      val register = Register(testUser, 10)
-      assert(register.pageHasLoaded)
+      val registerPageOne = RegisterPageOne(testUser, 10)
+      assert(registerPageOne.pageHasLoaded)
 
       Given("that the user fills in their personal details correctly")
-      register.fillInPersonalDetails()
+      registerPageOne.fillInPersonalDetails()
 
       When("they submit the form to create their Identity account")
-      register.submit()
+      registerPageOne.submit()
+
+      Then("they should be redirected to register as an Identity user")
+      val registerPageTwo = RegisterPageTwo(testUser, 10)
+      assert(registerPageTwo.pageHasLoaded)
+
+      Given("that the user fills in their personal details correctly")
+      registerPageTwo.fillInPersonalDetails()
+
+      When("they submit the form to create their Identity account")
+      registerPageTwo.submit()
 
       Then("they should be redirected to the Monthly Contributions page")
       assert(recurringContributionForm.pageHasLoaded)
@@ -77,14 +87,24 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       landingPage.clickContribute
 
       Then("they should be redirected to register as an Identity user")
-      val register = Register(testUser, 15)
-      assert(register.pageHasLoaded)
+      val registerPageOne = RegisterPageOne(testUser, 10)
+      assert(registerPageOne.pageHasLoaded)
 
       Given("that the user fills in their personal details correctly")
-      register.fillInPersonalDetails
+      registerPageOne.fillInPersonalDetails()
 
       When("they submit the form to create their Identity account")
-      register.submit
+      registerPageOne.submit()
+
+      Then("they should be redirected to register as an Identity user")
+      val registerPageTwo = RegisterPageTwo(testUser, 10)
+      assert(registerPageTwo.pageHasLoaded)
+
+      Given("that the user fills in their personal details correctly")
+      registerPageTwo.fillInPersonalDetails()
+
+      When("they submit the form to create their Identity account")
+      registerPageTwo.submit()
 
       Then("they should be redirected to the Monthly Contributions page")
       assert(recurringContributionForm.pageHasLoaded)
