@@ -11,7 +11,6 @@ case class ContributionEmailFields(
     currency: Currency,
     edition: String,
     name: String,
-    product: String,
     paymentMethod: Option[PaymentMethod] = None,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
@@ -35,7 +34,7 @@ case class ContributionEmailFields(
     "currency" -> currency.glyph,
     "edition" -> edition,
     "name" -> name,
-    "product" -> product
+    "product" -> "monthly-contribution"
   ) ++ paymentFields
 
   override def payload: String = super.payload(email, "regular-contribution-thank-you")
