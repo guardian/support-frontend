@@ -17,7 +17,7 @@ class ContributionCompletedSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    flowCompleted.handleRequest(wrapFixture(thankYouEmailJson), outStream, context)
+    flowCompleted.handleRequest(wrapFixture(thankYouEmailJson()), outStream, context)
 
     val completedState = Encoding.in[CompletedState](outStream.toInputStream)
 

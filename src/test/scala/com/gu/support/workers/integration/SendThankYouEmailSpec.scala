@@ -4,14 +4,16 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
-import com.gu.emailservices.{ContributionEmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService}
+import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency
+import com.gu.i18n.Currency.GBP
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
-import com.gu.support.workers.model.DirectDebitPaymentMethod
+import com.gu.support.workers.model.{DirectDebitPaymentMethod, Monthly, User}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.encoding.CustomCodecs._
@@ -27,13 +29,13 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendThankYouEmail.handleRequest(wrapFixture(thankYouEmailJson), outStream, context)
+    sendThankYouEmail.handleRequest(wrapFixture(thankYouEmailJson()), outStream, context)
 
     val result = Encoding.in[SendMessageResult](outStream.toInputStream)
     result.isSuccess should be(true)
   }
 
-  ignore should "send an email" in {
+  ignore should "send a contribution email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates@theguardian.com"
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
@@ -46,6 +48,24 @@ class SendThankYouEmailSpec extends LambdaSpec {
       "UK", "", "monthly-contribution", Some(dd), Some(mandateId)
     )
     val service = new EmailService(Configuration.contributionEmailServicesConfig.thankYou, executionContext)
+    service.send(ef)
+  }
+
+  it should "send a digital pack email" in {
+    //This test will send a thank you email to the address below - useful for quickly testing changes
+    val addressToSendTo = "rupert.bates@theguardian.com"
+    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
+    val mandateId = "65HK26E"
+    val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
+    val ef = DigitalPackEmailFields(
+      "A-S00045678",
+      Monthly,
+      user,
+      GBP,
+      dd,
+      Some(mandateId)
+    )
+    val service = new EmailService(Configuration.digitalPackEmailServicesConfig.thankYou, executionContext)
     service.send(ef)
   }
 

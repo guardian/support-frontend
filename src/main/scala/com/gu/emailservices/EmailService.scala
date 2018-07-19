@@ -19,7 +19,7 @@ class EmailService(config: EmailConfig, implicit val executionContext: Execution
 
   private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
 
-  def send(fields: ContributionEmailFields): Future[SendMessageResult] = {
+  def send(fields: EmailFields): Future[SendMessageResult] = {
     SafeLogger.info(s"Sending message to SQS queue $queueUrl")
     val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload(config.dataExtensionName)))
     messageResult.recover {

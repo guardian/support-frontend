@@ -6,6 +6,8 @@ trait EmailFields {
 
   val fields: List[(String, String)]
 
+  def payload(dataExtensionName: String): String
+
   protected def payload(email: String, dataExtensionName: String): String =
     s"""
        |{

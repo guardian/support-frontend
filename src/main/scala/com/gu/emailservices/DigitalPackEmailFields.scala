@@ -81,6 +81,6 @@ case class DigitalPackEmailFields(
 
   def formatPrice(price: Float): String = decimal(price).bigDecimal.stripTrailingZeros.toPlainString
 
-  def payload = super.payload(user.primaryEmailAddress, "Direct Debit")
+  def payload(dataExtensionName: String) = super.payload(user.primaryEmailAddress, dataExtensionName)
 
 }
