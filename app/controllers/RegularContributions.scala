@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, IdUser}
+import com.gu.identity.play.{AccessCredentials, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
 import io.circe.syntax._
@@ -73,6 +73,13 @@ class RegularContributions(
       )
     }
 
+  def thankyou(useGuestCheckout: Boolean): Action[AnyContent] = {
+    if (useGuestCheckout)
+      displayFormGuestCheckout()
+    else
+      displayForm()
+  }
+
   def displayFormGuestCheckout(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
@@ -94,10 +101,10 @@ class RegularContributions(
       }
     }
 
-  def status(jobId: String): Action[AnyContent] = authenticatedAction().async { implicit request =>
+  def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
-        SafeLogger.error(scrub"Failed to get status of step function execution for user ${request.user.id} due to $error")
+        SafeLogger.error(scrub"Failed to get status of step function execution for user <> due to $error")
         InternalServerError
       },
       response => Ok(response.asJson)
@@ -108,8 +115,12 @@ class RegularContributions(
     implicit request =>
       request.user.fold {
         val result = for {
-          user <- identityService.getOrCreateUserFromEmail(request.body.email)
-          response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+          userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
+          user <- identityService.getUser(IdMinimalUser(userId, None))
+          response <- {
+            print("ID = " + user.id)
+            client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+          }
         } yield response
 
         result.fold(

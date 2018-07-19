@@ -22,11 +22,7 @@ class StubIdentityService extends IdentityService {
     Future.successful(true)
   }
 
-  def getOrCreateUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
-    val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
-    val stubTestUser: IdUser = IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None)
-
-    SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
-    EitherT.rightT[Future, String](stubTestUser)
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+    EitherT.rightT[Future, String]("123456")
   }
 }
