@@ -40,6 +40,9 @@ type PropTypes = {|
 
 // ---- Auxiliary functions ----- //
 
+const submitClassName = 'component-stripe-inline-form__submit-payment';
+const submitClassNameDisabled = `${submitClassName}--disabled`;
+
 const setupStripeInlineForm = (stripeIsLoaded: () => void) => {
   const htmlElement = document.getElementById('stripe-js');
 
@@ -50,6 +53,17 @@ const setupStripeInlineForm = (stripeIsLoaded: () => void) => {
     );
   }
 };
+
+function disableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+
+  try {
+    element.setAttribute('disabled', '');
+    element.classList.add(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Disable submit button failed: ${e.message}`);
+  }
+}
 
 function enableSubmitButton() {
   const element = document.getElementsByClassName(submitClassName)[0];
@@ -108,20 +122,6 @@ const stripeElementsStyle = {
       lineHeight: '40px',
     },
 };
-
-const submitClassName = 'component-stripe-inline-form__submit-payment';
-const submitClassNameDisabled = `${submitClassName}--disabled`;
-
-function disableSubmitButton() {
-  const element = document.getElementsByClassName(submitClassName)[0];
-
-  try {
-    element.setAttribute('disabled', '');
-    element.classList.add(submitClassNameDisabled);
-  } catch (e) {
-    logException(`Disable submit button failed: ${e.message}`);
-  }
-}
 
 function checkoutForm(props: {
   stripe: Object,
