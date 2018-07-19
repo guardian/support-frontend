@@ -26,6 +26,7 @@ type PropTypes = {
   currencyId: IsoCurrency,
   country: IsoCountry,
   contributionType: ContributionType,
+  inlineCardPaymentVariant: 'notintest' | 'control' | 'inline',
   name: string,
   isSignedIn: boolean,
   form: Node,
@@ -57,6 +58,10 @@ function getTitle(
 
 export default function ContributionsCheckout(props: PropTypes) {
 
+  const paymentSectionHeading = props.inlineCardPaymentVariant === 'inline' ?
+    'Payment' :
+    'Payment methods';
+
   return (
     <div className="component-contributions-checkout">
       <Page
@@ -76,7 +81,7 @@ export default function ContributionsCheckout(props: PropTypes) {
         <YourDetails name={props.name} isSignedIn={props.isSignedIn}>
           {props.form}
         </YourDetails>
-        <PageSection heading="Payment" modifierClass="payment-methods">
+        <PageSection heading={paymentSectionHeading} modifierClass="payment-methods">
           {props.payment}
         </PageSection>
         <LegalSectionContainer />

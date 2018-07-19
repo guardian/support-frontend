@@ -4,9 +4,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Dispatch } from 'redux';
 import { Redirect } from 'react-router';
-import type { Dispatch } from 'redux';
-import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
+import StripeInlineForm from 'components/stripeInlineForm/stripeInlineForm';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -14,6 +14,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import { emptyInputField } from 'helpers/utilities';
 import type { Status } from 'helpers/switch';
 import { routes } from 'helpers/routes';
+import { stripeInlineFormActionsFor } from 'components/stripeInlineForm/stripeInlineFormActions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
@@ -31,7 +32,6 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 
 type PropTypes = {|
   dispatch: Dispatch<*>,
-  email: string,
   disable: boolean,
   error: ?string,
   isTestUser: boolean,
@@ -49,6 +49,12 @@ type PropTypes = {|
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
+  isStripeLoaded: boolean,
+  stripeIsLoaded: () => void,
+  stripeInlineErrorMessage: ?string,
+  stripeInlineSetError: (string) => void,
+  stripeInlineResetError: () => void,
+  email: string,
 |};
 
 
@@ -92,13 +98,13 @@ function RegularContributionsPayment(props: PropTypes, context) {
           'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
-      )}
+        )}
         switchStatus={props.directDebitSwitchStatus}
         disable={props.disable}
       />);
   }
 
-  const stripeButton = (<StripePopUpButton
+  const stripeInlineForm = (<StripeInlineForm
     email={props.email}
     callback={postCheckout(
       props.abParticipations,
@@ -111,11 +117,15 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
     )}
+    stripeIsLoaded={props.stripeIsLoaded}
+    isStripeLoaded={props.isStripeLoaded}
     currencyId={props.currencyId}
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
-    amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
+    errorMessage={props.stripeInlineErrorMessage}
+    setError={props.stripeInlineSetError}
+    resetError={props.stripeInlineResetError}
     disable={props.disable}
   />);
 
@@ -145,8 +155,11 @@ function RegularContributionsPayment(props: PropTypes, context) {
       { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
       {getStatusMessage(props.paymentStatus, props.error)}
+      {stripeInlineForm}
+
+      <p className="regular-contribution-payment__or-label">or</p>
+
       {directDebitButton}
-      {stripeButton}
       {payPalButton}
     </section>
   );
@@ -156,9 +169,9 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
 function mapStateToProps(state) {
   return {
+    email: state.page.user.email,
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: state.page.user.email,
     disable: emptyInputField(state.page.user.firstName) || emptyInputField(state.page.user.lastName),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
@@ -174,17 +187,29 @@ function mapStateToProps(state) {
     directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
+    isStripeLoaded: state.page.stripeInlineForm.isStripeLoaded,
+    stripeInlineErrorMessage: state.page.stripeInlineForm.errorMessage,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<*>) {
-  return {
+  return ({
+    stripeIsLoaded: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').stripeIsLoaded());
+    },
     dispatch,
+    stripeInlineSetError: (message: string) => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').setError(message));
+    },
+    stripeInlineResetError: () => {
+      dispatch(stripeInlineFormActionsFor('regularContributions').resetError());
+    },
     payPalSetHasLoaded: () => {
       dispatch(setPayPalHasLoaded());
     },
-  };
+  });
 }
+
 
 // ----- Exports ----- //
 
