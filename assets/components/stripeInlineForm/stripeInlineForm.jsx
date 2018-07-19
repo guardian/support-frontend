@@ -51,6 +51,15 @@ const setupStripeInlineForm = (stripeIsLoaded: () => void) => {
   }
 };
 
+function enableSubmitButton() {
+  const element = document.getElementsByClassName(submitClassName)[0];
+  try {
+    element.removeAttribute('disabled');
+    element.classList.remove(submitClassNameDisabled);
+  } catch (e) {
+    logException(`Enable submit button failed: ${e.message}`);
+  }
+}
 
 // ----- Component ----- //
 
@@ -111,16 +120,6 @@ function disableSubmitButton() {
     element.classList.add(submitClassNameDisabled);
   } catch (e) {
     logException(`Disable submit button failed: ${e.message}`);
-  }
-}
-
-function enableSubmitButton() {
-  const element = document.getElementsByClassName(submitClassName)[0];
-  try {
-    element.removeAttribute('disabled');
-    element.classList.remove(submitClassNameDisabled);
-  } catch (e) {
-    logException(`Enable submit button failed: ${e.message}`);
   }
 }
 
