@@ -8,9 +8,9 @@ case class User(
   firstName: String,
   lastName: String,
   country: Country,
-  state: Option[String],
-  allowMembershipMail: Boolean,
-  allowThirdPartyMail: Boolean,
-  allowGURelatedMail: Boolean,
-  isTestUser: Boolean
+  state: Option[String] = None,
+  allowMembershipMail: Boolean = false,
+  allowThirdPartyMail: Boolean = false,
+  allowGURelatedMail: Boolean = false,
+  isTestUser: Boolean = false
 )
