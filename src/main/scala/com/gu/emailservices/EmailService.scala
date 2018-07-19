@@ -9,7 +9,7 @@ import com.gu.monitoring.SafeLogger._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailService(config: EmailConfig, implicit val executionContext: ExecutionContext) {
+class EmailService(implicit val executionContext: ExecutionContext) {
 
   private val sqsClient = AmazonSQSAsyncClientBuilder
     .standard
@@ -17,11 +17,12 @@ class EmailService(config: EmailConfig, implicit val executionContext: Execution
     .withRegion(Regions.EU_WEST_1)
     .build()
 
-  private val queueUrl = sqsClient.getQueueUrl(config.queueName).getQueueUrl
+  private val queueName = "contributions-thanks"
+  private val queueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
     SafeLogger.info(s"Sending message to SQS queue $queueUrl")
-    val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload(config.dataExtensionName)))
+    val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload))
     messageResult.recover {
       case throwable =>
         SafeLogger.error(scrub"Failed to send message due to $queueUrl due to:", throwable)

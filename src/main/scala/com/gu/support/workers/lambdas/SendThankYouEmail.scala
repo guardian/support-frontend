@@ -2,7 +2,6 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.config.Configuration
 import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
@@ -19,7 +18,7 @@ import scala.concurrent.Future
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
-  def this() = this(new EmailService(Configuration.contributionEmailServicesConfig.thankYou, executionContext))
+  def this() = this(new EmailService)
 
   override protected def servicesHandler(
     state: SendThankYouEmailState,

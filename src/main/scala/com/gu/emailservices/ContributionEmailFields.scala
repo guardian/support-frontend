@@ -39,7 +39,7 @@ case class ContributionEmailFields(
     "product" -> product
   ) ++ paymentFields
 
-  def payload(dataExtensionName: String) = super.payload(email, dataExtensionName)
+  override def payload = super.payload(email, "regular-contribution-thank-you")
 
   def firstPaymentDate: String = DateTimeFormat
     .forPattern("EEEE, d MMMM yyyy")

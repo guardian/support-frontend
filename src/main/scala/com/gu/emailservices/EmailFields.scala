@@ -4,9 +4,9 @@ import io.circe.{Json, Printer}
 
 trait EmailFields {
 
-  val fields: List[(String, String)]
+  val fields: List[(String, String)] = Nil
 
-  def payload(dataExtensionName: String): String
+  def payload: String
 
   protected def payload(email: String, dataExtensionName: String): String =
     s"""

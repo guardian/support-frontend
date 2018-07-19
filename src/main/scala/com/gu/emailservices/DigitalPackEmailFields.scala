@@ -58,7 +58,7 @@ case class DigitalPackEmailFields(
     case _ => Seq("Default payment method" -> "PayPal")
   }
 
-  val fields = List(
+  override val fields = List(
     "ZuoraSubscriberId" -> accountId,
     "SubscriberKey" -> user.primaryEmailAddress,
     "EmailAddress" -> user.primaryEmailAddress,
@@ -81,6 +81,6 @@ case class DigitalPackEmailFields(
 
   def formatPrice(price: Float): String = decimal(price).bigDecimal.stripTrailingZeros.toPlainString
 
-  def payload(dataExtensionName: String) = super.payload(user.primaryEmailAddress, dataExtensionName)
+  def payload = super.payload(user.primaryEmailAddress, "digipack")
 
 }

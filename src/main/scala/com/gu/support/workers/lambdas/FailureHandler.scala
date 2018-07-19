@@ -1,7 +1,6 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.config.Configuration
 import com.gu.emailservices.{ContributionEmailFields, EmailService}
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
@@ -19,7 +18,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class FailureHandler(emailService: EmailService)
     extends FutureHandler[FailureHandlerState, CompletedState] {
-  def this() = this(new EmailService(Configuration.contributionEmailServicesConfig.failed, global))
+  def this() = this(new EmailService)
 
   override protected def handlerFuture(
     state: FailureHandlerState,

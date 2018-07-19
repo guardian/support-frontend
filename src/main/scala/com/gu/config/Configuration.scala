@@ -1,7 +1,6 @@
 package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
-import com.gu.emailservices.EmailServicesConfig
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
@@ -30,6 +29,4 @@ object Configuration {
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
-  val contributionEmailServicesConfig = EmailServicesConfig.fromConfig(config.getConfig("email.contribution"))
-  val digitalPackEmailServicesConfig = EmailServicesConfig.fromConfig(config.getConfig("email.digitalpack"))
 }
