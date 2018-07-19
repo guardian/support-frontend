@@ -1,0 +1,43 @@
+.component-stripe-pop-up-button {
+  background-color: gu-colour(news-garnett-highlight);
+  border: none;
+  border-radius: 600px;
+  color: gu-colour(garnett-neutral-1);
+  cursor: pointer;
+  display: block;
+  font-family: $gu-sans-web;
+  font-size: 14px;
+  height: $cta-height;
+  padding-left: $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  .svg-credit-card {
+    width: 24px;
+    fill: gu-colour(garnett-neutral-1);
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    background-color: darken(gu-colour(news-garnett-highlight), 5%);
+  }
+}
+
+.component-stripe-pop-up-button--disable {
+  background-color: gu-colour(garnett-neutral-4);
+  color: gu-colour(garnett-neutral-2);
+  cursor: auto;
+
+  .svg-credit-card {
+    fill: gu-colour(garnett-neutral-2);
+  }
+
+  &:hover {
+    background-color: gu-colour(garnett-neutral-4);
+  }
+}
+

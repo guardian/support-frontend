@@ -53,21 +53,6 @@
   }
 }
 
-
-.component-stripe-inline-form__submit-payment--disabled {
-  cursor: not-allowed;
-  background-color: gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-2);
-
-  .svg-arrow-right-straight {
-    fill: gu-colour(garnett-neutral-2)
-  }
-
-  &:hover {
-    background-color: gu-colour(garnett-neutral-4);
-  }
-}
-
 .component-stripe-inline-form--disable {
   pointer-events: none;
 
@@ -89,4 +74,7 @@
     color: gu-colour(garnett-neutral-2);
     border: 2px solid gu-colour(garnett-neutral-4);
   }
+
+
 }
+
