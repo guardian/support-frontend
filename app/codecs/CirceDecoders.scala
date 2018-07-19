@@ -9,7 +9,6 @@ import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, 
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
-import cats.syntax.either._
 import cats.syntax.functor._
 import shapeless.Lazy
 import com.gu.support.workers.model.monthlyContributions.Status
@@ -17,6 +16,7 @@ import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import ophan.thrift.componentEvent.ComponentType
 import switchboard.{PaymentMethodsSwitch, SwitchState, Switches}
+import services.{PaymentApiError, PayPalError}
 
 object CirceDecoders {
 
@@ -86,5 +86,8 @@ object CirceDecoders {
   implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+
+  private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
+  implicit val paymentApiError: Decoder[PaymentApiError] = deriveDecoder
 }
 

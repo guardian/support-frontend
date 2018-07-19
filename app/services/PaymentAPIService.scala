@@ -2,11 +2,18 @@ package services
 
 import java.io.IOException
 
+import io.circe.parser.decode
+import codecs.CirceDecoders.paymentApiError
+import monitoring.SafeLogger
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
+
+case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
+
+case class PaymentApiError(error: PayPalError)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -57,6 +64,28 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
+  def isDuplicatePaymentResponse(response: WSResponse): Boolean = {
+    decode[PaymentApiError](response.body).fold(
+      failure => {
+        val failureMessage = SafeLogger.LogMessage(
+          s"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}",
+          "Unable to decode PaymentAPIError. See logs for details"
+        )
+        SafeLogger.error(failureMessage)
+        false
+      },
+      paymentApiError => paymentApiError.error.errorName.contains("PAYMENT_ALREADY_DONE")
+    )
+  }
+
+  def isSuccessful(response: WSResponse): Boolean = {
+    response.status match {
+      case 200 => true
+      case 400 => isDuplicatePaymentResponse(response)
+      case _ => false
+    }
+  }
+
   def executePaypalPayment(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
@@ -65,6 +94,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser).map(_.status == 200)
+    postPaypalData(data, queryStrings, isTestUser).map(isSuccessful)
+
   }
 }
