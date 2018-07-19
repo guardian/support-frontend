@@ -46,7 +46,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     }
   }
 
-  private def postData(data: ExecutePaymentBody, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
+  private def postPaypalData(data: ExecutePaymentBody, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
     wsClient.url(payPalExecutePaymentEndpoint)
@@ -57,7 +57,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def execute(
+  def executePaypalPayment(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
@@ -65,6 +65,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): Future[Boolean] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postData(data, queryStrings, isTestUser).map(_.status == 200)
+    postPaypalData(data, queryStrings, isTestUser).map(_.status == 200)
   }
 }
