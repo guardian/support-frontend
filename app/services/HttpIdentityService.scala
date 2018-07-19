@@ -95,18 +95,25 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   }
 
   def getUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    println("Hoidoifodi")
     get(s"user/", headers(req), List("emailAddress" -> email)) { resp =>
+      println("hello")
+      println(resp.toString)
       (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
     }
   }
 
   def createUserFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
-    get(s"guest/", headers(req), List("emailAddress" -> email)) { resp =>
+    post(s"guest/", headers(req), List("emailAddress" -> email)) { resp =>
+      println("hello")
+      println(resp.toString)
       (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
     }
   }
 
   def getOrCreateUserFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    println("JKJFDJHKFHDJSFHKDSHFKHDS")
+
     getUserFromEmail(email).leftFlatMap(_ => createUserFromEmailUser(email))
   }
 
@@ -121,6 +128,20 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         .withQueryStringParameters(parameters: _*)
         .withRequestTimeout(1.second)
         .withMethod("GET")
+    )(func)
+  }
+
+  private def post[A](
+    endpoint: String,
+    headers: List[(String, String)],
+    parameters: List[(String, String)]
+  )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
+    execute(
+      wsClient.url(s"$apiUrl/$endpoint")
+        .withHttpHeaders(headers: _*)
+        .withQueryStringParameters(parameters: _*)
+        .withRequestTimeout(4.second)
+        .withMethod("POST")
     )(func)
   }
 
