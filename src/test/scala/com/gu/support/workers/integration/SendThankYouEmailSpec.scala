@@ -34,7 +34,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     result.isSuccess should be(true)
   }
 
-  "EmailService" should "send a contribution email" in {
+  ignore should "send a contribution email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates@theguardian.com"
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")

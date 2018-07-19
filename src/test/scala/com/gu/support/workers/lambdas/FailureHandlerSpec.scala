@@ -22,7 +22,8 @@ import scala.io.Source
 @IntegrationTest
 class FailureHandlerSpec extends LambdaSpec {
 
-  "EmailService" should "send a failure email" in {
+  ignore should "send a failure email" in {
+    //This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService
     val email = "rupert.bates@theguardian.com"
     service
