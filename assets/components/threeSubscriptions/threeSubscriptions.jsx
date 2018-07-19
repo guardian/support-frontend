@@ -68,16 +68,20 @@ function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Digital"
       subheading={`£${getPrice('digital', '11.99')}/month`}
       benefits={getDigitalBenefits()}
-      ctaText="Start your 14 day trial"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['digital', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Start your 14 day trial',
+          url: props.url,
+          accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
+          modifierClasses: ['digital', 'border'],
+        },
+      ]}
     />
   );
 
@@ -91,16 +95,20 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Paper"
       subheading={`from £${getPrice('paper', '10.36')}/month`}
       benefits={getPaperBenefits()}
-      ctaText="Get a paper subscription"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
       gridImage={{
         gridId: 'paperCircle',
         altText: 'paper subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['paper', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Get a paper subscription',
+          url: props.url,
+          accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
+          modifierClasses: ['paper', 'border'],
+        },
+      ]}
     />
   );
 
@@ -114,16 +122,20 @@ function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Paper+digital"
       subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
       benefits={getPaperDigitalBenefits()}
-      ctaText="Get a paper+digital subscription"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
       gridImage={{
         gridId: 'paperDigitalCircle',
         altText: 'paper + digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['paper-digital', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Get a paper+digital subscription',
+          url: props.url,
+          accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
+          modifierClasses: ['paper-digital', 'border'],
+        },
+      ]}
     />
   );
 

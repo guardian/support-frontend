@@ -47,7 +47,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
         heading="Digital Subscriptions"
         modifierClass="digital-subscriptions"
       >
-        <PremiumTier url="/" />
+        <PremiumTier iosUrl="/" androidUrl="/" />
         <DailyEdition url="/" />
         <DigitalBundle url={subsLinks.digital} />
       </PageSection>
@@ -59,7 +59,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function PremiumTier(props: { url: string }) {
+function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
 
   return (
     <SubscriptionBundle
@@ -76,15 +76,25 @@ function PremiumTier(props: { url: string }) {
           text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad',
         },
       ]}
-      ctaText="Buy in the App Store"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['premium-tier', 'border']}
+      ctas={[
+        {
+          text: 'Buy in the App Store',
+          url: props.iosUrl,
+          accessibilityHint: 'Proceed to buy the premium app in the app store',
+          modifierClasses: ['premium-tier', 'border'],
+        },
+        {
+          text: 'Buy in the Play Store',
+          url: props.androidUrl,
+          accessibilityHint: 'Proceed to buy the premium app in the play store',
+          modifierClasses: ['premium-tier', 'border'],
+        },
+      ]}
     />
   );
 
@@ -107,15 +117,19 @@ function DailyEdition(props: { url: string }) {
           text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad',
         },
       ]}
-      ctaText="Buy in the App Store"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['daily-edition', 'border']}
+      ctas={[
+        {
+          text: 'Buy in the App Store',
+          url: props.url,
+          accessibilityHint: 'Proceed to buy the daily edition app in the app store',
+          modifierClasses: ['daily-edition', 'border'],
+        },
+      ]}
     />
   );
 
@@ -129,15 +143,19 @@ function DigitalBundle(props: { url: string }) {
       heading="Digital"
       subheading={`£${getPrice('digital', '11.99')}/month`}
       benefits={getDigitalBenefits()}
-      ctaText="Start your 14 day trial"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['digital', 'border']}
+      ctas={[
+        {
+          text: 'Start your 14 day trial',
+          url: props.url,
+          accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
+          modifierClasses: ['digital', 'border'],
+        },
+      ]}
     />
   );
 
