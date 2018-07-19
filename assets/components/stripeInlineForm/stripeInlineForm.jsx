@@ -61,6 +61,7 @@ function StripeInlineFormComp(props: PropTypes) {
     return null;
   }
 
+  enableSubmitButton();
   return (
     <StripeProvider apiKey={getStripeKey(props.currencyId, props.isTestUser)}>
       <Elements>
