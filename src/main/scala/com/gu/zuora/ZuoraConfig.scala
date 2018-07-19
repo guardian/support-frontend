@@ -28,7 +28,7 @@ case class ZuoraConfig(
       case _ => monthlyContribution
     }
 
-  def digitalPackRatePlan(billingPeriod: BillingPeriod) = billingPeriod match {
+  def digitalPackRatePlan(billingPeriod: BillingPeriod): RatePlanId = billingPeriod match {
     case Annual => digitalPack.annual
     case Quarterly => digitalPack.quarterly
     case Monthly => digitalPack.monthly

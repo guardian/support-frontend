@@ -2,11 +2,11 @@ package com.gu.emailservices
 
 import com.gu.i18n.Currency
 import com.gu.support.workers.model._
-import org.joda.time.LocalDate
+import org.joda.time.DateTime
 
-import scala.math.BigDecimal.decimal
-
-//{
+// Output Json should look like this:
+//
+// {
 //  "To": {
 //    "Address": "gow5hckeqzc86qqx4rc@gu.com",
 //    "SubscriberKey": "gow5hckeqzc86qqx4rc@gu.com",
@@ -71,16 +71,11 @@ case class DigitalPackEmailFields(
     "City" -> "", //TODO: We don't have this
     "Post Code" -> "", //TODO: We don't have this
     "Country" -> user.country.name,
-    "Date of first payment" -> formatDate(LocalDate.now), //TODO: work this out using trial period
+    "Date of first payment" -> formatDate(DateTime.now), //TODO: work this out using trial period
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
     "Subscription details" -> subscriptionDetails
   ) ++ paymentFields //TODO: ++ promotionFields
 
-  def formatDate(d: LocalDate) = s"${d.dayOfMonth.get} ${d.monthOfYear.getAsText} ${d.year.getAsString}"
-
-  def formatPrice(price: Float): String = decimal(price).bigDecimal.stripTrailingZeros.toPlainString
-
-  def payload = super.payload(user.primaryEmailAddress, "digipack")
-
+  override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
 }

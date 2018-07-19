@@ -3,7 +3,6 @@ package com.gu.emailservices
 import com.gu.i18n.Currency
 import com.gu.support.workers.model.{DirectDebitPaymentMethod, PaymentMethod}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 
 case class ContributionEmailFields(
     email: String,
@@ -23,7 +22,7 @@ case class ContributionEmailFields(
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
       "Mandate ID" -> directDebitMandateId.getOrElse(""),
-      "first payment date" -> firstPaymentDate,
+      "first payment date" -> formatDate(created.plusDays(10)),
       "payment method" -> "Direct Debit"
     )
     case _ => Nil
@@ -39,10 +38,5 @@ case class ContributionEmailFields(
     "product" -> product
   ) ++ paymentFields
 
-  override def payload = super.payload(email, "regular-contribution-thank-you")
-
-  def firstPaymentDate: String = DateTimeFormat
-    .forPattern("EEEE, d MMMM yyyy")
-    .print(created.plusDays(10))
-
+  override def payload: String = super.payload(email, "regular-contribution-thank-you")
 }

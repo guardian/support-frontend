@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.emailservices.{ContributionEmailFields, EmailService}
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
@@ -12,7 +12,6 @@ import com.gu.support.workers.model.{ExecutionError, RequestInfo, Status}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.parser.decode
-import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -34,15 +33,8 @@ class FailureHandler(emailService: EmailService)
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState) = emailService.send(ContributionEmailFields(
-    email = state.user.primaryEmailAddress,
-    created = DateTime.now(),
-    amount = 0, //TODO: Not used by email & digital pack doesn't have it
-    currency = state.product.currency,
-    edition = state.user.country.alpha2,
-    name = state.user.firstName,
-    product = "monthly-contribution" //TODO: Adjust for DigiPack
-  ))
+  private def sendEmail(state: FailureHandlerState) =
+    emailService.send(FailedContributionEmailFields(email = state.user.primaryEmailAddress))
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
     SafeLogger.info(s"Attempting to handle error $error")
