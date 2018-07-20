@@ -30,11 +30,16 @@ class PayPalRegular(
   implicit val assetsResolver = assets
   implicit val sw = switches
 
-  // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = authenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
-    val paypalBillingDetails = request.body
+  def testUser[A](request: CustomActionBuilders.OptionalAuthRequest[A]): Boolean = {
+    val userName = request.user.map(user => user.user.displayName).getOrElse(request.cookies.get("_test_username").map(_.value))
+    testUsers.isTestUser(userName)
+  }
 
-    withPaypalServiceForUser(request.user) { service =>
+  // Sets up a payment by contacting PayPal, returns the token as JSON.
+  def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
+    val paypalBillingDetails = request.body
+    val isTestUser = true // testUser(request)
+    withPaypalServiceForUser(isTestUser) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
@@ -44,14 +49,15 @@ class PayPalRegular(
     }
   }
 
-  def createAgreement: Action[Token] = authenticatedAction().async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForUser(request.user) { service =>
+  def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
+    val isTestUser = testUser(request)
+    withPaypalServiceForUser(isTestUser) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
   }
 
-  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalNvpService => T): T = {
-    val service = payPalNvpServiceProvider.forUser(testUsers.isTestUser(user))
+  private def withPaypalServiceForUser[T](isTestUser: Boolean)(fn: PayPalNvpService => T): T = {
+    val service = payPalNvpServiceProvider.forUser(isTestUser)
     fn(service)
   }
 

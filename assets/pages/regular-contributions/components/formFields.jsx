@@ -8,6 +8,7 @@ import type { Dispatch } from 'redux';
 
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
+import EmailFormField from './emailFormField';
 
 import {
   setFirstName,
@@ -131,6 +132,7 @@ function NameForm(props: PropTypes) {
 
   return (
     <form className="regular-contrib__name-form">
+      <EmailFormField/>
       <TextInput
         id="first-name"
         labelText="First name"

@@ -58,7 +58,7 @@ const router = (
           render={() => (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
-              form={<FormFieldsGuestCheckout />}
+              form={<FormFields />}
               payment={<RegularContributionsPayment />}
             />
           )}

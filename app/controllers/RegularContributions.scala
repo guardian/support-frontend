@@ -71,16 +71,16 @@ class RegularContributions(
       )
     }
 
-  def displayFormGuestCheckout(): Action[AnyContent] =
+  def displayFormGuestCheckout(isTestUser: Boolean): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
-        val uatMode = true
+        val uatMode = isTestUser
         Future(
           monthlyContributionsPage(None, uatMode)
         )
       } { fUser =>
         identityService.getUser(fUser).semiflatMap { fullUser =>
-          val uatMode = true
+          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
           Future(monthlyContributionsPage(Some(fullUser), uatMode))
         } fold (
           { error =>

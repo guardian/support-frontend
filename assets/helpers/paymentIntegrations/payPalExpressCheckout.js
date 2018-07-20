@@ -109,7 +109,7 @@ function setup(
     commit: true,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currencyId, csrf),
+    payment: setupPayment(amount, currencyId, csrf, email),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
