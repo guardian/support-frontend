@@ -9,6 +9,7 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
+import play.libs.Json
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
@@ -38,14 +39,18 @@ class PayPalRegular(
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
-    val isTestUser = true // testUser(request)
+    val isTestUser = testUser(request)
+    print(isTestUser)
     withPaypalServiceForUser(isTestUser) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
-      Ok(Token(response).asJson)
+      {
+        Ok(Token(response).asJson)
+      }
+
     }
   }
 

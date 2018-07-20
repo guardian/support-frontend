@@ -84,7 +84,8 @@ libraryDependencies ++= Seq(
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
-  filters,
+  "org.bouncycastle" % "bcprov-jdk15on" % "1.60",
+    filters,
   ws
 )
 
