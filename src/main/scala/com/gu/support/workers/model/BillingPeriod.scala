@@ -1,14 +1,22 @@
 package com.gu.support.workers.model
 
 
-sealed trait BillingPeriod {
+sealed trait BillingPeriod{
+  val noun: String
+}
+
+object BillingPeriod {
   def fromString(code: String): Option[BillingPeriod] = List(Monthly, Annual).find(_.getClass.getSimpleName == s"$code$$")
 }
 
-object BillingPeriod extends BillingPeriod
+case object Monthly extends BillingPeriod {
+  override val noun = "month"
+}
 
-case object Monthly extends BillingPeriod
+case object Quarterly extends BillingPeriod {
+  override val noun = "quarter"
+}
 
-case object Quarterly extends BillingPeriod
-
-case object Annual extends BillingPeriod
+case object Annual extends BillingPeriod {
+  override val noun = "year"
+}
