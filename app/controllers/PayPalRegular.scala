@@ -29,16 +29,11 @@ class PayPalRegular(
   implicit val assetsResolver = assets
   implicit val sw = switches
 
-  def testUser[A](request: CustomActionBuilders.OptionalAuthRequest[A]): Boolean = {
-    val userName = request.user.map(user => user.user.displayName).getOrElse(request.cookies.get("_test_username").map(_.value))
-    testUsers.isTestUser(userName)
-  }
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
-    val isTestUser = testUser(request)
-    withPaypalServiceForUser(isTestUser) { service =>
+    withPaypalServiceForUser(testUsers.isTestUserOptionalAuth(request)) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
@@ -51,8 +46,7 @@ class PayPalRegular(
   }
 
   def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
-    val isTestUser = testUser(request)
-    withPaypalServiceForUser(isTestUser) { service =>
+    withPaypalServiceForUser(testUsers.isTestUserOptionalAuth(request)) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
   }

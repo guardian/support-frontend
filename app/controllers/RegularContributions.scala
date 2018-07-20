@@ -71,10 +71,10 @@ class RegularContributions(
       )
     }
 
-  def displayFormMaybeAuthenticated(isTestUser: Boolean): Action[AnyContent] =
+  def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
-        val uatMode = isTestUser
+        val uatMode = testUsers.isTestUserOptionalAuth(request)
         Future(
           monthlyContributionsPage(None, uatMode)
         )

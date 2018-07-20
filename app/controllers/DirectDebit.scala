@@ -22,8 +22,7 @@ class DirectDebit(
   def checkAccount: Action[CheckBankAccountDetails] =
     maybeAuthenticatedAction().async(circe.json[CheckBankAccountDetails]) { implicit request =>
       {
-        val userName = request.user.map(user => user.user.displayName).getOrElse(request.cookies.get("_test_username").map(_.value))
-        val goCardlessService = goCardlessServiceProvider.forUser(testUsers.isTestUser(userName))
+        val goCardlessService = goCardlessServiceProvider.forUser(testUsers.isTestUserOptionalAuth(request))
         goCardlessService.checkBankDetails(request.body).map { isAccountValid =>
           Ok(Map("accountValid" -> isAccountValid).asJson)
         }
