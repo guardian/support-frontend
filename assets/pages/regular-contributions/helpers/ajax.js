@@ -61,6 +61,7 @@ type RegularContribFields = {|
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
+  email: ?string
 |};
 
 // ----- Functions ----- //
