@@ -3,13 +3,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import com.gu.identity.play.AuthenticatedIdUser
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import play.libs.Json
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
@@ -40,7 +38,6 @@ class PayPalRegular(
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
     val isTestUser = testUser(request)
-    print(isTestUser)
     withPaypalServiceForUser(isTestUser) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
@@ -50,7 +47,6 @@ class PayPalRegular(
       {
         Ok(Token(response).asJson)
       }
-
     }
   }
 

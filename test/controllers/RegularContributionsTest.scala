@@ -161,7 +161,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
           payPalConfigProvider,
           stubControllerComponents(),
           Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), On)
-        ).displayForm()(FakeRequest())
+        ).displayFormAuthenticated()(FakeRequest())
       }
     }
   }

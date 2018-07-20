@@ -92,7 +92,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
           'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
-          props.email,
         )}
         switchStatus={props.directDebitSwitchStatus}
         disable={props.disable}
@@ -111,7 +110,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
       'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
-      props.email,
     )}
     currencyId={props.currencyId}
     isTestUser={props.isTestUser}

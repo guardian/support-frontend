@@ -51,7 +51,7 @@ class RegularContributions(
       payPalConfig = payPalConfigProvider.get(uatMode)
     ))
 
-  def displayForm(): Action[AnyContent] =
+  def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       identityService.getUser(request.user).semiflatMap { fullUser =>
         isMonthlyContributor(request.user.credentials) map {
@@ -71,7 +71,7 @@ class RegularContributions(
       )
     }
 
-  def displayFormGuestCheckout(isTestUser: Boolean): Action[AnyContent] =
+  def displayFormMaybeAuthenticated(isTestUser: Boolean): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
         val uatMode = isTestUser

@@ -20,7 +20,6 @@ import reducer from './regularContributionsReducer';
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
-import FormFieldsGuestCheckout from './components/formFieldsGuestCheckout';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
 
