@@ -41,11 +41,11 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.cont
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayForm()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormGuestCheckout()
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.thankyou(useGuestCheckout: Boolean ?= true)
+GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayFormGuestCheckout()
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.thankyou(useGuestCheckout: Boolean ?= true)
+GET  /contribute/recurring/pending                  controllers.RegularContributions.displayFormGuestCheckout()
 
 # this endpoint should be removed once identity remove
 # the need for a client token

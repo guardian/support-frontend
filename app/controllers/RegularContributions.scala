@@ -11,14 +11,12 @@ import lib.PlayImplicits._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
-import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import switchboard.Switches
 import views.html.monthlyContributions
-import views.html.monthlyContributionsGuestCheckout
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +44,7 @@ class RegularContributions(
       id = "regular-contributions-page",
       js = "regularContributionsPage.js",
       css = "regularContributionsPageStyles.css",
-      user = None,
+      user = maybeUser,
       uatMode,
       defaultStripeConfig = stripeConfigProvider.get(false),
       uatStripeConfig = stripeConfigProvider.get(true),
@@ -73,13 +71,6 @@ class RegularContributions(
       )
     }
 
-  def thankyou(useGuestCheckout: Boolean): Action[AnyContent] = {
-    if (useGuestCheckout)
-      displayFormGuestCheckout()
-    else
-      displayForm()
-  }
-
   def displayFormGuestCheckout(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
@@ -104,7 +95,7 @@ class RegularContributions(
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     client.status(jobId, request.uuid).fold(
       { error =>
-        SafeLogger.error(scrub"Failed to get status of step function execution for user <> due to $error")
+        SafeLogger.error(scrub"Failed to get status of step function execution for job ${jobId} due to $error")
         InternalServerError
       },
       response => Ok(response.asJson)
@@ -118,7 +109,6 @@ class RegularContributions(
           userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
           user <- identityService.getUser(IdMinimalUser(userId, None))
           response <- {
-            print("ID = " + user.id)
             client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
           }
         } yield response

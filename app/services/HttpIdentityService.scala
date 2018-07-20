@@ -1,23 +1,84 @@
 package services
 
 import cats.data.EitherT
-import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
+import play.api.libs.ws.{BodyWritable, InMemoryBody, WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
 
+import akka.util.ByteString
 import com.google.common.net.InetAddresses
 import config.Identity
-import io.circe.generic.JsonCodec
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{Json, Reads, Writes}
 
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
+
+object IdentityServiceEnrichers {
+
+  implicit class EnrichedList[A, B](underlying: List[(A, Option[B])]) {
+    def flattenValues: List[(A, B)] = underlying.collect {
+      case (k, Some(v)) => (k, v)
+    }
+  }
+
+  implicit class EnrichedRequest(request: RequestHeader) {
+    def clientIp: Option[String] = {
+      request.headers.get("X-Forwarded-For").flatMap { xForwardedFor =>
+        xForwardedFor.split(", ").find(publicIpAddress)
+      }
+    }
+
+    private def publicIpAddress(address: String) =
+      Try { InetAddresses.forString(address) }.exists(!_.isSiteLocalAddress)
+  }
+
+  implicit class EnrichedResponse(response: WSResponse) {
+    def success: Boolean = response.status / 100 == 2
+  }
+}
+
+object IdentityService {
+  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = {
+    if (config.useStub) new StubIdentityService else {
+      new HttpIdentityService(
+        apiUrl = config.apiUrl,
+        apiClientToken = config.apiClientToken
+      )
+    }
+  }
+}
+
+// Models a valid request to /guest
+//
+// Example request:
+// =================
+// {
+//   "email": "a@b.com",
+//   "publicFields": {
+//     "displayName": "a"
+//   }
+// }
+case class CreateGuestAccountRequestBody(primaryEmailAddress: String, publicFields: PublicFields)
+object CreateGuestAccountRequestBody {
+
+  def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
+
+  def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(Some(guestDisplayName(email))))
+
+  implicit val writesCreateGuestAccountRequestBody: Writes[CreateGuestAccountRequestBody] = Json.writes[CreateGuestAccountRequestBody]
+  implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
+    transform = body => InMemoryBody(ByteString.fromString(Json.toJson(body).toString)),
+    contentType = "application/json"
+  )
+
+}
+
 // Models the response of successfully creating a guest account.
 //
 // Example response:
@@ -68,40 +129,6 @@ object UserResponse {
   }
 }
 
-object IdentityServiceEnrichers {
-
-  implicit class EnrichedList[A, B](underlying: List[(A, Option[B])]) {
-    def flattenValues: List[(A, B)] = underlying.collect {
-      case (k, Some(v)) => (k, v)
-    }
-  }
-
-  implicit class EnrichedRequest(request: RequestHeader) {
-    def clientIp: Option[String] = {
-      request.headers.get("X-Forwarded-For").flatMap { xForwardedFor =>
-        xForwardedFor.split(", ").find(publicIpAddress)
-      }
-    }
-
-    private def publicIpAddress(address: String) =
-      Try { InetAddresses.forString(address) }.exists(!_.isSiteLocalAddress)
-  }
-
-  implicit class EnrichedResponse(response: WSResponse) {
-    def success: Boolean = response.status / 100 == 2
-  }
-}
-
-object IdentityService {
-  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = {
-    if (config.useStub) new StubIdentityService else {
-      new HttpIdentityService(
-        apiUrl = config.apiUrl,
-        apiClientToken = config.apiClientToken
-      )
-    }
-  }
-}
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
 
   import IdentityServiceEnrichers._
@@ -161,9 +188,17 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   }
 
   def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
-    post(s"guest", postHeaders(req), List("emailAddress" -> email)) { resp =>
-      resp.json.validate[GuestRegistrationResponse].asEither.map(_.guestRegistrationRequest.userId).leftMap(_.mkString(","))
-    }
+    val body = CreateGuestAccountRequestBody.fromEmail(email)
+    execute(
+      wsClient.url(s"$apiUrl/guest")
+        .withHttpHeaders(postHeaders(req): _*)
+        .withBody(body)
+        .withRequestTimeout(4.second)
+        .withBody(body)
+        .withMethod("POST")
+    ) { resp =>
+        resp.json.validate[GuestRegistrationResponse].asEither.map(_.guestRegistrationRequest.userId).leftMap(_.mkString(","))
+      }
   }
 
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
@@ -175,29 +210,12 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     headers: List[(String, String)],
     parameters: List[(String, String)]
   )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
-    print("3")
     execute(
       wsClient.url(s"$apiUrl/$endpoint")
         .withHttpHeaders(headers: _*)
         .withQueryStringParameters(parameters: _*)
         .withRequestTimeout(1.second)
         .withMethod("GET")
-    )(func)
-  }
-
-  private def post[A](
-    endpoint: String,
-    headers: List[(String, String)],
-    parameters: List[(String, String)]
-  )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
-    print(headers.toString)
-    execute(
-      wsClient.url(s"$apiUrl/$endpoint")
-        .withHttpHeaders(headers: _*)
-        .withQueryStringParameters(parameters: _*)
-        .withBody("{\n \"primaryEmailAddress\": \"guy.dawddson1dd1sddddds111@theguardian.com\",\n}")
-        .withRequestTimeout(4.second)
-        .withMethod("POST")
     )(func)
   }
 
