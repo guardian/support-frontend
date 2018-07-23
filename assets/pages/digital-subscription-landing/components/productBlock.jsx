@@ -10,7 +10,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import FeatureList, { type ListItem } from 'components/featureList/featureList';
 import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
-import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import PriceCtaContainer from './priceCtaContainer';
 
