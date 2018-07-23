@@ -24,11 +24,7 @@ type PropTypes = {
 
 // ----- Setup ----- //
 
-const imageProperties = {
-  srcSizes: [644, 500, 140],
-  sizes: '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px',
-  imgType: 'png',
-};
+const imageSlot = '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px';
 
 const defaultFeatures: ListItem[] = [
   {
@@ -72,6 +68,27 @@ const appFeatures: {
   ],
 };
 
+const defaultAppImage = {
+  gridId: 'premiumTier',
+  altText: 'the premium tier on the guardian app',
+  srcSizes: [644, 500, 140],
+  sizes: imageSlot,
+  imgType: 'png',
+};
+
+const appImages: {
+  [CountryGroupId]: GridImg,
+} = {
+  GBPCountries: defaultAppImage,
+  UnitedStates: defaultAppImage,
+  International: defaultAppImage,
+  AUDCountries: {
+    ...defaultAppImage,
+    gridId: 'premiumTierAU',
+    srcSizes: [1000, 500, 140],
+  },
+};
+
 
 // ----- Component ----- //
 
@@ -86,11 +103,7 @@ function ProductBlock(props: PropTypes) {
         </h2>
         <Product
           modifierClass="premium-app"
-          imageProps={{
-            gridId: 'premiumTier',
-            altText: 'the premium tier on the guardian app',
-            ...imageProperties,
-          }}
+          imageProps={appImages[props.countryGroupId]}
           companionSvg={null}
           heading="App premium tier"
           description="Exciting new app features available for mobile and tablet users with a digital subscription"
@@ -102,7 +115,9 @@ function ProductBlock(props: PropTypes) {
           imageProps={{
             gridId: 'dailyEdition',
             altText: 'the guardian daily edition app',
-            ...imageProperties,
+            srcSizes: [644, 500, 140],
+            sizes: imageSlot,
+            imgType: 'png',
           }}
           companionSvg={<SvgPennyFarthingCircles />}
           heading="iPad daily Edition"
