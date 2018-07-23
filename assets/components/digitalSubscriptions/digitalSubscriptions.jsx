@@ -6,7 +6,7 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getDigitalBenefits, getPrice } from 'helpers/flashSale';
+import { getPrice } from 'helpers/flashSale';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -64,16 +64,11 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
   return (
     <SubscriptionBundle
       modifierClass="premium-tier"
-      heading="Premium Tier"
+      heading="Premium App"
       subheading="£5.99/month"
       benefits={[
         {
-          heading: 'Premium experience on the Guardian app',
-          text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
-        },
-        {
-          heading: 'Daily Tablet Edition app',
-          text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad',
+          text: 'The ad free, premium app, designed for your smartphone',
         },
       ]}
       gridImage={{
@@ -89,7 +84,7 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
           modifierClasses: ['premium-tier', 'border'],
         },
         {
-          text: 'Buy in the Play Store',
+          text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['premium-tier', 'border'],
@@ -105,16 +100,11 @@ function DailyEdition(props: { url: string }) {
   return (
     <SubscriptionBundle
       modifierClass="daily-edition"
-      heading="Daily Edition"
+      heading="iPad Daily Edition"
       subheading="from £6.99/month"
       benefits={[
         {
-          heading: 'Premium experience on the Guardian app',
-          text: 'No adverts means faster loading pages and a clearer reading experience. Play our daily crosswords offline wherever you are',
-        },
-        {
-          heading: 'Daily Tablet Edition app',
-          text: 'Read the Guardian, the Observer and all the Weekend supplements in an optimised tablet app; available on iPad',
+          text: 'The iPad Edition of The Guardian and The Observer',
         },
       ]}
       gridImage={{
@@ -140,9 +130,13 @@ function DigitalBundle(props: { url: string }) {
   return (
     <SubscriptionBundle
       modifierClass="digital"
-      heading="Digital"
+      heading="Digital Pack"
       subheading={`£${getPrice('digital', '11.99')}/month`}
-      benefits={getDigitalBenefits()}
+      benefits={[
+        {
+          text: 'Digital bundle, including the Premium App and the iPad Daily Edition',
+        },
+      ]}
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
