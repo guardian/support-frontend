@@ -15,9 +15,6 @@ import type { ImageId, ImageType } from 'helpers/theGrid';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-/* eslint-disable react/no-unused-prop-types */
-
 export type Source = {
   gridId: ImageId,
   sizes: string,
@@ -25,8 +22,6 @@ export type Source = {
   srcSizes: number[],
   imgType: ImageType,
 };
-
-/* eslint-enable react/no-unused-prop-types */
 
 export type PropTypes = {
   sources: Source[],
