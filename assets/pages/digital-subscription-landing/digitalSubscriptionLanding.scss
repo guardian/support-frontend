@@ -338,13 +338,14 @@
     .svg-title-circles-right-mobile {
       position: absolute;
       top: 335px;
-      left: calc(50% + 120px);
-      @include mq($until: mobileMedium) {
-        width: 60px;
-      }
+      left: calc(50% + 100px);
+      width: 60px;
+
       @include mq($from: mobileMedium) {
         width: 80px;
+        left: calc(50% + 105px);
       }
+
       @include mq($from: tablet) {
         display: none;
       }
