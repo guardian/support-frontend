@@ -15,21 +15,26 @@ import type { ImageId, ImageType } from 'helpers/theGrid';
 
 // ----- Types ----- //
 
-export type Source = {
+export type GridImage = {
   gridId: ImageId,
-  sizes: string,
-  media: string,
   srcSizes: number[],
   imgType: ImageType,
 };
 
-export type PropTypes = {
+export type GridSlot = {
+  sizes: string,
+  media: string,
+};
+
+export type Source = GridImage & GridSlot;
+
+export type PropTypes = {|
   sources: Source[],
   fallback: string,
   fallbackSize: number,
   altText: string,
   fallbackImgType: ImageType,
-};
+|};
 
 
 // ----- Component ----- //

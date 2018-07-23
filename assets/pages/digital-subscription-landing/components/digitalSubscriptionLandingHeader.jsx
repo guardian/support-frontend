@@ -7,7 +7,9 @@ import React from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type PropTypes as GridPictureProps,
-  type Source as GSource,
+  type GridImage,
+  type GridSlot,
+  type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
@@ -22,24 +24,13 @@ type PropTypes = {
   cgId: CountryGroupId
 };
 
-type GridSource = {
-  gridId: GridId,
-  srcSizes: number[],
-  imgType: 'png' | 'jpg',
-};
-
-type GridSources = {
-  sources: {
-    mobile: GridSource,
-    tablet: GridSource,
-    desktop: GridSource,
+type GridImages = {
+  breakpoints: {
+    mobile: GridImage,
+    tablet: GridImage,
+    desktop: GridImage,
   },
   fallback: GridId,
-};
-
-type GridSlot = {
-  sizes: string,
-  media: string,
 };
 
 type GridSlots = {
@@ -51,8 +42,8 @@ type GridSlots = {
 
 // ----- Setup ----- //
 
-const defaultSources: GridSources = {
-  sources: {
+const defaultImages: GridImages = {
+  breakpoints: {
     mobile: {
       gridId: 'digitalSubscriptionHeaderMobile',
       srcSizes: [342, 684, 1200],
@@ -72,14 +63,14 @@ const defaultSources: GridSources = {
   fallback: 'digitalSubscriptionHeaderDesktop',
 };
 
-const gridSourcesByCountry: {
-  [CountryGroupId]: GridSources,
+const gridImagesByCountry: {
+  [CountryGroupId]: GridImages,
 } = {
-  GBPCountries: defaultSources,
-  UnitedStates: defaultSources,
-  International: defaultSources,
+  GBPCountries: defaultImages,
+  UnitedStates: defaultImages,
+  International: defaultImages,
   AUDCountries: {
-    sources: {
+    breakpoints: {
       mobile: {
         gridId: 'digitalSubscriptionHeaderMobileAU',
         srcSizes: [310, 620, 1088],
@@ -120,17 +111,17 @@ const gridSlots: GridSlots = {
 
 function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
-  const gridSources: GridSources = gridSourcesByCountry[cgId];
+  const gridImages: GridImages = gridImagesByCountry[cgId];
 
-  const sources: GSource[] = [
-    { ...gridSlots.mobile, ...gridSources.sources.mobile },
-    { ...gridSlots.tablet, ...gridSources.sources.tablet },
-    { ...gridSlots.desktop, ...gridSources.sources.desktop },
+  const sources: GridSource[] = [
+    { ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
+    { ...gridSlots.tablet, ...gridImages.breakpoints.tablet },
+    { ...gridSlots.desktop, ...gridImages.breakpoints.desktop },
   ];
 
   return {
     sources,
-    fallback: gridSources.fallback,
+    fallback: gridImages.fallback,
     fallbackSize: 500,
     altText: 'digital subscription',
     fallbackImgType: 'png',
