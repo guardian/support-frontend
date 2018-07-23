@@ -28,8 +28,11 @@ export const imageCatalogue: {
   amberRudd: '33d55e682e496b355baed45c0d92ca7dedbc6eff/0_0_370_370',
   zuck: 'e6142101bc909caee866be05ced677c54e9d3b4e/0_0_374_374',
   digitalSubscriptionHeaderDesktop: '01f9a081d0f78cb057ca585725f2742bed5a98fb/0_0_4045_1945',
+  digitalSubscriptionHeaderDesktopAU: 'f46b1e2c498ac4f1ebec1b2620b6e80583e4348f/0_0_4045_1945',
   digitalSubscriptionHeaderTablet: '4d588918cae445d7ded1e68960286fd91217434b/0_0_2035_1660',
+  digitalSubscriptionHeaderTabletAU: 'dbe3974508706a41e710f198b1da02f44e6141a1/0_0_2035_1660',
   digitalSubscriptionHeaderMobile: 'ed4028ccd5abd85b330114e3ef48660358f63969/0_0_1200_1755',
+  digitalSubscriptionHeaderMobileAU: 'dbe3974508706a41e710f198b1da02f44e6141a1/945_0_1088_1755',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

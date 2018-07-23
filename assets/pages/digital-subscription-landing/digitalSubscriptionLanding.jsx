@@ -54,7 +54,7 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <DigitalSubscriptionLandingHeader />
+      <DigitalSubscriptionLandingHeader cgId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
       <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />
