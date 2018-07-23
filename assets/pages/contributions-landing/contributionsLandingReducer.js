@@ -5,12 +5,12 @@
 import { combineReducers, type CombinedReducer } from 'redux';
 
 import { contributionSelectionReducerFor } from 'components/contributionSelection/contributionSelectionReducer';
-import { payPalContributionButtonReducerFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
+import { payPalContributionButtonReducerFor } from 'components/payPalContributionButton/payPalContributionButtonReducer';
 
 import type { State as ContributionSelectionState } from 'components/contributionSelection/contributionSelectionReducer';
 import type { Action as ContributionSelectionAction } from 'components/contributionSelection/contributionSelectionActions';
-import type { State as PayPalState } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
-import type { Action as PayPalAction } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
+import type { State as PayPalState } from 'components/payPalContributionButton/payPalContributionButtonReducer';
+import type { Action as PayPalAction } from 'components/payPalContributionButton/payPalContributionButtonActions';
 
 import type { CommonState } from 'helpers/page/page';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

@@ -5,10 +5,10 @@
 import { combineReducers } from 'redux';
 
 import { contributionSelectionReducerFor } from 'components/contributionSelection/contributionSelectionReducer';
-import { payPalContributionButtonReducerFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
+import { payPalContributionButtonReducerFor } from 'components/payPalContributionButton/payPalContributionButtonReducer';
 
 import type { State as ContributionSelectionState } from 'components/contributionSelection/contributionSelectionReducer';
-import type { State as PayPalState } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonReducer';
+import type { State as PayPalState } from 'components/payPalContributionButton/payPalContributionButtonReducer';
 
 import type { CommonState } from 'helpers/page/page';
 
