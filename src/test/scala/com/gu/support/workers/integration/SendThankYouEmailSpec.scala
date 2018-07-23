@@ -50,9 +50,9 @@ class SendThankYouEmailSpec extends LambdaSpec {
     service.send(ef)
   }
 
-  it should "send a digital pack email" in {
+  ignore should "send a digital pack email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
-    val addressToSendTo = "rupert.bates@theguardian.com"
+    val addressToSendTo = "rupert.bates+unitTest@theguardian.com"
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
     val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
