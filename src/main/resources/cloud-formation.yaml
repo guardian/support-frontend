@@ -477,57 +477,12 @@ Resources:
     - TargetGroup
     - ElasticLoadBalancer
 
-  ThreeOrMorePaypalPaymentErrorsIn15MinsAlarm:
-      Type: AWS::CloudWatch::Alarm
-      Condition: CreateProdResources
-      Properties:
-        AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple errors in the last five minutes for paypal contribution via the payment-api
-        MetricName: payment-error
-        Namespace: support-payment-api-PROD
-        Dimensions:
-                - Name: payment-provider
-                  Value: Paypal
-        ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
-        Period: 900
-        EvaluationPeriods: 1
-        Statistic: Sum
-        TreatMissingData: notBreaching
-      DependsOn:
-      - TargetGroup
-      - ElasticLoadBalancer
-
-  ThreeOrMoreStripePaymentErrorsIn15MinsAlarm:
-      Type: AWS::CloudWatch::Alarm
-      Condition: CreateProdResources
-      Properties:
-        AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple errors in the last five minutes for paypal contribution via the payment-api
-        MetricName: payment-error
-        Namespace: support-payment-api-PROD
-        Dimensions:
-                - Name: payment-provider
-                  Value: Stripe
-        ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
-        Period: 900
-        EvaluationPeriods: 1
-        Statistic: Sum
-        TreatMissingData: notBreaching
-      DependsOn:
-      - TargetGroup
-      - ElasticLoadBalancer
-
-
   PaymentErrorPaypalAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub ${App} ${Stage} Payment error for paypal contribution via the payment-api
       MetricName: payment-error
       Namespace: support-payment-api-PROD
@@ -549,7 +504,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub ${App} ${Stage} Payment error for stripe contribution via the payment-api
       MetricName: payment-error
       Namespace: support-payment-api-PROD
@@ -571,7 +526,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub ${App} ${Stage} Error executing post-payment tasks - create identity id and send thankyou email - for paypal contribution via the payment-api
       MetricName: post-payment-tasks-error
       Namespace: support-payment-api-PROD
@@ -593,7 +548,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub ${App} ${Stage} Error executing post-payment tasks - create identity id and send thankyou email - for stripe contribution via the payment-api
       MetricName: post-payment-tasks-error
       Namespace: support-payment-api-PROD
