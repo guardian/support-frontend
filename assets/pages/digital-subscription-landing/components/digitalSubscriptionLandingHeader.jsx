@@ -21,7 +21,7 @@ import PriceCtaContainer from './priceCtaContainer';
 // ----- Types ----- //
 
 type PropTypes = {
-  cgId: CountryGroupId
+  countryGroupId: CountryGroupId
 };
 
 type GridImages = {
@@ -139,7 +139,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <CirclesLeft />
         <CirclesRight />
         <div className="digital-subscription-landing-header__picture">
-          <GridPicture {...gridPicture(props.cgId)} />
+          <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
         <div className="digital-subscription-landing-header__title">
           <div className="digital-subscription-landing-header__title-copy">
