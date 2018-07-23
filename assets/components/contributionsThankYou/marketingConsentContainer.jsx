@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import { setGnmMarketing, type Action } from 'helpers/user/userActions';
-import { sendMarketingPreferencesToIdentity } from 'containerisableComponents/marketingConsent/helpers';
-import MarketingConsent from 'containerisableComponents/marketingConsent/marketingConsent';
+import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
