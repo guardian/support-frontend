@@ -2,9 +2,7 @@ package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.config.Configuration
-import com.gu.emailservices.{EmailFields, EmailService}
-import com.gu.i18n.Currency
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
@@ -17,7 +15,6 @@ import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.parser.decode
-import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
@@ -25,11 +22,12 @@ import scala.io.Source
 @IntegrationTest
 class FailureHandlerSpec extends LambdaSpec {
 
-  "EmailService" should "send a failure email" in {
-    val service = new EmailService(Configuration.emailServicesConfig.failed, global)
+  ignore should "send a failure email" in {
+    //This test will send a failure email to the address below - useful for quickly testing changes
+    val service = new EmailService
     val email = "rupert.bates@theguardian.com"
     service
-      .send(EmailFields(email, DateTime.now(), 5, Currency.GBP, "UK", "", "monthly-contribution"))
+      .send(FailedContributionEmailFields(email))
       .map(result => result.getMessageId should not be "")
   }
 

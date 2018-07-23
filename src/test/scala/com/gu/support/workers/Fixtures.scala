@@ -143,11 +143,11 @@ object Fixtures {
           }
         """
 
-  val thankYouEmailJson =
+  def thankYouEmailJson(product: String = contribution()) =
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "product": ${contribution()},
+       |  "product": ${product},
        |  "paymentMethod": $payPalPaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
