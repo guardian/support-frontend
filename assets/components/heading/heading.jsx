@@ -7,10 +7,10 @@ import React, { type Node } from 'react';
 
 // ----- Types ----- //
 
-export type HeadingRange = 1 | 2 | 3 | 4 | 5 | 6;
+export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
 
 type PropTypes = {
-  size: HeadingRange,
+  size: HeadingSize,
   className: string,
   children: Node,
 };
