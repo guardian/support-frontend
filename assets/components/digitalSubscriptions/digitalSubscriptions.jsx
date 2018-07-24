@@ -72,8 +72,8 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircle',
-        altText: 'digital subscription',
+        gridId: 'premiumTierCircle',
+        altText: 'premium app',
         ...gridImageProperties,
       }}
       ctas={[
@@ -108,8 +108,8 @@ function DailyEdition(props: { url: string }) {
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircle',
-        altText: 'digital subscription',
+        gridId: 'dailyEditionCircle',
+        altText: 'daily edition',
         ...gridImageProperties,
       }}
       ctas={[
@@ -138,7 +138,7 @@ function DigitalBundle(props: { url: string }) {
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircle',
+        gridId: 'digitalCircleAlt',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}

@@ -99,7 +99,7 @@ function PaperDigitalBundle(props: { url: string }) {
         },
       ]}
       gridImage={{
-        gridId: 'paperDigitalCircle',
+        gridId: 'paperDigitalCircleAlt',
         altText: 'paper + digital subscription',
         ...gridImageProperties,
       }}
@@ -129,8 +129,8 @@ function WeeklyBundle(props: { url: string }) {
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircle',
-        altText: 'digital subscription',
+        gridId: 'weeklyCircle',
+        altText: 'weekly subscription',
         ...gridImageProperties,
       }}
       ctas={[
