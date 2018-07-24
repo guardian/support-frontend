@@ -100,7 +100,7 @@ function DailyEdition(props: { url: string }) {
   return (
     <SubscriptionBundle
       modifierClass="daily-edition"
-      heading="iPad Daily Edition"
+      heading="Daily Edition"
       subheading="from £6.99/month"
       benefits={[
         {
@@ -144,7 +144,7 @@ function DigitalBundle(props: { url: string }) {
       }}
       ctas={[
         {
-          text: 'Start your 14 day trial',
+          text: 'Find out more',
           url: props.url,
           accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
           modifierClasses: ['digital', 'border'],

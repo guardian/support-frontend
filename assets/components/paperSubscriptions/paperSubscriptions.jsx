@@ -75,7 +75,7 @@ function PaperBundle(props: { url: string }) {
       }}
       ctas={[
         {
-          text: 'Get a paper subscription',
+          text: 'Choose a package',
           url: props.url,
           accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds thirty six pence per month.',
           modifierClasses: ['paper', 'border'],
@@ -91,7 +91,7 @@ function PaperDigitalBundle(props: { url: string }) {
   return (
     <SubscriptionBundle
       modifierClass="paper-digital"
-      heading="Paper+digital"
+      heading="Paper+Digital"
       subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
       benefits={[
         {
@@ -105,7 +105,7 @@ function PaperDigitalBundle(props: { url: string }) {
       }}
       ctas={[
         {
-          text: 'Get a paper+digital subscription',
+          text: 'Choose a package',
           url: props.url,
           accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
           modifierClasses: ['paper-digital', 'border'],
@@ -135,7 +135,7 @@ function WeeklyBundle(props: { url: string }) {
       }}
       ctas={[
         {
-          text: 'Get a weekly subscription',
+          text: 'Find out more',
           url: props.url,
           accessibilityHint: 'The Guardian\'s weekly subscription is available for thirty pounds per quarter',
           modifierClasses: ['weekly', 'border'],
