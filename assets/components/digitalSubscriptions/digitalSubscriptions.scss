@@ -112,15 +112,15 @@
   }
 
   .component-feature-list--premium-tier {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#bb3b80" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
-  .component-feature-list--daily-edition {
     list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#0084c6" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
   }
 
+  .component-feature-list--daily-edition {
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#bb3b80" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+  }
+
   .component-feature-list--digital {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#ed6300" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#ff4e36" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
   }
 
   .component-cta-link {
@@ -133,24 +133,6 @@
   }
 
   .component-cta-link--premium-tier {
-    color: gu-colour(lifestyle-garnett-main-1);
-    border-color: gu-colour(lifestyle-garnett-main-1);
-
-    .svg-arrow-right-straight {
-      fill: gu-colour(lifestyle-garnett-main-1);
-    }
-
-    &:hover {
-      color: #fff;
-      background-color: gu-colour(lifestyle-garnett-main-1);
-
-      .svg-arrow-right-straight {
-        fill: #fff;
-      }
-    }
-  }
-
-  .component-cta-link--daily-edition {
     color: gu-colour(sport-garnett-media-main-1);
     border-color: gu-colour(sport-garnett-media-main-1);
 
@@ -168,17 +150,35 @@
     }
   }
 
-  .component-cta-link--digital {
-    color: gu-colour(opinion-garnett-main-1);
-    border-color: gu-colour(opinion-garnett-main-1);
+  .component-cta-link--daily-edition {
+    color: gu-colour(lifestyle-garnett-main-1);
+    border-color: gu-colour(lifestyle-garnett-main-1);
 
     .svg-arrow-right-straight {
-      fill: gu-colour(opinion-garnett-main-1);
+      fill: gu-colour(lifestyle-garnett-main-1);
     }
 
     &:hover {
       color: #fff;
-      background-color: gu-colour(opinion-garnett-main-1);
+      background-color: gu-colour(lifestyle-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--digital {
+    color: gu-colour(news-garnett-media-main-1);
+    border-color: gu-colour(news-garnett-media-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(news-garnett-media-main-1);
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(news-garnett-media-main-1);
 
       .svg-arrow-right-straight {
         fill: #fff;
