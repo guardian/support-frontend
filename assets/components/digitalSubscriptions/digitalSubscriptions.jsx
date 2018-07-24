@@ -81,13 +81,13 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
           text: 'Buy in the App Store',
           url: props.iosUrl,
           accessibilityHint: 'Proceed to buy the premium app in the app store',
-          modifierClasses: ['premium-tier', 'border'],
+          modifierClasses: ['premium-tier', 'border', 'ios'],
         },
         {
           text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
-          modifierClasses: ['premium-tier', 'border'],
+          modifierClasses: ['premium-tier', 'border', 'android'],
         },
       ]}
     />
