@@ -68,7 +68,7 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
       subheading="£5.99/month"
       benefits={[
         {
-          text: 'The ad free, premium app, designed for your smartphone',
+          text: 'The ad free, premium app, designed especially for your smartphone',
         },
       ]}
       gridImage={{
@@ -134,7 +134,7 @@ function DigitalBundle(props: { url: string }) {
       subheading={`£${getPrice('digital', '11.99')}/month`}
       benefits={[
         {
-          text: 'Digital bundle, including the Premium App and the iPad Daily Edition',
+          text: 'Digital bundle, including the premium app and the iPad daily edition',
         },
       ]}
       gridImage={{

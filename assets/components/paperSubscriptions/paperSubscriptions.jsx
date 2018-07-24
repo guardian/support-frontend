@@ -95,7 +95,7 @@ function PaperDigitalBundle(props: { url: string }) {
       subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
       benefits={[
         {
-          text: 'All the benefits of a paper subscription, plus access to the Digital Pack',
+          text: 'All the benefits of a paper subscription, plus access to the digital pack',
         },
       ]}
       gridImage={{
