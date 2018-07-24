@@ -23,12 +23,10 @@ export default function DoubleHeading(props: PropTypes) {
 
   return (
     <div className={className}>
-      <h1 className="component-double-heading__heading">
-        { props.heading }
-      </h1>
-      <h2 className="component-double-heading__subheading">
-        { props.subheading }
-      </h2>
+      <h3 className="component-double-heading__heading">
+        <div>{ props.heading }</div>
+        <div className="component-double-heading__subheading">{ props.subheading }</div>
+      </h3>
     </div>
   );
 

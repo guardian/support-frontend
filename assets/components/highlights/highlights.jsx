@@ -23,13 +23,13 @@ export default function Highlights(props: PropTypes) {
   }
 
   return (
-    <h1 className={classNameWithModifiers('component-highlights', props.modifierClasses)}>
+    <h2 className={classNameWithModifiers('component-highlights', props.modifierClasses)}>
       {props.highlights.map(highlight => (
         <span className="component-highlights__line">
           <span className={classNameWithModifiers('component-highlights__highlight', props.modifierClasses)}>{highlight}</span>
         </span>
       ))}
-    </h1>
+    </h2>
   );
 
 }
