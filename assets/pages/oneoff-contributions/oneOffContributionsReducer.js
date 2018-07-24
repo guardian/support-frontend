@@ -7,7 +7,7 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { userReducer as user } from 'helpers/user/userReducer';
-import { marketingConsentReducerFor } from 'containerisableComponents/marketingConsent/marketingConsentReducer';
+import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import { stripeInlineFormReducerFor } from 'components/stripeInlineForm/stripeInlineFormReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 

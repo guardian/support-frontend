@@ -5,8 +5,8 @@
 import { connect } from 'react-redux';
 
 import ContributionPaymentCtas from 'components/contributionPaymentCtas/contributionPaymentCtas';
-import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
-import { payPalContributionButtonActionsFor } from 'containerisableComponents/payPalContributionButton/payPalContributionButtonActions';
+import { getAmount } from 'components/contributionSelection/contributionSelectionReducer';
+import { payPalContributionButtonActionsFor } from 'components/payPalContributionButton/payPalContributionButtonActions';
 import type { State } from '../contributionsLandingReducer';
 
 

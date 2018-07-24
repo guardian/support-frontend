@@ -5,7 +5,7 @@
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
+import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 import {
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,

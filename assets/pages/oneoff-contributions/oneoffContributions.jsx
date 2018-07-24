@@ -14,7 +14,7 @@ import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 import { getAmount } from 'helpers/checkouts';
 
-import ContributionsThankYouPage from 'containerisableComponents/contributionsThankYou/contributionsThankYouPage';
+import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 
 import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';

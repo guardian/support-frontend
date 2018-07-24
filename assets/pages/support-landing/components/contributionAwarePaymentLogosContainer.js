@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import ContributionAwarePaymentLogos from 'containerisableComponents/contributionAwarePaymentLogos/contributionAwarePaymentLogos';
+import ContributionAwarePaymentLogos from 'components/contributionAwarePaymentLogos/contributionAwarePaymentLogos';
 import type { State } from '../supportLandingReducer';
 
 

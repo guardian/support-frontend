@@ -4,9 +4,9 @@
 
 import { connect } from 'react-redux';
 
-import ContributionSelection from 'containerisableComponents/contributionSelection/contributionSelection';
-import { getAmount } from 'containerisableComponents/contributionSelection/contributionSelectionReducer';
-import { contributionSelectionActionsFor as actionsFor } from 'containerisableComponents/contributionSelection/contributionSelectionActions';
+import ContributionSelection from 'components/contributionSelection/contributionSelection';
+import { getAmount } from 'components/contributionSelection/contributionSelectionReducer';
+import { contributionSelectionActionsFor as actionsFor } from 'components/contributionSelection/contributionSelectionActions';
 
 import type { State } from '../contributionsLandingReducer';
 
