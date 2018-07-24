@@ -11,7 +11,7 @@ import SvgAdvertisingGraphDesktop from 'components/svgs/advertisingGraphDesktop'
 import SvgPaywallMobile from 'components/svgs/payWallMobile';
 import SvgPaywallDesktop from 'components/svgs/payWallDesktop';
 import SvgPaywallWide from 'components/svgs/payWallWide';
-import Heading  from 'components/heading/heading';
+import Heading from 'components/heading/heading';
 
 // ----- Component ----- //
 

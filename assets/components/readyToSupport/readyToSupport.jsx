@@ -6,7 +6,7 @@ import React from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgChevronUp from 'components/svgs/chevronUp';
-import Heading  from 'components/heading/heading';
+import Heading from 'components/heading/heading';
 
 // ----- Props ----- //
 
