@@ -1,0 +1,33 @@
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+// ----- Shared Components ----- //
+
+@import '~components/countryGroupSwitcher/countryGroupSwitcher';
+@import '~components/selectInput/selectInput';
+@import '~components/ctaLink/ctaLink';
+@import '~components/footer/footer';
+@import '~components/headers/countrySwitcherHeader/countrySwitcherHeader';
+@import '~components/leftMarginSection/leftMarginSection';
+@import '~components/customerService/customerService';
+
+
+// ----- Page-Specific Styles ----- //
+
+#digital-subscription-checkout-page-int,
+#digital-subscription-checkout-page-uk,
+#digital-subscription-checkout-page-us,
+#digital-subscription-checkout-page-au {
+  .component-left-margin-section__content {
+    overflow-x: hidden;
+    @include mq($from: leftCol) {
+      overflow-x: visible;
+    }
+  }
+}
+
+.component-left-margin-section--grey {
+  background: gu-colour(neutral-6);
+}

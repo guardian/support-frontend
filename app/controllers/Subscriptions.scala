@@ -68,4 +68,12 @@ class Subscriptions(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def digitalCheckout(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val title = "Support the Guardian | Digital Subscription"
+    val id = "digital-subscription-checkout-page-" + countryCode
+    val js = "digitalSubscriptionCheckoutPage.js"
+    val css = "digitalSubscriptionCheckoutPageStyles.css"
+    Ok(views.html.main(title, id, js, css))
+  }
+
 }

@@ -75,6 +75,10 @@ GET  /uk/subscribe/digital                         controllers.Subscriptions.dig
 GET  /us/subscribe/digital                         controllers.Subscriptions.digital(countryCode="us")
 GET  /au/subscribe/digital                         controllers.Subscriptions.digital(countryCode="au")
 GET  /int/subscribe/digital                        controllers.Subscriptions.digital(countryCode="int")
+GET  /uk/subscribe/digital/checkout                controllers.Subscriptions.digitalCheckout(countryCode="uk")
+GET  /us/subscribe/digital/checkout                controllers.Subscriptions.digitalCheckout(countryCode="us")
+GET  /au/subscribe/digital/checkout                controllers.Subscriptions.digitalCheckout(countryCode="au")
+GET  /int/subscribe/digital/checkout               controllers.Subscriptions.digitalCheckout(countryCode="int")
 
 # ----- Authentication ----- #
 
