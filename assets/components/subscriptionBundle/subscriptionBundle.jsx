@@ -11,6 +11,7 @@ import GridImage from 'components/gridImage/gridImage';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
+import type { HeadingSize } from 'components/heading/heading';
 import type { ListItem } from 'components/featureList/featureList';
 import type { GridImg } from 'components/gridImage/gridImage';
 
@@ -26,6 +27,7 @@ type PropTypes = {
   ctaUrl: string,
   ctaAccessibilityHint: string,
   gridImage: GridImg,
+  headingSize: HeadingSize,
   ctaModifiers?: Array<?string>,
 };
 
@@ -41,6 +43,7 @@ export default function SubscriptionBundle(props: PropTypes) {
         <DoubleHeading
           heading={props.heading}
           subheading={props.subheading}
+          headingSize={props.headingSize}
         />
         <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
         <CtaLink

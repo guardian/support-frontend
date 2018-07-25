@@ -9,12 +9,15 @@ import SvgSquaresHeroTablet from 'components/svgs/squaresHeroTablet';
 import SvgSquaresHeroMobile from 'components/svgs/squaresHeroMobile';
 import Highlights from 'components/highlights/highlights';
 
+import { type HeadingSize } from 'components/heading/heading';
+
 
 // ----- Types ----- //
 
 type PropTypes = {
   highlights?: ?string[],
   headings: string[],
+  highlightsHeadingSize: HeadingSize,
 };
 
 
@@ -27,7 +30,10 @@ function SquaresIntroduction(props: PropTypes) {
       <SvgSquaresHeroTablet />
       <SvgSquaresHeroMobile />
       <div className="component-squares-introduction__content">
-        <Highlights highlights={props.highlights} />
+        <Highlights
+          highlights={props.highlights}
+          headingSize={props.highlightsHeadingSize}
+        />
         <h1 className="component-squares-introduction__heading">
           {props.headings.map(heading =>
             <span className="component-squares-introduction__heading-line">{heading}</span>)}
@@ -42,6 +48,7 @@ function SquaresIntroduction(props: PropTypes) {
 
 SquaresIntroduction.defaultProps = {
   highlights: null,
+  highlightsHeadingSize: 2,
 };
 
 

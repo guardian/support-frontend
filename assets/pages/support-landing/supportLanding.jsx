@@ -60,6 +60,7 @@ const content = (
         headings={['Help us deliver the', 'independent journalism', 'the world needs']}
         highlights={['Support The Guardian']}
         modifierClasses={['compact']}
+        highlightsHeadingSize={2}
       />
       <section id={supporterSectionId}>
         <Contribute
@@ -72,10 +73,17 @@ const content = (
             PayPalButton={PayPalContributionButtonContainer}
           />
         </Contribute>
-        <ThreeSubscriptionsContainer />
+        <ThreeSubscriptionsContainer
+          digitalHeadingSize={3}
+          paperHeadingSize={3}
+          paperDigitalHeadingSize={3}
+        />
       </section>
-      <WhySupport />
-      <ReadyToSupport ctaUrl={`#${supporterSectionId}`} />
+      <WhySupport headingSize={3} />
+      <ReadyToSupport
+        ctaUrl={`#${supporterSectionId}`}
+        headingSize={3}
+      />
       <PatronsEventsContainer />
     </Page>
   </Provider>

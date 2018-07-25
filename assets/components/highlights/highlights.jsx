@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Heading from 'components/heading/heading';
+import Heading, { type HeadingSize } from 'components/heading/heading';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 
@@ -11,6 +11,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 type PropTypes = {
   highlights: ?string[],
+  headingSize: HeadingSize,
   modifierClasses: Array<?string>,
 };
 
@@ -24,7 +25,7 @@ export default function Highlights(props: PropTypes) {
   }
 
   return (
-    <Heading size={2} className={classNameWithModifiers('component-highlights', props.modifierClasses)}>
+    <Heading size={props.headingSize} className={classNameWithModifiers('component-highlights', props.modifierClasses)}>
       {props.highlights.map(highlight => (
         <span className="component-highlights__line">
           <span className={classNameWithModifiers('component-highlights__highlight', props.modifierClasses)}>{highlight}</span>

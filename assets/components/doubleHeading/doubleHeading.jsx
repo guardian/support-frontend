@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
-import Heading from 'components/heading/heading';
+import Heading, { type HeadingSize } from 'components/heading/heading';
 
 
 // ---- Types ----- //
@@ -12,6 +12,7 @@ import Heading from 'components/heading/heading';
 type PropTypes = {
   heading: string,
   subheading?: string,
+  headingSize: HeadingSize,
   modifierClass?: string,
 };
 
@@ -23,7 +24,7 @@ export default function DoubleHeading(props: PropTypes) {
   const className = classNameWithModifiers('component-double-heading', [props.modifierClass]);
 
   return (
-    <Heading size={3} className={className}>
+    <Heading size={props.headingSize} className={className}>
       <span className="component-double-heading__heading">{ props.heading }</span>
       <span className="component-double-heading__subheading">{ props.subheading }</span>
     </Heading>

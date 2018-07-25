@@ -12,12 +12,16 @@ import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { HeadingSize } from 'components/heading/heading';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
+  digitalHeadingSize: HeadingSize,
+  paperHeadingSize: HeadingSize,
+  paperDigitalHeadingSize: HeadingSize,
 };
 
 
@@ -44,9 +48,9 @@ export default function ThreeSubscriptions(props: PropTypes) {
   return (
     <div className="component-three-subscriptions">
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
-        <DigitalBundle url={subsLinks.digital} />
-        <PaperBundle url={subsLinks.paper} />
-        <PaperDigitalBundle url={subsLinks.paperDig} />
+        <DigitalBundle url={subsLinks.digital} headingSize={props.digitalHeadingSize} />
+        <PaperBundle url={subsLinks.paper} headingSize={props.paperHeadingSize} />
+        <PaperDigitalBundle url={subsLinks.paperDig} headingSize={props.paperDigitalHeadingSize} />
       </PageSection>
     </div>
   );
@@ -56,7 +60,7 @@ export default function ThreeSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function DigitalBundle(props: { url: string }) {
+function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
@@ -73,12 +77,13 @@ function DigitalBundle(props: { url: string }) {
         ...gridImageProperties,
       }}
       ctaModifiers={['digital', 'border']}
+      headingSize={props.headingSize}
     />
   );
 
 }
 
-function PaperBundle(props: { url: string }) {
+function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
@@ -95,12 +100,13 @@ function PaperBundle(props: { url: string }) {
         ...gridImageProperties,
       }}
       ctaModifiers={['paper', 'border']}
+      headingSize={props.headingSize}
     />
   );
 
 }
 
-function PaperDigitalBundle(props: { url: string }) {
+function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
@@ -117,6 +123,7 @@ function PaperDigitalBundle(props: { url: string }) {
         ...gridImageProperties,
       }}
       ctaModifiers={['paper-digital', 'border']}
+      headingSize={props.headingSize}
     />
   );
 
