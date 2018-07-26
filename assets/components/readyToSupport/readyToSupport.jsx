@@ -6,12 +6,13 @@ import React from 'react';
 
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgChevronUp from 'components/svgs/chevronUp';
-
+import Heading, { type HeadingSize } from 'components/heading/heading';
 
 // ----- Props ----- //
 
 type PropTypes = {
   ctaUrl: string,
+  headingSize: HeadingSize,
 };
 
 
@@ -22,10 +23,10 @@ export default function ReadyToSupport(props: PropTypes) {
   return (
     <section className="component-ready-to-support">
       <div className="component-ready-to-support__content">
-        <h1 className="component-ready-to-support__heading">
+        <Heading size={props.headingSize} className="component-ready-to-support__heading">
           <span className="component-ready-to-support__heading-line">Ready to support</span>
           <span className="component-ready-to-support__heading-line">The&nbsp;Guardian?</span>
-        </h1>
+        </Heading>
         <CtaLink
           text="See supporter options"
           url={props.ctaUrl}
