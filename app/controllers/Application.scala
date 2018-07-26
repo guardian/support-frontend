@@ -102,4 +102,9 @@ class Application(
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
+
+  // Remove trailing slashes so that /uk/ redirects to /uk
+  def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
+    MovedPermanently("/" + path)
+  }
 }
