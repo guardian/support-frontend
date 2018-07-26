@@ -82,7 +82,7 @@ const content = (
       <WhySupport headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
-        headingSize={3}
+        headingSize={2}
       />
       <PatronsEventsContainer />
     </Page>
