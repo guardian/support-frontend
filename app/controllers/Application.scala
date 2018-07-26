@@ -105,6 +105,7 @@ class Application(
 
   // Remove trailing slashes so that /uk/ redirects to /uk
   def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
-    MovedPermanently("/" + path)
+    request =>
+      Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 }
