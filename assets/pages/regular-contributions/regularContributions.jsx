@@ -5,6 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';
+import Loadable from 'react-loadable';
 import { BrowserRouter } from 'react-router-dom';
 
 import * as user from 'helpers/user/user';
@@ -17,8 +18,8 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 
 import reducer from './regularContributionsReducer';
-import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
-import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+
+
 import FormFields from './components/formFields';
 
 
@@ -34,6 +35,21 @@ const store = pageInit(reducer(
 
 user.init(store.dispatch);
 
+const Loading = () => <div>Loading...</div>;
+
+const contributionsCheckoutContainer = Loadable({
+  loader: () => import('./components/contributionsCheckoutContainer'),
+  render(loaded) {
+    const ContributionsCheckoutContainer = loaded.default;
+    return <ContributionsCheckoutContainer contributionType={contributionType} form={<FormFields />} />;
+  },
+  loading: Loading,
+});
+
+const contributionsThankYouContainer = Loadable({
+  loader: () => import('./components/contributionsThankYouPageContainer'),
+  loading: Loading,
+});
 
 // ----- Render ----- //
 
@@ -41,26 +57,9 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route
-          exact
-          path={routes.recurringContribCheckout}
-          render={() => (
-            <ContributionsCheckoutContainer
-              contributionType={contributionType}
-              form={<FormFields />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={routes.recurringContribThankyou}
-          render={() => <ContributionsThankYouPageContainer />}
-        />
-        <Route
-          exact
-          path={routes.recurringContribPending}
-          render={() => <ContributionsThankYouPageContainer />}
-        />
+        <Route exact path={routes.recurringContribCheckout} component={contributionsCheckoutContainer} />
+        <Route exact path={routes.recurringContribThankyou} component={contributionsThankYouContainer} />
+        <Route exact path={routes.recurringContribPending} component={contributionsThankYouContainer} />
       </div>
     </Provider>
   </BrowserRouter>

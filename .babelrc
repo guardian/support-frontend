@@ -23,6 +23,7 @@
   "plugins": [
     "babel-plugin-transform-exponentiation-operator",
     "transform-class-properties",
+    "syntax-dynamic-import",
     ["transform-object-rest-spread", { "useBuiltIns": true }],
   ],
   "env": {
