@@ -13,7 +13,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent';
 
 type PaymentRequestAPIStatus =
   'PaymentRequestAPINotAvailable' |
@@ -24,6 +24,12 @@ type PaymentRequestAPIStatus =
   'PromiseNotSupported' |
   'PromiseRejected' |
   'PaymentApiPromiseRejected';
+
+type GaEventData = {
+  category: string,
+  action: string,
+  label: ?string,
+}
 
 // ----- Functions ----- //
 
@@ -105,7 +111,11 @@ function getContributionValue() {
   return storage.getSession('contributionValue') || 0;
 }
 
-function sendData(event: EventType, participations: Participations, paymentRequestApiStatus: PaymentRequestAPIStatus) {
+function sendData(
+  event: EventType,
+  participations: Participations,
+  paymentRequestApiStatus: PaymentRequestAPIStatus,
+) {
   window.googleTagManagerDataLayer.push({
     event,
     // orderId anonymously identifies this user in this session.
@@ -151,9 +161,19 @@ function successfulConversion(participations: Participations) {
   pushToDataLayer('SuccessfulConversion', participations);
 }
 
+function gaEvent(gaEventData: GaEventData) {
+  window.googleTagManagerDataLayer.push({
+    event: 'GAEvent',
+    eventCategory: gaEventData.category,
+    eventAction: gaEventData.action,
+    eventLabel: gaEventData.label,
+  });
+}
+
 // ----- Exports ---//
 
 export {
   init,
+  gaEvent,
   successfulConversion,
 };
