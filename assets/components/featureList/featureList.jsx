@@ -6,8 +6,6 @@ import React, { type Node } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
-import Heading, { type HeadingRange } from 'components/heading/heading';
-
 
 // ----- Types ----- //
 
@@ -24,7 +22,6 @@ export type ListItem =
 type PropTypes = {
   modifierClass?: string,
   listItems: ListItem[],
-  headingSize: HeadingRange,
 };
 
 
@@ -34,7 +31,7 @@ function FeatureList(props: PropTypes) {
 
   const items = props.listItems.map((item: ListItem) => (
     <li className="component-feature-list__item">
-      <ItemHeading heading={item.heading ? item.heading : null} size={props.headingSize} />
+      <ItemHeading heading={item.heading ? item.heading : null} />
       <ItemText text={item.text ? item.text : null} />
     </li>
   ));
@@ -50,16 +47,13 @@ function FeatureList(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function ItemHeading(props: { heading: ?Node, size: HeadingRange }) {
+function ItemHeading(props: { heading: ?Node }) {
 
   if (props.heading) {
     return (
-      <Heading
-        className="component-feature-list__heading"
-        size={props.size}
-      >
-        {props.heading}
-      </Heading>
+      <span className="component-feature-list__heading">
+        <strong>{props.heading}</strong>
+      </span>
     );
   }
 
