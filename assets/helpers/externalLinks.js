@@ -15,7 +15,7 @@ import { getPromoCode } from './flashSale';
 
 // ----- Types ----- //
 
-export type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type SubsProduct = 'paper' | 'digital' | 'paperDig' | 'weekly';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
@@ -127,11 +127,13 @@ function buildSubsUrls(
   const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
   const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
+  const weekly = `${subsUrl}/weekly/GB?${params.toString()}`;
 
   return {
     digital,
     paper,
     paperDig,
+    weekly,
   };
 
 }

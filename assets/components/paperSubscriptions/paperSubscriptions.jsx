@@ -46,7 +46,7 @@ export default function PaperSubscriptions(props: PropTypes) {
       <PageSection heading="Print Subscriptions" modifierClass="paper-subscriptions">
         <PaperBundle url={subsLinks.paper} />
         <PaperDigitalBundle url={subsLinks.paperDig} />
-        <WeeklyBundle url="/" />
+        <WeeklyBundle url={subsLinks.weekly} />
       </PageSection>
     </div>
   );
