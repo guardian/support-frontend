@@ -4,14 +4,19 @@
 
 import React from 'react';
 
-import { getSubsLinks } from 'helpers/externalLinks';
+import {
+  getSubsLinks,
+  iOSAppUrl,
+  androidAppUrl,
+  dailyEditionUrl,
+} from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getPrice } from 'helpers/flashSale';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { addQueryParamsToURL } from 'helpers/url';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -28,6 +33,8 @@ const gridImageProperties = {
   sizes: '(max-width: 660px) 165px, (max-width: 740px) 174px, (max-width: 980px) 196px, (max-width: 1140px) 205px, 165px',
   imgType: 'png',
 };
+
+const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page&utm_campaign=split_subscriptions_test';
 
 
 // ----- Component ----- //
@@ -47,8 +54,11 @@ export default function DigitalSubscriptions(props: PropTypes) {
         heading="Digital Subscriptions"
         modifierClass="digital-subscriptions"
       >
-        <PremiumTier iosUrl="/" androidUrl="/" />
-        <DailyEdition url="/" />
+        <PremiumTier
+          iosUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
+          androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
+        />
+        <DailyEdition url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })} />
         <DigitalBundle url={subsLinks.digital} />
       </PageSection>
     </div>
