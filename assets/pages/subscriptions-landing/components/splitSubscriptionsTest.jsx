@@ -26,11 +26,13 @@ export default function SplitSubscriptionsTest(props: PropTypes) {
 
   const sections = variant ?
     [<DigitalSubscriptionsContainer />, <PaperSubscriptionsContainer />] :
-    <ThreeSubscriptionsContainer
-      digitalHeadingSize={3}
-      paperHeadingSize={3}
-      paperDigitalHeadingSize={3}
-    />;
+    (
+      <ThreeSubscriptionsContainer
+        digitalHeadingSize={3}
+        paperHeadingSize={3}
+        paperDigitalHeadingSize={3}
+      />
+    );
 
   return (
     <section id={props.sectionId}>
