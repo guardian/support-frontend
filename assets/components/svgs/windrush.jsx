@@ -3,11 +3,11 @@
 import React from 'react';
 import { gridUrl } from 'helpers/theGrid';
 
-export default function AmberRudd() {
-  const imageUrl = gridUrl('amberRudd', 370, 'png');
+export default function Windrush() {
+  const imageUrl = gridUrl('windrush', 370, 'png');
   return (
     <svg
-      className="svg-amber-rudd"
+      className="svg-windrush"
       height="412"
       width="404"
       xmlns="http://www.w3.org/2000/svg"
