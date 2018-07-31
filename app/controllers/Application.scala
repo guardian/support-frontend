@@ -84,11 +84,11 @@ class Application(
     ))
   }
 
-  def contributionsLanding(id: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = id,
+      mainId = s"contributions-landing-page-$countryCode",
       mainJsBundle = "contributionsLandingPage.js",
       mainStyleBundle = "contributionsLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
