@@ -106,7 +106,7 @@ function PremiumTier(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The ad free, premium app, designed especially for your smartphone',
+          text: 'The ad free, premium app, designed especially for your smartphone and tablet',
         },
       ]}
       gridImage={{
@@ -149,7 +149,7 @@ function DailyEdition(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The iPad Edition of The Guardian and The Observer',
+          text: 'Your complete daily UK newspaper, designed for iPad and available offline',
         },
       ]}
       gridImage={{
@@ -185,7 +185,7 @@ function DigitalBundle(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'Digital bundle, including the premium app and the iPad daily edition',
+          text: 'The premium app and the daily edition in one pack',
         },
       ]}
       gridImage={{

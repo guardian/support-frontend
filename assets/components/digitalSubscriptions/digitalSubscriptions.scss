@@ -72,9 +72,15 @@
   }
 
   .component-feature-list {
+    padding-left: 0;
+
     @include mq($from: leftCol) {
       flex: 1 0 auto;
     }
+  }
+
+  .component-feature-list__item {
+    margin-left: 0;
   }
 
   .component-double-heading {
@@ -109,18 +115,6 @@
   .component-feature-list {
     font-size: 16px;
     line-height: 1.25;
-  }
-
-  .component-feature-list--premium-tier {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#0084c6" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
-  .component-feature-list--daily-edition {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#bb3b80" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
-  .component-feature-list--digital {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#ff4e36" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
   }
 
   .component-cta-link {

@@ -21,7 +21,7 @@ export const imageCatalogue: {
   protestorsWide: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720',
   protestorsNarrow: 'd1a7088f8f2a367b0321528f081777c9b5618412/0_0_3578_2013',
   premiumTierCircle: '3e3b59228c3467b01dd09b9f79de28c586fe0ea6/0_0_825_825',
-  dailyEditionCircle: '51d7a69d6f62b3e9fcbe37e7ffe8ab17bcfee43f/0_0_825_825',
+  dailyEditionCircle: '64ba1a800e4c2975054b33ba07c4fe3c64d4b5f4/0_0_825_825',
   digitalCircle: '639c3abc4c09281aedb515d684ac4053ef38a1df/0_0_825_825',
   digitalCircleAlt: '0b5ded2325275e25f5b38198766c57363bddfa21/0_0_825_825',
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
