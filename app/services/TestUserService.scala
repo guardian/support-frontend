@@ -19,15 +19,13 @@ class TestUserService(secret: String) {
     recency = ValidityPeriod
   )
 
-  def isTestUserOptionalAuth[A](request: CustomActionBuilders.OptionalAuthRequest[_]): Boolean = {
+  def isTestUser[A](request: CustomActionBuilders.OptionalAuthRequest[_]): Boolean = {
     val userName = request.user.map(user => user.user.displayName).getOrElse(request.cookies.get("_test_username").map(_.value))
     isTestUser(userName)
   }
 
   def isTestUser(displayName: Option[String]): Boolean =
     displayName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
-
-  def isTestUser(implicit request: AuthRequest[_]): Boolean = isTestUser(request.user.user.displayName)
 
   def isTestUser(user: AuthenticatedIdUser): Boolean = isTestUser(user.displayName)
 }

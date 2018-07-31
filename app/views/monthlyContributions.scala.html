@@ -23,19 +23,14 @@
         window.guardian.uatMode = @uatMode;
         @user.map{ x =>
             window.guardian.user = {
-                id: "@x.id"
-            ,
-            email: "@x.primaryEmailAddress"
-            ,
+                id: "@x.id",
+                email: "@x.primaryEmailAddress",
             @x.publicFields.displayName.map { displayName =>
-                displayName: "@displayName"
-                ,
+                displayName: "@displayName",
             }
             @for(fields <- x.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
-                firstName: "@firstName"
-                ,
-                lastName: "@lastName"
-                ,
+                firstName: "@firstName",
+                lastName: "@lastName",
             }
         };
     }

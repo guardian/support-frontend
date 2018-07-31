@@ -1,9 +1,10 @@
 package controllers
 
 import actions.CustomActionBuilders
+import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
 import assets.AssetsResolver
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, IdMinimalUser, IdUser}
+import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
 import io.circe.syntax._
@@ -51,44 +52,39 @@ class RegularContributions(
       payPalConfig = payPalConfigProvider.get(uatMode)
     ))
 
+  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: WrappedRequest[AnyContent]): Future[Result] =
+    identityService.getUser(user).semiflatMap { fullUser =>
+      isMonthlyContributor(user.credentials) map {
+        case Some(true) =>
+          SafeLogger.info(s"Determined that ${user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
+          Redirect("/contribute/recurring/existing")
+        case Some(false) | None =>
+          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
+          monthlyContributionsPage(Some(fullUser), uatMode)
+      }
+    }.valueOr { error =>
+      SafeLogger.error(scrub"Failed to display recurring contributions form for ${user.id} due to error from identityService: $error")
+      InternalServerError
+    }
+
+  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent]): Future[Result] = {
+    val uatMode = testUsers.isTestUser(request)
+    Future.successful(
+      monthlyContributionsPage(None, uatMode)
+    )
+  }
+
   def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      identityService.getUser(request.user).semiflatMap { fullUser =>
-        isMonthlyContributor(request.user.credentials) map {
-          case Some(true) =>
-            SafeLogger.info(s"Determined that ${request.user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
-            Redirect("/contribute/recurring/existing")
-          case Some(false) | None =>
-            val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-            monthlyContributionsPage(Some(fullUser), uatMode)
-        }
-      } fold (
-        { error =>
-          SafeLogger.error(scrub"Failed to display recurring contributions form for ${request.user.id} due to error from identityService: $error")
-          InternalServerError
-        },
-        identity
-      )
+      displayFormWithUser(request.user)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       request.user.fold {
-        val uatMode = testUsers.isTestUserOptionalAuth(request)
-        Future(
-          monthlyContributionsPage(None, uatMode)
-        )
-      } { fUser =>
-        identityService.getUser(fUser).semiflatMap { fullUser =>
-          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-          Future(monthlyContributionsPage(Some(fullUser), uatMode))
-        } fold (
-          { error =>
-            SafeLogger.error(scrub"Failed to display recurring contributions form for ${fUser.id} due to error from identityService: $error")
-            InternalServerError
-          },
-          identity
-        )
+        displayFormWithoutUser()
+      } {
+        user => displayFormWithUser(user)
       }
     }
 
@@ -105,40 +101,44 @@ class RegularContributions(
   def create: Action[CreateRegularContributorRequest] = maybeAuthenticatedAction().async(circe.json[CreateRegularContributorRequest]) {
     implicit request =>
       request.user.fold {
-        val result = for {
-          userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
-          user <- identityService.getUser(IdMinimalUser(userId, None))
-          response <- {
-            client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
-          }
-        } yield response
-
-        result.fold(
-          { error =>
-            SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
-            InternalServerError
-          },
-          response => Accepted(response.asJson)
-        )
-
+        createContributorAndUser()
       } { fullUser =>
-        {
-          SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
-
-          val result = for {
-            user <- identityService.getUser(fullUser)
-            response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
-          } yield response
-
-          result.fold(
-            { error =>
-              SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${fullUser.id}, due to $error")
-              InternalServerError
-            },
-            response => Accepted(response.asJson)
-          )
-        }
+        createContributorWithUser(fullUser)
       }
+  }
+
+  private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
+    SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
+
+    val result = for {
+      user <- identityService.getUser(fullUser)
+      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+    } yield response
+
+    result.fold(
+      { error =>
+        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${fullUser.id}, due to $error")
+        InternalServerError
+      },
+      response => Accepted(response.asJson)
+    )
+
+  }
+
+  private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
+    val result = for {
+      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
+      user <- identityService.getUser(IdMinimalUser(userId, None))
+      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+    } yield response
+
+    result.fold(
+      { error =>
+        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
+        InternalServerError
+      },
+      response => Accepted(response.asJson)
+    )
   }
 
   private def contributor(user: IdUser, request: CreateRegularContributorRequest) = {

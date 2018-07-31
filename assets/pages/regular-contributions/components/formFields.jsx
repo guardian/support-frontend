@@ -22,7 +22,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import EmailFormField from './emailFormField';
+import EmailFormFieldContainer from './emailFormFieldContainer';
 
 // ----- Types ----- //
 
@@ -129,7 +129,7 @@ function NameForm(props: PropTypes) {
 
   return (
     <form className="regular-contrib__name-form">
-      <EmailFormField />
+      <EmailFormFieldContainer />
       <TextInput
         id="first-name"
         labelText="First name"

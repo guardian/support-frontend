@@ -29,24 +29,21 @@ class PayPalRegular(
   implicit val assetsResolver = assets
   implicit val sw = switches
 
-
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
-    withPaypalServiceForUser(testUsers.isTestUserOptionalAuth(request)) { service =>
+    withPaypalServiceForUser(testUsers.isTestUser(request)) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
     }.map { response =>
-      {
-        Ok(Token(response).asJson)
-      }
+      Ok(Token(response).asJson)
     }
   }
 
   def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForUser(testUsers.isTestUserOptionalAuth(request)) { service =>
+    withPaypalServiceForUser(testUsers.isTestUser(request)) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
   }

@@ -175,12 +175,6 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def getUserMaybeGuest(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
-    get(s"user/${user.id}", getHeaders(req), trackingParameters(req)) { resp =>
-      (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
-    }
-  }
-
   def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
     get(s"user", getHeaders(req), List("emailAddress" -> email)) { resp =>
       resp.json.validate[UserResponse].asEither.map(_.user.id).leftMap(_.mkString(","))
@@ -193,8 +187,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       wsClient.url(s"$apiUrl/guest")
         .withHttpHeaders(postHeaders(req): _*)
         .withBody(body)
-        .withRequestTimeout(4.second)
-        .withBody(body)
+        .withRequestTimeout(1.second)
         .withMethod("POST")
     ) { resp =>
         resp.json.validate[GuestRegistrationResponse].asEither.map(_.guestRegistrationRequest.userId).leftMap(_.mkString(","))
