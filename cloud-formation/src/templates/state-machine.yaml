@@ -26,13 +26,11 @@ States:
   ParallelTasks:
     Type: Parallel
     Branches:
-    - StartAt: ContributionCompleted
+    - StartAt: CheckoutSuccess
       States:
-        ContributionCompleted:
-          Type: Task
-          Resource: "${ContributionCompletedLambda.Arn}"
+        CheckoutSuccess: #Do not rename this step as it is used by support-frontend's polling logic.
+          Type: Pass
           End: True
-          {{> retry}}
     - StartAt: SendThankYouEmail
       States:
         SendThankYouEmail:
