@@ -28,16 +28,120 @@ import switchboard.{PaymentMethodsSwitch, Switches}
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
+  trait DisplayForm {
+    val credentials = AccessCredentials.Cookies("", None)
+
+    val authenticatedIdUser = AuthenticatedIdUser(credentials, IdMinimalUser("123", Some("test-user")))
+
+    private val testUsers = new TestUserService("test") {
+      override def isTestUser(displayName: Option[String]): Boolean = displayName.exists(_.startsWith("test"))
+    }
+
+    private val assetResolver = new AssetsResolver("", "", mock[Environment]) {
+      override def apply(path: String): String = path
+    }
+
+    private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
+
+    private val loggedInActionRefiner = new CustomActionBuilders(
+      authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+      idWebAppUrl = "",
+      supportUrl = "",
+      testUsers = testUsers,
+      cc = stubControllerComponents(),
+      addToken = csrfAddToken,
+      checkToken = csrfCheck,
+      csrfConfig = csrfConfig
+    )
+
+    val loggedOutActionRefiner = new CustomActionBuilders(
+      authenticatedIdUserProvider = _ => None,
+      idWebAppUrl = "https://identity-url.local",
+      supportUrl = "",
+      testUsers = testUsers,
+      cc = stubControllerComponents(),
+      addToken = csrfAddToken,
+      checkToken = csrfCheck,
+      csrfConfig = csrfConfig
+    )
+
+    def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
+      val membersDataService = mock[MembersDataService]
+      when(
+        membersDataService.userAttributes(data._1)
+      ).thenReturn(EitherT.fromEither[Future](data._2))
+      membersDataService
+    }
+
+    def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
+      val m = mock[HttpIdentityService]
+      when(
+        m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
+      ).thenReturn(EitherT.fromEither[Future](data._2))
+      m
+    }
+
+    def fakeRegularContributions(
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mock[MembersDataService]
+    ): RegularContributions = {
+      val stripeConfigProvider = mock[StripeConfigProvider]
+      val payPalConfigProvider = mock[PayPalConfigProvider]
+      when(stripeConfigProvider.get(any[Boolean]))
+        .thenReturn(
+          StripeConfig(StripeAccountConfig("test-key", "test-key"), StripeAccountConfig("test-key", "test-key"))
+        )
+      when(payPalConfigProvider.get(any[Boolean])).thenReturn(PayPalConfig(
+        payPalEnvironment = "",
+        NVPVersion = "",
+        url = "",
+        user = "",
+        password = "",
+        signature = ""
+      ))
+
+      new RegularContributions(
+        mock[RegularContributionsClient],
+        assetResolver,
+        actionRefiner,
+        membersDataService,
+        identityService,
+        testUsers,
+        stripeConfigProvider,
+        payPalConfigProvider,
+        stubControllerComponents(),
+        Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), On)
+      )
+    }
+
+    def fakeRequestAuthenticatedWith(
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mock[MembersDataService]
+    ): Future[Result] = {
+      fakeRegularContributions(actionRefiner, identityService, membersDataService).displayFormAuthenticated()(FakeRequest())
+    }
+
+    def fakeRequestMaybeAuthenticatedWith(
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mock[MembersDataService]
+    ): Future[Result] = {
+      fakeRegularContributions(actionRefiner, identityService, membersDataService).displayFormMaybeAuthenticated()(FakeRequest())
+    }
+  }
+
   "GET /contribute/recurring" should {
 
     "redirect unauthenticated user to signup page" in new DisplayForm {
-      val result = fakeRequestWith(actionRefiner = loggedOutActionRefiner)
+      val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
       status(result) mustBe 303
       header("Location", result).value must startWith("https://identity-url.local")
     }
 
     "return internal server error if identity does not return user info" in new DisplayForm {
-      val result = fakeRequestWith(
+      val result = fakeRequestAuthenticatedWith(
         identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
       )
       status(result) mustBe 500
@@ -45,7 +149,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
     "redirect to existing-contributor page if user is already a contributor" in new DisplayForm {
       val attributes = UserAttributes("123", ContentAccess(recurringContributor = true))
-      val result = fakeRequestWith(
+      val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
       status(result) mustBe 303
@@ -53,7 +157,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
     }
 
     "return form if user is not in members api" in new DisplayForm {
-      val result = fakeRequestWith(
+      val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(credentials -> (UserNotFound: MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
@@ -61,7 +165,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
     }
 
     "return form if members api fails" in new DisplayForm {
-      val result = fakeRequestWith(
+      val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(credentials -> (UnexpectedResponseStatus(100): MembersDataServiceError).asLeft)
       )
       status(result) mustBe 200
@@ -70,99 +174,64 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
     "return form if user is not a recurring contributor" in new DisplayForm {
       val attributes = UserAttributes("123", ContentAccess(recurringContributor = false))
-      val result = fakeRequestWith(
+      val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
       status(result) mustBe 200
       contentAsString(result) must include("regularContributionsPage.js")
     }
+  }
 
-    trait DisplayForm {
-      val credentials = AccessCredentials.Cookies("", None)
+  "GET /contribute/recurring-guest when signed in" should {
 
-      val authenticatedIdUser = AuthenticatedIdUser(credentials, IdMinimalUser("123", Some("test-user")))
-
-      private val testUsers = new TestUserService("test") {
-        override def isTestUser(displayName: Option[String]): Boolean = displayName.exists(_.startsWith("test"))
-      }
-
-      private val assetResolver = new AssetsResolver("", "", mock[Environment]) {
-        override def apply(path: String): String = path
-      }
-
-      private val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
-
-      private val loggedInActionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
-        idWebAppUrl = "",
-        supportUrl = "",
-        testUsers = testUsers,
-        cc = stubControllerComponents(),
-        addToken = csrfAddToken,
-        checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+    "return internal server error if identity does not return user info" in new DisplayForm {
+      val result = fakeRequestMaybeAuthenticatedWith(
+        identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
       )
+      status(result) mustBe 500
+    }
 
-      val loggedOutActionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => None,
-        idWebAppUrl = "https://identity-url.local",
-        supportUrl = "",
-        testUsers = testUsers,
-        cc = stubControllerComponents(),
-        addToken = csrfAddToken,
-        checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+    "redirect to existing-contributor page if user is already a contributor" in new DisplayForm {
+      val attributes = UserAttributes("123", ContentAccess(recurringContributor = true))
+      val result = fakeRequestMaybeAuthenticatedWith(
+        membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
       )
+      status(result) mustBe 303
+      header("Location", result) mustBe Some("/contribute/recurring/existing")
+    }
 
-      def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {
-        val membersDataService = mock[MembersDataService]
-        when(
-          membersDataService.userAttributes(data._1)
-        ).thenReturn(EitherT.fromEither[Future](data._2))
-        membersDataService
-      }
+    "return form if user is not in members api" in new DisplayForm {
+      val result = fakeRequestMaybeAuthenticatedWith(
+        membersDataService = mockedMembersDataService(credentials -> (UserNotFound: MembersDataServiceError).asLeft)
+      )
+      status(result) mustBe 200
+      contentAsString(result) must include("regularContributionsPage.js")
+    }
 
-      def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
-        val m = mock[HttpIdentityService]
-        when(
-          m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
-        ).thenReturn(EitherT.fromEither[Future](data._2))
-        m
-      }
+    "return form if members api fails" in new DisplayForm {
+      val result = fakeRequestMaybeAuthenticatedWith(
+        membersDataService = mockedMembersDataService(credentials -> (UnexpectedResponseStatus(100): MembersDataServiceError).asLeft)
+      )
+      status(result) mustBe 200
+      contentAsString(result) must include("regularContributionsPage.js")
+    }
 
-      def fakeRequestWith(
-        actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-        identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-        membersDataService: MembersDataService = mock[MembersDataService]
-      ): Future[Result] = {
-        val stripeConfigProvider = mock[StripeConfigProvider]
-        val payPalConfigProvider = mock[PayPalConfigProvider]
-        when(stripeConfigProvider.get(any[Boolean]))
-          .thenReturn(
-            StripeConfig(StripeAccountConfig("test-key", "test-key"), StripeAccountConfig("test-key", "test-key"))
-          )
-        when(payPalConfigProvider.get(any[Boolean])).thenReturn(PayPalConfig(
-          payPalEnvironment = "",
-          NVPVersion = "",
-          url = "",
-          user = "",
-          password = "",
-          signature = ""
-        ))
+    "return form if user is not a recurring contributor" in new DisplayForm {
+      val attributes = UserAttributes("123", ContentAccess(recurringContributor = false))
+      val result = fakeRequestMaybeAuthenticatedWith(
+        membersDataService = mockedMembersDataService(credentials -> attributes.asRight)
+      )
+      status(result) mustBe 200
+      contentAsString(result) must include("regularContributionsPage.js")
+    }
+  }
 
-        new RegularContributions(
-          mock[RegularContributionsClient],
-          assetResolver,
-          actionRefiner,
-          membersDataService,
-          identityService,
-          testUsers,
-          stripeConfigProvider,
-          payPalConfigProvider,
-          stubControllerComponents(),
-          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), On)
-        ).displayFormAuthenticated()(FakeRequest())
-      }
+  "GET /contribute/recurring-guest when not signed in" should {
+
+    "return form is user is not signed in" in new DisplayForm {
+      val result = fakeRequestMaybeAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
+      status(result) mustBe 200
+      contentAsString(result) must include("regularContributionsPage.js")
     }
   }
 }
