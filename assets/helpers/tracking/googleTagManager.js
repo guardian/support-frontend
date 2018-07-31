@@ -3,7 +3,7 @@
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency, fromString as currencyFromString } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
@@ -47,7 +47,7 @@ function getCurrency(): IsoCurrency {
   if (currency) {
     storage.setSession('currency', currency);
   }
-  return storage.getSession('currency') || 'GBP';
+  return currencyFromString(storage.getSession('currency') || 'GBP') || 'GBP';
 }
 
 function getContributionValue(): number {
@@ -55,7 +55,7 @@ function getContributionValue(): number {
   if (param) {
     storage.setSession('contributionValue', String(parseFloat(param)));
   }
-  return storage.getSession('contributionValue') || 0;
+  return parseFloat(storage.getSession('contributionValue')) || 0;
 }
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
