@@ -17,12 +17,14 @@ import { addQueryParamsToURL } from 'helpers/url';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
+import { type HeadingSize } from 'components/heading/heading';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
+  headingSize: HeadingSize,
 };
 
 
@@ -57,9 +59,16 @@ export default function DigitalSubscriptions(props: PropTypes) {
         <PremiumTier
           iosUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
+          headingSize={props.headingSize}
         />
-        <DailyEdition url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })} />
-        <DigitalBundle url={subsLinks.digital} />
+        <DailyEdition
+          url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })}
+          headingSize={props.headingSize}
+        />
+        <DigitalBundle
+          url={subsLinks.digital}
+          headingSize={props.headingSize}
+        />
       </PageSection>
     </div>
   );
@@ -69,13 +78,18 @@ export default function DigitalSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
+function PremiumTier(props: {
+    iosUrl: string,
+    androidUrl: string,
+    headingSize: HeadingSize,
+}) {
 
   return (
     <SubscriptionBundle
       modifierClass="premium-tier"
       heading="Premium App"
       subheading="£5.99/month"
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'The ad free, premium app, designed especially for your smartphone',
@@ -105,13 +119,14 @@ function PremiumTier(props: { iosUrl: string, androidUrl: string }) {
 
 }
 
-function DailyEdition(props: { url: string }) {
+function DailyEdition(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
       modifierClass="daily-edition"
       heading="Daily Edition"
       subheading="from £6.99/month"
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'The iPad Edition of The Guardian and The Observer',
@@ -135,13 +150,14 @@ function DailyEdition(props: { url: string }) {
 
 }
 
-function DigitalBundle(props: { url: string }) {
+function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
       subheading={`£${getPrice('digital', '11.99')}/month`}
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'Digital bundle, including the premium app and the iPad daily edition',

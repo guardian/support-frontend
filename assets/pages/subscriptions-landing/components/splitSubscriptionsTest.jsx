@@ -18,25 +18,35 @@ type PropTypes = {
 };
 
 
+// ----- Functions ----- //
+
+function getSections() {
+
+  if (getQueryParameter('splitSubscriptions') === 'true') {
+    return [
+      <DigitalSubscriptionsContainer headingSize={3} />,
+      <PaperSubscriptionsContainer headingSize={3} />,
+    ];
+  }
+
+  return (
+    <ThreeSubscriptionsContainer
+      digitalHeadingSize={3}
+      paperHeadingSize={3}
+      paperDigitalHeadingSize={3}
+    />
+  );
+
+}
+
+
 // ----- Component ----- //
 
 export default function SplitSubscriptionsTest(props: PropTypes) {
 
-  const variant = getQueryParameter('splitSubscriptions') === 'true';
-
-  const sections = variant ?
-    [<DigitalSubscriptionsContainer />, <PaperSubscriptionsContainer />] :
-    (
-      <ThreeSubscriptionsContainer
-        digitalHeadingSize={3}
-        paperHeadingSize={3}
-        paperDigitalHeadingSize={3}
-      />
-    );
-
   return (
     <section id={props.sectionId}>
-      {sections}
+      {getSections()}
     </section>
   );
 

@@ -7,17 +7,18 @@ import React from 'react';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getPrice } from 'helpers/flashSale';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type HeadingSize } from 'components/heading/heading';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
+  headingSize: HeadingSize,
 };
 
 
@@ -44,9 +45,9 @@ export default function PaperSubscriptions(props: PropTypes) {
   return (
     <div className="component-paper-subscriptions">
       <PageSection heading="Print Subscriptions" modifierClass="paper-subscriptions">
-        <PaperBundle url={subsLinks.paper} />
-        <PaperDigitalBundle url={subsLinks.paperDig} />
-        <WeeklyBundle url={subsLinks.weekly} />
+        <PaperBundle url={subsLinks.paper} headingSize={props.headingSize} />
+        <PaperDigitalBundle url={subsLinks.paperDig} headingSize={props.headingSize} />
+        <WeeklyBundle url={subsLinks.weekly} headingSize={props.headingSize} />
       </PageSection>
     </div>
   );
@@ -56,13 +57,14 @@ export default function PaperSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function PaperBundle(props: { url: string }) {
+function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
       subheading={`from £${getPrice('paper', '10.36')}/month`}
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'The Guardian and The Observer\'s newspaper subscription options',
@@ -86,13 +88,14 @@ function PaperBundle(props: { url: string }) {
 
 }
 
-function PaperDigitalBundle(props: { url: string }) {
+function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+Digital"
       subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'All the benefits of a paper subscription, plus access to the digital pack',
@@ -116,13 +119,14 @@ function PaperDigitalBundle(props: { url: string }) {
 
 }
 
-function WeeklyBundle(props: { url: string }) {
+function WeeklyBundle(props: { url: string, headingSize: HeadingSize }) {
 
   return (
     <SubscriptionBundle
       modifierClass="weekly"
       heading="Guardian Weekly"
       subheading="£30/quarter"
+      headingSize={props.headingSize}
       benefits={[
         {
           text: 'A weekly global newspaper delivered to your door',
