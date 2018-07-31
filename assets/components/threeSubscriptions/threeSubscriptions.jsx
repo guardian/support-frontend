@@ -17,11 +17,18 @@ import type { HeadingSize } from 'components/heading/heading';
 
 // ----- Types ----- //
 
+type ClickEvent = () => void;
+
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   digitalHeadingSize: HeadingSize,
   paperHeadingSize: HeadingSize,
   paperDigitalHeadingSize: HeadingSize,
+  clickEvents: ?{
+    digital: ClickEvent,
+    paper: ClickEvent,
+    paperDigital: ClickEvent,
+  },
 };
 
 
@@ -36,7 +43,7 @@ const gridImageProperties = {
 
 // ----- Component ----- //
 
-export default function ThreeSubscriptions(props: PropTypes) {
+function ThreeSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
     props.referrerAcquisitionData.campaignCode,
@@ -48,9 +55,21 @@ export default function ThreeSubscriptions(props: PropTypes) {
   return (
     <div className="component-three-subscriptions">
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
-        <DigitalBundle url={subsLinks.digital} headingSize={props.digitalHeadingSize} />
-        <PaperBundle url={subsLinks.paper} headingSize={props.paperHeadingSize} />
-        <PaperDigitalBundle url={subsLinks.paperDig} headingSize={props.paperDigitalHeadingSize} />
+        <DigitalBundle
+          url={subsLinks.digital}
+          headingSize={props.digitalHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.digital : null}
+        />
+        <PaperBundle
+          url={subsLinks.paper}
+          headingSize={props.paperHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.paper : null}
+        />
+        <PaperDigitalBundle
+          url={subsLinks.paperDig}
+          headingSize={props.paperDigitalHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.paperDigital : null}
+        />
       </PageSection>
     </div>
   );
@@ -60,7 +79,11 @@ export default function ThreeSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function DigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -80,6 +103,7 @@ function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
           modifierClasses: ['digital', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
@@ -87,7 +111,11 @@ function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
 }
 
-function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -107,6 +135,7 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
           modifierClasses: ['paper', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
@@ -114,7 +143,11 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
 
 }
 
-function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperDigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -134,9 +167,22 @@ function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
           modifierClasses: ['paper-digital', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+ThreeSubscriptions.defaultProps = {
+  clickEvents: null,
+};
+
+
+// ----- Exports ----- //
+
+export default ThreeSubscriptions;

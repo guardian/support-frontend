@@ -23,6 +23,7 @@ type BundleCta = {
   url: string,
   accessibilityHint: string,
   modifierClasses: Array<?string>,
+  onClick: ?Function,
 };
 
 type PropTypes = {

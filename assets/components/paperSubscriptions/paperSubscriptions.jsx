@@ -16,9 +16,16 @@ import { type HeadingSize } from 'components/heading/heading';
 
 // ----- Types ----- //
 
+type ClickEvent = () => void;
+
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
+  clickEvents: {
+    paper: ClickEvent,
+    paperDigital: ClickEvent,
+    weekly: ClickEvent,
+  },
 };
 
 
@@ -45,9 +52,21 @@ export default function PaperSubscriptions(props: PropTypes) {
   return (
     <div className="component-paper-subscriptions">
       <PageSection heading="Print Subscriptions" modifierClass="paper-subscriptions">
-        <PaperBundle url={subsLinks.paper} headingSize={props.headingSize} />
-        <PaperDigitalBundle url={subsLinks.paperDig} headingSize={props.headingSize} />
-        <WeeklyBundle url={subsLinks.weekly} headingSize={props.headingSize} />
+        <PaperBundle
+          url={subsLinks.paper}
+          headingSize={props.headingSize}
+          onClick={props.clickEvents.paper}
+        />
+        <PaperDigitalBundle
+          url={subsLinks.paperDig}
+          headingSize={props.headingSize}
+          onClick={props.clickEvents.paperDigital}
+        />
+        <WeeklyBundle
+          url={subsLinks.weekly}
+          headingSize={props.headingSize}
+          onClick={props.clickEvents.weekly}
+        />
       </PageSection>
     </div>
   );
@@ -57,7 +76,11 @@ export default function PaperSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent,
+}) {
 
   return (
     <SubscriptionBundle
@@ -81,6 +104,7 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds thirty six pence per month.',
           modifierClasses: ['paper', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
@@ -88,7 +112,11 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
 
 }
 
-function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperDigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent,
+}) {
 
   return (
     <SubscriptionBundle
@@ -112,6 +140,7 @@ function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
           modifierClasses: ['paper-digital', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
@@ -119,7 +148,11 @@ function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
 
 }
 
-function WeeklyBundle(props: { url: string, headingSize: HeadingSize }) {
+function WeeklyBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent,
+}) {
 
   return (
     <SubscriptionBundle
@@ -143,6 +176,7 @@ function WeeklyBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'The Guardian\'s weekly subscription is available for thirty pounds per quarter',
           modifierClasses: ['weekly', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />

@@ -22,9 +22,17 @@ import { type HeadingSize } from 'components/heading/heading';
 
 // ----- Types ----- //
 
+type ClickEvent = () => void;
+
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
+  clickEvents: {
+    iOSApp: ClickEvent,
+    androidApp: ClickEvent,
+    dailyEdition: ClickEvent,
+    digiPack: ClickEvent,
+  },
 };
 
 
@@ -57,17 +65,21 @@ export default function DigitalSubscriptions(props: PropTypes) {
         modifierClass="digital-subscriptions"
       >
         <PremiumTier
-          iosUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
+          iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
+          iOSOnClick={props.clickEvents.iOSApp}
+          androidOnClick={props.clickEvents.androidApp}
         />
         <DailyEdition
           url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
+          onClick={props.clickEvents.dailyEdition}
         />
         <DigitalBundle
           url={subsLinks.digital}
           headingSize={props.headingSize}
+          onClick={props.clickEvents.digiPack}
         />
       </PageSection>
     </div>
@@ -79,9 +91,11 @@ export default function DigitalSubscriptions(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function PremiumTier(props: {
-    iosUrl: string,
+    iOSUrl: string,
     androidUrl: string,
     headingSize: HeadingSize,
+    iOSOnClick: ClickEvent,
+    androidOnClick: ClickEvent,
 }) {
 
   return (
@@ -103,15 +117,17 @@ function PremiumTier(props: {
       ctas={[
         {
           text: 'Buy in the App Store',
-          url: props.iosUrl,
+          url: props.iOSUrl,
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['premium-tier', 'border', 'ios'],
+          onClick: props.iOSOnClick,
         },
         {
           text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['premium-tier', 'border', 'android'],
+          onClick: props.androidOnClick,
         },
       ]}
     />
@@ -119,7 +135,11 @@ function PremiumTier(props: {
 
 }
 
-function DailyEdition(props: { url: string, headingSize: HeadingSize }) {
+function DailyEdition(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent,
+}) {
 
   return (
     <SubscriptionBundle
@@ -143,6 +163,7 @@ function DailyEdition(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'Proceed to buy the daily edition app in the app store',
           modifierClasses: ['daily-edition', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />
@@ -150,7 +171,11 @@ function DailyEdition(props: { url: string, headingSize: HeadingSize }) {
 
 }
 
-function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function DigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent,
+}) {
 
   return (
     <SubscriptionBundle
@@ -174,6 +199,7 @@ function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
           url: props.url,
           accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
           modifierClasses: ['digital', 'border'],
+          onClick: props.onClick,
         },
       ]}
     />

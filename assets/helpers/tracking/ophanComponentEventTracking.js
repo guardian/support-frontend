@@ -54,7 +54,7 @@ type OphanComponent = {
   labels?: $ReadOnlyArray<string>
 };
 
-type OphanComponentEvent = {
+export type OphanComponentEvent = {
   component: OphanComponent,
   action: OphanAction,
   value?: string,
