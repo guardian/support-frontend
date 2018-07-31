@@ -128,13 +128,13 @@ class RegularContributionsClient(
           respondToClient(StatusResponse(Status.Pending, trackingUri, None))
         }
 
-        def paymentSuccess(executionHistory: List[HistoryEvent]): Boolean = {
+        def checkoutSuccess(executionHistory: List[HistoryEvent]): Boolean = {
           executionHistory
             .map { event => Try(event.getStateExitedEventDetails.getName) }
-            .contains(Success("PaymentSuccess"))
+            .contains(Success("CheckoutSuccess"))
         }
 
-        if (paymentSuccess(events)) {
+        if (checkoutSuccess(events)) {
           respondToClient(StatusResponse(Status.Success, trackingUri, None))
         } else {
           pendingOrFailure
