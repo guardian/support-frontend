@@ -17,5 +17,5 @@ This script allows you to decrypt the state from step function executions, it ca
     production AWS encryption key ARN as a second parameter to the script.
 END
 cd ..
-squashed_json="$(echo $1 | tr -d '\n\r\t ')"
-sbt --error "run-main com.gu.support.workers.encoding.StateDecoder $squashed_json $2"
+minified_json="$(echo $1 | tr -d '\n\r\t ')"
+sbt --error "run-main com.gu.support.workers.encoding.StateDecoder $minified_json $2"
