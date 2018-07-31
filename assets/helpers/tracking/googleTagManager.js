@@ -9,7 +9,6 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { logInfo } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -33,17 +32,29 @@ type GaEventData = {
 
 // ----- Functions ----- //
 
-function getDataValue(name, generator) {
-  let value = storage.getSession(name);
+function getOrderId() {
+  let value = storage.getSession('orderId');
   if (value === null) {
-    value = generator();
-    storage.setSession(name, value);
+    value = uuidv4();
+    storage.setSession('orderId', value);
   }
   return value;
 }
 
-function getCurrency(): IsoCurrency {
-  return detectCurrency(detectCountryGroup());
+function getCurrency(): string {
+  const currency = detectCurrency(detectCountryGroup());
+  if (currency) {
+    storage.setSession('currency', currency);
+  }
+  return storage.getSession('currency') || 'GBP';
+}
+
+function getContributionValue(): number {
+  const param = getQueryParameter('contributionValue');
+  if (param) {
+    storage.setSession('contributionValue', String(parseFloat(param)));
+  }
+  return parseFloat(storage.getSession('contributionValue')) || 0;
 }
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
@@ -103,14 +114,6 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   });
 }
 
-function getContributionValue() {
-  const param = getQueryParameter('contributionValue');
-  if (param) {
-    storage.setSession('contributionValue', String(parseInt(param, 10)));
-  }
-  return storage.getSession('contributionValue') || 0;
-}
-
 function sendData(
   event: EventType,
   participations: Participations,
@@ -121,8 +124,8 @@ function sendData(
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
-    orderId: getDataValue('orderId', uuidv4),
-    currency: getDataValue('currency', getCurrency),
+    orderId: getOrderId(),
+    currency: getCurrency(),
     value: getContributionValue(),
     paymentMethod: storage.getSession('paymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
