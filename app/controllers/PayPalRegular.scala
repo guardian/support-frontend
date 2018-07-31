@@ -32,7 +32,7 @@ class PayPalRegular(
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
-    withPaypalServiceForUser(testUsers.isTestUser(request)) { service =>
+    withPaypalServiceForRequest(request) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
@@ -43,12 +43,13 @@ class PayPalRegular(
   }
 
   def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForUser(testUsers.isTestUser(request)) { service =>
+    withPaypalServiceForRequest(request) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
   }
 
-  private def withPaypalServiceForUser[T](isTestUser: Boolean)(fn: PayPalNvpService => T): T = {
+  private def withPaypalServiceForRequest[T](request: CustomActionBuilders.OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
+    val isTestUser = testUsers.isTestUser(request)
     val service = payPalNvpServiceProvider.forUser(isTestUser)
     fn(service)
   }
