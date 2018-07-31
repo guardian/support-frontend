@@ -11,6 +11,7 @@ import DigitalSubscriptionsContainer from 'components/digitalSubscriptions/digit
 import PaperSubscriptionsContainer from 'components/paperSubscriptions/paperSubscriptionsContainer';
 
 import { trackComponentEvents } from 'helpers/tracking/ophanComponentEventTracking';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 
 // ----- Types ----- //
@@ -22,25 +23,35 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function createEventOnClick(
+function sendEventsOnClick(
   id: string,
   product: 'digital' | 'print',
   variant: boolean,
 ): () => void {
 
-  return () => trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_BUTTON',
-      id,
-      products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
-    },
-    action: 'CLICK',
-    id: `split_subscription_test_${id}`,
-    abTest: {
-      name: 'split_subscription_test',
-      variant: variant ? 'variant' : 'control',
-    },
-  });
+  return () => {
+
+    trackComponentEvents({
+      component: {
+        componentType: 'ACQUISITIONS_BUTTON',
+        id,
+        products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
+      },
+      action: 'CLICK',
+      id: `split_subscription_test_${id}`,
+      abTest: {
+        name: 'split_subscription_test',
+        variant: variant ? 'variant' : 'control',
+      },
+    });
+
+    gaEvent({
+      category: 'click',
+      action: 'split_subscriptions_test',
+      label: id,
+    });
+
+  };
 
 }
 
@@ -51,18 +62,18 @@ function getSections() {
       <DigitalSubscriptionsContainer
         headingSize={3}
         clickEvents={{
-          iOSApp: createEventOnClick('premium_tier_ios_cta', 'digital', true),
-          androidApp: createEventOnClick('premium_tier_android_cta', 'digital', true),
-          dailyEdition: createEventOnClick('daily_edition_cta', 'digital', true),
-          digiPack: createEventOnClick('digipack_cta', 'digital', true),
+          iOSApp: sendEventsOnClick('premium_tier_ios_cta', 'digital', true),
+          androidApp: sendEventsOnClick('premium_tier_android_cta', 'digital', true),
+          dailyEdition: sendEventsOnClick('daily_edition_cta', 'digital', true),
+          digiPack: sendEventsOnClick('digipack_cta', 'digital', true),
         }}
       />,
       <PaperSubscriptionsContainer
         headingSize={3}
         clickEvents={{
-          paper: createEventOnClick('paper_cta', 'print', true),
-          paperDigital: createEventOnClick('paper_digital_cta', 'print', true),
-          weekly: createEventOnClick('weekly_cta', 'print', true),
+          paper: sendEventsOnClick('paper_cta', 'print', true),
+          paperDigital: sendEventsOnClick('paper_digital_cta', 'print', true),
+          weekly: sendEventsOnClick('weekly_cta', 'print', true),
         }}
       />,
     ];
@@ -74,9 +85,9 @@ function getSections() {
       paperHeadingSize={3}
       paperDigitalHeadingSize={3}
       clickEvents={{
-        digital: createEventOnClick('digital_cta', 'digital', false),
-        paper: createEventOnClick('paper_cta', 'print', false),
-        paperDigital: createEventOnClick('paper_digital_cta', 'print', false),
+        digital: sendEventsOnClick('digital_cta', 'digital', false),
+        paper: sendEventsOnClick('paper_cta', 'print', false),
+        paperDigital: sendEventsOnClick('paper_digital_cta', 'print', false),
       }}
     />
   );
