@@ -112,7 +112,6 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 
 export {
   detect,
-  fromString,
   spokenCurrencies,
   currencies,
 };

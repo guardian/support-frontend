@@ -3,13 +3,12 @@
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
-import { detect as detectCurrency, fromString as currencyFromString } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { logInfo } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
@@ -42,12 +41,12 @@ function getOrderId() {
   return value;
 }
 
-function getCurrency(): IsoCurrency {
+function getCurrency(): string {
   const currency = detectCurrency(detectCountryGroup());
   if (currency) {
     storage.setSession('currency', currency);
   }
-  return currencyFromString(storage.getSession('currency') || 'GBP') || 'GBP';
+  return storage.getSession('currency') || 'GBP';
 }
 
 function getContributionValue(): number {
