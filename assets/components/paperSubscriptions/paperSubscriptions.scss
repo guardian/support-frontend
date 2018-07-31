@@ -72,8 +72,26 @@
   }
 
   .component-feature-list {
+    font-size: 16px;
+    line-height: 1.25;
+
+    @include mq($until: phablet) {
+      padding-left: 0;
+    }
+
     @include mq($from: leftCol) {
       flex: 1 0 auto;
+      padding-left: 0;
+    }
+  }
+
+  .component-feature-list__item {
+    @include mq($until: phablet) {
+      margin-left: 0;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: 0;
     }
   }
 
@@ -104,16 +122,6 @@
       font-size: 24px;
       line-height: 1.17;
     }
-  }
-
-  .component-feature-list {
-    padding-left: 0;
-    font-size: 16px;
-    line-height: 1.25;
-  }
-
-  .component-feature-list__item {
-    margin-left: 0;
   }
 
   .component-cta-link {
