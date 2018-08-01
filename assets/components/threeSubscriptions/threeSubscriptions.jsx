@@ -101,7 +101,7 @@ function DigitalBundle(props: {
         {
           text: 'Start your 14 day trial',
           url: props.url,
-          accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
+          accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['digital', 'border'],
           onClick: props.onClick,
         },
@@ -133,7 +133,7 @@ function PaperBundle(props: {
         {
           text: 'Get a paper subscription',
           url: props.url,
-          accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds seventy nine pence per month.',
+          accessibilityHint: 'Proceed to paper subscription options',
           modifierClasses: ['paper', 'border'],
           onClick: props.onClick,
         },

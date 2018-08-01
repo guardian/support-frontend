@@ -102,7 +102,7 @@ function PaperBundle(props: {
         {
           text: 'Choose a package',
           url: props.url,
-          accessibilityHint: 'Proceed to paper subscription options, starting at ten pounds thirty six pence per month.',
+          accessibilityHint: 'Proceed to paper subscription options',
           modifierClasses: ['paper', 'border'],
           onClick: props.onClick,
         },
@@ -174,7 +174,7 @@ function WeeklyBundle(props: {
         {
           text: 'Find out more',
           url: props.url,
-          accessibilityHint: 'The Guardian\'s weekly subscription is available for thirty pounds per quarter',
+          accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
           modifierClasses: ['weekly', 'border'],
           onClick: props.onClick,
         },

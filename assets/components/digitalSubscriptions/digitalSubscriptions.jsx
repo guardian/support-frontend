@@ -161,7 +161,7 @@ function DailyEdition(props: {
         {
           text: 'Buy in the App Store',
           url: props.url,
-          accessibilityHint: 'Proceed to buy the daily edition app in the app store',
+          accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
           modifierClasses: ['daily-edition', 'border'],
           onClick: props.onClick,
         },
@@ -197,7 +197,7 @@ function DigitalBundle(props: {
         {
           text: 'Find out more',
           url: props.url,
-          accessibilityHint: 'The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial.',
+          accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['digital', 'border'],
           onClick: props.onClick,
         },
