@@ -42,7 +42,7 @@ describe('Regular contributions Reducer', () => {
     expect(newState.regularContrib.error).toMatchSnapshot();
   });
 
-  it('should handle SET_PAYPAL_BUTTON', () => {
+  it('should handle CREATING_CONTRIBUTOR', () => {
 
     const action = {
       type: 'CREATING_CONTRIBUTOR',
@@ -50,5 +50,15 @@ describe('Regular contributions Reducer', () => {
 
     const newState = reducer(undefined, action);
     expect(newState.regularContrib.paymentStatus).toEqual('Pending');
+  });
+
+  it('should handle SET_EMAIL_HAS_BEEN_BLURRED', () => {
+
+    const action = {
+      type: 'SET_EMAIL_HAS_BEEN_BLURRED',
+    };
+
+    const newState = reducer(undefined, action);
+    expect(newState.regularContrib.emailHasBeenBlurred).toEqual(true);
   });
 });

@@ -30,6 +30,7 @@ Object {
   "regularContrib": Object {
     "amount": 20,
     "contributionType": "MONTHLY",
+    "emailHasBeenBlurred": false,
     "error": null,
     "payPalHasLoaded": false,
     "paymentMethod": "DirectDebit",
