@@ -84,7 +84,7 @@ class PayPalOneOff(
   }
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
-    SafeLogger.(info"The user selected cancel payment and decided not to contribute.")
+    SafeLogger.info("The user selected cancel payment and decided not to contribute.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
