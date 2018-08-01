@@ -6,6 +6,7 @@ const routes: {
   [string]: string,
 } = {
   recurringContribCheckout: '/contribute/recurring',
+  recurringContribCheckoutGuest: '/contribute/recurring-guest',
   recurringContribThankyou: '/contribute/recurring/thankyou',
   recurringContribCreate: '/contribute/recurring/create',
   recurringContribPending: '/contribute/recurring/pending',

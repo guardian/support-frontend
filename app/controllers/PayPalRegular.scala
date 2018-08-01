@@ -3,7 +3,6 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import com.gu.identity.play.AuthenticatedIdUser
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
@@ -31,10 +30,9 @@ class PayPalRegular(
   implicit val sw = switches
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = authenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
+  def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
     val paypalBillingDetails = request.body
-
-    withPaypalServiceForUser(request.user) { service =>
+    withPaypalServiceForRequest(request) { service =>
       service.retrieveToken(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
@@ -44,14 +42,15 @@ class PayPalRegular(
     }
   }
 
-  def createAgreement: Action[Token] = authenticatedAction().async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForUser(request.user) { service =>
+  def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
+    withPaypalServiceForRequest(request) { service =>
       service.createBillingAgreement(request.body)
     }.map(token => Ok(Token(token).asJson))
   }
 
-  private def withPaypalServiceForUser[T](user: AuthenticatedIdUser)(fn: PayPalNvpService => T): T = {
-    val service = payPalNvpServiceProvider.forUser(testUsers.isTestUser(user))
+  private def withPaypalServiceForRequest[T](request: CustomActionBuilders.OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
+    val isTestUser = testUsers.isTestUser(request)
+    val service = payPalNvpServiceProvider.forUser(isTestUser)
     fn(service)
   }
 

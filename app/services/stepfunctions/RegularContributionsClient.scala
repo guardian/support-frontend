@@ -37,7 +37,8 @@ case class CreateRegularContributorRequest(
     paymentFields: PaymentFields,
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
-    supportAbTests: Set[AbTest]
+    supportAbTests: Set[AbTest],
+    email: String
 )
 
 object RegularContributionsClient {

@@ -20,6 +20,7 @@ import reducer from './regularContributionsReducer';
 import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
+import RegularContributionsPayment from './components/regularContributionsPayment';
 
 
 // ----- Page Startup ----- //
@@ -34,7 +35,6 @@ const store = pageInit(reducer(
 
 user.init(store.dispatch);
 
-
 // ----- Render ----- //
 
 const router = (
@@ -48,6 +48,17 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
+            />
+          )}
+        />
+        <Route
+          exact
+          path={routes.recurringContribCheckoutGuest}
+          render={() => (
+            <ContributionsCheckoutContainer
+              contributionType={contributionType}
+              form={<FormFields />}
+              payment={<RegularContributionsPayment />}
             />
           )}
         />

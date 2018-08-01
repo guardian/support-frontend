@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
 
@@ -20,11 +19,10 @@ import { setCountry, type Action as PageAction } from 'helpers/page/pageActions'
 
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import EmailFormFieldContainer from './emailFormFieldContainer';
 
 // ----- Types ----- //
 
@@ -131,6 +129,7 @@ function NameForm(props: PropTypes) {
 
   return (
     <form className="regular-contrib__name-form">
+      <EmailFormFieldContainer />
       <TextInput
         id="first-name"
         labelText="First name"
