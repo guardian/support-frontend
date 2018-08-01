@@ -38,9 +38,9 @@ function sendEventsOnClick(
         products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
       },
       action: 'CLICK',
-      id: `split_subscription_test_${id}`,
+      id: `split_subscriptions_test_${id}`,
       abTest: {
-        name: 'split_subscription_test',
+        name: 'split_subscriptions_test',
         variant: variant ? 'variant' : 'control',
       },
     });
