@@ -1,7 +1,6 @@
 // @flow
 
 // ----- Imports ----- //
-
 import type { Action } from './userActions';
 
 

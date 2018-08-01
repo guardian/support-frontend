@@ -36,4 +36,14 @@
     margin-top: $gu-v-spacing * 3;
     margin-bottom: $gu-v-spacing * 2;
   }
+
+  .component-error-message {
+    height: 32px;
+    position: relative;
+
+    @include mq($from: desktop) {
+      width: 260px;
+    }
+  }
+
 }

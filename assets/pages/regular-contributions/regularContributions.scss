@@ -83,6 +83,10 @@
     margin-bottom: $gu-v-spacing;
   }
 
+  .component-text-input__input--error {
+    border: 2px solid gu-colour(error);
+  }
+
   .component-text-input--last-name {
     margin-top: $gu-v-spacing;
   }
