@@ -3,12 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
-
 import TextInput from 'components/textInput/textInput';
-import { setEmail, type Action } from 'helpers/user/userActions';
-
 
 // ----- Types ----- //
 
@@ -39,29 +34,6 @@ const EmailFormField = (props: PropTypes) => {
 
 };
 
-
-// ----- Map State/Props ----- //
-
-function mapStateToProps(state) {
-  const { user } = state.page;
-  return {
-    email: user.email,
-    isSignedIn: state.page.user.isSignedIn,
-  };
-
-}
-
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-
-  return {
-    emailUpdate: (email: string) => {
-      dispatch(setEmail(email));
-    },
-  };
-
-}
-
-
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmailFormField);
+export default EmailFormField;
