@@ -41,6 +41,14 @@ function getOrderId() {
   return value;
 }
 
+function getContributionType() {
+  const param = getQueryParameter('contribType');
+  if (param) {
+    storage.setSession('contribType', param);
+  }
+  return (storage.getSession('contribType') || '').toLowerCase();
+}
+
 function getCurrency(): string {
   const currency = detectCurrency(detectCountryGroup());
   if (currency) {
@@ -117,16 +125,19 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
 function sendData(
   event: EventType,
   participations: Participations,
-  paymentRequestApiStatus: PaymentRequestAPIStatus,
+  paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
+  const orderId = getOrderId();
+  const value = getContributionValue();
+  const currency = getCurrency();
   window.googleTagManagerDataLayer.push({
     event,
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
-    orderId: getOrderId(),
-    currency: getCurrency(),
-    value: getContributionValue(),
+    orderId,
+    currency,
+    value,
     paymentMethod: storage.getSession('paymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
     campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
@@ -134,6 +145,21 @@ function sendData(
     experience: getVariantsAsString(participations),
     ophanBrowserID: getOphanIds().browserId,
     paymentRequestApiStatus,
+    ecommerce: {
+      purchase: {
+        actionField: {
+          id: orderId,
+          revenue: value, // Total transaction value (incl. tax and shipping)
+          currency,
+        },
+        products: [{
+          name: `${getContributionType()}_contribution`,
+          category: 'contribution',
+          price: value,
+          quantity: 1,
+        }],
+      },
+    },
   });
 }
 
@@ -161,7 +187,7 @@ function init(participations: Participations) {
 }
 
 function successfulConversion(participations: Participations) {
-  pushToDataLayer('SuccessfulConversion', participations);
+  sendData('SuccessfulConversion', participations);
 }
 
 function gaEvent(gaEventData: GaEventData) {
