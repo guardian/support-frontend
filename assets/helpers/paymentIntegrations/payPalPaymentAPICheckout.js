@@ -4,7 +4,7 @@
 
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamsToURL, getAbsoluteURL } from 'helpers/url';
+import { addQueryParamsToURL, getAbsoluteURL, getOrigin, getCurrentURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
@@ -53,7 +53,7 @@ export function paypalPaymentAPIRedirect(
     amount,
     currency,
     returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-    cancelURL: getAbsoluteURL(routes.payPalRestCancelURL),
+    cancelURL: getCurrentURL() || getOrigin(),
   };
 
   const fetchOptions: Object = {
