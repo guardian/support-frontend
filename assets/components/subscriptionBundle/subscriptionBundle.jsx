@@ -18,17 +18,22 @@ import type { GridImg } from 'components/gridImage/gridImage';
 
 // ----- Props ----- //
 
+type BundleCta = {
+  text: string,
+  url: string,
+  accessibilityHint: string,
+  modifierClasses: Array<?string>,
+  onClick: ?Function,
+};
+
 type PropTypes = {
   modifierClass?: string,
   heading: string,
   subheading: string,
   benefits: ListItem[],
-  ctaText: string,
-  ctaUrl: string,
-  ctaAccessibilityHint: string,
   gridImage: GridImg,
   headingSize: HeadingSize,
-  ctaModifiers?: Array<?string>,
+  ctas: BundleCta[],
 };
 
 
@@ -46,12 +51,7 @@ export default function SubscriptionBundle(props: PropTypes) {
           headingSize={props.headingSize}
         />
         <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
-        <CtaLink
-          text={props.ctaText}
-          url={props.ctaUrl}
-          accessibilityHint={props.ctaAccessibilityHint}
-          modifierClasses={props.ctaModifiers}
-        />
+        {props.ctas.map(cta => <CtaLink {...cta} />)}
       </div>
     </div>
   );
@@ -63,5 +63,4 @@ export default function SubscriptionBundle(props: PropTypes) {
 
 SubscriptionBundle.defaultProps = {
   modifierClass: '',
-  ctaModifiers: [],
 };
