@@ -69,11 +69,11 @@ const numbersInWords = {
 
 const defaultConfig: Config = {
   ANNUAL: {
-    min: 50,
-    minInWords: numbersInWords['50'],
+    min: 10,
+    minInWords: numbersInWords['10'],
     max: 2000,
     maxInWords: numbersInWords['2000'],
-    default: 75,
+    default: 50,
   },
   MONTHLY: {
     min: 2,
@@ -181,8 +181,8 @@ const defaultMonthlyAmount = [
 ];
 
 const defaultAnnualAmount = [
-  { value: '25', spoken: numbersInWords['50'] },
-  { value: '75', spoken: numbersInWords['75'] },
+  { value: '25', spoken: numbersInWords['25'] },
+  { value: '50', spoken: numbersInWords['50'] },
   { value: '100', spoken: numbersInWords['100'] },
   { value: '250', spoken: numbersInWords['250'] },
 ];
@@ -245,17 +245,17 @@ const amounts = {
     UnitedStates: defaultAnnualAmount,
     AUDCountries: [
       { value: '50', spoken: numbersInWords['50'] },
-      { value: '75', spoken: numbersInWords['75'] },
       { value: '100', spoken: numbersInWords['100'] },
       { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
     ],
     EURCountries: defaultAnnualAmount,
     International: defaultAnnualAmount,
     NZDCountries: [
       { value: '50', spoken: numbersInWords['50'] },
-      { value: '75', spoken: numbersInWords['75'] },
       { value: '100', spoken: numbersInWords['100'] },
       { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
     ],
     Canada: defaultAnnualAmount,
   },
@@ -407,6 +407,18 @@ function getSpokenType(
 
 }
 
+function getFrequency(contributionType: Contrib) {
+
+  if (contributionType === 'ONE_OFF') {
+    return '';
+  } else if (contributionType === 'MONTHLY') {
+    return 'per month';
+  }
+
+  return 'a year';
+
+}
+
 function getCustomAmountA11yHint(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
@@ -450,24 +462,24 @@ function getContributionTypeRadios(
   annualTestVariant: 'control' | 'annual' | 'notintest',
 ) {
 
-    const oneOff = {
-        value: 'ONE_OFF',
-        text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
-        accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
-        id: 'qa-one-off-toggle',
-    };
-    const monthly = {
-        value: 'MONTHLY',
-        text: 'Monthly',
-        accessibilityHint: 'Make a regular monthly contribution',
-    };
-    const annual = {
-        value: 'ANNUAL',
-        text: 'Annually',
-        accessibilityHint: `Make a regular annual contribution`,
-    };
+  const oneOff = {
+    value: 'ONE_OFF',
+    text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
+    accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    id: 'qa-one-off-toggle',
+  };
+  const monthly = {
+    value: 'MONTHLY',
+    text: 'Monthly',
+    accessibilityHint: 'Make a regular monthly contribution',
+  };
+  const annual = {
+    value: 'ANNUAL',
+    text: 'Annually',
+    accessibilityHint: 'Make a regular annual contribution',
+  };
 
-  return annualTestVariant === 'annual' ? [ oneOff, monthly, annual ] : [ monthly, oneOff ];
+  return annualTestVariant === 'annual' ? [oneOff, monthly, annual] : [monthly, oneOff];
 
 }
 
@@ -500,6 +512,7 @@ export {
   getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
+  getFrequency,
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,

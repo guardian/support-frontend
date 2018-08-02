@@ -57,9 +57,21 @@
       border-radius: 37.5rem;
       margin: 0 10px 0 0;
     }
+
+    .component-radio-toggle__label {
+      @include mq($until: mobileMedium) {
+        padding: 13px ($gu-h-spacing / 2);
+      }
+    }
   }
   .component-number-input {
     width: 161px;
+  }
+
+  .component-contribution-selection__custom-amount {
+    @include mq($from: phablet) {
+      margin-left: 3px;
+    }
   }
 }
 
