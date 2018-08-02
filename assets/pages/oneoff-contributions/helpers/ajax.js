@@ -3,16 +3,17 @@
 // ----- Imports ----- //
 
 import { addQueryParamsToURL } from 'helpers/url';
-import { routes } from 'helpers/routes';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 
+import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
 
-import { checkoutError } from '../oneoffContributionsActions';
+import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+
 
 // ----- Setup ----- //
 
@@ -100,14 +101,9 @@ export default function postCheckout(
 
     return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
 
-      const url: string = addQueryParamsToURL(
-        routes.oneOffContribThankyou,
-        { INTCMP: referrerAcquisitionData.campaignCode },
-      );
-
       if (response.ok) {
-        window.location.assign(url);
-        return;
+        successfulConversion(abParticipations);
+        dispatch(checkoutSuccess());
       }
 
       dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));

@@ -12,10 +12,15 @@ function checkoutError(message: ?string): Action {
   return { type: 'CHECKOUT_ERROR', message };
 }
 
+function checkoutSuccess(): Action {
+  return { type: 'CHECKOUT_SUCCESS' };
+}
+
 function setEmailHasBeenBlurred(): Action {
   return { type: 'SET_EMAIL_HAS_BEEN_BLURRED' };
 }
 
+
 // ----- Exports ----- //
 
-export { checkoutError, setEmailHasBeenBlurred };
+export { checkoutError, checkoutSuccess, setEmailHasBeenBlurred };
