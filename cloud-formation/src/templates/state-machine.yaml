@@ -46,7 +46,7 @@ States:
           Resource: "${SendAcquisitionEventLambda.Arn}"
           End: True
           {{> retry}}
-    Next: WaitForBrowserPoll
+    End: True
 
   FailureHandler:
     Type: Task
