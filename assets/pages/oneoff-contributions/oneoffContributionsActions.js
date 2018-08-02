@@ -4,7 +4,7 @@
 
 export type Action =
     | { type: 'CHECKOUT_ERROR', message: ?string }
-    | { type: 'SET_EMAIL_HAS_BEEN_BLURRED' };
+    | { type: 'SET_EMAIL_HAS_BEEN_BLURRED' | 'CHECKOUT_SUCCESS' };
 
 // ----- Actions ----- //
 
