@@ -21,4 +21,8 @@ class StubIdentityService extends IdentityService {
     SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
     Future.successful(true)
   }
+
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+    EitherT.rightT[Future, String]("123456")
+  }
 }

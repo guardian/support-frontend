@@ -9,11 +9,10 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { logInfo } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent';
 
 type PaymentRequestAPIStatus =
   'PaymentRequestAPINotAvailable' |
@@ -25,19 +24,45 @@ type PaymentRequestAPIStatus =
   'PromiseRejected' |
   'PaymentApiPromiseRejected';
 
+type GaEventData = {
+  category: string,
+  action: string,
+  label: ?string,
+}
+
 // ----- Functions ----- //
 
-function getDataValue(name, generator) {
-  let value = storage.getSession(name);
+function getOrderId() {
+  let value = storage.getSession('orderId');
   if (value === null) {
-    value = generator();
-    storage.setSession(name, value);
+    value = uuidv4();
+    storage.setSession('orderId', value);
   }
   return value;
 }
 
-function getCurrency(): IsoCurrency {
-  return detectCurrency(detectCountryGroup());
+function getContributionType() {
+  const param = getQueryParameter('contribType');
+  if (param) {
+    storage.setSession('contribType', param);
+  }
+  return (storage.getSession('contribType') || '').toLowerCase();
+}
+
+function getCurrency(): string {
+  const currency = detectCurrency(detectCountryGroup());
+  if (currency) {
+    storage.setSession('currency', currency);
+  }
+  return storage.getSession('currency') || 'GBP';
+}
+
+function getContributionValue(): number {
+  const param = getQueryParameter('contributionValue');
+  if (param) {
+    storage.setSession('contributionValue', String(parseFloat(param)));
+  }
+  return parseFloat(storage.getSession('contributionValue')) || 0;
 }
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
@@ -97,23 +122,22 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   });
 }
 
-function getContributionValue() {
-  const param = getQueryParameter('contributionValue');
-  if (param) {
-    storage.setSession('contributionValue', String(parseInt(param, 10)));
-  }
-  return storage.getSession('contributionValue') || 0;
-}
-
-function sendData(event: EventType, participations: Participations, paymentRequestApiStatus: PaymentRequestAPIStatus) {
+function sendData(
+  event: EventType,
+  participations: Participations,
+  paymentRequestApiStatus?: PaymentRequestAPIStatus,
+) {
+  const orderId = getOrderId();
+  const value = getContributionValue();
+  const currency = getCurrency();
   window.googleTagManagerDataLayer.push({
     event,
     // orderId anonymously identifies this user in this session.
     // We need this to prevent page refreshes on conversion pages being
     // treated as new conversions
-    orderId: getDataValue('orderId', uuidv4),
-    currency: getDataValue('currency', getCurrency),
-    value: getContributionValue(),
+    orderId,
+    currency,
+    value,
     paymentMethod: storage.getSession('paymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
     campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
@@ -121,6 +145,21 @@ function sendData(event: EventType, participations: Participations, paymentReque
     experience: getVariantsAsString(participations),
     ophanBrowserID: getOphanIds().browserId,
     paymentRequestApiStatus,
+    ecommerce: {
+      purchase: {
+        actionField: {
+          id: orderId,
+          revenue: value, // Total transaction value (incl. tax and shipping)
+          currency,
+        },
+        products: [{
+          name: `${getContributionType()}_contribution`,
+          category: 'contribution',
+          price: value,
+          quantity: 1,
+        }],
+      },
+    },
   });
 }
 
@@ -148,12 +187,22 @@ function init(participations: Participations) {
 }
 
 function successfulConversion(participations: Participations) {
-  pushToDataLayer('SuccessfulConversion', participations);
+  sendData('SuccessfulConversion', participations);
+}
+
+function gaEvent(gaEventData: GaEventData) {
+  window.googleTagManagerDataLayer.push({
+    event: 'GAEvent',
+    eventCategory: gaEventData.category,
+    eventAction: gaEventData.action,
+    eventLabel: gaEventData.label,
+  });
 }
 
 // ----- Exports ---//
 
 export {
   init,
+  gaEvent,
   successfulConversion,
 };

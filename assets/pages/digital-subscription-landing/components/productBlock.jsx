@@ -10,22 +10,89 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import FeatureList, { type ListItem } from 'components/featureList/featureList';
 import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import PriceCtaContainer from './priceCtaContainer';
 
 
+// ----- Types ----- //
+
+type PropTypes = {
+  countryGroupId: CountryGroupId,
+};
+
+
 // ----- Setup ----- //
 
-const imageProperties = {
+const imageSlot = '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px';
+
+const defaultFeatures: ListItem[] = [
+  {
+    heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
+    text: 'A selection of long reads, interviews and features to be read at leisure',
+  },
+  {
+    heading: ['Live ', <mark className="product-block__highlight">New</mark>],
+    text: 'A fast way to catch up on every news story as it breaks',
+  },
+  {
+    heading: 'Complete the daily crossword',
+    text: 'Get our daily crossword wherever you are',
+  },
+  {
+    heading: 'Ad-free reading',
+    text: 'Read the news with no distractions',
+  },
+];
+
+const appFeatures: {
+  [CountryGroupId]: ListItem[],
+} = {
+  GBPCountries: defaultFeatures,
+  UnitedStates: defaultFeatures,
+  International: defaultFeatures,
+  AUDCountries: [
+    {
+      heading: 'Ad-free reading',
+      text: 'Read the news with no distractions',
+    },
+    {
+      heading: 'Complete the daily crossword',
+      text: 'Get our daily crossword wherever you are',
+    },
+    {
+      heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
+      text: 'Catch up on every breaking story from Australia and the world, in real time',
+    },
+
+  ],
+};
+
+const defaultAppImage = {
+  gridId: 'premiumTier',
+  altText: 'the premium tier on the guardian app',
   srcSizes: [644, 500, 140],
-  sizes: '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px',
+  sizes: imageSlot,
   imgType: 'png',
+};
+
+const appImages: {
+  [CountryGroupId]: GridImg,
+} = {
+  GBPCountries: defaultAppImage,
+  UnitedStates: defaultAppImage,
+  International: defaultAppImage,
+  AUDCountries: {
+    ...defaultAppImage,
+    gridId: 'premiumTierAU',
+    srcSizes: [1000, 500, 140],
+  },
 };
 
 
 // ----- Component ----- //
 
-export default function ProductBlock() {
+function ProductBlock(props: PropTypes) {
 
   return (
     <div className="product-block">
@@ -36,32 +103,11 @@ export default function ProductBlock() {
         </h2>
         <Product
           modifierClass="premium-app"
-          imageProps={{
-            gridId: 'premiumTier',
-            altText: 'the premium tier on the guardian app',
-            ...imageProperties,
-          }}
+          imageProps={appImages[props.countryGroupId]}
           companionSvg={null}
           heading="App premium tier"
           description="Exciting new app features available for mobile and tablet users with a digital subscription"
-          features={[
-            {
-              heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
-              text: 'A selection of long reads, interviews and features to be read at leisure',
-            },
-            {
-              heading: ['Live ', <mark className="product-block__highlight">New</mark>],
-              text: 'A fast way to catch up on every news story as it breaks',
-            },
-            {
-              heading: 'Complete the daily crossword',
-              text: 'Get our daily crossword wherever you are',
-            },
-            {
-              heading: 'Ad-free reading',
-              text: 'Read the news with no distractions',
-            },
-          ]}
+          features={appFeatures[props.countryGroupId]}
         />
         <div className="product-block__ampersand">&</div>
         <Product
@@ -69,7 +115,9 @@ export default function ProductBlock() {
           imageProps={{
             gridId: 'dailyEdition',
             altText: 'the guardian daily edition app',
-            ...imageProperties,
+            srcSizes: [644, 500, 140],
+            sizes: imageSlot,
+            imgType: 'png',
           }}
           companionSvg={<SvgPennyFarthingCircles />}
           heading="iPad daily Edition"
@@ -131,6 +179,14 @@ function Product(props: {
 
 }
 
+
+// ----- Default Props ----- //
+
 Product.defaultProps = {
   companionSvg: null,
 };
+
+
+// ----- Exports ----- //
+
+export default ProductBlock;

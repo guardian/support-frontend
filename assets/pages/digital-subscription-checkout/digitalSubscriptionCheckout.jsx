@@ -14,9 +14,6 @@ import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHe
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
-import IndependentJournalismSection from './components/independentJournalismSection';
-import ProductBlock from './components/productBlock';
 
 
 // ----- Redux Store ----- //
@@ -30,10 +27,10 @@ const countryGroupId: CountryGroupId = detect();
 const reactElementId: {
   [CountryGroupId]: string,
 } = {
-  GBPCountries: 'digital-subscription-landing-page-uk',
-  UnitedStates: 'digital-subscription-landing-page-us',
-  AUDCountries: 'digital-subscription-landing-page-au',
-  International: 'digital-subscription-landing-page-int',
+  GBPCountries: 'digital-subscription-checkout-page-uk',
+  UnitedStates: 'digital-subscription-checkout-page-us',
+  AUDCountries: 'digital-subscription-checkout-page-au',
+  International: 'digital-subscription-checkout-page-int',
 };
 
 const CountrySwitcherHeader = countrySwitcherHeaderContainer(
@@ -54,10 +51,8 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
-      <ProductBlock countryGroupId={countryGroupId} />
       <LeftMarginSection modifierClasses={['grey']}>
-        <IndependentJournalismSection />
+        <p>Placeholder</p>
       </LeftMarginSection>
     </Page>
   </Provider>

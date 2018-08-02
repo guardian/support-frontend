@@ -15,7 +15,7 @@ import { getPromoCode } from './flashSale';
 
 // ----- Types ----- //
 
-export type SubsProduct = 'paper' | 'digital' | 'paperDig';
+export type SubsProduct = 'paper' | 'digital' | 'paperDig' | 'weekly';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
@@ -31,6 +31,9 @@ export type SubsUrls = {
 
 const subsUrl = 'https://subscribe.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
+const iOSAppUrl = 'https://itunes.apple.com/gb/app/the-guardian/id409128287?mt=8';
+const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
+const dailyEditionUrl = 'https://itunes.apple.com/gb/app/guardian-observer-daily-edition/id452707806?mt=8';
 
 const memUrls: {
   [MemProduct]: string,
@@ -124,11 +127,13 @@ function buildSubsUrls(
   const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
   const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
+  const weekly = `${subsUrl}/weekly/GB?${params.toString()}`;
 
   return {
     digital,
     paper,
     paperDig,
+    weekly,
   };
 
 }
@@ -176,4 +181,7 @@ export {
   getSubsLinks,
   getMemLink,
   getDigitalCheckout,
+  iOSAppUrl,
+  androidAppUrl,
+  dailyEditionUrl,
 };

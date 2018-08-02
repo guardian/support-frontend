@@ -1,17 +1,21 @@
 package services
 
 import cats.data.EitherT
-import com.gu.identity.play.{IdMinimalUser, IdUser}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
+import play.api.libs.ws.{BodyWritable, InMemoryBody, WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
+
 import scala.concurrent.duration._
 import cats.implicits._
 import java.net.URI
+
+import akka.util.ByteString
 import com.google.common.net.InetAddresses
 import config.Identity
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads, Writes}
+
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,6 +53,82 @@ object IdentityService {
     }
   }
 }
+
+// Models a valid request to /guest
+//
+// Example request:
+// =================
+// {
+//   "email": "a@b.com",
+//   "publicFields": {
+//     "displayName": "a"
+//   }
+// }
+case class CreateGuestAccountRequestBody(primaryEmailAddress: String, publicFields: PublicFields)
+object CreateGuestAccountRequestBody {
+
+  def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
+
+  def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(Some(guestDisplayName(email))))
+
+  implicit val writesCreateGuestAccountRequestBody: Writes[CreateGuestAccountRequestBody] = Json.writes[CreateGuestAccountRequestBody]
+  implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
+    transform = body => InMemoryBody(ByteString.fromString(Json.toJson(body).toString)),
+    contentType = "application/json"
+  )
+
+}
+
+// Models the response of successfully creating a guest account.
+//
+// Example response:
+// =================
+// {
+//   "status": "ok",
+//   "guestRegistrationRequest": {
+//     "token": "83e41c1d-458d-49c0-b469-ddc263507034",
+//     "userId": "100000190",
+//     "timeIssued": "2018-02-28T14:46:01Z"
+//   }
+// }
+case class GuestRegistrationResponse(
+    guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest
+)
+
+object GuestRegistrationResponse {
+  implicit val readsGuestRegistrationResponse: Reads[GuestRegistrationResponse] = Json.reads[GuestRegistrationResponse]
+  case class GuestRegistrationRequest(userId: String)
+
+  object GuestRegistrationRequest {
+    implicit val readsGuestRegistrationRequest: Reads[GuestRegistrationRequest] = Json.reads[GuestRegistrationRequest]
+  }
+}
+
+// Models the response of successfully looking up user details via email address.
+//
+// Example response:
+// =================
+// {
+//   "status": "ok",
+//   "user": {
+//     "id": "100000190",
+//     "dates": {
+//       "accountCreatedDate": "2018-02-28T14:46:01Z"
+//     }
+//   }
+// }
+case class UserResponse(user: UserResponse.User)
+
+object UserResponse {
+
+  implicit val readsUserResponse: Reads[UserResponse] = Json.reads[UserResponse]
+  case class User(id: String)
+
+  object User {
+    implicit val readsUser: Reads[User] = Json.reads[User]
+  }
+}
+
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
 
   import IdentityServiceEnrichers._
@@ -72,10 +152,15 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  private def headers(request: RequestHeader): List[(String, String)] = List(
+  private def getHeaders(request: RequestHeader): List[(String, String)] = List(
     "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
     "X-GU-ID-FOWARDED-SC-GU-U" -> request.cookies.get("SC_GU_U").map(_.value),
     "Authorization" -> request.headers.get("GU-IdentityToken")
+  ).flattenValues
+
+  private def postHeaders(request: RequestHeader): List[(String, String)] = List(
+    "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
+    "Content-Type" -> Some("application/json")
   ).flattenValues
 
   private def trackingParameters(request: RequestHeader): List[(String, String)] = List(
@@ -85,9 +170,32 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   ).flattenValues
 
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
-    get(s"user/${user.id}", headers(req), trackingParameters(req)) { resp =>
+    get(s"user/${user.id}", getHeaders(req), trackingParameters(req)) { resp =>
       (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
     }
+  }
+
+  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+    get(s"user", getHeaders(req), List("emailAddress" -> email)) { resp =>
+      resp.json.validate[UserResponse].asEither.map(_.user.id).leftMap(_.mkString(","))
+    }
+  }
+
+  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+    val body = CreateGuestAccountRequestBody.fromEmail(email)
+    execute(
+      wsClient.url(s"$apiUrl/guest")
+        .withHttpHeaders(postHeaders(req): _*)
+        .withBody(body)
+        .withRequestTimeout(1.second)
+        .withMethod("POST")
+    ) { resp =>
+        resp.json.validate[GuestRegistrationResponse].asEither.map(_.guestRegistrationRequest.userId).leftMap(_.mkString(","))
+      }
+  }
+
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+    getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email))
   }
 
   private def get[A](
@@ -119,4 +227,5 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String]
 }

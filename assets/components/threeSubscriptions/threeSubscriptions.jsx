@@ -17,11 +17,18 @@ import type { HeadingSize } from 'components/heading/heading';
 
 // ----- Types ----- //
 
+type ClickEvent = () => void;
+
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   digitalHeadingSize: HeadingSize,
   paperHeadingSize: HeadingSize,
   paperDigitalHeadingSize: HeadingSize,
+  clickEvents: ?{
+    digital: ClickEvent,
+    paper: ClickEvent,
+    paperDigital: ClickEvent,
+  },
 };
 
 
@@ -36,7 +43,7 @@ const gridImageProperties = {
 
 // ----- Component ----- //
 
-export default function ThreeSubscriptions(props: PropTypes) {
+function ThreeSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
     props.referrerAcquisitionData.campaignCode,
@@ -48,9 +55,21 @@ export default function ThreeSubscriptions(props: PropTypes) {
   return (
     <div className="component-three-subscriptions">
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
-        <DigitalBundle url={subsLinks.digital} headingSize={props.digitalHeadingSize} />
-        <PaperBundle url={subsLinks.paper} headingSize={props.paperHeadingSize} />
-        <PaperDigitalBundle url={subsLinks.paperDig} headingSize={props.paperDigitalHeadingSize} />
+        <DigitalBundle
+          url={subsLinks.digital}
+          headingSize={props.digitalHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.digital : null}
+        />
+        <PaperBundle
+          url={subsLinks.paper}
+          headingSize={props.paperHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.paper : null}
+        />
+        <PaperDigitalBundle
+          url={subsLinks.paperDig}
+          headingSize={props.paperDigitalHeadingSize}
+          onClick={props.clickEvents ? props.clickEvents.paperDigital : null}
+        />
       </PageSection>
     </div>
   );
@@ -60,7 +79,11 @@ export default function ThreeSubscriptions(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function DigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -68,22 +91,31 @@ function DigitalBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Digital"
       subheading={`£${getPrice('digital', '11.99')}/month`}
       benefits={getDigitalBenefits()}
-      ctaText="Start your 14 day trial"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="The Guardian\'s digital subscription is available for eleven pounds and ninety nine pence per month. Find out how to sign up for a free trial."
       gridImage={{
         gridId: 'digitalCircle',
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['digital', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Start your 14 day trial',
+          url: props.url,
+          accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
+          modifierClasses: ['digital', 'border'],
+          onClick: props.onClick,
+        },
+      ]}
     />
   );
 
 }
 
-function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -91,22 +123,31 @@ function PaperBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Paper"
       subheading={`from £${getPrice('paper', '10.36')}/month`}
       benefits={getPaperBenefits()}
-      ctaText="Get a paper subscription"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="Proceed to paper subscription options, starting at ten pounds seventy nine pence per month."
       gridImage={{
         gridId: 'paperCircle',
         altText: 'paper subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['paper', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Get a paper subscription',
+          url: props.url,
+          accessibilityHint: 'Proceed to paper subscription options',
+          modifierClasses: ['paper', 'border'],
+          onClick: props.onClick,
+        },
+      ]}
     />
   );
 
 }
 
-function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
+function PaperDigitalBundle(props: {
+  url: string,
+  headingSize: HeadingSize,
+  onClick: ClickEvent | null,
+}) {
 
   return (
     <SubscriptionBundle
@@ -114,17 +155,34 @@ function PaperDigitalBundle(props: { url: string, headingSize: HeadingSize }) {
       heading="Paper+digital"
       subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
       benefits={getPaperDigitalBenefits()}
-      ctaText="Get a paper+digital subscription"
-      ctaUrl={props.url}
-      ctaAccessibilityHint="Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription"
       gridImage={{
         gridId: 'paperDigitalCircle',
         altText: 'paper + digital subscription',
         ...gridImageProperties,
       }}
-      ctaModifiers={['paper-digital', 'border']}
       headingSize={props.headingSize}
+      ctas={[
+        {
+          text: 'Get a paper+digital subscription',
+          url: props.url,
+          accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
+          modifierClasses: ['paper-digital', 'border'],
+          onClick: props.onClick,
+        },
+      ]}
     />
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+ThreeSubscriptions.defaultProps = {
+  clickEvents: null,
+};
+
+
+// ----- Exports ----- //
+
+export default ThreeSubscriptions;

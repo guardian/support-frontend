@@ -16,11 +16,13 @@ import { getAmount, getPaymentMethod } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 
 import reducer from './regularContributionsReducer';
 
 
 import FormFields from './components/formFields';
+import RegularContributionsPayment from './components/regularContributionsPayment';
 
 
 // ----- Page Startup ----- //
@@ -37,19 +39,11 @@ user.init(store.dispatch);
 
 const Loading = () => <div>Loading...</div>;
 
-const contributionsCheckoutContainer = Loadable({
-  loader: () => import('./components/contributionsCheckoutContainer'),
-  render(loaded) {
-    const ContributionsCheckoutContainer = loaded.default;
-    return <ContributionsCheckoutContainer contributionType={contributionType} form={<FormFields />} />;
-  },
-  loading: Loading,
-});
-
 const contributionsThankYouContainer = Loadable({
   loader: () => import('./components/contributionsThankYouPageContainer'),
   loading: Loading,
 });
+
 
 // ----- Render ----- //
 
@@ -57,7 +51,27 @@ const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
-        <Route exact path={routes.recurringContribCheckout} component={contributionsCheckoutContainer} />
+        <Route
+          exact
+          path={routes.recurringContribCheckout}
+          render={() => (
+            <ContributionsCheckoutContainer
+              contributionType={contributionType}
+              form={<FormFields />}
+            />
+          )}
+        />
+        <Route
+          exact
+          path={routes.recurringContribCheckoutGuest}
+          render={() => (
+            <ContributionsCheckoutContainer
+              contributionType={contributionType}
+              form={<FormFields />}
+              payment={<RegularContributionsPayment />}
+            />
+          )}
+        />
         <Route exact path={routes.recurringContribThankyou} component={contributionsThankYouContainer} />
         <Route exact path={routes.recurringContribPending} component={contributionsThankYouContainer} />
       </div>

@@ -1,6 +1,7 @@
 package services.stepfunctions
 
 import java.util.UUID
+
 import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
@@ -11,6 +12,7 @@ import com.gu.support.workers.model._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
+import com.amazonaws.services.stepfunctions.model.HistoryEvent
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
@@ -20,6 +22,8 @@ import com.gu.support.workers.model.monthlyContributions.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+
+import scala.util.{Success, Try}
 
 object CreateRegularContributorRequest {
   implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
@@ -33,7 +37,8 @@ case class CreateRegularContributorRequest(
     paymentFields: PaymentFields,
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
-    supportAbTests: Set[AbTest]
+    supportAbTests: Set[AbTest],
+    email: String
 )
 
 object RegularContributionsClient {
@@ -124,12 +129,17 @@ class RegularContributionsClient(
           respondToClient(StatusResponse(Status.Pending, trackingUri, None))
         }
 
-        events
-          .collect { case event if event.getType == "LambdaFunctionSucceeded" => event.getLambdaFunctionSucceededEventDetails }
-          .flatMap { event => stateWrapper.unWrap[CompletedState](event.getOutput).toOption }
-          .headOption
-          .map { event => respondToClient(StatusResponse(event.status, trackingUri, event.message)) }
-          .getOrElse(pendingOrFailure)
+        def checkoutSuccess(executionHistory: List[HistoryEvent]): Boolean = {
+          executionHistory
+            .map { event => Try(event.getStateExitedEventDetails.getName) }
+            .contains(Success("CheckoutSuccess"))
+        }
+
+        if (checkoutSuccess(events)) {
+          respondToClient(StatusResponse(Status.Success, trackingUri, None))
+        } else {
+          pendingOrFailure
+        }
       }
     )
   }

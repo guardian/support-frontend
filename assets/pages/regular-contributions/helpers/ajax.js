@@ -61,6 +61,7 @@ type RegularContribFields = {|
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
+  email: ?string
 |};
 
 // ----- Functions ----- //
@@ -172,6 +173,7 @@ function requestData(
     ophanIds,
     referrerAcquisitionData,
     supportAbTests,
+    email: user.email,
   };
 
   if (user.stateField) {

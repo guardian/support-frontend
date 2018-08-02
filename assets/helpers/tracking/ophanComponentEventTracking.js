@@ -5,7 +5,7 @@ import * as ophan from 'ophan';
 
 // ----- Types ----- //
 
-export type OphanProduct =
+type OphanProduct =
   | 'CONTRIBUTION'
   | 'RECURRING_CONTRIBUTION'
   | 'MEMBERSHIP_SUPPORTER'
@@ -14,7 +14,7 @@ export type OphanProduct =
   | 'DIGITAL_SUBSCRIPTION'
   | 'PRINT_SUBSCRIPTION';
 
-export type OphanAction =
+type OphanAction =
   | 'INSERT'
   | 'VIEW'
   | 'EXPAND'
@@ -25,7 +25,7 @@ export type OphanAction =
   | 'VOTE'
   | 'CLICK';
 
-export type OphanComponentType =
+type OphanComponentType =
   | 'READERS_QUESTIONS_ATOM'
   | 'QANDA_ATOM'
   | 'PROFILE_ATOM'
@@ -46,7 +46,7 @@ export type OphanComponentType =
   | 'ACQUISITIONS_BUTTON'
   | 'ACQUISITIONS_OTHER';
 
-export type OphanComponent = {
+type OphanComponent = {
   componentType: OphanComponentType,
   id?: string,
   products?: $ReadOnlyArray<OphanProduct>,
@@ -67,16 +67,8 @@ export type OphanComponentEvent = {
 
 // ----- Functions ----- //
 
-export const trackComponentEvents = (
-  action: OphanAction,
-  component: OphanComponent,
-  id?: string,
-) => {
+export const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   ophan.record({
-    componentEvent: {
-      component,
-      action,
-      id,
-    },
+    componentEvent,
   });
 };

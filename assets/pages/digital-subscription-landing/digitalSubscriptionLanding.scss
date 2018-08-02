@@ -158,6 +158,8 @@
     @include mq($from: leftCol) {
       columns: 2;
       column-gap: 54px;
+      column-fill: auto;
+      height: 175px;
     }
   }
 

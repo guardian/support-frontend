@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 import React from 'react';
-import AmberRudd from 'components/svgs/amberRudd';
-import AmberZuck from 'components/svgs/amberZuck';
+import Windrush from 'components/svgs/windrush';
+import WindrushZuck from 'components/svgs/windrushZuck';
 import Zuck from 'components/svgs/zuck';
 import PriceCtaContainer from './priceCtaContainer';
 
@@ -22,11 +22,11 @@ export default function IndependentJournalismSection() {
             and exposing corruption wherever
             we find it.
           </p>
-          <AmberRudd />
+          <Windrush />
         </div>
       </div>
       <div className="component-independent-journalism__footer">
-        <AmberZuck />
+        <WindrushZuck />
         <PriceCtaContainer referringCta="support_digipack_page_independent_journalism_section" />
       </div>
     </div>

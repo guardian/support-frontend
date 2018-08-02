@@ -15,26 +15,26 @@ import type { ImageId, ImageType } from 'helpers/theGrid';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-/* eslint-disable react/no-unused-prop-types */
-
-type Source = {
+export type GridImage = {
   gridId: ImageId,
-  sizes: string,
-  media: string,
   srcSizes: number[],
   imgType: ImageType,
 };
 
-/* eslint-enable react/no-unused-prop-types */
+export type GridSlot = {
+  sizes: string,
+  media: string,
+};
 
-export type PropTypes = {
+export type Source = GridImage & GridSlot;
+
+export type PropTypes = {|
   sources: Source[],
   fallback: string,
   fallbackSize: number,
   altText: string,
   fallbackImgType: ImageType,
-};
+|};
 
 
 // ----- Component ----- //
