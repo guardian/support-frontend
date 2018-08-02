@@ -91,12 +91,14 @@ function getAbsoluteURL(path: string = ''): string {
   return `${getOrigin()}${path}`;
 }
 
+
 // ----- Exports ----- //
 
 export {
   getQueryParameter,
   getAllQueryParams,
   getAllQueryParamsWithExclusions,
+  getOrigin,
   getBaseDomain,
   addQueryParamsToURL,
   getAbsoluteURL,

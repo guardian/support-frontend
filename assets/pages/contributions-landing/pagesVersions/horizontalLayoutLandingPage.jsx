@@ -5,8 +5,9 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
+import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getOrigin } from 'helpers/url';
 import Page from 'components/page/page';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Footer from 'components/footer/footer';
@@ -75,6 +76,10 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );
 
+function payPalCancelUrl(cgId: CountryGroupId): string {
+  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
+}
+
 
 // ----- Render ----- //
 
@@ -96,7 +101,9 @@ const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes
         <ContributionSelectionContainer />
         <ContributionAwarePaymentLogosContainer />
         <ContributionPaymentCtasContainer
-          PayPalButton={PayPalContributionButtonContainer}
+          PayPalButton={() =>
+            <PayPalContributionButtonContainer cancelURL={payPalCancelUrl(props.countryGroupId)} />
+          }
         />
       </Contribute>
     </Page>
