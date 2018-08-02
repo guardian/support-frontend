@@ -74,6 +74,35 @@ object Fixtures {
       }
     """
 
+  val acquisitionData =
+    s"""
+      {
+        "ophanIds":{
+          "pageviewId":"jkcg440imu1c0m8pxpxe",
+          "visitId":null,
+          "browserId":null
+        },
+        "referrerAcquisitionData":{
+          "campaignCode":null,
+          "referrerPageviewId":null,
+          "referrerUrl":null,
+          "componentId":null,
+          "componentType":null,
+          "source":null,
+          "abTest":null,
+          "abTests":[{
+            "name":"fakeTest",
+            "variant":"fakeVariant"
+          }],
+          "queryParameters":null
+        },
+        "supportAbTests":[{
+          "name":"fakeSupportTest",
+          "variant":"fakeVariant"
+        }]
+      }
+    """
+
   val mickeyMouse = "Mickey Mouse"
   val directDebitJson =
     s"""
@@ -98,7 +127,8 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(currency = currency)},
-          "paymentFields": $payPalJson
+          "paymentFields": $payPalJson,
+          "acquisitionData": $acquisitionData
         }"""
 
   def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5) =

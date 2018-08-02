@@ -11,11 +11,12 @@ import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
+import org.scalatest.mockito.MockitoSugar
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
   "SendAcquisitionEvent" should "work with a valid input" taggedAs IntegrationTest in {
-    val sendAcquisitionEvent = new SendAcquisitionEvent(mockServices)
+    val sendAcquisitionEvent = new SendAcquisitionEvent(MockOphanHelper.mockServices)
 
     val outStream = new ByteArrayOutputStream()
 
@@ -27,7 +28,11 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
     out.isSuccess should be(true)
   }
 
-  private lazy val mockServices = {
+}
+
+object MockOphanHelper extends MockitoSugar {
+
+  lazy val mockServices = {
     //Mock the Ophan service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
@@ -37,4 +42,5 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }
+
 }

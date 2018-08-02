@@ -28,7 +28,8 @@ States:
     Branches:
     - StartAt: CheckoutSuccess
       States:
-        CheckoutSuccess: #Do not rename this step as it is used by support-frontend's polling logic.
+        # Do not rename this step as it is used by support-frontend's polling logic.
+        CheckoutSuccess:
           Type: Pass
           End: True
     - StartAt: SendThankYouEmail
@@ -59,17 +60,15 @@ States:
       - Variable: "$.requestInfo.failed"
         BooleanEquals: true
         Next: FailState
-    Default: WaitForBrowserPoll
+    Default: CheckoutFailure
 
-  WaitForBrowserPoll:
-    Type: Wait
-    Seconds: 30
-    Comment: |
-      This state exists to avoid the situation where the state machine is terminated before the client's polling
-      detects that the execution is complete.  This could happen during a deployment when a new state machine
-      is created and the old is terminated.
+  # Do not rename this step as it is used by support-frontend's polling logic.
+  # From a user's perspective the checkout didn't work (e.g. their card wasn't accepted), but the code worked as expected
+  CheckoutFailure:
+    Type: Pass
     End: True
 
+  # The Step Function failed in an unexpected way at some stage of the execution (i.e. an unknown problem with our code)
   FailState:
     Type: Fail
 

@@ -9,7 +9,7 @@ import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodContributionJso
 import com.gu.support.workers.lambdas._
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncoder}
+import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
 import io.circe.parser._
 
 import scala.io.Source
@@ -27,7 +27,10 @@ class EndToEndSpec extends LambdaSpec {
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())
-      .parallel(new ContributionCompleted, new SendThankYouEmail())
+      .parallel(
+        new SendThankYouEmail(),
+        new SendAcquisitionEvent(MockOphanHelper.mockServices) //We have to mock Ophan - there doesn't seem to be a test mode
+      )
       .last()
 
     val decoded = decode[List[JsonWrapper]](output.toString("utf-8"))
