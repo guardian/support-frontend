@@ -181,9 +181,10 @@ const defaultMonthlyAmount = [
 ];
 
 const defaultAnnualAmount = [
-  { value: '50', spoken: numbersInWords['50'] },
+  { value: '25', spoken: numbersInWords['50'] },
   { value: '75', spoken: numbersInWords['75'] },
   { value: '100', spoken: numbersInWords['100'] },
+  { value: '250', spoken: numbersInWords['250'] },
 ];
 
 const amounts = {
@@ -242,10 +243,20 @@ const amounts = {
   ANNUAL: {
     GBPCountries: defaultAnnualAmount,
     UnitedStates: defaultAnnualAmount,
-    AUDCountries: defaultAnnualAmount,
+    AUDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '75', spoken: numbersInWords['75'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+    ],
     EURCountries: defaultAnnualAmount,
     International: defaultAnnualAmount,
-    NZDCountries: defaultAnnualAmount,
+    NZDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '75', spoken: numbersInWords['75'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+    ],
     Canada: defaultAnnualAmount,
   },
 };
@@ -436,21 +447,27 @@ function getContributionTypeRadios(
   countryGroupId: CountryGroupId,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
+  annualTestVariant: 'control' | 'annual' | 'notintest',
 ) {
 
-  return [
-    {
-      value: 'MONTHLY',
-      text: 'Monthly',
-      accessibilityHint: 'Make a regular monthly contribution',
-    },
-    {
-      value: 'ONE_OFF',
-      text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
-      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
-      id: 'qa-one-off-toggle',
-    },
-  ];
+    const oneOff = {
+        value: 'ONE_OFF',
+        text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
+        accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+        id: 'qa-one-off-toggle',
+    };
+    const monthly = {
+        value: 'MONTHLY',
+        text: 'Monthly',
+        accessibilityHint: 'Make a regular monthly contribution',
+    };
+    const annual = {
+        value: 'ANNUAL',
+        text: 'Annually',
+        accessibilityHint: `Make a regular annual contribution`,
+    };
+
+  return annualTestVariant === 'annual' ? [ oneOff, monthly, annual ] : [ monthly, oneOff ];
 
 }
 

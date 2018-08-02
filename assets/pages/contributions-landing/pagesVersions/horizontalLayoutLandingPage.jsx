@@ -30,13 +30,10 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
 };
 
-
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver the', 'independent journalism', 'the world needs'];
 const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
-
-const usContributeCopy = 'Make a monthly commitment to support The Guardian long term or a one-time contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string}
@@ -51,7 +48,7 @@ const countryGroupSpecificDetails: {
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
-    contributeCopy: usContributeCopy,
+    contributeCopy: defaultContributeCopy,
   },
   AUDCountries: {
     headerCopy: ['Help us deliver', 'the independent', 'journalism', 'Australia needs'],
@@ -83,31 +80,37 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
 
 // ----- Render ----- //
 
-const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => (
-  <Provider store={props.store}>
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={<Footer disclaimer countryGroupId={props.countryGroupId} />}
-    >
-      <CirclesIntroduction
-        headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
-        highlights={['Your contribution']}
-        modifierClasses={['compact']}
-      />
-      <Contribute
-        copy={countryGroupSpecificDetails[props.countryGroupId].contributeCopy}
-        modifierClasses={['compact']}
+const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
+    const annualContributeCopy = 'Make a recurring commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
+    const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributions;
+    const copyText = annualTestVariant === 'annual' ? annualContributeCopy : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
+
+  return (
+    <Provider store={props.store}>
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={<Footer disclaimer countryGroupId={props.countryGroupId} />}
       >
-        <ContributionSelectionContainer />
-        <ContributionAwarePaymentLogosContainer />
-        <ContributionPaymentCtasContainer
-          PayPalButton={() =>
-            <PayPalContributionButtonContainer cancelURL={payPalCancelUrl(props.countryGroupId)} />
-          }
+        <CirclesIntroduction
+          headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
+          highlights={['Your contribution']}
+          modifierClasses={['compact']}
         />
-      </Contribute>
-    </Page>
-  </Provider>
-);
+        <Contribute
+          copy={copyText}
+          modifierClasses={['compact']}
+        >
+          <ContributionSelectionContainer />
+          <ContributionAwarePaymentLogosContainer />
+          <ContributionPaymentCtasContainer
+            PayPalButton={() =>
+              <PayPalContributionButtonContainer cancelURL={payPalCancelUrl(props.countryGroupId)} />
+            }
+          />
+        </Contribute>
+      </Page>
+    </Provider>
+  )
+};
 
 export default HorizontalLayoutLandingPage;

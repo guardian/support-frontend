@@ -58,7 +58,19 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 2,
+      seed: 2,
+  },
+  annualContributions: {
+    variants: ['control', 'annual'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      }
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
   },
   recurringGuestCheckout: {
     variants: ['control', 'guest'],
