@@ -6,17 +6,15 @@ import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.support.config.Stage
 import RegularContributionsClient._
 import com.gu.support.workers.model._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
-import com.amazonaws.services.stepfunctions.model.HistoryEvent
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState}
+import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
 import monitoring.SafeLogger
