@@ -5,7 +5,7 @@
 import React from 'react';
 import TextInput from 'components/textInput/textInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
-import { validateEmailAddress } from '../../helpers/utilities';
+import { validateEmailAddress } from 'helpers/utilities';
 
 // ----- Types ----- //
 
@@ -18,6 +18,14 @@ type PropTypes = {
 };
 
 // ----- Component ----- //
+
+
+const EmailError = (props: {showEmailError: boolean}) => {
+  if (!props.showEmailError) {
+    return null;
+  }
+  return <ErrorMessage message="Please enter a valid email address." />;
+};
 
 const EmailFormField = (props: PropTypes) => {
 
@@ -33,16 +41,8 @@ const EmailFormField = (props: PropTypes) => {
     modifierClass.push('error');
   }
 
-  const errorMessage = () => {
-    if (!showEmailError) {
-      return '';
-    }
-    return (<ErrorMessage message="Please enter a valid email address." />);
-  };
-
-
   return (
-    <div>
+    <div className="component-email-form-field">
       <TextInput
         id="email"
         value={props.email}
@@ -53,7 +53,7 @@ const EmailFormField = (props: PropTypes) => {
         modifierClasses={modifierClass}
         required
       />
-      {errorMessage()}
+      <EmailError showEmailError={showEmailError} />
     </div>
   );
 

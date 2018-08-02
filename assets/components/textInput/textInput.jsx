@@ -17,7 +17,7 @@ type PropTypes = {
   placeholder: string,
   required: boolean,
   modifierClasses: Array<?string>,
-  onBlur?: () => void,
+  onBlur: () => void,
 };
 
 
