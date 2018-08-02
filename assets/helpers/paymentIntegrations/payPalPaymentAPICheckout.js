@@ -4,7 +4,7 @@
 
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { addQueryParamsToURL, getAbsoluteURL, getOrigin, getCurrentURL } from 'helpers/url';
+import { addQueryParamsToURL, getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
@@ -43,6 +43,7 @@ export function paypalPaymentAPIRedirect(
   countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
   nativeAbParticipations: Participations,
+  cancelURL: string,
 ): void {
 
   const acquisitionData = derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
@@ -53,7 +54,7 @@ export function paypalPaymentAPIRedirect(
     amount,
     currency,
     returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-    cancelURL: getCurrentURL() || getOrigin(),
+    cancelURL,
   };
 
   const fetchOptions: Object = {
