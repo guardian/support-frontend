@@ -10,6 +10,7 @@ import switchboard.Switches
 import utils.BrowserCheck
 import utils.RequestCountry._
 import scala.concurrent.ExecutionContext
+import monitoring.SafeLogger
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -70,6 +71,7 @@ class Application(
 
   def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
     BrowserCheck.logUserAgent(request)
+    SafeLogger.info("Redirecting to unsupported-browser page")
     Ok(views.html.unsupportedBrowserPage())
   }
 
