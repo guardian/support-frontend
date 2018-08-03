@@ -380,7 +380,7 @@ function getOneOffSpokenName(countryGroupId: CountryGroupId) {
   return countryGroupId === 'UnitedStates' ? 'one time' : 'one off';
 }
 
-function getContributionTypeClassName(contributionType: Contrib) {
+function getContributionTypeClassName(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
     return 'one-off';
@@ -395,7 +395,7 @@ function getContributionTypeClassName(contributionType: Contrib) {
 function getSpokenType(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
-) {
+): string {
 
   if (contributionType === 'ONE_OFF') {
     return getOneOffSpokenName(countryGroupId);
@@ -407,7 +407,7 @@ function getSpokenType(
 
 }
 
-function getFrequency(contributionType: Contrib) {
+function getFrequency(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
     return '';

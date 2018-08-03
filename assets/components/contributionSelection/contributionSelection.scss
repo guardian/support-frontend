@@ -46,15 +46,15 @@
   }
 }
 
-.component-contribution-selection--annual {
+.component-contribution-selection--annual-test {
   .component-contribution-selection__type {
     .component-radio-toggle {
       border: none;
     }
     .component-radio-toggle__button {
       display: inline-block;
-      border: 0.125rem solid #ffe500;
-      border-radius: 37.5rem;
+      border: 2px solid gu-colour(news-garnett-highlight);
+      border-radius: 600px;
       margin: 0 10px 0 0;
     }
 
