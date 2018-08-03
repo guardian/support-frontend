@@ -54,7 +54,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'ONE_OFF',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: '1',
       isCustomAmount: true,
       error: null,
@@ -73,7 +73,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'MONTHLY',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: '1',
       isCustomAmount: true,
       error: 'TooLittle',
@@ -85,6 +85,25 @@ describe('Contributions Selection reducer', () => {
 
   });
 
+  it('should re-parse custom amounts when SET_CONTRIBUTION_TYPE is fired for ANNUAL', () => {
+
+    const contributionType = 'ANNUAL';
+    const initialState = {
+      contributionType: 'ONE_OFF',
+      oneOffAmount: '50',
+      monthlyAmount: '5',
+      annualAmount: '50',
+      customAmount: '1',
+      isCustomAmount: true,
+      error: null,
+    };
+
+    const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
+    const newState = reducer(initialState, changeContributionType);
+    expect(newState.error).toEqual('TooLittle');
+
+  });
+
   it('should handle SET_AMOUNT for one-off', () => {
 
     const amount = '42';
@@ -92,7 +111,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'ONE_OFF',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: null,
       isCustomAmount: false,
       error: null,
@@ -115,7 +134,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'MONTHLY',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: null,
       isCustomAmount: false,
       error: null,
@@ -138,7 +157,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'ANNUAL',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: null,
       isCustomAmount: false,
       error: null,
@@ -161,7 +180,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'ONE_OFF',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: null,
       isCustomAmount: false,
       error: null,
@@ -182,7 +201,7 @@ describe('Contributions Selection reducer', () => {
       contributionType: 'ONE_OFF',
       oneOffAmount: '50',
       monthlyAmount: '5',
-      annualAmount: '75',
+      annualAmount: '50',
       customAmount: null,
       isCustomAmount: false,
       error: null,
