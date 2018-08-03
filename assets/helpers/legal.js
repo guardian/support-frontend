@@ -13,7 +13,7 @@ const termsLinks: {
 } = {
   GBPCountries: defaultTermsLink,
   UnitedStates: 'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
-  AUDCountries: defaultTermsLink,
+  AUDCountries: 'https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions',
   EURCountries: defaultTermsLink,
   International: defaultTermsLink,
   NZDCountries: defaultTermsLink,

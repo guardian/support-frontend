@@ -23,13 +23,14 @@ import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
 import OneoffContributionsPayment from './components/oneoffContributionsPayment';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Page Startup ----- //
 
-const countryGroup = detectCountryGroup();
+const countryGroupId: CountryGroupId = detectCountryGroup();
 
-const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup), countryGroup), true);
+const store = pageInit(reducer(getAmount('ONE_OFF', countryGroupId), countryGroup), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 
@@ -64,6 +65,7 @@ const router = (
               <ContributionsThankYouPage
                 contributionType="ONE_OFF"
                 directDebit={null}
+                countryGroupId={countryGroupId}
                 marketingConsent={<MarketingConsentContainer />}
               />);
           }
