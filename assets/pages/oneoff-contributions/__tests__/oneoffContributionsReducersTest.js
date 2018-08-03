@@ -41,4 +41,13 @@ describe('One-off Reducer', () => {
     expect(newState.oneoffContrib.error).toMatchSnapshot();
   });
 
+  it('should handle SET_EMAIL_HAS_BEEN_BLURRED', () => {
+
+    const action = { type: 'SET_EMAIL_HAS_BEEN_BLURRED' };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.oneoffContrib.emailHasBeenBlurred).toEqual(true);
+  });
+
 });
