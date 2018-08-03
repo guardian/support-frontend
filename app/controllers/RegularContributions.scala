@@ -18,7 +18,7 @@ import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import switchboard.Switches
-import views.html.monthlyContributions
+import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,8 +42,8 @@ class RegularContributions(
   implicit val sw = switches
 
   def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
-    Ok(monthlyContributions(
-      title = "Support the Guardian | Monthly Contributions",
+    Ok(recurringContributions(
+      title = "Support the Guardian | Recurring Contributions",
       id = "regular-contributions-page",
       js = "regularContributionsPage.js",
       css = "regularContributionsPageStyles.css",
@@ -56,9 +56,9 @@ class RegularContributions(
 
   private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: WrappedRequest[AnyContent]): Future[Result] =
     identityService.getUser(user).semiflatMap { fullUser =>
-      isMonthlyContributor(user.credentials) map {
+      isRegularContributor(user.credentials) map {
         case Some(true) =>
-          SafeLogger.info(s"Determined that ${user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
+          SafeLogger.info(s"Determined that ${user.id} is already a contributor; re-directing to /contribute/recurring/existing")
           Redirect("/contribute/recurring/existing")
         case Some(false) | None =>
           val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
@@ -163,7 +163,7 @@ class RegularContributions(
     )
   }
 
-  private def isMonthlyContributor(credentials: AccessCredentials) = credentials match {
+  private def isRegularContributor(credentials: AccessCredentials) = credentials match {
     case cookies: AccessCredentials.Cookies =>
       membersDataService.userAttributes(cookies).fold(
         {

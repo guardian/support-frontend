@@ -384,11 +384,11 @@ function getContributionTypeClassName(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
     return 'one-off';
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
+  } else if (contributionType === 'ANNUAL') {
+    return 'annual';
   }
 
-  return 'annual';
+  return 'monthly';
 
 }
 
@@ -399,11 +399,11 @@ function getSpokenType(
 
   if (contributionType === 'ONE_OFF') {
     return getOneOffSpokenName(countryGroupId);
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
+  } else if (contributionType === 'ANNUAL') {
+    return 'annual';
   }
 
-  return 'annual';
+  return 'monthly';
 
 }
 
