@@ -60,4 +60,16 @@ export const tests: Tests = {
     independent: true,
     seed: 2,
   },
+  recurringGuestCheckout: {
+    variants: ['control', 'guest'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+  },
 };
