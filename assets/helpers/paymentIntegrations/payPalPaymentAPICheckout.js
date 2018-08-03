@@ -43,6 +43,7 @@ export function paypalPaymentAPIRedirect(
   countryGroupId: CountryGroupId,
   errorHandler: (string) => void,
   nativeAbParticipations: Participations,
+  cancelURL: string,
 ): void {
 
   const acquisitionData = derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
@@ -53,7 +54,7 @@ export function paypalPaymentAPIRedirect(
     amount,
     currency,
     returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-    cancelURL: getAbsoluteURL(routes.payPalRestCancelURL),
+    cancelURL,
   };
 
   const fetchOptions: Object = {

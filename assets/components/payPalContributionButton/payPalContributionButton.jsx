@@ -33,6 +33,7 @@ type PropTypes = {
   additionalClass: string,
   onClick: ?(void => void),
   switchStatus: Status,
+  cancelURL: string,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -55,6 +56,7 @@ function payWithPayPal(props: PropTypes) {
         props.countryGroupId,
         props.errorHandler,
         props.abParticipations,
+        props.cancelURL,
       );
     }
   };

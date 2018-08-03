@@ -20,6 +20,7 @@ import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContai
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { getOrigin } from 'helpers/url';
 
 import pageReducer from './supportLandingReducer';
 
@@ -70,7 +71,9 @@ const content = (
           <ContributionSelectionContainer />
           <ContributionAwarePaymentLogosContainer />
           <ContributionPaymentCtasContainer
-            PayPalButton={PayPalContributionButtonContainer}
+            PayPalButton={() =>
+              <PayPalContributionButtonContainer cancelURL={`${getOrigin()}/uk`} />
+          }
           />
         </Contribute>
         <ThreeSubscriptionsContainer
