@@ -6,17 +6,15 @@ import scala.concurrent.Future
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.support.config.Stage
 import RegularContributionsClient._
 import com.gu.support.workers.model._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
-import com.amazonaws.services.stepfunctions.model.HistoryEvent
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.monthlyContributions.state.{CompletedState, CreatePaymentMethodState}
+import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
 import monitoring.SafeLogger
@@ -108,9 +106,17 @@ class RegularContributionsClient(
 
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
 
-    def respondToClient(statusResponse: StatusResponse) = {
+    def respondToClient(statusResponse: StatusResponse): StatusResponse = {
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse.status}")
       statusResponse
+    }
+
+    def checkoutStatus(detailedHistory: List[Try[String]], trackingUri: String): StatusResponse = {
+      detailedHistory match {
+        case history if history.contains(Success("CheckoutSuccess")) => StatusResponse(Status.Success, trackingUri, None)
+        case history if history.contains(Success("CheckoutFailure")) => StatusResponse(Status.Failure, trackingUri, None)
+        case _ => StatusResponse(Status.Pending, trackingUri, None)
+      }
     }
 
     underlying.history(jobId).bimap(
@@ -119,29 +125,12 @@ class RegularContributionsClient(
         StateMachineFailure: RegularContributionError
       },
       { events =>
-        val executionStatus = underlying.statusFromEvents(events)
-
         val trackingUri = supportUrl + statusCall(jobId).url
-
-        val pendingOrFailure = if (executionStatus.exists(_.unsuccessful)) {
-          respondToClient(StatusResponse(Status.Failure, trackingUri, None))
-        } else {
-          respondToClient(StatusResponse(Status.Pending, trackingUri, None))
-        }
-
-        def checkoutSuccess(executionHistory: List[HistoryEvent]): Boolean = {
-          executionHistory
-            .map { event => Try(event.getStateExitedEventDetails.getName) }
-            .contains(Success("CheckoutSuccess"))
-        }
-
-        if (checkoutSuccess(events)) {
-          respondToClient(StatusResponse(Status.Success, trackingUri, None))
-        } else {
-          pendingOrFailure
-        }
+        val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails.getName))
+        respondToClient(checkoutStatus(detailedHistory, trackingUri))
       }
     )
+
   }
 
   def healthy(): Future[Boolean] =
