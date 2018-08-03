@@ -1,8 +1,6 @@
 lambdas:
   #Name is the main class which implements the lambda.
-  #By convention the lambda created will be this name + Lambda eg. ContributionCompletedLambda
-- name: ContributionCompleted
-  description: Completed contribution successfully
+  #By convention the lambda created will be this name + Lambda eg. CreatePaymentMethodLambda
 - name: CreatePaymentMethod
   description: Step 1. Initialise Payment method
 - name: CreateSalesforceContact

@@ -6,10 +6,7 @@ import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs.completedStateCodec
-import com.gu.support.workers.model.states.CompletedState
-import com.gu.support.workers.model.{JsonWrapper, Status}
+import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
@@ -75,18 +72,6 @@ class FailureHandlerSpec extends LambdaSpec {
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
     SafeLogger.info(outState.right.get.requestInfo.messages.head)
-  }
-
-  it should "return a Status.Failure for a Zuora card declined error" in {
-    val failureHandler = new FailureHandler()
-
-    val outStream = new ByteArrayOutputStream()
-
-    failureHandler.handleRequest(cardDeclinedJsonZuora.asInputStream, outStream, context)
-
-    val outState = Encoding.in[CompletedState](outStream.toInputStream)
-    outState.isSuccess should be(true)
-    outState.get._1.status should be(Status.Failure)
   }
 
   it should "match a transaction declined error" in {

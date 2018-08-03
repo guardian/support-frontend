@@ -16,7 +16,6 @@ deployments:
         - "-CreateZuoraSubscriptionLambda-"
         - "-SendThankYouEmailLambda-"
         - "-FailureHandlerLambda-"
-        - "-ContributionCompletedLambda-"
         - "-SendAcquisitionEventLambda-"
       fileName: support-workers.jar
     dependencies: [cfn]
