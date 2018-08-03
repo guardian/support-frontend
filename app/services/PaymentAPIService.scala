@@ -64,7 +64,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def isDuplicatePaymentResponse(response: WSResponse): Boolean = {
+  def decodePaymentResponse(response: WSResponse): Option[PaymentApiError] = {
     decode[PaymentApiError](response.body).fold(
       failure => {
         val failureMessage = SafeLogger.LogMessage(
@@ -72,17 +72,44 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
           "Unable to decode PaymentAPIError. See logs for details"
         )
         SafeLogger.error(failureMessage)
-        false
+        None
       },
-      paymentApiError => paymentApiError.error.errorName.contains("PAYMENT_ALREADY_DONE")
+      resp => {
+       Some(resp)
+      }
     )
+  }
+
+  def logErrorResponse(paymentApiError: Option[PaymentApiError]): Unit = {
+    paymentApiError.foreach(err => {
+      val errorMessage = SafeLogger.LogMessage(
+        s"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}",
+        "Paypal payment failed due to error. See logs for full details"
+      )
+      SafeLogger.error(errorMessage)
+    })
+  }
+
+  def isDuplicatePaymentResponse(errorOpt: Option[PaymentApiError]): Boolean = {
+      errorOpt match {
+        case None => false
+        case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
+      }
   }
 
   def isSuccessful(response: WSResponse): Boolean = {
     response.status match {
       case 200 => true
-      case 400 => isDuplicatePaymentResponse(response)
-      case _ => false
+
+      case 400 =>
+        val error = decodePaymentResponse(response)
+        logErrorResponse(error)
+        isDuplicatePaymentResponse(error)
+
+      case _ =>
+        val error = decodePaymentResponse(response)
+        logErrorResponse(error)
+        false
     }
   }
 
