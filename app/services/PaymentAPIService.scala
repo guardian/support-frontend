@@ -75,26 +75,30 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
         None
       },
       resp => {
-       Some(resp)
+        Some(resp)
       }
     )
   }
 
   def logErrorResponse(paymentApiError: Option[PaymentApiError]): Unit = {
     paymentApiError.foreach(err => {
-      val errorMessage = SafeLogger.LogMessage(
-        s"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}",
-        "Paypal payment failed due to error. See logs for full details"
-      )
-      SafeLogger.error(errorMessage)
+      if (err.error.errorName.contains("INSTRUMENT_DECLINED")) {
+        SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
+      } else {
+        val errorMessage = SafeLogger.LogMessage(
+          s"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}",
+          "Paypal payment failed due to error. See logs for full details"
+        )
+        SafeLogger.error(errorMessage)
+      }
     })
   }
 
   def isDuplicatePaymentResponse(errorOpt: Option[PaymentApiError]): Boolean = {
-      errorOpt match {
-        case None => false
-        case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
-      }
+    errorOpt match {
+      case None => false
+      case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
+    }
   }
 
   def isSuccessful(response: WSResponse): Boolean = {
