@@ -36,7 +36,8 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    appConfig.switches
+    appConfig.switches,
+    appConfig.guardianDomain
   )
 
   lazy val payPalRegularController = new PayPalRegular(

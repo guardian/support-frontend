@@ -1,12 +1,13 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
+import actions.CustomActionBuilders.OptionalAuthRequest
 import assets.AssetsResolver
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
+import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.SafeLogger
@@ -31,7 +32,8 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    switches: Switches
+    switches: Switches,
+    guardianDomain: String
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
@@ -120,7 +122,9 @@ class RegularContributions(
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${fullUser.id}, due to $error")
         InternalServerError
       },
-      response => Accepted(response.asJson)
+      response =>
+        Accepted(response.asJson)
+          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
     )
 
   }
@@ -137,7 +141,10 @@ class RegularContributions(
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
         InternalServerError
       },
-      response => Accepted(response.asJson)
+      response =>
+        Accepted(response.asJson)
+          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
+
     )
   }
 
