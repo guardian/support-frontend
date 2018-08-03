@@ -96,8 +96,8 @@ const config: { [CountryGroupId]: Config } = {
   AUDCountries: {
     ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
-      min: 10,
-      minInWords: numbersInWords['10'],
+      min: 5,
+      minInWords: numbersInWords['5'],
       max: 166,
       maxInWords: numbersInWords['166'],
       default: 20,
@@ -146,8 +146,8 @@ const config: { [CountryGroupId]: Config } = {
   NZDCountries: {
     ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
-      min: 10,
-      minInWords: numbersInWords['10'],
+      min: 5,
+      minInWords: numbersInWords['5'],
       max: 166,
       maxInWords: numbersInWords['166'],
       default: 20,
