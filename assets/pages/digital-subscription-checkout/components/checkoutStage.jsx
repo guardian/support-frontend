@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import SubscriptionsThankYou from 'components/subscriptionsThankYou/subscriptionsThankYou';
 
 import { type Stage } from '../digitalSubscriptionCheckoutReducer';
 
@@ -35,7 +36,7 @@ function CheckoutStage(props: PropTypes) {
   switch (props.stage) {
 
     case 'thankyou':
-      return <div>Thank you page</div>;
+      return <SubscriptionsThankYou />;
 
     case 'checkout':
     default:
