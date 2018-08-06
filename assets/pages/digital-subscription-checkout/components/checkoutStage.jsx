@@ -5,33 +5,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-import Page from 'components/page/page';
-import CustomerService from 'components/customerService/customerService';
-import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 
-import StageSelection, { type PropTypes } from './stageSelection';
 import { type Stage } from '../digitalSubscriptionCheckoutReducer';
 
 
-// ----- Internationalisation ----- //
+// ----- Types ----- //
 
-const countryGroupId: CountryGroupId = detect();
+type PropTypes = {
+  stage: Stage;
+};
 
-const CountrySwitcherHeader = countrySwitcherHeaderContainer(
-  '/subscribe/digital',
-  [
-    'GBPCountries',
-    'UnitedStates',
-    'AUDCountries',
-    'International',
-  ],
-);
 
-function mapStateToProps(state): PropTypes<Stage> {
+// ----- State/Props Maps ----- //
+
+function mapStateToProps(state): PropTypes {
 
   return {
     stage: state.page.stage,
@@ -42,19 +30,24 @@ function mapStateToProps(state): PropTypes<Stage> {
 
 // ----- Component ----- //
 
-const CheckoutStage = StageSelection({
-  checkout: (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
-    >
-      <LeftMarginSection modifierClasses={['grey']}>
-        <p>Placeholder</p>
-      </LeftMarginSection>
-    </Page>
-  ),
-  thankyou: <div>Thank you page</div>,
-});
+function CheckoutStage(props: PropTypes) {
+
+  switch (props.stage) {
+
+    case 'thankyou':
+      return <div>Thank you page</div>;
+
+    case 'checkout':
+    default:
+      return (
+        <LeftMarginSection modifierClasses={['grey']}>
+          <p>Placeholder</p>
+        </LeftMarginSection>
+      );
+
+  }
+
+}
 
 
 // ----- Export ----- //
