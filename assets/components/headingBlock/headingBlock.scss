@@ -1,0 +1,22 @@
+.component-heading-block {
+  background-color: gu-colour(garnett-neutral-1);
+  color: #fff;
+}
+
+.component-heading-block__heading {
+  font-size: 26px;
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+  line-height: 1.12;
+  padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
+}
+
+.component-heading-block__banner {
+  background-color: gu-colour(sport-garnett-media-main-1);
+  padding: 4px ($gu-h-spacing / 2) 8px;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 1;
+  font-family: $gu-egyptian-web;
+  font-style: italic;
+}
