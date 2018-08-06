@@ -56,10 +56,10 @@ class PayPalOneOff(
 
     def processPaymentApiResponse(success: Boolean): Result = {
       if (success) {
-        SafeLogger.info(s"One-off contribution for Paypal payment is successful")
+        SafeLogger.info(s"One-off contribution for Paypal payment is successful. Sending user to thank-you page")
         Redirect("/contribute/one-off/thankyou")
       } else {
-        SafeLogger.error(scrub"Error making paypal payment")
+        SafeLogger.error(scrub"Error making paypal payment. Sending user to error page.")
         Ok(views.html.main(
           "Support the Guardian | PayPal Error",
           "paypal-error-page",
