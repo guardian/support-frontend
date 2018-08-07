@@ -90,6 +90,11 @@
   .component-payment-error--paypal {
     margin-top: $gu-v-spacing;
   }
+
+  .component-text-input__input--error {
+    border: 2px solid gu-colour(error);
+    margin-bottom: $gu-v-spacing / 2;
+  }
 }
 
 .oneoff-contribution-payment__or-label {

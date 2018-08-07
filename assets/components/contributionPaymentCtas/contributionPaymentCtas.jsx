@@ -13,6 +13,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import {
   getSpokenType,
   getOneOffSpokenName,
+  getFrequency,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { routes } from 'helpers/routes';
@@ -44,6 +45,7 @@ type PropTypes = {
   }>,
   error: ?string,
   resetError: void => void,
+  isGuestCheckout: boolean
 };
 
 
@@ -135,10 +137,12 @@ function RegularCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
+  isGuestCheckout: boolean,
 }): Node {
-
+  const recurringRoute = props.isGuestCheckout ? routes.recurringContribCheckoutGuest : routes.recurringContribCheckout;
+  const frequency = getFrequency(props.contributionType);
   const spokenType = getSpokenType(props.contributionType, props.countryGroupId);
-  const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
+  const clickUrl = addQueryParamsToURL(recurringRoute, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
     currency: props.currencyId,
@@ -146,7 +150,7 @@ function RegularCta(props: {
 
   return (
     <CtaLink
-      text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} a month`}
+      text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} ${frequency}`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}

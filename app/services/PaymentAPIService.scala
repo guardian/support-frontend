@@ -5,6 +5,7 @@ import java.io.IOException
 import io.circe.parser.decode
 import codecs.CirceDecoders.paymentApiError
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
@@ -67,34 +68,30 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   def decodePaymentResponse(response: WSResponse): Option[PaymentApiError] = {
     decode[PaymentApiError](response.body).fold(
       failure => {
-        val failureMessage = SafeLogger.LogMessage(
-          s"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}",
-          "Unable to decode PaymentAPIError. See logs for details"
-        )
-        SafeLogger.error(failureMessage)
+        SafeLogger.error(scrub"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}")
         None
       },
       resp => {
-       Some(resp)
+        Some(resp)
       }
     )
   }
 
   def logErrorResponse(paymentApiError: Option[PaymentApiError]): Unit = {
     paymentApiError.foreach(err => {
-      val errorMessage = SafeLogger.LogMessage(
-        s"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}",
-        "Paypal payment failed due to error. See logs for full details"
-      )
-      SafeLogger.error(errorMessage)
+      if (err.error.errorName.contains("INSTRUMENT_DECLINED")) {
+        SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
+      } else {
+        SafeLogger.error(scrub"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}")
+      }
     })
   }
 
   def isDuplicatePaymentResponse(errorOpt: Option[PaymentApiError]): Boolean = {
-      errorOpt match {
-        case None => false
-        case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
-      }
+    errorOpt match {
+      case None => false
+      case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
+    }
   }
 
   def isSuccessful(response: WSResponse): Boolean = {

@@ -46,7 +46,7 @@ function getContributionType() {
   if (param) {
     storage.setSession('contribType', param);
   }
-  return (storage.getSession('contribType') || '').toLowerCase();
+  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
 }
 
 function getCurrency(): string {
@@ -146,11 +146,11 @@ function sendData(
     ophanBrowserID: getOphanIds().browserId,
     paymentRequestApiStatus,
     ecommerce: {
+      currencyCode: currency,
       purchase: {
         actionField: {
           id: orderId,
           revenue: value, // Total transaction value (incl. tax and shipping)
-          currency,
         },
         products: [{
           name: `${getContributionType()}_contribution`,

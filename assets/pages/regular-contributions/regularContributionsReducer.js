@@ -31,6 +31,7 @@ export type State = {
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
+  emailHasBeenBlurred: boolean,
 };
 
 export type CombinedState = {
@@ -63,6 +64,7 @@ function createRegularContribReducer(
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
+    emailHasBeenBlurred: false,
   };
 
   return function regularContrib(state: State = initialState, action: Action): State {
@@ -82,6 +84,9 @@ function createRegularContribReducer(
 
       case 'SET_PAYPAL_HAS_LOADED':
         return Object.assign({}, state, { payPalHasLoaded: true });
+
+      case 'SET_EMAIL_HAS_BEEN_BLURRED':
+        return Object.assign({}, state, { emailHasBeenBlurred: true });
 
       default:
         return state;

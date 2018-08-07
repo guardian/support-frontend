@@ -21,6 +21,7 @@ import type { Action } from './oneoffContributionsActions';
 export type State = {
   amount: number,
   error: ?string,
+  emailHasBeenBlurred: boolean,
 };
 
 export type CombinedState = {
@@ -42,6 +43,7 @@ function createOneOffContribReducer(amount: number) {
   const initialState: State = {
     amount,
     error: null,
+    emailHasBeenBlurred: false,
   };
 
   return function oneOffContribReducer(state: State = initialState, action: Action): State {
@@ -50,6 +52,12 @@ function createOneOffContribReducer(amount: number) {
 
       case 'CHECKOUT_ERROR':
         return Object.assign({}, state, { error: action.message });
+
+      case 'CHECKOUT_SUCCESS':
+        return Object.assign({}, state, { paymentComplete: true });
+
+      case 'SET_EMAIL_HAS_BEEN_BLURRED':
+        return Object.assign({}, state, { emailHasBeenBlurred: true });
 
       default:
         return state;

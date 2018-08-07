@@ -1,12 +1,13 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
+import actions.CustomActionBuilders.OptionalAuthRequest
 import assets.AssetsResolver
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
+import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.SafeLogger
@@ -17,7 +18,7 @@ import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import switchboard.Switches
-import views.html.monthlyContributions
+import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +32,8 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    switches: Switches
+    switches: Switches,
+    guardianDomain: String
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
@@ -40,8 +42,8 @@ class RegularContributions(
   implicit val sw = switches
 
   def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
-    Ok(monthlyContributions(
-      title = "Support the Guardian | Monthly Contributions",
+    Ok(recurringContributions(
+      title = "Support the Guardian | Recurring Contributions",
       id = "regular-contributions-page",
       js = "regularContributionsPage.js",
       css = "regularContributionsPageStyles.css",
@@ -54,9 +56,9 @@ class RegularContributions(
 
   private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: WrappedRequest[AnyContent]): Future[Result] =
     identityService.getUser(user).semiflatMap { fullUser =>
-      isMonthlyContributor(user.credentials) map {
+      isRegularContributor(user.credentials) map {
         case Some(true) =>
-          SafeLogger.info(s"Determined that ${user.id} is already a monthly contributor; re-directing to /contribute/recurring/existing")
+          SafeLogger.info(s"Determined that ${user.id} is already a contributor; re-directing to /contribute/recurring/existing")
           Redirect("/contribute/recurring/existing")
         case Some(false) | None =>
           val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
@@ -120,7 +122,9 @@ class RegularContributions(
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${fullUser.id}, due to $error")
         InternalServerError
       },
-      response => Accepted(response.asJson)
+      response =>
+        Accepted(response.asJson)
+          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
     )
 
   }
@@ -137,7 +141,10 @@ class RegularContributions(
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
         InternalServerError
       },
-      response => Accepted(response.asJson)
+      response =>
+        Accepted(response.asJson)
+          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
+
     )
   }
 
@@ -156,7 +163,7 @@ class RegularContributions(
     )
   }
 
-  private def isMonthlyContributor(credentials: AccessCredentials) = credentials match {
+  private def isRegularContributor(credentials: AccessCredentials) = credentials match {
     case cookies: AccessCredentials.Cookies =>
       membersDataService.userAttributes(cookies).fold(
         {
