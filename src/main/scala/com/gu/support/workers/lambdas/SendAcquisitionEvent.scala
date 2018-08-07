@@ -83,7 +83,8 @@ object SendAcquisitionEvent {
               componentTypeV2 = data.referrerAcquisitionData.componentType,
               source = data.referrerAcquisitionData.source,
               platform = Some(ophan.thrift.event.Platform.Support),
-              queryParameters = data.referrerAcquisitionData.queryParameters
+              queryParameters = data.referrerAcquisitionData.queryParameters,
+              identityId = Some(state.user.id)
             )
           },
           "acquisition data not included"
