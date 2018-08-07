@@ -9,6 +9,19 @@
   font-weight: bold;
   line-height: 1.12;
   padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
+
+  @include mq($from: mobileMedium) {
+    width: 350px;
+  }
+
+  @include mq($from: tablet) {
+    font-size: 32px;
+    width: 500px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 36px;
+  }
 }
 
 .component-heading-block__banner {

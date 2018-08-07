@@ -33,7 +33,7 @@ function SubscriptionsThankYou() {
             </strong>, and we&#39;ve sent you an email to explain everything you need to know.
             Log in to the app with the email you used to sign up
           </p>
-          <div className="component-subscriptions-thank-you__premium-ctas">
+          <div className="component-subscriptions-thank-you__ctas">
             <CtaLink
               text="Download on the App Store"
               accessibilityHint="Click to download the app on the Apple App Store"
@@ -54,11 +54,13 @@ function SubscriptionsThankYou() {
             </strong> you can now access our award winning journalism in a
             format tailored for the iPad available to read offline, and updated daily.
           </p>
-          <CtaLink
-            text="Download the Daily Tablet Edition"
-            accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
-            url="/"
-          />
+          <div className="component-subscriptions-thank-you__ctas">
+            <CtaLink
+              text="Download the Daily Tablet Edition"
+              accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
+              url="/"
+            />
+          </div>
         </div>
       </LeftMarginSection>
     </div>
