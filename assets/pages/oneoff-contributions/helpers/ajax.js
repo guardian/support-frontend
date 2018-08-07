@@ -99,20 +99,27 @@ export default function postCheckout(
     );
 
     return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-
       const url: string = addQueryParamsToURL(
         routes.oneOffContribThankyou,
         { INTCMP: referrerAcquisitionData.campaignCode },
       );
-
       if (response.ok) {
         window.location.assign(url);
         return;
       }
-
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-    }).catch(() => {
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
+      return response.json()})
+      .then ((responseJson) => {
+          if (responseJson.error.exceptionType === "CardException") {
+            dispatch(checkoutError('Your card has been declined. Please try a different payment method'));
+          } else {
+            logger.logException('Stripe payment attempt failed with following error' + JSON.stringify(responseJson));
+            dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later. '));
+          }
+        })
+        .catch((error) => {
+        logger.logException('Stripe payment attempt failed with unexpected error while attempting to process payment response. ' +
+        'error: ' + error);
+        dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later. '));
     });
   };
 }
