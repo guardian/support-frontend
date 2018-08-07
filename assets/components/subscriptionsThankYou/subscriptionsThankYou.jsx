@@ -46,7 +46,7 @@ function SubscriptionsThankYou() {
             />
           </div>
           <h2 className="component-subscriptions-thank-you__heading">
-            and the Daily Tablet Edition?
+            and the iPad Daily Edition..?
           </h2>
           <p className="component-subscriptions-thank-you__copy">
             <strong className="component-subscriptions-thank-you__strong">
@@ -56,7 +56,7 @@ function SubscriptionsThankYou() {
           </p>
           <div className="component-subscriptions-thank-you__ctas">
             <CtaLink
-              text="Download the Daily Tablet Edition"
+              text="Download the iPad Edition"
               accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
               url="/"
             />
