@@ -2,7 +2,7 @@
 
 exports[`Contributions Selection reducer should not change the state for an action with the wrong scope 1`] = `
 Object {
-  "annualAmount": "75",
+  "annualAmount": "50",
   "contributionType": "MONTHLY",
   "customAmount": null,
   "error": null,
@@ -14,7 +14,7 @@ Object {
 
 exports[`Contributions Selection reducer should not change the state for an action with the wrong scope 2`] = `
 Object {
-  "annualAmount": "75",
+  "annualAmount": "50",
   "contributionType": "MONTHLY",
   "customAmount": null,
   "error": null,
@@ -26,7 +26,7 @@ Object {
 
 exports[`Contributions Selection reducer should not change the state for an action with the wrong scope 3`] = `
 Object {
-  "annualAmount": "75",
+  "annualAmount": "50",
   "contributionType": "MONTHLY",
   "customAmount": null,
   "error": null,
@@ -38,7 +38,7 @@ Object {
 
 exports[`Contributions Selection reducer should return the initial state 1`] = `
 Object {
-  "annualAmount": "75",
+  "annualAmount": "50",
   "contributionType": "MONTHLY",
   "customAmount": null,
   "error": null,
@@ -50,7 +50,7 @@ Object {
 
 exports[`Contributions Selection reducer should return the initial state for another country group 1`] = `
 Object {
-  "annualAmount": "75",
+  "annualAmount": "50",
   "contributionType": "MONTHLY",
   "customAmount": null,
   "error": null,

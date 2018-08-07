@@ -12,7 +12,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
-// import VerticalLandingLayout from './pagesVersions/verticalLayoutLandingPage';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
 

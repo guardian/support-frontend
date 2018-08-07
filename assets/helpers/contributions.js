@@ -69,11 +69,11 @@ const numbersInWords = {
 
 const defaultConfig: Config = {
   ANNUAL: {
-    min: 50,
-    minInWords: numbersInWords['50'],
+    min: 10,
+    minInWords: numbersInWords['10'],
     max: 2000,
     maxInWords: numbersInWords['2000'],
-    default: 75,
+    default: 50,
   },
   MONTHLY: {
     min: 2,
@@ -181,9 +181,10 @@ const defaultMonthlyAmount = [
 ];
 
 const defaultAnnualAmount = [
+  { value: '25', spoken: numbersInWords['25'] },
   { value: '50', spoken: numbersInWords['50'] },
-  { value: '75', spoken: numbersInWords['75'] },
   { value: '100', spoken: numbersInWords['100'] },
+  { value: '250', spoken: numbersInWords['250'] },
 ];
 
 const amounts = {
@@ -242,10 +243,20 @@ const amounts = {
   ANNUAL: {
     GBPCountries: defaultAnnualAmount,
     UnitedStates: defaultAnnualAmount,
-    AUDCountries: defaultAnnualAmount,
+    AUDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
     EURCountries: defaultAnnualAmount,
     International: defaultAnnualAmount,
-    NZDCountries: defaultAnnualAmount,
+    NZDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
     Canada: defaultAnnualAmount,
   },
 };
@@ -369,30 +380,42 @@ function getOneOffSpokenName(countryGroupId: CountryGroupId) {
   return countryGroupId === 'UnitedStates' ? 'one time' : 'one off';
 }
 
-function getContributionTypeClassName(contributionType: Contrib) {
+function getContributionTypeClassName(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
     return 'one-off';
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
+  } else if (contributionType === 'ANNUAL') {
+    return 'annual';
   }
 
-  return 'annual';
+  return 'monthly';
 
 }
 
 function getSpokenType(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
-) {
+): string {
 
   if (contributionType === 'ONE_OFF') {
     return getOneOffSpokenName(countryGroupId);
-  } else if (contributionType === 'MONTHLY') {
-    return 'monthly';
+  } else if (contributionType === 'ANNUAL') {
+    return 'annual';
   }
 
-  return 'annual';
+  return 'monthly';
+
+}
+
+function getFrequency(contributionType: Contrib): string {
+
+  if (contributionType === 'ONE_OFF') {
+    return '';
+  } else if (contributionType === 'MONTHLY') {
+    return 'per month';
+  }
+
+  return 'a year';
 
 }
 
@@ -436,21 +459,27 @@ function getContributionTypeRadios(
   countryGroupId: CountryGroupId,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
+  annualTestVariant: 'control' | 'annual' | 'notintest',
 ) {
 
-  return [
-    {
-      value: 'MONTHLY',
-      text: 'Monthly',
-      accessibilityHint: 'Make a regular monthly contribution',
-    },
-    {
-      value: 'ONE_OFF',
-      text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
-      accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
-      id: 'qa-one-off-toggle',
-    },
-  ];
+  const oneOff = {
+    value: 'ONE_OFF',
+    text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
+    accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    id: 'qa-one-off-toggle',
+  };
+  const monthly = {
+    value: 'MONTHLY',
+    text: 'Monthly',
+    accessibilityHint: 'Make a regular monthly contribution',
+  };
+  const annual = {
+    value: 'ANNUAL',
+    text: 'Annually',
+    accessibilityHint: 'Make a regular annual contribution',
+  };
+
+  return annualTestVariant === 'annual' ? [oneOff, monthly, annual] : [monthly, oneOff];
 
 }
 
@@ -483,6 +512,7 @@ export {
   getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
+  getFrequency,
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,
