@@ -203,7 +203,10 @@ function statusPoll(
 
   if (pollCount >= MAX_POLLS) {
     successfulConversion(participations);
-    ophan.sendInitialEvent(getAbsoluteURL(routes.recurringContribThankyou));
+    ophan.sendInitialEvent(
+      getAbsoluteURL(routes.recurringContribThankyou),
+      getAbsoluteURL(routes.recurringContribCheckout),
+    );
     dispatch(checkoutPending(paymentMethod));
     return undefined;
   }
