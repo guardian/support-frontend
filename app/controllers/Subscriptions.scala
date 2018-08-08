@@ -38,7 +38,10 @@ class Subscriptions(
     Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
-  def landing(title: String, id: String, js: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    val title = "Support the Guardian | Get a Subscription"
+    val id = "subscriptions-landing-page"
+    val js = "subscriptionsLandingPage.js"
     Ok(views.html.main(
       title,
       id,

@@ -206,3 +206,9 @@ function DigitalBundle(props: {
   );
 
 }
+
+export {
+  DigitalBundle,
+  PremiumTier,
+  DailyEdition,
+};

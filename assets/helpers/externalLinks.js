@@ -113,12 +113,14 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
+  countryGroupId: CountryGroupId,
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
 
+  const countryId = countryGroups[countryGroupId].supportInternationalisationId;
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
@@ -126,8 +128,8 @@ function buildSubsUrls(
 
   const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
   const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
-  const weekly = `${subsUrl}/weekly/GB?${params.toString()}`;
+  const digital = `/${countryId}/subscribe/digital?${params.toString()}`;
+  const weekly = `${subsUrl}/weekly?${params.toString()}`;
 
   return {
     digital,
@@ -140,6 +142,7 @@ function buildSubsUrls(
 
 // Creates links to subscriptions, tailored to the user's campaign.
 function getSubsLinks(
+  countryGroupId: CountryGroupId = 'GBPCountries',
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
@@ -147,6 +150,7 @@ function getSubsLinks(
 ): SubsUrls {
   if ((campaign && customPromos[campaign])) {
     return buildSubsUrls(
+      countryGroupId,
       customPromos[campaign],
       intCmp,
       otherQueryParams,
@@ -154,7 +158,7 @@ function getSubsLinks(
     );
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
+  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
 
 }
 

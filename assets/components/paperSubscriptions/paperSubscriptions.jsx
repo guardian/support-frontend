@@ -183,3 +183,9 @@ function WeeklyBundle(props: {
   );
 
 }
+
+export {
+  PaperBundle,
+  WeeklyBundle,
+  PaperDigitalBundle,
+};
