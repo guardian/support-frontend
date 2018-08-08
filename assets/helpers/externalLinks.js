@@ -142,7 +142,7 @@ function buildSubsUrls(
 
 // Creates links to subscriptions, tailored to the user's campaign.
 function getSubsLinks(
-  countryGroupId: CountryGroupId = 'GBPCountries',
+  countryGroupId: CountryGroupId,
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,

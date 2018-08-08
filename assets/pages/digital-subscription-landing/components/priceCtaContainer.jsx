@@ -17,7 +17,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string }) {
   const { countryGroupId } = state.common.internationalisation;
   const { referrerAcquisitionData } = state.common;
-  const price = digitalSubPrices[countryGroupId].toFixed(2);
+  const price = digitalSubPrices.DigitalPack[countryGroupId].toFixed(2);
 
   return {
     ctaText: 'Start a 14 day free trial',

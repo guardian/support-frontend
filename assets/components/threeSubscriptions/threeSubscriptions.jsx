@@ -6,7 +6,7 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits, getPrice } from 'helpers/flashSale';
+import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits, getDiscountedPrice } from 'helpers/flashSale';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -46,6 +46,7 @@ const gridImageProperties = {
 function ThreeSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
+    'GBPCountries',
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -87,9 +88,9 @@ function DigitalBundle(props: {
 
   return (
     <SubscriptionBundle
+      countryGroupId="GBPCountries"
       modifierClass="digital"
       heading="Digital"
-      subheading={`£${getPrice('digital', '11.99')}/month`}
       benefits={getDigitalBenefits()}
       gridImage={{
         gridId: 'digitalCircle',
@@ -121,7 +122,7 @@ function PaperBundle(props: {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`from £${getPrice('paper', '10.36')}/month`}
+      subheading={`from £${getDiscountedPrice('Paper', '10.36')}/month`}
       benefits={getPaperBenefits()}
       gridImage={{
         gridId: 'paperCircle',
@@ -153,7 +154,7 @@ function PaperDigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+digital"
-      subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
+      subheading={`from £${getDiscountedPrice('PaperAndDigital', '21.62')}/month`}
       benefits={getPaperDigitalBenefits()}
       gridImage={{
         gridId: 'paperDigitalCircle',

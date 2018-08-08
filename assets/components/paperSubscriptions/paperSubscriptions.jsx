@@ -6,12 +6,14 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPrice } from 'helpers/flashSale';
+import { getDiscountedPrice } from 'helpers/flashSale';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { type HeadingSize } from 'components/heading/heading';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
+import { displayPrice } from '../../helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -43,6 +45,7 @@ const gridImageProperties = {
 export default function PaperSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
+    'GBPCountries',
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -63,6 +66,7 @@ export default function PaperSubscriptions(props: PropTypes) {
           onClick={props.clickEvents.paperDigital}
         />
         <WeeklyBundle
+          countryGroupId="GBPCountries"
           url={subsLinks.weekly}
           headingSize={props.headingSize}
           onClick={props.clickEvents.weekly}
@@ -86,7 +90,7 @@ function PaperBundle(props: {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`from £${getPrice('paper', '10.36')}/month`}
+      subheading={`from £${getDiscountedPrice('Paper', '10.36')}/month`}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -122,7 +126,7 @@ function PaperDigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+Digital"
-      subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
+      subheading={`from £${getDiscountedPrice('PaperAndDigital', '21.62')}/month`}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -149,6 +153,7 @@ function PaperDigitalBundle(props: {
 }
 
 function WeeklyBundle(props: {
+  countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
   onClick: ClickEvent,
@@ -158,7 +163,7 @@ function WeeklyBundle(props: {
     <SubscriptionBundle
       modifierClass="weekly"
       heading="Guardian Weekly"
-      subheading="£30/quarter"
+      subheading={displayPrice('GuardianWeekly', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {

@@ -17,7 +17,8 @@ import PageSection from 'components/pageSection/pageSection';
 import { PremiumTier, DigitalBundle } from 'components/digitalSubscriptions/digitalSubscriptions';
 import { WeeklyBundle } from 'components/paperSubscriptions/paperSubscriptions';
 import { type HeadingSize } from 'components/heading/heading';
-import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { digitalSubPrices } from '../../helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -61,6 +62,7 @@ export default function InternationalSubscriptions(props: PropTypes) {
         modifierClass="international-subscriptions"
       >
         <PremiumTier
+          countryGroupId={props.countryGroupId}
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
@@ -68,11 +70,13 @@ export default function InternationalSubscriptions(props: PropTypes) {
           androidOnClick={props.clickEvents.androidApp}
         />
         <DigitalBundle
+          countryGroupId={props.countryGroupId}
           url={subsLinks.digital}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
         />
         <WeeklyBundle
+          countryGroupId={props.countryGroupId}
           url={subsLinks.weekly}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}

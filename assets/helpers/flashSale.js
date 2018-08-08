@@ -1,19 +1,19 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
+import type { SubscriptionProduct } from './subscriptions';
 
-type ProductType = 'digital' | 'paper' | 'paperAndDigital';
 
-function inOfferPeriod(product: ProductType): boolean {
+function inOfferPeriod(product: SubscriptionProduct): boolean {
   // Days are 1 based, months are 0 based
   const startTime = new Date(2018, 5, 18, 0, 0).getTime(); // 18th June 2018
   const endTime = new Date(2018, 6, 1, 0, 0).getTime(); // 1st July 2018
 
   // The current sale is digital only, paper & paper + digital is unaffected
   const included = {
-    digital: true,
-    paper: false,
-    paperAndDigital: false,
+    DigitalPack: true,
+    Paper: false,
+    PaperAndDigital: false,
   };
 
   const now = Date.now();
@@ -23,28 +23,28 @@ function inOfferPeriod(product: ProductType): boolean {
 
 // Promo codes
 const promoCodes = {
-  digital: {
+  DigitalPack: {
     promoCode: 'DPS80S',
     price: '11.99',
   },
-  paper: {
+  Paper: {
     promoCode: 'GST80F',
     price: '5.18',
   },
-  paperAndDigital: {
+  PaperAndDigital: {
     promoCode: 'GST80G',
     price: '10.81',
   },
 };
 
-function getPromoCode(product: ProductType, defaultCode: string) {
+function getPromoCode(product: SubscriptionProduct, defaultCode: string) {
   if (inOfferPeriod(product)) {
     return promoCodes[product].promoCode;
   }
   return defaultCode;
 }
 
-function getPrice(product: ProductType, defaultPrice: string) {
+function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: string) {
   if (inOfferPeriod(product)) {
     return promoCodes[product].price;
   }
@@ -72,21 +72,21 @@ function getDigitalBenefits() {
     },
   ];
 
-  if (inOfferPeriod('digital')) {
+  if (inOfferPeriod('DigitalPack')) {
     return [offerItem, ...items];
   }
   return items;
 }
 
 function getPaperBenefits() {
-  if (inOfferPeriod('paper')) {
+  if (inOfferPeriod('Paper')) {
     return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice];
   }
   return [chooseYourPackage, saveMoneyOnRetailPrice];
 }
 
 function getPaperDigitalBenefits() {
-  if (inOfferPeriod('paperAndDigital')) {
+  if (inOfferPeriod('PaperAndDigital')) {
     return [offerItem, chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
   }
   return [chooseYourPackage, saveMoneyOnRetailPrice, getAllBenefits];
@@ -97,5 +97,5 @@ export {
   getPaperBenefits,
   getPaperDigitalBenefits,
   getPromoCode,
-  getPrice,
+  getDiscountedPrice,
 };

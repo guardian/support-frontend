@@ -11,13 +11,15 @@ import {
   dailyEditionUrl,
 } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPrice } from 'helpers/flashSale';
+import { getDiscountedPrice } from 'helpers/flashSale';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { addQueryParamsToURL } from 'helpers/url';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { type HeadingSize } from 'components/heading/heading';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { displayPrice } from '../../helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -52,6 +54,7 @@ const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_lan
 export default function DigitalSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
+    'GBPCountries',
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -65,6 +68,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
         modifierClass="digital-subscriptions"
       >
         <PremiumTier
+          countryGroupId="GBPCountries"
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
@@ -77,6 +81,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
           onClick={props.clickEvents.dailyEdition}
         />
         <DigitalBundle
+          countryGroupId="GBPCountries"
           url={subsLinks.digital}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
@@ -91,6 +96,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function PremiumTier(props: {
+    countryGroupId: CountryGroupId,
     iOSUrl: string,
     androidUrl: string,
     headingSize: HeadingSize,
@@ -102,7 +108,7 @@ function PremiumTier(props: {
     <SubscriptionBundle
       modifierClass="premium-tier"
       heading="Premium App"
-      subheading="£5.99/month"
+      subheading={displayPrice('PremiumTier', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -172,6 +178,7 @@ function DailyEdition(props: {
 }
 
 function DigitalBundle(props: {
+  countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
   onClick: ClickEvent,
@@ -181,7 +188,7 @@ function DigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
-      subheading={`£${getPrice('digital', '11.99')}/month`}
+      subheading={displayPrice('DigitalPack', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
