@@ -5,6 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';
+import Loadable from 'react-loadable';
 import { BrowserRouter } from 'react-router-dom';
 
 import * as user from 'helpers/user/user';
@@ -15,10 +16,11 @@ import { getAmount, getPaymentMethod } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 
 import reducer from './regularContributionsReducer';
-import ContributionsThankYouPageContainer from './components/contributionsThankYouPageContainer';
-import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+
+
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
@@ -34,6 +36,14 @@ const store = pageInit(reducer(
 ), true);
 
 user.init(store.dispatch);
+
+const Loading = () => <div>Loading...</div>;
+
+const contributionsThankYouContainer = Loadable({
+  loader: () => import('./components/contributionsThankYouPageContainer'),
+  loading: Loading,
+});
+
 
 // ----- Render ----- //
 
@@ -62,16 +72,8 @@ const router = (
             />
           )}
         />
-        <Route
-          exact
-          path={routes.recurringContribThankyou}
-          render={() => <ContributionsThankYouPageContainer />}
-        />
-        <Route
-          exact
-          path={routes.recurringContribPending}
-          render={() => <ContributionsThankYouPageContainer />}
-        />
+        <Route exact path={routes.recurringContribThankyou} component={contributionsThankYouContainer} />
+        <Route exact path={routes.recurringContribPending} component={contributionsThankYouContainer} />
       </div>
     </Provider>
   </BrowserRouter>
