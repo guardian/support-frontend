@@ -9,12 +9,12 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import { type Contrib } from 'helpers/contributions';
 
 import EmailConfirmation from './emailConfirmation';
 import MarketingConsentContainer from './marketingConsentContainer';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
+import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 
 // ---- Types ----- //
@@ -42,7 +42,6 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       <BodyCopy {...props} />
       <MarketingConsentContainer />
       <QuestionsContact />
-      <SpreadTheWord />
     </Page>
   );
 }
@@ -52,9 +51,14 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 
 function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
-    return null;
+    return <ContributionsSurveySection />;
   } else if (props.directDebit) {
-    return <DirectDebitDetails {...props.directDebit} />;
+    return (
+      <div className="component-direct-debit-details__container">
+        <DirectDebitDetails {...props.directDebit} />
+        <ContributionsSurveySection />
+      </div>
+    );
   }
   return <EmailConfirmation />;
 }
