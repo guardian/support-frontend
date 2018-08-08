@@ -1,0 +1,31 @@
+@import assets.AssetsResolver
+@import views.ViewHelpers._
+@import switchboard.Switches
+@(
+	title: String,
+	description: Option[String] = None,
+)(implicit assets: AssetsResolver, request: RequestHeader, switches: Switches)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
+
+	@if(description.isDefined) {
+		<meta name="description" content="@description" />
+		<meta property="og:description" content="@description" />
+	}
+
+	<title>@title</title>
+	<meta property="og:title" content="@title"/>
+
+</head>
+<body>
+
+  <h1>@title</h1>
+  <p>@description</p>
+  
+</body>
+</html>
