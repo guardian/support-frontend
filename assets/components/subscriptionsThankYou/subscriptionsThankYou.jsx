@@ -4,6 +4,12 @@
 
 import React from 'react';
 
+import {
+  iOSAppUrl,
+  androidAppUrl,
+  dailyEditionUrl,
+} from 'helpers/externalLinks';
+
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import CtaLink from 'components/ctaLink/ctaLink';
@@ -37,12 +43,12 @@ function SubscriptionsThankYou() {
             <CtaLink
               text="Download on the App Store"
               accessibilityHint="Click to download the app on the Apple App Store"
-              url="/"
+              url={iOSAppUrl}
             />
             <CtaLink
               text="Get it on Google Play"
               accessibilityHint="Click to download the app on the Google Play store"
-              url="/"
+              url={androidAppUrl}
             />
           </div>
           <h2 className="component-subscriptions-thank-you__heading">
@@ -58,7 +64,7 @@ function SubscriptionsThankYou() {
             <CtaLink
               text="Download the iPad Edition"
               accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
-              url="/"
+              url={dailyEditionUrl}
             />
           </div>
         </div>
