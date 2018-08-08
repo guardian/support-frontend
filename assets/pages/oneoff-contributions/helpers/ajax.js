@@ -100,12 +100,15 @@ function postToEndpoint(request: Object, dispatch: Function, abParticipations: P
     if (responseJson.error.exceptionType === 'CardException') {
       dispatch(checkoutError('Your card has been declined.'));
     } else {
-      logException(`Stripe payment attempt failed with following error ${JSON.stringify(responseJson)}`);
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later. inner '));
+      const errorHttpCode = responseJson.error.errorCode || 'unknown';
+      const exceptionType = responseJson.error.exceptionType || 'unknown';
+      const errorName = responseJson.error.errorName || 'unknown';
+      logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
+      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
     }
-  }).catch((error) => {
-    logException(`Stripe payment attempt failed with unexpected error while attempting to process payment response ${error}`);
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later. outer '));
+  }).catch(() => {
+    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
   });
 }
 
