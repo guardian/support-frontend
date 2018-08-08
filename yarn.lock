@@ -5735,9 +5735,9 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ophan-tracker-js@^1.3.11:
-  version "1.3.11"
-  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.3.11.tgz#8556420e75920c05e73c83386aac61dc85e09f14"
+ophan-tracker-js@^1.3.9:
+  version "1.3.9"
+  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.3.9.tgz#97f2be458e05fdf6a63e17721e4011faac6b87e4"
 
 opn@^5.1.0:
   version "5.2.0"
