@@ -56,18 +56,18 @@ export default function PaperSubscriptions(props: PropTypes) {
     <div className="component-paper-subscriptions">
       <PageSection heading="Print Subscriptions" modifierClass="paper-subscriptions">
         <PaperBundle
-          url={subsLinks.paper}
+          url={subsLinks.Paper}
           headingSize={props.headingSize}
           onClick={props.clickEvents.paper}
         />
         <PaperDigitalBundle
-          url={subsLinks.paperDig}
+          url={subsLinks.PaperAndDigital}
           headingSize={props.headingSize}
           onClick={props.clickEvents.paperDigital}
         />
         <WeeklyBundle
           countryGroupId="GBPCountries"
-          url={subsLinks.weekly}
+          url={subsLinks.GuardianWeekly}
           headingSize={props.headingSize}
           onClick={props.clickEvents.weekly}
         />
@@ -83,7 +83,7 @@ export default function PaperSubscriptions(props: PropTypes) {
 function PaperBundle(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent,
+  onClick: ClickEvent | null,
 }) {
 
   return (
@@ -119,7 +119,7 @@ function PaperBundle(props: {
 function PaperDigitalBundle(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent,
+  onClick: ClickEvent | null,
 }) {
 
   return (

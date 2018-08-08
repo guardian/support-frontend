@@ -52,6 +52,7 @@ function getSubscriptionsForCountry() {
         iOSApp: sendTrackingEventsOnClick('premium_tier_ios_cta', 'digital', testName, true),
         androidApp: sendTrackingEventsOnClick('premium_tier_android_cta', 'digital', testName, true),
         digiPack: sendTrackingEventsOnClick('digipack_cta', 'digital', testName, true),
+        weekly: sendTrackingEventsOnClick('weekly_cta', 'print', testName, true),
       }}
     />);
 }

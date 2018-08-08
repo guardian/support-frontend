@@ -44,7 +44,9 @@ const digitalSubPrices: {
   },
 };
 
-const defaultBillingPeriods = {
+const defaultBillingPeriods: {
+  [SubscriptionProduct]: string,
+} = {
   PremiumTier: 'month',
   DigitalPack: 'month',
   GuardianWeekly: 'quarter',
@@ -54,7 +56,7 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = (digitalSubPrices[product][countryGroupId]);
   const formatted = Number.isInteger(price) ? price : price.toFixed(2);
-  const discountedPrice = getDiscountedPrice(product, formatted);
+  const discountedPrice = getDiscountedPrice(product, formatted.toString());
   return `${currency}${discountedPrice}/${defaultBillingPeriods[product]}`;
 }
 

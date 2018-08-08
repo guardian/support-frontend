@@ -14,6 +14,9 @@ function inOfferPeriod(product: SubscriptionProduct): boolean {
     DigitalPack: true,
     Paper: false,
     PaperAndDigital: false,
+    DailyEdition: false,
+    GuardianWeekly: false,
+    PremiumTier: false,
   };
 
   const now = Date.now();
@@ -34,6 +37,18 @@ const promoCodes = {
   PaperAndDigital: {
     promoCode: 'GST80G',
     price: '10.81',
+  },
+  DailyEdition: {
+    promoCode: '',
+    price: '6.99',
+  },
+  GuardianWeekly: {
+    promoCode: '',
+    price: '30',
+  },
+  PremiumTier: {
+    promoCode: '',
+    price: '5.99',
   },
 };
 

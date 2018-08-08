@@ -18,8 +18,6 @@ import { PremiumTier, DigitalBundle } from 'components/digitalSubscriptions/digi
 import { WeeklyBundle } from 'components/paperSubscriptions/paperSubscriptions';
 import { type HeadingSize } from 'components/heading/heading';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { digitalSubPrices } from '../../helpers/subscriptions';
-
 
 // ----- Types ----- //
 
@@ -71,13 +69,13 @@ export default function InternationalSubscriptions(props: PropTypes) {
         />
         <DigitalBundle
           countryGroupId={props.countryGroupId}
-          url={subsLinks.digital}
+          url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
         />
         <WeeklyBundle
           countryGroupId={props.countryGroupId}
-          url={subsLinks.weekly}
+          url={subsLinks.GuardianWeekly}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
         />

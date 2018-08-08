@@ -11,7 +11,6 @@ import {
   dailyEditionUrl,
 } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getDiscountedPrice } from 'helpers/flashSale';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { addQueryParamsToURL } from 'helpers/url';
 
@@ -82,7 +81,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
         />
         <DigitalBundle
           countryGroupId="GBPCountries"
-          url={subsLinks.digital}
+          url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
         />
@@ -181,7 +180,7 @@ function DigitalBundle(props: {
   countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent,
+  onClick: ClickEvent | null,
 }) {
 
   return (
