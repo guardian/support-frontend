@@ -18,7 +18,7 @@ import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { type HeadingSize } from 'components/heading/heading';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { displayPrice } from '../../helpers/subscriptions';
+import { displayPrice } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -51,9 +51,9 @@ const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_lan
 // ----- Component ----- //
 
 export default function DigitalSubscriptions(props: PropTypes) {
-
+  const countryGroupId = 'GBPCountries'; // This component is only used in the UK
   const subsLinks = getSubsLinks(
-    'GBPCountries',
+    countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -67,7 +67,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
         modifierClass="digital-subscriptions"
       >
         <PremiumTier
-          countryGroupId="GBPCountries"
+          countryGroupId={countryGroupId}
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
@@ -80,7 +80,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
           onClick={props.clickEvents.dailyEdition}
         />
         <DigitalBundle
-          countryGroupId="GBPCountries"
+          countryGroupId={countryGroupId}
           url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
@@ -150,7 +150,7 @@ function DailyEdition(props: {
     <SubscriptionBundle
       modifierClass="daily-edition"
       heading="Daily Edition"
-      subheading="from £6.99/month"
+      subheading={`from ${displayPrice('DailyEdition', 'GBPCountries')}`}
       headingSize={props.headingSize}
       benefits={[
         {

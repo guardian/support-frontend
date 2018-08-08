@@ -6,14 +6,13 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getDiscountedPrice } from 'helpers/flashSale';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { type HeadingSize } from 'components/heading/heading';
-import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
-import { displayPrice } from '../../helpers/subscriptions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { displayPrice } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -90,7 +89,7 @@ function PaperBundle(props: {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`from £${getDiscountedPrice('Paper', '10.36')}/month`}
+      subheading={`from ${displayPrice('Paper', 'GBPCountries')}`}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -126,7 +125,7 @@ function PaperDigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+Digital"
-      subheading={`from £${getDiscountedPrice('PaperAndDigital', '21.62')}/month`}
+      subheading={`from ${displayPrice('PaperAndDigital', 'GBPCountries')}`}
       headingSize={props.headingSize}
       benefits={[
         {

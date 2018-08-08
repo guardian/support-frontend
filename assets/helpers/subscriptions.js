@@ -10,7 +10,8 @@ import { getDiscountedPrice } from './flashSale';
 
 // ----- Types ------ //
 
-export type SubscriptionProduct = 'DigitalPack' |
+export type SubscriptionProduct =
+  'DigitalPack' |
   'PremiumTier' |
   'DailyEdition' |
   'GuardianWeekly' |
@@ -19,7 +20,7 @@ export type SubscriptionProduct = 'DigitalPack' |
 
 // ----- Config ----- //
 
-const digitalSubPrices: {
+const subscriptionPrices: {
   [SubscriptionProduct]: {
     [CountryGroupId]: number,
   }
@@ -42,6 +43,15 @@ const digitalSubPrices: {
     AUDCountries: 78,
     International: 65,
   },
+  Paper: {
+    GBPCountries: 10.36,
+  },
+  PaperAndDigital: {
+    GBPCountries: 21.62,
+  },
+  DailyEdition: {
+    GBPCountries: 6.99,
+  },
 };
 
 const defaultBillingPeriods: {
@@ -50,14 +60,21 @@ const defaultBillingPeriods: {
   PremiumTier: 'month',
   DigitalPack: 'month',
   GuardianWeekly: 'quarter',
+  Paper: 'month',
+  PaperAndDigital: 'month',
+  DailyEdition: 'month',
 };
+
+function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
+  const price = subscriptionPrices[product][countryGroupId];
+  const formatted = Number.isInteger(price) ? price : price.toFixed(2);
+  return getDiscountedPrice(product, formatted.toString());
+}
 
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
   const currency = currencies[detect(countryGroupId)].glyph;
-  const price = (digitalSubPrices[product][countryGroupId]);
-  const formatted = Number.isInteger(price) ? price : price.toFixed(2);
-  const discountedPrice = getDiscountedPrice(product, formatted.toString());
-  return `${currency}${discountedPrice}/${defaultBillingPeriods[product]}`;
+  const price = getProductPrice(product, countryGroupId);
+  return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
 
@@ -96,4 +113,4 @@ function sendTrackingEventsOnClick(
 
 // ----- Exports ----- //
 
-export { digitalSubPrices, sendTrackingEventsOnClick, displayPrice };
+export { sendTrackingEventsOnClick, displayPrice, getProductPrice };

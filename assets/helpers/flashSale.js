@@ -9,7 +9,7 @@ function inOfferPeriod(product: SubscriptionProduct): boolean {
   const startTime = new Date(2018, 5, 18, 0, 0).getTime(); // 18th June 2018
   const endTime = new Date(2018, 6, 1, 0, 0).getTime(); // 1st July 2018
 
-  // The current sale is digital only, paper & paper + digital is unaffected
+  // The current sale is digital only, everything else is unaffected
   const included = {
     DigitalPack: true,
     Paper: false,
