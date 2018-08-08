@@ -87,23 +87,23 @@ function mapDispatchToProps(dispatch: Dispatch<OneOffCheckoutAction | StripeInli
 function formValidation(
   areAnyRequiredFieldsEmpty: boolean,
   validEmail: boolean,
-  error: ?string => void,
+  setError: ?string => void,
 ): () => boolean {
 
   return (): boolean => {
 
     if (!areAnyRequiredFieldsEmpty && validEmail) {
-      if (error) {
-        error(null);
+      if (setError) {
+        setError(null);
       }
       return true;
     }
 
-    if (error) {
+    if (setError) {
       if (areAnyRequiredFieldsEmpty) {
-        error('Please fill in all the fields above.');
+        setError('Please fill in all the fields above.');
       } else {
-        error('Please fill in a valid email address.');
+        setError('Please fill in a valid email address.');
       }
     }
     return false;
