@@ -28,10 +28,22 @@
     }
   }
 
-  .component-left-margin-section__content {
-    @include mq($from: tablet) {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+  .component-left-margin-section--apps {
+    .component-left-margin-section__content {
+      padding: 2px ($gu-h-spacing / 2) 0;
+      box-sizing: border-box;
+
+      @include mq($from: tablet) {
+        border-left: 1px solid gu-colour(garnett-neutral-4);
+      }
     }
+  }
+
+  .svg-subs-thank-you-hero-mobile {
+    display: block;
+    width: 150%;
+    left: -25%;
+    position: relative;
   }
 }
 
@@ -44,10 +56,6 @@
     margin-top: $gu-v-spacing;
     margin-left: $gu-h-spacing;
   }
-}
-
-.component-subscriptions-thank-you__content {
-  padding: 2px ($gu-h-spacing / 2) 0;
 }
 
 .component-subscriptions-thank-you__heading {
