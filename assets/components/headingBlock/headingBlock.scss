@@ -25,7 +25,7 @@
 }
 
 .component-heading-block__banner {
-  background-color: gu-colour(sport-garnett-media-main-1);
+  border-top: 1px solid gu-colour(sport-garnett-media-main-1);
   padding: 4px ($gu-h-spacing / 2) 8px;
   vertical-align: middle;
   font-size: 14px;
