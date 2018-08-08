@@ -97,6 +97,13 @@ class Application(
     ))
   }
 
+  def newContributionsLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(views.html.newMain(
+      title = "Support the Guardian | Make a Contribution",
+      description = Some(stringsConfig.contributionsLandingDescription)
+    ))
+  }
+
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(title, id, js, css))
   }
