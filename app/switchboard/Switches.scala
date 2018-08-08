@@ -5,6 +5,7 @@ import com.typesafe.config.Config
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
     recurringPaymentMethods: PaymentMethodsSwitch,
+    serverSideExperiments: SwitchState,
     optimize: SwitchState
 )
 
@@ -13,6 +14,7 @@ object Switches {
     Switches(
       PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
       PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
+      SwitchState.fromConfig(config, "abtests"),
       SwitchState.fromConfig(config, "optimize")
     )
 
