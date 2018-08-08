@@ -21,6 +21,9 @@ object Switches {
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
+case class Switch(name: String, description: String, state: SwitchState) {
+  def isOn = state == SwitchState.On
+}
 
 object PaymentMethodsSwitch {
   def fromConfig(config: Config): PaymentMethodsSwitch =
@@ -34,16 +37,18 @@ object PaymentMethodsSwitch {
     )
 }
 
-sealed trait SwitchState
+sealed trait SwitchState {
+  def isOn: Boolean
+}
 
 object SwitchState {
   def fromConfig(config: Config, path: String): SwitchState = fromString(config.getString(path))
 
   def fromString(s: String): SwitchState = if (s.toLowerCase == "on") On else Off
 
-  case object On extends SwitchState
+  case object On extends SwitchState { val isOn = true }
 
-  case object Off extends SwitchState
+  case object Off extends SwitchState { val isOn = false }
 
 }
 
