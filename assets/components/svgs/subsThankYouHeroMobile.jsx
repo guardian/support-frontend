@@ -13,7 +13,7 @@ export default function SvgSubsThankYouHeroMobile() {
     <svg
       className="svg-subs-thank-you-hero-mobile"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 463 493"
+      viewBox="0 90 463 363"
       aria-labelledby="svg-subs-thank-you-hero-mobile-title"
     >
       <g fill="none" fillRule="evenodd" transform="translate(0 -31)">

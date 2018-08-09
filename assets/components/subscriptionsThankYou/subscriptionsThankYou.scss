@@ -1,6 +1,9 @@
 .component-subscriptions-thank-you {
   .svg-subs-thank-you-hero-mobile {
     display: block;
+    width: 480px;
+    position: relative;
+    left: calc((100vw - 480px)/2);
   }
 
   .component-cta-link {
