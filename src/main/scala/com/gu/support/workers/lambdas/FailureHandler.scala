@@ -7,16 +7,17 @@ import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.states.FailureHandlerState
-import com.gu.support.workers.model.{ExecutionError, RequestInfo}
+import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.model.states.{CheckoutFailureState, FailureHandlerState}
+import com.gu.support.workers.model.{CheckoutFailureReasons, ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FailureHandler(emailService: EmailService)
-    extends FutureHandler[FailureHandlerState, Unit] {
+class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHandlerState, CheckoutFailureState] {
+
   def this() = this(new EmailService)
 
   override protected def handlerFuture(
@@ -41,22 +42,29 @@ class FailureHandler(emailService: EmailService)
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => exitHandler(
         state,
+        CheckoutFailureReasons.Unknown,
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
       case Some(se @ StripeError("card_error", _, _, _, _)) => exitHandler(
         state,
+        CheckoutFailureReasons.Unknown,
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
       )
-      case _ => exitHandler(state, requestInfo.copy(failed = true))
+      case _ => exitHandler(
+        state,
+        CheckoutFailureReasons.Unknown,
+        requestInfo.copy(failed = true)
+      )
     }
   }
 
   private def exitHandler(
     state: FailureHandlerState,
+    checkoutFailureReason: CheckoutFailureReason,
     requestInfo: RequestInfo
   ) = {
     SafeLogger.info(s"Returning completed state...")
-    HandlerResult(Unit, requestInfo)
+    HandlerResult(CheckoutFailureState(state.user, checkoutFailureReason), requestInfo)
   }
 
   private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {

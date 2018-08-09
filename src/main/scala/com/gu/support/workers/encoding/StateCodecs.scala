@@ -2,7 +2,8 @@ package com.gu.support.workers.encoding
 
 import com.gu.salesforce.Salesforce._
 import com.gu.support.workers.encoding.Helpers.deriveCodec
-import com.gu.support.workers.model.Status
+import com.gu.support.workers.model.CheckoutFailureReasons._
+import com.gu.support.workers.model.{CheckoutFailureReasons, Status}
 import com.gu.support.workers.model.states._
 import com.gu.zuora.encoding.CustomCodecs._
 import io.circe.generic.semiauto._
@@ -13,8 +14,15 @@ object StateCodecs {
 
   implicit val encodeStatus: Encoder[Status] = Encoder.encodeString.contramap[Status](_.asString)
 
-  implicit val decodeStatus: Decoder[Status] =
-    Decoder.decodeString.emap { identifier => Status.fromString(identifier).toRight(s"Unrecognised status '$identifier'") }
+  implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.toString)
+
+  implicit val decodeStatus: Decoder[Status] = Decoder.decodeString.emap {
+    identifier => Status.fromString(identifier).toRight(s"Unrecognised status '$identifier'")
+  }
+
+  implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
+    identifier => CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
+  }
 
   //We need a custom decoder for CreatePaymentMethodState and FailureHandlerState because both lambdas must be able to handle old and new schemas
   implicit val createPaymentMethodStateDecoder: Decoder[CreatePaymentMethodState] = deriveDecoder[CreatePaymentMethodState].prepare(handleTwoSchemas(_))
@@ -40,4 +48,5 @@ object StateCodecs {
   implicit val createZuoraSubscriptionStateCodec: Codec[CreateZuoraSubscriptionState] = deriveCodec
   implicit val sendThankYouEmailStateCodec: Codec[SendThankYouEmailState] = deriveCodec
   implicit val sendAcquisitionEventStateDecoder: Decoder[SendAcquisitionEventState] = deriveDecoder
+  implicit val checkoutFailureStateDecoder: Codec[CheckoutFailureState] = deriveCodec
 }
