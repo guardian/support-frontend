@@ -15,6 +15,7 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgSubsThankYouHeroMobile from 'components/svgs/subsThankYouHeroMobile';
 import SvgSubsThankYouHeroTablet from 'components/svgs/subsThankYouHeroTablet';
+import SvgSubsThankYouHeroDesktop from 'components/svgs/subsThankYouHeroDesktop';
 
 
 // ----- Component ----- //
@@ -26,6 +27,7 @@ function SubscriptionsThankYou() {
       <div className="component-subscriptions-thank-you__hero">
         <SvgSubsThankYouHeroMobile />
         <SvgSubsThankYouHeroTablet />
+        <SvgSubsThankYouHeroDesktop />
       </div>
       <LeftMarginSection>
         <HeadingBlock heading="Thank you, for helping to support our journalism">

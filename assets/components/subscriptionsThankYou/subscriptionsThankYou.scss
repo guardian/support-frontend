@@ -16,7 +16,18 @@
     position: relative;
     left: calc((100vw - 980px)/2);
 
-    @include mq($from: phablet) {
+    @include mq($from: phablet, $until: desktop) {
+      display: block;
+    }
+  }
+
+  .svg-subs-thank-you-hero-desktop {
+    display: none;
+    width: 1300px;
+    position: relative;
+    left: calc((100vw - 1300px)/2);
+
+    @include mq($from: desktop) {
       display: block;
     }
   }
