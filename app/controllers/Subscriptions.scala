@@ -3,9 +3,10 @@ package controllers
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import com.gu.i18n.CountryGroup._
+import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import switchboard.Switches
+import switchboard.{SwitchState, Switches}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -16,7 +17,7 @@ class Subscriptions(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     switches: Switches
-)(implicit val ec: ExecutionContext) extends AbstractController(components) {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   import actionRefiners._
 
@@ -39,16 +40,20 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val title = "Support the Guardian | Get a Subscription"
-    val id = "subscriptions-landing-page"
-    val js = "subscriptionsLandingPage.js"
-    Ok(views.html.main(
-      title,
-      id,
-      js,
-      "subscriptionsLandingPageStyles.css",
-      description = Some(stringsConfig.subscriptionsLandingDescription)
-    ))
+    if (switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
+      Redirect(controllers.routes.Subscriptions.geoRedirect())
+    } else {
+      val title = "Support the Guardian | Get a Subscription"
+      val id = "subscriptions-landing-page"
+      val js = "subscriptionsLandingPage.js"
+      Ok(views.html.main(
+        title,
+        id,
+        js,
+        "subscriptionsLandingPageStyles.css",
+        description = Some(stringsConfig.subscriptionsLandingDescription)
+      ))
+    }
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
