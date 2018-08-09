@@ -71,6 +71,13 @@ function SubscriptionsThankYou() {
           />
         </div>
       </LeftMarginSection>
+      <LeftMarginSection modifierClasses={['return']}>
+        <CtaLink
+          text="Return to The Guardian"
+          accessibilityHint="Return to The Guardian home page"
+          url="https://theguardian.com"
+        />
+      </LeftMarginSection>
     </div>
   );
 

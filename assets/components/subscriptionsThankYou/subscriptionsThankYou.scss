@@ -42,6 +42,28 @@
       }
     }
   }
+
+  .component-left-margin-section--return {
+    .component-left-margin-section__content {
+      box-sizing: border-box;
+      background-color: gu-colour(media-garnett-main-1);
+      padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2) $gu-v-spacing;
+    }
+
+    .component-cta-link {
+      background-color: gu-colour(garnett-neutral-1);
+      color: #fff;
+      font-weight: bold;
+
+      &:hover {
+        background-color: darken(gu-colour(garnett-neutral-1), 5%);
+      }
+    }
+
+    .svg-arrow-right-straight {
+      fill: #fff;
+    }
+  }
 }
 
 .component-subscriptions-thank-you__ctas {
