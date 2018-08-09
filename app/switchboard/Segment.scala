@@ -1,4 +1,6 @@
-package experiments
+package switchboard
+
+import com.typesafe.config.Config
 
 sealed abstract class Segment(val headerName: String) {
   override def toString: String = headerName
@@ -26,4 +28,27 @@ object Segment {
   case object Perc10A extends Segment("X-GU-Experiment-10perc-A")
   case object Perc20A extends Segment("X-GU-Experiment-20perc-A")
   case object Perc50 extends Segment("X-GU-Experiment-50perc")
+
+  def fromConfig(config: Config, key: String) = config.getString(key) match {
+    case "Perc0A" => Perc0A
+    case "Perc0B" => Perc0B
+    case "Perc0C" => Perc0C
+    case "Perc0D" => Perc0D
+    case "Perc0E" => Perc0E
+    case "Perc1A" => Perc1A
+    case "Perc1B" => Perc1B
+    case "Perc1C" => Perc1C
+    case "Perc1D" => Perc1D
+    case "Perc1E" => Perc1E
+    case "Perc2A" => Perc2A
+    case "Perc2B" => Perc2B
+    case "Perc2C" => Perc2C
+    case "Perc2D" => Perc2D
+    case "Perc2E" => Perc2E
+    case "Perc5A" => Perc5A
+    case "Perc10A" => Perc10A
+    case "Perc20A" => Perc20A
+    case "Perc50" => Perc50
+    case _ => Perc0A
+  }
 }

@@ -1,11 +1,13 @@
 package switchboard
 
 import com.typesafe.config.Config
+import collection.JavaConverters._
+import play.api.mvc.RequestHeader
 
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
     recurringPaymentMethods: PaymentMethodsSwitch,
-    serverSideExperiments: SwitchState,
+    experiments: Map[String, ExperimentSwitch],
     optimize: SwitchState
 )
 
@@ -14,15 +16,35 @@ object Switches {
     Switches(
       PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
       PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
-      SwitchState.fromConfig(config, "abtests"),
+      experimentsFromConfig(config, "abtests"),
       SwitchState.fromConfig(config, "optimize")
     )
 
+  def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
+    config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
-case class Switch(name: String, description: String, state: SwitchState) {
+case class ExperimentSwitch(name: String, description: String, segment: Segment, state: SwitchState) {
   def isOn = state == SwitchState.On
+
+  private def checkHeader(headerName: String, predicate: String => Boolean)(implicit request: RequestHeader): Boolean =
+    request.headers.get(headerName).exists(predicate)
+
+  private def inVariant(implicit request: RequestHeader): Boolean = checkHeader(segment.headerName, _ == Group.Variant.name)
+  private def inControl(implicit request: RequestHeader): Boolean = checkHeader(segment.headerName, _ == Group.Control.name)
+
+  def canRun(implicit request: RequestHeader): Boolean = isOn
+  def isParticipating(implicit request: RequestHeader): Boolean = canRun && inVariant
+  def isControl(implicit request: RequestHeader): Boolean = canRun && inControl
+  def value(implicit request: RequestHeader): Group = {
+    if (isParticipating)
+      Group.Variant
+    else if (isControl)
+      Group.Control
+    else
+      Group.Unknown
+  }
 }
 
 object PaymentMethodsSwitch {
@@ -34,6 +56,16 @@ object PaymentMethodsSwitch {
         Some(SwitchState.fromConfig(config, "directDebit"))
       else
         None
+    )
+}
+
+object ExperimentSwitch {
+  def fromConfig(config: Config): ExperimentSwitch =
+    ExperimentSwitch(
+      config.getString("name"),
+      config.getString("description"),
+      Segment.fromConfig(config, "segment"),
+      SwitchState.fromConfig(config, "state")
     )
 }
 
