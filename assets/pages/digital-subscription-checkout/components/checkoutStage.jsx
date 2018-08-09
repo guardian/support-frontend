@@ -9,6 +9,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import SubscriptionsThankYou from 'components/subscriptionsThankYou/subscriptionsThankYou';
 
 import { type Stage } from '../digitalSubscriptionCheckoutReducer';
+import AppsSection from './appsSection';
 
 
 // ----- Types ----- //
@@ -36,12 +37,16 @@ function CheckoutStage(props: PropTypes) {
   switch (props.stage) {
 
     case 'thankyou':
-      return <SubscriptionsThankYou />;
+      return (
+        <SubscriptionsThankYou>
+          <AppsSection />
+        </SubscriptionsThankYou>
+      );
 
     case 'checkout':
     default:
       return (
-        <LeftMarginSection modifierClasses={['grey']}>
+        <LeftMarginSection>
           <p>Placeholder</p>
         </LeftMarginSection>
       );
