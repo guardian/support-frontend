@@ -2,9 +2,7 @@ package switchboard
 
 import com.typesafe.config.Config
 
-sealed abstract class Segment(val headerName: String) {
-  override def toString: String = headerName
-}
+sealed abstract class Segment(val headerName: String)
 
 object Segment {
   // Name of the header are defined and hard-coded in Fastly VCL to be assigned
