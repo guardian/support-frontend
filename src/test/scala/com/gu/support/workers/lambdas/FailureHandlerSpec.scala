@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
+import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
@@ -72,6 +72,19 @@ class FailureHandlerSpec extends LambdaSpec {
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
     SafeLogger.info(outState.right.get.requestInfo.messages.head)
+  }
+
+  it should "return a non failed JsonWrapper for Stripe payment errors for a digital pack, too" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(digipackCardDeclinedStripeJson.asInputStream, outStream, context)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInfo.failed should be(false)
+
+    SafeLogger.warn(outState.right.get.requestInfo.messages.head)
   }
 
   it should "match a transaction declined error" in {

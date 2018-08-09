@@ -1,14 +1,14 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields}
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.states.FailureHandlerState
-import com.gu.support.workers.model.{ExecutionError, RequestInfo}
+import com.gu.support.workers.model.{ExecutionError, RequestInfo, Contribution, DigitalPack}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -33,8 +33,14 @@ class FailureHandler(emailService: EmailService)
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState) =
-    emailService.send(FailedContributionEmailFields(email = state.user.primaryEmailAddress))
+  private def sendEmail(state: FailureHandlerState) = {
+    val emailFields = state.product match {
+      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress)
+      case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress)
+    }
+    SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
+    emailService.send(emailFields)
+  }
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
     SafeLogger.info(s"Attempting to handle error $error")
