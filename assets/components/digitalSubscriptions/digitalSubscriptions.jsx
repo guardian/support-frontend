@@ -183,9 +183,16 @@ function DigitalBundle(props: {
   onClick: ClickEvent | null,
 }) {
 
-  const benefits = props.countryGroupId === 'GBPCountries' ?
-    'The premium app and the daily edition in one pack' :
-    'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack';
+  const i13n = props.countryGroupId === 'GBPCountries' ?
+    {
+      gridId: 'digitalCircleAlt',
+      benefits: 'The premium app and the daily edition in one pack',
+    } :
+    {
+      gridId: 'digitalCircleInternational',
+      benefits: 'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack',
+    };
+
 
   return (
     <SubscriptionBundle
@@ -195,11 +202,11 @@ function DigitalBundle(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: benefits,
+          text: i13n.benefits,
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircleAlt',
+        gridId: i13n.gridId,
         altText: 'digital subscription',
         ...gridImageProperties,
       }}

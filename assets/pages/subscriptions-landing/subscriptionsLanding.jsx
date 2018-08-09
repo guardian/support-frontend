@@ -21,9 +21,9 @@ import { renderPage } from 'helpers/render';
 
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect } from 'helpers/internationalisation/countryGroup';
 import SplitSubscriptionsTest from './components/splitSubscriptionsTest';
-import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
-import { detect } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Setup ----- //
