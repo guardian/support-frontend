@@ -19,12 +19,17 @@ import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContai
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect } from 'helpers/internationalisation/countryGroup';
 import SplitSubscriptionsTest from './components/splitSubscriptionsTest';
 
 
 // ----- Setup ----- //
 
 const supporterSectionId = 'supporter-options';
+const countryGroupId: CountryGroupId = detect();
 
 
 // ----- Redux Store ----- //
@@ -33,6 +38,24 @@ const store = pageInit();
 
 
 // ----- Render ----- //
+
+function getSubscriptionsForCountry() {
+  if (countryGroupId === 'GBPCountries') {
+    return <SplitSubscriptionsTest sectionId={supporterSectionId} />;
+  }
+  const testName = 'international_subs_landing_pages';
+  return (
+    <InternationalSubscriptions
+      countryGroupId={countryGroupId}
+      headingSize={3}
+      clickEvents={{
+        iOSApp: sendTrackingEventsOnClick('premium_tier_ios_cta', 'digital', testName, true),
+        androidApp: sendTrackingEventsOnClick('premium_tier_android_cta', 'digital', testName, true),
+        digiPack: sendTrackingEventsOnClick('digipack_cta', 'digital', testName, true),
+        weekly: sendTrackingEventsOnClick('weekly_cta', 'print', testName, true),
+      }}
+    />);
+}
 
 const content = (
   <Provider store={store}>
@@ -46,7 +69,7 @@ const content = (
         modifierClasses={['compact']}
         highlightsHeadingSize={2}
       />
-      <SplitSubscriptionsTest sectionId={supporterSectionId} />
+      {getSubscriptionsForCountry()}
       <WhySupport headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}

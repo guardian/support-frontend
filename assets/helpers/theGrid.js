@@ -24,6 +24,7 @@ export const imageCatalogue: {
   dailyEditionCircle: '64ba1a800e4c2975054b33ba07c4fe3c64d4b5f4/0_0_825_825',
   digitalCircle: '639c3abc4c09281aedb515d684ac4053ef38a1df/0_0_825_825',
   digitalCircleAlt: '0b5ded2325275e25f5b38198766c57363bddfa21/0_0_825_825',
+  digitalCircleInternational: '7d404c1920f065c1b7e71b903cc3899f388acb22/0_0_825_825',
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
   paperDigitalCircle: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
   paperDigitalCircleAlt: '69d90e5d6fca261a227e47b311f80807b123c87b/0_0_825_825',

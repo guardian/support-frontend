@@ -1,0 +1,207 @@
+.component-international-subscriptions {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  padding-bottom: $gu-v-spacing * 3;
+
+  .component-page-section__header {
+    @include dropline;
+  }
+
+  .component-page-section__heading {
+    font-family: $gu-egyptian-web;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-page-section__body {
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: $gu-h-spacing / 2;
+      display: inline-flex;
+    }
+  }
+
+  .component-subscription-bundle {
+    padding: $gu-v-spacing 0;
+
+    @include mq($from: leftCol) {
+      flex: 1 33%;
+      padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2) 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-subscription-bundle__content {
+    @include mq($from: phablet, $until: leftCol) {
+      display: inline-block;
+      width: 70%;
+      vertical-align: top;
+    }
+
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .component-grid-image {
+    width: 165px;
+    height: 165px;
+    margin: $gu-v-spacing auto;
+    display: block;
+
+    @include mq($from: phablet, $until: leftCol) {
+      width: 28%;
+      height: 28%;
+      padding-right: 2%;
+      margin: 0;
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  .component-subscription-bundle--premium-tier, .component-subscription-bundle--daily-edition {
+    @include mq($from: leftCol) {
+      @include dropline;
+    }
+  }
+
+  .component-feature-list {
+    font-size: 16px;
+    line-height: 1.25;
+
+    @include mq($until: phablet) {
+      padding-left: 0;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: 0;
+      flex: 1 0 auto;
+    }
+  }
+
+  .component-feature-list__item {
+    @include mq($until: phablet) {
+      margin-left: 0;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: 0;
+    }
+  }
+
+  .component-double-heading {
+    margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: phablet, $until: leftCol) {
+      padding-left: 30px;
+    }
+  }
+
+  .component-double-heading__heading {
+    font-size: 36px;
+    line-height: 1.1;
+
+    @include mq($from: phablet, $until: leftCol) {
+      font-size: 30px;
+    }
+  }
+
+  .component-double-heading__subheading {
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 400;
+    font-family: $gu-egyptian-web;
+
+    @include mq($from: phablet, $until: leftCol) {
+      font-size: 24px;
+      line-height: 1.17;
+    }
+  }
+
+  .component-cta-link {
+    padding-left: 28px;
+    background-color: transparent;
+  }
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(garnett-neutral-1);
+  }
+
+  .component-cta-link--premium-tier {
+    color: gu-colour(sport-garnett-media-main-1);
+    border-color: gu-colour(sport-garnett-media-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(sport-garnett-media-main-1);
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(sport-garnett-media-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--daily-edition {
+    color: gu-colour(lifestyle-garnett-main-1);
+    border-color: gu-colour(lifestyle-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(lifestyle-garnett-main-1);
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(lifestyle-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--digital {
+    color: gu-colour(lifestyle-garnett-main-1);
+    border-color: gu-colour(lifestyle-garnett-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(lifestyle-garnett-main-1);
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(lifestyle-garnett-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+
+  .component-cta-link--weekly {
+    color: gu-colour(news-garnett-media-main-1);
+    border-color: gu-colour(news-garnett-media-main-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(news-garnett-media-main-1);
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: gu-colour(news-garnett-media-main-1);
+
+      .svg-arrow-right-straight {
+        fill: #fff;
+      }
+    }
+  }
+}
