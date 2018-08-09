@@ -183,6 +183,10 @@ function DigitalBundle(props: {
   onClick: ClickEvent | null,
 }) {
 
+  const benefits = props.countryGroupId === 'GBPCountries' ?
+    'The premium app and the daily edition in one pack' :
+    'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack';
+
   return (
     <SubscriptionBundle
       modifierClass="digital"
@@ -191,7 +195,7 @@ function DigitalBundle(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The premium app and the daily edition in one pack',
+          text: benefits,
         },
       ]}
       gridImage={{
