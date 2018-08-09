@@ -127,40 +127,44 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  const orderId = getOrderId();
-  const value = getContributionValue();
-  const currency = getCurrency();
-  window.googleTagManagerDataLayer.push({
-    event,
-    // orderId anonymously identifies this user in this session.
-    // We need this to prevent page refreshes on conversion pages being
-    // treated as new conversions
-    orderId,
-    currency,
-    value,
-    paymentMethod: storage.getSession('paymentMethod') || undefined,
-    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-    experience: getVariantsAsString(participations),
-    ophanBrowserID: getOphanIds().browserId,
-    paymentRequestApiStatus,
-    ecommerce: {
-      currencyCode: currency,
-      purchase: {
-        actionField: {
-          id: orderId,
-          revenue: value, // Total transaction value (incl. tax and shipping)
+  try {
+    const orderId = getOrderId();
+    const value = getContributionValue();
+    const currency = getCurrency();
+    window.googleTagManagerDataLayer.push({
+      event,
+      // orderId anonymously identifies this user in this session.
+      // We need this to prevent page refreshes on conversion pages being
+      // treated as new conversions
+      orderId,
+      currency,
+      value,
+      paymentMethod: storage.getSession('paymentMethod') || undefined,
+      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+      internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+      experience: getVariantsAsString(participations),
+      ophanBrowserID: getOphanIds().browserId,
+      paymentRequestApiStatus,
+      ecommerce: {
+        currencyCode: currency,
+        purchase: {
+          actionField: {
+            id: orderId,
+            revenue: value, // Total transaction value (incl. tax and shipping)
+          },
+          products: [{
+            name: `${getContributionType()}_contribution`,
+            category: 'contribution',
+            price: value,
+            quantity: 1,
+          }],
         },
-        products: [{
-          name: `${getContributionType()}_contribution`,
-          category: 'contribution',
-          price: value,
-          quantity: 1,
-        }],
       },
-    },
-  });
+    });
+  } catch (e) {
+    console.log(`Error in GTM tracking ${e}`);
+  }
 }
 
 

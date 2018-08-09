@@ -18,6 +18,7 @@ import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
+import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
 
 
@@ -201,6 +202,7 @@ function statusPoll(
 
   if (pollCount >= MAX_POLLS) {
     successfulConversion(participations);
+    pageView(routes.recurringContribThankyou, routes.recurringContribCheckout);
     dispatch(checkoutPending(paymentMethod));
     return undefined;
   }
