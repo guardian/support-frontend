@@ -18,8 +18,7 @@ import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
-import ophan from 'ophan';
-import { getAbsoluteURL } from 'helpers/url';
+import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
 
 
@@ -203,10 +202,7 @@ function statusPoll(
 
   if (pollCount >= MAX_POLLS) {
     successfulConversion(participations);
-    ophan.sendInitialEvent(
-      getAbsoluteURL(routes.recurringContribThankyou),
-      getAbsoluteURL(routes.recurringContribCheckout),
-    );
+    pageView(routes.recurringContribThankyou, routes.recurringContribCheckout);
     dispatch(checkoutPending(paymentMethod));
     return undefined;
   }

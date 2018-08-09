@@ -11,9 +11,8 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import ophan from 'ophan';
+import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
 import { routes } from 'helpers/routes';
-import { getAbsoluteURL } from 'helpers/url';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -105,10 +104,7 @@ export default function postCheckout(
 
       if (response.ok) {
         successfulConversion(abParticipations);
-        ophan.sendInitialEvent(
-          getAbsoluteURL(routes.oneOffContribThankyou),
-          getAbsoluteURL(routes.oneOffContribCheckout),
-        );
+        pageView(routes.oneOffContribThankyou, routes.oneOffContribCheckout);
         dispatch(checkoutSuccess());
       }
 
