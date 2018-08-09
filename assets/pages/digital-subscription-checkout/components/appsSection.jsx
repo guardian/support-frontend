@@ -47,7 +47,7 @@ function AppsSection() {
         </h2>
         <p className="apps-section__copy">
           <strong className="apps-section__strong">
-            If you&#39;re and iPad user
+            If you&#39;re an iPad user
           </strong> you can now access our award winning journalism in a
           format tailored for the iPad available to read offline, and updated daily.
         </p>
