@@ -2,6 +2,7 @@
 // ----- Imports ----- //
 
 import * as ophan from 'ophan';
+import { getAbsoluteURL } from '../url';
 
 // ----- Types ----- //
 
@@ -67,8 +68,24 @@ export type OphanComponentEvent = {
 
 // ----- Functions ----- //
 
-export const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
+const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   ophan.record({
     componentEvent,
   });
+};
+
+function pageView(currentRoute: string, referringRoute: string) {
+  try {
+    ophan.sendInitialEvent(
+      getAbsoluteURL(currentRoute),
+      getAbsoluteURL(referringRoute),
+    );
+  } catch (e) {
+    console.log(`Error in Ophan tracking: ${e}`);
+  }
+}
+
+export {
+  trackComponentEvents,
+  pageView,
 };

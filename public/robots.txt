@@ -5,6 +5,7 @@ Disallow: /uk/subscribe/digital
 Disallow: /us/subscribe/digital
 Disallow: /au/subscribe/digital
 Disallow: /int/subscribe/digital
+Disallow: /contribute.new
 Disallow: /contribute/recurring-guest
 
 Allow: /

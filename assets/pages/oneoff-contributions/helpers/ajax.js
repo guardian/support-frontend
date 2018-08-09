@@ -11,10 +11,10 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import ophan from 'ophan';
+import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
 import { routes } from 'helpers/routes';
-import { getAbsoluteURL } from 'helpers/url';
 import { logException } from 'helpers/logger';
+
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -86,13 +86,9 @@ function requestData(
 
 function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-
     if (response.ok) {
       successfulConversion(abParticipations);
-      ophan.sendInitialEvent(
-        getAbsoluteURL(routes.oneOffContribThankyou),
-        getAbsoluteURL(routes.oneOffContribCheckout),
-      );
+      pageView(routes.oneOffContribThankyou, routes.oneOffContribCheckout);
       dispatch(checkoutSuccess());
     }
     return response.json();

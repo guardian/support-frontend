@@ -15,6 +15,7 @@ Object {
     "amount": 20,
     "emailHasBeenBlurred": false,
     "error": null,
+    "paymentComplete": false,
   },
   "stripeInlineForm": Object {
     "errorMessage": null,
