@@ -5,7 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
+import { Redirect } from 'react-router';
 
+import { routes } from 'helpers/routes';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 
@@ -35,6 +37,7 @@ type PropTypes = {|
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
+  paymentComplete: boolean,
 |};
 
 
@@ -52,6 +55,7 @@ function mapStateToProps(state) {
     abParticipations: state.common.abParticipations,
     currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
+    paymentComplete: state.page.oneoffContrib.paymentComplete || false,
   };
 }
 
@@ -108,6 +112,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
 
   return (
     <section className="oneoff-contribution-payment">
+      { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
       <ErrorMessage message={props.error} />
       <StripePopUpButton
         email={props.email}
