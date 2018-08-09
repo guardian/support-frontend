@@ -29,7 +29,7 @@ object Segment {
   case object Perc20A extends Segment("X-GU-Experiment-20perc-A")
   case object Perc50 extends Segment("X-GU-Experiment-50perc")
 
-  def fromConfig(config: Config, key: String) = config.getString(key) match {
+  def fromConfig(config: Config, key: String): Segment = config.getString(key) match {
     case "Perc0A" => Perc0A
     case "Perc0B" => Perc0B
     case "Perc0C" => Perc0C

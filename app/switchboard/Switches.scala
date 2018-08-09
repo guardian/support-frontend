@@ -26,7 +26,7 @@ object Switches {
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
 case class ExperimentSwitch(name: String, description: String, segment: Segment, state: SwitchState) {
-  def isOn = state == SwitchState.On
+  def isOn: Boolean = state == SwitchState.On
 
   private def checkHeader(headerName: String, predicate: String => Boolean)(implicit request: RequestHeader): Boolean =
     request.headers.get(headerName).exists(predicate)
