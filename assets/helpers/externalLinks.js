@@ -11,19 +11,19 @@ import {
 import { addQueryParamsToURL } from 'helpers/url';
 
 import { getPromoCode } from './flashSale';
+import type { SubscriptionProduct } from './subscriptions';
 
 
 // ----- Types ----- //
 
-export type SubsProduct = 'paper' | 'digital' | 'paperDig' | 'weekly';
 export type MemProduct = 'patrons' | 'events';
 
 type PromoCodes = {
-  [SubsProduct]: string,
+  [SubscriptionProduct]: string,
 };
 
 export type SubsUrls = {
-  [SubsProduct]: string,
+  [SubscriptionProduct]: string,
 };
 
 
@@ -43,58 +43,58 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  digital: getPromoCode('digital', 'DXX83X'),
-  paper: getPromoCode('paper', 'GXX83P'),
-  paperDig: getPromoCode('paperAndDigital', 'GXX83X'),
+  DigitalPack: getPromoCode('DigitalPack', 'DXX83X'),
+  Paper: getPromoCode('Paper', 'GXX83P'),
+  PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
 };
 
 const customPromos : {
   [Campaign]: PromoCodes,
 } = {
   seven_fifty_middle: {
-    digital: 'D750MIDDLE',
-    paper: 'N750MIDDLE',
-    paperDig: 'ND750MIDDLE',
+    DigitalPack: 'D750MIDDLE',
+    Paper: 'N750MIDDLE',
+    PaperAndDigital: 'ND750MIDDLE',
   },
   seven_fifty_end: {
-    digital: 'D750END',
-    paper: 'N750END',
-    paperDig: 'ND750END',
+    DigitalPack: 'D750END',
+    Paper: 'N750END',
+    PaperAndDigital: 'ND750END',
   },
   seven_fifty_email: {
-    digital: 'D750EMAIL',
-    paper: 'N750EMAIL',
-    paperDig: 'ND750EMAIL',
+    DigitalPack: 'D750EMAIL',
+    Paper: 'N750EMAIL',
+    PaperAndDigital: 'ND750EMAIL',
   },
   epic_paradise_paradise_highlight: {
-    digital: 'DPARAHIGH',
-    paper: 'NPARAHIGH',
-    paperDig: 'NDPARAHIGH',
+    DigitalPack: 'DPARAHIGH',
+    Paper: 'NPARAHIGH',
+    PaperAndDigital: 'NDPARAHIGH',
   },
   epic_paradise_control: {
-    digital: 'DPARACON',
-    paper: 'NPARACON',
-    paperDig: 'NDPARACON',
+    DigitalPack: 'DPARACON',
+    Paper: 'NPARACON',
+    PaperAndDigital: 'NDPARACON',
   },
   epic_paradise_different_highlight: {
-    digital: 'DPARADIFF',
-    paper: 'NPARADIFF',
-    paperDig: 'NDPARADIFF',
+    DigitalPack: 'DPARADIFF',
+    Paper: 'NPARADIFF',
+    PaperAndDigital: 'NDPARADIFF',
   },
   epic_paradise_standfirst: {
-    digital: 'DPARASTAND',
-    paper: 'NPARASTAND',
-    paperDig: 'NDPARASTAND',
+    DigitalPack: 'DPARASTAND',
+    Paper: 'NPARASTAND',
+    PaperAndDigital: 'NDPARASTAND',
   },
   banner_just_one_control: {
-    digital: 'DBANJUSTCON',
-    paper: 'NBANJUSTCON',
-    paperDig: 'NDBANJUSTCON',
+    DigitalPack: 'DBANJUSTCON',
+    Paper: 'NBANJUSTCON',
+    PaperAndDigital: 'NDBANJUSTCON',
   },
   banner_just_one_just_one: {
-    digital: 'DBANJUSTONE',
-    paper: 'NBANJUSTONE',
-    paperDig: 'NDBANJUSTONE',
+    DigitalPack: 'DBANJUSTONE',
+    Paper: 'NBANJUSTONE',
+    PaperAndDigital: 'NDBANJUSTONE',
   },
 };
 
@@ -113,33 +113,36 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
+  countryGroupId: CountryGroupId,
   promoCodes: PromoCodes,
   intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
 
+  const countryId = countryGroups[countryGroupId].supportInternationalisationId;
   const params = new URLSearchParams();
   params.append('INTCMP', intCmp || defaultIntCmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
   params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
-  const paper = `${subsUrl}/p/${promoCodes.paper}?${params.toString()}`;
-  const paperDig = `${subsUrl}/p/${promoCodes.paperDig}?${params.toString()}`;
-  const digital = `/uk/subscribe/digital?${params.toString()}`; // This page is only used in the UK currently
-  const weekly = `${subsUrl}/weekly/GB?${params.toString()}`;
+  const paper = `${subsUrl}/p/${promoCodes.Paper}?${params.toString()}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${params.toString()}`;
+  const digital = `/${countryId}/subscribe/digital?${params.toString()}`;
+  const weekly = `${subsUrl}/weekly?${params.toString()}`;
 
   return {
-    digital,
-    paper,
-    paperDig,
-    weekly,
+    DigitalPack: digital,
+    Paper: paper,
+    PaperAndDigital: paperDig,
+    GuardianWeekly: weekly,
   };
 
 }
 
 // Creates links to subscriptions, tailored to the user's campaign.
 function getSubsLinks(
+  countryGroupId: CountryGroupId,
   intCmp: ?string,
   campaign: ?Campaign,
   otherQueryParams: Array<[string, string]>,
@@ -147,6 +150,7 @@ function getSubsLinks(
 ): SubsUrls {
   if ((campaign && customPromos[campaign])) {
     return buildSubsUrls(
+      countryGroupId,
       customPromos[campaign],
       intCmp,
       otherQueryParams,
@@ -154,7 +158,7 @@ function getSubsLinks(
     );
   }
 
-  return buildSubsUrls(defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
+  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
 
 }
 
@@ -166,7 +170,7 @@ function getDigitalCheckout(
 ): string {
 
   return addQueryParamsToURL(`${subsUrl}/checkout`, {
-    promoCode: defaultPromos.digital,
+    promoCode: defaultPromos.DigitalPack,
     countryGroup: countryGroups[cgId].supportInternationalisationId,
     acquisitionData: JSON.stringify(referrerAcquisitionData),
     startTrialButton: referringCta,

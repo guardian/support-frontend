@@ -28,7 +28,7 @@ type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
   error: ?string,
-  isFormEmpty: boolean,
+  areAnyRequiredFieldsEmpty: boolean,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   checkoutError: (?string) => void,
@@ -52,7 +52,7 @@ function mapStateToProps(state) {
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     error: state.page.oneoffContrib.error,
-    isFormEmpty: state.page.user.email === '' || state.page.user.fullName === '',
+    areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
@@ -85,25 +85,25 @@ function mapDispatchToProps(dispatch: Dispatch<OneOffCheckoutAction | StripeInli
 
 // If the form is valid, calls the given callback, otherwise sets an error.
 function formValidation(
-  isFormEmpty: boolean,
+  areAnyRequiredFieldsEmpty: boolean,
   validEmail: boolean,
-  error: ?string => void,
+  setError: ?string => void,
 ): () => boolean {
 
   return (): boolean => {
 
-    if (!isFormEmpty && validEmail) {
-      if (error) {
-        error(null);
+    if (!areAnyRequiredFieldsEmpty && validEmail) {
+      if (setError) {
+        setError(null);
       }
       return true;
     }
 
-    if (error) {
-      if (isFormEmpty) {
-        error('Please fill in all the fields above.');
+    if (setError) {
+      if (areAnyRequiredFieldsEmpty) {
+        setError('Please fill in all the fields above.');
       } else {
-        error('Please fill in a valid email address.');
+        setError('Please fill in a valid email address.');
       }
     }
     return false;
@@ -136,7 +136,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           context.store.getState,
         )}
         canProceed={formValidation(
-          props.isFormEmpty,
+          props.areAnyRequiredFieldsEmpty,
           validateEmailAddress(props.email),
           props.checkoutError,
         )}

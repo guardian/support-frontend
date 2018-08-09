@@ -8,7 +8,8 @@ case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
     recurringPaymentMethods: PaymentMethodsSwitch,
     experiments: Map[String, ExperimentSwitch],
-    optimize: SwitchState
+    optimize: SwitchState,
+    internationalSubscribePages: SwitchState
 )
 
 object Switches {
@@ -17,7 +18,8 @@ object Switches {
       PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
       PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
       experimentsFromConfig(config, "abtests"),
-      SwitchState.fromConfig(config, "optimize")
+      SwitchState.fromConfig(config, "optimize"),
+      SwitchState.fromConfig(config, "internationalSubscribePages")
     )
 
   def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
