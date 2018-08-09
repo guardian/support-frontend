@@ -37,13 +37,10 @@ case class ExperimentSwitch(name: String, description: String, segment: Segment,
   def canRun(implicit request: RequestHeader): Boolean = isOn
   def isParticipating(implicit request: RequestHeader): Boolean = canRun && inVariant
   def isControl(implicit request: RequestHeader): Boolean = canRun && inControl
-  def value(implicit request: RequestHeader): Group = {
-    if (isParticipating)
-      Group.Variant
-    else if (isControl)
-      Group.Control
-    else
-      Group.Unknown
+  def value(implicit request: RequestHeader): Group = (isParticipating, isControl) match {
+    case (true, _) => Group.Variant
+    case (_, true) => Group.Control
+    case _ => Group.Unknown
   }
 }
 
