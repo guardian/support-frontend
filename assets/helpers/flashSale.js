@@ -28,27 +28,27 @@ function inOfferPeriod(product: SubscriptionProduct): boolean {
 const promoCodes = {
   DigitalPack: {
     promoCode: 'DPS80S',
-    price: '11.99',
+    price: 11.99,
   },
   Paper: {
     promoCode: 'GST80F',
-    price: '5.18',
+    price: 5.18,
   },
   PaperAndDigital: {
     promoCode: 'GST80G',
-    price: '10.81',
+    price: 10.81,
   },
   DailyEdition: {
     promoCode: '',
-    price: '6.99',
+    price: 6.99,
   },
   GuardianWeekly: {
     promoCode: '',
-    price: '30',
+    price: 30,
   },
   PremiumTier: {
     promoCode: '',
-    price: '5.99',
+    price: 5.99,
   },
 };
 
@@ -59,7 +59,7 @@ function getPromoCode(product: SubscriptionProduct, defaultCode: string) {
   return defaultCode;
 }
 
-function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: string) {
+function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: number) {
   if (inOfferPeriod(product)) {
     return promoCodes[product].price;
   }

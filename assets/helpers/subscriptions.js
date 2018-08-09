@@ -67,8 +67,8 @@ const defaultBillingPeriods: {
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
   const price = subscriptionPrices[product][countryGroupId];
-  const formatted = Number.isInteger(price) ? price : price.toFixed(2);
-  return getDiscountedPrice(product, formatted.toString());
+  const discounted = getDiscountedPrice(product, price);
+  return Number.isInteger(discounted) ? discounted : discounted.toFixed(2);
 }
 
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
@@ -76,7 +76,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
-
 
 function sendTrackingEventsOnClick(
   id: string,
