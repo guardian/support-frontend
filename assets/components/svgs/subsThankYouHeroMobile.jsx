@@ -16,6 +16,7 @@ export default function SvgSubsThankYouHeroMobile() {
       viewBox="0 90 463 363"
       aria-labelledby="svg-subs-thank-you-hero-mobile-title"
     >
+      <title id="svg-subs-thank-you-hero-mobile-title">Thank You</title>
       <g fill="none" fillRule="evenodd" transform="translate(0 -31)">
         <circle cx="38.5" cy="231.5" fill="#FFE500" r="22.5" transform="matrix(-1 0 0 1 77 0)" />
         <circle cx="407.5" cy="252.5" fill="#FF7F0F" r="22.5" transform="matrix(-1 0 0 1 815 0)" />

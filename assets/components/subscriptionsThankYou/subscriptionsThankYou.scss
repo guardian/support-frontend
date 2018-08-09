@@ -4,6 +4,21 @@
     width: 480px;
     position: relative;
     left: calc((100vw - 480px)/2);
+
+    @include mq($from: phablet) {
+      display: none;
+    }
+  }
+
+  .svg-subs-thank-you-hero-tablet {
+    display: none;
+    width: 980px;
+    position: relative;
+    left: calc((100vw - 980px)/2);
+
+    @include mq($from: phablet) {
+      display: block;
+    }
   }
 
   .component-cta-link {
@@ -67,6 +82,10 @@
       fill: #fff;
     }
   }
+}
+
+.component-subscriptions-thank-you__hero {
+  overflow-x: hidden;
 }
 
 .component-subscriptions-thank-you__ctas {

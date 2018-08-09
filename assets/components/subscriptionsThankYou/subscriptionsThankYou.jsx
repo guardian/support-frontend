@@ -14,6 +14,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgSubsThankYouHeroMobile from 'components/svgs/subsThankYouHeroMobile';
+import SvgSubsThankYouHeroTablet from 'components/svgs/subsThankYouHeroTablet';
 
 
 // ----- Component ----- //
@@ -22,8 +23,11 @@ function SubscriptionsThankYou() {
 
   return (
     <div className="component-subscriptions-thank-you">
-      <LeftMarginSection>
+      <div className="component-subscriptions-thank-you__hero">
         <SvgSubsThankYouHeroMobile />
+        <SvgSubsThankYouHeroTablet />
+      </div>
+      <LeftMarginSection>
         <HeadingBlock heading="Thank you, for helping to support our journalism">
           <p className="component-subscriptions-thank-you__heading-banner">
             <strong className="component-subscriptions-thank-you__congrats">
