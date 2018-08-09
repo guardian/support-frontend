@@ -111,7 +111,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         stripeConfigProvider,
         payPalConfigProvider,
         stubControllerComponents(),
-        Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), On),
+        Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
         guardianDomain = ".thegulocal.com"
       )
     }
