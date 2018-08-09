@@ -11,12 +11,15 @@ import com.gu.support.workers.model._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
+import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
+import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.monthlyContributions.Contribution
 import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
 import play.api.mvc.Call
 import com.gu.support.workers.model.monthlyContributions.Status
+import com.gu.support.workers.model.states.CheckoutFailureState
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
@@ -111,14 +114,6 @@ class RegularContributionsClient(
       statusResponse
     }
 
-    def checkoutStatus(detailedHistory: List[Try[String]], trackingUri: String): StatusResponse = {
-      detailedHistory match {
-        case history if history.contains(Success("CheckoutSuccess")) => StatusResponse(Status.Success, trackingUri, None)
-        case history if history.contains(Success("CheckoutFailure")) => StatusResponse(Status.Failure, trackingUri, None)
-        case _ => StatusResponse(Status.Pending, trackingUri, None)
-      }
-    }
-
     underlying.history(jobId).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
@@ -126,11 +121,44 @@ class RegularContributionsClient(
       },
       { events =>
         val trackingUri = supportUrl + statusCall(jobId).url
-        val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails.getName))
+        val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
         respondToClient(checkoutStatus(detailedHistory, trackingUri))
       }
     )
 
+  }
+
+  case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
+
+  def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], trackingUri: String): StatusResponse = {
+
+    val finishedStates: List[Try[FinishedState]] = detailedHistory.map { stateAttempt =>
+      for {
+        attempt <- stateAttempt
+        name <- Try(attempt.getName)
+      } yield FinishedState(name, attempt)
+    }
+
+    finishedStates match {
+      case history if history.contains(Success(FinishedState("CheckoutSuccess", _))) =>
+        StatusResponse(Status.Success, trackingUri, None)
+      case history if history.contains(Success(FinishedState("CheckoutFailure", _))) =>
+        StatusResponse(Status.Failure, trackingUri, getFailureDetails(finishedStates))
+      case _ =>
+        StatusResponse(Status.Pending, trackingUri, None)
+    }
+
+  }
+
+  def getFailureDetails(finishedStates: List[Try[FinishedState]]): Option[String] = {
+    val findCheckoutFailure = finishedStates.find(state => state.map(_.name) == Success("CheckoutFailure"))
+    findCheckoutFailure.flatMap(_.toOption).flatMap {
+      state =>
+        {
+          val maybeFailureState = stateWrapper.unWrap[CheckoutFailureState](state.eventDetails.getOutput).toOption
+          maybeFailureState.map(_.checkoutFailureReason.toString)
+        }
+    }
   }
 
   def healthy(): Future[Boolean] =
