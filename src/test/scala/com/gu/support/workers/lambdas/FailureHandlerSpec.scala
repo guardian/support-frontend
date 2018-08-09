@@ -2,9 +2,10 @@ package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
+import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
+import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
@@ -12,8 +13,10 @@ import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.parser.decode
+import org.mockito.Mockito.{times, verify, when}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.io.Source
 
 @IntegrationTest
@@ -72,6 +75,41 @@ class FailureHandlerSpec extends LambdaSpec {
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
     SafeLogger.info(outState.right.get.requestInfo.messages.head)
+  }
+
+  it should "return a non failed JsonWrapper for Stripe payment errors for a digital pack, too" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(digipackCardDeclinedStripeJson.asInputStream, outStream, context)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInfo.failed should be(false)
+
+    SafeLogger.warn(outState.right.get.requestInfo.messages.head)
+  }
+
+  it should "digital pack: send an email with FailedDigitalPackEmailFields when there are Stripe payment errors " in {
+
+    val emailService = mock[EmailService]
+    val result = mock[SendMessageResult]
+    val testFields = FailedDigitalPackEmailFields("test@gu.com")
+
+    when(emailService.send(testFields)).thenReturn(Future.successful(result))
+
+    val failureHandler = new FailureHandler(emailService)
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequest(digipackCardDeclinedStripeJson.asInputStream, outStream, context)
+
+    verify(emailService, times(1)).send(testFields)
+
+    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
+    outState.right.get.requestInfo.failed should be(false)
+
+    SafeLogger.warn(outState.right.get.requestInfo.messages.head)
   }
 
   it should "match a transaction declined error" in {
