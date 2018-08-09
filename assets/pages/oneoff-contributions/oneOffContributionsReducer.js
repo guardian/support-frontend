@@ -21,6 +21,7 @@ import type { Action } from './oneoffContributionsActions';
 export type State = {
   amount: number,
   error: ?string,
+  paymentComplete: boolean,
   emailHasBeenBlurred: boolean,
 };
 
@@ -43,6 +44,7 @@ function createOneOffContribReducer(amount: number) {
   const initialState: State = {
     amount,
     error: null,
+    paymentComplete: false,
     emailHasBeenBlurred: false,
   };
 
