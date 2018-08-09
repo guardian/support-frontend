@@ -55,7 +55,7 @@ type OphanComponent = {
   labels?: $ReadOnlyArray<string>
 };
 
-type OphanComponentEvent = {
+export type OphanComponentEvent = {
   component: OphanComponent,
   action: OphanAction,
   value?: string,
@@ -74,7 +74,7 @@ const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   });
 };
 
-function pageView(currentRoute, referringRoute) {
+function pageView(currentRoute: string, referringRoute: string) {
   try {
     ophan.sendInitialEvent(
       getAbsoluteURL(currentRoute),
@@ -87,6 +87,5 @@ function pageView(currentRoute, referringRoute) {
 
 export {
   trackComponentEvents,
-  OphanComponentEvent,
   pageView,
 };
