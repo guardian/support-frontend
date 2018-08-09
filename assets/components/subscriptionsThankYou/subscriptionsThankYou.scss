@@ -1,4 +1,8 @@
 .component-subscriptions-thank-you {
+  .svg-subs-thank-you-hero-mobile {
+    display: block;
+  }
+
   .component-cta-link {
     background-color: transparent;
     border: 1px solid gu-colour(garnett-neutral-1);
@@ -37,13 +41,6 @@
         border-left: 1px solid gu-colour(garnett-neutral-4);
       }
     }
-  }
-
-  .svg-subs-thank-you-hero-mobile {
-    display: block;
-    width: 150%;
-    left: -25%;
-    position: relative;
   }
 }
 
