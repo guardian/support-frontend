@@ -24,15 +24,11 @@
 </head>
 <body>
 
-  <h1>@title</h1>
-	<p>@description</p>
+	@switches.experiments.get("new-payment-flow").exists(_.isParticipating).map { _ =>
+
+		<h1>Help us deliver the independent journalism the world needs</h1>
+		<p>Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 	
-	@switches.experiments.get("new-payment-flow").map { x =>
-		@x.value match {
-			case Group.Control => { <p>You're in the test dude! (but only in the control, boo)</p> }
-			case Group.Variant => { <p>You're in the test dude!</p> }
-			case Group.Unknown => { <p>Sorry old chum no test for you :(</p> }
-		}
 	}
   
 </body>
