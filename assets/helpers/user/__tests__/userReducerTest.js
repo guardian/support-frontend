@@ -130,4 +130,3 @@ describe('user reducer tests', () => {
     expect(newState.gnmMarketing).toEqual(preference);
   });
 });
-

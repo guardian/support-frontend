@@ -6,33 +6,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { Redirect } from 'react-router';
-
 import { routes } from 'helpers/routes';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
-
-import { validateEmailAddress } from 'helpers/utilities';
-
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { checkoutError, type Action } from '../oneoffContributionsActions';
+import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
+import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-
+import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
+import { type PageState as State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   dispatch: Function,
   email: string,
+  setShouldValidateFunctions: Array<() => void>,
   error: ?string,
-  areAnyRequiredFieldsEmpty: boolean,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  checkoutError: (?string) => void,
   abParticipations: Participations,
   currencyId: IsoCurrency,
   isTestUser: boolean,
@@ -40,16 +38,21 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
   optimizeExperiments: OptimizeExperiments,
+  formFields: Array<UserFormFieldAttribute>
 |};
 
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
+
+function mapStateToProps(state: State) {
+  const { fullName, email } = getFormFields(state);
+
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: state.page.user.email,
+    email: email.value,
+    formFields: [email, fullName],
     error: state.page.oneoffContrib.error,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
@@ -62,45 +65,15 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
-    checkoutError: (message: ?string) => {
-      dispatch(checkoutError(message));
-    },
+    setShouldValidateFunctions: [
+      () => dispatch(setFullNameShouldValidate()),
+      () => dispatch(setEmailShouldValidate()),
+    ],
   };
 }
-
-// ----- Functions ----- //
-
-// If the form is valid, calls the given callback, otherwise sets an error.
-function formValidation(
-  areAnyRequiredFieldsEmpty: boolean,
-  validEmail: boolean,
-  error: ?string => void,
-): Function {
-
-  return (): boolean => {
-
-    if (!areAnyRequiredFieldsEmpty && validEmail) {
-      if (error) {
-        error(null);
-      }
-      return true;
-    }
-
-    if (error) {
-      if (areAnyRequiredFieldsEmpty) {
-        error('Please fill in all the fields above.');
-      } else {
-        error('Please fill in a valid email address.');
-      }
-    }
-    return false;
-  };
-
-}
-
 
 // ----- Component ----- //
 
@@ -112,7 +85,6 @@ function formValidation(
  * You should not use context for other purposes. Please use redux.
  */
 function OneoffContributionsPayment(props: PropTypes, context) {
-
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
@@ -128,11 +100,8 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           context.store.getState,
           props.optimizeExperiments,
         )}
-        canOpen={formValidation(
-          props.areAnyRequiredFieldsEmpty,
-          validateEmailAddress(props.email),
-          props.checkoutError,
-        )}
+        canOpen={() => props.formFields.every(f => f.isValid)}
+        onClick={() => props.setShouldValidateFunctions.forEach(f => f())}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
