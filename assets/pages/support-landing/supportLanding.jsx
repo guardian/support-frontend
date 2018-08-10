@@ -65,6 +65,7 @@ const content = (
       />
       <section id={supporterSectionId}>
         <Contribute
+          heading="Contribute"
           copy="Your contribution funds and supports The Guardian's journalism."
           modifierClasses={['compact']}
         >
