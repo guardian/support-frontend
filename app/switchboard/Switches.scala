@@ -31,7 +31,7 @@ case class ExperimentSwitch(name: String, description: String, segment: Segment,
   def isOn: Boolean = state == SwitchState.On
 
   private def checkHeader(segment: Segment, group: Group)(implicit request: RequestHeader): Boolean =
-    request.headers.get("X-GU-Experiment").exists(_ == s"${segment.name}-${group.name}")
+    request.headers.get("X-GU-Experiment").exists(_.contains(s"${segment.name}-${group.name}"))
 
   private def inVariant(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Variant)
   private def inControl(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Control)
