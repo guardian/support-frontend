@@ -6,14 +6,14 @@ import type { SubscriptionProduct } from './subscriptions';
 
 function inOfferPeriod(product: SubscriptionProduct): boolean {
   // Days are 1 based, months are 0 based
-  const startTime = new Date(2018, 5, 18, 0, 0).getTime(); // 18th June 2018
-  const endTime = new Date(2018, 6, 1, 0, 0).getTime(); // 1st July 2018
+  const startTime = new Date(2018, 7, 20, 0, 0).getTime(); // 20th August 2018
+  const endTime = new Date(2018, 8, 2, 0, 0).getTime(); // 2nd September 2018
 
-  // The current sale is digital only, everything else is unaffected
+  // The current sale is paper and paper+digital only; everything else is unaffected
   const included = {
-    DigitalPack: true,
-    Paper: false,
-    PaperAndDigital: false,
+    DigitalPack: false,
+    Paper: true,
+    PaperAndDigital: true,
     DailyEdition: false,
     GuardianWeekly: false,
     PremiumTier: false,
@@ -27,15 +27,15 @@ function inOfferPeriod(product: SubscriptionProduct): boolean {
 // Promo codes
 const promoCodes = {
   DigitalPack: {
-    promoCode: 'DPS80S',
+    promoCode: '',
     price: 11.99,
   },
   Paper: {
-    promoCode: 'GST80F',
+    promoCode: 'GFS80G',
     price: 5.18,
   },
   PaperAndDigital: {
-    promoCode: 'GST80G',
+    promoCode: 'GFS80I',
     price: 10.81,
   },
   DailyEdition: {
