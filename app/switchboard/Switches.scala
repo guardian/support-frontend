@@ -30,11 +30,11 @@ case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, direct
 case class ExperimentSwitch(name: String, description: String, segment: Segment, state: SwitchState) {
   def isOn: Boolean = state == SwitchState.On
 
-  private def checkHeader(headerName: String, predicate: String => Boolean)(implicit request: RequestHeader): Boolean =
-    request.headers.get(headerName).exists(predicate)
+  private def checkHeader(segment: Segment, group: Group)(implicit request: RequestHeader): Boolean =
+    request.headers.get("X-GU-Experiment").exists(_ == s"${segment.name}-${group.name}")
 
-  private def inVariant(implicit request: RequestHeader): Boolean = checkHeader(segment.headerName, _ == Group.Variant.name)
-  private def inControl(implicit request: RequestHeader): Boolean = checkHeader(segment.headerName, _ == Group.Control.name)
+  private def inVariant(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Variant)
+  private def inControl(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Control)
 
   def canRun(implicit request: RequestHeader): Boolean = isOn
   def isParticipating(implicit request: RequestHeader): Boolean = canRun && inVariant
