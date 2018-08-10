@@ -11,13 +11,14 @@ import {
   dailyEditionUrl,
 } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPrice } from 'helpers/flashSale';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { addQueryParamsToURL } from 'helpers/url';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { type HeadingSize } from 'components/heading/heading';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { displayPrice } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -50,8 +51,9 @@ const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_lan
 // ----- Component ----- //
 
 export default function DigitalSubscriptions(props: PropTypes) {
-
+  const countryGroupId = 'GBPCountries'; // This component is only used in the UK
   const subsLinks = getSubsLinks(
+    countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -65,6 +67,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
         modifierClass="digital-subscriptions"
       >
         <PremiumTier
+          countryGroupId={countryGroupId}
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
@@ -77,7 +80,8 @@ export default function DigitalSubscriptions(props: PropTypes) {
           onClick={props.clickEvents.dailyEdition}
         />
         <DigitalBundle
-          url={subsLinks.digital}
+          countryGroupId={countryGroupId}
+          url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
           onClick={props.clickEvents.digiPack}
         />
@@ -91,6 +95,7 @@ export default function DigitalSubscriptions(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function PremiumTier(props: {
+    countryGroupId: CountryGroupId,
     iOSUrl: string,
     androidUrl: string,
     headingSize: HeadingSize,
@@ -102,7 +107,7 @@ function PremiumTier(props: {
     <SubscriptionBundle
       modifierClass="premium-tier"
       heading="Premium App"
-      subheading="£5.99/month"
+      subheading={displayPrice('PremiumTier', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -145,7 +150,7 @@ function DailyEdition(props: {
     <SubscriptionBundle
       modifierClass="daily-edition"
       heading="Daily Edition"
-      subheading="from £6.99/month"
+      subheading={`from ${displayPrice('DailyEdition', 'GBPCountries')}`}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -172,24 +177,36 @@ function DailyEdition(props: {
 }
 
 function DigitalBundle(props: {
+  countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent,
+  onClick: ClickEvent | null,
 }) {
+
+  const i13n = props.countryGroupId === 'GBPCountries' ?
+    {
+      gridId: 'digitalCircleAlt',
+      benefits: 'The premium app and the daily edition in one pack',
+    } :
+    {
+      gridId: 'digitalCircleInternational',
+      benefits: 'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack',
+    };
+
 
   return (
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
-      subheading={`£${getPrice('digital', '11.99')}/month`}
+      subheading={displayPrice('DigitalPack', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The premium app and the daily edition in one pack',
+          text: i13n.benefits,
         },
       ]}
       gridImage={{
-        gridId: 'digitalCircleAlt',
+        gridId: i13n.gridId,
         altText: 'digital subscription',
         ...gridImageProperties,
       }}
@@ -206,3 +223,9 @@ function DigitalBundle(props: {
   );
 
 }
+
+export {
+  DigitalBundle,
+  PremiumTier,
+  DailyEdition,
+};

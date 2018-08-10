@@ -6,13 +6,14 @@ import React from 'react';
 
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits, getPrice } from 'helpers/flashSale';
+import { getPaperBenefits, getDigitalBenefits, getPaperDigitalBenefits } from 'helpers/flashSale';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { HeadingSize } from 'components/heading/heading';
+import { displayPrice } from '../../helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -40,12 +41,15 @@ const gridImageProperties = {
   imgType: 'png',
 };
 
+const countryGroupId = 'GBPCountries'; // This component is only used in the UK
+
 
 // ----- Component ----- //
 
 function ThreeSubscriptions(props: PropTypes) {
 
   const subsLinks = getSubsLinks(
+    countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     [],
@@ -56,17 +60,17 @@ function ThreeSubscriptions(props: PropTypes) {
     <div className="component-three-subscriptions">
       <PageSection heading="Subscribe" modifierClass="three-subscriptions">
         <DigitalBundle
-          url={subsLinks.digital}
+          url={subsLinks.DigitalPack}
           headingSize={props.digitalHeadingSize}
           onClick={props.clickEvents ? props.clickEvents.digital : null}
         />
         <PaperBundle
-          url={subsLinks.paper}
+          url={subsLinks.Paper}
           headingSize={props.paperHeadingSize}
           onClick={props.clickEvents ? props.clickEvents.paper : null}
         />
         <PaperDigitalBundle
-          url={subsLinks.paperDig}
+          url={subsLinks.PaperAndDigital}
           headingSize={props.paperDigitalHeadingSize}
           onClick={props.clickEvents ? props.clickEvents.paperDigital : null}
         />
@@ -89,7 +93,7 @@ function DigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital"
-      subheading={`£${getPrice('digital', '11.99')}/month`}
+      subheading={displayPrice('DigitalPack', countryGroupId)}
       benefits={getDigitalBenefits()}
       gridImage={{
         gridId: 'digitalCircle',
@@ -121,7 +125,7 @@ function PaperBundle(props: {
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`from £${getPrice('paper', '10.36')}/month`}
+      subheading={`from ${displayPrice('Paper', countryGroupId)}`}
       benefits={getPaperBenefits()}
       gridImage={{
         gridId: 'paperCircle',
@@ -153,7 +157,7 @@ function PaperDigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+digital"
-      subheading={`from £${getPrice('paperAndDigital', '21.62')}/month`}
+      subheading={`from ${displayPrice('PaperAndDigital', countryGroupId)}`}
       benefits={getPaperDigitalBenefits()}
       gridImage={{
         gridId: 'paperDigitalCircle',

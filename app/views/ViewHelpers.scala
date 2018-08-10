@@ -12,5 +12,4 @@ object ViewHelpers {
     switches
       .asJson
       .pretty(Printer.spaces2.copy(dropNullValues = true))
-      .replaceAll("\"", "")
 }

@@ -14,16 +14,12 @@ import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
+import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
-import com.gu.support.workers.model.monthlyContributions.Status
-import com.gu.support.workers.model.states.CheckoutFailureState
+import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
-
 import scala.util.{Success, Try}
 
 object CreateRegularContributorRequest {
@@ -74,7 +70,7 @@ class RegularContributionsClient(
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      contribution = request.contribution,
+      product = request.contribution,
       paymentFields = request.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.ophanIds,
@@ -140,9 +136,9 @@ class RegularContributionsClient(
     }
 
     finishedStates match {
-      case history if history.contains(Success(FinishedState("CheckoutSuccess", _))) =>
+      case history if history.contains(Success(FinishedState("CheckoutSuccess", _: StateExitedEventDetails))) =>
         StatusResponse(Status.Success, trackingUri, None)
-      case history if history.contains(Success(FinishedState("CheckoutFailure", _))) =>
+      case history if history.contains(Success(FinishedState("CheckoutFailure", _: StateExitedEventDetails))) =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(finishedStates))
       case _ =>
         StatusResponse(Status.Pending, trackingUri, None)
