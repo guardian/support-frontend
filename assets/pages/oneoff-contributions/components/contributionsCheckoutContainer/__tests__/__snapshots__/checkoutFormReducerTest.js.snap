@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user reducer tests should return the initial state 1`] = `
+Object {
+  "email": Object {
+    "shouldValidate": false,
+  },
+  "fullName": Object {
+    "shouldValidate": false,
+  },
+}
+`;

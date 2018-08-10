@@ -14,25 +14,29 @@ import {
   setStateField,
   type Action as UserAction,
 } from 'helpers/user/userActions';
-
 import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
-
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ErrorMessage from 'components/errorMessage/errorMessage';
+import { type UserFormFieldAttribute, formFieldError, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
 import EmailFormFieldContainer from './emailFormFieldContainer';
+import {
+  type Action as CheckoutAction,
+  setFirstNameShouldValidate,
+  setLastNameShouldValidate,
+} from './contributionsCheckoutContainer/checkoutFormActions';
+
 
 // ----- Types ----- //
 
 type PropTypes = {
-  firstNameUpdate: (name: string) => void,
-  lastNameUpdate: (name: string) => void,
   stateUpdate: (value: UsState | CaState) => void,
   countryUpdate: (value: string) => void,
-  firstName: string,
-  lastName: string,
+  firstName: UserFormFieldAttribute,
+  lastName: UserFormFieldAttribute,
   countryGroup: CountryGroupId,
   country: IsoCountry,
 };
@@ -40,35 +44,73 @@ type PropTypes = {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+  const firstNameFormfield = {
+    value: state.page.user.firstName,
+    ...state.page.checkoutForm.firstName,
+  };
+  const lastNameFormField = {
+    value: state.page.user.lastName,
+    ...state.page.checkoutForm.lastName,
+  };
 
   return {
-    firstName: state.page.user.firstName,
-    lastName: state.page.user.lastName,
+    stateFirstName: firstNameFormfield,
+    stateLastName: lastNameFormField,
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
   };
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction>) {
+function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | CheckoutAction>) {
 
   return {
-    firstNameUpdate: (name: string) => {
-      dispatch(setFirstName(name));
-    },
-    lastNameUpdate: (name: string) => {
-      dispatch(setLastName(name));
-    },
     stateUpdate: (value: UsState | CaState) => {
       dispatch(setStateField(value));
     },
     countryUpdate: (value: IsoCountry) => {
       dispatch(setCountry(value));
     },
+    firstNameActions: {
+      setShouldValidate: () => {
+        dispatch(setFirstNameShouldValidate());
+      },
+      setValue: (firstName: string) => {
+        dispatch(setFirstName(firstName));
+      },
+    },
+    lastNameActions: {
+      setShouldValidate: () => {
+        dispatch(setLastNameShouldValidate());
+      },
+      setValue: (lastName: string) => {
+        dispatch(setLastName(lastName));
+      },
+    },
   };
-
 }
 
+function mergeProps(stateProps, dispatchProps) {
+
+  const firstName: UserFormFieldAttribute = {
+    ...stateProps.stateFirstName,
+    ...dispatchProps.firstNameActions,
+    isValid: formFieldError(stateProps.stateFirstName.value, true),
+  };
+
+  const lastName: UserFormFieldAttribute = {
+    ...stateProps.stateLastName,
+    ...dispatchProps.lastNameActions,
+    isValid: formFieldError(stateProps.stateLastName.value, true),
+  };
+
+  return {
+    ...stateProps,
+    ...dispatchProps,
+    firstName,
+    lastName,
+  };
+}
 
 // ----- Functions ----- //
 
@@ -127,6 +169,15 @@ function countriesDropdown(
 
 function NameForm(props: PropTypes) {
 
+  const showFirstNameError = shouldShowError(props.firstName);
+  const showLastNameError = shouldShowError(props.lastName);
+  const firstNameModifier = showFirstNameError
+    ? ['first-name', 'error']
+    : ['first-name'];
+  const lastNameModifier = showLastNameError
+    ? ['last-name', 'error']
+    : ['last-name'];
+
   return (
     <form className="regular-contrib__name-form">
       <EmailFormFieldContainer />
@@ -134,19 +185,29 @@ function NameForm(props: PropTypes) {
         id="first-name"
         labelText="First name"
         placeholder="First name"
-        value={props.firstName}
-        onChange={props.firstNameUpdate}
-        modifierClasses={['first-name']}
+        value={props.firstName.value}
+        onChange={props.firstName.setValue}
+        onBlur={props.firstName.setShouldValidate}
+        modifierClasses={firstNameModifier}
         required
+      />
+      <ErrorMessage
+        showError={showFirstNameError}
+        message="Please enter a first name."
       />
       <TextInput
         id="last-name"
         labelText="Last name"
         placeholder="Last name"
-        value={props.lastName}
-        onChange={props.lastNameUpdate}
-        modifierClasses={['last-name']}
+        value={props.lastName.value}
+        onChange={props.lastName.setValue}
+        onBlur={props.lastName.setShouldValidate}
+        modifierClasses={lastNameModifier}
         required
+      />
+      <ErrorMessage
+        showError={showLastNameError}
+        message="Please enter a last name."
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
@@ -156,4 +217,4 @@ function NameForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(NameForm);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(NameForm);

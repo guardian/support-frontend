@@ -4,6 +4,14 @@ exports[`One-off Reducer should handle SET_PAYPAL_BUTTON 1`] = `null`;
 
 exports[`One-off Reducer should return the initial state 1`] = `
 Object {
+  "checkoutForm": Object {
+    "email": Object {
+      "shouldValidate": false,
+    },
+    "fullName": Object {
+      "shouldValidate": false,
+    },
+  },
   "csrf": Object {
     "token": null,
   },
@@ -13,7 +21,6 @@ Object {
   },
   "oneoffContrib": Object {
     "amount": 20,
-    "emailHasBeenBlurred": false,
     "error": null,
     "paymentComplete": false,
   },
@@ -21,6 +28,7 @@ Object {
     "displayName": "",
     "email": "",
     "firstName": "",
+    "fullName": "",
     "gnmMarketing": false,
     "id": "",
     "isPostDeploymentTestUser": false,

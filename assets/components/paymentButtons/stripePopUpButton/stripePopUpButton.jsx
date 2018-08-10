@@ -15,6 +15,7 @@ import {
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
 
 // ---- Types ----- //
 
@@ -24,12 +25,13 @@ type PropTypes = {|
   callback: (token: string) => Promise<*>,
   closeHandler: () => void,
   currencyId: IsoCurrency,
-  email: string,
+  email: UserFormFieldAttribute,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   canOpen: () => boolean,
+  onClick: () => void,
   switchStatus: Status,
-  disable: boolean
+  disable: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -51,7 +53,6 @@ const StripePopUpButton = (props: PropTypes) => (
   />
 );
 
-
 // ----- Auxiliary Components ----- //
 
 function Button(props: PropTypes) {
@@ -65,10 +66,12 @@ function Button(props: PropTypes) {
     if (props.isPostDeploymentTestUser) {
       const testTokenId = 'tok_visa';
       props.callback(testTokenId);
-    } else if (props.canOpen && props.canOpen()) {
+    } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
-      openDialogBox(props.amount, props.email);
+      openDialogBox(props.amount, props.email.value);
     }
+    props.onClick();
+
   };
 
   const baseClass = 'component-stripe-pop-up-button';
@@ -93,8 +96,9 @@ function Button(props: PropTypes) {
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
-  canOpen: () => true,
   closeHandler: () => {},
+  canOpen: () => true,
+  onClick: () => {},
   switchStatus: 'On',
 };
 

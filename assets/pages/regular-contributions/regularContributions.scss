@@ -82,6 +82,7 @@
   }
 
   .component-text-input__input--error {
+    margin-bottom: $gu-v-spacing;
     border: 2px solid gu-colour(error);
   }
 

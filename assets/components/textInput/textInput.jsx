@@ -36,13 +36,14 @@ type PropTypes = {
   pattern?: string,
   modifierClasses: Array<?string>,
   onBlur: () => void,
+  pattern?: string,
+  type: ?string,
 };
 
 
 // ----- Component ----- //
 
 export default function TextInput(props: PropTypes) {
-
   return (
     <div className={classNameWithModifiers('component-text-input', props.modifierClasses)}>
       <label htmlFor={props.id} className="component-text-input__label">
@@ -51,6 +52,7 @@ export default function TextInput(props: PropTypes) {
       <input
         className={classNameWithModifiers('component-text-input__input', props.modifierClasses)}
         type={props.type}
+        pattern={props.pattern}
         id={props.id}
         onChange={event => props.onChange(event.target.value || '')}
         onBlur={props.onBlur}
@@ -59,7 +61,6 @@ export default function TextInput(props: PropTypes) {
         required={props.required}
         autoComplete={props.autocomplete}
         autoCapitalize={props.autocapitalize}
-        pattern={props.pattern}
       />
     </div>
   );
@@ -75,7 +76,7 @@ TextInput.defaultProps = {
   required: false,
   autocomplete: 'on',
   autocapitalize: 'off',
-  pattern: '',
   modifierClasses: [],
+  pattern: '.*',
   onBlur: () => undefined,
 };

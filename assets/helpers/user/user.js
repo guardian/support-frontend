@@ -18,7 +18,6 @@ import {
   setIsSignedIn,
 } from './userActions';
 
-
 // ----- Functions ----- //
 
 const init = (dispatch: Function) => {
