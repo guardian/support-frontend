@@ -31,11 +31,11 @@ function SubscriptionsThankYou(props: PropTypes) {
         <SvgSubsThankYouHeroDesktop />
       </div>
       <LeftMarginSection>
-        <HeadingBlock heading="Thank you, for helping to support our journalism">
+        <HeadingBlock heading="Thank you for helping to support our journalism">
           <p className="component-subscriptions-thank-you__heading-banner">
             <strong className="component-subscriptions-thank-you__congrats">
               Congratulations
-            </strong>, you are now subscribed!
+            </strong>, you are now a subscriber!
           </p>
         </HeadingBlock>
       </LeftMarginSection>

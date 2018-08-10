@@ -32,28 +32,29 @@ function AppsSection() {
         </p>
         <div className="apps-section__ctas">
           <CtaLink
-            text="Download on the App Store"
+            text="Download from the App Store"
             accessibilityHint="Click to download the app on the Apple App Store"
             url={iOSAppUrl}
           />
           <CtaLink
-            text="Get it on Google Play"
+            text="Download from Google Play"
             accessibilityHint="Click to download the app on the Google Play store"
             url={androidAppUrl}
           />
         </div>
         <h2 className="apps-section__heading">
-          and the iPad Daily Edition..?
+          ...and the Daily Tablet edition?
         </h2>
         <p className="apps-section__copy">
           <strong className="apps-section__strong">
             If you&#39;re an iPad user
-          </strong> you can now access our award winning journalism in a
-          format tailored for the iPad available to read offline, and updated daily.
+          </strong>, you can access our award-winning journalism in a format tailored
+          to this screen size. Our articles will be available to read offline, and updated
+          daily, first thing in the morning.
         </p>
         <div className="apps-section__ctas">
           <CtaLink
-            text="Download the iPad Edition"
+            text="Download the Daily Tablet edition"
             accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
             url={dailyEditionUrl}
           />
