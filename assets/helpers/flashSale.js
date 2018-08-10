@@ -52,14 +52,14 @@ const promoCodes = {
   },
 };
 
-function getPromoCode(product: SubscriptionProduct, defaultCode: string) {
+function getPromoCode(product: SubscriptionProduct, defaultCode: string): string {
   if (inOfferPeriod(product)) {
     return promoCodes[product].promoCode;
   }
   return defaultCode;
 }
 
-function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: number) {
+function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: number): number {
   if (inOfferPeriod(product)) {
     return promoCodes[product].price;
   }

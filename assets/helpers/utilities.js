@@ -18,6 +18,11 @@ function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
 }
 
+// Cross-browser compatible integer check.
+function isInteger(n: number): boolean {
+  return n % 1 === 0;
+}
+
 // Generates the "class class-modifier" string for HTML elements.
 // Does not add null, undefined and empty string.
 function classNameWithModifiers(className: string, modifiers: Array<?string>): string {
@@ -94,6 +99,7 @@ export {
   ascending,
   descending,
   roundDp,
+  isInteger,
   classNameWithModifiers,
   clickSubstituteKeyPressHandler,
   parseBoolean,
