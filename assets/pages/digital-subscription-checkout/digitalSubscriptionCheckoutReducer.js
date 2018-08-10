@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/page';
 
 import { type Action } from './digitalSubscriptionCheckoutActions';
 
