@@ -13,6 +13,6 @@ object Segment {
   def fromConfig(config: Config, key: String): Segment = config.getString(key) match {
     case "Perc0" => Perc0
     case "Perc50" => Perc50
-    case _ => Perc0
+    case _ => Perc50
   }
 }
