@@ -30,7 +30,7 @@ const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup)), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 
-const currentTime = new Date().toString();
+const currentTimeInEpochMilliseconds: number = Date.now();
 
 user.init(store.dispatch);
 
@@ -54,7 +54,7 @@ const router = (
           render={() => {
             setCookie(
               ONE_OFF_CONTRIBUTION_COOKIE,
-              currentTime,
+              currentTimeInEpochMilliseconds.toString(),
             );
             return (<ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />);
           }
