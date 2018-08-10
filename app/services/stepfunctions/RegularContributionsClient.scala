@@ -78,7 +78,6 @@ class RegularContributionsClient(
         supportAbTests = request.supportAbTests
       ))
     )
-    SafeLogger.info(createPaymentMethodState.toString)
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] Failed to create regular contribution for ${user.id} - $error")
