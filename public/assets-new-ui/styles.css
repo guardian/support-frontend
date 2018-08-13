@@ -258,3 +258,191 @@ footer[role="contentinfo"] {
     }
   }
 }
+
+/*= TYPOGRAPHY */
+
+body {
+  color: #333;
+  font: normal 16px/1.5  'Guardian Text Egyptian Web', Georgia, serif;
+}
+
+h1 {
+  border-bottom: 1px solid #dcdcdc;
+  color: #121212;
+  font: bold 24px/1.25 'Guardian Egyptian Web', Georgia, serif;
+  margin: 0 -10px;
+  padding: 0 10px 12px;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+.blurb {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 3px 0 9px;
+}
+
+footer[role="contentinfo"] {
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+.license small {
+  font-size: 1em;
+}
+
+.support {
+  font-size: 14px;
+}
+
+form {
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+.form__radio-group--tabs {
+  font-family: 'Guardian Egyptian Web', Georgia, serif;
+  font-weight: bold;
+}
+
+/*= CONTRIBUTION FORM */
+.form__radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.form__radio-group legend {
+  display: none;
+}
+
+.form__radio-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.form__radio-group ul input {
+  display: none;
+}
+
+
+.form__radio-group--tabs ul {
+  display: flex;
+}
+    
+.form__radio-group--tabs li {
+  border-top: 1px solid #dcdcdc;
+  flex: 1;
+  margin: 0 -10px;
+}
+
+.form__radio-group--tabs li + li {
+  border-left: 1px solid #dcdcdc;
+}
+
+.form__radio-group--tabs input + label {
+  display: block;
+  padding: 4px 10px 4px;
+}
+
+.form__radio-group--tabs input:checked + label {
+  background: white;
+  color: #00b2ff;
+}
+        
+.form__radio-group--tabs input:not(:checked) + label {
+  background: #f6f6f6;
+  color: #999;
+}
+
+.form__radio-group--pills ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__radio-group--pills li {
+  width: 50px;
+  height: 50px;
+}
+
+.form__radio-group--pills input + label {
+  border: solid 1px #00b2ff;
+  border-radius: 25px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+}
+ 
+.form__radio-group--pills input:checked + label {
+  background: #00b2ff;
+  color: #fff;
+}
+
+.form__radio-group--buttons li + li {
+  margin-top: 6px;
+}
+
+.form__radio-group--buttons label {
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+  display: block;
+  margin-bottom: 8px;
+  padding: 9px 10px 9px 38px;
+}
+
+.form__radio-group--buttons input:checked + label {
+  border-color: #00b2ff;
+  font-weight: bold;
+}
+        
+.form__field label {
+  font-weight: bold;
+  line-height: 1;
+}
+
+.form__input {
+  border: 1px solid #dcdcdc;
+  padding: 9px 10px 9px 38px;
+}
+
+.form__input::placeholder,
+.form__placeholder {
+  color: #999;
+}
+
+.form__submit {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-bottom: 30px;
+}
+
+.form__submit button {
+  background: #ffe500;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+}
+
+.contribution-form__amount,
+.contribution-form__other-amount,
+.contribution-form__fname, 
+.contribution-form__lname {
+  margin-top: 12px;
+}
+
+.contribution-form__email, 
+.contribution-form__state {
+  margin-top: 24px;
+}
+
+.contribution-form__pay {
+  margin-top: 20px;
+}
