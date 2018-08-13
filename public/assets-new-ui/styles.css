@@ -54,13 +54,19 @@ footer[role="contentinfo"] {
 
 /*= BREAKPOINTS */
 
+@media (min-width: 720px) {
+  .content {
+    border-color: #dcdcdc;
+    border-style: none solid;
+    border-width: 0 1px;
+  }
+}
+
 @supports(display: grid) {
   body {
     display: grid;
     grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
   }
-  
-  /*= HEADER */
   
   header[role="banner"] {
     grid-row: header-t / header-b;
@@ -74,7 +80,6 @@ footer[role="contentinfo"] {
     grid-row: header-b / footer-t;  
   }
     
-  /* Tablet */
   @media (min-width: 720px) {
     body,
     header[role="banner"],
@@ -90,9 +95,6 @@ footer[role="contentinfo"] {
     }
     
     .content {
-      border-color: #dcdcdc;
-      border-style: none solid;
-      border-width: 0 1px;
       margin: 0 -11px;
         
       grid-column: 2 / 6;
@@ -110,7 +112,6 @@ footer[role="contentinfo"] {
     }
   }
 
-  /* Left col */
   @media (min-width: 1140px) {
     body,
     header[role="banner"],
@@ -140,7 +141,6 @@ footer[role="contentinfo"] {
     }
   }  
 
-  /* Wide */
   @media (min-width: 1300px) {
     body,
     header[role="banner"],
@@ -180,5 +180,81 @@ footer[role="contentinfo"] {
 }
 
 @supports not (display: grid) {
-  /* TODO */
+  header[role="banner"] {
+    height: 75px;
+  }
+  
+  @media (min-width: 720px) {
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      padding: 0 calc(50% - 350px);
+      width: 700px;
+    }
+  
+    .content {
+      width: 340px;
+      margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+    }
+  
+    footer[role="contentinfo"] {
+      display: flex;
+    }
+    
+    .license,
+    .support {
+      width: 340px;
+    }
+  
+    .support {
+      margin-left: 20px;
+    }
+  
+    .support ul {
+      column-width: 160px;
+      column-gap: 20px;
+    }
+  }
+  
+  @media (min-width: 1140px) {
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+      width: 940px;
+    }
+  
+    .content {
+      width: 300px;
+      margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+    }
+  
+    .license,
+    .support {
+      width: 460px;
+    }
+    
+    .support ul {
+      column-width: 140px;
+    }
+  }
+  
+  @media (min-width: 1300px) {
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      padding: 0 calc(50% - 620px);
+      width: 1240px;
+    }
+    
+    .content {
+      width: 300px;
+      margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
+    }
+    
+    .license {
+      width: 700px;
+    }
+  
+    .support {
+      width: 460px;
+    }
+  }
 }
