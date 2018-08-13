@@ -7,7 +7,7 @@ import play.api.mvc.Cookie
 
 object RecurringContributionCookie {
 
-  val currentTime = Instant.ofEpochSecond(System.currentTimeMillis / 1000).toString
+  val currentTime = Instant.ofEpochSecond(System.currentTimeMillis / 1000).toEpochMilli.toString
 
   def create(domain: String, billingPeriod: BillingPeriod): Cookie = Cookie(
     name = s"gu.contributions.recurring.contrib-timestamp.$billingPeriod",
