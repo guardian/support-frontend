@@ -33,7 +33,6 @@
 @import '~components/contributionsThankYou/contributionsThankYouPage';
 @import '~components/marketingConsent/marketingConsent';
 @import '~components/payPalContributionButton/payPalContributionButton';
-@import '~components/stripeInlineForm/stripeInlineForm';
 @import '~components/yourContribution/yourContribution';
 @import '~components/yourDetails/yourDetails';
 @import '~components/legal/legalSection/legalSection';
@@ -100,10 +99,5 @@
 .oneoff-contribution-payment__or-label {
   font-size: 12px;
   margin-bottom: 4px;
-  font-family: $gu-sans-web;
-}
-
-.component-stripe-inline-form {
-  margin-top: -5px;
   font-family: $gu-sans-web;
 }

@@ -8,7 +8,6 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { userReducer as user } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import { stripeInlineFormReducerFor } from 'components/stripeInlineForm/stripeInlineFormReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
@@ -77,6 +76,5 @@ export default function createRootOneOffContribReducer(amount: number) {
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user,
     csrf,
-    stripeInlineForm: stripeInlineFormReducerFor('oneOffContributions'),
   });
 }

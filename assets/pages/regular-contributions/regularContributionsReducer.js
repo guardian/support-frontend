@@ -10,7 +10,6 @@ import type { DirectDebitState } from 'components/directDebit/directDebitReducer
 import { userReducer as user } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import { stripeInlineFormReducerFor } from 'components/stripeInlineForm/stripeInlineFormReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
@@ -109,6 +108,5 @@ export default function createRootRegularContributionsReducer(
     user,
     csrf,
     directDebit,
-    stripeInlineForm: stripeInlineFormReducerFor('regularContributions'),
   });
 }

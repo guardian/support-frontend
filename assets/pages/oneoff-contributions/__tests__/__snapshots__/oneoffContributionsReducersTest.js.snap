@@ -17,10 +17,6 @@ Object {
     "error": null,
     "paymentComplete": false,
   },
-  "stripeInlineForm": Object {
-    "errorMessage": null,
-    "isStripeLoaded": false,
-  },
   "user": Object {
     "displayName": "",
     "email": "",
