@@ -1,0 +1,32 @@
+body {
+  background: white;
+  margin: 0;
+  padding: 0;
+}
+
+/*= HEADER */
+
+header[role="banner"] {
+  background-color: #e9eff1;
+  border-bottom: 1px solid #dcdcdc;
+  height: 75px;
+}
+
+/*= FOOTER */
+
+footer[role="contentinfo"] {
+  background: #333;
+  color: #999;
+}
+
+/* Support navigation */
+.support ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.support a {
+  color: white;
+  text-decoration: none;
+}
