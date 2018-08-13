@@ -8,12 +8,13 @@ import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
 import com.gu.support.workers.model._
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder}
+import io.circe.{Decoder}
 import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
+import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
 import com.gu.support.workers.model.Status
@@ -51,10 +52,9 @@ object RegularContributionsClient {
     new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
-case class StatusResponse(status: Status, trackingUri: String, message: Option[String] = None)
-object StatusResponse {
-  implicit val encoder: Encoder[StatusResponse] = deriveEncoder
-}
+case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
+
+case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
 
 class RegularContributionsClient(
     arn: StateMachineArn,
@@ -95,7 +95,7 @@ class RegularContributionsClient(
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
-            message = Some("Failed to process request - please contact customer support")
+            failureReason = Some(CheckoutFailureReasons.Unknown)
           )
         }
 
@@ -118,15 +118,20 @@ class RegularContributionsClient(
       { events =>
         val trackingUri = supportUrl + statusCall(jobId).url
         val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
-        respondToClient(checkoutStatus(detailedHistory, trackingUri))
+        respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
       }
     )
 
   }
 
-  case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
+  def healthy(): Future[Boolean] =
+    underlying.status.map(_.getStatus == "ACTIVE").getOrElse(false)
 
-  def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], trackingUri: String): StatusResponse = {
+}
+
+object StepFunctionExecutionStatus {
+
+  def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], stateWrapper: StateWrapper, trackingUri: String): StatusResponse = {
 
     val finishedStates: List[Try[FinishedState]] = detailedHistory.map { stateAttempt =>
       for {
@@ -135,29 +140,21 @@ class RegularContributionsClient(
       } yield FinishedState(name, attempt)
     }
 
-    finishedStates match {
-      case history if history.contains(Success(FinishedState("CheckoutSuccess", _: StateExitedEventDetails))) =>
+    val searchForFinishedCheckout: Option[StatusResponse] = finishedStates.collectFirst {
+      case Success(FinishedState("CheckoutSuccess", _)) =>
         StatusResponse(Status.Success, trackingUri, None)
-      case history if history.contains(Success(FinishedState("CheckoutFailure", _: StateExitedEventDetails))) =>
-        StatusResponse(Status.Failure, trackingUri, getFailureDetails(finishedStates))
-      case _ =>
-        StatusResponse(Status.Pending, trackingUri, None)
+      case Success(FinishedState("CheckoutFailure", eventDetails)) =>
+        StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, eventDetails))
     }
+
+    searchForFinishedCheckout.getOrElse(StatusResponse(Status.Pending, trackingUri, None))
 
   }
 
-  def getFailureDetails(finishedStates: List[Try[FinishedState]]): Option[String] = {
-    val findCheckoutFailure = finishedStates.find(state => state.map(_.name) == Success("CheckoutFailure"))
-    findCheckoutFailure.flatMap(_.toOption).flatMap {
-      state =>
-        {
-          val maybeFailureState = stateWrapper.unWrap[CheckoutFailureState](state.eventDetails.getOutput).toOption
-          maybeFailureState.map(_.checkoutFailureReason.toString)
-        }
-    }
+  def getFailureDetails(stateWrapper: StateWrapper, eventDetails: StateExitedEventDetails): Option[CheckoutFailureReason] = {
+    stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput).map {
+      checkoutFailureState => checkoutFailureState.checkoutFailureReason
+    }.toOption
   }
-
-  def healthy(): Future[Boolean] =
-    underlying.status.map(_.getStatus == "ACTIVE").getOrElse(false)
 
 }

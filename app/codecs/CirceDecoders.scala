@@ -16,6 +16,7 @@ import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
+import services.stepfunctions.StatusResponse
 import switchboard.{PaymentMethodsSwitch, SwitchState, Switches}
 import services.{PayPalError, PaymentApiError}
 
@@ -97,12 +98,17 @@ object CirceDecoders {
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
-  implicit val checkoutFailureReasonCodec: Codec[CheckoutFailureReason] = deriveCodec
-  implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
   implicit val switchStateEncode: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
   implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+
+  implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
+  implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
+    identifier => CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
+  }
+  implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
+  implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
 
   private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
   implicit val paymentApiError: Decoder[PaymentApiError] = deriveDecoder
