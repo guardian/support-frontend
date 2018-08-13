@@ -46,6 +46,7 @@ function getSubscriptionsForCountry() {
   const testName = 'international_subs_landing_pages';
   return (
     <InternationalSubscriptions
+      sectionId={supporterSectionId}
       countryGroupId={countryGroupId}
       headingSize={3}
       clickEvents={{
