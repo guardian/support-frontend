@@ -74,3 +74,24 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
 
   private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] = decode[T](errorJson.errorMessage).toOption
 }
+
+object ErrorMappings {
+
+  import CheckoutFailureReasons._
+
+  def toCheckoutFailureReason(zuoraError: ZuoraError): CheckoutFailureReason = zuoraError.Message match {
+    case "Transaction declined.insufficient_funds - Your card has insufficient funds." => PaymentMethodUnacceptable
+    case "Transaction declined.fraudulent - Your card was declined." => PaymentMethodUnacceptable
+    case "Transaction declined.transaction_not_allo - Your card does not support this type of purchase." => PaymentMethodUnacceptable
+    case "Transaction declined.do_not_honor - Your card was declined." => PaymentMethodUnacceptable
+    case "Transaction declined.revocation_of_author - Your card was declined." => PaymentMethodUnacceptable
+    case "Transaction declined.generic_decline - Your card was declined." => Unknown
+    case _ => Unknown
+  }
+
+  def toCheckoutFailureReason(stripeError: StripeError): CheckoutFailureReason = stripeError.decline_code match {
+    case Some("insufficient_funds") => PaymentMethodUnacceptable
+    case _ => Unknown // FIXME
+  }
+
+}
