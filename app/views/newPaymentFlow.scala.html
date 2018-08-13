@@ -1,5 +1,5 @@
 <header role="banner">
-  <a href="#"><img src="#" alt="The Guardian"></a>
+  <a class="glogo" href="#"><img src="#" alt="The Guardian"></a>
 </header>
 
 <div class="content">
@@ -7,8 +7,8 @@
   <h1>Help us deliver the independent journalism the world needs</h1>
   <p>Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 
-  <form action="#">
-    <fieldset>
+  <form action="#" class="form contribution-form">
+    <fieldset class="form__radio-group form__radio-group--tabs">
       <legend>Recurrence</legend>
       <ul>
         <li>
@@ -22,7 +22,7 @@
       </ul>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="form__radio-group form__radio-group--pills">
       <legend>Amount</legend>
       <ul>
         <li>
@@ -47,28 +47,28 @@
         </li>
       </ul>
     
-      <div>
+      <div class="form__field">
         <label for="contributionOther">Other Amount</label>
         <input id="contributionOther" type="text" pattern="[1-9]\d*(.\d{2})?">
       </div>
     </fieldset>
 
-    <div>
+    <div class="form__field">
       <label for="contributionFName">First Name</label>
       <input id="contributionFName" type="text" required>
     </div>
 
-    <div>
+    <div class="form__field">
       <label for="contributionLName">Last Name</label>
       <input id="contributionLName" type="text" required>
     </div>
 
-    <div>
+    <div class="form__field">
       <label for="contributionEmail">Email address</label>
       <input id="contributionEmail" type="email" required>
     </div>
 
-    <div>
+    <div class="form__field">
       <label for="contributionState">Select your state</label>
       <select id="contributionState" required>
         <option></option>
@@ -77,7 +77,7 @@
       </select>
     </div>
 
-    <fieldset>
+    <fieldset class="form__radio-group">
       <legend>Pay with</legend>
 
       <ul>
@@ -92,7 +92,7 @@
       </ul>
     </fieldset>
 
-    <div>
+    <div class="form__submit">
       <button type="submit">Contribute</button>
     </div>
   </form>
@@ -100,7 +100,7 @@
 </div>
 
 <footer role="contentinfo">
-  <div>
+  <div class="license">
     <small>© 2018 Guardian News and Media Limited or its affiliated companies. All rights reserved.</small>
   </div>
 
