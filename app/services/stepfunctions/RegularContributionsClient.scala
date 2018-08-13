@@ -13,10 +13,9 @@ import io.circe.{Decoder, Encoder}
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.monthlyContributions.Contribution
-import com.gu.support.workers.model.monthlyContributions.state.CreatePaymentMethodState
+import com.gu.support.workers.model.states.CreatePaymentMethodState
 import play.api.mvc.Call
-import com.gu.support.workers.model.monthlyContributions.Status
+import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
@@ -71,7 +70,7 @@ class RegularContributionsClient(
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      contribution = request.contribution,
+      product = request.contribution,
       paymentFields = request.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.ophanIds,
