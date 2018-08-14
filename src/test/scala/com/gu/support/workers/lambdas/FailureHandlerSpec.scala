@@ -1,13 +1,17 @@
 package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
+import java.util.Base64
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
-import com.gu.support.workers.model.CheckoutFailureReasons.PaymentMethodUnacceptable
+import com.gu.support.workers.encoding.StateCodecs.checkoutFailureStateDecoder
+import com.gu.support.workers.encoding.utf8
+import com.gu.support.workers.model.CheckoutFailureReasons.{PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.model.JsonWrapper
+import com.gu.support.workers.model.states.CheckoutFailureState
 import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
@@ -30,7 +34,7 @@ class FailureHandlerSpec extends LambdaSpec {
       .map(result => result.getMessageId should not be "")
   }
 
-  "FailureHandler lambda" should "return a failed JsonWrapper for any errors except payment errors" in {
+  "FailureHandler lambda" should "return a failed JsonWrapper and an Unknown failure reason for any errors except payment errors" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
@@ -39,9 +43,13 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(true)
+
+    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
+    checkoutFailureState.right.get.checkoutFailureReason should be(Unknown)
+
   }
 
-  "FailureHandler lambda" should "still return a failed JsonWrapper if it receives the old schema" in {
+  "FailureHandler lambda" should "still return a failed JsonWrapper and an Unknown failure reason if it receives the old schema" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
@@ -50,9 +58,13 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(true)
+
+    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
+    checkoutFailureState.right.get.checkoutFailureReason should be(Unknown)
+
   }
 
-  it should "return a non failed JsonWrapper for Zuora payment errors" in {
+  it should "return a non failed JsonWrapper and an appropriate failure reason for a payment error from Zuora" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
@@ -62,9 +74,13 @@ class FailureHandlerSpec extends LambdaSpec {
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
     SafeLogger.info(outState.right.get.requestInfo.messages.head)
+
+    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
+    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+
   }
 
-  it should "return a non failed JsonWrapper for Stripe payment errors" in {
+  it should "return a non failed JsonWrapper and an appropriate failure reason for Stripe payment errors" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
@@ -74,9 +90,13 @@ class FailureHandlerSpec extends LambdaSpec {
     val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
     outState.right.get.requestInfo.failed should be(false)
     SafeLogger.info(outState.right.get.requestInfo.messages.head)
+
+    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
+    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+
   }
 
-  it should "return a non failed JsonWrapper for Stripe payment errors for a digital pack, too" in {
+  it should "return a non failed JsonWrapper and an appropriate failure reason for Stripe payment errors for a digital pack, too" in {
     val failureHandler = new FailureHandler()
 
     val outStream = new ByteArrayOutputStream()
@@ -87,6 +107,10 @@ class FailureHandlerSpec extends LambdaSpec {
     outState.right.get.requestInfo.failed should be(false)
 
     SafeLogger.warn(outState.right.get.requestInfo.messages.head)
+
+    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
+    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+
   }
 
   it should "digital pack: send an email with FailedDigitalPackEmailFields when there are Stripe payment errors " in {
@@ -124,6 +148,10 @@ class FailureHandlerSpec extends LambdaSpec {
     val failureHandler = new FailureHandler()
     val reason = failureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
     reason should be(PaymentMethodUnacceptable)
+  }
+
+  def decodeState(state: String): String = {
+    new String(Base64.getDecoder.decode(state), utf8)
   }
 
 }
