@@ -33,6 +33,7 @@ type PropTypes = {
   required: boolean,
   autocomplete?: AutoComplete,
   autocapitalize?: AutoCapitalize,
+  pattern?: string,
   modifierClasses: Array<?string>,
   onBlur: () => void,
 };
@@ -74,6 +75,7 @@ TextInput.defaultProps = {
   required: false,
   autocomplete: 'on',
   autocapitalize: 'off',
+  pattern: '',
   modifierClasses: [],
   onBlur: () => undefined,
 };
