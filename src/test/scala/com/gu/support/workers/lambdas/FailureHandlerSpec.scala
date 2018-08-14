@@ -6,13 +6,13 @@ import com.gu.emailservices.{EmailService, FailedContributionEmailFields}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures.{cardDeclinedJsonStripe, cardDeclinedJsonZuora, failureJson, oldSchemaFailureJson}
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
+import com.gu.support.workers.model.CheckoutFailureReasons.PaymentMethodUnacceptable
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.parser.decode
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
 
@@ -82,4 +82,11 @@ class FailureHandlerSpec extends LambdaSpec {
       case _ => fail()
     }
   }
+
+  it should "convert a transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
+    val failureHandler = new FailureHandler()
+    val reason = failureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
+    reason should be(PaymentMethodUnacceptable)
+  }
+
 }
