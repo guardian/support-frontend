@@ -329,6 +329,9 @@ form {
   display: none;
 }
 
+.form__radio-group ul label {
+  cursor: pointer;
+}
 
 .form__radio-group--tabs ul {
   display: flex;
@@ -405,11 +408,26 @@ form {
 .form__field label {
   font-weight: bold;
   line-height: 1;
+  margin-bottom: 4px;
 }
 
 .form__input {
   border: 1px solid #dcdcdc;
   padding: 9px 10px 9px 38px;
+  transition: all .2s ease-in-out;
+}
+
+.form__input:hover {
+  box-shadow: 0 0 0 3px #ededed;
+}
+
+.form__input:focus {
+  box-shadow: 0 0 0 3px #ffe500;
+  outline: none;
+}
+
+.form__input:invalid {
+  border-color: #3db540;
 }
 
 .form__input::placeholder,
@@ -429,6 +447,11 @@ form {
   border: none;
   border-radius: 20px;
   padding: 9px 20px;
+}
+
+.form__submit button:hover,
+.form__submit button:focus {
+  background: #e5ce00;
 }
 
 .contribution-form__amount,
