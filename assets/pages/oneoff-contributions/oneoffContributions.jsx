@@ -13,6 +13,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 import { getAmount } from 'helpers/checkouts';
+import { set as setCookie } from 'helpers/cookie';
 
 import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 
@@ -26,6 +27,10 @@ import FormFields from './components/formFields';
 const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup)), true);
+
+const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
+
+const currentTimeInEpochMilliseconds: number = Date.now();
 
 user.init(store.dispatch);
 
@@ -46,8 +51,13 @@ const router = (
         <Route
           exact
           path={routes.oneOffContribThankyou}
-          render={() =>
-            <ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />
+          render={() => {
+            setCookie(
+              ONE_OFF_CONTRIBUTION_COOKIE,
+              currentTimeInEpochMilliseconds.toString(),
+            );
+            return (<ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />);
+          }
           }
         />
       </div>

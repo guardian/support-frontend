@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
@@ -16,7 +17,7 @@ export type SubscriptionProduct =
   'DailyEdition' |
   'GuardianWeekly' |
   'Paper' |
-  'PaperAndDigital'
+  'PaperAndDigital';
 
 // ----- Config ----- //
 
@@ -65,13 +66,13 @@ const defaultBillingPeriods: {
   DailyEdition: 'month',
 };
 
-function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
+function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const price = subscriptionPrices[product][countryGroupId];
   const discounted = getDiscountedPrice(product, price);
-  return Number.isInteger(discounted) ? discounted : discounted.toFixed(2);
+  return Number.isInteger(discounted) ? discounted.toString() : discounted.toFixed(2);
 }
 
-function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
+function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;

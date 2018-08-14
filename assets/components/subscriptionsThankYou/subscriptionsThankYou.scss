@@ -1,0 +1,73 @@
+.component-subscriptions-thank-you {
+  .svg-subs-thank-you-hero-mobile {
+    display: block;
+    width: 480px;
+    position: relative;
+    left: calc((100vw - 480px)/2);
+
+    @include mq($from: phablet) {
+      display: none;
+    }
+  }
+
+  .svg-subs-thank-you-hero-tablet {
+    display: none;
+    width: 980px;
+    position: relative;
+    left: calc((100vw - 980px)/2);
+
+    @include mq($from: phablet, $until: desktop) {
+      display: block;
+    }
+  }
+
+  .svg-subs-thank-you-hero-desktop {
+    display: none;
+    width: 1300px;
+    position: relative;
+    left: calc((100vw - 1300px)/2);
+
+    @include mq($from: desktop) {
+      display: block;
+    }
+  }
+
+  .component-left-margin-section--return {
+    .component-left-margin-section__content {
+      box-sizing: border-box;
+      background-color: gu-colour(media-garnett-main-1);
+      padding: ($gu-v-spacing * 2) ($gu-h-spacing / 2);
+    }
+
+    .component-cta-link {
+      background-color: gu-colour(garnett-neutral-1);
+      color: #fff;
+      font-weight: bold;
+      box-sizing: border-box;
+
+      &:hover {
+        background-color: darken(gu-colour(garnett-neutral-1), 5%);
+      }
+
+      @include mq($from: mobileLandscape) {
+        width: 300px;
+      }
+    }
+
+    .svg-arrow-right-straight {
+      fill: #fff;
+    }
+  }
+}
+
+.component-subscriptions-thank-you__hero {
+  overflow-x: hidden;
+}
+
+.component-subscriptions-thank-you__congrats {
+  font-weight: bold;
+}
+
+.component-subscriptions-thank-you__strong {
+  font-weight: bold;
+}

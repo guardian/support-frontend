@@ -9,9 +9,11 @@
 @import '~components/selectInput/selectInput';
 @import '~components/ctaLink/ctaLink';
 @import '~components/footer/footer';
-@import '~components/headers/countrySwitcherHeader/countrySwitcherHeader';
+@import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/leftMarginSection/leftMarginSection';
 @import '~components/customerService/customerService';
+@import '~components/headingBlock/headingBlock';
+@import '~components/subscriptionsThankYou/subscriptionsThankYou';
 
 
 // ----- Page-Specific Styles ----- //
@@ -20,14 +22,101 @@
 #digital-subscription-checkout-page-uk,
 #digital-subscription-checkout-page-us,
 #digital-subscription-checkout-page-au {
+
+  // ----- General
+
   .component-left-margin-section__content {
     overflow-x: hidden;
     @include mq($from: leftCol) {
       overflow-x: visible;
     }
   }
-}
 
-.component-left-margin-section--grey {
-  background: gu-colour(neutral-6);
+  // ----- Apps
+
+  .apps-section {
+    .component-left-margin-section__content {
+      padding: 2px ($gu-h-spacing / 2) 0;
+      box-sizing: border-box;
+
+      @include mq($from: tablet) {
+        border-left: 1px solid gu-colour(garnett-neutral-4);
+      }
+    }
+
+    .component-cta-link {
+      background-color: transparent;
+      border: 1px solid gu-colour(garnett-neutral-1);
+      height: $cta-height;
+      box-sizing: border-box;
+      line-height: $cta-height - 2;
+      color: gu-colour(garnett-neutral-1);
+      margin-bottom: $gu-v-spacing;
+
+      @include mq($from: mobileLandscape) {
+        width: 300px;
+      }
+
+      &:hover {
+        background-color: gu-colour(garnett-neutral-1);
+        color: #fff;
+
+        .svg-arrow-right-straight {
+          fill: #fff;
+        }
+      }
+
+      .svg-arrow-right-straight {
+        fill: gu-colour(garnett-neutral-1);
+        height: 40%;
+        top: 30%;
+      }
+    }
+  }
+
+  .apps-section__ctas {
+    margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: tablet) {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: $gu-v-spacing;
+      margin-left: $gu-h-spacing;
+    }
+  }
+
+  .apps-section__heading {
+    font-size: 22px;
+    line-height: 1.18;
+    font-weight: 300;
+    font-family: $gu-egyptian-web;
+
+    @include mq($from: tablet) {
+      font-size: 28px;
+      width: 300px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 36px;
+      width: 250px;
+    }
+  }
+
+  .apps-section__copy {
+    font-size: 14px;
+    line-height: 1.43;
+    font-family: $gu-egyptian-web;
+    color: gu-colour(media-garnett-main-1);
+    margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
+
+    @include mq($from: tablet) {
+      display: inline-block;
+      width: 300px;
+      vertical-align: top;
+    }
+  }
+
+  .apps-section__strong {
+    font-weight: bold;
+  }
 }
