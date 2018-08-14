@@ -24,6 +24,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type ClickEvent = () => void;
 
 type PropTypes = {
+  sectionId: string,
   countryGroupId: CountryGroupId,
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
@@ -54,33 +55,35 @@ export default function InternationalSubscriptions(props: PropTypes) {
   );
 
   return (
-    <div className="component-international-subscriptions">
-      <PageSection
-        heading="Subscribe"
-        modifierClass="international-subscriptions"
-      >
-        <PremiumTier
-          countryGroupId={props.countryGroupId}
-          iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
-          androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
-          headingSize={props.headingSize}
-          iOSOnClick={props.clickEvents.iOSApp}
-          androidOnClick={props.clickEvents.androidApp}
-        />
-        <DigitalBundle
-          countryGroupId={props.countryGroupId}
-          url={subsLinks.DigitalPack}
-          headingSize={props.headingSize}
-          onClick={props.clickEvents.digiPack}
-        />
-        <WeeklyBundle
-          countryGroupId={props.countryGroupId}
-          url={subsLinks.GuardianWeekly}
-          headingSize={props.headingSize}
-          onClick={props.clickEvents.digiPack}
-        />
-      </PageSection>
-    </div>
+    <section id={props.sectionId}>
+      <div className="component-international-subscriptions">
+        <PageSection
+          heading="Subscribe"
+          modifierClass="international-subscriptions"
+        >
+          <PremiumTier
+            countryGroupId={props.countryGroupId}
+            iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
+            androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
+            headingSize={props.headingSize}
+            iOSOnClick={props.clickEvents.iOSApp}
+            androidOnClick={props.clickEvents.androidApp}
+          />
+          <DigitalBundle
+            countryGroupId={props.countryGroupId}
+            url={subsLinks.DigitalPack}
+            headingSize={props.headingSize}
+            onClick={props.clickEvents.digiPack}
+          />
+          <WeeklyBundle
+            countryGroupId={props.countryGroupId}
+            url={subsLinks.GuardianWeekly}
+            headingSize={props.headingSize}
+            onClick={props.clickEvents.digiPack}
+          />
+        </PageSection>
+      </div>
+    </section>
   );
 
 }

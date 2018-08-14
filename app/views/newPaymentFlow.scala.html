@@ -7,12 +7,12 @@
   <h1>Help us deliver the independent journalism the world needs</h1>
   <p>Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 
-  <form action="#" class="form contribution-form">
+  <form action="#" method="post" class="form contribution-form">
     <fieldset class="form__radio-group form__radio-group--tabs">
       <legend>Recurrence</legend>
       <ul>
         <li>
-          <input id="contributionType-monthly" type="radio" name="contributionType" value="monthly">
+          <input id="contributionType-monthly" type="radio" name="contributionType" value="monthly" checked>
           <label for="contributionType-monthly">Monthly</label>
         </li>
         <li>
@@ -26,7 +26,7 @@
       <legend>Amount</legend>
       <ul>
         <li>
-          <input id="contributionAmount-25" type="radio" name="contributionAmount" value="25">
+          <input id="contributionAmount-25" type="radio" name="contributionAmount" value="25" checked>
           <label for="contributionAmount-25" aria-label="25 US Dollars">$25</label>
         </li>
         <li>
@@ -49,18 +49,18 @@
     
       <div class="form__field">
         <label for="contributionOther">Other Amount</label>
-        <input id="contributionOther" type="text" pattern="[1-9]\d*(.\d{2})?">
+        <input id="contributionOther" type="number" min="1" max="2000" autocomplete="off">
       </div>
     </fieldset>
 
     <div class="form__field">
       <label for="contributionFName">First Name</label>
-      <input id="contributionFName" type="text" required>
+      <input id="contributionFName" type="text" autocapitalize="words" required>
     </div>
 
     <div class="form__field">
       <label for="contributionLName">Last Name</label>
-      <input id="contributionLName" type="text" required>
+      <input id="contributionLName" autocapitalize="words" type="text" required>
     </div>
 
     <div class="form__field">
@@ -82,7 +82,7 @@
 
       <ul>
         <li>
-          <input id="contributionPayment-paypal" name="contributionPayment" type="radio" value="paypal">
+          <input id="contributionPayment-paypal" name="contributionPayment" type="radio" value="paypal" checked>
           <label for="contributionPayment-paypal">Paypal</label>
         </li>
         <li>
