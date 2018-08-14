@@ -2,7 +2,6 @@
 // ----- Imports ----- //
 
 import * as ophan from 'ophan';
-import { getAbsoluteURL } from '../url';
 
 // ----- Types ----- //
 
