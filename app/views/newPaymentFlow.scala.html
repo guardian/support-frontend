@@ -9,57 +9,57 @@
 
   <form action="#" method="post" class="form form--contribution">
     <fieldset class="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
-      <legend>Recurrence</legend>
-      <ul>
-        <li>
-          <input id="contributionType-monthly" type="radio" name="contributionType" value="monthly" checked>
-          <label for="contributionType-monthly">Monthly</label>
+      <legend class="form__legend form__legend--radio-group">Recurrence</legend>
+      <ul class="form__radio-group__list">
+        <li class="form__radio-group__item">
+          <input id="contributionType-monthly" class="form__radio-group__input" type="radio" name="contributionType" value="monthly" checked>
+          <label for="contributionType-monthly" class="form__radio-group__label">Monthly</label>
         </li>
-        <li>
-          <input id="contributionType-oneoff" type="radio" name="contributionType" value="oneoff">
-          <label for="contributionType-oneoff">One off</label>
+        <li class="form__radio-group__item">
+          <input id="contributionType-oneoff" class="form__radio-group__input" type="radio" name="contributionType" value="oneoff">
+          <label for="contributionType-oneoff" class="form__radio-group__label">One off</label>
         </li>
       </ul>
     </fieldset>
 
     <fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
-      <legend>Amount</legend>
-      <ul>
-        <li>
-          <input id="contributionAmount-25" type="radio" name="contributionAmount" value="25" checked>
-          <label for="contributionAmount-25" aria-label="25 US Dollars">$25</label>
+      <legend class="form__legend form__legend--radio-group">Amount</legend>
+      <ul class="form__radio-group__list">
+        <li class="form__radio-group__item">
+          <input id="contributionAmount-25" class="form__radio-group__input" type="radio" name="contributionAmount" value="25" checked>
+          <label for="contributionAmount-25" class="form__radio-group__label" aria-label="25 US Dollars">$25</label>
         </li>
-        <li>
-          <input id="contributionAmount-50" type="radio" name="contributionAmount" value="50">
-          <label for="contributionAmount-50" aria-label="50 US Dollars">$50</label>
+        <li class="form__radio-group__item">
+          <input id="contributionAmount-50" class="form__radio-group__input" type="radio" name="contributionAmount" value="50">
+          <label for="contributionAmount-50" class="form__radio-group__label" aria-label="50 US Dollars">$50</label>
         </li>
-        <li>
-          <input id="contributionAmount-100" type="radio" name="contributionAmount" value="100">
-          <label for="contributionAmount-100" aria-label="100 US Dollars">$100</label>
+        <li class="form__radio-group__item">
+          <input id="contributionAmount-100" class="form__radio-group__input" type="radio" name="contributionAmount" value="100">
+          <label for="contributionAmount-100" class="form__radio-group__label" aria-label="100 US Dollars">$100</label>
         </li>
-        <li>
-          <input id="contributionAmount-250" type="radio" name="contributionAmount" value="250">
-          <label for="contributionAmount-250" aria-label="250 US Dollars">$250</label>
+        <li class="form__radio-group__item">
+          <input id="contributionAmount-250" class="form__radio-group__input" type="radio" name="contributionAmount" value="250">
+          <label for="contributionAmount-250" class="form__radio-group__label" aria-label="250 US Dollars">$250</label>
         </li>
-        <li>
+        <li class="form__radio-group__item">
           <input id="contributionAmount-other" type="radio" name="contributionAmount" value="other">
-          <label for="contributionAmount-other">Other</label>
+          <label for="contributionAmount-other" class="form__radio-group__label">Other</label>
         </li>
       </ul>
     
       <div class="form__field form__field--contribution-other-amount">
-        <label for="contributionOther">Other Amount</label>
+        <label class="form__label" for="contributionOther">Other Amount</label>
         <input id="contributionOther" class="form__input" type="number" min="1" max="2000" autocomplete="off">
       </div>
     </fieldset>
 
     <div class="form__field form__field--contribution-fname">
-      <label for="contributionFirstName">First Name</label>
+      <label class="form__label" for="contributionFirstName">First Name</label>
       <input id="contributionFirstName" class="form__input" type="text" autocapitalize="words" required>
     </div>
 
     <div class="form__field form__field--contribution-lname">
-      <label for="contributionLastName">Last Name</label>
+      <label class="form__label" for="contributionLastName">Last Name</label>
       <input id="contributionLastName" class="form__input form__input--primed" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
       <div id="error-contributionLastName" class="form__error">
           Lovely surname there fella
@@ -67,12 +67,12 @@
     </div>
 
     <div class="form__field form__field--contribution-email">
-      <label for="contributionEmail">Email address</label>
+      <label class="form__label" for="contributionEmail">Email address</label>
       <input id="contributionEmail" class="form__input" type="email" placeholder="example@@domain.com" required>
     </div>
 
     <div class="form__field form__field--contribution-state">
-      <label for="contributionState">State</label>
+      <label class="form__label" for="contributionState">State</label>
       <select id="contributionState" class="form__input" placeholder="State" required>
         <option></option>
         <option value="al">AL (Alabama)</option>
@@ -81,22 +81,22 @@
     </div>
 
     <fieldset class="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay">
-      <legend>Pay with</legend>
+      <legend class="form__legend form__legend--radio-group">Pay with</legend>
 
-      <ul>
-        <li>
-          <input id="contributionPayment-paypal" name="contributionPayment" type="radio" value="paypal" checked>
-          <label for="contributionPayment-paypal">Paypal</label>
+      <ul class="form__radio-group__list">
+        <li class="form__radio-group__item">
+          <input id="contributionPayment-paypal" class="form__radio-group__input" name="contributionPayment" type="radio" value="paypal" checked>
+          <label for="contributionPayment-paypal" class="form__radio-group__label">Paypal</label>
         </li>
-        <li>
-          <input id="contributionPayment-card" name="contributionPayment" type="radio" value="card">
-          <label for="contributionPayment-card">Credit/Debit Card</label>
+        <li class="form__radio-group__item">
+          <input id="contributionPayment-card" class="form__radio-group__input" name="contributionPayment" type="radio" value="card">
+          <label for="contributionPayment-card" class="form__radio-group__label">Credit/Debit Card</label>
         </li>
       </ul>
     </fieldset>
 
     <div class="form__submit">
-      <button type="submit">Contribute</button>
+      <button class="form__submit__button" type="submit">Contribute</button>
     </div>
   </form>
 
@@ -104,17 +104,17 @@
 
 <footer role="contentinfo">
   <div class="license">
-    <small>© 2018 Guardian News and Media Limited or its affiliated companies. All rights reserved.</small>
+    <small class="license__txt">© 2018 Guardian News and Media Limited or its affiliated companies. All rights reserved.</small>
   </div>
 
   <nav class="support">
-    <ul>
-      <li><a href="#">Help</a></li>
-      <li><a href="#">Terms &amp; Conditions</a></li>
-      <li><a href="#">Contact us</a></li>
-      <li><a href="#">Privacy Policy</a></li>
-      <li><a href="#">Report technical issue</a></li>
-      <li><a href="#">Cookie Policy</a></li>
+    <ul class="support__menu">
+      <li class="support__item"><a class="support__link" href="#">Help</a></li>
+      <li class="support__item"><a class="support__link" href="#">Terms &amp; Conditions</a></li>
+      <li class="support__item"><a class="support__link" href="#">Contact us</a></li>
+      <li class="support__item"><a class="support__link" href="#">Privacy Policy</a></li>
+      <li class="support__item"><a class="support__link" href="#">Report technical issue</a></li>
+      <li class="support__item"><a class="support__link" href="#">Cookie Policy</a></li>
     </ul>
   </nav>
 

@@ -26,17 +26,17 @@ footer[role="contentinfo"] {
 }
 
 /* Support navigation */
-.support ul {
+.support__menu {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.support li {
+.support__item {
   padding-top: 4px;
 }
 
-.support a {
+.support__link {
   color: white;
   text-decoration: none;
 }
@@ -47,7 +47,7 @@ footer[role="contentinfo"] {
   padding: 0 10px;
 }
 
-.contribution-form {
+.form--contribution {
   display: flex;
   flex-direction: column;
 }
@@ -92,12 +92,12 @@ header[role="banner"] {
     margin-left: 20px;
   }
 
-  .support ul {
+  .support__menu {
     column-width: 160px;
     column-gap: 20px;
   }
 
-  .support li {
+  .support__item {
     margin-left: -10px;
     padding-left: 10px;
     border-left: 1px solid #999;
@@ -122,7 +122,7 @@ header[role="banner"] {
     width: 460px;
   }
   
-  .support ul {
+  .support__menu {
     column-width: 140px;
   }
 }
@@ -293,8 +293,8 @@ footer[role="contentinfo"] {
   font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 }
 
-.license small {
-  font-size: 1em;
+.license__txt {
+  font-size: inherit;
 }
 
 .support {
@@ -317,64 +317,64 @@ form {
   padding: 0;
 }
 
-.form__radio-group legend {
+.form__legend--radio-group {
   display: none;
 }
 
-.form__radio-group ul {
+.form__radio-group__list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.form__radio-group ul input {
+.form__radio-group__input {
   display: none;
 }
 
-.form__radio-group ul label {
+.form__radio-group__label {
   cursor: pointer;
 }
 
-.form__radio-group--tabs ul {
+.form__radio-group--tabs .form__radio-group__list {
   display: flex;
 }
     
-.form__radio-group--tabs li {
+.form__radio-group--tabs .form__radio-group__item {
   border-top: 1px solid #dcdcdc;
   flex: 1;
   margin: 0 -10px;
 }
 
-.form__radio-group--tabs li + li {
+.form__radio-group--tabs .form__radio-group__item + .form__radio-group__item {
   border-left: 1px solid #dcdcdc;
 }
 
-.form__radio-group--tabs input + label {
+.form__radio-group--tabs .form__radio-group__input + .form__radio-group__label {
   display: block;
   padding: 4px 10px 4px;
 }
 
-.form__radio-group--tabs input:checked + label {
+.form__radio-group--tabs .form__radio-group__input:checked + .form__radio-group__label {
   background: white;
   color: #00b2ff;
 }
         
-.form__radio-group--tabs input:not(:checked) + label {
+.form__radio-group--tabs .form__radio-group__input:not(:checked) + .form__radio-group__label {
   background: #f6f6f6;
   color: #999;
 }
 
-.form__radio-group--pills ul {
+.form__radio-group--pills .form__radio-group__list {
   display: flex;
   justify-content: space-between;
 }
 
-.form__radio-group--pills li {
+.form__radio-group--pills .form__radio-group__item {
   width: 50px;
   height: 50px;
 }
 
-.form__radio-group--pills input + label {
+.form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
   border: solid 1px #00b2ff;
   border-radius: 25px;
   box-sizing: border-box;
@@ -385,16 +385,16 @@ form {
   height: 50px;
 }
   
-.form__radio-group--pills input:checked + label {
+.form__radio-group--pills .form__radio-group__input:checked + .form__radio-group__label {
   background: #00b2ff;
   color: #fff;
 }
 
-.form__radio-group--buttons li + li {
+.form__radio-group--buttons .form__radio-group__item + .form__radio-group__item {
   margin-top: 6px;
 }
 
-.form__radio-group--buttons label {
+.form__radio-group--buttons .form__radio-group__label {
   border: 1px solid #dcdcdc;
   border-radius: 20px;
   display: block;
@@ -402,12 +402,12 @@ form {
   padding: 9px 10px 9px 38px;
 }
 
-.form__radio-group--buttons input:checked + label {
+.form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label {
   border-color: #00b2ff;
   font-weight: bold;
 }
         
-.form__field label {
+.form__label {
   font-weight: bold;
   line-height: 1;
   margin-bottom: 4px;
@@ -456,15 +456,15 @@ form {
   padding-bottom: 30px;
 }
 
-.form__submit button {
+.form__submit__button {
   background: #ffe500;
   border: none;
   border-radius: 20px;
   padding: 9px 20px;
 }
 
-.form__submit button:hover,
-.form__submit button:focus {
+.form__submit__button:hover,
+.form__submit__button:focus {
   background: #e5ce00;
 }
 
