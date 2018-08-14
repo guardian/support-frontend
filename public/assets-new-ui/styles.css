@@ -414,7 +414,11 @@ form {
 }
 
 .form__input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: white;
   border: 1px solid #dcdcdc;
+  border-radius: 0;
   padding: 9px 10px 9px 38px;
   transition: all .2s ease-in-out;
 }
