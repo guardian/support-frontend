@@ -1,8 +1,11 @@
 package com.gu.support.workers.model
 
+import PartialFunction.condOpt
+
 object CheckoutFailureReasons {
 
   val all = List(
+    InsufficientFunds,
     PaymentMethodDetailsIncorrect,
     PaymentMethodTemporarilyDeclined,
     PaymentMethodUnacceptable,
@@ -15,6 +18,10 @@ object CheckoutFailureReasons {
 
   sealed trait CheckoutFailureReason {
     def asString: String
+  }
+
+  case object InsufficientFunds extends CheckoutFailureReason {
+    override def asString: String = "insufficient_funds"
   }
 
   case object PaymentMethodDetailsIncorrect extends CheckoutFailureReason {
@@ -42,50 +49,48 @@ object CheckoutFailureReasons {
   }
 
   // https://stripe.com/docs/declines/codes
-  def convertStripeDeclineCode(declineCode: String): Option[CheckoutFailureReason] = declineCode match {
-    case "approve_with_id" => Some(PaymentMethodTemporarilyDeclined)
-    case "call_issuer" => Some(PaymentMethodUnacceptable)
-    case "card_not_supported" => Some(PaymentMethodUnacceptable)
-    case "card_velocity_exceeded" => Some(PaymentMethodUnacceptable)
-    case "currency_not_supported" => Some(PaymentMethodUnacceptable)
-    case "transaction_not_allowed" => Some(PaymentMethodUnacceptable)
-    case "do_not_honor" => Some(PaymentMethodUnacceptable)
-    case "do_not_try_again" => Some(PaymentMethodUnacceptable)
-    case "duplicate_transaction" => Some(PaymentRecentlyTaken)
-    case "expired_card" => Some(PaymentMethodUnacceptable)
-    case "fraudulent" => Some(PaymentMethodUnacceptable)
-    case "generic_decline" => Some(PaymentMethodUnacceptable)
-    case "incorrect_number" => Some(PaymentMethodDetailsIncorrect)
-    case "incorrect_cvc" => Some(PaymentMethodDetailsIncorrect)
-    case "incorrect_pin" => Some(PaymentMethodDetailsIncorrect)
-    case "incorrect_zip" => Some(PaymentMethodDetailsIncorrect)
-    case "insufficient_funds" => Some(PaymentMethodUnacceptable)
-    case "invalid_account" => Some(PaymentMethodUnacceptable)
-    case "invalid_amount" => Some(PaymentMethodUnacceptable)
-    case "invalid_cvc" => Some(PaymentMethodDetailsIncorrect)
-    case "invalid_expiry_year" => Some(PaymentMethodDetailsIncorrect)
-    case "invalid_number" => Some(PaymentMethodDetailsIncorrect)
-    case "invalid_pin" => Some(PaymentMethodDetailsIncorrect)
-    case "issuer_not_available" => Some(PaymentMethodTemporarilyDeclined)
-    case "lost_card" => Some(PaymentMethodUnacceptable)
-    case "new_account_information_available" => Some(PaymentMethodUnacceptable)
-    case "no_action_taken" => Some(PaymentMethodUnacceptable)
-    case "not_permitted" => Some(PaymentMethodUnacceptable)
-    case "pickup_card" => Some(PaymentMethodUnacceptable)
-    case "pin_try_exceeded" => Some(PaymentMethodUnacceptable)
-    case "processing_error" => Some(PaymentMethodTemporarilyDeclined)
-    case "reenter_transaction" => Some(PaymentMethodTemporarilyDeclined)
-    case "restricted_card" => Some(PaymentMethodUnacceptable)
-    case "revocation_of_all_authorizations" => Some(PaymentMethodUnacceptable)
-    case "revocation_of_authorization" => Some(PaymentMethodUnacceptable)
-    case "security_violation" => Some(PaymentMethodUnacceptable)
-    case "service_not_allowed" => Some(PaymentMethodUnacceptable)
-    case "stolen_card" => Some(PaymentMethodUnacceptable)
-    case "stop_payment_order" => Some(PaymentMethodUnacceptable)
-    case "transaction_not_allowed" => Some(PaymentMethodUnacceptable)
-    case "try_again_later" => Some(PaymentMethodTemporarilyDeclined)
-    case "withdrawal_count_limit_exceeded" => Some(PaymentMethodUnacceptable)
-    case _ => None
+  def convertStripeDeclineCode(declineCode: String): Option[CheckoutFailureReason] = condOpt(declineCode) {
+    case "approve_with_id" => PaymentMethodTemporarilyDeclined
+    case "call_issuer" => PaymentMethodUnacceptable
+    case "card_not_supported" => PaymentMethodUnacceptable
+    case "card_velocity_exceeded" => PaymentMethodUnacceptable
+    case "currency_not_supported" => PaymentMethodUnacceptable
+    case "do_not_honor" => PaymentMethodUnacceptable
+    case "do_not_try_again" => PaymentMethodUnacceptable
+    case "duplicate_transaction" => PaymentRecentlyTaken
+    case "expired_card" => PaymentMethodUnacceptable
+    case "fraudulent" => PaymentMethodUnacceptable
+    case "generic_decline" => PaymentMethodUnacceptable
+    case "incorrect_number" => PaymentMethodDetailsIncorrect
+    case "incorrect_cvc" => PaymentMethodDetailsIncorrect
+    case "incorrect_pin" => PaymentMethodDetailsIncorrect
+    case "incorrect_zip" => PaymentMethodDetailsIncorrect
+    case "insufficient_funds" => InsufficientFunds
+    case "invalid_account" => PaymentMethodUnacceptable
+    case "invalid_amount" => PaymentMethodUnacceptable
+    case "invalid_cvc" => PaymentMethodDetailsIncorrect
+    case "invalid_expiry_year" => PaymentMethodDetailsIncorrect
+    case "invalid_number" => PaymentMethodDetailsIncorrect
+    case "invalid_pin" => PaymentMethodDetailsIncorrect
+    case "issuer_not_available" => PaymentMethodTemporarilyDeclined
+    case "lost_card" => PaymentMethodUnacceptable
+    case "new_account_information_available" => PaymentMethodUnacceptable
+    case "no_action_taken" => PaymentMethodUnacceptable
+    case "not_permitted" => PaymentMethodUnacceptable
+    case "pickup_card" => PaymentMethodUnacceptable
+    case "pin_try_exceeded" => PaymentMethodUnacceptable
+    case "processing_error" => PaymentMethodTemporarilyDeclined
+    case "reenter_transaction" => PaymentMethodTemporarilyDeclined
+    case "restricted_card" => PaymentMethodUnacceptable
+    case "revocation_of_all_authorizations" => PaymentMethodUnacceptable
+    case "revocation_of_authorization" => PaymentMethodUnacceptable
+    case "security_violation" => PaymentMethodUnacceptable
+    case "service_not_allowed" => PaymentMethodUnacceptable
+    case "stolen_card" => PaymentMethodUnacceptable
+    case "stop_payment_order" => PaymentMethodUnacceptable
+    case "transaction_not_allowed" => PaymentMethodUnacceptable
+    case "try_again_later" => PaymentMethodTemporarilyDeclined
+    case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
   }
 
 }
