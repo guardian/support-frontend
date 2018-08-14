@@ -4,25 +4,8 @@
 
 <div class="content">
 
-<<<<<<< HEAD
   <h1>Help us deliver the independent journalism the world needs</h1>
   <p class="blurb">Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
-=======
-<form action="#" method="post">
-  <fieldset>
-    <legend>Recurrence</legend>
-    <ul>
-      <li>
-        <input id="contributionType-monthly" type="radio" name="contributionType" value="monthly" checked>
-        <label for="contributionType-monthly">Monthly</label>
-      </li>
-      <li>
-        <input id="contributionType-oneoff" type="radio" name="contributionType" value="oneoff">
-        <label for="contributionType-oneoff">One off</label>
-      </li>
-    </ul>
-  </fieldset>
->>>>>>> POST
 
   <form action="#" class="form contribution-form">
     <fieldset class="contribution-form__type form__radio-group form__radio-group--tabs">
@@ -71,13 +54,16 @@
     </fieldset>
 
     <div class="contribution-form__fname form__field">
-      <label for="contributionFName">First Name</label>
-      <input class="form__input" id="contributionFName" type="text" placeholder="First Name" autocapitalize="words" required>
+      <label for="contributionFirstName">First Name</label>
+      <input class="form__input" id="contributionFirstName" type="text" placeholder="First Name" autocapitalize="words" required>
     </div>
 
     <div class="contribution-form__lname form__field">
-      <label for="contributionLName">Last Name</label>
-      <input class="form__input" id="contributionLName" type="text" placeholder="Last Name" autocapitalize="words" required>
+      <label for="contributionLastName">Last Name</label>
+      <input class="form__input" id="contributionLastName" type="text" placeholder="Last Name" autocapitalize="words" aria-describedby="error-contributionLastName" required>
+      <div id="error-contributionLastName">
+          Lovely surname there fella
+      </div>
     </div>
 
     <div class="contribution-form__email form__field">
