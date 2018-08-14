@@ -21,7 +21,7 @@ import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
   implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
@@ -106,7 +106,7 @@ class RegularContributionsClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
-      SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse.status}")
+      SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
       statusResponse
     }
 
@@ -152,9 +152,15 @@ object StepFunctionExecutionStatus {
   }
 
   def getFailureDetails(stateWrapper: StateWrapper, eventDetails: StateExitedEventDetails): Option[CheckoutFailureReason] = {
-    stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput).map {
-      checkoutFailureState => checkoutFailureState.checkoutFailureReason
-    }.toOption
+    SafeLogger.info(s"Event details are: $eventDetails")
+    stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput) match {
+      case Success(checkoutFailureState) =>
+        Some(checkoutFailureState.checkoutFailureReason)
+      case Failure(error) =>
+        SafeLogger.error(scrub"Failed to determine checkout failure reason due to $error")
+        None
+    }
+
   }
 
 }
