@@ -22,16 +22,21 @@ header[role="banner"] {
 footer[role="contentinfo"] {
   background: #333;
   color: #999;
+  padding-bottom: 24px;
 }
 
 /* Support navigation */
-.support ul {
+.support__menu {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.support a {
+.support__item {
+  padding-top: 4px;
+}
+
+.support__link {
   color: white;
   text-decoration: none;
 }
@@ -42,7 +47,7 @@ footer[role="contentinfo"] {
   padding: 0 10px;
 }
 
-.contribution-form {
+.form--contribution {
   display: flex;
   flex-direction: column;
 }
@@ -62,7 +67,7 @@ header[role="banner"] {
 @media (min-width: 740px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 350px);
+    padding: 0 calc(50% - 350px) 24px;
     width: 700px;
   }
   
@@ -87,15 +92,15 @@ header[role="banner"] {
     margin-left: 20px;
   }
 
-  .support ul {
+  .support__menu {
     column-width: 160px;
     column-gap: 20px;
   }
 
-  .support li {
+  .support__item {
     margin-left: -10px;
     padding-left: 10px;
-    border-left: 1px solid #dcdcdc;
+    border-left: 1px solid #999;
   }
 
 }
@@ -103,7 +108,7 @@ header[role="banner"] {
 @media (min-width: 1140px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    padding: 0 calc(50% - 550px) 24px calc(50% - 390px);
     width: 940px;
   }
 
@@ -117,7 +122,7 @@ header[role="banner"] {
     width: 460px;
   }
   
-  .support ul {
+  .support__menu {
     column-width: 140px;
   }
 }
@@ -125,7 +130,7 @@ header[role="banner"] {
 @media (min-width: 1300px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 620px);
+    padding: 0 calc(50% - 620px) 24px;
     width: 1240px;
   }
   
@@ -166,7 +171,7 @@ header[role="banner"] {
     body,
     header[role="banner"],
     footer[role="contentinfo"] {
-      padding: 0;
+      padding: 0 0 24px;
       width: auto;
 
       grid-column-gap: 20px;
@@ -255,4 +260,225 @@ header[role="banner"] {
       grid-column: 5 / 9;
     }
   }
+}
+
+/*= TYPOGRAPHY */
+body {
+  color: #333;
+  font: normal 16px/1.5  'Guardian Text Egyptian Web', Georgia, serif;
+}
+
+h1 {
+  border-bottom: 1px solid #dcdcdc;
+  color: #121212;
+  font: bold 24px/1.25 'Guardian Egyptian Web', Georgia, serif;
+  margin: 0 -10px;
+  padding: 0 10px 12px;
+}
+ 
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+  
+.blurb {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 3px 0 9px;
+}
+
+footer[role="contentinfo"] {
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+.license__txt {
+  font-size: inherit;
+}
+
+.support {
+  font-size: 14px;
+}
+
+form {
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+.form__radio-group--tabs {
+  font-family: 'Guardian Egyptian Web', Georgia, serif;
+  font-weight: bold;
+}
+
+/*= CONTRIBUTION FORM */
+.form__radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.form__legend--radio-group {
+  display: none;
+}
+
+.form__radio-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.form__radio-group__input {
+  display: none;
+}
+
+.form__radio-group__label {
+  cursor: pointer;
+}
+
+.form__radio-group--tabs .form__radio-group__list {
+  display: flex;
+}
+    
+.form__radio-group--tabs .form__radio-group__item {
+  border-top: 1px solid #dcdcdc;
+  flex: 1;
+  margin: 0 -10px;
+}
+
+.form__radio-group--tabs .form__radio-group__item + .form__radio-group__item {
+  border-left: 1px solid #dcdcdc;
+}
+
+.form__radio-group--tabs .form__radio-group__input + .form__radio-group__label {
+  display: block;
+  padding: 4px 10px 4px;
+}
+
+.form__radio-group--tabs .form__radio-group__input:checked + .form__radio-group__label {
+  background: white;
+  color: #00b2ff;
+}
+        
+.form__radio-group--tabs .form__radio-group__input:not(:checked) + .form__radio-group__label {
+  background: #f6f6f6;
+  color: #999;
+}
+
+.form__radio-group--pills .form__radio-group__list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__radio-group--pills .form__radio-group__item {
+  width: 50px;
+  height: 50px;
+}
+
+.form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
+  border: solid 1px #00b2ff;
+  border-radius: 25px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+}
+  
+.form__radio-group--pills .form__radio-group__input:checked + .form__radio-group__label {
+  background: #00b2ff;
+  color: #fff;
+}
+
+.form__radio-group--buttons .form__radio-group__item + .form__radio-group__item {
+  margin-top: 6px;
+}
+
+.form__radio-group--buttons .form__radio-group__label {
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+  display: block;
+  margin-bottom: 8px;
+  padding: 9px 10px 9px 38px;
+}
+
+.form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label {
+  border-color: #00b2ff;
+  font-weight: bold;
+}
+        
+.form__label {
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.form__input {
+  appearance: none;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 0;
+  padding: 9px 10px 9px 38px;
+  transition: all .2s ease-in-out;
+}
+
+.form__input:hover {
+  box-shadow: 0 0 0 3px #ededed;
+}
+
+.form__input:focus {
+  box-shadow: 0 0 0 3px #ffe500;
+  outline: none;
+}
+
+.form__input--primed:invalid {
+  border-color: #3db540;
+}
+
+.form__input::placeholder,
+.form__placeholder {
+  color: #999;
+}
+
+.form__error {
+  background-color: rgba(61,181,64,.1);
+  color: #236925;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 6px 10px;
+}
+
+.form__submit {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-bottom: 30px;
+}
+
+.form__submit__button {
+  background: #ffe500;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+}
+
+.form__submit__button:hover,
+.form__submit__button:focus {
+  background: #e5ce00;
+}
+
+.form__radio-group--contribution-amount,
+.form__field--contribution-other-amount,
+.form__field--contribution-fname, 
+.form__field--contribution-lname {
+  margin-top: 12px;
+}
+
+.form__field--contribution-email, 
+.form__field--contribution-state {
+  margin-top: 24px;
+}
+
+.form__radio-group--contribution-pay {
+  margin-top: 20px;
 }
