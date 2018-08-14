@@ -5,10 +5,10 @@
 <div class="content">
 
   <h1>Help us deliver the independent journalism the world needs</h1>
-  <p>Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
+  <p class="blurb">Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 
   <form action="#" method="post" class="form contribution-form">
-    <fieldset class="form__radio-group form__radio-group--tabs">
+    <fieldset class="contribution-form__type form__radio-group form__radio-group--tabs">
       <legend>Recurrence</legend>
       <ul>
         <li>
@@ -22,7 +22,7 @@
       </ul>
     </fieldset>
 
-    <fieldset class="form__radio-group form__radio-group--pills">
+    <fieldset class="contribution-form__amount form__radio-group form__radio-group--pills">
       <legend>Amount</legend>
       <ul>
         <li>
@@ -47,40 +47,40 @@
         </li>
       </ul>
     
-      <div class="form__field">
+      <div class="contribution-form__other-amount form__field">
         <label for="contributionOther">Other Amount</label>
-        <input id="contributionOther" type="number" min="1" max="2000" autocomplete="off">
+        <input id="contributionOther" class="form__input" type="number" min="1" max="2000" autocomplete="off">
       </div>
     </fieldset>
 
-    <div class="form__field">
+    <div class="contribution-form__fname form__field">
       <label for="contributionFirstName">First Name</label>
-      <input id="contributionFirstName" type="text" autocapitalize="words" required>
+      <input id="contributionFirstName" class="form__input" type="text" autocapitalize="words" required>
     </div>
 
-    <div class="form__field">
+    <div class="contribution-form__lname form__field">
       <label for="contributionLastName">Last Name</label>
-      <input id="contributionLastName" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
-      <div id="error-contributionLastName">
+      <input id="contributionLastName" class="form__input form__input--primed" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
+      <div id="error-contributionLastName" class="form__error">
           Lovely surname there fella
       </div>
     </div>
 
-    <div class="form__field">
+    <div class="contribution-form__email form__field">
       <label for="contributionEmail">Email address</label>
-      <input id="contributionEmail" type="email" required>
+      <input id="contributionEmail" class="form__input" type="email" placeholder="example@@domain.com" required>
     </div>
 
-    <div class="form__field">
-      <label for="contributionState">Select your state</label>
-      <select id="contributionState" required>
+    <div class="contribution-form__state form__field">
+      <label for="contributionState">State</label>
+      <select id="contributionState" class="form__input" placeholder="State" required>
         <option></option>
         <option value="al">AL (Alabama)</option>
         <option value="wy">WY (Wyoming)</option>
       </select>
     </div>
 
-    <fieldset class="form__radio-group">
+    <fieldset class="contribution-form__pay form__radio-group form__radio-group--buttons">
       <legend>Pay with</legend>
 
       <ul>
