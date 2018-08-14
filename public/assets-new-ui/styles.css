@@ -468,18 +468,18 @@ form {
   background: #e5ce00;
 }
 
-.contribution-form__amount,
-.contribution-form__other-amount,
-.contribution-form__fname, 
-.contribution-form__lname {
+.form__radio-group--contribution-amount,
+.form__field--contribution-other-amount,
+.form__field--contribution-fname, 
+.form__field--contribution-lname {
   margin-top: 12px;
 }
 
-.contribution-form__email, 
-.contribution-form__state {
+.form__field--contribution-email, 
+.form__field--contribution-state {
   margin-top: 24px;
 }
 
-.contribution-form__pay {
+.form__radio-group--contribution-pay {
   margin-top: 20px;
 }

@@ -7,8 +7,8 @@
   <h1>Help us deliver the independent journalism the world needs</h1>
   <p class="blurb">Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 
-  <form action="#" method="post" class="form contribution-form">
-    <fieldset class="contribution-form__type form__radio-group form__radio-group--tabs">
+  <form action="#" method="post" class="form form--contribution">
+    <fieldset class="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
       <legend>Recurrence</legend>
       <ul>
         <li>
@@ -22,7 +22,7 @@
       </ul>
     </fieldset>
 
-    <fieldset class="contribution-form__amount form__radio-group form__radio-group--pills">
+    <fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
       <legend>Amount</legend>
       <ul>
         <li>
@@ -47,18 +47,18 @@
         </li>
       </ul>
     
-      <div class="contribution-form__other-amount form__field">
+      <div class="form__field form__field--contribution-other-amount">
         <label for="contributionOther">Other Amount</label>
         <input id="contributionOther" class="form__input" type="number" min="1" max="2000" autocomplete="off">
       </div>
     </fieldset>
 
-    <div class="contribution-form__fname form__field">
+    <div class="form__field form__field--contribution-fname">
       <label for="contributionFirstName">First Name</label>
       <input id="contributionFirstName" class="form__input" type="text" autocapitalize="words" required>
     </div>
 
-    <div class="contribution-form__lname form__field">
+    <div class="form__field form__field--contribution-lname">
       <label for="contributionLastName">Last Name</label>
       <input id="contributionLastName" class="form__input form__input--primed" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
       <div id="error-contributionLastName" class="form__error">
@@ -66,12 +66,12 @@
       </div>
     </div>
 
-    <div class="contribution-form__email form__field">
+    <div class="form__field form__field--contribution-email">
       <label for="contributionEmail">Email address</label>
       <input id="contributionEmail" class="form__input" type="email" placeholder="example@@domain.com" required>
     </div>
 
-    <div class="contribution-form__state form__field">
+    <div class="form__field form__field--contribution-state">
       <label for="contributionState">State</label>
       <select id="contributionState" class="form__input" placeholder="State" required>
         <option></option>
@@ -80,7 +80,7 @@
       </select>
     </div>
 
-    <fieldset class="contribution-form__pay form__radio-group form__radio-group--buttons">
+    <fieldset class="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay">
       <legend>Pay with</legend>
 
       <ul>
