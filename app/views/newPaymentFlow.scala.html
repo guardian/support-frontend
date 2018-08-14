@@ -7,7 +7,7 @@
   <h1>Help us deliver the independent journalism the world needs</h1>
   <p class="blurb">Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it. Choose the option that suits you best.</p>
 
-  <form action="#" class="form contribution-form">
+  <form action="#" method="post" class="form contribution-form">
     <fieldset class="contribution-form__type form__radio-group form__radio-group--tabs">
       <legend>Recurrence</legend>
       <ul>
@@ -49,18 +49,21 @@
     
       <div class="contribution-form__other-amount form__field">
         <label for="contributionOther">Other Amount</label>
-        <input class="form__input" id="contributionOther" type="text" pattern="[1-9]\d*(.\d{2})?">
+        <input id="contributionOther" type="number" min="1" max="2000" autocomplete="off">
       </div>
     </fieldset>
 
     <div class="contribution-form__fname form__field">
-      <label for="contributionFName">First Name</label>
-      <input class="form__input" id="contributionFName" type="text" placeholder="First Name" required>
+      <label for="contributionFirstName">First Name</label>
+      <input id="contributionFirstName" type="text" autocapitalize="words" required>
     </div>
 
     <div class="contribution-form__lname form__field">
-      <label for="contributionLName">Last Name</label>
-      <input class="form__input" id="contributionLName" type="text" placeholder="Last Name" required>
+      <label for="contributionLastName">Last Name</label>
+      <input id="contributionLastName" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
+      <div id="error-contributionLastName">
+          Lovely surname there fella
+      </div>
     </div>
 
     <div class="contribution-form__email form__field">
