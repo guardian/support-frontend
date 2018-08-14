@@ -9,14 +9,31 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
+type AutoComplete = 'on' | 'off';
+
+type AutoCapitalize = 'off'
+                    | 'none'
+                    | 'on'
+                    | 'sentences'
+                    | 'words';
+
+type InputType = 'text'
+               | 'email'
+               | 'password'
+               | 'url'
+               | 'tel';
+
 type PropTypes = {
   id: string,
+  type: InputType,
   labelText: string,
   onChange: (name: string) => void,
   value: string,
   placeholder: string,
   required: boolean,
-  modifierClasses: Array<?string>,
+  autocomplete: AutoComplete,
+  autocapitalize?: AutoCapitalize,
+  modifierClasses?: Array<?string>,
   onBlur: () => void,
 };
 
@@ -39,6 +56,8 @@ export default function TextInput(props: PropTypes) {
         value={props.value}
         placeholder={props.placeholder}
         required={props.required}
+        autocomplete={props.autocomplete}
+        autocapitalize={props.autocapitalize}
       />
     </div>
   );
@@ -49,6 +68,7 @@ export default function TextInput(props: PropTypes) {
 // ----- Proptypes ----- //
 
 TextInput.defaultProps = {
+  type: 'text',
   placeholder: '',
   required: false,
   modifierClasses: [],
