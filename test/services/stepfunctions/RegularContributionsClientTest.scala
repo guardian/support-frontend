@@ -8,7 +8,8 @@ import com.gu.support.workers.model.{CheckoutFailureReasons, Status, User}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
-
+import codecs.CirceDecoders.checkoutFailureStateCodec
+import StepFunctionExecutionStatus._
 import scala.util.{Failure, Success}
 
 object StatusResults {
@@ -18,9 +19,6 @@ object StatusResults {
 }
 
 class RegularContributionsClientTest extends FlatSpec with Matchers with MockitoSugar {
-
-  import codecs.CirceDecoders.checkoutFailureStateCodec
-  import StepFunctionExecutionStatus._
 
   val mockStateWrapper = mock[StateWrapper]
 
