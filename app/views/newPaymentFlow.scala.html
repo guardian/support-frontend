@@ -54,13 +54,16 @@
     </fieldset>
 
     <div class="form__field">
-      <label for="contributionFName">First Name</label>
-      <input id="contributionFName" type="text" autocapitalize="words" required>
+      <label for="contributionFirstName">First Name</label>
+      <input id="contributionFirstName" type="text" autocapitalize="words" required>
     </div>
 
     <div class="form__field">
-      <label for="contributionLName">Last Name</label>
-      <input id="contributionLName" autocapitalize="words" type="text" required>
+      <label for="contributionLastName">Last Name</label>
+      <input id="contributionLastName" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
+      <div id="error-contributionLastName">
+          Lovely surname there fella
+      </div>
     </div>
 
     <div class="form__field">
