@@ -31,9 +31,9 @@ type PropTypes = {
   value: string,
   placeholder: string,
   required: boolean,
-  autocomplete: AutoComplete,
+  autocomplete?: AutoComplete,
   autocapitalize?: AutoCapitalize,
-  modifierClasses?: Array<?string>,
+  modifierClasses: Array<?string>,
   onBlur: () => void,
 };
 
@@ -71,8 +71,8 @@ TextInput.defaultProps = {
   type: 'text',
   placeholder: '',
   required: false,
-  autocomplete: false,
-  autocapitalize: false,
+  autocomplete: 'on',
+  autocapitalize: 'off',
   modifierClasses: [],
   onBlur: () => undefined,
 };
