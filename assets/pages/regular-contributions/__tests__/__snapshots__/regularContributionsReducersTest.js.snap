@@ -38,10 +38,6 @@ Object {
     "pollCount": 0,
     "statusUri": null,
   },
-  "stripeInlineForm": Object {
-    "errorMessage": null,
-    "isStripeLoaded": false,
-  },
   "user": Object {
     "displayName": "",
     "email": "",

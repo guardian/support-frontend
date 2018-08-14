@@ -17,10 +17,7 @@ import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
-
 import reducer from './regularContributionsReducer';
-
-
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
@@ -58,6 +55,7 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
+              payment={<RegularContributionsPayment />}
             />
           )}
         />
