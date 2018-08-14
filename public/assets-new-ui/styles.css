@@ -433,13 +433,21 @@ form {
   outline: none;
 }
 
-.form__input:invalid {
+.form__input--primed:invalid {
   border-color: #3db540;
 }
 
 .form__input::placeholder,
 .form__placeholder {
   color: #999;
+}
+
+.form__error {
+  background-color: rgba(61,181,64,.1);
+  color: #236925;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 6px 10px;
 }
 
 .form__submit {
