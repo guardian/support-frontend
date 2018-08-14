@@ -22,6 +22,7 @@ header[role="banner"] {
 footer[role="contentinfo"] {
   background: #333;
   color: #999;
+  padding-bottom: 24px;
 }
 
 /* Support navigation */
@@ -29,6 +30,10 @@ footer[role="contentinfo"] {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.support li {
+  padding-top: 4px;
 }
 
 .support a {
@@ -62,7 +67,7 @@ header[role="banner"] {
 @media (min-width: 740px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 350px);
+    padding: 0 calc(50% - 350px) 24px;
     width: 700px;
   }
   
@@ -95,7 +100,7 @@ header[role="banner"] {
   .support li {
     margin-left: -10px;
     padding-left: 10px;
-    border-left: 1px solid #dcdcdc;
+    border-left: 1px solid #999;
   }
 
 }
@@ -103,7 +108,7 @@ header[role="banner"] {
 @media (min-width: 1140px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    padding: 0 calc(50% - 550px) 24px calc(50% - 390px);
     width: 940px;
   }
 
@@ -125,7 +130,7 @@ header[role="banner"] {
 @media (min-width: 1300px) {
   header[role="banner"],
   footer[role="contentinfo"] {
-    padding: 0 calc(50% - 620px);
+    padding: 0 calc(50% - 620px) 24px;
     width: 1240px;
   }
   
@@ -166,7 +171,7 @@ header[role="banner"] {
     body,
     header[role="banner"],
     footer[role="contentinfo"] {
-      padding: 0;
+      padding: 0 0 24px;
       width: auto;
 
       grid-column-gap: 20px;
