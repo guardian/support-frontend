@@ -54,11 +54,91 @@ footer[role="contentinfo"] {
 
 /*= BREAKPOINTS */
 
-@media (min-width: 720px) {
+header[role="banner"] {
+  height: 75px;
+}
+
+@media (min-width: 740px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 350px);
+    width: 700px;
+  }
+  
   .content {
     border-color: #dcdcdc;
     border-style: none solid;
     border-width: 0 1px;
+    width: 340px;
+    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+  }
+
+  footer[role="contentinfo"] {
+    display: flex;
+  }
+  
+  .license,
+  .support {
+    width: 340px;
+  }
+
+  .support {
+    margin-left: 20px;
+  }
+
+  .support ul {
+    column-width: 160px;
+    column-gap: 20px;
+  }
+
+  .support li {
+    margin-left: -10px;
+    padding-left: 10px;
+    border-left: 1px solid #dcdcdc;
+  }
+
+}
+
+@media (min-width: 1140px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    width: 940px;
+  }
+
+  .content {
+    width: 300px;
+    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+  }
+
+  .license,
+  .support {
+    width: 460px;
+  }
+  
+  .support ul {
+    column-width: 140px;
+  }
+}
+
+@media (min-width: 1300px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 620px);
+    width: 1240px;
+  }
+  
+  .content {
+    width: 300px;
+    margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
+  }
+  
+  .license {
+    width: 700px;
+  }
+
+  .support {
+    width: 460px;
   }
 }
 
@@ -69,6 +149,7 @@ footer[role="contentinfo"] {
   }
   
   header[role="banner"] {
+    height: auto;
     grid-row: header-t / header-b;
   }
   
@@ -80,10 +161,13 @@ footer[role="contentinfo"] {
     grid-row: header-b / footer-t;  
   }
     
-  @media (min-width: 720px) {
+  @media (min-width: 740px) {
     body,
     header[role="banner"],
     footer[role="contentinfo"] {
+      padding: 0;
+      width: auto;
+
       grid-column-gap: 20px;
       grid-template-columns: 1fr repeat(8, 70px) 1fr;  
     }
@@ -102,13 +186,13 @@ footer[role="contentinfo"] {
 
     .license {
       grid-column: 2 / 6;
+      width: auto;
     }
 
     .support {
       grid-column: 6 / 10;
-
-      column-width: 160px;
-      column-gap: 20px;
+      margin-left: 0;
+      width: auto;
     }
   }
 
@@ -118,6 +202,7 @@ footer[role="contentinfo"] {
     footer[role="contentinfo"] {
       grid-column-gap: 20px;
       grid-template-columns: 1fr repeat(14, 60px) 1fr;  
+      width: auto;
     }
     
     header[role="banner"],
@@ -131,12 +216,10 @@ footer[role="contentinfo"] {
     
     .support {
       grid-column: 10 / 16;
-
-      column-width: 140px;
-      column-gap: 20px;
     }
-    
+
     .content {
+      width: auto;
       grid-column: 4 / 8;
     }
   }  
@@ -167,94 +250,8 @@ footer[role="contentinfo"] {
       grid-column: 11 / 17;
     }
 
-    .support li {
-      margin-left: -10px;
-      padding-left: 10px;
-      border-left: 1px solid #dcdcdc;
-    }
-
     .content {
       grid-column: 5 / 9;
-    }
-  }
-}
-
-@supports not (display: grid) {
-  header[role="banner"] {
-    height: 75px;
-  }
-  
-  @media (min-width: 720px) {
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      padding: 0 calc(50% - 350px);
-      width: 700px;
-    }
-  
-    .content {
-      width: 340px;
-      margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
-    }
-  
-    footer[role="contentinfo"] {
-      display: flex;
-    }
-    
-    .license,
-    .support {
-      width: 340px;
-    }
-  
-    .support {
-      margin-left: 20px;
-    }
-  
-    .support ul {
-      column-width: 160px;
-      column-gap: 20px;
-    }
-  }
-  
-  @media (min-width: 1140px) {
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
-      width: 940px;
-    }
-  
-    .content {
-      width: 300px;
-      margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
-    }
-  
-    .license,
-    .support {
-      width: 460px;
-    }
-    
-    .support ul {
-      column-width: 140px;
-    }
-  }
-  
-  @media (min-width: 1300px) {
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      padding: 0 calc(50% - 620px);
-      width: 1240px;
-    }
-    
-    .content {
-      width: 300px;
-      margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
-    }
-    
-    .license {
-      width: 700px;
-    }
-  
-    .support {
-      width: 460px;
     }
   }
 }
