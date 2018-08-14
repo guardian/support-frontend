@@ -58,6 +58,7 @@ export default function TextInput(props: PropTypes) {
         required={props.required}
         autoComplete={props.autocomplete}
         autoCapitalize={props.autocapitalize}
+        pattern={props.pattern}
       />
     </div>
   );
