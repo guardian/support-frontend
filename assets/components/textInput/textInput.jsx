@@ -49,15 +49,15 @@ export default function TextInput(props: PropTypes) {
       </label>
       <input
         className={classNameWithModifiers('component-text-input__input', props.modifierClasses)}
-        type="text"
+        type={props.type}
         id={props.id}
         onChange={event => props.onChange(event.target.value || '')}
         onBlur={props.onBlur}
         value={props.value}
         placeholder={props.placeholder}
         required={props.required}
-        autocomplete={props.autocomplete}
-        autocapitalize={props.autocapitalize}
+        autoComplete={props.autocomplete}
+        autoCapitalize={props.autocapitalize}
       />
     </div>
   );
@@ -71,6 +71,8 @@ TextInput.defaultProps = {
   type: 'text',
   placeholder: '',
   required: false,
+  autocomplete: false,
+  autocapitalize: false,
   modifierClasses: [],
   onBlur: () => undefined,
 };
