@@ -13,6 +13,6 @@ export default function trackConversion(
   successfulConversion(participations);
   // Send an Ophan pageview. Because this function is used to track page views
   // from client side routed thank you pages, the referrer will always be the current location
-  pageView(getAbsoluteURL(currentRoute), document.location);
+  pageView(getAbsoluteURL(currentRoute), document.location.href);
 }
 
