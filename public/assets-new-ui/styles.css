@@ -1,0 +1,258 @@
+body {
+  background: white;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/*= HEADER */
+
+header[role="banner"] {
+  background-color: #e9eff1;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.glogo {
+  width: 69px;
+  height: 69px;
+}
+
+/*= FOOTER */
+
+footer[role="contentinfo"] {
+  background: #333;
+  color: #999;
+}
+
+/* Support navigation */
+.support ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.support a {
+  color: white;
+  text-decoration: none;
+}
+
+/*= CONTENT */
+.content {
+  background: white;
+  padding: 0 10px;
+}
+
+.contribution-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__field {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/*= BREAKPOINTS */
+
+header[role="banner"] {
+  height: 75px;
+}
+
+@media (min-width: 740px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 350px);
+    width: 700px;
+  }
+  
+  .content {
+    border-color: #dcdcdc;
+    border-style: none solid;
+    border-width: 0 1px;
+    width: 340px;
+    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+  }
+
+  footer[role="contentinfo"] {
+    display: flex;
+  }
+  
+  .license,
+  .support {
+    width: 340px;
+  }
+
+  .support {
+    margin-left: 20px;
+  }
+
+  .support ul {
+    column-width: 160px;
+    column-gap: 20px;
+  }
+
+  .support li {
+    margin-left: -10px;
+    padding-left: 10px;
+    border-left: 1px solid #dcdcdc;
+  }
+
+}
+
+@media (min-width: 1140px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    width: 940px;
+  }
+
+  .content {
+    width: 300px;
+    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+  }
+
+  .license,
+  .support {
+    width: 460px;
+  }
+  
+  .support ul {
+    column-width: 140px;
+  }
+}
+
+@media (min-width: 1300px) {
+  header[role="banner"],
+  footer[role="contentinfo"] {
+    padding: 0 calc(50% - 620px);
+    width: 1240px;
+  }
+  
+  .content {
+    width: 300px;
+    margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
+  }
+  
+  .license {
+    width: 700px;
+  }
+
+  .support {
+    width: 460px;
+  }
+}
+
+@supports(display: grid) {
+  body {
+    display: grid;
+    grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
+  }
+  
+  header[role="banner"] {
+    height: auto;
+    grid-row: header-t / header-b;
+  }
+  
+  footer[role="contentinfo"] {
+    grid-row: footer-t / footer-b;
+  }
+  
+  .content {
+    grid-row: header-b / footer-t;  
+  }
+    
+  @media (min-width: 740px) {
+    body,
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      padding: 0;
+      width: auto;
+
+      grid-column-gap: 20px;
+      grid-template-columns: 1fr repeat(8, 70px) 1fr;  
+    }
+    
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      display: grid;
+      grid-column: span 10;
+    }
+    
+    .content {
+      margin: 0 -11px;
+        
+      grid-column: 2 / 6;
+    }
+
+    .license {
+      grid-column: 2 / 6;
+      width: auto;
+    }
+
+    .support {
+      grid-column: 6 / 10;
+      margin-left: 0;
+      width: auto;
+    }
+  }
+
+  @media (min-width: 1140px) {
+    body,
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column-gap: 20px;
+      grid-template-columns: 1fr repeat(14, 60px) 1fr;  
+      width: auto;
+    }
+    
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column: span 16;
+    }
+
+    .license {
+      grid-column: 4 / 10;
+    }
+    
+    .support {
+      grid-column: 10 / 16;
+    }
+
+    .content {
+      width: auto;
+      grid-column: 4 / 8;
+    }
+  }  
+
+  @media (min-width: 1300px) {
+    body,
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column-gap: 20px;
+      grid-template-columns: 1fr repeat(16, 60px) 1fr;  
+    }  
+
+    .glogo {
+      grid-column: 16;
+      justify-self: flex-end;
+    }  
+
+    header[role="banner"],
+    footer[role="contentinfo"] {
+        grid-column: span 18;
+    }
+
+    .license {
+      grid-column: 2 / 11;
+    }
+
+    .support {
+      grid-column: 11 / 17;
+    }
+
+    .content {
+      grid-column: 5 / 9;
+    }
+  }
+}
