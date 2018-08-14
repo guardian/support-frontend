@@ -54,7 +54,7 @@ footer[role="contentinfo"] {
 
 /*= BREAKPOINTS */
 
-@media (min-width: 720px) {
+@media (min-width: 740px) {
   .content {
     border-color: #dcdcdc;
     border-style: none solid;
@@ -80,7 +80,7 @@ footer[role="contentinfo"] {
     grid-row: header-b / footer-t;  
   }
     
-  @media (min-width: 720px) {
+  @media (min-width: 740px) {
     body,
     header[role="banner"],
     footer[role="contentinfo"] {
@@ -184,7 +184,7 @@ footer[role="contentinfo"] {
     height: 75px;
   }
   
-  @media (min-width: 720px) {
+  @media (min-width: 740px) {
     header[role="banner"],
     footer[role="contentinfo"] {
       padding: 0 calc(50% - 350px);
