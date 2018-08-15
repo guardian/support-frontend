@@ -79,8 +79,14 @@ header[role="banner"] {
     margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
   }
 
+  header[role="banner"],
   footer[role="contentinfo"] {
     display: flex;
+  }
+
+  header[role="banner"] {
+    flex-direction: row-reverse;
+    justify-content: space-between;
   }
   
   .license,
@@ -148,7 +154,7 @@ header[role="banner"] {
   }
 }
 
-@supports(display: grid) {
+/* @supports(display: grid) {
   body {
     display: grid;
     grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
@@ -183,6 +189,15 @@ header[role="banner"] {
       display: grid;
       grid-column: span 10;
     }
+
+    .glogo {
+      grid-column: 9;
+    }
+
+    .countries {
+      grid-column: 2 / 3;
+      grid-row: 1;
+    }
     
     .content {
       margin: 0 -11px;
@@ -216,6 +231,11 @@ header[role="banner"] {
       grid-column: span 16;
     }
 
+    .glogo {
+      grid-column: 14;
+      justify-self: flex-end;
+    }
+
     .license {
       grid-column: 4 / 10;
     }
@@ -240,8 +260,7 @@ header[role="banner"] {
 
     .glogo {
       grid-column: 16;
-      justify-self: flex-end;
-    }  
+    }
 
     header[role="banner"],
     footer[role="contentinfo"] {
@@ -260,7 +279,7 @@ header[role="banner"] {
       grid-column: 5 / 9;
     }
   }
-}
+} */
 
 /*= TYPOGRAPHY */
 body {
