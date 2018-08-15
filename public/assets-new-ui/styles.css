@@ -85,6 +85,7 @@ header[role="banner"] {
   }
 
   header[role="banner"] {
+    align-items: flex-start;
     flex-direction: row-reverse;
     justify-content: space-between;
   }
