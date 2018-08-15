@@ -5,6 +5,10 @@ body {
   padding: 0;
 }
 
+details:not([open]) > :not(summary) {
+  display: none;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
