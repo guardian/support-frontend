@@ -14,13 +14,11 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularCheckoutCallback } from 'helpers/checkouts';
-import { successfulConversion } from 'helpers/tracking/googleTagManager';
+import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
-import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
-
 
 // ----- Setup ----- //
 
@@ -201,8 +199,7 @@ function statusPoll(
 ): ?Promise<void> {
 
   if (pollCount >= MAX_POLLS) {
-    successfulConversion(participations);
-    pageView(routes.recurringContribThankyou, routes.recurringContribCheckout);
+    trackConversion(participations, routes.recurringContribPending);
     dispatch(checkoutPending(paymentMethod));
     return undefined;
   }
@@ -258,7 +255,7 @@ function handleStatus(
           dispatch(checkoutError(status.message));
           break;
         case 'success':
-          successfulConversion(participations);
+          trackConversion(participations, routes.recurringContribThankyou);
           dispatch(checkoutSuccess(paymentMethod));
           break;
         default: // pending

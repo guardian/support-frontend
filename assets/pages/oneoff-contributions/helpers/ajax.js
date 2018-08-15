@@ -5,13 +5,12 @@
 import { addQueryParamsToURL } from 'helpers/url';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 
-import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as cookie from 'helpers/cookie';
-import { pageView } from 'helpers/tracking/ophanComponentEventTracking';
+import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 
@@ -87,8 +86,7 @@ function requestData(
 function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
     if (response.ok) {
-      successfulConversion(abParticipations);
-      pageView(routes.oneOffContribThankyou, routes.oneOffContribCheckout);
+      trackConversion(abParticipations, routes.oneOffContribThankyou);
       dispatch(checkoutSuccess());
     }
     return response.json();

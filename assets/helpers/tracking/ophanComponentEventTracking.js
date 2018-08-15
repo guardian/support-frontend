@@ -2,7 +2,6 @@
 // ----- Imports ----- //
 
 import * as ophan from 'ophan';
-import { getAbsoluteURL } from '../url';
 
 // ----- Types ----- //
 
@@ -74,11 +73,11 @@ const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   });
 };
 
-function pageView(currentRoute: string, referringRoute: string) {
+function pageView(url: string, referrer: string) {
   try {
     ophan.sendInitialEvent(
-      getAbsoluteURL(currentRoute),
-      getAbsoluteURL(referringRoute),
+      url,
+      referrer,
     );
   } catch (e) {
     console.log(`Error in Ophan tracking: ${e}`);
