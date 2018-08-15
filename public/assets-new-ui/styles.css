@@ -15,6 +15,8 @@ header[role="banner"] {
 .glogo {
   width: 69px;
   height: 69px;
+  position: relative;
+  top: 24px;
 }
 
 /*= FOOTER */
