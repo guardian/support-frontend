@@ -7,7 +7,7 @@ import type { SubscriptionProduct } from './subscriptions';
 function inOfferPeriod(product: SubscriptionProduct): boolean {
   // Days are 1 based, months are 0 based
   const startTime = new Date(2018, 7, 20, 0, 0).getTime(); // 20th August 2018
-  const endTime = new Date(2018, 8, 2, 0, 0).getTime(); // 2nd September 2018
+  const endTime = new Date(2018, 8, 3, 0, 0).getTime(); // include all of 2nd September 2018
 
   // The current sale is paper and paper+digital only; everything else is unaffected
   const included = {
