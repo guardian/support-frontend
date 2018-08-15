@@ -70,12 +70,22 @@
 
     <div class="form__field form__field--contribution-fname">
       <label class="form__label" for="contributionFirstName">First Name</label>
-      <input id="contributionFirstName" class="form__input" type="text" autocapitalize="words" required>
+      <span class="form__input-with-icon">
+        <input id="contributionFirstName" class="form__input" type="text" autocapitalize="words" required>
+        <span class="form__icon">
+          <svg width="14" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M6.99 7.381c1.433 0 3.121-1.66 3.121-3.683C10.111 1.674 8.953.5 6.991.5 5.026.5 3.888 1.674 3.888 3.698c0 2.023 1.825 3.683 3.101 3.683zM2.333 9.789l-.797.83L0 16.69l.758.81h12.445l.797-.81-1.556-6.071-.777-.83C10.11 9.283 8.692 9 7 9c-1.711 0-3.111.243-4.667.79z" fill-rule="evenodd"/></svg>
+        </span>
+      </span>
     </div>
-
+    
     <div class="form__field form__field--contribution-lname">
       <label class="form__label" for="contributionLastName">Last Name</label>
-      <input id="contributionLastName" class="form__input form__input--primed" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
+      <span class="form__input-with-icon">
+        <input id="contributionLastName" class="form__input form__input--primed" aria-describedby="error-contributionLastName" autocapitalize="words" type="text" required>
+        <span class="form__icon">
+          <svg width="14" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M6.99 7.381c1.433 0 3.121-1.66 3.121-3.683C10.111 1.674 8.953.5 6.991.5 5.026.5 3.888 1.674 3.888 3.698c0 2.023 1.825 3.683 3.101 3.683zM2.333 9.789l-.797.83L0 16.69l.758.81h12.445l.797-.81-1.556-6.071-.777-.83C10.11 9.283 8.692 9 7 9c-1.711 0-3.111.243-4.667.79z"/></svg>
+        </span>
+      </span>
       <div id="error-contributionLastName" class="form__error">
           Lovely surname there fella
       </div>
@@ -83,7 +93,12 @@
 
     <div class="form__field form__field--contribution-email">
       <label class="form__label" for="contributionEmail">Email address</label>
-      <input id="contributionEmail" class="form__input" type="email" placeholder="example@@domain.com" required>
+      <span class="form__input-with-icon">
+        <input id="contributionEmail" class="form__input" type="email" placeholder="example@@domain.com" required>
+        <span class="form__icon">
+          <svg width="16" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z"/></svg>
+        </span>
+      </span>
     </div>
 
     <div class="form__field form__field--contribution-state">

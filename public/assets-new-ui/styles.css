@@ -565,3 +565,28 @@ form {
 .form__radio-group--contribution-pay {
   margin-top: 20px;
 }
+
+.form__input-with-icon {
+  position: relative;
+}
+
+.form__input-with-icon .form__icon {
+  align-items: center; 
+  display: flex;
+  fill: #999;
+  height: 40px;
+  justify-content: center;
+  left: 1px;
+  position: absolute;
+  top: 1px;
+  width: 38px;
+}
+
+.form__input-with-icon .form__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.form__input-with-icon .form__input:focus ~ .form__icon {
+  fill: #00b2ff;
+}
