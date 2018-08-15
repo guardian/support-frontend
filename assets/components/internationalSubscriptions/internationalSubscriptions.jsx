@@ -79,7 +79,7 @@ export default function InternationalSubscriptions(props: PropTypes) {
             countryGroupId={props.countryGroupId}
             url={subsLinks.GuardianWeekly}
             headingSize={props.headingSize}
-            onClick={props.clickEvents.digiPack}
+            onClick={props.clickEvents.weekly}
           />
         </PageSection>
       </div>
