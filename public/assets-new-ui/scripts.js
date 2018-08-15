@@ -33,10 +33,7 @@ const required = (msg) => (e) => {
 
 /**
  * Verifies if an element satisfies a set of rules.
- * ```
- *   Array<{ element: HTMLElement, predicates: Array<HTMLElement => void> }>
- * ```
- * @returns true if all the elements are valid
+ * @returns true if all the rules hold
  */
 const verify = (rules) => (element) => {
   rules.forEach(r => r(element));
