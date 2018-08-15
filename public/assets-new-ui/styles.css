@@ -5,11 +5,17 @@ body {
   padding: 0;
 }
 
+details:not([open]) > :not(summary) {
+  display: none;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
   background-color: #e9eff1;
   border-bottom: 1px solid #dcdcdc;
+  position: relative;
+  z-index: 1;
 }
 
 .glogo {
@@ -81,8 +87,15 @@ header[role="banner"] {
     margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
   }
 
+  header[role="banner"],
   footer[role="contentinfo"] {
     display: flex;
+  }
+
+  header[role="banner"] {
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-content: space-between;
   }
   
   .license,
@@ -185,6 +198,15 @@ header[role="banner"] {
       display: grid;
       grid-column: span 10;
     }
+
+    .glogo {
+      grid-column: 9;
+    }
+
+    .countries {
+      grid-column: 2 / 8;
+      grid-row: 1;
+    }
     
     .content {
       margin: 0 -11px;
@@ -218,6 +240,11 @@ header[role="banner"] {
       grid-column: span 16;
     }
 
+    .glogo {
+      grid-column: 14;
+      justify-self: flex-end;
+    }
+
     .license {
       grid-column: 4 / 10;
     }
@@ -242,8 +269,7 @@ header[role="banner"] {
 
     .glogo {
       grid-column: 16;
-      justify-self: flex-end;
-    }  
+    }
 
     header[role="banner"],
     footer[role="contentinfo"] {
@@ -293,6 +319,55 @@ button {
 
 footer[role="contentinfo"] {
   font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+.countries {
+  background: white;
+  border: 1px solid #dcdcdc;
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  max-width: 355px;
+  padding: 0;
+  width: 100%;
+}
+
+.countries summary {
+  color: #999;
+  outline: none;
+  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+}
+
+.countries summary:hover,
+.countries summary:focus {
+  box-shadow: 0 0 0 3px #ffe500;
+  color: inherit;
+}
+
+.countries summary::-webkit-details-marker {
+  display: none;
+}
+
+.countries__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.countries summary,
+.countries__item > a {
+  display: block;
+  padding: 10px 40px 16px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.countries__item > a {
+  color: inherit;
+}
+
+.countries__item > a:hover,
+.countries__item > a:focus {
+  background: #ffe500;
+  font-weight: bold;
 }
 
 .license__txt {
@@ -421,7 +496,7 @@ form {
   border: 1px solid #dcdcdc;
   border-radius: 0;
   padding: 9px 10px 9px 38px;
-  transition: all .2s ease-in-out;
+  transition: box-shadow .2s ease-in-out;
 }
 
 .form__input:hover {
