@@ -497,6 +497,7 @@ form {
 }
 
 .form__input {
+  -webkit-appearance: none;
   appearance: none;
   background: white;
   border: 1px solid #dcdcdc;
