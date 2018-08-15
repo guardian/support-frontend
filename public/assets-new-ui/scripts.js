@@ -32,8 +32,7 @@ const required = (msg) => (e) => {
 }
 
 /**
- * Verifies if a set of elements are valid according to a set of predicates. The input
- * is a list of tuples 
+ * Verifies if an element satisfies a set of rules.
  * ```
  *   Array<{ element: HTMLElement, predicates: Array<HTMLElement => void> }>
  * ```
