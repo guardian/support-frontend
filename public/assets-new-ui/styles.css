@@ -325,13 +325,15 @@ footer[role="contentinfo"] {
 }
 
 .countries summary {
+  color: #999;
   outline: none;
-  transition: box-shadow .2s ease-in-out;
+  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
 }
 
 .countries summary:hover,
 .countries summary:focus {
   box-shadow: 0 0 0 3px #ffe500;
+  color: inherit;
 }
 
 .countries summary::-webkit-details-marker {
@@ -346,11 +348,14 @@ footer[role="contentinfo"] {
 
 .countries summary,
 .countries__item > a {
-  color: inherit;
   display: block;
   padding: 10px 40px 16px;
   line-height: 1;
   text-decoration: none;
+}
+
+.countries__item > a {
+  color: inherit;
 }
 
 .countries__item > a:hover,
