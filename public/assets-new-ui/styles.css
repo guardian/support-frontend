@@ -68,8 +68,8 @@ header[role="banner"] {
 .countries__item > a {
   color: inherit;
   display: block;
-  padding: 10px 40px 16px;
-  line-height: 1;
+  padding: 0 40px;
+  line-height: 40px;
   text-decoration: none;
 }
 
@@ -590,4 +590,8 @@ form {
 
 .form__input-with-icon .form__input:focus ~ .form__icon {
   fill: #00b2ff;
+}
+
+.icon {
+  fill: inherit;
 }
