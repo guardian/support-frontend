@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
 
-import { type CountryGroupId /*, countryGroups */ } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 // import { getOrigin } from 'helpers/url';
 import Page from 'components/page/page';
 
