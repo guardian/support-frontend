@@ -1,16 +1,14 @@
 package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
-import java.util.Base64
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.StateCodecs.checkoutFailureStateDecoder
-import com.gu.support.workers.encoding.utf8
+import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.model.CheckoutFailureReasons.{PaymentMethodUnacceptable, Unknown}
-import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.model.states.CheckoutFailureState
 import com.gu.support.workers.{Fixtures, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -20,7 +18,6 @@ import io.circe.parser.decode
 import org.mockito.Mockito.{times, verify, when}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.io.Source
 
 @IntegrationTest
 class FailureHandlerSpec extends LambdaSpec {
@@ -41,11 +38,12 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(failureJson.asInputStream, outStream, context)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(true)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
+    val checkoutFailureState = outState.get._1
 
-    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
-    checkoutFailureState.right.get.checkoutFailureReason should be(Unknown)
+    requestInfo.failed should be(true)
+    checkoutFailureState.checkoutFailureReason should be(Unknown)
 
   }
 
@@ -56,11 +54,13 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(oldSchemaFailureJson.asInputStream, outStream, context)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(true)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
+    val checkoutFailureState = outState.get._1
 
-    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
-    checkoutFailureState.right.get.checkoutFailureReason should be(Unknown)
+    requestInfo.failed should be(true)
+    checkoutFailureState.checkoutFailureReason should be(Unknown)
+
 
   }
 
@@ -71,12 +71,14 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(cardDeclinedJsonZuora.asInputStream, outStream, context)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(false)
-    SafeLogger.info(outState.right.get.requestInfo.messages.head)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
+    val checkoutFailureState = outState.get._1
 
-    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
-    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+    SafeLogger.info(requestInfo.messages.head)
+
+    requestInfo.failed should be(false)
+    checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
 
   }
 
@@ -87,12 +89,14 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(cardDeclinedJsonStripe.asInputStream, outStream, context)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(false)
-    SafeLogger.info(outState.right.get.requestInfo.messages.head)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
+    val checkoutFailureState = outState.get._1
 
-    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
-    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+    SafeLogger.info(requestInfo.messages.head)
+
+    requestInfo.failed should be(false)
+    checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
 
   }
 
@@ -103,13 +107,14 @@ class FailureHandlerSpec extends LambdaSpec {
 
     failureHandler.handleRequest(digipackCardDeclinedStripeJson.asInputStream, outStream, context)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(false)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
+    val checkoutFailureState = outState.get._1
 
-    SafeLogger.warn(outState.right.get.requestInfo.messages.head)
+    SafeLogger.warn(requestInfo.messages.head)
 
-    val checkoutFailureState = decode[CheckoutFailureState](decodeState(outState.right.get.state))
-    checkoutFailureState.right.get.checkoutFailureReason should be(PaymentMethodUnacceptable)
+    requestInfo.failed should be(false)
+    checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
 
   }
 
@@ -129,10 +134,12 @@ class FailureHandlerSpec extends LambdaSpec {
 
     verify(emailService, times(1)).send(testFields)
 
-    val outState = decode[JsonWrapper](Source.fromInputStream(outStream.toInputStream).mkString)
-    outState.right.get.requestInfo.failed should be(false)
+    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+    val requestInfo = outState.get._3
 
-    SafeLogger.warn(outState.right.get.requestInfo.messages.head)
+    SafeLogger.warn(requestInfo.messages.head)
+
+    requestInfo.failed should be(false)
   }
 
   it should "match a transaction declined error" in {
@@ -148,10 +155,6 @@ class FailureHandlerSpec extends LambdaSpec {
     val failureHandler = new FailureHandler()
     val reason = failureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
     reason should be(PaymentMethodUnacceptable)
-  }
-
-  def decodeState(state: String): String = {
-    new String(Base64.getDecoder.decode(state), utf8)
   }
 
 }
