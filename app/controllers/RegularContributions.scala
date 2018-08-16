@@ -4,6 +4,7 @@ import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
 import assets.AssetsResolver
 import cats.implicits._
+import codecs.CirceDecoders.statusEncoder
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
