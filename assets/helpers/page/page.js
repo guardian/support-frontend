@@ -103,7 +103,7 @@ function buildInitialState(
 // Sets up the common reducer with its initial state.
 function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
 
-  function commonReducer(
+  return function commonReducer(
     state?: CommonState = initialState,
     action: Action,
   ): CommonState {
@@ -120,9 +120,8 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
       default:
         return state;
     }
-  }
+  };
 
-  return commonReducer;
 }
 
 // For pages that don't need Redux.
