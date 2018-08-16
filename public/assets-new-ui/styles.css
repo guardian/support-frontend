@@ -22,6 +22,86 @@ header[role="banner"] {
 .glogo {
   width: 69px;
   height: 69px;
+  position: relative;
+  top: 24px;
+}
+
+.countries {
+  background: white;
+  border: 1px solid #dcdcdc;
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  max-width: 355px;
+  padding: 0;
+  width: 100%;
+}
+
+.countries summary {
+  align-items: center;
+  color: #999;
+  display: flex;
+  fill: currentColor;
+  height: 40px;
+  outline: none;
+  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+}
+
+.countries__label {
+  flex: 1;
+}
+
+.countries .icon {
+  text-align: center;
+  width: 40px;
+}
+
+.countries .icon--world {
+  padding: 0 13px;
+}
+
+.countries .icon__arrow-up {
+  display: none;
+}
+
+.countries[open] .icon__arrow-up {
+  display: initial;
+}
+
+.countries[open] .icon__arrow-down {
+  display: none;
+}
+
+.countries summary:hover,
+.countries summary:focus {
+  box-shadow: 0 0 0 3px #ffe500;
+  color: inherit;
+}
+
+.countries summary::-webkit-details-marker {
+  display: none;
+}
+
+.countries__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.countries__item > a {
+  color: inherit;
+  display: flex;
+  padding: 0 40px;
+  line-height: 40px;
+  text-decoration: none;
+}
+
+.countries__item > a:hover,
+.countries__item > a:focus {
+  background: #ffe500;
+  font-weight: bold;
+}
+
+.countries__item .icon {
+  margin-left: -40px;
 }
 
 /*= FOOTER */
@@ -320,54 +400,6 @@ footer[role="contentinfo"] {
   font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 }
 
-.countries {
-  background: white;
-  border: 1px solid #dcdcdc;
-  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
-  max-width: 355px;
-  padding: 0;
-  width: 100%;
-}
-
-.countries summary {
-  color: #999;
-  outline: none;
-  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
-}
-
-.countries summary:hover,
-.countries summary:focus {
-  box-shadow: 0 0 0 3px #ffe500;
-  color: inherit;
-}
-
-.countries summary::-webkit-details-marker {
-  display: none;
-}
-
-.countries__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.countries summary,
-.countries__item > a {
-  display: block;
-  padding: 10px 40px 16px;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.countries__item > a {
-  color: inherit;
-}
-
-.countries__item > a:hover,
-.countries__item > a:focus {
-  background: #ffe500;
-  font-weight: bold;
-}
 
 .license__txt {
   font-size: inherit;
@@ -471,18 +503,64 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group__label {
+  align-items: center;
   border: 1px solid #dcdcdc;
   border-radius: 20px;
-  display: block;
+  display: flex;
   margin-bottom: 8px;
-  padding: 9px 10px 9px 38px;
+  padding: 9px 0;
 }
 
 .form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label {
   border-color: #00b2ff;
   font-weight: bold;
 }
-        
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui {
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  border-color: #999;
+  display: inline-block;
+  border-style: solid;
+  border-width: 1px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label:hover .radio-ui {
+  border-color: #00b2ff;
+  box-shadow: 0 0 0 2px #90DCFF;
+}
+
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label .radio-ui__icon {
+  filter: grayscale(100%);
+}
+
+.form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label .radio-ui {
+  border-color: #00b2ff;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #00b2ff;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__label {
+  flex: 1;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--paypal {
+  height: 18px;
+  width: 15px;
+  margin-right: 16px;
+  margin-left: 5px;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--card {
+  height: 14px;
+  width: 22px;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
 .form__label {
   font-weight: bold;
   line-height: 1;
@@ -490,6 +568,7 @@ form {
 }
 
 .form__input {
+  -webkit-appearance: none;
   appearance: none;
   background: white;
   border: 1px solid #dcdcdc;
@@ -503,7 +582,7 @@ form {
 }
 
 .form__input:focus {
-  box-shadow: 0 0 0 3px #ffe500;
+  box-shadow: 0 0 0 3px #00b2ff;
   outline: none;
 }
 
@@ -558,3 +637,33 @@ form {
 .form__radio-group--contribution-pay {
   margin-top: 20px;
 }
+
+.form__input-with-icon {
+  position: relative;
+}
+
+.form__input-with-icon .form__icon {
+  align-items: center; 
+  display: flex;
+  fill: #999;
+  height: 40px;
+  justify-content: center;
+  left: 1px;
+  position: absolute;
+  top: 1px;
+  width: 38px;
+}
+
+.form__input-with-icon .form__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.form__input-with-icon .form__input:focus ~ .form__icon {
+  fill: #00b2ff;
+}
+
+.icon {
+  fill: inherit;
+}
+
