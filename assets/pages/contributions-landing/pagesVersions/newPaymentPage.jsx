@@ -71,6 +71,7 @@ const NewPaymentPage: (PropTypes) => React.Node = (props: PropTypes) =>
   (
     <Provider store={props.store}>
       <Page>
+        <h1>Hello!</h1>
       </Page>
     </Provider>
   );
