@@ -22,6 +22,7 @@ import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
+import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 
 
 // ----- Page Startup ----- //
@@ -47,6 +48,7 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType="ONE_OFF"
               form={<FormFields />}
+              payment={<OneoffContributionsPayment />}
             />
           )}
         />

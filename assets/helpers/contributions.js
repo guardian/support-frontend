@@ -412,7 +412,7 @@ function getFrequency(contributionType: Contrib): string {
   if (contributionType === 'ONE_OFF') {
     return '';
   } else if (contributionType === 'MONTHLY') {
-    return 'per month';
+    return 'a month';
   }
 
   return 'a year';
@@ -448,7 +448,7 @@ function getAmountA11yHint(
   if (contributionType === 'ONE_OFF') {
     return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
   } else if (contributionType === 'MONTHLY') {
-    return `contribute ${spokenAmount} ${spokenCurrency} per month`;
+    return `contribute ${spokenAmount} ${spokenCurrency} a month`;
   }
 
   return `contribute ${spokenAmount} ${spokenCurrency} annually`;

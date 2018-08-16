@@ -27,7 +27,9 @@ class Subscriptions(
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/subscribe"
-      case _ => "https://subscribe.theguardian.com"
+      case Some(US) => "/us/subscribe"
+      case Some(Australia) => "/au/subscribe"
+      case _ => "/int/subscribe"
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
