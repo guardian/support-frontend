@@ -32,8 +32,9 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
+import { type OptimizeExperiments, getExperiments } from 'helpers/tracking/optimize';
 
-import type { Action } from './pageActions';
+import { type Action, setOptimizeExperiments } from './pageActions';
 
 
 // ----- Types ----- //
@@ -49,6 +50,7 @@ export type CommonState = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   otherQueryParams: Array<[string, string]>,
   abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
   switches: Switches,
   internationalisation: Internationalisation,
 };
@@ -95,6 +97,7 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
+    optimizeExperiments: {},
     switches,
   };
 
@@ -115,6 +118,9 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           ...state,
           internationalisation: { ...state.internationalisation, countryId: action.country },
         };
+
+      case 'SET_OPTIMIZE_EXPERIMENTS':
+        return { ...state, optimizeExperiments: action.experiments };
 
       default:
         return state;
@@ -169,11 +175,16 @@ function init<S, A>(
     switches,
   );
   const commonReducer = createCommonReducer(initialState);
-
-  return createStore(
+  const store = createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
   );
+
+  getExperiments()
+    .then(exp => store.dispatch(setOptimizeExperiments(exp)))
+    .catch(() => logger.logException('Problem retrieving optimize experiments.'));
+
+  return store;
 }
 
 

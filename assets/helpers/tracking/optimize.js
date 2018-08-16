@@ -5,7 +5,7 @@
 type Experiment = string;
 type Variant = string;
 
-type OptimizeExperiments = {
+export type OptimizeExperiments = {
   [Experiment]: Variant,
 };
 
@@ -33,7 +33,7 @@ function optimizeExists(): boolean {
 }
 
 // Retrieves the object from the window, async in case it hasn't been put there yet.
-function getExperiment(): Promise<OptimizeExperiments> {
+function getExperiments(): Promise<OptimizeExperiments> {
 
   if (optimizeExists()) {
     return Promise.resolve(parseExperiments(window.guardian.optimize));
@@ -54,4 +54,4 @@ function getExperiment(): Promise<OptimizeExperiments> {
 
 // ----- Exports ----- //
 
-export { getExperiment };
+export { getExperiments };
