@@ -24,13 +24,13 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 const reactElementId: {
   [CountryGroupId]: string
 } = {
-  GBPCountries: 'contributions-landing-page-uk',
-  EURCountries: 'contributions-landing-page-eu',
-  UnitedStates: 'contributions-landing-page-us',
-  AUDCountries: 'contributions-landing-page-au',
-  International: 'contributions-landing-page-int',
-  NZDCountries: 'contributions-landing-page-nz',
-  Canada: 'contributions-landing-page-ca',
+  GBPCountries: 'new-contributions-landing-page-uk',
+  EURCountries: 'new-contributions-landing-page-eu',
+  UnitedStates: 'new-contributions-landing-page-us',
+  AUDCountries: 'new-contributions-landing-page-au',
+  International: 'new-contributions-landing-page-int',
+  NZDCountries: 'new-contributions-landing-page-nz',
+  Canada: 'new-contributions-landing-page-ca',
 };
 
 // ----- Internationalisation ----- //

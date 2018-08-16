@@ -101,7 +101,7 @@ class Application(
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = s"contributions-landing-page-$countryCode",
+      mainId = s"new-contributions-landing-page-$countryCode",
       mainJsBundle = "newContributionsLandingPage.js",
       mainStyleBundle = "newContributionsLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
