@@ -52,8 +52,6 @@ object RegularContributionsClient {
     new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
-case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
-
 case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
 
 class RegularContributionsClient(
@@ -130,6 +128,8 @@ class RegularContributionsClient(
 }
 
 object StepFunctionExecutionStatus {
+
+  case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
 
   def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], stateWrapper: StateWrapper, trackingUri: String): StatusResponse = {
 
