@@ -116,16 +116,6 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           internationalisation: { ...state.internationalisation, countryId: action.country },
         };
 
-      case 'SET_COUNTRY_GROUP':
-        return {
-          ...state,
-          internationalisation: {
-            countryGroupId: action.countryGroup,
-            currencyId: detectCurrency(action.countryGroup),
-            countryId: detectCountry(action.countryGroup),
-          },
-        };
-
       default:
         return state;
     }
