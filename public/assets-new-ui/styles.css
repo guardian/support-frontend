@@ -45,8 +45,29 @@ header[role="banner"] {
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
 }
 
+.countries__label {
+  flex: 1;
+}
+
+.countries .icon {
+  text-align: center;
+  width: 40px;
+}
+
 .countries .icon--world {
   padding: 0 13px;
+}
+
+.countries .icon__arrow-up {
+  display: none;
+}
+
+.countries[open] .icon__arrow-up {
+  display: initial;
+}
+
+.countries[open] .icon__arrow-down {
+  display: none;
 }
 
 .countries summary:hover,
@@ -81,8 +102,6 @@ header[role="banner"] {
 
 .countries__item .icon {
   margin-left: -40px;
-  text-align: center;
-  width: 40px;
 }
 
 /*= FOOTER */
