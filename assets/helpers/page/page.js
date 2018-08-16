@@ -53,12 +53,6 @@ export type CommonState = {
   internationalisation: Internationalisation,
 };
 
-export type PreloadedState = {
-  campaign?: $PropertyType<CommonState, 'campaign'>,
-  referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
-};
-
 
 // ----- Functions ----- //
 
@@ -81,7 +75,6 @@ function analyticsInitialisation(participations: Participations): void {
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
-  preloadedState: ?PreloadedState = {},
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
   currencyId: IsoCurrency,
@@ -96,14 +89,14 @@ function buildInitialState(
     currencyId,
   };
 
-  return Object.assign({}, {
+  return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
     internationalisation,
     abParticipations,
     switches,
-  }, preloadedState);
+  };
 
 }
 
@@ -160,7 +153,6 @@ function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undef
 function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
-  preloadedState: ?PreloadedState = null,
 ): Store<*, *, *> {
 
   const countryGroupId: CountryGroupId = detectCountryGroup();
@@ -172,7 +164,6 @@ function init<S, A>(
 
   const initialState: CommonState = buildInitialState(
     participations,
-    preloadedState,
     countryGroupId,
     countryId,
     currencyId,
