@@ -67,7 +67,7 @@ header[role="banner"] {
 
 .countries__item > a {
   color: inherit;
-  display: block;
+  display: flex;
   padding: 0 40px;
   line-height: 40px;
   text-decoration: none;
@@ -77,6 +77,12 @@ header[role="banner"] {
 .countries__item > a:focus {
   background: #ffe500;
   font-weight: bold;
+}
+
+.countries__item .icon {
+  margin-left: -40px;
+  text-align: center;
+  width: 40px;
 }
 
 /*= FOOTER */
