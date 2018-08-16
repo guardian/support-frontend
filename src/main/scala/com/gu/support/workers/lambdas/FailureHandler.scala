@@ -7,7 +7,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.states.FailureHandlerState
+import com.gu.support.workers.model.CheckoutFailureReasons._
+import com.gu.support.workers.model.states.{CheckoutFailureState, FailureHandlerState}
 import com.gu.support.workers.model.{ExecutionError, RequestInfo, Contribution, DigitalPack}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
@@ -15,8 +16,8 @@ import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FailureHandler(emailService: EmailService)
-    extends FutureHandler[FailureHandlerState, Unit] {
+class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHandlerState, CheckoutFailureState] {
+
   def this() = this(new EmailService)
 
   override protected def handlerFuture(
@@ -47,22 +48,29 @@ class FailureHandler(emailService: EmailService)
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => exitHandler(
         state,
+        toCheckoutFailureReason(ze),
         requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
       )
       case Some(se @ StripeError("card_error", _, _, _, _)) => exitHandler(
         state,
+        toCheckoutFailureReason(se),
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
       )
-      case _ => exitHandler(state, requestInfo.copy(failed = true))
+      case _ => exitHandler(
+        state,
+        Unknown,
+        requestInfo.copy(failed = true)
+      )
     }
   }
 
   private def exitHandler(
     state: FailureHandlerState,
+    checkoutFailureReason: CheckoutFailureReason,
     requestInfo: RequestInfo
   ) = {
-    SafeLogger.info(s"Returning completed state...")
-    HandlerResult(Unit, requestInfo)
+    SafeLogger.info(s"Returning CheckoutFailure state...")
+    HandlerResult(CheckoutFailureState(state.user, checkoutFailureReason), requestInfo)
   }
 
   private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {
@@ -71,4 +79,15 @@ class FailureHandler(emailService: EmailService)
   } yield result
 
   private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] = decode[T](errorJson.errorMessage).toOption
+
+  def toCheckoutFailureReason(zuoraError: ZuoraError): CheckoutFailureReason = {
+    // Just get Stripe's decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
+    val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
+    convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
+  }
+
+  def toCheckoutFailureReason(stripeError: StripeError): CheckoutFailureReason = {
+    stripeError.decline_code.flatMap(error => convertStripeDeclineCode(error)).getOrElse(Unknown)
+  }
+
 }
