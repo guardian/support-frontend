@@ -17,6 +17,7 @@ import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+import MarketingConsentContainer from './components/marketingConsentContainer';
 
 import reducer from './regularContributionsReducer';
 
@@ -39,7 +40,7 @@ user.init(store.dispatch);
 
 const Loading = () => <div>Loading...</div>;
 
-const contributionsThankYouContainer = Loadable({
+const ContributionsThankYouContainer = Loadable({
   loader: () => import('./components/contributionsThankYouPageContainer'),
   loading: Loading,
 });
@@ -72,8 +73,24 @@ const router = (
             />
           )}
         />
-        <Route exact path={routes.recurringContribThankyou} component={contributionsThankYouContainer} />
-        <Route exact path={routes.recurringContribPending} component={contributionsThankYouContainer} />
+        <Route
+          exact
+          path={routes.recurringContribThankyou}
+          component={() => (
+            <ContributionsThankYouContainer
+              marketingConsent={<MarketingConsentContainer />}
+            />
+          )}
+        />
+        <Route
+          exact
+          path={routes.recurringContribPending}
+          component={() => (
+            <ContributionsThankYouContainer
+              marketingConsent={<MarketingConsentContainer />}
+            />
+          )}
+        />
       </div>
     </Provider>
   </BrowserRouter>

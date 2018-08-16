@@ -12,7 +12,7 @@ import { stripeInlineFormReducerFor } from 'components/stripeInlineForm/stripeIn
 import csrf from 'helpers/csrf/csrfReducer';
 
 import type { CommonState } from 'helpers/page/page';
-
+import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { Action } from './oneoffContributionsActions';
 
 
@@ -29,6 +29,7 @@ export type CombinedState = {
   oneoffContrib: State,
   user: UserState,
   csrf: CsrfState,
+  marketingConsent: MarketingConsentState
 };
 
 export type PageState = {

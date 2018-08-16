@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
@@ -12,7 +12,6 @@ import QuestionsContact from 'components/questionsContact/questionsContact';
 import { type Contrib } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
-import MarketingConsentContainer from './marketingConsentContainer';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
 
 // ---- Types ----- //
@@ -20,6 +19,7 @@ import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebit
 type PropTypes = {
   contributionType: Contrib,
   directDebit: ?DirectDebit,
+  marketingConsent: Node,
 };
 
 
@@ -38,7 +38,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       />
       <div className="multiline-divider" />
       <BodyCopy {...props} />
-      <MarketingConsentContainer />
+      {props.marketingConsent}
       <QuestionsContact />
       <SpreadTheWord />
     </Page>
