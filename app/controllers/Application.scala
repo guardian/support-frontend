@@ -97,6 +97,17 @@ class Application(
     ))
   }
 
+  def reactContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Ok(views.html.main(
+      title = "Support the Guardian | Make a Contribution",
+      description = Some(stringsConfig.contributionsLandingDescription),
+      mainId = s"new-contributions-landing-page-$countryCode",
+      mainJsBundle = "newContributionsLandingPage.js",
+      mainStyleBundle = "newContributionsLandingPageStyles.css",
+      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
+    ))
+  }
+
   def newContributionsLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(views.html.newMain(
       title = "Support the Guardian | Make a Contribution",
