@@ -116,20 +116,8 @@ footer[role="contentinfo"] {
   padding-bottom: $gu-v-spacing * 2;
 }
 
-/* Support navigation */
-.support__menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.support__item {
-  padding-top: $gu-v-spacing / 3;
-}
-
-.support__link {
+footer[role="contentinfo"] a {
   color: white;
-  text-decoration: none;
 }
 
 /*= CONTENT */
@@ -173,10 +161,6 @@ footer[role="contentinfo"] {
   font-size: inherit;
 }
 
-.support {
-  font-size: 14px;
-}
-
 /*= BREAKPOINTS */
 
 header[role="banner"] {
@@ -208,28 +192,7 @@ header[role="banner"] {
     flex-direction: row-reverse;
     justify-content: space-between;
   }
-  
-  .license,
-  .support {
-    width: 340px;
   }
-
-  .support {
-    margin-left: 20px;
-  }
-
-  .support__menu {
-    column-width: 160px;
-    column-gap: 20px;
-  }
-
-  .support__item {
-    margin-left: -10px;
-    padding-left: 10px;
-    border-left: 1px solid gu-colour(light-black);
-  }
-
-}
 
 @media (min-width: 1140px) {
   header[role="banner"],
@@ -241,15 +204,6 @@ header[role="banner"] {
   .gu-content__main {
     width: 300px;
     margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
-  }
-
-  .license,
-  .support {
-    width: 460px;
-  }
-  
-  .support__menu {
-    column-width: 140px;
   }
 }
 
@@ -264,15 +218,7 @@ header[role="banner"] {
     width: 300px;
     margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
   }
-  
-  .license {
-    width: 700px;
   }
-
-  .support {
-    width: 460px;
-  }
-}
 
 @supports(display: grid) {
   .gu-content {
@@ -326,14 +272,7 @@ header[role="banner"] {
     }
 
     .license {
-      grid-column: 2 / 6;
-      width: auto;
-    }
-
-    .support {
-      grid-column: 6 / 10;
-      margin-left: 0;
-      width: auto;
+      grid-column: 2 / 9;
     }
   }
 
@@ -356,17 +295,13 @@ header[role="banner"] {
       justify-self: flex-end;
     }
 
-    .license {
-      grid-column: 4 / 10;
-    }
-    
-    .support {
-      grid-column: 10 / 16;
-    }
-
     .gu-content__main {
       width: auto;
       grid-column: 4 / 8;
+    }
+
+    .license {
+      grid-column: 2 / 11;
     }
   }  
 
@@ -387,16 +322,12 @@ header[role="banner"] {
         grid-column: span 18;
     }
 
-    .license {
-      grid-column: 2 / 11;
-    }
-
-    .support {
-      grid-column: 11 / 17;
-    }
-
     .gu-content__main {
       grid-column: 5 / 9;
+    }
+
+    .license {
+      grid-column: 2 / 12;
     }
   }
 }

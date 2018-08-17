@@ -112,22 +112,6 @@ footer[role="contentinfo"] {
   padding-bottom: 24px;
 }
 
-/* Support navigation */
-.support__menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.support__item {
-  padding-top: 4px;
-}
-
-.support__link {
-  color: white;
-  text-decoration: none;
-}
-
 /*= CONTENT */
 .content {
   background: white;
@@ -177,26 +161,6 @@ header[role="banner"] {
     justify-content: space-between;
   }
   
-  .license,
-  .support {
-    width: 340px;
-  }
-
-  .support {
-    margin-left: 20px;
-  }
-
-  .support__menu {
-    column-width: 160px;
-    column-gap: 20px;
-  }
-
-  .support__item {
-    margin-left: -10px;
-    padding-left: 10px;
-    border-left: 1px solid #999;
-  }
-
 }
 
 @media (min-width: 1140px) {
@@ -210,15 +174,6 @@ header[role="banner"] {
     width: 300px;
     margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
   }
-
-  .license,
-  .support {
-    width: 460px;
-  }
-  
-  .support__menu {
-    column-width: 140px;
-  }
 }
 
 @media (min-width: 1300px) {
@@ -231,14 +186,6 @@ header[role="banner"] {
   .content {
     width: 300px;
     margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
-  }
-  
-  .license {
-    width: 700px;
-  }
-
-  .support {
-    width: 460px;
   }
 }
 
@@ -294,14 +241,7 @@ header[role="banner"] {
     }
 
     .license {
-      grid-column: 2 / 6;
-      width: auto;
-    }
-
-    .support {
-      grid-column: 6 / 10;
-      margin-left: 0;
-      width: auto;
+      grid-column: 2 / 9;
     }
   }
 
@@ -324,17 +264,13 @@ header[role="banner"] {
       justify-self: flex-end;
     }
 
-    .license {
-      grid-column: 4 / 10;
-    }
-    
-    .support {
-      grid-column: 10 / 16;
-    }
-
     .content {
       width: auto;
       grid-column: 4 / 8;
+    }
+
+    .license {
+      grid-column: 2 / 11;
     }
   }  
 
@@ -355,16 +291,12 @@ header[role="banner"] {
         grid-column: span 18;
     }
 
-    .license {
-      grid-column: 2 / 11;
-    }
-
-    .support {
-      grid-column: 11 / 17;
-    }
-
     .content {
       grid-column: 5 / 9;
+    }
+
+    .license {
+      grid-column: 2 / 12;
     }
   }
 }
@@ -403,10 +335,6 @@ footer[role="contentinfo"] {
 
 .license__txt {
   font-size: inherit;
-}
-
-.support {
-  font-size: 14px;
 }
 
 form {
