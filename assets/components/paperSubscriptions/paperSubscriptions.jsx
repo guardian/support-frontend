@@ -162,7 +162,7 @@ function WeeklyBundle(props: {
   return (
     <SubscriptionBundle
       modifierClass="weekly"
-      heading="Guardian Weekly"
+      heading="Guardian&nbsp;Weekly"
       subheading={props.subheading || displayPrice('GuardianWeekly', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
