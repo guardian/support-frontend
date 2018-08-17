@@ -155,6 +155,7 @@ function WeeklyBundle(props: {
   countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
+  subheading: ?string,
   onClick: ClickEvent,
 }) {
 
@@ -162,7 +163,7 @@ function WeeklyBundle(props: {
     <SubscriptionBundle
       modifierClass="weekly"
       heading="Guardian Weekly"
-      subheading={displayPrice('GuardianWeekly', props.countryGroupId)}
+      subheading={props.subheading || displayPrice('GuardianWeekly', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -185,8 +186,11 @@ function WeeklyBundle(props: {
       ]}
     />
   );
-
 }
+
+WeeklyBundle.defaultProps = {
+  subheading: undefined,
+};
 
 export {
   PaperBundle,

@@ -99,6 +99,7 @@ function PremiumTier(props: {
     iOSUrl: string,
     androidUrl: string,
     headingSize: HeadingSize,
+    subheading: ?string,
     iOSOnClick: ClickEvent,
     androidOnClick: ClickEvent,
 }) {
@@ -107,7 +108,7 @@ function PremiumTier(props: {
     <SubscriptionBundle
       modifierClass="premium-tier"
       heading="Premium App"
-      subheading={displayPrice('PremiumTier', props.countryGroupId)}
+      subheading={props.subheading || displayPrice('PremiumTier', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -139,6 +140,10 @@ function PremiumTier(props: {
   );
 
 }
+
+PremiumTier.defaultProps = {
+  subheading: undefined,
+};
 
 function DailyEdition(props: {
   url: string,
@@ -180,6 +185,7 @@ function DigitalBundle(props: {
   countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
+  subheading: ?string,
   onClick: ClickEvent | null,
 }) {
 
@@ -198,7 +204,7 @@ function DigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
-      subheading={displayPrice('DigitalPack', props.countryGroupId)}
+      subheading={props.subheading || displayPrice('DigitalPack', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -223,6 +229,10 @@ function DigitalBundle(props: {
   );
 
 }
+
+DigitalBundle.defaultProps = {
+  subheading: undefined,
+};
 
 export {
   DigitalBundle,
