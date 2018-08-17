@@ -112,11 +112,11 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           }
         })
         .catch((e) => {
-          logInfo(`PaymentAPI Promise rejected: ${e.message}`);
+          logInfo(`GTM error: canMakePayment check failed while checking PaymentAPI status. Promise rejected: ${e.message}`);
           resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
-      logInfo(`PaymentAPI Request error: ${e.message}`);
+      logInfo(`GTM error: Get PaymentAPI Status failed wiht an error: ${e.message}`);
       resolve('PaymentRequestAPIError');
     }
   });
@@ -177,7 +177,7 @@ function pushToDataLayer(event: EventType, participations: Participations) {
         sendData(event, participations, paymentRequestApiStatus);
       })
       .catch((e) => {
-        logInfo(`Promise rejected: ${e.message}`);
+        logInfo(`GTM Error: Get PaymentAPIStatus failed due Promise Rejected: ${e.message}`);
         sendData(event, participations, 'PromiseRejected');
       });
   } catch (e) {
