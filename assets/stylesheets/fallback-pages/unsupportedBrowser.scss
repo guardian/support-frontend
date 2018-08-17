@@ -6,13 +6,13 @@
 // ----- Page-Specific Styles ----- //
 
 .unsupported-browser__header {
-  background-color: gu-colour(nav-background-colour);
+  background-color: gu-colour(nav-faded);
 
   .svg-guardian-logo {
     height: 100%;
   }
 
-  border-bottom: 1px solid gu-colour(nav-rule);
+  border-bottom: 1px solid gu-colour(nav-dark);
 }
 
 .unsupported-browser__header-link {
