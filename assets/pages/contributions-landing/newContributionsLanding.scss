@@ -1,7 +1,6 @@
-input::-webkit-inner-spin-button,
-details:not([open]) > :not(summary) {
-  display: none;
-}
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
 
 /*= CONTENT */
 .content {
@@ -61,13 +60,13 @@ form {
 }
     
 .form__radio-group--tabs .form__radio-group__item {
-  border-top: 1px solid $gu-colours(neutral-4);
+  border-top: 1px solid gu-colour(neutral-4);
   flex: 1;
   margin: 0 -10px;
 }
 
 .form__radio-group--tabs .form__radio-group__item + .form__radio-group__item {
-  border-left: 1px solid $gu-colours(neutral-4);
+  border-left: 1px solid gu-colour(neutral-4);
 }
 
 .form__radio-group--tabs .form__radio-group__input + .form__radio-group__label {
@@ -77,12 +76,12 @@ form {
 
 .form__radio-group--tabs .form__radio-group__input:checked + .form__radio-group__label {
   background: white;
-  color: $gu-colours(sport-garnett-media-main-1);
+  color: gu-colour(sport-garnett-media-main-1);
 }
         
 .form__radio-group--tabs .form__radio-group__input:not(:checked) + .form__radio-group__label {
-  background: $gu-colours(granett-neutral-3);
-  color: $gu-colours(granett-neutral-2);
+  background: gu-colour(garnett-neutral-3);
+  color: gu-colour(garnett-neutral-2);
 }
 
 .form__radio-group--pills .form__radio-group__list {
@@ -96,7 +95,7 @@ form {
 }
 
 .form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
-  border: solid 1px $gu-colours(sport-garnett-media-main-1);
+  border: solid 1px gu-colour(sport-garnett-media-main-1);
   border-radius: 25px;
   box-sizing: border-box;
   display: flex;
@@ -107,7 +106,7 @@ form {
 }
   
 .form__radio-group--pills .form__radio-group__input:checked + .form__radio-group__label {
-  background: $gu-colours(sport-garnett-media-main-1);
+  background: gu-colour(sport-garnett-media-main-1);
   color: #fff;
 }
 
@@ -117,7 +116,7 @@ form {
 
 .form__radio-group--buttons .form__radio-group__label {
   align-items: center;
-  border: 1px solid $gu-colours(neutral-4);
+  border: 1px solid gu-colour(neutral-4);
   border-radius: 20px;
   display: flex;
   margin-bottom: 8px;
@@ -125,7 +124,7 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label {
-  border-color: $gu-colours(sport-garnett-media-main-1);
+  border-color: gu-colour(sport-garnett-media-main-1);
   font-weight: bold;
 }
 
@@ -133,7 +132,7 @@ form {
   width: 8px;
   height: 8px;
   border-radius: 100%;
-  border-color: $gu-colours(granett-neutral-2);
+  border-color: gu-colour(garnett-neutral-2);
   display: inline-block;
   border-style: solid;
   border-width: 1px;
@@ -142,8 +141,8 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label:hover .radio-ui {
-  border-color: $gu-colours(sport-garnett-media-main-1);
-  box-shadow: 0 0 0 2px $gu-colours(live-garnett-sport2);
+  border-color: gu-colour(sport-garnett-media-main-1);
+  box-shadow: 0 0 0 2px gu-colour(live-garnett-sport2);
 }
 
 .form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label .radio-ui__icon {
@@ -151,9 +150,9 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label .radio-ui {
-  border-color: $gu-colours(sport-garnett-media-main-1);
+  border-color: gu-colour(sport-garnett-media-main-1);
   box-shadow: inset 0 0 0 1px #fff;
-  background: $gu-colours(sport-garnett-media-main-1);
+  background: gu-colour(sport-garnett-media-main-1);
 }
 
 .form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__label {
@@ -184,7 +183,7 @@ form {
   -webkit-appearance: none;
   appearance: none;
   background: white;
-  border: 1px solid $gu-colours(neutral-4);
+  border: 1px solid gu-colour(neutral-4);
   border-radius: 0;
   padding: 9px 10px 9px 38px;
   transition: box-shadow .2s ease-in-out;
@@ -195,7 +194,7 @@ form {
 }
 
 .form__input:focus {
-  box-shadow: 0 0 0 3px $gu-colours(sport-garnett-media-main-1);
+  box-shadow: 0 0 0 3px gu-colour(sport-garnett-media-main-1);
   outline: none;
 }
 
@@ -205,7 +204,7 @@ form {
 
 .form__input::placeholder,
 .form__placeholder {
-  color: $gu-colours(granett-neutral-2);
+  color: gu-colour(garnett-neutral-2);
 }
 
 .form__error {
@@ -224,7 +223,7 @@ form {
 }
 
 .form__submit__button {
-  background: $gu-colours(news-garnett-highlight);
+  background: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 20px;
   padding: 9px 20px;
@@ -258,7 +257,7 @@ form {
 .form__input-with-icon .form__icon {
   align-items: center; 
   display: flex;
-  fill: $gu-colours(granett-neutral-2);
+  fill: gu-colour(garnett-neutral-2);
   height: 40px;
   justify-content: center;
   left: 1px;
@@ -273,7 +272,7 @@ form {
 }
 
 .form__input-with-icon .form__input:focus ~ .form__icon {
-  fill: $gu-colours(sport-garnett-media-main-1);
+  fill: gu-colour(sport-garnett-media-main-1);
 }
 
 .icon {
