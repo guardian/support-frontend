@@ -21,7 +21,7 @@ header[role="banner"] {
   top: 24px;
 }
 
-.countries {
+.countryGroups {
   background: white;
   border: 1px solid #dcdcdc;
   font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
@@ -30,7 +30,7 @@ header[role="banner"] {
   width: 100%;
 }
 
-.countries summary {
+.countryGroups summary {
   align-items: center;
   color: #999;
   display: flex;
@@ -40,52 +40,52 @@ header[role="banner"] {
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
 }
 
-.countries:not([open]) > :not(summary) {
+.countryGroups:not([open]) > :not(summary) {
   display: none;
 }
 
-.countries__label {
+.countryGroups__label {
   flex: 1;
 }
 
-.countries .icon {
+.countryGroups .icon {
   text-align: center;
   width: 40px;
 }
 
-.countries .icon--world {
+.countryGroups .icon--world {
   padding: 0 13px;
 }
 
-.countries .icon__arrow-up {
+.countryGroups .icon__arrow-up {
   display: none;
 }
 
-.countries[open] .icon__arrow-up {
+.countryGroups[open] .icon__arrow-up {
   display: initial;
 }
 
-.countries[open] .icon__arrow-down {
+.countryGroups[open] .icon__arrow-down {
   display: none;
 }
 
-.countries summary:hover,
-.countries summary:focus {
+.countryGroups summary:hover,
+.countryGroups summary:focus {
   box-shadow: 0 0 0 3px #ffe500;
   color: inherit;
 }
 
-.countries summary::-webkit-details-marker {
+.countryGroups summary::-webkit-details-marker {
   display: none;
 }
 
-.countries__list {
+.countryGroups__list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.countries__item > a {
+.countryGroups__item > a {
   color: inherit;
   display: flex;
   padding: 0 40px;
@@ -93,13 +93,13 @@ header[role="banner"] {
   text-decoration: none;
 }
 
-.countries__item > a:hover,
-.countries__item > a:focus {
+.countryGroups__item > a:hover,
+.countryGroups__item > a:focus {
   background: #ffe500;
   font-weight: bold;
 }
 
-.countries__item .icon {
+.countryGroups__item .icon {
   margin-left: -40px;
 }
 
@@ -228,7 +228,7 @@ header[role="banner"] {
       grid-column: 9;
     }
 
-    .countries {
+    .countryGroups {
       grid-column: 2 / 8;
       grid-row: 1;
     }
