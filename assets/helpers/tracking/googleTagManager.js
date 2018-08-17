@@ -110,7 +110,7 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
             resolve('AvailableNotInUse');
           }
         })
-        .catch((e) => {
+        .catch(() => {
           resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
@@ -173,7 +173,7 @@ function pushToDataLayer(event: EventType, participations: Participations) {
       .then((paymentRequestApiStatus) => {
         sendData(event, participations, paymentRequestApiStatus);
       })
-      .catch((e) => {
+      .catch(() => {
         sendData(event, participations, 'PromiseRejected');
       });
   } catch (e) {
