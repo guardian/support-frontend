@@ -2,11 +2,17 @@
 
 // ----- Imports ----- //
 
+import { type OptimizeExperiments } from '../optimize';
+
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
+  optimizeToAcquisitionABTest,
+  acquisitionsWithOptimize,
+  type ReferrerAcquisitionData,
 } from '../acquisitions';
+
 
 // ----- Tests ----- //
 
@@ -93,4 +99,70 @@ describe('acquisitions', () => {
       expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0' });
     });
   });
+
+  describe('optimizeToAcquisitionABTest', () => {
+
+    it('should return an empty array in the presence of a empty object as its input', () => {
+      expect(optimizeToAcquisitionABTest({})).toEqual([]);
+    });
+
+    it('should return an array of AcquisitionAbTests appended with an Optimize tag', () => {
+
+      const optimizeExperiments: OptimizeExperiments = {
+        testOne: 'variantOne',
+        testTwo: 'variantTwo',
+        testThree: 'variantSeven',
+      };
+
+      const acquisitionABTests = optimizeToAcquisitionABTest(optimizeExperiments);
+
+      expect(acquisitionABTests.length).toBe(3);
+      expect(acquisitionABTests[0]).toEqual({ name: 'testOne$Optimize', variant: 'variantOne' });
+
+    });
+
+  });
+
+  describe('acquisitionsWithOptimize', () => {
+
+    it('should produce referrerAcquisitionData with optimize experiments', () => {
+
+      const acquisitionData: ReferrerAcquisitionData = {
+        campaignCode: 'Example',
+        referrerPageviewId: '123456',
+        referrerUrl: 'https://example.com',
+        componentId: 'exampleComponentId',
+        componentType: 'exampleComponentType',
+        source: 'exampleSource',
+        abTest: null,
+        abTests: [{
+          name: 'abTestOne',
+          variant: 'valueOne',
+        }],
+        queryParameters: [{ name: 'param1', value: 'value1' }, { name: 'param2', value: 'value2' }],
+      };
+
+      const experiments: OptimizeExperiments = {
+        testOne: 'variantOne',
+        testTwo: 'variantTwo',
+        testThree: 'variantSeven',
+      };
+
+      const updatedAcquisitionData = acquisitionsWithOptimize(acquisitionData, experiments);
+
+      expect(updatedAcquisitionData).toMatchSnapshot();
+      expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests.length).toBe(4);
+      expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests[0]).toEqual({
+        name: 'testOne$Optimize',
+        variant: 'variantOne',
+      });
+      expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests[3]).toEqual({
+        name: 'abTestOne',
+        variant: 'valueOne',
+      });
+
+    });
+
+  });
+
 });

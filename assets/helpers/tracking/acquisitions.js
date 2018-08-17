@@ -2,14 +2,15 @@
 
 // ----- Imports ----- //
 
-
 import * as ophan from 'ophan';
+
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import { type OptimizeExperiments } from './optimize';
 
 
 // ----- Types ----- //
@@ -65,6 +66,7 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 
 // ----- Campaigns ----- //
+
 const campaigns : {
   [string]: string[],
 } = {
@@ -253,6 +255,30 @@ function getAcquisition(abParticipations: Participations): ReferrerAcquisitionDa
 
 }
 
+// Appends all the experiment names (the keys) with '$Optimize' to avoid name
+// collision with native tests, and returns as array of AB tests.
+function optimizeToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
+
+  return Object.keys(opt).map(k => ({
+    name: `${k}$Optimize`,
+    variant: opt[k],
+  }));
+
+}
+
+// Merges native and Optimize tests, and stringifies the result.
+function acquisitionsWithOptimize(
+  rad: ReferrerAcquisitionData,
+  opt: OptimizeExperiments,
+): ReferrerAcquisitionData {
+
+  return {
+    ...rad,
+    abTests: optimizeToAcquisitionABTest(opt).concat(rad.abTests ? rad.abTests : []),
+  };
+
+}
+
 
 // ----- Exports ----- //
 
@@ -262,4 +288,6 @@ export {
   getOphanIds,
   participationsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
+  optimizeToAcquisitionABTest,
+  acquisitionsWithOptimize,
 };
