@@ -112,7 +112,7 @@ function PremiumTier(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The ad free, premium app, designed especially for your smartphone and tablet',
+          text: 'The ad-free, premium app, designed especially for your smartphone and tablet',
         },
       ]}
       gridImage={{
