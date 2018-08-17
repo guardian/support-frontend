@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 
 import Page from 'components/page/page';
@@ -94,18 +94,18 @@ const content = (
               </span>
             </summary>
             <ul className="countries__list">
-              {Object.values(countryGroups).map(g => (g === selectedCountry ? (
+              {(Object.values(countryGroups): any).map((g: CountryGroup) => (
                 <li className="countries__item">
                   <a href={`/${g.supportInternationalisationId}/contribute.react`}>
-                    <span className="icon">
-                      <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
-                    </span>
+                    {g === selectedCountry ? (
+                      <span className="icon">
+                        <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
+                      </span>
+                    ) : ''}
                     {g.name} ({currencies[g.currency].extendedGlyph})
                   </a>
                 </li>
-              ) : (
-                <li className="countries__item"><a href={`/${g.supportInternationalisationId}/contribute.react`}>{g.name} ({currencies[g.currency].extendedGlyph})</a></li>
-              )))}
+              ))}
             </ul>
           </details>
         </header>
