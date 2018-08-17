@@ -119,7 +119,7 @@ const content = (
             <ul className="support__menu">
               <li className="support__item"><a className="support__link" href="#">Help</a></li>
               <li className="support__item"><a className="support__link" href="#">Terms &amp; Conditions</a></li>
-              <li className="support__item"><a className="support__link" href="#">Contact us</a></li>
+              <li className="support__item"><a className="support__link" href="mailto:contribution.support@theguardian.com">Contact us</a></li>
               <li className="support__item"><a className="support__link" href="#">Privacy Policy</a></li>
               <li className="support__item"><a className="support__link" href="#">Report technical issue</a></li>
               <li className="support__item"><a className="support__link" href="#">Cookie Policy</a></li>
