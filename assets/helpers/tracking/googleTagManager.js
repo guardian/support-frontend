@@ -7,7 +7,6 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
-import { logInfo } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
 
 
@@ -112,11 +111,9 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
           }
         })
         .catch((e) => {
-          logInfo(`GTM error: canMakePayment check failed while checking PaymentAPI status. Promise rejected: ${e.message}`);
           resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
-      logInfo(`GTM error: Get PaymentAPI Status failed wiht an error: ${e.message}`);
       resolve('PaymentRequestAPIError');
     }
   });
@@ -177,7 +174,6 @@ function pushToDataLayer(event: EventType, participations: Participations) {
         sendData(event, participations, paymentRequestApiStatus);
       })
       .catch((e) => {
-        logInfo(`GTM Error: Get PaymentAPIStatus failed due Promise Rejected: ${e.message}`);
         sendData(event, participations, 'PromiseRejected');
       });
   } catch (e) {
