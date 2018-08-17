@@ -205,3 +205,8 @@
     }
   }
 }
+
+// As a test we are tweaking the layout of the US product bundles
+.component-international-subscriptions--us .component-double-heading__subheading {
+  font-size: 24px;
+}

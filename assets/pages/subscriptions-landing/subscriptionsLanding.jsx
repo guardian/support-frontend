@@ -14,7 +14,6 @@ import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 
 // React components connected to redux store
-import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -76,7 +75,6 @@ const content = (
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}
       />
-      <PatronsEventsContainer />
     </Page>
   </Provider>
 );
