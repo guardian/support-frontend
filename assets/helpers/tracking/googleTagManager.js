@@ -7,7 +7,6 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
-import { logInfo } from 'helpers/logger';
 import type { Participations } from 'helpers/abTests/abtest';
 
 
@@ -111,12 +110,10 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
             resolve('AvailableNotInUse');
           }
         })
-        .catch((e) => {
-          logInfo(`PaymentAPI Promise rejected: ${e.message}`);
+        .catch(() => {
           resolve('PaymentApiPromiseRejected');
         });
     } catch (e) {
-      logInfo(`PaymentAPI Request error: ${e.message}`);
       resolve('PaymentRequestAPIError');
     }
   });
@@ -176,8 +173,7 @@ function pushToDataLayer(event: EventType, participations: Participations) {
       .then((paymentRequestApiStatus) => {
         sendData(event, participations, paymentRequestApiStatus);
       })
-      .catch((e) => {
-        logInfo(`Promise rejected: ${e.message}`);
+      .catch(() => {
         sendData(event, participations, 'PromiseRejected');
       });
   } catch (e) {
