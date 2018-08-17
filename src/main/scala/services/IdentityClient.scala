@@ -32,31 +32,42 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
     decode[A](response.body).leftMap { _ =>
       // If decoding A fails, it might be that the result was an API error instead.
       // So try to decode the result as an API error, finally creating an UnknownJsonFormat error if this fails too.
-      decode[ApiError](response.body).fold(Error.fromCirceError, identity)
+      decode[ApiError](response.body).fold(Error.fromCirceError(response.body, _), identity)
     }
 
-  private def executeRequest[A : Decoder](request: WSRequest): Result[A] = {
+  private def executeRequest[A : Decoder](request: WSRequest): EitherT[Future, Error, A] = {
     logger.info(s"Identity request: $request")
-    request.execute().map(resp => {
-      logger.info(s"Identity response: $resp")
-      resp
-    }).attemptT.leftMap(Error.fromThrowable).subflatMap(decodeIdentityClientResponse[A])
+    request.execute()
+      .attemptT
+      .bimap(
+        Error.fromThrowable,
+        resp => {
+          logger.info(s"Identity response: $resp")
+          resp
+        }
+      )
+      .subflatMap(decodeIdentityClientResponse[A])
   }
 
-  def getUser(emailAddress: String): Result[UserResponse] =
+  def getUser(email: String): Result[UserResponse] =
     executeRequest[UserResponse] {
       requestForPath("/user")
         .withMethod("GET")
-        .withQueryStringParameters("emailAddress" -> emailAddress)
+        .withQueryStringParameters("emailAddress" -> email)
     }
+    // Would be DRYER to have a generic execute action method, which given an action, builds the request, executes it,
+    // and then left maps the error into a contextual error (able to do this last step as the action is known).
+    // However, this would require additional re-factorisation which is getting deferred to another PR.
+    .leftMap(error => ContextualError(error, GetUser(email)))
 
-  def createGuestAccount(email: String): Result[GuestRegistrationResponse] = {
+  def createGuestAccount(email: String): Result[GuestRegistrationResponse] =
     executeRequest[GuestRegistrationResponse] {
       requestForPath("/guest")
         .withMethod("POST")
         .withBody(CreateGuestAccountRequestBody.fromEmail(email))
     }
-  }
+    // See comment on getUser() method.
+    .leftMap(error => ContextualError(error, CreateGuestAccount(email)))
 }
 
 
@@ -127,13 +138,13 @@ object IdentityClient extends StrictLogging {
     override def getMessage: String = this match {
       case ApiError(errors) => errors.map(_.message).mkString(" and ")
       case UnderlyingError(err) => err.getMessage
-      case UnknownJsonFormat(err) => err.getMessage
+      case UnknownJsonFormat(json, err) => s"unable to decode json: $json - ${err.getMessage}"
     }
   }
 
   object Error {
     def fromThrowable(err: Throwable): Error = UnderlyingError(err)
-    def fromCirceError(err: CirceError): Error = UnknownJsonFormat(err)
+    def fromCirceError(json: String, err: CirceError): Error = UnknownJsonFormat(json, err)
     def fromApiError(err: ApiError): Error = err
   }
 
@@ -164,7 +175,17 @@ object IdentityClient extends StrictLogging {
 
   case class UnderlyingError(err: Throwable) extends Error
 
-  case class UnknownJsonFormat(err: CirceError) extends Error
+  case class UnknownJsonFormat(json: String, err: CirceError) extends Error
 
-  type Result[A] = EitherT[Future, IdentityClient.Error, A]
+  sealed trait Action
+  case class GetUser(email: String) extends Action
+  case class CreateGuestAccount(email: String) extends Action
+
+  // Allows for the creation of a useful monad M[A] = EitherT[Future, ContextualError, A]
+  // which is able to provide information on when the flow has failed.
+  case class ContextualError(error: Error, action: Action) extends Exception {
+    override def getMessage: String = s"error executing identity client action $action - ${error.getMessage}"
+  }
+
+  type Result[A] = EitherT[Future, IdentityClient.ContextualError, A]
 }

@@ -7,7 +7,7 @@ import play.api.libs.ws.WSClient
 
 import conf.IdentityConfig
 import model.DefaultThreadPool
-import services.IdentityClient.ApiError
+import services.IdentityClient.{ApiError, ContextualError}
 
 trait IdentityService extends StrictLogging {
 
@@ -31,7 +31,7 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
     client.getUser(email).map(response => Option(response.user.id)).recover {
       // If the API error was that the result was not found,
       // then we can confidently say there is no identity id for the given email address.
-      case err: ApiError if err.isNotFound => Option.empty[Long]
+      case ContextualError(error: ApiError, _) if error.isNotFound => Option.empty[Long]
     }
 
   override def createGuestAccount(email: String): IdentityClient.Result[Long] =
@@ -42,14 +42,11 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
     }
 
   override def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[Long] =
-    (for {
+    for {
       preExistingIdentityId <- getIdentityIdFromEmail(email)
       // pure lifts the identity id into the monadic context.
       identityId <- preExistingIdentityId.fold(createGuestAccount(email))(Monad[IdentityClient.Result].pure(_))
-    } yield identityId).leftMap { err =>
-      logger.error("error getting or creating identity id", err)
-      err
-    }
+    } yield identityId
 }
 
 object IdentityService {

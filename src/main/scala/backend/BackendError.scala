@@ -25,7 +25,7 @@ sealed abstract class BackendError extends Exception {
 
 object BackendError {
   final case class Database(error: DatabaseService.Error) extends BackendError
-  final case class IdentityServiceError(error: IdentityClient.Error) extends BackendError
+  final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class Ophan(error: OphanServiceError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
@@ -46,7 +46,7 @@ object BackendError {
     })
   }
 
-  def fromIdentityError(err: IdentityClient.Error): BackendError = IdentityServiceError(err)
+  def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
   def fromDatabaseError(err: DatabaseService.Error): BackendError = Database(err)
   def fromOphanError(err: OphanServiceError): BackendError = Ophan(err)
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)

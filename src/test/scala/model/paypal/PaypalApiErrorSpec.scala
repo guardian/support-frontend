@@ -1,12 +1,10 @@
 package model.paypal
 
-import backend.PaypalBackend
 import com.paypal.api.payments.{Error, ErrorDetails}
 import com.paypal.base.rest.PayPalRESTException
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
-import services.CloudWatchService
 
 import scala.collection.JavaConverters._
 

@@ -35,7 +35,12 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   )
   val ophanError = OphanServiceError.BuildError("Ophan error response")
   val dbError = DatabaseService.Error("DB error response", None)
-  val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
+
+  val identityError = IdentityClient.ContextualError(
+    IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
+    IdentityClient.GetUser("test@theguardian.com")
+  )
+
   val paymentError = PaypalApiError.fromString("Error response")
   val backendPaymentError = BackendError.fromPaypalAPIError(paymentError)
   val backendDbError = BackendError.fromDatabaseError(dbError)
@@ -68,9 +73,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val identityResponse: EitherT[Future, IdentityClient.Error, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.Error, Long] =
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))

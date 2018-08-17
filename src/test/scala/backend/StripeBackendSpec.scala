@@ -33,7 +33,12 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
   val ophanError = OphanServiceError.BuildError("Ophan error response")
   val dbError = DatabaseService.Error("DB error response", None)
-  val identityError = IdentityClient.Error.fromThrowable(new Exception("Identity error response"))
+
+  val identityError = IdentityClient.ContextualError(
+    IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
+    IdentityClient.GetUser("test@theguardian.com")
+  )
+
   val paymentError = PaypalApiError.fromString("Error response")
   val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"))
   val backendError = BackendError.fromStripeApiError(stripeApiError)
@@ -53,9 +58,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, OphanServiceError, AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val identityResponse: EitherT[Future, IdentityClient.Error, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.Error, Long] =
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))

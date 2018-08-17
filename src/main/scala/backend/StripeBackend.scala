@@ -45,10 +45,10 @@ class StripeBackend(
           postPaymentTasks(email, data, charge, countrySubdivisionCode)
             .leftMap { err =>
               cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
-              logger.error(s"Didn't complete post-payment tasks after creating Stripe charge. " +
-                s"Charge: ${charge.toString}. " +
-                s"Error(s): ${err.getMessage}")
-
+              logger.error(
+                s"didn't complete post-payment tasks after creating Stripe charge - ${charge.toString}",
+                err
+              )
               err
             }
 
@@ -64,6 +64,7 @@ class StripeBackend(
   }
 
   private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
+
     val trackContributionResult = {
       getOrCreateIdentityIdFromEmail(email)
         .flatMap(identityId => trackContribution(charge, data, Option(identityId), countrySubdivisionCode))
@@ -94,11 +95,7 @@ class StripeBackend(
   // Convert the result of the identity id operation,
   // into the monad used by the for comprehension in the createCharge() method.
   private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
-    identityService.getOrCreateIdentityIdFromEmail(email)
-      .leftMap { err =>
-        logger.error("Error getting identityId", err.getMessage)
-        BackendError.fromIdentityError(err)
-      }
+    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(BackendError.fromIdentityError)
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
     // log so that if something goes wrong we can reconstruct the missing data from the logs
