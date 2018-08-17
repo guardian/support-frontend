@@ -142,7 +142,7 @@ function PremiumTier(props: {
 }
 
 PremiumTier.defaultProps = {
-  subheading: undefined,
+  subheading: null,
 };
 
 function DailyEdition(props: {
@@ -231,7 +231,7 @@ function DigitalBundle(props: {
 }
 
 DigitalBundle.defaultProps = {
-  subheading: undefined,
+  subheading: null,
 };
 
 export {

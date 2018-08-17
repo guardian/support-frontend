@@ -19,6 +19,7 @@ import { WeeklyBundle } from 'components/paperSubscriptions/paperSubscriptions';
 import { type HeadingSize } from 'components/heading/heading';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
@@ -57,7 +58,11 @@ export default function InternationalSubscriptions(props: PropTypes) {
 
   return (
     <section id={props.sectionId}>
-      <div className={`component-international-subscriptions component-international-subscriptions-${countryGroups[props.countryGroupId].supportInternationalisationId}`}>
+      <div className={classNameWithModifiers(
+        'component-international-subscriptions',
+        [countryGroups[props.countryGroupId].supportInternationalisationId],
+      )}
+      >
         <PageSection
           heading="Subscribe"
           modifierClass="international-subscriptions"

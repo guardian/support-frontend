@@ -189,7 +189,7 @@ function WeeklyBundle(props: {
 }
 
 WeeklyBundle.defaultProps = {
-  subheading: undefined,
+  subheading: null,
 };
 
 export {
