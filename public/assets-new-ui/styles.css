@@ -5,11 +5,6 @@ body {
   padding: 0;
 }
 
-input::-webkit-inner-spin-button,
-details:not([open]) > :not(summary) {
-  display: none;
-}
-
 /*= HEADER */
 
 header[role="banner"] {
@@ -43,6 +38,10 @@ header[role="banner"] {
   height: 40px;
   outline: none;
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+}
+
+.countries:not([open]) > :not(summary) {
+  display: none;
 }
 
 .countries__label {
