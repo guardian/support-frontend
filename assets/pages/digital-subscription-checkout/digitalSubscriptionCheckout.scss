@@ -89,7 +89,7 @@
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
-    font-family: $gu-egyptian-web;
+    font-family: $gu-headline;
 
     @include mq($from: tablet) {
       font-size: 28px;
@@ -105,7 +105,7 @@
   .apps-section__copy {
     font-size: 14px;
     line-height: 1.43;
-    font-family: $gu-egyptian-web;
+    font-family: $gu-headline;
     color: gu-colour(media-garnett-main-1);
     margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
 
