@@ -14,6 +14,7 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
 import { type RegularContributionType } from 'helpers/contributions';
+import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus } from './components/regularContributionsPayment';
@@ -37,7 +38,8 @@ export type CombinedState = {
   regularContrib: State,
   user: UserState,
   csrf: CsrfState,
-  directDebit: DirectDebitState
+  directDebit: DirectDebitState,
+  marketingConsent: MarketingConsentState,
 };
 
 export type PageState = {
