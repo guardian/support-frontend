@@ -67,7 +67,7 @@ function getPromoCode(product: SubscriptionProduct, defaultCode: string): string
 
 function getIntcmp(product: SubscriptionProduct, defaultIntcmp: string): string {
   if (inOfferPeriod(product)) {
-    return promoCodes[product].intcmp;// || defaultIntcmp;
+    return promoCodes[product].intcmp || defaultIntcmp;
   }
   return defaultIntcmp;
 }

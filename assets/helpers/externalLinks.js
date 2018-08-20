@@ -53,7 +53,7 @@ const defaultPromos: PromoCodes = {
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
 };
 
-const defaultIntcmp: Intcmps = {
+const defaultIntcmps: Intcmps = {
   DigitalPack: getIntcmp('DigitalPack', defaultIntCmp),
   Paper: getIntcmp('Paper', defaultIntCmp),
   PaperAndDigital: getIntcmp('PaperAndDigital', defaultIntCmp),
@@ -176,13 +176,13 @@ function getSubsLinks(
     return buildSubsUrls(
       countryGroupId,
       customPromos[campaign],
-      defaultIntcmp,
+      defaultIntcmps,
       otherQueryParams,
       referrerAcquisitionData,
     );
   }
 
-  return buildSubsUrls(countryGroupId, defaultPromos, defaultIntcmp, otherQueryParams, referrerAcquisitionData);
+  return buildSubsUrls(countryGroupId, defaultPromos, defaultIntcmps, otherQueryParams, referrerAcquisitionData);
 
 }
 
