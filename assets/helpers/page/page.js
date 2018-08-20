@@ -53,12 +53,6 @@ export type CommonState = {
   internationalisation: Internationalisation,
 };
 
-export type PreloadedState = {
-  campaign?: $PropertyType<CommonState, 'campaign'>,
-  referrerAcquisitionData?: $PropertyType<CommonState, 'referrerAcquisitionData'>,
-  abParticipations?: $PropertyType<CommonState, 'abParticipations'>,
-};
-
 
 // ----- Functions ----- //
 
@@ -81,7 +75,6 @@ function analyticsInitialisation(participations: Participations): void {
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
-  preloadedState: ?PreloadedState = {},
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
   currencyId: IsoCurrency,
@@ -96,40 +89,39 @@ function buildInitialState(
     currencyId,
   };
 
-  return Object.assign({}, {
+  return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
     internationalisation,
     abParticipations,
     switches,
-  }, preloadedState);
+  };
 
 }
 
 // Sets up the common reducer with its initial state.
 function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
 
-  function commonReducer(
+  return function commonReducer(
     state?: CommonState = initialState,
     action: Action,
   ): CommonState {
-    const { internationalisation } = state;
+
     switch (action.type) {
+
       case 'SET_COUNTRY':
-        internationalisation.countryId = action.country;
-        return Object.assign({}, state, { internationalisation });
-      case 'SET_COUNTRY_GROUP':
-        internationalisation.countryGroupId = action.countryGroup;
-        internationalisation.currencyId = detectCurrency(action.countryGroup);
-        internationalisation.countryId = detectCountry(action.countryGroup);
-        return Object.assign({}, state, { internationalisation });
+        return {
+          ...state,
+          internationalisation: { ...state.internationalisation, countryId: action.country },
+        };
+
       default:
         return state;
     }
-  }
 
-  return commonReducer;
+  };
+
 }
 
 // For pages that don't need Redux.
@@ -160,7 +152,6 @@ function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undef
 function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
-  preloadedState: ?PreloadedState = null,
 ): Store<*, *, *> {
 
   const countryGroupId: CountryGroupId = detectCountryGroup();
@@ -172,7 +163,6 @@ function init<S, A>(
 
   const initialState: CommonState = buildInitialState(
     participations,
-    preloadedState,
     countryGroupId,
     countryId,
     currencyId,
