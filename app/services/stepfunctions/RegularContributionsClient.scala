@@ -129,8 +129,6 @@ class RegularContributionsClient(
 
 object StepFunctionExecutionStatus {
 
-  case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
-
   def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], stateWrapper: StateWrapper, trackingUri: String): StatusResponse = {
 
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
