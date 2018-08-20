@@ -11,6 +11,8 @@ import { type UserFormFieldAttribute, emailRegexPattern, shouldShowError } from 
 
 type PropTypes = {
   email: UserFormFieldAttribute,
+  setValue: (string) => void,
+  setShouldValidate: () => void,
   isSignedIn: boolean,
 };
 
@@ -39,8 +41,8 @@ const EmailFormField = (props: PropTypes) => {
         value={emailValue}
         labelText="Email"
         placeholder="Email"
-        onChange={props.email.setValue}
-        onBlur={props.email.setShouldValidate}
+        onChange={props.setValue}
+        onBlur={props.setShouldValidate}
         modifierClasses={modifierClass}
         type="email"
         pattern={emailRegexPattern}

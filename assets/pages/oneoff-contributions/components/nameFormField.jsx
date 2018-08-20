@@ -16,6 +16,8 @@ import { type Action as CheckoutFormAction, setFullNameShouldValidate } from './
 
 type PropTypes = {
   name: UserFormFieldAttribute,
+  setName: (string) => void,
+  set
 };
 
 

@@ -22,8 +22,6 @@ export function emptyInputField(input: ?string): boolean {
 export type UserFormFieldAttribute = {
   value: string,
   shouldValidate: boolean,
-  setShouldValidate: () => void,
-  setValue: (string) => void,
   isValid: boolean,
 }
 

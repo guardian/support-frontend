@@ -44,18 +44,15 @@ type PropTypes = {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  const firstNameFormfield = {
-    value: state.page.user.firstName,
-    ...state.page.checkoutForm.firstName,
-  };
-  const lastNameFormField = {
-    value: state.page.user.lastName,
-    ...state.page.checkoutForm.lastName,
-  };
+
+  const firstNameValue = state.page.user.firstName;
+  const lastNameValue = state.page.user.lastName;
 
   return {
-    stateFirstName: firstNameFormfield,
-    stateLastName: lastNameFormField,
+    firstName: firstNameValue,
+    showFirstNameError: state.page.checkoutForm.firstName.shouldValidate && formFieldError(firstNameValue, true),
+    lastName: lastNameValue,
+    showLastNameError: state.page.checkoutForm.lastName.shouldValidate && formFieldError(lastNameValue, true),
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
   };
@@ -71,46 +68,21 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | Checkou
     countryUpdate: (value: IsoCountry) => {
       dispatch(setCountry(value));
     },
-    firstNameActions: {
-      setShouldValidate: () => {
-        dispatch(setFirstNameShouldValidate());
-      },
-      setValue: (firstName: string) => {
-        dispatch(setFirstName(firstName));
-      },
+    setFirstNameShouldValidate: () => {
+      dispatch(setFirstNameShouldValidate());
     },
-    lastNameActions: {
-      setShouldValidate: () => {
-        dispatch(setLastNameShouldValidate());
-      },
-      setValue: (lastName: string) => {
-        dispatch(setLastName(lastName));
-      },
+    setFirstName: (firstName: string) => {
+      dispatch(setFirstName(firstName));
+    },
+    setLastNameShouldValidate: () => {
+      dispatch(setLastNameShouldValidate());
+    },
+    setLastName: (lastName: string) => {
+      dispatch(setLastName(lastName));
     },
   };
 }
 
-function mergeProps(stateProps, dispatchProps) {
-
-  const firstName: UserFormFieldAttribute = {
-    ...stateProps.stateFirstName,
-    ...dispatchProps.firstNameActions,
-    isValid: formFieldError(stateProps.stateFirstName.value, true),
-  };
-
-  const lastName: UserFormFieldAttribute = {
-    ...stateProps.stateLastName,
-    ...dispatchProps.lastNameActions,
-    isValid: formFieldError(stateProps.stateLastName.value, true),
-  };
-
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    firstName,
-    lastName,
-  };
-}
 
 // ----- Functions ----- //
 
@@ -169,12 +141,10 @@ function countriesDropdown(
 
 function NameForm(props: PropTypes) {
 
-  const showFirstNameError = shouldShowError(props.firstName);
-  const showLastNameError = shouldShowError(props.lastName);
-  const firstNameModifier = showFirstNameError
+  const firstNameModifier = props.showFirstNameError
     ? ['first-name', 'error']
     : ['first-name'];
-  const lastNameModifier = showLastNameError
+  const lastNameModifier = props.showLastNameError
     ? ['last-name', 'error']
     : ['last-name'];
 
@@ -185,14 +155,14 @@ function NameForm(props: PropTypes) {
         id="first-name"
         labelText="First name"
         placeholder="First name"
-        value={props.firstName.value}
-        onChange={props.firstName.setValue}
-        onBlur={props.firstName.setShouldValidate}
+        value={props.firstName}
+        onChange={props.setFirstName}
+        onBlur={props.setFirstNameShouldValidate}
         modifierClasses={firstNameModifier}
         required
       />
       <ErrorMessage
-        showError={showFirstNameError}
+        showError={props.showFirstNameError}
         message="Please enter a first name."
       />
       <TextInput
@@ -200,13 +170,13 @@ function NameForm(props: PropTypes) {
         labelText="Last name"
         placeholder="Last name"
         value={props.lastName.value}
-        onChange={props.lastName.setValue}
-        onBlur={props.lastName.setShouldValidate}
+        onChange={props.setLastName}
+        onBlur={props.setLastNameShouldValidate}
         modifierClasses={lastNameModifier}
         required
       />
       <ErrorMessage
-        showError={showLastNameError}
+        showError={props.showLastNameError}
         message="Please enter a last name."
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
@@ -217,4 +187,4 @@ function NameForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(NameForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NameForm);
