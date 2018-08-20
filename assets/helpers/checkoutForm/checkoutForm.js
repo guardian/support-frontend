@@ -8,9 +8,9 @@
 // src/main/scala/play/api/data/validation/Validation.scala#L80
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
-export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
+export const emailRegexPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-export function patternIsValid(value: string, pattern: string) {
+export function patternIsValid(value: string, pattern: RegExp): boolean {
   const regex = new RegExp(pattern);
   return regex.test(value);
 }
@@ -25,21 +25,18 @@ export type UserFormFieldAttribute = {
   isValid: boolean,
 }
 
-export const defaultUserFormFieldAttribute = {
-  value: '',
-  shouldValidate: false,
-  setShouldValidate: () => {},
-  setValue: () => {},
-  showError: false,
-};
-
-
-export function shouldShowError(field: UserFormFieldAttribute) {
-  return field.shouldValidate && field.isValid;
+export function shouldShowError(field: UserFormFieldAttribute): boolean {
+  return field.shouldValidate && !field.isValid;
 }
 
-export function formFieldError(value: string, required: boolean, pattern: ?string) {
-  const emptyFieldError = required && emptyInputField(value);
-  const patternMatchError = pattern && !patternIsValid(value, pattern);
-  return emptyFieldError || !!patternMatchError;
+export type formFieldIsValidParameters = {
+  value: string,
+  required: boolean,
+  pattern: RegExp
+}
+
+export function formFieldIsValid(params: formFieldIsValidParameters): boolean {
+  const emptyFieldError = params.required && emptyInputField(params.value);
+  const patternMatchError = !patternIsValid(params.value, params.pattern);
+  return !emptyFieldError && !patternMatchError;
 }

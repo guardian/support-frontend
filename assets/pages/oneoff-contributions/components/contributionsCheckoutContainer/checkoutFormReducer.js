@@ -1,6 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
+import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { type Action } from './checkoutFormActions';
 
 // ----- Types ----- //
@@ -8,6 +9,8 @@ import { type Action } from './checkoutFormActions';
 
 export type CheckoutFormAttribute = {
   shouldValidate: boolean,
+  required: boolean,
+  pattern: RegExp,
 }
 
 export type OneOffContributionsCheckoutFormState = {
@@ -18,8 +21,16 @@ export type OneOffContributionsCheckoutFormState = {
 // ----- Setup ----- //
 
 const initialState: OneOffContributionsCheckoutFormState = {
-  email: { shouldValidate: false },
-  fullName: { shouldValidate: false },
+  email: {
+    shouldValidate: false,
+    required: true,
+    pattern: emailRegexPattern,
+  },
+  fullName: {
+    shouldValidate: false,
+    required: true,
+    pattern: /.*/,
+  },
 };
 
 
@@ -32,10 +43,10 @@ function checkoutFormReducer(
 
   switch (action.type) {
     case 'SET_EMAIL_SHOULD_VALIDATE':
-      return { ...state, email: { shouldValidate: true } };
+      return { ...state, email: { ...state.email, shouldValidate: true } };
 
     case 'SET_FULL_NAME_SHOULD_VALIDATE':
-      return { ...state, fullName: { shouldValidate: true } };
+      return { ...state, fullName: { ...state.fullName, shouldValidate: true } };
 
     default:
       return state;

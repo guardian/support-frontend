@@ -25,13 +25,14 @@ type PropTypes = {|
   callback: (token: string) => Promise<*>,
   closeHandler: () => void,
   currencyId: IsoCurrency,
-  email: UserFormFieldAttribute,
+  email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  canOpen: () => boolean,
   onClick: () => void,
+  canOpen: () => boolean,
   switchStatus: Status,
   disable: boolean,
+  formFields: Array<UserFormFieldAttribute>,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -68,7 +69,7 @@ function Button(props: PropTypes) {
       props.callback(testTokenId);
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
-      openDialogBox(props.amount, props.email.value);
+      openDialogBox(props.amount, props.email);
     }
     props.onClick();
 
@@ -98,8 +99,9 @@ function Button(props: PropTypes) {
 StripePopUpButton.defaultProps = {
   closeHandler: () => {},
   canOpen: () => true,
-  onClick: () => {},
+  onClick: () => undefined,
   switchStatus: 'On',
+  formFields: [],
 };
 
 

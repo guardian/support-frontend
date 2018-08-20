@@ -20,7 +20,7 @@ import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type UserFormFieldAttribute, emailRegexPattern, formFieldError } from 'helpers/checkoutForm/checkoutForm';
+import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
 
@@ -31,7 +31,7 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 
 type PropTypes = {|
   dispatch: Dispatch<*>,
-  email: UserFormFieldAttribute,
+  email: string,
   disable: boolean,
   error: ?string,
   isTestUser: boolean,
@@ -155,15 +155,30 @@ function RegularContributionsPayment(props: PropTypes, context) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
-  const { firstName, lastName, email } = state.page.user;
+
+  const firstName = {
+    value: state.page.user.firstName,
+    ...state.page.checkoutForm.firstName,
+  };
+
+  const lastName = {
+    value: state.page.user.lastName,
+    ...state.page.checkoutForm.lastName,
+  };
+
+  const email = {
+    value: state.page.user.email,
+    ...state.page.checkoutForm.email,
+  };
+
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     disable:
-      formFieldError(firstName, true)
-      || formFieldError(lastName, true)
-      || formFieldError(email, true, emailRegexPattern),
+      !formFieldIsValid(firstName)
+      || !formFieldIsValid(lastName)
+      || !formFieldIsValid(email),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,

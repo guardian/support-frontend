@@ -1,6 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
+import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { type Action } from './checkoutFormActions';
 
 // ----- Types ----- //
@@ -8,6 +9,8 @@ import { type Action } from './checkoutFormActions';
 
 export type CheckoutFormAttribute = {
   shouldValidate: boolean,
+  required: boolean,
+  pattern: RegExp,
 }
 
 export type RegularContributionsCheckoutFormState = {
@@ -19,9 +22,21 @@ export type RegularContributionsCheckoutFormState = {
 // ----- Setup ----- //
 
 const initialState: RegularContributionsCheckoutFormState = {
-  email: { shouldValidate: false },
-  firstName: { shouldValidate: false },
-  lastName: { shouldValidate: false },
+  email: {
+    shouldValidate: false,
+    required: true,
+    pattern: emailRegexPattern,
+  },
+  firstName: {
+    shouldValidate: false,
+    required: true,
+    pattern: /.*/,
+  },
+  lastName: {
+    shouldValidate: false,
+    required: true,
+    pattern: /.*/,
+  },
 };
 
 
@@ -34,13 +49,13 @@ function checkoutFormReducer(
 
   switch (action.type) {
     case 'SET_FIRST_NAME_SHOULD_VALIDATE':
-      return { ...state, firstName: { shouldValidate: true } };
+      return { ...state, firstName: { ...state.firstName, shouldValidate: true } };
 
     case 'SET_LAST_NAME_SHOULD_VALIDATE':
-      return { ...state, lastName: { shouldValidate: true } };
+      return { ...state, lastName: { ...state.lastName, shouldValidate: true } };
 
     case 'SET_EMAIL_SHOULD_VALIDATE':
-      return { ...state, email: { shouldValidate: true } };
+      return { ...state, email: { ...state.email, shouldValidate: true } };
 
     default:
       return state;

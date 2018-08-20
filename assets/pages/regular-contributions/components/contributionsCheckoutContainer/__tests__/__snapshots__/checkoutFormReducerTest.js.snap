@@ -3,12 +3,18 @@
 exports[`user reducer tests should return the initial state 1`] = `
 Object {
   "email": Object {
+    "pattern": /\\^\\[a-zA-Z0-9\\.!#\\$%&'\\*\\+\\\\/=\\?\\^_\`\\{\\|\\}~-\\]\\+@\\[a-zA-Z0-9\\]\\(\\?:\\[a-zA-Z0-9-\\]\\{0,61\\}\\[a-zA-Z0-9\\]\\)\\?\\(\\?:\\\\\\.\\[a-zA-Z0-9\\]\\(\\?:\\[a-zA-Z0-9-\\]\\{0,61\\}\\[a-zA-Z0-9\\]\\)\\?\\)\\+\\$/,
+    "required": true,
     "shouldValidate": false,
   },
   "firstName": Object {
+    "pattern": /\\.\\*/,
+    "required": true,
     "shouldValidate": false,
   },
   "lastName": Object {
+    "pattern": /\\.\\*/,
+    "required": true,
     "shouldValidate": false,
   },
 }
