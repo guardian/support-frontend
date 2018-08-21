@@ -35,6 +35,7 @@ class StripeBackend(
     stripeService.createCharge(data)
       .bimap(
         err => {
+          logger.error(s"unable to create Stripe charge ($data)", err)
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         },

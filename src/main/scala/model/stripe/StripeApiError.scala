@@ -27,12 +27,12 @@ object StripeApiError {
 
   def fromThrowable(err: Throwable): StripeApiError = {
     err match {
-      case e: StripeException => fromException(e)
+      case e: StripeException => fromStripeException(e)
       case _ => fromString(err.getMessage)
     }
   }
 
-  def fromException(err: StripeException): StripeApiError = {
+  def fromStripeException(err: StripeException): StripeApiError = {
     val exceptionType: Option[String] = {
       condOpt(err) {
         case _: APIConnectionException => "APIConnectionException"

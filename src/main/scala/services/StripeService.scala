@@ -41,12 +41,9 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       Future(Charge.create(getChargeParams(data), requestOptions))
         .attemptT
         .bimap(
-          err => {
-            logger.error("unable to create Stripe charge", err)
-            StripeApiError.fromThrowable(err)
-          },
+          StripeApiError.fromThrowable,
           charge => {
-            logger.info("Stripe charge created")
+            logger.info(s"Stripe charge with id ${charge.getId} created")
             charge
           }
         )

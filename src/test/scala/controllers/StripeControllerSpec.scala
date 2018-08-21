@@ -45,7 +45,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val stripeChargeSuccessMock: StripeChargeSuccess = StripeChargeSuccess.fromCharge(mockCharge)
 
   val stripeServiceResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
-    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromException)
+    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)
 
   val stripeServiceResponseError: EitherT[Future, StripeApiError, StripeChargeSuccess] =
     EitherT.left(Future.successful(StripeApiError.fromThrowable(new Exception("error message"))))
