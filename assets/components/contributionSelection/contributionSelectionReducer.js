@@ -35,7 +35,6 @@ export type State = {
 
 // Returns a countryGroupId-specific initial state for the reducer.
 function getInitialState(countryGroupId: CountryGroupId): State {
-
   return {
     contributionType: 'MONTHLY',
     oneOffAmount: config[countryGroupId].ONE_OFF.default.toString(),
@@ -45,15 +44,14 @@ function getInitialState(countryGroupId: CountryGroupId): State {
     isCustomAmount: false,
     error: null,
   };
-
 }
 
 // Changes the amount of the currently selected type of contribution.
-function updatePredefinedAmount(state: State, newAmount: string): State {
+function updatePredefinedAmount(state, contributionType: ContributionType, newAmount: string): State {
 
   const resetCustom = { isCustomAmount: false, error: null };
 
-  switch (state.contributionType) {
+  switch (contributionType) {
     case 'ONE_OFF':
       return { ...state, ...resetCustom, oneOffAmount: newAmount };
     case 'MONTHLY':
@@ -154,7 +152,11 @@ function contributionSelectionReducerFor(scope: string, countryGroupId: CountryG
         };
 
       case 'SET_AMOUNT':
-        return updatePredefinedAmount(state, action.amount);
+        return updatePredefinedAmount(state, state.contributionType, action.amount);
+
+      case 'SET_AMOUNT_FOR_CONTRIBUTION_TYPE':
+        return updatePredefinedAmount(state, action.contributionType, action.amount);
+
       case 'SET_CUSTOM_AMOUNT':
 
         return {

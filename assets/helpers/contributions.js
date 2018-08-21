@@ -10,7 +10,7 @@ import { spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -62,6 +62,7 @@ const numbersInWords = {
   '166': 'one hundred and sixty six',
   '250': 'two hundred and fifty',
   '500': 'five hundred',
+  '750': 'seven hundred and fifty',
   '2000': 'two thousand',
   '16000': 'sixteen thousand',
 };
@@ -180,14 +181,52 @@ const defaultMonthlyAmount = [
   { value: '30', spoken: numbersInWords['30'] },
 ];
 
-const defaultAnnualAmount = [
+const annualAmountLow = [
   { value: '25', spoken: numbersInWords['25'] },
   { value: '50', spoken: numbersInWords['50'] },
   { value: '100', spoken: numbersInWords['100'] },
   { value: '250', spoken: numbersInWords['250'] },
 ];
 
-const amounts = {
+const annualAmountMedium = [
+  { value: '50', spoken: numbersInWords['50'] },
+  { value: '100', spoken: numbersInWords['100'] },
+  { value: '250', spoken: numbersInWords['250'] },
+  { value: '500', spoken: numbersInWords['500'] },
+];
+
+
+const annualAmountHigh = [
+  { value: '100', spoken: numbersInWords['100'] },
+  { value: '250', spoken: numbersInWords['250'] },
+  { value: '500', spoken: numbersInWords['500'] },
+  { value: '750', spoken: numbersInWords['750'] },
+];
+
+const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
+  if (annualTestVariant === 'annualHigherAmounts') {
+    return {
+      GBPCountries: annualAmountMedium,
+      UnitedStates: annualAmountMedium,
+      AUDCountries: annualAmountHigh,
+      EURCountries: annualAmountMedium,
+      International: annualAmountMedium,
+      NZDCountries: annualAmountHigh,
+      Canada: annualAmountMedium,
+    };
+  }
+  return {
+    GBPCountries: annualAmountLow,
+    UnitedStates: annualAmountLow,
+    AUDCountries: annualAmountMedium,
+    EURCountries: annualAmountLow,
+    International: annualAmountLow,
+    NZDCountries: annualAmountMedium,
+    Canada: annualAmountLow,
+  };
+};
+
+const amounts = (annualTestVariant: AnnualContributionsTestVariant) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
     UnitedStates: defaultOneOffAmount,
@@ -240,26 +279,8 @@ const amounts = {
       { value: '20', spoken: numbersInWords['20'] },
     ],
   },
-  ANNUAL: {
-    GBPCountries: defaultAnnualAmount,
-    UnitedStates: defaultAnnualAmount,
-    AUDCountries: [
-      { value: '50', spoken: numbersInWords['50'] },
-      { value: '100', spoken: numbersInWords['100'] },
-      { value: '250', spoken: numbersInWords['250'] },
-      { value: '500', spoken: numbersInWords['500'] },
-    ],
-    EURCountries: defaultAnnualAmount,
-    International: defaultAnnualAmount,
-    NZDCountries: [
-      { value: '50', spoken: numbersInWords['50'] },
-      { value: '100', spoken: numbersInWords['100'] },
-      { value: '250', spoken: numbersInWords['250'] },
-      { value: '500', spoken: numbersInWords['500'] },
-    ],
-    Canada: defaultAnnualAmount,
-  },
-};
+  ANNUAL: getAnnualAmounts(annualTestVariant),
+});
 
 
 // ----- Functions ----- //
@@ -459,7 +480,7 @@ function getContributionTypeRadios(
   countryGroupId: CountryGroupId,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-  annualTestVariant: 'control' | 'annual' | 'notintest',
+  annualTestVariant: AnnualContributionsTestVariant,
 ) {
 
   const oneOff = {
@@ -479,7 +500,9 @@ function getContributionTypeRadios(
     accessibilityHint: 'Make a regular annual contribution',
   };
 
-  return annualTestVariant === 'annual' ? [oneOff, monthly, annual] : [monthly, oneOff];
+  return annualTestVariant === 'annual' || annualTestVariant === 'annualHigherAmounts'
+    ? [oneOff, monthly, annual]
+    : [monthly, oneOff];
 
 }
 
@@ -487,9 +510,10 @@ function getContributionAmountRadios(
   contributionType: Contrib,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
+  annualTestVariant: AnnualContributionsTestVariant,
 ): Radio[] {
 
-  return amounts[contributionType][countryGroupId].map(amount => ({
+  return amounts(annualTestVariant)[contributionType][countryGroupId].map(amount => ({
     value: amount.value,
     text: `${currencies[currencyId].glyph}${amount.value}`,
     accessibilityHint: getAmountA11yHint(contributionType, currencyId, amount.spoken),

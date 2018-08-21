@@ -10,7 +10,7 @@ import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-
+import { setInitialAmountsForAnnualHigherAmountsVariant } from 'helpers/abTests/helpers/annualContributions';
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
@@ -40,4 +40,5 @@ const reactElementId: {
 
 const content = <HorizontalLandingLayout store={store} countryGroupId={countryGroupId} />;
 
+setInitialAmountsForAnnualHigherAmountsVariant(store);
 renderPage(content, reactElementId[countryGroupId]);

@@ -66,4 +66,21 @@ describe('Contributions Selection actions', () => {
 
   });
 
+  it('should create an action to set the amount for a given contribution type', () => {
+
+    const amount = '22';
+    const contributionType = 'ANNUAL';
+
+    const expectedAction = {
+      type: 'SET_AMOUNT_FOR_CONTRIBUTION_TYPE',
+      contributionType,
+      amount,
+      scope,
+    };
+
+    expect(actions.setAmountForContributionType(contributionType, amount)).toEqual(expectedAction);
+
+  });
+
+
 });
