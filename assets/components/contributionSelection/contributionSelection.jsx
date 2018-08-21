@@ -51,9 +51,13 @@ type PropTypes = {|
 
 function ContributionSelection(props: PropTypes) {
 
-  const modifierClasses = [getContributionTypeClassName(props.contributionType)];
+  const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
+  if (props.annualTestVariant === 'annual' || props.annualTestVariant === 'annualHigherAmounts') {
+    modifierClassArray.push('annual-test');
+  }
+
   return (
-    <div className={classNameWithModifiers('component-contribution-selection', modifierClasses)}>
+    <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
@@ -61,6 +65,7 @@ function ContributionSelection(props: PropTypes) {
             props.countryGroupId,
             props.oneOffSingleOneTimeTestVariant,
             props.usOneOffSingleOneTimeTestVariant,
+            props.annualTestVariant,
           )}
           checked={props.contributionType}
           toggleAction={props.setContributionType}

@@ -42,8 +42,7 @@ const content = <HorizontalLandingLayout store={store} countryGroupId={countryGr
 
 renderPage(content, reactElementId[countryGroupId]);
 
-
 const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundTwo;
-if (annualTestVariant === 'higherAmounts' && (countryGroupId === 'NZDCountries' || countryGroupId === 'AUDCountries')) {
+if (annualTestVariant === 'annualHigherAmounts') {
   store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', 100));
 }

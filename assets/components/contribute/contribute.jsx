@@ -23,7 +23,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function Contributes(props: PropTypes) {
+export default function Contribute(props: PropTypes) {
   const secureHeadingModifiers = props.modifierClasses.slice(0);
   const secureBodyModifiers = props.modifierClasses.slice(0);
 
@@ -51,7 +51,7 @@ export default function Contributes(props: PropTypes) {
 
 // ----- Default Props ----- //
 
-Contributes.defaultProps = {
+Contribute.defaultProps = {
   heading: '',
   modifierClasses: [],
 };

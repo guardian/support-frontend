@@ -3,7 +3,7 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-export type AnnualContributionsTestVariant = 'control' | 'higherAmounts' | 'notintest';
+export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
 
 export const tests: Tests = {
   oneOffOneTimeSingle: {
@@ -51,7 +51,7 @@ export const tests: Tests = {
     seed: 2,
   },
   annualContributionsRoundTwo: {
-    variants: ['control', 'higherAmounts'],
+    variants: ['control', 'annual', 'annualHigherAmounts'],
     audiences: {
       ALL: {
         offset: 0,

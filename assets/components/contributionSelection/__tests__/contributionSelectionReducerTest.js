@@ -173,6 +173,85 @@ describe('Contributions Selection reducer', () => {
 
   });
 
+  it('should handle SET_AMOUNT_FOR_CONTRIBUTION_TYPE for one-off', () => {
+
+
+    const amount = '42';
+    const initialState = {
+      contributionType: 'X',
+      oneOffAmount: '50',
+      monthlyAmount: '5',
+      annualAmount: '50',
+      customAmount: null,
+      isCustomAmount: false,
+      error: null,
+    };
+
+    const contributionType = 'ONE_OFF';
+
+    const newState = reducer(initialState, actions.setAmountForContributionType(contributionType, amount));
+
+    expect(newState.contributionType).toEqual(initialState.contributionType);
+    expect(newState.oneOffAmount).toEqual(amount);
+    expect(newState.monthlyAmount).toEqual(initialState.monthlyAmount);
+    expect(newState.annualAmount).toEqual(initialState.annualAmount);
+    expect(newState.isCustomAmount).toEqual(false);
+    expect(newState.error).toBeNull();
+
+  });
+
+  it('should handle SET_AMOUNT_FOR_CONTRIBUTION_TYPE for monthly', () => {
+
+    const amount = '42';
+    const initialState = {
+      contributionType: 'X',
+      oneOffAmount: '50',
+      monthlyAmount: '5',
+      annualAmount: '50',
+      customAmount: null,
+      isCustomAmount: false,
+      error: null,
+    };
+
+    const contributionType = 'MONTHLY';
+
+    const newState = reducer(initialState, actions.setAmountForContributionType(contributionType, amount));
+
+    expect(newState.contributionType).toEqual(initialState.contributionType);
+    expect(newState.oneOffAmount).toEqual(initialState.oneOffAmount);
+    expect(newState.monthlyAmount).toEqual(amount);
+    expect(newState.annualAmount).toEqual(initialState.annualAmount);
+    expect(newState.isCustomAmount).toEqual(false);
+    expect(newState.error).toBeNull();
+
+  });
+
+  it('should handle SET_AMOUNT_FOR_CONTRIBUTION_TYPE for annual', () => {
+
+    const amount = '42';
+    const initialState = {
+      contributionType: 'X',
+      oneOffAmount: '50',
+      monthlyAmount: '5',
+      annualAmount: '50',
+      customAmount: null,
+      isCustomAmount: false,
+      error: null,
+    };
+
+    const contributionType = 'ANNUAL';
+
+    const newState = reducer(initialState, actions.setAmountForContributionType(contributionType, amount));
+
+    expect(newState.contributionType).toEqual(initialState.contributionType);
+    expect(newState.oneOffAmount).toEqual(initialState.oneOffAmount);
+    expect(newState.monthlyAmount).toEqual(initialState.monthlyAmount);
+    expect(newState.annualAmount).toEqual(amount);
+    expect(newState.isCustomAmount).toEqual(false);
+    expect(newState.error).toBeNull();
+
+  });
+
   it('should handle SET_CUSTOM_AMOUNT', () => {
 
     const amount = '42';
