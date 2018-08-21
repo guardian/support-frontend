@@ -44,6 +44,6 @@ renderPage(content, reactElementId[countryGroupId]);
 
 
 const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundTwo;
-if (annualTestVariant === 'higherAmounts' && (countryGroupId === 'NZDCountries' || countryGroupId === 'AUDCountries')){
-  store.dispatch(contributionSelectionActionsFor('X').setAmount(100))
+if (annualTestVariant === 'higherAmounts' && (countryGroupId === 'NZDCountries' || countryGroupId === 'AUDCountries')) {
+  store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', 100));
 }

@@ -10,7 +10,7 @@ import { spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { AnnualContributionsTestVariant } from 'helpers/abTests/abTestDefinitions'
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -167,7 +167,7 @@ const config: { [CountryGroupId]: Config} =
       },
       ONE_OFF: defaultConfig.ONE_OFF,
     },
-};
+  };
 
 const defaultOneOffAmount = [
   { value: '25', spoken: numbersInWords['25'] },
@@ -197,7 +197,7 @@ const annualHigherAmountsDefaultAnnualAmount = [
 ];
 
 const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
-  if (annualTestVariant === 'higherAmounts'){
+  if (annualTestVariant === 'higherAmounts') {
     return {
       GBPCountries: annualHigherAmountsDefaultAnnualAmount,
       UnitedStates: annualHigherAmountsDefaultAnnualAmount,
@@ -239,63 +239,61 @@ const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => 
   };
 };
 
-const amounts = (annualTestVariant: AnnualContributionsTestVariant) => {
-  return {
-    ONE_OFF: {
-      GBPCountries: defaultOneOffAmount,
-      UnitedStates: defaultOneOffAmount,
-      EURCountries: defaultOneOffAmount,
-      AUDCountries: [
-        { value: '50', spoken: numbersInWords['50'] },
-        { value: '100', spoken: numbersInWords['100'] },
-        { value: '250', spoken: numbersInWords['250'] },
-        { value: '500', spoken: numbersInWords['500'] },
-      ],
-      International: defaultOneOffAmount,
-      NZDCountries: [
-        { value: '50', spoken: numbersInWords['50'] },
-        { value: '100', spoken: numbersInWords['100'] },
-        { value: '250', spoken: numbersInWords['250'] },
-        { value: '500', spoken: numbersInWords['500'] },
-      ],
-      Canada: defaultOneOffAmount,
-    },
-    MONTHLY: {
-      UnitedStates: defaultMonthlyAmount,
-      AUDCountries: [
-        { value: '10', spoken: numbersInWords['10'] },
-        { value: '20', spoken: numbersInWords['20'] },
-        { value: '40', spoken: numbersInWords['40'] },
-      ],
-      GBPCountries: [
-        { value: '2', spoken: numbersInWords['2'] },
-        { value: '5', spoken: numbersInWords['5'] },
-        { value: '10', spoken: numbersInWords['10'] },
-      ],
-      EURCountries: [
-        { value: '6', spoken: numbersInWords['6'] },
-        { value: '10', spoken: numbersInWords['10'] },
-        { value: '20', spoken: numbersInWords['20'] },
-      ],
-      International: [
-        { value: '5', spoken: numbersInWords['5'] },
-        { value: '10', spoken: numbersInWords['10'] },
-        { value: '20', spoken: numbersInWords['20'] },
-      ],
-      NZDCountries: [
-        { value: '10', spoken: numbersInWords['10'] },
-        { value: '20', spoken: numbersInWords['20'] },
-        { value: '50', spoken: numbersInWords['50'] },
-      ],
-      Canada: [
-        { value: '5', spoken: numbersInWords['5'] },
-        { value: '10', spoken: numbersInWords['10'] },
-        { value: '20', spoken: numbersInWords['20'] },
-      ],
-    },
-    ANNUAL: getAnnualAmounts(annualTestVariant),
-  };
-};
+const amounts = (annualTestVariant: AnnualContributionsTestVariant) => ({
+  ONE_OFF: {
+    GBPCountries: defaultOneOffAmount,
+    UnitedStates: defaultOneOffAmount,
+    EURCountries: defaultOneOffAmount,
+    AUDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
+    International: defaultOneOffAmount,
+    NZDCountries: [
+      { value: '50', spoken: numbersInWords['50'] },
+      { value: '100', spoken: numbersInWords['100'] },
+      { value: '250', spoken: numbersInWords['250'] },
+      { value: '500', spoken: numbersInWords['500'] },
+    ],
+    Canada: defaultOneOffAmount,
+  },
+  MONTHLY: {
+    UnitedStates: defaultMonthlyAmount,
+    AUDCountries: [
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+      { value: '40', spoken: numbersInWords['40'] },
+    ],
+    GBPCountries: [
+      { value: '2', spoken: numbersInWords['2'] },
+      { value: '5', spoken: numbersInWords['5'] },
+      { value: '10', spoken: numbersInWords['10'] },
+    ],
+    EURCountries: [
+      { value: '6', spoken: numbersInWords['6'] },
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+    ],
+    International: [
+      { value: '5', spoken: numbersInWords['5'] },
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+    ],
+    NZDCountries: [
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+      { value: '50', spoken: numbersInWords['50'] },
+    ],
+    Canada: [
+      { value: '5', spoken: numbersInWords['5'] },
+      { value: '10', spoken: numbersInWords['10'] },
+      { value: '20', spoken: numbersInWords['20'] },
+    ],
+  },
+  ANNUAL: getAnnualAmounts(annualTestVariant),
+});
 
 
 // ----- Functions ----- //
