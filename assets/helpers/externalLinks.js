@@ -8,7 +8,6 @@ import {
   countryGroups,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { addQueryParamsToURL } from 'helpers/url';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct } from './subscriptions';
@@ -111,6 +110,19 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+function buildParamString(
+  product: SubscriptionProduct,
+  intCmp: ?string,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+): string {
+  const params = new URLSearchParams(window.location.search);
+
+  const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
+  params.set('INTCMP', maybeCustomIntcmp);
+  params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
+
+  return params.toString();
+}
 
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
@@ -121,14 +133,11 @@ function buildSubsUrls(
 ): SubsUrls {
 
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
-  const params = new URLSearchParams(window.location.search);
-  params.set('INTCMP', getIntcmp(product, intCmp, defaultIntCmp));
-  params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
-  const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, otherQueryParams, referrerAcquisitionData)}`;
-  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, otherQueryParams, referrerAcquisitionData)}`;
-  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, otherQueryParams, referrerAcquisitionData)}`;
-  const weekly = `${subsUrl}/weekly?${buildParamString('GuardianWeekly', intCmp, otherQueryParams, referrerAcquisitionData)}`;
+  const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, referrerAcquisitionData)}`;
+  const weekly = `${subsUrl}/weekly?${buildParamString('GuardianWeekly', intCmp, referrerAcquisitionData)}`;
 
   return {
     DigitalPack: digital,
@@ -170,7 +179,7 @@ function getDigitalCheckout(
   params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
   params.set('promoCode', defaultPromos.DigitalPack);
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
-  params.set('startTrialButton', referringCta);
+  params.set('startTrialButton', referringCta || '');
 
   return `${subsUrl}/checkout?${params.toString()}`;
 }
