@@ -10,7 +10,7 @@ import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-
+import { contributionSelectionActionsFor } from 'components/contributionSelection/contributionSelectionActions';
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
@@ -41,3 +41,9 @@ const reactElementId: {
 const content = <HorizontalLandingLayout store={store} countryGroupId={countryGroupId} />;
 
 renderPage(content, reactElementId[countryGroupId]);
+
+
+const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundTwo;
+if (annualTestVariant === 'higherAmounts' && (countryGroupId === 'NZDCountries' || countryGroupId === 'AUDCountries')){
+  store.dispatch(contributionSelectionActionsFor('X').setAmount(100))
+}

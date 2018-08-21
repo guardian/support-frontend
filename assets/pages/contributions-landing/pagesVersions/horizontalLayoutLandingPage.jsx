@@ -80,33 +80,31 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
 
 // ----- Render ----- //
 
-const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
-  return (
-    <Provider store={props.store}>
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={<Footer disclaimer countryGroupId={props.countryGroupId} />}
+const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => (
+  <Provider store={props.store}>
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={<Footer disclaimer countryGroupId={props.countryGroupId} />}
+    >
+      <CirclesIntroduction
+        headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
+        highlights={['Your contribution']}
+        modifierClasses={['compact']}
+      />
+      <Contribute
+        copy="Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best."
+        modifierClasses={['compact']}
       >
-        <CirclesIntroduction
-          headings={countryGroupSpecificDetails[props.countryGroupId].headerCopy}
-          highlights={['Your contribution']}
-          modifierClasses={['compact']}
+        <ContributionSelectionContainer />
+        <ContributionAwarePaymentLogosContainer />
+        <ContributionPaymentCtasContainer
+          PayPalButton={() =>
+            <PayPalContributionButtonContainer cancelURL={payPalCancelUrl(props.countryGroupId)} />
+          }
         />
-        <Contribute
-          copy="Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best."
-          modifierClasses={['compact']}
-        >
-          <ContributionSelectionContainer />
-          <ContributionAwarePaymentLogosContainer />
-          <ContributionPaymentCtasContainer
-            PayPalButton={() =>
-              <PayPalContributionButtonContainer cancelURL={payPalCancelUrl(props.countryGroupId)} />
-            }
-          />
-        </Contribute>
-      </Page>
-    </Provider>
-  );
-};
+      </Contribute>
+    </Page>
+  </Provider>
+);
 
 export default HorizontalLayoutLandingPage;

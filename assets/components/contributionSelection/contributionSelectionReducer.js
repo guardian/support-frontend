@@ -35,8 +35,7 @@ export type State = {
 
 // Returns a countryGroupId-specific initial state for the reducer.
 function getInitialState(countryGroupId: CountryGroupId): State {
-
-  return {
+    return {
     contributionType: 'MONTHLY',
     oneOffAmount: config[countryGroupId].ONE_OFF.default.toString(),
     monthlyAmount: config[countryGroupId].MONTHLY.default.toString(),

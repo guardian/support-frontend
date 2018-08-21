@@ -24,6 +24,7 @@ import type {
   Contrib as ContributionType,
   ContributionError,
 } from 'helpers/contributions';
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Props ----- //
@@ -42,6 +43,7 @@ type PropTypes = {|
   error: ContributionError,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
+  annualTestVariant: AnnualContributionsTestVariant,
 |};
 
 
@@ -49,10 +51,9 @@ type PropTypes = {|
 
 function ContributionSelection(props: PropTypes) {
 
+  const modifierClasses = [getContributionTypeClassName(props.contributionType)];
   return (
-    <div className={
-      classNameWithModifiers('component-contribution-selection', [getContributionTypeClassName(props.contributionType)])
-    }>
+    <div className={classNameWithModifiers('component-contribution-selection', modifierClasses)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
@@ -74,6 +75,7 @@ function ContributionSelection(props: PropTypes) {
               props.contributionType,
               props.currencyId,
               props.countryGroupId,
+              props.annualTestVariant,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}
