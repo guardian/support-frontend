@@ -146,9 +146,6 @@ function buildSubsUrls(
 ): SubsUrls {
 
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
-  const params = new URLSearchParams();
-  otherQueryParams.forEach(p => params.append(p[0], p[1]));
-  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
   const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, otherQueryParams, referrerAcquisitionData)}`;
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, otherQueryParams, referrerAcquisitionData)}`;
