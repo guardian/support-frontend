@@ -62,7 +62,7 @@ const numbersInWords = {
   '166': 'one hundred and sixty six',
   '250': 'two hundred and fifty',
   '500': 'five hundred',
-  '750': 'seven hundred',
+  '750': 'seven hundred and fifty',
   '2000': 'two thousand',
   '16000': 'sixteen thousand',
 };

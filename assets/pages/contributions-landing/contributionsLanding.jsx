@@ -10,7 +10,7 @@ import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { contributionSelectionActionsFor } from 'components/contributionSelection/contributionSelectionActions';
+import { setInitialAmountsForAnnualHigherAmountsVariant } from 'helpers/abTests/helpers/annualContributions';
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
@@ -40,9 +40,5 @@ const reactElementId: {
 
 const content = <HorizontalLandingLayout store={store} countryGroupId={countryGroupId} />;
 
+setInitialAmountsForAnnualHigherAmountsVariant(store);
 renderPage(content, reactElementId[countryGroupId]);
-
-const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundTwo;
-if (annualTestVariant === 'annualHigherAmounts') {
-  store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', 100));
-}
