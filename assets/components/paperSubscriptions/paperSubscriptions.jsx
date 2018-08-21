@@ -47,7 +47,6 @@ export default function PaperSubscriptions(props: PropTypes) {
     'GBPCountries',
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 
