@@ -22,11 +22,6 @@ type PromoCodes = {
   [SubscriptionProduct]: string,
 };
 
-type Intcmps = {
-  [SubscriptionProduct]: string,
-};
-
-
 export type SubsUrls = {
   [SubscriptionProduct]: string,
 };
@@ -51,12 +46,6 @@ const defaultPromos: PromoCodes = {
   DigitalPack: getPromoCode('DigitalPack', 'DXX83X'),
   Paper: getPromoCode('Paper', 'GXX83P'),
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
-};
-
-const defaultIntcmps: Intcmps = {
-  DigitalPack: getIntcmp('DigitalPack', defaultIntCmp),
-  Paper: getIntcmp('Paper', defaultIntCmp),
-  PaperAndDigital: getIntcmp('PaperAndDigital', defaultIntCmp),
 };
 
 const customPromos : {
@@ -124,12 +113,14 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 function buildParamString(
   product: SubscriptionProduct,
-  intCmp: Intcmps,
+  intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): string {
   const params = new URLSearchParams();
-  params.append('INTCMP', intCmp[product] || defaultIntCmp);
+
+  const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
+  params.append('INTCMP', maybeCustomIntcmp);
   otherQueryParams.forEach(p => params.append(p[0], p[1]));
   params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
@@ -140,7 +131,7 @@ function buildParamString(
 function buildSubsUrls(
   countryGroupId: CountryGroupId,
   promoCodes: PromoCodes,
-  intCmp: Intcmps,
+  intCmp: ?string,
   otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
@@ -173,13 +164,13 @@ function getSubsLinks(
     return buildSubsUrls(
       countryGroupId,
       customPromos[campaign],
-      defaultIntcmps,
+      intCmp,
       otherQueryParams,
       referrerAcquisitionData,
     );
   }
 
-  return buildSubsUrls(countryGroupId, defaultPromos, defaultIntcmps, otherQueryParams, referrerAcquisitionData);
+  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
 
 }
 
