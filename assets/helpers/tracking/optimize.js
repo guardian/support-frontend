@@ -1,11 +1,11 @@
 /* eslint-disable */
 try {
-  //var db = indexedDB.open("test");
+  var db = indexedDB.open("test");
   // Check if Firefox Private Browsing is enabled
   // because the page hiding snippet doesn't work
   // properly in FF PB mode, see here:
   // https://www.en.advertisercommunity.com/t5/Google-Optimize-Implement/Optimize-Page-Hiding-Snippet-Unhide-delay-issue-in-Firefox/td-p/1106919
-  //db.onsuccess = function() {
+  db.onsuccess = function() {
     // Not in FF PB mode
     (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
       h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
@@ -21,7 +21,7 @@ try {
     ga('create', 'UA-51507017-5', 'auto', {cookieDomain: 'auto', anonymizeIp: true});
     ga('require', 'GTM-NZGXNBL');
     ga('require', 'GTM-KGKKPS4');
-  //};
+  };
 } catch (e) {
   console.log(`Error initialising Optimize script: ${e.message}`);
 }
