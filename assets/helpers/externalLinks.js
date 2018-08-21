@@ -10,7 +10,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { addQueryParamsToURL } from 'helpers/url';
 
-import { getPromoCode } from './flashSale';
+import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct } from './subscriptions';
 
 
@@ -111,6 +111,22 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+function buildParamString(
+  product: SubscriptionProduct,
+  intCmp: ?string,
+  otherQueryParams: Array<[string, string]>,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+): string {
+  const params = new URLSearchParams();
+
+  const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
+  params.append('INTCMP', maybeCustomIntcmp);
+  otherQueryParams.forEach(p => params.append(p[0], p[1]));
+  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
+
+  return params.toString();
+}
+
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
   countryGroupId: CountryGroupId,
@@ -121,15 +137,11 @@ function buildSubsUrls(
 ): SubsUrls {
 
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
-  const params = new URLSearchParams();
-  params.append('INTCMP', intCmp || defaultIntCmp);
-  otherQueryParams.forEach(p => params.append(p[0], p[1]));
-  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
-  const paper = `${subsUrl}/p/${promoCodes.Paper}?${params.toString()}`;
-  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${params.toString()}`;
-  const digital = `/${countryId}/subscribe/digital?${params.toString()}`;
-  const weekly = `${subsUrl}/weekly?${params.toString()}`;
+  const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, otherQueryParams, referrerAcquisitionData)}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, otherQueryParams, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, otherQueryParams, referrerAcquisitionData)}`;
+  const weekly = `${subsUrl}/weekly?${buildParamString('GuardianWeekly', intCmp, otherQueryParams, referrerAcquisitionData)}`;
 
   return {
     DigitalPack: digital,

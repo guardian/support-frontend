@@ -29,26 +29,32 @@ const promoCodes = {
   DigitalPack: {
     promoCode: '',
     price: 11.99,
+    intcmp: '',
   },
   Paper: {
     promoCode: 'GFS80G',
     price: 5.18,
+    intcmp: 'gdnwb_macqn_other_subs_SubscribeLandingPagePrintOnlySupporterLandingPagePrintOnly_',
   },
   PaperAndDigital: {
     promoCode: 'GFS80I',
     price: 10.81,
+    intcmp: 'gdnwb_macqn_other_subs_SubscribeLandingPagePrint+digitalSupporterLandingPagePrint+digital_',
   },
   DailyEdition: {
     promoCode: '',
     price: 6.99,
+    intcmp: '',
   },
   GuardianWeekly: {
     promoCode: '',
     price: 30,
+    intcmp: '',
   },
   PremiumTier: {
     promoCode: '',
     price: 5.99,
+    intcmp: '',
   },
 };
 
@@ -57,6 +63,13 @@ function getPromoCode(product: SubscriptionProduct, defaultCode: string): string
     return promoCodes[product].promoCode;
   }
   return defaultCode;
+}
+
+function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp: string): string {
+  if (inOfferPeriod(product)) {
+    return promoCodes[product].intcmp || intcmp || defaultIntcmp;
+  }
+  return intcmp || defaultIntcmp;
 }
 
 function getDiscountedPrice(product: SubscriptionProduct, defaultPrice: number): number {
@@ -112,5 +125,6 @@ export {
   getPaperBenefits,
   getPaperDigitalBenefits,
   getPromoCode,
+  getIntcmp,
   getDiscountedPrice,
 };
