@@ -129,22 +129,13 @@ class RegularContributionsClient(
 
 object StepFunctionExecutionStatus {
 
-  case class FinishedState(name: String, eventDetails: StateExitedEventDetails)
-
   def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], stateWrapper: StateWrapper, trackingUri: String): StatusResponse = {
 
-    val finishedStates: List[Try[FinishedState]] = detailedHistory.map { stateAttempt =>
-      for {
-        attempt <- stateAttempt
-        name <- Try(attempt.getName)
-      } yield FinishedState(name, attempt)
-    }
-
-    val searchForFinishedCheckout: Option[StatusResponse] = finishedStates.collectFirst {
-      case Success(FinishedState("CheckoutSuccess", _)) =>
+    val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
+      case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutSuccess") =>
         StatusResponse(Status.Success, trackingUri, None)
-      case Success(FinishedState("CheckoutFailure", eventDetails)) =>
-        StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, eventDetails))
+      case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutFailure") =>
+        StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }
 
     searchForFinishedCheckout.getOrElse(StatusResponse(Status.Pending, trackingUri, None))
