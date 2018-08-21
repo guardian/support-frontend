@@ -81,10 +81,6 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
 // ----- Render ----- //
 
 const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
-  const annualContributeCopy = 'Make a recurring commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
-  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributions;
-  const copyText = annualTestVariant === 'annual' ? annualContributeCopy : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
-
   return (
     <Provider store={props.store}>
       <Page
@@ -97,7 +93,7 @@ const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes
           modifierClasses={['compact']}
         />
         <Contribute
-          copy={copyText}
+          copy="Make a monthly commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best."
           modifierClasses={['compact']}
         >
           <ContributionSelectionContainer />

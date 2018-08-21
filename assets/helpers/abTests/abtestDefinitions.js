@@ -48,18 +48,6 @@ export const tests: Tests = {
     independent: true,
     seed: 2,
   },
-  annualContributions: {
-    variants: ['control', 'annual'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-  },
   recurringGuestCheckout: {
     variants: ['control', 'guest'],
     audiences: {

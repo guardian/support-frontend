@@ -459,7 +459,6 @@ function getContributionTypeRadios(
   countryGroupId: CountryGroupId,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-  annualTestVariant: 'control' | 'annual' | 'notintest',
 ) {
 
   const oneOff = {
@@ -479,7 +478,7 @@ function getContributionTypeRadios(
     accessibilityHint: 'Make a regular annual contribution',
   };
 
-  return annualTestVariant === 'annual' ? [oneOff, monthly, annual] : [monthly, oneOff];
+  return [oneOff, monthly, annual];
 
 }
 

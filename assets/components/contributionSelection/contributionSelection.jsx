@@ -42,7 +42,6 @@ type PropTypes = {|
   error: ContributionError,
   oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
   usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-  annualTestVariant: 'control' | 'annual' | 'notintest',
 |};
 
 
@@ -50,11 +49,10 @@ type PropTypes = {|
 
 function ContributionSelection(props: PropTypes) {
 
-  const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  if (props.annualTestVariant === 'annual') { modifierClassArray.push('annual-test'); }
-
   return (
-    <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>
+    <div className={
+      classNameWithModifiers('component-contribution-selection', [getContributionTypeClassName(props.contributionType)])
+    }>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
@@ -62,7 +60,6 @@ function ContributionSelection(props: PropTypes) {
             props.countryGroupId,
             props.oneOffSingleOneTimeTestVariant,
             props.usOneOffSingleOneTimeTestVariant,
-            props.annualTestVariant,
           )}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
