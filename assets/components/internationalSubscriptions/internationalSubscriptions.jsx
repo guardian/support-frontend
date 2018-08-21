@@ -52,7 +52,6 @@ export default function InternationalSubscriptions(props: PropTypes) {
     props.countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 
