@@ -34,7 +34,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
 
-import { type Action, setOptimizeExperiments } from './pageActions';
+import { type Action } from './pageActions';
 
 
 // ----- Types ----- //
@@ -118,9 +118,6 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           ...state,
           internationalisation: { ...state.internationalisation, countryId: action.country },
         };
-
-      case 'SET_OPTIMIZE_EXPERIMENTS':
-        return { ...state, optimizeExperiments: action.experiments };
 
       default:
         return state;
