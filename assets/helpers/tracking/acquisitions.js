@@ -10,7 +10,7 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { type OptimizeExperiments } from './optimize';
+import { type OptimizeExperiments, OPTIMIZE_QUERY_PARAMETER } from './optimize';
 
 
 // ----- Types ----- //
@@ -190,7 +190,7 @@ function buildAcquisition(
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
 
   const queryParameters =
     acquisitionData.queryParameters ||
@@ -238,7 +238,7 @@ function derivePaymentApiAcquisitionData(
     abTests.push(referrerAcquisitionData.abTest);
   }
 
-  const response: PaymentAPIAcquisitionData = {
+  return {
     platform: 'SUPPORT',
     visitId: ophanIds.visitId,
     browserId: ophanIds.browserId,
@@ -251,8 +251,6 @@ function derivePaymentApiAcquisitionData(
     source: referrerAcquisitionData.source,
     abTests,
   };
-
-  return response;
 }
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
