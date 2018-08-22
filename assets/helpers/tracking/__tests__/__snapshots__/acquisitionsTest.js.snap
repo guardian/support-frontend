@@ -5,15 +5,15 @@ Object {
   "abTest": null,
   "abTests": Array [
     Object {
-      "name": "testOne$Optimize",
+      "name": "testOne",
       "variant": "variantOne",
     },
     Object {
-      "name": "testTwo$Optimize",
+      "name": "testTwo",
       "variant": "variantTwo",
     },
     Object {
-      "name": "testThree$Optimize",
+      "name": "testThree",
       "variant": "variantSeven",
     },
     Object {

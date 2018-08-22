@@ -117,7 +117,7 @@ describe('acquisitions', () => {
       const acquisitionABTests = optimizeToAcquisitionABTest(optimizeExperiments);
 
       expect(acquisitionABTests.length).toBe(3);
-      expect(acquisitionABTests[0]).toEqual({ name: 'testOne$Optimize', variant: 'variantOne' });
+      expect(acquisitionABTests[0]).toEqual({ name: 'testOne', variant: 'variantOne' });
 
     });
 
@@ -153,7 +153,7 @@ describe('acquisitions', () => {
       expect(updatedAcquisitionData).toMatchSnapshot();
       expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests.length).toBe(4);
       expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests[0]).toEqual({
-        name: 'testOne$Optimize',
+        name: 'testOne',
         variant: 'variantOne',
       });
       expect(updatedAcquisitionData.abTests && updatedAcquisitionData.abTests[3]).toEqual({
