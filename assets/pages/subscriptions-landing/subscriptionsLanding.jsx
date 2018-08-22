@@ -61,7 +61,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<SimpleHeader />}
-      footer={<Footer disclaimer privacyPolicy countryGroupId={countryGroupId}/>}
+      footer={<Footer disclaimer privacyPolicy countryGroupId={countryGroupId} />}
     >
       <CirclesIntroduction
         headings={['Help us deliver the', 'independent journalism', 'the world needs']}
