@@ -52,7 +52,7 @@ function parseExperimentsFromQueryParams(queryParameter: ?string): OptimizeExper
 }
 
 // Retrieves the object from the window, async in case it hasn't been put there yet.
-function getExperiments(): OptimizeExperiments {
+function getOptimizeExperiments(): OptimizeExperiments {
   return {
     ...parseExperimentsFromQueryParams(getQueryParameter('utm_expid')),
     ...getExperimentsFromGaData(),
@@ -62,4 +62,4 @@ function getExperiments(): OptimizeExperiments {
 
 // ----- Exports ----- //
 
-export { getExperiments };
+export { getOptimizeExperiments };
