@@ -29,6 +29,8 @@ type GaEventData = {
   label: ?string,
 }
 
+const gaPropertyId = 'UA-51507017-5';
+
 // ----- Functions ----- //
 
 function getOrderId() {
@@ -205,4 +207,5 @@ export {
   init,
   gaEvent,
   successfulConversion,
+  gaPropertyId,
 };

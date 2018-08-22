@@ -1,5 +1,11 @@
 // @flow
 
+// ----- Imports ----- //
+
+import { getQueryParameter } from 'helpers/url';
+import { gaPropertyId } from './googleTagManager';
+
+
 // ----- Types ----- //
 
 type Experiment = string;
@@ -13,7 +19,7 @@ export type OptimizeExperiments = {
 // ----- Functions ----- //
 
 // Makes sure experiments are of the type [string]: string to match participations.
-function parseExperiments(optimize: Object): OptimizeExperiments {
+function parseExperimentsFromGaData(optimize: Object): OptimizeExperiments {
 
   return Object.keys(optimize).reduce((result, key) => {
     if (typeof optimize[key] === 'string') {
@@ -22,33 +28,35 @@ function parseExperiments(optimize: Object): OptimizeExperiments {
 
     return result;
   }, {});
-
 }
 
-// Checks if the optimize object exists in the window.
-function optimizeExists(): boolean {
-  return window.guardian &&
-    window.guardian.optimize &&
-    typeof window.guardian.optimize === 'object';
+function getExperimentsFromGaData(): OptimizeExperiments {
+  try {
+    return parseExperimentsFromGaData(window.gaData[gaPropertyId].experiments);
+  } catch (_) {
+    return {};
+  }
+}
+
+// Returns an Optimize experiment from the query parameter utm_expid.
+// Expected format of query parameter is '.<testid>.<variantid>'
+function parseExperimentsFromQueryParams(queryParameter: ?string): OptimizeExperiments {
+  if (queryParameter) {
+    // eslint-disable-next-line no-unused-vars
+    const [_, experimentId, variantId] = queryParameter.split('.');
+    if (experimentId && variantId) {
+      return { [experimentId]: variantId };
+    }
+  }
+  return {};
 }
 
 // Retrieves the object from the window, async in case it hasn't been put there yet.
-function getExperiments(): Promise<OptimizeExperiments> {
-
-  if (optimizeExists()) {
-    return Promise.resolve(parseExperiments(window.guardian.optimize));
-  }
-
-  return new Promise((res, rej) => {
-    window.addEventListener('optimizeActive', () => {
-      if (optimizeExists()) {
-        res(parseExperiments(window.guardian.optimize));
-      }
-
-      rej();
-    });
-  });
-
+function getExperiments(): OptimizeExperiments {
+  return {
+    ...parseExperimentsFromQueryParams(getQueryParameter('utm_expid')),
+    ...getExperimentsFromGaData(),
+  };
 }
 
 
