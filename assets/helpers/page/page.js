@@ -32,7 +32,7 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
+import { getOptimizeExperiments } from 'helpers/tracking/optimize';
 
 import { type Action } from './pageActions';
 
@@ -50,7 +50,6 @@ export type CommonState = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   otherQueryParams: Array<[string, string]>,
   abParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
   switches: Switches,
   internationalisation: Internationalisation,
 };
@@ -82,7 +81,8 @@ function buildInitialState(
   currencyId: IsoCurrency,
   switches: Switches,
 ): CommonState {
-  const acquisition = getAcquisition(abParticipations);
+  const optimizeExperiments = getOptimizeExperiments();
+  const acquisition = getAcquisition(abParticipations, optimizeExperiments);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -97,7 +97,6 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    optimizeExperiments: getOptimizeExperiments(),
     switches,
   };
 

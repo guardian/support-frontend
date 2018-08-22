@@ -165,10 +165,22 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
+// Appends all the experiment names (the keys) with '$Optimize' to avoid name
+// collision with native tests, and returns as array of AB tests.
+function optimizeToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
+
+  return Object.keys(opt).map(k => ({
+    name: k,
+    variant: opt[k],
+  }));
+
+}
+
 // Builds the acquisition object from data and other sources.
 function buildAcquisition(
   acquisitionData: Object = {},
   abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 ): ReferrerAcquisitionData {
 
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
@@ -184,7 +196,10 @@ function buildAcquisition(
     acquisitionData.queryParameters ||
     toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
 
-  const abTests = participationsToAcquisitionABTest(abParticipations);
+  const abTests = [
+    ...participationsToAcquisitionABTest(abParticipations),
+    ...optimizeToAcquisitionABTest(optimizeExperiments),
+  ];
 
   if (acquisitionData.abTest) {
     abTests.push(acquisitionData.abTest);
@@ -242,40 +257,22 @@ function derivePaymentApiAcquisitionData(
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function getAcquisition(abParticipations: Participations): ReferrerAcquisitionData {
+function getAcquisition(
+  abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+): ReferrerAcquisitionData {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData =
-      buildAcquisition(paramData || readAcquisition() || undefined, abParticipations);
+  const referrerAcquisitionData = buildAcquisition(
+    paramData || readAcquisition() || undefined,
+    abParticipations,
+    optimizeExperiments,
+  );
   storeAcquisition(referrerAcquisitionData);
 
   return referrerAcquisitionData;
-
-}
-
-// Appends all the experiment names (the keys) with '$Optimize' to avoid name
-// collision with native tests, and returns as array of AB tests.
-function optimizeToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
-
-  return Object.keys(opt).map(k => ({
-    name: k,
-    variant: opt[k],
-  }));
-
-}
-
-// Merges native and Optimize tests, and stringifies the result.
-function acquisitionsWithOptimize(
-  rad: ReferrerAcquisitionData,
-  opt: OptimizeExperiments,
-): ReferrerAcquisitionData {
-
-  return {
-    ...rad,
-    abTests: optimizeToAcquisitionABTest(opt).concat(rad.abTests ? rad.abTests : []),
-  };
 
 }
 
@@ -289,5 +286,4 @@ export {
   participationsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
   optimizeToAcquisitionABTest,
-  acquisitionsWithOptimize,
 };
