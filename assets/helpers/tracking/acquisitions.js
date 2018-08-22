@@ -260,7 +260,7 @@ function getAcquisition(abParticipations: Participations): ReferrerAcquisitionDa
 function optimizeToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
 
   return Object.keys(opt).map(k => ({
-    name: `${k}$Optimize`,
+    name: k,
     variant: opt[k],
   }));
 
