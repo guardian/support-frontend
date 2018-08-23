@@ -97,7 +97,8 @@ GET  /paypal/rest/cancel                                controllers.PayPalOneOff
 POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
 # ----- Assets ----- #
+# See application.conf for cache time config
 
-GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file, aggressiveCaching ?= true)
+GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /assets-payment/*file                          controllers.Assets.at(path="/public/assets-new-ui", file)
 GET  /*file                                         controllers.Assets.at(path="/public", file)
