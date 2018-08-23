@@ -111,7 +111,7 @@ const content = (
           </details>
         </header>
       }
-      footer={<Footer disclaimer={true} countryGroupId={countryGroupId} />}
+      footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
