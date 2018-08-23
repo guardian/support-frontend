@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import Page from 'components/page/page';
 
