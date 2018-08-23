@@ -24,7 +24,6 @@ describe('reducer tests', () => {
         componentType: null,
         source: null,
         abTest: null,
-        abTests: [],
         queryParameters: [],
       },
       internationalisation: {
