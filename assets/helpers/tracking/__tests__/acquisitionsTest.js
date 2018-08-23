@@ -42,13 +42,19 @@ describe('acquisitions', () => {
         testId3: 'variant3',
       };
 
+      const optimizeExperiments = {
+        optimizeExperiment1: 'variant1',
+        optimizeExperiment2: 'variant2',
+        optimizeExperiment3: 'variant3',
+      };
+
       const paymentApiAcquisitionData =
-        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 
       // The abTests array should be a combination of supportAbTests and the source tests
-      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(4);
+      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(7);
       expect(paymentApiAcquisitionData.campaignCodes && paymentApiAcquisitionData.campaignCodes.length).toEqual(1);
     });
   });
