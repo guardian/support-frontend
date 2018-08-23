@@ -1,0 +1,281 @@
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
+
+/*= CONTENT */
+.content {
+  background: white;
+  padding: 0 10px;
+}
+
+.form--contribution {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__field {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/*= TYPOGRAPHY */
+
+form {
+  font-family: $gu-text-sans-web;
+}
+
+.form__radio-group--tabs {
+  font-family: $gu-egyptian-web;
+  font-weight: bold;
+}
+
+/*= CONTRIBUTION FORM */
+.form__radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.form__legend--radio-group {
+  display: none;
+}
+
+.form__radio-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.form__radio-group__input {
+  display: none;
+}
+
+.form__radio-group__label {
+  cursor: pointer;
+}
+
+.form__radio-group--tabs .form__radio-group__list {
+  display: flex;
+}
+    
+.form__radio-group--tabs .form__radio-group__item {
+  border-top: 1px solid gu-colour(neutral-4);
+  flex: 1;
+  margin: 0 -10px;
+}
+
+.form__radio-group--tabs .form__radio-group__item + .form__radio-group__item {
+  border-left: 1px solid gu-colour(neutral-4);
+}
+
+.form__radio-group--tabs .form__radio-group__input + .form__radio-group__label {
+  display: block;
+  padding: 4px 10px 4px;
+}
+
+.form__radio-group--tabs .form__radio-group__input:checked + .form__radio-group__label {
+  background: white;
+  color: gu-colour(sport-garnett-media-main-1);
+}
+        
+.form__radio-group--tabs .form__radio-group__input:not(:checked) + .form__radio-group__label {
+  background: gu-colour(garnett-neutral-3);
+  color: gu-colour(garnett-neutral-2);
+}
+
+.form__radio-group--pills .form__radio-group__list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__radio-group--pills .form__radio-group__item {
+  width: 50px;
+  height: 50px;
+}
+
+.form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
+  border: solid 1px gu-colour(sport-garnett-media-main-1);
+  border-radius: 25px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+}
+  
+.form__radio-group--pills .form__radio-group__input:checked + .form__radio-group__label {
+  background: gu-colour(sport-garnett-media-main-1);
+  color: #fff;
+}
+
+.form__radio-group--buttons .form__radio-group__item + .form__radio-group__item {
+  margin-top: 6px;
+}
+
+.form__radio-group--buttons .form__radio-group__label {
+  align-items: center;
+  border: 1px solid gu-colour(neutral-4);
+  border-radius: 20px;
+  display: flex;
+  margin-bottom: 8px;
+  padding: 9px 0;
+}
+
+.form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label {
+  border-color: gu-colour(sport-garnett-media-main-1);
+  font-weight: bold;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui {
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  border-color: gu-colour(garnett-neutral-2);
+  display: inline-block;
+  border-style: solid;
+  border-width: 1px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label:hover .radio-ui {
+  border-color: gu-colour(sport-garnett-media-main-1);
+  box-shadow: 0 0 0 2px gu-colour(live-garnett-sport2);
+}
+
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label .radio-ui__icon {
+  filter: grayscale(100%);
+}
+
+.form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label .radio-ui {
+  border-color: gu-colour(sport-garnett-media-main-1);
+  box-shadow: inset 0 0 0 1px #fff;
+  background: gu-colour(sport-garnett-media-main-1);
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__label {
+  flex: 1;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--paypal {
+  height: 18px;
+  width: 15px;
+  margin-right: 16px;
+  margin-left: 5px;
+}
+
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--card {
+  height: 14px;
+  width: 22px;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.form__label {
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.form__input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: white;
+  border: 1px solid gu-colour(neutral-4);
+  border-radius: 0;
+  padding: 9px 10px 9px 38px;
+  transition: box-shadow .2s ease-in-out;
+}
+
+.form__input:hover {
+  box-shadow: 0 0 0 3px #ededed;
+}
+
+.form__input:focus {
+  box-shadow: 0 0 0 3px gu-colour(sport-garnett-media-main-1);
+  outline: none;
+}
+
+.form__input--primed:invalid {
+  border-color: #3db540;
+}
+
+.form__input::placeholder,
+.form__placeholder {
+  color: gu-colour(garnett-neutral-2);
+}
+
+.form__error {
+  background-color: rgba(61,181,64,.1);
+  color: #236925;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 6px 10px;
+}
+
+.form__submit {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-bottom: 30px;
+}
+
+.form__submit__button {
+  background: gu-colour(news-garnett-highlight);
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+}
+
+.form__submit__button:hover,
+.form__submit__button:focus {
+  background: #e5ce00;
+}
+
+.form__radio-group--contribution-amount,
+.form__field--contribution-other-amount,
+.form__field--contribution-fname, 
+.form__field--contribution-lname {
+  margin-top: 12px;
+}
+
+.form__field--contribution-email, 
+.form__field--contribution-state {
+  margin-top: 24px;
+}
+
+.form__radio-group--contribution-pay {
+  margin-top: 20px;
+}
+
+.form__input-with-icon {
+  position: relative;
+}
+
+.form__input-with-icon .form__icon {
+  align-items: center; 
+  display: flex;
+  fill: gu-colour(garnett-neutral-2);
+  height: 40px;
+  justify-content: center;
+  left: 1px;
+  position: absolute;
+  top: 1px;
+  width: 38px;
+}
+
+.form__input-with-icon .form__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.form__input-with-icon .form__input:focus ~ .form__icon {
+  fill: gu-colour(sport-garnett-media-main-1);
+}
+
+.icon {
+  fill: inherit;
+}
+
