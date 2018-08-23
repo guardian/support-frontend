@@ -16,6 +16,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Status } from 'helpers/switch';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 
 
 // ---- Types ----- //
@@ -34,6 +35,7 @@ type PropTypes = {
   onClick: ?(void => void),
   switchStatus: Status,
   cancelURL: string,
+  optimizeExperiments: OptimizeExperiments,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -57,6 +59,7 @@ function payWithPayPal(props: PropTypes) {
         props.errorHandler,
         props.abParticipations,
         props.cancelURL,
+        props.optimizeExperiments,
       );
     }
   };

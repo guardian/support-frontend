@@ -32,7 +32,7 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { getOptimizeExperiments } from 'helpers/tracking/optimize';
+import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
 
 import { type Action } from './pageActions';
 
@@ -52,6 +52,7 @@ export type CommonState = {
   abParticipations: Participations,
   switches: Switches,
   internationalisation: Internationalisation,
+  optimizeExperiments: OptimizeExperiments,
 };
 
 
@@ -98,6 +99,7 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     switches,
+    optimizeExperiments,
   };
 
 }

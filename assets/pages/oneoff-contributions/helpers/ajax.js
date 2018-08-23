@@ -15,6 +15,7 @@ import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+import type {OptimizeExperiments} from "../../../helpers/tracking/optimize";
 
 
 // ----- Setup ----- //
@@ -53,6 +54,7 @@ function requestData(
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ) {
   const { user } = getState().page;
 
@@ -66,7 +68,7 @@ function requestData(
         token: paymentToken,
         email: user.email,
       },
-      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations),
+      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
     };
 
     return {
@@ -113,8 +115,10 @@ export default function postCheckout(
   currencyId: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ): (string) => Promise<*> {
   return (paymentToken: string) => {
+    // TODO: data ok here
     const request = requestData(
       abParticipations,
       paymentToken,
@@ -122,6 +126,7 @@ export default function postCheckout(
       amount,
       referrerAcquisitionData,
       getState,
+      optimizeExperiments,
     );
 
     return postToEndpoint(request, dispatch, abParticipations);

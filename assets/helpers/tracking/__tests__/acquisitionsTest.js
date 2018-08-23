@@ -8,7 +8,7 @@ import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
-  optimizeToAcquisitionABTest,
+  optimizeExperimentsToAcquisitionABTest,
 } from '../acquisitions';
 
 
@@ -98,10 +98,10 @@ describe('acquisitions', () => {
     });
   });
 
-  describe('optimizeToAcquisitionABTest', () => {
+  describe('optimizeExperimentsToAcquisitionABTest', () => {
 
     it('should return an empty array in the presence of a empty object as its input', () => {
-      expect(optimizeToAcquisitionABTest({})).toEqual([]);
+      expect(optimizeExperimentsToAcquisitionABTest({})).toEqual([]);
     });
 
     it('should return an array of AcquisitionAbTests appended with an Optimize tag', () => {
@@ -112,7 +112,7 @@ describe('acquisitions', () => {
         testThree: 'variantSeven',
       };
 
-      const acquisitionABTests = optimizeToAcquisitionABTest(optimizeExperiments);
+      const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
 
       expect(acquisitionABTests.length).toBe(3);
       expect(acquisitionABTests[0]).toEqual({ name: 'testOne', variant: 'variantOne' });

@@ -167,13 +167,11 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 
 // Appends all the experiment names (the keys) with '$Optimize' to avoid name
 // collision with native tests, and returns as array of AB tests.
-function optimizeToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
-
+function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
   return Object.keys(opt).map(k => ({
     name: k,
     variant: opt[k],
   }));
-
 }
 
 // Builds the acquisition object from data and other sources.
@@ -198,7 +196,7 @@ function buildAcquisition(
 
   const abTests = [
     ...participationsToAcquisitionABTest(abParticipations),
-    ...optimizeToAcquisitionABTest(optimizeExperiments),
+    ...optimizeExperimentsToAcquisitionABTest(optimizeExperiments),
   ];
 
   if (acquisitionData.abTest) {
@@ -227,16 +225,21 @@ const getOphanIds = (): OphanIds => ({
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
-  const campaignCodes = referrerAcquisitionData.campaignCode ?
-    [referrerAcquisitionData.campaignCode] : [];
+  const abTests: AcquisitionABTest[] = [
+    ...participationsToAcquisitionABTest(nativeAbParticipations),
+    ...optimizeExperimentsToAcquisitionABTest(optimizeExperiments),
+  ];
 
   if (referrerAcquisitionData.abTest) {
     abTests.push(referrerAcquisitionData.abTest);
   }
+
+  const campaignCodes = referrerAcquisitionData.campaignCode ?
+    [referrerAcquisitionData.campaignCode] : [];
 
   return {
     platform: 'SUPPORT',
@@ -283,5 +286,5 @@ export {
   getOphanIds,
   participationsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
-  optimizeToAcquisitionABTest,
+  optimizeExperimentsToAcquisitionABTest,
 };
