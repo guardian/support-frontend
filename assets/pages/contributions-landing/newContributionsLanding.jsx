@@ -30,120 +30,128 @@ const defaultContributeCopy = `
   as and when you feel like it – choose the option that suits you best.
 `;
 
+type CountryMetaData = {
+  headerCopy: string,
+  contributeCopy: string,
+  amounts: Object,
+  currency: Object,
+  contribution: Object
+};
+
 const countryGroupSpecificDetails: {
-  [CountryGroupId]: {headerCopy: string, contributeCopy: string}
+  [CountryGroupId]: CountryMetaData
 } = {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [25, 50, 100, 250],
-      monthly: [2, 5, 10]
+      monthly: [2, 5, 10],
     },
     currency: {
       name: 'British Pounds',
-      symbol: '£'
+      symbol: '£',
     },
     contribution: {
       oneoff: 'One-off',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [25, 50, 100, 250],
-      monthly: [6, 10, 20]
+      monthly: [6, 10, 20],
     },
     currency: {
       name: 'Euros',
-      symbol: '€'
+      symbol: '€',
     },
     contribution: {
       oneoff: 'One-off',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [25, 50, 100, 250],
-      monthly: [7, 15, 30]
+      monthly: [7, 15, 30],
     },
     currency: {
       name: 'US Dollars',
-      symbol: '$'
+      symbol: '$',
     },
     contribution: {
       oneoff: 'One-time',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [50, 100, 250, 500],
-      monthly: [10, 20, 40]
+      monthly: [10, 20, 40],
     },
     currency: {
       name: 'Australian Dollars',
-      symbol: '$'
+      symbol: '$',
     },
     contribution: {
       oneoff: 'One-off',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [25, 50, 100, 250],
-      monthly: [2, 5, 10]
+      monthly: [2, 5, 10],
     },
     currency: {
       name: 'Canadian Dollars',
-      symbol: '$'
+      symbol: '$',
     },
     contribution: {
       oneoff: 'One-off',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [50, 100, 250, 500],
-      monthly: [10, 20, 40]
+      monthly: [10, 20, 40],
     },
     currency: {
       name: 'Canadian Dollars',
-      symbol: '$'
+      symbol: '$',
     },
     contribution: {
       oneoff: 'One-off',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
     amounts: {
       oneoff: [25, 50, 100, 250],
-      monthly: [5, 10, 20]
+      monthly: [5, 10, 20],
     },
     currency: {
       name: 'Canadian Dollars',
-      symbol: '$'
+      symbol: '$',
     },
     contribution: {
       oneoff: 'One-time',
-      monthly: 'Monthly'
-    }
+      monthly: 'Monthly',
+    },
   },
 };
 
@@ -153,9 +161,9 @@ const contributionType: ContributionType = 'monthly';
 
 const selectedCountryGroup = countryGroupSpecificDetails[countryGroupId];
 
-const formatAmount = (amount, verbose) => verbose ?
+const formatAmount = (amount, verbose) => (verbose ?
   `${amount} ${selectedCountryGroup.currency.name}` :
-  `${selectedCountryGroup.currency.symbol}${amount}`;
+  `${selectedCountryGroup.currency.symbol}${amount}`);
 
 // ----- Render ----- //
 
@@ -169,21 +177,25 @@ const content = (
           <legend className="form__legend form__legend--radio-group">Recurrence</legend>
           <ul className="form__radio-group__list">
             <li className="form__radio-group__item">
-              <input id="contributionType-monthly" 
-                className="form__radio-group__input" 
-                type="radio" 
-                name="contributionType" 
-                value="monthly" 
-                checked={contributionType === 'monthly'} />
+              <input
+                id="contributionType-monthly"
+                className="form__radio-group__input"
+                type="radio"
+                name="contributionType"
+                value="monthly"
+                checked={contributionType === 'monthly'}
+              />
               <label htmlFor="contributionType-monthly" className="form__radio-group__label">{selectedCountryGroup.contribution.monthly}</label>
             </li>
             <li className="form__radio-group__item">
-              <input id="contributionType-oneoff" 
-                className="form__radio-group__input" 
-                type="radio" 
-                name="contributionType" 
+              <input
+                id="contributionType-oneoff"
+                className="form__radio-group__input"
+                type="radio"
+                name="contributionType"
                 value="oneoff"
-                checked={contributionType === 'oneoff'} />
+                checked={contributionType === 'oneoff'}
+              />
               <label htmlFor="contributionType-oneoff" className="form__radio-group__label">{selectedCountryGroup.contribution.oneoff}</label>
             </li>
           </ul>
@@ -194,12 +206,14 @@ const content = (
           <ul className="form__radio-group__list">
             {selectedCountryGroup.amounts[contributionType].map((a, i) => (
               <li className="form__radio-group__item">
-                <input id={`contributionAmount-${a}`} 
-                  className="form__radio-group__input" 
-                  type="radio" 
-                  name="contributionAmount" 
+                <input
+                  id={`contributionAmount-${a}`}
+                  className="form__radio-group__input"
+                  type="radio"
+                  name="contributionAmount"
                   value={a}
-                  checked={i === 0} />
+                  checked={i === 0}
+                />
                 <label htmlFor={`contributionAmount-${a}`} className="form__radio-group__label" aria-label={formatAmount(a, true)}>
                   {formatAmount(a, false)}
                 </label>
