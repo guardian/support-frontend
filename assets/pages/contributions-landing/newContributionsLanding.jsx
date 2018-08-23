@@ -43,7 +43,7 @@ const countryGroupSpecificDetails: {
     currency: {
       name: 'British Pounds',
       symbol: '£'
-  },
+    },
     contribution: {
       oneoff: 'One-off',
       monthly: 'Monthly'
@@ -55,7 +55,7 @@ const countryGroupSpecificDetails: {
     amounts: {
       oneoff: [25, 50, 100, 250],
       monthly: [6, 10, 20]
-  },
+    },
     currency: {
       name: 'Euros',
       symbol: '€'
@@ -87,7 +87,7 @@ const countryGroupSpecificDetails: {
     amounts: {
       oneoff: [50, 100, 250, 500],
       monthly: [10, 20, 40]
-  },
+    },
     currency: {
       name: 'Australian Dollars',
       symbol: '$'
@@ -135,7 +135,7 @@ const countryGroupSpecificDetails: {
     amounts: {
       oneoff: [25, 50, 100, 250],
       monthly: [5, 10, 20]
-  },
+    },
     currency: {
       name: 'Canadian Dollars',
       symbol: '$'
@@ -193,7 +193,7 @@ const content = (
           <legend className="form__legend form__legend--radio-group">Amount</legend>
           <ul className="form__radio-group__list">
             {selectedCountryGroup.amounts[contributionType].map((a, i) => (
-            <li className="form__radio-group__item">
+              <li className="form__radio-group__item">
                 <input id={`contributionAmount-${a}`} 
                   className="form__radio-group__input" 
                   type="radio" 
@@ -203,7 +203,7 @@ const content = (
                 <label htmlFor={`contributionAmount-${a}`} className="form__radio-group__label" aria-label={formatAmount(a, true)}>
                   {formatAmount(a, false)}
                 </label>
-            </li>
+              </li>
             ))}
             <li className="form__radio-group__item">
               <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
@@ -242,7 +242,7 @@ const content = (
         <div className="form__field form__field--contribution-email">
           <label className="form__label" htmlFor="contributionEmail">Email address</label>
           <span className="form__input-with-icon">
-            <input id="contributionEmail" className="form__input" type="email" placeholder="example@@domain.com" required />
+            <input id="contributionEmail" className="form__input" type="email" placeholder="example@domain.com" required />
             <span className="form__icon">
               <svg width="16" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z" /></svg>
             </span>
