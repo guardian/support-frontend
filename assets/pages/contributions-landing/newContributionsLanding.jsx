@@ -36,30 +36,114 @@ const countryGroupSpecificDetails: {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [25, 50, 100, 250],
+      monthly: [2, 5, 10]
+    },
+    currency: {
+      name: 'British Pounds',
+      symbol: '£'
+  },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly'
+    }
   },
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [25, 50, 100, 250],
+      monthly: [6, 10, 20]
+  },
+    currency: {
+      name: 'Euros',
+      symbol: '€'
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly'
+    }
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [25, 50, 100, 250],
+      monthly: [7, 15, 30]
+    },
+    currency: {
+      name: 'US Dollars',
+      symbol: '$'
+    },
+    contribution: {
+      oneoff: 'One-time',
+      monthly: 'Monthly'
+    }
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [50, 100, 250, 500],
+      monthly: [10, 20, 40]
+  },
+    currency: {
+      name: 'Australian Dollars',
+      symbol: '$'
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly'
+    }
   },
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [25, 50, 100, 250],
+      monthly: [2, 5, 10]
+    },
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$'
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly'
+    }
   },
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [50, 100, 250, 500],
+      monthly: [10, 20, 40]
+    },
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$'
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly'
+    }
   },
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    amounts: {
+      oneoff: [25, 50, 100, 250],
+      monthly: [5, 10, 20]
+  },
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$'
+    },
+    contribution: {
+      oneoff: 'One-time',
+      monthly: 'Monthly'
+    }
   },
 };
 
