@@ -298,7 +298,9 @@ const content = (
           </ul>
         </fieldset>
         <div className="form__submit">
-          <button className="form__submit__button" type="submit">Contribute</button>
+          <button className="form__submit__button" type="submit">
+            Contribute {formatAmount(selectedCountryGroup.amounts[contributionType][0], false)}
+          </button>
         </div>
       </form>
     </Page>
