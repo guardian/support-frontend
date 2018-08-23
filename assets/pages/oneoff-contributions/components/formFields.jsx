@@ -17,7 +17,7 @@ import {
   setFullNameShouldValidate,
   setEmailShouldValidate,
 } from './contributionsCheckoutContainer/checkoutFormActions';
-import { formFields } from '../helpers/checkoutFormFields';
+import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
 import { type PageState as State } from '../oneOffContributionsReducer';
 
 
@@ -36,7 +36,7 @@ type PropTypes = {
 
 function mapStateToProps(state: State) {
 
-  const { fullName, email } = formFields(state);
+  const { fullName, email } = getFormFields(state);
 
   return {
     fullName,

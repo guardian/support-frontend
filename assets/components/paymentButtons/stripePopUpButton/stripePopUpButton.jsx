@@ -15,7 +15,6 @@ import {
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
 
 // ---- Types ----- //
 
@@ -32,7 +31,6 @@ type PropTypes = {|
   canOpen: () => boolean,
   switchStatus: Status,
   disable: boolean,
-  formFields: Array<UserFormFieldAttribute>,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -101,7 +99,6 @@ StripePopUpButton.defaultProps = {
   canOpen: () => true,
   onClick: () => undefined,
   switchStatus: 'On',
-  formFields: [],
 };
 
 

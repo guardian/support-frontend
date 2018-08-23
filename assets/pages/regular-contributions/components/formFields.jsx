@@ -29,7 +29,7 @@ import {
   setEmailShouldValidate,
 } from './contributionsCheckoutContainer/checkoutFormActions';
 import { type PageState as State } from '../regularContributionsReducer';
-import { formFields } from '../helpers/checkoutFormFields';
+import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
 
 
 // ----- Types ----- //
@@ -54,7 +54,7 @@ type PropTypes = {
 
 function mapStateToProps(state: State) {
 
-  const { firstName, lastName, email } = formFields(state);
+  const { firstName, lastName, email } = getFormFields(state);
 
   return {
     firstName,

@@ -2,7 +2,7 @@
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type PageState as State } from '../regularContributionsReducer';
 
-export function formFields(state: State) {
+function getFormFields(state: State) {
 
   const firstNameFromState = {
     value: state.page.user.firstName,
@@ -39,3 +39,5 @@ export function formFields(state: State) {
 
   return { firstName, lastName, email };
 }
+
+export { getFormFields };

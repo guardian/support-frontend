@@ -81,9 +81,11 @@
     margin-bottom: $gu-v-spacing;
   }
 
-  .component-text-input__input--error {
-    margin-bottom: $gu-v-spacing;
-    border: 2px solid gu-colour(error);
+  .component-text-input--error {
+    .component-text-input__input {
+      border: 2px solid gu-colour(error);
+      margin-bottom: $gu-v-spacing / 2;
+    }
   }
 
   .component-text-input--last-name {

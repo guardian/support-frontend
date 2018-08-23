@@ -55,7 +55,7 @@ export default function TextInput(props: PropTypes) {
         {props.labelText}
       </label>
       <input
-        className={classNameWithModifiers('component-text-input__input', modifierClasses)}
+        className="component-text-input__input"
         type={props.type}
         id={props.id}
         onChange={event => props.onChange(event.target.value || '')}

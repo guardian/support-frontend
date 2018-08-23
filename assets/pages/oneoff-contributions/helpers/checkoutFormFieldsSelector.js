@@ -2,7 +2,7 @@
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type PageState as State } from '../oneOffContributionsReducer';
 
-export function formFields(state: State) {
+function getFormFields(state: State) {
 
   const fullNameFromState = {
     value: state.page.user.fullName,
@@ -27,3 +27,5 @@ export function formFields(state: State) {
 
   return { fullName, email };
 }
+
+export { getFormFields };

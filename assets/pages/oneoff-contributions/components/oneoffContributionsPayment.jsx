@@ -17,7 +17,7 @@ import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-import { formFields } from '../helpers/checkoutFormFields';
+import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
 import { type PageState as State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
@@ -43,7 +43,7 @@ type PropTypes = {|
 
 
 function mapStateToProps(state: State) {
-  const { fullName, email } = formFields(state);
+  const { fullName, email } = getFormFields(state);
 
   return {
     isTestUser: state.page.user.isTestUser || false,
@@ -102,7 +102,6 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
         disable={false}
-        formFields={props.formFields}
       />
     </section>
   );
