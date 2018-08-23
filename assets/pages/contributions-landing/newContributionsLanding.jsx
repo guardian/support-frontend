@@ -148,6 +148,12 @@ const countryGroupSpecificDetails: {
 };
 
 
+const selectedCountryGroup = countryGroupSpecificDetails[countryGroupId];
+
+const formatAmount = (amount, verbose) => verbose ?
+  `${amount} ${selectedCountryGroup.currency.name}` :
+  `${selectedCountryGroup.currency.symbol}${amount}`;
+
 // ----- Render ----- //
 
 const content = (
@@ -173,22 +179,19 @@ const content = (
         <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
           <legend className="form__legend form__legend--radio-group">Amount</legend>
           <ul className="form__radio-group__list">
+            {selectedCountryGroup.amounts[contributionType].map((a, i) => (
             <li className="form__radio-group__item">
-              <input id="contributionAmount-25" className="form__radio-group__input" type="radio" name="contributionAmount" value="25" checked />
-              <label htmlFor="contributionAmount-25" className="form__radio-group__label" aria-label="25 US Dollars">$25</label>
+                <input id={`contributionAmount-${a}`} 
+                  className="form__radio-group__input" 
+                  type="radio" 
+                  name="contributionAmount" 
+                  value={a}
+                  checked={i === 0} />
+                <label htmlFor={`contributionAmount-${a}`} className="form__radio-group__label" aria-label={formatAmount(a, true)}>
+                  {formatAmount(a, false)}
+                </label>
             </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-50" className="form__radio-group__input" type="radio" name="contributionAmount" value="50" />
-              <label htmlFor="contributionAmount-50" className="form__radio-group__label" aria-label="50 US Dollars">$50</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-100" className="form__radio-group__input" type="radio" name="contributionAmount" value="100" />
-              <label htmlFor="contributionAmount-100" className="form__radio-group__label" aria-label="100 US Dollars">$100</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-250" className="form__radio-group__input" type="radio" name="contributionAmount" value="250" />
-              <label htmlFor="contributionAmount-250" className="form__radio-group__label" aria-label="250 US Dollars">$250</label>
-            </li>
+            ))}
             <li className="form__radio-group__item">
               <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
               <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
