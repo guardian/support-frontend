@@ -11,6 +11,7 @@ import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'h
 import { currencies } from 'helpers/internationalisation/currency';
 
 import Page from 'components/page/page';
+import Footer from 'components/footer/footer';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
 
@@ -110,14 +111,7 @@ const content = (
           </details>
         </header>
       }
-      footer={
-        <footer role="contentinfo" className="gu-content__footer">
-          <div className="license">
-            <small className="license__txt">© 2018 Guardian News and Media Limited or its affiliated companies. All rights reserved.</small>
-            <p>The ultimate owner of the Guardian is The Scott Trust Limited, whose role it is to secure the editorial and financial independence of the Guardian in perpetuity. Reader contributions support the Guardian’s journalism. Please note that your support of the Guardian’s journalism does not constitute a charitable donation, as such your contribution is not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If you have any questions about contributing to the Guardian, please <a href="mailto:contribution.support@theguardian.com">contact us here</a>.</p>
-          </div>
-        </footer>
-      }
+      footer={<Footer disclaimer={true} countryGroupId={countryGroupId} />}
     >
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
