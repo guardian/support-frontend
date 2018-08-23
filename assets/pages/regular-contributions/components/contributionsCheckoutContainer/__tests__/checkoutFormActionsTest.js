@@ -18,7 +18,7 @@ describe('Checkout form', () => {
     expect(setFirstNameShouldValidate()).toEqual(expectedAction);
   });
 
-  it('should create an action to set the shouldValidate on the checkout form first name field', () => {
+  it('should create an action to set the shouldValidate on the checkout form last name field', () => {
     const expectedAction = { type: 'SET_LAST_NAME_SHOULD_VALIDATE' };
     expect(setLastNameShouldValidate()).toEqual(expectedAction);
   });

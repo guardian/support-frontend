@@ -7,18 +7,18 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import TextInput from 'components/textInput/textInput';
 import {
-setFullName,
-setEmail,
-type Action as UserAction,
+  setFullName,
+  setEmail,
+  type Action as UserAction,
 } from 'helpers/user/userActions';
 import { type UserFormFieldAttribute, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
 import {
-type Action as CheckoutAction,
-setFullNameShouldValidate,
-setEmailShouldValidate,
+  type Action as CheckoutAction,
+  setFullNameShouldValidate,
+  setEmailShouldValidate,
 } from './contributionsCheckoutContainer/checkoutFormActions';
-import {formFields} from "../helpers/checkoutFormFields";
-import { type PageState as State } from '../oneOffContributionsReducer'
+import { formFields } from '../helpers/checkoutFormFields';
+import { type PageState as State } from '../oneOffContributionsReducer';
 
 
 // ----- Types ----- //
@@ -36,8 +36,7 @@ type PropTypes = {
 
 function mapStateToProps(state: State) {
 
-  const {fullName, email} = formFields(state);
-
+  const { fullName, email } = formFields(state);
 
   return {
     fullName,

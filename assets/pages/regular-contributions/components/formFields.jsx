@@ -21,15 +21,15 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type UserFormFieldAttribute, formFieldIsValid, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
+import { type UserFormFieldAttribute, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
 import {
   type Action as CheckoutAction,
   setFirstNameShouldValidate,
   setLastNameShouldValidate,
   setEmailShouldValidate,
 } from './contributionsCheckoutContainer/checkoutFormActions';
-import { type PageState as State } from '../regularContributionsReducer'
-import { formFields } from '../helpers/checkoutFormFields'
+import { type PageState as State } from '../regularContributionsReducer';
+import { formFields } from '../helpers/checkoutFormFields';
 
 
 // ----- Types ----- //

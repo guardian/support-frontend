@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { Redirect } from 'react-router';
 import { routes } from 'helpers/routes';
-import { type PageState as State } from '../oneOffContributionsReducer'
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -15,9 +14,11 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
-import postCheckout from '../helpers/ajax';
+import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
-import { formFields } from  '../helpers/CheckoutFormFields'
+import postCheckout from '../helpers/ajax';
+import { formFields } from '../helpers/checkoutFormFields';
+import { type PageState as State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
 
@@ -42,7 +43,7 @@ type PropTypes = {|
 
 
 function mapStateToProps(state: State) {
-  const {fullName, email} = formFields(state);
+  const { fullName, email } = formFields(state);
 
   return {
     isTestUser: state.page.user.isTestUser || false,
@@ -59,7 +60,7 @@ function mapStateToProps(state: State) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<*>) {
+function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
     setShouldValidateFunctions: [

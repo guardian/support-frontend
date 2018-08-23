@@ -1,6 +1,6 @@
 // @flow
-import { type PageState as State } from '../regularContributionsReducer'
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { type PageState as State } from '../regularContributionsReducer';
 
 export function formFields(state: State) {
 
@@ -19,13 +19,13 @@ export function formFields(state: State) {
     ...state.page.checkoutForm.email,
   };
 
-  const firstName =  {
+  const firstName = {
     value: firstNameFromState.value,
     shouldValidate: firstNameFromState.shouldValidate,
     isValid: formFieldIsValid(firstNameFromState),
   };
 
-  const lastName =  {
+  const lastName = {
     value: lastNameFromState.value,
     shouldValidate: lastNameFromState.shouldValidate,
     isValid: formFieldIsValid(lastNameFromState),

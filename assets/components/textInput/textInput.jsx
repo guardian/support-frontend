@@ -50,26 +50,26 @@ export default function TextInput(props: PropTypes) {
   }
 
   return (
-      <div className={classNameWithModifiers('component-text-input', modifierClasses)}>
-        <label htmlFor={props.id} className="component-text-input__label">
-          {props.labelText}
-        </label>
-        <input
-          className={classNameWithModifiers('component-text-input__input', modifierClasses)}
-          type={props.type}
-          id={props.id}
-          onChange={event => props.onChange(event.target.value || '')}
-          onBlur={props.onBlur}
-          value={props.value}
-          placeholder={props.placeholder}
-          autoComplete={props.autocomplete}
-          autoCapitalize={props.autocapitalize}
-        />
-        <ErrorMessage
-          showError={props.showError}
-          message={props.errorMessage}
-        />
-      </div>
+    <div className={classNameWithModifiers('component-text-input', modifierClasses)}>
+      <label htmlFor={props.id} className="component-text-input__label">
+        {props.labelText}
+      </label>
+      <input
+        className={classNameWithModifiers('component-text-input__input', modifierClasses)}
+        type={props.type}
+        id={props.id}
+        onChange={event => props.onChange(event.target.value || '')}
+        onBlur={props.onBlur}
+        value={props.value}
+        placeholder={props.placeholder}
+        autoComplete={props.autocomplete}
+        autoCapitalize={props.autocapitalize}
+      />
+      <ErrorMessage
+        showError={props.showError}
+        message={props.errorMessage}
+      />
+    </div>
   );
 
 }

@@ -1,6 +1,6 @@
 // @flow
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { type PageState as State } from '../oneOffContributionsReducer'
+import { type PageState as State } from '../oneOffContributionsReducer';
 
 export function formFields(state: State) {
 
@@ -25,5 +25,5 @@ export function formFields(state: State) {
     isValid: formFieldIsValid(emailFromState),
   };
 
-  return {fullName, email};
+  return { fullName, email };
 }
