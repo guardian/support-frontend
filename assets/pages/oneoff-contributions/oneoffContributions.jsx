@@ -17,6 +17,8 @@ import { set as setCookie } from 'helpers/cookie';
 
 import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 
+import MarketingConsentContainer from './components/marketingConsentContainer';
+
 import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
@@ -58,7 +60,12 @@ const router = (
               ONE_OFF_CONTRIBUTION_COOKIE,
               currentTimeInEpochMilliseconds.toString(),
             );
-            return (<ContributionsThankYouPage contributionType="ONE_OFF" directDebit={null} />);
+            return (
+              <ContributionsThankYouPage
+                contributionType="ONE_OFF"
+                directDebit={null}
+                marketingConsent={<MarketingConsentContainer />}
+              />);
           }
           }
         />

@@ -12,6 +12,7 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import Contribute from 'components/contribute/contribute';
+import { setInitialAmountsForAnnualHigherAmountsVariant } from 'helpers/abTests/helpers/annualContributions';
 
 // React components connected to redux store
 import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
@@ -93,4 +94,5 @@ const content = (
   </Provider>
 );
 
+setInitialAmountsForAnnualHigherAmountsVariant(store);
 renderPage(content, 'support-landing-page');

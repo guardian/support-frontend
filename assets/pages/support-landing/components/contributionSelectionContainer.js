@@ -25,7 +25,7 @@ function mapStateToProps(state: State) {
     error: state.page.selection.error,
     oneOffSingleOneTimeTestVariant: state.common.abParticipations.oneOffOneTimeSingle,
     usOneOffSingleOneTimeTestVariant: state.common.abParticipations.usOneOffOneTimeSingle,
-    annualTestVariant: state.common.abParticipations.annualContributions,
+    annualTestVariant: state.common.abParticipations.annualContributionsRoundTwo,
   };
 
 }

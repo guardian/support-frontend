@@ -56,7 +56,6 @@ export default function DigitalSubscriptions(props: PropTypes) {
     countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 
@@ -99,6 +98,7 @@ function PremiumTier(props: {
     iOSUrl: string,
     androidUrl: string,
     headingSize: HeadingSize,
+    subheading: ?string,
     iOSOnClick: ClickEvent,
     androidOnClick: ClickEvent,
 }) {
@@ -107,11 +107,11 @@ function PremiumTier(props: {
     <SubscriptionBundle
       modifierClass="premium-tier"
       heading="Premium App"
-      subheading={displayPrice('PremiumTier', props.countryGroupId)}
+      subheading={props.subheading || displayPrice('PremiumTier', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The ad free, premium app, designed especially for your smartphone and tablet',
+          text: 'The ad-free, premium app, designed especially for your smartphone and tablet',
         },
       ]}
       gridImage={{
@@ -139,6 +139,10 @@ function PremiumTier(props: {
   );
 
 }
+
+PremiumTier.defaultProps = {
+  subheading: null,
+};
 
 function DailyEdition(props: {
   url: string,
@@ -180,6 +184,7 @@ function DigitalBundle(props: {
   countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
+  subheading: ?string,
   onClick: ClickEvent | null,
 }) {
 
@@ -198,7 +203,7 @@ function DigitalBundle(props: {
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
-      subheading={displayPrice('DigitalPack', props.countryGroupId)}
+      subheading={props.subheading || displayPrice('DigitalPack', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -223,6 +228,10 @@ function DigitalBundle(props: {
   );
 
 }
+
+DigitalBundle.defaultProps = {
+  subheading: null,
+};
 
 export {
   DigitalBundle,

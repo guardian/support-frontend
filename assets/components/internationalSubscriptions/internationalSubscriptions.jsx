@@ -18,6 +18,8 @@ import { PremiumTier, DigitalBundle } from 'components/digitalSubscriptions/digi
 import { WeeklyBundle } from 'components/paperSubscriptions/paperSubscriptions';
 import { type HeadingSize } from 'components/heading/heading';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
@@ -50,13 +52,16 @@ export default function InternationalSubscriptions(props: PropTypes) {
     props.countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 
   return (
     <section id={props.sectionId}>
-      <div className="component-international-subscriptions">
+      <div className={classNameWithModifiers(
+        'component-international-subscriptions',
+        [countryGroups[props.countryGroupId].supportInternationalisationId],
+      )}
+      >
         <PageSection
           heading="Subscribe"
           modifierClass="international-subscriptions"
@@ -66,6 +71,7 @@ export default function InternationalSubscriptions(props: PropTypes) {
             iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
             androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
             headingSize={props.headingSize}
+            subheading="7-day free trial"
             iOSOnClick={props.clickEvents.iOSApp}
             androidOnClick={props.clickEvents.androidApp}
           />
@@ -73,12 +79,14 @@ export default function InternationalSubscriptions(props: PropTypes) {
             countryGroupId={props.countryGroupId}
             url={subsLinks.DigitalPack}
             headingSize={props.headingSize}
+            subheading="14-day free trial"
             onClick={props.clickEvents.digiPack}
           />
           <WeeklyBundle
             countryGroupId={props.countryGroupId}
             url={subsLinks.GuardianWeekly}
             headingSize={props.headingSize}
+            subheading="&nbsp;"
             onClick={props.clickEvents.weekly}
           />
         </PageSection>

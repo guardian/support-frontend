@@ -64,7 +64,7 @@ function CustomerService(props: PropTypes) {
         <div className="component-customer-service__text">
           For help with Guardian and Observer subscription services please
           email <DigitalPackEmail email="apac.help@theguardian.com" /> or
-          call 1800 773 766 (within Australia) or +61 2076 8599 (outside Australia).
+          call 1800 773 766 (within Australia) or +61 2 8076 8599 (outside Australia).
           Lines are open 9am-5pm Monday-Friday (AEDT)
           <FAQBlock />
         </div>

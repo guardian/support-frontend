@@ -52,7 +52,6 @@ function ThreeSubscriptions(props: PropTypes) {
     countryGroupId,
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 

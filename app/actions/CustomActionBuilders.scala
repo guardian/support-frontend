@@ -48,7 +48,7 @@ class CustomActionBuilders(
       "clientId" -> clientId
 
   def onUnauthenticated(identityClientId: String): RequestHeader => Result = request => {
-    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin/start"))
+    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin"))
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =

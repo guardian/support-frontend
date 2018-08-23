@@ -22,7 +22,7 @@
     }
 
     .component-page-section__header {
-      font-family: $gu-egyptian-web;
+      font-family: $gu-headline;
       font-weight: bold;
       font-size: 24px;
       line-height: 1.17;
@@ -38,7 +38,7 @@
   }
 
   .component-error-message {
-    height: 32px;
+    height: 40px;
     position: relative;
 
     @include mq($from: desktop) {

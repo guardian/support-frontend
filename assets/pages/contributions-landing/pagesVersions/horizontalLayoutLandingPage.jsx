@@ -82,8 +82,10 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
 
 const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
   const annualContributeCopy = 'Make a recurring commitment to support The Guardian long term or a one-off contribution as and when you feel like it – choose the option that suits you best.';
-  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributions;
-  const copyText = annualTestVariant === 'annual' ? annualContributeCopy : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
+  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributionsRoundTwo;
+  const copyText = annualTestVariant === 'annual' || annualTestVariant === 'annualHigherAmounts'
+    ? annualContributeCopy
+    : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
 
   return (
     <Provider store={props.store}>

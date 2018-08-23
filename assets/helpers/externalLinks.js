@@ -8,9 +8,8 @@ import {
   countryGroups,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { addQueryParamsToURL } from 'helpers/url';
 
-import { getPromoCode } from './flashSale';
+import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct } from './subscriptions';
 
 
@@ -31,9 +30,9 @@ export type SubsUrls = {
 
 const subsUrl = 'https://subscribe.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
-const iOSAppUrl = 'https://itunes.apple.com/gb/app/the-guardian/id409128287?mt=8';
+const iOSAppUrl = 'https://itunes.apple.com/app/the-guardian/id409128287?mt=8';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
-const dailyEditionUrl = 'https://itunes.apple.com/gb/app/guardian-observer-daily-edition/id452707806?mt=8';
+const dailyEditionUrl = 'https://itunes.apple.com/app/guardian-observer-daily-edition/id452707806?mt=8';
 
 const memUrls: {
   [MemProduct]: string,
@@ -111,25 +110,34 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
 }
 
+function buildParamString(
+  product: SubscriptionProduct,
+  intCmp: ?string,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+): string {
+  const params = new URLSearchParams(window.location.search);
+
+  const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
+  params.set('INTCMP', maybeCustomIntcmp);
+  params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
+
+  return params.toString();
+}
+
 // Creates URLs for the subs site from promo codes and intCmp.
 function buildSubsUrls(
   countryGroupId: CountryGroupId,
   promoCodes: PromoCodes,
   intCmp: ?string,
-  otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
 
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
-  const params = new URLSearchParams();
-  params.append('INTCMP', intCmp || defaultIntCmp);
-  otherQueryParams.forEach(p => params.append(p[0], p[1]));
-  params.append('acquisitionData', JSON.stringify(referrerAcquisitionData));
 
-  const paper = `${subsUrl}/p/${promoCodes.Paper}?${params.toString()}`;
-  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${params.toString()}`;
-  const digital = `/${countryId}/subscribe/digital?${params.toString()}`;
-  const weekly = `${subsUrl}/weekly?${params.toString()}`;
+  const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, referrerAcquisitionData)}`;
+  const weekly = `${subsUrl}/weekly?${buildParamString('GuardianWeekly', intCmp, referrerAcquisitionData)}`;
 
   return {
     DigitalPack: digital,
@@ -145,7 +153,6 @@ function getSubsLinks(
   countryGroupId: CountryGroupId,
   intCmp: ?string,
   campaign: ?Campaign,
-  otherQueryParams: Array<[string, string]>,
   referrerAcquisitionData: ReferrerAcquisitionData,
 ): SubsUrls {
   if ((campaign && customPromos[campaign])) {
@@ -153,12 +160,11 @@ function getSubsLinks(
       countryGroupId,
       customPromos[campaign],
       intCmp,
-      otherQueryParams,
       referrerAcquisitionData,
     );
   }
 
-  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, otherQueryParams, referrerAcquisitionData);
+  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, referrerAcquisitionData);
 
 }
 
@@ -169,13 +175,13 @@ function getDigitalCheckout(
   referringCta: ?string,
 ): string {
 
-  return addQueryParamsToURL(`${subsUrl}/checkout`, {
-    promoCode: defaultPromos.DigitalPack,
-    countryGroup: countryGroups[cgId].supportInternationalisationId,
-    acquisitionData: JSON.stringify(referrerAcquisitionData),
-    startTrialButton: referringCta,
-  });
+  const params = new URLSearchParams(window.location.search);
+  params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
+  params.set('promoCode', defaultPromos.DigitalPack);
+  params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
+  params.set('startTrialButton', referringCta || '');
 
+  return `${subsUrl}/checkout?${params.toString()}`;
 }
 
 

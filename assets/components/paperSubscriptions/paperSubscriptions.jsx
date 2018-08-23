@@ -47,7 +47,6 @@ export default function PaperSubscriptions(props: PropTypes) {
     'GBPCountries',
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
-    [],
     props.referrerAcquisitionData,
   );
 
@@ -155,14 +154,15 @@ function WeeklyBundle(props: {
   countryGroupId: CountryGroupId,
   url: string,
   headingSize: HeadingSize,
+  subheading: ?string,
   onClick: ClickEvent,
 }) {
 
   return (
     <SubscriptionBundle
       modifierClass="weekly"
-      heading="Guardian Weekly"
-      subheading={displayPrice('GuardianWeekly', props.countryGroupId)}
+      heading="Guardian&nbsp;Weekly"
+      subheading={props.subheading || displayPrice('GuardianWeekly', props.countryGroupId)}
       headingSize={props.headingSize}
       benefits={[
         {
@@ -185,8 +185,11 @@ function WeeklyBundle(props: {
       ]}
     />
   );
-
 }
+
+WeeklyBundle.defaultProps = {
+  subheading: null,
+};
 
 export {
   PaperBundle,
