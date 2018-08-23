@@ -147,6 +147,9 @@ const countryGroupSpecificDetails: {
   },
 };
 
+type ContributionType = 'oneoff' | 'monthly';
+
+const contributionType: ContributionType = 'monthly';
 
 const selectedCountryGroup = countryGroupSpecificDetails[countryGroupId];
 
@@ -166,12 +169,22 @@ const content = (
           <legend className="form__legend form__legend--radio-group">Recurrence</legend>
           <ul className="form__radio-group__list">
             <li className="form__radio-group__item">
-              <input id="contributionType-monthly" className="form__radio-group__input" type="radio" name="contributionType" value="monthly" checked />
-              <label htmlFor="contributionType-monthly" className="form__radio-group__label">Monthly</label>
+              <input id="contributionType-monthly" 
+                className="form__radio-group__input" 
+                type="radio" 
+                name="contributionType" 
+                value="monthly" 
+                checked={contributionType === 'monthly'} />
+              <label htmlFor="contributionType-monthly" className="form__radio-group__label">{selectedCountryGroup.contribution.monthly}</label>
             </li>
             <li className="form__radio-group__item">
-              <input id="contributionType-oneoff" className="form__radio-group__input" type="radio" name="contributionType" value="oneoff" />
-              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">One-off</label>
+              <input id="contributionType-oneoff" 
+                className="form__radio-group__input" 
+                type="radio" 
+                name="contributionType" 
+                value="oneoff"
+                checked={contributionType === 'oneoff'} />
+              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">{selectedCountryGroup.contribution.oneoff}</label>
             </li>
           </ul>
         </fieldset>
