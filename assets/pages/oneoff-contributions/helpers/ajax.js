@@ -9,13 +9,13 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
-import type {OptimizeExperiments} from "../../../helpers/tracking/optimize";
 
 
 // ----- Setup ----- //
@@ -118,7 +118,6 @@ export default function postCheckout(
   optimizeExperiments: OptimizeExperiments,
 ): (string) => Promise<*> {
   return (paymentToken: string) => {
-    // TODO: data ok here
     const request = requestData(
       abParticipations,
       paymentToken,
