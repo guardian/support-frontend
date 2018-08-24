@@ -526,6 +526,7 @@ function getContributionAmountRadios(
 
 export {
   config,
+  amounts,
   parseContrib,
   validateContribution,
   parseContribution,

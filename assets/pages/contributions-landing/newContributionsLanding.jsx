@@ -5,6 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { amounts, getFrequency, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -22,18 +23,7 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(createPageReducerFor(countryGroupId));
 
-
-const reactElementId: {
-  [CountryGroupId]: string
-} = {
-  GBPCountries: 'new-contributions-landing-page-uk',
-  EURCountries: 'new-contributions-landing-page-eu',
-  UnitedStates: 'new-contributions-landing-page-us',
-  AUDCountries: 'new-contributions-landing-page-au',
-  International: 'new-contributions-landing-page-int',
-  NZDCountries: 'new-contributions-landing-page-nz',
-  Canada: 'new-contributions-landing-page-ca',
-};
+const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
 // ----- Internationalisation ----- //
 
@@ -43,42 +33,146 @@ const defaultContributeCopy = `
   as and when you feel like it – choose the option that suits you best.
 `;
 
+type CountryMetaData = {
+  headerCopy: string,
+  contributeCopy: string,
+  currency: Object,
+  contribution: Object
+};
+
 const countryGroupSpecificDetails: {
-  [CountryGroupId]: {headerCopy: string, contributeCopy: string}
+  [CountryGroupId]: CountryMetaData
 } = {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'British Pounds',
+      symbol: '£',
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly',
+    },
   },
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'Euros',
+      symbol: '€',
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly',
+    },
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'US Dollars',
+      symbol: '$',
+    },
+    contribution: {
+      oneoff: 'One-time',
+      monthly: 'Monthly',
+    },
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'Australian Dollars',
+      symbol: '$',
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly',
+    },
   },
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$',
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly',
+    },
   },
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$',
+    },
+    contribution: {
+      oneoff: 'One-off',
+      monthly: 'Monthly',
+    },
   },
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
+    currency: {
+      name: 'Canadian Dollars',
+      symbol: '$',
+    },
+    contribution: {
+      oneoff: 'One-time',
+      monthly: 'Monthly',
+    },
   },
 };
 
+type Amount = { value: string, spoken: string };
+
+const contributionType: Contrib = 'MONTHLY';
+
+const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
+
+const formatAmount = (amount: Amount, verbose: boolean) => (verbose ?
+  `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
+  `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
+
 const selectedCountryGroup = countryGroups[countryGroupId];
 
+const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
+
 // ----- Render ----- //
+
+const renderAmount = (amount: Amount, i) => (
+  <li className="form__radio-group__item">
+    <input
+      id={`contributionAmount-${amount.value}`}
+      className="form__radio-group__input"
+      type="radio"
+      name="contributionAmount"
+      value={amount.value}
+      checked={i === 0}
+    />
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
+      {formatAmount(amount, false)}
+    </label>
+  </li>
+);
+
+const renderCountryGroup = (countryGroup: CountryGroup) => (
+  <li className="countryGroups__item">
+    <a href={`/${countryGroup.supportInternationalisationId}/contribute.react`}>
+      {countryGroup === selectedCountryGroup ? (
+        <span className="icon">
+          <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
+        </span>
+      ) : ''}
+      {countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph})
+    </a>
+  </li>
+);
 
 const content = (
   <Provider store={store}>
@@ -95,18 +189,7 @@ const content = (
               </span>
             </summary>
             <ul className="countryGroups__list">
-              {(Object.values(countryGroups): any).map((g: CountryGroup) => (
-                <li className="countryGroups__item">
-                  <a href={`/${g.supportInternationalisationId}/contribute.react`}>
-                    {g === selectedCountryGroup ? (
-                      <span className="icon">
-                        <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
-                      </span>
-                    ) : ''}
-                    {g.name} ({currencies[g.currency].extendedGlyph})
-                  </a>
-                </li>
-              ))}
+              {(Object.values(countryGroups): any).map(renderCountryGroup)}
             </ul>
           </details>
         </header>
@@ -120,12 +203,26 @@ const content = (
           <legend className="form__legend form__legend--radio-group">Recurrence</legend>
           <ul className="form__radio-group__list">
             <li className="form__radio-group__item">
-              <input id="contributionType-monthly" className="form__radio-group__input" type="radio" name="contributionType" value="monthly" checked />
-              <label htmlFor="contributionType-monthly" className="form__radio-group__label">Monthly</label>
+              <input
+                id="contributionType-monthly"
+                className="form__radio-group__input"
+                type="radio"
+                name="contributionType"
+                value="monthly"
+                checked={contributionType === 'MONTHLY'}
+              />
+              <label htmlFor="contributionType-monthly" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.monthly}</label>
             </li>
             <li className="form__radio-group__item">
-              <input id="contributionType-oneoff" className="form__radio-group__input" type="radio" name="contributionType" value="oneoff" />
-              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">One-off</label>
+              <input
+                id="contributionType-oneoff"
+                className="form__radio-group__input"
+                type="radio"
+                name="contributionType"
+                value="oneoff"
+                checked={contributionType === 'ONE_OFF'}
+              />
+              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.oneoff}</label>
             </li>
           </ul>
         </fieldset>
@@ -133,22 +230,7 @@ const content = (
         <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
           <legend className="form__legend form__legend--radio-group">Amount</legend>
           <ul className="form__radio-group__list">
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-25" className="form__radio-group__input" type="radio" name="contributionAmount" value="25" checked />
-              <label htmlFor="contributionAmount-25" className="form__radio-group__label" aria-label="25 US Dollars">$25</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-50" className="form__radio-group__input" type="radio" name="contributionAmount" value="50" />
-              <label htmlFor="contributionAmount-50" className="form__radio-group__label" aria-label="50 US Dollars">$50</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-100" className="form__radio-group__input" type="radio" name="contributionAmount" value="100" />
-              <label htmlFor="contributionAmount-100" className="form__radio-group__label" aria-label="100 US Dollars">$100</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-250" className="form__radio-group__input" type="radio" name="contributionAmount" value="250" />
-              <label htmlFor="contributionAmount-250" className="form__radio-group__label" aria-label="250 US Dollars">$250</label>
-            </li>
+            {selectedAmounts.map(renderAmount)}
             <li className="form__radio-group__item">
               <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
               <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
@@ -186,7 +268,7 @@ const content = (
         <div className="form__field form__field--contribution-email">
           <label className="form__label" htmlFor="contributionEmail">Email address</label>
           <span className="form__input-with-icon">
-            <input id="contributionEmail" className="form__input" type="email" placeholder="example@@domain.com" required />
+            <input id="contributionEmail" className="form__input" type="email" placeholder="example@domain.com" required />
             <span className="form__icon">
               <svg width="16" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z" /></svg>
             </span>
@@ -228,11 +310,15 @@ const content = (
           </ul>
         </fieldset>
         <div className="form__submit">
-          <button className="form__submit__button" type="submit">Contribute</button>
+          <button className="form__submit__button" type="submit">
+            Contribute&nbsp;
+            {formatAmount(selectedAmounts[0], false)}&nbsp;
+            {getFrequency(contributionType)}
+          </button>
         </div>
       </form>
     </Page>
   </Provider>
 );
 
-renderPage(content, reactElementId[countryGroupId]);
+renderPage(content, reactElementId);
