@@ -164,12 +164,41 @@ const contributionType: ContributionType = 'monthly';
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 
 const formatAmount = (amount, verbose) => (verbose ?
-  `${amount} ${selectedCountryGroup.currency.name}` :
-  `${selectedCountryGroup.currency.symbol}${amount}`);
+  `${amount} ${selectedCountryGroupDetails.currency.name}` :
+  `${selectedCountryGroupDetails.currency.symbol}${amount}`);
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 // ----- Render ----- //
+
+const renderAmount = (amount: number, i) => (
+  <li className="form__radio-group__item">
+    <input
+      id={`contributionAmount-${amount}`}
+      className="form__radio-group__input"
+      type="radio"
+      name="contributionAmount"
+      value={amount}
+      checked={i === 0}
+    />
+    <label htmlFor={`contributionAmount-${amount}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
+      {formatAmount(amount, false)}
+    </label>
+  </li>
+);
+
+const renderCountryGroup = (countryGroup: CountryGroup) => (
+  <li className="countryGroups__item">
+    <a href={`/${countryGroup.supportInternationalisationId}/contribute.react`}>
+      {countryGroup === selectedCountryGroup ? (
+        <span className="icon">
+          <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
+        </span>
+      ) : ''}
+      {countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph})
+    </a>
+  </li>
+);
 
 const content = (
   <Provider store={store}>
@@ -186,18 +215,7 @@ const content = (
               </span>
             </summary>
             <ul className="countryGroups__list">
-              {(Object.values(countryGroups): any).map((g: CountryGroup) => (
-                <li className="countryGroups__item">
-                  <a href={`/${g.supportInternationalisationId}/contribute.react`}>
-                    {g === selectedCountryGroup ? (
-                      <span className="icon">
-                        <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
-                      </span>
-                    ) : ''}
-                    {g.name} ({currencies[g.currency].extendedGlyph})
-                  </a>
-                </li>
-              ))}
+              {(Object.values(countryGroups): any).map(renderCountryGroup)}
             </ul>
           </details>
         </header>
@@ -238,21 +256,7 @@ const content = (
         <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
           <legend className="form__legend form__legend--radio-group">Amount</legend>
           <ul className="form__radio-group__list">
-            {selectedCountryGroupDetails.amounts[contributionType].map((a, i) => (
-              <li className="form__radio-group__item">
-                <input
-                  id={`contributionAmount-${a}`}
-                  className="form__radio-group__input"
-                  type="radio"
-                  name="contributionAmount"
-                  value={a}
-                  checked={i === 0}
-                />
-                <label htmlFor={`contributionAmount-${a}`} className="form__radio-group__label" aria-label={formatAmount(a, true)}>
-                  {formatAmount(a, false)}
-                </label>
-              </li>
-            ))}
+            {selectedCountryGroupDetails.amounts[contributionType].map(renderAmount)}
             <li className="form__radio-group__item">
               <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
               <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
@@ -333,8 +337,8 @@ const content = (
         </fieldset>
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
-            Contribute 
-            {formatAmount(selectedCountryGroupDetails.amounts[contributionType][0], false)}
+            Contribute&nbsp;
+            {formatAmount(selectedCountryGroupDetails.amounts[contributionType][0], false)}&nbsp;
             {contributionType === 'monthly' ? 'a month' : ''}
           </button>
         </div>
