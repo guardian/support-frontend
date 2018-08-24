@@ -67,7 +67,7 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
 
 function isPayWithCardButtonFocused(event: FocusEvent): boolean {
   const { relatedTarget } = event;
-  if (relatedTarget && relatedTarget.id) {
+  if (relatedTarget instanceof HTMLElement) {
     return relatedTarget.id === 'qa-pay-with-card';
   }
   return false;
