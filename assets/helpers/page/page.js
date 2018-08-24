@@ -89,6 +89,20 @@ function buildInitialState(
     currencyId,
   };
 
+  // That's just temporary, until I figure out how the current workflow works
+  // and add reducers/actions.
+  const newPaymentUI = {
+    labels: {
+      ANNUAL: 'Annually',
+      MONTHLY: 'Monthly',
+      ONE_OFF: 'Single'
+    },
+    contributionType: 'MONTHLY',
+    amount: '5',
+    otherAmount: null
+  };
+
+
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
@@ -96,6 +110,7 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     switches,
+    newPaymentUI,
   };
 
 }
