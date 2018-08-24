@@ -222,6 +222,13 @@ const getOphanIds = (): OphanIds => ({
   visitId: getCookie('vsid'),
 });
 
+function getSupportAbTests(participations: Participations, experiments: OptimizeExperiments): AcquisitionABTest[] {
+  return [
+    ...participationsToAcquisitionABTest(participations),
+    ...optimizeExperimentsToAcquisitionABTest(experiments),
+  ];
+}
+
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
@@ -229,10 +236,7 @@ function derivePaymentApiAcquisitionData(
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests: AcquisitionABTest[] = [
-    ...participationsToAcquisitionABTest(nativeAbParticipations),
-    ...optimizeExperimentsToAcquisitionABTest(optimizeExperiments),
-  ];
+  const abTests = getSupportAbTests(nativeAbParticipations, optimizeExperiments);
 
   if (referrerAcquisitionData.abTest) {
     abTests.push(referrerAcquisitionData.abTest);
@@ -285,6 +289,7 @@ export {
   getAcquisition,
   getOphanIds,
   participationsToAcquisitionABTest,
-  derivePaymentApiAcquisitionData,
   optimizeExperimentsToAcquisitionABTest,
+  derivePaymentApiAcquisitionData,
+  getSupportAbTests,
 };
