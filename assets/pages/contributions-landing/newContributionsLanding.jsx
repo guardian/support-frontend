@@ -129,11 +129,13 @@ const countryGroupSpecificDetails: {
   },
 };
 
+type Amount = { value: string, spoken: string };
+
 const contributionType: Contrib = 'MONTHLY';
 
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 
-const formatAmount = (amount, verbose) => (verbose ?
+const formatAmount = (amount: Amount, verbose: boolean) => (verbose ?
   `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
   `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
 
@@ -143,17 +145,17 @@ const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 
 // ----- Render ----- //
 
-const renderAmount = (amount: number, i) => (
+const renderAmount = (amount: Amount, i) => (
   <li className="form__radio-group__item">
     <input
-      id={`contributionAmount-${amount}`}
+      id={`contributionAmount-${amount.value}`}
       className="form__radio-group__input"
       type="radio"
       name="contributionAmount"
-      value={amount}
+      value={amount.value}
       checked={i === 0}
     />
-    <label htmlFor={`contributionAmount-${amount}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
       {formatAmount(amount, false)}
     </label>
   </li>
