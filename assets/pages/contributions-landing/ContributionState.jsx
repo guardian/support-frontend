@@ -16,8 +16,8 @@ type PropTypes = {
 
 // ----- Render ----- //
 
-const renderState = (selectedState: string) => (state: [string, string]) => (
-  <option value="{state[0]}" selected={state[0] === selectedState}>{state[1]}</option>
+const renderState = (selectedState: string) => ([stateValue, stateName]: [string, string]) => (
+  <option value="{stateValue}" selected={stateValue === selectedState}>{stateName}</option>
 );
 
 const renderStatesField = (selectedState, states) => (
