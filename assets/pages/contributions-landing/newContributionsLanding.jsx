@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, type Contrib } from 'helpers/contributions';
+import { amounts, getFrequency, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -236,7 +236,7 @@ const content = (
                 type="radio"
                 name="contributionType"
                 value="monthly"
-                checked={contributionType === 'monthly'}
+                checked={contributionType === 'MONTHLY'}
               />
               <label htmlFor="contributionType-monthly" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.monthly}</label>
             </li>
@@ -247,7 +247,7 @@ const content = (
                 type="radio"
                 name="contributionType"
                 value="oneoff"
-                checked={contributionType === 'oneoff'}
+                checked={contributionType === 'ONE_OFF'}
               />
               <label htmlFor="contributionType-oneoff" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.oneoff}</label>
             </li>
@@ -340,7 +340,7 @@ const content = (
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
             {formatAmount(selectedAmounts[0], false)}&nbsp;
-            {contributionType === 'monthly' ? 'a month' : ''}
+            {getFrequency(contributionType)}
           </button>
         </div>
       </form>
