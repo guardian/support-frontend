@@ -5,6 +5,7 @@ Object {
   "displayName": "",
   "email": "",
   "firstName": "",
+  "fullName": "",
   "gnmMarketing": false,
   "id": "",
   "isPostDeploymentTestUser": false,
