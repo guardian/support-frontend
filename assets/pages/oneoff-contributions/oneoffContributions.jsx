@@ -20,7 +20,7 @@ import ContributionsThankYouPage from 'components/contributionsThankYou/contribu
 import MarketingConsentContainer from './components/marketingConsentContainer';
 
 import reducer from './oneOffContributionsReducer';
-import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
 import OneoffContributionsPayment from './components/oneoffContributionsPayment';
 
