@@ -1,13 +1,13 @@
+import React from 'react';
 import { connect } from 'react-redux';
 
-import type Amountimport { render } from 'preact';
- from 'helpers/contributions';
+import { amounts, type Amount } from 'helpers/contributions'; 
 
-const formatAmount = (amount: Amount, verbose: boolean) => (verbose ?
-  `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
-  `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
+const formatAmount = (countryGroupDetails: CountryMetaData, amount: Amount, verbose: boolean) => (verbose ?
+  `${amount.value} ${countryGroupDetails.currency.name}` :
+  `${countryGroupDetails.currency.symbol}${amount.value}`);
 
-const renderAmount = (amount: Amount, i) => (
+const renderAmount = (countryGroupDetails: CountryMetaData) => (amount: Amount, i) => (
   <li className="form__radio-group__item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -17,8 +17,8 @@ const renderAmount = (amount: Amount, i) => (
       value={amount.value}
       checked={i === 0}
     />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
-      {formatAmount(amount, false)}
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(countryGroupDetails, amount, true)}>
+      {formatAmount(countryGroupDetails, amount, false)}
     </label>
   </li>
 );
@@ -29,7 +29,7 @@ function ContributionAmount(props) {
     <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
       <legend className="form__legend form__legend--radio-group">Amount</legend>
       <ul className="form__radio-group__list">
-        {props.amounts.map(renderAmount)}
+        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(props.countryGroupDetails))}
         <li className="form__radio-group__item">
           <input id="contributionAmount-other" 
             className="form__radio-group__input" 
@@ -65,12 +65,12 @@ function ContributionAmount(props) {
 
 
 const s2p = state => ({ 
-  amounts: state.newPaymentUI.amounts,
-  amount: state.newPaymentUI.amount,
-  otherAmount: state.newPaymentUI.otherAmount,
-  currency: state.newPaymentUI.currency,
+  countryGroupId: state.common.internationalisation.countryGroupId,
+  contributionType: state.common.newPaymentUI.contributionType,
+  amount: state.common.newPaymentUI.amount,
+  otherAmount: state.common.newPaymentUI.otherAmount
 });
 
 const NewContributionAmount = connect(s2p)(ContributionAmount);
 
-export { NewContributionAmount };
+export { formatAmount, NewContributionAmount };

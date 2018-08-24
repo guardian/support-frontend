@@ -15,8 +15,9 @@ import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
 import { NewContributionType } from './new_components/ContributionType';
-import { NewContributionAmount } from './new_components/ContributionAmount';
+import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
 
+import { type CountryMetaData, countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
@@ -29,108 +30,6 @@ const store = pageInit(createPageReducerFor(countryGroupId));
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
 // ----- Internationalisation ----- //
-
-const defaultHeaderCopy = 'Help us deliver the independent journalism the world needs';
-const defaultContributeCopy = `
-  Make a monthly commitment to support The Guardian long term or a one-off contribution 
-  as and when you feel like it – choose the option that suits you best.
-`;
-
-type CountryMetaData = {
-  headerCopy: string,
-  contributeCopy: string,
-  currency: Object,
-  contribution: Object
-};
-
-const countryGroupSpecificDetails: {
-  [CountryGroupId]: CountryMetaData
-} = {
-  GBPCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'British Pounds',
-      symbol: '£',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  EURCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Euros',
-      symbol: '€',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  UnitedStates: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'US Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
-  },
-  AUDCountries: {
-    headerCopy: 'Help us deliver the independent journalism Australia needs',
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Australian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  International: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  NZDCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  Canada: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
-  },
-};
 
 const contributionType: Contrib = 'MONTHLY';
 
@@ -181,7 +80,7 @@ const content = (
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className="form form--contribution">
         <NewContributionType />        
-        <NewContributionAmount />
+        <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
         
         <div className="form__field form__field--contribution-fname">
           <label className="form__label" htmlFor="contributionFirstName">First Name</label>
@@ -248,7 +147,7 @@ const content = (
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
-            {formatAmount(selectedAmounts[0], false)}&nbsp;
+            {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
             {getFrequency(contributionType)}
           </button>
         </div>
