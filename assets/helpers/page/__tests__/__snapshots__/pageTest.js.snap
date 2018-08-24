@@ -20,7 +20,6 @@ Object {
   "otherQueryParams": Array [],
   "referrerAcquisitionData": Object {
     "abTest": null,
-    "abTests": Array [],
     "campaignCode": null,
     "componentId": null,
     "componentType": null,
