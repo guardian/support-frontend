@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import ContributionsCheckout from 'components/contributionsCheckout/contributionsCheckout';
 
-import { type PageState as State } from '../regularContributionsReducer';
+import { type PageState as State } from '../../regularContributionsReducer';
 
 
 // ----- State Maps ----- //

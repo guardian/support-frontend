@@ -45,7 +45,7 @@ function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId
 function Footer(props: PropTypes) {
 
   return (
-    <footer className="component-footer">
+    <footer className="component-footer" role="contentinfo">
       <div className="component-footer__content">
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
         {props.children}
