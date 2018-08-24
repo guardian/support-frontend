@@ -14,11 +14,10 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 
-import { checkoutError, type Action } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
 import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
 import { type PageState as State } from '../oneOffContributionsReducer';
@@ -38,7 +37,7 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
-  formFields: Array<UserFormFieldAttribute>
+  formFields: Array<UserFormFieldAttribute>,
   optimizeExperiments: OptimizeExperiments,
 |};
 
