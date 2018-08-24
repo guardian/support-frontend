@@ -46,10 +46,10 @@ function ContributionState(props: PropTypes) {
   }
 }
 
-const s2p = () => ({
+const mapStateToProps = () => ({
   selectedState: 'WY',
 });
 
-const NewContributionState = connect(s2p)(ContributionState);
+const NewContributionState = connect(mapStateToProps)(ContributionState);
 
 export { NewContributionState };
