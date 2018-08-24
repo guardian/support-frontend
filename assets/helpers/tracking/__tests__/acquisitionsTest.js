@@ -32,7 +32,6 @@ describe('acquisitions', () => {
           name: 'referrerAbTest',
           variant: 'value1',
         },
-        abTests: [],
         queryParameters: [{ name: 'param1', value: 'value1' }, { name: 'param2', value: 'value2' }],
       };
 

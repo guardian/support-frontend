@@ -11,7 +11,6 @@ import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/p
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import { emptyInputField, validateEmailAddress } from 'helpers/utilities';
 import type { Status } from 'helpers/switch';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -22,6 +21,7 @@ import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
 
@@ -160,14 +160,30 @@ function RegularContributionsPayment(props: PropTypes, context) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+
+  const firstName = {
+    value: state.page.user.firstName,
+    ...state.page.checkoutForm.firstName,
+  };
+
+  const lastName = {
+    value: state.page.user.lastName,
+    ...state.page.checkoutForm.lastName,
+  };
+
+  const email = {
+    value: state.page.user.email,
+    ...state.page.checkoutForm.email,
+  };
+
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
     disable:
-      emptyInputField(state.page.user.firstName)
-      || emptyInputField(state.page.user.lastName)
-      || !validateEmailAddress(state.page.user.email),
+      !formFieldIsValid(firstName)
+      || !formFieldIsValid(lastName)
+      || !formFieldIsValid(email),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,

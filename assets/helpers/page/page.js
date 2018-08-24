@@ -24,7 +24,7 @@ import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationa
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import {
   getCampaign,
-  getAcquisition,
+  getReferrerAcquisitionData,
   type Campaign,
   type ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
@@ -82,8 +82,8 @@ function buildInitialState(
   currencyId: IsoCurrency,
   switches: Switches,
 ): CommonState {
+  const acquisition = getReferrerAcquisitionData();
   const optimizeExperiments = getOptimizeExperiments();
-  const acquisition = getAcquisition(abParticipations, optimizeExperiments);
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {

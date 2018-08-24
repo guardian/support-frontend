@@ -76,7 +76,6 @@
     }
   }
 
-
   .component-paypal-contribution-button {
     height: $cta-height;
     width: 100%;
@@ -90,9 +89,11 @@
     margin-top: $gu-v-spacing;
   }
 
-  .component-text-input__input--error {
-    border: 2px solid gu-colour(error);
-    margin-bottom: $gu-v-spacing / 2;
+  .component-text-input--error {
+    .component-text-input__input {
+      border: 2px solid gu-colour(error);
+      margin-bottom: $gu-v-spacing / 2;
+    }
   }
 }
 
