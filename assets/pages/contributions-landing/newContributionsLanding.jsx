@@ -11,6 +11,9 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 
 import Page from 'components/page/page';
 
+import { NewContributionType } from './new_components/ContributionType';
+import { NewContributionAmount } from './new_components/ContributionAmount';
+
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
@@ -83,55 +86,9 @@ const content = (
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className="form form--contribution">
-        <fieldset className="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
-          <legend className="form__legend form__legend--radio-group">Recurrence</legend>
-          <ul className="form__radio-group__list">
-            <li className="form__radio-group__item">
-              <input id="contributionType-monthly" className="form__radio-group__input" type="radio" name="contributionType" value="monthly" checked />
-              <label htmlFor="contributionType-monthly" className="form__radio-group__label">Monthly</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionType-oneoff" className="form__radio-group__input" type="radio" name="contributionType" value="oneoff" />
-              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">One-off</label>
-            </li>
-          </ul>
-        </fieldset>
-
-        <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
-          <legend className="form__legend form__legend--radio-group">Amount</legend>
-          <ul className="form__radio-group__list">
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-25" className="form__radio-group__input" type="radio" name="contributionAmount" value="25" checked />
-              <label htmlFor="contributionAmount-25" className="form__radio-group__label" aria-label="25 US Dollars">$25</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-50" className="form__radio-group__input" type="radio" name="contributionAmount" value="50" />
-              <label htmlFor="contributionAmount-50" className="form__radio-group__label" aria-label="50 US Dollars">$50</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-100" className="form__radio-group__input" type="radio" name="contributionAmount" value="100" />
-              <label htmlFor="contributionAmount-100" className="form__radio-group__label" aria-label="100 US Dollars">$100</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-250" className="form__radio-group__input" type="radio" name="contributionAmount" value="250" />
-              <label htmlFor="contributionAmount-250" className="form__radio-group__label" aria-label="250 US Dollars">$250</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
-              <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
-            </li>
-          </ul>
-          <div className="form__field form__field--contribution-other-amount">
-            <label className="form__label" htmlFor="contributionOther">Other Amount</label>
-            <span className="form__input-with-icon">
-              <input id="contributionOther" className="form__input" type="number" min="1" max="2000" autoComplete="off" />
-              <span className="form__icon">
-                <svg width="11" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M2.9 18.992l.365-2.676c-1.176-.08-2.292-.304-3.062-.648L0 12.06h1.724l.77 2.676c.284.141.629.243.994.304l.588-4.48-.629-.263C1.297 9.405.122 8.047.122 5.919c0-2.412 1.44-4.297 5.07-4.358L5.393 0h1.359l-.224 1.601a10.19 10.19 0 0 1 2.657.548l.203 3.445H7.766l-.73-2.493a2.784 2.784 0 0 0-.77-.203l-.527 4.075.608.243c2.291.932 3.873 1.925 3.873 4.5 0 2.979-2.109 4.661-5.637 4.661l-.345 2.615H2.9zm.243-14.31c0 .912.406 1.378 1.46 1.845l.487-3.69c-1.278.082-1.947.77-1.947 1.845zm3.812 8.412c0-1.095-.547-1.54-1.764-2.047L4.664 15.1c1.52-.101 2.291-.85 2.291-2.006z" /><path d="M-14-12h38v42h-38z" fill="none" /></svg>
-              </span>
-            </span>
-          </div>
-        </fieldset>
-
+        <NewContributionType />        
+        <NewContributionAmount />
+        
         <div className="form__field form__field--contribution-fname">
           <label className="form__label" htmlFor="contributionFirstName">First Name</label>
           <span className="form__input-with-icon">
