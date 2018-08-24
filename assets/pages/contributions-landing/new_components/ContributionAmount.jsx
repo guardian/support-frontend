@@ -85,7 +85,7 @@ function ContributionAmount(props: PropTypes) {
 }
 
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: 'MONTHLY',
   amount: '5',
