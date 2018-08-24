@@ -1,26 +1,35 @@
 import { connect } from 'react-redux';
 
+import type Amountimport { render } from 'preact';
+ from 'helpers/contributions';
+
+const formatAmount = (amount: Amount, verbose: boolean) => (verbose ?
+  `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
+  `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
+
+const renderAmount = (amount: Amount, i) => (
+  <li className="form__radio-group__item">
+    <input
+      id={`contributionAmount-${amount.value}`}
+      className="form__radio-group__input"
+      type="radio"
+      name="contributionAmount"
+      value={amount.value}
+      checked={i === 0}
+    />
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
+      {formatAmount(amount, false)}
+    </label>
+  </li>
+);
+
+
 function ContributionAmount(props) {
   return (
     <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
       <legend className="form__legend form__legend--radio-group">Amount</legend>
       <ul className="form__radio-group__list">
-        {props.amounts.map((amt, i) => (
-          <li className="form__radio-group__item">
-            <input id={`contributionAmount-${amt}`} 
-              className="form__radio-group__input" 
-              type="radio" 
-              name="contributionAmount" 
-              value={amt} 
-              checked={props.amount === null && i === 0 || amt === props.amount} />
-            <label htmlFor={`contributionAmount-${amt}`} 
-              className="form__radio-group__label" 
-              aria-label="25 US Dollars"
-              >
-              $25
-            </label>
-          </li>
-        ))}
+        {props.amounts.map(renderAmount)}
         <li className="form__radio-group__item">
           <input id="contributionAmount-other" 
             className="form__radio-group__input" 
@@ -32,7 +41,7 @@ function ContributionAmount(props) {
           <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
         </li>
       </ul>
-      {amount === 'other' ? (
+      {props.amount === 'other' ? (
         <div className="form__field form__field--contribution-other-amount">
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -52,7 +61,7 @@ function ContributionAmount(props) {
       ) : null}
     </fieldset>
   );
-}k
+}
 
 
 const s2p = state => ({ 
