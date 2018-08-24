@@ -17,7 +17,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   contributionType: Contrib,
   amount: number,
-  otherAmount?: number,
+  otherAmount: number | null,
 };
 
 // ----- Render ----- //
@@ -93,12 +93,6 @@ const s2p = state => ({
 });
 
 const NewContributionAmount = connect(s2p)(ContributionAmount);
-
-// ----- Default Props ----- //
-
-ContributionAmount.defaultProps = {
-  otherAmount: null,
-};
 
 
 export { formatAmount, NewContributionAmount };
