@@ -95,11 +95,11 @@ function buildInitialState(
     labels: {
       ANNUAL: 'Annually',
       MONTHLY: 'Monthly',
-      ONE_OFF: 'Single'
+      ONE_OFF: 'Single',
     },
     contributionType: 'MONTHLY',
     amount: '5',
-    otherAmount: null
+    otherAmount: null,
   };
 
 
