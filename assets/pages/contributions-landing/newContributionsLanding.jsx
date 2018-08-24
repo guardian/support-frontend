@@ -36,7 +36,6 @@ const defaultContributeCopy = `
 type CountryMetaData = {
   headerCopy: string,
   contributeCopy: string,
-  amounts: Object,
   currency: Object,
   contribution: Object
 };
@@ -47,10 +46,6 @@ const countryGroupSpecificDetails: {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [25, 50, 100, 250],
-      monthly: [2, 5, 10],
-    },
     currency: {
       name: 'British Pounds',
       symbol: '£',
@@ -63,10 +58,6 @@ const countryGroupSpecificDetails: {
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [25, 50, 100, 250],
-      monthly: [6, 10, 20],
-    },
     currency: {
       name: 'Euros',
       symbol: '€',
@@ -79,10 +70,6 @@ const countryGroupSpecificDetails: {
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [25, 50, 100, 250],
-      monthly: [7, 15, 30],
-    },
     currency: {
       name: 'US Dollars',
       symbol: '$',
@@ -95,10 +82,6 @@ const countryGroupSpecificDetails: {
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [50, 100, 250, 500],
-      monthly: [10, 20, 40],
-    },
     currency: {
       name: 'Australian Dollars',
       symbol: '$',
@@ -111,10 +94,6 @@ const countryGroupSpecificDetails: {
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [25, 50, 100, 250],
-      monthly: [2, 5, 10],
-    },
     currency: {
       name: 'Canadian Dollars',
       symbol: '$',
@@ -127,10 +106,6 @@ const countryGroupSpecificDetails: {
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [50, 100, 250, 500],
-      monthly: [10, 20, 40],
-    },
     currency: {
       name: 'Canadian Dollars',
       symbol: '$',
@@ -143,10 +118,6 @@ const countryGroupSpecificDetails: {
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    amounts: {
-      oneoff: [25, 50, 100, 250],
-      monthly: [5, 10, 20],
-    },
     currency: {
       name: 'Canadian Dollars',
       symbol: '$',
