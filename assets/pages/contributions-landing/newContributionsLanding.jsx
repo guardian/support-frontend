@@ -333,7 +333,9 @@ const content = (
         </fieldset>
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
-            Contribute {formatAmount(selectedCountryGroupDetails.amounts[contributionType][0], false)}
+            Contribute 
+            {formatAmount(selectedCountryGroupDetails.amounts[contributionType][0], false)}
+            {contributionType === 'monthly' ? 'a month' : ''}
           </button>
         </div>
       </form>
