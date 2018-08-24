@@ -1,3 +1,5 @@
+// @flow
+
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const defaultHeaderCopy = 'Help us deliver the independent journalism the world needs';
@@ -102,6 +104,4 @@ const countryGroupSpecificDetails: {
   },
 };
 
-export {
-  countryGroupSpecificDetails
-};
+export { countryGroupSpecificDetails };

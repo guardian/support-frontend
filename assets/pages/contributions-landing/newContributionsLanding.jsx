@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, getFrequency, type Contrib, type Amount } from 'helpers/contributions';
+import { amounts, getFrequency, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -17,7 +17,7 @@ import Footer from 'components/footer/footer';
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
 
-import { type CountryMetaData, countryGroupSpecificDetails } from './contributionsLandingMetadata';
+import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
@@ -79,9 +79,9 @@ const content = (
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className="form form--contribution">
-        <NewContributionType />        
+        <NewContributionType />
         <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
-        
+
         <div className="form__field form__field--contribution-fname">
           <label className="form__label" htmlFor="contributionFirstName">First Name</label>
           <span className="form__input-with-icon">

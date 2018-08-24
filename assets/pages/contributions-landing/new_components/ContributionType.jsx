@@ -1,7 +1,25 @@
+// @flow
+
+// ----- Imports ----- //
+
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Contrib } from 'helpers/contributions';
 
-function ContributionType(props) {
+// ----- Types ----- //
+
+type PropTypes = {
+  contributionType: Contrib,
+  labels: {
+    ONE_OFF: string,
+    MONTHLY: string,
+    ANNUAL: string
+  }
+};
+
+// ----- Render ----- //
+
+function ContributionType(props: PropTypes) {
   return (
     <fieldset className="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
       <legend className="form__legend form__legend--radio-group">Recurrence</legend>
@@ -21,11 +39,11 @@ function ContributionType(props) {
       </ul>
     </fieldset>
   );
-};
+}
 
-const s2p = state => ({ 
-  contributionType: state.common.newPaymentUI.contributionType, 
-  labels: state.common.newPaymentUI.labels 
+const s2p = state => ({
+  contributionType: state.common.newPaymentUI.contributionType,
+  labels: state.common.newPaymentUI.labels,
 });
 
 const NewContributionType = connect(s2p)(ContributionType);
