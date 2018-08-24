@@ -17,7 +17,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   contributionType: Contrib,
   amount: number,
-  otherAmount: number | null,
+  otherAmount: ?number,
 };
 
 // ----- Render ----- //
@@ -88,8 +88,8 @@ function ContributionAmount(props: PropTypes) {
 const mapStateToProps = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: 'MONTHLY',
-  amount: '5',
-  otherAmount: null,
+  amount: 5,
+  otherAmount: (null: ?number),
 });
 
 const NewContributionAmount = connect(mapStateToProps)(ContributionAmount);
