@@ -5,6 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { amounts, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -157,17 +158,17 @@ const countryGroupSpecificDetails: {
   },
 };
 
-type ContributionType = 'oneoff' | 'monthly';
-
-const contributionType: ContributionType = 'monthly';
+const contributionType: Contrib = 'MONTHLY';
 
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 
 const formatAmount = (amount, verbose) => (verbose ?
-  `${amount} ${selectedCountryGroupDetails.currency.name}` :
-  `${selectedCountryGroupDetails.currency.symbol}${amount}`);
+  `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
+  `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
 
 const selectedCountryGroup = countryGroups[countryGroupId];
+
+const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 
 // ----- Render ----- //
 
@@ -256,7 +257,7 @@ const content = (
         <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
           <legend className="form__legend form__legend--radio-group">Amount</legend>
           <ul className="form__radio-group__list">
-            {selectedCountryGroupDetails.amounts[contributionType].map(renderAmount)}
+            {selectedAmounts.map(renderAmount)}
             <li className="form__radio-group__item">
               <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
               <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
@@ -338,7 +339,7 @@ const content = (
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
-            {formatAmount(selectedCountryGroupDetails.amounts[contributionType][0], false)}&nbsp;
+            {formatAmount(selectedAmounts[0], false)}&nbsp;
             {contributionType === 'monthly' ? 'a month' : ''}
           </button>
         </div>
