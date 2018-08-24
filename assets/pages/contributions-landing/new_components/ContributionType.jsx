@@ -41,11 +41,15 @@ function ContributionType(props: PropTypes) {
   );
 }
 
-const s2p = state => ({
-  contributionType: state.common.newPaymentUI.contributionType,
-  labels: state.common.newPaymentUI.labels,
+const mapStateToProps = () => ({
+  contributionType: 'MONTHLY',
+  labels: {
+    ANNUAL: 'Annually',
+    MONTHLY: 'Monthly',
+    ONE_OFF: 'Single',
+  },
 });
 
-const NewContributionType = connect(s2p)(ContributionType);
+const NewContributionType = connect(mapStateToProps)(ContributionType);
 
 export { NewContributionType };

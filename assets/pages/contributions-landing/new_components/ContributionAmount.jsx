@@ -85,14 +85,14 @@ function ContributionAmount(props: PropTypes) {
 }
 
 
-const s2p = state => ({
+const mapStateToProps = (state) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
-  contributionType: state.common.newPaymentUI.contributionType,
-  amount: state.common.newPaymentUI.amount,
-  otherAmount: state.common.newPaymentUI.otherAmount,
+  contributionType: 'MONTHLY',
+  amount: '5',
+  otherAmount: null,
 });
 
-const NewContributionAmount = connect(s2p)(ContributionAmount);
+const NewContributionAmount = connect(mapStateToProps)(ContributionAmount);
 
 
 export { formatAmount, NewContributionAmount };
