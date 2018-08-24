@@ -8,6 +8,7 @@ import PageSection from 'components/pageSection/pageSection';
 import Signout from 'components/signout/signout';
 import DisplayName from 'components/displayName/displayName';
 
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -16,9 +17,10 @@ type PropTypes = {
   children: Node,
 };
 
+
 // ----- Component ----- //
 
-function YourDetails(props: PropTypes) {
+export default function YourDetails(props: PropTypes) {
 
   return (
     <div className="component-your-details">
@@ -31,6 +33,5 @@ function YourDetails(props: PropTypes) {
       </PageSection>
     </div>
   );
-}
 
-export default YourDetails;
+}

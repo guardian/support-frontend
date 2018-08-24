@@ -11,89 +11,62 @@ import SelectInput from 'components/selectInput/selectInput';
 import {
   setFirstName,
   setLastName,
-  setEmail,
   setStateField,
   type Action as UserAction,
 } from 'helpers/user/userActions';
+
 import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
+
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type UserFormFieldAttribute, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
-import {
-  type Action as CheckoutAction,
-  setFirstNameShouldValidate,
-  setLastNameShouldValidate,
-  setEmailShouldValidate,
-} from './contributionsCheckoutContainer/checkoutFormActions';
-import { type PageState as State } from '../regularContributionsReducer';
-import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
-
+import EmailFormFieldContainer from './emailFormFieldContainer';
 
 // ----- Types ----- //
 
 type PropTypes = {
+  firstNameUpdate: (name: string) => void,
+  lastNameUpdate: (name: string) => void,
   stateUpdate: (value: UsState | CaState) => void,
   countryUpdate: (value: string) => void,
-  firstName: UserFormFieldAttribute,
-  lastName: UserFormFieldAttribute,
-  email: UserFormFieldAttribute,
-  setFirstName: (string) => void,
-  setLastName: (string) => void,
-  setEmail: (string) => void,
-  setFirstNameShouldValidate: () => void,
-  setLastNameShouldValidate: () => void,
-  setEmailShouldValidate: () => void,
+  firstName: string,
+  lastName: string,
   countryGroup: CountryGroupId,
   country: IsoCountry,
 };
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state: State) {
-
-  const { firstName, lastName, email } = getFormFields(state);
+function mapStateToProps(state) {
 
   return {
-    firstName,
-    lastName,
-    email,
+    firstName: state.page.user.firstName,
+    lastName: state.page.user.lastName,
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
   };
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | CheckoutAction>) {
+function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction>) {
 
   return {
+    firstNameUpdate: (name: string) => {
+      dispatch(setFirstName(name));
+    },
+    lastNameUpdate: (name: string) => {
+      dispatch(setLastName(name));
+    },
     stateUpdate: (value: UsState | CaState) => {
       dispatch(setStateField(value));
     },
     countryUpdate: (value: IsoCountry) => {
       dispatch(setCountry(value));
     },
-    setFirstNameShouldValidate: () => {
-      dispatch(setFirstNameShouldValidate());
-    },
-    setFirstName: (firstName: string) => {
-      dispatch(setFirstName(firstName));
-    },
-    setLastNameShouldValidate: () => {
-      dispatch(setLastNameShouldValidate());
-    },
-    setLastName: (lastName: string) => {
-      dispatch(setLastName(lastName));
-    },
-    setEmailShouldValidate: () => {
-      dispatch(setEmailShouldValidate());
-    },
-    setEmail: (email: string) => {
-      dispatch(setEmail(email));
-    },
   };
+
 }
 
 
@@ -153,40 +126,27 @@ function countriesDropdown(
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
+
   return (
     <form className="regular-contrib__name-form">
-      <TextInput
-        id="email"
-        value={props.email.value}
-        labelText="Email"
-        placeholder="Email"
-        onChange={props.setEmail}
-        onBlur={props.setEmailShouldValidate}
-        modifierClasses={['email']}
-        showError={shouldShowError(props.email)}
-        errorMessage="Please enter a valid email address."
-      />
+      <EmailFormFieldContainer />
       <TextInput
         id="first-name"
         labelText="First name"
         placeholder="First name"
-        value={props.firstName.value}
-        onChange={props.setFirstName}
-        onBlur={props.setFirstNameShouldValidate}
+        value={props.firstName}
+        onChange={props.firstNameUpdate}
         modifierClasses={['first-name']}
-        showError={shouldShowError(props.firstName)}
-        errorMessage="Please enter a first name."
+        required
       />
       <TextInput
         id="last-name"
         labelText="Last name"
         placeholder="Last name"
-        value={props.lastName.value}
-        onChange={props.setLastName}
-        onBlur={props.setLastNameShouldValidate}
+        value={props.lastName}
+        onChange={props.lastNameUpdate}
         modifierClasses={['last-name']}
-        showError={shouldShowError(props.lastName)}
-        errorMessage="Please enter a last name."
+        required
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
