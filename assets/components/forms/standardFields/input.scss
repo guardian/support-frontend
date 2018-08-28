@@ -1,0 +1,10 @@
+@import './formFields';
+
+.component-input:not([type="radio"]) {
+  @include form-field;
+
+  height: 38px;
+  padding-left: 12px;
+  padding-right: 12px;
+  width: 314px;
+}

@@ -1,0 +1,22 @@
+@mixin form-field {
+  font-size: 16px;
+  font-family: $gu-text-sans-web;
+  border: 1px solid gu-colour(garnett-neutral-4);
+
+  &:hover {
+    box-shadow: 0 0 0 2px lighten(gu-colour(garnett-neutral-4), 6%);
+  }
+
+  &:focus, &:active {
+    box-shadow: 0 0 0 2px lighten(gu-colour(news-garnett-highlight), 6%);
+  }
+}
+
+@mixin label {
+  font-size: 16px;
+  line-height: 16px;
+  font-family: $gu-text-sans-web;
+  font-weight: bold;
+  margin-bottom: $gu-v-spacing / 2;
+  margin-top: $gu-v-spacing * 2;
+}
