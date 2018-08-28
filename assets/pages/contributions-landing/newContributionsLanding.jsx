@@ -14,6 +14,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
+import { NewContributionType } from './new_components/ContributionType';
+import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
+
+import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 
 
@@ -27,139 +31,15 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 // ----- Internationalisation ----- //
 
-const defaultHeaderCopy = 'Help us deliver the independent journalism the world needs';
-const defaultContributeCopy = `
-  Make a monthly commitment to support The Guardian long term or a one-off contribution 
-  as and when you feel like it – choose the option that suits you best.
-`;
-
-type CountryMetaData = {
-  headerCopy: string,
-  contributeCopy: string,
-  currency: Object,
-  contribution: Object
-};
-
-const countryGroupSpecificDetails: {
-  [CountryGroupId]: CountryMetaData
-} = {
-  GBPCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'British Pounds',
-      symbol: '£',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  EURCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Euros',
-      symbol: '€',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  UnitedStates: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'US Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
-  },
-  AUDCountries: {
-    headerCopy: 'Help us deliver the independent journalism Australia needs',
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Australian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  International: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  NZDCountries: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
-  },
-  Canada: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
-    currency: {
-      name: 'Canadian Dollars',
-      symbol: '$',
-    },
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
-  },
-};
-
-type Amount = { value: string, spoken: string };
-
 const contributionType: Contrib = 'MONTHLY';
 
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
-
-const formatAmount = (amount: Amount, verbose: boolean) => (verbose ?
-  `${amount.value} ${selectedCountryGroupDetails.currency.name}` :
-  `${selectedCountryGroupDetails.currency.symbol}${amount.value}`);
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 
 // ----- Render ----- //
-
-const renderAmount = (amount: Amount, i) => (
-  <li className="form__radio-group__item">
-    <input
-      id={`contributionAmount-${amount.value}`}
-      className="form__radio-group__input"
-      type="radio"
-      name="contributionAmount"
-      value={amount.value}
-      checked={i === 0}
-    />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(amount, true)}>
-      {formatAmount(amount, false)}
-    </label>
-  </li>
-);
 
 const renderCountryGroup = (countryGroup: CountryGroup) => (
   <li className="countryGroups__item">
@@ -199,53 +79,8 @@ const content = (
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className="form form--contribution">
-        <fieldset className="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
-          <legend className="form__legend form__legend--radio-group">Recurrence</legend>
-          <ul className="form__radio-group__list">
-            <li className="form__radio-group__item">
-              <input
-                id="contributionType-monthly"
-                className="form__radio-group__input"
-                type="radio"
-                name="contributionType"
-                value="monthly"
-                checked={contributionType === 'MONTHLY'}
-              />
-              <label htmlFor="contributionType-monthly" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.monthly}</label>
-            </li>
-            <li className="form__radio-group__item">
-              <input
-                id="contributionType-oneoff"
-                className="form__radio-group__input"
-                type="radio"
-                name="contributionType"
-                value="oneoff"
-                checked={contributionType === 'ONE_OFF'}
-              />
-              <label htmlFor="contributionType-oneoff" className="form__radio-group__label">{selectedCountryGroupDetails.contribution.oneoff}</label>
-            </li>
-          </ul>
-        </fieldset>
-
-        <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
-          <legend className="form__legend form__legend--radio-group">Amount</legend>
-          <ul className="form__radio-group__list">
-            {selectedAmounts.map(renderAmount)}
-            <li className="form__radio-group__item">
-              <input id="contributionAmount-other" className="form__radio-group__input" type="radio" name="contributionAmount" value="other" />
-              <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
-            </li>
-          </ul>
-          <div className="form__field form__field--contribution-other-amount">
-            <label className="form__label" htmlFor="contributionOther">Other Amount</label>
-            <span className="form__input-with-icon">
-              <input id="contributionOther" className="form__input" type="number" min="1" max="2000" autoComplete="off" />
-              <span className="form__icon">
-                <svg width="11" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M2.9 18.992l.365-2.676c-1.176-.08-2.292-.304-3.062-.648L0 12.06h1.724l.77 2.676c.284.141.629.243.994.304l.588-4.48-.629-.263C1.297 9.405.122 8.047.122 5.919c0-2.412 1.44-4.297 5.07-4.358L5.393 0h1.359l-.224 1.601a10.19 10.19 0 0 1 2.657.548l.203 3.445H7.766l-.73-2.493a2.784 2.784 0 0 0-.77-.203l-.527 4.075.608.243c2.291.932 3.873 1.925 3.873 4.5 0 2.979-2.109 4.661-5.637 4.661l-.345 2.615H2.9zm.243-14.31c0 .912.406 1.378 1.46 1.845l.487-3.69c-1.278.082-1.947.77-1.947 1.845zm3.812 8.412c0-1.095-.547-1.54-1.764-2.047L4.664 15.1c1.52-.101 2.291-.85 2.291-2.006z" /><path d="M-14-12h38v42h-38z" fill="none" /></svg>
-              </span>
-            </span>
-          </div>
-        </fieldset>
+        <NewContributionType />
+        <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
 
         <div className="form__field form__field--contribution-fname">
           <label className="form__label" htmlFor="contributionFirstName">First Name</label>
@@ -312,7 +147,7 @@ const content = (
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
-            {formatAmount(selectedAmounts[0], false)}&nbsp;
+            {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
             {getFrequency(contributionType)}
           </button>
         </div>
