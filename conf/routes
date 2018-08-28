@@ -38,7 +38,8 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 GET  /contribute                                    controllers.Application.contributeGeoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
-GET  /contribute.new                                controllers.Application.newContributionsLanding()
+GET  /contribute.new                                controllers.Application.newContributionsLanding(displayForm = "true")
+GET  /thankyou.new                                  controllers.Application.newContributionsLanding(displayForm = "false")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.react controllers.Application.reactContributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
