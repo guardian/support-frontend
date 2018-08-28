@@ -55,22 +55,24 @@ header[role="banner"] {
   width: 40px;
 }
 
+.countryGroups .svg-chevron {
+  width: 19px;
+  height: 10px;
+}
+
+.countryGroups[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+.countryGroups .svg-checkmark {
+  width: 18px;
+  height: 14px;
+}
+
 .countryGroups .svg-globe {
   padding: 0 $gu-v-spacing;
   width: 14px;
   height: 14px;
-}
-
-.countryGroups .icon__arrow-up {
-  display: none;
-}
-
-.countryGroups[open] .icon__arrow-up {
-  display: initial;
-}
-
-.countryGroups[open] .icon__arrow-down {
-  display: none;
 }
 
 .countryGroups summary:hover,

@@ -21,6 +21,8 @@ import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 import { NewContributionState } from './ContributionState';
 
+import SvgCheckmark from 'components/svgs/checkmark';
+import SvgChevron from 'components/svgs/chevron';
 import SvgGlobe from 'components/svgs/globe';
 
 // ----- Redux Store ----- //
@@ -48,7 +50,7 @@ const renderCountryGroup = (countryGroup: CountryGroup) => (
     <a href={`/${countryGroup.supportInternationalisationId}/contribute.react`}>
       {countryGroup === selectedCountryGroup ? (
         <span className="icon">
-          <svg width="18" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" /></svg>
+          <SvgCheckmark />
         </span>
       ) : ''}
       {countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph})
@@ -67,7 +69,7 @@ const content = (
               <SvgGlobe />
               <span className="countryGroups__label">{selectedCountryGroup.name} ({currencies[selectedCountryGroup.currency].extendedGlyph})</span>
               <span className="icon icon--arrows">
-                <svg width="19" height="10" xmlns="http://www.w3.org/2000/svg"><path className="icon__arrow-down" d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z" /><path className="icon__arrow-up" d="M1.25 9.5L.5 8.75 9 .5h.95l8.55 8.25-.75.75L9.5 2.75z" /></svg>
+                <SvgChevron />
               </span>
             </summary>
             <ul className="countryGroups__list">
