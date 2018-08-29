@@ -2,24 +2,13 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
-
-
-// ----- Types ----- //
-
-type PropTypes = {
-  children: Node,
-};
+import React from 'react';
 
 
 // ----- Component ----- //
 
-function Fieldset({ children, ...otherProps }: PropTypes) {
-  return (
-    <fieldset className="component-fieldset" {...otherProps}>
-      {children}
-    </fieldset>
-  );
+function Fieldset(props: {}) {
+  return <fieldset className="component-fieldset" {...props} />;
 }
 
 
