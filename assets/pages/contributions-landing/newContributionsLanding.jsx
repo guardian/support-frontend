@@ -16,7 +16,7 @@ import Footer from 'components/footer/footer';
 
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
-import { NewContributionName } from './new_components/ContributionName';
+import { NewContributionTextInput } from './new_components/ContributionTextInput';
 import { NewContributionPayment } from './new_components/ContributionPayment';
 
 import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
@@ -83,8 +83,8 @@ const content = (
       <form action="#" method="post" className="form form--contribution">
         <NewContributionType />
         <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
-        <NewContributionName id="contributionFirstName" name="contribution-fname" label="First Name" required />
-        <NewContributionName id="contributionLastName" name="contribution-lname" label="Last Name" required />
+        <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" required />
+        <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" required />
         <div className="form__field form__field--contribution-email">
           <label className="form__label" htmlFor="contributionEmail">Email address</label>
           <span className="form__input-with-icon">
