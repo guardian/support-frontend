@@ -66,7 +66,7 @@ const content = (
     <Page
       header={
         <header role="banner" className="gu-content__header">
-          <a className="glogo" href="https://www.theguardian.com"><img src="/assets-payment/roundel.svg" alt="The Guardian" /></a>
+          <a className="glogo" href="https://www.theguardian.com"><img src="/assets/images/roundel.svg" alt="The Guardian" /></a>
           <details className="countryGroups">
             <summary aria-label={`Selected country: ${selectedCountryGroup.name} (${currencies[selectedCountryGroup.currency].glyph})`}>
               <SvgGlobe />
