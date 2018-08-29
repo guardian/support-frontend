@@ -125,7 +125,7 @@ const content = (
               <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">PayPal</span>
-                <img className="radio-ui__icon radio-ui__icon--paypal" src="/assets-payment/paypal.png" alt="" />
+                <img className="radio-ui__icon radio-ui__icon--paypal" src="/assets/images/paypal.png" alt="" />
               </label>
             </li>
             <li className="form__radio-group__item">
@@ -133,7 +133,7 @@ const content = (
               <label htmlFor="contributionPayment-card" className="form__radio-group__label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">Credit/Debit Card</span>
-                <img className="radio-ui__icon radio-ui__icon--card" src="/assets-payment/card.svg" alt="" />
+                <img className="radio-ui__icon radio-ui__icon--card" src="/assets/images/card.svg" alt="" />
               </label>
             </li>
           </ul>
