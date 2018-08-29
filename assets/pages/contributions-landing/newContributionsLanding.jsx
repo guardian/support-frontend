@@ -14,18 +14,18 @@ import { currencies } from 'helpers/internationalisation/currency';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
+import SvgCheckmark from 'components/svgs/checkmark';
+import SvgChevron from 'components/svgs/chevron';
+import SvgEnveloppe from 'components/svgs/enveloppe';
+import SvgGlobe from 'components/svgs/globe';
+import SvgUser from 'components/svgs/user';
+
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
 
 import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 import { NewContributionState } from './ContributionState';
-
-import SvgCheckmark from 'components/svgs/checkmark';
-import SvgChevron from 'components/svgs/chevron';
-import SvgEnveloppe from 'components/svgs/enveloppe';
-import SvgGlobe from 'components/svgs/globe';
-import SvgUser from 'components/svgs/user';
 
 // ----- Redux Store ----- //
 

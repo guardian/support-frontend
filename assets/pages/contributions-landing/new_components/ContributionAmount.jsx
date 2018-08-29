@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { type CountryMetaData } from '../contributionsLandingMetadata';
-
 import SvgDollar from 'components/svgs/dollar';
+
+import { type CountryMetaData } from '../contributionsLandingMetadata';
 
 // ----- Types ----- //
 
@@ -63,6 +63,7 @@ function ContributionAmount(props: PropTypes) {
           <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
         </li>
       </ul>
+      {props.amount === 'other' ? (
         <div className="form__field form__field--contribution-other-amount">
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -80,6 +81,7 @@ function ContributionAmount(props: PropTypes) {
             </span>
           </span>
         </div>
+      ) : null}
     </fieldset>
   );
 }
