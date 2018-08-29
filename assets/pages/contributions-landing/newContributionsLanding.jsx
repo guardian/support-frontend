@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { amounts, getFrequency, getPaymentType, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
+import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
@@ -46,13 +46,7 @@ const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 const content = (
   <Provider store={store}>
     <Page
-      header={
-        <NewContributionHeader
-          countryGroupId={countryGroupId}
-          selectedCountryGroup={selectedCountryGroup}
-          selectedCountryGroupDetails={selectedCountryGroupDetails}
-          />
-      }
+      header={<NewContributionHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>

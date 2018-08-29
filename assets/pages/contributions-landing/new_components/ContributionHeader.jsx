@@ -5,17 +5,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { countryGroups, type CountryGroup, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups, type CountryGroup } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-
-import { type CountryMetaData } from '../contributionsLandingMetadata';
 
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId,
   selectedCountryGroup: CountryGroup,
-  selectedCountryGroupDetails: CountryMetaData,
 };
 
 // ----- Render ----- //

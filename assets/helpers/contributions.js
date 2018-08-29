@@ -448,9 +448,9 @@ function getPaymentType(contributionType: Contrib, paymentType: PaymentType): st
   if (contributionType === 'ONE_OFF') {
     if (paymentType === 'paypal') {
       return 'with PayPal';
-    } else {
-      return 'with card';
     }
+
+    return 'with card';
   }
 
   return '';
