@@ -121,6 +121,10 @@ footer[role="contentinfo"] a {
   color: white;
 }
 
+.component-footer__content {
+  padding-top: $gu-v-spacing;
+}
+
 /*= CONTENT */
 .gu-content__main {
   background: white;
