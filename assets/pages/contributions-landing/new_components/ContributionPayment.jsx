@@ -22,12 +22,14 @@ function ContributionPayment(props: PropTypes) {
 
       <ul className="form__radio-group__list">
         <li className="form__radio-group__item">
-          <input id="contributionPayment-paypal" 
-            className="form__radio-group__input" 
-            name="contributionPayment" 
-            type="radio" 
-            value="paypal" 
-            checked={props.paymentType === 'paypal'} />
+          <input
+            id="contributionPayment-paypal"
+            className="form__radio-group__input"
+            name="contributionPayment"
+            type="radio"
+            value="paypal"
+            checked={props.paymentType === 'paypal'}
+          />
           <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
             <span className="radio-ui" />
             <span className="radio-ui__label">PayPal</span>
@@ -35,12 +37,14 @@ function ContributionPayment(props: PropTypes) {
           </label>
         </li>
         <li className="form__radio-group__item">
-          <input id="contributionPayment-card" 
-            className="form__radio-group__input" 
-            name="contributionPayment" 
-            type="radio" 
-            value="card" 
-            checked={props.paymentType === 'card'} />
+          <input
+            id="contributionPayment-card"
+            className="form__radio-group__input"
+            name="contributionPayment"
+            type="radio"
+            value="card"
+            checked={props.paymentType === 'card'}
+          />
           <label htmlFor="contributionPayment-card" className="form__radio-group__label">
             <span className="radio-ui" />
             <span className="radio-ui__label">Credit/Debit Card</span>

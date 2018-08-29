@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, getFrequency, getPaymentType, type Contrib, type PaymentType } from 'helpers/contributions';
+import { amounts, getFrequency, getPaymentType, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
