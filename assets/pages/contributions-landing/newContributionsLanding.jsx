@@ -18,7 +18,7 @@ import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgCreditCard from 'components/svgs/newCreditCard';
-import SvgEnveloppe from 'components/svgs/enveloppe';
+import SvgEnvelope from 'components/svgs/envelope';
 import SvgGlobe from 'components/svgs/globe';
 import SvgPayPal from 'components/svgs/paypal';
 import SvgRoundel from 'components/svgs/roundel';
@@ -117,7 +117,7 @@ const content = (
           <span className="form__input-with-icon">
             <input id="contributionEmail" className="form__input" type="email" placeholder="example@domain.com" required />
             <span className="form__icon">
-              <SvgEnveloppe />
+              <SvgEnvelope />
             </span>
           </span>
         </div>
