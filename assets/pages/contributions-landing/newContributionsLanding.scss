@@ -23,6 +23,11 @@ header[role="banner"] {
   top: $gu-v-spacing * 2;
 }
 
+.glogo .svg-roundel {
+  width: 100%;
+  height: 100%;
+}
+
 .countryGroups {
   background: white;
   border: 1px solid gu-colour(garnett-neutral-4);
@@ -482,7 +487,7 @@ form {
   box-shadow: 0 0 0 2px gu-colour(live-garnett-sport2);
 }
 
-.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label .radio-ui__icon {
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label svg {
   filter: grayscale(100%);
 }
 
@@ -503,7 +508,7 @@ form {
   margin-left: 5px;
 }
 
-.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--card {
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .svg-credit-card {
   height: 14px;
   width: 22px;
   margin-right: 10px;
