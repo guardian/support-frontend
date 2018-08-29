@@ -3,31 +3,22 @@
   width: 318px;
   font-size: 16px;
   font-family: $gu-text-sans-web;
-  border: 1px solid gu-colour(garnett-neutral-4);
-  border-radius: 600px;
   padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2);
   cursor: pointer;
   margin-bottom: $gu-v-spacing;
-
-  &:hover {
-    box-shadow: 0 0 0 2px lighten(gu-colour(sport-garnett-media-main-1), 30%);
-  }
-
-  &:active, &:focus {
-    box-shadow: 0 0 0 2px gu-colour(sport-garnett-media-main-1);
-  }
 }
 
 .component-radio-input__text {
   margin-left: ($gu-h-spacing / 2);
+  font-weight: bold;
 }
 
 .component-radio-input__input {
-  &:hover {
-    box-shadow: 0 0 0 2px lighten(gu-colour(sport-garnett-media-main-1), 30%);
-  }
+  margin-top: -1px;
+  vertical-align: middle;
+  transition: box-shadow .2s;
 
-  &:active, &:focus {
-    box-shadow: 0 0 0 2px gu-colour(sport-garnett-media-main-1);
+  &:hover {
+    box-shadow: 0 0 0 2px lighten(gu-colour(garnett-neutral-4), 6%);
   }
 }
