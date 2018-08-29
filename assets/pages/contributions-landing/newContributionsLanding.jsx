@@ -19,6 +19,7 @@ import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgEnveloppe from 'components/svgs/enveloppe';
 import SvgGlobe from 'components/svgs/globe';
+import SvgRoundel from 'components/svgs/roundel';
 import SvgUser from 'components/svgs/user';
 
 import { NewContributionType } from './new_components/ContributionType';
@@ -66,7 +67,9 @@ const content = (
     <Page
       header={
         <header role="banner" className="gu-content__header">
-          <a className="glogo" href="https://www.theguardian.com"><img src="/assets/images/roundel.svg" alt="The Guardian" /></a>
+          <a className="glogo" href="https://www.theguardian.com">
+            <SvgRoundel />
+          </a>
           <details className="countryGroups">
             <summary aria-label={`Selected country: ${selectedCountryGroup.name} (${currencies[selectedCountryGroup.currency].glyph})`}>
               <SvgGlobe />
