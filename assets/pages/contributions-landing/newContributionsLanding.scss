@@ -416,12 +416,15 @@ form {
 
 .form__radio-group--pills .form__radio-group__list {
   display: flex;
-  justify-content: space-between;
 }
 
 .form__radio-group--pills .form__radio-group__item {
   width: 50px;
   height: 50px;
+}
+
+.form__radio-group--pills .form__radio-group__item + .form__radio-group__item {
+  margin-left: 10px;
 }
 
 .form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
