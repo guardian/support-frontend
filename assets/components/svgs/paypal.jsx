@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-// The generic credit card logo used on checkouts.
+// The generic PayPal logo used on checkouts.
 export default function SvgPayPal() {
 
   return (

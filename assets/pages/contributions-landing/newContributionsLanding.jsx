@@ -17,7 +17,7 @@ import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
-import SvgCreditCard from 'components/svgs/newCreditCard';
+import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgGlobe from 'components/svgs/globe';
 import SvgPayPal from 'components/svgs/paypal';
@@ -139,7 +139,7 @@ const content = (
               <label htmlFor="contributionPayment-card" className="form__radio-group__label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">Pay with Credit/Debit Card</span>
-                <SvgCreditCard />
+                <SvgNewCreditCard />
               </label>
             </li>
           </ul>
