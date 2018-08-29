@@ -125,7 +125,7 @@ const content = (
               <input id="contributionPayment-paypal" className="form__radio-group__input" name="contributionPayment" type="radio" value="paypal" checked />
               <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
                 <span className="radio-ui" />
-                <span className="radio-ui__label">PayPal</span>
+                <span className="radio-ui__label">Pay with PayPal</span>
                 <img className="radio-ui__icon radio-ui__icon--paypal" src="/assets/images/paypal.png" alt="" />
               </label>
             </li>
@@ -133,7 +133,7 @@ const content = (
               <input id="contributionPayment-card" className="form__radio-group__input" name="contributionPayment" type="radio" value="card" />
               <label htmlFor="contributionPayment-card" className="form__radio-group__label">
                 <span className="radio-ui" />
-                <span className="radio-ui__label">Credit/Debit Card</span>
+                <span className="radio-ui__label">Pay with Credit/Debit Card</span>
                 <img className="radio-ui__icon radio-ui__icon--card" src="/assets/images/card.svg" alt="" />
               </label>
             </li>
