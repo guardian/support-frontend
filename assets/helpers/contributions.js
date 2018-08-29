@@ -21,6 +21,8 @@ export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type Amount = { value: string, spoken: string };
 
+export type PaymentType = 'paypal' | 'card';
+
 type ParseError = 'ParseError';
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
@@ -442,6 +444,18 @@ function getFrequency(contributionType: Contrib): string {
 
 }
 
+function getPaymentType(contributionType: Contrib, paymentType: PaymentType): string {
+  if (contributionType === 'ONE_OFF') {
+    if (paymentType === 'paypal') {
+      return 'with PayPal';
+    } else {
+      return 'with card';
+    }
+  }
+
+  return '';
+}
+
 function getCustomAmountA11yHint(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
@@ -540,6 +554,7 @@ export {
   getContributionTypeClassName,
   getSpokenType,
   getFrequency,
+  getPaymentType,
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,

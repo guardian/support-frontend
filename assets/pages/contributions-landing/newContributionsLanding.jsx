@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, getFrequency, type Contrib } from 'helpers/contributions';
+import { amounts, getFrequency, getPaymentType, type Contrib, type PaymentType } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId, type CountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -16,11 +16,11 @@ import Footer from 'components/footer/footer';
 
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
+import { NewContributionPayment } from './new_components/ContributionPayment';
 
 import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
 import { NewContributionState } from './ContributionState';
-
 
 // ----- Redux Store ----- //
 
@@ -111,33 +111,13 @@ const content = (
           </span>
         </div>
         <NewContributionState countryGroupId={countryGroupId} />
-        <fieldset className="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay">
-          <legend className="form__legend form__legend--radio-group">Pay with</legend>
-
-          <ul className="form__radio-group__list">
-            <li className="form__radio-group__item">
-              <input id="contributionPayment-paypal" className="form__radio-group__input" name="contributionPayment" type="radio" value="paypal" checked />
-              <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
-                <span className="radio-ui" />
-                <span className="radio-ui__label">PayPal</span>
-                <img className="radio-ui__icon radio-ui__icon--paypal" src="/assets-payment/paypal.png" alt="" />
-              </label>
-            </li>
-            <li className="form__radio-group__item">
-              <input id="contributionPayment-card" className="form__radio-group__input" name="contributionPayment" type="radio" value="card" />
-              <label htmlFor="contributionPayment-card" className="form__radio-group__label">
-                <span className="radio-ui" />
-                <span className="radio-ui__label">Credit/Debit Card</span>
-                <img className="radio-ui__icon radio-ui__icon--card" src="/assets-payment/card.svg" alt="" />
-              </label>
-            </li>
-          </ul>
-        </fieldset>
+        <NewContributionPayment />
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
             {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
             {getFrequency(contributionType)}
+            {getPaymentType(contributionType, 'paypal')}
           </button>
         </div>
       </form>
