@@ -16,6 +16,7 @@ import Footer from 'components/footer/footer';
 
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
+import { NewContributionName } from './new_components/ContributionName';
 import { NewContributionPayment } from './new_components/ContributionPayment';
 
 import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
@@ -82,25 +83,8 @@ const content = (
       <form action="#" method="post" className="form form--contribution">
         <NewContributionType />
         <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
-
-        <div className="form__field form__field--contribution-fname">
-          <label className="form__label" htmlFor="contributionFirstName">First Name</label>
-          <span className="form__input-with-icon">
-            <input id="contributionFirstName" className="form__input" type="text" autoCapitalize="words" required />
-            <span className="form__icon">
-              <svg width="14" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M6.99 7.381c1.433 0 3.121-1.66 3.121-3.683C10.111 1.674 8.953.5 6.991.5 5.026.5 3.888 1.674 3.888 3.698c0 2.023 1.825 3.683 3.101 3.683zM2.333 9.789l-.797.83L0 16.69l.758.81h12.445l.797-.81-1.556-6.071-.777-.83C10.11 9.283 8.692 9 7 9c-1.711 0-3.111.243-4.667.79z" fillRule="evenodd" /></svg>
-            </span>
-          </span>
-        </div>
-        <div className="form__field form__field--contribution-lname">
-          <label className="form__label" htmlFor="contributionLastName">Last Name</label>
-          <span className="form__input-with-icon">
-            <input id="contributionLastName" className="form__input" aria-describedby="error-contributionLastName" autoCapitalize="words" type="text" required />
-            <span className="form__icon">
-              <svg width="14" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M6.99 7.381c1.433 0 3.121-1.66 3.121-3.683C10.111 1.674 8.953.5 6.991.5 5.026.5 3.888 1.674 3.888 3.698c0 2.023 1.825 3.683 3.101 3.683zM2.333 9.789l-.797.83L0 16.69l.758.81h12.445l.797-.81-1.556-6.071-.777-.83C10.11 9.283 8.692 9 7 9c-1.711 0-3.111.243-4.667.79z" /></svg>
-            </span>
-          </span>
-        </div>
+        <NewContributionName id="contributionFirstName" name="contribution-fname" label="First Name" required />
+        <NewContributionName id="contributionLastName" name="contribution-lname" label="Last Name" required />
         <div className="form__field form__field--contribution-email">
           <label className="form__label" htmlFor="contributionEmail">Email address</label>
           <span className="form__input-with-icon">
