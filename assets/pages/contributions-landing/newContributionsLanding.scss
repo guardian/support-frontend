@@ -553,9 +553,11 @@ form {
 }
 
 .form__submit__button {
+  align-items: center;
   background: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 20px;
+  display: inline-flex;
   padding: 9px 20px;
 }
 
@@ -623,6 +625,12 @@ form {
 .form__field .svg-globe {
   width: 14px;
   height: 14px;
+}
+
+.form__submit .svg-arrow-right-straight {
+  width: 20px;
+  height: 18px;
+  vertical-align: middle;
 }
 
 .icon {

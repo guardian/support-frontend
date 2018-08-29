@@ -14,6 +14,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
+import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgEnveloppe from 'components/svgs/enveloppe';
@@ -142,7 +143,8 @@ const content = (
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
             {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
-            {getFrequency(contributionType)}
+            {getFrequency(contributionType)}&nbsp;
+            <SvgArrowRight />
           </button>
         </div>
       </form>
