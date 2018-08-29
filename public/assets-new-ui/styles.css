@@ -612,7 +612,7 @@ form {
   padding: 0 10px;
 }
 
-.confirmation h2 {
+.confirmation__maintitle {
   margin: 0;
 }
 
@@ -630,7 +630,7 @@ form {
   width: 50px;
 }
 
-.confirmation h3,
+.confirmation__title,
 .confirmation__message {
   font: 300 22px/1.2 'Guardian Egyptian Web', Georgia, serif;
   margin: 6px 0 12px;
