@@ -108,11 +108,19 @@ class Application(
     ))
   }
 
-  def newContributionsLanding(displayForm: String): Action[AnyContent] = NoCacheAction() { implicit request =>
+  def newContributionsLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(views.html.newMain(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
-      displayForm = displayForm == "true"
+      displayForm = true
+    ))
+  }
+
+  def newThankyouLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(views.html.newMain(
+      title = "Support the Guardian | Make a Contribution",
+      description = Some(stringsConfig.contributionsLandingDescription),
+      displayForm = false
     ))
   }
 
