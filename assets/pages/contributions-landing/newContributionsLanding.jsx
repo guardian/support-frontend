@@ -20,6 +20,7 @@ import SvgChevron from 'components/svgs/chevron';
 import SvgCreditCard from 'components/svgs/newCreditCard';
 import SvgEnveloppe from 'components/svgs/enveloppe';
 import SvgGlobe from 'components/svgs/globe';
+import SvgPayPal from 'components/svgs/paypal';
 import SvgRoundel from 'components/svgs/roundel';
 import SvgUser from 'components/svgs/user';
 
@@ -130,7 +131,7 @@ const content = (
               <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">Pay with PayPal</span>
-                <img className="radio-ui__icon radio-ui__icon--paypal" src="/assets/images/paypal.png" alt="" />
+                <SvgPayPal />
               </label>
             </li>
             <li className="form__radio-group__item">
