@@ -74,4 +74,4 @@ The message should have a body similar to the following:
           "DataExtensionName": "$dataExtensionName"
         }
 This example is from the 'Contributor Thank You' email, I think the only mandatory fields are `To->Address` and `DataExtensionName`, these should be set to the address of the email recipient and the name of the DataExtension which you added to membership-workflow.
-An example of sending these messages can be found in [EmailService](/common/src/main/scala/com/gu/emailservices/EmailService.scala).
+An example of sending these messages can be found in [EmailService](/src/main/scala/com/gu/emailservices/EmailService.scala).
