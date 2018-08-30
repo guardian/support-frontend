@@ -23,6 +23,11 @@ header[role="banner"] {
   top: $gu-v-spacing * 2;
 }
 
+.glogo .svg-roundel {
+  width: 100%;
+  height: 100%;
+}
+
 .countryGroups {
   background: white;
   border: 1px solid gu-colour(garnett-neutral-4);
@@ -55,20 +60,24 @@ header[role="banner"] {
   width: 40px;
 }
 
-.countryGroups .icon--world {
+.countryGroups .svg-chevron {
+  width: 19px;
+  height: 10px;
+}
+
+.countryGroups[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+.countryGroups .svg-checkmark {
+  width: 18px;
+  height: 14px;
+}
+
+.countryGroups .svg-globe {
   padding: 0 $gu-v-spacing;
-}
-
-.countryGroups .icon__arrow-up {
-  display: none;
-}
-
-.countryGroups[open] .icon__arrow-up {
-  display: initial;
-}
-
-.countryGroups[open] .icon__arrow-down {
-  display: none;
+  width: 14px;
+  height: 14px;
 }
 
 .countryGroups summary:hover,
@@ -117,6 +126,10 @@ footer[role="contentinfo"] a {
   color: white;
 }
 
+.component-footer__content {
+  padding-top: $gu-v-spacing;
+}
+
 /*= CONTENT */
 .gu-content__main {
   background: white;
@@ -132,7 +145,7 @@ body {
 h1 {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   color: gu-colour(garnett-neutral-1);
-  font: bold 24px/1.25 $gu-headline;
+  font: bold 32px/1.15 $gu-headline;
   margin: 0 -10px;
   padding: 0 10px $gu-v-spacing;
 }
@@ -412,12 +425,15 @@ form {
 
 .form__radio-group--pills .form__radio-group__list {
   display: flex;
-  justify-content: space-between;
 }
 
 .form__radio-group--pills .form__radio-group__item {
   width: 50px;
   height: 50px;
+}
+
+.form__radio-group--pills .form__radio-group__item + .form__radio-group__item {
+  margin-left: 10px;
 }
 
 .form__radio-group--pills .form__radio-group__input + .form__radio-group__label {
@@ -471,7 +487,7 @@ form {
   box-shadow: 0 0 0 2px gu-colour(live-garnett-sport2);
 }
 
-.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label .radio-ui__icon {
+.form__radio-group--buttons .form__radio-group__input:not(:checked) + .form__radio-group__label svg {
   filter: grayscale(100%);
 }
 
@@ -485,14 +501,14 @@ form {
   flex: 1;
 }
 
-.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--paypal {
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .svg-paypal {
   height: 18px;
   width: 15px;
   margin-right: 16px;
   margin-left: 5px;
 }
 
-.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .radio-ui__icon--card {
+.form__radio-group--buttons .form__radio-group__input + .form__radio-group__label .svg-new-credit-card {
   height: 14px;
   width: 22px;
   margin-right: 10px;
@@ -549,9 +565,11 @@ form {
 }
 
 .form__submit__button {
+  align-items: center;
   background: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 20px;
+  display: inline-flex;
   padding: 9px 20px;
 }
 
@@ -599,6 +617,32 @@ form {
 
 .form__input-with-icon .form__input:focus ~ .form__icon {
   fill: gu-colour(sport-garnett-media-main-1);
+}
+
+.form__field .svg-user {
+  width: 18px;
+  height: 18px;
+}
+
+.form__field .svg-envelope {
+  width: 16px;
+  height: 10px;
+}
+
+.form__field .svg-dollar {
+  width: 11px;
+  height: 19px;
+}
+
+.form__field .svg-globe {
+  width: 14px;
+  height: 14px;
+}
+
+.form__submit .svg-arrow-right-straight {
+  width: 20px;
+  height: 18px;
+  vertical-align: middle;
 }
 
 .icon {
