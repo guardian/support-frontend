@@ -16,7 +16,6 @@ import { NewContributionHeader } from 'components/new-contribution/ContributionH
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
 
 
-
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
