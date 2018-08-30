@@ -5,8 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Contrib, type PaymentType } from 'helpers/contributions';
-import { getPaymentDescription } from 'helpers/checkouts';
+import { getFrequency, type Contrib } from 'helpers/contributions';
+import { getPaymentDescription, type PaymentMethod } from 'helpers/checkouts';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
@@ -19,7 +19,7 @@ type PropTypes = {
   selectedCountryGroupDetails: CountryMetaData,
   contributionType: Contrib,
   selectedAmounts: Array<{ value: string, spoken: string }>,
-  paymentType: PaymentType,
+  paymentMethod: PaymentMethod,
 };
 
 // ----- Render ----- //
@@ -31,7 +31,7 @@ function ContributionSubmit(props: PropTypes) {
         Contribute&nbsp;
         {formatAmount(props.selectedCountryGroupDetails, props.selectedAmounts[0], false)}&nbsp;
         {getFrequency(props.contributionType)}&nbsp;
-        {getPaymentDescription(props.contributionType, props.paymentType)}&nbsp;
+        {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
         <SvgArrowRight />
       </button>
     </div>

@@ -5,7 +5,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, type Contrib, type PaymentType } from 'helpers/contributions';
+import { amounts, type Contrib } from 'helpers/contributions';
+import { type PaymentMethod } from 'helpers/checkouts';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -38,7 +39,7 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 // ----- Internationalisation ----- //
 
 const contributionType: Contrib = 'MONTHLY';
-const paymentType: PaymentType = 'paypal';
+const paymentMethod: PaymentMethod = 'PayPal';
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 const selectedCountryGroup = countryGroups[countryGroupId];
 const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
@@ -65,7 +66,7 @@ const content = (
           selectedCountryGroupDetails={selectedCountryGroupDetails}
           selectedAmounts={selectedAmounts}
           contributionType={contributionType}
-          paymentType={paymentType}
+          paymentMethod={paymentMethod}
         />
       </form>
     </Page>

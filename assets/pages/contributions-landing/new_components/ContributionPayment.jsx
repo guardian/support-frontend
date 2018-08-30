@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentType } from 'helpers/contributions';
+import { type PaymentMethod } from 'helpers/checkouts';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
@@ -13,7 +13,7 @@ import SvgPayPal from 'components/svgs/paypal';
 // ----- Types ----- //
 
 type PropTypes = {
-  paymentType: PaymentType,
+  paymentMethod: PaymentMethod,
 };
 
 // ----- Render ----- //
@@ -31,7 +31,7 @@ function ContributionPayment(props: PropTypes) {
             name="contributionPayment"
             type="radio"
             value="paypal"
-            checked={props.paymentType === 'paypal'}
+            checked={props.paymentMethod === 'PayPal'}
           />
           <label htmlFor="contributionPayment-paypal" className="form__radio-group__label">
             <span className="radio-ui" />
@@ -46,7 +46,7 @@ function ContributionPayment(props: PropTypes) {
             name="contributionPayment"
             type="radio"
             value="card"
-            checked={props.paymentType === 'card'}
+            checked={props.paymentMethod !== 'PayPal'}
           />
           <label htmlFor="contributionPayment-card" className="form__radio-group__label">
             <span className="radio-ui" />
@@ -60,7 +60,7 @@ function ContributionPayment(props: PropTypes) {
 }
 
 const mapStateToProps = () => ({
-  paymentType: 'paypal',
+  paymentMethod: 'PayPal',
 });
 
 const NewContributionPayment = connect(mapStateToProps)(ContributionPayment);
