@@ -51,9 +51,22 @@ function getPaymentMethod(): ?PaymentMethod {
   return null;
 }
 
+function getPaymentDescription(contributionType: Contrib, paymentMethod: PaymentMethod): string {
+  if (contributionType === 'ONE_OFF') {
+    if (paymentMethod === 'PayPal') {
+      return 'with PayPal';
+    }
+
+    return 'with card';
+  }
+
+  return '';
+}
+
 // ----- Exports ----- //
 
 export {
   getAmount,
   getPaymentMethod,
+  getPaymentDescription,
 };
