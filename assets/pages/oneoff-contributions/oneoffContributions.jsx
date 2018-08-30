@@ -29,7 +29,7 @@ import OneoffContributionsPayment from './components/oneoffContributionsPayment'
 
 const countryGroup = detectCountryGroup();
 
-const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup)), true);
+const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup), countryGroup), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 

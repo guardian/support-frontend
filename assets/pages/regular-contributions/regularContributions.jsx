@@ -26,11 +26,13 @@ import RegularContributionsPayment from './components/regularContributionsPaymen
 // ----- Page Startup ----- //
 
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
+const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(
-  getAmount(contributionType, detectCountryGroup()),
+  getAmount(contributionType, countryGroup),
   getPaymentMethod(),
   contributionType,
+  countryGroup,
 ), true);
 
 user.init(store.dispatch);
