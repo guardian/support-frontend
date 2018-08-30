@@ -11,6 +11,7 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
+import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
 import { NewContributionHeader } from '../contributions-landing/new_components/ContributionHeader';
 
@@ -33,7 +34,7 @@ const selectedCountryGroup = countryGroups[countryGroupId];
 const content = (
   <Provider store={store}>
     <Page
-      header={<NewContributionHeader selectedCountryGroup={selectedCountryGroup} />}
+      header={<NewContributionHeader />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <h1>Thank you for your contribution to independent journalism</h1>
@@ -53,7 +54,10 @@ const content = (
       </section>
 
       <div class="confirmation confirmation--backtothegu">
-        <a class="button button--wob" href="#">Return to The Guardian</a>
+        <a class="button button--wob" href="https://www.theguardian.com">
+          Return to The Guardian&nbsp;
+          <SvgArrowRight />  
+        </a>
       </div>
     </Page>
   </Provider>

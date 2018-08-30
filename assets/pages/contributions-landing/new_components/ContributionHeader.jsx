@@ -16,7 +16,7 @@ import SvgRoundel from 'components/svgs/roundel';
 // ----- Types ----- //
 
 type PropTypes = {
-  selectedCountryGroup: CountryGroup,
+  selectedCountryGroup: ?CountryGroup,
 };
 
 // ----- Render ----- //
@@ -40,18 +40,20 @@ function ContributionHeader(props: PropTypes) {
       <a className="glogo" href="https://www.theguardian.com">
         <SvgRoundel />
       </a>
-      <details className="countryGroups">
-        <summary aria-label={`Selected country: ${props.selectedCountryGroup.name} (${currencies[props.selectedCountryGroup.currency].glyph})`}>
-          <SvgGlobe />
-          <span className="countryGroups__label">{props.selectedCountryGroup.name} ({currencies[props.selectedCountryGroup.currency].extendedGlyph})</span>
-          <span className="icon icon--arrows">
-            <SvgChevron />
-          </span>
-        </summary>
-        <ul className="countryGroups__list">
-          {(Object.values(countryGroups): any).map(renderCountryGroup(props.selectedCountryGroup))}
-        </ul>
-      </details>
+      { props.selectedCountryGroup ? (
+        <details className="countryGroups">
+          <summary aria-label={`Selected country: ${props.selectedCountryGroup.name} (${currencies[props.selectedCountryGroup.currency].glyph})`}>
+            <SvgGlobe />
+            <span className="countryGroups__label">{props.selectedCountryGroup.name} ({currencies[props.selectedCountryGroup.currency].extendedGlyph})</span>
+            <span className="icon icon--arrows">
+              <SvgChevron />
+            </span>
+          </summary>
+          <ul className="countryGroups__list">
+            {(Object.values(countryGroups): any).map(renderCountryGroup(props.selectedCountryGroup))}
+          </ul>
+        </details>
+      ) : null}
     </header>
   );
 }
