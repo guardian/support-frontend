@@ -97,7 +97,7 @@ class Application(
     ))
   }
 
-  def reactContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def newContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
@@ -108,19 +108,13 @@ class Application(
     ))
   }
 
-  def newContributionsLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.newMain(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      displayForm = true
-    ))
-  }
-
-  def newThankyouLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.newMain(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      displayForm = false
+  def newThankyouLanding(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(views.html.main(
+      title = "Support the Guardian | Thank you for your contribution",
+      description = None,
+      mainId = s"new-thank-you-page-$countryCode",
+      mainJsBundle = "newThankYouLandingPage.js",
+      mainStyleBundle = "newContributionsLandingPageStyles.css"
     ))
   }
 
