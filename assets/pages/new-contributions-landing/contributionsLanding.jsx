@@ -18,7 +18,7 @@ import Footer from 'components/footer/footer';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 
-import { NewContributionHeader } from 'components/new-contribution/ContributionHeader';
+import { NewHeader } from 'components/headers/new-header/Header';
 import { NewContributionType } from './components/ContributionType';
 import { NewContributionAmount } from './components/ContributionAmount';
 import { NewContributionPayment } from './components/ContributionPayment';
@@ -49,7 +49,7 @@ const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 const content = (
   <Provider store={store}>
     <Page
-      header={<NewContributionHeader selectedCountryGroup={selectedCountryGroup} />}
+      header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>

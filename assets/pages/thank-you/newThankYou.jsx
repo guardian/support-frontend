@@ -12,7 +12,7 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import { NewContributionHeader } from 'components/new-contribution/ContributionHeader';
+import { NewHeader } from 'components/headers/new-header/Header';
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
 
 
@@ -31,7 +31,7 @@ const reactElementId = `new-thank-you-page-${countryGroups[countryGroupId].suppo
 const content = (
   <Provider store={store}>
     <Page
-      header={<NewContributionHeader />}
+      header={<NewHeader />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <h1>Thank you for your contribution to independent journalism</h1>

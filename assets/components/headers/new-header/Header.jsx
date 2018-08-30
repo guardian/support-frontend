@@ -23,7 +23,7 @@ type PropTypes = {
 
 const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup: CountryGroup) => (
   <li className="countryGroups__item">
-    <a href={`/${countryGroup.supportInternationalisationId}/contribute.react`}>
+    <a href={`/${countryGroup.supportInternationalisationId}/contribute.new`}>
       {countryGroup === selectedCountryGroup ? (
         <span className="icon">
           <SvgCheckmark />
@@ -34,7 +34,7 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
   </li>
 );
 
-function ContributionHeader(props: PropTypes) {
+function Header(props: PropTypes) {
   return (
     <header role="banner" className="gu-content__header">
       <a className="glogo" href="https://www.theguardian.com">
@@ -58,10 +58,10 @@ function ContributionHeader(props: PropTypes) {
   );
 }
 
-ContributionHeader.defaultProps = {
+Header.defaultProps = {
   selectedCountryGroup: null,
 };
 
-const NewContributionHeader = connect()(ContributionHeader);
+const NewHeader = connect()(Header);
 
-export { NewContributionHeader };
+export { NewHeader };
