@@ -677,18 +677,18 @@ form {
   font: normal 16px/1 $gu-text-sans-web;
   height: 50px;
   justify-content: center;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 ($gu-h-spacing / 2);
   width: 50px;
 }
 
 .confirmation__title,
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
-  margin: 6px 0 12px;
+  margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
 }
 
 .confirmation p {
-  margin: 12px 0 24px;
+  margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
 }
 
 .confirmation--newsletter {
@@ -697,20 +697,20 @@ form {
 }
 
 .confirmation--backtothegu {
-  margin-bottom: 32px;
-  padding-bottom: 12px;
-  padding-top: 12px;
+  margin-bottom: $gu-v-spacing + 20px;
+  padding-bottom: $gu-v-spacing;
+  padding-top: $gu-v-spacing;
 }
 
 .button {
   align-items: center;
   border: 1px solid currentColor;
-  border-radius: 24px;
+  border-radius: $gu-v-spacing * 2;
   display: inline-flex;
   font-family: $gu-text-sans-web;
-  height: 42px;
+  height: $gu-v-spacing * 3.5;
   line-height: 1;
-  padding: 0 12px;
+  padding: 0 $gu-h-spacing;
   text-decoration: none;
 }
 
