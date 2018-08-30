@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, getFrequency, getPaymentType, type Contrib } from 'helpers/contributions';
+import { amounts, type Contrib } from 'helpers/contributions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -13,15 +13,15 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
-import { NewContributionHeader } from './new_components/ContributionHeader';
-import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 
+import { NewContributionHeader } from './new_components/ContributionHeader';
 import { NewContributionType } from './new_components/ContributionType';
-import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
-import { NewContributionTextInput } from './new_components/ContributionTextInput';
+import { NewContributionAmount } from './new_components/ContributionAmount';
 import { NewContributionPayment } from './new_components/ContributionPayment';
+import { NewContributionTextInput } from './new_components/ContributionTextInput';
+import { NewContributionSubmit } from './new_components/ContributionSubmit';
 
 import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
@@ -37,13 +37,12 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 // ----- Internationalisation ----- //
 
-const contributionType: Contrib = 'MONTHLY';
-
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
-const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
+const contributionType: Contrib = 'MONTHLY';
+const paymentType: PaymentType = 'paypal';
 
 // ----- Render ----- //
 
@@ -63,15 +62,12 @@ const content = (
         <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
-        <div className="form__submit">
-          <button className="form__submit__button" type="submit">
-            Contribute&nbsp;
-            {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
-            {getFrequency(contributionType)}&nbsp;
-            {getPaymentType(contributionType, 'paypal')}&nbsp;
-            <SvgArrowRight />
-          </button>
-        </div>
+        <NewContributionSubmit
+          selectedCountryGroupDetails={selectedCountryGroupDetails}
+          selectedAmounts={amounts('notintest')[contributionType][countryGroupId]}
+          contributionType={contributionType}
+          paymentType={paymentType}
+        />
       </form>
     </Page>
   </Provider>

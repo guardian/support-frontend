@@ -37,7 +37,7 @@ function ContributionTextInput(props: PropTypes) {
             {props.icon}
           </span>
         </span>
-      )  : (
+      ) : (
         <input
           id={props.id}
           className="form__input"
