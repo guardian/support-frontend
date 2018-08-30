@@ -3,7 +3,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 body {
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   min-height: 100vh;
 }
 
@@ -29,7 +29,7 @@ header[role="banner"] {
 }
 
 .countryGroups {
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-4);
   font-family: $gu-text-sans-web;
   max-width: 355px;
@@ -123,7 +123,7 @@ footer[role="contentinfo"] {
 }
 
 footer[role="contentinfo"] a {
-  color: white;
+  color: gu-colour(garnett-neutral-5);
 }
 
 .component-footer__content {
@@ -132,7 +132,7 @@ footer[role="contentinfo"] a {
 
 /*= CONTENT */
 .gu-content__main {
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
 }
 
@@ -343,7 +343,7 @@ header[role="banner"] {
 }
 /*= CONTENT */
 .content {
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
 }
 
@@ -414,7 +414,7 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group__input:checked + .form__radio-group__label {
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   color: gu-colour(sport-garnett-media-main-1);
 }
         
@@ -449,7 +449,7 @@ form {
   
 .form__radio-group--pills .form__radio-group__input:checked + .form__radio-group__label {
   background: gu-colour(sport-garnett-media-main-1);
-  color: #fff;
+  color: gu-colour(garnett-neutral-5);
 }
 
 .form__radio-group--buttons .form__radio-group__item + .form__radio-group__item {
@@ -493,7 +493,7 @@ form {
 
 .form__radio-group--buttons .form__radio-group__input:checked + .form__radio-group__label .radio-ui {
   border-color: gu-colour(sport-garnett-media-main-1);
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: inset 0 0 0 1px gu-colour(garnett-neutral-5);
   background: gu-colour(sport-garnett-media-main-1);
 }
 
@@ -524,7 +524,7 @@ form {
 .form__input {
   -webkit-appearance: none;
   appearance: none;
-  background: white;
+  background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(neutral-4);
   border-radius: 0;
   padding: 9px 10px 9px 38px;
@@ -649,3 +649,82 @@ form {
   fill: inherit;
 }
 
+
+/*= THANK YOU PAGE */
+
+.hidden {
+  display: none;
+}
+
+.confirmation {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  font-weight: 300;
+  margin: 0 -10px;
+  padding: 0 10px;
+}
+
+.confirmation__maintitle {
+  margin: 0;
+}
+
+.confirmation__amount {
+  align-items: center;
+  background: gu-colour(sport-garnett-media-main-1);
+  border-radius: 100%;
+  color: gu-colour(garnett-neutral-5);
+  display: flex;
+  float: right;
+  font: normal 16px/1 $gu-text-sans-web;
+  height: 50px;
+  justify-content: center;
+  margin: 0 0 0 10px;
+  width: 50px;
+}
+
+.confirmation__title,
+.confirmation__message {
+  font: 300 22px/1.2 $gu-headline;
+  margin: 6px 0 12px;
+}
+
+.confirmation p {
+  margin: 12px 0 24px;
+}
+
+.confirmation--newsletter {
+  background: url("/assets-payment/newsletters.png");
+  padding-bottom: 100px;
+}
+
+.confirmation--backtothegu {
+  margin-bottom: 32px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.button {
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: 24px;
+  display: inline-flex;
+  font-family: $gu-text-sans-web;
+  height: 42px;
+  line-height: 1;
+  padding: 0 12px;
+  text-decoration: none;
+}
+
+.button--newsletter {
+  color: #29a05f;
+}
+
+.button--wob {
+  background: gu-colour(garnett-neutral-1);
+  color: gu-colour(garnett-neutral-5);
+}
+
+.button .svg-arrow-right-straight {
+  width: 20px;
+  height: 18px;
+  fill: gu-colour(garnett-neutral-5);
+}
