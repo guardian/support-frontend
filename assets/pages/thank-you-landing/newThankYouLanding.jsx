@@ -27,8 +27,6 @@ const reactElementId = `new-thank-you-page-${countryGroups[countryGroupId].suppo
 
 // ----- Internationalisation ----- //
 
-const selectedCountryGroup = countryGroups[countryGroupId];
-
 // ----- Render ----- //
 
 const content = (
@@ -39,24 +37,27 @@ const content = (
     >
       <h1>Thank you for your contribution to independent journalism</h1>
 
-      <section class="confirmation confirmation--newsletter">
-        <h3 class="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>News and offers from The Guardian, The Observer and Guardian Weekly, on the ways to read and support our journalism. Already a member, subscriber or contributor, opt in here to receive your regular emails and updates.</p>
-        <a class="button button--newsletter" href="#">Subscribe</a>
+      <section className="confirmation confirmation--newsletter">
+        <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
+        <p>News and offers from The Guardian, The Observer and Guardian Weekly,
+          on the ways to read and support our journalism. Already a member, subscriber or
+          contributor, opt in here to receive your regular emails and updates.
+        </p>
+        <a className="button button--newsletter" href="/subscribe">Subscribe</a>
       </section>
 
-      <section class="confirmation">
-        <h2 class="confirmation__maintitle">
-          <span class="hidden">Your contribution:</span>
-          <span class="confirmation__amount">$25</span>
+      <section className="confirmation">
+        <h2 className="confirmation__maintitle">
+          <span className="hidden">Your contribution:</span>
+          <span className="confirmation__amount">$25</span>
         </h2>
-        <p class="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
+        <p className="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
       </section>
 
-      <div class="confirmation confirmation--backtothegu">
-        <a class="button button--wob" href="https://www.theguardian.com">
+      <div className="confirmation confirmation--backtothegu">
+        <a className="button button--wob" href="https://www.theguardian.com">
           Return to The Guardian&nbsp;
-          <SvgArrowRight />  
+          <SvgArrowRight />
         </a>
       </div>
     </Page>
