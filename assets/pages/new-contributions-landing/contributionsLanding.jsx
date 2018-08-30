@@ -19,12 +19,12 @@ import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 
 import { NewContributionHeader } from 'components/new-contribution/ContributionHeader';
-import { NewContributionType } from 'components/new-contribution/ContributionType';
-import { NewContributionAmount } from 'components/new-contribution/ContributionAmount';
-import { NewContributionPayment } from 'components/new-contribution/ContributionPayment';
-import { NewContributionState } from 'components/new-contribution/ContributionState';
-import { NewContributionSubmit } from 'components/new-contribution/ContributionSubmit';
-import { NewContributionTextInput } from 'components/new-contribution/ContributionTextInput';
+import { NewContributionType } from './components/ContributionType';
+import { NewContributionAmount } from './components/ContributionAmount';
+import { NewContributionPayment } from './components/ContributionPayment';
+import { NewContributionState } from './components/ContributionState';
+import { NewContributionSubmit } from './components/ContributionSubmit';
+import { NewContributionTextInput } from './components/ContributionTextInput';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
 
