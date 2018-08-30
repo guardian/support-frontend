@@ -5,7 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, getPaymentType, type Contrib, type PaymentType } from 'helpers/contributions';
+import { getFrequency, type Contrib, type PaymentType } from 'helpers/contributions';
+import { getPaymentDescription } from 'helpers/checkouts';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
@@ -30,7 +31,7 @@ function ContributionSubmit(props: PropTypes) {
         Contribute&nbsp;
         {formatAmount(props.selectedCountryGroupDetails, props.selectedAmounts[0], false)}&nbsp;
         {getFrequency(props.contributionType)}&nbsp;
-        {getPaymentType(props.contributionType, props.paymentType)}&nbsp;
+        {getPaymentDescription(props.contributionType, props.paymentType)}&nbsp;
         <SvgArrowRight />
       </button>
     </div>

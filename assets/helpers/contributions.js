@@ -444,18 +444,6 @@ function getFrequency(contributionType: Contrib): string {
 
 }
 
-function getPaymentType(contributionType: Contrib, paymentType: PaymentType): string {
-  if (contributionType === 'ONE_OFF') {
-    if (paymentType === 'paypal') {
-      return 'with PayPal';
-    }
-
-    return 'with card';
-  }
-
-  return '';
-}
-
 function getCustomAmountA11yHint(
   contributionType: Contrib,
   countryGroupId: CountryGroupId,
@@ -554,7 +542,6 @@ export {
   getContributionTypeClassName,
   getSpokenType,
   getFrequency,
-  getPaymentType,
   getCustomAmountA11yHint,
   getContributionTypeRadios,
   getContributionAmountRadios,
