@@ -5,6 +5,11 @@ body {
   padding: 0;
 }
 
+a {
+  color: inherit;
+  text-decoration-color: currentColor;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
@@ -594,3 +599,75 @@ form {
   fill: inherit;
 }
 
+/*= THANK YOU PAGE */
+
+.hidden {
+  display: none;
+}
+
+.confirmation {
+  border-bottom: 1px solid #dcdcdc;
+  font-weight: 300;
+  margin: 0 -10px;
+  padding: 0 10px;
+}
+
+.confirmation__maintitle {
+  margin: 0;
+}
+
+.confirmation__amount {
+  align-items: center;
+  background: #00b2ff;
+  border-radius: 100%;
+  color: white;
+  display: flex;
+  float: right;
+  font: normal 16px/1 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  height: 50px;
+  justify-content: center;
+  margin: 0 0 0 10px;
+  width: 50px;
+}
+
+.confirmation__title,
+.confirmation__message {
+  font: 300 22px/1.2 'Guardian Egyptian Web', Georgia, serif;
+  margin: 6px 0 12px;
+}
+
+.confirmation p {
+  margin: 12px 0 24px;
+}
+
+.confirmation--newsletter {
+  background: url("/assets-payment/newsletters.png");
+  padding-bottom: 100px;
+}
+
+.confirmation--backtothegu {
+  margin-bottom: 32px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.button {
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: 24px;
+  display: inline-flex;
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  height: 42px;
+  line-height: 1;
+  padding: 0 12px;
+  text-decoration: none;
+}
+
+.button--newsletter {
+  color: #29a05f;
+}
+
+.button--wob {
+  background: #121212;
+  color: white;
+}
