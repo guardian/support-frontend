@@ -14,6 +14,10 @@ import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 
 import { NewContributionHeader } from './new_components/ContributionHeader';
+import SvgArrowRight from 'components/svgs/arrowRightStraight';
+import SvgEnvelope from 'components/svgs/envelope';
+import SvgUser from 'components/svgs/user';
+
 import { NewContributionType } from './new_components/ContributionType';
 import { formatAmount, NewContributionAmount } from './new_components/ContributionAmount';
 import { NewContributionTextInput } from './new_components/ContributionTextInput';
@@ -54,17 +58,18 @@ const content = (
       <form action="#" method="post" className="form form--contribution">
         <NewContributionType />
         <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
-        <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" required />
-        <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" required />
-        <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" required />
+        <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
+        <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
+        <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
         <div className="form__submit">
           <button className="form__submit__button" type="submit">
             Contribute&nbsp;
             {formatAmount(selectedCountryGroupDetails, selectedAmounts[0], false)}&nbsp;
-            {getFrequency(contributionType)}
-            {getPaymentType(contributionType, 'paypal')}
+            {getFrequency(contributionType)}&nbsp;
+            {getPaymentType(contributionType, 'paypal')}&nbsp;
+            <SvgArrowRight />
           </button>
         </div>
       </form>
