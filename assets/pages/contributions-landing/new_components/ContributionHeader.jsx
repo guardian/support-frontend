@@ -50,13 +50,17 @@ function ContributionHeader(props: PropTypes) {
             </span>
           </summary>
           <ul className="countryGroups__list">
-            {(Object.values(countryGroups): any).map(renderCountryGroup(props.selectedCountryGroup))}
+            {(Object.values(countryGroups): any).map(renderCountryGroup((props.selectedCountryGroup: any)))}
           </ul>
         </details>
       ) : null}
     </header>
   );
 }
+
+ContributionHeader.defaultProps = {
+  selectedCountryGroup: null,
+};
 
 const NewContributionHeader = connect()(ContributionHeader);
 
