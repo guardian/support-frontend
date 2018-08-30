@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 
 import { getFrequency, type Contrib } from 'helpers/contributions';
 import { getPaymentDescription, type PaymentMethod } from 'helpers/checkouts';
+import { type CountryMetaData } from 'helpers/internationalisation/contributions';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
 import { formatAmount } from './ContributionAmount';
-import { type CountryMetaData } from '../contributionsLandingMetadata';
 
 // ----- Types ----- //
 

@@ -10,6 +10,7 @@ import { type PaymentMethod } from 'helpers/checkouts';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
@@ -17,16 +18,15 @@ import Footer from 'components/footer/footer';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 
-import { NewContributionHeader } from './new_components/ContributionHeader';
-import { NewContributionType } from './new_components/ContributionType';
-import { NewContributionAmount } from './new_components/ContributionAmount';
-import { NewContributionPayment } from './new_components/ContributionPayment';
-import { NewContributionTextInput } from './new_components/ContributionTextInput';
-import { NewContributionSubmit } from './new_components/ContributionSubmit';
+import { NewContributionHeader } from 'components/new-contribution/ContributionHeader';
+import { NewContributionType } from 'components/new-contribution/ContributionType';
+import { NewContributionAmount } from 'components/new-contribution/ContributionAmount';
+import { NewContributionPayment } from 'components/new-contribution/ContributionPayment';
+import { NewContributionState } from 'components/new-contribution/ContributionState';
+import { NewContributionSubmit } from 'components/new-contribution/ContributionSubmit';
+import { NewContributionTextInput } from 'components/new-contribution/ContributionTextInput';
 
-import { countryGroupSpecificDetails } from './contributionsLandingMetadata';
 import { createPageReducerFor } from './contributionsLandingReducer';
-import { NewContributionState } from './ContributionState';
 
 // ----- Redux Store ----- //
 

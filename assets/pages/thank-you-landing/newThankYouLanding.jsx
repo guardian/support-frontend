@@ -12,10 +12,10 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-
-import { NewContributionHeader } from '../contributions-landing/new_components/ContributionHeader';
-
+import { NewContributionHeader } from 'components/new-contribution/ContributionHeader';
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
+
+
 
 // ----- Redux Store ----- //
 
