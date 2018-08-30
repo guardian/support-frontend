@@ -36,6 +36,25 @@ const content = (
       header={<NewContributionHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
+      <h1>Thank you for your contribution to independent journalism</h1>
+
+      <section class="confirmation confirmation--newsletter">
+        <h3 class="confirmation__title">Subscriptions, membership and contributions</h3>
+        <p>News and offers from The Guardian, The Observer and Guardian Weekly, on the ways to read and support our journalism. Already a member, subscriber or contributor, opt in here to receive your regular emails and updates.</p>
+        <a class="button button--newsletter" href="#">Subscribe</a>
+      </section>
+
+      <section class="confirmation">
+        <h2 class="confirmation__maintitle">
+          <span class="hidden">Your contribution:</span>
+          <span class="confirmation__amount">$25</span>
+        </h2>
+        <p class="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
+      </section>
+
+      <div class="confirmation confirmation--backtothegu">
+        <a class="button button--wob" href="#">Return to The Guardian</a>
+      </div>
     </Page>
   </Provider>
 );
