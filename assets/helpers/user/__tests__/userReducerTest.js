@@ -1,11 +1,14 @@
-import { userReducer as reducer } from '../userReducer';
+// ----- Imports ----- //
+
+import { createUserReducer } from '../userReducer';
+
 
 // ----- Tests ----- //
 
 describe('user reducer tests', () => {
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toMatchSnapshot();
+    expect(createUserReducer('GBPCountries')(undefined, {})).toMatchSnapshot();
   });
 
   it('should handle SET_DISPLAY_NAME', () => {
@@ -15,7 +18,7 @@ describe('user reducer tests', () => {
       name,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.displayName).toEqual(name);
   });
@@ -27,7 +30,7 @@ describe('user reducer tests', () => {
       name,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
     expect(newState.firstName).toEqual(name);
   });
 
@@ -38,7 +41,7 @@ describe('user reducer tests', () => {
       name,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.lastName).toEqual(name);
   });
@@ -51,7 +54,7 @@ describe('user reducer tests', () => {
       name,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.fullName).toEqual(name);
   });
@@ -64,7 +67,7 @@ describe('user reducer tests', () => {
       testUser,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.isTestUser).toEqual(testUser);
   });
@@ -77,7 +80,7 @@ describe('user reducer tests', () => {
       postDeploymentTestUser,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.isPostDeploymentTestUser).toEqual(postDeploymentTestUser);
   });
@@ -90,7 +93,7 @@ describe('user reducer tests', () => {
       email,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
 
     expect(newState.email).toEqual(email);
   });
@@ -103,7 +106,7 @@ describe('user reducer tests', () => {
       stateField,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('UnitedStates')(undefined, action);
     expect(newState.stateField).toEqual(stateField);
   });
 
@@ -115,7 +118,7 @@ describe('user reducer tests', () => {
       preference,
     };
 
-    const newState = reducer(undefined, action);
+    const newState = createUserReducer('GBPCountries')(undefined, action);
     expect(newState.gnmMarketing).toEqual(preference);
   });
 });
