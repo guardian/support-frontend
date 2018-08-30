@@ -12,7 +12,7 @@ type PropTypes = {
   name: string,
   label: string,
   placeholder: boolean | string,
-  icon?: JSX$Element,
+  icon: ?React$Element<*>,
   type?: string,
   required?: boolean
 };

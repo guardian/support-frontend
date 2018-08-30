@@ -10,12 +10,14 @@ import { getFrequency, getPaymentType, type Contrib, type PaymentType } from 'he
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
 import { formatAmount } from './ContributionAmount';
+import { type CountryMetaData } from '../contributionsLandingMetadata';
 
 // ----- Types ----- //
 
 type PropTypes = {
+  selectedCountryGroupDetails: CountryMetaData,
   contributionType: Contrib,
-  selectedAmounts: [number],
+  selectedAmounts: Array<{ value: string, spoken: string }>,
   paymentType: PaymentType,
 };
 
