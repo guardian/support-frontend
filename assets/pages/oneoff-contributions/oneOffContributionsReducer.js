@@ -56,10 +56,10 @@ function createOneOffContributionsReducer(amount: number) {
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
-        return Object.assign({}, state, { error: action.message });
+        return { ...state, error: action.message };
 
       case 'CHECKOUT_SUCCESS':
-        return Object.assign({}, state, { paymentComplete: true });
+        return { ...state, paymentComplete: true };
 
       default:
         return state;
