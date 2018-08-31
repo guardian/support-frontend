@@ -6,14 +6,13 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { userReducer as user } from 'helpers/user/userReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CommonState } from 'helpers/page/page';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { Action } from './oneoffContributionsActions';
-import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFormState } from './components/contributionsCheckoutContainer/checkoutFormReducer';
 
 
 // ----- Types ----- //
@@ -22,14 +21,14 @@ export type State = {
   amount: number,
   error: ?string,
   paymentComplete: boolean,
+  emailHasBeenBlurred: boolean,
 };
 
 export type CombinedState = {
   oneoffContrib: State,
   user: UserState,
   csrf: CsrfState,
-  checkoutForm: OneOffContributionsCheckoutFormState,
-  marketingConsent: MarketingConsentState,
+  marketingConsent: MarketingConsentState
 };
 
 export type PageState = {
@@ -46,6 +45,7 @@ function createOneOffContribReducer(amount: number) {
     amount,
     error: null,
     paymentComplete: false,
+    emailHasBeenBlurred: false,
   };
 
   return function oneOffContribReducer(state: State = initialState, action: Action): State {
@@ -58,6 +58,9 @@ function createOneOffContribReducer(amount: number) {
       case 'CHECKOUT_SUCCESS':
         return Object.assign({}, state, { paymentComplete: true });
 
+      case 'SET_EMAIL_HAS_BEEN_BLURRED':
+        return Object.assign({}, state, { emailHasBeenBlurred: true });
+
       default:
         return state;
 
@@ -68,12 +71,11 @@ function createOneOffContribReducer(amount: number) {
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(amount: number) {
+export default function createRootOneOffContribReducer(amount: number, countryGroup: CountryGroupId) {
   return combineReducers({
     oneoffContrib: createOneOffContribReducer(amount),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
-    user,
+    user: createUserReducer(countryGroup),
     csrf,
-    checkoutForm,
   });
 }

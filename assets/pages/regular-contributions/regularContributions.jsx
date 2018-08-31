@@ -16,7 +16,7 @@ import { getAmount, getPaymentMethod } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer/contributionsCheckoutContainer';
+import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
 import FormFields from './components/formFields';
@@ -26,11 +26,13 @@ import RegularContributionsPayment from './components/regularContributionsPaymen
 // ----- Page Startup ----- //
 
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
+const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(
-  getAmount(contributionType, detectCountryGroup()),
+  getAmount(contributionType, countryGroup),
   getPaymentMethod(),
   contributionType,
+  countryGroup,
 ), true);
 
 user.init(store.dispatch);

@@ -9,7 +9,7 @@ import createReducer from '../regularContributionsReducer';
 
 describe('Regular contributions Reducer', () => {
 
-  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY');
+  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY', 'GBPCountries');
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
@@ -52,4 +52,13 @@ describe('Regular contributions Reducer', () => {
     expect(newState.regularContrib.paymentStatus).toEqual('Pending');
   });
 
+  it('should handle SET_EMAIL_HAS_BEEN_BLURRED', () => {
+
+    const action = {
+      type: 'SET_EMAIL_HAS_BEEN_BLURRED',
+    };
+
+    const newState = reducer(undefined, action);
+    expect(newState.regularContrib.emailHasBeenBlurred).toEqual(true);
+  });
 });

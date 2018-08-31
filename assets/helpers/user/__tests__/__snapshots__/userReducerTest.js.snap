@@ -5,12 +5,12 @@ Object {
   "displayName": "",
   "email": "",
   "firstName": "",
-  "fullName": "",
   "gnmMarketing": false,
   "id": "",
   "isPostDeploymentTestUser": false,
   "isSignedIn": false,
   "isTestUser": null,
   "lastName": "",
+  "stateField": "",
 }
 `;

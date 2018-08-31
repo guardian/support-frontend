@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import { userReducer as user } from 'helpers/user/userReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -15,7 +15,8 @@ import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { checkoutFormReducer as checkoutForm, type RegularContributionsCheckoutFormState } from './components/contributionsCheckoutContainer/checkoutFormReducer';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus } from './components/regularContributionsPayment';
 
@@ -31,6 +32,7 @@ export type State = {
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
+  emailHasBeenBlurred: boolean,
 };
 
 export type CombinedState = {
@@ -38,7 +40,6 @@ export type CombinedState = {
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
-  checkoutForm: RegularContributionsCheckoutFormState,
   marketingConsent: MarketingConsentState,
 };
 
@@ -65,6 +66,7 @@ function createRegularContribReducer(
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
+    emailHasBeenBlurred: false,
   };
 
   return function regularContrib(state: State = initialState, action: Action): State {
@@ -85,6 +87,9 @@ function createRegularContribReducer(
       case 'SET_PAYPAL_HAS_LOADED':
         return Object.assign({}, state, { payPalHasLoaded: true });
 
+      case 'SET_EMAIL_HAS_BEEN_BLURRED':
+        return Object.assign({}, state, { emailHasBeenBlurred: true });
+
       default:
         return state;
 
@@ -99,13 +104,13 @@ export default function createRootRegularContributionsReducer(
   amount: number,
   paymentMethod: ?PaymentMethod,
   contributionType: RegularContributionType,
+  countryGroup: CountryGroupId,
 ) {
   return combineReducers({
     regularContrib: createRegularContribReducer(amount, paymentMethod, contributionType),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
-    user,
+    user: createUserReducer(countryGroup),
     csrf,
     directDebit,
-    checkoutForm,
   });
 }
