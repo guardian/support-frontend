@@ -3,7 +3,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 body {
-  background: gu-colour(garnett-neutral-5);
+  background: gu-colour(news-garnett-highlight);
   min-height: 100vh;
 }
 
@@ -728,4 +728,10 @@ form {
   width: 20px;
   height: 18px;
   fill: gu-colour(garnett-neutral-5);
+}
+
+.svg-subscribe {
+  width: 23px;
+  height: 17px;
+  fill: currentColor;
 }
