@@ -64,7 +64,7 @@ const content = (
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
         <NewContributionSubmit
-          selectedCountryGroupDetails={selectedCountryGroupDetails}
+          countryGroupId={countryGroupId}
           selectedAmounts={selectedAmounts}
           contributionType={contributionType}
           paymentMethod={paymentMethod}

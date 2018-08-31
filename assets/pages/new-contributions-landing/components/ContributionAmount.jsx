@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type CountryMetaData, countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies, detect } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
@@ -34,11 +35,11 @@ const mapStateToProps: State => PropTypes = state => ({
 
 // ----- Render ----- //
 
-const formatAmount = (countryGroupDetails: CountryMetaData, amount: Amount, verbose: boolean) => (verbose ?
-  `${amount.value} ${countryGroupDetails.currency.name}` :
-  `${countryGroupDetails.currency.symbol}${amount.value}`);
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) => (verbose ?
+  `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
+  `${currency.glyph}${amount.value}`);
 
-const renderAmount = (countryGroupDetails: CountryMetaData) => (amount: Amount, i) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (amount: Amount, i) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -48,19 +49,20 @@ const renderAmount = (countryGroupDetails: CountryMetaData) => (amount: Amount, 
       value={amount.value}
       checked={i === 0}
     />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(countryGroupDetails, amount, true)}>
-      {formatAmount(countryGroupDetails, amount, false)}
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
+      {formatAmount(currency, spokenCurrency, amount, false)}
     </label>
   </li>
 );
 
 
 function ContributionAmount(props: PropTypes) {
+  const currency: IsoCurrency = detect(props.countryGroupId);
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(props.countryGroupDetails))}
+        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[currency], spokenCurrencies[currency]))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"

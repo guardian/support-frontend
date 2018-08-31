@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { getFrequency, type Contrib } from 'helpers/contributions';
 import { getPaymentDescription, type PaymentMethod } from 'helpers/checkouts';
-import { type CountryMetaData } from 'helpers/internationalisation/contributions';
+import { type IsoCurrency, currencies, spokenCurrencies, detect } from 'helpers/internationalisation/currency';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
@@ -16,7 +16,7 @@ import { formatAmount } from './ContributionAmount';
 // ----- Types ----- //
 
 type PropTypes = {
-  selectedCountryGroupDetails: CountryMetaData,
+  countryGroupId: CountryGroupId,
   contributionType: Contrib,
   selectedAmounts: Array<{ value: string, spoken: string }>,
   paymentMethod: PaymentMethod,
@@ -25,11 +25,13 @@ type PropTypes = {
 // ----- Render ----- //
 
 function ContributionSubmit(props: PropTypes) {
+  const currency: IsoCurrency = detect(props.countryGroupId);
+
   return (
     <div className="form__submit">
       <button className="form__submit-button" type="submit">
         Contribute&nbsp;
-        {formatAmount(props.selectedCountryGroupDetails, props.selectedAmounts[0], false)}&nbsp;
+        {formatAmount(currencies[currency], spokenCurrencies[currency], props.selectedAmounts[0], false)}&nbsp;
         {getFrequency(props.contributionType)}&nbsp;
         {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
         <SvgArrowRight />
