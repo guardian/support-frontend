@@ -14,6 +14,7 @@ import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
+import SvgNewsletters from 'components/svgs/newsletters';
 import { NewHeader } from 'components/headers/new-header/Header';
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
 
@@ -48,6 +49,7 @@ const content = (
           <SvgSubscribe />
           Subscribe
         </a>
+        <SvgNewsletters />
       </section>
 
       <section className="confirmation">

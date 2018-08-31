@@ -693,8 +693,6 @@ form {
 }
 
 .confirmation--newsletter {
-  background: url("/assets-payment/newsletters.png");
-  padding-bottom: 100px;
 }
 
 .confirmation--backtothegu {
@@ -734,4 +732,9 @@ form {
   width: 23px;
   height: 17px;
   fill: currentColor;
+}
+
+.svg-newsletters {
+  display: block;
+  margin: ($gu-v-spacing * 2) -10px 0;
 }
