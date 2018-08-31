@@ -25,7 +25,7 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(createPageReducerFor(countryGroupId));
 
-const reactElementId = `new-thank-you-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+const reactElementId = `new-contributions-thank-you-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
 // ----- Internationalisation ----- //
 

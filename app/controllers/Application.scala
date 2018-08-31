@@ -112,7 +112,7 @@ class Application(
     Ok(views.html.main(
       title = "Support the Guardian | Thank you for your contribution",
       description = None,
-      mainId = s"new-thank-you-page-$countryCode",
+      mainId = s"new-contributions-thank-you-page-$countryCode",
       mainJsBundle = "newThankYouPage.js",
       mainStyleBundle = "newContributionsLandingPageStyles.css"
     ))
