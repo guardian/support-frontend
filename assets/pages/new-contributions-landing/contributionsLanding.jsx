@@ -53,6 +53,7 @@ const content = (
       header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
+      <div class="gu-content__content">
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
@@ -70,6 +71,7 @@ const content = (
           paymentMethod={paymentMethod}
         />
       </form>
+      </div>
     </Page>
   </Provider>
 );

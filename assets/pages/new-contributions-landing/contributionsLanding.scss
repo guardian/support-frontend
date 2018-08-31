@@ -132,7 +132,7 @@ footer[role="contentinfo"] a {
 }
 
 /*= CONTENT */
-.gu-content__main {
+.gu-content__content {
   background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
 }
@@ -181,7 +181,7 @@ header[role="banner"] {
     width: 700px;
   }
   
-  .gu-content__main {
+  .gu-content__content {
     border-color: gu-colour(garnett-neutral-4);
     border-style: none solid;
     border-width: 0 1px;
@@ -208,7 +208,7 @@ header[role="banner"] {
     width: 940px;
   }
 
-  .gu-content__main {
+  .gu-content__content {
     width: 300px;
     margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
   }
@@ -221,7 +221,7 @@ header[role="banner"] {
     width: 1240px;
   }
   
-  .gu-content__main {
+  .gu-content__content {
     width: 300px;
     margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
   }
@@ -231,6 +231,7 @@ header[role="banner"] {
   .gu-content {
     display: grid;
     grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
+    grid-template-columns: 1fr;
   }
   
   header[role="banner"] {
@@ -246,6 +247,12 @@ header[role="banner"] {
     grid-row: header-b / footer-t;  
   }
     
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .gu-content__main {
+    display: grid;
+  }
+
   @include mq($from: tablet) {
     .gu-content,
     header[role="banner"] {
@@ -256,7 +263,10 @@ header[role="banner"] {
     footer[role="contentinfo"] {
       padding: 0 0 ($gu-v-spacing * 2);
       width: auto;
+    }
 
+    .gu-content__main,
+    footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
       grid-template-columns: 1fr repeat(8, 70px) 1fr;  
     }
@@ -276,7 +286,7 @@ header[role="banner"] {
       grid-row: 1;
     }
     
-    .gu-content__main {
+    .gu-content__content {
       margin: 0 -11px;
         
       grid-column: 2 / 6;
@@ -288,7 +298,7 @@ header[role="banner"] {
   }
 
   @include mq($from: leftCol) {
-    .gu-content,
+    .gu-content__main,
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
@@ -306,7 +316,7 @@ header[role="banner"] {
       justify-self: flex-end;
     }
 
-    .gu-content__main {
+    .gu-content__content {
       width: auto;
       grid-column: 4 / 8;
     }
@@ -317,7 +327,7 @@ header[role="banner"] {
   }  
 
   @include mq($from: wide) {
-    .gu-content,
+    .gu-content__main,
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
@@ -333,7 +343,7 @@ header[role="banner"] {
         grid-column: span 18;
     }
 
-    .gu-content__main {
+    .gu-content__content {
       grid-column: 5 / 9;
     }
 
@@ -689,9 +699,6 @@ form {
 
 .confirmation p {
   margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
-}
-
-.confirmation--newsletter {
 }
 
 .confirmation--backtothegu {

@@ -37,6 +37,7 @@ const content = (
       header={<NewHeader />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
+      <div class="gu-content__content">
       <h1>Thank you for your contribution to independent journalism</h1>
 
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
@@ -65,6 +66,7 @@ const content = (
           Return to The Guardian&nbsp;
           <SvgArrowRight />
         </a>
+      </div>
       </div>
     </Page>
   </Provider>
