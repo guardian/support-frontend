@@ -7,10 +7,11 @@ import { connect } from 'react-redux';
 
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type CountryMetaData } from 'helpers/internationalisation/contributions';
+import { type CountryMetaData, countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 
 import SvgDollar from 'components/svgs/dollar';
 
+import { type State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -22,7 +23,8 @@ type PropTypes = {
   otherAmount: ?number,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps: State => PropTypes = state => ({
+  countryGroupDetails: countryGroupSpecificDetails.GBPCountries,
   countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: 'MONTHLY',
   amount: 5,

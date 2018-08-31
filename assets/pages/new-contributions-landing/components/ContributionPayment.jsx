@@ -10,13 +10,15 @@ import { type PaymentMethod } from 'helpers/checkouts';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
+import { type State } from '../contributionsLandingReducer';
+
 // ----- Types ----- //
 
 type PropTypes = {
   paymentMethod: PaymentMethod,
 };
 
-const mapStateToProps = () => ({
+const mapStateToProps: State => PropTypes = () => ({
   paymentMethod: 'PayPal',
 });
 

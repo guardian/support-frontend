@@ -9,6 +9,7 @@ import { usStates, caStates } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import SvgGlobe from 'components/svgs/globe';
+import { type State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 type PropTypes = {
@@ -16,7 +17,8 @@ type PropTypes = {
   selectedState: string,
 };
 
-const mapStateToProps = () => ({
+const mapStateToProps: State => PropTypes = () => ({
+  countryGroupId: 'UnitedStates',
   selectedState: 'WY',
 });
 

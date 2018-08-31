@@ -6,6 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib } from 'helpers/contributions';
 
+import { type State } from '../contributionsLandingReducer';
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -17,7 +19,7 @@ type PropTypes = {
   }
 };
 
-const mapStateToProps = () => ({
+const mapStateToProps: State => PropTypes = () => ({
   contributionType: 'MONTHLY',
   labels: {
     ANNUAL: 'Annually',
