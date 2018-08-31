@@ -11,8 +11,6 @@ const defaultContributeCopy = `
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy: string,
-  currency: Object,
-  contribution: Object
 };
 
 const countryGroupSpecificDetails: {
