@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { countryGroups, type CountryGroup } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -34,7 +33,7 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
   </li>
 );
 
-function Header(props: PropTypes) {
+function NewHeader(props: PropTypes) {
   return (
     <header role="banner" className="gu-content__header">
       <a className="glogo" href="https://www.theguardian.com">
@@ -58,10 +57,8 @@ function Header(props: PropTypes) {
   );
 }
 
-Header.defaultProps = {
+NewHeader.defaultProps = {
   selectedCountryGroup: null,
 };
-
-const NewHeader = connect()(Header);
 
 export { NewHeader };
