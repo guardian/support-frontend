@@ -65,6 +65,23 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
 
 // ----- Component ----- //
 
+function isPayWithCardButtonFocused(event: FocusEvent): boolean {
+  const { relatedTarget } = event;
+  if (relatedTarget instanceof HTMLElement) {
+    return relatedTarget.classList.contains('component-stripe-pop-up-button');
+  }
+  return false;
+}
+
+const onBlur = (setShouldValidate: () => void) => (event: FocusEvent) => {
+  // Don't update the Redux state if the focus event is on the payment button, as this
+  // will cause a re-render and the click event on the button will be lost
+  if (!isPayWithCardButtonFocused(event)) {
+    setShouldValidate();
+  }
+};
+
+
 function NameForm(props: PropTypes) {
   return (
     <form className="oneoff-contrib__name-form">
@@ -74,7 +91,7 @@ function NameForm(props: PropTypes) {
         labelText="Email"
         placeholder="Email"
         onChange={props.setEmail}
-        onBlur={props.setEmailShouldValidate}
+        onBlur={onBlur(props.setEmailShouldValidate)}
         modifierClasses={['email']}
         showError={shouldShowError(props.email)}
         errorMessage="Please enter a valid email address."
@@ -85,7 +102,7 @@ function NameForm(props: PropTypes) {
         labelText="Full name"
         value={props.fullName.value}
         onChange={props.setFullName}
-        onBlur={props.setFullNameShouldValidate}
+        onBlur={onBlur(props.setFullNameShouldValidate)}
         modifierClasses={['name']}
         showError={shouldShowError(props.fullName)}
         errorMessage="Please enter your name."

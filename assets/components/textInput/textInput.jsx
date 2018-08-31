@@ -34,7 +34,7 @@ type PropTypes = {
   autocomplete?: AutoComplete,
   autocapitalize?: AutoCapitalize,
   modifierClasses: Array<?string>,
-  onBlur: () => void,
+  onBlur: (FocusEvent) => void,
   showError: boolean,
   errorMessage: string,
 };
