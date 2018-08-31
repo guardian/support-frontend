@@ -7,6 +7,12 @@ body {
   min-height: 100vh;
 }
 
+.gu-content__bg {
+  // hide for people without CSS grid support
+  // until further notice
+  display: none;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
@@ -246,11 +252,15 @@ header[role="banner"] {
   .gu-content__main {
     grid-row: header-b / footer-t;  
   }
-    
+
   header[role="banner"],
   footer[role="contentinfo"],
   .gu-content__main {
     display: grid;
+  }
+
+  .gu-content__bg {
+    display: block;
   }
 
   @include mq($from: tablet) {
@@ -264,7 +274,7 @@ header[role="banner"] {
       padding: 0 0 ($gu-v-spacing * 2);
       width: auto;
     }
-
+    
     .gu-content__main,
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
@@ -285,15 +295,30 @@ header[role="banner"] {
       grid-column: 2 / 8;
       grid-row: 1;
     }
-    
+
     .gu-content__content {
       margin: 0 -11px;
-        
+      grid-row: 1;
       grid-column: 2 / 6;
     }
 
     .component-footer__content {
       grid-column: 2 / 9;
+    }
+
+    .gu-content__bg {
+      align-items: flex-end;
+      display: flex;
+      grid-column: 1 / 11;
+      grid-row: 1;
+      justify-content: center;
+      z-index: -1;
+    }
+
+    .gu-content__bg svg {
+      height: auto;
+      max-width: 1300px;
+      width: 100%;
     }
   }
 
@@ -324,6 +349,10 @@ header[role="banner"] {
     .component-footer__content {
       grid-column: 2 / 11;
     }
+
+    .gu-content__bg {
+      grid-column: 1 / 17;
+    }
   }  
 
   @include mq($from: wide) {
@@ -349,6 +378,10 @@ header[role="banner"] {
 
     .component-footer__content {
       grid-column: 2 / 12;
+    }
+
+    .gu-content__bg {
+      grid-column: 1 / 19;
     }
   }
 }

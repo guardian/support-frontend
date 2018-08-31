@@ -15,6 +15,7 @@ import { countryGroupSpecificDetails } from 'helpers/internationalisation/contri
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
+import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
@@ -54,23 +55,26 @@ const content = (
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <div class="gu-content__content">
-      <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
-      <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-      <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
-        <NewContributionType />
-        <NewContributionAmount countryGroupId={countryGroupId} />
-        <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
-        <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
-        <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
-        <NewContributionState countryGroupId={countryGroupId} />
-        <NewContributionPayment />
-        <NewContributionSubmit
-          countryGroupId={countryGroupId}
-          selectedAmounts={selectedAmounts}
-          contributionType={contributionType}
-          paymentMethod={paymentMethod}
-        />
-      </form>
+        <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
+        <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
+        <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
+          <NewContributionType />
+          <NewContributionAmount countryGroupId={countryGroupId} />
+          <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
+          <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
+          <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
+          <NewContributionState countryGroupId={countryGroupId} />
+          <NewContributionPayment />
+          <NewContributionSubmit
+            countryGroupId={countryGroupId}
+            selectedAmounts={selectedAmounts}
+            contributionType={contributionType}
+            paymentMethod={paymentMethod}
+          />
+        </form>
+      </div>
+      <div className="gu-content__bg">
+        <SvgContributionsBgDesktop />
       </div>
     </Page>
   </Provider>

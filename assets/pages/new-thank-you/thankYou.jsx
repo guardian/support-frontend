@@ -15,6 +15,8 @@ import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgNewsletters from 'components/svgs/newsletters';
+import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
+import SvgContributionsBgMobile from 'components/svgs/contributionsBgMobile';
 import { NewHeader } from 'components/headers/new-header/Header';
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
 
@@ -38,35 +40,38 @@ const content = (
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
       <div class="gu-content__content">
-      <h1>Thank you for your contribution to independent journalism</h1>
+        <h1>Thank you for your contribution to independent journalism</h1>
 
-      <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
-        <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>News and offers from The Guardian, The Observer and Guardian Weekly,
-          on the ways to read and support our journalism. Already a member, subscriber or
-          contributor, opt in here to receive your regular emails and updates.
-        </p>
-        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
-          <SvgSubscribe />
-          Subscribe
-        </a>
-        <SvgNewsletters />
-      </section>
+        <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
+          <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
+          <p>News and offers from The Guardian, The Observer and Guardian Weekly,
+            on the ways to read and support our journalism. Already a member, subscriber or
+            contributor, opt in here to receive your regular emails and updates.
+          </p>
+          <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
+            <SvgSubscribe />
+            Subscribe
+          </a>
+          <SvgNewsletters />
+        </section>
 
-      <section className="confirmation">
-        <h2 className="confirmation__maintitle">
-          <span className="hidden">Your contribution:</span>
-          <span className="confirmation__amount">$25</span>
-        </h2>
-        <p className="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
-      </section>
+        <section className="confirmation">
+          <h2 className="confirmation__maintitle">
+            <span className="hidden">Your contribution:</span>
+            <span className="confirmation__amount">$25</span>
+          </h2>
+          <p className="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
+        </section>
 
-      <div className={classNameWithModifiers('confirmation', ['backtothegu'])}>
-        <a className={classNameWithModifiers('button', ['wob'])} href="https://www.theguardian.com">
-          Return to The Guardian&nbsp;
-          <SvgArrowRight />
-        </a>
+        <div className={classNameWithModifiers('confirmation', ['backtothegu'])}>
+          <a className={classNameWithModifiers('button', ['wob'])} href="https://www.theguardian.com">
+            Return to The Guardian&nbsp;
+            <SvgArrowRight />
+          </a>
+        </div>
       </div>
+      <div className="gu-content__bg">
+        <SvgContributionsBgDesktop />
       </div>
     </Page>
   </Provider>
