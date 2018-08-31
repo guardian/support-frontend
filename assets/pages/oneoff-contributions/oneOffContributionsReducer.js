@@ -18,37 +18,40 @@ import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFo
 
 // ----- Types ----- //
 
-export type State = {
+export type OneOffContributionsState = {
   amount: number,
   error: ?string,
   paymentComplete: boolean,
 };
 
-export type CombinedState = {
-  oneoffContrib: State,
+export type PageState = {
+  oneoffContrib: OneOffContributionsState,
   user: UserState,
   csrf: CsrfState,
   checkoutForm: OneOffContributionsCheckoutFormState,
   marketingConsent: MarketingConsentState,
 };
 
-export type PageState = {
+export type State = {
   common: CommonState,
-  page: CombinedState,
-}
+  page: PageState,
+};
 
 
 // ----- Reducers ----- //
 
-function createOneOffContribReducer(amount: number) {
+function createOneOffContributionsReducer(amount: number) {
 
-  const initialState: State = {
+  const initialState: OneOffContributionsState = {
     amount,
     error: null,
     paymentComplete: false,
   };
 
-  return function oneOffContribReducer(state: State = initialState, action: Action): State {
+  return function oneOffContribReducer(
+    state: OneOffContributionsState = initialState,
+    action: Action,
+  ): OneOffContributionsState {
 
     switch (action.type) {
 
@@ -68,9 +71,9 @@ function createOneOffContribReducer(amount: number) {
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(amount: number, countryGroup: CountryGroupId) {
+export default function createRootOneOffContributionsReducer(amount: number, countryGroup: CountryGroupId) {
   return combineReducers({
-    oneoffContrib: createOneOffContribReducer(amount),
+    oneoffContrib: createOneOffContributionsReducer(amount),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user: createUserReducer(countryGroup),
     csrf,
