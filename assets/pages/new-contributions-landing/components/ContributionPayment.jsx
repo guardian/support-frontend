@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { type PaymentMethod } from 'helpers/checkouts';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
@@ -26,8 +27,8 @@ const mapStateToProps: State => PropTypes = () => ({
 
 function ContributionPayment(props: PropTypes) {
   return (
-    <fieldset className="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay">
-      <legend className="form__legend form__legend--radio-group">Pay with</legend>
+    <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Pay with</legend>
 
       <ul className="form__radio-group-list">
         <li className="form__radio-group-item">

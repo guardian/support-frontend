@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { usStates, caStates } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgGlobe from 'components/svgs/globe';
 import { type State } from '../contributionsLandingReducer';
@@ -29,7 +30,7 @@ const renderState = (selectedState: string) => ([stateValue, stateName]: [string
 );
 
 const renderStatesField = (selectedState, states) => (
-  <div className="form__field form__field--contribution-state">
+  <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
     <label className="form__label" htmlFor="contributionState">State</label>
     <span className="form__input-with-icon">
       <select id="contributionState" className="form__input" placeholder="State" required>

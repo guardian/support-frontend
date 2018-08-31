@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib } from 'helpers/contributions';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import { type State } from '../contributionsLandingReducer';
 
@@ -32,8 +33,8 @@ const mapStateToProps: State => PropTypes = () => ({
 
 function ContributionType(props: PropTypes) {
   return (
-    <fieldset className="form__radio-group form__radio-group--tabs form__radio-group--contribution-type">
-      <legend className="form__legend form__legend--radio-group">Recurrence</legend>
+    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list">
         <li className="form__radio-group-item">
           <input id="contributionType-oneoff" className="form__radio-group-input" type="radio" name="contributionType" value="ONE_OFF" checked={props.contributionType === 'ONE_OFF'} />

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type CountryMetaData, countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
@@ -56,8 +57,8 @@ const renderAmount = (countryGroupDetails: CountryMetaData) => (amount: Amount, 
 
 function ContributionAmount(props: PropTypes) {
   return (
-    <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
-      <legend className="form__legend form__legend--radio-group">Amount</legend>
+    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
         {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(props.countryGroupDetails))}
         <li className="form__radio-group-item">
@@ -73,7 +74,7 @@ function ContributionAmount(props: PropTypes) {
         </li>
       </ul>
       {props.amount === 'other' ? (
-        <div className="form__field form__field--contribution-other-amount">
+        <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
             <input
