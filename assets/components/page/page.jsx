@@ -12,6 +12,7 @@ type PropTypes = {
   header: Node,
   footer: Node,
   children: Node,
+  optChildren: ?Node
 };
 
 
@@ -25,6 +26,7 @@ export default function Page(props: PropTypes) {
       <main role="main" className="gu-content__main">
         {props.children}
       </main>
+      {props.optChildren}
       {props.footer}
     </div>
   );
