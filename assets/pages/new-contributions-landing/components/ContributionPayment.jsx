@@ -16,6 +16,10 @@ type PropTypes = {
   paymentMethod: PaymentMethod,
 };
 
+const mapStateToProps = () => ({
+  paymentMethod: 'PayPal',
+});
+
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
@@ -58,10 +62,6 @@ function ContributionPayment(props: PropTypes) {
     </fieldset>
   );
 }
-
-const mapStateToProps = () => ({
-  paymentMethod: 'PayPal',
-});
 
 const NewContributionPayment = connect(mapStateToProps)(ContributionPayment);
 

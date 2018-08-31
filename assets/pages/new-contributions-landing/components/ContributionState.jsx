@@ -16,6 +16,10 @@ type PropTypes = {
   selectedState: string,
 };
 
+const mapStateToProps = () => ({
+  selectedState: 'WY',
+});
+
 // ----- Render ----- //
 
 const renderState = (selectedState: string) => ([stateValue, stateName]: [string, string]) => (
@@ -47,10 +51,6 @@ function ContributionState(props: PropTypes) {
       return null;
   }
 }
-
-const mapStateToProps = () => ({
-  selectedState: 'WY',
-});
 
 const NewContributionState = connect(mapStateToProps)(ContributionState);
 

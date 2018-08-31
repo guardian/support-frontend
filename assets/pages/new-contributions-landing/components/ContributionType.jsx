@@ -17,6 +17,15 @@ type PropTypes = {
   }
 };
 
+const mapStateToProps = () => ({
+  contributionType: 'MONTHLY',
+  labels: {
+    ANNUAL: 'Annually',
+    MONTHLY: 'Monthly',
+    ONE_OFF: 'Single',
+  },
+});
+
 // ----- Render ----- //
 
 function ContributionType(props: PropTypes) {
@@ -40,15 +49,6 @@ function ContributionType(props: PropTypes) {
     </fieldset>
   );
 }
-
-const mapStateToProps = () => ({
-  contributionType: 'MONTHLY',
-  labels: {
-    ANNUAL: 'Annually',
-    MONTHLY: 'Monthly',
-    ONE_OFF: 'Single',
-  },
-});
 
 const NewContributionType = connect(mapStateToProps)(ContributionType);
 

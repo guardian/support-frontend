@@ -22,6 +22,13 @@ type PropTypes = {
   otherAmount: ?number,
 };
 
+const mapStateToProps = state => ({
+  countryGroupId: state.common.internationalisation.countryGroupId,
+  contributionType: 'MONTHLY',
+  amount: 5,
+  otherAmount: (null: ?number),
+});
+
 // ----- Render ----- //
 
 const formatAmount = (countryGroupDetails: CountryMetaData, amount: Amount, verbose: boolean) => (verbose ?
@@ -85,14 +92,6 @@ function ContributionAmount(props: PropTypes) {
     </fieldset>
   );
 }
-
-
-const mapStateToProps = state => ({
-  countryGroupId: state.common.internationalisation.countryGroupId,
-  contributionType: 'MONTHLY',
-  amount: 5,
-  otherAmount: (null: ?number),
-});
 
 const NewContributionAmount = connect(mapStateToProps)(ContributionAmount);
 
