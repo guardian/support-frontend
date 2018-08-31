@@ -18,13 +18,13 @@ import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFo
 
 // ----- Types ----- //
 
-export type OneOffContributionsState = {
+type OneOffContributionsState = {
   amount: number,
   error: ?string,
   paymentComplete: boolean,
 };
 
-export type PageState = {
+type PageState = {
   oneoffContrib: OneOffContributionsState,
   user: UserState,
   csrf: CsrfState,
