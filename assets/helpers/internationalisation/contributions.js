@@ -21,58 +21,30 @@ const countryGroupSpecificDetails: {
   GBPCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
   },
   EURCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
   },
   International: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
   },
   NZDCountries: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-off',
-      monthly: 'Monthly',
-    },
   },
   Canada: {
     headerCopy: defaultHeaderCopy,
     contributeCopy: defaultContributeCopy,
-    contribution: {
-      oneoff: 'One-time',
-      monthly: 'Monthly',
-    },
   },
 };
 
