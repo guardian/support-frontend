@@ -12,7 +12,8 @@ import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type State } from '../oneOffContributionsReducer';
 
-// ----- Component ----- //
+
+// ----- State/Action Maps ----- //
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
@@ -40,5 +41,8 @@ function mapStateToProps(state: State) {
     csrf: state.page.csrf,
   };
 }
+
+
+// ----- Exports ----- //
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsent);
