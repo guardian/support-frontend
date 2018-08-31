@@ -19,6 +19,11 @@ export type Currency = {|
   extendedGlyph: string,
 |};
 
+export type SpokenCurrency = {|
+  singular: string,
+  plural: string,
+|};
+
 const currencies: {
   [IsoCurrency]: Currency,
 } = {
@@ -48,7 +53,9 @@ const currencies: {
   },
 };
 
-const spokenCurrencies = {
+const spokenCurrencies: {
+  [IsoCurrency]: SpokenCurrency,
+} = {
   GBP: {
     singular: 'pound',
     plural: 'pounds',

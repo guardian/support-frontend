@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { classNameWithModifiers } from 'helpers/utilities';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import Page from 'components/page/page';
@@ -36,13 +37,13 @@ const content = (
     >
       <h1>Thank you for your contribution to independent journalism</h1>
 
-      <section className="confirmation confirmation--newsletter">
+      <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
         <p>News and offers from The Guardian, The Observer and Guardian Weekly,
           on the ways to read and support our journalism. Already a member, subscriber or
           contributor, opt in here to receive your regular emails and updates.
         </p>
-        <a className="button button--newsletter" href="/subscribe">Subscribe</a>
+        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">Subscribe</a>
       </section>
 
       <section className="confirmation">
@@ -53,8 +54,8 @@ const content = (
         <p className="confirmation__message">Look out for an email confirming your monthly recurring contribution</p>
       </section>
 
-      <div className="confirmation confirmation--backtothegu">
-        <a className="button button--wob" href="https://www.theguardian.com">
+      <div className={classNameWithModifiers('confirmation', ['backtothegu'])}>
+        <a className={classNameWithModifiers('button', ['wob'])} href="https://www.theguardian.com">
           Return to The Guardian&nbsp;
           <SvgArrowRight />
         </a>

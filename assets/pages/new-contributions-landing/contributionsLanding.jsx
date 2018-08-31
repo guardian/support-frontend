@@ -9,6 +9,7 @@ import { amounts, type Contrib } from 'helpers/contributions';
 import { type PaymentMethod } from 'helpers/checkouts';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { classNameWithModifiers } from 'helpers/utilities';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 
@@ -54,7 +55,7 @@ const content = (
     >
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-      <form action="#" method="post" className="form form--contribution">
+      <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
         <NewContributionType />
         <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
         <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
@@ -63,7 +64,7 @@ const content = (
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
         <NewContributionSubmit
-          selectedCountryGroupDetails={selectedCountryGroupDetails}
+          countryGroupId={countryGroupId}
           selectedAmounts={selectedAmounts}
           contributionType={contributionType}
           paymentMethod={paymentMethod}
