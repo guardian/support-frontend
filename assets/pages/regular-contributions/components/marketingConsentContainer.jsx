@@ -10,7 +10,7 @@ import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PageState as RegularContributionPageState } from '../regularContributionsReducer';
+import { type State } from '../regularContributionsReducer';
 
 // ----- Component ----- //
 
@@ -31,7 +31,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-function mapStateToProps(state: RegularContributionPageState) {
+function mapStateToProps(state: State) {
   return {
     email: state.page.user.email,
     marketingPreferencesOptIn: state.page.user.gnmMarketing,
