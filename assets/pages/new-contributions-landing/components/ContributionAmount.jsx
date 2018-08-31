@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type CountryMetaData, countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies, detect } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -18,7 +17,6 @@ import { type State } from '../contributionsLandingReducer';
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupDetails: CountryMetaData,
   countryGroupId: CountryGroupId,
   contributionType: Contrib,
   amount: number,
@@ -26,7 +24,6 @@ type PropTypes = {
 };
 
 const mapStateToProps: State => PropTypes = state => ({
-  countryGroupDetails: countryGroupSpecificDetails.GBPCountries,
   countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: 'MONTHLY',
   amount: 5,
@@ -35,9 +32,10 @@ const mapStateToProps: State => PropTypes = state => ({
 
 // ----- Render ----- //
 
-const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) => (verbose ?
-  `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
-  `${currency.glyph}${amount.value}`);
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) =>
+  (verbose ?
+    `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
+    `${currency.glyph}${amount.value}`);
 
 const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (amount: Amount, i) => (
   <li className="form__radio-group-item">
