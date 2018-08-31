@@ -120,5 +120,6 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 export {
   detect,
   spokenCurrencies,
+  fromCountryGroupId,
   currencies,
 };
