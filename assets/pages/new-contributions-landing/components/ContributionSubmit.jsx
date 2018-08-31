@@ -27,7 +27,7 @@ type PropTypes = {
 function ContributionSubmit(props: PropTypes) {
   return (
     <div className="form__submit">
-      <button className="form__submit__button" type="submit">
+      <button className="form__submit-button" type="submit">
         Contribute&nbsp;
         {formatAmount(props.selectedCountryGroupDetails, props.selectedAmounts[0], false)}&nbsp;
         {getFrequency(props.contributionType)}&nbsp;

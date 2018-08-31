@@ -29,16 +29,16 @@ const formatAmount = (countryGroupDetails: CountryMetaData, amount: Amount, verb
   `${countryGroupDetails.currency.symbol}${amount.value}`);
 
 const renderAmount = (countryGroupDetails: CountryMetaData) => (amount: Amount, i) => (
-  <li className="form__radio-group__item">
+  <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
-      className="form__radio-group__input"
+      className="form__radio-group-input"
       type="radio"
       name="contributionAmount"
       value={amount.value}
       checked={i === 0}
     />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group__label" aria-label={formatAmount(countryGroupDetails, amount, true)}>
+    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(countryGroupDetails, amount, true)}>
       {formatAmount(countryGroupDetails, amount, false)}
     </label>
   </li>
@@ -49,18 +49,18 @@ function ContributionAmount(props: PropTypes) {
   return (
     <fieldset className="form__radio-group form__radio-group--pills form__radio-group--contribution-amount">
       <legend className="form__legend form__legend--radio-group">Amount</legend>
-      <ul className="form__radio-group__list">
+      <ul className="form__radio-group-list">
         {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(props.countryGroupDetails))}
-        <li className="form__radio-group__item">
+        <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
-            className="form__radio-group__input"
+            className="form__radio-group-input"
             type="radio"
             name="contributionAmount"
             value="other"
             checked={props.amount === 'other'}
           />
-          <label htmlFor="contributionAmount-other" className="form__radio-group__label">Other</label>
+          <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
       {props.amount === 'other' ? (
