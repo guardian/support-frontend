@@ -23,7 +23,7 @@ import type { PaymentStatus } from './components/regularContributionsPayment';
 
 // ----- Types ----- //
 
-export type RegularContributionsState = {
+type RegularContributionsState = {
   amount: number,
   contributionType: RegularContributionType,
   error: ?string,
@@ -34,7 +34,7 @@ export type RegularContributionsState = {
   pollCount: number,
 };
 
-export type PageState = {
+type PageState = {
   regularContrib: RegularContributionsState,
   user: UserState,
   csrf: CsrfState,
