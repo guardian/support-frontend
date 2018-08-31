@@ -28,7 +28,7 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
         <span className="icon">
           <SvgCheckmark />
         </span>
-      ) : ''}
+      ) : null}
       {countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph})
     </a>
   </li>

@@ -44,7 +44,7 @@ function ContributionState(props: PropTypes) {
     case 'Canada':
       return renderStatesField(props.selectedState, caStates);
     default:
-      return '';
+      return null;
   }
 }
 
