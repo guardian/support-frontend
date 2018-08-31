@@ -13,6 +13,7 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
+import SvgSubscribe from 'components/svgs/subscribe';
 import { NewHeader } from 'components/headers/new-header/Header';
 import { createPageReducerFor } from '../contributions-landing/contributionsLandingReducer';
 
@@ -43,7 +44,10 @@ const content = (
           on the ways to read and support our journalism. Already a member, subscriber or
           contributor, opt in here to receive your regular emails and updates.
         </p>
-        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">Subscribe</a>
+        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
+          <SvgSubscribe />
+          Subscribe
+        </a>
       </section>
 
       <section className="confirmation">
