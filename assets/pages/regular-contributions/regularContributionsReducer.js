@@ -76,19 +76,19 @@ function createRegularContributionsReducer(
     switch (action.type) {
 
       case 'CHECKOUT_PENDING':
-        return Object.assign({}, state, { paymentStatus: 'PollingTimedOut', paymentMethod: action.paymentMethod });
+        return { ...state, paymentStatus: 'PollingTimedOut', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_SUCCESS':
-        return Object.assign({}, state, { paymentStatus: 'Success', paymentMethod: action.paymentMethod });
+        return { ...state, paymentStatus: 'Success', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_ERROR':
-        return Object.assign({}, state, { paymentStatus: 'Failed', error: action.message });
+        return { ...state, paymentStatus: 'Failed', error: action.message };
 
       case 'CREATING_CONTRIBUTOR':
-        return Object.assign({}, state, { paymentStatus: 'Pending' });
+        return { ...state, paymentStatus: 'Pending' };
 
       case 'SET_PAYPAL_HAS_LOADED':
-        return Object.assign({}, state, { payPalHasLoaded: true });
+        return { ...state, payPalHasLoaded: true };
 
       default:
         return state;
