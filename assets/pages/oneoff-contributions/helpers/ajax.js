@@ -45,6 +45,15 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type Result<A, B> = {
+  success: false,
+  error: A,
+} | {
+  success: true,
+  value: B,
+};
+
+
 // ----- Functions ----- //
 
 function requestData(
@@ -85,27 +94,52 @@ function requestData(
   });
 }
 
-function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
-  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-    if (response.ok) {
-      trackConversion(abParticipations, routes.oneOffContribThankyou);
-      dispatch(checkoutSuccess());
-    }
-    return response.json();
-  }).then((responseJson) => {
-    if (responseJson.error.exceptionType === 'CardException') {
+const handleResponse = (
+  dispatch: Function,
+  abParticipations: Participations,
+) => (response): Promise<Result<Object, void>> => {
+
+  if (response.ok) {
+    trackConversion(abParticipations, routes.oneOffContribThankyou);
+    dispatch(checkoutSuccess());
+    return Promise.resolve({ success: true, value: undefined });
+  }
+
+  return response.json().then(errorJson => ({ success: false, error: errorJson }));
+
+};
+
+const handleResult = (dispatch: Function) => (result: Result<Object, void>): void => {
+
+  if (!result.success) {
+
+    const { error } = result.error;
+
+    if (error.exceptionType === 'CardException') {
       dispatch(checkoutError('Your card has been declined.'));
     } else {
-      const errorHttpCode = responseJson.error.errorCode || 'unknown';
-      const exceptionType = responseJson.error.exceptionType || 'unknown';
-      const errorName = responseJson.error.errorName || 'unknown';
+      const errorHttpCode = error.errorCode || 'unknown';
+      const exceptionType = error.exceptionType || 'unknown';
+      const errorName = error.errorName || 'unknown';
       logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
       dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
     }
-  }).catch(() => {
-    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  });
+  }
+
+};
+
+const handleUnknownError = (dispatch: Function) => () => {
+  logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+  dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
+};
+
+function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
+
+  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
+    .then(handleResponse(dispatch, abParticipations))
+    .then(handleResult(dispatch))
+    .catch(handleUnknownError(dispatch));
+
 }
 
 export default function postCheckout(
