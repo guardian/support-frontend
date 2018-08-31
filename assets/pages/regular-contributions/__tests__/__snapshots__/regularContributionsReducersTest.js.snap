@@ -48,6 +48,7 @@ Object {
     "isSignedIn": false,
     "isTestUser": null,
     "lastName": "",
+    "stateField": "",
   },
 }
 `;

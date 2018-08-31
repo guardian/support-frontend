@@ -9,7 +9,7 @@ import createReducer from '../regularContributionsReducer';
 
 describe('Regular contributions Reducer', () => {
 
-  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY');
+  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY', 'GBPCountries');
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();

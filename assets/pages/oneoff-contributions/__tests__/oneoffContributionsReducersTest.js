@@ -9,7 +9,7 @@ import createReducer from '../oneOffContributionsReducer';
 
 describe('One-off Reducer', () => {
 
-  const reducer = createReducer(20);
+  const reducer = createReducer(20, 'GBPCountries');
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();

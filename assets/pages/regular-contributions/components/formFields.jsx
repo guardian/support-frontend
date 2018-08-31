@@ -83,9 +83,6 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
   const options: SelectOption[] = Object.keys(states).map((stateCode: UsState | CaState) =>
     ({ value: stateCode, text: states[stateCode] }));
 
-  // Sets the initial state to the first in the dropdown.
-  stateUpdate(options[0].value);
-
   return (<SelectInput
     id="qa-state-dropdown"
     onChange={stateUpdate}

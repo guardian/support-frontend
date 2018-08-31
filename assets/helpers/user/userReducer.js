@@ -1,6 +1,10 @@
 // @flow
 
 // ----- Imports ----- //
+
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { usStates, caStates } from 'helpers/internationalisation/country';
+
 import type { Action } from './userActions';
 
 
@@ -36,52 +40,74 @@ const initialState: User = {
 };
 
 
+// ----- Functions ----- //
+
+function defaultStateOrProvince(countryGroup: CountryGroupId): string {
+  if (countryGroup === 'UnitedStates') {
+    return Object.keys(usStates)[0];
+  } else if (countryGroup === 'Canada') {
+    return Object.keys(caStates)[0];
+  }
+
+  return '';
+}
+
+
 // ----- Reducer ----- //
 
-function userReducer(
-  state: User = initialState,
-  action: Action,
-): User {
+function createUserReducer(countryGroup: CountryGroupId) {
 
-  switch (action.type) {
-    case 'SET_USER_ID':
-      return Object.assign({}, state, { id: action.id });
+  const initialStateWithStateOrProvince = {
+    ...initialState,
+    stateField: defaultStateOrProvince(countryGroup),
+  };
 
-    case 'SET_DISPLAY_NAME':
-      return Object.assign({}, state, { displayName: action.name });
+  return function userReducer(
+    state: User = initialStateWithStateOrProvince,
+    action: Action,
+  ): User {
 
-    case 'SET_FIRST_NAME':
-      return Object.assign({}, state, { firstName: action.name });
+    switch (action.type) {
+      case 'SET_USER_ID':
+        return Object.assign({}, state, { id: action.id });
 
-    case 'SET_LAST_NAME':
-      return Object.assign({}, state, { lastName: action.name });
+      case 'SET_DISPLAY_NAME':
+        return Object.assign({}, state, { displayName: action.name });
 
-    case 'SET_FULL_NAME':
-      return Object.assign({}, state, { fullName: action.name });
+      case 'SET_FIRST_NAME':
+        return Object.assign({}, state, { firstName: action.name });
 
-    case 'SET_TEST_USER':
-      return Object.assign({}, state, { isTestUser: action.testUser });
+      case 'SET_LAST_NAME':
+        return Object.assign({}, state, { lastName: action.name });
 
-    case 'SET_POST_DEPLOYMENT_TEST_USER':
-      return Object.assign({}, state, { isPostDeploymentTestUser: action.postDeploymentTestUser });
+      case 'SET_FULL_NAME':
+        return Object.assign({}, state, { fullName: action.name });
 
-    case 'SET_EMAIL':
-      return Object.assign({}, state, { email: action.email });
+      case 'SET_TEST_USER':
+        return Object.assign({}, state, { isTestUser: action.testUser });
 
-    case 'SET_STATEFIELD':
-      return Object.assign({}, state, { stateField: action.stateField });
+      case 'SET_POST_DEPLOYMENT_TEST_USER':
+        return Object.assign({}, state, { isPostDeploymentTestUser: action.postDeploymentTestUser });
 
-    case 'SET_GNM_MARKETING':
-      return Object.assign({}, state, { gnmMarketing: action.preference });
+      case 'SET_EMAIL':
+        return Object.assign({}, state, { email: action.email });
 
-    case 'SET_IS_SIGNED_IN':
-      return Object.assign({}, state, { isSignedIn: action.isSignedIn });
+      case 'SET_STATEFIELD':
+        return Object.assign({}, state, { stateField: action.stateField });
 
-    default:
-      return state;
+      case 'SET_GNM_MARKETING':
+        return Object.assign({}, state, { gnmMarketing: action.preference });
 
-  }
+      case 'SET_IS_SIGNED_IN':
+        return Object.assign({}, state, { isSignedIn: action.isSignedIn });
+
+      default:
+        return state;
+
+    }
+
+  };
 
 }
 
-export { userReducer };
+export { createUserReducer };

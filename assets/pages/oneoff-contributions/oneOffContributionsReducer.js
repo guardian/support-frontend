@@ -6,10 +6,10 @@ import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { userReducer as user } from 'helpers/user/userReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CommonState } from 'helpers/page/page';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { Action } from './oneoffContributionsActions';
@@ -71,11 +71,11 @@ function createOneOffContribReducer(amount: number) {
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(amount: number) {
+export default function createRootOneOffContribReducer(amount: number, countryGroup: CountryGroupId) {
   return combineReducers({
     oneoffContrib: createOneOffContribReducer(amount),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
-    user,
+    user: createUserReducer(countryGroup),
     csrf,
   });
 }
