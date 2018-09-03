@@ -7,10 +7,21 @@ body {
   min-height: 100vh;
 }
 
+.gu-content__main {
+  position: relative;
+}
+
 .gu-content__bg {
-  // hide for people without CSS grid support
-  // until further notice
-  display: none;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+.gu-content__bg svg {
+  display: block;
+  margin: 0 auto;
 }
 
 /*= HEADER */
@@ -141,6 +152,7 @@ footer[role="contentinfo"] a {
 .gu-content__content {
   background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
+  overflow: hidden;
 }
 
 /*= TYPOGRAPHY */
@@ -181,7 +193,11 @@ header[role="banner"] {
 }
 
 @include mq($from: tablet) {
-  header[role="banner"],
+  header[role="banner"] {
+    padding: 0 calc(50% - 350px);
+    width: 700px;
+  }
+
   footer[role="contentinfo"] {
     padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
     width: 700px;
@@ -205,10 +221,20 @@ header[role="banner"] {
     flex-direction: row-reverse;
     justify-content: space-between;
   }
+
+  .gu-content__bg svg {
+    height: auto;
+    max-width: 1300px;
+    width: 100%;
+  }
 }
 
 @include mq($from: leftCol) {
-  header[role="banner"],
+  header[role="banner"] {
+    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    width: 940px;
+  }
+  
   footer[role="contentinfo"] {
     padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
     width: 940px;
@@ -221,7 +247,11 @@ header[role="banner"] {
 }
 
 @include mq($from: wide) {
-  header[role="banner"],
+  header[role="banner"] {
+    padding: 0 calc(50% - 620px);
+    width: 1240px;
+  }
+
   footer[role="contentinfo"] {
     padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
     width: 1240px;
@@ -260,7 +290,7 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    display: block;
+    position: static;
   }
 
   @include mq($from: tablet) {
@@ -312,13 +342,6 @@ header[role="banner"] {
       grid-column: 1 / 11;
       grid-row: 1;
       justify-content: center;
-      z-index: -1;
-    }
-
-    .gu-content__bg svg {
-      height: auto;
-      max-width: 1300px;
-      width: 100%;
     }
   }
 
