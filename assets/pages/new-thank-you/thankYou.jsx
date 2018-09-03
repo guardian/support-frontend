@@ -71,6 +71,7 @@ const content = (
         </div>
       </div>
       <div className="gu-content__bg">
+        <SvgContributionsBgMobile />
         <SvgContributionsBgDesktop />
       </div>
     </Page>

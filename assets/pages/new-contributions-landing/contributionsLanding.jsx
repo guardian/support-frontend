@@ -15,6 +15,7 @@ import { countryGroupSpecificDetails } from 'helpers/internationalisation/contri
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
+import SvgContributionsBgMobile from 'components/svgs/contributionsBgMobile';
 import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 
 import SvgEnvelope from 'components/svgs/envelope';
@@ -74,6 +75,7 @@ const content = (
         </form>
       </div>
       <div className="gu-content__bg">
+        <SvgContributionsBgMobile />
         <SvgContributionsBgDesktop />
       </div>
     </Page>
