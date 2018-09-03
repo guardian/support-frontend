@@ -101,7 +101,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.optimizeExperiments,
         )}
         canOpen={() => props.formFields.every(f => f.isValid)}
-        onClick={() => props.setShouldValidateFunctions.forEach(f => f())}
+        whenUnableToOpen={() => props.setShouldValidateFunctions.forEach(f => f())}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}

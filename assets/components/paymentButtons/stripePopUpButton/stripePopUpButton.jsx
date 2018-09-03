@@ -27,7 +27,7 @@ type PropTypes = {|
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  onClick: () => void,
+  whenUnableToOpen: () => void,
   canOpen: () => boolean,
   switchStatus: Status,
   disable: boolean,
@@ -68,9 +68,9 @@ function Button(props: PropTypes) {
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);
+    } else {
+      props.whenUnableToOpen();
     }
-    props.onClick();
-
   };
 
   const baseClass = 'component-stripe-pop-up-button';
@@ -97,7 +97,7 @@ function Button(props: PropTypes) {
 StripePopUpButton.defaultProps = {
   closeHandler: () => {},
   canOpen: () => true,
-  onClick: () => undefined,
+  whenUnableToOpen: () => undefined,
   switchStatus: 'On',
 };
 
