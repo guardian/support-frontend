@@ -22,7 +22,7 @@ type PropTypes = {
   currency: IsoCurrency,
   contributionType: Contrib,
   amount?: Amount,
-  otherAmount?: number,
+  showOther: boolean,
   selectAmount: Amount => (() => void),
   selectOtherAmount: () => void,
 };
@@ -31,7 +31,7 @@ type PropTypes = {
 const mapStateToProps = state => ({
   contributionType: state.page.contributionType,
   amount: state.page.amount,
-  otherAmount: state.page.otherAmount,
+  showOther: state.page.showOtherAmount,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -79,13 +79,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.otherAmount}
+            checked={props.showOther}
             onChange={props.selectOtherAmount}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.otherAmount ? (
+      {props.showOther ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -96,7 +96,6 @@ function ContributionAmount(props: PropTypes) {
               min="1"
               max="2000"
               autoComplete="off"
-              value={props.otherAmount}
             />
             <span className="form__icon">
               <SvgDollar />

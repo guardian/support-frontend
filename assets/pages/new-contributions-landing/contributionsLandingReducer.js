@@ -33,6 +33,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     contributionType: 'ONE_OFF',
     paymentMethod: 'PayPal',
     amount: amounts('notintest')['ONE_OFF'][countryGroupId][0],
+    showOtherAmount: false,
   };
 
   return function reducer(state: PageState = initialState, action: Action): PageState {
@@ -42,17 +43,17 @@ function initReducer(countryGroupId: CountryGroupId) {
           ...state, 
           contributionType: action.contributionType, 
           amount: amounts('notintest')[action.contributionType][countryGroupId][0], 
-          otherAmount: null 
+          showOtherAmount: false
         };
 
       case 'UPDATE_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'SELECT_AMOUNT':
-        return { ...state, amount: action.amount, otherAmount: null };
+        return { ...state, amount: action.amount, showOtherAmount: false };
 
       case 'SELECT_OTHER_AMOUNT':
-        return { ...state, amount: null, otherAmount: 1 };
+        return { ...state, amount: null, showOtherAmount: true };
 
       default:
         return state;
