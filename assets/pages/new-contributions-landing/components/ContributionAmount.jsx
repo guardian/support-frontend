@@ -7,25 +7,26 @@ import { connect } from 'react-redux';
 
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies, detect } from 'helpers/internationalisation/currency';
+import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type State } from '../contributionsLandingReducer';
 import { selectAmount, selectOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
   amount?: Amount,
   otherAmount?: number,
-  selectAmount: Amount => Event => void,
+  selectAmount: Amount => (() => void),
   selectOtherAmount: () => void,
 };
+/* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.contributionType,
@@ -34,8 +35,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  selectAmount: amount => e => { dispatch(selectAmount(amount)) },
-  selectOtherAmount: () => { dispatch(selectOtherAmount()) },
+  selectAmount: amount => () => { dispatch(selectAmount(amount)); },
+  selectOtherAmount: () => { dispatch(selectOtherAmount()); },
 });
 
 // ----- Render ----- //
@@ -45,7 +46,7 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropsType) => (amount: Amount, i) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -53,8 +54,10 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       type="radio"
       name="contributionAmount"
       value={amount.value}
+      /* eslint-disable react/prop-types */
       checked={props.amount && amount.value === props.amount.value}
       onChange={props.selectAmount(amount)}
+      /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
       {formatAmount(currency, spokenCurrency, amount, false)}
@@ -68,9 +71,7 @@ function ContributionAmount(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(
-          renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props)
-        )}
+        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -106,6 +107,11 @@ function ContributionAmount(props: PropTypes) {
     </fieldset>
   );
 }
+
+ContributionAmount.defaultProps = {
+  amount: null,
+  otherAmount: null,
+};
 
 const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
 

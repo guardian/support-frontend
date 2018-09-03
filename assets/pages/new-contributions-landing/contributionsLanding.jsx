@@ -5,8 +5,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { amounts, type Contrib } from 'helpers/contributions';
-import { type PaymentMethod } from 'helpers/checkouts';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -56,10 +54,22 @@ const content = (
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
         <NewContributionType />
-        <NewContributionAmount countryGroupId={countryGroupId} countryGroupDetails={selectedCountryGroupDetails} currency={currency} />
+        <NewContributionAmount
+          countryGroupId={countryGroupId}
+          countryGroupDetails={selectedCountryGroupDetails}
+          currency={currency}
+        />
         <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
         <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
-        <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
+        <NewContributionTextInput
+          id="contributionEmail"
+          name="contribution-email"
+          label="Email address"
+          type="email"
+          placeholder="example@domain.com"
+          icon={<SvgEnvelope />}
+          required
+        />
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
         <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
