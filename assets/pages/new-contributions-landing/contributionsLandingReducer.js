@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { type PaymentMethod } from 'helpers/checkouts';
-import { type Contrib } from 'helpers/contributions';
+import { amounts, type Contrib } from 'helpers/contributions';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -14,7 +14,8 @@ import { type Action } from './contributionsLandingActions';
 type PageState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  amount?: string,
+  amount?: Amount,
+  otherAmount?: number,
 };
 
 export type State = {
@@ -24,30 +25,42 @@ export type State = {
 
 // ----- Initial state ----- //
 
-const initialState: PageState = {
-  contributionType: 'ONE_OFF',
-  paymentMethod: 'PayPal',
-};
-
 // ----- Functions ----- //
 
-function reducer(state: PageState = initialState, action: Action): PageState {
-  switch (action.type) {
-    case 'UPDATE_CONTRIBUTION_TYPE':
-      return { ...state, contributionType: action.contributionType, amount: null };
+function initReducer(countryGroupId: CountryGroupId) {
+  
+  const initialState: PageState = {
+    contributionType: 'ONE_OFF',
+    paymentMethod: 'PayPal',
+    amount: amounts('notintest')['ONE_OFF'][countryGroupId][0],
+  };
 
-    case 'UPDATE_PAYMENT_METHOD':
-      return { ...state, paymentMethod: action.paymentMethod };
+  return function reducer(state: PageState = initialState, action: Action): PageState {
+    switch (action.type) {
+      case 'UPDATE_CONTRIBUTION_TYPE':
+        return { 
+          ...state, 
+          contributionType: action.contributionType, 
+          amount: amounts('notintest')[action.contributionType][countryGroupId][0], 
+          otherAmount: null 
+        };
 
-    case 'SELECT_AMOUNT':
-      return { ...state, amount: action.amount };
+      case 'UPDATE_PAYMENT_METHOD':
+        return { ...state, paymentMethod: action.paymentMethod };
 
-    default:
-      return state;
+      case 'SELECT_AMOUNT':
+        return { ...state, amount: action.amount, otherAmount: null };
+
+      case 'SELECT_OTHER_AMOUNT':
+        return { ...state, amount: null, otherAmount: 1 };
+
+      default:
+        return state;
+    }
   }
 }
 
 
 // ----- Reducer ----- //
 
-export { reducer };
+export { initReducer };
