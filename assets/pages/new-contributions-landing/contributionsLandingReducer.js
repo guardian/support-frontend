@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { type PaymentMethod } from 'helpers/checkouts';
-import { amounts, type Contrib } from 'helpers/contributions';
+import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -14,7 +14,7 @@ import { type Action } from './contributionsLandingActions';
 type PageState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  amount?: Amount,
+  amount: Amount | null,
   otherAmount?: number,
 };
 

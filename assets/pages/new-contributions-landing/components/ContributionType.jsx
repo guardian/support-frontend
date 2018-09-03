@@ -4,11 +4,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Dispatch } from 'redux';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import { type State } from '../contributionsLandingReducer';
-import { updateContributionType } from '../contributionsLandingActions';
+import { type Action, updateContributionType } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -17,11 +18,11 @@ type PropTypes = {
   onSelectContributionType: Event => void,
 };
 
-const mapStateToProps: State => PropTypes = state => ({
+const mapStateToProps = (state: State) => ({
   contributionType: state.page.contributionType,
 });
 
-const mapDispathToProps = dispatch => ({
+const mapDispathToProps = (dispatch: Dispatch<Action>) => ({
   onSelectContributionType: (e) => {
     if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
 

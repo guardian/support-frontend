@@ -12,6 +12,7 @@ import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internat
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
 import { formatAmount } from './ContributionAmount';
+import { type State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -19,7 +20,7 @@ type PropTypes = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
-  amount?: Amount
+  amount: Amount | null
 };
 
 const mapStateToProps = (state: State) =>

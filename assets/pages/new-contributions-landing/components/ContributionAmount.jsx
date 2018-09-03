@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -12,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { selectAmount, selectOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, selectOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -21,7 +22,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  amount?: Amount,
+  amount: Amount | null,
   showOther: boolean,
   selectAmount: Amount => (() => void),
   selectOtherAmount: () => void,
@@ -34,7 +35,7 @@ const mapStateToProps = state => ({
   showOther: state.page.showOtherAmount,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   selectAmount: amount => () => { dispatch(selectAmount(amount)); },
   selectOtherAmount: () => { dispatch(selectOtherAmount()); },
 });
