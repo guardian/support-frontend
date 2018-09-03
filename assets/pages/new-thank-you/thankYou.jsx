@@ -39,7 +39,7 @@ const content = (
       header={<NewHeader />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
-      <div class="gu-content__content">
+      <div className="gu-content__content">
         <h1>Thank you for your contribution to independent journalism</h1>
 
         <section className={classNameWithModifiers('confirmation', ['newsletter'])}>

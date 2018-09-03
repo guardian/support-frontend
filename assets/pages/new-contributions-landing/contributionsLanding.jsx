@@ -43,7 +43,6 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const contributionType: Contrib = 'MONTHLY';
 const paymentMethod: PaymentMethod = 'PayPal';
-const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 const selectedCountryGroup = countryGroups[countryGroupId];
 const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 
@@ -55,7 +54,7 @@ const content = (
       header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     >
-      <div class="gu-content__content">
+      <div className="gu-content__content">
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
