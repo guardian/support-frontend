@@ -28,14 +28,14 @@ import { NewContributionState } from './components/ContributionState';
 import { NewContributionSubmit } from './components/ContributionSubmit';
 import { NewContributionTextInput } from './components/ContributionTextInput';
 
-import { reducer } from './contributionsLandingReducer';
+import { initReducer } from './contributionsLandingReducer';
 
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
 const currency: IsoCurrency = detectCurrency(countryGroupId);
 
-const store = pageInit(reducer);
+const store = pageInit(initReducer(countryGroupId));
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
