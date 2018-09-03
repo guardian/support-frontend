@@ -13,21 +13,26 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgDollar from 'components/svgs/dollar';
 
 import { type State } from '../contributionsLandingReducer';
+import { selectAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
+  currency: IsoCurrency,
   contributionType: Contrib,
-  amount: number,
-  otherAmount: ?number,
+  otherSelected: boolean,
+  amount?: string,
+  selectAmount: Event => void,
 };
 
-const mapStateToProps: State => PropTypes = state => ({
-  countryGroupId: state.common.internationalisation.countryGroupId,
+const mapStateToProps = state => ({
   contributionType: state.page.contributionType,
-  amount: 5,
-  otherAmount: (null: ?number),
+  amount: state.page.amount,
+});
+
+const mapDispatchToProps = dispatch => ({
+  selectAmount: e => { dispatch(selectAmount(e.target.value)) },
 });
 
 // ----- Render ----- //
@@ -37,7 +42,7 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (amount: Amount, i) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropsType) => (amount: Amount, i) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -45,7 +50,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (am
       type="radio"
       name="contributionAmount"
       value={amount.value}
-      checked={i === 0}
+      checked={amount && props.amount === amount.value || i === 0}
+      onChange={props.selectAmount}
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
       {formatAmount(currency, spokenCurrency, amount, false)}
@@ -55,12 +61,13 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (am
 
 
 function ContributionAmount(props: PropTypes) {
-  const currency: IsoCurrency = detect(props.countryGroupId);
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[currency], spokenCurrencies[currency]))}
+        {amounts('notintest')[props.contributionType][props.countryGroupId].map(
+          renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props)
+        )}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -68,7 +75,7 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.amount === 'other'}
+            onChange={props.selectAmount}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
@@ -84,7 +91,6 @@ function ContributionAmount(props: PropTypes) {
               min="1"
               max="2000"
               autoComplete="off"
-              value={props.otherAmount}
             />
             <span className="form__icon">
               <SvgDollar />
@@ -96,7 +102,7 @@ function ContributionAmount(props: PropTypes) {
   );
 }
 
-const NewContributionAmount = connect(mapStateToProps)(ContributionAmount);
+const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
 
 
 export { formatAmount, NewContributionAmount };

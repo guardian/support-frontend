@@ -14,6 +14,7 @@ import { type Action } from './contributionsLandingActions';
 type PageState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
+  amount?: string,
 };
 
 export type State = {
@@ -33,10 +34,13 @@ const initialState: PageState = {
 function reducer(state: PageState = initialState, action: Action): PageState {
   switch (action.type) {
     case 'UPDATE_CONTRIBUTION_TYPE':
-      return { ...state, contributionType: action.contributionType };
+      return { ...state, contributionType: action.contributionType, amount: null };
 
     case 'UPDATE_PAYMENT_METHOD':
       return { ...state, paymentMethod: action.paymentMethod };
+
+    case 'SELECT_AMOUNT':
+      return { ...state, amount: action.amount };
 
     default:
       return state;
