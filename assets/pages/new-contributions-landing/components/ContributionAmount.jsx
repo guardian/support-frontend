@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgDollar from 'components/svgs/dollar';
 
 import { type State } from '../contributionsLandingReducer';
-import { selectAmount } from '../contributionsLandingActions';
+import { selectAmount, selectOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -21,18 +21,21 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  otherSelected: boolean,
-  amount?: string,
-  selectAmount: Event => void,
+  amount?: Amount,
+  otherAmount?: number,
+  selectAmount: Amount => Event => void,
+  selectOtherAmount: () => void,
 };
 
 const mapStateToProps = state => ({
   contributionType: state.page.contributionType,
   amount: state.page.amount,
+  otherAmount: state.page.otherAmount,
 });
 
 const mapDispatchToProps = dispatch => ({
-  selectAmount: e => { dispatch(selectAmount(e.target.value)) },
+  selectAmount: amount => e => { dispatch(selectAmount(amount)) },
+  selectOtherAmount: () => { dispatch(selectOtherAmount()) },
 });
 
 // ----- Render ----- //
@@ -50,8 +53,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       type="radio"
       name="contributionAmount"
       value={amount.value}
-      checked={amount && props.amount === amount.value || i === 0}
-      onChange={props.selectAmount}
+      checked={props.amount && amount.value === props.amount.value}
+      onChange={props.selectAmount(amount)}
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
       {formatAmount(currency, spokenCurrency, amount, false)}
@@ -75,12 +78,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            onChange={props.selectAmount}
+            checked={props.otherAmount}
+            onChange={props.selectOtherAmount}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.amount === 'other' ? (
+      {props.otherAmount ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -91,6 +95,7 @@ function ContributionAmount(props: PropTypes) {
               min="1"
               max="2000"
               autoComplete="off"
+              value={props.otherAmount}
             />
             <span className="form__icon">
               <SvgDollar />
