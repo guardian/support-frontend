@@ -108,11 +108,11 @@ class Application(
     ))
   }
 
-  def newThankyou(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
+  def newContributionsThankyou(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(views.html.main(
       title = "Support the Guardian | Thank you for your contribution",
       description = None,
-      mainId = s"new-thank-you-page-$countryCode",
+      mainId = s"new-contributions-thank-you-page-$countryCode",
       mainJsBundle = "newThankYouPage.js",
       mainStyleBundle = "newContributionsLandingPageStyles.css"
     ))
