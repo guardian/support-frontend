@@ -15,20 +15,10 @@ import { updateContributionType } from '../contributionsLandingActions';
 type PropTypes = {
   contributionType: Contrib,
   onSelectContributionType: Event => void,
-  labels: {
-    ONE_OFF: string,
-    MONTHLY: string,
-    ANNUAL: string
-  }
 };
 
 const mapStateToProps: State => PropTypes = state => ({
   contributionType: state.page.contributionType,
-  labels: {
-    ANNUAL: 'Annually',
-    MONTHLY: 'Monthly',
-    ONE_OFF: 'Single',
-  },
 });
 
 const mapDispathToProps = (dispatch) => ({
@@ -56,7 +46,7 @@ function ContributionType(props: PropTypes) {
             value="ONE_OFF"
             onChange={props.onSelectContributionType}
             checked={props.contributionType === 'ONE_OFF'} />
-          <label htmlFor="contributionType-oneoff" className="form__radio-group-label">{props.labels.ONE_OFF}</label>
+          <label htmlFor="contributionType-oneoff" className="form__radio-group-label">Single</label>
         </li>
         <li className="form__radio-group-item">
           <input 
@@ -67,7 +57,7 @@ function ContributionType(props: PropTypes) {
             value="MONTHLY" 
             onChange={props.onSelectContributionType}
             checked={props.contributionType === 'MONTHLY'} />
-          <label htmlFor="contributionType-monthly" className="form__radio-group-label">{props.labels.MONTHLY}</label>
+          <label htmlFor="contributionType-monthly" className="form__radio-group-label">Monthly</label>
         </li>
         <li className="form__radio-group-item">
           <input 
@@ -78,7 +68,7 @@ function ContributionType(props: PropTypes) {
             value="ANNUAL" 
             onChange={props.onSelectContributionType}
             checked={props.contributionType === 'ANNUAL'} />
-          <label htmlFor="contributionType-annual" className="form__radio-group-label">{props.labels.ANNUAL}</label>
+          <label htmlFor="contributionType-annual" className="form__radio-group-label">Annually</label>
         </li>
       </ul>
     </fieldset>
