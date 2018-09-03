@@ -25,7 +25,7 @@ type PropTypes = {
 
 const mapStateToProps: State => PropTypes = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
-  contributionType: 'MONTHLY',
+  contributionType: state.page.contributionType,
   amount: 5,
   otherAmount: (null: ?number),
 });
