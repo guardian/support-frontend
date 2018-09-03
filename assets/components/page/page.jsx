@@ -12,7 +12,6 @@ type PropTypes = {
   header: Node,
   footer: Node,
   children: Node,
-  optChildren: ?Node
 };
 
 
