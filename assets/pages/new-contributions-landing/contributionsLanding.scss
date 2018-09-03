@@ -836,6 +836,10 @@ form {
   color: #29a05f;
 }
 
+.button--newsletter .svg-subscribe {
+  margin-right: 10px;
+}
+
 .button--wob {
   background: gu-colour(garnett-neutral-1);
   color: gu-colour(garnett-neutral-5);
@@ -849,7 +853,7 @@ form {
 
 .svg-subscribe {
   width: 23px;
-  height: 17px;
+  height: 20px;
   fill: currentColor;
 }
 
