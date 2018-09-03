@@ -2,25 +2,18 @@
 
 // ----- Imports ----- //
 
-import { combineReducers, type CombinedReducer } from 'redux';
+import { type PaymentMethod } from 'helpers/checkouts';
+import { type Contrib } from 'helpers/contributions';
+import { type CommonState } from 'helpers/page/page';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { contributionSelectionReducerFor } from 'components/contributionSelection/contributionSelectionReducer';
-import { payPalContributionButtonReducerFor } from 'components/payPalContributionButton/payPalContributionButtonReducer';
-
-import type { State as ContributionSelectionState } from 'components/contributionSelection/contributionSelectionReducer';
-import type { Action as ContributionSelectionAction } from 'components/contributionSelection/contributionSelectionActions';
-import type { State as PayPalState } from 'components/payPalContributionButton/payPalContributionButtonReducer';
-import type { Action as PayPalAction } from 'components/payPalContributionButton/payPalContributionButtonActions';
-
-import type { CommonState } from 'helpers/page/page';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
 type PageState = {
-  selection: ContributionSelectionState,
-  payPal: PayPalState,
+  contributionType: Contrib,
+  paymentMethod: PaymentMethod,
 };
 
 export type State = {
@@ -28,21 +21,29 @@ export type State = {
   page: PageState,
 };
 
-type PageReducer = CombinedReducer<PageState, ContributionSelectionAction | PayPalAction>;
+// ----- Initial state ----- //
 
+const initialState: PageState = {
+  contributionType: 'ONE_OFF',
+  paymentMethod: 'PayPal',
+};
 
 // ----- Functions ----- //
 
-function createPageReducerFor(countryGroupId: CountryGroupId): PageReducer {
+function reducer(state: PageState = initialState, action: Action): PageState {
+  switch (action.type) {
+    case 'UPDATE_CONTRIBUTION_TYPE':
+      return { ...state, contributionType: action.contributionType };
 
-  return combineReducers({
-    selection: contributionSelectionReducerFor('CONTRIBUTE_SECTION', countryGroupId),
-    payPal: payPalContributionButtonReducerFor('CONTRIBUTE_SECTION'),
-  });
+    case 'UPDATE_PAYMENT_METHOD':
+      return { ...state, paymentMethod: action.paymentMethod };
 
+    default:
+      return state;
+  }
 }
 
 
 // ----- Reducer ----- //
 
-export { createPageReducerFor };
+export { reducer };
