@@ -28,22 +28,22 @@ export type State = {
 // ----- Functions ----- //
 
 function initReducer(countryGroupId: CountryGroupId) {
-  
+
   const initialState: PageState = {
     contributionType: 'ONE_OFF',
     paymentMethod: 'PayPal',
-    amount: amounts('notintest')['ONE_OFF'][countryGroupId][0],
+    amount: amounts('notintest').ONE_OFF[countryGroupId][0],
     showOtherAmount: false,
   };
 
   return function reducer(state: PageState = initialState, action: Action): PageState {
     switch (action.type) {
       case 'UPDATE_CONTRIBUTION_TYPE':
-        return { 
-          ...state, 
-          contributionType: action.contributionType, 
-          amount: amounts('notintest')[action.contributionType][countryGroupId][0], 
-          showOtherAmount: false
+        return {
+          ...state,
+          contributionType: action.contributionType,
+          amount: amounts('notintest')[action.contributionType][countryGroupId][0],
+          showOtherAmount: false,
         };
 
       case 'UPDATE_PAYMENT_METHOD':
@@ -58,7 +58,7 @@ function initReducer(countryGroupId: CountryGroupId) {
       default:
         return state;
     }
-  }
+  };
 }
 
 

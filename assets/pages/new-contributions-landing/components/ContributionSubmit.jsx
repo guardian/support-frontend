@@ -26,7 +26,7 @@ const mapStateToProps = (state: State) =>
   ({
     contributionType: state.page.contributionType,
     paymentMethod: state.page.paymentMethod,
-    amount: state.page.amount
+    amount: state.page.amount,
   });
 
 // ----- Render ----- //
