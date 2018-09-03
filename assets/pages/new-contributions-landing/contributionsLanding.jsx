@@ -27,23 +27,20 @@ import { NewContributionState } from './components/ContributionState';
 import { NewContributionSubmit } from './components/ContributionSubmit';
 import { NewContributionTextInput } from './components/ContributionTextInput';
 
-import { createPageReducerFor } from './contributionsLandingReducer';
+import { reducer } from './contributionsLandingReducer';
 
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(createPageReducerFor(countryGroupId));
+const store = pageInit(reducer);
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
 // ----- Internationalisation ----- //
 
-const contributionType: Contrib = 'MONTHLY';
-const paymentMethod: PaymentMethod = 'PayPal';
 const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 const selectedCountryGroup = countryGroups[countryGroupId];
-const selectedAmounts = amounts('notintest')[contributionType][countryGroupId];
 
 // ----- Render ----- //
 
@@ -63,12 +60,7 @@ const content = (
         <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
-        <NewContributionSubmit
-          countryGroupId={countryGroupId}
-          selectedAmounts={selectedAmounts}
-          contributionType={contributionType}
-          paymentMethod={paymentMethod}
-        />
+        <NewContributionSubmit countryGroupId={countryGroupId} />
       </form>
     </Page>
   </Provider>
