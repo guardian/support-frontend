@@ -56,7 +56,7 @@ const content = (
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
       <form action="#" method="post" className={classNameWithModifiers('form', ['contribution'])}>
         <NewContributionType />
-        <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
+        <NewContributionAmount countryGroupId={countryGroupId} countryGroupDetails={selectedCountryGroupDetails} currency={currency} />
         <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
         <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
         <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
