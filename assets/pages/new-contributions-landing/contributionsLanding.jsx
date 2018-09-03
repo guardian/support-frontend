@@ -12,6 +12,7 @@ import { renderPage } from 'helpers/render';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { type IsoCurrency, detect as detectCurrency } from 'helpers/internationalisation/currency';
 
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
@@ -32,6 +33,7 @@ import { reducer } from './contributionsLandingReducer';
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
+const currency: IsoCurrency = detectCurrency(countryGroupId);
 
 const store = pageInit(reducer);
 
@@ -60,7 +62,7 @@ const content = (
         <NewContributionTextInput id="contributionEmail" name="contribution-email" label="Email address" type="email" placeholder="example@domain.com" icon={<SvgEnvelope />} required />
         <NewContributionState countryGroupId={countryGroupId} />
         <NewContributionPayment />
-        <NewContributionSubmit countryGroupId={countryGroupId} />
+        <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
       </form>
     </Page>
   </Provider>

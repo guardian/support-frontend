@@ -19,6 +19,7 @@ import { formatAmount } from './ContributionAmount';
 type PropTypes = {
   countryGroupId: CountryGroupId,
   contributionType: Contrib,
+  currency: IsoCurrency,
   selectedAmounts: Array<{ value: string, spoken: string }>,
   paymentMethod: PaymentMethod,
 };
@@ -33,14 +34,13 @@ const mapStateToProps = (state: State) =>
 
 
 function ContributionSubmit(props: PropTypes) {
-  const currency: IsoCurrency = detect(props.countryGroupId);
   const selectedAmounts = amounts('notintest')[props.contributionType][props.countryGroupId];
 
   return (
     <div className="form__submit">
       <button className="form__submit-button" type="submit">
         Contribute&nbsp;
-        {formatAmount(currencies[currency], spokenCurrencies[currency], selectedAmounts[0], false)}&nbsp;
+        {formatAmount(currencies[props.currency], spokenCurrencies[props.currency], selectedAmounts[0], false)}&nbsp;
         {getFrequency(props.contributionType)}&nbsp;
         {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
         <SvgArrowRight />
