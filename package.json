@@ -17,17 +17,16 @@
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
   },
   "browserslist": [
-    "Chrome >= 38",
-    "ChromeAndroid >= 44",
+    "Chrome >= 49",
+    "ChromeAndroid >= 49",
     "Safari >= 8",
     "ios_saf >= 8",
     "IE >= 11",
-    "Edge >= 12",
-    "Firefox >= 44",
-    "FirefoxAndroid > 44",
+    "Edge >= 14",
+    "Firefox >= 48",
+    "FirefoxAndroid > 48",
     "Samsung >= 4",
-    "Opera >= 25",
-    "OperaMini all"
+    "Opera >= 54"
   ],
   "jest": {
     "transform": {
