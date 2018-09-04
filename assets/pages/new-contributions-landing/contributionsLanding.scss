@@ -13,7 +13,6 @@ body {
 
 .gu-content__bg svg {
   display: block;
-  margin: 0 auto;
 }
 
 /*= HEADER */
@@ -209,15 +208,21 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    align-items: stretch;
-    display: flex;
-    justify-content: flex-end;
-    min-height: 280px;
-    flex-direction: column;
+    height: 280px;
+    position: relative;
   }
 
   .gu-content__bg .svg-contributions-bg-desktop {
     display: none;
+  }
+  
+  .gu-content__bg .svg-contributions-bg-mobile {
+    bottom: 0;
+    height: 223px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,0);
+    width: 375px;
   }
 
   .countryGroups {
@@ -348,10 +353,6 @@ header[role="banner"] {
   footer[role="contentinfo"],
   .gu-content__main {
     display: grid;
-  }
-
-  .gu-content__bg {
-    position: static;
   }
 
   @include mq($from: tablet) {
@@ -868,14 +869,48 @@ form {
 }
 
 /*= Positioning background circles */
+.gu-content__bg .component-grid-image {
+  border-radius: 100%;
+  object-fit: cover;
+  position: absolute;
+}
+
+@include mq($from: mobile, $until: tablet) {
+  .component-grid-image--circle-a,
+  .component-grid-image--circle-b,
+  .component-grid-image--circle-c {
+    display: none;
+  }
+
+  .component-grid-image--circle-d {
+    bottom: 0px;
+    height: 123px;
+    left: 8px;
+    width: 123px;
+  }
+
+  .component-grid-image--circle-e {
+    bottom: 0px;
+    height: 70px;
+    left: 150px;
+    width: 70px;
+  }
+
+  .component-grid-image--circle-f {
+    bottom: 0px;
+    height: 178px;
+    right: -46px;
+    width: 178px;
+  }
+}  
 
 @include mq($from: tablet) {
-  .gu-content__bg .component-grid-image {
-    border-radius: 100%;
-    object-fit: cover;
-    position: absolute;
+  .component-grid-image--circle-d,
+  .component-grid-image--circle-e,
+  .component-grid-image--circle-f {
+    display: none;
   }
-  
+
   .component-grid-image--circle-a {
     bottom: 0;
     height: 450px;
