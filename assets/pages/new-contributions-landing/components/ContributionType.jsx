@@ -22,7 +22,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.contributionType,
 });
 
-const mapDispathToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSelectContributionType: (e) => {
     if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
 
@@ -78,6 +78,6 @@ function ContributionType(props: PropTypes) {
   );
 }
 
-const NewContributionType = connect(mapStateToProps, mapDispathToProps)(ContributionType);
+const NewContributionType = connect(mapStateToProps, mapDispatchToProps)(ContributionType);
 
 export { NewContributionType };
