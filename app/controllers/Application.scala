@@ -2,14 +2,17 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
+import cats.implicits._
 import com.gu.i18n.CountryGroup._
+import com.gu.support.config.StripeConfigProvider
+import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import switchboard.Switches
 import utils.BrowserCheck
 import utils.RequestCountry._
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import monitoring.SafeLogger
 
 class Application(
@@ -17,6 +20,7 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
+    stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     switches: Switches
@@ -97,16 +101,31 @@ class Application(
     ))
   }
 
-  def newContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = s"new-contributions-landing-page-$countryCode",
-      mainJsBundle = "newContributionsLandingPage.js",
-      mainStyleBundle = "newContributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
+  def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    request.user.fold {
+      Future.successful(Ok(newContributionsForm(countryCode, None)))
+    } { minimalUser =>
+      {
+        identityService.getUser(minimalUser).fold(
+          _ => Ok(newContributionsForm(countryCode, None)),
+          user => Ok(newContributionsForm(countryCode, Some(user)))
+        )
+      }
+    }
   }
+
+  private def newContributionsForm(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
+    views.html.oneOffContributions(
+      title = "Support the Guardian | Make a Contribution",
+      id = s"new-contributions-landing-page-$countryCode",
+      js = "newContributionsLandingPage.js",
+      css = "newContributionsLandingPageStyles.css",
+      defaultStripeConfig = stripeConfigProvider.get(false),
+      uatStripeConfig = stripeConfigProvider.get(true),
+      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      idUser = idUser
+    )
 
   def newContributionsThankyou(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(views.html.main(
