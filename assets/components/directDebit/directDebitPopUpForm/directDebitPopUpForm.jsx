@@ -20,14 +20,12 @@ import type { RegularCheckoutCallback } from 'helpers/checkouts';
 
 // ---- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: RegularCheckoutCallback,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,
 };
-/* eslint-enable react/no-unused-prop-types */
 
 
 // ----- Map State/Props ----- //

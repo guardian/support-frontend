@@ -31,7 +31,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   callback: RegularCheckoutCallback,
   isDDGuaranteeOpen: boolean,
@@ -52,7 +51,7 @@ type PropTypes = {
   confirmDirectDebitClicked: (callback: RegularCheckoutCallback) => void,
   countryGroupId: CountryGroupId,
 };
-/* eslint-enable react/no-unused-prop-types */
+
 
 // ----- Map State/Props ----- //
 
