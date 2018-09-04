@@ -28,7 +28,7 @@ export type GridImg = {
   sizes: string,
   altText: string,
   imgType?: ImageType,
-  classModifiers?: string[],
+  classModifiers?: Array<?string>,
 }
 
 type PropTypes = GridImg;
@@ -50,7 +50,7 @@ export default function GridImage(props: PropTypes) {
 
   return (
     <img
-      className={classNameWithModifiers('component-grid-image', props.classModifiers)}
+      className={classNameWithModifiers('component-grid-image', props.classModifiers || [])}
       sizes={props.sizes}
       srcSet={srcSet}
       src={fallbackSrc}

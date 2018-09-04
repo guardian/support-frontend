@@ -73,9 +73,9 @@ const content = (
         </div>
       </div>
       <div className="gu-content__bg">
-        <GridImage gridId="newsroom" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />
-        <GridImage gridId="newsroom" srcSizes={[1000, 500, 140]} classModifiers={['circle-b']} />
-        <GridImage gridId="newsroom" srcSizes={[1000, 500, 140]} classModifiers={['circle-c']} />
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-b']} />
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-c']} />
         <SvgContributionsBgMobile />
         <SvgContributionsBgDesktop />
       </div>
