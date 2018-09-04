@@ -28,7 +28,7 @@ import {
   setLastNameShouldValidate,
   setEmailShouldValidate,
 } from './contributionsCheckoutContainer/checkoutFormActions';
-import { type PageState as State } from '../regularContributionsReducer';
+import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
 
 

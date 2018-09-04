@@ -1,6 +1,6 @@
 // @flow
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { type PageState as State } from '../regularContributionsReducer';
+import { type State } from '../regularContributionsReducer';
 
 function getFormFields(state: State) {
 
