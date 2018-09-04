@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -94,8 +94,8 @@ function ContributionAmount(props: PropTypes) {
               id="contributionOther"
               className="form__input"
               type="number"
-              min="1"
-              max="2000"
+              min={config[props.countryGroupId][props.contributionType].min}
+              max={config[props.countryGroupId][props.contributionType].max}
               autoComplete="off"
             />
             <span className="form__icon">
