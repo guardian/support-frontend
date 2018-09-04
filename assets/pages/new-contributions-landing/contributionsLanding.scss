@@ -269,6 +269,7 @@ header[role="banner"] {
 
   .gu-content__bg {
     bottom: 0;
+    height: 580px;
     left: 0;
     position: absolute;
     width: 100%;
@@ -276,9 +277,12 @@ header[role="banner"] {
   }
   
   .gu-content__bg svg {
-    height: auto;
-    max-width: 1300px;
-    width: 100%;
+    bottom: 0;
+    height: 580px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,0);
+    width: 1300px;
   }
 
   .gu-content__main .svg-contributions-bg-mobile {
