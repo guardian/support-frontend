@@ -15,6 +15,7 @@ import { emptyInputField, validateEmailAddress } from 'helpers/utilities';
 import type { Status } from 'helpers/switch';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
 import type { Contrib } from 'helpers/contributions';
@@ -49,6 +50,7 @@ type PropTypes = {|
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
+  optimizeExperiments: OptimizeExperiments,
 |};
 
 
@@ -92,6 +94,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
+          props.optimizeExperiments,
         )}
         switchStatus={props.directDebitSwitchStatus}
         disable={props.disable}
@@ -110,6 +113,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
+      props.optimizeExperiments,
     )}
     currencyId={props.currencyId}
     isTestUser={props.isTestUser}
@@ -133,6 +137,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       'PayPal',
       props.referrerAcquisitionData,
       context.store.getState,
+      props.optimizeExperiments,
     )}
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
@@ -177,6 +182,7 @@ function mapStateToProps(state) {
     directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
     stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
     payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 }
 

@@ -22,6 +22,7 @@ function mapStateToProps(state: State) {
     isoCountry: state.common.internationalisation.countryId,
     canClick: !state.page.selection.error,
     switchStatus: state.common.switches.oneOffPaymentMethods.payPal,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 
 }

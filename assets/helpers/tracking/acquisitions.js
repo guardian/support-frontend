@@ -2,14 +2,15 @@
 
 // ----- Imports ----- //
 
-
 import * as ophan from 'ophan';
+
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import { type OptimizeExperiments, OPTIMIZE_QUERY_PARAMETER } from './optimize';
 
 
 // ----- Types ----- //
@@ -67,6 +68,7 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 
 // ----- Campaigns ----- //
+
 const campaigns : {
   [string]: string[],
 } = {
@@ -165,6 +167,15 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
+// Appends all the experiment names (the keys) with '$Optimize' to avoid name
+// collision with native tests, and returns as array of AB tests.
+function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
+  return Object.keys(opt).map(k => ({
+    name: k,
+    variant: opt[k],
+  }));
+}
+
 // Builds the acquisition object from data and other sources.
 function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
 
@@ -177,7 +188,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
 
   const queryParameters =
     acquisitionData.queryParameters ||
@@ -201,13 +212,21 @@ const getOphanIds = (): OphanIds => ({
   visitId: getCookie('vsid'),
 });
 
+function getSupportAbTests(participations: Participations, experiments: OptimizeExperiments): AcquisitionABTest[] {
+  return [
+    ...participationsToAcquisitionABTest(participations),
+    ...optimizeExperimentsToAcquisitionABTest(experiments),
+  ];
+}
+
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+  const abTests = getSupportAbTests(nativeAbParticipations, optimizeExperiments);
 
   if (referrerAcquisitionData.abTest) {
     abTests.push(referrerAcquisitionData.abTest);
@@ -252,5 +271,7 @@ export {
   getReferrerAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
+  optimizeExperimentsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
+  getSupportAbTests,
 };

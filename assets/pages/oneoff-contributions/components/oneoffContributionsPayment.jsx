@@ -18,6 +18,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/switch';
 
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { checkoutError, type Action } from '../oneoffContributionsActions';
 import postCheckout from '../helpers/ajax';
 
@@ -38,6 +39,7 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
+  optimizeExperiments: OptimizeExperiments,
 |};
 
 
@@ -56,6 +58,7 @@ function mapStateToProps(state) {
     currencyId: state.common.internationalisation.currencyId,
     stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
     paymentComplete: state.page.oneoffContrib.paymentComplete || false,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 }
 
@@ -123,6 +126,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.currencyId,
           props.referrerAcquisitionData,
           context.store.getState,
+          props.optimizeExperiments,
         )}
         canOpen={formValidation(
           props.areAnyRequiredFieldsEmpty,

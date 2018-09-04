@@ -9,6 +9,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
@@ -53,6 +54,7 @@ function requestData(
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ) {
   const { user } = getState().page;
 
@@ -66,7 +68,7 @@ function requestData(
         token: paymentToken,
         email: user.email,
       },
-      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations),
+      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
     };
 
     return {
@@ -113,6 +115,7 @@ export default function postCheckout(
   currencyId: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ): (string) => Promise<*> {
   return (paymentToken: string) => {
     const request = requestData(
@@ -122,6 +125,7 @@ export default function postCheckout(
       amount,
       referrerAcquisitionData,
       getState,
+      optimizeExperiments,
     );
 
     return postToEndpoint(request, dispatch, abParticipations);

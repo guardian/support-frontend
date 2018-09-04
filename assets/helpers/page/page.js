@@ -32,8 +32,9 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
+import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
 
-import type { Action } from './pageActions';
+import { type Action } from './pageActions';
 
 
 // ----- Types ----- //
@@ -51,6 +52,7 @@ export type CommonState = {
   abParticipations: Participations,
   switches: Switches,
   internationalisation: Internationalisation,
+  optimizeExperiments: OptimizeExperiments,
 };
 
 
@@ -81,6 +83,7 @@ function buildInitialState(
   switches: Switches,
 ): CommonState {
   const acquisition = getReferrerAcquisitionData();
+  const optimizeExperiments = getOptimizeExperiments();
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -96,6 +99,7 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     switches,
+    optimizeExperiments,
   };
 
 }

@@ -34,6 +34,7 @@ describe('reducer tests', () => {
       abParticipations: {},
       otherQueryParams: [],
       switches: {},
+      optimizeExperiments: {},
     };
 
     global.reducer = createCommonReducer(initialState);

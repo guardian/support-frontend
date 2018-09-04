@@ -9,7 +9,7 @@ import type { Dispatch } from 'redux';
 import type { BillingPeriod, Contrib } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
-import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
+import { getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -18,6 +18,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
 
 // ----- Setup ----- //
@@ -130,6 +131,7 @@ function requestData(
   accountNumber?: string,
   sortCode?: string,
   accountHolderName?: string,
+  optimizeExperiments: OptimizeExperiments,
 ) {
 
   const { user } = getState().page;
@@ -143,7 +145,7 @@ function requestData(
   }
 
   const ophanIds: OphanIds = getOphanIds();
-  const supportAbTests = participationsToAcquisitionABTest(abParticipations);
+  const supportAbTests = getSupportAbTests(abParticipations, optimizeExperiments);
   const paymentFields = getPaymentFields(
     token,
     accountNumber,
@@ -279,6 +281,7 @@ function postCheckout(
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ): RegularCheckoutCallback {
   return (
     token?: string,
@@ -303,6 +306,7 @@ function postCheckout(
       accountNumber,
       sortCode,
       accountHolderName,
+      optimizeExperiments,
     );
 
     return fetch(routes.recurringContribCreate, request).then((response) => {

@@ -2,11 +2,15 @@
 
 // ----- Imports ----- //
 
+import { type OptimizeExperiments } from '../optimize';
+
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
+  optimizeExperimentsToAcquisitionABTest,
 } from '../acquisitions';
+
 
 // ----- Tests ----- //
 
@@ -37,13 +41,19 @@ describe('acquisitions', () => {
         testId3: 'variant3',
       };
 
+      const optimizeExperiments = {
+        optimizeExperiment1: 'variant1',
+        optimizeExperiment2: 'variant2',
+        optimizeExperiment3: 'variant3',
+      };
+
       const paymentApiAcquisitionData =
-        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 
       // The abTests array should be a combination of supportAbTests and the source tests
-      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(4);
+      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(7);
       expect(paymentApiAcquisitionData.campaignCodes && paymentApiAcquisitionData.campaignCodes.length).toEqual(1);
     });
   });
@@ -91,5 +101,28 @@ describe('acquisitions', () => {
       expect(acquisitionABTests.length).toEqual(3);
       expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0' });
     });
+  });
+
+  describe('optimizeExperimentsToAcquisitionABTest', () => {
+
+    it('should return an empty array in the presence of a empty object as its input', () => {
+      expect(optimizeExperimentsToAcquisitionABTest({})).toEqual([]);
+    });
+
+    it('should return an array of AcquisitionAbTests appended with an Optimize tag', () => {
+
+      const optimizeExperiments: OptimizeExperiments = {
+        testOne: 'variantOne',
+        testTwo: 'variantTwo',
+        testThree: 'variantSeven',
+      };
+
+      const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
+
+      expect(acquisitionABTests.length).toBe(3);
+      expect(acquisitionABTests[0]).toEqual({ name: 'testOne', variant: 'variantOne' });
+
+    });
+
   });
 });

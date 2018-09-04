@@ -17,6 +17,7 @@ Object {
     "countryId": "GB",
     "currencyId": "GBP",
   },
+  "optimizeExperiments": Object {},
   "otherQueryParams": Array [],
   "referrerAcquisitionData": Object {
     "abTest": null,

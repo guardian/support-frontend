@@ -1,28 +1,92 @@
-/* eslint-disable */
-try {
-  var db = indexedDB.open("test");
-  // Check if Firefox Private Browsing is enabled
-  // because the page hiding snippet doesn't work
-  // properly in FF PB mode, see here:
-  // https://www.en.advertisercommunity.com/t5/Google-Optimize-Implement/Optimize-Page-Hiding-Snippet-Unhide-delay-issue-in-Firefox/td-p/1106919
-  db.onsuccess = function() {
-    // Not in FF PB mode
-    (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
-      h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
-      (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
-    })(window,document.documentElement,'async-hide','dataLayer',4000,
-      {'GTM-KGKKPS4':true, 'GTM-NZGXNBL':true});
+// @flow
 
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+// ----- Imports ----- //
 
-    ga('create', 'UA-51507017-5', 'auto', {cookieDomain: 'auto', anonymizeIp: true});
-    ga('require', 'GTM-NZGXNBL');
-    ga('require', 'GTM-KGKKPS4');
-  };
-} catch (e) {
-  console.log(`Error initialising Optimize script: ${e.message}`);
+import * as storage from 'helpers/storage';
+import { getQueryParameter } from 'helpers/url';
+import { deserialiseJsonObject } from 'helpers/utilities';
+import { gaPropertyId } from './googleTagManager';
+
+
+// ----- Types ----- //
+
+type Experiment = string;
+type Variant = string;
+
+export type OptimizeExperiments = {
+  [Experiment]: Variant,
+};
+
+const OPTIMIZE_STORAGE_KEY = 'optimizeExperiments';
+
+const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
+
+
+// ----- Functions ----- //
+
+// Makes sure experiments are of the type [string]: string to match participations.
+function parseExperimentsFromGaData(optimize: Object): OptimizeExperiments {
+
+  return Object.keys(optimize).reduce((result, key) => {
+    if (typeof optimize[key] === 'string') {
+      return { ...result, [key]: optimize[key] };
+    }
+
+    return result;
+  }, {});
 }
-/* eslint-enable */
+
+function getExperimentsFromGaData(): OptimizeExperiments {
+  try {
+    return parseExperimentsFromGaData(window.gaData[gaPropertyId].experiments);
+  } catch (_) {
+    return {};
+  }
+}
+
+// Returns an Optimize experiment from the query parameter utm_expid.
+// Expected format of query parameter is '.<testid>.<variantid>'
+function parseExperimentFromQueryParam(queryParameter: ?string): OptimizeExperiments {
+  if (queryParameter) {
+    // eslint-disable-next-line no-unused-vars
+    const [_, experimentId, variantId] = queryParameter.split('.');
+    if (experimentId && variantId) {
+      return { [experimentId]: variantId };
+    }
+  }
+  return {};
+}
+
+function storeOptimizeExperimentsInSession(experiments: OptimizeExperiments): boolean {
+  try {
+    const serialised = JSON.stringify(experiments);
+    storage.setSession(OPTIMIZE_STORAGE_KEY, serialised);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function readOptimizeExperimentsInSession(): OptimizeExperiments {
+  const data = storage.getSession(OPTIMIZE_STORAGE_KEY);
+  return data ? deserialiseJsonObject(data) || {} : {};
+}
+
+function getOptimizeExperiments(): OptimizeExperiments {
+  const experiments = {
+    ...parseExperimentFromQueryParam(getQueryParameter(OPTIMIZE_QUERY_PARAMETER)),
+    ...getExperimentsFromGaData(),
+    ...readOptimizeExperimentsInSession(),
+  };
+  storeOptimizeExperimentsInSession(experiments);
+  return experiments;
+}
+
+// ----- Exports ----- //
+
+export {
+  OPTIMIZE_QUERY_PARAMETER,
+  getOptimizeExperiments,
+  parseExperimentsFromGaData,
+  parseExperimentFromQueryParam,
+};
