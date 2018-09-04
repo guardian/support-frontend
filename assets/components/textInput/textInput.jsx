@@ -5,6 +5,7 @@
 import React from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
+import ErrorMessage from 'components/errorMessage/errorMessage';
 
 
 // ----- Types ----- //
@@ -30,12 +31,12 @@ type PropTypes = {
   onChange: (name: string) => void,
   value: string,
   placeholder: string,
-  required: boolean,
   autocomplete?: AutoComplete,
   autocapitalize?: AutoCapitalize,
-  pattern?: string,
   modifierClasses: Array<?string>,
-  onBlur: () => void,
+  onBlur: (FocusEvent) => void,
+  showError: boolean,
+  errorMessage: string,
 };
 
 
@@ -43,23 +44,30 @@ type PropTypes = {
 
 export default function TextInput(props: PropTypes) {
 
+  const { modifierClasses } = props;
+  if (props.showError) {
+    modifierClasses.push('error');
+  }
+
   return (
-    <div className={classNameWithModifiers('component-text-input', props.modifierClasses)}>
+    <div className={classNameWithModifiers('component-text-input', modifierClasses)}>
       <label htmlFor={props.id} className="component-text-input__label">
         {props.labelText}
       </label>
       <input
-        className={classNameWithModifiers('component-text-input__input', props.modifierClasses)}
+        className="component-text-input__input"
         type={props.type}
         id={props.id}
         onChange={event => props.onChange(event.target.value || '')}
         onBlur={props.onBlur}
         value={props.value}
         placeholder={props.placeholder}
-        required={props.required}
         autoComplete={props.autocomplete}
         autoCapitalize={props.autocapitalize}
-        pattern={props.pattern}
+      />
+      <ErrorMessage
+        showError={props.showError}
+        message={props.errorMessage}
       />
     </div>
   );
@@ -72,10 +80,8 @@ export default function TextInput(props: PropTypes) {
 TextInput.defaultProps = {
   type: 'text',
   placeholder: '',
-  required: false,
   autocomplete: 'on',
   autocapitalize: 'off',
-  pattern: '',
   modifierClasses: [],
   onBlur: () => undefined,
 };

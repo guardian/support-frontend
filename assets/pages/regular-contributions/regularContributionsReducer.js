@@ -16,7 +16,7 @@ import type { PaymentMethod } from 'helpers/checkouts';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import { checkoutFormReducer as checkoutForm, type RegularContributionsCheckoutFormState } from './components/contributionsCheckoutContainer/checkoutFormReducer';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus } from './components/regularContributionsPayment';
 
@@ -32,7 +32,6 @@ export type State = {
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
-  emailHasBeenBlurred: boolean,
 };
 
 export type CombinedState = {
@@ -40,6 +39,7 @@ export type CombinedState = {
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
+  checkoutForm: RegularContributionsCheckoutFormState,
   marketingConsent: MarketingConsentState,
 };
 
@@ -66,7 +66,6 @@ function createRegularContribReducer(
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
-    emailHasBeenBlurred: false,
   };
 
   return function regularContrib(state: State = initialState, action: Action): State {
@@ -86,9 +85,6 @@ function createRegularContribReducer(
 
       case 'SET_PAYPAL_HAS_LOADED':
         return Object.assign({}, state, { payPalHasLoaded: true });
-
-      case 'SET_EMAIL_HAS_BEEN_BLURRED':
-        return Object.assign({}, state, { emailHasBeenBlurred: true });
 
       default:
         return state;
@@ -112,5 +108,6 @@ export default function createRootRegularContributionsReducer(
     user: createUserReducer(countryGroup),
     csrf,
     directDebit,
+    checkoutForm,
   });
 }
