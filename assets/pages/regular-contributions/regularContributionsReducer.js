@@ -23,7 +23,7 @@ import type { PaymentStatus } from './components/regularContributionsPayment';
 
 // ----- Types ----- //
 
-export type State = {
+type RegularContributionsState = {
   amount: number,
   contributionType: RegularContributionType,
   error: ?string,
@@ -34,8 +34,8 @@ export type State = {
   pollCount: number,
 };
 
-export type CombinedState = {
-  regularContrib: State,
+type PageState = {
+  regularContrib: RegularContributionsState,
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
@@ -43,21 +43,21 @@ export type CombinedState = {
   marketingConsent: MarketingConsentState,
 };
 
-export type PageState = {
+export type State = {
   common: CommonState,
-  page: CombinedState,
+  page: PageState,
 };
 
 
 // ----- Reducers ----- //
 
-function createRegularContribReducer(
+function createRegularContributionsReducer(
   amount: number,
   paymentMethod: ?PaymentMethod,
   contributionType: RegularContributionType,
 ) {
 
-  const initialState: State = {
+  const initialState: RegularContributionsState = {
     amount,
     contributionType,
     error: null,
@@ -68,28 +68,33 @@ function createRegularContribReducer(
     pollCount: 0,
   };
 
-  return function regularContrib(state: State = initialState, action: Action): State {
+  return function regularContributionsReducer(
+    state: RegularContributionsState = initialState,
+    action: Action,
+  ): RegularContributionsState {
+
     switch (action.type) {
 
       case 'CHECKOUT_PENDING':
-        return Object.assign({}, state, { paymentStatus: 'PollingTimedOut', paymentMethod: action.paymentMethod });
+        return { ...state, paymentStatus: 'PollingTimedOut', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_SUCCESS':
-        return Object.assign({}, state, { paymentStatus: 'Success', paymentMethod: action.paymentMethod });
+        return { ...state, paymentStatus: 'Success', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_ERROR':
-        return Object.assign({}, state, { paymentStatus: 'Failed', error: action.message });
+        return { ...state, paymentStatus: 'Failed', error: action.message };
 
       case 'CREATING_CONTRIBUTOR':
-        return Object.assign({}, state, { paymentStatus: 'Pending' });
+        return { ...state, paymentStatus: 'Pending' };
 
       case 'SET_PAYPAL_HAS_LOADED':
-        return Object.assign({}, state, { payPalHasLoaded: true });
+        return { ...state, payPalHasLoaded: true };
 
       default:
         return state;
 
     }
+
   };
 }
 
@@ -103,7 +108,7 @@ export default function createRootRegularContributionsReducer(
   countryGroup: CountryGroupId,
 ) {
   return combineReducers({
-    regularContrib: createRegularContribReducer(amount, paymentMethod, contributionType),
+    regularContrib: createRegularContributionsReducer(amount, paymentMethod, contributionType),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
     user: createUserReducer(countryGroup),
     csrf,
