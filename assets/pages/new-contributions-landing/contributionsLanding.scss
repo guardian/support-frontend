@@ -887,27 +887,28 @@ form {
   border-radius: 100%;
   object-fit: cover;
   position: absolute;
+  left: 50%;
 }
 
 @include mq($from: mobile, $until: tablet) {
   .component-grid-image--circle-a {
     bottom: 0px;
     height: 123px;
-    left: 8px;
+    transform: translate(-162px, 0);
     width: 123px;
   }
 
   .component-grid-image--circle-b {
     bottom: 0px;
     height: 70px;
-    left: 150px;
+    transform: translate(-20px, 0);
     width: 70px;
   }
 
   .component-grid-image--circle-c {
     bottom: 0px;
     height: 178px;
-    right: -46px;
+    transform: translate(39px, 0);
     width: 178px;
   }
 }  
@@ -916,21 +917,21 @@ form {
   .component-grid-image--circle-a {
     bottom: 0;
     height: 450px;
-    right: 261px;
+    transform: translate(-78px,0);
     width: 450px;
   }
-
+  
   .component-grid-image--circle-b {
     bottom: 359px;
     height: 250px;
-    right: 124px;
+    transform: translate(258px,0);
     width: 250px;
   }
-
+  
   .component-grid-image--circle-c {
     bottom: 0px;
     height: 280px;
-    left: -59px;
+    transform: translate(-692px,0);
     width: 290px;
   }
 }
