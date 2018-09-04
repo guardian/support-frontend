@@ -4,30 +4,40 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 
-import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies, detect } from 'helpers/internationalisation/currency';
+import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type State } from '../contributionsLandingReducer';
+import { type Action, selectAmount, selectOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   countryGroupId: CountryGroupId,
+  currency: IsoCurrency,
   contributionType: Contrib,
-  amount: number,
-  otherAmount: ?number,
+  amount: Amount | null,
+  showOther: boolean,
+  selectAmount: Amount => (() => void),
+  selectOtherAmount: () => void,
 };
+/* eslint-enable react/no-unused-prop-types */
 
-const mapStateToProps: State => PropTypes = state => ({
-  countryGroupId: state.common.internationalisation.countryGroupId,
-  contributionType: 'MONTHLY',
-  amount: 5,
-  otherAmount: (null: ?number),
+const mapStateToProps = state => ({
+  contributionType: state.page.contributionType,
+  amount: state.page.amount,
+  showOther: state.page.showOtherAmount,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  selectAmount: amount => () => { dispatch(selectAmount(amount)); },
+  selectOtherAmount: () => { dispatch(selectOtherAmount()); },
 });
 
 // ----- Render ----- //
@@ -37,7 +47,7 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (amount: Amount, i) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -45,7 +55,10 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (am
       type="radio"
       name="contributionAmount"
       value={amount.value}
-      checked={i === 0}
+      /* eslint-disable react/prop-types */
+      checked={props.amount && amount.value === props.amount.value}
+      onChange={props.selectAmount(amount)}
+      /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
       {formatAmount(currency, spokenCurrency, amount, false)}
@@ -55,12 +68,11 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency) => (am
 
 
 function ContributionAmount(props: PropTypes) {
-  const currency: IsoCurrency = detect(props.countryGroupId);
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[currency], spokenCurrencies[currency]))}
+        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -68,12 +80,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.amount === 'other'}
+            checked={props.showOther}
+            onChange={props.selectOtherAmount}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.amount === 'other' ? (
+      {props.showOther ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -81,10 +94,9 @@ function ContributionAmount(props: PropTypes) {
               id="contributionOther"
               className="form__input"
               type="number"
-              min="1"
-              max="2000"
+              min={config[props.countryGroupId][props.contributionType].min}
+              max={config[props.countryGroupId][props.contributionType].max}
               autoComplete="off"
-              value={props.otherAmount}
             />
             <span className="form__icon">
               <SvgDollar />
@@ -96,7 +108,12 @@ function ContributionAmount(props: PropTypes) {
   );
 }
 
-const NewContributionAmount = connect(mapStateToProps)(ContributionAmount);
+ContributionAmount.defaultProps = {
+  amount: null,
+  otherAmount: null,
+};
+
+const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
 
 
 export { formatAmount, NewContributionAmount };
