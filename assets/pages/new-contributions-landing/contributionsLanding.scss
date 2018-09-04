@@ -355,6 +355,20 @@ header[role="banner"] {
     display: grid;
   }
 
+  @include mq($from: mobile, $until: tablet) {
+    header[role="banner"] {
+      justify-content: flex-end;
+    }
+    
+    .gu-content__bg {
+      grid-row: 1;
+    }
+
+    .gu-content__content {
+      grid-row: 2;
+    }
+  }
+
   @include mq($from: tablet) {
     .gu-content,
     header[role="banner"] {
