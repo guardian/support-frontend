@@ -1,34 +1,20 @@
 {
   "presets": [
-    "react",
-    [ "env", {
+    "@babel/preset-react",
+    "@babel/preset-flow",
+    [ "@babel/preset-env", {
       "modules": false,
-      "targets": {
-        "browsers": [
-          "Chrome >= 38",
-          "ChromeAndroid >= 44",
-          "Safari >= 8",
-          "ios_saf >= 8",
-          "IE >= 11",
-          "Edge >= 12",
-          "Firefox >= 44",
-          "FirefoxAndroid > 44",
-          "Samsung >= 4",
-          "Opera >= 25",
-          "OperaMini all"
-        ]
-      }
     }]
   ],
   "plugins": [
-    "babel-plugin-transform-exponentiation-operator",
-    "transform-class-properties",
-    "syntax-dynamic-import",
-    ["transform-object-rest-spread", { "useBuiltIns": true }],
+    "@babel/plugin-transform-exponentiation-operator",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
   ],
   "env": {
     "test": {
-      "presets": ["env"]
+      "presets": ["@babel/preset-env"]
     }
   }
 }
