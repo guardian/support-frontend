@@ -42,14 +42,14 @@ const store = pageInit();
 function getSubscriptionsForCountry() {
   if (countryGroupId === 'GBPCountries') {
     return (
-    <section id={supporterSectionId}>
-      <DigitalSubscriptionsContainer
-        headingSize={3}
-      />
-      <PaperSubscriptionsContainer
-        headingSize={3}
-      />
-    </section>
+      <section id={supporterSectionId}>
+        <DigitalSubscriptionsContainer
+          headingSize={3}
+        />
+        <PaperSubscriptionsContainer
+          headingSize={3}
+        />
+      </section>
     );
   }
   const testName = 'international_subs_landing_pages';

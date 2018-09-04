@@ -56,18 +56,24 @@ export default function PaperSubscriptions(props: PropTypes) {
         <PaperBundle
           url={subsLinks.Paper}
           headingSize={props.headingSize}
-          onClick={props.clickEvents && props.clickEvents.paper ? props.clickEvents.paper : () => undefined}
+          onClick={props.clickEvents && props.clickEvents.paper ?
+            props.clickEvents.paper :
+            () => undefined}
         />
         <PaperDigitalBundle
           url={subsLinks.PaperAndDigital}
           headingSize={props.headingSize}
-          onClick={props.clickEvents && props.clickEvents.paperDigital ? props.clickEvents.paperDigital : () => undefined}
+          onClick={props.clickEvents && props.clickEvents.paperDigital ?
+            props.clickEvents.paperDigital :
+            () => undefined}
         />
         <WeeklyBundle
           countryGroupId="GBPCountries"
           url={subsLinks.GuardianWeekly}
           headingSize={props.headingSize}
-          onClick={props.clickEvents && props.clickEvents.weekly ? props.clickEvents.weekly : () => undefined}
+          onClick={props.clickEvents && props.clickEvents.weekly ?
+            props.clickEvents.weekly :
+            () => undefined}
         />
       </PageSection>
     </div>
@@ -75,6 +81,9 @@ export default function PaperSubscriptions(props: PropTypes) {
 
 }
 
+PaperSubscriptions.defaultProps = {
+  clickEvents: undefined,
+};
 
 // ----- Auxiliary Components ----- //
 
