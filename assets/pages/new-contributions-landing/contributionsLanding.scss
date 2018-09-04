@@ -414,12 +414,12 @@ header[role="banner"] {
       grid-template-columns: 1fr repeat(14, 60px) 1fr;  
       width: auto;
     }
-
+    
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column: span 16;
     }
-    
+
     .glogo {
       grid-column: 14;
       justify-self: flex-end;
@@ -865,4 +865,35 @@ form {
 .svg-newsletters {
   display: block;
   margin: ($gu-v-spacing * 2) -10px 0;
+}
+
+/*= Positioning background circles */
+
+@include mq($from: tablet) {
+  .gu-content__bg .component-grid-image {
+    border-radius: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
+  
+  .component-grid-image--circle-a {
+    bottom: 0;
+    height: 450px;
+    right: 261px;
+    width: 450px;
+  }
+
+  .component-grid-image--circle-b {
+    bottom: 359px;
+    height: 250px;
+    right: 124px;
+    width: 250px;
+  }
+
+  .component-grid-image--circle-c {
+    bottom: 0px;
+    height: 280px;
+    left: -59px;
+    width: 290px;
+  }
 }
