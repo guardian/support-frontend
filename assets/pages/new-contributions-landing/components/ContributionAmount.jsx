@@ -97,6 +97,7 @@ function ContributionAmount(props: PropTypes) {
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
               autoComplete="off"
+              required
             />
             <span className="form__icon">
               <SvgDollar />
