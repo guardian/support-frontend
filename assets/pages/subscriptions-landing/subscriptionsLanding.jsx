@@ -12,6 +12,7 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import PaperSubscriptionsContainer from 'components/paperSubscriptions/paperSubscriptionsContainer';
 
 // React components connected to redux store
 
@@ -20,9 +21,9 @@ import { renderPage } from 'helpers/render';
 
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
+import DigitalSubscriptionsContainer from 'components/digitalSubscriptions/digitalSubscriptionsContainer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect } from 'helpers/internationalisation/countryGroup';
-import SplitSubscriptionsTest from './components/splitSubscriptionsTest';
 
 
 // ----- Setup ----- //
@@ -40,7 +41,16 @@ const store = pageInit();
 
 function getSubscriptionsForCountry() {
   if (countryGroupId === 'GBPCountries') {
-    return <SplitSubscriptionsTest sectionId={supporterSectionId} />;
+    return (
+      <section id={supporterSectionId}>
+        <DigitalSubscriptionsContainer
+          headingSize={3}
+        />
+        <PaperSubscriptionsContainer
+          headingSize={3}
+        />
+      </section>
+    );
   }
   const testName = 'international_subs_landing_pages';
   return (

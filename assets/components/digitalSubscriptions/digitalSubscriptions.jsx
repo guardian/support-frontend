@@ -28,11 +28,11 @@ type ClickEvent = () => void;
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
-  clickEvents: {
-    iOSApp: ClickEvent,
-    androidApp: ClickEvent,
-    dailyEdition: ClickEvent,
-    digiPack: ClickEvent,
+  clickEvents?: {
+    iOSApp: ?ClickEvent,
+    androidApp: ?ClickEvent,
+    dailyEdition: ?ClickEvent,
+    digiPack: ?ClickEvent,
   },
 };
 
@@ -70,19 +70,30 @@ export default function DigitalSubscriptions(props: PropTypes) {
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
-          iOSOnClick={props.clickEvents.iOSApp}
-          androidOnClick={props.clickEvents.androidApp}
+          iOSOnClick={props.clickEvents && props.clickEvents.iOSApp ? props.clickEvents.iOSApp : () => undefined}
+          androidOnClick={
+            props.clickEvents && props.clickEvents.androidApp ?
+              props.clickEvents.androidApp :
+              () => undefined
+          }
         />
         <DailyEdition
           url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
-          onClick={props.clickEvents.dailyEdition}
+          onClick={
+            props.clickEvents && props.clickEvents.dailyEdition ?
+              props.clickEvents.dailyEdition :
+              () => undefined
+          }
         />
         <DigitalBundle
           countryGroupId={countryGroupId}
           url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
-          onClick={props.clickEvents.digiPack}
+          onClick={
+            props.clickEvents && props.clickEvents.digiPack ?
+              props.clickEvents.digiPack :
+              () => undefined}
         />
       </PageSection>
     </div>
@@ -90,6 +101,9 @@ export default function DigitalSubscriptions(props: PropTypes) {
 
 }
 
+DigitalSubscriptions.defaultProps = {
+  clickEvents: undefined,
+};
 
 // ----- Auxiliary Components ----- //
 
