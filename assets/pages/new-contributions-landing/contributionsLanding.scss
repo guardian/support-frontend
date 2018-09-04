@@ -876,27 +876,21 @@ form {
 }
 
 @include mq($from: mobile, $until: tablet) {
-  .component-grid-image--circle-a,
-  .component-grid-image--circle-b,
-  .component-grid-image--circle-c {
-    display: none;
-  }
-
-  .component-grid-image--circle-d {
+  .component-grid-image--circle-a {
     bottom: 0px;
     height: 123px;
     left: 8px;
     width: 123px;
   }
 
-  .component-grid-image--circle-e {
+  .component-grid-image--circle-b {
     bottom: 0px;
     height: 70px;
     left: 150px;
     width: 70px;
   }
 
-  .component-grid-image--circle-f {
+  .component-grid-image--circle-c {
     bottom: 0px;
     height: 178px;
     right: -46px;
@@ -905,12 +899,6 @@ form {
 }  
 
 @include mq($from: tablet) {
-  .component-grid-image--circle-d,
-  .component-grid-image--circle-e,
-  .component-grid-image--circle-f {
-    display: none;
-  }
-
   .component-grid-image--circle-a {
     bottom: 0;
     height: 450px;
