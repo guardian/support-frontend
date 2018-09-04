@@ -15,7 +15,7 @@ type PageState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   amount: Amount | null,
-  otherAmount?: number,
+  showOtherAmount: boolean,
 };
 
 export type State = {
