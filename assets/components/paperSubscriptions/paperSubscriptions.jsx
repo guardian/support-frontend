@@ -22,10 +22,10 @@ type ClickEvent = () => void;
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
-  clickEvents: {
-    paper: ClickEvent,
-    paperDigital: ClickEvent,
-    weekly: ClickEvent,
+  clickEvents?: {
+    paper: ?ClickEvent,
+    paperDigital: ?ClickEvent,
+    weekly: ?ClickEvent,
   },
 };
 
@@ -56,18 +56,18 @@ export default function PaperSubscriptions(props: PropTypes) {
         <PaperBundle
           url={subsLinks.Paper}
           headingSize={props.headingSize}
-          onClick={props.clickEvents.paper}
+          onClick={props.clickEvents && props.clickEvents.paper ? props.clickEvents.paper : () => undefined}
         />
         <PaperDigitalBundle
           url={subsLinks.PaperAndDigital}
           headingSize={props.headingSize}
-          onClick={props.clickEvents.paperDigital}
+          onClick={props.clickEvents && props.clickEvents.paperDigital ? props.clickEvents.paperDigital : () => undefined}
         />
         <WeeklyBundle
           countryGroupId="GBPCountries"
           url={subsLinks.GuardianWeekly}
           headingSize={props.headingSize}
-          onClick={props.clickEvents.weekly}
+          onClick={props.clickEvents && props.clickEvents.weekly ? props.clickEvents.weekly : () => undefined}
         />
       </PageSection>
     </div>
