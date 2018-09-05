@@ -2,6 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
 import com.gu.support.config.StripeConfigProvider
@@ -102,16 +103,11 @@ class Application(
   }
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    request.user.fold {
-      Future.successful(Ok(newContributions(countryCode, None)))
-    } { minimalUser =>
-      {
-        identityService.getUser(minimalUser).fold(
-          _ => Ok(newContributions(countryCode, None)),
-          user => Ok(newContributions(countryCode, Some(user)))
-        )
-      }
-    }
+    type Attempt[A] = EitherT[Future, String, A]
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+      _ => Ok(newContributions(countryCode, None)),
+      user => Ok(newContributions(countryCode, user))
+    )
   }
 
   private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
