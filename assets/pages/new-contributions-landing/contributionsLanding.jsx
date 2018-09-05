@@ -10,6 +10,7 @@ import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type IsoCurrency, detect as detectCurrency } from 'helpers/internationalisation/currency';
+import * as user from 'helpers/user/user';
 
 import GridImage from 'components/gridImage/gridImage';
 
@@ -29,6 +30,8 @@ const countryGroupId: CountryGroupId = detect();
 const currency: IsoCurrency = detectCurrency(countryGroupId);
 
 const store = pageInit(initReducer(countryGroupId));
+
+user.init(store.dispatch);
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 

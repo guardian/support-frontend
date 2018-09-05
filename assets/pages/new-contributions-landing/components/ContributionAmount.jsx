@@ -30,9 +30,9 @@ type PropTypes = {
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
-  contributionType: state.page.contributionType,
-  amount: state.page.amount,
-  showOther: state.page.showOtherAmount,
+  contributionType: state.page.form.contributionType,
+  amount: state.page.form.amount,
+  showOther: state.page.form.showOtherAmount,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
