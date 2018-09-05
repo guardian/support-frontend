@@ -12,9 +12,9 @@ export default function trackConversion(
   if (navigator.doNotTrack !== "1") {
     // Fire GTM conversion events
     successfulConversion(participations);
-    // Send an Ophan pageview. Because this function is used to track page views
-    // from client side routed thank you pages, the referrer will always be the current location
-    pageView(getAbsoluteURL(currentRoute), document.location.href);
   }
+  // Send an Ophan pageview. Because this function is used to track page views
+  // from client side routed thank you pages, the referrer will always be the current location
+  pageView(getAbsoluteURL(currentRoute), document.location.href);
 }
 
