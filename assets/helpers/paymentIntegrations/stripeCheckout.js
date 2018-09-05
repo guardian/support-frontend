@@ -1,12 +1,148 @@
 // @flow
 
+/**
+ * This module contains a copy of pages/oneoff-contributions/helpers/ajax so that
+ * the new payment flow can use this code without any impact on the existing
+ * infrastructure.
+ *
+ * There are a couple of differences though:
+ * - the amount: instead of fixing it when the callback is created, it should
+ *   be provided by the `getState` function
+ * - the actions: what happens upon error/success is view-dependent, so the
+ *   actions are provided as parameters too. As a result, `dispatch` can
+ *   go away (which makes the module completely independant of React)
+ * - tracking conversions: this should be decoupled from the payment itself and
+ *   moved upstream, in the success handler
+ *
+ * The latter module can be removed entirely once the new payment flow becomes the one
+ * and only contribution endpoint.
+ */
+
+
+import { addQueryParamsToURL } from 'helpers/url';
+import { 
+  derivePaymentApiAcquisitionData, 
+  type ReferrerAcquisitionData,
+  type PaymentAPIAcquisitionData,
+} from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+
+import * as cookie from 'helpers/cookie';
+import { logException } from 'helpers/logger';
 
 // ----- Setup ----- //
 
 let stripeHandler = null;
 
+const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
+
+function stripeOneOffContributionEndpoint(testUser: ?string) {
+  if (testUser) {
+    return addQueryParamsToURL(
+      ONEOFF_CONTRIB_ENDPOINT,
+      { mode: 'test' },
+    );
+  }
+
+  return ONEOFF_CONTRIB_ENDPOINT;
+}
+
+// ----- Types ----- //
+
+type PaymentApiStripeExecutePaymentBody = {|
+  paymentData: {
+    currency: IsoCurrency,
+    amount: number,
+    token: string,
+    email: string
+  },
+  acquisitionData: PaymentAPIAcquisitionData,
+|};
 
 // ----- Functions ----- //
+
+function requestData(
+  abParticipations: Participations,
+  paymentToken: string,
+  currency: IsoCurrency,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  optimizeExperiments: OptimizeExperiments,
+  getData: () => { user: { fullName: string, email: string }, amount: number },
+) {
+  const { user, amount } = getData();
+
+  const oneOffContribFields: PaymentApiStripeExecutePaymentBody = {
+    paymentData: {
+      currency,
+      amount,
+      token: paymentToken,
+      email: user.email,
+    },
+    acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
+  };
+
+  return {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(oneOffContribFields),
+    credentials: 'include',
+  };
+
+  return Promise.resolve({
+    ok: false,
+    text: () => 'Failed to process payment - missing fields',
+  });
+}
+
+function postToEndpoint(request: Object, onSuccess: Function, onError: Function): Promise<*> {
+  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
+    if (response.ok) {
+      onSuccess();
+    }
+    return response.json();
+  }).then((responseJson) => {
+    if (responseJson.error.exceptionType === 'CardException') {
+      onError('Your card has been declined.');
+    } else {
+      const errorHttpCode = responseJson.error.errorCode || 'unknown';
+      const exceptionType = responseJson.error.exceptionType || 'unknown';
+      const errorName = responseJson.error.errorName || 'unknown';
+      logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
+      onError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
+    }
+  }).catch(() => {
+    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+    onError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
+  });
+}
+
+function createTokenCallback({
+  abParticipations, currencyId, referrerAcquisitionData,
+  optimizeExperiments, getData, onSuccess, onError,
+}: {
+  abParticipations: Participations,
+  currencyId: IsoCurrency,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  optimizeExperiments: OptimizeExperiments,
+  getData: Function,
+  onSuccess: Function,
+  onError: Function,
+}): (string) => Promise<*> {
+  return (paymentToken: string) => {
+    const request = requestData(
+      abParticipations,
+      paymentToken,
+      currencyId,
+      referrerAcquisitionData,
+      optimizeExperiments,
+      getData,
+    );
+
+    return postToEndpoint(request, onSuccess, onError);
+  };
+}
 
 const loadStripe = () => new Promise((resolve) => {
 
@@ -46,7 +182,7 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
   return stripeKey;
 };
 
-export const setupStripeCheckout = (
+const setupStripeCheckout = (
   callback: (token: string) => Promise<*>,
   closeHandler: ?() => void,
   currency: string,
@@ -84,6 +220,8 @@ const openDialogBox = (amount: number, email: string) => {
 };
 
 export {
+  createTokenCallback,
+  setupStripeCheckout,
   openDialogBox,
   getStripeKey,
 };
