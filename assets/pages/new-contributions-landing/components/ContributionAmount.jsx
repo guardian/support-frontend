@@ -111,7 +111,7 @@ function ContributionAmount(props: PropTypes) {
 
 ContributionAmount.defaultProps = {
   amount: null,
-  otherAmount: null,
+  showOther: false,
 };
 
 const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
