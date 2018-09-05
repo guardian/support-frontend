@@ -8,8 +8,6 @@ import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import csrf from 'helpers/csrf/csrfReducer';
 
 import { type Action } from './contributionsLandingActions';
 
@@ -25,7 +23,6 @@ type FormState = {
 type PageState = {
   form: FormState,
   user: UserState,
-  csrf: CsrfState,
 };
 
 export type State = {
@@ -75,7 +72,6 @@ function initReducer(countryGroupId: CountryGroupId) {
   return combineReducers({
     form: createFormReducer(countryGroupId),
     user: createUserReducer(countryGroupId),
-    csrf,
   });
 }
 
