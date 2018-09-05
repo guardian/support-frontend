@@ -10,6 +10,7 @@ import React from 'react';
 
 import { gridUrl, gridSrcset } from 'helpers/theGrid';
 import { ascending } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { ImageType, ImageId } from 'helpers/theGrid';
 
@@ -27,6 +28,7 @@ export type GridImg = {
   sizes: string,
   altText: string,
   imgType?: ImageType,
+  classModifiers?: Array<?string>,
 }
 
 type PropTypes = GridImg;
@@ -48,7 +50,7 @@ export default function GridImage(props: PropTypes) {
 
   return (
     <img
-      className="component-grid-image"
+      className={classNameWithModifiers('component-grid-image', props.classModifiers || [])}
       sizes={props.sizes}
       srcSet={srcSet}
       src={fallbackSrc}
@@ -64,4 +66,5 @@ export default function GridImage(props: PropTypes) {
 GridImage.defaultProps = {
   imgType: 'jpg',
   altText: '',
+  classModifiers: [],
 };

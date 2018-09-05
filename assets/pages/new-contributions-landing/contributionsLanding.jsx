@@ -11,6 +11,8 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type IsoCurrency, detect as detectCurrency } from 'helpers/internationalisation/currency';
 
+import GridImage from 'components/gridImage/gridImage';
+
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import SvgContributionsBgMobile from 'components/svgs/contributionsBgMobile';
@@ -49,6 +51,9 @@ const content = (
         selectedCountryGroupDetails={selectedCountryGroupDetails}
       />
       <div className="gu-content__bg">
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-b']} />
+        <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-c']} />
         <SvgContributionsBgMobile />
         <SvgContributionsBgDesktop />
       </div>
