@@ -3,6 +3,9 @@
         "PROD": {
             "url": "https://support.theguardian.com/uk",
             "overdue": "14M",
+            "messages": {
+                "seen": "prout/seen.md"
+            },
             "afterSeen": {
                 "travis": {
                     "config": {
