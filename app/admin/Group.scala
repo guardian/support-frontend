@@ -1,4 +1,4 @@
-package switchboard
+package admin
 
 sealed abstract class Group(val name: String)
 object Group {

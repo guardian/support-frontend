@@ -1,0 +1,9 @@
+@import admin.Settings
+@import views.ViewHelpers.printSettings
+
+@(settings: Settings)
+
+<script type="text/javascript">
+    window.guardian = window.guardian || {};
+    guardian.settings = @Html(printSettings(settings));
+</script>

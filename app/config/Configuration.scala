@@ -6,7 +6,7 @@ import config.ConfigImplicits._
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
-import switchboard.Switches
+import admin.Settings
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -39,6 +39,6 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val switches = Switches.fromConfig(config.getConfig("switches"))
+  implicit val settings = Settings.fromConfig(config.getConfig("switches"))
 
 }

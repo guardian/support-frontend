@@ -12,7 +12,7 @@ import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
-import switchboard.Switches
+import admin.Settings
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -36,14 +36,14 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[PaymentAPIService], mock[StringsConfig], mock[Switches]
+        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[PaymentAPIService], mock[StringsConfig], mock[Settings]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[PaymentAPIService], mock[StringsConfig], mock[Switches]
+        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[PaymentAPIService], mock[StringsConfig], mock[Settings]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

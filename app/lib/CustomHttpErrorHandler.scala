@@ -12,7 +12,7 @@ import play.api.mvc.Results.{InternalServerError, NotFound}
 import assets.AssetsResolver
 import views.html.main
 import play.core.SourceMapper
-import switchboard.Switches
+import admin.Settings
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -23,7 +23,7 @@ class CustomHttpErrorHandler(
     sourceMapper: Option[SourceMapper],
     router: => Option[Router],
     val assets: AssetsResolver,
-    switches: Switches
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
@@ -31,14 +31,14 @@ class CustomHttpErrorHandler(
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(main("Error 404", "error-404-page", "error404Page.js", "errorPageStyles.css")(assets, request, switches))
+      NotFound(main("Error 404", "error-404-page", "error404Page.js", "errorPageStyles.css")(assets, request, settings))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
     )
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     logServerError(request, exception)
     Future.successful(
-      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "errorPageStyles.css")(assets, request, switches))
+      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "errorPageStyles.css")(assets, request, settings))
         .withHeaders(CacheControl.noCache)
     )
   }

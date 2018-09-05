@@ -1,4 +1,4 @@
-package switchboard
+package admin
 
 import com.typesafe.config.Config
 

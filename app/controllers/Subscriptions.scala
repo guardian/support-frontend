@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import switchboard.{SwitchState, Switches}
+import admin.{SwitchState, Settings}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -16,13 +16,13 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    switches: Switches
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   import actionRefiners._
 
   implicit val ar = assets
-  implicit val sw = switches
+  implicit val st = settings
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
@@ -42,7 +42,7 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
+    if (settings.switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
       Redirect(controllers.routes.Subscriptions.geoRedirect())
     } else {
       val title = "Support the Guardian | Get a Subscription"

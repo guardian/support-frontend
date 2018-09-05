@@ -1,8 +1,8 @@
 @import assets.AssetsResolver
-@import switchboard.Switches
-@import switchboard.SwitchState
-@()(implicit assets: AssetsResolver, switches: Switches)
-@if(switches.optimize == SwitchState.On) {
+@import admin.Settings
+@import admin.SwitchState
+@()(implicit assets: AssetsResolver, settings: Settings)
+@if(settings.switches.optimize == SwitchState.On) {
     <!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->
     <!-- Page-hiding snippet -->
     <style>.async-hide {
