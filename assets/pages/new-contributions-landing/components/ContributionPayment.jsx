@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Dispatch } from 'redux';
 
 import { type PaymentMethod } from 'helpers/checkouts';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -12,6 +13,7 @@ import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
 import { type State } from '../contributionsLandingReducer';
+import { type Action, updatePaymentMethod } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -19,9 +21,13 @@ type PropTypes = {
   paymentMethod: PaymentMethod,
 };
 
-const mapStateToProps: State => PropTypes = () => ({
+const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.paymentMethod,
 });
+
+const mapDispatchToProps = {
+  updatePaymentMethod
+};
 
 // ----- Render ----- //
 
@@ -37,7 +43,8 @@ function ContributionPayment(props: PropTypes) {
             className="form__radio-group-input"
             name="contributionPayment"
             type="radio"
-            value="card"
+            value="Stripe"
+            onChange={() => props.updatePaymentMethod('Stripe')}
             checked={props.paymentMethod !== 'PayPal'}
           />
           <label htmlFor="contributionPayment-card" className="form__radio-group-label">
@@ -52,7 +59,8 @@ function ContributionPayment(props: PropTypes) {
             className="form__radio-group-input"
             name="contributionPayment"
             type="radio"
-            value="paypal"
+            value="PayPal"
+            onChange={() => props.updatePaymentMethod('PayPal')}
             checked={props.paymentMethod === 'PayPal'}
           />
           <label htmlFor="contributionPayment-paypal" className="form__radio-group-label">
@@ -66,6 +74,6 @@ function ContributionPayment(props: PropTypes) {
   );
 }
 
-const NewContributionPayment = connect(mapStateToProps)(ContributionPayment);
+const NewContributionPayment = connect(mapStateToProps, mapDispatchToProps)(ContributionPayment);
 
 export { NewContributionPayment };
