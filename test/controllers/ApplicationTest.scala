@@ -37,14 +37,28 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
   "/healthcheck" should {
     "return healthy" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[StripeConfigProvider], mock[PaymentAPIService], mock[StringsConfig], mock[Switches]
+        actionRefiner, 
+        mock[AssetsResolver], 
+        mock[HttpIdentityService], 
+        stubControllerComponents(), 
+        mock[StripeConfigProvider], 
+        mock[PaymentAPIService], 
+        mock[StringsConfig], 
+        mock[Switches]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
 
     "not be cached" in {
       val result = new Application(
-        actionRefiner, mock[AssetsResolver], mock[HttpIdentityService], stubControllerComponents(), mock[StripeConfigProvider], mock[PaymentAPIService], mock[StringsConfig], mock[Switches]
+        actionRefiner, 
+        xmock[AssetsResolver], 
+        mock[HttpIdentityService], 
+        stubControllerComponents(), 
+        mock[StripeConfigProvider], 
+        mock[PaymentAPIService], 
+        mock[StringsConfig], 
+        mock[Switches]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
