@@ -1,7 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.i18n.Currency
-import com.gu.support.workers.model.{DirectDebitPaymentMethod, PaymentMethod}
+import com.gu.support.workers.model.{BillingPeriod, DirectDebitPaymentMethod, PaymentMethod}
 import org.joda.time.DateTime
 
 case class ContributionEmailFields(
@@ -11,7 +11,7 @@ case class ContributionEmailFields(
     currency: Currency,
     edition: String,
     name: String,
-    product: String,
+    billingPeriod: BillingPeriod,
     paymentMethod: Option[PaymentMethod] = None,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
@@ -35,7 +35,7 @@ case class ContributionEmailFields(
     "currency" -> currency.glyph,
     "edition" -> edition,
     "name" -> name,
-    "product" -> product
+    "product" -> s"${billingPeriod.toString.toLowerCase}-contribution"
   ) ++ paymentFields
 
   override def payload: String = super.payload(email, "regular-contribution-thank-you")

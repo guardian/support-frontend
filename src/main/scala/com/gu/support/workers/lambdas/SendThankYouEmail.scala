@@ -49,7 +49,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           currency = c.currency,
           edition = state.user.country.alpha2,
           name = state.user.firstName,
-          product = s"${state.product.billingPeriod}-contribution",
+          billingPeriod = state.product.billingPeriod,
           paymentMethod = Some(state.paymentMethod),
           directDebitMandateId = directDebitMandateId
         )
