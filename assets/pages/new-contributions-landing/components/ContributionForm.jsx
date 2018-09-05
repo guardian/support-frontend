@@ -54,7 +54,8 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  redirect: () => { dispatch(paymentSuccess()); },
+  onSuccess: () => { dispatch(paymentSuccess()); },
+  onError: error => { dispatch(paymentFailure(error)); },
 });
 
 // ----- Functions ----- //
@@ -123,9 +124,9 @@ function ContributionForm(props: PropTypes) {
     },
     onSuccess: () => {
       trackConversion(abParticipations, thankYouRoute);
-      props.redirect();
+      props.onSuccess();
     },
-    onError: paymentFailure,
+    onError: props.onError,
   });
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
