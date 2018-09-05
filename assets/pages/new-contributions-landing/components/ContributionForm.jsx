@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
@@ -26,11 +26,12 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action } from '../contributionsLandingActions';
+import { type Action, paymentSuccess } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  done: boolean,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -38,7 +39,8 @@ type PropTypes = {|
   abParticipations: Participations,
   dispatch: Dispatch<Action>,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  optimizeExperiments: OptimizeExperiments
+  optimizeExperiments: OptimizeExperiments,
+  redirect: () => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,7 +52,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  dispatch,
+  redirect: () => { dispatch(paymentSuccess()); },
 });
 
 // ----- Functions ----- //
@@ -93,6 +95,8 @@ function ContributionForm(props: PropTypes) {
 
   let formElement = null;
 
+  const thankyouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`;
+
   const callback = createTokenCallback({
     abParticipations,
     currencyId: currency,
@@ -116,8 +120,8 @@ function ContributionForm(props: PropTypes) {
       }
     },
     onSuccess: () => {
-      // trackConversion(abParticipations, routes.oneOffContribThankyou);
-      console.log('payment successful');
+      trackConversion(abParticipations, thankYouRoute);
+      props.redirect();
     },
     onError: (error) => {
       console.error(`payment failed with ${error}`);
@@ -126,7 +130,9 @@ function ContributionForm(props: PropTypes) {
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
 
-  return (
+  return props.done ? 
+    <Redirect to={thankYouRoute} />
+  : ( 
     <div className="gu-content__content">
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
@@ -155,6 +161,10 @@ function ContributionForm(props: PropTypes) {
     </div>
   );
 }
+
+ContributionForm.defaultProps = {
+  done: false
+};
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
 
