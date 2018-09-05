@@ -147,12 +147,27 @@ function ContributionForm(props: PropTypes) {
             countryGroupDetails={selectedCountryGroupDetails}
             currency={currency}
           />
-          <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
-          <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
+          <NewContributionTextInput 
+            id="contributionFirstName" 
+            name="contribution-fname" 
+            label="First Name" 
+            value={window.guardian.user && window.guardian.user.firstName ? window.guardian.user.firstName : null}
+            icon={<SvgUser />} 
+            required 
+            />
+          <NewContributionTextInput 
+            id="contributionLastName" 
+            name="contribution-lname" 
+            label="Last Name" 
+            value={window.guardian.user && window.guardian.user.lastName ? window.guardian.user.lastName : null}
+            icon={<SvgUser />} 
+            required 
+            />
           <NewContributionTextInput
             id="contributionEmail"
             name="contribution-email"
             label="Email address"
+            value={window.guardian.user ? window.guardian.user.email : null }
             type="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}

@@ -16,6 +16,7 @@ type PropTypes = {
   placeholder: boolean | string,
   icon: ?React$Element<*>,
   type?: string,
+  value: string | null,
   required?: boolean
 };
 
@@ -34,6 +35,7 @@ function ContributionTextInput(props: PropTypes) {
             autoCapitalize="words"
             required={props.required}
             placeholder={props.placeholder}
+            value={props.value}
           />
           <span className="form__icon">
             {props.icon}
@@ -57,6 +59,7 @@ ContributionTextInput.defaultProps = {
   type: 'text',
   placeholder: false,
   required: false,
+  value: null,
 };
 
 const NewContributionTextInput = connect()(ContributionTextInput);
