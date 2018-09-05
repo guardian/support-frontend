@@ -13,7 +13,7 @@ import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
-import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/stripeCheckout';
+import { setupStripeCheckout, openDialogBox, createTokenCallback } from 'helpers/paymentIntegrations/stripeCheckout';
 
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
@@ -25,12 +25,13 @@ import { NewContributionState } from './ContributionState';
 import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
-import postCheckout from '../../oneoff-contributions/helpers/ajax';
 import { type State } from '../contributionsLandingReducer';
 import { type Action } from '../contributionsLandingActions';
 
 // ----- Types ----- //
+/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  isTestUser: boolean,
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   selectedCountryGroupDetails: CountryMetaData,
@@ -39,8 +40,10 @@ type PropTypes = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments
 |};
+/* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
+  isTestUser: state.page.user.isTestUser || false,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
   optimizeExperiments: state.common.optimizeExperiments,
@@ -50,44 +53,80 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   dispatch,
 });
 
+// ----- Functions ----- //
+
+const getAmount = formElements =>
+  parseFloat(formElements.contributionAmount.value === 'other'
+      ? formElements.contributionOther.value
+      : formElements.contributionAmount.value);
+
 // ----- Event handlers ----- //
 
 const onSubmit = (props: PropTypes) => (e) => {
   e.preventDefault();
 
   const { elements } = e.target;
-  const amount = elements.contributionAmount === 'other' ? elements.contributionOther : elements.contributionAmount;
-  const email = elements.contributionEmail;
+  const amount = getAmount(elements);
+  const email = elements.contributionEmail.value;
 
-  if (window.StripeCheckout === undefined) {
-    const firstName = elements.contributionFirstName;
-    const lastName = elements.contributionLastName;
-    const callback = postCheckout(
-      props.abParticipations,
-      props.dispatch,
-      amount,
-      props.currency,
-      props.referrerAcquisitionData,
-      () => ({ page: { user: { fullName: `${firstName} ${lastName}`, email } } }),
-      props.optimizeExperiments,
-    );
-
-    setupStripeCheckout(callback, () => {}, props.currency, false);
-  }
-
-  openDialogBox(amount, email);
+  stripeReady.then(() => {
+    openDialogBox(amount, email);
+  });
 };
 
 
 // ----- Render ----- //
 
+let stripeReady = null;
+
 function ContributionForm(props: PropTypes) {
-  const { countryGroupId, selectedCountryGroupDetails, currency } = props;
+  const { 
+    abParticipations, 
+    countryGroupId, 
+    selectedCountryGroupDetails, 
+    referrerAcquisitionData,
+    optimizeExperiments,
+    currency,
+  } = props;
+
+  let formElement = null;
+
+  const callback = createTokenCallback({
+    abParticipations, 
+    currency, 
+    referrerAcquisitionData, 
+    optimizeExperiments,
+    getData: () => {
+      const elements = formElement.elements;
+      const firstName = elements.contributionFirstName.value;
+      const lastName = elements.contributionLastName.value;
+      const email = elements.contributionEmail.value;
+      const amount = getAmount(elements);
+        
+      return {
+        user: {
+          fullName: `${firstName} ${lastName}`,
+          email
+        },
+        amount
+      };
+    },
+    onSuccess: () => {
+      trackConversion(abParticipations, routes.oneOffContribThankyou);
+      console.log('payment successful');
+    },
+    onError: error => {
+      console.error(`payment failed with ${error}`);
+    }
+  });
+
+  stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
+
   return (
     <div className="gu-content__content">
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-      <form className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit(props)}>
+      <form ref={el => formElement = el} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit(props)}>
         <NewContributionType />
         <NewContributionAmount
           countryGroupId={countryGroupId}
