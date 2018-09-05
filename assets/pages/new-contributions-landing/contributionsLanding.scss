@@ -13,7 +13,6 @@ body {
 
 .gu-content__bg svg {
   display: block;
-  margin: 0 auto;
 }
 
 /*= HEADER */
@@ -209,15 +208,21 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    align-items: stretch;
-    display: flex;
-    justify-content: flex-end;
-    min-height: 280px;
-    flex-direction: column;
+    height: 280px;
+    position: relative;
   }
 
-  .gu-content__main .svg-contributions-bg-desktop {
+  .gu-content__bg .svg-contributions-bg-desktop {
     display: none;
+  }
+  
+  .gu-content__bg .svg-contributions-bg-mobile {
+    bottom: 0;
+    height: 223px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,0);
+    width: 375px;
   }
 
   .countryGroups {
@@ -269,6 +274,7 @@ header[role="banner"] {
 
   .gu-content__bg {
     bottom: 0;
+    height: 580px;
     left: 0;
     position: absolute;
     width: 100%;
@@ -276,9 +282,12 @@ header[role="banner"] {
   }
   
   .gu-content__bg svg {
-    height: auto;
-    max-width: 1300px;
-    width: 100%;
+    bottom: 0;
+    height: 580px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,0);
+    width: 1300px;
   }
 
   .gu-content__main .svg-contributions-bg-mobile {
@@ -320,151 +329,162 @@ header[role="banner"] {
   }
 }
 
-// @supports(display: grid) {
-//   .gu-content {
-//     display: grid;
-//     grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
-//     grid-template-columns: 1fr;
-//   }
+@supports(display: grid) {
+  .gu-content {
+    display: grid;
+    grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
+    grid-template-columns: 1fr;
+  }
   
-//   header[role="banner"] {
-//     height: auto;
-//     grid-row: header-t / header-b;
-//   }
+  header[role="banner"] {
+    height: auto;
+    grid-row: header-t / header-b;
+  }
   
-//   footer[role="contentinfo"] {
-//     grid-row: footer-t / footer-b;
-//   }
+  footer[role="contentinfo"] {
+    grid-row: footer-t / footer-b;
+  }
   
-//   .gu-content__main {
-//     grid-row: header-b / footer-t;  
-//   }
+  .gu-content__main {
+    grid-row: header-b / footer-t;  
+  }
 
-//   header[role="banner"],
-//   footer[role="contentinfo"],
-//   .gu-content__main {
-//     display: grid;
-//   }
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .gu-content__main {
+    display: grid;
+  }
 
-//   .gu-content__bg {
-//     position: static;
-//   }
-
-//   @include mq($from: tablet) {
-//     .gu-content,
-//     header[role="banner"] {
-//       padding: 0;
-//       width: auto;
-//     }
-
-//     footer[role="contentinfo"] {
-//       padding: 0 0 ($gu-v-spacing * 2);
-//       width: auto;
-//     }
+  @include mq($from: mobile, $until: tablet) {
+    header[role="banner"] {
+      justify-content: flex-end;
+    }
     
-//     .gu-content__main,
-//     footer[role="contentinfo"] {
-//       grid-column-gap: $gu-h-spacing;
-//       grid-template-columns: 1fr repeat(8, 70px) 1fr;  
-//     }
+    .gu-content__bg {
+      grid-row: 1;
+    }
+
+    .gu-content__content {
+      grid-row: 2;
+    }
+  }
+
+  @include mq($from: tablet) {
+    .gu-content,
+    header[role="banner"] {
+      padding: 0;
+      width: auto;
+    }
+
+    footer[role="contentinfo"] {
+      padding: 0 0 ($gu-v-spacing * 2);
+      width: auto;
+    }
     
-//     header[role="banner"],
-//     footer[role="contentinfo"] {
-//       display: grid;
-//       grid-column: span 10;
-//     }
-
-//     .glogo {
-//       grid-column: 9;
-//     }
-
-//     .countryGroups {
-//       grid-column: 2 / 8;
-//       grid-row: 1;
-//     }
-
-//     .gu-content__content {
-//       margin: 0 -11px;
-//       grid-row: 1;
-//       grid-column: 2 / 6;
-//     }
-
-//     .component-footer__content {
-//       grid-column: 2 / 9;
-//     }
-
-//     .gu-content__bg {
-//       align-items: flex-end;
-//       display: flex;
-//       grid-column: 1 / 11;
-//       grid-row: 1;
-//       justify-content: center;
-//     }
-//   }
-
-//   @include mq($from: leftCol) {
-//     .gu-content__main,
-//     header[role="banner"],
-//     footer[role="contentinfo"] {
-//       grid-column-gap: $gu-h-spacing;
-//       grid-template-columns: 1fr repeat(14, 60px) 1fr;  
-//       width: auto;
-//     }
+    .gu-content__main,
+    footer[role="contentinfo"] {
+      grid-column-gap: $gu-h-spacing;
+      grid-template-columns: 1fr repeat(8, 70px) 1fr;  
+    }
     
-//     header[role="banner"],
-//     footer[role="contentinfo"] {
-//       grid-column: span 16;
-//     }
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      display: grid;
+      grid-column: span 10;
+    }
 
-//     .glogo {
-//       grid-column: 14;
-//       justify-self: flex-end;
-//     }
+    .glogo {
+      grid-column: 9;
+    }
 
-//     .gu-content__content {
-//       width: auto;
-//       grid-column: 4 / 8;
-//     }
+    .countryGroups {
+      grid-column: 2 / 8;
+      grid-row: 1;
+    }
 
-//     .component-footer__content {
-//       grid-column: 2 / 11;
-//     }
+    .gu-content__content {
+      margin: 0 -11px;
+      grid-row: 1;
+      grid-column: 2 / 6;
+    }
 
-//     .gu-content__bg {
-//       grid-column: 1 / 17;
-//     }
-//   }  
+    .component-footer__content {
+      grid-column: 2 / 9;
+    }
 
-//   @include mq($from: wide) {
-//     .gu-content__main,
-//     header[role="banner"],
-//     footer[role="contentinfo"] {
-//       grid-column-gap: $gu-h-spacing;
-//       grid-template-columns: 1fr repeat(16, 60px) 1fr;  
-//     }  
+    .gu-content__bg {
+      align-items: flex-end;
+      display: flex;
+      grid-column: 1 / 11;
+      grid-row: 1;
+      justify-content: center;
+    }
+  }
 
-//     .glogo {
-//       grid-column: 16;
-//     }
+  @include mq($from: leftCol) {
+    .gu-content__main,
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column-gap: $gu-h-spacing;
+      grid-template-columns: 1fr repeat(14, 60px) 1fr;  
+      width: auto;
+    }
+    
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column: span 16;
+    }
 
-//     header[role="banner"],
-//     footer[role="contentinfo"] {
-//         grid-column: span 18;
-//     }
+    .glogo {
+      grid-column: 14;
+      justify-self: flex-end;
+    }
 
-//     .gu-content__content {
-//       grid-column: 5 / 9;
-//     }
+    .gu-content__content {
+      width: auto;
+      grid-column: 4 / 8;
+    }
 
-//     .component-footer__content {
-//       grid-column: 2 / 12;
-//     }
+    .component-footer__content {
+      grid-column: 2 / 11;
+    }
 
-//     .gu-content__bg {
-//       grid-column: 1 / 19;
-//     }
-//   }
-// }
+    .gu-content__bg {
+      grid-column: 1 / 17;
+    }
+  }  
+
+  @include mq($from: wide) {
+    .gu-content__main,
+    header[role="banner"],
+    footer[role="contentinfo"] {
+      grid-column-gap: $gu-h-spacing;
+      grid-template-columns: 1fr repeat(16, 60px) 1fr;  
+    }  
+
+    .glogo {
+      grid-column: 16;
+    }
+
+    header[role="banner"],
+    footer[role="contentinfo"] {
+        grid-column: span 18;
+    }
+
+    .gu-content__content {
+      grid-column: 5 / 9;
+    }
+
+    .component-footer__content {
+      grid-column: 2 / 12;
+    }
+
+    .gu-content__bg {
+      grid-column: 1 / 19;
+    }
+  }
+}
+
 /*= CONTENT */
 .content {
   background: gu-colour(garnett-neutral-5);
@@ -860,4 +880,58 @@ form {
 .svg-newsletters {
   display: block;
   margin: ($gu-v-spacing * 2) -10px 0;
+}
+
+/*= Positioning background circles */
+.gu-content__bg .component-grid-image {
+  border-radius: 100%;
+  object-fit: cover;
+  position: absolute;
+  left: 50%;
+}
+
+@include mq($from: mobile, $until: tablet) {
+  .component-grid-image--circle-a {
+    bottom: 0px;
+    height: 123px;
+    transform: translate(-162px, 0);
+    width: 123px;
+  }
+
+  .component-grid-image--circle-b {
+    bottom: 0px;
+    height: 70px;
+    transform: translate(-20px, 0);
+    width: 70px;
+  }
+
+  .component-grid-image--circle-c {
+    bottom: 0px;
+    height: 178px;
+    transform: translate(39px, 0);
+    width: 178px;
+  }
+}  
+
+@include mq($from: tablet) {
+  .component-grid-image--circle-a {
+    bottom: 0;
+    height: 450px;
+    transform: translate(-78px,0);
+    width: 450px;
+  }
+  
+  .component-grid-image--circle-b {
+    bottom: 359px;
+    height: 250px;
+    transform: translate(258px,0);
+    width: 250px;
+  }
+  
+  .component-grid-image--circle-c {
+    bottom: 0px;
+    height: 280px;
+    transform: translate(-692px,0);
+    width: 290px;
+  }
 }
