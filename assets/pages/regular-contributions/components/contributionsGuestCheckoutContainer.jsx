@@ -56,16 +56,18 @@ function mapStateToProps(state: State) {
 
 const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
   dispatch,
-  onBackClick: () => { dispatch(setStage('checkout')) },
+  onBackClick: () => {
+    dispatch(setStage('checkout'));
+  },
 });
 
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
 
   return {
+    ...ownProps,
     ...stateProps,
     ...dispatchProps,
-    ...ownProps,
     onNextButtonClick:
       () => submitYourDetailsForm(
         dispatchProps.dispatch,
