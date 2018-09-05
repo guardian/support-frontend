@@ -20,7 +20,7 @@ type PropTypes = {
 };
 
 const mapStateToProps: State => PropTypes = () => ({
-  paymentMethod: 'PayPal',
+  paymentMethod: state.page.paymentMethod,
 });
 
 // ----- Render ----- //
