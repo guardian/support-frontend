@@ -103,18 +103,18 @@ class Application(
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     request.user.fold {
-      Future.successful(Ok(newContributionsForm(countryCode, None)))
+      Future.successful(Ok(newContributions(countryCode, None)))
     } { minimalUser =>
       {
         identityService.getUser(minimalUser).fold(
-          _ => Ok(newContributionsForm(countryCode, None)),
-          user => Ok(newContributionsForm(countryCode, Some(user)))
+          _ => Ok(newContributions(countryCode, None)),
+          user => Ok(newContributions(countryCode, Some(user)))
         )
       }
     }
   }
 
-  private def newContributionsForm(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
+  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
     views.html.oneOffContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -126,16 +126,6 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
-
-  def newContributionsThankyou(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.main(
-      title = "Support the Guardian | Thank you for your contribution",
-      description = None,
-      mainId = s"new-contributions-thank-you-page-$countryCode",
-      mainJsBundle = "newThankYouPage.js",
-      mainStyleBundle = "newContributionsLandingPageStyles.css"
-    ))
-  }
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(title, id, js, css))
