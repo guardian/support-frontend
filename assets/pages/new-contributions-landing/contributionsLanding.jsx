@@ -62,6 +62,7 @@ const router = (
                 countryGroupId={countryGroupId}
                 currency={currency}
                 selectedCountryGroupDetails={selectedCountryGroupDetails}
+                thankYouRoute={`/${countryGroupId}/thankyou.new`}
               />
               <NewContributionBackground />
             </Page>

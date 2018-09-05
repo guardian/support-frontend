@@ -43,6 +43,7 @@ type PropTypes = {|
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
+  thankYouRoute: string,
   onSuccess: () => void,
   onError: string => void,
 |};
@@ -88,41 +89,34 @@ const onSubmit = (e) => {
 
 // ----- Render ----- //
 
-function ContributionForm(props: PropTypes) {
+function setupStripe(formElement, props) {
   const {
     abParticipations,
-    countryGroupId,
-    selectedCountryGroupDetails,
+    currency,
     referrerAcquisitionData,
     optimizeExperiments,
-    currency,
+    thankYouRoute,
   } = props;
-
-  let formElement = null;
-
-  const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`;
 
   const callback = createTokenCallback({
     abParticipations,
     currencyId: currency,
     referrerAcquisitionData,
     optimizeExperiments,
-    getData: () => { // eslint-disable-line consistent-return
-      if (formElement) {
-        const elements: any = formElement.elements; // eslint-disable-line prefer-destructuring
-        const firstName = elements.contributionFirstName.value;
-        const lastName = elements.contributionLastName.value;
-        const email = elements.contributionEmail.value;
-        const amount = getAmount(elements);
+    getData: () => {
+      const elements: any = formElement.elements; // eslint-disable-line prefer-destructuring
+      const firstName = elements.contributionFirstName.value;
+      const lastName = elements.contributionLastName.value;
+      const email = elements.contributionEmail.value;
+      const amount = getAmount(elements);
 
-        return {
-          user: {
-            fullName: `${firstName} ${lastName}`,
-            email,
-          },
-          amount,
-        };
-      }
+      return {
+        user: {
+          fullName: `${firstName} ${lastName}`,
+          email,
+        },
+        amount,
+      };
     },
     onSuccess: () => {
       trackConversion(abParticipations, thankYouRoute);
@@ -132,6 +126,15 @@ function ContributionForm(props: PropTypes) {
   });
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
+}
+
+function ContributionForm(props: PropTypes) {
+  const {
+    countryGroupId,
+    selectedCountryGroupDetails,
+    currency,
+    thankYouRoute
+  } = props;
 
   return props.done ?
     <Redirect to={thankYouRoute} />
@@ -140,7 +143,11 @@ function ContributionForm(props: PropTypes) {
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <ErrorMessage message={props.error} />
-        <form ref={(el) => { if (el) { formElement = el; } }} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
+        <form ref={el => { 
+          if (el) { 
+            setupStripe(el, props);
+          } 
+        }} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
           <NewContributionType />
           <NewContributionAmount
             countryGroupId={countryGroupId}
