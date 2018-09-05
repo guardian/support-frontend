@@ -13,11 +13,12 @@ import YourContribution from 'components/yourContribution/yourContribution';
 import YourDetails from 'components/yourDetails/yourDetails';
 import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
-
+import CtaLink from 'components/ctaLink/ctaLink';
+import SvgArrowLeftStraight from 'components/svgs/arrowLeftStraight';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
-
+import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
 
 // ----- Types ----- //
 
@@ -25,15 +26,62 @@ type PropTypes = {
   amount: number,
   currencyId: IsoCurrency,
   contributionType: ContributionType,
-  name: string,
+  displayName: string,
   isSignedIn: boolean,
   form: Node,
   payment: Node,
+  onNextButtonClick: () => void,
+  onBackClick: () => void,
+  stage: Stage,
 };
 
 // ----- Component ----- //
 
+
 export default function ContributionsCheckout(props: PropTypes) {
+
+  const checkoutStage = () => {
+    switch (props.stage) {
+
+      case 'payment':
+        return (
+          <PageSection heading="Payment methods" modifierClass="payment-methods">
+            {props.payment}
+            <CtaLink
+              text="Back"
+              accessibilityHint="back"
+              id="qa-back-button"
+              onClick={props.onBackClick}
+              svg={<SvgArrowLeftStraight />}
+              modifierClasses={['form-navigation', 'back']}
+            />
+          </PageSection>
+        );
+
+      case 'checkout':
+      default:
+        return (
+          <YourDetails
+            name={props.displayName}
+            isSignedIn={props.isSignedIn}
+          >
+            <div>
+              {props.form}
+              <CtaLink
+                text="Continue"
+                accessibilityHint="Continue"
+                id="qa-contribute-button"
+                onClick={props.onNextButtonClick}
+                modifierClasses={['form-navigation', 'continue']}
+              />
+            </div>
+          </YourDetails>
+        );
+
+
+    }
+  };
+
 
   return (
     <div className="component-contributions-checkout">
@@ -47,18 +95,13 @@ export default function ContributionsCheckout(props: PropTypes) {
         />
         <YourContribution
           contributionType={props.contributionType}
+          country={props.country}
           amount={props.amount}
           currencyId={props.currencyId}
         />
-        <YourDetails name={props.name} isSignedIn={props.isSignedIn}>
-          {props.form}
-        </YourDetails>
-        <PageSection heading="Payment methods" modifierClass="payment-methods">
-          {props.payment}
-        </PageSection>
+        {checkoutStage()}
         <LegalSectionContainer />
       </Page>
     </div>
   );
-
 }

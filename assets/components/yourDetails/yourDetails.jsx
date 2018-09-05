@@ -25,9 +25,6 @@ function YourDetails(props: PropTypes) {
       <PageSection heading="Your details" headingChildren={<Signout />}>
         <DisplayName name={props.name} isSignedIn={props.isSignedIn} />
         {props.children}
-        <p className="component-your-details__info">
-          <small>All fields are required.</small>
-        </p>
       </PageSection>
     </div>
   );

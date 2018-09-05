@@ -135,6 +135,30 @@
   .component-payment-error--paypal-express {
     margin-top: $gu-v-spacing;
   }
+
+  .component-cta-link--continue {
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    width: 100%;
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-cta-link--back {
+    margin-top: $gu-v-spacing * 2;
+    height: 42px;
+    display: inline-block;
+
+    .svg-arrow-left-straight {
+      position: absolute;
+      left: $gu-v-spacing;
+    }
+
+    .component-cta-link__text {
+      margin-left: $gu-v-spacing * 2;
+    }
+  }
 }
 
 .regular-contribution-payment__or-label {

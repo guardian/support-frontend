@@ -16,7 +16,7 @@ import type { PaymentMethod } from 'helpers/checkouts';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { checkoutFormReducer as checkoutForm, type RegularContributionsCheckoutFormState } from './components/contributionsCheckoutContainer/checkoutFormReducer';
+import { checkoutFormReducer as checkoutForm, type RegularContributionsCheckoutFormState } from './helpers/checkoutForm/checkoutFormReducer';
 import type { Action } from './regularContributionsActions';
 import type { PaymentStatus } from './components/regularContributionsPayment';
 

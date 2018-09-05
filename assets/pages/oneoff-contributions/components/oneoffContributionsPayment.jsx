@@ -16,10 +16,10 @@ import type { Status } from 'helpers/switch';
 
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
-import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
-import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
+import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
+import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
+import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type PageState as State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
