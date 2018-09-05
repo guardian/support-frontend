@@ -154,10 +154,11 @@
     color: gu-colour(garnett-neutral-1);
     border: 1px solid gu-colour(neutral-4);
     display: inline-block;
-    .svg-arrow-left-straight {
+    .svg-arrow-right-straight {
       fill: gu-colour(garnett-neutral-1);
       position: absolute;
       left: $gu-v-spacing;
+      transform: rotate(180deg);
     }
 
     .component-cta-link__text {

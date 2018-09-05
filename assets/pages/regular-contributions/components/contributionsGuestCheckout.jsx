@@ -14,7 +14,6 @@ import YourDetails from 'components/yourDetails/yourDetails';
 import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import CtaLink from 'components/ctaLink/ctaLink';
-import SvgArrowLeftStraight from 'components/svgs/arrowLeftStraight';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
@@ -52,7 +51,6 @@ export default function ContributionsCheckout(props: PropTypes) {
               accessibilityHint="back"
               id="qa-back-button"
               onClick={props.onBackClick}
-              svg={<SvgArrowLeftStraight />}
               modifierClasses={['form-navigation', 'back']}
             />
           </PageSection>
