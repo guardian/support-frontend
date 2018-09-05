@@ -10,6 +10,7 @@ export type Action =
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SELECT_AMOUNT', amount: Amount }
   | { type: 'SELECT_OTHER_AMOUNT' }
+  | { type: 'PAYMENT_FAILURE' }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib): Action =>
@@ -24,10 +25,13 @@ const selectOtherAmount = (): Action => ({ type: 'SELECT_OTHER_AMOUNT' });
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
+const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
+
 export {
   updateContributionType,
   updatePaymentMethod,
   selectAmount,
   selectOtherAmount,
+  paymentFailure,
   paymentSuccess,
 };

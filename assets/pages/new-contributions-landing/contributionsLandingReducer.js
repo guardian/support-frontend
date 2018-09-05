@@ -61,6 +61,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'SELECT_OTHER_AMOUNT':
         return { ...state, amount: null, showOtherAmount: true };
 
+      case 'PAYMENT_FAILURE':
+        return { ...state, done: false, error: action.error };
+
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };
 

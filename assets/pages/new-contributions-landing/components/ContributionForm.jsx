@@ -15,6 +15,7 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox, createTokenCallback } from 'helpers/paymentIntegrations/stripeCheckout';
 
+import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 
@@ -26,12 +27,13 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentSuccess } from '../contributionsLandingActions';
+import { type Action, paymentSuccess, paymentFailure } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   done: boolean,
+  error: ?string,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -123,9 +125,7 @@ function ContributionForm(props: PropTypes) {
       trackConversion(abParticipations, thankYouRoute);
       props.redirect();
     },
-    onError: (error) => {
-      console.error(`payment failed with ${error}`);
-    },
+    onError: paymentFailure,
   });
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
@@ -136,6 +136,7 @@ function ContributionForm(props: PropTypes) {
     <div className="gu-content__content">
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
+      <ErrorMessage message={props.error} />
       <form ref={(el) => { if (el) { formElement = el; }}} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
         <NewContributionType />
         <NewContributionAmount
