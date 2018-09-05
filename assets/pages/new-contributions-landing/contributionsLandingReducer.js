@@ -18,6 +18,7 @@ type FormState = {
   paymentMethod: PaymentMethod,
   amount: Amount | null,
   showOtherAmount: boolean,
+  done: boolean,
 };
 
 type PageState = {
@@ -40,6 +41,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentMethod: 'PayPal',
     amount: amounts('notintest').ONE_OFF[countryGroupId][0],
     showOtherAmount: false,
+    done: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {

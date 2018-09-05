@@ -50,6 +50,7 @@ type PropTypes = {|
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
+  done: state.page.form.done,
   isTestUser: state.page.user.isTestUser || false,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
@@ -57,7 +58,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  onSuccess: () => { dispatch(paymentSuccess()); },
+  onSuccess: () => { console.log('successss'); dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
 });
 
@@ -189,7 +190,6 @@ function ContributionForm(props: PropTypes) {
 }
 
 ContributionForm.defaultProps = {
-  done: false,
   error: null,
 };
 
