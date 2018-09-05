@@ -48,7 +48,7 @@ export default function ContributionsCheckout(props: PropTypes) {
           <PageSection heading="Payment methods" modifierClass="payment-methods">
             {props.payment}
             <CtaLink
-              text="Back"
+              text="Back to your details"
               accessibilityHint="back"
               id="qa-back-button"
               onClick={props.onBackClick}
@@ -68,8 +68,8 @@ export default function ContributionsCheckout(props: PropTypes) {
             <div>
               {props.form}
               <CtaLink
-                text="Continue"
-                accessibilityHint="Continue"
+                text="Continue to payment"
+                accessibilityHint="Continue to payment"
                 id="qa-contribute-button"
                 onClick={props.onNextButtonClick}
                 modifierClasses={['form-navigation', 'continue']}

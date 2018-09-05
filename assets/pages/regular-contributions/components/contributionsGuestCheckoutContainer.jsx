@@ -19,10 +19,10 @@ import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutF
 
 // ----- Functions ----- //
 
-const setShouldValidateFunctions = (dispatch: Dispatch<CheckoutAction>) => [
-  () => dispatch(setFirstNameShouldValidate()),
-  () => dispatch(setLastNameShouldValidate()),
-  () => dispatch(setEmailShouldValidate()),
+const setShouldValidateFunctions = [
+  setFirstNameShouldValidate,
+  setLastNameShouldValidate,
+  setEmailShouldValidate,
 ];
 
 const submitYourDetailsForm = (dispatch: Dispatch<CheckoutAction>, formFields: Array<UserFormFieldAttribute>) => {
@@ -30,7 +30,7 @@ const submitYourDetailsForm = (dispatch: Dispatch<CheckoutAction>, formFields: A
   if (formIsValid) {
     dispatch(setStage('payment'));
   } else {
-    setShouldValidateFunctions(dispatch).forEach(f => f());
+    setShouldValidateFunctions.forEach(f => dispatch(f()));
   }
 };
 
