@@ -83,10 +83,10 @@ const router = (
                 <NewContributionThanks
                   countryGroupId={countryGroupId}
                   currency={currency}
-                  />
+                />
                 <NewContributionBackground />
               </Page>
-            )
+            );
           }}
         />
       </div>

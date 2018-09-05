@@ -10,7 +10,7 @@ import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 
 // ----- Render ----- //
 
-function NewContributionBackground(props: PropTypes) {
+function NewContributionBackground() {
   return (
     <div className="gu-content__bg">
       <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />

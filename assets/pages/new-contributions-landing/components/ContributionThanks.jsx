@@ -9,11 +9,12 @@ import { type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { formatAmount } from './ContributionAmount';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgNewsletters from 'components/svgs/newsletters';
+
+import { formatAmount } from './ContributionAmount';
 
 // ----- Types ----- //
 
@@ -22,7 +23,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  amount: Amount | null,
+  amount: Amount,
 };
 /* eslint-enable react/no-unused-prop-types */
 

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
@@ -14,6 +15,7 @@ import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox, createTokenCallback } from 'helpers/paymentIntegrations/stripeCheckout';
+import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -33,16 +35,16 @@ import { type Action, paymentSuccess, paymentFailure } from '../contributionsLan
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   done: boolean,
-  error: ?string,
+  error: string | null,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   selectedCountryGroupDetails: CountryMetaData,
   abParticipations: Participations,
-  dispatch: Dispatch<Action>,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
-  redirect: () => void,
+  onSuccess: () => void,
+  onError: string => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -55,7 +57,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSuccess: () => { dispatch(paymentSuccess()); },
-  onError: error => { dispatch(paymentFailure(error)); },
+  onError: (error) => { dispatch(paymentFailure(error)); },
 });
 
 // ----- Functions ----- //
@@ -98,16 +100,16 @@ function ContributionForm(props: PropTypes) {
 
   let formElement = null;
 
-  const thankyouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`;
+  const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`;
 
   const callback = createTokenCallback({
     abParticipations,
     currencyId: currency,
     referrerAcquisitionData,
     optimizeExperiments,
-    getData: () => {
+    getData: () => { // eslint-disable-line consistent-return
       if (formElement) {
-        const elements: any = formElement.elements;
+        const elements: any = formElement.elements; // eslint-disable-line prefer-destructuring
         const firstName = elements.contributionFirstName.value;
         const lastName = elements.contributionLastName.value;
         const email = elements.contributionEmail.value;
@@ -131,41 +133,42 @@ function ContributionForm(props: PropTypes) {
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
 
-  return props.done ? 
+  return props.done ?
     <Redirect to={thankYouRoute} />
-  : ( 
-    <div className="gu-content__content">
-      <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
-      <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-      <ErrorMessage message={props.error} />
-      <form ref={(el) => { if (el) { formElement = el; }}} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
-        <NewContributionType />
-        <NewContributionAmount
-          countryGroupId={countryGroupId}
-          countryGroupDetails={selectedCountryGroupDetails}
-          currency={currency}
-        />
-        <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
-        <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
-        <NewContributionTextInput
-          id="contributionEmail"
-          name="contribution-email"
-          label="Email address"
-          type="email"
-          placeholder="example@domain.com"
-          icon={<SvgEnvelope />}
-          required
-        />
-        <NewContributionState countryGroupId={countryGroupId} />
-        <NewContributionPayment />
-        <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
-      </form>
-    </div>
-  );
+    : (
+      <div className="gu-content__content">
+        <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
+        <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
+        <ErrorMessage message={props.error} />
+        <form ref={(el) => { if (el) { formElement = el; } }} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
+          <NewContributionType />
+          <NewContributionAmount
+            countryGroupId={countryGroupId}
+            countryGroupDetails={selectedCountryGroupDetails}
+            currency={currency}
+          />
+          <NewContributionTextInput id="contributionFirstName" name="contribution-fname" label="First Name" icon={<SvgUser />} required />
+          <NewContributionTextInput id="contributionLastName" name="contribution-lname" label="Last Name" icon={<SvgUser />} required />
+          <NewContributionTextInput
+            id="contributionEmail"
+            name="contribution-email"
+            label="Email address"
+            type="email"
+            placeholder="example@domain.com"
+            icon={<SvgEnvelope />}
+            required
+          />
+          <NewContributionState countryGroupId={countryGroupId} />
+          <NewContributionPayment />
+          <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
+        </form>
+      </div>
+    );
 }
 
 ContributionForm.defaultProps = {
-  done: false
+  done: false,
+  error: null,
 };
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
