@@ -132,9 +132,9 @@ function createTokenCallback({
   currencyId: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
-  getData: Function,
-  onSuccess: Function,
-  onError: Function,
+  getData: () => CheckoutData,
+  onSuccess: () => void,
+  onError: string => void,
 }): (string) => Promise<*> {
   return (paymentToken: string) => {
     const request = requestData(
