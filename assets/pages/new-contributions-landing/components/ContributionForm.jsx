@@ -80,7 +80,7 @@ const getAmount = (formElements: Object) =>
 const onSubmit = (e) => {
   e.preventDefault();
 
-  const { elements } = e.target;
+  const { elements } = (e.target: any);
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
 
@@ -105,7 +105,7 @@ function setupStripe(formElement, props) {
     referrerAcquisitionData,
     optimizeExperiments,
     getData: () => {
-      const elements: any = formElement.elements; // eslint-disable-line prefer-destructuring
+      const { elements } = (formElement.elements: any);
       const firstName = elements.contributionFirstName.value;
       const lastName = elements.contributionLastName.value;
       const email = elements.contributionEmail.value;
