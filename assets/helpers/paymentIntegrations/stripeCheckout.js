@@ -20,8 +20,8 @@
 
 
 import { addQueryParamsToURL } from 'helpers/url';
-import { 
-  derivePaymentApiAcquisitionData, 
+import {
+  derivePaymentApiAcquisitionData,
   type ReferrerAcquisitionData,
   type PaymentAPIAcquisitionData,
 } from 'helpers/tracking/acquisitions';
@@ -61,6 +61,14 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type CheckoutData = {|
+  user: {
+    fullName: string,
+    email: string
+  },
+  amount: number,
+|};
+
 // ----- Functions ----- //
 
 function requestData(
@@ -69,7 +77,7 @@ function requestData(
   currency: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
-  getData: () => { user: { fullName: string, email: string }, amount: number },
+  getData: () => CheckoutData,
 ) {
   const { user, amount } = getData();
 
@@ -89,11 +97,6 @@ function requestData(
     body: JSON.stringify(oneOffContribFields),
     credentials: 'include',
   };
-
-  return Promise.resolve({
-    ok: false,
-    text: () => 'Failed to process payment - missing fields',
-  });
 }
 
 function postToEndpoint(request: Object, onSuccess: Function, onError: Function): Promise<*> {

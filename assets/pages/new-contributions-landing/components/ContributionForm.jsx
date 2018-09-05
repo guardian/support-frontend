@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -55,35 +55,37 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 
 // ----- Functions ----- //
 
-const getAmount = formElements =>
+const getAmount = (formElements: Object) =>
   parseFloat(formElements.contributionAmount.value === 'other'
-      ? formElements.contributionOther.value
-      : formElements.contributionAmount.value);
+    ? formElements.contributionOther.value
+    : formElements.contributionAmount.value);
 
 // ----- Event handlers ----- //
 
-const onSubmit = (props: PropTypes) => (e) => {
+let stripeReady = null;
+
+const onSubmit = (e) => {
   e.preventDefault();
 
   const { elements } = e.target;
   const amount = getAmount(elements);
-  const email = elements.contributionEmail.value;
+  const email = elements.namedItem('contributionEmail').value;
 
-  stripeReady.then(() => {
-    openDialogBox(amount, email);
-  });
+  if (stripeReady) {
+    stripeReady.then(() => {
+      openDialogBox(amount, email);
+    });
+  }
 };
 
 
 // ----- Render ----- //
 
-let stripeReady = null;
-
 function ContributionForm(props: PropTypes) {
-  const { 
-    abParticipations, 
-    countryGroupId, 
-    selectedCountryGroupDetails, 
+  const {
+    abParticipations,
+    countryGroupId,
+    selectedCountryGroupDetails,
     referrerAcquisitionData,
     optimizeExperiments,
     currency,
@@ -92,32 +94,34 @@ function ContributionForm(props: PropTypes) {
   let formElement = null;
 
   const callback = createTokenCallback({
-    abParticipations, 
-    currency, 
-    referrerAcquisitionData, 
+    abParticipations,
+    currencyId: currency,
+    referrerAcquisitionData,
     optimizeExperiments,
     getData: () => {
-      const elements = formElement.elements;
-      const firstName = elements.contributionFirstName.value;
-      const lastName = elements.contributionLastName.value;
-      const email = elements.contributionEmail.value;
-      const amount = getAmount(elements);
-        
-      return {
-        user: {
-          fullName: `${firstName} ${lastName}`,
-          email
-        },
-        amount
-      };
+      if (formElement) {
+        const elements: any = formElement.elements;
+        const firstName = elements.contributionFirstName.value;
+        const lastName = elements.contributionLastName.value;
+        const email = elements.contributionEmail.value;
+        const amount = getAmount(elements);
+
+        return {
+          user: {
+            fullName: `${firstName} ${lastName}`,
+            email,
+          },
+          amount,
+        };
+      }
     },
     onSuccess: () => {
-      trackConversion(abParticipations, routes.oneOffContribThankyou);
+      // trackConversion(abParticipations, routes.oneOffContribThankyou);
       console.log('payment successful');
     },
-    onError: error => {
+    onError: (error) => {
       console.error(`payment failed with ${error}`);
-    }
+    },
   });
 
   stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
@@ -126,7 +130,7 @@ function ContributionForm(props: PropTypes) {
     <div className="gu-content__content">
       <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
       <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-      <form ref={el => formElement = el} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit(props)}>
+      <form ref={(el) => { if (el) { formElement = el; }}} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
         <NewContributionType />
         <NewContributionAmount
           countryGroupId={countryGroupId}

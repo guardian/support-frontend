@@ -7,7 +7,7 @@ import { type PaymentMethod } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { createUserReducer, type UserState } from 'helpers/user/userReducer';
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 
@@ -38,36 +38,36 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
-    const initialState: FormState = {
-      contributionType: 'ONE_OFF',
-      paymentMethod: 'PayPal',
-      amount: amounts('notintest').ONE_OFF[countryGroupId][0],
-      showOtherAmount: false,
-    };
-  
-    return function formReducer(state: FormState = initialState, action: Action): FormState {
-      switch (action.type) {
-        case 'UPDATE_CONTRIBUTION_TYPE':
-          return {
-            ...state,
-            contributionType: action.contributionType,
-            amount: amounts('notintest')[action.contributionType][countryGroupId][0],
-            showOtherAmount: false,
-          };
-  
-        case 'UPDATE_PAYMENT_METHOD':
-          return { ...state, paymentMethod: action.paymentMethod };
-  
-        case 'SELECT_AMOUNT':
-          return { ...state, amount: action.amount, showOtherAmount: false };
-  
-        case 'SELECT_OTHER_AMOUNT':
-          return { ...state, amount: null, showOtherAmount: true };
-  
-        default:
-          return state;
-      }
-    };
+  const initialState: FormState = {
+    contributionType: 'ONE_OFF',
+    paymentMethod: 'PayPal',
+    amount: amounts('notintest').ONE_OFF[countryGroupId][0],
+    showOtherAmount: false,
+  };
+
+  return function formReducer(state: FormState = initialState, action: Action): FormState {
+    switch (action.type) {
+      case 'UPDATE_CONTRIBUTION_TYPE':
+        return {
+          ...state,
+          contributionType: action.contributionType,
+          amount: amounts('notintest')[action.contributionType][countryGroupId][0],
+          showOtherAmount: false,
+        };
+
+      case 'UPDATE_PAYMENT_METHOD':
+        return { ...state, paymentMethod: action.paymentMethod };
+
+      case 'SELECT_AMOUNT':
+        return { ...state, amount: action.amount, showOtherAmount: false };
+
+      case 'SELECT_OTHER_AMOUNT':
+        return { ...state, amount: null, showOtherAmount: true };
+
+      default:
+        return state;
+    }
+  };
 }
 
 function initReducer(countryGroupId: CountryGroupId) {
