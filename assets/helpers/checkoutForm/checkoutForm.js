@@ -1,7 +1,6 @@
 // @flow
 
 // ----- Imports ----- //
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 
 // Copied from

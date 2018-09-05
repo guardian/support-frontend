@@ -95,7 +95,6 @@ export default function ContributionsCheckout(props: PropTypes) {
         />
         <YourContribution
           contributionType={props.contributionType}
-          country={props.country}
           amount={props.amount}
           currencyId={props.currencyId}
         />
