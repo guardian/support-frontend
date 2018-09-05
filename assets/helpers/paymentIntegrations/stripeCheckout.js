@@ -61,6 +61,14 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type CheckoutData = {|
+  user: {
+    fullName: string,
+    email: string,
+  },
+  amount: number
+|};
+
 // ----- Functions ----- //
 
 function requestData(
@@ -69,7 +77,7 @@ function requestData(
   currency: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
-  getData: Function,
+  getData: () => CheckoutData,
 ) {
   const { user, amount } = getData();
 
