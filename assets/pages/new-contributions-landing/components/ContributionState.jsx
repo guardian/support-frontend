@@ -9,7 +9,6 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgGlobe from 'components/svgs/globe';
-import { type State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 type PropTypes = {
@@ -19,10 +18,10 @@ type PropTypes = {
 // ----- Render ----- //
 
 const renderState = ([stateValue, stateName]: [string, string]) => (
-  <option value="{stateValue}">{stateName}</option>
+  <option value={stateValue}>{stateName}</option>
 );
 
-const renderStatesField = (states) => (
+const renderStatesField = states => (
   <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
     <label className="form__label" htmlFor="contributionState">State</label>
     <span className="form__input-with-icon">

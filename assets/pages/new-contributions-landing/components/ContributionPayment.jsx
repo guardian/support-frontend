@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Dispatch } from 'redux';
 
 import { type PaymentMethod } from 'helpers/checkouts';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -13,12 +12,13 @@ import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updatePaymentMethod } from '../contributionsLandingActions';
+import { updatePaymentMethod } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
 type PropTypes = {
   paymentMethod: PaymentMethod,
+  updatePaymentMethod: PaymentMethod => void,
 };
 
 const mapStateToProps = (state: State) => ({
@@ -26,7 +26,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = {
-  updatePaymentMethod
+  updatePaymentMethod,
 };
 
 // ----- Render ----- //
