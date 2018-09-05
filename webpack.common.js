@@ -30,7 +30,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',
     newContributionsLandingPage: 'pages/new-contributions-landing/contributionsLanding.jsx',
     newContributionsLandingPageStyles: 'pages/new-contributions-landing/contributionsLanding.scss',
-    newThankYouPage: 'pages/new-thank-you/thankYou.jsx',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
     digitalSubscriptionLandingPageStyles: 'pages/digital-subscription-landing/digitalSubscriptionLanding.scss',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
