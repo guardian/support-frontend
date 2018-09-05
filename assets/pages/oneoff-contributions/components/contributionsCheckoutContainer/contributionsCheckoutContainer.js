@@ -15,7 +15,6 @@ function mapStateToProps(state: State) {
   return {
     amount: state.page.oneoffContrib.amount,
     currencyId: state.common.internationalisation.currencyId,
-    country: state.common.internationalisation.countryId,
     name: state.page.user.displayName,
     isSignedIn: state.page.user.isSignedIn,
   };

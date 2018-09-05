@@ -368,41 +368,6 @@ function errorMessage(
 
 }
 
-function getOneOffName(
-  countryGroupId: CountryGroupId,
-  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
-  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
-) {
-  let response = null;
-
-  const variant = oneOffSingleOneTimeTestVariant === 'notintest' ? usOneOffSingleOneTimeTestVariant : oneOffSingleOneTimeTestVariant;
-
-  switch (variant) {
-    case 'single':
-      response = 'Single';
-      break;
-    case 'once':
-      response = 'Just once';
-      break;
-    case 'oneTime':
-      response = 'One-time';
-      break;
-    case 'oneOff':
-      response = 'One-off';
-      break;
-    case 'control':
-    default:
-      response = countryGroupId === 'UnitedStates' ? 'One-time' : 'One-off';
-      break;
-  }
-
-  return response;
-}
-
-function getOneOffSpokenName(countryGroupId: CountryGroupId) {
-  return countryGroupId === 'UnitedStates' ? 'one time' : 'one off';
-}
-
 function getContributionTypeClassName(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
@@ -415,13 +380,10 @@ function getContributionTypeClassName(contributionType: Contrib): string {
 
 }
 
-function getSpokenType(
-  contributionType: Contrib,
-  countryGroupId: CountryGroupId,
-): string {
+function getSpokenType(contributionType: Contrib): string {
 
   if (contributionType === 'ONE_OFF') {
-    return getOneOffSpokenName(countryGroupId);
+    return 'single';
   } else if (contributionType === 'ANNUAL') {
     return 'annual';
   }
@@ -456,7 +418,7 @@ function getCustomAmountA11yHint(
 
   return `Enter an amount of ${config[countryGroupId][contributionType].minInWords}
     ${spokenCurrency} or more for your 
-    ${getSpokenType(contributionType, countryGroupId)} contribution.`;
+    ${getSpokenType(contributionType)} contribution.`;
 
 }
 
@@ -469,7 +431,7 @@ function getAmountA11yHint(
   const spokenCurrency = spokenCurrencies[currencyId].plural;
 
   if (contributionType === 'ONE_OFF') {
-    return `make a one-off contribution of ${spokenAmount} ${spokenCurrency}`;
+    return `make a single contribution of ${spokenAmount} ${spokenCurrency}`;
   } else if (contributionType === 'MONTHLY') {
     return `contribute ${spokenAmount} ${spokenCurrency} a month`;
   }
@@ -480,15 +442,13 @@ function getAmountA11yHint(
 
 function getContributionTypeRadios(
   countryGroupId: CountryGroupId,
-  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
-  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
   annualTestVariant: AnnualContributionsTestVariant,
 ) {
 
   const oneOff = {
     value: 'ONE_OFF',
-    text: getOneOffName(countryGroupId, oneOffSingleOneTimeTestVariant, usOneOffSingleOneTimeTestVariant),
-    accessibilityHint: `Make a ${getOneOffSpokenName(countryGroupId)} contribution`,
+    text: 'Single',
+    accessibilityHint: 'Make a single contribution',
     id: 'qa-one-off-toggle',
   };
   const monthly = {
@@ -535,8 +495,6 @@ export {
   getMinContribution,
   billingPeriodFromContrib,
   errorMessage,
-  getOneOffName,
-  getOneOffSpokenName,
   getContributionTypeClassName,
   getSpokenType,
   getFrequency,
