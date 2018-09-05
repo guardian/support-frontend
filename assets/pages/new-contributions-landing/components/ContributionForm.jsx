@@ -44,6 +44,9 @@ type PropTypes = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
   thankYouRoute: string,
+  initialFirstName: string,
+  initialLastName: string,
+  initialEmail: string,
   onSuccess: () => void,
   onError: string => void,
 |};
@@ -52,6 +55,9 @@ type PropTypes = {|
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
   isTestUser: state.page.user.isTestUser || false,
+  initialFirstName: state.page.user.firstName,
+  initialLastName: state.page.user.lastName,
+  initialEmail: state.page.user.email,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
   optimizeExperiments: state.common.optimizeExperiments,
@@ -135,6 +141,9 @@ function ContributionForm(props: PropTypes) {
     selectedCountryGroupDetails,
     currency,
     thankYouRoute,
+    initialFirstName,
+    initialLastName,
+    initialEmail,
   } = props;
 
   return props.done ?
@@ -163,7 +172,7 @@ function ContributionForm(props: PropTypes) {
             id="contributionFirstName"
             name="contribution-fname"
             label="First Name"
-            value={window.guardian.user && window.guardian.user.firstName ? window.guardian.user.firstName : null}
+            value={initialFirstName}
             icon={<SvgUser />}
             required
           />
@@ -171,7 +180,7 @@ function ContributionForm(props: PropTypes) {
             id="contributionLastName"
             name="contribution-lname"
             label="Last Name"
-            value={window.guardian.user && window.guardian.user.lastName ? window.guardian.user.lastName : null}
+            value={initialLastName}
             icon={<SvgUser />}
             required
           />
@@ -179,7 +188,7 @@ function ContributionForm(props: PropTypes) {
             id="contributionEmail"
             name="contribution-email"
             label="Email address"
-            value={window.guardian.user ? window.guardian.user.email : null}
+            value={initialEmail}
             type="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
