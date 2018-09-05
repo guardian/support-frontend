@@ -111,7 +111,7 @@ class Application(
   }
 
   private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
-    views.html.oneOffContributions(
+    views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
       js = "newContributionsLandingPage.js",
