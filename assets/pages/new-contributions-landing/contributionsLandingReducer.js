@@ -31,7 +31,7 @@ function initReducer(countryGroupId: CountryGroupId) {
 
   const initialState: PageState = {
     contributionType: 'ONE_OFF',
-    paymentMethod: 'PayPal',
+    paymentMethod: 'Stripe',
     amount: amounts('notintest').ONE_OFF[countryGroupId][0],
     showOtherAmount: false,
   };
