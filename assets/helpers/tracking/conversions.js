@@ -9,7 +9,7 @@ export default function trackConversion(
   participations: Participations,
   currentRoute: string,
 ) {
-  if (navigator.doNotTrack !== "1") {
+  if (navigator.doNotTrack !== '1') {
     // Fire GTM conversion events
     successfulConversion(participations);
   }

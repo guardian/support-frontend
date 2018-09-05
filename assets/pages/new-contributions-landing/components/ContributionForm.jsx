@@ -8,7 +8,7 @@ import { Redirect } from 'react-router';
 import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
-import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
@@ -134,7 +134,7 @@ function ContributionForm(props: PropTypes) {
     countryGroupId,
     selectedCountryGroupDetails,
     currency,
-    thankYouRoute
+    thankYouRoute,
   } = props;
 
   return props.done ?
@@ -144,38 +144,42 @@ function ContributionForm(props: PropTypes) {
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <ErrorMessage message={props.error} />
-        <form ref={el => { 
-          if (el) { 
+        <form
+          ref={(el) => {
+          if (el) {
             setupStripe(el, props);
-          } 
-        }} className={classNameWithModifiers('form', ['contribution'])} onSubmit={onSubmit}>
+          }
+        }}
+          className={classNameWithModifiers('form', ['contribution'])}
+          onSubmit={onSubmit}
+        >
           <NewContributionType />
           <NewContributionAmount
             countryGroupId={countryGroupId}
             countryGroupDetails={selectedCountryGroupDetails}
             currency={currency}
           />
-          <NewContributionTextInput 
-            id="contributionFirstName" 
-            name="contribution-fname" 
-            label="First Name" 
+          <NewContributionTextInput
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First Name"
             value={window.guardian.user && window.guardian.user.firstName ? window.guardian.user.firstName : null}
-            icon={<SvgUser />} 
-            required 
-            />
-          <NewContributionTextInput 
-            id="contributionLastName" 
-            name="contribution-lname" 
-            label="Last Name" 
+            icon={<SvgUser />}
+            required
+          />
+          <NewContributionTextInput
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last Name"
             value={window.guardian.user && window.guardian.user.lastName ? window.guardian.user.lastName : null}
-            icon={<SvgUser />} 
-            required 
-            />
+            icon={<SvgUser />}
+            required
+          />
           <NewContributionTextInput
             id="contributionEmail"
             name="contribution-email"
             label="Email address"
-            value={window.guardian.user ? window.guardian.user.email : null }
+            value={window.guardian.user ? window.guardian.user.email : null}
             type="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
