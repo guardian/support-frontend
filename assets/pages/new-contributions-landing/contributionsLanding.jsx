@@ -15,16 +15,13 @@ import { type IsoCurrency, detect as detectCurrency } from 'helpers/internationa
 import * as user from 'helpers/user/user';
 import { set as setCookie } from 'helpers/cookie';
 
-import GridImage from 'components/gridImage/gridImage';
-
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-import SvgContributionsBgMobile from 'components/svgs/contributionsBgMobile';
-import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 
 import { NewHeader } from 'components/headers/new-header/Header';
 import { NewContributionForm } from './components/ContributionForm';
 import { NewContributionThanks } from './components/ContributionThanks';
+import { NewContributionBackground } from './components/ContributionBackground';
 
 import { initReducer } from './contributionsLandingReducer';
 
@@ -66,13 +63,7 @@ const router = (
                 currency={currency}
                 selectedCountryGroupDetails={selectedCountryGroupDetails}
               />
-              <div className="gu-content__bg">
-                <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />
-                <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-b']} />
-                <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-c']} />
-                <SvgContributionsBgMobile />
-                <SvgContributionsBgDesktop />
-              </div>
+              <NewContributionBackground />
             </Page>
           )}
         />
@@ -93,13 +84,7 @@ const router = (
                   countryGroupId={countryGroupId}
                   currency={currency}
                   />
-                <div className="gu-content__bg">
-                  <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-a']} />
-                  <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-b']} />
-                  <GridImage gridId="newsroom" sizes="" srcSizes={[1000, 500, 140]} classModifiers={['circle-c']} />
-                  <SvgContributionsBgMobile />
-                  <SvgContributionsBgDesktop />
-                </div>
+                <NewContributionBackground />
               </Page>
             )
           }}
