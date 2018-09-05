@@ -64,7 +64,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  onSuccess: () => { console.log('successss'); dispatch(paymentSuccess()); },
+  onSuccess: () => { dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
 });
 
@@ -150,7 +150,9 @@ function ContributionForm(props: PropTypes) {
         <form
           ref={(el) => {
           if (el) {
-            setupStripe(el, props).then(() => el.onsubmit = onSubmit);
+            setupStripe(el, props).then(() => {
+              el.addEventListener('submit', onSubmit);
+            });
           }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
