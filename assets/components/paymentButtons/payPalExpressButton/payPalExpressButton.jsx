@@ -8,7 +8,7 @@ import React from 'react';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';

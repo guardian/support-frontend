@@ -162,7 +162,7 @@ function init<S, A>(
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
   const participations: Participations = abTest.init(countryId, countryGroupId);
-  const { settings: { switches } } = window.guardian;
+  const { settings } = window.guardian;
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
@@ -170,7 +170,7 @@ function init<S, A>(
     countryGroupId,
     countryId,
     currencyId,
-    switches,
+    settings,
   );
   const commonReducer = createCommonReducer(initialState);
 
