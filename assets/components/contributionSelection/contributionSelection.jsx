@@ -41,8 +41,6 @@ type PropTypes = {|
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
-  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
-  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
   annualTestVariant: AnnualContributionsTestVariant,
 |};
 
@@ -63,8 +61,6 @@ function ContributionSelection(props: PropTypes) {
           name="contribution-type-toggle"
           radios={getContributionTypeRadios(
             props.countryGroupId,
-            props.oneOffSingleOneTimeTestVariant,
-            props.usOneOffSingleOneTimeTestVariant,
             props.annualTestVariant,
           )}
           checked={props.contributionType}
