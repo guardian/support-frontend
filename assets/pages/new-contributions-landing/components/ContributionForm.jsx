@@ -77,8 +77,6 @@ const getAmount = (formElements: Object) =>
 
 // ----- Event handlers ----- //
 
-let stripeReady = null;
-
 const onSubmit = (e) => {
   e.preventDefault();
 
@@ -86,11 +84,7 @@ const onSubmit = (e) => {
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
 
-  if (stripeReady) {
-    stripeReady.then(() => {
-      openDialogBox(amount, email);
-    });
-  }
+  openDialogBox(amount, email);
 };
 
 
@@ -132,7 +126,7 @@ function setupStripe(formElement, props) {
     onError: props.onError,
   });
 
-  stripeReady = setupStripeCheckout(callback, null, currency, props.isTestUser);
+  return setupStripeCheckout(callback, null, currency, props.isTestUser);
 }
 
 function ContributionForm(props: PropTypes) {
@@ -156,11 +150,10 @@ function ContributionForm(props: PropTypes) {
         <form
           ref={(el) => {
           if (el) {
-            setupStripe(el, props);
+            setupStripe(el, props).then(() => el.onsubmit = onSubmit);
           }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
-          onSubmit={onSubmit}
         >
           <NewContributionType />
           <NewContributionAmount
