@@ -1,5 +1,6 @@
 // @flow
 
+import { doNotTrack} from 'helpers/page/page';
 import { getAbsoluteURL } from '../url';
 import { pageView } from './ophanComponentEventTracking';
 import { successfulConversion } from './googleTagManager';
@@ -9,7 +10,7 @@ export default function trackConversion(
   participations: Participations,
   currentRoute: string,
 ) {
-  if (navigator.doNotTrack !== '1') {
+  if (!doNotTrack()) {
     // Fire GTM conversion events
     successfulConversion(participations);
   }
