@@ -33,21 +33,6 @@ function ContributionPayment(props: PropTypes) {
       <ul className="form__radio-group-list">
         <li className="form__radio-group-item">
           <input
-            id="contributionPayment-paypal"
-            className="form__radio-group-input"
-            name="contributionPayment"
-            type="radio"
-            value="paypal"
-            checked={props.paymentMethod === 'PayPal'}
-          />
-          <label htmlFor="contributionPayment-paypal" className="form__radio-group-label">
-            <span className="radio-ui" />
-            <span className="radio-ui__label">PayPal</span>
-            <SvgPayPal />
-          </label>
-        </li>
-        <li className="form__radio-group-item">
-          <input
             id="contributionPayment-card"
             className="form__radio-group-input"
             name="contributionPayment"
@@ -59,6 +44,21 @@ function ContributionPayment(props: PropTypes) {
             <span className="radio-ui" />
             <span className="radio-ui__label">Credit/Debit Card</span>
             <SvgNewCreditCard />
+          </label>
+        </li>
+        <li className="form__radio-group-item">
+          <input
+            id="contributionPayment-paypal"
+            className="form__radio-group-input"
+            name="contributionPayment"
+            type="radio"
+            value="paypal"
+            checked={props.paymentMethod === 'PayPal'}
+          />
+          <label htmlFor="contributionPayment-paypal" className="form__radio-group-label">
+            <span className="radio-ui" />
+            <span className="radio-ui__label">PayPal</span>
+            <SvgPayPal />
           </label>
         </li>
       </ul>
