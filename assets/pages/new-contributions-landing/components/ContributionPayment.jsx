@@ -22,7 +22,7 @@ type PropTypes = {
 };
 
 const mapStateToProps = (state: State) => ({
-  paymentMethod: state.page.paymentMethod,
+  paymentMethod: state.page.form.paymentMethod,
 });
 
 const mapDispatchToProps = {
