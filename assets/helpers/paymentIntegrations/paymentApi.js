@@ -3,7 +3,6 @@
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
-  derivePaymentApiAcquisitionData,
   type ReferrerAcquisitionData,
   type PaymentAPIAcquisitionData,
   type OphanIds,
@@ -11,14 +10,11 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod, type Contrib } from 'helpers/contributions';
-import { type Participations } from 'helpers/abTests/abtest';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollP } from 'helpers/promise';
+import { pollP, logP } from 'helpers/promise';
 
 import * as cookie from 'helpers/cookie';
-import { logException } from 'helpers/logger';
 
 // ----- Setup ----- //
 

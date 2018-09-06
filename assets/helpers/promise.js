@@ -1,5 +1,7 @@
 // @flow
 
+import { logException } from 'helpers/logger';
+
 // Repeats a promise a maximum of `n` times, until it succeeds or bottoms out
 function repeatP<A>(n: number, p: () => Promise<A>): Promise<A> {
   return n === 0
@@ -20,8 +22,17 @@ function pollP<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => bo
   return repeatP(max, () => sleepP(sleep, () => p().then(a => pred(a) ? Promise.reject() : a)));
 }
 
+// Logs any error produced by the promise
+function logP<A>(p: Promise<A>): Promise<A> {
+  return p.catch(error => {
+    logException(error);
+    throw error;
+  })
+}
+
 export {
   repeatP,
   sleepP,
-  pollP
+  pollP,
+  logP
 }
