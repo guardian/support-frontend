@@ -19,7 +19,7 @@ type PropTypes = {
 };
 
 const mapStateToProps = (state: State) => ({
-  contributionType: state.page.contributionType,
+  contributionType: state.page.form.contributionType,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({

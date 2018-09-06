@@ -30,9 +30,9 @@ type PropTypes = {
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
-  contributionType: state.page.contributionType,
-  amount: state.page.amount,
-  showOther: state.page.showOtherAmount,
+  contributionType: state.page.form.contributionType,
+  amount: state.page.form.amount,
+  showOther: state.page.form.showOtherAmount,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
@@ -97,6 +97,7 @@ function ContributionAmount(props: PropTypes) {
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
               autoComplete="off"
+              required
             />
             <span className="form__icon">
               <SvgDollar />
@@ -110,7 +111,7 @@ function ContributionAmount(props: PropTypes) {
 
 ContributionAmount.defaultProps = {
   amount: null,
-  otherAmount: null,
+  showOther: false,
 };
 
 const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
