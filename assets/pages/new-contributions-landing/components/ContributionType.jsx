@@ -15,7 +15,7 @@ import { type Action, updateContributionType } from '../contributionsLandingActi
 
 type PropTypes = {
   contributionType: Contrib,
-  onSelectContributionType: Event => void,
+  onSelectContributionType: Event => Action,
 };
 
 const mapStateToProps = (state: State) => ({

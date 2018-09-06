@@ -34,6 +34,8 @@ const mapStateToProps = (state: State) =>
 
 
 function ContributionSubmit(props: PropTypes) {
+  const frequency = getFrequency(props.contributionType);
+
   return (
     <div className="form__submit">
       <button className="form__submit-button" type="submit">
@@ -43,8 +45,8 @@ function ContributionSubmit(props: PropTypes) {
           spokenCurrencies[props.currency],
           props.amount,
           false,
-        ) : null}
-        {getFrequency(props.contributionType)}&nbsp;
+        ) : null}&nbsp;
+        {frequency ? `${frequency} ` : null}
         {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
         <SvgArrowRight />
       </button>
