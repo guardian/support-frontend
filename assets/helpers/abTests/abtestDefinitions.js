@@ -38,31 +38,7 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-  usOneOffOneTimeSingle: {
-    variants: ['control', 'single', 'once', 'oneOff'],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 2,
-  },
-  annualContributionsRoundTwo: {
-    variants: ['control', 'annual', 'annualHigherAmounts'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-  },
-  recurringGuestCheckout: {
+  recurringGuestCheckoutRoundTwo: {
     variants: ['control', 'guest'],
     audiences: {
       ALL: {
@@ -70,7 +46,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
     seed: 4,
   },

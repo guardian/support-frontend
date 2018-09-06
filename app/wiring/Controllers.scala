@@ -13,6 +13,7 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
+    appConfig.oneOffStripeConfigProvider,
     paymentAPIService,
     stringsConfig,
     appConfig.settings

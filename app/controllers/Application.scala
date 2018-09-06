@@ -2,14 +2,18 @@ package controllers
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
+import cats.data.EitherT
+import cats.implicits._
 import com.gu.i18n.CountryGroup._
+import com.gu.support.config.StripeConfigProvider
+import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import admin.Settings
 import utils.BrowserCheck
 import utils.RequestCountry._
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import monitoring.SafeLogger
 
 class Application(
@@ -17,6 +21,7 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
+    stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settings: Settings
@@ -97,26 +102,26 @@ class Application(
     ))
   }
 
-  def newContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = s"new-contributions-landing-page-$countryCode",
-      mainJsBundle = "newContributionsLandingPage.js",
-      mainStyleBundle = "newContributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
+  def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    type Attempt[A] = EitherT[Future, String, A]
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+      _ => Ok(newContributions(countryCode, None)),
+      user => Ok(newContributions(countryCode, user))
+    )
   }
 
-  def newContributionsThankyou(countryCode: String): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.main(
-      title = "Support the Guardian | Thank you for your contribution",
-      description = None,
-      mainId = s"new-contributions-thank-you-page-$countryCode",
-      mainJsBundle = "newThankYouPage.js",
-      mainStyleBundle = "newContributionsLandingPageStyles.css"
-    ))
-  }
+  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
+    views.html.newContributions(
+      title = "Support the Guardian | Make a Contribution",
+      id = s"new-contributions-landing-page-$countryCode",
+      js = "newContributionsLandingPage.js",
+      css = "newContributionsLandingPageStyles.css",
+      defaultStripeConfig = stripeConfigProvider.get(false),
+      uatStripeConfig = stripeConfigProvider.get(true),
+      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      idUser = idUser
+    )
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     Ok(views.html.main(title, id, js, css))

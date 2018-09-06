@@ -12,7 +12,6 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import {
   getSpokenType,
-  getOneOffSpokenName,
   getFrequency,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -22,7 +21,6 @@ import { addQueryParamsToURL } from 'helpers/url';
 import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 import { type Status } from 'helpers/settings';
-import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -33,7 +31,6 @@ type PropTypes = {
   contributionType: ContributionType,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  country: IsoCountry,
   countryGroupId: CountryGroupId,
   currencyId: IsoCurrency,
   isDisabled: boolean,
@@ -102,14 +99,12 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 // Build the one-off payment button.
 function OneOffCta(props: {
   contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
   amount: number,
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
 }): Node {
 
-  const spokenType = getOneOffSpokenName(props.countryGroupId);
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
@@ -119,7 +114,7 @@ function OneOffCta(props: {
   return (
     <CtaLink
       text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} with card`}
-      accessibilityHint={`proceed to make your ${spokenType} contribution`}
+      accessibilityHint="proceed to make your single contribution"
       url={clickUrl}
       onClick={onCtaClick(props.isDisabled, props.resetError)}
       id="qa-contribute-button"
@@ -132,7 +127,6 @@ function OneOffCta(props: {
 // Build the regular payment button.
 function RegularCta(props: {
   contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
   amount: number,
   currencyId: IsoCurrency,
   isDisabled: boolean,
@@ -141,7 +135,7 @@ function RegularCta(props: {
 }): Node {
   const recurringRoute = props.isGuestCheckout ? routes.recurringContribCheckoutGuest : routes.recurringContribCheckout;
   const frequency = getFrequency(props.contributionType);
-  const spokenType = getSpokenType(props.contributionType, props.countryGroupId);
+  const spokenType = getSpokenType(props.contributionType);
   const clickUrl = addQueryParamsToURL(recurringRoute, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,

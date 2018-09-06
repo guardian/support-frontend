@@ -13,10 +13,13 @@ export type CheckoutFormAttribute = {
   pattern: RegExp,
 }
 
+export type Stage = 'checkout' | 'payment'
+
 export type RegularContributionsCheckoutFormState = {
   email: CheckoutFormAttribute,
   firstName: CheckoutFormAttribute,
   lastName: CheckoutFormAttribute,
+  stage: Stage,
 };
 
 // ----- Setup ----- //
@@ -37,6 +40,7 @@ const initialState: RegularContributionsCheckoutFormState = {
     required: true,
     pattern: /.*/,
   },
+  stage: 'checkout',
 };
 
 
@@ -56,6 +60,9 @@ function checkoutFormReducer(
 
     case 'SET_EMAIL_SHOULD_VALIDATE':
       return { ...state, email: { ...state.email, shouldValidate: true } };
+
+    case 'SET_STAGE':
+      return { ...state, stage: action.stage };
 
     default:
       return state;

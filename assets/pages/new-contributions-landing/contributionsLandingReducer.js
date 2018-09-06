@@ -2,20 +2,28 @@
 
 // ----- Imports ----- //
 
+import { combineReducers } from 'redux';
 import { type PaymentMethod } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 
 import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
-type PageState = {
+type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   amount: Amount | null,
   showOtherAmount: boolean,
+  done: boolean,
+};
+
+type PageState = {
+  form: FormState,
+  user: UserState,
 };
 
 export type State = {
@@ -27,16 +35,16 @@ export type State = {
 
 // ----- Functions ----- //
 
-function initReducer(countryGroupId: CountryGroupId) {
-
-  const initialState: PageState = {
+function createFormReducer(countryGroupId: CountryGroupId) {
+  const initialState: FormState = {
     contributionType: 'ONE_OFF',
     paymentMethod: 'PayPal',
     amount: amounts('notintest').ONE_OFF[countryGroupId][0],
     showOtherAmount: false,
+    done: false,
   };
 
-  return function reducer(state: PageState = initialState, action: Action): PageState {
+  return function formReducer(state: FormState = initialState, action: Action): FormState {
     switch (action.type) {
       case 'UPDATE_CONTRIBUTION_TYPE':
         return {
@@ -55,10 +63,24 @@ function initReducer(countryGroupId: CountryGroupId) {
       case 'SELECT_OTHER_AMOUNT':
         return { ...state, amount: null, showOtherAmount: true };
 
+      case 'PAYMENT_FAILURE':
+        return { ...state, done: false, error: action.error };
+
+      case 'PAYMENT_SUCCESS':
+        return { ...state, done: true };
+
       default:
         return state;
     }
   };
+}
+
+function initReducer(countryGroupId: CountryGroupId) {
+
+  return combineReducers({
+    form: createFormReducer(countryGroupId),
+    user: createUserReducer(countryGroupId),
+  });
 }
 
 

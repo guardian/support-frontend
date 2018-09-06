@@ -43,7 +43,7 @@ class OneOffContributions(
 
   private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader) =
     oneOffContributions(
-      title = "Support the Guardian | One-off Contribution",
+      title = "Support the Guardian | Single Contribution",
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       css = "oneoffContributionsPageStyles.css",
