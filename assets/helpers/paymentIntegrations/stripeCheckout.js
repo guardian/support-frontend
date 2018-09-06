@@ -18,8 +18,6 @@
  * and only contribution endpoint.
  */
 
-
-import { addQueryParamsToURL } from 'helpers/url';
 import {
   derivePaymentApiAcquisitionData,
   type ReferrerAcquisitionData,
@@ -28,57 +26,9 @@ import {
 import { type Participations } from 'helpers/abTests/abtest';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
-
-import * as cookie from 'helpers/cookie';
-import { logException } from 'helpers/logger';
-
-import { createPaymentCallback, type PaymentCallback, type PaymentResult } from './paymentApi';
-
-// ----- Setup ----- //
-
-let stripeHandler = null;
-
-// ----- Types ----- //
-
-type PaymentApiStripeExecutePaymentBody = {|
-  paymentData: {
-    currency: IsoCurrency,
-    amount: number,
-    token: string,
-    email: string
-  },
-  acquisitionData: PaymentAPIAcquisitionData,
-|};
-
-type CheckoutData = {|
-  user: {
-    fullName: string,
-    email: string,
-  },
-  amount: number
-|};
+import { type PaymentCallback, type PaymentResult } from './paymentApi';
 
 // ----- Functions ----- //
-
-// function requestData(
-//   abParticipations: Participations,
-//   paymentToken: string,
-//   currency: IsoCurrency,
-//   referrerAcquisitionData: ReferrerAcquisitionData,
-//   optimizeExperiments: OptimizeExperiments,
-//   getData: () => CheckoutData,
-// ) {
-//   const { user, amount } = getData();
-
-//   const oneOffContribFields: PaymentApiStripeExecutePaymentBody = {
-//     paymentData: {
-//       currency,
-//       amount,
-//       token: paymentToken,
-//       email: user.email,
-//     },
-//     acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
-//   };
 
 function loadStripe(): Promise<void> {
   if (!window.StripeCheckout) {
