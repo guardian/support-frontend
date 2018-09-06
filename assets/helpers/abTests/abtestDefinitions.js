@@ -6,37 +6,17 @@ import type { Tests } from './abtest';
 export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
 
 export const tests: Tests = {
-  oneOffOneTimeSingle: {
-    variants: ['control', 'single', 'once', 'oneTime'],
+  annualContributionsRoundTwo: {
+    variants: ['control', 'annual', 'annualHigherAmounts'],
     audiences: {
-      GBPCountries: {
-        offset: 0,
-        size: 1,
-      },
-      AUDCountries: {
-        offset: 0,
-        size: 1,
-      },
-      Canada: {
-        offset: 0,
-        size: 1,
-      },
-      NZDCountries: {
-        offset: 0,
-        size: 1,
-      },
-      International: {
-        offset: 0,
-        size: 1,
-      },
-      EURCountries: {
+      ALL: {
         offset: 0,
         size: 1,
       },
     },
     isActive: true,
     independent: true,
-    seed: 0,
+    seed: 3,
   },
   recurringGuestCheckoutRoundTwo: {
     variants: ['control', 'guest'],
