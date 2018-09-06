@@ -110,8 +110,8 @@ function requestPaymentApi(endpoint: string, init: Object) {
   );
 }
 
-function stripeOneOffContributionEndpoint(testUser: ?string) {
-  if (testUser) {
+function getOneOffStripeEndpoint() {
+  if (cookie.get('_test_username')) {
     return addQueryParamsToURL(
       ONEOFF_CONTRIB_ENDPOINT,
       { mode: 'test' },
@@ -123,7 +123,7 @@ function stripeOneOffContributionEndpoint(testUser: ?string) {
 
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return requestPaymentApi(
-    stripeOneOffContributionEndpoint(cookie.get('_test_username')),
+    getOneOffStripeEndpoint(),
     createRequestOptions('POST', data, 'include', null)
   ).then(json => {
     if (json.error) {
