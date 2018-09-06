@@ -90,7 +90,7 @@ const onSubmit = (e) => {
 
 // ----- Render ----- //
 
-function setupStripe(formElement, props) {
+function setupStripe(formElement: Object, props: PropTypes) {
   const {
     abParticipations,
     currency,
