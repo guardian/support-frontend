@@ -1,19 +1,24 @@
 // @flow
 
 // Repeats a promise a maximum of `n` times, until it succeeds or bottoms out
-const repeatP: <A>(number, () => Promise<A>) => Promise<A> = (n, p) => n === 0
-  ? Promise.reject(void)
-  : p().catch(() => repeat(n - 1, p));
+function repeatP<A>(n: number, p: () => Promise<A>): Promise<A> {
+  return n === 0
+    ? Promise.reject(null)
+    : p().catch(() => repeatP(n - 1, p));
+}
 
 // Runs a promise `i` milliseconds in the future
-const sleepP: <A>(number, () => Promise<A>) => Promise<A> = (i, p) => new Promise((resolve, reject) => {
-  setTimeout(() => p().then(resolve, reject), i);
-});
+function sleepP<A>(i: number, p: () => Promise<A>): Promise<A> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => p().then(resolve, reject), i);
+  });
+}
 
 // Runs a promise `p` every `sleep` milliseconds until the result passes a validation test `pred`
 // and fails after `max` attempts
-const pollP: <A>(number, number, () => Promise<A>, A => boolean) => Promise<A> = (max, sleep, p, pred)
-  repeatP(max, () => sleeP(sleep, () => p().then(a => pred(a) ? Promise.reject() : a)));
+function pollP<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => boolean): Promise<A> {
+  return repeatP(max, () => sleepP(sleep, () => p().then(a => pred(a) ? Promise.reject() : a)));
+}
 
 export {
   repeatP,
