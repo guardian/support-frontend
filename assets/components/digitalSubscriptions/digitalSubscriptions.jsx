@@ -113,8 +113,8 @@ function PremiumTier(props: {
     androidUrl: string,
     headingSize: HeadingSize,
     subheading: ?string,
-    iOSOnClick: ClickEvent,
-    androidOnClick: ClickEvent,
+    iOSOnClick?: ClickEvent,
+    androidOnClick?: ClickEvent,
 }) {
 
   return (
@@ -139,14 +139,18 @@ function PremiumTier(props: {
           url: props.iOSUrl,
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['premium-tier', 'border', 'ios'],
-          onClick: props.iOSOnClick,
+          onClick: props.iOSOnClick ?
+            props.iOSOnClick :
+            () => {},
         },
         {
           text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['premium-tier', 'border', 'android'],
-          onClick: props.androidOnClick,
+          onClick: props.androidOnClick ?
+            props.androidOnClick :
+            () => {},
         },
       ]}
     />
@@ -156,6 +160,8 @@ function PremiumTier(props: {
 
 PremiumTier.defaultProps = {
   subheading: null,
+  iOSOnClick: () => {},
+  androidOnClick: () => {},
 };
 
 function DailyEdition(props: {

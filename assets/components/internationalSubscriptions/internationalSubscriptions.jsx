@@ -30,11 +30,11 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
-  clickEvents: {
-    iOSApp: ClickEvent,
-    androidApp: ClickEvent,
-    digiPack: ClickEvent,
-    weekly: ClickEvent,
+  clickEvents?: {
+    iOSApp: ?ClickEvent,
+    androidApp: ?ClickEvent,
+    digiPack: ?ClickEvent,
+    weekly: ?ClickEvent,
   },
 };
 
@@ -72,22 +72,34 @@ export default function InternationalSubscriptions(props: PropTypes) {
             androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
             headingSize={props.headingSize}
             subheading="7-day free trial"
-            iOSOnClick={props.clickEvents.iOSApp}
-            androidOnClick={props.clickEvents.androidApp}
+            iOSOnClick={props.clickEvents && props.clickEvents.iOSApp ?
+              props.clickEvents.iOSApp :
+              () => {}
+            }
+            androidOnClick={props.clickEvents && props.clickEvents.androidApp ?
+              props.clickEvents.androidApp :
+              () => {}
+            }
           />
           <DigitalBundle
             countryGroupId={props.countryGroupId}
             url={subsLinks.DigitalPack}
             headingSize={props.headingSize}
             subheading="14-day free trial"
-            onClick={props.clickEvents.digiPack}
+            onClick={props.clickEvents && props.clickEvents.digiPack ?
+              props.clickEvents.digiPack :
+              () => {}
+            }
           />
           <WeeklyBundle
             countryGroupId={props.countryGroupId}
             url={subsLinks.GuardianWeekly}
             headingSize={props.headingSize}
             subheading="&nbsp;"
-            onClick={props.clickEvents.weekly}
+            onClick={props.clickEvents && props.clickEvents.weekly ?
+              props.clickEvents.weekly :
+              () => {}
+            }
           />
         </PageSection>
       </div>
@@ -95,3 +107,8 @@ export default function InternationalSubscriptions(props: PropTypes) {
   );
 
 }
+
+InternationalSubscriptions.defaultProps = {
+  clickEvents: undefined,
+};
+
