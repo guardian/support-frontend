@@ -7,7 +7,7 @@ import React from 'react';
 import SvgCreditCard from 'components/svgs/creditCard';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import {

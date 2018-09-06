@@ -12,7 +12,7 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
-import switchboard.Switches
+import admin.Settings
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -24,13 +24,13 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    switches: Switches
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
 
-  implicit val assetsResolver = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")

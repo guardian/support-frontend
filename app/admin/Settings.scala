@@ -1,4 +1,4 @@
-package switchboard
+package admin
 
 import com.typesafe.config.Config
 import collection.JavaConverters._
@@ -12,14 +12,20 @@ case class Switches(
     internationalSubscribePages: SwitchState
 )
 
-object Switches {
-  def fromConfig(config: Config): Switches =
-    Switches(
-      PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
-      PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
-      experimentsFromConfig(config, "abtests"),
-      SwitchState.fromConfig(config, "optimize"),
-      SwitchState.fromConfig(config, "internationalSubscribePages")
+case class Settings(
+    switches: Switches
+)
+
+object Settings {
+  def fromConfig(config: Config): Settings =
+    Settings(
+      Switches(
+        PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
+        PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
+        experimentsFromConfig(config, "abtests"),
+        SwitchState.fromConfig(config, "optimize"),
+        SwitchState.fromConfig(config, "internationalSubscribePages")
+      )
     )
 
   def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =

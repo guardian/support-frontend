@@ -14,7 +14,7 @@ import {
 } from 'components/directDebit/directDebitActions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import { classNameWithModifiers } from 'helpers/utilities';
 

@@ -13,7 +13,7 @@ import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';

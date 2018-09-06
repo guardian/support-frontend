@@ -9,3 +9,7 @@ type SwitchObject = {
 export type Switches = {
   [string]: SwitchObject,
 };
+
+export type Settings = {
+  switches: Switches
+};
