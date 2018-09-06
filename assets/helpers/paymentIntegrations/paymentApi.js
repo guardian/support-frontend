@@ -103,10 +103,10 @@ function createRequestOptions(
 }
 
 function requestPaymentApi(endpoint: string, init: Object) {
-  return fetch(endpoint, init).then(resp => resp.ok 
+  return logP(fetch(endpoint, init).then(resp => resp.ok 
     ? resp.json() 
     : Promise.reject('There was an error processing your request. Please\u00a0try\u00a0again\u00a0later.')
-  );
+  ));
 }
 
 function getOneOffStripeEndpoint() {
