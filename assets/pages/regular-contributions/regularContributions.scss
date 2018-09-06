@@ -135,6 +135,36 @@
   .component-payment-error--paypal-express {
     margin-top: $gu-v-spacing;
   }
+
+  .component-cta-link--continue {
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 $gu-h-spacing;
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-cta-link--back {
+    background-color: transparent;
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(neutral-4);
+    display: inline-block;
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      position: absolute;
+      left: $gu-v-spacing;
+      transform: rotate(180deg);
+    }
+
+    .component-cta-link__text {
+      margin-left: $gu-v-spacing * 2;
+    }
+  }
 }
 
 .regular-contribution-payment__or-label {

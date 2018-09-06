@@ -10,7 +10,7 @@ import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import switchboard.Switches
+import admin.Settings
 import utils.BrowserCheck
 import utils.RequestCountry._
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,13 +24,13 @@ class Application(
     stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    switches: Switches
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())

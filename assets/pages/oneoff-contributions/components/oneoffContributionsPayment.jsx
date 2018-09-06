@@ -12,14 +12,14 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
-import { type Action as CheckoutAction } from './contributionsCheckoutContainer/checkoutFormActions';
-import { setFullNameShouldValidate, setEmailShouldValidate } from './contributionsCheckoutContainer/checkoutFormActions';
+import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
+import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
+import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type PageState as State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
@@ -59,7 +59,7 @@ function mapStateToProps(state: State) {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
     currencyId: state.common.internationalisation.currencyId,
-    stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
+    stripeSwitchStatus: state.common.settings.switches.oneOffPaymentMethods.stripe,
     paymentComplete: state.page.oneoffContrib.paymentComplete || false,
     optimizeExperiments: state.common.optimizeExperiments,
   };

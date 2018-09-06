@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { type State } from '../regularContributionsReducer';
+import { type State } from '../../regularContributionsReducer';
 
 
 // ----- Selectors ----- //
@@ -45,7 +45,6 @@ function getFormFields(state: State) {
 
   return { firstName, lastName, email };
 }
-
 
 // ----- Exports ----- //
 

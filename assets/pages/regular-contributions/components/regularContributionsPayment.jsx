@@ -11,7 +11,7 @@ import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/p
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
@@ -195,9 +195,9 @@ function mapStateToProps(state) {
     abParticipations: state.common.abParticipations,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     payPalHasLoaded: state.page.regularContrib.payPalHasLoaded,
-    directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
-    stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
-    payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
+    directDebitSwitchStatus: state.common.settings.switches.recurringPaymentMethods.directDebit,
+    stripeSwitchStatus: state.common.settings.switches.recurringPaymentMethods.stripe,
+    payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
     optimizeExperiments: state.common.optimizeExperiments,
   };
 }

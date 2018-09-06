@@ -6,19 +6,19 @@ import { connect } from 'react-redux';
 
 import ContributionsCheckout from 'components/contributionsCheckout/contributionsCheckout';
 
-import { type State } from '../../regularContributionsReducer';
+import { type PageState as State } from '../oneOffContributionsReducer';
 
 
 // ----- State Maps ----- //
 
 function mapStateToProps(state: State) {
   return {
-    amount: state.page.regularContrib.amount,
+    amount: state.page.oneoffContrib.amount,
     currencyId: state.common.internationalisation.currencyId,
-    country: state.common.internationalisation.countryId,
     name: state.page.user.displayName,
     isSignedIn: state.page.user.isSignedIn,
   };
+
 }
 
 

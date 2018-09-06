@@ -17,8 +17,8 @@ import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct,
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
-import switchboard.{PaymentMethodsSwitch, ExperimentSwitch, Group, Segment, SwitchState, Switches}
-import services.{PaymentApiError, PayPalError}
+import admin._
+import services.{PayPalError, PaymentApiError}
 
 object CirceDecoders {
 
@@ -105,6 +105,7 @@ object CirceDecoders {
   implicit val segmentDecoder: Decoder[Segment] = deriveDecoder
   implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+  implicit val settingsCodec: Codec[Settings] = deriveCodec
 
   implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
   implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {

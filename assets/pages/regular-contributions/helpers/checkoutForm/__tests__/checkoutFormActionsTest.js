@@ -3,6 +3,7 @@ import {
   setEmailShouldValidate,
   setFirstNameShouldValidate,
   setLastNameShouldValidate,
+  setStage,
 } from '../checkoutFormActions';
 
 
@@ -21,6 +22,11 @@ describe('Checkout form', () => {
   it('should create an action to set the shouldValidate on the checkout form last name field', () => {
     const expectedAction = { type: 'SET_LAST_NAME_SHOULD_VALIDATE' };
     expect(setLastNameShouldValidate()).toEqual(expectedAction);
+  });
+
+  it('should create an action to set the stage ', () => {
+    const expectedAction = { type: 'SET_STAGE', stage: 'payment' };
+    expect(setStage('payment')).toEqual(expectedAction);
   });
 
 });

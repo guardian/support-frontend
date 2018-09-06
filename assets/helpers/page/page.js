@@ -16,7 +16,7 @@ import type { Store } from 'redux';
 
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Switches } from 'helpers/switch';
+import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
@@ -50,7 +50,7 @@ export type CommonState = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   otherQueryParams: Array<[string, string]>,
   abParticipations: Participations,
-  switches: Switches,
+  settings: Settings,
   internationalisation: Internationalisation,
   optimizeExperiments: OptimizeExperiments,
 };
@@ -80,7 +80,7 @@ function buildInitialState(
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
   currencyId: IsoCurrency,
-  switches: Switches,
+  settings: Settings,
 ): CommonState {
   const acquisition = getReferrerAcquisitionData();
   const optimizeExperiments = getOptimizeExperiments();
@@ -98,7 +98,7 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    switches,
+    settings,
     optimizeExperiments,
   };
 
@@ -162,7 +162,7 @@ function init<S, A>(
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
   const participations: Participations = abTest.init(countryId, countryGroupId);
-  const { switches } = window.guardian;
+  const { settings } = window.guardian;
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
@@ -170,7 +170,7 @@ function init<S, A>(
     countryGroupId,
     countryId,
     currencyId,
-    switches,
+    settings,
   );
   const commonReducer = createCommonReducer(initialState);
 

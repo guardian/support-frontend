@@ -21,15 +21,19 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type UserFormFieldAttribute, shouldShowError } from 'helpers/checkoutForm/checkoutForm';
+import {
+  type UserFormFieldAttribute,
+  shouldShowError,
+  onFormFieldBlur,
+} from 'helpers/checkoutForm/checkoutForm';
 import {
   type Action as CheckoutAction,
   setFirstNameShouldValidate,
   setLastNameShouldValidate,
   setEmailShouldValidate,
-} from './contributionsCheckoutContainer/checkoutFormActions';
+} from '../helpers/checkoutForm/checkoutFormActions';
 import { type State } from '../regularContributionsReducer';
-import { getFormFields } from '../helpers/checkoutFormFieldsSelector';
+import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 
 
 // ----- Types ----- //
@@ -150,6 +154,8 @@ function countriesDropdown(
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
+  const continueButtonClassName = 'component-cta-link--continue';
+
   return (
     <form className="regular-contrib__name-form">
       <TextInput
@@ -158,7 +164,7 @@ function NameForm(props: PropTypes) {
         labelText="Email"
         placeholder="Email"
         onChange={props.setEmail}
-        onBlur={props.setEmailShouldValidate}
+        onBlur={onFormFieldBlur(props.setEmailShouldValidate, continueButtonClassName)}
         modifierClasses={['email']}
         showError={shouldShowError(props.email)}
         errorMessage="Please enter a valid email address."
@@ -169,7 +175,7 @@ function NameForm(props: PropTypes) {
         placeholder="First name"
         value={props.firstName.value}
         onChange={props.setFirstName}
-        onBlur={props.setFirstNameShouldValidate}
+        onBlur={onFormFieldBlur(props.setFirstNameShouldValidate, continueButtonClassName)}
         modifierClasses={['first-name']}
         showError={shouldShowError(props.firstName)}
         errorMessage="Please enter a first name."
@@ -180,13 +186,16 @@ function NameForm(props: PropTypes) {
         placeholder="Last name"
         value={props.lastName.value}
         onChange={props.setLastName}
-        onBlur={props.setLastNameShouldValidate}
+        onBlur={onFormFieldBlur(props.setLastNameShouldValidate, continueButtonClassName)}
         modifierClasses={['last-name']}
         showError={shouldShowError(props.lastName)}
         errorMessage="Please enter a last name."
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
+      <p className="component-your-details__info">
+        <small>All fields are required.</small>
+      </p>
     </form>
   );
 }
