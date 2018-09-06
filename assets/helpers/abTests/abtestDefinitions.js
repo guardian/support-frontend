@@ -38,7 +38,7 @@ export const tests: Tests = {
     independent: true,
     seed: 0,
   },
-  recurringGuestCheckout: {
+  recurringGuestCheckoutRoundTwo: {
     variants: ['control', 'guest'],
     audiences: {
       ALL: {
@@ -46,7 +46,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
     seed: 4,
   },
