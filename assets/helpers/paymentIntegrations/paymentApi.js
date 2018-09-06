@@ -125,22 +125,24 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return requestPaymentApi(
     getOneOffStripeEndpoint(),
     createRequestOptions('POST', data, 'include', null)
-  ).then(json => {
-    if (json.error) {
-      if (json.error.exceptionType === 'CardException') {
-        return { tag: 'failure', error: 'Your card has been declined.' };
-      } else {
-        const errorHttpCode = json.error.errorCode || 'unknown';
-        const exceptionType = json.error.exceptionType || 'unknown';
-        const errorName = json.error.errorName || 'unknown';
-        return {
-          tag: 'failure',
-          error: `Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`
-        };
-      }
+  ).then(checkOneOffStatus);
+}
+
+function checkOneOffStatus(json: Object): Promise<PaymentResult> {
+  if (json.error) {
+    if (json.error.exceptionType === 'CardException') {
+      return Promise.resolve({ tag: 'failure', error: 'Your card has been declined.' });
+    } else {
+      const errorHttpCode = json.error.errorCode || 'unknown';
+      const exceptionType = json.error.exceptionType || 'unknown';
+      const errorName = json.error.errorName || 'unknown';
+      return Promise.resolve({
+        tag: 'failure',
+        error: `Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`
+      });
     }
-    return json;
-  });
+  }
+  return Promise.resolve(PaymentSuccess);
 }
 
 function postRegularStripeRequest(data: PaymentFields, csrf: CsrfState): Promise<PaymentResult> {
