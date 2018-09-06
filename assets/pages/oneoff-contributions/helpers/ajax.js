@@ -93,21 +93,21 @@ function postToEndpoint(request: Object, dispatch: Function, abParticipations: P
     }
     return response.json();
   }).then((data) => {
-      if (!(data.type === 'success')) {
-          if (data.type === 'error') {
-              const {error: {exceptionType = 'Unknown', responseCode = 0, errorName = 'Unknown'}} = data;
-              if (exceptionType === 'CardException') {
-                  dispatch(checkoutError('Your card has been declined.'));
-              } else {
-                  logException(`Stripe payment attempt failed with following error: code: ${responseCode} type: ${exceptionType} error-name: ${errorName}.`);
-                  dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-              }
-          } else {
-              logException(`Stripe payment attempt failed with unexpected error while attempting to process payment response ${data.text()}`);
-              dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-          }
+    if (!(data.type === 'success')) {
+      if (data.type === 'error') {
+        const { error: { exceptionType = 'Unknown', responseCode = 0, errorName = 'Unknown' } } = data;
+        if (exceptionType === 'CardException') {
+          dispatch(checkoutError('Your card has been declined.'));
+        } else {
+          logException(`Stripe payment attempt failed with following error: code: ${responseCode} type: ${exceptionType} error-name: ${errorName}.`);
+          dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
+        }
+      } else {
+        logException(`Stripe payment attempt failed with unexpected error while attempting to process payment response ${data.text()}`);
+        dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
       }
-  })
+    }
+  });
 }
 
 export default function postCheckout(
