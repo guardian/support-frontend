@@ -18,15 +18,15 @@ import play.twirl.api.Html
 import admin.Settings
 
 class OneOffContributions(
-  val assets: AssetsResolver,
-  actionRefiners: CustomActionBuilders,
-  identityService: IdentityService,
-  testUsers: TestUserService,
-  stripeConfigProvider: StripeConfigProvider,
-  paymentAPIService: PaymentAPIService,
-  authAction: AuthAction[AnyContent],
-  components: ControllerComponents,
-  settings: Settings
+    val assets: AssetsResolver,
+    actionRefiners: CustomActionBuilders,
+    identityService: IdentityService,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
+    paymentAPIService: PaymentAPIService,
+    authAction: AuthAction[AnyContent],
+    components: ControllerComponents,
+    settings: Settings
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
