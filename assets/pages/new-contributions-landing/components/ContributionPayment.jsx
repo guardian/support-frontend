@@ -12,13 +12,13 @@ import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
 import { type State } from '../contributionsLandingReducer';
-import { updatePaymentMethod } from '../contributionsLandingActions';
+import { type Action, updatePaymentMethod } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
 type PropTypes = {
   paymentMethod: PaymentMethod,
-  updatePaymentMethod: PaymentMethod => void,
+  updatePaymentMethod: PaymentMethod => Action,
 };
 
 const mapStateToProps = (state: State) => ({
