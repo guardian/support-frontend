@@ -28,6 +28,8 @@ Object {
     "referrerPageviewId": null,
     "source": null,
   },
-  "switches": Object {},
+  "settings": Object {
+    "switches": Object {},
+  },
 }
 `;
