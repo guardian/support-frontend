@@ -124,19 +124,22 @@ function stripeOneOffContributionEndpoint(testUser: ?string) {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
-function postOneOffStripeRequest(data: PaymentFields): Promise<Object> {
+function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return requestPaymentApi(
     stripeOneOffContributionEndpoint(cookie.get('_test_username')),
     createRequestOptions('POST', data, 'include', null)
   ).then(json => {
     if (json.error) {
       if (json.error.exceptionType === 'CardException') {
-        throw new Error('Your card has been declined.');
+        return { tag: 'failure', error: 'Your card has been declined.' };
       } else {
         const errorHttpCode = json.error.errorCode || 'unknown';
         const exceptionType = json.error.exceptionType || 'unknown';
         const errorName = json.error.errorName || 'unknown';
-        throw new Error(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
+        return {
+          tag: 'failure',
+          error: `Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`
+        };
       }
     }
     return json;
