@@ -60,18 +60,18 @@ type PaymentFields
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
-type Token
+export type Token
   = {| tag: 'Stripe', token: string |}
-  | {|tag: 'PayPal', token: string |}
-  | {|tag: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |}
+  | {| tag: 'PayPal', token: string |}
+  | {| tag: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |}
   ;
 
-type PaymentResult
+export type PaymentResult
   = {| tag: 'success' |}
   | {| tag: 'failure', error: string |}
   ;
 
-type PaymentCallback = Token => Promise<PaymentResult>;
+export type PaymentCallback = Token => Promise<PaymentResult>;
 
 type HttpMethod = 'POST' | 'GET';
   
