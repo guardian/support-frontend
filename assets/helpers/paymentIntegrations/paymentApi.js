@@ -16,12 +16,6 @@ import { pollP, logP } from 'helpers/promise';
 
 import * as cookie from 'helpers/cookie';
 
-// ----- Setup ----- //
-
-const POLLING_INTERVAL = 3000;
-const MAX_POLLS = 10;
-const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
-
 // ----- Types ----- //
 
 type OneOffFields = {|
@@ -77,11 +71,16 @@ type PaymentResult
   | {| tag: 'failure', error: string |}
   ;
 
-const PaymentSuccess: PaymentResult = { tag: 'success' };
-
 type PaymentCallback = Token => Promise<PaymentResult>;
 
 type HttpMethod = 'POST' | 'GET';
+  
+// ----- Setup ----- //
+  
+const PaymentSuccess: PaymentResult = { tag: 'success' };
+const POLLING_INTERVAL = 3000;
+const MAX_POLLS = 10;
+const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 // ----- Functions ----- //
 
