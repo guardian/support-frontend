@@ -26,8 +26,8 @@ class PayPalRegular(
 
   import actionBuilders._
 
-  implicit val assetsResolver = assets
-  implicit val st = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>

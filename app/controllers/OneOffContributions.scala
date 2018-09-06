@@ -31,8 +31,8 @@ class OneOffContributions(
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val st = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(

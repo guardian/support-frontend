@@ -39,8 +39,8 @@ class RegularContributions(
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val st = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
     Ok(recurringContributions(

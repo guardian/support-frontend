@@ -29,8 +29,8 @@ class PayPalOneOff(
 
   import actionBuilders._
 
-  implicit val assetsResolver = assets
-  implicit val sw = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")

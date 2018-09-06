@@ -21,8 +21,8 @@ class Subscriptions(
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val st = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {

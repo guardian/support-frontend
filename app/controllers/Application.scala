@@ -24,8 +24,8 @@ class Application(
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val sw = settings
+  implicit val a: AssetsResolver = assets
+  implicit val s: Settings = settings
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
