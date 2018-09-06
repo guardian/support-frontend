@@ -32,5 +32,13 @@ describe('user reducer tests', () => {
     expect(newState.lastName.shouldValidate).toEqual(true);
   });
 
+  it('should handle SET_STAGE', () => {
+    const action = { type: 'SET_STAGE', stage: 'payment' };
+
+    const newState = reducer(undefined, action);
+
+    expect(newState.stage).toEqual('payment');
+  });
+
 
 });

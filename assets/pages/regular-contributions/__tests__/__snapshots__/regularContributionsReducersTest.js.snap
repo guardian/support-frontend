@@ -22,6 +22,7 @@ Object {
       "required": true,
       "shouldValidate": false,
     },
+    "stage": "checkout",
   },
   "csrf": Object {
     "token": null,

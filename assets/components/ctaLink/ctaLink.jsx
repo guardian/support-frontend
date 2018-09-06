@@ -40,7 +40,7 @@ export default function CtaLink(props: PropTypes) {
       tabIndex={props.tabIndex}
       aria-describedby={accessibilityHintId}
     >
-      <span>{props.text}</span>
+      <span className="component-cta-link__text">{props.text}</span>
       {props.svg}
       <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
     </a>
