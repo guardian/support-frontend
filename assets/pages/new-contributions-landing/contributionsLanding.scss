@@ -9,6 +9,7 @@ body {
 .gu-content {
   position: relative;
   z-index: 0;
+  overflow: hidden;
 }
 
 .gu-content--contribution-form {
@@ -300,7 +301,7 @@ header[role="banner"] {
     left: 50%;
     position: absolute;
     transform: translate(-50%,0);
-    width: 1300px;
+    width: 1400px;
   }
 
   .gu-content__main .svg-contributions-bg-mobile {
@@ -886,56 +887,3 @@ form {
   margin: ($gu-v-spacing * 2) -10px 0;
 }
 
-/*= Positioning background circles */
-.gu-content__bg .component-grid-image {
-  border-radius: 100%;
-  object-fit: cover;
-  position: absolute;
-  left: 50%;
-}
-
-@include mq($from: mobile, $until: tablet) {
-  .component-grid-image--circle-a {
-    bottom: 0px;
-    height: 123px;
-    transform: translate(-162px, 0);
-    width: 123px;
-  }
-
-  .component-grid-image--circle-b {
-    bottom: 0px;
-    height: 70px;
-    transform: translate(-20px, 0);
-    width: 70px;
-  }
-
-  .component-grid-image--circle-c {
-    bottom: 0px;
-    height: 178px;
-    transform: translate(39px, 0);
-    width: 178px;
-  }
-}  
-
-@include mq($from: tablet) {
-  .component-grid-image--circle-a {
-    bottom: 0;
-    height: 450px;
-    transform: translate(-78px,0);
-    width: 450px;
-  }
-  
-  .component-grid-image--circle-b {
-    bottom: 359px;
-    height: 250px;
-    transform: translate(258px,0);
-    width: 250px;
-  }
-  
-  .component-grid-image--circle-c {
-    bottom: 0px;
-    height: 280px;
-    transform: translate(-692px,0);
-    width: 290px;
-  }
-}
