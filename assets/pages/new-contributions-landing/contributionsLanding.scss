@@ -840,6 +840,11 @@ form {
   padding-top: $gu-v-spacing;
 }
 
+.confirmation__meta {
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
+}
+
 .button {
   align-items: center;
   border: 1px solid currentColor;

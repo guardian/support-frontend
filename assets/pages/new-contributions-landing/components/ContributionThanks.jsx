@@ -41,12 +41,6 @@ function ContributionThanks(props: PropTypes) {
 
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
-          <h2 className="confirmation__maintitle">
-            <span className="hidden">Your contribution:</span>
-            <span className="confirmation__amount">
-              {formatAmount(currencies[props.currency], spokenCurrencies[props.currency], props.amount, false)}
-            </span>
-          </h2>
           <p className="confirmation__message">Look out for an email confirming your {getSpokenType(props.contributionType)} recurring payment.</p>
         </section>
       ) : null}
@@ -58,6 +52,7 @@ function ContributionThanks(props: PropTypes) {
           <SvgSubscribe />
           Sign me up
         </a>
+        <p class="confirmation__meta"><small>You can stop these at any time.</small></p>
         <SvgNewsletters />
       </section>
 
