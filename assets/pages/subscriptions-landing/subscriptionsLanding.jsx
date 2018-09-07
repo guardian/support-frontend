@@ -80,7 +80,7 @@ const content = (
         highlightsHeadingSize={2}
       />
       {getSubscriptionsForCountry()}
-      <WhySupport headingSize={3} />
+      <WhySupport headingSize={3} id="why-support" />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}
