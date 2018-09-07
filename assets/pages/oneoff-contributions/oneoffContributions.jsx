@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { detect as detectCountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -28,9 +28,9 @@ import type { CountryGroupId } from '../../helpers/internationalisation/countryG
 
 // ----- Page Startup ----- //
 
-const countryGroupId: CountryGroupId = detectCountryGroup();
+const countryGroupId: CountryGroupId = detectCountryGroupId();
 
-const store = pageInit(reducer(getAmount('ONE_OFF', countryGroupId), countryGroup), true);
+const store = pageInit(reducer(getAmount('ONE_OFF', countryGroupId), countryGroupId), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 
