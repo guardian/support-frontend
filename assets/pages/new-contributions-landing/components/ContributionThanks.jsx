@@ -47,7 +47,7 @@ function ContributionThanks(props: PropTypes) {
         </p>
         <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
           <SvgSubscribe />
-          Subscribe
+          Sign me up
         </a>
         <SvgNewsletters />
       </section>
