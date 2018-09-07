@@ -23,17 +23,9 @@ import { displayPrice } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
-type ClickEvent = () => void;
-
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
-  clickEvents?: {
-    iOSApp: ?ClickEvent,
-    androidApp: ?ClickEvent,
-    dailyEdition: ?ClickEvent,
-    digiPack: ?ClickEvent,
-  },
 };
 
 
@@ -45,7 +37,7 @@ const gridImageProperties = {
   imgType: 'png',
 };
 
-const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page&utm_campaign=split_subscriptions_test';
+const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page';
 
 
 // ----- Component ----- //
@@ -70,40 +62,21 @@ export default function DigitalSubscriptions(props: PropTypes) {
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
-          iOSOnClick={props.clickEvents && props.clickEvents.iOSApp ? props.clickEvents.iOSApp : () => undefined}
-          androidOnClick={
-            props.clickEvents && props.clickEvents.androidApp ?
-              props.clickEvents.androidApp :
-              () => undefined
-          }
         />
         <DailyEdition
           url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
-          onClick={
-            props.clickEvents && props.clickEvents.dailyEdition ?
-              props.clickEvents.dailyEdition :
-              () => undefined
-          }
         />
         <DigitalBundle
           countryGroupId={countryGroupId}
           url={subsLinks.DigitalPack}
           headingSize={props.headingSize}
-          onClick={
-            props.clickEvents && props.clickEvents.digiPack ?
-              props.clickEvents.digiPack :
-              () => undefined}
         />
       </PageSection>
     </div>
   );
 
 }
-
-DigitalSubscriptions.defaultProps = {
-  clickEvents: undefined,
-};
 
 // ----- Auxiliary Components ----- //
 
@@ -113,8 +86,6 @@ function PremiumTier(props: {
     androidUrl: string,
     headingSize: HeadingSize,
     subheading: ?string,
-    iOSOnClick?: ClickEvent,
-    androidOnClick?: ClickEvent,
 }) {
 
   return (
@@ -139,18 +110,12 @@ function PremiumTier(props: {
           url: props.iOSUrl,
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['premium-tier', 'border', 'ios'],
-          onClick: props.iOSOnClick ?
-            props.iOSOnClick :
-            () => {},
         },
         {
           text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['premium-tier', 'border', 'android'],
-          onClick: props.androidOnClick ?
-            props.androidOnClick :
-            () => {},
         },
       ]}
     />
@@ -160,14 +125,11 @@ function PremiumTier(props: {
 
 PremiumTier.defaultProps = {
   subheading: null,
-  iOSOnClick: () => {},
-  androidOnClick: () => {},
 };
 
 function DailyEdition(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent,
 }) {
 
   return (
@@ -192,7 +154,6 @@ function DailyEdition(props: {
           url: props.url,
           accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
           modifierClasses: ['daily-edition', 'border'],
-          onClick: props.onClick,
         },
       ]}
     />
@@ -205,7 +166,6 @@ function DigitalBundle(props: {
   url: string,
   headingSize: HeadingSize,
   subheading: ?string,
-  onClick: ClickEvent | null,
 }) {
 
   const i13n = props.countryGroupId === 'GBPCountries' ?
@@ -241,7 +201,6 @@ function DigitalBundle(props: {
           url: props.url,
           accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['digital', 'border'],
-          onClick: props.onClick,
         },
       ]}
     />
