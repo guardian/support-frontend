@@ -9,7 +9,9 @@ export type Action =
 
 // ----- Action Creators ----- //
 
-function checkoutError(message: ?string): Action {
+function checkoutError(specificError: ?string): Action {
+  const defaultError = 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
+  const message = specificError || defaultError;
   return { type: 'CHECKOUT_ERROR', message };
 }
 
