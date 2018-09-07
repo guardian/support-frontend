@@ -1,6 +1,12 @@
 // @flow
+
+// ----- Imports ----- //
+
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { type PageState as State } from '../../oneOffContributionsReducer';
+import { type State } from '../../oneOffContributionsReducer';
+
+
+// ----- Selectors ----- //
 
 function getFormFields(state: State) {
 
@@ -27,5 +33,8 @@ function getFormFields(state: State) {
 
   return { fullName, email };
 }
+
+
+// ----- Exports ----- //
 
 export { getFormFields };

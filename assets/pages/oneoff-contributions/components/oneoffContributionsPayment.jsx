@@ -20,7 +20,7 @@ import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutF
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import { type PageState as State } from '../oneOffContributionsReducer';
+import { type State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
 
