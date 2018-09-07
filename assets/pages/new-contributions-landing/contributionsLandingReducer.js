@@ -36,10 +36,16 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
+  const initialAmount: { [Contrib]: Amount } = {
+    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId][1],
+    MONTHLY: amounts('notintest').MONTHLY[countryGroupId][1],
+    ANNUAL:  amounts('notintest').ANNUAL[countryGroupId][1],
+  };
+
   const initialState: FormState = {
-    contributionType: 'ONE_OFF',
+    contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
-    amount: amounts('notintest').ONE_OFF[countryGroupId][0],
+    amount: initialAmount.MONTHLY,
     showOtherAmount: false,
     done: false,
   };
@@ -50,7 +56,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return {
           ...state,
           contributionType: action.contributionType,
-          amount: amounts('notintest')[action.contributionType][countryGroupId][0],
+          amount: initialAmount[action.contributionType],
           showOtherAmount: false,
         };
 
