@@ -2,9 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-
-import SvgCreditCard from 'components/svgs/creditCard';
+import React, { type Node } from 'react';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Status } from 'helpers/settings';
@@ -31,6 +29,7 @@ type PropTypes = {|
   canOpen: () => boolean,
   switchStatus: Status,
   disable: boolean,
+  svg: Node,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -85,7 +84,7 @@ function Button(props: PropTypes) {
       onClick={onClick}
       disabled={props.disable}
     >
-      Pay with debit/credit card <SvgCreditCard />
+      Pay with debit/credit card {props.svg}
     </button>
   );
 
