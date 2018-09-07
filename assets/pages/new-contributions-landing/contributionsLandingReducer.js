@@ -36,10 +36,14 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
+  const oneOffAmounts = amounts('notintest').ONE_OFF[countryGroupId];
+  const monthlyAmounts = amounts('notintest').MONTHLY[countryGroupId];
+  const annualAmounts = amounts('notintest').ANNUAL[countryGroupId];
+
   const initialAmount: { [Contrib]: Amount } = {
-    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId][1],
-    MONTHLY: amounts('notintest').MONTHLY[countryGroupId][1],
-    ANNUAL: amounts('notintest').ANNUAL[countryGroupId][1],
+    ONE_OFF: oneOffAmounts.find(amount => amount.isDefault) || oneOffAmounts[0],
+    MONTHLY: monthlyAmounts.find(amount => amount.isDefault) || monthlyAmounts[0],
+    ANNUAL: annualAmounts.find(amount => amount.isDefault) || annualAmounts[0],
   };
 
   const initialState: FormState = {
