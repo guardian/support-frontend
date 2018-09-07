@@ -7,14 +7,12 @@ import { connect } from 'react-redux';
 
 import { type Amount, type Contrib, getSpokenType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgNewsletters from 'components/svgs/newsletters';
-
-import { formatAmount } from './ContributionAmount';
 
 // ----- Types ----- //
 
@@ -41,18 +39,23 @@ function ContributionThanks(props: PropTypes) {
 
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
-          <p className="confirmation__message">Look out for an email confirming your {getSpokenType(props.contributionType)} recurring payment.</p>
+          <p className="confirmation__message">
+            Look out for an email confirming your {getSpokenType(props.contributionType)} recurring payment.
+          </p>
         </section>
       ) : null}
 
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>Get related news and offers – whether you are a subscriber, member, contributor or would like to become one.</p>
+        <p>
+          Get related news and offers – whether you are a subscriber, member, 
+          contributor or would like to become one.
+        </p>
         <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
           <SvgSubscribe />
           Sign me up
         </a>
-        <p class="confirmation__meta"><small>You can stop these at any time.</small></p>
+        <p className="confirmation__meta"><small>You can stop these at any time.</small></p>
         <SvgNewsletters />
       </section>
 

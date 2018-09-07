@@ -39,7 +39,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialAmount: { [Contrib]: Amount } = {
     ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId][1],
     MONTHLY: amounts('notintest').MONTHLY[countryGroupId][1],
-    ANNUAL:  amounts('notintest').ANNUAL[countryGroupId][1],
+    ANNUAL: amounts('notintest').ANNUAL[countryGroupId][1],
   };
 
   const initialState: FormState = {

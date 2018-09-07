@@ -97,7 +97,7 @@ function ContributionAmount(props: PropTypes) {
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
               autoComplete="off"
-              autoFocus
+              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               required
             />
             <span className="form__icon">
