@@ -9,12 +9,14 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { logP } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
-import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/stripeCheckout';
+import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
@@ -37,6 +39,7 @@ import { type Action, paymentSuccess, paymentFailure } from '../contributionsLan
 type PropTypes = {|
   done: boolean,
   error: string | null,
+  csrf: CsrfState,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -56,6 +59,7 @@ type PropTypes = {|
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
+  csrf: state.page.csrf,
   isTestUser: state.page.user.isTestUser || false,
   initialFirstName: state.page.user.firstName,
   initialLastName: state.page.user.lastName,
