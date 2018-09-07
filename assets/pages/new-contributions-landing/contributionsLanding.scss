@@ -806,7 +806,12 @@ form {
   padding: 0 10px;
 }
 
-.confirmation__title,
+.confirmation__title {
+  font-weight: 900;
+  font-size: 1;
+  margin: ($gu-v-spacing / 3) 0;
+}
+
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
   margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
