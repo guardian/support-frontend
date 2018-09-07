@@ -99,7 +99,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
             paymentData: {
               currency: currency,
               amount: formElement.elements.contributionAmount.value,
-              token,
+              token: token.token,
               email: formElement.elements.contributionEmail.value
             },
             acquisitionData: derivePaymentApiAcquisitionData(
@@ -110,7 +110,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
           }
         }
       default:
-        console.log('boom')
+        // TODO
     }
   }
 }
@@ -175,8 +175,13 @@ function ContributionForm(props: PropTypes) {
                 return onPaymentFinished;
               })
               .then(result => {
-                console.log('hooho')
-                console.dir(result);
+                switch (result.tag) {
+                  case 'success':
+                    props.onSuccess();
+                    break;
+                  case 'failure':
+                    props.onError(result.error);
+                }
               }));
           }
         }}

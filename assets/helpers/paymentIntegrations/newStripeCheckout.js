@@ -78,7 +78,6 @@ function setupStripeCheckout(
     });
 
     const handleToken = (token) => {
-      console.log('urioew')
       callback({ tag: 'Stripe', token: token.id }).then(deferred.resolve, deferred.reject);
     };
 

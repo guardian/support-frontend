@@ -73,8 +73,6 @@ export type PaymentResult
 
 export type PaymentCallback = Token => Promise<PaymentResult>;
 
-type HttpMethod = 'POST' | 'GET';
-  
 // ----- Setup ----- //
   
 const PaymentSuccess: PaymentResult = { tag: 'success' };
@@ -84,9 +82,15 @@ const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 // ----- Functions ----- //
 
-function createRequestOptions(
-  method: HttpMethod, 
-  data: PaymentFields | null,
+function postRequestOptions(
+  data: PaymentFields,
+  credentials: Credentials, 
+  csrf: CsrfState | null
+): Object {
+  return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
+}
+
+function getRequestOptions(
   credentials: Credentials, 
   csrf: CsrfState | null
 ): Object {
@@ -95,18 +99,14 @@ function createRequestOptions(
     : { 'Content-Type': 'application/json' };
 
   return {
-    method,
+    method: 'GET',
     headers,
-    body: data === null ? '' : JSON.stringify(data.fields),
     credentials,
   };
 }
 
 function requestPaymentApi(endpoint: string, init: Object) {
-  return logP(fetch(endpoint, init).then(resp => resp.ok 
-    ? resp.json() 
-    : Promise.reject('There was an error processing your request. Please\u00a0try\u00a0again\u00a0later.')
-  ));
+  return logP(fetch(endpoint, init).then(resp => resp.json()));
 }
 
 function getOneOffStripeEndpoint() {
@@ -123,7 +123,7 @@ function getOneOffStripeEndpoint() {
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return requestPaymentApi(
     getOneOffStripeEndpoint(),
-    createRequestOptions('POST', data, 'include', null)
+    postRequestOptions(data, 'include', null)
   ).then(checkOneOffStatus);
 }
 
@@ -147,7 +147,7 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
 function postRegularStripeRequest(data: PaymentFields, csrf: CsrfState): Promise<PaymentResult> {
   return requestPaymentApi(
     routes.recurringContribCreate,
-    createRequestOptions('POST', data, 'same-origin', csrf)
+    postRequestOptions(data, 'same-origin', csrf)
   ).then(checkRegularStatus(csrf))
 }
 
@@ -155,7 +155,7 @@ function checkRegularStatus(csrf: CsrfState): Object => Promise<PaymentResult> {
   return json => pollP(
     MAX_POLLS, 
     POLLING_INTERVAL,
-    () => requestPaymentApi(json.trackingUri, createRequestOptions('GET', null, 'same-origin', csrf)),
+    () => requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf)),
     json => json.status === 'pending'
   ).then(json => {
     switch (json.status) {
@@ -175,7 +175,7 @@ function createPaymentCallback(
 ): PaymentCallback {
   return paymentToken => {
     const data = getData(contributionType, paymentToken);
-    
+
     switch (paymentToken.tag) {
       case 'Stripe':
         switch (contributionType) {
