@@ -37,7 +37,7 @@ const mapStateToProps = state => ({
 function ContributionThanks(props: PropTypes) {
   return (
     <div className="gu-content__content">
-      <h1>Thank you for your contribution to independent journalism</h1>
+      <h1>Thank you for a valuable contribution</h1>
 
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
