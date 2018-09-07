@@ -34,7 +34,7 @@ const mapDispatchToProps = {
 function ContributionPayment(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Pay with</legend>
+      <legend className={classNameWithModifiers('form__legend', [])}>Payment method</legend>
 
       <ul className="form__radio-group-list">
         <li className="form__radio-group-item">
