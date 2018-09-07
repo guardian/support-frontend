@@ -54,15 +54,21 @@ export function getTitle(contributionType: ContributionType): string {
   }
 }
 
-function isButtonFocused(event: FocusEvent, buttonClassName: string): boolean {
-  const { relatedTarget } = event;
+function isButtonFocused(event: any, buttonClassName: string): boolean {
+  const { relatedTarget, explicitOriginalTarget } = event;
+  // Working in Chrome
   if (relatedTarget instanceof HTMLElement) {
     return relatedTarget.classList.contains(buttonClassName);
+  }
+  // Work around for firefox
+  if (explicitOriginalTarget instanceof HTMLElement) {
+    return explicitOriginalTarget.classList.contains(buttonClassName);
   }
   return false;
 }
 
-export const onFormFieldBlur = (setShouldValidate: () => void, buttonClassName: string) => (event: FocusEvent) => {
+
+export const onFormFieldBlur = (setShouldValidate: () => void, buttonClassName: string) => (event: any) => {
   // Don't update the Redux state if the focus event is on the payment button, as this
   // will cause a re-render and the click event on the button will be lost
   if (!isButtonFocused(event, buttonClassName)) {
