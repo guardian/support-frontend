@@ -1,5 +1,6 @@
 package admin
 
+import scala.io.Source
 import com.typesafe.config.Config
 import collection.JavaConverters._
 import play.api.mvc.RequestHeader
@@ -27,6 +28,18 @@ object Settings {
         SwitchState.fromConfig(config, "internationalSubscribePages")
       )
     )
+
+  def fromDiskOrS3(adminSettingsSource: Config): String = {
+    if (adminSettingsSource.hasPath("local.path")) {
+      val homeDir = System.getProperty("user.home")
+      val localPath = adminSettingsSource.getString("local.path").replaceFirst("~", homeDir)
+      val bufferedSource = Source.fromFile(localPath)
+      val rawJson = bufferedSource.getLines.mkString
+      bufferedSource.close()
+
+      rawJson
+    } else ""
+  }
 
   def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
     config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
