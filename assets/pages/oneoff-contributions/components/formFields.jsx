@@ -22,7 +22,7 @@ import {
   setEmailShouldValidate,
 } from '../helpers/checkoutForm/checkoutFormActions';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import { type PageState as State } from '../oneOffContributionsReducer';
+import { type State } from '../oneOffContributionsReducer';
 
 
 // ----- Types ----- //
