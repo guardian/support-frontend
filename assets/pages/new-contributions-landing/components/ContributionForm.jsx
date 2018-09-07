@@ -82,18 +82,6 @@ const getAmount = (formElements: Object) =>
     ? formElements.contributionOther.value
     : formElements.contributionAmount.value);
 
-// ----- Event handlers ----- //
-
-const onSubmit = (stripeHandler) => (e) => {
-  e.preventDefault();
-
-  const { elements } = (e.target: any);
-  const amount = getAmount(elements);
-  const email = elements.namedItem('contributionEmail').value;
-
-  openDialogBox(stripeHandler, amount, email);
-};
-
 function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
   return (contributionType, token) => {
     switch (contributionType) {
@@ -122,10 +110,23 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
           }
         }
       default:
-
+        console.log('boom')
     }
   }
 }
+    
+// ----- Event handlers ----- //
+
+const onSubmit = (stripeHandler) => (e) => {
+  e.preventDefault();
+
+  const { elements } = (e.target: any);
+  const amount = getAmount(elements);
+  const email = elements.namedItem('contributionEmail').value;
+
+  openDialogBox(stripeHandler, amount, email);
+};
+
 
 // ----- Render ----- //
 
