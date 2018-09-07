@@ -204,7 +204,7 @@ function ContributionForm(props: PropTypes) {
             required
           />
           <NewContributionState countryGroupId={countryGroupId} />
-          <NewContributionPayment />
+          <NewContributionPayment countryGroupId={countryGroupId} />
           <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
         </form>
       </div>
