@@ -14,7 +14,8 @@ import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
-import { setupStripeCheckout, openDialogBox, createTokenCallback } from 'helpers/paymentIntegrations/stripeCheckout';
+import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/stripeCheckout';
+import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -43,6 +44,7 @@ type PropTypes = {|
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
+  contributionType: Contrib,
   thankYouRoute: string,
   initialFirstName: string,
   initialLastName: string,
@@ -58,6 +60,7 @@ const mapStateToProps = (state: State) => ({
   initialFirstName: state.page.user.firstName,
   initialLastName: state.page.user.lastName,
   initialEmail: state.page.user.email,
+  contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
   optimizeExperiments: state.common.optimizeExperiments,
@@ -87,6 +90,38 @@ const onSubmit = (e) => {
   openDialogBox(amount, email);
 };
 
+function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
+  return (contributionType, token) => {
+    switch (contributionType) {
+      case 'ONE_OFF':
+        const {
+          abParticipations,
+          currency,
+          referrerAcquisitionData,
+          optimizeExperiments,
+        } = props;
+    
+        return { 
+          tag: 'oneoff', 
+          fields: {
+            paymentData: {
+              currency: currency,
+              amount: formElement.elements.contributionAmount.value,
+              token,
+              email: formElement.elements.contributionEmail.value
+            },
+            acquisitionData: derivePaymentApiAcquisitionData(
+              referrerAcquisitionData, 
+              abParticipations, 
+              optimizeExperiments
+            )
+          }
+        }
+      default:
+
+    }
+  }
+}
 
 // ----- Render ----- //
 
@@ -99,34 +134,13 @@ function setupStripe(formElement: Object, props: PropTypes) {
     thankYouRoute,
   } = props;
 
-  const callback = createTokenCallback({
-    abParticipations,
-    currencyId: currency,
-    referrerAcquisitionData,
-    optimizeExperiments,
-    getData: () => {
-      const { elements } = (formElement.elements: any);
-      const firstName = elements.contributionFirstName.value;
-      const lastName = elements.contributionLastName.value;
-      const email = elements.contributionEmail.value;
-      const amount = getAmount(elements);
+  const callback = createPaymentCallback(
+    getData(props, formElement),
+    props.contributionType,
+    props.csrf
+  );
 
-      return {
-        user: {
-          fullName: `${firstName} ${lastName}`,
-          email,
-        },
-        amount,
-      };
-    },
-    onSuccess: () => {
-      trackConversion(abParticipations, thankYouRoute);
-      props.onSuccess();
-    },
-    onError: props.onError,
-  });
-
-  return setupStripeCheckout(callback, null, currency, props.isTestUser);
+  return setupStripeCheckout(callback, currency, props.isTestUser);
 }
 
 function ContributionForm(props: PropTypes) {
