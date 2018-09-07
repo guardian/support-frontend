@@ -23,7 +23,6 @@ import reducer from './regularContributionsReducer';
 import FormFields from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
-
 // ----- Page Startup ----- //
 
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
