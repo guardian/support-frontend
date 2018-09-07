@@ -34,6 +34,7 @@ type PropTypes = {
   setEmail: (string) => void,
   setFullNameShouldValidate: () => void,
   setEmailShouldValidate: () => void,
+  isSignedIn: boolean,
 };
 
 // ----- Map State/Props ----- //
@@ -45,6 +46,7 @@ function mapStateToProps(state: State) {
   return {
     fullName,
     email,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }
@@ -74,17 +76,21 @@ function NameForm(props: PropTypes) {
 
   return (
     <form className="oneoff-contrib__name-form">
-      <TextInput
-        id="email"
-        value={props.email.value}
-        labelText="Email"
-        placeholder="Email"
-        onChange={props.setEmail}
-        onBlur={onFormFieldBlur(props.setEmailShouldValidate, stripeButtonClassName)}
-        modifierClasses={['email']}
-        showError={shouldShowError(props.email)}
-        errorMessage="Please enter a valid email address."
-      />
+      {
+        !props.isSignedIn ? (
+          <TextInput
+            id="email"
+            value={props.email.value}
+            labelText="Email"
+            placeholder="Email"
+            onChange={props.setEmail}
+            onBlur={onFormFieldBlur(props.setEmailShouldValidate, stripeButtonClassName)}
+            modifierClasses={['email']}
+            showError={shouldShowError(props.email)}
+            errorMessage="Please enter a valid email address."
+          />
+        ) : null
+      }
       <TextInput
         id="name"
         placeholder="Full name"
