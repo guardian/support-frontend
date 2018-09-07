@@ -41,10 +41,7 @@ function ContributionThanks(props: PropTypes) {
 
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>News and offers from The Guardian, The Observer and Guardian Weekly,
-          on the ways to read and support our journalism. Already a member, subscriber or
-          contributor, opt in here to receive your regular emails and updates.
-        </p>
+        <p>Get related news and offers – whether you are a subscriber, member, contributor or would like to become one.</p>
         <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
           <SvgSubscribe />
           Sign me up
