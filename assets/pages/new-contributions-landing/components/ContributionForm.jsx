@@ -80,14 +80,14 @@ const getAmount = (formElements: Object) =>
 
 // ----- Event handlers ----- //
 
-const onSubmit = (e) => {
+const onSubmit = (stripeHandler) => (e) => {
   e.preventDefault();
 
   const { elements } = (e.target: any);
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
 
-  openDialogBox(amount, email);
+  openDialogBox(stripeHandler, amount, email);
 };
 
 function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
@@ -164,9 +164,15 @@ function ContributionForm(props: PropTypes) {
         <form
           ref={(el) => {
           if (el) {
-            setupStripe(el, props).then(() => {
-              el.addEventListener('submit', onSubmit);
-            });
+            logP(setupStripe(el, props)
+              .then(([stripeHandler, onPaymentFinished]) => {
+                el.addEventListener('submit', onSubmit(stripeHandler));
+                return onPaymentFinished;
+              })
+              .then(result => {
+                console.log('hooho')
+                console.dir(result);
+              }));
           }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
