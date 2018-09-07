@@ -41,4 +41,5 @@ class Configuration {
 
   implicit val settings = Settings.fromConfig(config.getConfig("switches"))
 
+  implicit val settingsFromDisk = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource"))
 }

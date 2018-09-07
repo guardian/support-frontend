@@ -4,6 +4,10 @@ import scala.io.Source
 import com.typesafe.config.Config
 import collection.JavaConverters._
 import play.api.mvc.RequestHeader
+import codecs.CirceDecoders._
+import io.circe.parser._
+import cats.implicits._
+import io.circe.syntax._
 
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
@@ -29,16 +33,41 @@ object Settings {
       )
     )
 
-  def fromDiskOrS3(adminSettingsSource: Config): String = {
-    if (adminSettingsSource.hasPath("local.path")) {
+  def fromDiskOrS3(adminSettingsSource: Config): Either[String, Settings] = {
+    val rawJson = if (adminSettingsSource.hasPath("local.path")) {
       val homeDir = System.getProperty("user.home")
       val localPath = adminSettingsSource.getString("local.path").replaceFirst("~", homeDir)
       val bufferedSource = Source.fromFile(localPath)
-      val rawJson = bufferedSource.getLines.mkString
+      val json = bufferedSource.getLines.mkString
       bufferedSource.close()
 
-      rawJson
+      json
     } else ""
+
+    val paymentMethodsSwitchAsJson = PaymentMethodsSwitch(SwitchState.On, SwitchState.On, None).asJson
+
+    decode[PaymentMethodsSwitch](paymentMethodsSwitchAsJson.toString)
+      .leftMap(err => {
+        println("payment method error")
+        println(err)
+        err.getMessage
+      })
+      .map(paymentMethods => {
+        println("payment methods success")
+        println(paymentMethods)
+        paymentMethods
+      })
+
+    decode[Settings](rawJson)
+      .leftMap(err => {
+        println("error")
+        println(err)
+        err.getMessage
+      })
+      .map(settings => {
+        println(settings)
+        settings
+      })
   }
 
   def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
