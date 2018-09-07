@@ -806,24 +806,6 @@ form {
   padding: 0 10px;
 }
 
-.confirmation__maintitle {
-  margin: 0;
-}
-
-.confirmation__amount {
-  align-items: center;
-  background: gu-colour(sport-garnett-media-main-1);
-  border-radius: 100%;
-  color: gu-colour(garnett-neutral-5);
-  display: flex;
-  float: right;
-  font: normal 16px/1 $gu-text-sans-web;
-  height: 50px;
-  justify-content: center;
-  margin: 0 0 0 ($gu-h-spacing / 2);
-  width: 50px;
-}
-
 .confirmation__title,
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
