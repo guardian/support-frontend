@@ -48,7 +48,7 @@ function ContributionThanks(props: PropTypes) {
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
         <p>
-          Get related news and offers – whether you are a subscriber, member, 
+          Get related news and offers – whether you are a subscriber, member,
           contributor or would like to become one.
         </p>
         <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
