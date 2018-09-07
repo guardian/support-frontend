@@ -23,19 +23,11 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type ClickEvent = () => void;
-
 type PropTypes = {
   sectionId: string,
   countryGroupId: CountryGroupId,
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
-  clickEvents: {
-    iOSApp: ClickEvent,
-    androidApp: ClickEvent,
-    digiPack: ClickEvent,
-    weekly: ClickEvent,
-  },
 };
 
 
@@ -72,22 +64,18 @@ export default function InternationalSubscriptions(props: PropTypes) {
             androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
             headingSize={props.headingSize}
             subheading="7-day free trial"
-            iOSOnClick={props.clickEvents.iOSApp}
-            androidOnClick={props.clickEvents.androidApp}
           />
           <DigitalBundle
             countryGroupId={props.countryGroupId}
             url={subsLinks.DigitalPack}
             headingSize={props.headingSize}
             subheading="14-day free trial"
-            onClick={props.clickEvents.digiPack}
           />
           <WeeklyBundle
             countryGroupId={props.countryGroupId}
             url={subsLinks.GuardianWeekly}
             headingSize={props.headingSize}
             subheading="&nbsp;"
-            onClick={props.clickEvents.weekly}
           />
         </PageSection>
       </div>
@@ -95,3 +83,4 @@ export default function InternationalSubscriptions(props: PropTypes) {
   );
 
 }
+

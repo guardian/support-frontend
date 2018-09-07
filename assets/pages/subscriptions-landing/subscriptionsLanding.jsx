@@ -19,7 +19,6 @@ import PaperSubscriptionsContainer from 'components/paperSubscriptions/paperSubs
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
 import DigitalSubscriptionsContainer from 'components/digitalSubscriptions/digitalSubscriptionsContainer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -52,18 +51,12 @@ function getSubscriptionsForCountry() {
       </section>
     );
   }
-  const testName = 'international_subs_landing_pages';
+
   return (
     <InternationalSubscriptions
       sectionId={supporterSectionId}
       countryGroupId={countryGroupId}
       headingSize={3}
-      clickEvents={{
-        iOSApp: sendTrackingEventsOnClick('premium_tier_ios_cta', 'digital', testName, true),
-        androidApp: sendTrackingEventsOnClick('premium_tier_android_cta', 'digital', testName, true),
-        digiPack: sendTrackingEventsOnClick('digipack_cta', 'digital', testName, true),
-        weekly: sendTrackingEventsOnClick('weekly_cta', 'print', testName, true),
-      }}
     />);
 }
 
