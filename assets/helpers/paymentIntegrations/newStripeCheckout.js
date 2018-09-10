@@ -20,6 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentCallback, type PaymentResult } from './paymentApi';
+import { type Contrib } from 'helpers/contributions';
 
 // ----- Functions ----- //
 
@@ -41,20 +42,22 @@ function loadStripe(): Promise<void> {
 
 }
 
-function getStripeKey(currency: IsoCurrency, isTestUser: boolean): string {
+function getStripeKey(contributionType: Contrib, currency: IsoCurrency, isTestUser: boolean): string {
+  const key = contributionType === 'ONE_OFF' ? contributionType : 'REGULAR';
   switch (currency) {
     case 'AUD':
       return isTestUser ?
-        window.guardian.stripeKeyAustralia.uat : window.guardian.stripeKeyAustralia.default;
+        window.guardian.stripeKeyAustralia[key].uat : window.guardian.stripeKeyAustralia[key].default;
     default:
       return isTestUser ?
-        window.guardian.stripeKeyDefaultCurrencies.uat :
-        window.guardian.stripeKeyDefaultCurrencies.default;
+        window.guardian.stripeKeyDefaultCurrencies[key].uat :
+        window.guardian.stripeKeyDefaultCurrencies[key].default;
   }
 }
 
 function setupStripeCheckout(
   callback: PaymentCallback,
+  contributionType: Contrib,
   currency: IsoCurrency,
   isTestUser: boolean,
 ): Promise<[Object, Promise<PaymentResult>]> {
@@ -81,7 +84,7 @@ function setupStripeCheckout(
       callback({ paymentMethod: 'Stripe', token: token.id }).then(deferred.resolve, deferred.reject);
     };
 
-    const stripeKey = getStripeKey(currency, isTestUser);
+    const stripeKey = getStripeKey(contributionType, currency, isTestUser);
 
     resolve1([
       window.StripeCheckout.configure({

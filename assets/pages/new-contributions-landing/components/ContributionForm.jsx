@@ -99,7 +99,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
     const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
       ? formElement.elements.contributionState.value
       : null;
-    const billingPeriod = formElement.elements.contributionType === 'MONTHLY'
+    const billingPeriod = formElement.elements.contributionType.value === 'MONTHLY'
       ? 'Monthly'
       : 'Annual';
     const ophanIds = getOphanIds();
