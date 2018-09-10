@@ -97,10 +97,10 @@ const handleFailure = (onFailure: OnFailure) => (errorJson: Object): void => {
   if (error.exceptionType === 'CardException') {
     onFailure('Your card has been declined.');
   } else {
-    const errorHttpCode = error.errorCode || 'unknown';
+    const errorHttpCode = error.errorHttpCode || 'unknown';
     const exceptionType = error.exceptionType || 'unknown';
     const errorName = error.errorName || 'unknown';
-    logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
+    logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode}, type: ${exceptionType}, error-name: ${errorName}.`);
     onFailure('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
   }
 
