@@ -21,13 +21,6 @@ export type RegularCheckoutCallback = (
   accountHolderName?: string
 ) => Promise<*>
 
-// ----- Data ----- //
-
-const paymentMethodsPerCountryGroup: { [CountryGroupId | 'default']: PaymentMethod[] } = {
-  GBPCountries: ['Stripe', 'DirectDebit', 'PayPal'],
-  default: ['Stripe', 'PayPal'],
-};
-
 // ----- Functions ----- //
 
 function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): number {
@@ -89,5 +82,4 @@ export {
   getPaymentMethod,
   getPaymentDescription,
   getPaymentLabel,
-  paymentMethodsPerCountryGroup,
 };

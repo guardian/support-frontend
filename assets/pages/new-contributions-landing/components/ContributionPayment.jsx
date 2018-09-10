@@ -5,8 +5,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentMethod, paymentMethodsPerCountryGroup, getPaymentLabel } from 'helpers/checkouts';
+import { type PaymentMethod, getPaymentLabel } from 'helpers/checkouts';
+import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
@@ -19,11 +21,15 @@ import { type Action, updatePaymentMethod } from '../contributionsLandingActions
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
+  contributionType: Contrib,
   paymentMethod: PaymentMethod,
   updatePaymentMethod: PaymentMethod => Action, // eslint-disable-line react/no-unused-prop-types
 };
 
 const mapStateToProps = (state: State) => ({
+  countryId: state.common.internationalisation.countryId,
+  contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
 });
 
@@ -34,7 +40,9 @@ const mapDispatchToProps = {
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
-  const paymentMethods = paymentMethodsPerCountryGroup[props.countryGroupId] || paymentMethodsPerCountryGroup.default;
+  const paymentMethods: PaymentMethod[] = props.contributionType !== 'ONE_OFF' && props.countryId === 'GB'
+    ? ['Stripe', 'DirectDebit', 'PayPal']
+    : ['Stripe', 'PayPal'];
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
