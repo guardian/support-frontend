@@ -8,26 +8,15 @@ import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import {
-  setEmailShouldValidate,
-  setFirstNameShouldValidate,
-  setLastNameShouldValidate,
-  setStage,
-} from '../helpers/checkoutForm/checkoutFormActions';
+import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
+import { formClassName, setShouldValidateFunctions } from './formFields';
 
 
 // ----- Functions ----- //
 
-const setShouldValidateFunctions = [
-  setFirstNameShouldValidate,
-  setLastNameShouldValidate,
-  setEmailShouldValidate,
-];
-
-const submitYourDetailsForm = (dispatch: Dispatch<CheckoutAction>, formFields: Array<UserFormFieldAttribute>) => {
-  const formIsValid = formFields.every(el => el.isValid);
-  if (formIsValid) {
+const submitYourDetailsForm = (dispatch: Dispatch<CheckoutAction>) => {
+  if (formIsValid(formClassName)) {
     dispatch(setStage('payment'));
   } else {
     setShouldValidateFunctions.forEach(f => dispatch(f()));
@@ -55,28 +44,14 @@ function mapStateToProps(state: State) {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
-  dispatch,
   onBackClick: () => {
     dispatch(setStage('checkout'));
   },
+  onNextButtonClick:
+    () => submitYourDetailsForm(dispatch),
 });
-
-
-function mergeProps(stateProps, dispatchProps, ownProps) {
-
-  return {
-    ...ownProps,
-    ...stateProps,
-    ...dispatchProps,
-    onNextButtonClick:
-      () => submitYourDetailsForm(
-        dispatchProps.dispatch,
-        [stateProps.firstName, stateProps.lastName, stateProps.email],
-      ),
-  };
-}
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionsGuestCheckout);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionsGuestCheckout);

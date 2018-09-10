@@ -20,25 +20,27 @@ export function emptyInputField(input: ?string): boolean {
 }
 
 export type UserFormFieldAttribute = {
+  id: string,
   value: string,
   shouldValidate: boolean,
-  isValid: boolean,
 }
 
 export function shouldShowError(field: UserFormFieldAttribute): boolean {
-  return field.shouldValidate && !field.isValid;
+  return field.shouldValidate && !formFieldIsValid(field.id);
 }
 
-export type formFieldIsValidParameters = {
-  value: string,
-  required: boolean,
-  pattern: RegExp
-}
+export const formInputs = (formClassName: string): Array<HTMLInputElement> =>
+  [...document.querySelector('.' + formClassName).getElementsByTagName('input')];
 
-export function formFieldIsValid(params: formFieldIsValidParameters): boolean {
-  const emptyFieldError = params.required && emptyInputField(params.value);
-  const patternMatchError = !patternIsValid(params.value, params.pattern);
-  return !emptyFieldError && !patternMatchError;
+export const formIsValid = (formId: string) =>
+  [...formInputs(formId)].every(element => element.validity.valid);
+
+export function formFieldIsValid(id: string) {
+  const element = document.getElementById(id);
+  if (element && element instanceof HTMLInputElement) {
+    return element.validity.valid;
+  }
+  return false;
 }
 
 export function getTitle(contributionType: ContributionType): string {

@@ -1,16 +1,14 @@
 // @flow
 
 // ----- Imports ----- //
-import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { type Action } from './checkoutFormActions';
 
 // ----- Types ----- //
 
 
 export type CheckoutFormAttribute = {
+  id: string,
   shouldValidate: boolean,
-  required: boolean,
-  pattern: RegExp,
 }
 
 export type OneOffContributionsCheckoutFormState = {
@@ -23,13 +21,9 @@ export type OneOffContributionsCheckoutFormState = {
 const initialState: OneOffContributionsCheckoutFormState = {
   email: {
     shouldValidate: false,
-    required: true,
-    pattern: emailRegexPattern,
   },
   fullName: {
     shouldValidate: false,
-    required: true,
-    pattern: /.*/,
   },
 };
 

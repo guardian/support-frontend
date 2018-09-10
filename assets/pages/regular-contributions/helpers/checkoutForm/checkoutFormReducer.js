@@ -8,9 +8,7 @@ import { type Action } from './checkoutFormActions';
 
 
 export type CheckoutFormAttribute = {
-  shouldValidate: boolean,
-  required: boolean,
-  pattern: RegExp,
+  shouldValidate: boolean;
 }
 
 export type Stage = 'checkout' | 'payment'
@@ -27,18 +25,12 @@ export type RegularContributionsCheckoutFormState = {
 const initialState: RegularContributionsCheckoutFormState = {
   email: {
     shouldValidate: false,
-    required: true,
-    pattern: emailRegexPattern,
   },
   firstName: {
     shouldValidate: false,
-    required: true,
-    pattern: /.*/,
   },
   lastName: {
     shouldValidate: false,
-    required: true,
-    pattern: /.*/,
   },
   stage: 'checkout',
 };

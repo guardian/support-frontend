@@ -25,6 +25,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
+import { formClassName, setShouldValidateFunctions } from './formFields';
 
 // ----- Types ----- //
 
@@ -33,7 +34,6 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
-  disable: boolean,
   error: ?string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
@@ -51,6 +51,8 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
   optimizeExperiments: OptimizeExperiments,
+  canOpen?: () => boolean,
+  whenUnableToOpen?: (dispatch: CheckoutAction)
 |};
 
 
@@ -97,7 +99,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.optimizeExperiments,
         )}
         switchStatus={props.directDebitSwitchStatus}
-        disable={props.disable}
+        canOpen={() => formIsValid(formClassName)}
+        whenUnableToOpen={() => setShouldValidateFunctions}
       />);
   }
 
@@ -120,8 +123,9 @@ function RegularContributionsPayment(props: PropTypes, context) {
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
-    disable={props.disable}
     svg={<SvgArrowRightStraight />}
+    canOpen={() => formIsValid(formClassName)}
+    whenUnableToOpen={() => setShouldValidateFunctions}
   />);
 
   const payPalButton = (<PayPalExpressButton
@@ -143,7 +147,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
-    disable={props.disable}
+    canOpen={() => formIsValid(formClassName)}
+    whenUnableToOpen={() => setShouldValidateFunctions}
   />);
 
   return (
@@ -181,10 +186,6 @@ function mapStateToProps(state) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    disable:
-      !formFieldIsValid(firstName)
-      || !formFieldIsValid(lastName)
-      || !formFieldIsValid(email),
     error: state.page.regularContrib.error,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,

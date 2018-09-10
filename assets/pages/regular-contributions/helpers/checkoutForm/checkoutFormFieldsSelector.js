@@ -10,37 +10,23 @@ import { type State } from '../../regularContributionsReducer';
 
 function getFormFields(state: State) {
 
-  const firstNameFromState = {
+
+  const firstName = {
+    id: 'first-name',
     value: state.page.user.firstName,
     ...state.page.checkoutForm.firstName,
   };
 
-  const lastNameFromState = {
+  const lastName = {
+    id: 'lastName',
     value: state.page.user.lastName,
     ...state.page.checkoutForm.lastName,
   };
 
-  const emailFromState = {
+  const email = {
+    id: 'email',
     value: state.page.user.email,
     ...state.page.checkoutForm.email,
-  };
-
-  const firstName = {
-    value: firstNameFromState.value,
-    shouldValidate: firstNameFromState.shouldValidate,
-    isValid: formFieldIsValid(firstNameFromState),
-  };
-
-  const lastName = {
-    value: lastNameFromState.value,
-    shouldValidate: lastNameFromState.shouldValidate,
-    isValid: formFieldIsValid(lastNameFromState),
-  };
-
-  const email = {
-    value: emailFromState.value,
-    shouldValidate: emailFromState.shouldValidate,
-    isValid: formFieldIsValid(emailFromState),
   };
 
   return { firstName, lastName, email };

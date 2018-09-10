@@ -25,6 +25,8 @@ type PropTypes = {|
   setHasLoaded: () => void,
   switchStatus: Status,
   disable: boolean,
+  canOpen: () => boolean,
+  whenUnableToOpen: () => void,
 |};
 
 
@@ -56,6 +58,8 @@ function Button(props: PropTypes) {
     props.currencyId,
     props.csrf,
     props.callback,
+    props.canOpen,
+    props.whenUnableToOpen,
   );
 
   const disabledButton = (
