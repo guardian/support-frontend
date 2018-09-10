@@ -18,7 +18,6 @@ import { type CommonState } from 'helpers/page/page';
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
-  supporterSectionId: string,
   headingSize: HeadingSize,
 };
 
@@ -36,25 +35,29 @@ function mapStateToProps(state: { common: CommonState }) {
 
 function SubscriptionsByCountryGroup(props: PropTypes) {
 
-  if (props.countryGroupId === 'GBPCountries') {
+  const { countryGroupId, headingSize, ...otherProps } = props;
+
+  if (countryGroupId === 'GBPCountries') {
     return (
-      <section id={props.supporterSectionId}>
+      <div {...otherProps}>
         <DigitalSubscriptionsContainer
-          headingSize={props.headingSize}
+          headingSize={headingSize}
         />
         <PaperSubscriptionsContainer
-          headingSize={props.headingSize}
+          headingSize={headingSize}
         />
-      </section>
+      </div>
     );
   }
 
   return (
-    <InternationalSubscriptions
-      sectionId={props.supporterSectionId}
-      countryGroupId={props.countryGroupId}
-      headingSize={props.headingSize}
-    />
+    <div {...otherProps}>
+      <InternationalSubscriptions
+        countryGroupId={countryGroupId}
+        headingSize={headingSize}
+        {...otherProps}
+      />
+    </div>
   );
 
 }

@@ -42,7 +42,7 @@ const content = (
         modifierClasses={['compact']}
         highlightsHeadingSize={2}
       />
-      <SubscriptionsByCountryGroup supporterSectionId={supporterSectionId} headingSize={3} />
+      <SubscriptionsByCountryGroup id={supporterSectionId} headingSize={3} />
       <WhySupport headingSize={3} id="why-support" />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
