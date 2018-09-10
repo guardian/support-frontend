@@ -123,20 +123,31 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
 }
 
 function checkRegularStatus(csrf: CsrfState): Object => Promise<PaymentResult> {
-  return json => pollP(
-    MAX_POLLS,
-    POLLING_INTERVAL,
-    () => requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf)),
-    json2 => json2.status === 'pending',
-  ).then((json3) => {
-    switch (json3.status) {
-      case 'success':
-        return PaymentSuccess;
+  return json => {
+    switch (json.status) {
+      case 'pending':
+        return pollP(
+          MAX_POLLS,
+          POLLING_INTERVAL,
+          () => requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf)),
+          json2 => json2.status === 'pending',
+        ).then((json3) => {
+          switch (json3.status) {
+            case 'success':
+              return PaymentSuccess;
+
+            default:
+              return { tag: 'failure', error: json3.message };
+          }
+        });
+
+      case 'failure':
+        return Promise.resolve({ tag: 'failure', error: json.message });
 
       default:
-        return { tag: 'failure', error: json3.message };
+        return Promise.resolve(PaymentSuccess);
     }
-  });
+  }
 }
 
 function getOneOffStripeEndpoint() {
