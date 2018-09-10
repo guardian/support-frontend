@@ -15,6 +15,7 @@ import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownC
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
 import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.EitherValues._
 class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "referrerAcquisitionDataCodec" should {
@@ -149,8 +150,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "SwitchStateDecoder" should {
     "decode json" in {
-      decode[SwitchState]("\"On\"") mustBe Right(On)
-      decode[SwitchState]("\"Off\"") mustBe Right(Off)
+      decode[SwitchState]("\"On\"").right.value mustBe On
+      decode[SwitchState]("\"Off\"").right.value mustBe Off
     }
 
   }
@@ -166,9 +167,9 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "SegmentDecoder" should {
     "decode json" in {
-      decode[Segment]("\"Perc0\"") mustBe Right(Segment.Perc0)
-      decode[Segment]("\"Perc50\"") mustBe Right(Segment.Perc50)
-      decode[Segment]("\"Anything else\"") mustBe Right(Segment.Perc50)
+      decode[Segment]("\"Perc0\"").right.value mustBe Segment.Perc0
+      decode[Segment]("\"Perc50\"").right.value mustBe Segment.Perc50
+      decode[Segment]("\"Anything else\"").right.value mustBe Segment.Perc50
     }
   }
 
@@ -234,7 +235,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         )
       )
 
-      decode[Settings](json) mustBe Right(settings)
+      decode[Settings](json).right.value mustBe settings
     }
   }
 }
