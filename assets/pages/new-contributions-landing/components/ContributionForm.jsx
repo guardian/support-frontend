@@ -180,7 +180,7 @@ function setupStripe(formElement: Object, props: PropTypes) {
     csrf,
   );
 
-  return setupStripeCheckout(callback, currency, isTestUser);
+  return setupStripeCheckout(callback, contributionType, currency, isTestUser);
 }
 
 function ContributionForm(props: PropTypes) {
