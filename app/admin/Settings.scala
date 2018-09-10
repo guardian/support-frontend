@@ -43,10 +43,9 @@ object Settings {
     }
 
     adminSettingsSource.flatMap(settingsSource =>
-      decode[Settings](settingsSource.path)
+      decode[Settings](settingsSource.rawJson)
         .leftMap(err => new Error(s"Error decoding settings JSON at ${settingsSource.path}. Circe error: ${err.getMessage}")))
   }
-
 
   def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
     config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
