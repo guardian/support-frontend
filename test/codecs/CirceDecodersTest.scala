@@ -1,15 +1,21 @@
 package codecs
 
+import admin._
 import cats.syntax.either._
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.DirectDebitPaymentFields
 import io.circe.parser.parse
+import io.circe.parser._
+import io.circe.syntax._
+import io.circe.{Json, JsonObject}
 import models.CheckBankAccountDetails
+import SwitchState._
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
 import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.EitherValues._
 class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "referrerAcquisitionDataCodec" should {
@@ -139,6 +145,97 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       checkBankAccountData.sortCode.value mustBe "121212"
       checkBankAccountData.accountNumber.value mustBe "12121212"
+    }
+  }
+
+  "SwitchStateDecoder" should {
+    "decode json" in {
+      decode[SwitchState]("\"On\"").right.value mustBe On
+      decode[SwitchState]("\"Off\"").right.value mustBe Off
+    }
+
+  }
+  "SwitchStateEncoder" should {
+    "encode json" in {
+      val on: SwitchState = On
+      on.asJson mustBe Json.fromString("On")
+
+      val off: SwitchState = Off
+      off.asJson mustBe Json.fromString("Off")
+    }
+  }
+
+  "SegmentDecoder" should {
+    "decode json" in {
+      decode[Segment]("\"Perc0\"").right.value mustBe Segment.Perc0
+      decode[Segment]("\"Perc50\"").right.value mustBe Segment.Perc50
+      decode[Segment]("\"Anything else\"").right.value mustBe Segment.Perc50
+    }
+  }
+
+  "SegmentEncoder" should {
+    "encode json" in {
+      val perc0: Segment = Segment.Perc0
+      perc0.asJson mustBe Json.fromString("Perc0")
+
+      val perc50: Segment = Segment.Perc50
+      perc50.asJson mustBe Json.fromString("Perc50")
+    }
+  }
+
+  "SettingsDecoder" should {
+    "decode json" in {
+      val json =
+        """{
+          |  "switches": {
+          |    "oneOffPaymentMethods": {
+          |      "stripe": "On",
+          |      "payPal": "On"
+          |    },
+          |    "recurringPaymentMethods": {
+          |      "stripe": "On",
+          |      "payPal": "On",
+          |      "directDebit": "On"
+          |    },
+          |    "experiments": {
+          |      "newPaymentFlow": {
+          |        "name": "newPaymentFlow",
+          |        "description": "Redesign of the payment flow UI",
+          |        "segment": "Perc0",
+          |        "state": "On"
+          |      }
+          |    },
+          |    "optimize": "Off",
+          |    "internationalSubscribePages": "On"
+          |  }
+          |}""".stripMargin
+
+      val settings = Settings(
+        Switches(
+          oneOffPaymentMethods = PaymentMethodsSwitch(
+            stripe = On,
+            payPal = On,
+            directDebit = None
+          ),
+          recurringPaymentMethods = PaymentMethodsSwitch(
+            stripe = On,
+            payPal = On,
+            directDebit = Some(On)
+          ),
+          experiments = Map(
+            "newPaymentFlow" -> ExperimentSwitch(
+              name = "newPaymentFlow",
+              description = "Redesign of the payment flow UI",
+              segment = Segment.Perc0,
+              state = On
+            )
+          ),
+          optimize = Off,
+          internationalSubscribePages = On
+        )
+      )
+
+      decode[Settings](json).right.value mustBe settings
     }
   }
 }
