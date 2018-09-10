@@ -18,6 +18,7 @@ type FormState = {
   paymentMethod: PaymentMethod,
   amount: Amount | null,
   showOtherAmount: boolean,
+  otherAmount: string | null,
   done: boolean,
 };
 
@@ -51,6 +52,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentMethod: 'Stripe',
     amount: initialAmount.MONTHLY,
     showOtherAmount: false,
+    otherAmount: null,
     done: false,
   };
 
@@ -72,6 +74,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SELECT_OTHER_AMOUNT':
         return { ...state, amount: null, showOtherAmount: true };
+
+      case 'UPDATE_OTHER_AMOUNT':
+        return { ...state, amount: null, showOtherAmount: true, otherAmount: action.otherAmount };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };

@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type Action, selectAmount, selectOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, selectOtherAmount, updateOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -26,6 +26,7 @@ type PropTypes = {
   showOther: boolean,
   selectAmount: Amount => (() => void),
   selectOtherAmount: () => void,
+  updateOtherAmount: string => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -38,6 +39,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   selectAmount: amount => () => { dispatch(selectAmount(amount)); },
   selectOtherAmount: () => { dispatch(selectOtherAmount()); },
+  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
 });
 
 // ----- Render ----- //
@@ -96,6 +98,7 @@ function ContributionAmount(props: PropTypes) {
               type="number"
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
+              onChange={e => props.updateOtherAmount(e.target.value)}
               autoComplete="off"
               autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               required
