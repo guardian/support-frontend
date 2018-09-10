@@ -8,7 +8,9 @@ import com.gu.support.workers.model.DirectDebitPaymentFields
 import io.circe.parser.parse
 import io.circe.parser._
 import io.circe.syntax._
+import io.circe.{Json, JsonObject}
 import models.CheckBankAccountDetails
+import SwitchState._
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
@@ -147,20 +149,20 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "SwitchStateDecoder" should {
     "decode json" in {
-      decode[SwitchState]("\"On\"") mustBe Right(SwitchState.On)
-      decode[SwitchState]("\"Off\"") mustBe Right(SwitchState.Off)
+      decode[SwitchState]("\"On\"") mustBe Right(On)
+      decode[SwitchState]("\"Off\"") mustBe Right(Off)
+    }
+
+  }
+  "SwitchStateEncoder" should {
+    "encode json" in {
+      val on: SwitchState = On
+      on.asJson mustBe Json.fromString("On")
+
+      val off: SwitchState = Off
+      off.asJson mustBe Json.fromString("Off")
     }
   }
-
-  //  "SwitchStateEncoder" should {
-  //    "encode json" in {
-  //      val on: SwitchState = SwitchState.On
-  //      on.asJson mustBe "On"
-  //
-  //      val off: SwitchState = SwitchState.Off
-  //      off.asJson mustBe "Off"
-  //    }
-  //  }
 
   "SegmentDecoder" should {
     "decode json" in {
@@ -170,20 +172,18 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
     }
   }
 
-  //    "SegmentEncoder" should {
-  //      "decode json" in {
-  //        val perc0: Segment = Segment.Perc0
-  //        perc0.asJson mustBe "Perc0"
-  //
-  //        val perc50: Segment = Segment.Perc50
-  //        perc50.asJson mustBe "Perc50"
-  //      }
-  //    }
+  "SegmentEncoder" should {
+    "encode json" in {
+      val perc0: Segment = Segment.Perc0
+      perc0.asJson mustBe Json.fromString("Perc0")
+
+      val perc50: Segment = Segment.Perc50
+      perc50.asJson mustBe Json.fromString("Perc50")
+    }
+  }
 
   "SettingsDecoder" should {
     "decode json" in {
-      import SwitchState._
-
       val json =
         """{
           |  "switches": {
