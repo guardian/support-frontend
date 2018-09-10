@@ -10,9 +10,10 @@ import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PageState as OneOffPageState } from '../oneOffContributionsReducer';
+import { type State } from '../oneOffContributionsReducer';
 
-// ----- Component ----- //
+
+// ----- State/Action Maps ----- //
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
@@ -31,7 +32,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-function mapStateToProps(state: OneOffPageState) {
+function mapStateToProps(state: State) {
   return {
     email: state.page.user.email,
     marketingPreferencesOptIn: state.page.user.gnmMarketing,
@@ -40,5 +41,8 @@ function mapStateToProps(state: OneOffPageState) {
     csrf: state.page.csrf,
   };
 }
+
+
+// ----- Exports ----- //
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsent);

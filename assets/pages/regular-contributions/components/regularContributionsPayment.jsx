@@ -10,6 +10,7 @@ import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/strip
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type { Status } from 'helpers/settings';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -24,7 +25,6 @@ import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
 import PaymentFailureMessage from '../../../components/paymentFailureMessage/paymentFailureMessage';
-
 
 // ----- Types ----- //
 
@@ -121,6 +121,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
     disable={props.disable}
+    svg={<SvgArrowRightStraight />}
   />);
 
   const payPalButton = (<PayPalExpressButton

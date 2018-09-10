@@ -3,8 +3,21 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 body {
-  background: gu-colour(news-garnett-highlight);
   min-height: 100vh;
+}
+
+.gu-content {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gu-content--contribution-form {
+  background: #f1f8fc;
+}
+
+.gu-content--contribution-thankyou {
+  background: gu-colour(news-garnett-highlight);
 }
 
 .gu-content__main {
@@ -124,6 +137,7 @@ footer[role="contentinfo"] {
   background: gu-colour(media-garnett-main-1);
   color: gu-colour(garnett-neutral-2);
   padding-bottom: $gu-v-spacing * 2;
+  font-size: 12px;
 }
 
 footer[role="contentinfo"] a {
@@ -194,6 +208,7 @@ header[role="banner"] {
     border: 0;
     position: absolute;
     top: 0;
+    left: 10px;
     width: 290px;
   }
 
@@ -268,7 +283,7 @@ header[role="banner"] {
     border-color: gu-colour(garnett-neutral-4);
     border-style: none solid;
     border-width: 0 1px;
-    width: 340px;
+    width: 380px;
     margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
   }
 
@@ -287,7 +302,7 @@ header[role="banner"] {
     left: 50%;
     position: absolute;
     transform: translate(-50%,0);
-    width: 1300px;
+    width: 1400px;
   }
 
   .gu-content__main .svg-contributions-bg-mobile {
@@ -307,7 +322,7 @@ header[role="banner"] {
   }
 
   .gu-content__content {
-    width: 300px;
+    width: 380px;
     margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
   }
 }
@@ -321,11 +336,6 @@ header[role="banner"] {
   footer[role="contentinfo"] {
     padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
     width: 1240px;
-  }
-  
-  .gu-content__content {
-    width: 300px;
-    margin-left: calc(50% - 400px); /* account for the 11px of negative margin */
   }
 }
 
@@ -403,9 +413,9 @@ header[role="banner"] {
     }
 
     .gu-content__content {
-      margin: 0 -11px;
+      margin: 0;
       grid-row: 1;
-      grid-column: 2 / 6;
+      grid-column: 2 / 7;
     }
 
     .component-footer__content {
@@ -442,7 +452,7 @@ header[role="banner"] {
 
     .gu-content__content {
       width: auto;
-      grid-column: 4 / 8;
+      grid-column: 4 / 9;
     }
 
     .component-footer__content {
@@ -472,7 +482,7 @@ header[role="banner"] {
     }
 
     .gu-content__content {
-      grid-column: 5 / 9;
+      grid-column: 5 / 10;
     }
 
     .component-footer__content {
@@ -659,6 +669,10 @@ form {
   margin-left: 5px;
 }
 
+.form__radio-group--contribution-pay .form__legend {
+  font-weight: bold;
+}
+
 .form__label {
   font-weight: bold;
   line-height: 1;
@@ -806,25 +820,12 @@ form {
   padding: 0 10px;
 }
 
-.confirmation__maintitle {
-  margin: 0;
+.confirmation__title {
+  font-weight: 900;
+  font-size: 1;
+  margin: ($gu-v-spacing / 3) 0;
 }
 
-.confirmation__amount {
-  align-items: center;
-  background: gu-colour(sport-garnett-media-main-1);
-  border-radius: 100%;
-  color: gu-colour(garnett-neutral-5);
-  display: flex;
-  float: right;
-  font: normal 16px/1 $gu-text-sans-web;
-  height: 50px;
-  justify-content: center;
-  margin: 0 0 0 ($gu-h-spacing / 2);
-  width: 50px;
-}
-
-.confirmation__title,
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
   margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
@@ -838,6 +839,11 @@ form {
   margin-bottom: $gu-v-spacing + 20px;
   padding-bottom: $gu-v-spacing;
   padding-top: $gu-v-spacing;
+}
+
+.confirmation__meta {
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
 }
 
 .button {
@@ -882,56 +888,3 @@ form {
   margin: ($gu-v-spacing * 2) -10px 0;
 }
 
-/*= Positioning background circles */
-.gu-content__bg .component-grid-image {
-  border-radius: 100%;
-  object-fit: cover;
-  position: absolute;
-  left: 50%;
-}
-
-@include mq($from: mobile, $until: tablet) {
-  .component-grid-image--circle-a {
-    bottom: 0px;
-    height: 123px;
-    transform: translate(-162px, 0);
-    width: 123px;
-  }
-
-  .component-grid-image--circle-b {
-    bottom: 0px;
-    height: 70px;
-    transform: translate(-20px, 0);
-    width: 70px;
-  }
-
-  .component-grid-image--circle-c {
-    bottom: 0px;
-    height: 178px;
-    transform: translate(39px, 0);
-    width: 178px;
-  }
-}  
-
-@include mq($from: tablet) {
-  .component-grid-image--circle-a {
-    bottom: 0;
-    height: 450px;
-    transform: translate(-78px,0);
-    width: 450px;
-  }
-  
-  .component-grid-image--circle-b {
-    bottom: 359px;
-    height: 250px;
-    transform: translate(258px,0);
-    width: 250px;
-  }
-  
-  .component-grid-image--circle-c {
-    bottom: 0px;
-    height: 280px;
-    transform: translate(-692px,0);
-    width: 290px;
-  }
-}

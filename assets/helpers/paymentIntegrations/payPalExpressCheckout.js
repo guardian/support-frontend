@@ -103,7 +103,7 @@ function setup(
 
   const payPalOptions: Object = {
     env: window.guardian.payPalEnvironment,
-    style: { color: 'blue', size: 'responsive' },
+    style: { color: 'blue', size: 'responsive', label: 'pay' },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,

@@ -98,11 +98,11 @@ object CirceDecoders {
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
-  implicit val switchStateEncode: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
-  implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
+  implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
+  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val segmentEncoder: Encoder[Segment] = Encoder.encodeString.contramap[Segment](_.toString)
-  implicit val segmentDecoder: Decoder[Segment] = deriveDecoder
+  implicit val segmentDecoder: Decoder[Segment] = Decoder.decodeString.map(Segment.fromString)
   implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
   implicit val settingsCodec: Codec[Settings] = deriveCodec

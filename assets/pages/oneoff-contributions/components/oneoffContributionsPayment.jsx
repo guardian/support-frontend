@@ -12,15 +12,15 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
-
+import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import { type PageState as State } from '../oneOffContributionsReducer';
 import PaymentFailureMessage from '../../../components/paymentFailureMessage/paymentFailureMessage';
+import { type State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
 
@@ -108,6 +108,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
         disable={false}
+        svg={<SvgCreditCard />}
       />
     </section>
   );

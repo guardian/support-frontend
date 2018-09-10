@@ -52,6 +52,7 @@ type PropTypes = {
   setEmailShouldValidate: () => void,
   countryGroup: CountryGroupId,
   country: IsoCountry,
+  isSignedIn: boolean,
 };
 
 // ----- Map State/Props ----- //
@@ -66,6 +67,7 @@ function mapStateToProps(state: State) {
     email,
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }
@@ -158,17 +160,21 @@ function NameForm(props: PropTypes) {
 
   return (
     <form className="regular-contrib__name-form">
-      <TextInput
-        id="email"
-        value={props.email.value}
-        labelText="Email"
-        placeholder="Email"
-        onChange={props.setEmail}
-        onBlur={onFormFieldBlur(props.setEmailShouldValidate, continueButtonClassName)}
-        modifierClasses={['email']}
-        showError={shouldShowError(props.email)}
-        errorMessage="Please enter a valid email address."
-      />
+      {
+        !props.isSignedIn ? (
+          <TextInput
+            id="email"
+            value={props.email.value}
+            labelText="Email"
+            placeholder="Email"
+            onChange={props.setEmail}
+            onBlur={onFormFieldBlur(props.setEmailShouldValidate, continueButtonClassName)}
+            modifierClasses={['email']}
+            showError={shouldShowError(props.email)}
+            errorMessage="Please enter a valid email address."
+          />
+        ) : null
+      }
       <TextInput
         id="first-name"
         labelText="First name"
