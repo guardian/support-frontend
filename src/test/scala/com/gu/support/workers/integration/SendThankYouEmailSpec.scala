@@ -44,7 +44,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Some(dd), Some(mandateId)
+      "UK", "", Monthly, Some(dd), Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -71,7 +71,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", Some(dd), Some(mandateId))
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", Monthly, Some(dd), Some(mandateId))
     val resultJson = parse(ef.payload)
 
     resultJson.isRight should be(true)
@@ -87,7 +87,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   }
 
   it should "still work without a Payment Method" in {
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "")
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", Monthly)
     val resultJson = parse(ef.payload)
     resultJson.isRight should be(true)
     (resultJson.right.get \\ "payment method").isEmpty should be(true)
