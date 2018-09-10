@@ -56,24 +56,25 @@ type RegularFields = {|
 |};
 
 type PaymentFields
-  = {| tag: 'oneoff', fields: OneOffFields |}
-  | {| tag: 'regular', fields: RegularFields |}
+  = {| contributionType: 'oneoff', fields: OneOffFields |}
+  | {| contributionType: 'regular', fields: RegularFields |}
   ;
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
 export type Token
-  = {| tag: 'Stripe', token: string |}
-  | {| tag: 'PayPal', token: string |}
-  | {| tag: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |};
+  = {| paymentMethod: 'Stripe', token: string |}
+  | {| paymentMethod: 'PayPal', token: string |}
+  | {| paymentMethod: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |};
+
 export type PaymentResult
-  = {| tag: 'success' |}
-  | {| tag: 'failure', error: string |};
+  = {| paymentStatus: 'success' |}
+  | {| paymentStatus: 'failure', error: string |};
 export type PaymentCallback = Token => Promise<PaymentResult>;
 
 // ----- Setup ----- //
 
-const PaymentSuccess: PaymentResult = { tag: 'success' };
+const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
 const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
@@ -110,13 +111,13 @@ function requestPaymentApi(endpoint: string, init: Object) {
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   if (json.error) {
     if (json.error.exceptionType === 'CardException') {
-      return Promise.resolve({ tag: 'failure', error: 'Your card has been declined.' });
+      return Promise.resolve({ paymentStatus: 'failure', error: 'Your card has been declined.' });
     }
     const errorHttpCode = json.error.errorCode || 'unknown';
     const exceptionType = json.error.exceptionType || 'unknown';
     const errorName = json.error.errorName || 'unknown';
     return Promise.resolve({
-      tag: 'failure',
+      paymentStatus: 'failure',
       error: `Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`,
     });
 
@@ -142,12 +143,12 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
               return PaymentSuccess;
 
             default:
-              return { tag: 'failure', error: json3.message };
+              return { paymentStatus: 'failure', error: json3.message };
           }
         });
 
       case 'failure':
-        return Promise.resolve({ tag: 'failure', error: json.message });
+        return Promise.resolve({ paymentStatus: 'failure', error: json.message });
 
       default:
         return Promise.resolve(PaymentSuccess);

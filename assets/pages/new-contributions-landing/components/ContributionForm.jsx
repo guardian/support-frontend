@@ -106,7 +106,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
     switch (contributionType) {
       case 'ONE_OFF':
         return {
-          tag: 'oneoff',
+          contributionType: 'oneoff',
           fields: {
             paymentData: {
               currency,
@@ -124,7 +124,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
 
       default:
         return {
-          tag: 'regular',
+          contributionType: 'regular',
           fields: {
             firstName: formElement.elements.contributionFirstName.value,
             lastName: formElement.elements.contributionLastName.value,

@@ -71,7 +71,7 @@ function setupStripeCheckout(
     });
 
     const handleToken = (token) => {
-      callback({ tag: 'Stripe', token: token.id }).then(deferred.resolve, deferred.reject);
+      callback({ paymentMethod: 'Stripe', token: token.id }).then(deferred.resolve, deferred.reject);
     };
 
     const stripeKey = getStripeKey(currency, isTestUser);
