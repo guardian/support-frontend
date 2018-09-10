@@ -143,7 +143,8 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         </div>
         <div className="digital-subscription-landing-header__title">
           <div className="digital-subscription-landing-header__title-copy">
-            <h1>Support The Guardian with a digital subscription</h1>
+            {/*<h1>Support The Guardian with a digital subscription abc</h1>*/}
+            <h1>Get the full digital experience of The Guardian</h1>
           </div>
         </div>
         <PriceCtaContainer dark referringCta="support_digipack_page_header" />

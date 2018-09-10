@@ -28,20 +28,20 @@ const imageSlot = '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px';
 
 const defaultFeatures: ListItem[] = [
   {
-    heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
-    text: 'A selection of long reads, interviews and features to be read at leisure',
+    heading: 'Ad-free reading',
+    text: 'Independent reporting with no distractions',
   },
   {
     heading: ['Live ', <mark className="product-block__highlight">New</mark>],
-    text: 'A fast way to catch up on every news story as it breaks',
+    text: 'Catch up on every news story as it breaks',
   },
   {
-    heading: 'Complete the daily crossword',
-    text: 'Get our daily crossword wherever you are',
+    heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
+    text: 'Explore a beautifully curated feed of features, reviews and opinion',
   },
   {
-    heading: 'Ad-free reading',
-    text: 'Read the news with no distractions',
+    heading: 'Enhanced offline reading',
+    text: 'Quality journalism on your schedule - download the day\'s news before you travel',
   },
 ];
 
@@ -54,7 +54,7 @@ const appFeatures: {
   AUDCountries: [
     {
       heading: 'Ad-free reading',
-      text: 'Read the news with no distractions',
+      text: 'Independent reporting with no distractions',
     },
     {
       heading: 'Complete the daily crossword',
@@ -106,7 +106,7 @@ function ProductBlock(props: PropTypes) {
           imageProps={appImages[props.countryGroupId]}
           companionSvg={null}
           heading="App premium tier"
-          description="Exciting new app features available for mobile and tablet users with a digital subscription"
+          description="Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading"
           features={appFeatures[props.countryGroupId]}
         />
         <div className="product-block__ampersand">&</div>
@@ -121,23 +121,23 @@ function ProductBlock(props: PropTypes) {
           }}
           companionSvg={<SvgPennyFarthingCircles />}
           heading="iPad daily Edition"
-          description="Enjoy the daily UK newspaper and all of our supplements, specially designed to be read on the iPad"
+          description="Every issue of The Guardian and Observer, designed for your iPad and available offline"
           features={[
             {
-              heading: 'Read on the go',
-              text: 'Your complete daily newspaper, designed for iPad and available offline',
+              heading: 'On-the-go reading',
+              text: 'Your complete daily newspaper, beautifully designed for your iPad',
             },
             {
-              heading: 'Never wait for the news',
-              text: 'Downloads automatically at 4am every day, so it\'s there when you wake up',
+              heading: 'Every supplement',
+              text: 'Including Weekend, Review, Feast and Observer Food Monthly',
             },
             {
-              heading: 'Get every supplement',
-              text: 'Including Weekend, Feast and Observer Food Monthly',
+              heading: 'Journalism at your own pace',
+              text: 'Access a month of issues in your 30-day archive',
             },
             {
-              heading: 'Enjoy our journalism at your own pace',
-              text: 'Access to your own 30-day archive',
+              heading: 'The news when you need it',
+              text: 'Downloads automatically every day, ready for you to read offline',
             },
           ]}
         />
