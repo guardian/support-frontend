@@ -180,7 +180,19 @@ function setupStripe(formElement: Object, props: PropTypes) {
     csrf,
   );
 
-  return setupStripeCheckout(callback, contributionType, currency, isTestUser);
+  const onSuccess: PaymentResult => void = result => {
+    switch (result.paymentStatus) {
+      case 'success':
+        trackConversion(abParticipations, '/contribute/thankyou.new');
+        props.onSuccess();
+        break;
+
+      default:
+        props.onError(result.error);
+    }
+  };
+
+  return setupStripeCheckout(callback, contributionType, currency, isTestUser, onSuccess);
 }
 
 function ContributionForm(props: PropTypes) {
@@ -205,21 +217,10 @@ function ContributionForm(props: PropTypes) {
         <form
           ref={(el) => {
           if (el) {
-            logP(setupStripe(el, props)
-              .then(([stripeHandler, onPaymentFinished]) => {
+            setupStripe(el, props)
+              .then((stripeHandler) => {
                 el.addEventListener('submit', onSubmit(stripeHandler));
-                return onPaymentFinished;
-              })
-              .then((result) => {
-                switch (result.paymentStatus) {
-                  case 'success':
-                    trackConversion(abParticipations, '/contribute/thankyou.new');
-                    props.onSuccess();
-                    break;
-                  default:
-                    props.onError(result.error);
-                }
-              }));
+              });
           }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
