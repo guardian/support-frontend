@@ -72,13 +72,13 @@ function getPaymentDescription(contributionType: Contrib, paymentMethod: Payment
 
 function getPaymentLabel(paymentMethod: PaymentMethod): string {
   switch (paymentMethod) {
-    case 'Stripe': 
+    case 'Stripe':
       return 'Credit/Debit Card';
     case 'DirectDebit':
       return 'Debit Card';
     case 'PayPal':
     default:
-      return 'PayPal'
+      return 'PayPal';
   }
 }
 

@@ -20,7 +20,7 @@ import { type Action, updatePaymentMethod } from '../contributionsLandingActions
 type PropTypes = {
   countryGroupId: CountryGroupId,
   paymentMethod: PaymentMethod,
-  updatePaymentMethod: PaymentMethod => Action,
+  updatePaymentMethod: PaymentMethod => Action, // eslint-disable-line react/no-unused-prop-types
 };
 
 const mapStateToProps = (state: State) => ({
@@ -34,12 +34,14 @@ const mapDispatchToProps = {
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
+  const paymentMethods = paymentMethodsPerCountryGroup[props.countryGroupId] || paymentMethodsPerCountryGroup.default;
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
       <legend className="form__legend">Payment method</legend>
 
       <ul className="form__radio-group-list">
-        {(paymentMethodsPerCountryGroup[props.countryGroupId] || paymentMethodsPerCountryGroup.default).map(paymentMethod => (
+        {paymentMethods.map(paymentMethod => (
           <li className="form__radio-group-item">
             <input
               id={`contributionPayment-${paymentMethod}`}

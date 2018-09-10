@@ -19,7 +19,6 @@ import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
-import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -87,44 +86,42 @@ const getAmount = (formElements: Object) =>
 
 function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
   return (contributionType, token) => {
-    const { 
-      countryGroupId, 
+    const {
+      countryGroupId,
       countryId,
-      currency, 
-      ophanIds,
+      currency,
       abParticipations,
       referrerAcquisitionData,
       optimizeExperiments,
     } = props;
+    const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
+      ? formElement.elements.contributionState.value
+      : null;
+    const billingPeriod = formElement.elements.contributionType === 'MONTHLY'
+      ? 'Monthly'
+      : 'Annual';
+    const ophanIds = getOphanIds();
 
     switch (contributionType) {
       case 'ONE_OFF':
-        return { 
-          tag: 'oneoff', 
+        return {
+          tag: 'oneoff',
           fields: {
             paymentData: {
-              currency: currency,
+              currency,
               amount: getAmount(formElement.elements),
               token: token.token,
-              email: formElement.elements.contributionEmail.value
+              email: formElement.elements.contributionEmail.value,
             },
             acquisitionData: derivePaymentApiAcquisitionData(
-              referrerAcquisitionData, 
-              abParticipations, 
-              optimizeExperiments
-            )
-          }
-        }
+              referrerAcquisitionData,
+              abParticipations,
+              optimizeExperiments,
+            ),
+          },
+        };
 
       default:
-        const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
-          ? formElement.elements.contributionState.value
-          : null;
-        const billingPeriod = formElement.elements.contributionType === 'MONTHLY'
-          ? 'Monthly'
-          : 'Annual';
-        const ophanIds = getOphanIds();
-
         return {
           tag: 'regular',
           fields: {
@@ -142,15 +139,15 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
             ophanIds,
             referrerAcquisitionData,
             supportAbTests: getSupportAbTests(abParticipations, optimizeExperiments),
-          }
+          },
         };
     }
-  }
+  };
 }
-    
+
 // ----- Event handlers ----- //
 
-const onSubmit = (stripeHandler) => (e) => {
+const onSubmit = stripeHandler => (e) => {
   e.preventDefault();
 
   const { elements } = (e.target: any);
@@ -165,20 +162,19 @@ const onSubmit = (stripeHandler) => (e) => {
 
 function setupStripe(formElement: Object, props: PropTypes) {
   const {
-    abParticipations,
+    csrf,
     currency,
-    referrerAcquisitionData,
-    optimizeExperiments,
-    thankYouRoute,
+    contributionType,
+    isTestUser,
   } = props;
 
   const callback = createPaymentCallback(
     getData(props, formElement),
-    props.contributionType,
-    props.csrf
+    contributionType,
+    csrf,
   );
 
-  return setupStripeCheckout(callback, currency, props.isTestUser);
+  return setupStripeCheckout(callback, currency, isTestUser);
 }
 
 function ContributionForm(props: PropTypes) {
@@ -207,12 +203,12 @@ function ContributionForm(props: PropTypes) {
                 el.addEventListener('submit', onSubmit(stripeHandler));
                 return onPaymentFinished;
               })
-              .then(result => {
+              .then((result) => {
                 switch (result.tag) {
                   case 'success':
                     props.onSuccess();
                     break;
-                  case 'failure':
+                  default:
                     props.onError(result.error);
                 }
               }));

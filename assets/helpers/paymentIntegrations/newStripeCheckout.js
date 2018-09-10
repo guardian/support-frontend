@@ -18,14 +18,7 @@
  * and only contribution endpoint.
  */
 
-import {
-  derivePaymentApiAcquisitionData,
-  type ReferrerAcquisitionData,
-  type PaymentAPIAcquisitionData,
-} from 'helpers/tracking/acquisitions';
-import { type Participations } from 'helpers/abTests/abtest';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type PaymentCallback, type PaymentResult } from './paymentApi';
 
 // ----- Functions ----- //
@@ -43,9 +36,9 @@ function loadStripe(): Promise<void> {
         document.head.appendChild(script);
       }
     });
-  } else {
-    return Promise.resolve();
   }
+  return Promise.resolve();
+
 }
 
 function getStripeKey(currency: IsoCurrency, isTestUser: boolean): string {
@@ -94,7 +87,7 @@ function setupStripeCheckout(
         currency,
         token: handleToken,
       }),
-      deferred.promise
+      deferred.promise,
     ]);
   }));
 }
