@@ -165,12 +165,14 @@ function setupStripe(formElement: Object, props: PropTypes) {
     csrf,
     currency,
     contributionType,
+    abParticipations,
     isTestUser,
   } = props;
 
   const callback = createPaymentCallback(
     getData(props, formElement),
     contributionType,
+    abParticipations,
     csrf,
   );
 

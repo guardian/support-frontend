@@ -11,8 +11,10 @@ import {
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod, type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
 import { pollP, logP } from 'helpers/promise';
+import trackConversion from 'helpers/tracking/conversions';
 
 import * as cookie from 'helpers/cookie';
 
@@ -122,14 +124,17 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   return Promise.resolve(PaymentSuccess);
 }
 
-function checkRegularStatus(csrf: CsrfState): Object => Promise<PaymentResult> {
-  return json => {
+function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
+  return (json) => {
     switch (json.status) {
       case 'pending':
         return pollP(
           MAX_POLLS,
           POLLING_INTERVAL,
-          () => requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf)),
+          () => {
+            trackConversion(participations, routes.recurringContribPending);
+            requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf));
+          },
           json2 => json2.status === 'pending',
         ).then((json3) => {
           switch (json3.status) {
@@ -147,7 +152,7 @@ function checkRegularStatus(csrf: CsrfState): Object => Promise<PaymentResult> {
       default:
         return Promise.resolve(PaymentSuccess);
     }
-  }
+  };
 }
 
 function getOneOffStripeEndpoint() {
@@ -168,16 +173,21 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   ).then(checkOneOffStatus);
 }
 
-function postRegularStripeRequest(data: PaymentFields, csrf: CsrfState): Promise<PaymentResult> {
+function postRegularStripeRequest(
+  data: PaymentFields, 
+  participations: Participations, 
+  csrf: CsrfState
+): Promise<PaymentResult> {
   return requestPaymentApi(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(csrf));
+  ).then(checkRegularStatus(participations, csrf));
 }
 
 function createPaymentCallback(
   getData: (Contrib, Token) => PaymentFields,
   contributionType: Contrib,
+  participations: Participations,
   csrf: CsrfState,
 ): PaymentCallback {
   return (paymentToken) => {
@@ -190,7 +200,7 @@ function createPaymentCallback(
             return postOneOffStripeRequest(data);
 
           default:
-            return postRegularStripeRequest(data, csrf);
+            return postRegularStripeRequest(data, participations, csrf);
         }
       case 'PayPal':
         // TODO
