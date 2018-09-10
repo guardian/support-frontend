@@ -174,9 +174,9 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
 }
 
 function postRegularStripeRequest(
-  data: PaymentFields, 
-  participations: Participations, 
-  csrf: CsrfState
+  data: PaymentFields,
+  participations: Participations,
+  csrf: CsrfState,
 ): Promise<PaymentResult> {
   return requestPaymentApi(
     routes.recurringContribCreate,

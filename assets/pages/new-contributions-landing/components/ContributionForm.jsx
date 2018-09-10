@@ -19,6 +19,7 @@ import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
+import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -188,6 +189,7 @@ function ContributionForm(props: PropTypes) {
     initialFirstName,
     initialLastName,
     initialEmail,
+    abParticipations,
   } = props;
 
   return props.done ?
@@ -208,6 +210,7 @@ function ContributionForm(props: PropTypes) {
               .then((result) => {
                 switch (result.tag) {
                   case 'success':
+                    trackConversion(abParticipations, '/contribute/thankyou.new');
                     props.onSuccess();
                     break;
                   default:
