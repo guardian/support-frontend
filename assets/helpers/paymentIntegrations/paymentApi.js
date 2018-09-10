@@ -87,16 +87,16 @@ function getRequestOptions(
   csrf: CsrfState | null,
 ): Object {
   const headers = csrf !== null
-  ? { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' }
-  : { 'Content-Type': 'application/json' };
-  
+    ? { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' }
+    : { 'Content-Type': 'application/json' };
+
   return {
     method: 'GET',
     headers,
     credentials,
   };
 }
-  
+
 /** Builds a `RequestInit` object for use with POST requests using the Fetch API */
 function postRequestOptions(
   data: PaymentFields,
@@ -106,7 +106,7 @@ function postRequestOptions(
   return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
 }
 
-/** Sends a request to the payment API (or support workers, yolo) and converts 
+/** Sends a request to the payment API (or support workers, yolo) and converts
  *  the response into a JSON object */
 function requestPaymentApi(endpoint: string, init: Object) {
   return logP(fetch(endpoint, init).then(resp => resp.json()));
@@ -130,9 +130,9 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   return Promise.resolve(PaymentSuccess);
 }
 
-/** 
+/**
  * Process the response for a regular payment from the payment API.
- * 
+ *
  * If the payment is:
  * - pending, then we start polling the API until it's done or some timeout occurs
  * - failed, then we bubble up an error value
@@ -205,7 +205,7 @@ function postRegularStripeRequest(
  * The payment in itself is handled by a third party, so we need a way
  * to catch the outcome. This is done in the form of a callback that
  * receives some form of token from the third party.
- * 
+ *
  * This data is used to then send the appropriate data to the payment API
  */
 function createPaymentCallback(

@@ -19,8 +19,8 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentCallback, type PaymentResult } from './paymentApi';
 import { type Contrib } from 'helpers/contributions';
+import { type PaymentCallback, type PaymentResult } from './paymentApi';
 
 // ----- Functions ----- //
 
@@ -73,7 +73,7 @@ function setupStripeCheckout(
       deferred.reject = reject2;
     });
 
-    /** 
+    /**
      * The callback returns a promise that we want to catch at the calling site
      * in order to process the result of the payment (i.e. send data too the payment API).
      * Sadly, Promises in JavaScript can only be resolved/rejected form the inside 😭

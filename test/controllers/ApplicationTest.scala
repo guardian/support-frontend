@@ -42,6 +42,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[HttpIdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
+        mock[StripeConfigProvider],
         mock[PaymentAPIService],
         mock[StringsConfig],
         mock[Settings]
@@ -55,6 +56,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[AssetsResolver],
         mock[HttpIdentityService],
         stubControllerComponents(),
+        mock[StripeConfigProvider],
         mock[StripeConfigProvider],
         mock[PaymentAPIService],
         mock[StringsConfig],
