@@ -13,7 +13,7 @@ import { type BillingPeriod, type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollP, logP } from 'helpers/promise';
+import { pollUntilP, logP } from 'helpers/promise';
 import trackConversion from 'helpers/tracking/conversions';
 
 import * as cookie from 'helpers/cookie';
@@ -142,7 +142,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   return (json) => {
     switch (json.status) {
       case 'pending':
-        return pollP(
+        return pollUntilP(
           MAX_POLLS,
           POLLING_INTERVAL,
           () => {

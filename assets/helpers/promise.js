@@ -18,8 +18,9 @@ function sleepP<A>(i: number, p: () => Promise<A>): Promise<A> {
 
 // Runs a promise `p` every `sleep` milliseconds until the result passes a validation test `pred`
 // and fails after `max` attempts
-function pollP<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => boolean): Promise<A> {
-  return repeatP(max, () => sleepP(sleep, () => p().then(a => (pred(a) ? Promise.reject() : a))));
+function pollUntilP<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => boolean): Promise<A> {
+  const innerPromise = () => p().then(a => (pred(a) ? Promise.reject() : a));
+  return repeatP(max, () => sleepP(sleep, innerPromise));
 }
 
 // Logs any error produced by the promise
@@ -33,6 +34,6 @@ function logP<A>(p: Promise<A>): Promise<A> {
 export {
   repeatP,
   sleepP,
-  pollP,
+  pollUntilP,
   logP,
 };
