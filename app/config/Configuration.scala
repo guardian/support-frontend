@@ -7,6 +7,7 @@ import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
 import admin.Settings
+import cats.syntax.either._
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -39,7 +40,6 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val settings = Settings.fromConfig(config.getConfig("switches"))
+  implicit val settings = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource")).valueOr(throw _)
 
-  implicit val settingsFromDisk = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource"))
 }
