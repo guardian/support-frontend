@@ -378,6 +378,10 @@ header[role="banner"] {
       justify-content: none;
     }
 
+    footer[role="contentinfo"] {
+      padding: 0 ($gu-h-spacing / 2);
+    }
+
     .countryGroups {
       grid-area: 1 / 1;
     }
