@@ -139,6 +139,16 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
  * - otherwise, we bubble up a success value
  */
 function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
+  const handleCompletion = (json) => {
+    switch (json.status) {
+      case 'success':
+        return PaymentSuccess;
+
+      default:
+        return { paymentStatus: 'failure', error: json.message };
+    }
+  };
+
   return (json) => {
     switch (json.status) {
       case 'pending':
@@ -150,21 +160,10 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
             return requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',
-        ).then((json3) => {
-          switch (json3.status) {
-            case 'success':
-              return PaymentSuccess;
-
-            default:
-              return { paymentStatus: 'failure', error: json3.message };
-          }
-        });
-
-      case 'failure':
-        return Promise.resolve({ paymentStatus: 'failure', error: json.message });
+        ).then(handleCompletion);
 
       default:
-        return Promise.resolve(PaymentSuccess);
+        return Promise.resolve(handleCompletion(json));
     }
   };
 }
