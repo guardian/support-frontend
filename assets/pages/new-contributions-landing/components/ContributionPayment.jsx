@@ -9,7 +9,6 @@ import { type PaymentMethod, getPaymentLabel } from 'helpers/checkouts';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
@@ -20,7 +19,6 @@ import { type Action, updatePaymentMethod } from '../contributionsLandingActions
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId,
   countryId: IsoCountry,
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
