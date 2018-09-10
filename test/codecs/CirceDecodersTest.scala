@@ -1,10 +1,13 @@
 package codecs
 
+import admin._
 import cats.syntax.either._
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.workers.model.DirectDebitPaymentFields
 import io.circe.parser.parse
+import io.circe.parser._
+import io.circe.syntax._
 import models.CheckBankAccountDetails
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
@@ -139,6 +142,99 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       checkBankAccountData.sortCode.value mustBe "121212"
       checkBankAccountData.accountNumber.value mustBe "12121212"
+    }
+  }
+
+  "SwitchStateDecoder" should {
+    "decode json" in {
+      decode[SwitchState](""""On"""") mustBe Right(SwitchState.On)
+      decode[SwitchState](""""Off"""") mustBe Right(SwitchState.Off)
+    }
+  }
+
+  //  "SwitchStateEncoder" should {
+  //    "encode json" in {
+  //      val on: SwitchState = SwitchState.On
+  //      on.asJson mustBe "On"
+  //
+  //      val off: SwitchState = SwitchState.Off
+  //      off.asJson mustBe "Off"
+  //    }
+  //  }
+
+  "SegmentDecoder" should {
+    "decode json" in {
+      decode[Segment]("\"Perc0\"") mustBe Right(Segment.Perc0)
+      decode[Segment]("\"Perc50\"") mustBe Right(Segment.Perc50)
+      decode[Segment]("\"Anything else\"") mustBe Right(Segment.Perc50)
+    }
+  }
+
+  //    "SegmentEncoder" should {
+  //      "decode json" in {
+  //        val perc0: Segment = Segment.Perc0
+  //        perc0.asJson mustBe "Perc0"
+  //
+  //        val perc50: Segment = Segment.Perc50
+  //        perc50.asJson mustBe "Perc50"
+  //      }
+  //    }
+
+  "SettingsDecoder" should {
+    "decode json" in {
+      import SwitchState._
+
+      val json =
+        """{
+          |  "switches": {
+          |    "oneOffPaymentMethods": {
+          |      "stripe": "On",
+          |      "payPal": "On"
+          |    },
+          |    "recurringPaymentMethods": {
+          |      "stripe": "On",
+          |      "payPal": "On",
+          |      "directDebit": "On"
+          |    },
+          |    "experiments": {
+          |      "newPaymentFlow": {
+          |        "name": "newPaymentFlow",
+          |        "description": "Redesign of the payment flow UI",
+          |        "segment": "Perc0",
+          |        "state": "On"
+          |      }
+          |    },
+          |    "optimize": "Off",
+          |    "internationalSubscribePages": "On"
+          |  }
+          |}""".stripMargin
+
+      val settings = Settings(
+        Switches(
+          oneOffPaymentMethods = PaymentMethodsSwitch(
+            stripe = On,
+            payPal = On,
+            directDebit = None
+          ),
+          recurringPaymentMethods = PaymentMethodsSwitch(
+            stripe = On,
+            payPal = On,
+            directDebit = Some(On)
+          ),
+          experiments = Map(
+            "newPaymentFlow" -> ExperimentSwitch(
+              name = "newPaymentFlow",
+              description = "Redesign of the payment flow UI",
+              segment = Segment.Perc0,
+              state = On
+            )
+          ),
+          optimize = Off,
+          internationalSubscribePages = On
+        )
+      )
+
+      decode[Settings](json) mustBe Right(settings)
     }
   }
 }
