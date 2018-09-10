@@ -18,7 +18,7 @@ function getFormFields(state: State) {
   };
 
   const lastName = {
-    id: 'lastName',
+    id: 'last-name',
     value: state.page.user.lastName,
     ...state.page.checkoutForm.lastName,
   };

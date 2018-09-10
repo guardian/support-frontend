@@ -29,8 +29,13 @@ export function shouldShowError(field: UserFormFieldAttribute): boolean {
   return field.shouldValidate && !formFieldIsValid(field.id);
 }
 
-export const formInputs = (formClassName: string): Array<HTMLInputElement> =>
-  [...document.querySelector('.' + formClassName).getElementsByTagName('input')];
+export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
+  const form = document.querySelector(`.${formClassName}`);
+  if (form) {
+    return [...form.getElementsByTagName('input')];
+  }
+  return [];
+};
 
 export const formIsValid = (formId: string) =>
   [...formInputs(formId)].every(element => element.validity.valid);

@@ -154,7 +154,7 @@ function NameForm(props: PropTypes) {
   const continueButtonClassName = 'component-cta-link--continue';
 
   return (
-    <form className="regular-contrib__name-form">
+    <form className={formClassName}>
       {
         !props.isSignedIn ? (
           <TextInput

@@ -100,7 +100,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           context.store.getState,
           props.optimizeExperiments,
         )}
-        canOpen={() => props.formFields.every(f => f.isValid)}
+        canOpen={() => true}
         whenUnableToOpen={() => props.setShouldValidateFunctions.forEach(f => f())}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}

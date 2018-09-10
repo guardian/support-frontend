@@ -64,6 +64,7 @@ export default function TextInput(props: PropTypes) {
         placeholder={props.placeholder}
         autoComplete={props.autocomplete}
         autoCapitalize={props.autocapitalize}
+        required={true}
       />
       <ErrorMessage
         showError={props.showError}

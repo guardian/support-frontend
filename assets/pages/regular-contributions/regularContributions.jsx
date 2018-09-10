@@ -64,8 +64,8 @@ const router = (
               payment={
                 <RegularContributionsPayment
                   whenUnableToOpen={
-                    (dispatch: Dispatch<CheckoutAction>) =>
-                      setShouldValidateFunctions.forEach(f => dispatch(f()))
+                    () =>
+                      setShouldValidateFunctions.forEach(f => store.dispatch(f()))
                   }
                   canOpen={
                     () => formIsValid(formClassName)

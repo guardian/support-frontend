@@ -106,7 +106,7 @@ function setup(
   };
 
   function addFormChangeListeners(handler) {
-    formInputs(formId).forEach(input => {
+    formInputs(formClassName).forEach(input => {
       input.addEventListener('change', handler);
     });
   }

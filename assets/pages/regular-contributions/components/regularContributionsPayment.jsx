@@ -51,8 +51,8 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
   optimizeExperiments: OptimizeExperiments,
-  canOpen?: () => boolean,
-  whenUnableToOpen?: (dispatch: CheckoutAction)
+  canOpen: () => boolean,
+  whenUnableToOpen: (dispatch: CheckoutAction) => void,
 |};
 
 
@@ -99,7 +99,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.optimizeExperiments,
         )}
         switchStatus={props.directDebitSwitchStatus}
-        canOpen={() => formIsValid(formClassName)}
+        canOpen={props.canOpen}
         whenUnableToOpen={() => setShouldValidateFunctions}
       />);
   }
@@ -124,8 +124,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
     amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
     svg={<SvgArrowRightStraight />}
-    canOpen={() => formIsValid(formClassName)}
-    whenUnableToOpen={() => setShouldValidateFunctions}
+    canOpen={props.canOpen}
+    whenUnableToOpen={props.whenUnableToOpen}
   />);
 
   const payPalButton = (<PayPalExpressButton
@@ -147,8 +147,8 @@ function RegularContributionsPayment(props: PropTypes, context) {
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
-    canOpen={() => formIsValid(formClassName)}
-    whenUnableToOpen={() => setShouldValidateFunctions}
+    canOpen={props.canOpen}
+    whenUnableToOpen={props.whenUnableToOpen}
   />);
 
   return (
@@ -212,6 +212,13 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
     },
   };
 }
+
+RegularContributionsPayment.defaultProps = {
+  canOpen: () => true,
+  whenUnableToOpen: () => undefined,
+};
+
+
 
 // ----- Exports ----- //
 
