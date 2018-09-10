@@ -21,11 +21,6 @@ case class Settings(
     switches: Switches
 )
 
-case class AdminSettingsSource(
-    path: String,
-    rawJson: String
-)
-
 object Settings {
   def fromConfig(config: Config): Settings =
     Settings(
@@ -38,20 +33,31 @@ object Settings {
       )
     )
 
-  def fromDiskOrS3(adminSettingsSource: Config): Either[Throwable, Settings] = {
-    val settings: Either[Throwable, AdminSettingsSource] = if (adminSettingsSource.hasPath("local.path")) {
-      fromDisk(adminSettingsSource.getString("local.path"))
-    } else if (adminSettingsSource.hasPath("s3")) {
-      fromS3(adminSettingsSource.getString("s3.bucket"), adminSettingsSource.getString("s3.key"))
+  def fromDiskOrS3(config: Config): Either[Throwable, Settings] = {
+    val adminSettingsSource: Either[Throwable, AdminSettingsSource] = if (config.hasPath("local.path")) {
+      AdminSettingsSource.fromDisk(config.getString("local.path"))
+    } else if (config.hasPath("s3")) {
+      AdminSettingsSource.fromS3(config.getString("s3.bucket"), config.getString("s3.key"))
     } else {
       Left(new Error("Need adminSettingsSource.local or adminSettingsSource.s3 defined in config"))
     }
 
-    settings.flatMap(s =>
-      decode[Settings](s.path)
-        .leftMap(err => new Error(s"Error decoding settings JSON at $s.path. Circe error: ${err.getMessage}")))
+    adminSettingsSource.flatMap(settingsSource =>
+      decode[Settings](settingsSource.path)
+        .leftMap(err => new Error(s"Error decoding settings JSON at ${settingsSource.path}. Circe error: ${err.getMessage}")))
   }
 
+
+  def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
+    config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
+}
+
+case class AdminSettingsSource(
+    path: String,
+    rawJson: String
+)
+
+object AdminSettingsSource {
   def fromDisk(path: String): Either[Throwable, AdminSettingsSource] =
     Either.catchNonFatal {
       val homeDir = System.getProperty("user.home")
@@ -63,9 +69,6 @@ object Settings {
     }
 
   def fromS3(bucket: String, key: String): Either[Throwable, AdminSettingsSource] = ???
-
-  def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
-    config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
