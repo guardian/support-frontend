@@ -147,8 +147,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "SwitchStateDecoder" should {
     "decode json" in {
-      decode[SwitchState](""""On"""") mustBe Right(SwitchState.On)
-      decode[SwitchState](""""Off"""") mustBe Right(SwitchState.Off)
+      decode[SwitchState]("\"On\"") mustBe Right(SwitchState.On)
+      decode[SwitchState]("\"Off\"") mustBe Right(SwitchState.Off)
     }
   }
 
