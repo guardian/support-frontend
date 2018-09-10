@@ -55,10 +55,9 @@ type RegularFields = {|
   supportAbTests: AcquisitionABTest[],
 |};
 
-type PaymentFields
+export type PaymentFields
   = {| contributionType: 'oneoff', fields: OneOffFields |}
-  | {| contributionType: 'regular', fields: RegularFields |}
-  ;
+  | {| contributionType: 'regular', fields: RegularFields |};
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
@@ -70,6 +69,7 @@ export type Token
 export type PaymentResult
   = {| paymentStatus: 'success' |}
   | {| paymentStatus: 'failure', error: string |};
+
 export type PaymentCallback = Token => Promise<PaymentResult>;
 
 // ----- Setup ----- //
@@ -81,6 +81,11 @@ const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 // ----- Functions ----- //
 
+/**
+ *
+ * @param {*} credentials
+ * @param {*} csrf
+ */
 function getRequestOptions(
   credentials: Credentials,
   csrf: CsrfState | null,
@@ -134,7 +139,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
           POLLING_INTERVAL,
           () => {
             trackConversion(participations, routes.recurringContribPending);
-            requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf));
+            return requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',
         ).then((json3) => {
@@ -194,7 +199,7 @@ function createPaymentCallback(
   return (paymentToken) => {
     const data = getData(contributionType, paymentToken);
 
-    switch (paymentToken.tag) {
+    switch (paymentToken.paymentMethod) {
       case 'Stripe':
         switch (contributionType) {
           case 'ONE_OFF':

@@ -14,11 +14,12 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
+import { createPaymentCallback, type PaymentFields, type Token } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -111,7 +112,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
             paymentData: {
               currency,
               amount: getAmount(formElement.elements),
-              token: token.token,
+              token: token.paymentMethod === 'Stripe' ? token.token : '',
               email: formElement.elements.contributionEmail.value,
             },
             acquisitionData: derivePaymentApiAcquisitionData(
@@ -136,7 +137,9 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
               currency,
               billingPeriod,
             },
-            paymentFields: { stripeToken: token.token },
+            paymentFields: token.paymentMethod === 'Stripe'
+              ? { stripeToken: token.token }
+              : { baid: '' },
             ophanIds,
             referrerAcquisitionData,
             supportAbTests: getSupportAbTests(abParticipations, optimizeExperiments),
@@ -208,7 +211,7 @@ function ContributionForm(props: PropTypes) {
                 return onPaymentFinished;
               })
               .then((result) => {
-                switch (result.tag) {
+                switch (result.paymentStatus) {
                   case 'success':
                     trackConversion(abParticipations, '/contribute/thankyou.new');
                     props.onSuccess();
