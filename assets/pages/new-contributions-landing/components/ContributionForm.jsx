@@ -12,9 +12,10 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { logP } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { createPaymentCallback } from 'helpers/paymentIntegrations/paymentApi';
@@ -42,6 +43,7 @@ type PropTypes = {|
   csrf: CsrfState,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
   currency: IsoCurrency,
   selectedCountryGroupDetails: CountryMetaData,
   abParticipations: Participations,
@@ -60,6 +62,7 @@ type PropTypes = {|
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
   csrf: state.page.csrf,
+  countryId: state.common.internationalisation.countryId,
   isTestUser: state.page.user.isTestUser || false,
   initialFirstName: state.page.user.firstName,
   initialLastName: state.page.user.lastName,
@@ -84,21 +87,24 @@ const getAmount = (formElements: Object) =>
 
 function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
   return (contributionType, token) => {
+    const { 
+      countryGroupId, 
+      countryId,
+      currency, 
+      ophanIds,
+      abParticipations,
+      referrerAcquisitionData,
+      optimizeExperiments,
+    } = props;
+
     switch (contributionType) {
       case 'ONE_OFF':
-        const {
-          abParticipations,
-          currency,
-          referrerAcquisitionData,
-          optimizeExperiments,
-        } = props;
-    
         return { 
           tag: 'oneoff', 
           fields: {
             paymentData: {
               currency: currency,
-              amount: formElement.elements.contributionAmount.value,
+              amount: getAmount(formElement.elements),
               token: token.token,
               email: formElement.elements.contributionEmail.value
             },
@@ -109,8 +115,35 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
             )
           }
         }
+
       default:
-        // TODO
+        const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
+          ? formElement.elements.contributionState.value
+          : null;
+        const billingPeriod = formElement.elements.contributionType === 'MONTHLY'
+          ? 'Monthly'
+          : 'Annual';
+        const ophanIds = getOphanIds();
+
+        return {
+          tag: 'regular',
+          fields: {
+            firstName: formElement.elements.contributionFirstName.value,
+            lastName: formElement.elements.contributionLastName.value,
+            country: countryId,
+            state: contributionState,
+            email: formElement.elements.contributionEmail.value,
+            contribution: {
+              amount: getAmount(formElement.elements),
+              currency,
+              billingPeriod,
+            },
+            paymentFields: { stripeToken: token.token },
+            ophanIds,
+            referrerAcquisitionData,
+            supportAbTests: getSupportAbTests(abParticipations, optimizeExperiments),
+          }
+        };
     }
   }
 }
