@@ -70,6 +70,13 @@ function setupStripeCheckout(
       deferred.reject = reject2;
     });
 
+    /** 
+     * The callback returns a promise that we want to catch at the calling site
+     * in order to process the result of the payment (i.e. send data too the payment API).
+     * Sadly, Promises in JavaScript can only be resolved/rejected form the inside 😭
+     * There's no other choice but to use the trick above to leak the resolution/rejection
+     * handlers out of the scope of the Promise, so we can call them inside the callback.
+     */
     const handleToken = (token) => {
       callback({ paymentMethod: 'Stripe', token: token.id }).then(deferred.resolve, deferred.reject);
     };

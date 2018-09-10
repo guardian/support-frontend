@@ -81,26 +81,23 @@ const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 // ----- Functions ----- //
 
-/**
- *
- * @param {*} credentials
- * @param {*} csrf
- */
+/** Builds a `RequestInit` object for use with GET requests using the Fetch API */
 function getRequestOptions(
   credentials: Credentials,
   csrf: CsrfState | null,
 ): Object {
   const headers = csrf !== null
-    ? { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' }
-    : { 'Content-Type': 'application/json' };
-
+  ? { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' }
+  : { 'Content-Type': 'application/json' };
+  
   return {
     method: 'GET',
     headers,
     credentials,
   };
 }
-
+  
+/** Builds a `RequestInit` object for use with POST requests using the Fetch API */
 function postRequestOptions(
   data: PaymentFields,
   credentials: Credentials,
@@ -109,10 +106,13 @@ function postRequestOptions(
   return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
 }
 
+/** Sends a request to the payment API (or support workers, yolo) and converts 
+ *  the response into a JSON object */
 function requestPaymentApi(endpoint: string, init: Object) {
   return logP(fetch(endpoint, init).then(resp => resp.json()));
 }
 
+/** Process the response for a one-off payment from the payment API */
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   if (json.error) {
     if (json.error.exceptionType === 'CardException') {
@@ -130,6 +130,14 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   return Promise.resolve(PaymentSuccess);
 }
 
+/** 
+ * Process the response for a regular payment from the payment API.
+ * 
+ * If the payment is:
+ * - pending, then we start polling the API until it's done or some timeout occurs
+ * - failed, then we bubble up an error value
+ * - otherwise, we bubble up a success value
+ */
 function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
   return (json) => {
     switch (json.status) {
@@ -161,6 +169,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   };
 }
 
+/** Returns the URL for one-off payments (should probably be a `const` somewhere) */
 function getOneOffStripeEndpoint() {
   if (cookie.get('_test_username')) {
     return addQueryParamsToURL(
@@ -172,6 +181,7 @@ function getOneOffStripeEndpoint() {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
+/** Sends a one-off payment request to the payment API and checks the result */
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return requestPaymentApi(
     getOneOffStripeEndpoint(),
@@ -179,6 +189,7 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   ).then(checkOneOffStatus);
 }
 
+/** Sends a regular payment request to the payment API and checks the result */
 function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
@@ -190,6 +201,13 @@ function postRegularStripeRequest(
   ).then(checkRegularStatus(participations, csrf));
 }
 
+/**
+ * The payment in itself is handled by a third party, so we need a way
+ * to catch the outcome. This is done in the form of a callback that
+ * receives some form of token from the third party.
+ * 
+ * This data is used to then send the appropriate data to the payment API
+ */
 function createPaymentCallback(
   getData: (Contrib, Token) => PaymentFields,
   contributionType: Contrib,
