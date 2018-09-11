@@ -67,7 +67,7 @@ object AdminSettingsSource {
   private def fromS3(config: Config): Either[Throwable, AdminSettingsSource] = Either.catchNonFatal {
     S3(
       config.getString("adminSettingsSource.s3.bucket"),
-      config.getString("adminSettingsSource.s3.key"),
+      config.getString("adminSettingsSource.s3.key")
     )
   }
 
