@@ -275,7 +275,7 @@
       width: 320px;
     }
 
-    @include mq($from: mobileMedium, $until: leftCol) {
+    @include mq($from: mobileMedium, $until: tablet) {
       width: 330px;
     }
 
