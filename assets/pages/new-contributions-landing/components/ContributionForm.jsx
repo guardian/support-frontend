@@ -268,6 +268,7 @@ function ContributionForm(props: PropTypes) {
           <NewContributionState countryGroupId={countryGroupId} />
           <NewContributionPayment countryGroupId={countryGroupId} />
           <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
+          {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
       </div>
     );
