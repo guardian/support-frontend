@@ -20,10 +20,12 @@ const updateContributionType = (contributionType: Contrib): Action =>
 const updatePaymentMethod = (paymentMethod: PaymentMethod): Action =>
   ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 
-const selectAmount = (amount: Amount, contributionType: Contrib, index: number): Action => 
-  ({ type: 'SELECT_AMOUNT', amount, contributionType, index });
+const selectAmount = (amount: Amount, contributionType: Contrib, index: number): Action =>
+  ({
+    type: 'SELECT_AMOUNT', amount, contributionType, index,
+  });
 
-const selectOtherAmount = (contributionType: Contrib, index: number): Action => 
+const selectOtherAmount = (contributionType: Contrib, index: number): Action =>
   ({ type: 'SELECT_OTHER_AMOUNT', contributionType, index });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });

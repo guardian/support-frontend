@@ -72,16 +72,16 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'SELECT_AMOUNT':
-        return { 
-          ...state, 
-          amount: action.amount, 
+        return {
+          ...state,
+          amount: action.amount,
           selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.index },
         };
 
       case 'SELECT_OTHER_AMOUNT':
-        return { 
-          ...state, 
-          amount: null, 
+        return {
+          ...state,
+          amount: null,
           selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.index },
         };
 

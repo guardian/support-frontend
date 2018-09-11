@@ -37,9 +37,8 @@ const mapStateToProps = (state: State) =>
 
 function ContributionSubmit(props: PropTypes) {
   const frequency = getFrequency(props.contributionType);
-  const amount = props.amount 
-    ? props.amount
-    : props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
+  const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
+  const amount = props.amount ? props.amount : otherAmount;
 
   return (
     <div className="form__submit">
