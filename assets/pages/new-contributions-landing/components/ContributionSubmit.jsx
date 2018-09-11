@@ -20,7 +20,7 @@ type PropTypes = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
-  amount: Amount | null,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
 };
 
@@ -28,7 +28,7 @@ const mapStateToProps = (state: State) =>
   ({
     contributionType: state.page.form.contributionType,
     paymentMethod: state.page.form.paymentMethod,
-    amount: state.page.form.amount,
+    selectedAmounts: state.page.form.selectedAmounts,
     otherAmount: state.page.form.otherAmount,
   });
 
@@ -38,7 +38,7 @@ const mapStateToProps = (state: State) =>
 function ContributionSubmit(props: PropTypes) {
   const frequency = getFrequency(props.contributionType);
   const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
-  const amount = props.amount ? props.amount : otherAmount;
+  const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
 
   return (
     <div className="form__submit">
@@ -57,10 +57,6 @@ function ContributionSubmit(props: PropTypes) {
     </div>
   );
 }
-
-ContributionSubmit.defaultProps = {
-  amount: null,
-};
 
 const NewContributionSubmit = connect(mapStateToProps)(ContributionSubmit);
 

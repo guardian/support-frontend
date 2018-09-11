@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type Action, selectAmount, selectOtherAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -22,23 +22,19 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  amount: Amount | null,
-  selectedAmounts: { [Contrib]: number },
-  selectAmount: (Amount, Contrib, number) => (() => void),
-  selectOtherAmount: (Contrib, number) => () => void,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectAmount: (Amount | 'other', Contrib) => (() => void),
   updateOtherAmount: string => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
-  amount: state.page.form.amount,
   selectedAmounts: state.page.form.selectedAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  selectAmount: (amount, contributionType, i) => () => { dispatch(selectAmount(amount, contributionType, i)); },
-  selectOtherAmount: (contributionType, i) => () => { dispatch(selectOtherAmount(contributionType, i)); },
+  selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
   updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
 });
 
@@ -49,7 +45,7 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount, i) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -58,8 +54,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={i === props.selectedAmounts[props.contributionType]}
-      onChange={props.selectAmount(amount, props.contributionType, i)}
+      checked={amount.value === props.selectedAmounts[props.contributionType].value}
+      onChange={props.selectAmount(amount, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -71,9 +67,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
-  // the "other" amount is not an `Amount`, but it always appears in tail position in the UI at
-  // an index i = <number of amounts> + 1
-  const showOther: boolean = props.selectedAmounts[props.contributionType] === validAmounts.length + 1;
+  const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
@@ -87,7 +81,7 @@ function ContributionAmount(props: PropTypes) {
             name="contributionAmount"
             value="other"
             checked={showOther}
-            onChange={props.selectOtherAmount(props.contributionType, validAmounts.length + 1)}
+            onChange={props.selectAmount('other', props.contributionType)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>

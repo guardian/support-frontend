@@ -16,8 +16,7 @@ import { type Action } from './contributionsLandingActions';
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  amount: Amount | null,
-  selectedAmounts: { [Contrib]: number },
+  selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   done: boolean,
 };
@@ -43,16 +42,15 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
 
-  const initialAmount: { [Contrib]: number } = {
-    ONE_OFF: amountsForCountry.ONE_OFF.findIndex(amount => amount.isDefault) || 0,
-    MONTHLY: amountsForCountry.MONTHLY.findIndex(amount => amount.isDefault) || 0,
-    ANNUAL: amountsForCountry.ANNUAL.findIndex(amount => amount.isDefault) || 0,
+  const initialAmount: { [Contrib]: Amount | 'other' } = {
+    ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
+    MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
+    ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
   };
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
-    amount: amountsForCountry.MONTHLY[initialAmount.MONTHLY],
     selectedAmounts: initialAmount,
     otherAmount: null,
     done: false,
@@ -64,7 +62,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return {
           ...state,
           contributionType: action.contributionType,
-          amount: amountsForCountry[action.contributionType][initialAmount[action.contributionType]],
           showOtherAmount: false,
         };
 
@@ -74,19 +71,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'SELECT_AMOUNT':
         return {
           ...state,
-          amount: action.amount,
-          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.index },
-        };
-
-      case 'SELECT_OTHER_AMOUNT':
-        return {
-          ...state,
-          amount: null,
-          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.index },
+          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.amount },
         };
 
       case 'UPDATE_OTHER_AMOUNT':
-        return { ...state, amount: null, otherAmount: action.otherAmount };
+        return { ...state, otherAmount: action.otherAmount };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
