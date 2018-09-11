@@ -9,6 +9,7 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { bracketP } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
@@ -18,12 +19,13 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { createPaymentCallback, type PaymentFields, type PaymentResult, type Token } from 'helpers/paymentIntegrations/paymentApi';
+import { createPaymentCallback, type PaymentFields, type PaymentResult, type PaymentCallback, type Token } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -33,13 +35,14 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentSuccess, paymentFailure } from '../contributionsLandingActions';
+import { type Action, paymentSuccess, paymentFailure, paymentWaiting } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   done: boolean,
   error: string | null,
+  isWaiting: boolean,
   csrf: CsrfState,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
@@ -56,11 +59,13 @@ type PropTypes = {|
   initialEmail: string,
   onSuccess: () => void,
   onError: string => void,
+  onWaiting: boolean => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
+  isWaiting: state.page.form.isWaiting,
   csrf: state.page.csrf,
   countryId: state.common.internationalisation.countryId,
   isTestUser: state.page.user.isTestUser || false,
@@ -76,6 +81,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSuccess: () => { dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
+  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); }
 });
 
 // ----- Functions ----- //
@@ -172,11 +178,15 @@ function setupStripe(formElement: Object, props: PropTypes) {
     isTestUser,
   } = props;
 
-  const callback = createPaymentCallback(
-    getData(props, formElement),
-    contributionType,
-    abParticipations,
-    csrf,
+  const callback: PaymentCallback = bracketP(
+    () => { props.onWaiting(true); return Promise.resolve(); },
+    () => { props.onWaiting(false); return Promise.resolve(); },
+    createPaymentCallback(
+      getData(props, formElement),
+      contributionType,
+      abParticipations,
+      csrf,
+    )
   );
 
   const onSuccess: PaymentResult => void = (result) => {
