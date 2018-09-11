@@ -54,7 +54,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={amount.value === props.selectedAmounts[props.contributionType].value}
+      checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
       onChange={props.selectAmount(amount, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
