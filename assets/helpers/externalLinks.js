@@ -36,7 +36,9 @@ export type SubsUrls = {
 const subsUrl = 'https://subscribe.theguardian.com';
 const patronsUrl = 'https://patrons.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
-const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
+const iOSAppUrl = 'https://itunes.apple.com/app/the-guardian/id409128287?mt=8';
+const androidAppUrl = 'https://theguardian.app.link/dPnRUMLd1P';
+const dailyEditionUrl = 'https://itunes.apple.com/app/guardian-observer-daily-edition/id452707806?mt=8';
 
 const memUrls: {
   [MemProduct]: string,
