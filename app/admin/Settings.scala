@@ -28,8 +28,8 @@ object Settings {
   def fromDiskOrS3(config: Config)(implicit s3: AmazonS3): Either[Throwable, Settings] =
     for {
       source <- AdminSettingsSource.fromConfig(config)
-      rawJson <- getRawJson(source).leftMap(err => new Error(s"Could not fetch JSON from $source. $err"))
-      settings <- decodeJson(rawJson).leftMap(err => new Error(s"Could not decode JSON from $source. $err"))
+      rawJson <- getRawJson(source).leftMap(err => new Error(s"Could not fetch settings from $source. $err"))
+      settings <- decodeJson(rawJson).leftMap(err => new Error(s"Could not decode settings JSON from $source. $err"))
     } yield settings
 
   private def decodeJson(rawJson: String): Either[Throwable, Settings] = decode[Settings](rawJson)
@@ -53,8 +53,12 @@ object Settings {
 
 sealed trait AdminSettingsSource
 
-case class S3(bucket: String, key: String) extends AdminSettingsSource
-case class LocalFile(path: String) extends AdminSettingsSource
+case class S3(bucket: String, key: String) extends AdminSettingsSource {
+  override def toString: String = s"s3://$bucket/$key"
+}
+case class LocalFile(path: String) extends AdminSettingsSource {
+  override def toString: String = s"local file at $path"
+}
 
 object AdminSettingsSource {
 
