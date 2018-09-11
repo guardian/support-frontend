@@ -71,6 +71,9 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
+  // the "other" amount is not an `Amount`, but it always appears in tail position in the UI at
+  // and index i = <number of amounts> + 1
+  const showOther: boolean = props.selectedAmounts[props.contributionType] === validAmounts.length + 1;
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
@@ -83,13 +86,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.selectedAmounts[props.contributionType] === validAmounts.length + 1}
+            checked={showOther}
             onChange={props.selectOtherAmount(props.contributionType, validAmounts.length + 1)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.selectedAmounts[props.contributionType] === validAmounts.length + 1 ? (
+      {showOther ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
