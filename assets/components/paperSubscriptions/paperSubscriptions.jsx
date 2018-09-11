@@ -80,7 +80,7 @@ function PaperBundle(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'The Guardian and The Observer\'s newspaper subscription options',
+          text: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
         },
       ]}
       gridImage={{
@@ -150,7 +150,7 @@ function WeeklyBundle(props: {
       headingSize={props.headingSize}
       benefits={[
         {
-          text: 'A weekly global newspaper delivered to your door',
+          text: 'A weekly, global newspaper from The Guardian, with free delivery worldwide',
         },
       ]}
       gridImage={{

@@ -171,11 +171,11 @@ function DigitalBundle(props: {
   const i13n = props.countryGroupId === 'GBPCountries' ?
     {
       gridId: 'digitalCircleAlt',
-      benefits: 'The premium app and the daily edition in one pack',
+      benefits: 'The premium app and the daily edition iPad app in one pack, plus no ads when you sign in on theguardian.com',
     } :
     {
       gridId: 'digitalCircleInternational',
-      benefits: 'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack',
+      benefits: 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus no ads when you sign in on theguardian.com',
     };
 
 
