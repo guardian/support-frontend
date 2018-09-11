@@ -41,6 +41,6 @@ class Configuration(implicit s3: AmazonS3) {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val settings = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource")).valueOr(throw _)
+  implicit val settings = Settings.fromDiskOrS3(config).valueOr(throw _)
 
 }
