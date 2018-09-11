@@ -70,7 +70,6 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 
 function ContributionAmount(props: PropTypes) {
-  console.dir(props.selectedAmounts);
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
