@@ -72,7 +72,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
   // the "other" amount is not an `Amount`, but it always appears in tail position in the UI at
-  // and index i = <number of amounts> + 1
+  // an index i = <number of amounts> + 1
   const showOther: boolean = props.selectedAmounts[props.contributionType] === validAmounts.length + 1;
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
