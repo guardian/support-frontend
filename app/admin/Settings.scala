@@ -2,11 +2,13 @@ package admin
 
 import scala.io.Source
 import com.typesafe.config.Config
+
 import collection.JavaConverters._
 import play.api.mvc.RequestHeader
 import codecs.CirceDecoders._
 import io.circe.parser._
 import cats.implicits._
+import com.amazonaws.services.s3.AmazonS3
 import io.circe.syntax._
 
 case class Switches(
@@ -22,22 +24,11 @@ case class Settings(
 )
 
 object Settings {
-  def fromConfig(config: Config): Settings =
-    Settings(
-      Switches(
-        PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
-        PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
-        experimentsFromConfig(config, "abtests"),
-        SwitchState.fromConfig(config, "optimize"),
-        SwitchState.fromConfig(config, "internationalSubscribePages")
-      )
-    )
-
-  def fromDiskOrS3(config: Config): Either[Throwable, Settings] = {
+  def fromDiskOrS3(config: Config, s3: AmazonS3): Either[Throwable, Settings] = {
     val adminSettingsSource: Either[Throwable, AdminSettingsSource] = if (config.hasPath("local.path")) {
       AdminSettingsSource.fromDisk(config.getString("local.path"))
     } else if (config.hasPath("s3")) {
-      AdminSettingsSource.fromS3(config.getString("s3.bucket"), config.getString("s3.key"))
+      AdminSettingsSource.fromS3(config.getString("s3.bucket"), config.getString("s3.key"), s3)
     } else {
       Left(new Error("Need adminSettingsSource.local or adminSettingsSource.s3 defined in config"))
     }
@@ -46,9 +37,6 @@ object Settings {
       decode[Settings](settingsSource.rawJson)
         .leftMap(err => new Error(s"Error decoding settings JSON at ${settingsSource.path}. Circe error: ${err.getMessage}")))
   }
-
-  def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
-    config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
 }
 
 case class AdminSettingsSource(
@@ -57,17 +45,29 @@ case class AdminSettingsSource(
 )
 
 object AdminSettingsSource {
-  def fromDisk(path: String): Either[Throwable, AdminSettingsSource] =
+  def fromDisk(path: String): Either[Throwable, AdminSettingsSource] = {
+    val homeDir = System.getProperty("user.home")
+    val localPath = path.replaceFirst("~", homeDir)
+
     Either.catchNonFatal {
-      val homeDir = System.getProperty("user.home")
-      val localPath = path.replaceFirst("~", homeDir)
       val bufferedSource = Source.fromFile(localPath)
       val json = bufferedSource.getLines.mkString
       bufferedSource.close()
       AdminSettingsSource(localPath, json)
-    }
+    }.leftMap(err => new Error(s"Could not fetch admin settings from $localPath. $err"))
+  }
 
-  def fromS3(bucket: String, key: String): Either[Throwable, AdminSettingsSource] = ???
+  def fromS3(bucket: String, key: String, s3: AmazonS3): Either[Throwable, AdminSettingsSource] = {
+    val s3Path = s"s3://$bucket/$key"
+
+    Either.catchNonFatal {
+      val inputStream = s3.getObject(bucket, key).getObjectContent
+      AdminSettingsSource(
+        s3Path,
+        Source.fromInputStream(inputStream).mkString
+      )
+    }.leftMap(err => new Error(s"Could not fetch admin settings from $s3Path. $err"))
+  }
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])

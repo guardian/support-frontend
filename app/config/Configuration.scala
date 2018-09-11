@@ -4,7 +4,7 @@ import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import services.GoCardlessConfigProvider
-import services.aws.AwsConfig
+import services.aws.{AwsConfig, AwsS3Client}
 import services.stepfunctions.StateMachineArn
 import admin.Settings
 import cats.syntax.either._
@@ -40,6 +40,7 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val settings = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource")).valueOr(throw _)
+  private val s3 = AwsS3Client.getClient
+  implicit val settings = Settings.fromDiskOrS3(config.getConfig("adminSettingsSource"), s3).valueOr(throw _)
 
 }
