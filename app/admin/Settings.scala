@@ -24,7 +24,7 @@ case class Settings(
 )
 
 object Settings {
-  def fromDiskOrS3(config: Config, s3: AmazonS3): Either[Throwable, Settings] = {
+  def fromDiskOrS3(config: Config)(implicit s3: AmazonS3): Either[Throwable, Settings] = {
     val adminSettingsSource: Either[Throwable, AdminSettingsSource] = if (config.hasPath("local.path")) {
       AdminSettingsSource.fromDisk(config.getString("local.path"))
     } else if (config.hasPath("s3")) {
