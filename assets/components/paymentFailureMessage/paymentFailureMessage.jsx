@@ -12,7 +12,7 @@ import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 type PropTypes = {
   showError?: boolean,
   message: ?string,
-  errorMessage: ?string,
+  errorMessage: string,
   svg: Node,
 };
 
