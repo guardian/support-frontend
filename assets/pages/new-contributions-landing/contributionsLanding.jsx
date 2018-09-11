@@ -10,6 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type IsoCurrency, detect as detectCurrency } from 'helpers/internationalisation/currency';
 import * as user from 'helpers/user/user';

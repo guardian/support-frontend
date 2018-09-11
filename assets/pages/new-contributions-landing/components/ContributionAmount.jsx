@@ -23,9 +23,9 @@ type PropTypes = {
   currency: IsoCurrency,
   contributionType: Contrib,
   amount: Amount | null,
-  showOther: boolean,
-  selectAmount: Amount => (() => void),
-  selectOtherAmount: () => void,
+  selectedAmounts: { [Contrib]: number },
+  selectAmount: (Amount, Contrib, number) => (() => void),
+  selectOtherAmount: (Contrib, number) => () => void,
   updateOtherAmount: string => void,
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -33,12 +33,12 @@ type PropTypes = {
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   amount: state.page.form.amount,
-  showOther: state.page.form.showOtherAmount,
+  selectedAmounts: state.page.form.selectedAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  selectAmount: amount => () => { dispatch(selectAmount(amount)); },
-  selectOtherAmount: () => { dispatch(selectOtherAmount()); },
+  selectAmount: (amount, contributionType, i) => () => { dispatch(selectAmount(amount, contributionType, i)); },
+  selectOtherAmount: (contributionType, i) => () => { dispatch(selectOtherAmount(contributionType, i)); },
   updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
 });
 
@@ -49,7 +49,7 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
+const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount, i) => (
   <li className="form__radio-group-item">
     <input
       id={`contributionAmount-${amount.value}`}
@@ -58,8 +58,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={props.amount && amount.value === props.amount.value}
-      onChange={props.selectAmount(amount)}
+      checked={i === props.selectedAmounts[props.contributionType]}
+      onChange={props.selectAmount(amount, props.contributionType, i)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -70,11 +70,13 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 
 function ContributionAmount(props: PropTypes) {
+  console.dir(props.selectedAmounts);
+  const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
+        {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -82,13 +84,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.showOther}
-            onChange={props.selectOtherAmount}
+            checked={props.selectedAmounts[props.contributionType] === validAmounts.length + 1}
+            onChange={props.selectOtherAmount(props.contributionType, validAmounts.length + 1)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.showOther ? (
+      {props.selectedAmounts[props.contributionType] === validAmounts.length + 1 ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
