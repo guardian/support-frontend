@@ -33,9 +33,9 @@ function logP<A>(p: Promise<A>): Promise<A> {
 
 // Wraps a promise `use` with pre- and post- processing actions.
 function bracketP<A, B>(
-  acquire: () => Promise<void>, 
+  acquire: () => Promise<void>,
   release: () => Promise<void>,
-  use: A => Promise<B>
+  use: A => Promise<B>,
 ): A => Promise<B> {
   const releaseAndReturn = b => release.then(() => b);
   const releaseAndRethrow = e => release.then(() => Promise.reject(e));

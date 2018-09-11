@@ -81,7 +81,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSuccess: () => { dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
-  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); }
+  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
 });
 
 // ----- Functions ----- //
@@ -186,7 +186,7 @@ function setupStripe(formElement: Object, props: PropTypes) {
       contributionType,
       abParticipations,
       csrf,
-    )
+    ),
   );
 
   const onSuccess: PaymentResult => void = (result) => {
