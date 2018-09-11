@@ -28,8 +28,8 @@ object Settings {
   def fromDiskOrS3(config: Config)(implicit s3: AmazonS3): Either[Throwable, Settings] =
     for {
       source <- AdminSettingsSource.fromConfig(config)
-      rawJson <- getRawJson(source)
-      settings <- decodeJson(rawJson)
+      rawJson <- getRawJson(source).leftMap(err => new Error(s"Could not fetch JSON from $source. $err"))
+      settings <- decodeJson(rawJson).leftMap(err => new Error(s"Could not decode JSON from $source. $err"))
     } yield settings
 
   private def decodeJson(rawJson: String): Either[Throwable, Settings] = decode[Settings](rawJson)
@@ -39,6 +39,7 @@ object Settings {
       val inputStream = s3.getObject(bucket, key).getObjectContent
       Source.fromInputStream(inputStream).mkString
     }
+
     case LocalFile(path) => Either.catchNonFatal {
       val homeDir = System.getProperty("user.home")
       val localPath = path.replaceFirst("~", homeDir)
@@ -59,6 +60,7 @@ object AdminSettingsSource {
 
   def fromConfig(config: Config): Either[Throwable, AdminSettingsSource] =
     fromLocalFile(config).orElse(fromS3(config))
+      .leftMap(err => new Error(s"adminSettingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config): Either[Throwable, AdminSettingsSource] = Either.catchNonFatal {
     LocalFile(config.getString("adminSettingsSource.local.path"))
