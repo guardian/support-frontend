@@ -9,7 +9,6 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { logP } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
@@ -19,7 +18,7 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
 import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { createPaymentCallback, type PaymentFields, type Token } from 'helpers/paymentIntegrations/paymentApi';
+import { createPaymentCallback, type PaymentFields, type PaymentResult, type Token } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -180,7 +179,7 @@ function setupStripe(formElement: Object, props: PropTypes) {
     csrf,
   );
 
-  const onSuccess: PaymentResult => void = result => {
+  const onSuccess: PaymentResult => void = (result) => {
     switch (result.paymentStatus) {
       case 'success':
         trackConversion(abParticipations, '/contribute/thankyou.new');
@@ -204,7 +203,6 @@ function ContributionForm(props: PropTypes) {
     initialFirstName,
     initialLastName,
     initialEmail,
-    abParticipations,
   } = props;
 
   return props.done ?
