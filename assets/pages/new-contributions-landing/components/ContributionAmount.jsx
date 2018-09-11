@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type Action, selectAmount, selectOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -22,22 +22,20 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  amount: Amount | null,
-  showOther: boolean,
-  selectAmount: Amount => (() => void),
-  selectOtherAmount: () => void,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectAmount: (Amount | 'other', Contrib) => (() => void),
+  updateOtherAmount: string => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
-  amount: state.page.form.amount,
-  showOther: state.page.form.showOtherAmount,
+  selectedAmounts: state.page.form.selectedAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  selectAmount: amount => () => { dispatch(selectAmount(amount)); },
-  selectOtherAmount: () => { dispatch(selectOtherAmount()); },
+  selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
+  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
 });
 
 // ----- Render ----- //
@@ -56,8 +54,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={props.amount && amount.value === props.amount.value}
-      onChange={props.selectAmount(amount)}
+      checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
+      onChange={props.selectAmount(amount, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -68,11 +66,13 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 
 function ContributionAmount(props: PropTypes) {
+  const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
+  const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
+        {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -80,13 +80,13 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.showOther}
-            onChange={props.selectOtherAmount}
+            checked={showOther}
+            onChange={props.selectAmount('other', props.contributionType)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.showOther ? (
+      {showOther ? (
         <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
           <label className="form__label" htmlFor="contributionOther">Other Amount</label>
           <span className="form__input-with-icon">
@@ -96,6 +96,7 @@ function ContributionAmount(props: PropTypes) {
               type="number"
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
+              onChange={e => props.updateOtherAmount(e.target.value)}
               autoComplete="off"
               autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               required

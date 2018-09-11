@@ -5,9 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type Amount, type Contrib, getSpokenType } from 'helpers/contributions';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type Contrib, getSpokenType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
@@ -18,16 +16,12 @@ import SvgNewsletters from 'components/svgs/newsletters';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  countryGroupId: CountryGroupId,
-  currency: IsoCurrency,
   contributionType: Contrib,
-  amount: Amount,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
-  amount: state.page.form.amount,
 });
 
 // ----- Render ----- //

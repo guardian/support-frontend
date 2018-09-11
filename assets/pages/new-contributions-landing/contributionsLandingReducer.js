@@ -16,8 +16,8 @@ import { type Action } from './contributionsLandingActions';
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  amount: Amount | null,
-  showOtherAmount: boolean,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  otherAmount: string | null,
   done: boolean,
 };
 
@@ -36,21 +36,23 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
-  const oneOffAmounts = amounts('notintest').ONE_OFF[countryGroupId];
-  const monthlyAmounts = amounts('notintest').MONTHLY[countryGroupId];
-  const annualAmounts = amounts('notintest').ANNUAL[countryGroupId];
+  const amountsForCountry: { [Contrib]: Amount[] } = {
+    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
+    MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
+    ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
+  };
 
-  const initialAmount: { [Contrib]: Amount } = {
-    ONE_OFF: oneOffAmounts.find(amount => amount.isDefault) || oneOffAmounts[0],
-    MONTHLY: monthlyAmounts.find(amount => amount.isDefault) || monthlyAmounts[0],
-    ANNUAL: annualAmounts.find(amount => amount.isDefault) || annualAmounts[0],
+  const initialAmount: { [Contrib]: Amount | 'other' } = {
+    ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
+    MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
+    ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
   };
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
-    amount: initialAmount.MONTHLY,
-    showOtherAmount: false,
+    selectedAmounts: initialAmount,
+    otherAmount: null,
     done: false,
   };
 
@@ -60,7 +62,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return {
           ...state,
           contributionType: action.contributionType,
-          amount: initialAmount[action.contributionType],
           showOtherAmount: false,
         };
 
@@ -68,10 +69,13 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'SELECT_AMOUNT':
-        return { ...state, amount: action.amount, showOtherAmount: false };
+        return {
+          ...state,
+          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.amount },
+        };
 
-      case 'SELECT_OTHER_AMOUNT':
-        return { ...state, amount: null, showOtherAmount: true };
+      case 'UPDATE_OTHER_AMOUNT':
+        return { ...state, otherAmount: action.otherAmount };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
