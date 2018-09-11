@@ -15,12 +15,12 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type State } from '../oneOffContributionsReducer';
+import { formClassName } from './formFields';
 
 // ----- Types ----- //
 
@@ -38,7 +38,6 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
   optimizeExperiments: OptimizeExperiments,
-  formFields: Array<UserFormFieldAttribute>
 |};
 
 
@@ -46,13 +45,10 @@ type PropTypes = {|
 
 
 function mapStateToProps(state: State) {
-  const { fullName, email } = getFormFields(state);
-
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: email.value,
-    formFields: [email, fullName],
+    email: state.page.user.email,
     error: state.page.oneoffContrib.error,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
@@ -69,8 +65,8 @@ function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
     setShouldValidateFunctions: [
-      () => dispatch(setFullNameShouldValidate()),
-      () => dispatch(setEmailShouldValidate()),
+      () => dispatch(setFullNameShouldValidate(true)),
+      () => dispatch(setEmailShouldValidate(true)),
     ],
   };
 }
@@ -100,14 +96,13 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           context.store.getState,
           props.optimizeExperiments,
         )}
-        canOpen={() => true}
+        canOpen={() => formIsValid(formClassName)}
         whenUnableToOpen={() => props.setShouldValidateFunctions.forEach(f => f())}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
-        disable={false}
         svg={<SvgCreditCard />}
       />
     </section>

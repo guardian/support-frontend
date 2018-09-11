@@ -22,10 +22,8 @@ import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
-import { formClassName, setShouldValidateFunctions } from './formFields';
 
 // ----- Types ----- //
 
@@ -52,7 +50,7 @@ type PropTypes = {|
   payPalSwitchStatus: Status,
   optimizeExperiments: OptimizeExperiments,
   canOpen: () => boolean,
-  whenUnableToOpen: (dispatch: CheckoutAction) => void,
+  whenUnableToOpen: () => void,
 |};
 
 
@@ -100,7 +98,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
         )}
         switchStatus={props.directDebitSwitchStatus}
         canOpen={props.canOpen}
-        whenUnableToOpen={() => setShouldValidateFunctions}
+        whenUnableToOpen={props.whenUnableToOpen}
       />);
   }
 
@@ -167,21 +165,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
 function mapStateToProps(state) {
 
-  const firstName = {
-    value: state.page.user.firstName,
-    ...state.page.checkoutForm.firstName,
-  };
-
-  const lastName = {
-    value: state.page.user.lastName,
-    ...state.page.checkoutForm.lastName,
-  };
-
-  const email = {
-    value: state.page.user.email,
-    ...state.page.checkoutForm.email,
-  };
-
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
@@ -217,7 +200,6 @@ RegularContributionsPayment.defaultProps = {
   canOpen: () => true,
   whenUnableToOpen: () => undefined,
 };
-
 
 
 // ----- Exports ----- //

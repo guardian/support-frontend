@@ -5,10 +5,10 @@
 import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
-import { formIsValid, formInputs } from 'helpers/checkoutForm/checkoutForm'
+import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { formClassName } from 'pages/regular-contributions/components/formFields';
+import { formClassName } from '../../pages/regular-contributions/components/formFields';
 
 // ----- Functions ----- //
 
@@ -90,8 +90,8 @@ function setup(
   csrf: CsrfState,
   callback: (token: string) => Promise<*>,
   canOpen: () => boolean,
-  whenUnableToOpen: () => boolean)
-: Promise<Object> {
+  whenUnableToOpen: () => void,
+): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
     callback(baid.token);
@@ -105,14 +105,12 @@ function setup(
       });
   };
 
-  function addFormChangeListeners(handler) {
-    formInputs(formClassName).forEach(input => {
-      input.addEventListener('change', handler);
-    });
+  function addFormChangeListeners(handler: () => void) {
+    formInputs(formClassName).forEach(input => input.addEventListener('change', handler));
   }
 
-  function toggleButton(actions){
-    return canOpen() ? actions.enable() : actions.disable ();
+  function toggleButton(actions): void {
+    return canOpen() ? actions.enable() : actions.disable();
   }
 
   const payPalOptions: Object = {
@@ -122,15 +120,13 @@ function setup(
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
 
-    validate: function(actions) {
-      toggleButton(actions, canOpen);
+    validate(actions) {
+      toggleButton(actions);
 
-      addFormChangeListeners(function () {
-        toggleButton(actions, canOpen);
-      });
+      addFormChangeListeners(() => toggleButton(actions));
     },
 
-    onClick: function(e) {
+    onClick() {
       if (!canOpen()) {
         whenUnableToOpen();
       }

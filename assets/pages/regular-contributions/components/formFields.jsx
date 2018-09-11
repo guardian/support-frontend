@@ -24,12 +24,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type UserFormFieldAttribute,
   shouldShowError,
-  onFormFieldBlur,
+  emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
 import {
   type Action as CheckoutAction, setEmailShouldValidate,
   setFirstNameShouldValidate,
-  setLastNameShouldValidate
+  setLastNameShouldValidate,
 } from '../helpers/checkoutForm/checkoutFormActions';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
@@ -151,8 +151,6 @@ export const setShouldValidateFunctions = [
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
-  const continueButtonClassName = 'component-cta-link--continue';
-
   return (
     <form className={formClassName}>
       {
@@ -166,6 +164,9 @@ function NameForm(props: PropTypes) {
             modifierClasses={['email']}
             showError={shouldShowError(props.email)}
             errorMessage="Please enter a valid email address."
+            type="email"
+            pattern={emailRegexPattern}
+            required
           />
         ) : null
       }
@@ -178,6 +179,7 @@ function NameForm(props: PropTypes) {
         modifierClasses={['first-name']}
         showError={shouldShowError(props.firstName)}
         errorMessage="Please enter a first name."
+        required
       />
       <TextInput
         id="last-name"
@@ -188,6 +190,7 @@ function NameForm(props: PropTypes) {
         modifierClasses={['last-name']}
         showError={shouldShowError(props.lastName)}
         errorMessage="Please enter a last name."
+        required
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}

@@ -7,7 +7,6 @@ import { type Action } from './checkoutFormActions';
 
 
 export type CheckoutFormAttribute = {
-  id: string,
   shouldValidate: boolean,
 }
 

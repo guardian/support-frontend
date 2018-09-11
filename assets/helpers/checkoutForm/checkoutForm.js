@@ -8,9 +8,9 @@ import { type Contrib as ContributionType } from 'helpers/contributions';
 // src/main/scala/play/api/data/validation/Validation.scala#L80
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
-export const emailRegexPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
-export function patternIsValid(value: string, pattern: RegExp): boolean {
+export function patternIsValid(value: string, pattern: string): boolean {
   const regex = new RegExp(pattern);
   return regex.test(value);
 }
@@ -25,6 +25,14 @@ export type UserFormFieldAttribute = {
   shouldValidate: boolean,
 }
 
+export function formFieldIsValid(id: string) {
+  const element = document.getElementById(id);
+  if (element && element instanceof HTMLInputElement) {
+    return element.validity.valid;
+  }
+  return false;
+}
+
 export function shouldShowError(field: UserFormFieldAttribute): boolean {
   return field.shouldValidate && !formFieldIsValid(field.id);
 }
@@ -37,16 +45,13 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
-export const formIsValid = (formId: string) =>
-  [...formInputs(formId)].every(element => element.validity.valid);
-
-export function formFieldIsValid(id: string) {
-  const element = document.getElementById(id);
-  if (element && element instanceof HTMLInputElement) {
-    return element.validity.valid;
+export const formIsValid = (formClassName: string) => {
+  const form = document.querySelector(`.${formClassName}`);
+  if (form && form instanceof HTMLFormElement) {
+    return form.checkValidity();
   }
   return false;
-}
+};
 
 export function getTitle(contributionType: ContributionType): string {
 
@@ -61,18 +66,3 @@ export function getTitle(contributionType: ContributionType): string {
   }
 }
 
-function isButtonFocused(event: FocusEvent, buttonClassName: string): boolean {
-  const { relatedTarget } = event;
-  if (relatedTarget instanceof HTMLElement) {
-    return relatedTarget.classList.contains(buttonClassName);
-  }
-  return false;
-}
-
-export const onFormFieldBlur = (setShouldValidate: () => void, buttonClassName: string) => (event: FocusEvent) => {
-  // Don't update the Redux state if the focus event is on the payment button, as this
-  // will cause a re-render and the click event on the button will be lost
-  if (!isButtonFocused(event, buttonClassName)) {
-    setShouldValidate();
-  }
-};

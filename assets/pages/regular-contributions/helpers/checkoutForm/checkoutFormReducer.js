@@ -1,7 +1,6 @@
 // @flow
 
 // ----- Imports ----- //
-import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { type Action } from './checkoutFormActions';
 
 // ----- Types ----- //
@@ -45,13 +44,13 @@ function checkoutFormReducer(
 
   switch (action.type) {
     case 'SET_FIRST_NAME_SHOULD_VALIDATE':
-      return { ...state, firstName: { ...state.firstName, shouldValidate: true } };
+      return { ...state, firstName: { ...state.firstName, shouldValidate: action.shouldValidate } };
 
     case 'SET_LAST_NAME_SHOULD_VALIDATE':
-      return { ...state, lastName: { ...state.lastName, shouldValidate: true } };
+      return { ...state, lastName: { ...state.lastName, shouldValidate: action.shouldValidate } };
 
     case 'SET_EMAIL_SHOULD_VALIDATE':
-      return { ...state, email: { ...state.email, shouldValidate: true } };
+      return { ...state, email: { ...state.email, shouldValidate: action.shouldValidate } };
 
     case 'SET_STAGE':
       return { ...state, stage: action.stage };

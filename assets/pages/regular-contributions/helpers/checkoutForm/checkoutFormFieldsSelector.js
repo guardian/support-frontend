@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type State } from '../../regularContributionsReducer';
 
 

@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { Dispatch } from 'redux';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import Loadable from 'react-loadable';
@@ -22,8 +21,7 @@ import ContributionsCheckoutContainer from './components/contributionsCheckoutCo
 import ContributionsGuestCheckoutContainer from './components/contributionsGuestCheckoutContainer';
 import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
-import { type Action as CheckoutAction } from './helpers/checkoutForm/checkoutFormActions';
-import FormFields, {formClassName, setShouldValidateFunctions} from './components/formFields';
+import FormFields, { formClassName, setShouldValidateFunctions } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
 // ----- Page Startup ----- //
@@ -65,7 +63,7 @@ const router = (
                 <RegularContributionsPayment
                   whenUnableToOpen={
                     () =>
-                      setShouldValidateFunctions.forEach(f => store.dispatch(f()))
+                      setShouldValidateFunctions.forEach(f => store.dispatch(f(true)))
                   }
                   canOpen={
                     () => formIsValid(formClassName)

@@ -4,10 +4,9 @@
 
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
-import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { formClassName, setShouldValidateFunctions } from './formFields';
@@ -18,17 +17,15 @@ import { formClassName, setShouldValidateFunctions } from './formFields';
 const submitYourDetailsForm = (dispatch: Dispatch<CheckoutAction>) => {
   if (formIsValid(formClassName)) {
     dispatch(setStage('payment'));
+    setShouldValidateFunctions.forEach(f => dispatch(f(false)));
   } else {
-    setShouldValidateFunctions.forEach(f => dispatch(f()));
+    setShouldValidateFunctions.forEach(f => dispatch(f(true)));
   }
 };
 
 // ----- State Maps ----- //
 
 function mapStateToProps(state: State) {
-
-  const { firstName, lastName, email } = getFormFields(state);
-
 
   return {
     amount: state.page.regularContrib.amount,
@@ -37,9 +34,6 @@ function mapStateToProps(state: State) {
     displayName: state.page.user.displayName,
     isSignedIn: state.page.user.isSignedIn,
     stage: state.page.checkoutForm.stage,
-    firstName,
-    lastName,
-    email,
   };
 }
 

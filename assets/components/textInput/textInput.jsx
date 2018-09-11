@@ -34,9 +34,11 @@ type PropTypes = {
   autocomplete?: AutoComplete,
   autocapitalize?: AutoCapitalize,
   modifierClasses: Array<?string>,
-  onBlur: (FocusEvent) => void,
   showError: boolean,
   errorMessage: string,
+  required: boolean,
+  pattern?: string,
+  type: ?string,
 };
 
 
@@ -57,14 +59,14 @@ export default function TextInput(props: PropTypes) {
       <input
         className="component-text-input__input"
         type={props.type}
+        pattern={props.pattern}
         id={props.id}
         onChange={event => props.onChange(event.target.value || '')}
-        onBlur={props.onBlur}
         value={props.value}
         placeholder={props.placeholder}
         autoComplete={props.autocomplete}
         autoCapitalize={props.autocapitalize}
-        required={true}
+        required={props.required}
       />
       <ErrorMessage
         showError={props.showError}
@@ -84,5 +86,5 @@ TextInput.defaultProps = {
   autocomplete: 'on',
   autocapitalize: 'off',
   modifierClasses: [],
-  onBlur: () => undefined,
+  pattern: '.*',
 };

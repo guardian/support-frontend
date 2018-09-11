@@ -103,16 +103,6 @@
     }
   }
 
-
-  .component-paypal-button-checkout__disabled-pop-up-button {
-    margin-bottom: $gu-v-spacing;
-    width: 100%;
-
-    @include mq($from: phablet) {
-      width: 304px;
-    }
-  }
-
   .component-stripe-pop-up-button {
     @include mq($from: phablet) {
       width: 304px;
