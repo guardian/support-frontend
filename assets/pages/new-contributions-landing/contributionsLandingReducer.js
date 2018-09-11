@@ -20,6 +20,7 @@ type FormState = {
   paymentMethod: PaymentMethod,
   amount: Amount | null,
   showOtherAmount: boolean,
+  isWaiting: boolean,
   done: boolean,
 };
 
@@ -54,6 +55,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentMethod: 'Stripe',
     amount: initialAmount.MONTHLY,
     showOtherAmount: false,
+    isWaiting: false,
     done: false,
   };
 
@@ -78,6 +80,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
+
+      case 'PAYMENT_WAITING':
+        return { ...state, done: false, isWaiting: action.isWaiting };
 
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };

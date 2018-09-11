@@ -11,6 +11,7 @@ export type Action =
   | { type: 'SELECT_AMOUNT', amount: Amount }
   | { type: 'SELECT_OTHER_AMOUNT' }
   | { type: 'PAYMENT_FAILURE', error: string }
+  | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib): Action =>
@@ -25,6 +26,8 @@ const selectOtherAmount = (): Action => ({ type: 'SELECT_OTHER_AMOUNT' });
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
+const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
+
 const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
 
 export {
@@ -33,5 +36,6 @@ export {
   selectAmount,
   selectOtherAmount,
   paymentFailure,
+  paymentWaiting,
   paymentSuccess,
 };
