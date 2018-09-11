@@ -14,13 +14,8 @@ import {
 import {
   type UserFormFieldAttribute,
   shouldShowError,
-  onFormFieldBlur,
 } from 'helpers/checkoutForm/checkoutForm';
-import {
-  type Action as CheckoutAction,
-  setFullNameShouldValidate,
-  setEmailShouldValidate,
-} from '../helpers/checkoutForm/checkoutFormActions';
+import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type State } from '../oneOffContributionsReducer';
 
@@ -32,8 +27,7 @@ type PropTypes = {
   email: UserFormFieldAttribute,
   setFullName: (string) => void,
   setEmail: (string) => void,
-  setFullNameShouldValidate: () => void,
-  setEmailShouldValidate: () => void,
+  isSignedIn: boolean,
 };
 
 // ----- Map State/Props ----- //
@@ -45,6 +39,7 @@ function mapStateToProps(state: State) {
   return {
     fullName,
     email,
+    isSignedIn: state.page.user.isSignedIn,
   };
 
 }
@@ -52,14 +47,8 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
 
   return {
-    setFullNameShouldValidate: () => {
-      dispatch(setFullNameShouldValidate());
-    },
     setFullName: (fullName: string) => {
       dispatch(setFullName(fullName));
-    },
-    setEmailShouldValidate: () => {
-      dispatch(setEmailShouldValidate());
     },
     setEmail: (email: string) => {
       dispatch(setEmail(email));
@@ -70,28 +59,28 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
-  const stripeButtonClassName = 'component-stripe-pop-up-button';
-
   return (
     <form className="oneoff-contrib__name-form">
-      <TextInput
-        id="email"
-        value={props.email.value}
-        labelText="Email"
-        placeholder="Email"
-        onChange={props.setEmail}
-        onBlur={onFormFieldBlur(props.setEmailShouldValidate, stripeButtonClassName)}
-        modifierClasses={['email']}
-        showError={shouldShowError(props.email)}
-        errorMessage="Please enter a valid email address."
-      />
+      {
+        !props.isSignedIn ? (
+          <TextInput
+            id="email"
+            value={props.email.value}
+            labelText="Email"
+            placeholder="Email"
+            onChange={props.setEmail}
+            modifierClasses={['email']}
+            showError={shouldShowError(props.email)}
+            errorMessage="Please enter a valid email address."
+          />
+        ) : null
+      }
       <TextInput
         id="name"
         placeholder="Full name"
         labelText="Full name"
         value={props.fullName.value}
         onChange={props.setFullName}
-        onBlur={onFormFieldBlur(props.setFullNameShouldValidate, stripeButtonClassName)}
         modifierClasses={['name']}
         showError={shouldShowError(props.fullName)}
         errorMessage="Please enter your name."

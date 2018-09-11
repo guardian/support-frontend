@@ -13,12 +13,14 @@ import { type Contrib } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
 type PropTypes = {
   contributionType: Contrib,
   directDebit: ?DirectDebit,
+  countryGroupId: CountryGroupId,
   marketingConsent: Node,
 };
 
@@ -39,7 +41,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       <div className="multiline-divider" />
       <BodyCopy {...props} />
       {props.marketingConsent}
-      <QuestionsContact />
+      <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
     </Page>
   );

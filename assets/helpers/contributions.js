@@ -62,6 +62,7 @@ const numbersInWords = {
   '75': 'seventy five',
   '100': 'one hundred',
   '166': 'one hundred and sixty six',
+  '200': 'two hundred',
   '250': 'two hundred and fifty',
   '500': 'five hundred',
   '750': 'seven hundred and fifty',
@@ -99,10 +100,10 @@ const config: { [CountryGroupId]: Config } = {
   AUDCountries: {
     ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
-      min: 5,
-      minInWords: numbersInWords['5'],
-      max: 166,
-      maxInWords: numbersInWords['166'],
+      min: 10,
+      minInWords: numbersInWords['10'],
+      max: 200,
+      maxInWords: numbersInWords['200'],
       default: 20,
     },
     ONE_OFF: {
@@ -149,10 +150,10 @@ const config: { [CountryGroupId]: Config } = {
   NZDCountries: {
     ANNUAL: defaultConfig.ANNUAL,
     MONTHLY: {
-      min: 5,
-      minInWords: numbersInWords['5'],
-      max: 166,
-      maxInWords: numbersInWords['166'],
+      min: 10,
+      minInWords: numbersInWords['10'],
+      max: 200,
+      maxInWords: numbersInWords['200'],
       default: 20,
     },
     ONE_OFF: defaultConfig.ONE_OFF,
