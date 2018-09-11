@@ -286,17 +286,11 @@
     }
 
     @include mq($from: leftCol) {
-      width: 500px;
-      font-size: 32px;
-      line-height: 36px;
+      width: 550px;
+      margin-left: 12px;
+      font-size: 36px;
+      line-height: 42px;
     }
-
-    //@include mq($from: leftCol) {
-    //  width: 490px;
-    //  margin-left: 12px;
-    //  font-size: 36px;
-    //  line-height: 42px;
-    //}
   }
 
   .component-left-margin-section--header-block {
