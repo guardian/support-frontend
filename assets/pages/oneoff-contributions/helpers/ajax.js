@@ -33,6 +33,7 @@ function stripeOneOffContributionEndpoint(testUser: ?string) {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
+
 // ----- Types ----- //
 
 type PaymentApiStripeExecutePaymentBody = {|
@@ -44,6 +45,10 @@ type PaymentApiStripeExecutePaymentBody = {|
   },
   acquisitionData: PaymentAPIAcquisitionData,
 |};
+
+type OnSuccess = () => void;
+type OnFailure = string => void;
+
 
 // ----- Functions ----- //
 
@@ -85,30 +90,47 @@ function requestData(
   });
 }
 
-function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
-  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-    if (response.ok) {
-      trackConversion(abParticipations, routes.oneOffContribThankyou);
-      dispatch(checkoutSuccess());
-    }
-    return response.json();
-  }).then((responseJson) => {
-    if (responseJson.error.exceptionType === 'CardException') {
-      dispatch(checkoutError('Your card has been declined.'));
-    } else {
-      const errorHttpCode = responseJson.error.errorCode || 'unknown';
-      const exceptionType = responseJson.error.exceptionType || 'unknown';
-      const errorName = responseJson.error.errorName || 'unknown';
-      logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-    }
-  }).catch(() => {
-    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  });
+const handleFailure = (onFailure: OnFailure) => (errorJson: Object): void => {
+
+  const { error } = errorJson;
+
+  if (error.exceptionType === 'CardException') {
+    onFailure('Your card has been declined.');
+  } else {
+    const errorHttpCode = error.errorHttpCode || 'unknown';
+    const exceptionType = error.exceptionType || 'unknown';
+    const errorName = error.errorName || 'unknown';
+    logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode}, type: ${exceptionType}, error-name: ${errorName}.`);
+    onFailure('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
+  }
+
+};
+
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
+
+  if (response.ok) {
+    onSuccess();
+    return Promise.resolve();
+  }
+
+  return response.json().then(handleFailure(onFailure));
+
+};
+
+const handleUnknownError = (onFailure: OnFailure) => () => {
+  logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+  onFailure('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
+};
+
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
+
+  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
+    .then(handleResponse(onSuccess, onFailure))
+    .catch(handleUnknownError(onFailure));
+
 }
 
-export default function postCheckout(
+function postCheckout(
   abParticipations: Participations,
   dispatch: Function,
   amount: number,
@@ -117,6 +139,14 @@ export default function postCheckout(
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
 ): (string) => Promise<*> {
+
+  const onSuccess: OnSuccess = () => {
+    trackConversion(abParticipations, routes.oneOffContribThankyou);
+    dispatch(checkoutSuccess());
+  };
+
+  const onFailure: OnFailure = msg => dispatch(checkoutError(msg));
+
   return (paymentToken: string) => {
     const request = requestData(
       abParticipations,
@@ -128,6 +158,11 @@ export default function postCheckout(
       optimizeExperiments,
     );
 
-    return postToEndpoint(request, dispatch, abParticipations);
+    return postToEndpoint(request, onSuccess, onFailure);
   };
 }
+
+
+// ----- Export ----- //
+
+export default postCheckout;
