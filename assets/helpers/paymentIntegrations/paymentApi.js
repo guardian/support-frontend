@@ -13,7 +13,7 @@ import { type BillingPeriod, type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollUntilPromise } from 'helpers/promise';
+import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
@@ -147,7 +147,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   return (json) => {
     switch (json.status) {
       case 'pending':
-        return pollUntilPromise(
+        return logPromise(pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
           () => {
@@ -155,7 +155,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
             return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',
-        ).then(handleCompletion);
+        ).then(handleCompletion));
 
       default:
         return Promise.resolve(handleCompletion(json));
@@ -177,10 +177,10 @@ function getOneOffStripeEndpoint() {
 
 /** Sends a one-off payment request to the payment API and checks the result */
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
-  return fetchJson(
+  return logPromise(fetchJson(
     getOneOffStripeEndpoint(),
     postRequestOptions(data, 'include', null),
-  ).then(checkOneOffStatus);
+  ).then(checkOneOffStatus));
 }
 
 /** Sends a regular payment request to the payment API and checks the result */
@@ -189,10 +189,10 @@ function postRegularStripeRequest(
   participations: Participations,
   csrf: CsrfState,
 ): Promise<PaymentResult> {
-  return fetchJson(
+  return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf));
+  ).then(checkRegularStatus(participations, csrf)));
 }
 
 /**
