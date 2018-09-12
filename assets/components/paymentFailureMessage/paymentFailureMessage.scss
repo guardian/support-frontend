@@ -1,16 +1,9 @@
 .component-payment-failure-message {
-  position: relative;
-  border: none;
-  padding: 0 $gu-h-spacing;
+  padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
   color: gu-colour(news-main);
   background-color: gu-colour(payment-failure-error);
   font-family: $gu-sans-web;
-  text-align: left;
   margin-bottom: 20px;
-
-  @include mq($from: mobileLandscape) {
-    height: 32px;
-  }
 
   @include mq($from: tablet) {
     width: 404px;
@@ -19,10 +12,9 @@
 }
 
 .svg-exclamation-alternate {
-  position: relative;
   display: inline-block;
   margin-right: 8px;
-  top: 6px;
+  vertical-align: bottom;
 }
 
 .svg-exclamation-alternate__circle {
@@ -34,18 +26,17 @@
 }
 
 .component-payment-failure-message__error-message {
-  position: relative;
+  vertical-align: bottom;
   display: inline-block;
   font-size: 14px;
   font-weight: 600;
 }
 
 .component-payment-failure-message__small-print {
-  position: relative;
   display: block;
   line-height: 18px;
   font-size: 12px;
   font-weight: 400;
-  margin-top: 10px;
+  margin-top: $gu-v-spacing;
 }
 

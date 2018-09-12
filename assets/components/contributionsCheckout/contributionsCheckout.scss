@@ -38,8 +38,6 @@
   }
 
   .component-payment-failure-message {
-    height: 108px;
-    position: relative;
 
     @include mq($from: desktop) {
       width: 260px;
