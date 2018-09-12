@@ -13,7 +13,8 @@ import { type BillingPeriod, type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollUntilPromise, logPromise } from 'helpers/promise';
+import { pollUntilPromise } from 'helpers/promise';
+import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
 import * as cookie from 'helpers/cookie';
@@ -106,12 +107,6 @@ function postRequestOptions(
   return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
 }
 
-/** Sends a request to the payment API (or support workers, yolo) and converts
- *  the response into a JSON object */
-function requestPaymentApi(endpoint: string, settings: Object) {
-  return logPromise(fetch(endpoint, settings).then(resp => resp.json()));
-}
-
 /** Process the response for a one-off payment from the payment API */
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
   if (json.error) {
@@ -157,7 +152,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
           POLLING_INTERVAL,
           () => {
             trackConversion(participations, routes.recurringContribPending);
-            return requestPaymentApi(json.trackingUri, getRequestOptions('same-origin', csrf));
+            return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',
         ).then(handleCompletion);
@@ -182,7 +177,7 @@ function getOneOffStripeEndpoint() {
 
 /** Sends a one-off payment request to the payment API and checks the result */
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
-  return requestPaymentApi(
+  return fetchJson(
     getOneOffStripeEndpoint(),
     postRequestOptions(data, 'include', null),
   ).then(checkOneOffStatus);
@@ -194,7 +189,7 @@ function postRegularStripeRequest(
   participations: Participations,
   csrf: CsrfState,
 ): Promise<PaymentResult> {
-  return requestPaymentApi(
+  return fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
   ).then(checkRegularStatus(participations, csrf));
