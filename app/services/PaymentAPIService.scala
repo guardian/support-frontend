@@ -4,6 +4,8 @@ import java.io.IOException
 
 import io.circe.parser.decode
 import codecs.CirceDecoders.paymentApiError
+import io.circe.generic.JsonCodec
+import models.{PayPalError, PaymentAPIResponse}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json._
@@ -12,9 +14,11 @@ import services.ExecutePaymentBody._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
+@JsonCodec case class PaypalExecuteSuccessResponse(email: Option[String])
 
-case class PaymentApiError(error: PayPalError)
+@JsonCodec case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
+
+case class PaymentApiPaypalError(error: PayPalError)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -28,14 +32,6 @@ object ExecutePaymentBody {
 
 object PaymentAPIService {
   case class Email(value: String)
-  object Email {
-    def fromResponse(resp: WSResponse): Either[Throwable, Option[Email]] =
-      if (resp.status == 200) {
-        Right((resp.json \ "email").validate[String].asOpt.map(Email.apply))
-      } else {
-        Left(new IOException(resp.toString))
-      }
-  }
 }
 
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
@@ -65,48 +61,24 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def decodePaymentResponse(response: WSResponse): Option[PaymentApiError] = {
-    decode[PaymentApiError](response.body).fold(
+  def decodePaymentResponse(response: WSResponse): Option[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]] = {
+    decode[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]](response.body).fold(
       failure => {
         SafeLogger.error(scrub"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}")
         None
       },
       resp => {
+        resp.error.foreach(logErrorResponse)
         Some(resp)
       }
     )
   }
 
-  def logErrorResponse(paymentApiError: Option[PaymentApiError]): Unit = {
-    paymentApiError.foreach(err => {
-      if (err.error.errorName.contains("INSTRUMENT_DECLINED")) {
-        SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
-      } else {
-        SafeLogger.error(scrub"Paypal payment failed due to ${err.error.errorName} error. Full message: ${err.error.message}")
-      }
-    })
-  }
-
-  def isDuplicatePaymentResponse(errorOpt: Option[PaymentApiError]): Boolean = {
-    errorOpt match {
-      case None => false
-      case Some(err) => err.error.errorName.contains("PAYMENT_ALREADY_DONE")
-    }
-  }
-
-  def isSuccessful(response: WSResponse): Boolean = {
-    response.status match {
-      case 200 => true
-
-      case 400 =>
-        val error = decodePaymentResponse(response)
-        logErrorResponse(error)
-        isDuplicatePaymentResponse(error)
-
-      case _ =>
-        val error = decodePaymentResponse(response)
-        logErrorResponse(error)
-        false
+  def logErrorResponse(error: PayPalError): Unit = {
+    if (error.errorName.contains("INSTRUMENT_DECLINED")) {
+      SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
+    } else {
+      SafeLogger.error(scrub"Paypal payment failed due to ${error.errorName} error. Full message: ${error.message}")
     }
   }
 
@@ -116,9 +88,8 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
     isTestUser: Boolean
-  )(implicit ec: ExecutionContext): Future[Boolean] = {
+  )(implicit ec: ExecutionContext): Future[Option[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]]] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser).map(isSuccessful)
-
+    postPaypalData(data, queryStrings, isTestUser).map(decodePaymentResponse)
   }
 }
