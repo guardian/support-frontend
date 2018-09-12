@@ -126,7 +126,7 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
 }
 
 /**
- * Process the response for a regular payment from the payment API.
+ * Process the response for a regular payment from the recurring contribution endpoint.
  *
  * If the payment is:
  * - pending, then we start polling the API until it's done or some timeout occurs
@@ -183,7 +183,7 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   ).then(checkOneOffStatus));
 }
 
-/** Sends a regular payment request to the payment API and checks the result */
+/** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
