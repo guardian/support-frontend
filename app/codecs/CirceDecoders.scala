@@ -105,7 +105,7 @@ object CirceDecoders {
   implicit val segmentDecoder: Decoder[Segment] = Decoder.decodeString.map(Segment.fromString)
   implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
-  implicit val settingsCodec: Codec[Settings] = deriveCodec
+  implicit val settingsCodec: Codec[AdminSettings] = deriveCodec
 
   implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
   implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
