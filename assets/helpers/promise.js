@@ -3,14 +3,14 @@
 import { logException } from 'helpers/logger';
 
 // Repeats a promise a maximum of `n` times, until it succeeds or bottoms out
-function repeatP<A>(n: number, p: () => Promise<A>): Promise<A> {
+function repeatPromise<A>(n: number, p: () => Promise<A>): Promise<A> {
   return n === 0
     ? Promise.reject(new Error(`Failed after ${n} attempts`))
-    : p().catch(() => repeatP(n - 1, p));
+    : p().catch(() => repeatPromise(n - 1, p));
 }
 
 // Runs a promise `i` milliseconds in the future
-function sleepP<A>(i: number, p: () => Promise<A>): Promise<A> {
+function sleepPromise<A>(i: number, p: () => Promise<A>): Promise<A> {
   return new Promise((resolve, reject) => {
     setTimeout(() => p().then(resolve, reject), i);
   });
@@ -18,13 +18,13 @@ function sleepP<A>(i: number, p: () => Promise<A>): Promise<A> {
 
 // Runs a promise `p` every `sleep` milliseconds until the result passes a validation test `pred`
 // and fails after `max` attempts
-function pollUntilP<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => boolean): Promise<A> {
+function pollUntilPromise<A>(max: number, sleep: number, p: () => Promise<A>, pred: A => boolean): Promise<A> {
   const innerPromise = () => p().then(a => (pred(a) ? Promise.reject() : a));
-  return repeatP(max, () => sleepP(sleep, innerPromise));
+  return repeatPromise(max, () => sleepPromise(sleep, innerPromise));
 }
 
 // Logs any error produced by the promise
-function logP<A>(p: Promise<A>): Promise<A> {
+function logPromise<A>(p: Promise<A>): Promise<A> {
   return p.catch((error) => {
     logException(error);
     throw error;
@@ -32,7 +32,7 @@ function logP<A>(p: Promise<A>): Promise<A> {
 }
 
 // Wraps a promise `use` with pre- and post- processing actions.
-function bracketP<A, B>(
+function bracketPromise<A, B>(
   acquire: () => Promise<void>,
   release: () => Promise<void>,
   use: A => Promise<B>,
@@ -45,9 +45,9 @@ function bracketP<A, B>(
 }
 
 export {
-  repeatP,
-  sleepP,
-  pollUntilP,
-  logP,
-  bracketP,
+  repeatPromise,
+  sleepPromise,
+  pollUntilPromise,
+  logPromise,
+  bracketPromise,
 };

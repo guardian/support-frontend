@@ -13,7 +13,7 @@ import { type BillingPeriod, type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollUntilP, logP } from 'helpers/promise';
+import { pollUntilPromise, logPromise } from 'helpers/promise';
 import trackConversion from 'helpers/tracking/conversions';
 
 import * as cookie from 'helpers/cookie';
@@ -108,8 +108,8 @@ function postRequestOptions(
 
 /** Sends a request to the payment API (or support workers, yolo) and converts
  *  the response into a JSON object */
-function requestPaymentApi(endpoint: string, init: Object) {
-  return logP(fetch(endpoint, init).then(resp => resp.json()));
+function requestPaymentApi(endpoint: string, settings: Object) {
+  return logPromise(fetch(endpoint, settings).then(resp => resp.json()));
 }
 
 /** Process the response for a one-off payment from the payment API */
@@ -152,7 +152,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   return (json) => {
     switch (json.status) {
       case 'pending':
-        return pollUntilP(
+        return pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
           () => {

@@ -9,7 +9,7 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { bracketP } from 'helpers/promise';
+import { bracketPromise } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
@@ -178,7 +178,7 @@ function setupStripe(formElement: Object, props: PropTypes) {
     isTestUser,
   } = props;
 
-  const callback: PaymentCallback = bracketP(
+  const callback: PaymentCallback = bracketPromise(
     () => { props.onWaiting(true); return Promise.resolve(); },
     () => { props.onWaiting(false); return Promise.resolve(); },
     createPaymentCallback(
