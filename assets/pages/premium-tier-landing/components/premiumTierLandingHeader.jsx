@@ -132,7 +132,7 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 // ----- Component ----- //
 
-export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
+export default function PremiumTierLandingHeader(props: PropTypes) {
   return (
     <div className="premium-tier-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>

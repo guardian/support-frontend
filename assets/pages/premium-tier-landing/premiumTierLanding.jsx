@@ -14,7 +14,7 @@ import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHe
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import DigitalSubscriptionLandingHeader from './components/premiumTierLandingHeader';
+import PremiumTierLandingHeader from './components/premiumTierLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 
@@ -54,7 +54,7 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
+      <PremiumTierLandingHeader countryGroupId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
       <LeftMarginSection modifierClasses={['grey']}>
         <IndependentJournalismSection />
