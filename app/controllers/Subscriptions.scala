@@ -24,14 +24,17 @@ class Subscriptions(
   implicit val a: AssetsResolver = assets
   implicit val s: Settings = settings
 
-  def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/subscribe"
-      case Some(US) => "/us/subscribe"
-      case Some(Australia) => "/au/subscribe"
-      case _ => "/int/subscribe"
-    }
+  def geoRedirect: Action[AnyContent] = geoRedirect("subscribe")
 
+  def geoRedirect(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    // If we implement endpoints for EU, CA & NZ we could replace this match with
+    // request.fastlyCountry.map(_.id).getOrDefault("int")
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => s"/uk/$path"
+      case Some(US) => s"/us/$path"
+      case Some(Australia) => s"/au/$path"
+      case _ => s"/int/$path"
+    }
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
@@ -66,16 +69,7 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css))
   }
 
-  def digitalGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/subscribe/digital"
-      case Some(US) => "/us/subscribe/digital"
-      case Some(Australia) => "/au/subscribe/digital"
-      case _ => "/int/subscribe/digital"
-    }
-
-    Redirect(redirectUrl, request.queryString, status = FOUND)
-  }
+  def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
   def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val title = "Support the Guardian | Premium Tier"
@@ -85,16 +79,7 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css))
   }
 
-  def premiumTierGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/subscribe/premium-tier"
-      case Some(US) => "/us/subscribe/premium-tier"
-      case Some(Australia) => "/au/subscribe/premium-tier"
-      case _ => "/int/subscribe/premium-tier"
-    }
-
-    Redirect(redirectUrl, request.queryString, status = FOUND)
-  }
+  def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
   def displayForm(countryCode: String): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId) {
