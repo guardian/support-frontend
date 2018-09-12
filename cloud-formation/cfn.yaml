@@ -102,6 +102,13 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support-frontend.private.conf
+        - PolicyName: SettingsBucket
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::support-frontend-admin-console/${Stage}/*
         - PolicyName: UpdateSSHKeys
           PolicyDocument:
             Version: 2012-10-17

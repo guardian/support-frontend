@@ -5,10 +5,12 @@ import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
+import com.amazonaws.services.s3.AmazonS3
 import services.stepfunctions.StateMachineArn
 import admin.Settings
+import cats.syntax.either._
 
-class Configuration {
+class Configuration(implicit s3: AmazonS3) {
   val config = ConfigFactory.load()
 
   lazy val stage = Stage.fromString(config.getString("stage")).get
@@ -25,7 +27,7 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val paymentApiUrl = config.getString("paymentApi.url");
+  lazy val paymentApiUrl = config.getString("paymentApi.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
@@ -39,6 +41,6 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val settings = Settings.fromConfig(config.getConfig("switches"))
+  implicit val settings = Settings.fromDiskOrS3(config).valueOr(throw _)
 
 }
