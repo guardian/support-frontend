@@ -39,21 +39,26 @@ function ContributionSubmit(props: PropTypes) {
   const frequency = getFrequency(props.contributionType);
   const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
   const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
+  const showPayPalButton = props.paymentMethod === 'PayPal';
 
   return (
     <div className="form__submit">
-      <button className="form__submit-button" type="submit">
-        Contribute&nbsp;
-        {amount ? formatAmount(
-          currencies[props.currency],
-          spokenCurrencies[props.currency],
-          amount,
-          false,
-        ) : null}&nbsp;
-        {frequency ? `${frequency} ` : null}
-        {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-        <SvgArrowRight />
-      </button>
+      {showPayPalButton ? (
+        <button>Pay with PayPal, bro</button>
+      ): (
+        <button className="form__submit-button" type="submit">
+          Contribute&nbsp;
+          {amount ? formatAmount(
+            currencies[props.currency],
+            spokenCurrencies[props.currency],
+            amount,
+            false,
+          ) : null}&nbsp;
+          {frequency ? `${frequency} ` : null}
+          {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+          <SvgArrowRight />
+        </button>        
+      )}
     </div>
   );
 }
