@@ -156,10 +156,8 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
 
 // ----- Event handlers ----- //
 
-const onSubmit = stripeHandler => (e) => {
-  e.preventDefault();
-
-  const { elements } = (e.target: any);
+const onSubmit = form => stripeHandler => {
+  const { elements } = (form: any);
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
 
@@ -223,13 +221,12 @@ function ContributionForm(props: PropTypes) {
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <ErrorMessage message={props.error} />
         <form
-          ref={(el) => {
-          if (el) {
-            setupStripe(el, props)
-              .then((stripeHandler) => {
-                el.addEventListener('submit', onSubmit(stripeHandler));
-              });
-          }
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formElement = e.target;
+            if (formElement) {
+              setupStripe(formElement, props).then(onSubmit(formElement));
+            }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
         >
