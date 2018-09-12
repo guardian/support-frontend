@@ -156,7 +156,7 @@ function getData(props: PropTypes, formElement: Object): (Contrib, Token) => Pay
 
 // ----- Event handlers ----- //
 
-const onSubmit = form => stripeHandler => {
+const onSubmit = form => (stripeHandler) => {
   const { elements } = (form: any);
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
