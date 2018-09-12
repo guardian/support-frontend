@@ -5,9 +5,11 @@
 import { combineReducers } from 'redux';
 import { type PaymentMethod } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { type Action } from './contributionsLandingActions';
 
@@ -18,12 +20,14 @@ type FormState = {
   paymentMethod: PaymentMethod,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
+  isWaiting: boolean,
   done: boolean,
 };
 
 type PageState = {
   form: FormState,
   user: UserState,
+  csrf: CsrfState,
 };
 
 export type State = {
@@ -51,8 +55,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
+    amount: initialAmount.MONTHLY,
+    showOtherAmount: false,
     selectedAmounts: initialAmount,
     otherAmount: null,
+    isWaiting: false,
     done: false,
   };
 
@@ -80,6 +87,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
 
+      case 'PAYMENT_WAITING':
+        return { ...state, done: false, isWaiting: action.isWaiting };
+
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };
 
@@ -94,6 +104,7 @@ function initReducer(countryGroupId: CountryGroupId) {
   return combineReducers({
     form: createFormReducer(countryGroupId),
     user: createUserReducer(countryGroupId),
+    csrf,
   });
 }
 

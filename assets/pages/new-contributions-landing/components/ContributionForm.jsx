@@ -9,17 +9,23 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { bracketPromise } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type Contrib } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Participations } from 'helpers/abTests/abtest';
-import { setupStripeCheckout, openDialogBox, createTokenCallback } from 'helpers/paymentIntegrations/stripeCheckout';
+import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
+import { createPaymentCallback, type PaymentFields, type PaymentResult, type PaymentCallback, type Token } from 'helpers/paymentIntegrations/paymentApi';
 import trackConversion from 'helpers/tracking/conversions';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -29,35 +35,44 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentSuccess, paymentFailure } from '../contributionsLandingActions';
+import { type Action, paymentSuccess, paymentFailure, paymentWaiting } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   done: boolean,
   error: string | null,
+  isWaiting: boolean,
+  csrf: CsrfState,
   isTestUser: boolean,
   countryGroupId: CountryGroupId,
+  countryId: IsoCountry,
   currency: IsoCurrency,
   selectedCountryGroupDetails: CountryMetaData,
   abParticipations: Participations,
   referrerAcquisitionData: ReferrerAcquisitionData,
   optimizeExperiments: OptimizeExperiments,
+  contributionType: Contrib,
   thankYouRoute: string,
   initialFirstName: string,
   initialLastName: string,
   initialEmail: string,
   onSuccess: () => void,
   onError: string => void,
+  onWaiting: boolean => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
+  isWaiting: state.page.form.isWaiting,
+  csrf: state.page.csrf,
+  countryId: state.common.internationalisation.countryId,
   isTestUser: state.page.user.isTestUser || false,
   initialFirstName: state.page.user.firstName,
   initialLastName: state.page.user.lastName,
   initialEmail: state.page.user.email,
+  contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
   optimizeExperiments: state.common.optimizeExperiments,
@@ -66,6 +81,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSuccess: () => { dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
+  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
 });
 
 // ----- Functions ----- //
@@ -75,16 +91,77 @@ const getAmount = (formElements: Object) =>
     ? formElements.contributionOther.value
     : formElements.contributionAmount.value);
 
+function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
+  return (contributionType, token) => {
+    const {
+      countryGroupId,
+      countryId,
+      currency,
+      abParticipations,
+      referrerAcquisitionData,
+      optimizeExperiments,
+    } = props;
+    const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
+      ? formElement.elements.contributionState.value
+      : null;
+    const billingPeriod = formElement.elements.contributionType.value === 'MONTHLY'
+      ? 'Monthly'
+      : 'Annual';
+    const ophanIds = getOphanIds();
+
+    switch (contributionType) {
+      case 'ONE_OFF':
+        return {
+          contributionType: 'oneoff',
+          fields: {
+            paymentData: {
+              currency,
+              amount: getAmount(formElement.elements),
+              token: token.paymentMethod === 'Stripe' ? token.token : '',
+              email: formElement.elements.contributionEmail.value,
+            },
+            acquisitionData: derivePaymentApiAcquisitionData(
+              referrerAcquisitionData,
+              abParticipations,
+              optimizeExperiments,
+            ),
+          },
+        };
+
+      default:
+        return {
+          contributionType: 'regular',
+          fields: {
+            firstName: formElement.elements.contributionFirstName.value,
+            lastName: formElement.elements.contributionLastName.value,
+            country: countryId,
+            state: contributionState,
+            email: formElement.elements.contributionEmail.value,
+            contribution: {
+              amount: getAmount(formElement.elements),
+              currency,
+              billingPeriod,
+            },
+            paymentFields: token.paymentMethod === 'Stripe'
+              ? { stripeToken: token.token }
+              : { baid: '' },
+            ophanIds,
+            referrerAcquisitionData,
+            supportAbTests: getSupportAbTests(abParticipations, optimizeExperiments),
+          },
+        };
+    }
+  };
+}
+
 // ----- Event handlers ----- //
 
-const onSubmit = (e) => {
-  e.preventDefault();
-
-  const { elements } = (e.target: any);
+const onSubmit = form => (stripeHandler) => {
+  const { elements } = (form: any);
   const amount = getAmount(elements);
   const email = elements.namedItem('contributionEmail').value;
 
-  openDialogBox(amount, email);
+  openDialogBox(stripeHandler, amount, email);
 };
 
 
@@ -92,41 +169,37 @@ const onSubmit = (e) => {
 
 function setupStripe(formElement: Object, props: PropTypes) {
   const {
-    abParticipations,
+    csrf,
     currency,
-    referrerAcquisitionData,
-    optimizeExperiments,
-    thankYouRoute,
+    contributionType,
+    abParticipations,
+    isTestUser,
   } = props;
 
-  const callback = createTokenCallback({
-    abParticipations,
-    currencyId: currency,
-    referrerAcquisitionData,
-    optimizeExperiments,
-    getData: () => {
-      const { elements } = (formElement.elements: any);
-      const firstName = elements.contributionFirstName.value;
-      const lastName = elements.contributionLastName.value;
-      const email = elements.contributionEmail.value;
-      const amount = getAmount(elements);
+  const callback: PaymentCallback = bracketPromise(
+    () => { props.onWaiting(true); return Promise.resolve(); },
+    () => { props.onWaiting(false); return Promise.resolve(); },
+    createPaymentCallback(
+      getData(props, formElement),
+      contributionType,
+      abParticipations,
+      csrf,
+    ),
+  );
 
-      return {
-        user: {
-          fullName: `${firstName} ${lastName}`,
-          email,
-        },
-        amount,
-      };
-    },
-    onSuccess: () => {
-      trackConversion(abParticipations, thankYouRoute);
-      props.onSuccess();
-    },
-    onError: props.onError,
-  });
+  const onSuccess: PaymentResult => void = (result) => {
+    switch (result.paymentStatus) {
+      case 'success':
+        trackConversion(abParticipations, '/contribute/thankyou.new');
+        props.onSuccess();
+        break;
 
-  return setupStripeCheckout(callback, null, currency, props.isTestUser);
+      default:
+        props.onError(result.error);
+    }
+  };
+
+  return setupStripeCheckout(callback, contributionType, currency, isTestUser, onSuccess);
 }
 
 function ContributionForm(props: PropTypes) {
@@ -148,12 +221,12 @@ function ContributionForm(props: PropTypes) {
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <ErrorMessage message={props.error} />
         <form
-          ref={(el) => {
-          if (el) {
-            setupStripe(el, props).then(() => {
-              el.addEventListener('submit', onSubmit);
-            });
-          }
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formElement = e.target;
+            if (formElement) {
+              setupStripe(formElement, props).then(onSubmit(formElement));
+            }
         }}
           className={classNameWithModifiers('form', ['contribution'])}
         >
@@ -190,8 +263,9 @@ function ContributionForm(props: PropTypes) {
             required
           />
           <NewContributionState countryGroupId={countryGroupId} />
-          <NewContributionPayment />
+          <NewContributionPayment countryGroupId={countryGroupId} />
           <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
+          {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
       </div>
     );

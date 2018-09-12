@@ -21,7 +21,8 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    stripeConfigProvider: StripeConfigProvider,
+    oneOffStripeConfigProvider: StripeConfigProvider,
+    regularStripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settings: Settings
@@ -116,8 +117,10 @@ class Application(
       id = s"new-contributions-landing-page-$countryCode",
       js = "newContributionsLandingPage.js",
       css = "newContributionsLandingPageStyles.css",
-      defaultStripeConfig = stripeConfigProvider.get(false),
-      uatStripeConfig = stripeConfigProvider.get(true),
+      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+      oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+      regularUatStripeConfig = regularStripeConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser

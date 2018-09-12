@@ -14,6 +14,7 @@ trait Controllers {
     identityService,
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
+    appConfig.regularStripeConfigProvider,
     paymentAPIService,
     stringsConfig,
     appConfig.settings
