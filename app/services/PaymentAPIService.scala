@@ -1,24 +1,19 @@
 package services
 
-import java.io.IOException
-
 import io.circe.parser.decode
-import codecs.CirceDecoders.paymentApiError
-import io.circe.generic.JsonCodec
-import models.{PayPalError, PaymentAPIResponse}
+import models.PaymentAPIResponse
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
+import codecs.CirceDecoders._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@JsonCodec case class PaypalExecuteSuccessResponse(email: Option[String])
+case class PaypalExecuteSuccessResponse(email: Option[String])
 
-@JsonCodec case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
-
-case class PaymentApiPaypalError(error: PayPalError)
+case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -64,7 +59,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
   def decodePaymentResponse(response: WSResponse): Option[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]] = {
     decode[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]](response.body).fold(
       failure => {
-        SafeLogger.error(scrub"Unable to decode PaymentAPIError: ${response.body}. Message is ${failure.getMessage}")
+        SafeLogger.error(scrub"Unable to decode payment API response: ${response.body}. Message is ${failure.getMessage}")
         None
       },
       resp => {

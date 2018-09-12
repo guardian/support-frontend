@@ -18,7 +18,7 @@ import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._
-import services.{PayPalError, PaymentApiPaypalError}
+import services.{PayPalError, PaypalExecuteSuccessResponse}
 
 object CirceDecoders {
 
@@ -114,7 +114,7 @@ object CirceDecoders {
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
   implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
 
-  private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
-  implicit val paymentApiError: Decoder[PaymentApiPaypalError] = deriveDecoder
+  implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
+  implicit val paypalExecuteSuccessResponseDecoder: Decoder[PaypalExecuteSuccessResponse] = deriveDecoder
 }
 

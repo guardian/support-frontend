@@ -66,9 +66,9 @@ class PayPalOneOff(
     def processPaymentApiResponse(paymentApiResponse: Option[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]]): Result =
       paymentApiResponse.fold(paypalErrorPage)(resp => {
         resp.data.fold(
-          resp.error.foreach(error => {
+          resp.error.fold(paypalErrorPage)(error => {
             if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
-              SafeLogger.info(s"One-off contribution for Paypal payment is successful. Sending user to thank-you page")
+              SafeLogger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
               Redirect("/contribute/one-off/thankyou")
             } else {
               paypalErrorPage

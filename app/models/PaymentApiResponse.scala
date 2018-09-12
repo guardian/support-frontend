@@ -1,7 +1,6 @@
 package models
 
 import io.circe.Decoder
-import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto.deriveDecoder
 
 case class PaymentAPIResponse[E, S](`type`: String, error: Option[E], data: Option[S])
