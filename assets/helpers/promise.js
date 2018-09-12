@@ -37,8 +37,8 @@ function bracketPromise<A, B>(
   release: () => Promise<void>,
   use: A => Promise<B>,
 ): A => Promise<B> {
-  const releaseAndReturn = b => release.then(() => b);
-  const releaseAndRethrow = e => release.then(() => Promise.reject(e));
+  const releaseAndReturn = b => release().then(() => b);
+  const releaseAndRethrow = e => release().then(() => Promise.reject(e));
   return a => acquire()
     .then(() => use(a))
     .then(releaseAndReturn, releaseAndRethrow);
