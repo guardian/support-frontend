@@ -366,16 +366,28 @@ header[role="banner"] {
   }
 
   @include mq($from: mobile, $until: tablet) {
-    header[role="banner"] {
-      justify-content: flex-end;
-    }
-    
     .gu-content__bg {
       grid-row: 1;
     }
 
     .gu-content__content {
       grid-row: 2;
+    }
+
+    .gu-content__header {
+      justify-content: none;
+    }
+
+    footer[role="contentinfo"] {
+      padding: 0 ($gu-h-spacing / 2);
+    }
+
+    .countryGroups {
+      grid-area: 1 / 1;
+    }
+
+    .glogo {
+      grid-area: 1 / 2;
     }
   }
 

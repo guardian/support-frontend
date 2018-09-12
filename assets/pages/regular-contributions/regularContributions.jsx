@@ -16,11 +16,12 @@ import { getAmount, getPaymentMethod } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import ContributionsGuestCheckoutContainer from './components/contributionsGuestCheckoutContainer';
 import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
-import FormFields from './components/formFields';
+import FormFields, { formClassName, setShouldValidateFunctions } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
 
 // ----- Page Startup ----- //
@@ -58,7 +59,17 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
-              payment={<RegularContributionsPayment />}
+              payment={
+                <RegularContributionsPayment
+                  whenUnableToOpen={
+                    () =>
+                      setShouldValidateFunctions.forEach(f => store.dispatch(f(true)))
+                  }
+                  canOpen={
+                    () => formIsValid(formClassName)
+                  }
+                />
+              }
             />
           )}
         />
@@ -69,7 +80,9 @@ const router = (
             <ContributionsGuestCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
-              payment={<RegularContributionsPayment />}
+              payment={
+                <RegularContributionsPayment />
+              }
             />
           )}
         />

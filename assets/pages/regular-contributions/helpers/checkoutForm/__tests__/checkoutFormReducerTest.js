@@ -9,7 +9,7 @@ describe('user reducer tests', () => {
   });
 
   it('should handle SET_EMAIL_SHOULD_VALIDATE', () => {
-    const action = { type: 'SET_EMAIL_SHOULD_VALIDATE' };
+    const action = { type: 'SET_EMAIL_SHOULD_VALIDATE', shouldValidate: true };
 
     const newState = reducer(undefined, action);
 
@@ -17,7 +17,7 @@ describe('user reducer tests', () => {
   });
 
   it('should handle SET_FIRST_NAME_SHOULD_VALIDATE', () => {
-    const action = { type: 'SET_FIRST_NAME_SHOULD_VALIDATE' };
+    const action = { type: 'SET_FIRST_NAME_SHOULD_VALIDATE', shouldValidate: true };
 
     const newState = reducer(undefined, action);
 
@@ -25,7 +25,7 @@ describe('user reducer tests', () => {
   });
 
   it('should handle SET_LAST_NAME_SHOULD_VALIDATE', () => {
-    const action = { type: 'SET_LAST_NAME_SHOULD_VALIDATE' };
+    const action = { type: 'SET_LAST_NAME_SHOULD_VALIDATE', shouldValidate: true };
 
     const newState = reducer(undefined, action);
 
