@@ -49,7 +49,7 @@ class PaypalBackend(
    * The Android app creates and approves the payment directly via PayPal.
    * Funds are captured via this endpoint.
    */
-  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, Payment] =
+  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     paypalService.capturePayment(c)
       .bimap(
         err => {
@@ -58,7 +58,8 @@ class PaypalBackend(
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-          postPaymentTasks(payment, c.signedInUserEmail, c.acquisitionData, countrySubdivisionCode)
+          val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, c.signedInUserEmail)
+          postPaymentTasks(enrichedPaypalPayment, c.acquisitionData, countrySubdivisionCode)
             .leftMap { err =>
               cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
               logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
@@ -67,12 +68,11 @@ class PaypalBackend(
 
               err
             }
-
-          payment
+          enrichedPaypalPayment
         }
       )
 
-  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, Payment] =
+  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     paypalService.executePayment(e)
       .bimap(
         err => {
@@ -80,8 +80,9 @@ class PaypalBackend(
           err
         },
         payment => {
+          val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, e.signedInUserEmail)
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-          postPaymentTasks(payment, e.signedInUserEmail, e.acquisitionData, countrySubdivisionCode)
+          postPaymentTasks(enrichedPaypalPayment, e.acquisitionData, countrySubdivisionCode)
             .leftMap {
               err => {
                 cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
@@ -93,7 +94,7 @@ class PaypalBackend(
               }
             }
 
-          payment
+          enrichedPaypalPayment
         }
       )
 
@@ -104,11 +105,17 @@ class PaypalBackend(
     } yield dbUpdateResult
   }
 
-  // Success or failure of these steps shouldn't affect the response to the client
-  private def postPaymentTasks(payment: Payment, signedInUserEmail: Option[String], acquisitionData: AcquisitionData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
-    emailFromPayment(payment).flatMap { paymentEmail =>
-      val email = signedInUserEmail.getOrElse(paymentEmail)
+  def getEmail(enrichedPaypalPayment: EnrichedPaypalPayment): Either[BackendError, String] = {
+    Either.fromOption(
+      enrichedPaypalPayment.email,
+      BackendError.fromPaypalAPIError(PaypalApiError.fromString("Could not get email from payment object in PayPal SDK"))
+    )
+  }
 
+  // Success or failure of these steps shouldn't affect the response to the client
+  private def postPaymentTasks(enrichedPayment: EnrichedPaypalPayment, acquisitionData: AcquisitionData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
+    val payment = enrichedPayment.payment
+    EitherT.fromEither(getEmail(enrichedPayment)).flatMap { email =>
       val trackContributionResult: EitherT[Future, BackendError, Unit] = getOrCreateIdentityIdFromEmail(email)
         .flatMap { identityId =>
           trackContribution(payment, acquisitionData, email, Option(identityId), countrySubdivisionCode)
@@ -181,13 +188,6 @@ class PaypalBackend(
   private def sendThankYouEmail(email: String, currency: String): EitherT[Future, BackendError, SendMessageResult] =
     emailService.sendThankYouEmail(email, currency)
       .leftMap(BackendError.fromEmailError)
-
-  private def emailFromPayment(p: Payment): EitherT[Future, BackendError, String] =
-    Either.catchNonFatal(p.getPayer.getPayerInfo.getEmail)
-      .leftMap(error => {
-        logger.error("Could not get email from payment object in PayPal SDK", error)
-        BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))
-      }).toEitherT
 
   private def currencyFromPayment(p: Payment): EitherT[Future, BackendError, String] =
     Either.catchNonFatal(p.getTransactions.asScala.head.getAmount.getCurrency)

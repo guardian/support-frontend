@@ -41,11 +41,13 @@ class PaypalController(
         .getInstanceFor(captureRequest)
         .capturePayment(captureRequest.body, captureRequest.countrySubdivisionCode)
         .fold(
-          err => toErrorResult(err),
-          _ => Ok(ResultBody.Success(()))
-        )
+        err => toErrorResult(err),
+        _ => Ok(ResultBody.Success(()))
+      )
     }
 
+  // We return the email that we track the acquisition with so that we can offer the user the chance to sign up
+  // to marketing emails with the same email that we associate with the acquisition in our database
   def executePayment: Action[ExecutePaypalPaymentData] = CorsAction.async(circe.json[ExecutePaypalPaymentData]) {
     executeRequest =>
       paypalBackendProvider
@@ -53,7 +55,7 @@ class PaypalController(
         .executePayment(executeRequest.body, executeRequest.countrySubdivisionCode)
         .fold(
           err => toErrorResult(err),
-          payment => Ok(ResultBody.Success("execute payment success"))
+          payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email)))
         )
       }
 

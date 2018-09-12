@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.paypal.api.payments.{Links, Payment}
 import model.DefaultThreadPool
-import model.paypal.PaypalApiError
+import model.paypal.{EnrichedPaypalPayment, PaypalApiError}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -38,12 +38,20 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val mockPaypalRequestBasedProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
 
+  val enrichedPaymentMock: EnrichedPaypalPayment = mock[EnrichedPaypalPayment]
+
   val paymentMock: Payment = mock[Payment]
 
   val paymentServiceResponse: EitherT[Future, PaypalApiError, Payment] =
     EitherT.right(Future.successful(paymentMock))
 
   val paymentServiceResponseError: EitherT[Future, PaypalApiError, Payment] =
+    EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
+
+  val enrichedPaymentServiceResponse: EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+    EitherT.right(Future.successful(enrichedPaymentMock))
+
+  val enrichedPaymentServiceResponseError: EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     EitherT.left(Future.successful(PaypalApiError.fromString("Error response")))
 
   val paymentHookResponse: EitherT[Future, BackendError, Unit] =
@@ -90,6 +98,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
       val fixtureFor200Response = new PaypalControllerFixture()(executionContext, context) {
         val link = new Links("http://return-url.com", "approval_url")
         val links: java.util.List[Links] = List(link).asJava
+        when(enrichedPaymentMock.payment)
+            .thenReturn(paymentMock)
         when(paymentMock.getLinks)
           .thenReturn(links)
         when(paymentMock.getId)
@@ -181,6 +191,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
 
           val link = new Links("invalidURL", "approval_url")
           val links: java.util.List[Links] = List(link).asJava
+          when(enrichedPaymentMock.payment)
+            .thenReturn(paymentMock)
           when(paymentMock.getLinks)
             .thenReturn(links)
           when(paymentMock.getId)
@@ -189,7 +201,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.createPayment(any()))
-          .thenReturn(paymentServiceResponse)
+          .thenReturn(paymentServiceResponseError)
         }
 
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
@@ -218,7 +230,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse(
@@ -279,7 +291,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse(
@@ -304,7 +316,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
@@ -350,7 +362,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
@@ -375,7 +387,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
@@ -414,7 +426,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.capturePayment(any(), any()))
-            .thenReturn(paymentServiceResponseError)
+            .thenReturn(enrichedPaymentServiceResponseError)
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
@@ -459,7 +471,9 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.executePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
+          when(enrichedPaymentMock.email)
+            .thenReturn(Some("a@b.com"))
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -507,7 +521,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.executePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -531,7 +545,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.executePayment(any(), any()))
-            .thenReturn(paymentServiceResponseError)
+            .thenReturn(enrichedPaymentServiceResponseError)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -567,7 +581,9 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.executePayment(any(), any()))
-            .thenReturn(paymentServiceResponse)
+            .thenReturn(enrichedPaymentServiceResponse)
+          when(enrichedPaymentMock.email)
+            .thenReturn(Some("a@b.com"))
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
