@@ -35,7 +35,7 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentSuccess, paymentFailure, paymentWaiting } from '../contributionsLandingActions';
+import { type Action, paymentSuccess, paymentFailure, paymentWaiting, updateFirstName, updateLastName, updateEmail } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -54,9 +54,12 @@ type PropTypes = {|
   optimizeExperiments: OptimizeExperiments,
   contributionType: Contrib,
   thankYouRoute: string,
-  initialFirstName: string,
-  initialLastName: string,
-  initialEmail: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  updateFirstName: Event => void,
+  updateLastName: Event => void,
+  updateEmail: Event => void,
   onSuccess: () => void,
   onError: string => void,
   onWaiting: boolean => void,
@@ -69,16 +72,26 @@ const mapStateToProps = (state: State) => ({
   csrf: state.page.csrf,
   countryId: state.common.internationalisation.countryId,
   isTestUser: state.page.user.isTestUser || false,
-  initialFirstName: state.page.user.firstName,
-  initialLastName: state.page.user.lastName,
-  initialEmail: state.page.user.email,
+  firstName: state.page.form.formData.firstName || state.page.user.firstName,
+  lastName: state.page.form.formData.lastName || state.page.user.lastName,
+  email: state.page.form.formData.email || state.page.user.email,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   abParticipations: state.common.abParticipations,
   optimizeExperiments: state.common.optimizeExperiments,
 });
 
+function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
+  const cleanString = string.trim();
+  if (cleanString !== '') {
+    dispatch(action(cleanString));
+  }
+}
+
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  updateFirstName: event => { maybeDispatch(dispatch, updateFirstName, event.target.value); },
+  updateLastName: event => { maybeDispatch(dispatch, updateLastName, event.target.value); },
+  updateEmail: event => { maybeDispatch(dispatch, updateEmail, event.target.value); },
   onSuccess: () => { dispatch(paymentSuccess()); },
   onError: (error) => { dispatch(paymentFailure(error)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
@@ -208,9 +221,12 @@ function ContributionForm(props: PropTypes) {
     selectedCountryGroupDetails,
     currency,
     thankYouRoute,
-    initialFirstName,
-    initialLastName,
-    initialEmail,
+    firstName,
+    lastName,
+    email,
+    updateFirstName,
+    updateLastName,
+    updateEmail,
   } = props;
 
   return props.done ?
@@ -240,26 +256,29 @@ function ContributionForm(props: PropTypes) {
             id="contributionFirstName"
             name="contribution-fname"
             label="First Name"
-            value={initialFirstName}
+            value={firstName}
             icon={<SvgUser />}
+            onInput={updateFirstName}
             required
           />
           <NewContributionTextInput
             id="contributionLastName"
             name="contribution-lname"
             label="Last Name"
-            value={initialLastName}
+            value={lastName}
             icon={<SvgUser />}
+            onInput={updateLastName}
             required
           />
           <NewContributionTextInput
             id="contributionEmail"
             name="contribution-email"
             label="Email address"
-            value={initialEmail}
+            value={email}
             type="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
+            onInput={updateEmail}
             required
           />
           <NewContributionState countryGroupId={countryGroupId} />

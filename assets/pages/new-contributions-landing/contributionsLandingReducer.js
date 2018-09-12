@@ -15,12 +15,19 @@ import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
+type FormData = {
+  firstName: string | null,
+  lastName: string | null,
+  email: string | null,
+};
+
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   isWaiting: boolean,
+  formData: FormData,
   done: boolean,
 };
 
@@ -35,8 +42,6 @@ export type State = {
   page: PageState,
 };
 
-// ----- Initial state ----- //
-
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
@@ -45,17 +50,23 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
     ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
-
+  
   const initialAmount: { [Contrib]: Amount | 'other' } = {
     ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
     MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
     ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
   };
-
+  
+  // ----- Initial state ----- //
+  
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
-    amount: initialAmount.MONTHLY,
+    formData: {
+      firstName: null,
+      lastName: null,
+      email: null,
+    },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
     otherAmount: null,
@@ -74,6 +85,18 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
+
+      case 'UPDATE_FIRST_NAME':
+        console.log('updating first name')
+        return { ...state, formData: { ...state.formData, firstName: action.firstName } };
+        
+        case 'UPDATE_LAST_NAME':
+        console.log('updating last name')
+        return { ...state, formData: { ...state.formData, lastName: action.lastName } };
+        
+        case 'UPDATE_EMAIL':
+        console.log('updating email')
+        return { ...state, formData: { ...state.formData, email: action.email } };
 
       case 'SELECT_AMOUNT':
         return {
