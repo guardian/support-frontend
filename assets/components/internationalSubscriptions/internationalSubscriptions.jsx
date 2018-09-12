@@ -24,7 +24,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 // ----- Types ----- //
 
 type PropTypes = {
-  sectionId: string,
   countryGroupId: CountryGroupId,
   referrerAcquisitionData: ReferrerAcquisitionData,
   headingSize: HeadingSize,
@@ -48,38 +47,37 @@ export default function InternationalSubscriptions(props: PropTypes) {
   );
 
   return (
-    <section id={props.sectionId}>
-      <div className={classNameWithModifiers(
+    <div
+      className={classNameWithModifiers(
         'component-international-subscriptions',
         [countryGroups[props.countryGroupId].supportInternationalisationId],
       )}
+    >
+      <PageSection
+        heading="Subscribe"
+        modifierClass="international-subscriptions"
       >
-        <PageSection
-          heading="Subscribe"
-          modifierClass="international-subscriptions"
-        >
-          <PremiumTier
-            countryGroupId={props.countryGroupId}
-            iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
-            androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
-            headingSize={props.headingSize}
-            subheading="7-day free trial"
-          />
-          <DigitalBundle
-            countryGroupId={props.countryGroupId}
-            url={subsLinks.DigitalPack}
-            headingSize={props.headingSize}
-            subheading="14-day free trial"
-          />
-          <WeeklyBundle
-            countryGroupId={props.countryGroupId}
-            url={subsLinks.GuardianWeekly}
-            headingSize={props.headingSize}
-            subheading="&nbsp;"
-          />
-        </PageSection>
-      </div>
-    </section>
+        <PremiumTier
+          countryGroupId={props.countryGroupId}
+          iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
+          androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
+          headingSize={props.headingSize}
+          subheading="7-day free trial"
+        />
+        <DigitalBundle
+          countryGroupId={props.countryGroupId}
+          url={subsLinks.DigitalPack}
+          headingSize={props.headingSize}
+          subheading="14-day free trial"
+        />
+        <WeeklyBundle
+          countryGroupId={props.countryGroupId}
+          url={subsLinks.GuardianWeekly}
+          headingSize={props.headingSize}
+          subheading="&nbsp;"
+        />
+      </PageSection>
+    </div>
   );
 
 }
