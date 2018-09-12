@@ -10,6 +10,7 @@ import io.circe.parser._
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import io.circe.syntax._
+import monitoring.SafeLogger
 
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
@@ -30,7 +31,10 @@ object Settings {
       source <- AdminSettingsSource.fromConfig(config)
       rawJson <- getRawJson(source).leftMap(err => new Error(s"Could not fetch settings from $source. $err"))
       settings <- decodeJson(rawJson).leftMap(err => new Error(s"Could not decode settings JSON from $source. $err"))
-    } yield settings
+    } yield {
+      SafeLogger.info(s"Loaded settings from $source")
+      settings
+    }
 
   private def decodeJson(rawJson: String): Either[Throwable, Settings] = decode[Settings](rawJson)
 
