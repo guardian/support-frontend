@@ -144,6 +144,15 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
     }
   };
 
+  // Exhaustion of the maximum number of polls is considered a payment success
+  const handleExhaustedPolls = (error) => {
+    if (error === undefined) {
+      return Promise.resolve(PaymentSuccess);
+    } else {
+      throw error;
+    }
+  };
+
   return (json) => {
     switch (json.status) {
       case 'pending':
@@ -155,7 +164,7 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
             return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',
-        ).then(handleCompletion));
+        ).then(handleCompletion, handleExhaustedPolls));
 
       default:
         return Promise.resolve(handleCompletion(json));

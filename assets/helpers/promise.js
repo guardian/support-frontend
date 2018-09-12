@@ -5,7 +5,7 @@ import { logException } from 'helpers/logger';
 // Repeats a promise a maximum of `n` times, until it succeeds or bottoms out
 function repeatPromise<A>(n: number, p: () => Promise<A>): Promise<A> {
   return n === 0
-    ? Promise.reject(new Error(`Failed after ${n} attempts`))
+    ? Promise.reject()
     : p().catch(() => repeatPromise(n - 1, p));
 }
 
