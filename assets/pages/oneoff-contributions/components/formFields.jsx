@@ -14,6 +14,7 @@ import {
 import {
   type UserFormFieldAttribute,
   shouldShowError,
+  emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
@@ -56,11 +57,13 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
   };
 }
 
+export const formClassName = 'oneoff-contrib__checkout-form';
+
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
   return (
-    <form className="oneoff-contrib__name-form">
+    <form className={formClassName}>
       {
         !props.isSignedIn ? (
           <TextInput
@@ -72,6 +75,9 @@ function NameForm(props: PropTypes) {
             modifierClasses={['email']}
             showError={shouldShowError(props.email)}
             errorMessage="Please enter a valid email address."
+            type="email"
+            pattern={emailRegexPattern}
+            required
           />
         ) : null
       }
@@ -84,6 +90,7 @@ function NameForm(props: PropTypes) {
         modifierClasses={['name']}
         showError={shouldShowError(props.fullName)}
         errorMessage="Please enter your name."
+        required
       />
       <p className="component-your-details__info">
         <small>All fields are required.</small>
