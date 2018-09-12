@@ -30,6 +30,8 @@ type PropTypes = {
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
+  countryGroupId: state.common.internationalisation.countryGroupId,
+  currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmount,

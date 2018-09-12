@@ -26,6 +26,7 @@ type PropTypes = {
 
 const mapStateToProps = (state: State) =>
   ({
+    currency: state.common.internationalisation.currencyId,
     contributionType: state.page.form.contributionType,
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
@@ -45,7 +46,7 @@ function ContributionSubmit(props: PropTypes) {
     <div className="form__submit">
       {showPayPalButton ? (
         <button>Pay with PayPal, bro</button>
-      ): (
+      ) : (
         <button className="form__submit-button" type="submit">
           Contribute&nbsp;
           {amount ? formatAmount(
@@ -57,7 +58,7 @@ function ContributionSubmit(props: PropTypes) {
           {frequency ? `${frequency} ` : null}
           {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
           <SvgArrowRight />
-        </button>        
+        </button>
       )}
     </div>
   );

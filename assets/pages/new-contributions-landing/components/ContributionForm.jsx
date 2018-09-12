@@ -9,18 +9,11 @@ import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { bracketPromise } from 'helpers/promise';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type ReferrerAcquisitionData, derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type Contrib } from 'helpers/contributions';
-import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type Participations } from 'helpers/abTests/abtest';
-import { setupStripeCheckout, openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { createPaymentCallback, type PaymentFields, type PaymentResult, type PaymentCallback, type Token } from 'helpers/paymentIntegrations/paymentApi';
-import trackConversion from 'helpers/tracking/conversions';
+import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
+import { type Contrib, type Amount } from 'helpers/contributions';
+import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
+import { type Token } from 'helpers/paymentIntegrations/paymentApi';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -35,7 +28,7 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentSuccess, paymentFailure, paymentWaiting, updateFirstName, updateLastName, updateEmail } from '../contributionsLandingActions';
+import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEmail, updateState, onThirdPartyPaymentDone } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -43,42 +36,38 @@ type PropTypes = {|
   done: boolean,
   error: string | null,
   isWaiting: boolean,
-  csrf: CsrfState,
-  isTestUser: boolean,
   countryGroupId: CountryGroupId,
-  countryId: IsoCountry,
-  currency: IsoCurrency,
   selectedCountryGroupDetails: CountryMetaData,
-  abParticipations: Participations,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  optimizeExperiments: OptimizeExperiments,
   contributionType: Contrib,
   thankYouRoute: string,
   firstName: string,
   lastName: string,
   email: string,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  otherAmount: string | null,
+  paymentMethod: PaymentMethod,
+  paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
-  onSuccess: () => void,
-  onError: string => void,
+  updateState: Event => void,
   onWaiting: boolean => void,
+  onThirdPartyPaymentDone: Token => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
   isWaiting: state.page.form.isWaiting,
-  csrf: state.page.csrf,
-  countryId: state.common.internationalisation.countryId,
-  isTestUser: state.page.user.isTestUser || false,
+  countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: state.page.form.formData.firstName || state.page.user.firstName,
   lastName: state.page.form.formData.lastName || state.page.user.lastName,
   email: state.page.form.formData.email || state.page.user.email,
+  selectedAmounts: state.page.form.selectedAmounts,
+  otherAmount: state.page.form.formData.otherAmount,
+  paymentMethod: state.page.form.paymentMethod,
+  paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
-  referrerAcquisitionData: state.common.referrerAcquisitionData,
-  abParticipations: state.common.abParticipations,
-  optimizeExperiments: state.common.optimizeExperiments,
 });
 
 function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
@@ -88,146 +77,67 @@ function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, str
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  updateFirstName: event => { maybeDispatch(dispatch, updateFirstName, event.target.value); },
-  updateLastName: event => { maybeDispatch(dispatch, updateLastName, event.target.value); },
-  updateEmail: event => { maybeDispatch(dispatch, updateEmail, event.target.value); },
-  onSuccess: () => { dispatch(paymentSuccess()); },
-  onError: (error) => { dispatch(paymentFailure(error)); },
+const mapDispatchToProps = (dispatch: Function) => ({
+  updateFirstName: (event) => { maybeDispatch(dispatch, updateFirstName, event.target.value); },
+  updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
+  updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
+  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
 });
 
 // ----- Functions ----- //
 
-const getAmount = (formElements: Object) =>
-  parseFloat(formElements.contributionAmount.value === 'other'
-    ? formElements.contributionOther.value
-    : formElements.contributionAmount.value);
-
-function getData(props: PropTypes, formElement: Object): (Contrib, Token) => PaymentFields {
-  return (contributionType, token) => {
-    const {
-      countryGroupId,
-      countryId,
-      currency,
-      abParticipations,
-      referrerAcquisitionData,
-      optimizeExperiments,
-    } = props;
-    const contributionState = countryGroupId === 'UnitedStates' || countryGroupId === 'Canada'
-      ? formElement.elements.contributionState.value
-      : null;
-    const billingPeriod = formElement.elements.contributionType.value === 'MONTHLY'
-      ? 'Monthly'
-      : 'Annual';
-    const ophanIds = getOphanIds();
-
-    switch (contributionType) {
-      case 'ONE_OFF':
-        return {
-          contributionType: 'oneoff',
-          fields: {
-            paymentData: {
-              currency,
-              amount: getAmount(formElement.elements),
-              token: token.paymentMethod === 'Stripe' ? token.token : '',
-              email: formElement.elements.contributionEmail.value,
-            },
-            acquisitionData: derivePaymentApiAcquisitionData(
-              referrerAcquisitionData,
-              abParticipations,
-              optimizeExperiments,
-            ),
-          },
-        };
-
-      default:
-        return {
-          contributionType: 'regular',
-          fields: {
-            firstName: formElement.elements.contributionFirstName.value,
-            lastName: formElement.elements.contributionLastName.value,
-            country: countryId,
-            state: contributionState,
-            email: formElement.elements.contributionEmail.value,
-            contribution: {
-              amount: getAmount(formElement.elements),
-              currency,
-              billingPeriod,
-            },
-            paymentFields: token.paymentMethod === 'Stripe'
-              ? { stripeToken: token.token }
-              : { baid: '' },
-            ophanIds,
-            referrerAcquisitionData,
-            supportAbTests: getSupportAbTests(abParticipations, optimizeExperiments),
-          },
-        };
-    }
-  };
-}
+const getAmount = (props: PropTypes) =>
+  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
+    ? props.otherAmount
+    : props.selectedAmounts[props.contributionType].value);
 
 // ----- Event handlers ----- //
 
-const onSubmit = form => (stripeHandler) => {
-  const { elements } = (form: any);
-  const amount = getAmount(elements);
-  const email = elements.namedItem('contributionEmail').value;
+function onSubmit(props: PropTypes): Event => void {
+  return (event) => {
+    event.preventDefault();
+    const amount = getAmount(props);
+    const { email } = props;
 
-  openDialogBox(stripeHandler, amount, email);
-};
+    if (props.paymentHandler) {
+      switch (props.paymentMethod) {
+        case 'DebitCard':
+          // TODO
+          break;
 
+        case 'PayPal':
+          // TODO
+          break;
 
-// ----- Render ----- //
-
-function setupStripe(formElement: Object, props: PropTypes) {
-  const {
-    csrf,
-    currency,
-    contributionType,
-    abParticipations,
-    isTestUser,
-  } = props;
-
-  const callback: PaymentCallback = bracketPromise(
-    () => { props.onWaiting(true); return Promise.resolve(); },
-    () => { props.onWaiting(false); return Promise.resolve(); },
-    createPaymentCallback(
-      getData(props, formElement),
-      contributionType,
-      abParticipations,
-      csrf,
-    ),
-  );
-
-  const onSuccess: PaymentResult => void = (result) => {
-    switch (result.paymentStatus) {
-      case 'success':
-        trackConversion(abParticipations, '/contribute/thankyou.new');
-        props.onSuccess();
-        break;
-
-      default:
-        props.onError(result.error);
+        case 'Stripe':
+        default:
+          if (props.paymentHandler.Stripe) {
+            openDialogBox(props.paymentHandler.Stripe, amount, email);
+          }
+          break;
+      }
     }
   };
-
-  return setupStripeCheckout(callback, contributionType, currency, isTestUser, onSuccess);
 }
+
+// ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
   const {
     countryGroupId,
     selectedCountryGroupDetails,
-    currency,
     thankYouRoute,
     firstName,
     lastName,
     email,
-    updateFirstName,
-    updateLastName,
-    updateEmail,
   } = props;
+
+  const paymentCallback = (token: Token) => {
+    props.onWaiting(true);
+    props.onThirdPartyPaymentDone(token);
+  };
 
   return props.done ?
     <Redirect to={thankYouRoute} />
@@ -236,29 +146,16 @@ function ContributionForm(props: PropTypes) {
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <ErrorMessage message={props.error} />
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formElement = e.target;
-            if (formElement) {
-              setupStripe(formElement, props).then(onSubmit(formElement));
-            }
-        }}
-          className={classNameWithModifiers('form', ['contribution'])}
-        >
+        <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])}>
           <NewContributionType />
-          <NewContributionAmount
-            countryGroupId={countryGroupId}
-            countryGroupDetails={selectedCountryGroupDetails}
-            currency={currency}
-          />
+          <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
             label="First Name"
             value={firstName}
             icon={<SvgUser />}
-            onInput={updateFirstName}
+            onInput={props.updateFirstName}
             required
           />
           <NewContributionTextInput
@@ -267,7 +164,7 @@ function ContributionForm(props: PropTypes) {
             label="Last Name"
             value={lastName}
             icon={<SvgUser />}
-            onInput={updateLastName}
+            onInput={props.updateLastName}
             required
           />
           <NewContributionTextInput
@@ -278,12 +175,12 @@ function ContributionForm(props: PropTypes) {
             type="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
-            onInput={updateEmail}
+            onInput={props.updateEmail}
             required
           />
-          <NewContributionState countryGroupId={countryGroupId} />
-          <NewContributionPayment countryGroupId={countryGroupId} />
-          <NewContributionSubmit countryGroupId={countryGroupId} currency={currency} />
+          <NewContributionState onChange={props.updateState} />
+          <NewContributionPayment paymentCallback={paymentCallback} />
+          <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
       </div>

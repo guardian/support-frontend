@@ -9,7 +9,7 @@ import {
   type AcquisitionABTest,
 } from 'helpers/tracking/acquisitions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type BillingPeriod, type Contrib } from 'helpers/contributions';
+import { type BillingPeriod } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
@@ -70,8 +70,6 @@ export type Token
 export type PaymentResult
   = {| paymentStatus: 'success' |}
   | {| paymentStatus: 'failure', error: string |};
-
-export type PaymentCallback = Token => Promise<PaymentResult>;
 
 // ----- Setup ----- //
 
@@ -148,9 +146,9 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   const handleExhaustedPolls = (error) => {
     if (error === undefined) {
       return Promise.resolve(PaymentSuccess);
-    } else {
-      throw error;
     }
+    throw error;
+
   };
 
   return (json) => {
@@ -204,41 +202,8 @@ function postRegularStripeRequest(
   ).then(checkRegularStatus(participations, csrf)));
 }
 
-/**
- * The payment in itself is handled by a third party, so we need a way
- * to catch the outcome. This is done in the form of a callback that
- * receives some form of token from the third party.
- *
- * This data is used to then send the appropriate data to the payment API
- */
-function createPaymentCallback(
-  getData: (Contrib, Token) => PaymentFields,
-  contributionType: Contrib,
-  participations: Participations,
-  csrf: CsrfState,
-): PaymentCallback {
-  return (paymentToken) => {
-    const data = getData(contributionType, paymentToken);
-
-    switch (paymentToken.paymentMethod) {
-      case 'Stripe':
-        switch (contributionType) {
-          case 'ONE_OFF':
-            return postOneOffStripeRequest(data);
-
-          default:
-            return postRegularStripeRequest(data, participations, csrf);
-        }
-      case 'PayPal':
-        // TODO
-        return Promise.resolve(PaymentSuccess);
-
-      case 'DirectDebit':
-      default:
-        // TODO
-        return Promise.resolve(PaymentSuccess);
-    }
-  };
-}
-
-export { createPaymentCallback };
+export {
+  postOneOffStripeRequest,
+  postRegularStripeRequest,
+  PaymentSuccess,
+};
