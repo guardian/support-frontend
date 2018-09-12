@@ -29,7 +29,7 @@ const mapStateToProps = (state: State) =>
     contributionType: state.page.form.contributionType,
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
-    otherAmount: state.page.form.otherAmount,
+    otherAmount: state.page.form.formData.otherAmount,
   });
 
 // ----- Render ----- //

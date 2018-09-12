@@ -19,13 +19,13 @@ type FormData = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+  otherAmount: string | null,
 };
 
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   selectedAmounts: { [Contrib]: Amount | 'other' },
-  otherAmount: string | null,
   isWaiting: boolean,
   formData: FormData,
   done: boolean,
@@ -66,10 +66,10 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       firstName: null,
       lastName: null,
       email: null,
+      otherAmount: null,
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
-    otherAmount: null,
     isWaiting: false,
     done: false,
   };
@@ -105,7 +105,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'UPDATE_OTHER_AMOUNT':
-        return { ...state, otherAmount: action.otherAmount };
+        return { ...state, formData: { ...state.formData, otherAmount: action.otherAmount } };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
