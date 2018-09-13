@@ -210,7 +210,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |  }
           |}""".stripMargin
 
-      val settings = AdminSettings(
+      val settings = Settings(
         Switches(
           oneOffPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
@@ -235,7 +235,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         )
       )
 
-      decode[AdminSettings](json).right.value mustBe settings
+      decode[Settings](json).right.value mustBe settings
     }
   }
 }

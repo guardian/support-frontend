@@ -22,7 +22,7 @@ import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
 import fixtures.TestCSRFComponents
 import play.api.libs.json.JsString
-import admin.AdminSettings
+import admin.Settings
 
 class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
@@ -92,7 +92,7 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
           mock[PaymentAPIService],
           mock[AuthAction[AnyContent]],
           stubControllerComponents(),
-          mock[AdminSettings]
+          mock[Settings]
         ).autofill(FakeRequest())
       }
     }

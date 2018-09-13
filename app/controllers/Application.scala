@@ -10,7 +10,7 @@ import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import admin.AdminSettings
+import admin.Settings
 import utils.BrowserCheck
 import utils.RequestCountry._
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,13 +25,13 @@ class Application(
     regularStripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    settings: AdminSettings
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: AdminSettings = settings
+  implicit val s: Settings = settings
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())

@@ -1,7 +1,7 @@
 @import assets.AssetsResolver
-@import admin.AdminSettings
+@import admin.Settings
 @import admin.SwitchState
-@()(implicit assets: AssetsResolver, settings: AdminSettings)
+@()(implicit assets: AssetsResolver, settings: Settings)
 @if(settings.switches.optimize == SwitchState.On) {
     <!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->
     <!-- Page-hiding snippet -->

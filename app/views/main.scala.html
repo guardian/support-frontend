@@ -1,6 +1,6 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
-@import admin.AdminSettings
+@import admin.Settings
 @(
 	title: String,
 	mainId: String,
@@ -9,7 +9,7 @@
 	description: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html("")
-)(implicit assets: AssetsResolver, request: RequestHeader, settings: AdminSettings)
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 <!DOCTYPE html>
 <html lang="en">

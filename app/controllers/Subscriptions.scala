@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{SwitchState, AdminSettings}
+import admin.{SwitchState, Settings}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -16,13 +16,13 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settings: AdminSettings
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: AdminSettings = settings
+  implicit val s: Settings = settings
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {

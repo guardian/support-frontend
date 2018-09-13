@@ -18,29 +18,29 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.AdminSettings
+import admin.Settings
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
-    client: RegularContributionsClient,
-    val assets: AssetsResolver,
-    actionRefiners: CustomActionBuilders,
-    membersDataService: MembersDataService,
-    identityService: IdentityService,
-    testUsers: TestUserService,
-    stripeConfigProvider: StripeConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
-    components: ControllerComponents,
-    settings: AdminSettings,
-    guardianDomain: String
+                            client: RegularContributionsClient,
+                            val assets: AssetsResolver,
+                            actionRefiners: CustomActionBuilders,
+                            membersDataService: MembersDataService,
+                            identityService: IdentityService,
+                            testUsers: TestUserService,
+                            stripeConfigProvider: StripeConfigProvider,
+                            payPalConfigProvider: PayPalConfigProvider,
+                            components: ControllerComponents,
+                            settings: Settings,
+                            guardianDomain: String
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: AdminSettings = settings
+  implicit val s: Settings = settings
 
   def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
     Ok(recurringContributions(

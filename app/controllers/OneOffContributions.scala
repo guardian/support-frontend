@@ -15,7 +15,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.AdminSettings
+import admin.Settings
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -26,13 +26,13 @@ class OneOffContributions(
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    settings: AdminSettings
+    settings: Settings
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: AdminSettings = settings
+  implicit val s: Settings = settings
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(

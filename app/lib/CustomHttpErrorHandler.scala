@@ -12,7 +12,7 @@ import play.api.mvc.Results.{InternalServerError, NotFound}
 import assets.AssetsResolver
 import views.html.main
 import play.core.SourceMapper
-import admin.AdminSettings
+import admin.Settings
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -23,7 +23,7 @@ class CustomHttpErrorHandler(
     sourceMapper: Option[SourceMapper],
     router: => Option[Router],
     val assets: AssetsResolver,
-    settings: AdminSettings
+    settings: Settings
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
