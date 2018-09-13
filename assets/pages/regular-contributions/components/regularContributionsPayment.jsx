@@ -9,7 +9,6 @@ import type { Dispatch } from 'redux';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type { Status } from 'helpers/settings';
@@ -22,6 +21,7 @@ import type { Contrib } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
 
@@ -65,7 +65,7 @@ function getStatusMessage(
   if (paymentStatus === 'Pending') {
     return <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
-  return <ErrorMessage message={error} />;
+  return <PaymentFailureMessage message={error} />;
 
 }
 

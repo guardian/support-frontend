@@ -37,9 +37,7 @@
     margin-bottom: $gu-v-spacing * 2;
   }
 
-  .component-error-message {
-    height: 40px;
-    position: relative;
+  .component-payment-failure-message {
 
     @include mq($from: desktop) {
       width: 260px;

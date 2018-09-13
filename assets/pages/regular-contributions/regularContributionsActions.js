@@ -25,7 +25,7 @@ function checkoutSuccess(paymentMethod: PaymentMethod): Action {
 }
 
 function checkoutError(specificError: ?string): Action {
-  const defaultError = 'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.';
+  const defaultError = 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   const message = specificError || defaultError;
   return { type: 'CHECKOUT_ERROR', message };
 }
