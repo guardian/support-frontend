@@ -24,17 +24,17 @@ import views.html.recurringContributions
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
-                            client: RegularContributionsClient,
-                            val assets: AssetsResolver,
-                            actionRefiners: CustomActionBuilders,
-                            membersDataService: MembersDataService,
-                            identityService: IdentityService,
-                            testUsers: TestUserService,
-                            stripeConfigProvider: StripeConfigProvider,
-                            payPalConfigProvider: PayPalConfigProvider,
-                            components: ControllerComponents,
-                            settings: Settings,
-                            guardianDomain: String
+    client: RegularContributionsClient,
+    val assets: AssetsResolver,
+    actionRefiners: CustomActionBuilders,
+    membersDataService: MembersDataService,
+    identityService: IdentityService,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
+    components: ControllerComponents,
+    settings: Settings,
+    guardianDomain: String
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
