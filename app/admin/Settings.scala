@@ -66,16 +66,16 @@ object SettingsSource {
 
   def fromConfig(config: Config): Either[Throwable, SettingsSource] =
     fromLocalFile(config).orElse(fromS3(config))
-      .leftMap(err => new Error(s"adminSettingsSource was not correctly set in config. $err"))
+      .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
-    LocalFile(config.getString("adminSettingsSource.local.path"))
+    LocalFile(config.getString("settingsSource.local.path"))
   }
 
   private def fromS3(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
-      config.getString("adminSettingsSource.s3.bucket"),
-      config.getString("adminSettingsSource.s3.key")
+      config.getString("settingsSource.s3.bucket"),
+      config.getString("settingsSource.s3.key")
     )
   }
 
