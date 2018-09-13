@@ -2,7 +2,6 @@
   padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
   color: gu-colour(news-garnett-main-1);
   background-color: gu-colour(news-faded);
-  font-family: $gu-sans-web;
   margin-bottom: 20px;
 
   @include mq($from: tablet) {
@@ -22,20 +21,22 @@
 }
 
 .svg-exclamation-alternate__exclamation-mark {
-  fill: gu-colour(garnett-neutral-5)
+  fill: gu-colour(garnett-neutral-5);
 }
 
 .component-payment-failure-message__error-message {
   vertical-align: bottom;
   display: inline-block;
-  font-size: 14px;
+  font-family: $gu-sans-web;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .component-payment-failure-message__small-print {
   display: block;
   line-height: 18px;
-  font-size: 12px;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
   font-weight: 400;
   margin-top: $gu-v-spacing;
 }

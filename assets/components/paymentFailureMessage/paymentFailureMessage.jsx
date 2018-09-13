@@ -2,15 +2,14 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-import type { Node } from 'react';
+import React, { type Node } from 'react';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 
 
 // ---- Types ----- //
 
 type PropTypes = {
-  showError?: boolean,
+  showError: boolean,
   message: ?string,
   errorHeading: string,
   svg: Node,
