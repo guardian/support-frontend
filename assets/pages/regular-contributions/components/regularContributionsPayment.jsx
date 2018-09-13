@@ -22,9 +22,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { formFieldIsValid } from 'helpers/checkoutForm/checkoutForm';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
-import PaymentFailureMessage from '../../../components/paymentFailureMessage/paymentFailureMessage';
 
 // ----- Types ----- //
 

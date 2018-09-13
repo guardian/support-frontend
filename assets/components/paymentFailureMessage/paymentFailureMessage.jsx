@@ -12,7 +12,7 @@ import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 type PropTypes = {
   showError?: boolean,
   message: ?string,
-  errorMessage: string,
+  errorHeading: string,
   svg: Node,
 };
 
@@ -25,7 +25,7 @@ export default function PaymentFailureMessage(props: PropTypes) {
 
     return (
       <div className="component-payment-failure-message">
-        {props.svg}<span className="component-payment-failure-message__error-message">{props.errorMessage}</span>
+        {props.svg}<span className="component-payment-failure-message__error-message">{props.errorHeading}</span>
         <span className="component-payment-failure-message__small-print">{props.message}</span>
       </div>
     );
@@ -41,6 +41,6 @@ export default function PaymentFailureMessage(props: PropTypes) {
 
 PaymentFailureMessage.defaultProps = {
   showError: true,
-  errorMessage: 'Payment Attempt Failed',
+  errorHeading: 'Payment Attempt Failed',
   svg: <SvgExclamationAlternate />,
 };

@@ -15,11 +15,11 @@ import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import PaymentFailureMessage from '../../../components/paymentFailureMessage/paymentFailureMessage';
 import { type State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //

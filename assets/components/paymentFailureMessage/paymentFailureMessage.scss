@@ -1,7 +1,7 @@
 .component-payment-failure-message {
   padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
-  color: gu-colour(news-main);
-  background-color: gu-colour(payment-failure-error);
+  color: gu-colour(news-garnett-main-1);
+  background-color: gu-colour(news-faded);
   font-family: $gu-sans-web;
   margin-bottom: 20px;
 
@@ -18,7 +18,7 @@
 }
 
 .svg-exclamation-alternate__circle {
-  fill: gu-colour(news-main);
+  fill: gu-colour(news-garnett-main-1);
 }
 
 .svg-exclamation-alternate__exclamation-mark {
