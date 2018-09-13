@@ -41,7 +41,7 @@ const defaultFeatures: ListItem[] = [
   },
   {
     heading: 'Enhanced offline reading',
-    text: 'Quality journalism on your schedule - download the day\'s news before you travel',
+    text: 'Download the day\'s news before you travel',
   },
 ];
 
@@ -120,7 +120,7 @@ function ProductBlock(props: PropTypes) {
             imgType: 'png',
           }}
           companionSvg={<SvgPennyFarthingCircles />}
-          heading="iPad daily Edition"
+          heading="iPad daily edition"
           description="Every issue of The Guardian and Observer, designed for your iPad and available offline"
           features={[
             {
