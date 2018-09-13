@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import createReducer from '../oneOffContributionsReducer';
 
 
@@ -17,15 +18,15 @@ describe('One-off Reducer', () => {
 
   it('should handle CHECKOUT_ERROR', () => {
 
-    const message = 'Test error';
+    const insufficientFunds: CheckoutFailureReason = 'insufficient_funds';
     const action = {
       type: 'CHECKOUT_ERROR',
-      message,
+      checkoutFailureReason: insufficientFunds,
     };
 
     const newState = reducer(undefined, action);
 
-    expect(newState.oneoffContrib.error).toEqual(message);
+    expect(newState.oneoffContrib.checkoutFailureReason).toEqual(insufficientFunds);
   });
 
   it('should handle SET_PAYPAL_BUTTON', () => {
@@ -38,7 +39,7 @@ describe('One-off Reducer', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.oneoffContrib.error).toMatchSnapshot();
+    expect(newState.oneoffContrib.checkoutFailureReason).toMatchSnapshot();
   });
 
 });
