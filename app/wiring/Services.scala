@@ -1,9 +1,11 @@
 package wiring
 
-import com.gu.support.config.Stages
+import admin.SettingsProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
+
 import services._
+import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}
 
@@ -35,4 +37,6 @@ trait Services {
   lazy val authenticationService = AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
+
+  val settingsProvider: SettingsProvider = SettingsProvider.fromConfigurationUnsafe(appConfig)
 }

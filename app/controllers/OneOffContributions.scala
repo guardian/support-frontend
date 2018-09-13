@@ -6,6 +6,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
+
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
@@ -15,7 +16,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.Settings
+import admin.{Settings, SettingsProvider}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -26,13 +27,13 @@ class OneOffContributions(
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    settings: Settings
+    settingsProvider: SettingsProvider
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
+  implicit val s: Settings = settingsProvider.settings
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(

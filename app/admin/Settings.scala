@@ -1,16 +1,15 @@
 package admin
 
-import scala.io.Source
+import scala.io.{BufferedSource, Source}
 import com.typesafe.config.Config
 
-import collection.JavaConverters._
 import play.api.mvc.RequestHeader
 import codecs.CirceDecoders._
 import io.circe.parser._
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
-import io.circe.syntax._
-import monitoring.SafeLogger
+
+import scala.util.Try
 
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
@@ -20,51 +19,48 @@ case class Switches(
     internationalSubscribePages: SwitchState
 )
 
-case class Settings(
-    switches: Switches
-)
+case class Settings(switches: Switches)
 
 object Settings {
 
-  def fromDiskOrS3(config: Config)(implicit s3: AmazonS3): Either[Throwable, Settings] =
+  private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] =
+    try {
+      decode[Settings](buf.mkString)
+    } finally {
+      Try(buf.close())
+    }
+
+  def fromS3(source: AdminSettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
     for {
-      source <- AdminSettingsSource.fromConfig(config)
-      rawJson <- getRawJson(source).leftMap(err => new Error(s"Could not fetch settings from $source. $err"))
-      settings <- decodeJson(rawJson).leftMap(err => new Error(s"Could not decode settings JSON from $source. $err"))
-    } yield {
-      SafeLogger.info(s"Loaded settings from $source")
-      settings
-    }
+      buf <- Either.catchNonFatal {
+        val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
+        Source.fromInputStream(inputStream)
+      }
+      settings <- fromBufferedSource(buf)
+    } yield settings
 
-  private def decodeJson(rawJson: String): Either[Throwable, Settings] = decode[Settings](rawJson)
-
-  private def getRawJson(source: AdminSettingsSource)(implicit s3: AmazonS3): Either[Throwable, String] = source match {
-    case S3(bucket, key) => Either.catchNonFatal {
-      val inputStream = s3.getObject(bucket, key).getObjectContent
-      Source.fromInputStream(inputStream).mkString
-    }
-
-    case LocalFile(path) => Either.catchNonFatal {
-      val homeDir = System.getProperty("user.home")
-      val localPath = path.replaceFirst("~", homeDir)
-      val bufferedSource = Source.fromFile(localPath)
-      val rawJson = bufferedSource.getLines.mkString
-      bufferedSource.close()
-      rawJson
-    }
-  }
+  def fromLocalFile(source: AdminSettingsSource.LocalFile): Either[Throwable, Settings] =
+    for {
+      buf <- Either.catchNonFatal {
+        val homeDir = System.getProperty("user.home")
+        val localPath = source.path.replaceFirst("~", homeDir)
+        Source.fromFile(localPath)
+      }
+      settings <- fromBufferedSource(buf)
+    } yield settings
 }
 
 sealed trait AdminSettingsSource
 
-case class S3(bucket: String, key: String) extends AdminSettingsSource {
-  override def toString: String = s"s3://$bucket/$key"
-}
-case class LocalFile(path: String) extends AdminSettingsSource {
-  override def toString: String = s"local file at $path"
-}
-
 object AdminSettingsSource {
+
+  case class S3(bucket: String, key: String) extends AdminSettingsSource {
+    override def toString: String = s"s3://$bucket/$key"
+  }
+
+  case class LocalFile(path: String) extends AdminSettingsSource {
+    override def toString: String = s"local file at $path"
+  }
 
   def fromConfig(config: Config): Either[Throwable, AdminSettingsSource] =
     fromLocalFile(config).orElse(fromS3(config))
