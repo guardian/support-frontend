@@ -75,7 +75,6 @@ function Button(props: PropTypes) {
       id="qa-pay-with-card"
       className="component-stripe-pop-up-button"
       onClick={onClick}
-      disabled={!props.canOpen()}
     >
       Pay with debit/credit card {props.svg}
     </button>

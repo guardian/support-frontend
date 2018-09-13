@@ -107,7 +107,6 @@ function Button(props: {
       id="qa-pay-with-direct-debit"
       className="component-direct-debit-pop-up-button"
       onClick={onClick}
-      disabled={!props.canOpen()}
     >
       Pay with Direct Debit
       <SvgArrowRightStraight />
