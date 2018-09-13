@@ -18,16 +18,4 @@ export const tests: Tests = {
     independent: true,
     seed: 3,
   },
-  recurringGuestCheckoutRoundTwo: {
-    variants: ['control', 'guest'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-  },
 };
