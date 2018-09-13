@@ -30,7 +30,7 @@ object Settings {
       Try(buf.close())
     }
 
-  def fromS3(source: AdminSettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
+  def fromS3(source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
     for {
       buf <- Either.catchNonFatal {
         val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
@@ -39,7 +39,7 @@ object Settings {
       settings <- fromBufferedSource(buf)
     } yield settings
 
-  def fromLocalFile(source: AdminSettingsSource.LocalFile): Either[Throwable, Settings] =
+  def fromLocalFile(source: SettingsSource.LocalFile): Either[Throwable, Settings] =
     for {
       buf <- Either.catchNonFatal {
         val homeDir = System.getProperty("user.home")
@@ -50,27 +50,27 @@ object Settings {
     } yield settings
 }
 
-sealed trait AdminSettingsSource
+sealed trait SettingsSource
 
-object AdminSettingsSource {
+object SettingsSource {
 
-  case class S3(bucket: String, key: String) extends AdminSettingsSource {
+  case class S3(bucket: String, key: String) extends SettingsSource {
     override def toString: String = s"s3://$bucket/$key"
   }
 
-  case class LocalFile(path: String) extends AdminSettingsSource {
+  case class LocalFile(path: String) extends SettingsSource {
     override def toString: String = s"local file at $path"
   }
 
-  def fromConfig(config: Config): Either[Throwable, AdminSettingsSource] =
+  def fromConfig(config: Config): Either[Throwable, SettingsSource] =
     fromLocalFile(config).orElse(fromS3(config))
       .leftMap(err => new Error(s"adminSettingsSource was not correctly set in config. $err"))
 
-  private def fromLocalFile(config: Config): Either[Throwable, AdminSettingsSource] = Either.catchNonFatal {
+  private def fromLocalFile(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     LocalFile(config.getString("adminSettingsSource.local.path"))
   }
 
-  private def fromS3(config: Config): Either[Throwable, AdminSettingsSource] = Either.catchNonFatal {
+  private def fromS3(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
       config.getString("adminSettingsSource.s3.bucket"),
       config.getString("adminSettingsSource.s3.key")

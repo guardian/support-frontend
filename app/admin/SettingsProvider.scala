@@ -23,13 +23,13 @@ class LocalFileSettingsProvider private (override val settings: Settings) extend
 
 object LocalFileSettingsProvider {
 
-  def fromLocalFile(source: AdminSettingsSource.LocalFile): Either[Throwable, SettingsProvider] =
+  def fromLocalFile(source: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] =
     Settings.fromLocalFile(source).map(new LocalFileSettingsProvider(_))
 }
 
 class S3SettingsProvider private (
     fastlyService: FastlyService,
-    source: AdminSettingsSource.S3
+    source: SettingsSource.S3
 )(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext) extends SettingsProvider {
 
   private val _settings: AtomicReference[Settings] = new AtomicReference[Settings]()
@@ -66,7 +66,7 @@ class S3SettingsProvider private (
 
 object S3SettingsProvider {
 
-  def fromS3(s3: AdminSettingsSource.S3, fastlyConfig: FastlyConfig)(implicit s3Client: AmazonS3, system: ActorSystem): Either[Throwable, SettingsProvider] = {
+  def fromS3(s3: SettingsSource.S3, fastlyConfig: FastlyConfig)(implicit s3Client: AmazonS3, system: ActorSystem): Either[Throwable, SettingsProvider] = {
     // Er on the side of caution and use a dedicated execution context,
     // since we are using the synchronous S3 client.
     // Ok using a single threaded execution context,
@@ -86,8 +86,8 @@ object SettingsProvider {
 
   def fromConfiguration(config: Configuration)(implicit s3Client: AmazonS3, system: ActorSystem): Either[Throwable, SettingsProvider] = {
     config.settingsSource match {
-      case s3: AdminSettingsSource.S3 => S3SettingsProvider.fromS3(s3, config.fastlyConfig)
-      case localFile: AdminSettingsSource.LocalFile => LocalFileSettingsProvider.fromLocalFile(localFile)
+      case s3: SettingsSource.S3 => S3SettingsProvider.fromS3(s3, config.fastlyConfig)
+      case localFile: SettingsSource.LocalFile => LocalFileSettingsProvider.fromLocalFile(localFile)
     }
   }
 
