@@ -1,20 +1,17 @@
 package services
 
-import cats.data.EitherT
 import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
 import io.circe.Decoder
-import io.circe.disjunctionCodecs._
-import lib.PaymentApiError
 import monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PayPalSuccessBody(email: Option[String])
-case class PayPalErrorBody(responseCode: Option[Int], errorName: Option[String], message: String)
+case class PayPalSuccess(email: Option[String])
+case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -57,24 +54,20 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .execute()
   }
 
-  def decodePaymentAPIResponse[A: Decoder, B: Decoder](json: String): Option[Either[A, B]] = {
+  def decodePaymentAPIResponse[A: Decoder, B: Decoder](response: WSResponse): Option[Either[A, B]] = {
     implicit def paymentAPIPaypalResponseDecoder: Decoder[Either[A, B]] =
       Decoder.decodeEither[A, B]("error", "data")
-    io.circe.parser.decode[Either[A, B]](json).toOption
-  }
-
-  def decodePaymentResponse(response: WSResponse): Option[Either[PaymentApiError, PayPalSuccessBody]] = {
-    decodePaymentAPIResponse[PayPalSuccessBody](response.body)
+    io.circe.parser.decode[Either[A, B]](response.body)
       .fold(
         failure => {
           SafeLogger.error(scrub"Unable to decode payment API response: ${response.body}. Message is ${failure.getMessage}")
           None
         },
-        resp => Some(Right(resp))
+        resp => Some(resp)
       )
   }
 
-  def logErrorResponse(error: PayPalErrorBody): Unit = {
+  def logErrorResponse(error: PayPalError): Unit = {
     if (error.errorName.contains("INSTRUMENT_DECLINED")) {
       SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
     } else {
@@ -88,8 +81,8 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
     isTestUser: Boolean
-  )(implicit ec: ExecutionContext): EitherT[Future, PaymentApiError, PayPalSuccessBody] = {
+  )(implicit ec: ExecutionContext): Future[Option[Either[PayPalError, PayPalSuccess]]] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    EitherT(postPaypalData(data, queryStrings, isTestUser).map(x => decodePaymentAPIResponse[PayPalSuccessBody](x.body)))
+    postPaypalData(data, queryStrings, isTestUser).map(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }

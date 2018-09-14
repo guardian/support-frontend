@@ -1,20 +1,15 @@
 
 package controllers
 
-import cats.data.EitherT
 import actions.CustomActionBuilders
 import assets.AssetsResolver
-import cats.implicits._
-import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
-import services.PaymentAPIService.Email
 import services._
 import admin.Settings
-import lib.PaymentApiError
+import monitoring.SafeLogger
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -34,18 +29,53 @@ class PayPalOneOff(
   implicit val a: AssetsResolver = assets
   implicit val s: Settings = settings
 
-  def resultFromEmailOption(email: Option[String]): Result = {
+  def resultFromEmailOption(email: Option[String])(implicit request: RequestHeader): Result = {
     val redirect = {
-      SafeLogger.info("Redirecting to thank you page without email in flash session")
       Redirect("/contribute/one-off/thankyou")
     }
-    email.fold(redirect)({ e =>
+    email.fold({
+      SafeLogger.info("Redirecting to thank you page without email in flash session")
+      redirect
+    })({ e =>
       SafeLogger.info("Redirecting to thank you page with email in flash session")
       redirect.flashing("email" -> e)
     })
   }
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
+
+  def paypalErrorPage(implicit request: RequestHeader): Result = Ok(views.html.main(
+    "Support the Guardian | PayPal Error",
+    "paypal-error-page",
+    "payPalErrorPage.js",
+    "payPalErrorPageStyles.css"
+  ))
+
+  def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
+    if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
+      SafeLogger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
+      Redirect("/contribute/one-off/thankyou")
+    } else {
+      paypalErrorPage
+    }
+  }
+
+  def processPaymentApiResponse(
+    paymentApiResponse: Option[Either[PayPalError, PayPalSuccess]]
+  )(implicit request: RequestHeader): Result = {
+    paymentApiResponse.fold(paypalErrorPage)(resp => {
+      resp.fold(
+        processPayPalError,
+        successfulResponse => {
+          SafeLogger.info(s"One-off contribution for Paypal payment is successful")
+          resultFromEmailOption(successfulResponse.email)
+        }
+      )
+    })
+  }
+
+  def emailForUser(user: AuthenticatedIdUser)(implicit request: RequestHeader): Future[Option[String]] =
+    identityService.getUser(user).value.map(_.toOption.map(_.primaryEmailAddress))
 
   def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     val acquisitionData = (for {
@@ -58,28 +88,15 @@ class PayPalOneOff(
       "payerId" -> PayerID
     )
 
-    val paypalErrorPage = Ok(views.html.main(
-      "Support the Guardian | PayPal Error",
-      "paypal-error-page",
-      "payPalErrorPage.js",
-      "payPalErrorPageStyles.css"
-    ))
-
-    def processPaymentApiResponse(paymentApiResponse: Option[Either[PaymentApiError, PayPalSuccessBody]]): Result = paypalErrorPage
-
-    def emailForUser(user: AuthenticatedIdUser): Future[Option[String]] =
-      identityService.getUser(user).value.map(_.toOption.map(_.primaryEmailAddress))
-
     val queryStrings = request.queryString
     val testUsername = request.cookies.get("_test_username")
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
-    val email = for {
+    for {
       maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
       result <- paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
     } yield processPaymentApiResponse(result)
 
-    Future.successful(paypalErrorPage)
   }
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
