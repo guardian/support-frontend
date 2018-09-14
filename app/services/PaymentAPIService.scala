@@ -98,7 +98,6 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
     isTestUser: Boolean
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser) //.map(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
-      .subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(data, queryStrings, isTestUser).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }
