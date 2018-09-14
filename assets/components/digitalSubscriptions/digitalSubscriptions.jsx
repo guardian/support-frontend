@@ -131,6 +131,7 @@ function PremiumTier(props: {
 
 PremiumTier.defaultProps = {
   subheading: null,
+  ctaOnClick: () => {},
 };
 
 function DailyEdition(props: {
@@ -168,6 +169,10 @@ function DailyEdition(props: {
   );
 
 }
+
+DailyEdition.defaultProps = {
+  ctaOnClick: () => {},
+};
 
 function DigitalBundle(props: {
   countryGroupId: CountryGroupId,

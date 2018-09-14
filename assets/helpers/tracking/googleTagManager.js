@@ -202,7 +202,7 @@ function gaEvent(gaEventData: GaEventData) {
 }
 
 function appStoreCtaClick() {
-  sendData('AppStoreCtaClick', {TestName: ''});
+  sendData('AppStoreCtaClick', { TestName: '' });
 }
 
 // ----- Exports ---//
