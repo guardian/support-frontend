@@ -31,7 +31,7 @@ class PayPalOneOff(
 
   def resultFromEmailOption(email: Option[String])(implicit request: RequestHeader): Result = {
     val redirect = {
-      Redirect("/contribute/one-off/thankyou")
+      Redirect(routes.OneOffContributions.displayForm())
     }
     email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
@@ -44,26 +44,30 @@ class PayPalOneOff(
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 
-  def paypalErrorPage(implicit request: RequestHeader): Result = Ok(views.html.main(
-    "Support the Guardian | PayPal Error",
-    "paypal-error-page",
-    "payPalErrorPage.js",
-    "payPalErrorPageStyles.css"
-  ))
+  def paypalError: Action[AnyContent] = PrivateAction { implicit request =>
+    Ok(views.html.main(
+      "Support the Guardian | PayPal Error",
+      "paypal-error-page",
+      "payPalErrorPage.js",
+      "payPalErrorPageStyles.css"
+    ))
+  }
 
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
     if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
       SafeLogger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
-      Redirect("/contribute/one-off/thankyou")
+      Redirect(routes.OneOffContributions.displayForm())
     } else {
-      paypalErrorPage
+      Redirect(routes.PayPalOneOff.paypalError())
     }
   }
 
   def processPaymentApiResponse(
     paymentApiResponse: Option[Either[PayPalError, PayPalSuccess]]
   )(implicit request: RequestHeader): Result = {
-    paymentApiResponse.fold(paypalErrorPage)(resp => {
+    paymentApiResponse.fold(
+      Redirect(routes.PayPalOneOff.paypalError())
+    )(resp => {
       resp.fold(
         processPayPalError,
         successfulResponse => {
@@ -101,11 +105,6 @@ class PayPalOneOff(
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.info("The user selected cancel payment and decided not to contribute.")
-    Ok(views.html.main(
-      "Support the Guardian | PayPal Error",
-      "paypal-error-page",
-      "payPalErrorPage.js",
-      "payPalErrorPageStyles.css"
-    ))
+    Redirect(routes.PayPalOneOff.paypalError())
   }
 }
