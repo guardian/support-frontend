@@ -8,6 +8,7 @@ import {
   type OphanIds,
   type AcquisitionABTest,
 } from 'helpers/tracking/acquisitions';
+import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
@@ -69,7 +70,7 @@ export type Token
 
 export type PaymentResult
   = {| paymentStatus: 'success' |}
-  | {| paymentStatus: 'failure', error: string |};
+  | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
 
 // ----- Setup ----- //
 
