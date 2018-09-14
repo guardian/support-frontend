@@ -11,7 +11,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
 
 type PaymentRequestAPIStatus =
   'PaymentRequestAPINotAvailable' |
@@ -201,11 +201,16 @@ function gaEvent(gaEventData: GaEventData) {
   });
 }
 
+function appStoreCtaClick() {
+  sendData('AppStoreCtaClick', {TestName: ''});
+}
+
 // ----- Exports ---//
 
 export {
   init,
   gaEvent,
   successfulConversion,
+  appStoreCtaClick,
   gaPropertyId,
 };
