@@ -31,17 +31,15 @@ function logPromise<A>(p: Promise<A>): Promise<A> {
   });
 }
 
-// Wraps a promise `use` with pre- and post- processing actions.
+// Acquires a resource, processes it and makes sure it is properly released
 function bracketPromise<A, B>(
-  acquire: () => Promise<void>,
-  release: () => Promise<void>,
+  acquire: () => Promise<A>,
+  release: A => Promise<void>,
   use: A => Promise<B>,
-): A => Promise<B> {
-  const releaseAndReturn = b => release().then(() => b);
-  const releaseAndRethrow = e => release().then(() => Promise.reject(e));
-  return a => acquire()
-    .then(() => use(a))
-    .then(releaseAndReturn, releaseAndRethrow);
+): () => Promise<B> {
+  const releaseAndReturn = (a: A) => (b: B): Promise<B> => release(a).then(() => b);
+  const releaseAndRethrow = (a: A) => (e: any): Promise<B> => release(a).then(() => Promise.reject(e));
+  return () => acquire().then(a => use(a).then(releaseAndReturn(a), releaseAndRethrow(a)));
 }
 
 export {

@@ -106,7 +106,7 @@ const getAmount = (state: State) =>
     ? state.page.form.formData.otherAmount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const mkOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -123,7 +123,7 @@ const mkOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => (
   },
 });
 
-const mkRegularPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
@@ -151,11 +151,11 @@ const onThirdPartyPaymentDone = (token: Token) =>
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(sendData(mkOneOffPaymentData(token, state)));
+        dispatch(sendData(makeOneOffPaymentData(token, state)));
         return;
 
       default:
-        dispatch(sendData(mkRegularPaymentData(token, state)));
+        dispatch(sendData(makeRegularPaymentData(token, state)));
 
     }
   };

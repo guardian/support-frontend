@@ -29,7 +29,7 @@ const renderState = ([stateValue, stateName]: [string, string]) => (
   <option value={stateValue}>{stateName}</option>
 );
 
-const renderStatesField = (states, onChange) => (
+const renderStatesField = (states: { [string]: string }, onChange: (Event => void) | false) => (
   <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
     <label className="form__label" htmlFor="contributionState">State</label>
     <span className="form__input-with-icon">

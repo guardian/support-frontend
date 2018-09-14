@@ -13,6 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
@@ -94,6 +95,13 @@ const getAmount = (props: PropTypes) =>
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
+const isNotEmpty: HTMLInputElement => boolean   = input => input.value.trim() !== '';
+const isValidEmail: HTMLInputElement => boolean = input => new RegExp(emailRegexPattern).test(input.value);
+
+const checkFirstName: HTMLInputElement => boolean = isNotEmpty;
+const checkLastName: HTMLInputElement => boolean  = isNotEmpty;
+const checkEmail: HTMLInputElement => boolean     = input => isNotEmpty(input) && isValidEmail(input);
+
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
@@ -157,6 +165,8 @@ function ContributionForm(props: PropTypes) {
             value={firstName}
             icon={<SvgUser />}
             onInput={props.updateFirstName}
+            checkValidity={checkFirstName}
+            errorMessage="Please provide your first name"
             required
           />
           <NewContributionTextInput
@@ -166,6 +176,8 @@ function ContributionForm(props: PropTypes) {
             value={lastName}
             icon={<SvgUser />}
             onInput={props.updateLastName}
+            checkValidity={checkLastName}
+            errorMessage="Please provide your last name"
             required
           />
           <NewContributionTextInput
@@ -177,6 +189,8 @@ function ContributionForm(props: PropTypes) {
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
+            checkValidity={checkEmail}
+            errorMessage="Please provide a valid email address"
             required
           />
           <NewContributionState onChange={props.updateState} />
