@@ -5,6 +5,7 @@ import java.util.UUID
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.services.AnalyticsService.RequestData
 import okhttp3._
+import ophan.thrift.event.AbTestInfo
 
 private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpClient)
   extends AnalyticsService {
@@ -26,7 +27,7 @@ private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpC
       "uid" -> submission.ophanIds.browserId.getOrElse(""), // TODO: Or visitId? Does this work here? https://support.google.com/analytics/answer/3123662
 
       // Custom Dimensions
-      //"cd16" -> submission.acquisition.abTests,
+      "cd16" -> buildABTestPayload(submission.acquisition.abTests),
 
       // The GA conversion event
       "t" -> "event",
@@ -52,9 +53,19 @@ private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpC
 
     body
       .filter { case (key, value) => value != "" }
-      .map { case (key, value) => s"$key=$value" }.mkString("&")
+      .map { case (key, value) => s"$key=$value" }
+      .mkString("&")
     //Link to a hit in hitbuilder https://ga-dev-tools.appspot.com/hit-builder/?v=1&t=event&tid=UA-51507017-5&cid=555&dh=support.code.dev-theguardian.com&ec=AcquisitionConversion&ea=RecurringContribution&ti=T12345&tr=5&pa=purchase&pr1nm=RecurringContribution&el=monthly&ev=5&cu=AUD
   }
+
+  private[services] def buildABTestPayload(maybeTests: Option[AbTestInfo]) =
+    maybeTests.map {
+      abTests =>
+        abTests.tests
+          .map(test => s"${test._1}=${test._2}")
+          .mkString(",")
+    }.getOrElse("")
+
 
   override def buildRequest(submission: AcquisitionSubmission): RequestData = {
 
