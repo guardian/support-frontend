@@ -135,10 +135,11 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   const handleCompletion = (json) => {
     switch (json.status) {
       case 'success':
+      case 'pending':
         return PaymentSuccess;
 
       default:
-        return { paymentStatus: 'failure', error: json.message };
+        return { paymentStatus: 'failure', error: json.failureReason };
     }
   };
 
