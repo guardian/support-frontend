@@ -17,8 +17,8 @@ type PropTypes = {
   icon: ?React$Element<*>,
   type?: string,
   value: string | null,
-  checkValidity: (HTMLInputElement => boolean) | null,
-  errorMessage: string | null,
+  // checkValidity: (HTMLInputElement => boolean) | null,
+  // errorMessage: string | null,
   onInput: (Event => void) | false,
   required?: boolean,
 };

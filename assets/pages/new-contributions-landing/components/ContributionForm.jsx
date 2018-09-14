@@ -95,12 +95,12 @@ const getAmount = (props: PropTypes) =>
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-const isNotEmpty: HTMLInputElement => boolean   = input => input.value.trim() !== '';
+const isNotEmpty: HTMLInputElement => boolean = input => input.value.trim() !== '';
 const isValidEmail: HTMLInputElement => boolean = input => new RegExp(emailRegexPattern).test(input.value);
 
 const checkFirstName: HTMLInputElement => boolean = isNotEmpty;
-const checkLastName: HTMLInputElement => boolean  = isNotEmpty;
-const checkEmail: HTMLInputElement => boolean     = input => isNotEmpty(input) && isValidEmail(input);
+const checkLastName: HTMLInputElement => boolean = isNotEmpty;
+const checkEmail: HTMLInputElement => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
 
