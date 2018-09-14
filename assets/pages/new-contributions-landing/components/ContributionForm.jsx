@@ -12,10 +12,11 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { type Contrib, type Amount } from 'helpers/contributions';
+import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-import ErrorMessage from 'components/errorMessage/errorMessage';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -34,7 +35,7 @@ import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEma
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   done: boolean,
-  error: string | null,
+  error: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   selectedCountryGroupDetails: CountryMetaData,
@@ -145,7 +146,7 @@ function ContributionForm(props: PropTypes) {
       <div className="gu-content__content">
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-        <ErrorMessage message={props.error} />
+        <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])}>
           <NewContributionType />
           <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />

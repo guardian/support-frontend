@@ -108,18 +108,8 @@ function postRequestOptions(
 
 /** Process the response for a one-off payment from the payment API */
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
-  if (json.error) {
-    if (json.error.exceptionType === 'CardException') {
-      return Promise.resolve({ paymentStatus: 'failure', error: 'Your card has been declined.' });
-    }
-    const errorHttpCode = json.error.errorCode || 'unknown';
-    const exceptionType = json.error.exceptionType || 'unknown';
-    const errorName = json.error.errorName || 'unknown';
-    return Promise.resolve({
-      paymentStatus: 'failure',
-      error: `Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`,
-    });
-
+  if (json.failureReason) {
+    return Promise.resolve({ paymentStatus: 'failure', error: json.failureReason });
   }
   return Promise.resolve(PaymentSuccess);
 }
