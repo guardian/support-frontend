@@ -1,17 +1,30 @@
 package services
 
+import cats.data.EitherT
 import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
+
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
 import io.circe.Decoder
+import io.circe.parser.decode
 import monitoring.SafeLogger
+import cats.implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class PayPalSuccess(email: Option[String])
+
 case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
+
+sealed trait PaymentAPIResponseError[+A]
+
+object PaymentAPIResponseError {
+  case class DecodingError(error: io.circe.Error) extends PaymentAPIResponseError[Nothing]
+  case class ExecuteError(error: Throwable) extends PaymentAPIResponseError[Nothing]
+  case class APIError[A](error: A) extends PaymentAPIResponseError[A]
+}
 
 case class ExecutePaymentBody(
     signedInUserEmail: Option[String],
@@ -27,7 +40,7 @@ object PaymentAPIService {
   case class Email(value: String)
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
@@ -43,7 +56,12 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     }
   }
 
-  private def postPaypalData(data: ExecutePaymentBody, queryStrings: Map[String, Seq[String]], isTestUser: Boolean) = {
+  private def postPaypalData[A](
+    data: ExecutePaymentBody,
+    queryStrings: Map[String, Seq[String]],
+    isTestUser: Boolean
+  ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
+
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
     wsClient.url(payPalExecutePaymentEndpoint)
@@ -52,19 +70,16 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
       .withBody(Json.toJson(data))
       .withMethod("POST")
       .execute()
+      .attemptT
+      .leftMap(PaymentAPIResponseError.ExecuteError)
   }
 
-  def decodePaymentAPIResponse[A: Decoder, B: Decoder](response: WSResponse): Option[Either[A, B]] = {
-    implicit def paymentAPIPaypalResponseDecoder: Decoder[Either[A, B]] =
-      Decoder.decodeEither[A, B]("error", "data")
-    io.circe.parser.decode[Either[A, B]](response.body)
-      .fold(
-        failure => {
-          SafeLogger.error(scrub"Unable to decode payment API response: ${response.body}. Message is ${failure.getMessage}")
-          None
-        },
-        resp => Some(resp)
-      )
+  def decodePaymentAPIResponse[A: Decoder, B: Decoder](response: WSResponse): Either[PaymentAPIResponseError[A], B] = {
+    implicit def paymentAPIResponseDecoder: Decoder[Either[A, B]] = Decoder.decodeEither[A, B]("error", "data")
+    decode[Either[A, B]](response.body).fold(
+      err => Left(PaymentAPIResponseError.DecodingError(err)),
+      response => response.leftMap(err => PaymentAPIResponseError.APIError(err))
+    )
   }
 
   def logErrorResponse(error: PayPalError): Unit = {
@@ -81,8 +96,8 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String) {
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
     isTestUser: Boolean
-  )(implicit ec: ExecutionContext): Future[Option[Either[PayPalError, PayPalSuccess]]] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser).map(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(data, queryStrings, isTestUser).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }
