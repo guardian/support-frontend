@@ -24,13 +24,17 @@ type PropTypes = {
   contributionType: Contrib,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   selectAmount: (Amount | 'other', Contrib) => (() => void),
+  otherAmount: string | null,
   updateOtherAmount: string => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
+  countryGroupId: state.common.internationalisation.countryGroupId,
+  currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
+  otherAmount: state.page.form.formData.otherAmount,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
@@ -97,6 +101,7 @@ function ContributionAmount(props: PropTypes) {
               min={config[props.countryGroupId][props.contributionType].min}
               max={config[props.countryGroupId][props.contributionType].max}
               onChange={e => props.updateOtherAmount(e.target.value)}
+              value={props.otherAmount}
               autoComplete="off"
               autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               required
