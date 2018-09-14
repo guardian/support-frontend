@@ -18,18 +18,11 @@ import { displayPrice } from '../../helpers/subscriptions';
 
 // ----- Types ----- //
 
-type ClickEvent = () => void;
-
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   digitalHeadingSize: HeadingSize,
   paperHeadingSize: HeadingSize,
   paperDigitalHeadingSize: HeadingSize,
-  clickEvents: ?{
-    digital: ClickEvent,
-    paper: ClickEvent,
-    paperDigital: ClickEvent,
-  },
 };
 
 
@@ -61,17 +54,14 @@ function ThreeSubscriptions(props: PropTypes) {
         <DigitalBundle
           url={subsLinks.DigitalPack}
           headingSize={props.digitalHeadingSize}
-          onClick={props.clickEvents ? props.clickEvents.digital : null}
         />
         <PaperBundle
           url={subsLinks.Paper}
           headingSize={props.paperHeadingSize}
-          onClick={props.clickEvents ? props.clickEvents.paper : null}
         />
         <PaperDigitalBundle
           url={subsLinks.PaperAndDigital}
           headingSize={props.paperDigitalHeadingSize}
-          onClick={props.clickEvents ? props.clickEvents.paperDigital : null}
         />
       </PageSection>
     </div>
@@ -85,7 +75,6 @@ function ThreeSubscriptions(props: PropTypes) {
 function DigitalBundle(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent | null,
 }) {
 
   return (
@@ -106,7 +95,6 @@ function DigitalBundle(props: {
           url: props.url,
           accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['digital', 'border'],
-          onClick: props.onClick,
         },
       ]}
     />
@@ -117,7 +105,6 @@ function DigitalBundle(props: {
 function PaperBundle(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent | null,
 }) {
 
   return (
@@ -138,7 +125,6 @@ function PaperBundle(props: {
           url: props.url,
           accessibilityHint: 'Proceed to paper subscription options',
           modifierClasses: ['paper', 'border'],
-          onClick: props.onClick,
         },
       ]}
     />
@@ -149,7 +135,6 @@ function PaperBundle(props: {
 function PaperDigitalBundle(props: {
   url: string,
   headingSize: HeadingSize,
-  onClick: ClickEvent | null,
 }) {
 
   return (
@@ -170,20 +155,12 @@ function PaperDigitalBundle(props: {
           url: props.url,
           accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
           modifierClasses: ['paper-digital', 'border'],
-          onClick: props.onClick,
         },
       ]}
     />
   );
 
 }
-
-
-// ----- Default Props ----- //
-
-ThreeSubscriptions.defaultProps = {
-  clickEvents: null,
-};
 
 
 // ----- Exports ----- //

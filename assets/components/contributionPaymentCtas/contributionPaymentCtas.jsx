@@ -42,7 +42,6 @@ type PropTypes = {
   }>,
   error: ?string,
   resetError: void => void,
-  isGuestCheckout: boolean
 };
 
 
@@ -131,12 +130,10 @@ function RegularCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
-  isGuestCheckout: boolean,
 }): Node {
-  const recurringRoute = props.isGuestCheckout ? routes.recurringContribCheckoutGuest : routes.recurringContribCheckout;
   const frequency = getFrequency(props.contributionType);
   const spokenType = getSpokenType(props.contributionType);
-  const clickUrl = addQueryParamsToURL(recurringRoute, {
+  const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
     currency: props.currencyId,

@@ -254,7 +254,7 @@ function handleStatus(
 
       switch (status.status) {
         case 'failure':
-          dispatch(checkoutError(status.message));
+          dispatch(checkoutError());
           break;
         case 'success':
           trackConversion(participations, routes.recurringContribThankyou);

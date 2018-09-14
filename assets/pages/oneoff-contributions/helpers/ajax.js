@@ -47,7 +47,7 @@ type PaymentApiStripeExecutePaymentBody = {|
 |};
 
 type OnSuccess = () => void;
-type OnFailure = string => void;
+type OnFailure = () => void;
 
 
 // ----- Functions ----- //
@@ -94,16 +94,13 @@ const handleFailure = (onFailure: OnFailure) => (errorJson: Object): void => {
 
   const { error } = errorJson;
 
-  if (error.exceptionType === 'CardException') {
-    onFailure('Your card has been declined.');
-  } else {
+  if (error.exceptionType !== 'CardException') {
     const errorHttpCode = error.errorHttpCode || 'unknown';
     const exceptionType = error.exceptionType || 'unknown';
     const errorName = error.errorName || 'unknown';
     logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode}, type: ${exceptionType}, error-name: ${errorName}.`);
-    onFailure('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
   }
-
+  onFailure();
 };
 
 const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
@@ -119,7 +116,7 @@ const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response
 
 const handleUnknownError = (onFailure: OnFailure) => () => {
   logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-  onFailure('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.');
+  onFailure();
 };
 
 function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
@@ -145,7 +142,7 @@ function postCheckout(
     dispatch(checkoutSuccess());
   };
 
-  const onFailure: OnFailure = msg => dispatch(checkoutError(msg));
+  const onFailure: OnFailure = () => dispatch(checkoutError());
 
   return (paymentToken: string) => {
     const request = requestData(

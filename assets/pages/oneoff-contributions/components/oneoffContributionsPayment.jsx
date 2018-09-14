@@ -8,13 +8,13 @@ import type { Dispatch } from 'redux';
 import { Redirect } from 'react-router';
 import { routes } from 'helpers/routes';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
@@ -84,7 +84,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
-      <ErrorMessage message={props.error} />
+      <PaymentFailureMessage message={props.error} />
       <StripePopUpButton
         email={props.email}
         callback={postCheckout(
