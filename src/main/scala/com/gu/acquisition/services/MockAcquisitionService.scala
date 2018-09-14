@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Build an acquisition submission, but don't actually send it to an Ophan endpoint.
   * Useful for e.g. test users.
   */
-object MockOphanService extends OphanService {
+object MockAcquisitionService extends AcquisitionService {
 
   override def submit[A: AcquisitionSubmissionBuilder](a: A)(
     implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {

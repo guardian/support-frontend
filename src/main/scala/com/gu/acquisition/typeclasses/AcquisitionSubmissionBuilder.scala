@@ -1,7 +1,7 @@
 package com.gu.acquisition.typeclasses
 
 import com.gu.acquisition.model.errors.OphanServiceError.BuildError
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
+import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import ophan.thrift.event.Acquisition
 import simulacrum.typeclass
 
@@ -16,9 +16,12 @@ import simulacrum.typeclass
 
   def buildAcquisition(a: A): Either[String, Acquisition]
 
+  def buildGAData(a: A): Either[String, GAData]
+
   def asAcquisitionSubmission(a: A): Either[BuildError, AcquisitionSubmission] =
     (for {
       ophanIds <- buildOphanIds(a)
+      gaData <- buildGAData(a)
       acquisition <- buildAcquisition(a)
-    } yield AcquisitionSubmission(ophanIds, acquisition)).leftMap(BuildError)
+    } yield AcquisitionSubmission(ophanIds, gaData, acquisition)).leftMap(BuildError)
 }

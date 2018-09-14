@@ -1,7 +1,7 @@
 package com.gu.acquisition.app
 
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
-import com.gu.acquisition.services.DefaultOphanService
+import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
+import com.gu.acquisition.services.OphanService
 import com.typesafe.scalalogging.StrictLogging
 import okhttp3.{HttpUrl, OkHttpClient}
 import ophan.thrift.event.{Acquisition, PaymentFrequency, PaymentProvider}
@@ -19,6 +19,7 @@ object BasicMockDataGenerator extends MockDataGenerator {
   override def generateSubmission: AcquisitionSubmission =
     AcquisitionSubmission(
       OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
+      GAData(Some("support.theguardian.com"), None, None),
       Acquisition(
         product = ophan.thrift.event.Product.Contribution,
         paymentFrequency = PaymentFrequency.OneOff,
@@ -37,7 +38,7 @@ object BasicMockDataGenerator extends MockDataGenerator {
     )
 }
 
-class AcquisitionSubmissionSimulator(service: DefaultOphanService, generator: MockDataGenerator)(
+class AcquisitionSubmissionSimulator(service: OphanService, generator: MockDataGenerator)(
   implicit ec: ExecutionContext) extends StrictLogging {
 
   import cats.instances.future._
@@ -57,7 +58,7 @@ object AcquisitionSubmissionSimulator {
   def apply(endpoint: HttpUrl, generator: MockDataGenerator)(
     implicit ec: ExecutionContext, client: OkHttpClient
   ): AcquisitionSubmissionSimulator = {
-    val service = new DefaultOphanService(endpoint)
+    val service = new OphanService()
     new AcquisitionSubmissionSimulator(service, generator)
   }
 }

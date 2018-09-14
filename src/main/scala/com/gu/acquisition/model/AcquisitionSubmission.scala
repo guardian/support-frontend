@@ -6,7 +6,7 @@ import ophan.thrift.event.Acquisition
 /**
   * Encapsulates all the data required to submit an acquisition to Ophan.
   */
-case class AcquisitionSubmission(ophanIds: OphanIds, acquisition: Acquisition)
+case class AcquisitionSubmission(ophanIds: OphanIds, gaData: GAData, acquisition: Acquisition)
 
 object AcquisitionSubmission {
 
@@ -16,6 +16,8 @@ object AcquisitionSubmission {
     new AcquisitionSubmissionBuilder[AcquisitionSubmission] {
 
       override def buildOphanIds(a: AcquisitionSubmission): Either[String, OphanIds] = Right(a.ophanIds)
+
+      override def buildGAData(a: AcquisitionSubmission): Either[String, GAData] = Right(a.gaData)
 
       override def buildAcquisition(a: AcquisitionSubmission): Either[String, Acquisition] = Right(a.acquisition)
     }

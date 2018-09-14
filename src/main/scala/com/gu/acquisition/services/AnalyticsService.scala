@@ -3,47 +3,19 @@ package com.gu.acquisition.services
 import java.io.IOException
 
 import cats.data.EitherT
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds, SyntheticPageviewId}
+import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
+import com.gu.acquisition.model.errors.OphanServiceError.{NetworkFailure, ResponseUnsuccessful}
+import com.gu.acquisition.services.AnalyticsService.RequestData
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import okhttp3._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 
-/**
-  * Build an acquisition submission, and submit it to the Ophan endpoint specified in the class constructor.
-  * Uses OkHttp for executing the Http request.
-  */
-class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
-  extends OphanService {
-  import DefaultOphanService._
-  import OphanServiceError._
+private [acquisition] abstract class AnalyticsService(implicit client: OkHttpClient) {
 
-  private def cookieValue(visitId: Option[String], browserId: Option[String]): String =
-    List(visitId.map(("vsid", _)), browserId.map(("bwid", _))).flatten
-      .map { case (name, value) => name + "=" + value }
-      .mkString(";")
-
-  // Exposed for unit testing
-  private[services] def buildRequest(submission: AcquisitionSubmission): RequestData = {
-    import com.gu.acquisition.instances.acquisition._
-    import io.circe.syntax._
-    import submission._
-
-    val url = endpoint.newBuilder()
-      .addPathSegment("a.gif")
-      .addQueryParameter("viewId", ophanIds.pageviewId.getOrElse(SyntheticPageviewId.generate))
-      .addQueryParameter("acquisition" , acquisition.asJson.noSpaces)
-      .build()
-
-    val request = new Request.Builder()
-      .url(url)
-      .addHeader("Cookie", cookieValue(ophanIds.visitId, ophanIds.browserId))
-      .build()
-
-    RequestData(request, submission)
-  }
+  protected def buildRequest(submission: AcquisitionSubmission): RequestData
 
   private def executeRequest(data: RequestData): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
 
@@ -73,7 +45,7 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
     EitherT(p.future)
   }
 
-  override def submit[A : AcquisitionSubmissionBuilder](a: A)(
+  def submit[A : AcquisitionSubmissionBuilder](a: A)(
     implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission] = {
 
     import cats.instances.future._
@@ -82,10 +54,10 @@ class DefaultOphanService(val endpoint: HttpUrl)(implicit client: OkHttpClient)
 
     a.asAcquisitionSubmission.toEitherT.map(buildRequest).flatMap(executeRequest)
   }
+
 }
 
-object DefaultOphanService {
+object AnalyticsService {
 
   private[services] case class RequestData(request: Request, submission: AcquisitionSubmission)
 }
-

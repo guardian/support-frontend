@@ -1,18 +1,19 @@
 package com.gu.acquisition.services
 
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
+import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import okhttp3.OkHttpClient
 import ophan.thrift.event._
 import org.scalatest.{Matchers, WordSpecLike}
 
-class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
+class OphanServiceSpec extends WordSpecLike with Matchers {
 
-  implicit val client = new OkHttpClient()
+  implicit val client: OkHttpClient = new OkHttpClient()
 
-  val service: DefaultOphanService = OphanService.prod
+  val service: OphanService = new OphanService()
 
   val submission: AcquisitionSubmission = AcquisitionSubmission(
     OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
+    GAData(Some("support.theguardian.com"), None, None),
     Acquisition(
       product = ophan.thrift.event.Product.Contribution,
       paymentFrequency = PaymentFrequency.OneOff,
@@ -30,7 +31,7 @@ class DefaultOphanServiceSpec extends WordSpecLike with Matchers {
     )
   )
 
-  "A default Ophan service" should {
+  "An Ophan service" should {
 
     "build a correct request" in {
 
