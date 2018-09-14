@@ -15,6 +15,7 @@ import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
@@ -28,7 +29,7 @@ type PropTypes = {|
   dispatch: Function,
   email: string,
   setShouldValidateFunctions: Array<() => void>,
-  error: ?string,
+  checkoutFailureReason: ?CheckoutFailureReason,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -49,7 +50,7 @@ function mapStateToProps(state: State) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    error: state.page.oneoffContrib.error,
+    checkoutFailureReason: state.page.oneoffContrib.checkoutFailureReason,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
@@ -84,7 +85,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
-      <PaymentFailureMessage message={props.error} />
+      <PaymentFailureMessage checkoutFailureReason={props.checkoutFailureReason} />
       <StripePopUpButton
         email={props.email}
         callback={postCheckout(

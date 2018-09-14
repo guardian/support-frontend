@@ -41,8 +41,8 @@ Object {
   },
   "regularContrib": Object {
     "amount": 20,
+    "checkoutFailureReason": null,
     "contributionType": "MONTHLY",
-    "error": null,
     "payPalHasLoaded": false,
     "paymentMethod": "DirectDebit",
     "paymentStatus": "NotStarted",

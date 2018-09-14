@@ -21,7 +21,7 @@ Object {
   },
   "oneoffContrib": Object {
     "amount": 20,
-    "error": null,
+    "checkoutFailureReason": null,
     "paymentComplete": false,
   },
   "user": Object {

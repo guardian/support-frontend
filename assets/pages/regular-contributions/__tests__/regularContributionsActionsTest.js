@@ -1,4 +1,5 @@
 // @flow
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import {
   checkoutError,
   setPayPalHasLoaded,
@@ -9,12 +10,12 @@ import {
 describe('Regular contributions actions', () => {
 
   it('should create an action to flag a checkout error', () => {
-    const message:string = 'This is an error.';
+    const insufficientFunds: CheckoutFailureReason = 'insufficient_funds';
     const expectedAction = {
       type: 'CHECKOUT_ERROR',
-      message,
+      checkoutFailureReason: insufficientFunds,
     };
-    expect(checkoutError(message)).toEqual(expectedAction);
+    expect(checkoutError(insufficientFunds)).toEqual(expectedAction);
   });
 
   it('should create an action to set a value when PayPal has loaded', () => {
