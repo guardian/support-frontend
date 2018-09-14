@@ -126,8 +126,9 @@ function setup(
       addFormChangeListeners(() => toggleButton(actions));
     },
 
-    onClick() {
+    onClick(a,b,c) {
       if (!canOpen()) {
+        console.log(actions)
         whenUnableToOpen();
       }
     },

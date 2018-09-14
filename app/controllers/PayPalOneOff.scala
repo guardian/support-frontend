@@ -1,6 +1,7 @@
 
 package controllers
 
+import cats.data.EitherT
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.implicits._
@@ -13,7 +14,7 @@ import play.api.mvc._
 import services.PaymentAPIService.Email
 import services._
 import admin.Settings
-import models.PaymentAPIResponse
+import lib.PaymentApiError
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -63,35 +64,22 @@ class PayPalOneOff(
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
     ))
-    def processPaymentApiResponse(paymentApiResponse: Option[PaymentAPIResponse[PayPalError, PaypalExecuteSuccessResponse]]): Result =
-      paymentApiResponse.fold(paypalErrorPage)(resp => {
-        resp.data.fold(
-          resp.error.fold(paypalErrorPage)(error => {
-            if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
-              SafeLogger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
-              Redirect("/contribute/one-off/thankyou")
-            } else {
-              paypalErrorPage
-            }
-          })
-        )(
-            data => {
-              SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-              resultFromEmailOption(data.email)
-            }
-          )
-      })
+
+    def processPaymentApiResponse(paymentApiResponse: Option[Either[PaymentApiError, PayPalSuccessBody]]): Result = paypalErrorPage
+
     def emailForUser(user: AuthenticatedIdUser): Future[Option[String]] =
       identityService.getUser(user).value.map(_.toOption.map(_.primaryEmailAddress))
 
     val queryStrings = request.queryString
-    val testUsername = request.cookies.get("_test_username");
+    val testUsername = request.cookies.get("_test_username")
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
-    for {
+    val email = for {
       maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
       result <- paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
     } yield processPaymentApiResponse(result)
+
+    Future.successful(paypalErrorPage)
   }
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
