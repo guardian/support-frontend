@@ -14,7 +14,7 @@ import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -46,8 +46,10 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type OneOffStripeFailure = {| failureReason: CheckoutFailureReason |}
+
 type OnSuccess = () => void;
-type OnFailure = () => void;
+type OnFailure = CheckoutFailureReason => void;
 
 
 // ----- Functions ----- //
@@ -90,17 +92,8 @@ function requestData(
   });
 }
 
-const handleFailure = (onFailure: OnFailure) => (errorJson: Object): void => {
-
-  const { error } = errorJson;
-
-  if (error.exceptionType !== 'CardException') {
-    const errorHttpCode = error.errorHttpCode || 'unknown';
-    const exceptionType = error.exceptionType || 'unknown';
-    const errorName = error.errorName || 'unknown';
-    logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode}, type: ${exceptionType}, error-name: ${errorName}.`);
-  }
-  onFailure();
+const handleFailure = (onFailure: OnFailure) => (failure: OneOffStripeFailure): void => {
+  onFailure(failure.failureReason);
 };
 
 const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
@@ -116,7 +109,7 @@ const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response
 
 const handleUnknownError = (onFailure: OnFailure) => () => {
   logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-  onFailure();
+  onFailure('unknown');
 };
 
 function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
@@ -142,7 +135,9 @@ function postCheckout(
     dispatch(checkoutSuccess());
   };
 
-  const onFailure: OnFailure = () => dispatch(checkoutError());
+  const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
+    dispatch(checkoutError(checkoutFailureReason));
+  };
 
   return (paymentToken: string) => {
     const request = requestData(

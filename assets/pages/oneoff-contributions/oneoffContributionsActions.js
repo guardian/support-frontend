@@ -13,7 +13,7 @@ export type Action =
 
 // ----- Action Creators ----- //
 
-function checkoutError(checkoutFailureReason: CheckoutFailureReason = 'unknown'): Action {
+function checkoutError(checkoutFailureReason: CheckoutFailureReason): Action {
   return { type: 'CHECKOUT_ERROR', checkoutFailureReason };
 }
 
