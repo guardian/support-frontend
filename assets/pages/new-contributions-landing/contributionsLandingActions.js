@@ -5,7 +5,7 @@
 import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type Token, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/paymentApi';
+import { type Token, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';

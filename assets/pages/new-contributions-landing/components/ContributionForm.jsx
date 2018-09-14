@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { type Contrib, type Amount } from 'helpers/contributions';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type Token } from 'helpers/paymentIntegrations/paymentApi';
+import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import SvgEnvelope from 'components/svgs/envelope';

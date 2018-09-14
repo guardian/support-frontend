@@ -11,7 +11,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type Token } from 'helpers/paymentIntegrations/paymentApi';
+import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
