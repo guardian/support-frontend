@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { PaymentMethod } from 'helpers/checkouts';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 
 
 // ----- Types ----- //
@@ -10,7 +11,7 @@ import type { PaymentMethod } from 'helpers/checkouts';
 export type Action =
   | { type: 'CHECKOUT_PENDING', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_SUCCESS', paymentMethod: PaymentMethod }
-  | { type: 'CHECKOUT_ERROR', message: string }
+  | { type: 'CHECKOUT_ERROR', checkoutFailureReason: CheckoutFailureReason }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'CREATING_CONTRIBUTOR' };
 
@@ -24,10 +25,8 @@ function checkoutSuccess(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_SUCCESS', paymentMethod };
 }
 
-function checkoutError(specificError: ?string): Action {
-  const defaultError = 'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.';
-  const message = specificError || defaultError;
-  return { type: 'CHECKOUT_ERROR', message };
+function checkoutError(checkoutFailureReason: CheckoutFailureReason): Action {
+  return { type: 'CHECKOUT_ERROR', checkoutFailureReason };
 }
 
 function setPayPalHasLoaded(): Action {

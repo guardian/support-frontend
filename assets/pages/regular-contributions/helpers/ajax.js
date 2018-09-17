@@ -14,6 +14,7 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularCheckoutCallback } from 'helpers/checkouts';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -63,6 +64,15 @@ type RegularContribFields = {|
   supportAbTests: AcquisitionABTest[],
   email: ?string
 |};
+
+// https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/Status.scala
+type Status = 'success' | 'failure' | 'pending';
+
+type StatusResponse = {|
+  status: Status,
+  trackingUri: string,
+  failureReason: CheckoutFailureReason
+|}
 
 // ----- Functions ----- //
 
@@ -249,12 +259,12 @@ function handleStatus(
 ) {
 
   if (response.ok) {
-    response.json().then((status) => {
-      trackingURI = status.trackingUri;
+    response.json().then((statusResponse: StatusResponse) => {
+      trackingURI = statusResponse.trackingUri;
 
-      switch (status.status) {
+      switch (statusResponse.status) {
         case 'failure':
-          dispatch(checkoutError(status.message));
+          dispatch(checkoutError(statusResponse.failureReason));
           break;
         case 'success':
           trackConversion(participations, routes.recurringContribThankyou);
@@ -267,7 +277,7 @@ function handleStatus(
   } else if (trackingURI) {
     delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations);
   } else {
-    dispatch(checkoutError());
+    dispatch(checkoutError('unknown'));
   }
 }
 
