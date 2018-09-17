@@ -148,6 +148,10 @@ function ContributionForm(props: PropTypes) {
     props.onThirdPartyPaymentDone(token);
   };
 
+  const widgetClosed = () => {
+    props.onWaiting(false);
+  }
+
   return props.done ?
     <Redirect to={thankYouRoute} />
     : (
@@ -194,7 +198,7 @@ function ContributionForm(props: PropTypes) {
             required
           />
           <NewContributionState onChange={props.updateState} />
-          <NewContributionPayment paymentCallback={paymentCallback} />
+          <NewContributionPayment paymentCallback={paymentCallback} widgetClosed={widgetClosed} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
