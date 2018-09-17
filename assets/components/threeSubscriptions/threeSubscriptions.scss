@@ -70,7 +70,7 @@
     }
   }
 
-  .component-subscription-bundle:nth-child(0), .component-subscription-bundle:nth-child(1) {
+  .component-subscription-bundle:nth-child(1), .component-subscription-bundle:nth-child(2) {
     @include mq($from: leftCol) {
       @include dropline;
     }
