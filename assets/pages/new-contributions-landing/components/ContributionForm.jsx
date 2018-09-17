@@ -110,8 +110,8 @@ const getAmount = (props: PropTypes) =>
 
 const isNotEmpty: string => boolean = input => input.trim() !== '';
 const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
-const isLTE: (number, string) => boolean = (min, input) => min <= parseFloat(input);
-const isSTE: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
+const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
+const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
 
 const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
@@ -174,8 +174,8 @@ function ContributionForm(props: PropTypes) {
 
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
-    && isLTE(config[props.countryGroupId][props.contributionType].min, input)
-    && isSTE(config[props.countryGroupId][props.contributionType].max, input);
+    && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
+    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
 
   return props.done ?
     <Redirect to={thankYouRoute} />
