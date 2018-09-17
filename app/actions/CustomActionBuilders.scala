@@ -7,11 +7,11 @@ import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
-
 import services.TestUserService
 import utils.RequestCountry
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
@@ -85,4 +85,5 @@ class CustomActionBuilders(
     cc.executionContext,
     List("Vary" -> RequestCountry.fastlyCountryHeader)
   )
+
 }
