@@ -52,6 +52,8 @@ val circeVersion = "0.9.1"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+
 val awsVersion = "1.11.221"
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,

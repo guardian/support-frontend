@@ -16,7 +16,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.{Settings, SettingsProvider}
+import admin.Settings
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -26,14 +26,13 @@ class OneOffContributions(
     stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
-    components: ControllerComponents,
-    settingsProvider: SettingsProvider
+    components: ControllerComponents
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
+  import settings._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settingsProvider.settings
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(
@@ -42,7 +41,7 @@ class OneOffContributions(
     )
   }
 
-  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader) =
+  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
     oneOffContributions(
       title = "Support the Guardian | Single Contribution",
       id = "oneoff-contributions-page",
@@ -54,9 +53,11 @@ class OneOffContributions(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
+  }
 
-  def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    request.user.fold {
+  def displayForm(): Action[AnyContent] = addSettingsTo(maybeAuthenticatedAction()).async { implicit request =>
+    import request.settings
+    request.withoutSettings.user.fold {
       Future.successful(Ok(formHtml(None)))
     } { minimalUser =>
       {

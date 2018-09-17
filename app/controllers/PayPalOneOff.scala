@@ -13,7 +13,7 @@ import play.api.mvc._
 
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
-import admin.{Settings, SettingsProvider}
+import admin.Settings
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -24,14 +24,13 @@ class PayPalOneOff(
     testUsers: TestUserService,
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
-    identityService: IdentityService,
-    settingsProvider: SettingsProvider
+    identityService: IdentityService
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
+  import settings._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settingsProvider.settings
 
   def resultFromEmailOption(email: Option[Email]): Result = {
     val redirect = Redirect("/contribute/one-off/thankyou")
@@ -43,7 +42,8 @@ class PayPalOneOff(
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 
-  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = addSettingsTo(maybeAuthenticatedAction()).async { implicit request =>
+    import request.settings
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
@@ -78,14 +78,15 @@ class PayPalOneOff(
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
     for {
-      maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
+      maybeEmail <- request.withoutSettings.user.map(emailForUser).getOrElse(Future.successful(None))
       result <- paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
     } yield processPaymentApiResponse(result)
 
   }
 
-  def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
+  def cancelURL(): Action[AnyContent] = addSettingsTo(PrivateAction) { implicit request =>
     SafeLogger.info("The user selected cancel payment and decided not to contribute.")
+    import request.settings
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",

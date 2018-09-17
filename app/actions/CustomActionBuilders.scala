@@ -1,5 +1,6 @@
 package actions
 
+import admin.SettingsProvider
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
 import com.netaporter.uri.dsl._
@@ -7,11 +8,11 @@ import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
+
 import services.TestUserService
 import utils.RequestCountry
 
-import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
@@ -26,7 +27,8 @@ class CustomActionBuilders(
     cc: ControllerComponents,
     addToken: CSRFAddToken,
     checkToken: CSRFCheck,
-    csrfConfig: CSRFConfig
+    csrfConfig: CSRFConfig,
+    settingsProvider: SettingsProvider
 )(implicit private val ec: ExecutionContext) {
 
   import CustomActionBuilders._
@@ -86,4 +88,5 @@ class CustomActionBuilders(
     List("Vary" -> RequestCountry.fastlyCountryHeader)
   )
 
+  val settings: SettingsSyntax = new SettingsSyntax(settingsProvider)
 }

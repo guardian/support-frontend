@@ -38,5 +38,5 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  val settingsProvider: SettingsProvider = SettingsProvider.fromConfigurationUnsafe(appConfig)
+  lazy val settingsProvider: SettingsProvider = SettingsProvider.fromConfigurationUnsafe(appConfig.config)
 }
