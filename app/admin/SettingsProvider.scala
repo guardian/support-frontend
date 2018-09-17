@@ -68,7 +68,7 @@ object SettingsSurrogateKey {
 
 // Convenient way of settings settings Surrogate-Key.
 // Mix this trait into controllers for the syntax: result.withSettingSurrogateKey
-trait SettingsSyntax {
+trait SettingsSurrogateKeySyntax {
 
   implicit class ResultSyntax(result: Result) {
     def withSettingsSurrogateKey: Result = SettingsSurrogateKey.addTo(result)

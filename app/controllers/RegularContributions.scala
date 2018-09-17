@@ -19,7 +19,7 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.{Settings, SettingsSyntax, SettingsProvider}
+import admin.{Settings, SettingsSurrogateKeySyntax, SettingsProvider}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ class RegularContributions(
     components: ControllerComponents,
     guardianDomain: String,
     settingsProvider: SettingsProvider
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 

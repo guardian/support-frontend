@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{Settings, SettingsProvider, SettingsSyntax, SwitchState}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -17,7 +17,7 @@ class Subscriptions(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
