@@ -13,6 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
+import { type Action, selectAmount, updateOtherAmount, updateBlurred } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -25,7 +26,10 @@ type PropTypes = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   selectAmount: (Amount | 'other', Contrib) => (() => void),
   otherAmount: string | null,
+  otherAmountBlurred: boolean,
+  checkOtherAmount: string => boolean,
   updateOtherAmount: string => void,
+  updateBlurred: () => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -35,11 +39,13 @@ const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmount,
+  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
   updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
+  updateBlurred: () => { dispatch(updateBlurred('otherAmount')); },
 });
 
 // ----- Render ----- //
@@ -96,22 +102,23 @@ function ContributionAmount(props: PropTypes) {
       </ul>
       {showOther ? (
         <NewContributionTextInput
-              id="contributionOther"
+          id="contributionOther"
           name="contribution-other-amount"
-              type="number"
+          type="number"
           label="Other Amount"
-              value={props.otherAmount}
+          value={props.otherAmount}
           icon={<SvgDollar />}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
-          isValid={true}
-          wasBlurred={false}
+          onBlur={() => props.updateBlurred()}
+          isValid={props.checkOtherAmount(props.otherAmount || '')}
+          wasBlurred={props.otherAmountBlurred}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
-              autoComplete="off"
+          autoComplete="off"
           min={min}
           max={max}
           autoFocus
-              required
-            />
+          required
+        />
       ) : null}
     </fieldset>
   );
