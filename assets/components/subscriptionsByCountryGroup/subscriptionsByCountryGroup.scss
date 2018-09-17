@@ -15,7 +15,7 @@
   }
 
   .component-subscription-bundle--digital {
-    @include colour-bundle(opinion-garnett-main-1);
+    @include colour-bundle(lifestyle-garnett-main-1);
   }
 
   .component-subscription-bundle--paper {
@@ -30,4 +30,10 @@
     @include colour-bundle(opinion-garnett-main-1);
   }
 
+}
+
+.component-subscriptions-by-country-group--uk {
+  .component-subscription-bundle--digital {
+    @include colour-bundle(opinion-garnett-main-1);
+  }
 }

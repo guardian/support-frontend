@@ -19,9 +19,6 @@
 @import '~components/readyToSupport/readyToSupport';
 @import '~components/svgs/svg';
 @import '~components/threeSubscriptions/threeSubscriptions';
-@import '~components/digitalSubscriptions/digitalSubscriptions';
-@import '~components/paperSubscriptions/paperSubscriptions';
-@import '~components/internationalSubscriptions/internationalSubscriptions';
 @import '~components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 @import '~components/whySupport/whySupport';
 
@@ -40,6 +37,11 @@
 
   .component-cta-link--android {
     margin-top: $gu-v-spacing;
+  }
+
+  // As a test we are tweaking the layout of the US product bundles
+  .component-subscriptions-by-country-group--us .component-double-heading__subheading {
+    font-size: 24px;
   }
 
 }

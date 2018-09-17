@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
 import { type HeadingSize } from 'components/heading/heading';
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -22,6 +21,8 @@ import {
   androidAppUrl,
   dailyEditionUrl,
 } from 'helpers/externalLinks';
+import { classNameWithModifiers } from 'helpers/utilities';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types and State Mapping ----- //
@@ -46,6 +47,7 @@ function mapStateToProps(state: { common: CommonState }) {
 // ----- Setup ----- //
 
 const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page';
+const internationalAppReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page&utm_campaign=international_subs_landing_pages';
 
 
 // ----- Component ----- //
@@ -61,10 +63,14 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
   );
+  const className = classNameWithModifiers(
+    'component-subscriptions-by-country-group',
+    [countryGroups[countryGroupId].supportInternationalisationId],
+  );
 
   if (countryGroupId === 'GBPCountries') {
     return (
-      <div className="component-subscriptions-by-country-group" {...otherProps}>
+      <div className={className} {...otherProps}>
         <ThreeSubscriptions heading="Digital Subscriptions">
           <SubscriptionBundle
             modifierClass="premium-tier"
@@ -147,7 +153,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
             modifierClass="paper"
             heading="Paper"
             subheading={`from ${displayPrice('Paper', 'GBPCountries')}`}
-            headingSize={props.headingSize}
+            headingSize={headingSize}
             benefits={{
               list: false,
               copy: 'The Guardian and The Observer\'s newspaper subscription options',
@@ -170,7 +176,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
             modifierClass="paper-digital"
             heading="Paper+Digital"
             subheading={`from ${displayPrice('PaperAndDigital', 'GBPCountries')}`}
-            headingSize={props.headingSize}
+            headingSize={headingSize}
             benefits={{
               list: false,
               copy: 'All the benefits of a paper subscription, plus access to the digital pack',
@@ -193,7 +199,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
             modifierClass="weekly"
             heading="Guardian&nbsp;Weekly"
             subheading={displayPrice('GuardianWeekly', props.countryGroupId)}
-            headingSize={props.headingSize}
+            headingSize={headingSize}
             benefits={{
               list: false,
               copy: 'A weekly global newspaper delivered to your door',
@@ -218,12 +224,87 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
   }
 
   return (
-    <div {...otherProps}>
-      <InternationalSubscriptions
-        countryGroupId={countryGroupId}
-        headingSize={headingSize}
-        {...otherProps}
-      />
+    <div
+      className={className}
+      {...otherProps}
+    >
+      <ThreeSubscriptions>
+        <SubscriptionBundle
+          modifierClass="premium-tier"
+          heading="Premium App"
+          subheading="7-day free trial"
+          headingSize={headingSize}
+          benefits={{
+            list: false,
+            copy: 'The ad-free, premium app, designed especially for your smartphone and tablet',
+          }}
+          gridImage={{
+            gridId: 'premiumTierCircle',
+            altText: 'premium app',
+            ...gridImageProperties,
+          }}
+          ctas={[
+            {
+              text: 'Buy in the App Store',
+              url: addQueryParamsToURL(iOSAppUrl, { referrer: internationalAppReferrer }),
+              accessibilityHint: 'Proceed to buy the premium app in the app store',
+              modifierClasses: ['premium-tier', 'border', 'ios'],
+            },
+            {
+              text: 'Buy on Google Play',
+              url: addQueryParamsToURL(androidAppUrl, { referrer: internationalAppReferrer }),
+              accessibilityHint: 'Proceed to buy the premium app in the play store',
+              modifierClasses: ['premium-tier', 'border', 'android'],
+            },
+          ]}
+        />
+        <SubscriptionBundle
+          modifierClass="digital"
+          heading="Digital Pack"
+          subheading="14-day free trial"
+          headingSize={headingSize}
+          benefits={{
+            list: false,
+            copy: 'The Premium App and the Daily Edition iPad app of the UK newspaper in one pack',
+          }}
+          gridImage={{
+            gridId: 'digitalCircleInternational',
+            altText: 'digital subscription',
+            ...gridImageProperties,
+          }}
+          ctas={[
+            {
+              text: 'Find out more',
+              url: subsLinks.DigitalPack,
+              accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
+              modifierClasses: ['digital', 'border'],
+            },
+          ]}
+        />
+        <SubscriptionBundle
+          modifierClass="weekly"
+          heading="Guardian&nbsp;Weekly"
+          subheading="&nbsp;"
+          headingSize={headingSize}
+          benefits={{
+            list: false,
+            copy: 'A weekly global newspaper delivered to your door',
+          }}
+          gridImage={{
+            gridId: 'weeklyCircle',
+            altText: 'weekly subscription',
+            ...gridImageProperties,
+          }}
+          ctas={[
+            {
+              text: 'Find out more',
+              url: subsLinks.GuardianWeekly,
+              accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
+              modifierClasses: ['weekly', 'border'],
+            },
+          ]}
+        />
+      </ThreeSubscriptions>
     </div>
   );
 
