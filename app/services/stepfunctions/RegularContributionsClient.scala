@@ -68,6 +68,15 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
+  def getPaymentMethodType(payment: PaymentFields): String = {
+    payment match {
+      case p: PayPalPaymentFields => "Paypal"
+      case s: StripePaymentFields => "Stripe"
+      case d: DirectDebitPaymentFields => "Direct-debit"
+      case _ => "Unknown"
+    }
+  }
+
   def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
@@ -86,7 +95,9 @@ class RegularContributionsClient(
         StateMachineFailure: RegularContributionError
       },
       { success =>
-        SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
+        val paymentMethod = getPaymentMethodType(createPaymentMethodState.paymentFields)
+        SafeLogger.info(s"[$requestId] Creating regular $paymentMethod contribution for ${user.id} in country ${request.country.alpha2} ($success)")
+        tipMonitor.verify(s"Regular $paymentMethod contribution for ${request.country.alpha2} user")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
@@ -108,9 +119,6 @@ class RegularContributionsClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
-      if (statusResponse.status == Status.Success){
-       tipMonitor.verify("Regular Paypal Payment")
-      }
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
       statusResponse
     }

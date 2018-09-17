@@ -3,3 +3,30 @@
 
 - name: Regular Paypal Payment
   description: User successfully creates regular contribution using Paypal
+
+- name: Regular Paypal contribution for US user
+  description:  US user successfully creates regular contribution using Paypal
+
+- name: Regular Stripe contribution for US user
+  description:  US user successfully creates regular contribution using Stripe
+
+- name: Regular Direct-debit contribution for US user
+  description:  US user successfully creates regular contribution using Direct-debit
+
+- name: Regular Paypal contribution for GB user
+  description:  GB user successfully creates regular contribution using Paypal
+
+- name: Regular Stripe contribution for GB user
+  description:  GB user successfully creates regular contribution using Stripe
+
+- name: Regular Direct-debit contribution for GB user
+  description:  GB user successfully creates regular contribution using Direct-debit
+
+- name: Regular Paypal contribution for AU user
+  description:  AU user successfully creates regular contribution using Paypal
+
+- name: Regular Stripe contribution for AU user
+  description:  AU user successfully creates regular contribution using Stripe
+
+- name: Regular Direct-debit contribution for AU user
+  description:  AU user successfully creates regular contribution using Direct-debit
