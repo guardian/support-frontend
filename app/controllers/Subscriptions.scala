@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{Settings, SettingsProvider, SwitchState}
+import admin.{Settings, SettingsProvider, SettingsSyntax, SwitchState}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -17,7 +17,7 @@ class Subscriptions(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSyntax {
 
   import actionRefiners._
 
@@ -57,7 +57,7 @@ class Subscriptions(
         js,
         "subscriptionsLandingPageStyles.css",
         description = Some(stringsConfig.subscriptionsLandingDescription)
-      ))
+      )).withSettingsSurrogateKey
     }
   }
 
@@ -67,7 +67,7 @@ class Subscriptions(
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css))
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
@@ -78,7 +78,7 @@ class Subscriptions(
     val id = "premium-tier-landing-page-" + countryCode
     val js = "premiumTierLandingPage.js"
     val css = "premiumTierLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css))
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
@@ -90,7 +90,6 @@ class Subscriptions(
       val id = "digital-subscription-checkout-page-" + countryCode
       val js = "digitalSubscriptionCheckoutPage.js"
       val css = "digitalSubscriptionCheckoutPageStyles.css"
-      Ok(views.html.main(title, id, js, css))
+      Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
     }
-
 }

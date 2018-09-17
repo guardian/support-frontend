@@ -13,7 +13,7 @@ import play.api.mvc._
 
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
-import admin.{Settings, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSyntax}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -26,7 +26,7 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
 
   import actionBuilders._
 
@@ -77,10 +77,10 @@ class PayPalOneOff(
     val testUsername = request.cookies.get("_test_username");
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
 
-    for {
+    (for {
       maybeEmail <- request.user.map(emailForUser).getOrElse(Future.successful(None))
       result <- paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, maybeEmail, isTestUser)
-    } yield processPaymentApiResponse(result)
+    } yield processPaymentApiResponse(result)).map(_.withSettingsSurrogateKey)
 
   }
 
@@ -92,6 +92,6 @@ class PayPalOneOff(
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 }

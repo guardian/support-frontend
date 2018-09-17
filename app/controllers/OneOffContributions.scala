@@ -16,7 +16,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.{Settings, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSyntax}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -28,7 +28,7 @@ class OneOffContributions(
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
     settingsProvider: SettingsProvider
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
 
   import actionRefiners._
 
@@ -57,16 +57,14 @@ class OneOffContributions(
 
   def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    request.user.fold {
-      Future.successful(Ok(formHtml(None)))
-    } { minimalUser =>
-      {
+    request.user
+      .fold(Future.successful(Ok(formHtml(None)))) { minimalUser =>
         identityService.getUser(minimalUser).fold(
           _ => Ok(formHtml(None)),
           user => Ok(formHtml(Some(user)))
         )
       }
-    }
+      .map(_.withSettingsSurrogateKey)
   }
 
   private def fullNameFor(user: IdUser): Option[String] = {

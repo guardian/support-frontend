@@ -4,6 +4,7 @@ import cats.syntax.either._
 import com.amazonaws.services.s3.AmazonS3
 import com.typesafe.config.Config
 import monitoring.SafeLogger
+import play.api.mvc.Result
 
 abstract class SettingsProvider {
 
@@ -52,4 +53,12 @@ object SettingsProvider {
     fromConfiguration(config).valueOr { error =>
       throw new RuntimeException("unable to load settings provider from config", error)
     }
+}
+
+trait SettingsSyntax {
+
+
+  implicit class ResultSyntax(result: Result) {
+    def withSettingsSurrogateKey: Result = result.withHeaders("Surrogate-Key" -> "settings")
+  }
 }

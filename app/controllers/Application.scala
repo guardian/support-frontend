@@ -11,7 +11,7 @@ import config.StringsConfig
 import play.api.mvc._
 
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -28,7 +28,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSyntax {
 
   import actionRefiners._
 
@@ -91,7 +91,7 @@ class Application(
       mainStyleBundle = "supportLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
       description = Some(stringsConfig.supportLandingDescription)
-    ))
+    )).withSettingsSurrogateKey
   }
 
   def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -103,7 +103,7 @@ class Application(
       mainJsBundle = "contributionsLandingPage.js",
       mainStyleBundle = "contributionsLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
+    )).withSettingsSurrogateKey
   }
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -112,7 +112,7 @@ class Application(
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(newContributions(countryCode, None)),
       user => Ok(newContributions(countryCode, user))
-    )
+    ).map(_.withSettingsSurrogateKey)
   }
 
   private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
@@ -133,7 +133,7 @@ class Application(
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    Ok(views.html.main(title, id, js, css))
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

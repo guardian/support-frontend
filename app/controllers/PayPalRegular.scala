@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import admin.{Settings, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSyntax}
 
 import scala.concurrent.ExecutionContext
 
@@ -23,7 +23,7 @@ class PayPalRegular(
     testUsers: TestUserService,
     components: ControllerComponents,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
 
   import actionBuilders._
 
@@ -64,7 +64,7 @@ class PayPalRegular(
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
@@ -77,6 +77,6 @@ class PayPalRegular(
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 }

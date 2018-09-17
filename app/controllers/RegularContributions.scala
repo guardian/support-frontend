@@ -19,7 +19,7 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.{Settings, SettingsProvider}
+import admin.{Settings, SettingsSyntax, SettingsProvider}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ class RegularContributions(
     components: ControllerComponents,
     guardianDomain: String,
     settingsProvider: SettingsProvider
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
 
   import actionRefiners._
 
@@ -81,13 +81,13 @@ class RegularContributions(
   def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: Settings = settingsProvider.settings()
-      displayFormWithUser(request.user)
+      displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: Settings = settingsProvider.settings()
-      request.user.fold(displayFormWithoutUser())(displayFormWithUser)
+      request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
     }
 
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
