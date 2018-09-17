@@ -39,6 +39,8 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
+  lazy val tipPersonalAccessToken: String = ""
+
   implicit val settings = Settings.fromConfig(config.getConfig("switches"))
 
 }

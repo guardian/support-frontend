@@ -12,6 +12,7 @@ import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
 import admin.Settings
+import com.gu.tip.Tip
 
 import scala.concurrent.ExecutionContext
 
@@ -21,7 +22,8 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settings: Settings
+    settings: Settings,
+    tipMonitoring: Tip
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._

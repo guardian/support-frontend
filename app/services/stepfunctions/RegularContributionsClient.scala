@@ -8,8 +8,8 @@ import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
 import com.gu.support.workers.model._
-import io.circe.generic.semiauto.{deriveDecoder}
-import io.circe.{Decoder}
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.Decoder
 import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
@@ -18,9 +18,11 @@ import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
 import com.gu.support.workers.model.Status
+import com.gu.tip.Tip
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+
 import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
@@ -47,9 +49,10 @@ object RegularContributionsClient {
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
-    call: String => Call
+    call: String => Call,
+    tipMonitor: Tip
   )(implicit system: ActorSystem): RegularContributionsClient =
-    new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
+    new RegularContributionsClient(arn, stateWrapper, supportUrl, call, tipMonitor)
 }
 
 case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
@@ -58,7 +61,8 @@ class RegularContributionsClient(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
-    statusCall: String => Call
+    statusCall: String => Call,
+    tipMonitor: Tip
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
@@ -104,16 +108,19 @@ class RegularContributionsClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
+      if (statusResponse.status == Status.Success){
+       tipMonitor.verify("Regular Paypal Payment")
+      }
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
       statusResponse
     }
-
     underlying.history(jobId).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
         StateMachineFailure: RegularContributionError
       },
       { events =>
+        SafeLogger.info(s"support Url is: $supportUrl")
         val trackingUri = supportUrl + statusCall(jobId).url
         val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
         respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))

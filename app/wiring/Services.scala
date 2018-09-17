@@ -8,7 +8,7 @@ import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}
 
 trait Services {
-  self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
+  self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration with Monitoring =>
 
   implicit private val implicitWs = wsClient
 
@@ -26,7 +26,8 @@ trait Services {
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.RegularContributions.status
+      controllers.routes.RegularContributions.status,
+      tipMonitoring
     )
   }
 

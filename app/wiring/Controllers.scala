@@ -48,7 +48,8 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    appConfig.settings
+    appConfig.settings,
+    tipMonitoring
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
