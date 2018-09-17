@@ -14,8 +14,8 @@ abstract class SettingsProvider {
   def settings(): Settings
 }
 
-class LocalFileSettingsProvider private (_settings: Settings) extends SettingsProvider {
-  override def settings(): Settings = _settings
+class LocalFileSettingsProvider private (initialSettings: Settings) extends SettingsProvider {
+  override def settings(): Settings = initialSettings
 }
 
 object LocalFileSettingsProvider {
@@ -24,10 +24,10 @@ object LocalFileSettingsProvider {
     Settings.fromLocalFile(localFile).map(new LocalFileSettingsProvider(_))
 }
 
-class S3SettingsProvider private (_settings: Settings) extends SettingsProvider {
+class S3SettingsProvider private (initialSettings: Settings) extends SettingsProvider {
 
   // TODO: in a subsequent PR, poll S3 for changes.
-  override def settings(): Settings = _settings
+  override def settings(): Settings = initialSettings
 }
 
 object S3SettingsProvider {
@@ -62,7 +62,8 @@ object SettingsProvider {
 // See https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230 for more details.
 object SettingsSurrogateKey {
   val settingsSurrogateKey = "settings"
-  def addSettingsSurrogateKey(result: Result): Result = result.withHeaders("Surrogate-Key" -> settingsSurrogateKey)
+  // Codacy prefers this over a fully qualified method name
+  def addTo(result: Result): Result = result.withHeaders("Surrogate-Key" -> settingsSurrogateKey)
 }
 
 // Convenient way of settings settings Surrogate-Key.
@@ -70,6 +71,6 @@ object SettingsSurrogateKey {
 trait SettingsSyntax {
 
   implicit class ResultSyntax(result: Result) {
-    def withSettingsSurrogateKey: Result = SettingsSurrogateKey.addSettingsSurrogateKey(result)
+    def withSettingsSurrogateKey: Result = SettingsSurrogateKey.addTo(result)
   }
 }

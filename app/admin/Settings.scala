@@ -23,12 +23,11 @@ case class Settings(switches: Switches)
 
 object Settings {
 
-  private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] =
-    try {
-      decode[Settings](buf.mkString)
-    } finally {
-      Try(buf.close())
-    }
+  private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] = {
+    val settings = decode[Settings](buf.mkString)
+    Try(buf.close())
+    settings
+  }
 
   def fromS3(source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
     for {
