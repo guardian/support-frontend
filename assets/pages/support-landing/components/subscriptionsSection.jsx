@@ -56,7 +56,7 @@ function SubscriptionsSection(props: PropTypes) {
         modifierClass="digital"
         heading="Digital"
         subheading={displayPrice('DigitalPack', props.countryGroupId)}
-        benefits={getDigitalBenefits()}
+        benefits={{ list: true, benefits: getDigitalBenefits() }}
         gridImage={{
           gridId: 'digitalCircle',
           altText: 'digital subscription',
@@ -76,7 +76,7 @@ function SubscriptionsSection(props: PropTypes) {
         modifierClass="paper"
         heading="Paper"
         subheading={`from ${displayPrice('Paper', props.countryGroupId)}`}
-        benefits={getPaperBenefits()}
+        benefits={{ list: true, benefits: getPaperBenefits() }}
         gridImage={{
           gridId: 'paperCircle',
           altText: 'paper subscription',
@@ -96,7 +96,7 @@ function SubscriptionsSection(props: PropTypes) {
         modifierClass="paper-digital"
         heading="Paper+Digital"
         subheading={`from ${displayPrice('PaperAndDigital', props.countryGroupId)}`}
-        benefits={getPaperDigitalBenefits()}
+        benefits={{ list: true, benefits: getPaperDigitalBenefits() }}
         gridImage={{
           gridId: 'paperDigitalCircle',
           altText: 'paper + digital subscription',

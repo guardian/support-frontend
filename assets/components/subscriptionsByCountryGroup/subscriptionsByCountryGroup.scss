@@ -1,0 +1,33 @@
+.component-subscriptions-by-country-group {
+
+  .component-subscription-bundle__description {
+    @include mq($from: leftCol) {
+      flex: 1 0 auto;
+    }
+  }
+
+  .component-subscription-bundle--premium-tier {
+    @include colour-bundle(sport-garnett-media-main-1);
+  }
+
+  .component-subscription-bundle--daily-edition {
+    @include colour-bundle(lifestyle-garnett-main-1);
+  }
+
+  .component-subscription-bundle--digital {
+    @include colour-bundle(opinion-garnett-main-1);
+  }
+
+  .component-subscription-bundle--paper {
+    @include colour-bundle(sport-garnett-media-main-1);
+  }
+
+  .component-subscription-bundle--paper-digital {
+    @include colour-bundle(lifestyle-garnett-main-1);
+  }
+
+  .component-subscription-bundle--weekly {
+    @include colour-bundle(opinion-garnett-main-1);
+  }
+
+}
