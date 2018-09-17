@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
   updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  updateBlurred: (field) => { dispatch(updateBlurred(field)) },
+  updateBlurred: (field) => { dispatch(updateBlurred(field)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
 });
@@ -116,14 +116,13 @@ const isSTE: (number, string) => boolean = (max, input) => parseFloat(input) <= 
 const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
 const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
-const checkState: string => boolean = input => isNotEmpty(input);
 
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     event.preventDefault();
-    
+
     if (!(event.target: any).checkValidity()) {
       return;
     }
@@ -175,12 +174,12 @@ function ContributionForm(props: PropTypes) {
 
   const widgetClosed = () => {
     props.onWaiting(false);
-  }
+  };
 
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLTE(config[props.countryGroupId][props.contributionType].min, input)
-    && isSTE(config[props.countryGroupId][props.contributionType].max, input)
+    && isSTE(config[props.countryGroupId][props.contributionType].max, input);
 
   return props.done ?
     <Redirect to={thankYouRoute} />
@@ -191,7 +190,10 @@ function ContributionForm(props: PropTypes) {
         <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
           <NewContributionType />
-          <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} checkOtherAmount={checkOtherAmount} />
+          <NewContributionAmount
+            countryGroupDetails={selectedCountryGroupDetails}
+            checkOtherAmount={checkOtherAmount}
+          />
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
@@ -206,7 +208,7 @@ function ContributionForm(props: PropTypes) {
             wasBlurred={firstNameBlurred}
             errorMessage="Please provide your first name"
             required
-            />
+          />
           <NewContributionTextInput
             id="contributionLastName"
             name="contribution-lname"

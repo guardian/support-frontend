@@ -47,9 +47,9 @@ const updateBlurred = (field: FieldName): Action => ({ type: 'UPDATE_BLURRED', f
 const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
-  });  
+  });
 
-const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });  
+const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 

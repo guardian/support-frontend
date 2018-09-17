@@ -70,7 +70,7 @@ function ContributionTextInput(props: PropTypes) {
         />
       )}
       {showError ? (
-        <div class="form__error">
+        <div className="form__error">
           {props.errorMessage}
         </div>
       ) : null}

@@ -12,7 +12,7 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
-import { type Action, type FieldName } from './contributionsLandingActions';
+import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -102,7 +102,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           ...state,
           contributionType: action.contributionType,
           showOtherAmount: false,
-          formData: { ...state.formData }
+          formData: { ...state.formData },
         };
 
       case 'UPDATE_PAYMENT_METHOD':
@@ -132,14 +132,14 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_BLURRED':
         switch (action.field) {
           case 'otherAmount':
-            return { ...state, formData: { ...state.formData,  otherAmountBlurred: true } };
+            return { ...state, formData: { ...state.formData, otherAmountBlurred: true } };
           case 'email':
-            return { ...state, formData: { ...state.formData,  emailBlurred: true } };
+            return { ...state, formData: { ...state.formData, emailBlurred: true } };
           case 'lastName':
-            return { ...state, formData: { ...state.formData,  lastNameBlurred: true } };
+            return { ...state, formData: { ...state.formData, lastNameBlurred: true } };
           case 'firstName':
           default:
-            return { ...state, formData: { ...state.formData,  firstNameBlurred: true } };
+            return { ...state, formData: { ...state.formData, firstNameBlurred: true } };
         }
 
       case 'SELECT_AMOUNT':

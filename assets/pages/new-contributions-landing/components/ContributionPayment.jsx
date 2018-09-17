@@ -78,11 +78,11 @@ function setupPaymentMethod(props: PropTypes): void {
       case 'Stripe':
       default:
         setupStripeCheckout(
-          paymentCallback, 
+          paymentCallback,
           widgetClosed,
-          contributionType, 
-          currency, 
-          isTestUser
+          contributionType,
+          currency,
+          isTestUser,
         ).then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
     }
   }

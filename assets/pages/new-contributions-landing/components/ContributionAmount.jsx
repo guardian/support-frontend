@@ -78,7 +78,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const { min, max } = config[props.countryGroupId][props.contributionType];
+  const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
   const maxAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString(), spoken: '', isDefault: false }, false);
 
