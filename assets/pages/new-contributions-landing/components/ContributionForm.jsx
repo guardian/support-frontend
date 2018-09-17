@@ -8,10 +8,11 @@ import { Redirect } from 'react-router';
 import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
+import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { type Contrib, type Amount } from 'helpers/contributions';
+import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
@@ -31,7 +32,7 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEmail, updateState, onThirdPartyPaymentDone } from '../contributionsLandingActions';
+import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEmail, updateState, onThirdPartyPaymentDone, updateBlurred } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -44,16 +45,22 @@ type PropTypes = {|
   contributionType: Contrib,
   thankYouRoute: string,
   firstName: string,
+  firstNameBlurred: boolean,
   lastName: string,
+  lastNameBlurred: boolean,
   email: string,
+  emailBlurred: boolean,
+  state: UsState | CaState | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
+  otherAmountBlurred: boolean,
   paymentMethod: PaymentMethod,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
+  updateBlurred: string => void,
   onWaiting: boolean => void,
   onThirdPartyPaymentDone: Token => void,
   isDirectDebitPopUpOpen: boolean
@@ -65,10 +72,15 @@ const mapStateToProps = (state: State) => ({
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: state.page.form.formData.firstName || state.page.user.firstName,
+  firstNameBlurred: state.page.form.formData.firstNameBlurred,
   lastName: state.page.form.formData.lastName || state.page.user.lastName,
+  lastNameBlurred: state.page.form.formData.lastNameBlurred,
   email: state.page.form.formData.email || state.page.user.email,
+  emailBlurred: state.page.form.formData.emailBlurred,
+  state: state.page.form.formData.state || state.page.user.stateField,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmount,
+  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
@@ -87,6 +99,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
   updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  updateBlurred: (field) => { dispatch(updateBlurred(field)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
 });
@@ -98,18 +111,25 @@ const getAmount = (props: PropTypes) =>
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-const isNotEmpty: HTMLInputElement => boolean = input => input.value.trim() !== '';
-const isValidEmail: HTMLInputElement => boolean = input => new RegExp(emailRegexPattern).test(input.value);
+const isNotEmpty: string => boolean = input => input.trim() !== '';
+const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
+const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
+const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
 
-const checkFirstName: HTMLInputElement => boolean = isNotEmpty;
-const checkLastName: HTMLInputElement => boolean = isNotEmpty;
-const checkEmail: HTMLInputElement => boolean = input => isNotEmpty(input) && isValidEmail(input);
+const checkFirstName: string => boolean = isNotEmpty;
+const checkLastName: string => boolean = isNotEmpty;
+const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     event.preventDefault();
+
+    if (!(event.target: any).checkValidity()) {
+      return;
+    }
+
     const amount = getAmount(props);
     const { email } = props;
 
@@ -142,14 +162,23 @@ function ContributionForm(props: PropTypes) {
     selectedCountryGroupDetails,
     thankYouRoute,
     firstName,
+    firstNameBlurred,
     lastName,
+    lastNameBlurred,
     email,
+    emailBlurred,
+    state,
   } = props;
 
   const paymentCallback = (token: Token) => {
     props.onWaiting(true);
     props.onThirdPartyPaymentDone(token);
   };
+
+  const checkOtherAmount: string => boolean = input =>
+    isNotEmpty(input)
+    && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
+    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
 
   return props.done ?
     <Redirect to={thankYouRoute} />
@@ -158,17 +187,24 @@ function ContributionForm(props: PropTypes) {
         <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <PaymentFailureMessage checkoutFailureReason={props.error} />
-        <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])}>
+        <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
           <NewContributionType />
-          <NewContributionAmount countryGroupDetails={selectedCountryGroupDetails} />
+          <NewContributionAmount
+            countryGroupDetails={selectedCountryGroupDetails}
+            checkOtherAmount={checkOtherAmount}
+          />
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
             label="First Name"
             value={firstName}
             icon={<SvgUser />}
+            autoComplete="given-name"
+            autoCapitalize="words"
             onInput={props.updateFirstName}
-            checkValidity={checkFirstName}
+            onBlur={() => props.updateBlurred('firstName')}
+            isValid={checkFirstName(firstName)}
+            wasBlurred={firstNameBlurred}
             errorMessage="Please provide your first name"
             required
           />
@@ -178,8 +214,12 @@ function ContributionForm(props: PropTypes) {
             label="Last Name"
             value={lastName}
             icon={<SvgUser />}
+            autoComplete="family-name"
+            autoCapitalize="words"
             onInput={props.updateLastName}
-            checkValidity={checkLastName}
+            onBlur={() => props.updateBlurred('lastName')}
+            isValid={checkLastName(lastName)}
+            wasBlurred={lastNameBlurred}
             errorMessage="Please provide your last name"
             required
           />
@@ -189,14 +229,17 @@ function ContributionForm(props: PropTypes) {
             label="Email address"
             value={email}
             type="email"
+            autoComplete="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
-            checkValidity={checkEmail}
+            onBlur={() => props.updateBlurred('email')}
+            isValid={checkEmail(email)}
+            wasBlurred={emailBlurred}
             errorMessage="Please provide a valid email address"
             required
           />
-          <NewContributionState onChange={props.updateState} />
+          <NewContributionState onChange={props.updateState} value={state} />
           <NewContributionPayment paymentCallback={paymentCallback} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}

@@ -10,6 +10,8 @@ import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';
 
+export type FieldName = 'otherAmount' | 'email' | 'lastName' | 'firstName';
+
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
@@ -18,6 +20,7 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
+  | { type: 'UPDATE_BLURRED', field: FieldName }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -38,6 +41,8 @@ const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME'
 const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email });
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
+
+const updateBlurred = (field: FieldName): Action => ({ type: 'UPDATE_BLURRED', field });
 
 const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
@@ -167,6 +172,7 @@ export {
   updateLastName,
   updateEmail,
   updateState,
+  updateBlurred,
   isPaymentReady,
   selectAmount,
   updateOtherAmount,
