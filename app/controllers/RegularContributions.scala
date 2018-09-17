@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{CustomActionBuilders, SettingsRequest}
+import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
 import assets.AssetsResolver
 import cats.implicits._
@@ -19,7 +19,7 @@ import play.api.mvc._
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.Settings
+import admin.{Settings, SettingsProvider}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,11 +34,11 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    guardianDomain: String
+    guardianDomain: String,
+    settingsProvider: SettingsProvider
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
-  import settings._
 
   implicit val a: AssetsResolver = assets
 
@@ -71,24 +71,23 @@ class RegularContributions(
       InternalServerError
     }
 
-  private def displayFormWithoutUser()(implicit request: SettingsRequest[OptionalAuthRequest, AnyContent]): Future[Result] = {
-    import request.settings
-    val uatMode = testUsers.isTestUser(request.withoutSettings)
+  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: Settings): Future[Result] = {
+    val uatMode = testUsers.isTestUser(request)
     Future.successful(
       monthlyContributionsPage(None, uatMode)
     )
   }
 
   def displayFormAuthenticated(): Action[AnyContent] =
-    addSettingsTo(authenticatedAction(recurringIdentityClientId)).async { implicit request =>
-      import request.settings
-      displayFormWithUser(request.withoutSettings.user)
+    authenticatedAction(recurringIdentityClientId).async { implicit request =>
+      implicit val settings: Settings = settingsProvider.settings()
+      displayFormWithUser(request.user)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
-    addSettingsTo(maybeAuthenticatedAction(recurringIdentityClientId)).async { implicit request =>
-      import request.settings
-      request.withoutSettings.user.fold(displayFormWithoutUser())(displayFormWithUser)
+    maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
+      implicit val settings: Settings = settingsProvider.settings()
+      request.user.fold(displayFormWithoutUser())(displayFormWithUser)
     }
 
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>

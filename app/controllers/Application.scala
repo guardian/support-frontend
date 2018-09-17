@@ -26,11 +26,11 @@ class Application(
     oneOffStripeConfigProvider: StripeConfigProvider,
     regularStripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
-    stringsConfig: StringsConfig
+    stringsConfig: StringsConfig,
+    settingsProvider: SettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) {
 
   import actionRefiners._
-  import settings._
 
   implicit val a: AssetsResolver = assets
 
@@ -82,8 +82,8 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def supportLanding(): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    // import request.settings
+  def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian",
       mainId = "support-landing-page",
@@ -94,8 +94,8 @@ class Application(
     ))
   }
 
-  def contributionsLanding(countryCode: String): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    // import request.settings
+  def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
@@ -106,10 +106,10 @@ class Application(
     ))
   }
 
-  def newContributionsLanding(countryCode: String): Action[AnyContent] = addSettingsTo(maybeAuthenticatedAction()).async { implicit request =>
+  def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
-    // import request.settings
-    request.withoutSettings.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+    implicit val settings: Settings = settingsProvider.settings()
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(newContributions(countryCode, None)),
       user => Ok(newContributions(countryCode, user))
     )
@@ -131,8 +131,8 @@ class Application(
     )
   }
 
-  def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    import request.settings
+  def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(title, id, js, css))
   }
 

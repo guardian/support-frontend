@@ -21,11 +21,11 @@ class PayPalRegular(
     assets: AssetsResolver,
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
-    components: ControllerComponents
+    components: ControllerComponents,
+    settingsProvider: SettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
-  import settings._
 
   implicit val a: AssetsResolver = assets
 
@@ -56,8 +56,8 @@ class PayPalRegular(
 
   // The endpoint corresponding to the PayPal return url, hit if the user is
   // redirected and needs to come back.
-  def returnUrl: Action[AnyContent] = addSettingsTo(PrivateAction) { implicit request =>
-    import request.settings
+  def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
@@ -69,9 +69,9 @@ class PayPalRegular(
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
-  def cancelUrl: Action[AnyContent] = addSettingsTo(PrivateAction) { implicit request =>
+  def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
-    import request.settings
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",

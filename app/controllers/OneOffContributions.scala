@@ -16,7 +16,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.Settings
+import admin.{Settings, SettingsProvider}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -26,11 +26,11 @@ class OneOffContributions(
     stripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
-    components: ControllerComponents
+    components: ControllerComponents,
+    settingsProvider: SettingsProvider
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
-  import settings._
 
   implicit val a: AssetsResolver = assets
 
@@ -55,9 +55,9 @@ class OneOffContributions(
     )
   }
 
-  def displayForm(): Action[AnyContent] = addSettingsTo(maybeAuthenticatedAction()).async { implicit request =>
-    import request.settings
-    request.withoutSettings.user.fold {
+  def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    request.user.fold {
       Future.successful(Ok(formHtml(None)))
     } { minimalUser =>
       {

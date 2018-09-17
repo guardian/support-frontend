@@ -15,11 +15,11 @@ class Subscriptions(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
     components: ControllerComponents,
-    stringsConfig: StringsConfig
+    stringsConfig: StringsConfig,
+    settingsProvider: SettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   import actionRefiners._
-  import settings._
 
   implicit val a: AssetsResolver = assets
 
@@ -43,11 +43,11 @@ class Subscriptions(
     Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
-  def landing(countryCode: String): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    if (request.settings.switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
+  def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    if (settingsProvider.settings().switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
       Redirect(controllers.routes.Subscriptions.geoRedirect())
     } else {
-      import request.settings
+      implicit val settings: Settings = settingsProvider.settings()
       val title = "Support the Guardian | Get a Subscription"
       val id = "subscriptions-landing-page"
       val js = "subscriptionsLandingPage.js"
@@ -61,8 +61,8 @@ class Subscriptions(
     }
   }
 
-  def digital(countryCode: String): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    import request.settings
+  def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
@@ -72,8 +72,8 @@ class Subscriptions(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def premiumTier(countryCode: String): Action[AnyContent] = addSettingsTo(CachedAction()) { implicit request =>
-    import request.settings
+  def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     val title = "Support the Guardian | Premium Tier"
     val id = "premium-tier-landing-page-" + countryCode
     val js = "premiumTierLandingPage.js"
@@ -84,8 +84,8 @@ class Subscriptions(
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
   def displayForm(countryCode: String): Action[AnyContent] =
-    addSettingsTo(authenticatedAction(recurringIdentityClientId)) { implicit request =>
-      import request.settings
+    authenticatedAction(recurringIdentityClientId) { implicit request =>
+      implicit val settings: Settings = settingsProvider.settings()
       val title = "Support the Guardian | Digital Subscription"
       val id = "digital-subscription-checkout-page-" + countryCode
       val js = "digitalSubscriptionCheckoutPage.js"
