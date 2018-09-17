@@ -58,7 +58,7 @@ object SettingsProvider {
 // If an action requires settings to handle a request,
 // then 'Surrogate-Key' header should be set with value 'settings' on any result that is returned by said action.
 // This means that if the settings change over the application life-cycle,
-// the routes that need to be purged so that changes in settings propagate to the user can be efficiently targeted.
+// the routes that need to be purged (so that changes in settings propagate to the user) can be efficiently targeted.
 // See https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230 for more details.
 object SettingsSurrogateKey {
   val settingsSurrogateKey = "settings"
