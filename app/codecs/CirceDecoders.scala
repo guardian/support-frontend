@@ -16,7 +16,7 @@ import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
-import services.stepfunctions.{StatusResponse, StatusResponseWithGuestAccountToken}
+import services.stepfunctions.StatusResponse
 import admin._
 import services.{PayPalError, PayPalSuccess}
 
@@ -108,7 +108,6 @@ object CirceDecoders {
   implicit val settingsCodec: Codec[Settings] = deriveCodec
 
   implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
-  implicit val statusWithGuestAccountTokenEncoder: Encoder[StatusResponseWithGuestAccountToken] = deriveEncoder
   implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
     identifier => CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
   }

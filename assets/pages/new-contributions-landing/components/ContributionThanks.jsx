@@ -11,7 +11,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgNewsletters from 'components/svgs/newsletters';
-import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -40,19 +39,6 @@ function ContributionThanks(props: PropTypes) {
         </section>
       ) : null}
 
-      <section>
-        <NewContributionTextInput
-          id="password"
-          name="password"
-          label="Password"
-          value={firstName}
-          icon={<SvgUser />}
-          onInput={props.updateFirstName}
-          checkValidity={checkFirstName}
-          errorMessage="Please provide your first name"
-          required
-        />
-      </section>
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
         <p>

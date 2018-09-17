@@ -15,8 +15,6 @@ import config.Identity
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.{Json, Reads, Writes}
-import shapeless._
-import shapeless.syntax._
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -96,14 +94,15 @@ case class GuestRegistrationResponse(
     guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest
 )
 
-case class UserIdWithOptionalToken(userId: String, token: Option[String])
+// A userId with an optional guest account registration toke (created when a guest account is registered)
+case class UserIdWithGuestAccountToken(userId: String, guestAccountRegistrationToken: Option[String])
 
-object UserIdWithOptionalToken {
-  def fromGuestRegistrationResponse(guestRegistrationResponse: GuestRegistrationResponse): UserIdWithOptionalToken =
-    UserIdWithOptionalToken(guestRegistrationResponse.guestRegistrationRequest.userId, guestRegistrationResponse.guestRegistrationRequest.token)
-
-  def fromIdentityId(identityId: String): UserIdWithOptionalToken = UserIdWithOptionalToken.fromIdentityId(identityId)
-
+object UserIdWithGuestAccountToken {
+  def fromGuestRegistrationResponse(guestRegistrationResponse: GuestRegistrationResponse): UserIdWithGuestAccountToken =
+    UserIdWithGuestAccountToken(
+      guestRegistrationResponse.guestRegistrationRequest.userId,
+      guestRegistrationResponse.guestRegistrationRequest.token
+    )
 }
 
 object GuestRegistrationResponse {
@@ -186,15 +185,15 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
+  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     get(s"user", getHeaders(req), List("emailAddress" -> email)) { resp =>
       resp.json.validate[UserResponse].asEither.map(
-        userResponse => UserIdWithOptionalToken(userResponse.user.id, None)
+        userResponse => UserIdWithGuestAccountToken(userResponse.user.id, None)
       ).leftMap(_.mkString(","))
     }
   }
 
-  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
+  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     val body = CreateGuestAccountRequestBody.fromEmail(email)
     execute(
       wsClient.url(s"$apiUrl/guest")
@@ -205,12 +204,11 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     ) { resp =>
         resp.json.validate[GuestRegistrationResponse]
           .asEither
-          .map(response => UserIdWithOptionalToken(response.guestRegistrationRequest.userId, response.guestRegistrationRequest.token))
-          .leftMap(_.mkString(","))
+          .bimap( _.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
       }
   }
 
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email))
   }
 
@@ -243,5 +241,5 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken]
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }

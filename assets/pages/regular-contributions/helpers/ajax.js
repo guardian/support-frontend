@@ -20,7 +20,7 @@ import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
+import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
@@ -71,7 +71,8 @@ type Status = 'success' | 'failure' | 'pending';
 type StatusResponse = {|
   status: Status,
   trackingUri: string,
-  failureReason: CheckoutFailureReason
+  failureReason: CheckoutFailureReason,
+  guestAccountCreationToken?: string
 |}
 
 // ----- Functions ----- //
@@ -261,6 +262,10 @@ function handleStatus(
   if (response.ok) {
     response.json().then((statusResponse: StatusResponse) => {
       trackingURI = statusResponse.trackingUri;
+
+      if (statusResponse.guestAccountCreationToken) {
+        dispatch(setGuestAccountCreationToken(statusResponse.guestAccountCreationToken));
+      }
 
       switch (statusResponse.status) {
         case 'failure':
