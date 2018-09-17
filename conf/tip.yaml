@@ -1,2 +1,5 @@
 - name: One-off Paypal Payment
   description: User making oneoff paypal payment is successful and user is sent to thank-you page
+
+- name: Regular Paypal Payment
+  description: User successfully creates regular contribution using Paypal
