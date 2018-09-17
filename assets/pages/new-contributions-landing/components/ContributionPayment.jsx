@@ -28,7 +28,6 @@ type PropTypes = {
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   paymentCallback: Token => void,
-  widgetClosed: () => void,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
   isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
@@ -56,7 +55,6 @@ function setupPaymentMethod(props: PropTypes): void {
   const {
     paymentMethod,
     paymentCallback,
-    widgetClosed,
     paymentHandler,
     contributionType,
     currency,
@@ -77,13 +75,8 @@ function setupPaymentMethod(props: PropTypes): void {
 
       case 'Stripe':
       default:
-        setupStripeCheckout(
-          paymentCallback,
-          widgetClosed,
-          contributionType,
-          currency,
-          isTestUser,
-        ).then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
+        setupStripeCheckout(paymentCallback, contributionType, currency, isTestUser)
+          .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
     }
   }
 }

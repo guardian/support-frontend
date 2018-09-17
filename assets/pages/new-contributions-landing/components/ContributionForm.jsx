@@ -172,10 +172,6 @@ function ContributionForm(props: PropTypes) {
     props.onThirdPartyPaymentDone(token);
   };
 
-  const widgetClosed = () => {
-    props.onWaiting(false);
-  };
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLTE(config[props.countryGroupId][props.contributionType].min, input)
@@ -240,8 +236,8 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide a valid email address"
             required
           />
-          <NewContributionState onChange={props.updateState} value={state} />
-          <NewContributionPayment paymentCallback={paymentCallback} widgetClosed={widgetClosed} />
+          <NewContributionState onChange={props.updateState} />
+          <NewContributionPayment paymentCallback={paymentCallback} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
