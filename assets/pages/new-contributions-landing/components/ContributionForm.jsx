@@ -21,6 +21,7 @@ import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailu
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -55,6 +56,7 @@ type PropTypes = {|
   updateState: Event => void,
   onWaiting: boolean => void,
   onThirdPartyPaymentDone: Token => void,
+  isDirectDebitPopUpOpen: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,6 +72,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
+  isDirectDebitPopUpOpen: state.page.form.isDirectDebitPopUpOpen,
 });
 
 function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
@@ -198,6 +201,10 @@ function ContributionForm(props: PropTypes) {
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
+        <DirectDebitPopUpForm
+          callback={() => Promise.resolve()}
+          isPopUpOpen={props.isDirectDebitPopUpOpen}
+        />
       </div>
     );
 }

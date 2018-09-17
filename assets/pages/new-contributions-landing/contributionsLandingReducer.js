@@ -35,6 +35,7 @@ type FormState = {
   isWaiting: boolean,
   formData: FormData,
   done: boolean,
+  isDirectDebitPopUpOpen: boolean,
 };
 
 type PageState = {
@@ -85,6 +86,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     selectedAmounts: initialAmount,
     isWaiting: false,
     done: false,
+    isDirectDebitPopUpOpen: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
