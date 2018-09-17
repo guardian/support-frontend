@@ -15,7 +15,6 @@ trait ActionBuilders {
     cc = controllerComponents,
     addToken = csrfAddToken,
     checkToken = csrfCheck,
-    csrfConfig = csrfConfig,
-    settingsProvider = settingsProvider
+    csrfConfig = csrfConfig
   )
 }

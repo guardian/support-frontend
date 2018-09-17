@@ -1,6 +1,5 @@
 package actions
 
-import admin.SettingsProvider
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
 import com.netaporter.uri.dsl._
@@ -27,8 +26,7 @@ class CustomActionBuilders(
     cc: ControllerComponents,
     addToken: CSRFAddToken,
     checkToken: CSRFCheck,
-    csrfConfig: CSRFConfig,
-    settingsProvider: SettingsProvider
+    csrfConfig: CSRFConfig
 )(implicit private val ec: ExecutionContext) {
 
   import CustomActionBuilders._
@@ -87,6 +85,4 @@ class CustomActionBuilders(
     cc.executionContext,
     List("Vary" -> RequestCountry.fastlyCountryHeader)
   )
-
-  val settings: SettingsSyntax = new SettingsSyntax(settingsProvider)
 }
