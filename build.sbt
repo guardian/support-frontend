@@ -37,7 +37,8 @@ lazy val root = (project in file("."))
     name,
     BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
     BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
+    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId()),
+    BuildInfoKey.constant("GitHeadSha", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse ("git rev-parse HEAD".!!.trim))
   ),
   buildInfoPackage := "app",
   buildInfoOptions += BuildInfoOption.ToMap,
@@ -84,6 +85,7 @@ libraryDependencies ++= Seq(
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
+  "com.gu" %% "tip" % "0.5.0",
   filters,
   ws
 )

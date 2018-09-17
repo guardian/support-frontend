@@ -8,7 +8,7 @@ import play.api.mvc.EssentialFilter
 import play.filters.gzip.GzipFilter
 import play.api.BuiltInComponentsFromContext
 import controllers.AssetsComponents
-import monitoring.{SentryLogging, StateMachineMonitor}
+import monitoring.{SentryLogging, StateMachineMonitor, TipMonitoring}
 import play.filters.HttpFiltersComponents
 
 trait AppComponents extends PlayComponents
@@ -20,7 +20,8 @@ trait AppComponents extends PlayComponents
   with ActionBuilders
   with Assets
   with GoogleAuth
-  with HttpFiltersComponents {
+  with HttpFiltersComponents
+  with Monitoring {
   self: BuiltInComponentsFromContext =>
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(

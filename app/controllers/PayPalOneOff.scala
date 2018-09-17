@@ -13,6 +13,7 @@ import play.api.mvc._
 import services.PaymentAPIService.Email
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import admin.Settings
+import com.gu.tip.Tip
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -24,7 +25,8 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settings: Settings
+    settings: Settings,
+    tipMonitoring: Tip
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionBuilders._
@@ -57,6 +59,7 @@ class PayPalOneOff(
     def processPaymentApiResponse(success: Boolean): Result = {
       if (success) {
         SafeLogger.info(s"One-off contribution for Paypal payment is successful. Sending user to thank-you page")
+        tipMonitoring.verify("One-off Paypal Payment")
         Redirect("/contribute/one-off/thankyou")
       } else {
         SafeLogger.error(scrub"Error making paypal payment. Sending user to error page.")
