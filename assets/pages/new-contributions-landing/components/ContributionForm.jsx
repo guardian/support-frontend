@@ -236,7 +236,7 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide a valid email address"
             required
           />
-          <NewContributionState onChange={props.updateState} />
+          <NewContributionState onChange={props.updateState} value={state} />
           <NewContributionPayment paymentCallback={paymentCallback} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
