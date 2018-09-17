@@ -711,7 +711,8 @@ form {
   outline: none;
 }
 
-.form__input--primed:invalid {
+.form__input--primed:invalid,
+.form__input--invalid {
   border-color: #3db540;
 }
 

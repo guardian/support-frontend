@@ -34,7 +34,6 @@ const renderStatesField = (states: { [string]: string }, onChange: (Event => voi
     <label className="form__label" htmlFor="contributionState">State</label>
     <span className="form__input-with-icon">
       <select id="contributionState" className="form__input" placeholder="State" onChange={onChange} required>
-        <option />
         {(Object.entries(states): any).map(renderState)}
       </select>
       <span className="form__icon">
