@@ -54,6 +54,9 @@ object RegularContributionsClient {
 
 case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
 
+case class StatusResponseWithGuestAccountToken(statusResponse: StatusResponse, token: Option[String])
+
+
 class RegularContributionsClient(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,

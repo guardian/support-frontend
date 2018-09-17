@@ -15,7 +15,8 @@ import config.Identity
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.{Json, Reads, Writes}
-
+import shapeless._
+import shapeless.syntax._
 import scala.util.Try
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -95,9 +96,19 @@ case class GuestRegistrationResponse(
     guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest
 )
 
+case class UserIdWithOptionalToken(userId: String, token: Option[String])
+
+object UserIdWithOptionalToken {
+  def fromGuestRegistrationResponse(guestRegistrationResponse: GuestRegistrationResponse): UserIdWithOptionalToken =
+    UserIdWithOptionalToken(guestRegistrationResponse.guestRegistrationRequest.userId, guestRegistrationResponse.guestRegistrationRequest.token)
+
+  def fromIdentityId(identityId: String): UserIdWithOptionalToken = UserIdWithOptionalToken.fromIdentityId(identityId)
+
+}
+
 object GuestRegistrationResponse {
   implicit val readsGuestRegistrationResponse: Reads[GuestRegistrationResponse] = Json.reads[GuestRegistrationResponse]
-  case class GuestRegistrationRequest(userId: String)
+  case class GuestRegistrationRequest(token: Option[String], userId: String)
 
   object GuestRegistrationRequest {
     implicit val readsGuestRegistrationRequest: Reads[GuestRegistrationRequest] = Json.reads[GuestRegistrationRequest]
@@ -175,13 +186,15 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
     get(s"user", getHeaders(req), List("emailAddress" -> email)) { resp =>
-      resp.json.validate[UserResponse].asEither.map(_.user.id).leftMap(_.mkString(","))
+      resp.json.validate[UserResponse].asEither.map(
+        userResponse => UserIdWithOptionalToken(userResponse.user.id, None)
+      ).leftMap(_.mkString(","))
     }
   }
 
-  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
     val body = CreateGuestAccountRequestBody.fromEmail(email)
     execute(
       wsClient.url(s"$apiUrl/guest")
@@ -190,11 +203,14 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         .withRequestTimeout(1.second)
         .withMethod("POST")
     ) { resp =>
-        resp.json.validate[GuestRegistrationResponse].asEither.map(_.guestRegistrationRequest.userId).leftMap(_.mkString(","))
+        resp.json.validate[GuestRegistrationResponse]
+          .asEither
+          .map(response => UserIdWithOptionalToken(response.guestRegistrationRequest.userId, response.guestRegistrationRequest.token))
+          .leftMap(_.mkString(","))
       }
   }
 
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken] = {
     getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email))
   }
 
@@ -227,5 +243,5 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String]
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithOptionalToken]
 }
