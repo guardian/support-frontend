@@ -55,10 +55,20 @@ object SettingsProvider {
     }
 }
 
+// The 'Surrogate-Key' header should have value 'settings' for any results that require settings to handle.
+// This means that if the settings change over the application life-cycle,
+// the routes that need to be purged so that changes in settings propagate to the user can be efficiently targeted.
+// See https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230 for more details.
+object SettingsSurrogateKey {
+  val settingsSurrogateKey = "settings"
+  def addSettingsSurrogateKey(result: Result): Result = result.withHeaders("Surrogate-Key" -> settingsSurrogateKey)
+}
+
+// Convenient way of settings settings Surrogate-Key.
+// Mix this trait into controllers for the syntax: result.withSettingSurrogateKey
 trait SettingsSyntax {
 
-
   implicit class ResultSyntax(result: Result) {
-    def withSettingsSurrogateKey: Result = result.withHeaders("Surrogate-Key" -> "settings")
+    def withSettingsSurrogateKey: Result = SettingsSurrogateKey.addSettingsSurrogateKey(result)
   }
 }
