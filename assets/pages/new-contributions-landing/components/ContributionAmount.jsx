@@ -13,7 +13,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
 
-import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -72,6 +72,10 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
+  const { min, max } = config[props.countryGroupId][props.contributionType];
+  const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
+  const maxAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString(), spoken: '', isDefault: false }, false);
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
@@ -91,26 +95,23 @@ function ContributionAmount(props: PropTypes) {
         </li>
       </ul>
       {showOther ? (
-        <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
-          <label className="form__label" htmlFor="contributionOther">Other Amount</label>
-          <span className="form__input-with-icon">
-            <input
+        <NewContributionTextInput
               id="contributionOther"
-              className="form__input"
+          name="contribution-other-amount"
               type="number"
-              min={config[props.countryGroupId][props.contributionType].min}
-              max={config[props.countryGroupId][props.contributionType].max}
-              onChange={e => props.updateOtherAmount(e.target.value)}
+          label="Other Amount"
               value={props.otherAmount}
+          icon={<SvgDollar />}
+          onInput={e => props.updateOtherAmount((e.target: any).value)}
+          isValid={true}
+          wasBlurred={false}
+          errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
               autoComplete="off"
-              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          min={min}
+          max={max}
+          autoFocus
               required
             />
-            <span className="form__icon">
-              <SvgDollar />
-            </span>
-          </span>
-        </div>
       ) : null}
     </fieldset>
   );

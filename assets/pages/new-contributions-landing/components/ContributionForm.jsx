@@ -168,6 +168,8 @@ function ContributionForm(props: PropTypes) {
             label="First Name"
             value={firstName}
             icon={<SvgUser />}
+            autoComplete="given-name"
+            autoCapitalize="words"
             onInput={props.updateFirstName}
             checkValidity={checkFirstName}
             errorMessage="Please provide your first name"
@@ -179,6 +181,8 @@ function ContributionForm(props: PropTypes) {
             label="Last Name"
             value={lastName}
             icon={<SvgUser />}
+            autoComplete="family-name"
+            autoCapitalize="words"
             onInput={props.updateLastName}
             checkValidity={checkLastName}
             errorMessage="Please provide your last name"
@@ -190,6 +194,7 @@ function ContributionForm(props: PropTypes) {
             label="Email address"
             value={email}
             type="email"
+            autoComplete="email"
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
