@@ -33,7 +33,6 @@ type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
 };
 
-
 function mapStateToProps(state: { common: CommonState }) {
 
   return {
@@ -91,13 +90,13 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Buy in the App Store',
                 url: addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer }),
                 accessibilityHint: 'Proceed to buy the premium app in the app store',
-                modifierClasses: ['premium-tier', 'border', 'ios'],
+                modifierClasses: ['border', 'ios'],
               },
               {
                 text: 'Buy on Google Play',
                 url: addQueryParamsToURL(androidAppUrl, { referrer: appReferrer }),
                 accessibilityHint: 'Proceed to buy the premium app in the play store',
-                modifierClasses: ['premium-tier', 'border', 'android'],
+                modifierClasses: ['border', 'android'],
               },
             ]}
           />
@@ -120,7 +119,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Buy in the App Store',
                 url: addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer }),
                 accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
-                modifierClasses: ['daily-edition', 'border'],
+                modifierClasses: ['border'],
               },
             ]}
           />
@@ -143,7 +142,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Find out more',
                 url: subsLinks.DigitalPack,
                 accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
-                modifierClasses: ['digital', 'border'],
+                modifierClasses: ['border'],
               },
             ]}
           />
@@ -168,7 +167,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Choose a package',
                 url: subsLinks.Paper,
                 accessibilityHint: 'Proceed to paper subscription options',
-                modifierClasses: ['paper', 'border'],
+                modifierClasses: ['border'],
               },
             ]}
           />
@@ -191,7 +190,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Choose a package',
                 url: subsLinks.PaperAndDigital,
                 accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
-                modifierClasses: ['paper-digital', 'border'],
+                modifierClasses: ['border'],
               },
             ]}
           />
@@ -214,7 +213,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
                 text: 'Find out more',
                 url: subsLinks.GuardianWeekly,
                 accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
-                modifierClasses: ['weekly', 'border'],
+                modifierClasses: ['border'],
               },
             ]}
           />
@@ -248,13 +247,13 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
               text: 'Buy in the App Store',
               url: addQueryParamsToURL(iOSAppUrl, { referrer: internationalAppReferrer }),
               accessibilityHint: 'Proceed to buy the premium app in the app store',
-              modifierClasses: ['premium-tier', 'border', 'ios'],
+              modifierClasses: ['border', 'ios'],
             },
             {
               text: 'Buy on Google Play',
               url: addQueryParamsToURL(androidAppUrl, { referrer: internationalAppReferrer }),
               accessibilityHint: 'Proceed to buy the premium app in the play store',
-              modifierClasses: ['premium-tier', 'border', 'android'],
+              modifierClasses: ['border', 'android'],
             },
           ]}
         />
@@ -277,7 +276,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
               text: 'Find out more',
               url: subsLinks.DigitalPack,
               accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
-              modifierClasses: ['digital', 'border'],
+              modifierClasses: ['border'],
             },
           ]}
         />
@@ -300,7 +299,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
               text: 'Find out more',
               url: subsLinks.GuardianWeekly,
               accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
-              modifierClasses: ['weekly', 'border'],
+              modifierClasses: ['border'],
             },
           ]}
         />
