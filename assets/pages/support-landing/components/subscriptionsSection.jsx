@@ -14,7 +14,7 @@ import { displayPrice } from 'helpers/subscriptions';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-import { gridImageProperties } from 'components/threeSubscriptions/gridImageProperties';
+import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
 import type { State } from '../supportLandingReducer';
 

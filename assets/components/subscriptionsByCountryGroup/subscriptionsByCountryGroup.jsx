@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { type HeadingSize } from 'components/heading/heading';
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-import { gridImageProperties } from 'components/threeSubscriptions/gridImageProperties';
+import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type CommonState } from 'helpers/page/page';
