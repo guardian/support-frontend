@@ -19,7 +19,7 @@ import Footer from 'components/footer/footer';
 
 import { NewHeader } from 'components/headers/new-header/Header';
 import { NewContributionForm } from './components/ContributionForm';
-import { NewContributionThanks } from './components/ContributionThanks';
+import { SignUpAsk } from './components/SignUpAsk';
 import { NewContributionBackground } from './components/ContributionBackground';
 
 import { initReducer } from './contributionsLandingReducer';
@@ -79,7 +79,7 @@ const router = (
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
-                <NewContributionThanks />
+                <SignUpAsk />
                 <NewContributionBackground />
               </Page>
             );
