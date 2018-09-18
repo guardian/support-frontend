@@ -85,7 +85,7 @@ function setupPaymentMethod(props: PropTypes): void {
 
 function ContributionPayment(props: PropTypes) {
   const paymentMethods: PaymentMethod[] = props.contributionType !== 'ONE_OFF' && props.countryId === 'GB'
-    ? ['Stripe', 'DirectDebit', 'PayPal']
+    ? ['DirectDebit', 'Stripe', 'PayPal']
     : ['Stripe', 'PayPal'];
 
   setupPaymentMethod(props);
