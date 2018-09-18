@@ -15,10 +15,11 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
+
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.Settings
+import admin.{Settings, SettingsSurrogateKeySyntax, SettingsProvider}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,16 +34,15 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    settings: Settings,
-    guardianDomain: String
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+    guardianDomain: String,
+    settingsProvider: SettingsProvider
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
 
-  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
+  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: Settings): Result = {
     Ok(recurringContributions(
       title = "Support the Guardian | Recurring Contributions",
       id = "regular-contributions-page",
@@ -54,8 +54,9 @@ class RegularContributions(
       uatStripeConfig = stripeConfigProvider.get(true),
       payPalConfig = payPalConfigProvider.get(uatMode)
     ))
+  }
 
-  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: WrappedRequest[AnyContent]): Future[Result] =
+  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: Settings): Future[Result] =
     identityService.getUser(user).semiflatMap { fullUser =>
       isRegularContributor(user.credentials) map {
         case Some(true) =>
@@ -70,7 +71,7 @@ class RegularContributions(
       InternalServerError
     }
 
-  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent]): Future[Result] = {
+  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: Settings): Future[Result] = {
     val uatMode = testUsers.isTestUser(request)
     Future.successful(
       monthlyContributionsPage(None, uatMode)
@@ -79,16 +80,14 @@ class RegularContributions(
 
   def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      displayFormWithUser(request.user)
+      implicit val settings: Settings = settingsProvider.settings()
+      displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      request.user.fold {
-        displayFormWithoutUser()
-      } {
-        user => displayFormWithUser(user)
-      }
+      implicit val settings: Settings = settingsProvider.settings()
+      request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
     }
 
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
