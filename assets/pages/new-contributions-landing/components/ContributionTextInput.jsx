@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -14,7 +13,7 @@ type PropTypes = {
   name: string,
   label: string,
   placeholder: boolean | string,
-  icon: ?React$Element<*>,
+  icon: React$Element<*>,
   type?: string,
   value: string | null,
   errorMessage: string | null,
@@ -32,43 +31,34 @@ type PropTypes = {
 
 // ----- Render ----- //
 
-function ContributionTextInput(props: PropTypes) {
+function NewContributionTextInput(props: PropTypes) {
   const showError = props.value !== '' && !props.isValid && props.wasBlurred;
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
-      <label className="form__label" htmlFor={props.id}>{props.label}</label>
-      {props.icon ? (
-        <span className="form__input-with-icon">
-          <input
-            id={props.id}
-            className={classNameWithModifiers('form__input', showError ? ['invalid'] : [])}
-            type={props.type}
-            autoCapitalize={props.autoCapitalize}
-            autoComplete={props.autoComplete}
-            autoFocus={props.autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
-            required={props.required}
-            placeholder={props.placeholder}
-            onInput={props.onInput}
-            onBlur={props.onBlur}
-            value={props.value}
-            min={props.min}
-            max={props.max}
-          />
-          <span className="form__icon">
-            {props.icon}
-          </span>
-        </span>
-      ) : (
+      <label className="form__label" htmlFor={props.id}>
+        {props.label}
+      </label>
+      <span className="form__input-with-icon">
         <input
           id={props.id}
-          className="form__input"
+          className={classNameWithModifiers('form__input', showError ? ['invalid'] : [])}
           type={props.type}
-          autoCapitalize="words"
+          autoCapitalize={props.autoCapitalize}
+          autoComplete={props.autoComplete}
+          autoFocus={props.autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
           required={props.required}
           placeholder={props.placeholder}
+          onInput={props.onInput}
+          onBlur={props.onBlur}
+          value={props.value}
+          min={props.min}
+          max={props.max}
         />
-      )}
+        <span className="form__icon">
+          {props.icon}
+        </span>
+      </span>
       {showError ? (
         <div className="form__error">
           {props.errorMessage}
@@ -78,7 +68,7 @@ function ContributionTextInput(props: PropTypes) {
   );
 }
 
-ContributionTextInput.defaultProps = {
+NewContributionTextInput.defaultProps = {
   type: 'text',
   placeholder: false,
   required: false,
@@ -91,7 +81,5 @@ ContributionTextInput.defaultProps = {
   max: undefined,
   min: undefined,
 };
-
-const NewContributionTextInput = connect()(ContributionTextInput);
 
 export { NewContributionTextInput };
