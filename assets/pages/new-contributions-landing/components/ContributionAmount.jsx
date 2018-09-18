@@ -105,7 +105,7 @@ function ContributionAmount(props: PropTypes) {
           id="contributionOther"
           name="contribution-other-amount"
           type="number"
-          label="Other Amount"
+          label="Other amount"
           value={props.otherAmount}
           icon={<SvgDollar />}
           onInput={e => props.updateOtherAmount((e.target: any).value)}

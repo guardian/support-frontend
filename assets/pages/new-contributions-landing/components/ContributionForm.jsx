@@ -193,7 +193,7 @@ function ContributionForm(props: PropTypes) {
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
-            label="First Name"
+            label="First name"
             value={firstName}
             icon={<SvgUser />}
             autoComplete="given-name"
@@ -208,7 +208,7 @@ function ContributionForm(props: PropTypes) {
           <NewContributionTextInput
             id="contributionLastName"
             name="contribution-lname"
-            label="Last Name"
+            label="Last name"
             value={lastName}
             icon={<SvgUser />}
             autoComplete="family-name"

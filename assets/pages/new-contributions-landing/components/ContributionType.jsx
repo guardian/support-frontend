@@ -71,7 +71,7 @@ function ContributionType(props: PropTypes) {
             onChange={props.onSelectContributionType}
             checked={props.contributionType === 'ANNUAL'}
           />
-          <label htmlFor="contributionType-annual" className="form__radio-group-label">Annually</label>
+          <label htmlFor="contributionType-annual" className="form__radio-group-label">Annual</label>
         </li>
       </ul>
     </fieldset>
