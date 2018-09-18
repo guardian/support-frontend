@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import admin.{Settings, SettingsProvider, SettingsSyntax}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.ExecutionContext
 
@@ -23,7 +23,7 @@ class PayPalRegular(
     testUsers: TestUserService,
     components: ControllerComponents,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 

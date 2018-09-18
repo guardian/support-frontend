@@ -290,10 +290,10 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    bottom: 0;
     height: 580px;
     left: 0;
     position: absolute;
+    top: 245px;
     width: 100%;
     z-index: -1;
   }
@@ -711,7 +711,8 @@ form {
   outline: none;
 }
 
-.form__input--primed:invalid {
+.form__input--primed:invalid,
+.form__input--invalid {
   border-color: #3db540;
 }
 
@@ -800,9 +801,15 @@ form {
   height: 10px;
 }
 
+.form__field .svg-pound,
 .form__field .svg-dollar {
-  width: 11px;
-  height: 19px;
+  width: 24px;
+  height: 26px;
+}
+
+.form__field .svg-euro {
+  width: 30px;
+  height: 40px;
 }
 
 .form__field .svg-globe {

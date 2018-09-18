@@ -16,7 +16,7 @@ import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.{Settings, SettingsProvider, SettingsSyntax}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -28,7 +28,7 @@ class OneOffContributions(
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
     settingsProvider: SettingsProvider
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 

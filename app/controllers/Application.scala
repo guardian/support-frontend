@@ -11,7 +11,7 @@ import config.StringsConfig
 import play.api.mvc._
 
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider, SettingsSyntax}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -28,7 +28,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 

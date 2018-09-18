@@ -20,6 +20,7 @@ type PropTypes = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
+  isWaiting: boolean,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
 };
@@ -28,9 +29,10 @@ const mapStateToProps = (state: State) =>
   ({
     currency: state.common.internationalisation.currencyId,
     contributionType: state.page.form.contributionType,
+    isWaiting: state.page.form.isWaiting,
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
-    otherAmount: state.page.form.formData.otherAmount,
+    otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   });
 
 // ----- Render ----- //
@@ -45,9 +47,9 @@ function ContributionSubmit(props: PropTypes) {
   return (
     <div className="form__submit">
       {showPayPalButton ? (
-        <button>Pay with PayPal, bro</button>
+        <button disabled={props.isWaiting}>Pay with PayPal, bro</button>
       ) : (
-        <button className="form__submit-button" type="submit">
+        <button disabled={props.isWaiting} className="form__submit-button" type="submit">
           Contribute&nbsp;
           {amount ? formatAmount(
             currencies[props.currency],

@@ -12,7 +12,7 @@ import services._
 import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
-import admin.{Settings, SettingsProvider, SettingsSyntax}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -25,7 +25,7 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
