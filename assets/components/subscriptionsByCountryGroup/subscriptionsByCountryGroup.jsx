@@ -25,6 +25,7 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { type ImageId } from 'helpers/theGrid';
+import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
 
 
 // ----- Types and State Mapping ----- //
@@ -121,6 +122,7 @@ function Digital(props: {
             url: addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer }),
             accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
             modifierClasses: ['border'],
+            onClick: appStoreCtaClick,
           },
         ]}
       />
@@ -249,12 +251,14 @@ function PremiumTier(props: {
           url: addQueryParamsToURL(iOSAppUrl, { referrer }),
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['border', 'ios'],
+          onClick: appStoreCtaClick,
         },
         {
           text: 'Buy on Google Play',
           url: addQueryParamsToURL(androidAppUrl, { referrer }),
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['border', 'android'],
+          onClick: appStoreCtaClick,
         },
       ]}
     />
