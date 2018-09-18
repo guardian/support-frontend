@@ -16,7 +16,6 @@ type PropTypes = {
   url: string,
   price: string,
   dark: boolean,
-  secondaryCopy: string,
 };
 
 
@@ -32,12 +31,6 @@ export default function PriceCta(props: PropTypes) {
         accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
         ctaId="price-cta"
       />
-      <p className="component-price-cta__price">
-        <span className="component-price-cta__price-copy">for only</span>
-        <span className="component-price-cta__price-amount">{props.price}</span>
-        <span className="component-price-cta__price-copy">per month</span>
-      </p>
-      <p className="component-price-cta__cancel">{props.secondaryCopy}</p>
     </div>
   );
 
@@ -48,5 +41,4 @@ export default function PriceCta(props: PropTypes) {
 
 PriceCta.defaultProps = {
   dark: false,
-  secondaryCopy: 'You can cancel your subscription at any time',
 };
