@@ -12,6 +12,8 @@ import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spoke
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
+import SvgEuro from 'components/svgs/euro';
+import SvgPound from 'components/svgs/pound';
 
 import { type Action, selectAmount, updateOtherAmount, updateBlurred } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
@@ -38,8 +40,8 @@ const mapStateToProps = state => ({
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmount,
-  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  otherAmountBlurred: state.page.form.formData.otherAmounts[state.page.form.contributionType].blurred,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
@@ -74,6 +76,14 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
+const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
+  switch (countryGroupId) {
+    case 'GBPCountries': return <SvgPound />;
+    case 'EURCountries': return <SvgEuro />;
+    default: return <SvgDollar />;
+  }
+};
+
 
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
@@ -105,9 +115,9 @@ function ContributionAmount(props: PropTypes) {
           id="contributionOther"
           name="contribution-other-amount"
           type="number"
-          label="Other Amount"
+          label="Other amount"
           value={props.otherAmount}
-          icon={<SvgDollar />}
+          icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
           onBlur={() => props.updateBlurred()}
           isValid={props.checkOtherAmount(props.otherAmount || '')}

@@ -12,6 +12,7 @@ export type Action =
   | { type: 'CHECKOUT_PENDING', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_SUCCESS', paymentMethod: PaymentMethod }
   | { type: 'CHECKOUT_ERROR', checkoutFailureReason: CheckoutFailureReason }
+  | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'CREATING_CONTRIBUTOR' };
 
@@ -37,6 +38,10 @@ function creatingContributor(): Action {
   return { type: 'CREATING_CONTRIBUTOR' };
 }
 
+function setGuestAccountCreationToken(guestAccountCreationToken: string): Action {
+  return { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken };
+}
+
 // ----- Exports ----- //
 
 export {
@@ -45,4 +50,5 @@ export {
   checkoutError,
   setPayPalHasLoaded,
   creatingContributor,
+  setGuestAccountCreationToken,
 };

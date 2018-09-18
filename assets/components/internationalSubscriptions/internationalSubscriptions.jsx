@@ -10,6 +10,7 @@ import {
   androidAppUrl,
 } from 'helpers/externalLinks';
 import { getCampaign } from 'helpers/tracking/acquisitions';
+import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { addQueryParamsToURL } from 'helpers/url';
 
@@ -63,6 +64,7 @@ export default function InternationalSubscriptions(props: PropTypes) {
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
           subheading="7-day free trial"
+          ctaOnClick={appStoreCtaClick}
         />
         <DigitalBundle
           countryGroupId={props.countryGroupId}

@@ -13,6 +13,7 @@ import {
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { addQueryParamsToURL } from 'helpers/url';
+import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
 
 import PageSection from 'components/pageSection/pageSection';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -62,10 +63,12 @@ export default function DigitalSubscriptions(props: PropTypes) {
           iOSUrl={addQueryParamsToURL(iOSAppUrl, { referrer: appReferrer })}
           androidUrl={addQueryParamsToURL(androidAppUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
+          ctaOnClick={appStoreCtaClick}
         />
         <DailyEdition
           url={addQueryParamsToURL(dailyEditionUrl, { referrer: appReferrer })}
           headingSize={props.headingSize}
+          ctaOnClick={appStoreCtaClick}
         />
         <DigitalBundle
           countryGroupId={countryGroupId}
@@ -86,6 +89,7 @@ function PremiumTier(props: {
     androidUrl: string,
     headingSize: HeadingSize,
     subheading: ?string,
+    ctaOnClick?: ?Function,
 }) {
 
   return (
@@ -110,12 +114,14 @@ function PremiumTier(props: {
           url: props.iOSUrl,
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['premium-tier', 'border', 'ios'],
+          onClick: props.ctaOnClick,
         },
         {
           text: 'Buy on Google Play',
           url: props.androidUrl,
           accessibilityHint: 'Proceed to buy the premium app in the play store',
           modifierClasses: ['premium-tier', 'border', 'android'],
+          onClick: props.ctaOnClick,
         },
       ]}
     />
@@ -125,11 +131,13 @@ function PremiumTier(props: {
 
 PremiumTier.defaultProps = {
   subheading: null,
+  ctaOnClick: () => {},
 };
 
 function DailyEdition(props: {
   url: string,
   headingSize: HeadingSize,
+  ctaOnClick?: ?Function,
 }) {
 
   return (
@@ -154,12 +162,17 @@ function DailyEdition(props: {
           url: props.url,
           accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
           modifierClasses: ['daily-edition', 'border'],
+          onClick: props.ctaOnClick,
         },
       ]}
     />
   );
 
 }
+
+DailyEdition.defaultProps = {
+  ctaOnClick: () => {},
+};
 
 function DigitalBundle(props: {
   countryGroupId: CountryGroupId,

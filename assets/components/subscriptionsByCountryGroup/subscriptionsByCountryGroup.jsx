@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import PaperSubscriptionsContainer from 'components/paperSubscriptions/paperSubscriptionsContainer';
 import DigitalSubscriptionsContainer from 'components/digitalSubscriptions/digitalSubscriptionsContainer';
 import InternationalSubscriptions from 'components/internationalSubscriptions/internationalSubscriptionsContainer';
-import { type HeadingSize } from 'components/heading/heading';
 
+import { type HeadingSize } from 'components/heading/heading';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type CommonState } from 'helpers/page/page';
 

@@ -79,8 +79,8 @@ const mapStateToProps = (state: State) => ({
   emailBlurred: state.page.form.formData.emailBlurred,
   state: state.page.form.formData.state || state.page.user.stateField,
   selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmount,
-  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  otherAmountBlurred: state.page.form.formData.otherAmounts[state.page.form.contributionType].blurred,
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
@@ -196,7 +196,7 @@ function ContributionForm(props: PropTypes) {
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
-            label="First Name"
+            label="First name"
             value={firstName}
             icon={<SvgUser />}
             autoComplete="given-name"
@@ -211,7 +211,7 @@ function ContributionForm(props: PropTypes) {
           <NewContributionTextInput
             id="contributionLastName"
             name="contribution-lname"
-            label="Last Name"
+            label="Last name"
             value={lastName}
             icon={<SvgUser />}
             autoComplete="family-name"
