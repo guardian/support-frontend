@@ -43,6 +43,7 @@ Object {
     "amount": 20,
     "checkoutFailureReason": null,
     "contributionType": "MONTHLY",
+    "guestAccountCreationToken": null,
     "payPalHasLoaded": false,
     "paymentMethod": "DirectDebit",
     "paymentStatus": "NotStarted",

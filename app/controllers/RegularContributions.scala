@@ -16,7 +16,7 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
-import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
+import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
 import admin.Settings
 import views.html.recurringContributions
@@ -132,19 +132,20 @@ class RegularContributions(
 
   private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
     val result = for {
-      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
-      user <- identityService.getUser(IdMinimalUser(userId, None))
+      userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
+      user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
       response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield response
+    } yield StatusResponse.fromStatusResponseAndToken(response, userIdWithOptionalToken.guestAccountRegistrationToken)
 
     result.fold(
       { error =>
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
         InternalServerError
       },
-      response =>
+      response => {
         Accepted(response.asJson)
           .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
+      }
 
     )
   }

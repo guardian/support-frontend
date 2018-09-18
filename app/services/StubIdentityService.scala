@@ -22,7 +22,7 @@ class StubIdentityService extends IdentityService {
     Future.successful(true)
   }
 
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
-    EitherT.rightT[Future, String]("123456")
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+    EitherT.rightT[Future, String](UserIdWithGuestAccountToken("123456", None))
   }
 }
