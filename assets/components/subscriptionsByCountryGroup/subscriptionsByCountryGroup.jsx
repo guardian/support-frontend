@@ -13,6 +13,7 @@ import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acqu
 import { getSubsLinks } from 'helpers/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getAppReferrer } from 'helpers/tracking/appStores';
 
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
@@ -25,6 +26,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   headingSize: HeadingSize,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  appMedium: string,
 };
 
 function mapStateToProps(state: { common: CommonState }) {
@@ -37,29 +39,27 @@ function mapStateToProps(state: { common: CommonState }) {
 }
 
 
-// ----- Setup ----- //
-
-const appReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page';
-const internationalAppReferrer = 'utm_source=support.theguardian.com&utm_medium=subscribe_landing_page&utm_campaign=international_subs_landing_pages';
-
-
 // ----- Component ----- //
 
 function SubscriptionsByCountryGroup(props: PropTypes) {
 
   const {
-    countryGroupId, headingSize, referrerAcquisitionData, ...otherProps
+    countryGroupId, headingSize, referrerAcquisitionData, appMedium, ...otherProps
   } = props;
+
   const subsLinks = getSubsLinks(
     countryGroupId,
     referrerAcquisitionData.campaignCode,
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
   );
+
   const className = classNameWithModifiers(
     'component-subscriptions-by-country-group',
     [countryGroups[countryGroupId].supportInternationalisationId],
   );
+
+  const appReferrer = getAppReferrer(appMedium, countryGroupId);
 
   if (countryGroupId === 'GBPCountries') {
     return (
@@ -84,7 +84,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
       <InternationalSection
         headingSize={headingSize}
         subsLinks={subsLinks}
-        appReferrer={internationalAppReferrer}
+        appReferrer={appReferrer}
       />
     </div>
   );
