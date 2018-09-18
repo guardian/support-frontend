@@ -78,11 +78,11 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element => {
   switch (countryGroupId) {
-    case 'GBPCountries': return <SvgPound />
-    case 'EURCountries': return <SvgEuro />
-    default: return <SvgDollar />
+    case 'GBPCountries': return <SvgPound />;
+    case 'EURCountries': return <SvgEuro />;
+    default: return <SvgDollar />;
   }
-}
+};
 
 
 function ContributionAmount(props: PropTypes) {

@@ -136,18 +136,18 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_BLURRED':
         switch (action.field) {
           case 'otherAmount':
-            return { 
-              ...state, 
-              formData: { 
-                ...state.formData, 
+            return {
+              ...state,
+              formData: {
+                ...state.formData,
                 otherAmounts: {
                   ...state.formData.otherAmounts,
                   [state.contributionType]: {
                     amount: state.formData.otherAmounts[state.contributionType].amount,
-                    blurred: true
-                  }
-                }
-              }
+                    blurred: true,
+                  },
+                },
+              },
             };
           case 'email':
             return { ...state, formData: { ...state.formData, emailBlurred: true } };
@@ -165,18 +165,18 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'UPDATE_OTHER_AMOUNT':
-        return { 
-          ...state, 
-          formData: { 
-            ...state.formData, 
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
             otherAmounts: {
               ...state.formData.otherAmounts,
               [state.contributionType]: {
                 amount: action.otherAmount,
-                blurred: state.formData.otherAmounts[state.contributionType].blurred 
-              } 
-            }
-          }
+                blurred: state.formData.otherAmounts[state.contributionType].blurred,
+              },
+            },
+          },
         };
 
       case 'PAYMENT_FAILURE':
