@@ -146,7 +146,7 @@ function Paper(props: {
       <SubscriptionBundle
         modifierClass="paper"
         heading="Paper"
-        subheading={`from ${displayPrice('Paper', 'GBPCountries')}`}
+        subheading={`from ${displayPrice('Paper', props.countryGroupId)}`}
         headingSize={props.headingSize}
         benefits={{
           list: false,
@@ -169,7 +169,7 @@ function Paper(props: {
       <SubscriptionBundle
         modifierClass="paper-digital"
         heading="Paper+Digital"
-        subheading={`from ${displayPrice('PaperAndDigital', 'GBPCountries')}`}
+        subheading={`from ${displayPrice('PaperAndDigital', props.countryGroupId)}`}
         headingSize={props.headingSize}
         benefits={{
           list: false,
