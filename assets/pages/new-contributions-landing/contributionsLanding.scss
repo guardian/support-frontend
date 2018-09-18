@@ -316,6 +316,8 @@ header[role="banner"] {
   }
 }
 
+
+
 @include mq($from: leftCol) {
   header[role="banner"] {
     padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
@@ -906,7 +908,7 @@ form {
   fill: gu-colour(garnett-neutral-5);
 }
 
-.svg-subscribe {
+.svg-subscribe, .svg-lock {
   width: 23px;
   height: 20px;
   fill: currentColor;
