@@ -32,7 +32,7 @@ const mapStateToProps = (state: State) =>
     isWaiting: state.page.form.isWaiting,
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
-    otherAmount: state.page.form.formData.otherAmount,
+    otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   });
 
 // ----- Render ----- //

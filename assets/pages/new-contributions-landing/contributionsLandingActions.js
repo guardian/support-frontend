@@ -108,7 +108,7 @@ const sendData = (data: PaymentFields) =>
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
-    ? state.page.form.formData.otherAmount
+    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
 const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
