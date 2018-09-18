@@ -19,7 +19,7 @@ import Footer from 'components/footer/footer';
 
 import { NewHeader } from 'components/headers/new-header/Header';
 import { NewContributionForm } from './components/ContributionForm';
-import { SignUpAsk } from './components/SignUpAsk';
+import { SignUpAsk } from './components/SignUpAsk/SignUpAsk';
 import { NewContributionBackground } from './components/ContributionBackground';
 
 import { initReducer } from './contributionsLandingReducer';

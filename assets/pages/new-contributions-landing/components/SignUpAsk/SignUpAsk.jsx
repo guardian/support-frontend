@@ -9,7 +9,8 @@ import { type Contrib, getSpokenType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgPasswordKey from 'components/svgs/passwordKey';
-import { NewContributionTextInput } from './ContributionTextInput';
+import SvgEnvelope from 'components/svgs/envelope';
+import { NewContributionTextInput } from '../ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -35,18 +36,25 @@ function SignUpAsk(props: PropTypes) {
           </p>
 
          <NewContributionTextInput
+           id="email"
+           name="contribution-email"
+           label="Email address"
+           value={"Example@domain.com"}
+           icon={<SvgEnvelope />}
+           autoComplete="off"
+           autoCapitalize="words"
+           required
+           disabled
+         />
+
+         <NewContributionTextInput
            id="password"
            name="contribution-password"
            label="Set a password"
-           value={"Example@domain.com"}
+           value={"******"}
            icon={<SvgPasswordKey />}
            autoComplete="off"
            autoCapitalize="words"
-           //  onInput={props.updateFirstName}
-           // onBlur={() => props.updateBlurred('firstName')}
-           //isValid={checkFirstName(firstName)}
-           //wasBlurred={firstNameBlurred}
-           //errorMessage="Please provide your first name"
            required
          />
        </section>
@@ -54,7 +62,7 @@ function SignUpAsk(props: PropTypes) {
   );
 }
 
-const NewContributionThanks = connect(mapStateToProps)(ContributionThanks);
+const SignUpAsk = connect(mapStateToProps)(SignUpAsk);
 
 
-export { NewContributionThanks };
+export { SignUpAsk };
