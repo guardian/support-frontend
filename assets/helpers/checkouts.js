@@ -14,6 +14,10 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
 
+type StripeHandler = { open: Function, close: Function };
+
+export type PaymentHandler = StripeHandler;
+
 export type RegularCheckoutCallback = (
   token?: string,
   accountNumber?: string,
@@ -66,9 +70,9 @@ function getPaymentDescription(contributionType: Contrib, paymentMethod: Payment
 function getPaymentLabel(paymentMethod: PaymentMethod): string {
   switch (paymentMethod) {
     case 'Stripe':
-      return 'Credit/Debit Card';
+      return 'Credit/Debit card';
     case 'DirectDebit':
-      return 'Debit Card';
+      return 'Direct debit';
     case 'PayPal':
     default:
       return 'PayPal';
