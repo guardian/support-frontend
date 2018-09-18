@@ -108,8 +108,9 @@ function postRequestOptions(
 
 /** Process the response for a one-off payment from the payment API */
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
-  if (json.failureReason) {
-    return Promise.resolve({ paymentStatus: 'failure', error: json.failureReason });
+  if (json.error) {
+    const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
+    return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
   return Promise.resolve(PaymentSuccess);
 }

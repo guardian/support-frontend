@@ -46,7 +46,7 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
-type OneOffStripeFailure = {| failureReason: CheckoutFailureReason |}
+type PaymentApiError = {| type: string, error: Object |}
 
 type OnSuccess = () => void;
 type OnFailure = CheckoutFailureReason => void;
@@ -92,8 +92,9 @@ function requestData(
   });
 }
 
-const handleFailure = (onFailure: OnFailure) => (failure: OneOffStripeFailure): void => {
-  onFailure(failure.failureReason);
+const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiError): void => {
+  const failureReason: CheckoutFailureReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
+  onFailure(failureReason);
 };
 
 const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
