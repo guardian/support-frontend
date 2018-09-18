@@ -76,7 +76,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
-const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element => {
+const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Node => {
   switch (countryGroupId) {
     case 'GBPCountries': return <SvgPound />;
     case 'EURCountries': return <SvgEuro />;
