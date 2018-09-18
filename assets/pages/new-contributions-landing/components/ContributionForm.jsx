@@ -23,6 +23,7 @@ import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -63,6 +64,7 @@ type PropTypes = {|
   updateBlurred: string => void,
   onWaiting: boolean => void,
   onThirdPartyPaymentDone: Token => void,
+  openDirectDebitPopUp: void => void,
   isDirectDebitPopUpOpen: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
@@ -84,7 +86,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
-  isDirectDebitPopUpOpen: state.page.form.isDirectDebitPopUpOpen,
+  isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
 });
 
 function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
@@ -102,6 +104,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateBlurred: (field) => { dispatch(updateBlurred(field)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
+  openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
 });
 
 // ----- Functions ----- //
@@ -136,7 +139,7 @@ function onSubmit(props: PropTypes): Event => void {
     if (props.paymentHandler) {
       switch (props.paymentMethod) {
         case 'DebitCard':
-          // TODO
+          props.openDirectDebitPopUp();
           break;
 
         case 'PayPal':
@@ -255,6 +258,7 @@ function ContributionForm(props: PropTypes) {
 
 ContributionForm.defaultProps = {
   error: null,
+  isDirectDebitPopUpOpen: false,
 };
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);

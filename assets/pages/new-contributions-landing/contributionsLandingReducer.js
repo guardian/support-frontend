@@ -10,6 +10,8 @@ import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { type Action } from './contributionsLandingActions';
@@ -40,13 +42,13 @@ type FormState = {
   isWaiting: boolean,
   formData: FormData,
   done: boolean,
-  isDirectDebitPopUpOpen: boolean,
 };
 
 type PageState = {
   form: FormState,
   user: UserState,
   csrf: CsrfState,
+  directDebit: DirectDebitState,
 };
 
 export type State = {
@@ -98,7 +100,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     selectedAmounts: initialAmount,
     isWaiting: false,
     done: false,
-    isDirectDebitPopUpOpen: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -201,6 +202,7 @@ function initReducer(countryGroupId: CountryGroupId) {
   return combineReducers({
     form: createFormReducer(countryGroupId),
     user: createUserReducer(countryGroupId),
+    directDebit,
     csrf,
   });
 }
