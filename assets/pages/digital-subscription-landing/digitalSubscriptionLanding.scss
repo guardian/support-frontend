@@ -243,6 +243,10 @@
     display: block;
   }
 
+  .digital-subscription-landing-header__wrapper {
+    position: relative;
+  }
+
   .digital-subscription-landing-header__picture {
     @include mq($until: tablet) {
       height: 351px
@@ -253,6 +257,17 @@
     @include mq($from: leftCol) {
       height: 389px;
     }
+  }
+
+  .digital-subscription-landing-header__product {
+    background-color: gu-colour(news-garnett-highlight);
+    width: 144px;
+    position: absolute;
+    top: -44px;
+    font-family: $gu-headline;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 4px 12px;
   }
 
   .digital-subscription-landing-header__title {

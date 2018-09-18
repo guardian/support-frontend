@@ -141,8 +141,13 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <div className="digital-subscription-landing-header__picture">
           <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
-        <div className="digital-subscription-landing-header__title">
-          <h1 className="digital-subscription-landing-header__title-copy">Support The Guardian with a digital subscription</h1>
+        <div className="digital-subscription-landing-header__wrapper">
+          <div className="digital-subscription-landing-header__product">
+            Digital Pack
+          </div>
+          <div className="digital-subscription-landing-header__title">
+            <h1 className="digital-subscription-landing-header__title-copy">Support The Guardian with a digital subscription</h1>
+          </div>
         </div>
         <PriceCtaContainer dark referringCta="support_digipack_page_header" />
       </LeftMarginSection>
