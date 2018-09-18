@@ -23,8 +23,9 @@ type FormData = {
   lastNameBlurred: boolean,
   email: string | null,
   emailBlurred: boolean,
-  otherAmount: string | null,
-  otherAmountBlurred: boolean,
+  otherAmounts: {
+    [Contrib]: { amount: string | null, blurred: boolean }
+  },
   state: UsState | CaState | null,
 };
 
@@ -85,8 +86,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       lastNameBlurred: false,
       email: null,
       emailBlurred: false,
-      otherAmount: null,
-      otherAmountBlurred: false,
+      otherAmounts: {
+        ONE_OFF: { amount: null, blurred: false },
+        MONTHLY: { amount: null, blurred: false },
+        ANNUAL: { amount: null, blurred: false },
+      },
       state: null,
     },
     showOtherAmount: false,
@@ -132,7 +136,19 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_BLURRED':
         switch (action.field) {
           case 'otherAmount':
-            return { ...state, formData: { ...state.formData, otherAmountBlurred: true } };
+            return {
+              ...state,
+              formData: {
+                ...state.formData,
+                otherAmounts: {
+                  ...state.formData.otherAmounts,
+                  [state.contributionType]: {
+                    amount: state.formData.otherAmounts[state.contributionType].amount,
+                    blurred: true,
+                  },
+                },
+              },
+            };
           case 'email':
             return { ...state, formData: { ...state.formData, emailBlurred: true } };
           case 'lastName':
@@ -149,7 +165,19 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'UPDATE_OTHER_AMOUNT':
-        return { ...state, formData: { ...state.formData, otherAmount: action.otherAmount } };
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            otherAmounts: {
+              ...state.formData.otherAmounts,
+              [state.contributionType]: {
+                amount: action.otherAmount,
+                blurred: state.formData.otherAmounts[state.contributionType].blurred,
+              },
+            },
+          },
+        };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
