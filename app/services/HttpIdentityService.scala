@@ -204,7 +204,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     ) { resp =>
         resp.json.validate[GuestRegistrationResponse]
           .asEither
-          .bimap( _.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
+          .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
       }
   }
 
