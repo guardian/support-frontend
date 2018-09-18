@@ -1,8 +1,6 @@
 package model.stripe
 
 import com.stripe.exception._
-import io.circe.generic.JsonCodec
-
 import PartialFunction.condOpt
 
 // exceptionType: The type of exception - eg CardException, ApiException etc
@@ -10,14 +8,12 @@ import PartialFunction.condOpt
 // responseCode: The http status code returned by the Stripe API: eg 400, 403, 500 etc.
 // See here for more details on exception types and http status codes: https://stripe.com/docs/api/java#errors
 //
-// errorName: For some exception types, such as CardException, there is an extra field which gives a more detailed name
-// for the error - this can normally be displayed to the user.
-// See here for more information on errorNames (NB: Stripe calls these error codes):
-// https://stripe.com/docs/error-codes
+// declineCode: Detailed information from the card issuer which explains why a charge was declined. Only relevant for CardExceptions.
+// https://stripe.com/docs/declines/codes
 //
 // requestID: This field contains an identifying key for the request which can be used for debugging and investigating any failures
 
-@JsonCodec case class StripeApiError private (exceptionType: Option[String], responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], declineCode: Option[String], message: String) extends Exception {
   override val getMessage: String = message
 }
 
@@ -43,9 +39,9 @@ object StripeApiError {
       }
     }
 
-    val errorName: Option[String] = condOpt(err) { case e: CardException => e.getCode }
+    val declineCode: Option[String] = condOpt(err) { case e: CardException => e.getDeclineCode }
 
-    StripeApiError(exceptionType, Option(err.getStatusCode), errorName, err.getMessage)
+    StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage)
 
   }
 }

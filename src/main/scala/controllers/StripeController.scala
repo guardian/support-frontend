@@ -4,11 +4,11 @@ import actions.CorsActionProvider
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
+import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 import backend.StripeBackend
-import model.stripe.{StripeApiError, StripeChargeData, StripeRefundHook}
-import model.{DefaultThreadPool, ResultBody}
+import model.stripe.{StripeChargeData, StripeRefundHook}
+import model.{CheckoutErrorResponse, DefaultThreadPool, ResultBody}
 
 class StripeController(
   cc: ControllerComponents,
@@ -18,16 +18,16 @@ class StripeController(
 
   import util.RequestTypeDecoder.instances._
   import model.stripe.StripeJsonDecoder._
-
-  def toErrorResult(error: StripeApiError): Result = {
-    new Status(error.responseCode.getOrElse(INTERNAL_SERVER_ERROR))(ResultBody.Error(error))
-  }
+  import model.CheckoutError.checkoutErrorEncoder
 
   def executePayment: Action[StripeChargeData] = CorsAction.async(circe.json[StripeChargeData]) { request => {
       stripeBackendProvider.getInstanceFor(request)
         .createCharge(request.body, request.countrySubdivisionCode)
         .fold(
-          err => toErrorResult(err),
+          err => {
+            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+          },
           charge => Ok(ResultBody.Success(charge))
         )
       }

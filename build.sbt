@@ -38,6 +38,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
+  "com.gu" %% "support-models" % "0.32",
   "com.gu" %% "ophan-event-model" % "0.0.6",
   "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
   "com.gu" %% "acquisition-event-producer-play26" % "4.0.3",

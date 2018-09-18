@@ -6,6 +6,7 @@ import backend.{PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
 import backend.BackendError
+import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
 import model.stripe.{StripeApiError, StripeChargeSuccess}
@@ -16,6 +17,7 @@ import org.scalatestplus.play._
 import play.api._
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
+import play.api.libs.json.Json
 import play.api.libs.json.Json._
 import play.api.mvc._
 import play.api.routing.Router
@@ -47,8 +49,11 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val stripeServiceResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
     EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)
 
-  val stripeServiceResponseError: EitherT[Future, StripeApiError, StripeChargeSuccess] =
-    EitherT.left(Future.successful(StripeApiError.fromThrowable(new Exception("error message"))))
+  val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
+    EitherT.leftT[Future, StripeChargeSuccess](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", 500, new Throwable)))
+
+  val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
+    EitherT.leftT[Future, StripeChargeSuccess](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable)))
 
   val mockEvent: Event = mock[Event]
 
@@ -56,7 +61,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.right(Future.successful(()))
 
   val processRefundHookFailure: EitherT[Future, BackendError, Unit] =
-    EitherT.left(Future.successful(BackendError.fromStripeApiError(StripeApiError.fromString("Error response"))))
+    EitherT.leftT[Future, Unit](BackendError.fromStripeApiError(StripeApiError.fromString("Error response")))
 
   val stripeController: StripeController =
     new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
@@ -335,10 +340,38 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(400)
       }
 
-      "return 500 response if the response from the service contains an error" in {
+      "return a 402 response with an appropriate failure reason if the response from the service contains a CardException" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceResponseError)
+            .thenReturn(stripeServiceCardErrorResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "currency": "GBP",
+              |  "amount": 1,
+              |  "token": "token",
+              |  "email": "email@theguardian.com"
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+
+        status(stripeControllerResult).mustBe(402)
+
+        val expectedBody = Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "payment_method_unacceptable"))
+        contentAsJson(stripeControllerResult).mustBe(expectedBody)
+
+      }
+
+      "return a 500 response if the response from the service contains an error (other than a CardException)" in {
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.createCharge(any(), any()))
+            .thenReturn(stripeServiceInvalidRequestErrorResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
@@ -357,6 +390,9 @@ class StripeControllerSpec extends PlaySpec with Status {
           Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(500)
+
+        val expectedBody = Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "unknown"))
+        contentAsJson(stripeControllerResult).mustBe(expectedBody)
       }
     }
 
