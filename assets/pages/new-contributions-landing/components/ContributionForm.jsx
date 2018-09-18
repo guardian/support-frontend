@@ -245,6 +245,7 @@ function ContributionForm(props: PropTypes) {
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
         <DirectDebitPopUpForm
+          // TODO: put payment through
           callback={() => Promise.resolve()}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
