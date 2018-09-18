@@ -12,6 +12,8 @@ import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spoke
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
+import SvgEuro from 'components/svgs/euro';
+import SvgPound from 'components/svgs/pound';
 
 import { type Action, selectAmount, updateOtherAmount, updateBlurred } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
@@ -74,6 +76,14 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
+const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element => {
+  switch (countryGroupId) {
+    case 'GBPCountries': return <SvgPound />
+    case 'EURCountries': return <SvgEuro />
+    default: return <SvgDollar />
+  }
+}
+
 
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
@@ -107,7 +117,7 @@ function ContributionAmount(props: PropTypes) {
           type="number"
           label="Other amount"
           value={props.otherAmount}
-          icon={<SvgDollar />}
+          icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
           onBlur={() => props.updateBlurred()}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
