@@ -38,8 +38,8 @@ const mapStateToProps = state => ({
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmount,
-  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  otherAmountBlurred: state.page.form.formData.otherAmounts[state.page.form.contributionType].blurred,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
