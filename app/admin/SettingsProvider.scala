@@ -51,7 +51,7 @@ object SettingsProvider {
 
   def fromConfigurationUnsafe(config: Config)(implicit s3: AmazonS3): SettingsProvider =
     fromConfiguration(config).valueOr { error =>
-      throw new RuntimeException("unable to load settings provider from config", error)
+      throw new RuntimeException(s"unable to load settings provider from config. ${error.getMessage}")
     }
 }
 
