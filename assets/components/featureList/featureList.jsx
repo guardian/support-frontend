@@ -25,16 +25,16 @@ type PropTypes = {
 function FeatureList(props: PropTypes) {
 
   const items = props.listItems.map((item: ListItem) => (
-    <div className="component-feature-list__item">
+    <li className="component-feature-list__item">
       <ItemHeading heading={item.heading ? item.heading : null} />
       <ItemText text={item.text ? item.text : null} />
-    </div>
+    </li>
   ));
 
   return (
-    <div className={classNameWithModifiers('component-feature-list', [props.modifierClass])}>
+    <ul className={classNameWithModifiers('component-feature-list', [props.modifierClass])}>
       { items }
-    </div>
+    </ul>
   );
 
 }

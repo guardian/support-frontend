@@ -171,7 +171,6 @@
 
   .component-feature-list__item {
     margin-bottom: $gu-v-spacing / 2;
-    display: list-item;
 
     @include mq($from: leftCol) {
       width: 200px;
