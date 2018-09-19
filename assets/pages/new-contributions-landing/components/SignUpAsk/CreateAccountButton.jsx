@@ -4,16 +4,16 @@
 
 import React from 'react';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import {classNameWithModifiers} from "../../../../helpers/utilities";
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
 // ----- Render ----- //
 
 
-function CreateAccountButton(props: PropTypes) {
+function CreateAccountButton() {
 
-  const accessibilityHintId = "accessibility-hint-create-account";
+  const accessibilityHintId = 'accessibility-hint-create-account';
 
   return (
     <div className="form__submit">

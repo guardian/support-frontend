@@ -35,6 +35,7 @@ function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.checkoutFormHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
 
+
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
       <label className="form__label" htmlFor={props.id}>
@@ -43,7 +44,7 @@ function NewContributionTextInput(props: PropTypes) {
       <span className="form__input-with-icon">
         <input
           id={props.id}
-          className={classNameWithModifiers('form__input', showError ? ['invalid'] : [])}
+          className={classNameWithModifiers('form__input', modifiersArray)}
           type={props.type}
           autoCapitalize={props.autoCapitalize}
           autoComplete={props.autoComplete}
@@ -83,4 +84,4 @@ ContributionTextInput.defaultProps = {
   disabled: false,
 };
 
-export { NewContributionTextInput };
+export { ContributionTextInput };

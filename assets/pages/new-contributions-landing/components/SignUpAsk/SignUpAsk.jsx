@@ -5,14 +5,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type Contrib, getSpokenType } from 'helpers/contributions';
+import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
+import CtaLink from 'components/ctaLink/ctaLink';
 import { NewContributionTextInput } from '../ContributionTextInput';
 import { CreateAccountButton } from './CreateAccountButton';
-import CtaLink from "../../../../components/ctaLink/ctaLink";
 
 // ----- Types ----- //
 
@@ -25,6 +25,7 @@ type PropTypes = {
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   email: state.page.user.email,
+  guestAccountCreationToken: state.page.
 });
 
 
