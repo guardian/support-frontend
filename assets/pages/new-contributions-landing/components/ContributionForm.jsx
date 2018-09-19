@@ -138,7 +138,7 @@ function onSubmit(props: PropTypes): Event => void {
 
     if (props.paymentHandler) {
       switch (props.paymentMethod) {
-        case 'DebitCard':
+        case 'DirectDebit':
           props.openDirectDebitPopUp();
           break;
 
