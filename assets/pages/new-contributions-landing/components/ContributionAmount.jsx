@@ -15,7 +15,7 @@ import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount, updateBlurred } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -28,10 +28,9 @@ type PropTypes = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   selectAmount: (Amount | 'other', Contrib) => (() => void),
   otherAmount: string | null,
-  otherAmountBlurred: boolean,
   checkOtherAmount: string => boolean,
   updateOtherAmount: string => void,
-  updateBlurred: () => void,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -41,13 +40,12 @@ const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
-  otherAmountBlurred: state.page.form.formData.otherAmounts[state.page.form.contributionType].blurred,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
   updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
-  updateBlurred: () => { dispatch(updateBlurred('otherAmount')); },
 });
 
 // ----- Render ----- //
@@ -119,9 +117,8 @@ function ContributionAmount(props: PropTypes) {
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
-          onBlur={() => props.updateBlurred()}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
-          wasBlurred={props.otherAmountBlurred}
+          checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
           min={min}
