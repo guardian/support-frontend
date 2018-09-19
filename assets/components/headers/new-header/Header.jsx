@@ -42,11 +42,13 @@ function NewHeader(props: PropTypes) {
       { props.selectedCountryGroup ? (
         <details className="countryGroups">
           <summary aria-label={`Selected country: ${props.selectedCountryGroup.name} (${currencies[props.selectedCountryGroup.currency].glyph})`}>
-            <SvgGlobe />
-            <span className="countryGroups__label">{props.selectedCountryGroup.name} ({currencies[props.selectedCountryGroup.currency].extendedGlyph})</span>
-            <span className="icon icon--arrows">
-              <SvgChevron />
-            </span>
+            <div className="countryGroups__summary-wrapper">
+              <SvgGlobe />
+              <span className="countryGroups__label">{props.selectedCountryGroup.name} ({currencies[props.selectedCountryGroup.currency].extendedGlyph})</span>
+              <span className="icon icon--arrows">
+                <SvgChevron />
+              </span>
+            </div>
           </summary>
           <ul className="countryGroups__list">
             {(Object.values(countryGroups): any).map(renderCountryGroup((props.selectedCountryGroup: any)))}
