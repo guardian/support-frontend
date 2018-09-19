@@ -86,6 +86,8 @@ class SendThankYouEmailSpec extends LambdaSpec {
       .validate("first payment date", "Monday, 10 January 2000")
       .validate("payment method", "Direct Debit")
       .validate("currency", "£")
+      .validate("SfContactId", "sfContactId")
+      .validate("IdentityUserId", "identityId")
   }
 
   it should "still work without a Payment Method" in {
