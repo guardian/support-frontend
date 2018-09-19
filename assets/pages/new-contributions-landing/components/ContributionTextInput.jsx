@@ -18,8 +18,9 @@ type PropTypes = {
   value: string | null,
   errorMessage: string | null,
   isValid: boolean,
-  checkoutFormHasBeenSubmitted: boolean,
+  wasBlurred: boolean,
   onInput: (Event => void) | void,
+  onBlur: (Event => void) | void,
   required?: boolean,
   autoCapitalize: 'off' | 'none' | 'on' | 'sentences' | 'words',
   autoComplete: 'off' | 'on' | 'name' | 'given-name' | 'family-name' | 'email',
@@ -49,6 +50,7 @@ function NewContributionTextInput(props: PropTypes) {
           required={props.required}
           placeholder={props.placeholder}
           onInput={props.onInput}
+          onBlur={props.onBlur}
           value={props.value}
           min={props.min}
           max={props.max}
@@ -71,6 +73,7 @@ NewContributionTextInput.defaultProps = {
   placeholder: false,
   required: false,
   onInput: undefined,
+  onBlur: undefined,
   value: null,
   autoCapitalize: 'none',
   autoComplete: 'on',

@@ -15,7 +15,7 @@ import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -39,7 +39,7 @@ import {
   updateLastName,
   updateEmail,
   updateState,
-  onThirdPartyPaymentAuthorised,
+  onThirdPartyPaymentDone,
   setCheckoutFormHasBeenSubmitted,
 } from '../contributionsLandingActions';
 
@@ -66,7 +66,7 @@ type PropTypes = {|
   updateEmail: Event => void,
   updateState: Event => void,
   onWaiting: boolean => void,
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  onThirdPartyPaymentDone: Token => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
@@ -106,7 +106,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
+  onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
 });
@@ -174,9 +174,9 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
+  const paymentCallback = (token: Token) => {
     props.onWaiting(true);
-    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
+    props.onThirdPartyPaymentDone(token);
   };
 
   const checkOtherAmount: string => boolean = input =>
@@ -241,7 +241,7 @@ function ContributionForm(props: PropTypes) {
             required
           />
           <NewContributionState onChange={props.updateState} value={state} />
-          <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
+          <NewContributionPayment paymentCallback={paymentCallback} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
