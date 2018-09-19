@@ -41,7 +41,7 @@ const defaultFeatures: ListItem[] = [
   },
   {
     heading: 'Enhanced offline reading',
-    text: 'Download the day\'s news before you travel',
+    text: 'Quality journalism on your schedule - download the day\'s news before you travel',
   },
 ];
 
