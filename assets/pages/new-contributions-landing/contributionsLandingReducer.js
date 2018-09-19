@@ -18,15 +18,13 @@ import { type Action } from './contributionsLandingActions';
 
 type FormData = {
   firstName: string | null,
-  firstNameBlurred: boolean,
   lastName: string | null,
-  lastNameBlurred: boolean,
   email: string | null,
-  emailBlurred: boolean,
   otherAmounts: {
-    [Contrib]: { amount: string | null, blurred: boolean }
+    [Contrib]: { amount: string | null }
   },
   state: UsState | CaState | null,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 
 type FormState = {
@@ -81,17 +79,15 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentReady: false,
     formData: {
       firstName: null,
-      firstNameBlurred: false,
       lastName: null,
-      lastNameBlurred: false,
       email: null,
-      emailBlurred: false,
       otherAmounts: {
-        ONE_OFF: { amount: null, blurred: false },
-        MONTHLY: { amount: null, blurred: false },
-        ANNUAL: { amount: null, blurred: false },
+        ONE_OFF: { amount: null },
+        MONTHLY: { amount: null },
+        ANNUAL: { amount: null },
       },
       state: null,
+      checkoutFormHasBeenSubmitted: false,
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
@@ -133,31 +129,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-      case 'UPDATE_BLURRED':
-        switch (action.field) {
-          case 'otherAmount':
-            return {
-              ...state,
-              formData: {
-                ...state.formData,
-                otherAmounts: {
-                  ...state.formData.otherAmounts,
-                  [state.contributionType]: {
-                    amount: state.formData.otherAmounts[state.contributionType].amount,
-                    blurred: true,
-                  },
-                },
-              },
-            };
-          case 'email':
-            return { ...state, formData: { ...state.formData, emailBlurred: true } };
-          case 'lastName':
-            return { ...state, formData: { ...state.formData, lastNameBlurred: true } };
-          case 'firstName':
-          default:
-            return { ...state, formData: { ...state.formData, firstNameBlurred: true } };
-        }
-
       case 'SELECT_AMOUNT':
         return {
           ...state,
@@ -173,7 +144,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
               ...state.formData.otherAmounts,
               [state.contributionType]: {
                 amount: action.otherAmount,
-                blurred: state.formData.otherAmounts[state.contributionType].blurred,
               },
             },
           },
@@ -187,6 +157,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };
+
+      case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
+        return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
 
       default:
         return state;

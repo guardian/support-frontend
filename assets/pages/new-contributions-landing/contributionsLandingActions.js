@@ -20,12 +20,12 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
-  | { type: 'UPDATE_BLURRED', field: FieldName }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', error: string }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
+  | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib): Action =>
@@ -42,12 +42,12 @@ const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email })
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
-const updateBlurred = (field: FieldName): Action => ({ type: 'UPDATE_BLURRED', field });
-
 const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
   });
+
+const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -172,7 +172,6 @@ export {
   updateLastName,
   updateEmail,
   updateState,
-  updateBlurred,
   isPaymentReady,
   selectAmount,
   updateOtherAmount,
@@ -180,4 +179,5 @@ export {
   paymentWaiting,
   paymentSuccess,
   onThirdPartyPaymentDone,
+  setCheckoutFormHasBeenSubmitted,
 };
