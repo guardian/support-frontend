@@ -60,6 +60,7 @@ header[role="banner"] {
   width: 100%;
 }
 
+// Safari doesn't respect styles applied to <summary> so we need this wrapper div
 .countryGroups__summary-wrapper {
   align-items: center;
   color: gu-colour(garnett-neutral-2);
