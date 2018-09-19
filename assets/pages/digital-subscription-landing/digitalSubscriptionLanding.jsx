@@ -56,9 +56,7 @@ const content = (
     >
       <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
-      <LeftMarginSection modifierClasses={['grey']}>
-        <IndependentJournalismSection />
-      </LeftMarginSection>
+      <IndependentJournalismSection />
     </Page>
   </Provider>
 );
