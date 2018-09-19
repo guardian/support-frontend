@@ -25,17 +25,17 @@ class EmailFieldsSpec extends FlatSpec with Matchers {
 
     val Right(serializedJson) = parse(
       EmailPayload(
-        EmailPayloadTo(
-          "email@email.com",
-          "email@email.com",
-          EmailPayloadContactAttributes(
-            Map("attribute1" -> "value1", "attribute2" -> "value2")
-          )
-        ),
-        "dataExtensionName",
-        Some("sfContactId"),
-        Some("identityUserId")
-      ).jsonString
+      EmailPayloadTo(
+        "email@email.com",
+        "email@email.com",
+        EmailPayloadContactAttributes(
+          Map("attribute1" -> "value1", "attribute2" -> "value2")
+        )
+      ),
+      "dataExtensionName",
+      Some("sfContactId"),
+      Some("identityUserId")
+    ).jsonString
     )
 
     serializedJson shouldBe expectedJson

@@ -3,6 +3,7 @@ package com.gu.emailservices
 import com.gu.i18n.Currency
 import com.gu.support.workers.model.{BillingPeriod, DirectDebitPaymentMethod, PaymentMethod}
 import org.joda.time.DateTime
+import com.gu.salesforce.Salesforce.SfContactId
 
 case class ContributionEmailFields(
     email: String,
@@ -12,8 +13,7 @@ case class ContributionEmailFields(
     edition: String,
     name: String,
     billingPeriod: BillingPeriod,
-    sfContactId: Option[String],
-    identityId: Option[String],
+    sfContactId: SfContactId,
     paymentMethod: Option[PaymentMethod] = None,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
@@ -41,4 +41,6 @@ case class ContributionEmailFields(
   ) ++ paymentFields
 
   override def payload: String = super.payload(email, "regular-contribution-thank-you")
+
+  override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
 }

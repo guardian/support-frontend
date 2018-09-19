@@ -96,4 +96,6 @@ object Salesforce {
     def isFresh: Boolean = issued_at.isAfter(DateTime.now().minusMinutes(expiryTimeMinutes))
   }
 
+  case class SfContactId(id: String)
+
 }

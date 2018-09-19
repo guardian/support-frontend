@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields}
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, IdentityUserId}
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
@@ -9,7 +9,7 @@ import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.CheckoutFailureReasons._
 import com.gu.support.workers.model.states.{CheckoutFailureState, FailureHandlerState}
-import com.gu.support.workers.model.{ExecutionError, RequestInfo, Contribution, DigitalPack}
+import com.gu.support.workers.model.{Contribution, DigitalPack, ExecutionError, RequestInfo}
 import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -36,8 +36,8 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
 
   private def sendEmail(state: FailureHandlerState) = {
     val emailFields = state.product match {
-      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, None, Some(state.user.id))
-      case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, None, Some(state.user.id))
+      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+      case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
     }
     SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)

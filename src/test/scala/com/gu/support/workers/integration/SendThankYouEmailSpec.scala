@@ -7,6 +7,7 @@ import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, Em
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -44,7 +45,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Monthly, Some("sfContactId"), Some("identityId"), Some(dd), Some(mandateId)
+      "UK", "", Monthly, SfContactId("sfContactId"), Some(dd), Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -62,8 +63,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       user,
       GBP,
       dd,
-      Some("sfContactId"),
-      Some("identityId"),
+      SfContactId("sfContactId"),
       Some(mandateId)
     )
     val service = new EmailService
@@ -73,7 +73,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", Monthly, Some("sfContactId"), Some("identityId"), Some(dd), Some(mandateId))
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", Monthly, SfContactId("sfContactId"), Some(dd), Some(mandateId))
     val resultJson = parse(ef.payload)
 
     resultJson.isRight should be(true)
@@ -87,11 +87,10 @@ class SendThankYouEmailSpec extends LambdaSpec {
       .validate("payment method", "Direct Debit")
       .validate("currency", "£")
       .validate("SfContactId", "sfContactId")
-      .validate("IdentityUserId", "identityId")
   }
 
   it should "still work without a Payment Method" in {
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", Monthly, Some("sfContactId"), Some("identityId"))
+    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", Monthly, SfContactId("sfContactId"))
     val resultJson = parse(ef.payload)
     resultJson.isRight should be(true)
     (resultJson.right.get \\ "payment method").isEmpty should be(true)

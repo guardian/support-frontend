@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import io.circe.generic.auto._
 import io.circe.syntax._
+import com.gu.salesforce.Salesforce.SfContactId
 
 case class EmailPayloadContactAttributes(SubscriberAttributes: Map[String, String])
 case class EmailPayloadTo(Address: String, SubscriberKey: String, ContactAttributes: EmailPayloadContactAttributes)
@@ -11,13 +12,14 @@ case class EmailPayload(To: EmailPayloadTo, DataExtensionName: String, SfContact
   lazy val jsonString: String = this.asJson.toString
 }
 
+case class IdentityUserId(id: String)
+
 trait EmailFields {
 
   val fields: List[(String, String)] = Nil
 
   def payload: String
-  def sfContactId: Option[String]
-  def identityId: Option[String]
+  def userId: Either[SfContactId, IdentityUserId]
 
   protected def payload(email: String, dataExtensionName: String): String = {
     EmailPayload(
@@ -27,8 +29,8 @@ trait EmailFields {
         ContactAttributes = EmailPayloadContactAttributes(SubscriberAttributes = fields.toMap)
       ),
       DataExtensionName = dataExtensionName,
-      SfContactId = sfContactId,
-      IdentityUserId = identityId
+      SfContactId = userId.left.toOption.map(_.id),
+      IdentityUserId = userId.right.toOption.map(_.id)
     ).jsonString
   }
 

@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService}
 import com.gu.monitoring.SafeLogger
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.states.SendThankYouEmailState
@@ -50,8 +51,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           edition = state.user.country.alpha2,
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
-          sfContactId = Some(state.salesForceContact.Id),
-          identityId = None,
+          sfContactId = SfContactId(state.salesForceContact.Id),
           paymentMethod = Some(state.paymentMethod),
           directDebitMandateId = directDebitMandateId
         )
@@ -62,8 +62,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           currency = d.currency,
           paymentMethod = state.paymentMethod,
           directDebitMandateId = directDebitMandateId,
-          sfContactId = Some(state.salesForceContact.Id),
-          identityId = None
+          sfContactId = SfContactId(state.salesForceContact.Id)
         )
       }
     )
