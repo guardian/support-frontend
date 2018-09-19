@@ -12,6 +12,8 @@ case class ContributionEmailFields(
     edition: String,
     name: String,
     billingPeriod: BillingPeriod,
+    sfContactId: Option[String],
+    identityId: Option[String],
     paymentMethod: Option[PaymentMethod] = None,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {

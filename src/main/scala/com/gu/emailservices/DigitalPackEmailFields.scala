@@ -41,6 +41,8 @@ case class DigitalPackEmailFields(
     user: User,
     currency: Currency,
     paymentMethod: PaymentMethod,
+    sfContactId: Option[String],
+    identityId: Option[String],
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 

@@ -36,8 +36,8 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
 
   private def sendEmail(state: FailureHandlerState) = {
     val emailFields = state.product match {
-      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress)
-      case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress)
+      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, None, Some(state.user.id))
+      case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, None, Some(state.user.id))
     }
     SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)

@@ -50,6 +50,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           edition = state.user.country.alpha2,
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
+          sfContactId = Some(state.salesForceContact.Id),
+          identityId = None,
           paymentMethod = Some(state.paymentMethod),
           directDebitMandateId = directDebitMandateId
         )
@@ -59,7 +61,9 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           user = state.user,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId
+          directDebitMandateId = directDebitMandateId,
+          sfContactId = Some(state.salesForceContact.Id),
+          identityId = None
         )
       }
     )

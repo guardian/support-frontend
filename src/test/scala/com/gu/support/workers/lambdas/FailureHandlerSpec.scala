@@ -27,7 +27,7 @@ class FailureHandlerSpec extends LambdaSpec {
     val service = new EmailService
     val email = "rupert.bates@theguardian.com"
     service
-      .send(FailedContributionEmailFields(email))
+      .send(FailedContributionEmailFields(email, Some("sfContactId"), Some("identityId")))
       .map(result => result.getMessageId should not be "")
   }
 
@@ -60,7 +60,6 @@ class FailureHandlerSpec extends LambdaSpec {
 
     requestInfo.failed should be(true)
     checkoutFailureState.checkoutFailureReason should be(Unknown)
-
 
   }
 
@@ -122,7 +121,7 @@ class FailureHandlerSpec extends LambdaSpec {
 
     val emailService = mock[EmailService]
     val result = mock[SendMessageResult]
-    val testFields = FailedDigitalPackEmailFields("test@gu.com")
+    val testFields = FailedDigitalPackEmailFields("test@gu.com", Some("sfContactId"), Some("identityId"))
 
     when(emailService.send(testFields)).thenReturn(Future.successful(result))
 
