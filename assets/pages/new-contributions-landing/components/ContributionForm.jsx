@@ -187,7 +187,7 @@ function ContributionForm(props: PropTypes) {
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
+        <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
