@@ -74,9 +74,10 @@
   height: 40px;
   width: 40px;
   float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .svg-cross {
-    padding-left: 1px;
-    padding-top: 3px;
     height: 19px;
   }
 }
