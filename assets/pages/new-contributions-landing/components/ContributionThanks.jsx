@@ -11,8 +11,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgNewsletters from 'components/svgs/newsletters';
-import SvgPasswordKey from 'components/svgs/passwordKey';
-import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -40,24 +38,6 @@ function ContributionThanks(props: PropTypes) {
           </p>
         </section>
       ) : null}
-
-      <section>
-        <NewContributionTextInput
-          id="password"
-          name="contribution-password"
-          label="Set a password"
-          value={"Example@domain.com"}
-          icon={<SvgPasswordKey />}
-          autoComplete="off"
-          autoCapitalize="words"
-        //  onInput={props.updateFirstName}
-         // onBlur={() => props.updateBlurred('firstName')}
-          //isValid={checkFirstName(firstName)}
-          //wasBlurred={firstNameBlurred}
-          //errorMessage="Please provide your first name"
-          required
-        />
-      </section>
 
       <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
         <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>

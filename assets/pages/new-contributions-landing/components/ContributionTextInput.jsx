@@ -33,6 +33,7 @@ type PropTypes = {
 
 function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.checkoutFormHasBeenSubmitted;
+  const modifiersArray = showError ? ['invalid', props.id] : [props.id];
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
@@ -68,7 +69,7 @@ function NewContributionTextInput(props: PropTypes) {
   );
 }
 
-NewContributionTextInput.defaultProps = {
+ContributionTextInput.defaultProps = {
   type: 'text',
   placeholder: false,
   required: false,

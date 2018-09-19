@@ -3,6 +3,8 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
+@import '~components/ctaLink/ctaLink';
+@import 'components/SignUpAsk/signUpAsk';
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/errorMessage/errorMessage';
@@ -63,8 +65,7 @@ header[role="banner"] {
   width: 100%;
 }
 
-// Safari doesn't respect styles applied to <summary> so we need this wrapper div
-.countryGroups__summary-wrapper {
+.countryGroups summary {
   align-items: center;
   color: gu-colour(garnett-neutral-2);
   display: flex;
@@ -167,21 +168,21 @@ body {
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
-.header {
+h1 {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   color: gu-colour(garnett-neutral-1);
   font: bold 32px/1.15 $gu-headline;
   margin: 0 -10px;
   padding: 0 10px $gu-v-spacing;
 }
-
+ 
 input,
 select,
 textarea,
 button {
   font: inherit;
 }
-
+  
 .blurb {
   font-size: 14px;
   line-height: 1.4;
@@ -210,7 +211,7 @@ header[role="banner"] {
 }
 
 @include mq($from: mobile, $until: tablet) {
-  .header {
+  h1 {
     border: 0;
     position: absolute;
     top: 0;
@@ -236,7 +237,7 @@ header[role="banner"] {
   .gu-content__bg .svg-contributions-bg-desktop {
     display: none;
   }
-
+  
   .gu-content__bg .svg-contributions-bg-mobile {
     bottom: 0;
     height: 223px;
@@ -284,7 +285,7 @@ header[role="banner"] {
   .countryGroups__item .icon {
     margin-left: -40px;
   }
-
+    
   .gu-content__content {
     border-color: gu-colour(garnett-neutral-4);
     border-style: none solid;
@@ -301,7 +302,7 @@ header[role="banner"] {
     width: 100%;
     z-index: -1;
   }
-
+  
   .gu-content__bg svg {
     bottom: 0;
     height: 580px;
@@ -410,13 +411,13 @@ header[role="banner"] {
       padding: 0 0 ($gu-v-spacing * 2);
       width: auto;
     }
-
+    
     .gu-content__main,
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(8, 70px) 1fr;
+      grid-template-columns: 1fr repeat(8, 70px) 1fr;  
     }
-
+    
     header[role="banner"],
     footer[role="contentinfo"] {
       display: grid;
@@ -456,10 +457,10 @@ header[role="banner"] {
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(14, 60px) 1fr;
+      grid-template-columns: 1fr repeat(14, 60px) 1fr;  
       width: auto;
     }
-
+    
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column: span 16;
@@ -482,15 +483,15 @@ header[role="banner"] {
     .gu-content__bg {
       grid-column: 1 / 17;
     }
-  }
+  }  
 
   @include mq($from: wide) {
     .gu-content__main,
     header[role="banner"],
     footer[role="contentinfo"] {
       grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(16, 60px) 1fr;
-    }
+      grid-template-columns: 1fr repeat(16, 60px) 1fr;  
+    }  
 
     .glogo {
       grid-column: 16;
@@ -571,7 +572,7 @@ form {
 .form__radio-group--tabs .form__radio-group-list {
   display: flex;
 }
-
+    
 .form__radio-group--tabs .form__radio-group-item {
   border-top: 1px solid gu-colour(neutral-4);
   flex: 1;
@@ -591,7 +592,7 @@ form {
   background: gu-colour(garnett-neutral-5);
   color: gu-colour(sport-garnett-media-main-1);
 }
-
+        
 .form__radio-group--tabs .form__radio-group-input:not(:checked) + .form__radio-group-label {
   background: gu-colour(garnett-neutral-3);
   color: gu-colour(garnett-neutral-2);
@@ -620,7 +621,7 @@ form {
   width: 50px;
   height: 50px;
 }
-
+  
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
   background: gu-colour(sport-garnett-media-main-1);
   color: gu-colour(garnett-neutral-5);
@@ -749,25 +750,21 @@ form {
   border-radius: 20px;
   display: inline-flex;
   padding: 9px 20px;
+}
 
-  &:enabled {
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      background: #e5ce00;
-    }
-  }
+.form__submit-button:hover,
+.form__submit-button:focus {
+  background: #e5ce00;
 }
 
 .form__radio-group--contribution-amount,
 .form__field--contribution-other-amount,
-.form__field--contribution-fname,
+.form__field--contribution-fname, 
 .form__field--contribution-lname {
   margin-top: 12px;
 }
 
-.form__field--contribution-email,
+.form__field--contribution-email, 
 .form__field--contribution-state {
   margin-top: 24px;
 }
@@ -781,7 +778,7 @@ form {
 }
 
 .form__input-with-icon .form__icon {
-  align-items: center;
+  align-items: center; 
   display: flex;
   fill: gu-colour(garnett-neutral-2);
   height: 40px;
