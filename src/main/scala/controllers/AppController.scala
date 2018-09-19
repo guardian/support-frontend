@@ -16,7 +16,7 @@ class AppController(
 
   def healthcheck: Action[AnyContent] = Action {
     Ok(HealthCheckResponse("Everything is super", app.BuildInfo.gitCommitId))
-      .withHeaders("Cache-Control" -> "no-cache")
+      .withHeaders("Cache-Control" -> "private, no-store")
   }
 
   def acquisition(viewId: String, acquisition: String): Action[AnyContent] = Action {
