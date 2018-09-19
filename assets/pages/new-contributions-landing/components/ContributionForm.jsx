@@ -31,7 +31,16 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEmail, updateState, onThirdPartyPaymentDone, updateBlurred } from '../contributionsLandingActions';
+import {
+  type Action,
+  paymentWaiting,
+  updateFirstName,
+  updateLastName,
+  updateEmail,
+  updateState,
+  onThirdPartyPaymentDone,
+  setCheckoutFormHasBeenSubmitted,
+} from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -44,24 +53,21 @@ type PropTypes = {|
   contributionType: Contrib,
   thankYouRoute: string,
   firstName: string,
-  firstNameBlurred: boolean,
   lastName: string,
-  lastNameBlurred: boolean,
   email: string,
-  emailBlurred: boolean,
   state: UsState | CaState | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
-  otherAmountBlurred: boolean,
   paymentMethod: PaymentMethod,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
-  updateBlurred: string => void,
   onWaiting: boolean => void,
   onThirdPartyPaymentDone: Token => void,
+  checkoutFormHasBeenSubmitted: boolean,
+  setCheckoutFormHasBeenSubmitted: () => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,18 +76,15 @@ const mapStateToProps = (state: State) => ({
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: state.page.form.formData.firstName || state.page.user.firstName,
-  firstNameBlurred: state.page.form.formData.firstNameBlurred,
   lastName: state.page.form.formData.lastName || state.page.user.lastName,
-  lastNameBlurred: state.page.form.formData.lastNameBlurred,
   email: state.page.form.formData.email || state.page.user.email,
-  emailBlurred: state.page.form.formData.emailBlurred,
   state: state.page.form.formData.state || state.page.user.stateField,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
-  otherAmountBlurred: state.page.form.formData.otherAmounts[state.page.form.contributionType].blurred,
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
@@ -96,9 +99,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
   updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  updateBlurred: (field) => { dispatch(updateBlurred(field)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
+  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
 });
 
 // ----- Functions ----- //
@@ -121,12 +124,11 @@ const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-
     if (!(event.target: any).checkValidity()) {
       return;
     }
-
     const amount = getAmount(props);
     const { email } = props;
 
@@ -159,12 +161,10 @@ function ContributionForm(props: PropTypes) {
     selectedCountryGroupDetails,
     thankYouRoute,
     firstName,
-    firstNameBlurred,
     lastName,
-    lastNameBlurred,
     email,
-    emailBlurred,
     state,
+    checkoutFormHasBeenSubmitted,
   } = props;
 
   const paymentCallback = (token: Token) => {
@@ -199,9 +199,8 @@ function ContributionForm(props: PropTypes) {
             autoComplete="given-name"
             autoCapitalize="words"
             onInput={props.updateFirstName}
-            onBlur={() => props.updateBlurred('firstName')}
             isValid={checkFirstName(firstName)}
-            wasBlurred={firstNameBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
           />
@@ -214,9 +213,8 @@ function ContributionForm(props: PropTypes) {
             autoComplete="family-name"
             autoCapitalize="words"
             onInput={props.updateLastName}
-            onBlur={() => props.updateBlurred('lastName')}
             isValid={checkLastName(lastName)}
-            wasBlurred={lastNameBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
           />
@@ -230,9 +228,8 @@ function ContributionForm(props: PropTypes) {
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
-            onBlur={() => props.updateBlurred('email')}
             isValid={checkEmail(email)}
-            wasBlurred={emailBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
           />
