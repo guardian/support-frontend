@@ -255,7 +255,6 @@ function ContributionForm(props: PropTypes) {
 
 ContributionForm.defaultProps = {
   error: null,
-  isDirectDebitPopUpOpen: false,
 };
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
