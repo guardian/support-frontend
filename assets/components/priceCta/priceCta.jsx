@@ -4,8 +4,6 @@
 
 import React from 'react';
 
-import { classNameWithModifiers } from 'helpers/utilities';
-
 import CtaLink from 'components/ctaLink/ctaLink';
 
 
@@ -15,7 +13,6 @@ type PropTypes = {
   ctaText: string,
   url: string,
   price: string,
-  dark: boolean,
 };
 
 
@@ -24,7 +21,7 @@ type PropTypes = {
 export default function PriceCta(props: PropTypes) {
 
   return (
-    <div className={classNameWithModifiers('component-price-cta', props.dark ? ['dark'] : [])}>
+    <div className="component-price-cta">
       <CtaLink
         text={props.ctaText}
         url={props.url}
@@ -36,9 +33,3 @@ export default function PriceCta(props: PropTypes) {
 
 }
 
-
-// ----- Default Props ----- //
-
-PriceCta.defaultProps = {
-  dark: false,
-};

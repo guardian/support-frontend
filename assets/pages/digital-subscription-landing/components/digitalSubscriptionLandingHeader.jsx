@@ -21,7 +21,9 @@ import PriceCtaContainer from './priceCtaContainer';
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId
+  countryGroupId: CountryGroupId,
+  h1Text: string,
+  ctaText: string,
 };
 
 type GridImages = {
@@ -146,10 +148,10 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             Digital Pack
           </div>
           <div className="digital-subscription-landing-header__title">
-            <h1 className="digital-subscription-landing-header__title-copy">Support The Guardian with a digital subscription</h1>
+            <h1 className="digital-subscription-landing-header__title-copy">{props.h1Text}</h1>
           </div>
         </div>
-        <PriceCtaContainer dark referringCta="support_digipack_page_header" />
+        <PriceCtaContainer referringCta="support_digipack_page_header" ctaText={props.ctaText} />
       </LeftMarginSection>
     </div>
   );

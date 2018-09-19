@@ -13,10 +13,11 @@ import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import type { PageContent } from './promotionHelper';
+import { getPageContent } from './promotionHelper';
 
 
 // ----- Redux Store ----- //
@@ -46,6 +47,8 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   ],
 );
 
+const pageContent: PageContent = getPageContent();
+
 // ----- Render ----- //
 
 const content = (
@@ -54,9 +57,13 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
-      <ProductBlock countryGroupId={countryGroupId} />
-      <IndependentJournalismSection />
+      <DigitalSubscriptionLandingHeader
+        countryGroupId={countryGroupId}
+        h1Text={pageContent.title}
+        ctaText={pageContent.ctaText}
+      />
+      <ProductBlock countryGroupId={countryGroupId} ctaText={pageContent.ctaText} />
+      <IndependentJournalismSection ctaText={pageContent.ctaText} />
     </Page>
   </Provider>
 );

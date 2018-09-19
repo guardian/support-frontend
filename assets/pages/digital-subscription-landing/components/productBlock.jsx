@@ -19,6 +19,7 @@ import PriceCtaContainer from './priceCtaContainer';
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
+  ctaText: string,
 };
 
 
@@ -141,7 +142,7 @@ function ProductBlock(props: PropTypes) {
             },
           ]}
         />
-        <PriceCtaContainer referringCta="support_digipack_page_product_benefits_section" />
+        <PriceCtaContainer referringCta="support_digipack_page_product_benefits_section" ctaText={props.ctaText} />
       </LeftMarginSection>
     </div>
   );

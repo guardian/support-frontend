@@ -14,13 +14,13 @@ import { getProductPrice } from 'helpers/subscriptions';
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string }) {
+function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string, ctaText: ?string }) {
   const { countryGroupId } = state.common.internationalisation;
   const { referrerAcquisitionData } = state.common;
   const price = getProductPrice('DigitalPack', countryGroupId);
 
   return {
-    ctaText: 'Start a 14 day free trial',
+    ctaText: ownProps.ctaText || 'Start a 14 day free trial',
     url: getDigitalCheckout(
       referrerAcquisitionData,
       countryGroupId,

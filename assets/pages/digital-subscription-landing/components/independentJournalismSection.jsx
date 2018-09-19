@@ -9,7 +9,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import PriceCtaContainer from './priceCtaContainer';
 
 
-export default function IndependentJournalismSection() {
+export default function IndependentJournalismSection(props: {ctaText: string}) {
 
   return (
     <LeftMarginSection modifierClasses={['grey']}>
@@ -30,7 +30,7 @@ export default function IndependentJournalismSection() {
         </div>
         <div className="component-independent-journalism__footer">
           <WindrushZuck />
-          <PriceCtaContainer referringCta="support_digipack_page_independent_journalism_section" />
+          <PriceCtaContainer referringCta="support_digipack_page_independent_journalism_section" ctaText={props.ctaText} />
         </div>
       </div>
     </LeftMarginSection>

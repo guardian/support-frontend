@@ -406,6 +406,13 @@
       }
     }
   }
+
+  // cta link text should be 16px throughout the whole site but that will require
+  // quite a bit of work to make everything else match up, so for now I'm just going
+  // to change it here.
+  .component-cta-link__text {
+    font-size: 16px;
+  }
 }
 
 .component-left-margin-section--grey {
