@@ -743,11 +743,15 @@ form {
   border-radius: 20px;
   display: inline-flex;
   padding: 9px 20px;
-}
 
-.form__submit-button:hover,
-.form__submit-button:focus {
-  background: #e5ce00;
+  &:enabled {
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background: #e5ce00;
+    }
+  }
 }
 
 .form__radio-group--contribution-amount,
