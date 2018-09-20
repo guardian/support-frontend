@@ -20,6 +20,15 @@
     margin-right: 8px;
   }
 
+  .svg-exclamation-alternate__circle {
+    fill: none;
+    stroke: gu-colour(error);
+  }
+
+  .svg-exclamation-alternate__exclamation-mark {
+    fill: gu-colour(error);
+  }
+
   .component-error-message__message {
     position: relative;
     left: 1px;

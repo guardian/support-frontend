@@ -9,8 +9,10 @@
   id: String,
   js: String,
   css: String,
-  defaultStripeConfig: StripeConfig,
-  uatStripeConfig: StripeConfig,
+  oneOffDefaultStripeConfig: StripeConfig,
+  oneOffUatStripeConfig: StripeConfig,
+  regularDefaultStripeConfig: StripeConfig,
+  regularUatStripeConfig: StripeConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
   idUser: Option[IdUser],
@@ -33,12 +35,24 @@
       };
     };
     window.guardian.stripeKeyDefaultCurrencies = {
-      default: "@defaultStripeConfig.forCurrency(None).publicKey",
-      uat: "@uatStripeConfig.forCurrency(None).publicKey"
+      ONE_OFF: {
+        default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
+        uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
+      },
+      REGULAR: {
+        default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
+        uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
+      }
     };
     window.guardian.stripeKeyAustralia = {
-      default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-      uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      ONE_OFF: {
+        default: "@oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+        uat: "@oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      },
+      REGULAR: {        
+        default: "@regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+        uat: "@regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      }
     };
     window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";

@@ -18,7 +18,7 @@ import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._
-import services.{PayPalError, PaymentApiError}
+import services.{PayPalError, PayPalSuccess}
 
 object CirceDecoders {
 
@@ -98,11 +98,11 @@ object CirceDecoders {
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
-  implicit val switchStateEncode: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
-  implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
+  implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
+  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val segmentEncoder: Encoder[Segment] = Encoder.encodeString.contramap[Segment](_.toString)
-  implicit val segmentDecoder: Decoder[Segment] = deriveDecoder
+  implicit val segmentDecoder: Decoder[Segment] = Decoder.decodeString.map(Segment.fromString)
   implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
   implicit val settingsCodec: Codec[Settings] = deriveCodec
@@ -114,7 +114,8 @@ object CirceDecoders {
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
   implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
 
-  private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
-  implicit val paymentApiError: Decoder[PaymentApiError] = deriveDecoder
+  implicit val payPalErrorBodyDecoder: Decoder[PayPalError] = deriveDecoder
+  implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
+
 }
 

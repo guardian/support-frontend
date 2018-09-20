@@ -13,6 +13,7 @@ import { marketingConsentReducerFor } from 'components/marketingConsent/marketin
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
 import type { PaymentMethod } from 'helpers/checkouts';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -26,12 +27,13 @@ import type { PaymentStatus } from './components/regularContributionsPayment';
 type RegularContributionsState = {
   amount: number,
   contributionType: RegularContributionType,
-  error: ?string,
+  checkoutFailureReason: ?CheckoutFailureReason,
   paymentStatus: PaymentStatus,
   paymentMethod: ?PaymentMethod,
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
+  guestAccountCreationToken: ?string,
 };
 
 type PageState = {
@@ -60,12 +62,13 @@ function createRegularContributionsReducer(
   const initialState: RegularContributionsState = {
     amount,
     contributionType,
-    error: null,
+    checkoutFailureReason: null,
     paymentStatus: 'NotStarted',
     paymentMethod,
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
+    guestAccountCreationToken: null,
   };
 
   return function regularContributionsReducer(
@@ -82,13 +85,16 @@ function createRegularContributionsReducer(
         return { ...state, paymentStatus: 'Success', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_ERROR':
-        return { ...state, paymentStatus: 'Failed', error: action.message };
+        return { ...state, paymentStatus: 'Failed', checkoutFailureReason: action.checkoutFailureReason };
 
       case 'CREATING_CONTRIBUTOR':
         return { ...state, paymentStatus: 'Pending' };
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
+        return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
 
       default:
         return state;

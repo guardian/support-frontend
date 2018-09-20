@@ -3,10 +3,10 @@ package config
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
+
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
-import admin.Settings
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -25,7 +25,7 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val paymentApiUrl = config.getString("paymentApi.url");
+  lazy val paymentApiUrl = config.getString("paymentApi.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
@@ -38,7 +38,4 @@ class Configuration {
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
-
-  implicit val settings = Settings.fromConfig(config.getConfig("switches"))
-
 }

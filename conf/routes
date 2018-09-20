@@ -71,6 +71,9 @@ GET  /subscribe/digital                            controllers.Subscriptions.dig
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.Subscriptions.digital(country: String)
 GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String)
 
+GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
+GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
+
 # ----- Authentication ----- #
 
 GET  /login                                         controllers.Login.login
@@ -91,6 +94,7 @@ GET  /paypal/cancel                                 controllers.PayPalRegular.ca
 
 GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
+GET  /paypal/rest/error                                 controllers.PayPalOneOff.paypalError
 
 # ----- Direct Debit ----- #
 

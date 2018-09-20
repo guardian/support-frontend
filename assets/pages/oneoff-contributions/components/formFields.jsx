@@ -14,13 +14,9 @@ import {
 import {
   type UserFormFieldAttribute,
   shouldShowError,
-  onFormFieldBlur,
+  emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
-import {
-  type Action as CheckoutAction,
-  setFullNameShouldValidate,
-  setEmailShouldValidate,
-} from '../helpers/checkoutForm/checkoutFormActions';
+import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type State } from '../oneOffContributionsReducer';
 
@@ -32,8 +28,6 @@ type PropTypes = {
   email: UserFormFieldAttribute,
   setFullName: (string) => void,
   setEmail: (string) => void,
-  setFullNameShouldValidate: () => void,
-  setEmailShouldValidate: () => void,
   isSignedIn: boolean,
 };
 
@@ -54,14 +48,8 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
 
   return {
-    setFullNameShouldValidate: () => {
-      dispatch(setFullNameShouldValidate());
-    },
     setFullName: (fullName: string) => {
       dispatch(setFullName(fullName));
-    },
-    setEmailShouldValidate: () => {
-      dispatch(setEmailShouldValidate());
     },
     setEmail: (email: string) => {
       dispatch(setEmail(email));
@@ -69,13 +57,13 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
   };
 }
 
+export const formClassName = 'oneoff-contrib__checkout-form';
+
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
-  const stripeButtonClassName = 'component-stripe-pop-up-button';
-
   return (
-    <form className="oneoff-contrib__name-form">
+    <form className={formClassName}>
       {
         !props.isSignedIn ? (
           <TextInput
@@ -84,10 +72,12 @@ function NameForm(props: PropTypes) {
             labelText="Email"
             placeholder="Email"
             onChange={props.setEmail}
-            onBlur={onFormFieldBlur(props.setEmailShouldValidate, stripeButtonClassName)}
             modifierClasses={['email']}
             showError={shouldShowError(props.email)}
             errorMessage="Please enter a valid email address."
+            type="email"
+            pattern={emailRegexPattern}
+            required
           />
         ) : null
       }
@@ -97,10 +87,10 @@ function NameForm(props: PropTypes) {
         labelText="Full name"
         value={props.fullName.value}
         onChange={props.setFullName}
-        onBlur={onFormFieldBlur(props.setFullNameShouldValidate, stripeButtonClassName)}
         modifierClasses={['name']}
         showError={shouldShowError(props.fullName)}
         errorMessage="Please enter your name."
+        required
       />
       <p className="component-your-details__info">
         <small>All fields are required.</small>

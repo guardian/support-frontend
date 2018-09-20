@@ -3,27 +3,47 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-import { type PaymentMethod } from 'helpers/checkouts';
+import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
+type FormData = {
+  firstName: string | null,
+  lastName: string | null,
+  email: string | null,
+  otherAmounts: {
+    [Contrib]: { amount: string | null }
+  },
+  state: UsState | CaState | null,
+  checkoutFormHasBeenSubmitted: boolean,
+};
+
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  amount: Amount | null,
-  showOtherAmount: boolean,
+  paymentReady: boolean,
+  paymentHandler: {
+    [PaymentMethod]: PaymentHandler | null
+  },
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  isWaiting: boolean,
+  formData: FormData,
   done: boolean,
 };
 
 type PageState = {
   form: FormState,
   user: UserState,
+  csrf: CsrfState,
 };
 
 export type State = {
@@ -31,26 +51,47 @@ export type State = {
   page: PageState,
 };
 
-// ----- Initial state ----- //
-
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
-  const oneOffAmounts = amounts('notintest').ONE_OFF[countryGroupId];
-  const monthlyAmounts = amounts('notintest').MONTHLY[countryGroupId];
-  const annualAmounts = amounts('notintest').ANNUAL[countryGroupId];
-
-  const initialAmount: { [Contrib]: Amount } = {
-    ONE_OFF: oneOffAmounts.find(amount => amount.isDefault) || oneOffAmounts[0],
-    MONTHLY: monthlyAmounts.find(amount => amount.isDefault) || monthlyAmounts[0],
-    ANNUAL: annualAmounts.find(amount => amount.isDefault) || annualAmounts[0],
+  const amountsForCountry: { [Contrib]: Amount[] } = {
+    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
+    MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
+    ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
+
+  const initialAmount: { [Contrib]: Amount | 'other' } = {
+    ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
+    MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
+    ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
+  };
+
+  // ----- Initial state ----- //
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'Stripe',
-    amount: initialAmount.MONTHLY,
+    paymentHandler: {
+      Stripe: null,
+      DirectDebit: null,
+      PayPal: null,
+    },
+    paymentReady: false,
+    formData: {
+      firstName: null,
+      lastName: null,
+      email: null,
+      otherAmounts: {
+        ONE_OFF: { amount: null },
+        MONTHLY: { amount: null },
+        ANNUAL: { amount: null },
+      },
+      state: null,
+      checkoutFormHasBeenSubmitted: false,
+    },
     showOtherAmount: false,
+    selectedAmounts: initialAmount,
+    isWaiting: false,
     done: false,
   };
 
@@ -60,24 +101,65 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return {
           ...state,
           contributionType: action.contributionType,
-          amount: initialAmount[action.contributionType],
           showOtherAmount: false,
+          formData: { ...state.formData },
         };
 
       case 'UPDATE_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
 
-      case 'SELECT_AMOUNT':
-        return { ...state, amount: action.amount, showOtherAmount: false };
+      case 'UPDATE_PAYMENT_READY':
+        return action.paymentHandler
+          ? {
+            ...state,
+            paymentReady: action.paymentReady,
+            paymentHandler: { ...state.paymentHandler, ...action.paymentHandler },
+          }
+          : { ...state, paymentReady: action.paymentReady };
 
-      case 'SELECT_OTHER_AMOUNT':
-        return { ...state, amount: null, showOtherAmount: true };
+      case 'UPDATE_FIRST_NAME':
+        return { ...state, formData: { ...state.formData, firstName: action.firstName } };
+
+      case 'UPDATE_LAST_NAME':
+        return { ...state, formData: { ...state.formData, lastName: action.lastName } };
+
+      case 'UPDATE_EMAIL':
+        return { ...state, formData: { ...state.formData, email: action.email } };
+
+      case 'UPDATE_STATE':
+        return { ...state, formData: { ...state.formData, state: action.state } };
+
+      case 'SELECT_AMOUNT':
+        return {
+          ...state,
+          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.amount },
+        };
+
+      case 'UPDATE_OTHER_AMOUNT':
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            otherAmounts: {
+              ...state.formData.otherAmounts,
+              [state.contributionType]: {
+                amount: action.otherAmount,
+              },
+            },
+          },
+        };
 
       case 'PAYMENT_FAILURE':
         return { ...state, done: false, error: action.error };
 
+      case 'PAYMENT_WAITING':
+        return { ...state, done: false, isWaiting: action.isWaiting };
+
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };
+
+      case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
+        return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
 
       default:
         return state;
@@ -90,6 +172,7 @@ function initReducer(countryGroupId: CountryGroupId) {
   return combineReducers({
     form: createFormReducer(countryGroupId),
     user: createUserReducer(countryGroupId),
+    csrf,
   });
 }
 

@@ -12,8 +12,11 @@ import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spoke
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
+import SvgEuro from 'components/svgs/euro';
+import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, selectOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -22,22 +25,27 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
-  amount: Amount | null,
-  showOther: boolean,
-  selectAmount: Amount => (() => void),
-  selectOtherAmount: () => void,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectAmount: (Amount | 'other', Contrib) => (() => void),
+  otherAmount: string | null,
+  checkOtherAmount: string => boolean,
+  updateOtherAmount: string => void,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
+  countryGroupId: state.common.internationalisation.countryGroupId,
+  currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
-  amount: state.page.form.amount,
-  showOther: state.page.form.showOtherAmount,
+  selectedAmounts: state.page.form.selectedAmounts,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  selectAmount: amount => () => { dispatch(selectAmount(amount)); },
-  selectOtherAmount: () => { dispatch(selectOtherAmount()); },
+  selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
+  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
 });
 
 // ----- Render ----- //
@@ -56,8 +64,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={props.amount && amount.value === props.amount.value}
-      onChange={props.selectAmount(amount)}
+      checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
+      onChange={props.selectAmount(amount, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -66,13 +74,27 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
+const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
+  switch (countryGroupId) {
+    case 'GBPCountries': return <SvgPound />;
+    case 'EURCountries': return <SvgEuro />;
+    default: return <SvgDollar />;
+  }
+};
+
 
 function ContributionAmount(props: PropTypes) {
+  const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
+  const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
+  const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
+  const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
+  const maxAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString(), spoken: '', isDefault: false }, false);
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
-        {amounts('notintest')[props.contributionType][props.countryGroupId].map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
+        {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -80,31 +102,30 @@ function ContributionAmount(props: PropTypes) {
             type="radio"
             name="contributionAmount"
             value="other"
-            checked={props.showOther}
-            onChange={props.selectOtherAmount}
+            checked={showOther}
+            onChange={props.selectAmount('other', props.contributionType)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
       </ul>
-      {props.showOther ? (
-        <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
-          <label className="form__label" htmlFor="contributionOther">Other Amount</label>
-          <span className="form__input-with-icon">
-            <input
-              id="contributionOther"
-              className="form__input"
-              type="number"
-              min={config[props.countryGroupId][props.contributionType].min}
-              max={config[props.countryGroupId][props.contributionType].max}
-              autoComplete="off"
-              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-              required
-            />
-            <span className="form__icon">
-              <SvgDollar />
-            </span>
-          </span>
-        </div>
+      {showOther ? (
+        <NewContributionTextInput
+          id="contributionOther"
+          name="contribution-other-amount"
+          type="number"
+          label="Other amount"
+          value={props.otherAmount}
+          icon={iconForCountryGroup(props.countryGroupId)}
+          onInput={e => props.updateOtherAmount((e.target: any).value)}
+          isValid={props.checkOtherAmount(props.otherAmount || '')}
+          checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+          errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
+          autoComplete="off"
+          min={min}
+          max={max}
+          autoFocus
+          required
+        />
       ) : null}
     </fieldset>
   );
