@@ -40,6 +40,7 @@ type FormState = {
   isWaiting: boolean,
   formData: FormData,
   done: boolean,
+  guestAccountCreationToken: ?string,
 };
 
 type PageState = {
@@ -96,6 +97,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     selectedAmounts: initialAmount,
     isWaiting: false,
     done: false,
+    guestAccountCreationToken: null,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -163,6 +165,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
         return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
+
+      case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
+        return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
 
       default:
         return state;
