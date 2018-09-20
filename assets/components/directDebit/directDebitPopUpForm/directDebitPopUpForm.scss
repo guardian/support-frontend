@@ -74,6 +74,7 @@
   height: 40px;
   width: 40px;
   float: right;
+  cursor: pointer;
 
   // buttons don't work as flex containers in all browsers
   // https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
