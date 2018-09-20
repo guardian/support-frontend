@@ -70,7 +70,7 @@ type PropTypes = {|
   onThirdPartyPaymentDone: Token => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
-  openDirectDebitPopUp: void => void,
+  openDirectDebitPopUp: () => void,
   isDirectDebitPopUpOpen: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
