@@ -51,7 +51,7 @@ const subscriptionPrices: {
     GBPCountries: 21.62,
   },
   DailyEdition: {
-    GBPCountries: 6.99,
+    GBPCountries: 11.99,
   },
 };
 
