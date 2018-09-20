@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -31,8 +30,8 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
+
 import {
-  type Action,
   paymentWaiting,
   updateFirstName,
   updateLastName,
@@ -69,15 +68,21 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
 |};
+
+type FormValueType = string | null;
+
+const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
+  (formValue === null ? userValue : formValue);
+
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  firstName: state.page.form.formData.firstName || state.page.user.firstName,
-  lastName: state.page.form.formData.lastName || state.page.user.lastName,
-  email: state.page.form.formData.email || state.page.user.email,
+  firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
+  lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
+  email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   state: state.page.form.formData.state || state.page.user.stateField,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
@@ -87,17 +92,11 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
-function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
-  const cleanString = string.trim();
-  if (cleanString !== '') {
-    dispatch(action(cleanString));
-  }
-}
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { maybeDispatch(dispatch, updateFirstName, event.target.value); },
-  updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
-  updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
+  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
+  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
+  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
