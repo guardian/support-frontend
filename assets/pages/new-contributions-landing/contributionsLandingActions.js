@@ -5,12 +5,13 @@
 import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type Token,
+import {
+  type Token,
   type PaymentFields,
   type PaymentResult,
   PaymentSuccess,
   postOneOffStripeRequest,
-  postRegularStripeRequest
+  postRegularStripeRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
@@ -99,7 +100,12 @@ const sendData = (data: PaymentFields) =>
             return;
 
           default:
-            dispatch(onPaymentResult(postRegularStripeRequest(data, state.common.abParticipations, state.page.csrf, dispatch)));
+            dispatch(onPaymentResult(postRegularStripeRequest(
+              data,
+              state.common.abParticipations,
+              state.page.csrf,
+              dispatch,
+            )));
             return;
         }
 

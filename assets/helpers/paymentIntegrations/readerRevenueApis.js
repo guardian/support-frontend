@@ -1,5 +1,5 @@
 // @flow
-import type { Dispatch } from "redux";
+import type { Dispatch } from 'redux';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
@@ -8,7 +8,6 @@ import {
   type OphanIds,
   type AcquisitionABTest,
 } from 'helpers/tracking/acquisitions';
-import { type Action, setGuestAccountCreationToken } from 'pages/new-contributions-landing/contributionsLandingActions'
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/contributions';
@@ -18,6 +17,7 @@ import { type UsState, type CaState, type IsoCountry } from 'helpers/internation
 import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
+import { type Action, setGuestAccountCreationToken } from '../../pages/new-contributions-landing/contributionsLandingActions';
 
 import * as cookie from 'helpers/cookie';
 
@@ -74,7 +74,6 @@ export type PaymentResult
   | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
 
 // ----- Setup ----- //
-
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
@@ -124,7 +123,11 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
  * - failed, then we bubble up an error value
  * - otherwise, we bubble up a success value
  */
-function checkRegularStatus(participations: Participations, csrf: CsrfState, dispatch: Dispatch<Action>): Object => Promise<PaymentResult> {
+function checkRegularStatus(
+  participations: Participations,
+  csrf: CsrfState,
+  dispatch: Dispatch<Action>,
+): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
       case 'success':
@@ -192,7 +195,7 @@ function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
