@@ -75,6 +75,8 @@ type PropTypes = {|
 
 type FormValueType = string | null;
 
+// We only want to use the user state value if the form state value has not been changed since it was initialised,
+// i.e it is null.
 const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
   (formValue === null ? userValue : formValue);
 
