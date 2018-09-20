@@ -33,7 +33,7 @@ function PaperSection(props: {
         headingSize={props.headingSize}
         benefits={{
           list: false,
-          copy: 'The Guardian and The Observer\'s newspaper subscription options',
+          copy: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
         }}
         gridImage={{
           gridId: 'paperCircle',

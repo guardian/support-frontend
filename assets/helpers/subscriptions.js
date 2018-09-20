@@ -78,6 +78,12 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
+function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
+  return countryGroupId === 'GBPCountries'
+    ? 'The premium app and the daily edition iPad app in one pack, plus ad-free reading on all your devices'
+    : 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices';
+}
+
 function sendTrackingEventsOnClick(
   id: string,
   product: 'digital' | 'print',
@@ -113,4 +119,4 @@ function sendTrackingEventsOnClick(
 
 // ----- Exports ----- //
 
-export { sendTrackingEventsOnClick, displayPrice, getProductPrice };
+export { sendTrackingEventsOnClick, displayPrice, getProductPrice, displayDigitalPackBenefitCopy };

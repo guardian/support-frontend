@@ -21,7 +21,7 @@ function Weekly(props: { headingSize: HeadingSize, url: string, subheading: stri
       headingSize={props.headingSize}
       benefits={{
         list: false,
-        copy: 'A weekly global newspaper delivered to your door',
+        copy: 'A weekly, global newspaper from The Guardian, with free delivery worldwide',
       }}
       gridImage={{
         gridId: 'weeklyCircle',

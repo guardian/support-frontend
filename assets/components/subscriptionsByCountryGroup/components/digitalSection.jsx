@@ -12,7 +12,7 @@ import { type HeadingSize } from 'components/heading/heading';
 import { addQueryParamsToURL } from 'helpers/url';
 import { dailyEditionUrl } from 'helpers/externalLinks';
 import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
-import { displayPrice } from 'helpers/subscriptions';
+import { displayPrice, displayDigitalPackBenefitCopy } from 'helpers/subscriptions';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -64,7 +64,7 @@ function DigitalSection(props: {
         url={props.subsLinks.DigitalPack}
         subheading={displayPrice('DigitalPack', props.countryGroupId)}
         gridId="digitalCircleAlt"
-        copy="The premium app and the daily edition in one pack"
+        copy={displayDigitalPackBenefitCopy(props.countryGroupId)}
       />
     </ThreeSubscriptions>
   );
