@@ -70,7 +70,7 @@ function NewContributionTextInput(props: PropTypes) {
   );
 }
 
-ContributionTextInput.defaultProps = {
+NewContributionTextInput.defaultProps = {
   type: 'text',
   placeholder: false,
   required: false,
@@ -84,4 +84,4 @@ ContributionTextInput.defaultProps = {
   disabled: false,
 };
 
-export { ContributionTextInput };
+export { NewContributionTextInput };
