@@ -55,7 +55,7 @@
   position: relative;
   top: -81px;
   margin-bottom: -143px;
-  z-index: 2;
+  z-index: 1;
   @include mq($until: leftCol) {
     display: none;
   }

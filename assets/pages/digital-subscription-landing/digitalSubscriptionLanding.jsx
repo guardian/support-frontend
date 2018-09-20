@@ -16,6 +16,7 @@ import Footer from 'components/footer/footer';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import PromotionPopUp from './components/promotionPopUp';
 import { findOutMoreReducer } from './components/findOutMoreReducer';
 
 
@@ -59,6 +60,7 @@ const content = (
       />
       <ProductBlock countryGroupId={countryGroupId} />
       <IndependentJournalismSection />
+      <PromotionPopUp />
     </Page>
   </Provider>
 );
