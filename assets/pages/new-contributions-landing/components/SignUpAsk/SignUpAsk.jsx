@@ -25,7 +25,6 @@ type PropTypes = {
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   email: state.page.user.email,
-  guestAccountCreationToken: state.page.
 });
 
 
