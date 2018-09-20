@@ -1,0 +1,56 @@
+.component-why-support-video {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  padding-bottom: $gu-v-spacing * 3;
+  overflow: hidden;
+
+  .component-page-section__heading {
+    font-family: $gu-headline;
+    font-size: 24px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-page-section__header {
+    position: relative;
+
+    @include dropline;
+  }
+
+  .component-page-section__body {
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing;
+    }
+  }
+}
+
+.component-why-support-video__video {
+  margin: ($gu-v-spacing * 2) 0;
+  background-color: #333;
+  width: 100%;
+  padding-bottom: 56%;
+
+  @include mq($from: wide) {
+    width: 645px;
+    height: 363px;
+    padding-bottom: 0;
+  }
+}
+
+.component-why-support-video__heading {
+  font-family: $gu-headline;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 1.17;
+
+  @include mq($from: phablet) {
+    width: 450px;
+  }
+}
+
+.component-why-support-video__copy {
+  margin-top: $gu-v-spacing;
+
+  @include mq($from: wide) {
+    width: 630px;
+  }
+}
