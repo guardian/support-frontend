@@ -15,6 +15,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 
+import FeaturedProductTest from './components/featuredProductTest';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
@@ -64,16 +65,22 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
   if (countryGroupId === 'GBPCountries') {
     return (
       <div className={className} {...otherProps}>
-        <DigitalSection
-          headingSize={headingSize}
-          subsLinks={subsLinks}
-          countryGroupId={countryGroupId}
-          appReferrer={appReferrer}
-        />
-        <PaperSection
-          headingSize={headingSize}
-          subsLinks={subsLinks}
-          countryGroupId={countryGroupId}
+        <FeaturedProductTest
+          digitalSection={
+            <DigitalSection
+              headingSize={headingSize}
+              subsLinks={subsLinks}
+              countryGroupId={countryGroupId}
+              appReferrer={appReferrer}
+            />
+          }
+          paperSection={
+            <PaperSection
+              headingSize={headingSize}
+              subsLinks={subsLinks}
+              countryGroupId={countryGroupId}
+            />
+          }
         />
       </div>
     );
