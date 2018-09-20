@@ -22,6 +22,8 @@ import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailu
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -68,6 +70,8 @@ type PropTypes = {|
   onThirdPartyPaymentDone: Token => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
+  openDirectDebitPopUp: () => void,
+  isDirectDebitPopUpOpen: boolean
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -85,6 +89,7 @@ const mapStateToProps = (state: State) => ({
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
 });
 
 function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
@@ -102,6 +107,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
+  openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
 });
 
 // ----- Functions ----- //
@@ -134,8 +140,8 @@ function onSubmit(props: PropTypes): Event => void {
 
     if (props.paymentHandler) {
       switch (props.paymentMethod) {
-        case 'DebitCard':
-          // TODO
+        case 'DirectDebit':
+          props.openDirectDebitPopUp();
           break;
 
         case 'PayPal':
@@ -181,7 +187,7 @@ function ContributionForm(props: PropTypes) {
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
+        <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -238,6 +244,11 @@ function ContributionForm(props: PropTypes) {
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
+        <DirectDebitPopUpForm
+          // TODO: put payment through
+          callback={() => Promise.resolve()}
+          isPopUpOpen={props.isDirectDebitPopUpOpen}
+        />
       </div>
     );
 }

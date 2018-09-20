@@ -3,6 +3,9 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
+@import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+@import '~components/directDebit/directDebitForm/directDebitForm';
+@import '~components/errorMessage/errorMessage';
 
 body {
   min-height: 100vh;
@@ -164,7 +167,7 @@ body {
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
-h1 {
+.header {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   color: gu-colour(garnett-neutral-1);
   font: bold 32px/1.15 $gu-headline;
@@ -207,7 +210,7 @@ header[role="banner"] {
 }
 
 @include mq($from: mobile, $until: tablet) {
-  h1 {
+  .header {
     border: 0;
     position: absolute;
     top: 0;

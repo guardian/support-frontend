@@ -75,9 +75,16 @@
   width: 40px;
   float: right;
   cursor: pointer;
-  .svg-cross {
-    padding-left: 1px;
-    padding-top: 3px;
-    height: 19px;
+
+  // buttons don't work as flex containers in all browsers
+  // https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .svg-cross {
+      height: 19px;
+    }
   }
 }
