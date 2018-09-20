@@ -16,13 +16,12 @@ import Footer from 'components/footer/footer';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
-import type { PageContent } from './promotionHelper';
-import { getPageContent } from './promotionHelper';
+import { findOutMoreReducer } from './components/findOutMoreReducer';
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit();
+const store = pageInit(findOutMoreReducer);
 
 // ----- Internationalisation ----- //
 
@@ -47,8 +46,6 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
   ],
 );
 
-const pageContent: PageContent = getPageContent();
-
 // ----- Render ----- //
 
 const content = (
@@ -59,11 +56,9 @@ const content = (
     >
       <DigitalSubscriptionLandingHeader
         countryGroupId={countryGroupId}
-        h1Text={pageContent.title}
-        ctaText={pageContent.ctaText}
       />
-      <ProductBlock countryGroupId={countryGroupId} ctaText={pageContent.ctaText} />
-      <IndependentJournalismSection ctaText={pageContent.ctaText} />
+      <ProductBlock countryGroupId={countryGroupId} />
+      <IndependentJournalismSection />
     </Page>
   </Provider>
 );

@@ -6,10 +6,11 @@ import Windrush from 'components/svgs/windrush';
 import WindrushZuck from 'components/svgs/windrushZuck';
 import Zuck from 'components/svgs/zuck';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import PriceCtaContainer from './priceCtaContainer';
+import CtaSwitch from './ctaSwitch';
 
 
-export default function IndependentJournalismSection(props: {ctaText: string}) {
+
+export default function IndependentJournalismSection() {
 
   return (
     <LeftMarginSection modifierClasses={['grey']}>
@@ -30,7 +31,7 @@ export default function IndependentJournalismSection(props: {ctaText: string}) {
         </div>
         <div className="component-independent-journalism__footer">
           <WindrushZuck />
-          <PriceCtaContainer referringCta="support_digipack_page_independent_journalism_section" ctaText={props.ctaText} />
+          <CtaSwitch referringCta="support_digipack_page_independent_journalism_section" />
         </div>
       </div>
     </LeftMarginSection>

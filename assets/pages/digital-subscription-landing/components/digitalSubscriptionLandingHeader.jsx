@@ -15,15 +15,15 @@ import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import PriceCtaContainer from './priceCtaContainer';
+import CtaSwitch from './ctaSwitch';
+
+import { getPageTitle } from '../helpers/promotions';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
-  h1Text: string,
-  ctaText: string,
 };
 
 type GridImages = {
@@ -148,10 +148,10 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             Digital Pack
           </div>
           <div className="digital-subscription-landing-header__title">
-            <h1 className="digital-subscription-landing-header__title-copy">{props.h1Text}</h1>
+            <h1 className="digital-subscription-landing-header__title-copy">{getPageTitle()}</h1>
           </div>
         </div>
-        <PriceCtaContainer referringCta="support_digipack_page_header" ctaText={props.ctaText} />
+        <CtaSwitch referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>
   );
