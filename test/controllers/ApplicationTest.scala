@@ -11,9 +11,10 @@ import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
+
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
-import admin.Settings
+import admin.SettingsProvider
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -42,9 +43,10 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[HttpIdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
+        mock[StripeConfigProvider],
         mock[PaymentAPIService],
         mock[StringsConfig],
-        mock[Settings]
+        mock[SettingsProvider]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -56,9 +58,10 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[HttpIdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
+        mock[StripeConfigProvider],
         mock[PaymentAPIService],
         mock[StringsConfig],
-        mock[Settings]
+        mock[SettingsProvider]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

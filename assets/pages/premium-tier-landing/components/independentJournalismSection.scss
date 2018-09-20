@@ -1,0 +1,100 @@
+.component-independent-journalism {
+  font-family: $gu-headline;
+  color: #121212;
+  @include mq($from: desktop) {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
+.component-independent-journalism__content {
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.component-independent-journalism__header {
+  width: 100%;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.12;
+
+  @include mq($from: leftCol) {
+    width: 620px;
+    font-size: 36px;
+    line-height: 1.17;
+  }
+}
+
+.component-independent-journalism__copy {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.18;
+  padding-right: 18px;
+  @include mq($from: leftCol) {
+    width: 620px;
+    font-size: 36px;
+    line-height: 1.11;
+  }
+}
+
+.component-independent-journalism__wrapper {
+  display: flex;
+  position: relative;
+  @include mq($until: leftCol) {
+    padding-bottom: 220px;
+  }
+}
+
+.component-independent-journalism__footer {
+  position: relative;
+}
+
+.svg-windrush {
+  position: relative;
+  top: -81px;
+  margin-bottom: -143px;
+  z-index: 2;
+  @include mq($until: leftCol) {
+    display: none;
+  }
+}
+
+.svg-zuck {
+  position: absolute;
+  left: -281px;
+  top: -34px;
+  margin-bottom: -123px;
+  z-index: 5;
+  @include mq($until: leftCol) {
+    display: none;
+  }
+}
+
+
+.svg-windrush-zuck {
+  left: -112px;
+  position:absolute;
+  top: -221px;
+
+  @include mq($from: mobileMedium) {
+    left: -76px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    left: 24px;
+  }
+
+  @include mq($from: tablet) {
+    left: 162px;
+  }
+
+  @include mq($from: desktop) {
+    left: 182px;
+  }
+
+  @include mq($from: leftCol) {
+    display: none;
+  }
+}

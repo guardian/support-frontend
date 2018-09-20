@@ -24,13 +24,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type UserFormFieldAttribute,
   shouldShowError,
-  onFormFieldBlur,
+  emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
 import {
-  type Action as CheckoutAction,
+  type Action as CheckoutAction, setEmailShouldValidate,
   setFirstNameShouldValidate,
   setLastNameShouldValidate,
-  setEmailShouldValidate,
 } from '../helpers/checkoutForm/checkoutFormActions';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
@@ -47,9 +46,6 @@ type PropTypes = {
   setFirstName: (string) => void,
   setLastName: (string) => void,
   setEmail: (string) => void,
-  setFirstNameShouldValidate: () => void,
-  setLastNameShouldValidate: () => void,
-  setEmailShouldValidate: () => void,
   countryGroup: CountryGroupId,
   country: IsoCountry,
   isSignedIn: boolean,
@@ -81,20 +77,11 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | Checkou
     countryUpdate: (value: IsoCountry) => {
       dispatch(setCountry(value));
     },
-    setFirstNameShouldValidate: () => {
-      dispatch(setFirstNameShouldValidate());
-    },
     setFirstName: (firstName: string) => {
       dispatch(setFirstName(firstName));
     },
-    setLastNameShouldValidate: () => {
-      dispatch(setLastNameShouldValidate());
-    },
     setLastName: (lastName: string) => {
       dispatch(setLastName(lastName));
-    },
-    setEmailShouldValidate: () => {
-      dispatch(setEmailShouldValidate());
     },
     setEmail: (email: string) => {
       dispatch(setEmail(email));
@@ -152,14 +139,20 @@ function countriesDropdown(
   />);
 }
 
+export const formClassName = 'regular-contrib__checkout-form';
+
+export const setShouldValidateFunctions = [
+  setFirstNameShouldValidate,
+  setLastNameShouldValidate,
+  setEmailShouldValidate,
+];
+
 
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
-  const continueButtonClassName = 'component-cta-link--continue';
-
   return (
-    <form className="regular-contrib__name-form">
+    <form className={formClassName}>
       {
         !props.isSignedIn ? (
           <TextInput
@@ -168,10 +161,12 @@ function NameForm(props: PropTypes) {
             labelText="Email"
             placeholder="Email"
             onChange={props.setEmail}
-            onBlur={onFormFieldBlur(props.setEmailShouldValidate, continueButtonClassName)}
             modifierClasses={['email']}
             showError={shouldShowError(props.email)}
             errorMessage="Please enter a valid email address."
+            type="email"
+            pattern={emailRegexPattern}
+            required
           />
         ) : null
       }
@@ -181,10 +176,10 @@ function NameForm(props: PropTypes) {
         placeholder="First name"
         value={props.firstName.value}
         onChange={props.setFirstName}
-        onBlur={onFormFieldBlur(props.setFirstNameShouldValidate, continueButtonClassName)}
         modifierClasses={['first-name']}
         showError={shouldShowError(props.firstName)}
         errorMessage="Please enter a first name."
+        required
       />
       <TextInput
         id="last-name"
@@ -192,10 +187,10 @@ function NameForm(props: PropTypes) {
         placeholder="Last name"
         value={props.lastName.value}
         onChange={props.setLastName}
-        onBlur={onFormFieldBlur(props.setLastNameShouldValidate, continueButtonClassName)}
         modifierClasses={['last-name']}
         showError={shouldShowError(props.lastName)}
         errorMessage="Please enter a last name."
+        required
       />
       {stateDropdown(props.countryGroup, props.stateUpdate)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}

@@ -67,7 +67,9 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
             className="component-direct-debit-pop-up-form__close-button focus-target"
             onClick={props.closeDirectDebitPopUp}
           >
-            <SvgCross />
+            <span>
+              <SvgCross />
+            </span>
           </button>
           <DirectDebitForm callback={props.callback} />
         </div>

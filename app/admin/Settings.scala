@@ -1,8 +1,15 @@
 package admin
 
+import scala.io.{BufferedSource, Source}
 import com.typesafe.config.Config
-import collection.JavaConverters._
+
 import play.api.mvc.RequestHeader
+import codecs.CirceDecoders._
+import io.circe.parser._
+import cats.implicits._
+import com.amazonaws.services.s3.AmazonS3
+
+import scala.util.Try
 
 case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
@@ -12,24 +19,63 @@ case class Switches(
     internationalSubscribePages: SwitchState
 )
 
-case class Settings(
-    switches: Switches
-)
+case class Settings(switches: Switches)
 
 object Settings {
-  def fromConfig(config: Config): Settings =
-    Settings(
-      Switches(
-        PaymentMethodsSwitch.fromConfig(config.getConfig("oneOff")),
-        PaymentMethodsSwitch.fromConfig(config.getConfig("recurring")),
-        experimentsFromConfig(config, "abtests"),
-        SwitchState.fromConfig(config, "optimize"),
-        SwitchState.fromConfig(config, "internationalSubscribePages")
-      )
-    )
 
-  def experimentsFromConfig(config: Config, rootKey: String): Map[String, ExperimentSwitch] =
-    config.getConfigList(rootKey).asScala.map(ExperimentSwitch.fromConfig).map { x => x.name -> x }.toMap
+  private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] = {
+    val settings = decode[Settings](buf.mkString)
+    Try(buf.close())
+    settings
+  }
+
+  def fromS3(source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
+    for {
+      buf <- Either.catchNonFatal {
+        val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
+        Source.fromInputStream(inputStream)
+      }
+      settings <- fromBufferedSource(buf)
+    } yield settings
+
+  def fromLocalFile(source: SettingsSource.LocalFile): Either[Throwable, Settings] =
+    for {
+      buf <- Either.catchNonFatal {
+        val homeDir = System.getProperty("user.home")
+        val localPath = source.path.replaceFirst("~", homeDir)
+        Source.fromFile(localPath)
+      }
+      settings <- fromBufferedSource(buf)
+    } yield settings
+}
+
+sealed trait SettingsSource
+
+object SettingsSource {
+
+  case class S3(bucket: String, key: String) extends SettingsSource {
+    override def toString: String = s"s3://$bucket/$key"
+  }
+
+  case class LocalFile(path: String) extends SettingsSource {
+    override def toString: String = s"local file at $path"
+  }
+
+  def fromConfig(config: Config): Either[Throwable, SettingsSource] =
+    fromLocalFile(config).orElse(fromS3(config))
+      .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
+
+  private def fromLocalFile(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+    LocalFile(config.getString("settingsSource.local.path"))
+  }
+
+  private def fromS3(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+    S3(
+      config.getString("settingsSource.s3.bucket"),
+      config.getString("settingsSource.s3.key")
+    )
+  }
+
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])

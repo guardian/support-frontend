@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{SwitchState, Settings}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
 
 import scala.concurrent.ExecutionContext
@@ -16,22 +16,24 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settings: Settings
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+    settingsProvider: SettingsProvider
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
 
-  def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+  def geoRedirect: Action[AnyContent] = geoRedirect("subscribe")
+
+  def geoRedirect(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    // If we implement endpoints for EU, CA & NZ we could replace this match with
+    // request.fastlyCountry.map(_.id).getOrDefault("int")
     val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/subscribe"
-      case Some(US) => "/us/subscribe"
-      case Some(Australia) => "/au/subscribe"
-      case _ => "/int/subscribe"
+      case Some(UK) => s"/uk/$path"
+      case Some(US) => s"/us/$path"
+      case Some(Australia) => s"/au/$path"
+      case _ => s"/int/$path"
     }
-
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
@@ -42,9 +44,10 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (settings.switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
+    if (settingsProvider.settings().switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
       Redirect(controllers.routes.Subscriptions.geoRedirect())
     } else {
+      implicit val settings: Settings = settingsProvider.settings()
       val title = "Support the Guardian | Get a Subscription"
       val id = "subscriptions-landing-page"
       val js = "subscriptionsLandingPage.js"
@@ -54,38 +57,39 @@ class Subscriptions(
         js,
         "subscriptionsLandingPageStyles.css",
         description = Some(stringsConfig.subscriptionsLandingDescription)
-      ))
+      )).withSettingsSurrogateKey
     }
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css))
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
-  def digitalGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/subscribe/digital"
-      case Some(US) => "/us/subscribe/digital"
-      case Some(Australia) => "/au/subscribe/digital"
-      case Some(RestOfTheWorld) => "/int/subscribe/digital"
-      case _ => "https://subscribe.theguardian.com/digital"
-    }
+  def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-    Redirect(redirectUrl, request.queryString, status = FOUND)
+  def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "Support the Guardian | Premium Tier"
+    val id = "premium-tier-landing-page-" + countryCode
+    val js = "premiumTierLandingPage.js"
+    val css = "premiumTierLandingPageStyles.css"
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
+
+  def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
   def displayForm(countryCode: String): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId) {
-      implicit request =>
-        val title = "Support the Guardian | Digital Subscription"
-        val id = "digital-subscription-checkout-page-" + countryCode
-        val js = "digitalSubscriptionCheckoutPage.js"
-        val css = "digitalSubscriptionCheckoutPageStyles.css"
-        Ok(views.html.main(title, id, js, css))
+    authenticatedAction(recurringIdentityClientId) { implicit request =>
+      implicit val settings: Settings = settingsProvider.settings()
+      val title = "Support the Guardian | Digital Subscription"
+      val id = "digital-subscription-checkout-page-" + countryCode
+      val js = "digitalSubscriptionCheckoutPage.js"
+      val css = "digitalSubscriptionCheckoutPageStyles.css"
+      Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
     }
-
 }

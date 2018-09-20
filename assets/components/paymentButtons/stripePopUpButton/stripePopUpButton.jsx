@@ -12,7 +12,6 @@ import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
-import { classNameWithModifiers } from 'helpers/utilities';
 
 // ---- Types ----- //
 
@@ -28,7 +27,6 @@ type PropTypes = {|
   whenUnableToOpen: () => void,
   canOpen: () => boolean,
   switchStatus: Status,
-  disable: boolean,
   svg: Node,
 |};
 /* eslint-enable react/no-unused-prop-types */
@@ -72,17 +70,11 @@ function Button(props: PropTypes) {
     }
   };
 
-  const baseClass = 'component-stripe-pop-up-button';
-  const className: string = props.disable
-    ? classNameWithModifiers(baseClass, ['disable'])
-    : baseClass;
-
   return (
     <button
       id="qa-pay-with-card"
-      className={className}
+      className="component-stripe-pop-up-button"
       onClick={onClick}
-      disabled={props.disable}
     >
       Pay with debit/credit card {props.svg}
     </button>

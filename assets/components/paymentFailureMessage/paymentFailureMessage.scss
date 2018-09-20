@@ -1,0 +1,43 @@
+.component-payment-failure-message {
+  padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
+  color: gu-colour(news-garnett-main-1);
+  background-color: gu-colour(news-faded);
+  margin-bottom: 20px;
+
+  @include mq($from: tablet) {
+    width: 404px;
+  }
+
+}
+
+.svg-exclamation-alternate {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: bottom;
+}
+
+.svg-exclamation-alternate__circle {
+  fill: gu-colour(news-garnett-main-1);
+}
+
+.svg-exclamation-alternate__exclamation-mark {
+  fill: gu-colour(garnett-neutral-5);
+}
+
+.component-payment-failure-message__error-heading {
+  vertical-align: bottom;
+  display: inline-block;
+  font-family: $gu-sans-web;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.component-payment-failure-message__small-print {
+  display: block;
+  line-height: 18px;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: $gu-v-spacing;
+}
+

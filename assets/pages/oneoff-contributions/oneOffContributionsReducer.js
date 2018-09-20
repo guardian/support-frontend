@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -20,7 +20,7 @@ import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFo
 
 type OneOffContributionsState = {
   amount: number,
-  error: ?string,
+  checkoutFailureReason: ?CheckoutFailureReason,
   paymentComplete: boolean,
 };
 
@@ -44,7 +44,7 @@ function createOneOffContributionsReducer(amount: number) {
 
   const initialState: OneOffContributionsState = {
     amount,
-    error: null,
+    checkoutFailureReason: null,
     paymentComplete: false,
   };
 
@@ -56,7 +56,7 @@ function createOneOffContributionsReducer(amount: number) {
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
-        return { ...state, error: action.message };
+        return { ...state, checkoutFailureReason: action.checkoutFailureReason };
 
       case 'CHECKOUT_SUCCESS':
         return { ...state, paymentComplete: true };

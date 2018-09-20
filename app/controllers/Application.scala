@@ -9,10 +9,12 @@ import com.gu.support.config.StripeConfigProvider
 import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
+
 import services.{IdentityService, PaymentAPIService}
-import admin.Settings
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
+
 import scala.concurrent.{ExecutionContext, Future}
 import monitoring.SafeLogger
 
@@ -21,16 +23,16 @@ class Application(
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
-    stripeConfigProvider: StripeConfigProvider,
+    oneOffStripeConfigProvider: StripeConfigProvider,
+    regularStripeConfigProvider: StripeConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    settings: Settings
-)(implicit val ec: ExecutionContext) extends AbstractController(components) {
+    settingsProvider: SettingsProvider
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
@@ -81,6 +83,7 @@ class Application(
   }
 
   def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian",
       mainId = "support-landing-page",
@@ -88,10 +91,11 @@ class Application(
       mainStyleBundle = "supportLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
       description = Some(stringsConfig.supportLandingDescription)
-    ))
+    )).withSettingsSurrogateKey
   }
 
   def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
       description = Some(stringsConfig.contributionsLandingDescription),
@@ -99,32 +103,37 @@ class Application(
       mainJsBundle = "contributionsLandingPage.js",
       mainStyleBundle = "contributionsLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
+    )).withSettingsSurrogateKey
   }
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
+    implicit val settings: Settings = settingsProvider.settings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(newContributions(countryCode, None)),
       user => Ok(newContributions(countryCode, user))
-    )
+    ).map(_.withSettingsSurrogateKey)
   }
 
-  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader) =
+  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
       js = "newContributionsLandingPage.js",
       css = "newContributionsLandingPageStyles.css",
-      defaultStripeConfig = stripeConfigProvider.get(false),
-      uatStripeConfig = stripeConfigProvider.get(true),
+      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+      oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+      regularUatStripeConfig = regularStripeConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
+  }
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(title, id, js, css))
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

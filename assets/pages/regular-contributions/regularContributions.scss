@@ -23,6 +23,7 @@
 @import '~components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 @import '~components/paymentButtons/payPalExpressButton/payPalExpressButton';
 @import '~components/paymentButtons/stripePopUpButton/stripePopUpButton';
+@import '~components/paymentFailureMessage/paymentFailureMessage';
 @import '~components/progressMessage/progressMessage';
 @import '~components/questionsContact/questionsContact';
 @import '~components/secure/secure';
@@ -95,16 +96,6 @@
   // ----- Payment methods
 
   .component-direct-debit-pop-up-button {
-    margin-bottom: $gu-v-spacing;
-    width: 100%;
-
-    @include mq($from: phablet) {
-      width: 304px;
-    }
-  }
-
-
-  .component-paypal-button-checkout__disabled-pop-up-button {
     margin-bottom: $gu-v-spacing;
     width: 100%;
 
