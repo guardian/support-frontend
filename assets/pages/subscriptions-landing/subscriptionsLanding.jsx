@@ -42,7 +42,7 @@ const content = (
         highlightsHeadingSize={2}
       />
       <SubscriptionsByCountryGroup id={supporterSectionId} headingSize={3} appMedium="subscribe_landing_page" />
-      <WhySupportVideoContainer headingSize={3} />
+      <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}
