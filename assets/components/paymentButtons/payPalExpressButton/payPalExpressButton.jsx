@@ -12,6 +12,7 @@ import type { Status } from 'helpers/settings';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
@@ -51,11 +52,20 @@ function Button(props: PropTypes) {
     return null;
   }
 
+  const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
+    paymentMethod: 'PayPal',
+    token,
+  });
+
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
+  };
+
   const payPalOptions = setup(
     props.amount,
     props.currencyId,
     props.csrf,
-    props.onPaymentAuthorisation,
+    onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
   );

@@ -90,7 +90,7 @@ function setup(
   amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
 ): Promise<Object> {
