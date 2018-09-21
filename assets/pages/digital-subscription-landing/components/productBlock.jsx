@@ -28,10 +28,6 @@ const imageSlot = '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px';
 
 const defaultFeatures: ListItem[] = [
   {
-    heading: 'Ad-free reading',
-    text: 'Independent reporting with no distractions',
-  },
-  {
     heading: ['Live ', <mark className="product-block__highlight">New</mark>],
     text: 'Catch up on every news story as it breaks',
   },
@@ -43,6 +39,10 @@ const defaultFeatures: ListItem[] = [
     heading: 'Enhanced offline reading',
     text: 'Quality journalism on your schedule - download the day\'s news before you travel',
   },
+  {
+    heading: 'Complete the daily crossword',
+    text: 'Get our daily crossword wherever you are'
+  }
 ];
 
 const appFeatures: {
@@ -53,18 +53,17 @@ const appFeatures: {
   International: defaultFeatures,
   AUDCountries: [
     {
-      heading: 'Ad-free reading',
-      text: 'Independent reporting with no distractions',
+      heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
+      text: 'Catch up on every breaking story from Australia and the world, in real time',
+    },
+    {
+      heading: 'Enhanced offline reading',
+      text: 'Quality journalism on your schedule - download the day\'s news before you travel',
     },
     {
       heading: 'Complete the daily crossword',
       text: 'Get our daily crossword wherever you are',
     },
-    {
-      heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
-      text: 'Catch up on every breaking story from Australia and the world, in real time',
-    },
-
   ],
 };
 
@@ -98,8 +97,8 @@ function ProductBlock(props: PropTypes) {
     <div className="product-block">
       <LeftMarginSection>
         <h2 className="product-block__heading">
-          Enjoy our quality, independent journalism, plus extra features
-          on our mobile and tablet apps
+          Read the Guardian ad-free on all your devices, plus get all the
+          benefits of the Premium App and Daily Edition iPad app
         </h2>
         <Product
           modifierClass="premium-app"
