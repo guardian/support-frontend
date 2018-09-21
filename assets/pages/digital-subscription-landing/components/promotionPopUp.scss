@@ -10,14 +10,22 @@
   background-color: rgba(0,0,0,0.6);
 }
 
+//----------------Form------------------//
 .component-promotion-popup__form {
   background-color: gu-colour(garnett-neutral-3);
-  margin: 15% auto;
+  width: 100%;
   border: 1px solid #888;
-  width: 70%;
-  max-width: 640px;
+  @include mq($from: phablet) {
+    margin: 15% 0;
+  }
+  @include mq($from: tablet) {
+    margin: 15% auto;
+    width: 70%;
+    max-width: 640px;
+  }
 }
 
+//----------------Header------------------//
 .component-promotion-popup__header {
   position: relative;
 }
@@ -77,20 +85,34 @@
   display: block;
 }
 
+//-----------------Body------------------//
 .component-promotion-popup__body {
   background: white;
-  display: flex;
+  @include mq($from: tablet) {
+    display: flex;
+  }
 }
 
 .component-promotion-popup__title {
   order: 1;
   font-family: $gu-headline;
   line-height: 42px;
-  font-size: 38px;
-  font-weight: bold;
-  border-right: solid gu-colour(garnett-neutral-4) 1px;
-  padding: 10px 20px;
-  max-width: 280px;
+  font-size: 32px;
+  padding: 10px 10px;
+
+  @include mq($until: tablet) {
+    border-bottom: solid gu-colour(garnett-neutral-4) 1px;
+  }
+  @include mq($from: tablet) {
+    border-right: solid gu-colour(garnett-neutral-4) 1px;
+    font-size: 34px;
+  }
+  @include mq($from: desktop) {
+    padding: 10px 20px;
+    font-size: 38px;
+    font-weight: bold;
+    max-width: 280px;
+  }
 }
 .component-promotion-popup__options {
   order: 2;
