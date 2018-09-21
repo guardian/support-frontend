@@ -15,13 +15,12 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import SvgCross from 'components/svgs/cross';
 
 import type { Phase } from 'components/directDebit/directDebitActions';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
-
+import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: RegularCheckoutCallback,
+  callback: Token => void,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,

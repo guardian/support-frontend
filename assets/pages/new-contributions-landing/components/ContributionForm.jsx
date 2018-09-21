@@ -245,7 +245,7 @@ function ContributionForm(props: PropTypes) {
         </form>
         <DirectDebitPopUpForm
           // TODO: put payment through
-          callback={() => Promise.resolve()}
+          callback={() => undefined}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
       </div>

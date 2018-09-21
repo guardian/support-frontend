@@ -21,18 +21,18 @@ import {
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex, Phase, Action } from 'components/directDebit/directDebitActions';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: RegularCheckoutCallback,
+  callback: Token => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,7 +48,7 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (callback: RegularCheckoutCallback) => void,
+  confirmDirectDebitClicked: (callback: Token => void) => void,
   countryGroupId: CountryGroupId,
 };
 

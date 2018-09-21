@@ -1,5 +1,7 @@
 // @flow
 
+import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+
 
 // ----- Setup ----- //
 
@@ -47,7 +49,7 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
 };
 
 export const setupStripeCheckout = (
-  callback: (token: string) => Promise<*>,
+  callback: Token => void,
   closeHandler: ?() => void,
   currency: string,
   isTestUser: boolean,

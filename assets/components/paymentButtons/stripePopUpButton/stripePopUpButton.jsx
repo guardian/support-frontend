@@ -12,13 +12,15 @@ import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   amount: number,
-  callback: (token: string) => Promise<*>,
+  callback: Token => void,
   closeHandler: () => void,
   currencyId: IsoCurrency,
   email: string,
@@ -61,7 +63,10 @@ function Button(props: PropTypes) {
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
       const testTokenId = 'tok_visa';
-      props.callback(testTokenId);
+      props.callback({
+        paymentMethod: 'Stripe',
+        token: testTokenId,
+      });
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);

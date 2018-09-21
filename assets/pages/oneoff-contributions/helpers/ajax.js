@@ -16,6 +16,7 @@ import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ----- Setup ----- //
@@ -56,7 +57,7 @@ type OnFailure = CheckoutFailureReason => void;
 
 function requestData(
   abParticipations: Participations,
-  paymentToken: string,
+  token: Token,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -66,13 +67,13 @@ function requestData(
   const { user } = getState().page;
 
   if (user.fullName !== null && user.fullName !== undefined &&
-    user.email !== null && user.email !== undefined) {
+    user.email !== null && user.email !== undefined && token.paymentMethod === 'Stripe') {
 
     const oneOffContribFields: PaymentApiStripeExecutePaymentBody = {
       paymentData: {
         currency,
         amount,
-        token: paymentToken,
+        token: token.token,
         email: user.email,
       },
       acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
@@ -129,7 +130,7 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): (string) => Promise<*> {
+): Token => void {
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
@@ -140,7 +141,7 @@ function postCheckout(
     dispatch(checkoutError(checkoutFailureReason));
   };
 
-  return (paymentToken: string) => {
+  return (paymentToken: Token) => {
     const request = requestData(
       abParticipations,
       paymentToken,
@@ -151,7 +152,7 @@ function postCheckout(
       optimizeExperiments,
     );
 
-    return postToEndpoint(request, onSuccess, onFailure);
+    postToEndpoint(request, onSuccess, onFailure);
   };
 }
 
