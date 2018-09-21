@@ -2,19 +2,21 @@
 
 // ----- Imports ----- //
 
-import type { Action } from './findOutMoreActions';
+import type { Action, PromotionOptions } from './promotionPopUpActions';
 
 // ----- Setup ----- //
 
 export type FindOutMoreState = {
   isPopUpOpen: boolean,
+  expandedOption: PromotionOptions,
 };
 
 const initialState: FindOutMoreState = {
   isPopUpOpen: false,
+  expandedOption: 'Saturday',
 };
 
-function findOutMoreReducer(
+function promotionPopUpReducer(
   state: FindOutMoreState = initialState,
   action: Action,
 ) {
@@ -27,10 +29,15 @@ function findOutMoreReducer(
       return Object.assign({}, state, {
         isPopUpOpen: false,
       });
+    case 'EXPAND_OPTION':
+      return Object.assign({}, state, {
+        expandedOption: action.option,
+      });
+
 
     default:
       return state;
   }
 }
 
-export { findOutMoreReducer };
+export { promotionPopUpReducer };

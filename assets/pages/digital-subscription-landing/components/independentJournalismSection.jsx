@@ -8,8 +8,6 @@ import Zuck from 'components/svgs/zuck';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaSwitch from './ctaSwitch';
 
-
-
 export default function IndependentJournalismSection() {
 
   return (

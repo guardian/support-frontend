@@ -8,5 +8,7 @@ import FindOutMoreCta from './findOutMoreCta';
 import { showPromotion } from '../helpers/promotions';
 
 export default function CtaSwitch(props: {referringCta: string}) {
-  return showPromotion() ? <FindOutMoreCta referringCta={props.referringCta} /> : <PriceCtaContainer referringCta={props.referringCta} />;
+  return showPromotion() ?
+    <FindOutMoreCta referringCta={props.referringCta} /> :
+    <PriceCtaContainer referringCta={props.referringCta} />;
 }

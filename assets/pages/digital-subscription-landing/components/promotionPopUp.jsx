@@ -3,16 +3,20 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { Dispatch } from 'redux';
+import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import GridImage from 'components/gridImage/gridImage';
-import type { Action } from 'components/directDebit/directDebitActions';
-import { closePopUp, openPopUp } from './findOutMoreActions';
-import SvgCross from '../../../components/svgs/cross';
+import SvgCross from 'components/svgs/cross';
+import SvgChevron from 'components/svgs/chevron';
+import { classNameWithModifiers } from 'helpers/utilities';
+import { type Action, closePopUp } from './promotionPopUpActions';
+import { expandOption, type PromotionOptions } from './promotionPopUpActions';
 
 type PropTypes = {
   isPopUpOpen: boolean,
+  expandedOption: PromotionOptions,
   closePopUpDialog: () => void,
+  chooseOption: (option: PromotionOptions) => void,
 }
 
 // ----- Map State/Props ----- //
@@ -20,6 +24,7 @@ type PropTypes = {
 function mapStateToProps(state) {
   return {
     isPopUpOpen: state.page.isPopUpOpen,
+    expandedOption: state.page.expandedOption,
   };
 }
 
@@ -29,8 +34,8 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     closePopUpDialog: () => {
       dispatch(closePopUp());
     },
-    openPopUpDialog: () => {
-      dispatch(openPopUp());
+    chooseOption: (option: PromotionOptions) => {
+      dispatch(expandOption(option));
     },
   };
 
@@ -39,29 +44,27 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 function PromotionPopUp(props: PropTypes) {
   if (props.isPopUpOpen) {
     return (
-      <div className="component-find-out-more-popup">
-        <div className="component-find-out-more-popup__form">
-          <div className="component-find-out-more-popup__header">
-            <button onClick={props.closePopUpDialog} className="component-find-out-more-popup__close"><SvgCross /></button>
+      <div className="component-promotion-popup">
+        <div className="component-promotion-popup__form">
+          <div className="component-promotion-popup__header">
+            <button onClick={props.closePopUpDialog} className="component-promotion-popup__close"><SvgCross />
+            </button>
             <GridImage
-              classModifiers={['pop-up-header']}
+              classModifiers={['pop-up-image']}
               gridId="digitalSubscriptionPromotionPopUpHeader"
               srcSizes={[1000, 500, 140]}
               sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
               altText="Blah"
               imgType="png"
             />
+            <div className="component-promotion-popup__roundel">
+              <h1>Upgrade<br />to<br />Paper+<br />Digital</h1>
+            </div>
           </div>
-          <div className="component-find-out-more-popup__body">
-            <h1 className="component-find-out-more-popup__title">Select your subscription to see more</h1>
-            <div className="component-find-out-more-popup__options">
-              <p>To upgrade to paper + digital call 0330 333 6796 and one of our agents will be happy to assist.
-                <ul>
-                  <li>Sat: +£11.26 extra / month</li>
-                  <li>Sun: +£11.27 extra / month</li>
-                  <li>Weekend: +£8.66 extra / month</li>
-                </ul>
-              </p>
+          <div className="component-promotion-popup__body">
+            <h2 className="component-promotion-popup__title">Select your subscription to see more</h2>
+            <div className="component-promotion-popup__options">
+              <Options expandedOption={props.expandedOption} chooseOption={props.chooseOption} />
             </div>
           </div>
         </div>
@@ -69,6 +72,59 @@ function PromotionPopUp(props: PropTypes) {
     );
   }
   return null;
+}
+
+function getOptionClassName(expandedOption: PromotionOptions, thisOption: PromotionOptions) {
+  const modifier = expandedOption === thisOption ? 'open' : 'closed';
+  return classNameWithModifiers('component-promotion-options__item', [modifier]);
+}
+
+function Options(props: {
+  expandedOption: PromotionOptions,
+  chooseOption: (option: PromotionOptions) => void}) {
+  return (
+    <ul>
+      <OptionItem
+        thisOption="Saturday"
+        description="The Saturday paper plus the iPad daily edition and Premium mobile app, for an extra £11.26/month.
+          To get the offer please call 0330 333 6796 and one of our agents will be happy to assist."
+        {...props}
+      />
+      <OptionItem
+        thisOption="Sunday"
+        description="The Observer on Sunday plus the iPad daily edition and Premium mobile app, for an extra £11.27/month.
+          To get the offer please call 0330 333 6796 and one of our agents will be happy to assist."
+        {...props}
+      />
+      <OptionItem
+        thisOption="Weekend"
+        description="The Saturday paper, the Observer on Sunday plus the iPad daily edition and Premium mobile app,
+          for an extra £8.66/month. To get the offer please call 0330 333 6796 and one of our agents
+          will be happy to assist."
+        {...props}
+      />
+    </ul>
+  );
+}
+
+function OptionItem(props: {
+  expandedOption: PromotionOptions,
+  thisOption: PromotionOptions,
+  chooseOption: (option: PromotionOptions) => void,
+  description: string,
+}) {
+  return (
+    <li className={getOptionClassName(props.expandedOption, props.thisOption)}>
+      <button className="component-promotion-options__button" onClick={() => props.chooseOption(props.thisOption)}>
+        <SvgChevron />
+      </button>
+      <h3 className="component-promotion-options__title">{`I have a ${props.thisOption} subscription`}</h3>
+      <span className="component-promotion-options__description">
+        {props.description}
+      </span>
+    </li>
+  );
+
 }
 
 // ----- Exports ----- //

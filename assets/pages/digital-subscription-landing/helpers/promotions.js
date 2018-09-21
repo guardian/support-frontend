@@ -3,7 +3,7 @@
 import { getQueryParameter } from 'helpers/url';
 
 function showPromotion(): boolean {
-  return getQueryParameter('promoCode', null) === 'the_code'; // TODO: need the actual code here
+  return getQueryParameter('promoCode') === 'the_code'; // TODO: need the actual code here
 }
 
 
