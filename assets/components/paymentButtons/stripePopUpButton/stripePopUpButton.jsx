@@ -55,18 +55,23 @@ const StripePopUpButton = (props: PropTypes) => (
 
 function Button(props: PropTypes) {
 
+  const stripeTokenToToken = (stripeTokenAsString: string): Token => ({
+    paymentMethod: 'Stripe',
+    token: stripeTokenAsString,
+  });
+
+  const newCallback = (stripeTokenAsString: string): void => {
+    props.callback(stripeTokenToToken(stripeTokenAsString));
+  };
+
   if (!isStripeSetup()) {
-    setupStripeCheckout(props.callback, props.closeHandler, props.currencyId, props.isTestUser);
+    setupStripeCheckout(newCallback, props.closeHandler, props.currencyId, props.isTestUser);
   }
 
   const onClick = () => {
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
-      const testTokenId = 'tok_visa';
-      props.callback({
-        paymentMethod: 'Stripe',
-        token: testTokenId,
-      });
+      newCallback('tok_visa');
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);
