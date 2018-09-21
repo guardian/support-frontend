@@ -41,8 +41,8 @@ const defaultFeatures: ListItem[] = [
   },
   {
     heading: 'Complete the daily crossword',
-    text: 'Get our daily crossword wherever you are'
-  }
+    text: 'Get our daily crossword wherever you are',
+  },
 ];
 
 const appFeatures: {
