@@ -1,5 +1,4 @@
 // @flow
-import type { Dispatch } from 'redux';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
@@ -17,7 +16,6 @@ import { type UsState, type CaState, type IsoCountry } from 'helpers/internation
 import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
-import { type Action, setGuestAccountCreationToken } from '../../pages/new-contributions-landing/contributionsLandingActions';
 
 import * as cookie from 'helpers/cookie';
 
@@ -126,7 +124,7 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
 function checkRegularStatus(
   participations: Participations,
   csrf: CsrfState,
-  dispatch: Dispatch<Action>,
+  setGuestAccountCreationToken: (string) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
@@ -150,7 +148,7 @@ function checkRegularStatus(
 
   return (json) => {
     if (json.guestAccountCreationToken) {
-      dispatch(setGuestAccountCreationToken(json.guestAccountCreationToken));
+      setGuestAccountCreationToken(json.guestAccountCreationToken);
     }
     switch (json.status) {
       case 'pending':
@@ -195,12 +193,12 @@ function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
-  dispatch: Dispatch<Action>,
+  setGuestAccountCreationToken: (string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf, dispatch)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
 }
 
 export {

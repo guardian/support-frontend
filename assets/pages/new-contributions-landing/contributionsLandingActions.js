@@ -104,7 +104,7 @@ const sendData = (data: PaymentFields) =>
               data,
               state.common.abParticipations,
               state.page.csrf,
-              dispatch,
+              token => dispatch(setGuestAccountCreationToken(token)),
             )));
             return;
         }
