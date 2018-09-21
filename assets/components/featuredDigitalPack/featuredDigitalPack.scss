@@ -62,9 +62,8 @@
     }
 
     @include mq($from: wide) {
-      top: 50px;
-      width: 750px;
-      margin-left: 100px;
+      top: 80px;
+      margin-left: 160px;
     }
   }
 
@@ -86,6 +85,10 @@
 
     @include mq($from: leftCol) {
       top: 95px;
+    }
+
+    @include mq($from: wide) {
+      top: 150px;
     }
   }
 }
