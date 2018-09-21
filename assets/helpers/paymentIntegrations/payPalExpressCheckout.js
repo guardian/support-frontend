@@ -8,7 +8,6 @@ import * as storage from 'helpers/storage';
 import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { formClassName } from '../../pages/regular-contributions/components/formFields';
 
 
