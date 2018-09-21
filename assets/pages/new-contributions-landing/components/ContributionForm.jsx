@@ -15,7 +15,7 @@ import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -66,7 +66,7 @@ type PropTypes = {|
   updateEmail: Event => void,
   updateState: Event => void,
   onWaiting: boolean => void,
-  onThirdPartyPaymentDone: Token => void,
+  onThirdPartyPaymentDone: PaymentAuthorisation => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
@@ -172,7 +172,7 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const paymentCallback = (token: Token) => {
+  const paymentCallback = (token: PaymentAuthorisation) => {
     props.onWaiting(true);
     props.onThirdPartyPaymentDone(token);
   };

@@ -11,13 +11,13 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {|
   amount: number,
-  callback: Token => void,
+  callback: PaymentAuthorisation => void,
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,

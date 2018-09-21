@@ -8,7 +8,7 @@ import * as storage from 'helpers/storage';
 import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { formClassName } from '../../pages/regular-contributions/components/formFields';
 
 
@@ -90,7 +90,7 @@ function setup(
   amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  callback: Token => void,
+  callback: PaymentAuthorisation => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
 ): Promise<Object> {

@@ -11,7 +11,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
@@ -27,7 +27,7 @@ type PropTypes = {
   contributionType: Contrib,
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
-  paymentCallback: Token => void,
+  paymentCallback: PaymentAuthorisation => void,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
   isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,

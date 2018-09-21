@@ -15,7 +15,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -57,7 +57,7 @@ type OnFailure = CheckoutFailureReason => void;
 
 function requestData(
   abParticipations: Participations,
-  token: Token,
+  token: PaymentAuthorisation,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -130,7 +130,7 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): Token => void {
+): PaymentAuthorisation => void {
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
@@ -141,7 +141,7 @@ function postCheckout(
     dispatch(checkoutError(checkoutFailureReason));
   };
 
-  return (paymentToken: Token) => {
+  return (paymentToken: PaymentAuthorisation) => {
     const request = requestData(
       abParticipations,
       paymentToken,

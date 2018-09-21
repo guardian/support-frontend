@@ -5,7 +5,7 @@
 import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type Token, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';
@@ -111,7 +111,7 @@ const getAmount = (state: State) =>
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeOneOffPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -128,7 +128,7 @@ const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) =>
   },
 });
 
-const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
@@ -150,7 +150,7 @@ const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) =
   },
 });
 
-const onThirdPartyPaymentDone = (token: Token) =>
+const onThirdPartyPaymentDone = (token: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 

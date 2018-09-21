@@ -27,12 +27,12 @@ import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: Token => void,
+  callback: PaymentAuthorisation => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,7 +48,7 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (callback: Token => void) => void,
+  confirmDirectDebitClicked: (callback: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
 };
 

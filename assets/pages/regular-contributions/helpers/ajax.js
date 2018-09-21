@@ -13,7 +13,7 @@ import { getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
@@ -89,7 +89,7 @@ const paymentMethodToPaymentFieldMap = {
 };
 
 const getPaymentFields =
-  (token: Token): ?(PayPalDetails | StripeDetails | DirectDebitDetails) => {
+  (token: PaymentAuthorisation): ?(PayPalDetails | StripeDetails | DirectDebitDetails) => {
     let response = null;
     switch (token.paymentMethod) {
       case 'PayPal':
@@ -125,7 +125,7 @@ function requestData(
   paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-  token: Token,
+  token: PaymentAuthorisation,
   optimizeExperiments: OptimizeExperiments,
 ) {
 
@@ -275,8 +275,8 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): Token => void {
-  return (token: Token) => {
+): PaymentAuthorisation => void {
+  return (token: PaymentAuthorisation) => {
     pollCount = 0;
     dispatch(creatingContributor());
 
