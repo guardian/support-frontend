@@ -39,7 +39,7 @@ import {
   updateLastName,
   updateEmail,
   updateState,
-  onThirdPartyPaymentDone,
+  onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
 } from '../contributionsLandingActions';
 
@@ -66,7 +66,7 @@ type PropTypes = {|
   updateEmail: Event => void,
   updateState: Event => void,
   onWaiting: boolean => void,
-  onThirdPartyPaymentDone: PaymentAuthorisation => void,
+  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
@@ -104,7 +104,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
+  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
 });
@@ -172,9 +172,9 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const paymentCallback = (token: PaymentAuthorisation) => {
+  const paymentCallback = (paymentAuthorisation: PaymentAuthorisation) => {
     props.onWaiting(true);
-    props.onThirdPartyPaymentDone(token);
+    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
   const checkOtherAmount: string => boolean = input =>

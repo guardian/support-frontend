@@ -57,7 +57,7 @@ type OnFailure = CheckoutFailureReason => void;
 
 function requestData(
   abParticipations: Participations,
-  token: StripeAuthorisation,
+  stripeAuthorisation: StripeAuthorisation,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -73,7 +73,7 @@ function requestData(
       paymentData: {
         currency,
         amount,
-        token: token.token,
+        token: stripeAuthorisation.token,
         email: user.email,
       },
       acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
@@ -141,10 +141,10 @@ function postCheckout(
     dispatch(checkoutError(checkoutFailureReason));
   };
 
-  return (paymentToken: StripeAuthorisation) => {
+  return (stripeAuthorisation: StripeAuthorisation) => {
     const request = requestData(
       abParticipations,
-      paymentToken,
+      stripeAuthorisation,
       currencyId,
       amount,
       referrerAcquisitionData,

@@ -150,17 +150,17 @@ const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (
   },
 });
 
-const onThirdPartyPaymentDone = (token: PaymentAuthorisation) =>
+const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(sendData(makeOneOffPaymentData(token, state)));
+        dispatch(sendData(makeOneOffPaymentData(paymentAuthorisation, state)));
         return;
 
       default:
-        dispatch(sendData(makeRegularPaymentData(token, state)));
+        dispatch(sendData(makeRegularPaymentData(paymentAuthorisation, state)));
 
     }
   };
@@ -178,6 +178,6 @@ export {
   paymentFailure,
   paymentWaiting,
   paymentSuccess,
-  onThirdPartyPaymentDone,
+  onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
 };

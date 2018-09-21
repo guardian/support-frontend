@@ -125,7 +125,7 @@ function requestData(
   paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-  token: PaymentAuthorisation,
+  paymentAuthorisation: PaymentAuthorisation,
   optimizeExperiments: OptimizeExperiments,
 ) {
 
@@ -141,7 +141,7 @@ function requestData(
 
   const ophanIds: OphanIds = getOphanIds();
   const supportAbTests = getSupportAbTests(abParticipations, optimizeExperiments);
-  const paymentFields = getPaymentFields(token);
+  const paymentFields = getPaymentFields(paymentAuthorisation);
 
   if (!paymentFields) {
     return Promise.resolve({
@@ -276,7 +276,7 @@ function postCheckout(
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
 ): PaymentAuthorisation => void {
-  return (token: PaymentAuthorisation) => {
+  return (paymentAuthorisation: PaymentAuthorisation) => {
     pollCount = 0;
     dispatch(creatingContributor());
 
@@ -289,7 +289,7 @@ function postCheckout(
       paymentMethodToPaymentFieldMap[paymentMethod],
       referrerAcquisitionData,
       getState,
-      token,
+      paymentAuthorisation,
       optimizeExperiments,
     );
 
