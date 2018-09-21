@@ -41,6 +41,8 @@ export const imageCatalogue: {
   digitalSubscriptionHeaderMobile: 'ed4028ccd5abd85b330114e3ef48660358f63969/0_0_1200_1755',
   digitalSubscriptionHeaderMobileAU: 'dbe3974508706a41e710f198b1da02f44e6141a1/945_0_1088_1755',
   digitalSubscriptionPromotionPopUpHeader: 'd0322e698dc8b30337feefd3294c8b82882c353b/0_0_2770_1410',
+  digitalPackBenefitsMobile: '4dbe893d4d76164a5ddef7e0230372dc6acb2f53/0_0_1730_1510',
+  digitalPackBenefitsDesktop: '35e2adb47899023829cd8d5af1a24697ffe59f77/0_0_796_420',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

@@ -5,6 +5,9 @@
 import React from 'react';
 
 import { getQueryParameter } from 'helpers/url';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
+import FeaturedDigitalPack from 'components/featuredDigitalPack/featuredDigitalPack';
 
 import DigitalSection from './digitalSection';
 import PaperSection from './paperSection';
@@ -15,6 +18,8 @@ import PaperSection from './paperSection';
 type PropTypes = {
   paperSection: React$Element<typeof PaperSection>,
   digitalSection: React$Element<typeof DigitalSection>,
+  countryGroupId: CountryGroupId,
+  digitalPackUrl: string,
 };
 
 
@@ -30,7 +35,11 @@ function FeaturedProductTest(props: PropTypes) {
     case 'featured':
       return (
         <div className={className}>
-          <h1>Featured</h1>
+          <FeaturedDigitalPack
+            headingSize={3}
+            countryGroupId={props.countryGroupId}
+            url={props.digitalPackUrl}
+          />
           {props.digitalSection}
           {props.paperSection}
         </div>
@@ -39,7 +48,11 @@ function FeaturedProductTest(props: PropTypes) {
     case 'featuredShort':
       return (
         <div className={className}>
-          <h1>Featured</h1>
+          <FeaturedDigitalPack
+            headingSize={3}
+            countryGroupId={props.countryGroupId}
+            url={props.digitalPackUrl}
+          />
           {props.paperSection}
         </div>
       );
