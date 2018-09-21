@@ -98,8 +98,8 @@ function ProductBlock(props: PropTypes) {
     <div className="product-block">
       <LeftMarginSection>
         <h2 className="product-block__heading">
-          Enjoy our quality, independent journalism, plus extra features
-          on our mobile and tablet apps
+          Read the Guardian ad-free on all your devices,
+          plus get all the benefits of the Premium App and Daily Edition iPad app
         </h2>
         <Product
           modifierClass="premium-app"

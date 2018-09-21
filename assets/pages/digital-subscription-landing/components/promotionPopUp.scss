@@ -135,6 +135,12 @@
   }
 }
 
+.component-promotion-options__item {
+  p {
+    margin-bottom: 8px;
+  }
+}
+
 .component-promotion-options__item--closed {
   .component-promotion-options__description {
     display: none;

@@ -86,21 +86,35 @@ function Options(props: {
     <ul>
       <OptionItem
         thisOption="Saturday"
-        description="The Saturday paper plus the iPad daily edition and Premium mobile app, for an extra £11.26/month.
-          To get the offer please call 0330 333 6796 and one of our agents will be happy to assist."
+        description={
+          <span>
+            <p>Get the Saturday paper, plus a Digital Pack subscription for just £11.26 extra per month.</p>
+            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
+          </span>
+        }
         {...props}
       />
       <OptionItem
         thisOption="Sunday"
-        description="The Observer on Sunday plus the iPad daily edition and Premium mobile app, for an extra £11.27/month.
-          To get the offer please call 0330 333 6796 and one of our agents will be happy to assist."
+        description={
+          <span>
+            <p>Get the Observer on Sunday, plus a Digital Pack subscription for just £11.27 extra per month.</p>
+            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
+          </span>
+        }
         {...props}
       />
       <OptionItem
         thisOption="Weekend"
-        description="The Saturday paper, the Observer on Sunday plus the iPad daily edition and Premium mobile app,
-          for an extra £8.66/month. To get the offer please call 0330 333 6796 and one of our agents
-          will be happy to assist."
+        description={
+          <span>
+            <p>
+              Get the Saturday paper, the Observer on Sunday, plus a Digital Pack
+              subscription for just £8.66 extra per month.
+            </p>
+            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
+          </span>
+        }
         {...props}
       />
     </ul>
