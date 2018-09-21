@@ -9,6 +9,7 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 import Video from 'components/video/video';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type VideoId } from 'helpers/youtube';
 
 
 // ----- Props ----- //
@@ -21,7 +22,7 @@ type PropTypes = {
 
 // ----- Functions ----- //
 
-function getVideoId(cgId: CountryGroupId) {
+function getVideoId(cgId: CountryGroupId): VideoId {
 
   switch (cgId) {
 
