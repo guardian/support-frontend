@@ -21,20 +21,28 @@
       padding-left: $gu-h-spacing;
     }
   }
-}
 
-.component-why-support-video__video {
-  margin: ($gu-v-spacing * 2) 0;
-  background-color: #333;
-  width: 100%;
-  padding-bottom: 56%;
+  .component-video {
+    margin: ($gu-v-spacing * 2) 0;
+    width: 100%;
+    padding-bottom: 56.25%;
+    position: relative;
 
-  @include mq($from: wide) {
-    width: 645px;
-    height: 363px;
-    padding-bottom: 0;
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include mq($from: desktop) {
+      width: 645px;
+      height: 363px;
+      padding-bottom: 0;
+    }
   }
 }
+
+
 
 .component-why-support-video__heading {
   font-family: $gu-headline;
@@ -50,7 +58,7 @@
 .component-why-support-video__copy {
   margin-top: $gu-v-spacing;
 
-  @include mq($from: wide) {
+  @include mq($from: desktop) {
     width: 630px;
   }
 }

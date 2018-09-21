@@ -11,11 +11,10 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
+import WhySupportVideoContainer from 'components/whySupportVideo/whySupportVideoContainer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-
-import WhySupportByCountryGroup from './components/whySupportByCountryGroup';
 
 
 // ----- Setup ----- //
@@ -43,7 +42,7 @@ const content = (
         highlightsHeadingSize={2}
       />
       <SubscriptionsByCountryGroup id={supporterSectionId} headingSize={3} appMedium="subscribe_landing_page" />
-      <WhySupportByCountryGroup />
+      <WhySupportVideoContainer headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}

@@ -6,25 +6,49 @@ import React from 'react';
 
 import PageSection from 'components/pageSection/pageSection';
 import Heading, { type HeadingSize } from 'components/heading/heading';
+import Video from 'components/video/video';
+
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Props ----- //
 
 type PropTypes = {
   headingSize: HeadingSize,
+  countryGroupId: CountryGroupId,
 };
+
+
+// ----- Functions ----- //
+
+function getVideoId(cgId: CountryGroupId) {
+
+  switch (cgId) {
+
+    case 'UnitedStates':
+    case 'AUDCountries':
+      return 'subscribeCampaignUS';
+
+    default:
+      return 'subscribeCampaignUK';
+
+  }
+
+}
 
 
 // ----- Component ----- //
 
 function WhySupportVideo(props: PropTypes) {
 
-  const { headingSize, ...otherProps } = props;
+  const { headingSize, countryGroupId, ...otherProps } = props;
+
+  const videoId = getVideoId(countryGroupId);
 
   return (
     <div className="component-why-support-video" {...otherProps}>
       <PageSection heading="Why support?" modifierClass="why-support-video">
-        <div className="component-why-support-video__video" />
+        <Video videoId={videoId} title="The Guardian - a space worth supporting" />
         <Heading className="component-why-support-video__heading" size={props.headingSize}>
           Your subscription helps support independent investigative journalism
         </Heading>
