@@ -158,6 +158,9 @@
 .component-promotion-options__description {
   display: block;
   margin-left: 44px;
+  strong {
+    font-weight: bold;
+  }
 }
 
 .component-promotion-options__description-p1 {
