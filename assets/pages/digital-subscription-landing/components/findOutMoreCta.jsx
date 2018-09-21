@@ -13,22 +13,16 @@ type PropTypes = {
   openPopUpDialog: () => void,
 }
 
-// ----- Map State/Props ----- //
-
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
-
   return {
     openPopUpDialog: () => {
       dispatch(openPopUp());
     },
   };
-
 }
 
 function FindOutMoreCta(props: PropTypes) {
-
   return <Button onClick={props.openPopUpDialog} />;
-
 }
 
 function Button(props: { onClick: () => void }) {

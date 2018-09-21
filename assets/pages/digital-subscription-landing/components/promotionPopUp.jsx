@@ -16,7 +16,7 @@ type PropTypes = {
   isPopUpOpen: boolean,
   expandedOption: PromotionOptions,
   closePopUpDialog: () => void,
-  chooseOption: (option: PromotionOptions) => void,
+  expandOption: (option: PromotionOptions) => void,
 }
 
 // ----- Map State/Props ----- //
@@ -34,7 +34,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     closePopUpDialog: () => {
       dispatch(closePopUp());
     },
-    chooseOption: (option: PromotionOptions) => {
+    expandOption: (option: PromotionOptions) => {
       dispatch(expandOption(option));
     },
   };
@@ -54,7 +54,6 @@ function PromotionPopUp(props: PropTypes) {
               gridId="digitalSubscriptionPromotionPopUpHeader"
               srcSizes={[1000, 500, 140]}
               sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
-              altText="Blah"
               imgType="png"
             />
             <div className="component-promotion-popup__roundel">
@@ -64,7 +63,7 @@ function PromotionPopUp(props: PropTypes) {
           <div className="component-promotion-popup__body">
             <h2 className="component-promotion-popup__title">Select your subscription to see more</h2>
             <div className="component-promotion-popup__options">
-              <Options expandedOption={props.expandedOption} chooseOption={props.chooseOption} />
+              <Options expandedOption={props.expandedOption} expandOption={props.expandOption} />
             </div>
           </div>
         </div>
@@ -81,40 +80,22 @@ function getOptionClassName(expandedOption: PromotionOptions, thisOption: Promot
 
 function Options(props: {
   expandedOption: PromotionOptions,
-  chooseOption: (option: PromotionOptions) => void}) {
+  expandOption: (option: PromotionOptions) => void}) {
   return (
     <ul>
       <OptionItem
         thisOption="Saturday"
-        description={
-          <span>
-            <p>Get the Saturday paper, plus a Digital Pack subscription for just £11.26 extra per month.</p>
-            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
-          </span>
-        }
+        description="Get the Saturday paper, plus a Digital Pack subscription for just £11.26 extra per month."
         {...props}
       />
       <OptionItem
         thisOption="Sunday"
-        description={
-          <span>
-            <p>Get the Observer on Sunday, plus a Digital Pack subscription for just £11.27 extra per month.</p>
-            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
-          </span>
-        }
+        description="Get the Observer on Sunday, plus a Digital Pack subscription for just £11.27 extra per month"
         {...props}
       />
       <OptionItem
         thisOption="Weekend"
-        description={
-          <span>
-            <p>
-              Get the Saturday paper, the Observer on Sunday, plus a Digital Pack
-              subscription for just £8.66 extra per month.
-            </p>
-            <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
-          </span>
-        }
+        description="Get the Saturday paper, the Observer on Sunday, plus a Digital Pack subscription for just £8.66 extra per month."
         {...props}
       />
     </ul>
@@ -124,17 +105,18 @@ function Options(props: {
 function OptionItem(props: {
   expandedOption: PromotionOptions,
   thisOption: PromotionOptions,
-  chooseOption: (option: PromotionOptions) => void,
+  expandOption: (option: PromotionOptions) => void,
   description: string,
 }) {
   return (
     <li className={getOptionClassName(props.expandedOption, props.thisOption)}>
-      <button className="component-promotion-options__button" onClick={() => props.chooseOption(props.thisOption)}>
+      <button className="component-promotion-options__button" onClick={() => props.expandOption(props.thisOption)}>
         <SvgChevron />
       </button>
       <h3 className="component-promotion-options__title">{`I have a ${props.thisOption} subscription`}</h3>
       <span className="component-promotion-options__description">
-        {props.description}
+        <p className="component-promotion-options__description-p1">{props.description}</p>
+        <p>To upgrade, please call 0330 333 6796 and one of our agents will be happy to assist.</p>
       </span>
     </li>
   );
