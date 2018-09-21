@@ -1,5 +1,4 @@
 // @flow
-
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
@@ -79,7 +78,6 @@ export type PaymentResult
   | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
 
 // ----- Setup ----- //
-
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
@@ -129,7 +127,11 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
  * - failed, then we bubble up an error value
  * - otherwise, we bubble up a success value
  */
-function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
+function checkRegularStatus(
+  participations: Participations,
+  csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
+): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
       case 'success':
@@ -151,6 +153,9 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   };
 
   return (json) => {
+    if (json.guestAccountCreationToken) {
+      setGuestAccountCreationToken(json.guestAccountCreationToken);
+    }
     switch (json.status) {
       case 'pending':
         return logPromise(pollUntilPromise(
@@ -194,11 +199,12 @@ function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
 }
 
 export {
