@@ -85,7 +85,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
   if (props.country === 'GB') {
     directDebitButton = (
       <DirectDebitPopUpButton
-        callback={postCheckout(
+        onPaymentAuthorisation={postCheckout(
           props.abParticipations,
           props.amount,
           props.csrf,
@@ -105,7 +105,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
 
   const stripeButton = (<StripePopUpButton
     email={props.email}
-    callback={postCheckout(
+    onPaymentAuthorisation={postCheckout(
       props.abParticipations,
       props.amount,
       props.csrf,
@@ -131,7 +131,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     amount={props.amount}
     currencyId={props.currencyId}
     csrf={props.csrf}
-    callback={postCheckout(
+    onPaymentAuthorisation={postCheckout(
       props.abParticipations,
       props.amount,
       props.csrf,

@@ -172,7 +172,7 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const paymentCallback = (paymentAuthorisation: PaymentAuthorisation) => {
+  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.onWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
@@ -239,13 +239,13 @@ function ContributionForm(props: PropTypes) {
             required
           />
           <NewContributionState onChange={props.updateState} value={state} />
-          <NewContributionPayment paymentCallback={paymentCallback} />
+          <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
         <DirectDebitPopUpForm
           // TODO: put payment through
-          callback={() => undefined}
+          onPaymentAuthorisation={() => undefined}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
       </div>

@@ -90,13 +90,13 @@ function setup(
   amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
-    callback(baid.token);
+    onPaymentAuthorisation(baid.token);
   };
 
   const onAuthorize = (data) => {

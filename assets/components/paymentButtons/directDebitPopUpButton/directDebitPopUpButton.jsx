@@ -22,7 +22,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
   switchStatus: Status,
@@ -75,7 +75,7 @@ function ButtonAndForm(props: PropTypes) {
           canOpen={props.canOpen}
           whenUnableToOpen={props.whenUnableToOpen}
         />
-        <DirectDebitPopUpForm callback={props.callback} />
+        <DirectDebitPopUpForm onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>
     );
   }

@@ -20,7 +20,7 @@ import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerReve
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   amount: number,
-  callback: StripeAuthorisation => void,
+  onPaymentAuthorisation: StripeAuthorisation => void,
   closeHandler: () => void,
   currencyId: IsoCurrency,
   email: string,
@@ -60,18 +60,18 @@ function Button(props: PropTypes) {
     token,
   });
 
-  const newCallback = (token: string): void => {
-    props.callback(tokenToAuthorisation(token));
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
   };
 
   if (!isStripeSetup()) {
-    setupStripeCheckout(newCallback, props.closeHandler, props.currencyId, props.isTestUser);
+    setupStripeCheckout(onPaymentAuthorisation, props.closeHandler, props.currencyId, props.isTestUser);
   }
 
   const onClick = () => {
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
-      newCallback('tok_visa');
+      onPaymentAuthorisation('tok_visa');
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);

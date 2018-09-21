@@ -20,7 +20,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,
@@ -70,7 +70,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
               <SvgCross />
             </span>
           </button>
-          <DirectDebitForm callback={props.callback} />
+          <DirectDebitForm onPaymentAuthorisation={props.onPaymentAuthorisation} />
         </div>
       </div>
     );

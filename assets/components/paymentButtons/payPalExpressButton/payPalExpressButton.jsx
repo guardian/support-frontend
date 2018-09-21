@@ -17,7 +17,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 
 type PropTypes = {|
   amount: number,
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
@@ -55,7 +55,7 @@ function Button(props: PropTypes) {
     props.amount,
     props.currencyId,
     props.csrf,
-    props.callback,
+    props.onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
   );

@@ -56,14 +56,14 @@ function getStripeKey(contributionType: Contrib, currency: IsoCurrency, isTestUs
 }
 
 function setupStripeCheckout(
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   contributionType: Contrib,
   currency: IsoCurrency,
   isTestUser: boolean,
 ): Promise<Object> {
   return loadStripe().then(() => {
     const handleToken = (token) => {
-      callback({ paymentMethod: 'Stripe', token: token.id });
+      onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id });
     };
 
     const stripeKey = getStripeKey(contributionType, currency, isTestUser);

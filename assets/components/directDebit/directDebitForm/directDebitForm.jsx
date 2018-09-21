@@ -32,7 +32,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: PaymentAuthorisation => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,7 +48,7 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (callback: PaymentAuthorisation => void) => void,
+  confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
 };
 
@@ -78,8 +78,8 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     editDirectDebitClicked: () => {
       dispatch(setDirectDebitFormPhase('entry'));
     },
-    confirmDirectDebitClicked: (callback) => {
-      dispatch(confirmDirectDebitClicked(callback));
+    confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
+      dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
       return false;
     },
     openDDGuaranteeClicked: () => {
@@ -140,7 +140,7 @@ const DirectDebitForm = (props: PropTypes) => (
       phase={props.phase}
       onPayClick={() => props.payDirectDebitClicked()}
       onEditClick={() => props.editDirectDebitClicked()}
-      onConfirmClick={() => props.confirmDirectDebitClicked(props.callback)}
+      onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
     />
 
     <ErrorMessage
