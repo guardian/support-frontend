@@ -12,7 +12,7 @@ import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ---- Types ----- //
@@ -20,7 +20,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   amount: number,
-  callback: PaymentAuthorisation => void,
+  callback: StripeAuthorisation => void,
   closeHandler: () => void,
   currencyId: IsoCurrency,
   email: string,
@@ -55,13 +55,13 @@ const StripePopUpButton = (props: PropTypes) => (
 
 function Button(props: PropTypes) {
 
-  const stripeTokenToToken = (stripeTokenAsString: string): PaymentAuthorisation => ({
+  const tokenToAuthorisation = (token: string): StripeAuthorisation => ({
     paymentMethod: 'Stripe',
-    token: stripeTokenAsString,
+    token,
   });
 
-  const newCallback = (stripeTokenAsString: string): void => {
-    props.callback(stripeTokenToToken(stripeTokenAsString));
+  const newCallback = (token: string): void => {
+    props.callback(tokenToAuthorisation(token));
   };
 
   if (!isStripeSetup()) {
