@@ -172,6 +172,7 @@ function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): P
       sortCode: authorisation.sortCode,
       accountNumber: authorisation.accountNumber,
     };
+    // TODO: what is a sane way to handle such cases?
     default: throw new Error('If Flow works, this cannot happen');
   }
 }

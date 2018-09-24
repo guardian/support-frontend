@@ -38,7 +38,7 @@ type RegularContribution = {|
 |};
 
 // TODO: can we do away with these types and use the PaymentAuthorisation here?
-// and do away with getPaymentFields and paymentDetailsFromAuthorisation
+// and thus do away with getPaymentFields and paymentDetailsFromAuthorisation
 // (would probably require backend renaming)
 export type PayPalDetails = {| baid: string |};
 
