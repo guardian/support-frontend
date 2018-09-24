@@ -11,6 +11,7 @@ import SvgChevron from 'components/svgs/chevron';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Action, closePopUp } from './promotionPopUpActions';
 import { expandOption, type PromotionOptions } from './promotionPopUpActions';
+import { type State } from './promotionPopUpReducer';
 
 type PropTypes = {
   isPopUpOpen: boolean,
@@ -21,7 +22,7 @@ type PropTypes = {
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
+function mapStateToProps(state: State) {
   return {
     isPopUpOpen: state.page.isPopUpOpen,
     expandedOption: state.page.expandedOption,

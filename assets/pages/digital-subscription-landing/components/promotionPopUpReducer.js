@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { Action, PromotionOptions } from './promotionPopUpActions';
+import type { CommonState } from '../../../helpers/page/page';
 
 // ----- Setup ----- //
 
@@ -11,12 +12,17 @@ export type FindOutMoreState = {
   expandedOption: PromotionOptions,
 };
 
+export type State = {
+  common: CommonState,
+  page: FindOutMoreState,
+};
+
 const initialState: FindOutMoreState = {
   isPopUpOpen: false,
   expandedOption: 'Saturday',
 };
 
-function promotionPopUpReducer(
+export default function promotionPopUpReducer(
   state: FindOutMoreState = initialState,
   action: Action,
 ) {
@@ -39,5 +45,3 @@ function promotionPopUpReducer(
       return state;
   }
 }
-
-export { promotionPopUpReducer };
