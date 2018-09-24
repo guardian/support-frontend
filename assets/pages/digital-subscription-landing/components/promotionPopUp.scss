@@ -14,7 +14,6 @@
 .component-promotion-popup__form {
   background-color: gu-colour(garnett-neutral-3);
   width: 100%;
-  border: 1px solid #888;
   @include mq($from: phablet) {
     margin: 15% 0;
   }
@@ -31,7 +30,6 @@
 }
 
 .component-promotion-popup__close {
-  color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -51,7 +49,7 @@
 
 .component-promotion-popup__close:hover,
 .component-promotion-popup__close:focus {
-  color: black;
+  color: gu-colour(garnett-neutral-1);
   text-decoration: none;
   cursor: pointer;
 }
@@ -165,5 +163,10 @@
 
 .component-promotion-options__description-p1 {
   margin-bottom: 8px;
+}
+
+.component-promotion-options__phone-link {
+  color: initial;
+  text-decoration: none;
 }
 
