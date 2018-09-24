@@ -13,14 +13,14 @@ import { getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
+import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
@@ -71,7 +71,8 @@ type Status = 'success' | 'failure' | 'pending';
 type StatusResponse = {|
   status: Status,
   trackingUri: string,
-  failureReason: CheckoutFailureReason
+  failureReason: CheckoutFailureReason,
+  guestAccountCreationToken?: string
 |}
 
 // ----- Functions ----- //
@@ -88,38 +89,25 @@ const paymentMethodToPaymentFieldMap = {
 };
 
 const getPaymentFields =
-  (
-    token?: string,
-    accountNumber?: string,
-    sortCode?: string,
-    accountHolderName?: string,
-    paymentFieldName: string,
-  ): ?(PayPalDetails | StripeDetails | DirectDebitDetails
-    ) => {
+  (token: PaymentAuthorisation): ?(PayPalDetails | StripeDetails | DirectDebitDetails) => {
     let response = null;
-    switch (paymentFieldName) {
-      case 'baid':
-        if (token) {
-          response = {
-            [paymentFieldName]: token,
-          };
-        }
+    switch (token.paymentMethod) {
+      case 'PayPal':
+        response = {
+          baid: token.token,
+        };
         break;
-      case 'stripeToken':
-        if (token) {
-          response = {
-            [paymentFieldName]: token,
-          };
-        }
+      case 'Stripe':
+        response = {
+          stripeToken: token.token,
+        };
         break;
-      case 'directDebitData':
-        if (accountHolderName && sortCode && accountNumber) {
-          response = {
-            accountHolderName,
-            sortCode,
-            accountNumber,
-          };
-        }
+      case 'DirectDebit':
+        response = {
+          accountHolderName: token.accountHolderName,
+          sortCode: token.sortCode,
+          accountNumber: token.accountNumber,
+        };
         break;
       default:
         response = null;
@@ -137,10 +125,7 @@ function requestData(
   paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-  token?: string,
-  accountNumber?: string,
-  sortCode?: string,
-  accountHolderName?: string,
+  paymentAuthorisation: PaymentAuthorisation,
   optimizeExperiments: OptimizeExperiments,
 ) {
 
@@ -156,13 +141,7 @@ function requestData(
 
   const ophanIds: OphanIds = getOphanIds();
   const supportAbTests = getSupportAbTests(abParticipations, optimizeExperiments);
-  const paymentFields = getPaymentFields(
-    token,
-    accountNumber,
-    sortCode,
-    accountHolderName,
-    paymentFieldName,
-  );
+  const paymentFields = getPaymentFields(paymentAuthorisation);
 
   if (!paymentFields) {
     return Promise.resolve({
@@ -262,6 +241,10 @@ function handleStatus(
     response.json().then((statusResponse: StatusResponse) => {
       trackingURI = statusResponse.trackingUri;
 
+      if (statusResponse.guestAccountCreationToken) {
+        dispatch(setGuestAccountCreationToken(statusResponse.guestAccountCreationToken));
+      }
+
       switch (statusResponse.status) {
         case 'failure':
           dispatch(checkoutError(statusResponse.failureReason));
@@ -292,14 +275,8 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): RegularCheckoutCallback {
-  return (
-    token?: string,
-    accountNumber?: string,
-    sortCode?: string,
-    accountHolderName?: string,
-  ) => {
-
+): PaymentAuthorisation => void {
+  return (paymentAuthorisation: PaymentAuthorisation) => {
     pollCount = 0;
     dispatch(creatingContributor());
 
@@ -312,14 +289,11 @@ function postCheckout(
       paymentMethodToPaymentFieldMap[paymentMethod],
       referrerAcquisitionData,
       getState,
-      token,
-      accountNumber,
-      sortCode,
-      accountHolderName,
+      paymentAuthorisation,
       optimizeExperiments,
     );
 
-    return fetch(routes.recurringContribCreate, request).then((response) => {
+    fetch(routes.recurringContribCreate, request).then((response) => {
       handleStatus(
         response,
         dispatch,

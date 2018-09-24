@@ -12,8 +12,10 @@ import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spoke
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgDollar from 'components/svgs/dollar';
+import SvgEuro from 'components/svgs/euro';
+import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount, updateBlurred } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -26,10 +28,9 @@ type PropTypes = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   selectAmount: (Amount | 'other', Contrib) => (() => void),
   otherAmount: string | null,
-  otherAmountBlurred: boolean,
   checkOtherAmount: string => boolean,
   updateOtherAmount: string => void,
-  updateBlurred: () => void,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -38,14 +39,13 @@ const mapStateToProps = state => ({
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmount,
-  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
   updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
-  updateBlurred: () => { dispatch(updateBlurred('otherAmount')); },
 });
 
 // ----- Render ----- //
@@ -73,6 +73,14 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
     </label>
   </li>
 );
+
+const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
+  switch (countryGroupId) {
+    case 'GBPCountries': return <SvgPound />;
+    case 'EURCountries': return <SvgEuro />;
+    default: return <SvgDollar />;
+  }
+};
 
 
 function ContributionAmount(props: PropTypes) {
@@ -105,13 +113,12 @@ function ContributionAmount(props: PropTypes) {
           id="contributionOther"
           name="contribution-other-amount"
           type="number"
-          label="Other Amount"
+          label="Other amount"
           value={props.otherAmount}
-          icon={<SvgDollar />}
+          icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
-          onBlur={() => props.updateBlurred()}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
-          wasBlurred={props.otherAmountBlurred}
+          checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
           min={min}

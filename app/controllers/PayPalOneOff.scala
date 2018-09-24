@@ -9,10 +9,10 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
 
 import services._
-import admin.Settings
 import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -24,23 +24,23 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settings: Settings
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+    settingsProvider: SettingsProvider
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 
   def paypalError: Action[AnyContent] = PrivateAction { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
@@ -72,6 +72,7 @@ class PayPalOneOff(
   }
 
   def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
       cookieAcquisitionData <- Try {

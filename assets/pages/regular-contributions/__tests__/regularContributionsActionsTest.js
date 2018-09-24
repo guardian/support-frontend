@@ -4,6 +4,7 @@ import {
   checkoutError,
   setPayPalHasLoaded,
   creatingContributor,
+  setGuestAccountCreationToken,
 } from '../regularContributionsActions';
 
 
@@ -30,6 +31,15 @@ describe('Regular contributions actions', () => {
       type: 'CREATING_CONTRIBUTOR',
     };
     expect(creatingContributor()).toEqual(expectedAction);
+  });
+
+  it('should store the guest account creation token', () => {
+    const token = '12345';
+    const expectedAction = {
+      type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN',
+      guestAccountCreationToken: token,
+    };
+    expect(setGuestAccountCreationToken(token)).toEqual(expectedAction);
   });
 
 });

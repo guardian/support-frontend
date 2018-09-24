@@ -33,6 +33,7 @@ type RegularContributionsState = {
   payPalHasLoaded: boolean,
   statusUri: ?string,
   pollCount: number,
+  guestAccountCreationToken: ?string,
 };
 
 type PageState = {
@@ -67,6 +68,7 @@ function createRegularContributionsReducer(
     payPalHasLoaded: false,
     statusUri: null,
     pollCount: 0,
+    guestAccountCreationToken: null,
   };
 
   return function regularContributionsReducer(
@@ -90,6 +92,9 @@ function createRegularContributionsReducer(
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
+        return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
 
       default:
         return state;

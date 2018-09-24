@@ -11,7 +11,7 @@ function getPageTitle(): string {
   if (showPromotion()) {
     return 'Upgrade your subscription to Paper+Digital now';
   }
-  return 'Support The Guardian with a digital subscription';
+  return 'Get the full digital experience of The Guardian';
 }
 
 export { getPageTitle, showPromotion };

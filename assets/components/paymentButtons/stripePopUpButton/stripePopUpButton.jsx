@@ -12,13 +12,15 @@ import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   amount: number,
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: StripeAuthorisation => void,
   closeHandler: () => void,
   currencyId: IsoCurrency,
   email: string,
@@ -53,15 +55,23 @@ const StripePopUpButton = (props: PropTypes) => (
 
 function Button(props: PropTypes) {
 
+  const tokenToAuthorisation = (token: string): StripeAuthorisation => ({
+    paymentMethod: 'Stripe',
+    token,
+  });
+
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
+  };
+
   if (!isStripeSetup()) {
-    setupStripeCheckout(props.callback, props.closeHandler, props.currencyId, props.isTestUser);
+    setupStripeCheckout(onPaymentAuthorisation, props.closeHandler, props.currencyId, props.isTestUser);
   }
 
   const onClick = () => {
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
-      const testTokenId = 'tok_visa';
-      props.callback(testTokenId);
+      onPaymentAuthorisation('tok_visa');
     } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);

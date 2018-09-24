@@ -18,13 +18,14 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
+
 import services.stepfunctions.RegularContributionsClient
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config._
 import fixtures.TestCSRFComponents
 import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, Settings, Switches}
+import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
@@ -101,6 +102,11 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         signature = ""
       ))
 
+      val settingsProvider = mock[SettingsProvider]
+      when(settingsProvider.settings()).thenReturn(
+        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On, On))
+      )
+
       new RegularContributions(
         mock[RegularContributionsClient],
         assetResolver,
@@ -111,8 +117,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         stripeConfigProvider,
         payPalConfigProvider,
         stubControllerComponents(),
-        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On, On)),
-        guardianDomain = ".thegulocal.com"
+        guardianDomain = ".thegulocal.com",
+        settingsProvider
       )
     }
 

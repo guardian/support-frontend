@@ -88,7 +88,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
       <PaymentFailureMessage checkoutFailureReason={props.checkoutFailureReason} />
       <StripePopUpButton
         email={props.email}
-        callback={postCheckout(
+        onPaymentAuthorisation={postCheckout(
           props.abParticipations,
           props.dispatch,
           props.amount,

@@ -5,7 +5,14 @@
 import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type Token, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import {
+  type PaymentAuthorisation,
+  type PaymentFields,
+  type PaymentResult,
+  PaymentSuccess,
+  postOneOffStripeRequest,
+  postRegularStripeRequest,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';
@@ -20,12 +27,13 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
-  | { type: 'UPDATE_BLURRED', field: FieldName }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', error: string }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
+  | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
+  | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib): Action =>
@@ -42,12 +50,12 @@ const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email })
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
-const updateBlurred = (field: FieldName): Action => ({ type: 'UPDATE_BLURRED', field });
-
 const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
   });
+
+const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -56,6 +64,9 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
 const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
+
+const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
+  ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
 
 const isPaymentReady = (paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandler: paymentHandler || null });
@@ -89,7 +100,12 @@ const sendData = (data: PaymentFields) =>
             return;
 
           default:
-            dispatch(onPaymentResult(postRegularStripeRequest(data, state.common.abParticipations, state.page.csrf)));
+            dispatch(onPaymentResult(postRegularStripeRequest(
+              data,
+              state.common.abParticipations,
+              state.page.csrf,
+              token => dispatch(setGuestAccountCreationToken(token)),
+            )));
             return;
         }
 
@@ -108,10 +124,10 @@ const sendData = (data: PaymentFields) =>
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
-    ? state.page.form.formData.otherAmount
+    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeOneOffPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -128,7 +144,7 @@ const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) =>
   },
 });
 
-const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
@@ -150,17 +166,17 @@ const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) =
   },
 });
 
-const onThirdPartyPaymentDone = (token: Token) =>
+const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(sendData(makeOneOffPaymentData(token, state)));
+        dispatch(sendData(makeOneOffPaymentData(paymentAuthorisation, state)));
         return;
 
       default:
-        dispatch(sendData(makeRegularPaymentData(token, state)));
+        dispatch(sendData(makeRegularPaymentData(paymentAuthorisation, state)));
 
     }
   };
@@ -172,12 +188,13 @@ export {
   updateLastName,
   updateEmail,
   updateState,
-  updateBlurred,
   isPaymentReady,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
   paymentWaiting,
   paymentSuccess,
-  onThirdPartyPaymentDone,
+  onThirdPartyPaymentAuthorised,
+  setCheckoutFormHasBeenSubmitted,
+  setGuestAccountCreationToken,
 };

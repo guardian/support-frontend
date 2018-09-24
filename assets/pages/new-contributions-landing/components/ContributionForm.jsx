@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import type { Dispatch } from 'redux';
 
 import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -16,12 +15,14 @@ import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type Token } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -31,7 +32,16 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, paymentWaiting, updateFirstName, updateLastName, updateEmail, updateState, onThirdPartyPaymentDone, updateBlurred } from '../contributionsLandingActions';
+
+import {
+  paymentWaiting,
+  updateFirstName,
+  updateLastName,
+  updateEmail,
+  updateState,
+  onThirdPartyPaymentAuthorised,
+  setCheckoutFormHasBeenSubmitted,
+} from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -44,61 +54,61 @@ type PropTypes = {|
   contributionType: Contrib,
   thankYouRoute: string,
   firstName: string,
-  firstNameBlurred: boolean,
   lastName: string,
-  lastNameBlurred: boolean,
   email: string,
-  emailBlurred: boolean,
   state: UsState | CaState | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
-  otherAmountBlurred: boolean,
   paymentMethod: PaymentMethod,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
-  updateBlurred: string => void,
   onWaiting: boolean => void,
-  onThirdPartyPaymentDone: Token => void,
+  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  checkoutFormHasBeenSubmitted: boolean,
+  setCheckoutFormHasBeenSubmitted: () => void,
+  openDirectDebitPopUp: () => void,
+  isDirectDebitPopUpOpen: boolean
 |};
+
+type FormValueType = string | null;
+
+// We only want to use the user state value if the form state value has not been changed since it was initialised,
+// i.e it is null.
+const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
+  (formValue === null ? userValue : formValue);
+
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   done: state.page.form.done,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  firstName: state.page.form.formData.firstName || state.page.user.firstName,
-  firstNameBlurred: state.page.form.formData.firstNameBlurred,
-  lastName: state.page.form.formData.lastName || state.page.user.lastName,
-  lastNameBlurred: state.page.form.formData.lastNameBlurred,
-  email: state.page.form.formData.email || state.page.user.email,
-  emailBlurred: state.page.form.formData.emailBlurred,
+  firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
+  lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
+  email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   state: state.page.form.formData.state || state.page.user.stateField,
   selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmount,
-  otherAmountBlurred: state.page.form.formData.otherAmountBlurred,
+  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
 });
 
-function maybeDispatch(dispatch: Dispatch<Action>, action: string => Action, string: string) {
-  const cleanString = string.trim();
-  if (cleanString !== '') {
-    dispatch(action(cleanString));
-  }
-}
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { maybeDispatch(dispatch, updateFirstName, event.target.value); },
-  updateLastName: (event) => { maybeDispatch(dispatch, updateLastName, event.target.value); },
-  updateEmail: (event) => { maybeDispatch(dispatch, updateEmail, event.target.value); },
+  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
+  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
+  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  updateBlurred: (field) => { dispatch(updateBlurred(field)); },
   onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentDone: (token) => { dispatch(onThirdPartyPaymentDone(token)); },
+  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
+  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
+  openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
 });
 
 // ----- Functions ----- //
@@ -121,19 +131,18 @@ const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-
     if (!(event.target: any).checkValidity()) {
       return;
     }
-
     const amount = getAmount(props);
     const { email } = props;
 
     if (props.paymentHandler) {
       switch (props.paymentMethod) {
-        case 'DebitCard':
-          // TODO
+        case 'DirectDebit':
+          props.openDirectDebitPopUp();
           break;
 
         case 'PayPal':
@@ -159,17 +168,15 @@ function ContributionForm(props: PropTypes) {
     selectedCountryGroupDetails,
     thankYouRoute,
     firstName,
-    firstNameBlurred,
     lastName,
-    lastNameBlurred,
     email,
-    emailBlurred,
     state,
+    checkoutFormHasBeenSubmitted,
   } = props;
 
-  const paymentCallback = (token: Token) => {
+  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.onWaiting(true);
-    props.onThirdPartyPaymentDone(token);
+    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
   const checkOtherAmount: string => boolean = input =>
@@ -181,7 +188,7 @@ function ContributionForm(props: PropTypes) {
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1>{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
+        <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
         <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -193,30 +200,28 @@ function ContributionForm(props: PropTypes) {
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
-            label="First Name"
+            label="First name"
             value={firstName}
             icon={<SvgUser />}
             autoComplete="given-name"
             autoCapitalize="words"
             onInput={props.updateFirstName}
-            onBlur={() => props.updateBlurred('firstName')}
             isValid={checkFirstName(firstName)}
-            wasBlurred={firstNameBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
           />
           <NewContributionTextInput
             id="contributionLastName"
             name="contribution-lname"
-            label="Last Name"
+            label="Last name"
             value={lastName}
             icon={<SvgUser />}
             autoComplete="family-name"
             autoCapitalize="words"
             onInput={props.updateLastName}
-            onBlur={() => props.updateBlurred('lastName')}
             isValid={checkLastName(lastName)}
-            wasBlurred={lastNameBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
           />
@@ -230,17 +235,21 @@ function ContributionForm(props: PropTypes) {
             placeholder="example@domain.com"
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
-            onBlur={() => props.updateBlurred('email')}
             isValid={checkEmail(email)}
-            wasBlurred={emailBlurred}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
           />
           <NewContributionState onChange={props.updateState} value={state} />
-          <NewContributionPayment paymentCallback={paymentCallback} />
+          <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
+        <DirectDebitPopUpForm
+          // TODO: put payment through
+          onPaymentAuthorisation={() => undefined}
+          isPopUpOpen={props.isDirectDebitPopUpOpen}
+        />
       </div>
     );
 }

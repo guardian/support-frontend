@@ -1,5 +1,4 @@
 // @flow
-
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
@@ -63,17 +62,22 @@ export type PaymentFields
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
-export type Token
-  = {| paymentMethod: 'Stripe', token: string |}
-  | {| paymentMethod: 'PayPal', token: string |}
-  | {| paymentMethod: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |};
+export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
+export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
+export type DirectDebitAuthorisation = {|
+  paymentMethod: 'DirectDebit',
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string
+|};
+
+export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | DirectDebitAuthorisation;
 
 export type PaymentResult
   = {| paymentStatus: 'success' |}
   | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
 
 // ----- Setup ----- //
-
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
@@ -108,8 +112,9 @@ function postRequestOptions(
 
 /** Process the response for a one-off payment from the payment API */
 function checkOneOffStatus(json: Object): Promise<PaymentResult> {
-  if (json.failureReason) {
-    return Promise.resolve({ paymentStatus: 'failure', error: json.failureReason });
+  if (json.error) {
+    const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
+    return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
   return Promise.resolve(PaymentSuccess);
 }
@@ -122,7 +127,11 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
  * - failed, then we bubble up an error value
  * - otherwise, we bubble up a success value
  */
-function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
+function checkRegularStatus(
+  participations: Participations,
+  csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
+): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
       case 'success':
@@ -144,6 +153,9 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   };
 
   return (json) => {
+    if (json.guestAccountCreationToken) {
+      setGuestAccountCreationToken(json.guestAccountCreationToken);
+    }
     switch (json.status) {
       case 'pending':
         return logPromise(pollUntilPromise(
@@ -187,11 +199,12 @@ function postRegularStripeRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
 }
 
 export {

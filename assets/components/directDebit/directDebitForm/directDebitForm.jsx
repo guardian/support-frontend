@@ -21,18 +21,18 @@ import {
   setDirectDebitFormPhase,
 } from 'components/directDebit/directDebitActions';
 import type { SortCodeIndex, Phase, Action } from 'components/directDebit/directDebitActions';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {
-  callback: RegularCheckoutCallback,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
   accountNumber: string,
@@ -48,7 +48,7 @@ type PropTypes = {
   phase: Phase,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (callback: RegularCheckoutCallback) => void,
+  confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
 };
 
@@ -78,8 +78,8 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     editDirectDebitClicked: () => {
       dispatch(setDirectDebitFormPhase('entry'));
     },
-    confirmDirectDebitClicked: (callback) => {
-      dispatch(confirmDirectDebitClicked(callback));
+    confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
+      dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
       return false;
     },
     openDDGuaranteeClicked: () => {
@@ -140,7 +140,7 @@ const DirectDebitForm = (props: PropTypes) => (
       phase={props.phase}
       onPayClick={() => props.payDirectDebitClicked()}
       onEditClick={() => props.editDirectDebitClicked()}
-      onConfirmClick={() => props.confirmDirectDebitClicked(props.callback)}
+      onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
     />
 
     <ErrorMessage

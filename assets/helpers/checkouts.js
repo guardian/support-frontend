@@ -18,13 +18,6 @@ type StripeHandler = { open: Function, close: Function };
 
 export type PaymentHandler = StripeHandler;
 
-export type RegularCheckoutCallback = (
-  token?: string,
-  accountNumber?: string,
-  sortCode?: string,
-  accountHolderName?: string
-) => Promise<*>
-
 // ----- Functions ----- //
 
 function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): number {
@@ -70,9 +63,9 @@ function getPaymentDescription(contributionType: Contrib, paymentMethod: Payment
 function getPaymentLabel(paymentMethod: PaymentMethod): string {
   switch (paymentMethod) {
     case 'Stripe':
-      return 'Credit/Debit Card';
+      return 'Credit/Debit card';
     case 'DirectDebit':
-      return 'Debit Card';
+      return 'Direct debit';
     case 'PayPal':
     default:
       return 'PayPal';
