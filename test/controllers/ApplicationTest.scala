@@ -11,7 +11,6 @@ import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
-
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
 import admin.SettingsProvider

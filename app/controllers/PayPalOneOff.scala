@@ -7,7 +7,6 @@ import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
-
 import services._
 import cats.data.EitherT
 import cats.implicits._

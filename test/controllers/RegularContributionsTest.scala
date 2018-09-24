@@ -18,7 +18,6 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-
 import services.stepfunctions.RegularContributionsClient
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._

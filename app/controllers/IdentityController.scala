@@ -6,8 +6,9 @@ import io.circe.generic.semiauto.deriveDecoder
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.mvc._
-import services.IdentityService
 import play.api.libs.circe.Circe
+import services.IdentityService
+
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
