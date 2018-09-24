@@ -28,19 +28,11 @@ export default function promotionPopUpReducer(
 ) {
   switch (action.type) {
     case 'OPEN_POP_UP':
-      return Object.assign({}, state, {
-        isPopUpOpen: true,
-      });
+      return { ...state, isPopUpOpen: true };
     case 'CLOSE_POP_UP':
-      return Object.assign({}, state, {
-        isPopUpOpen: false,
-      });
+      return { ...state, isPopUpOpen: false };
     case 'EXPAND_OPTION':
-      return Object.assign({}, state, {
-        expandedOption: action.option,
-      });
-
-
+      return { ...state, expandedOption: action.option };
     default:
       return state;
   }

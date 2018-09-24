@@ -117,7 +117,7 @@ function OptionItem(props: {
       <h3 className="component-promotion-options__title">{`I have a ${props.thisOption} subscription`}</h3>
       <span className="component-promotion-options__description">
         <p className="component-promotion-options__description-p1">{props.description}</p>
-        <p>To upgrade, please <strong>call <a className="component-promotion-options__phone-link" href="tel:0330 333 6796">0330 333 6796</a></strong> and one of our agents will be happy to assist.</p>
+        <p>To upgrade, please <a className="component-promotion-options__phone-link" href="tel:0330 333 6796">call 0330 333 6796</a> and one of our agents will be happy to assist.</p>
       </span>
     </li>
   );
