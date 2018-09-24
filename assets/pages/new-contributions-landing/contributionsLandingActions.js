@@ -95,6 +95,7 @@ const setupRegularPayment = (data: PaymentFields) =>
 
     switch (state.page.form.paymentMethod) {
       case 'Stripe':
+      case 'DirectDebit':
         dispatch(onPaymentResult(postRegularPaymentRequest(
           data,
           state.common.abParticipations,
@@ -106,15 +107,6 @@ const setupRegularPayment = (data: PaymentFields) =>
       case 'PayPal':
         // TODO
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
-        return;
-
-      case 'DirectDebit':
-        dispatch(onPaymentResult(postRegularPaymentRequest(
-          data,
-          state.common.abParticipations,
-          state.page.csrf,
-          token => dispatch(setGuestAccountCreationToken(token)),
-        )));
         return;
 
       default:
