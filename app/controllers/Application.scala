@@ -136,4 +136,5 @@ class Application(
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
+
 }

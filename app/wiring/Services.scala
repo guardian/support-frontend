@@ -26,8 +26,7 @@ trait Services {
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.RegularContributions.status,
-      tipMonitoring
+      controllers.routes.RegularContributions.status
     )
   }
 

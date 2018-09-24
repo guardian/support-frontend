@@ -1,23 +1,44 @@
-- name: One-off Paypal Payment
-  description: User making oneoff paypal payment is successful and user is sent to thank-you page
+- name: US One-off PayPal contribution
+  description: US User making oneoff paypal payment is successful and user is sent to thank-you page
 
-- name: Regular Paypal contribution for US user
+- name: US One-off Stripe contribution
+  description: US User making oneoff stripe payment is successful and user is sent to thank-you page
+
+- name: GB One-off PayPal contribution
+  description: UK User making oneoff paypal payment is successful and user is sent to thank-you page
+
+- name: GB One-off Stripe contribution
+  description: UK User making oneoff stripe payment is successful and user is sent to thank-you page
+
+- name: GB One-off Direct-debit contribution
+  description: UK User making oneoff direct-debit payment is successful and user is sent to thank-you page
+
+- name: AU One-off PayPal contribution
+  description: AU User making oneoff paypal payment is successful and user is sent to thank-you page
+
+- name: AU One-off Stripe contribution
+  description: AU User making oneoff stripe payment is successful and user is sent to thank-you page
+
+- name: US MONTHLY PayPal contribution
   description:  US user successfully creates regular contribution using Paypal
 
-- name: Regular Stripe contribution for US user
+- name: US MONTHLY Stripe contribution
   description:  US user successfully creates regular contribution using Stripe
 
-- name: Regular Paypal contribution for GB user
+- name: GB MONTHLY PayPal contribution
   description:  GB user successfully creates regular contribution using Paypal
 
-- name: Regular Stripe contribution for GB user
+- name: GB MONTHLY Stripe contribution
   description:  GB user successfully creates regular contribution using Stripe
 
-- name: Regular Direct-debit contribution for GB user
+- name: GB MONTHLY Direct-debit contribution
   description:  GB user successfully creates regular contribution using Direct-debit
 
-- name: Regular Paypal contribution for AU user
+- name: GB ANNUAL Stripe contribution
+  description:  GB user successfully creates regular contribution using Stripe
+
+- name: AU MONTHLY PayPal contribution
   description:  AU user successfully creates regular contribution using Paypal
 
-- name: Regular Stripe contribution for AU user
+- name: AU MONTHLY Stripe contribution
   description:  AU user successfully creates regular contribution using Stripe

@@ -19,6 +19,7 @@ const routes: {
   payPalCreateAgreement: '/paypal/create-agreement',
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
+  tipContributionSuccess: '/tip/contribution/success',
 };
 
 

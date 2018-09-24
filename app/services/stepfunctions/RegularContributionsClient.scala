@@ -18,7 +18,6 @@ import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
 import com.gu.support.workers.model.Status
-import com.gu.tip.Tip
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
@@ -49,10 +48,9 @@ object RegularContributionsClient {
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
-    call: String => Call,
-    tipMonitor: Tip
+    call: String => Call
   )(implicit system: ActorSystem): RegularContributionsClient =
-    new RegularContributionsClient(arn, stateWrapper, supportUrl, call, tipMonitor)
+    new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
 case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
@@ -61,8 +59,7 @@ class RegularContributionsClient(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
-    statusCall: String => Call,
-    tipMonitor: Tip
+    statusCall: String => Call
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
@@ -97,7 +94,6 @@ class RegularContributionsClient(
       { success =>
         val paymentMethod = getPaymentMethodType(createPaymentMethodState.paymentFields)
         SafeLogger.info(s"[$requestId] Creating regular $paymentMethod contribution for ${user.id} in country ${request.country.alpha2} ($success)")
-        tipMonitor.verify(s"Regular $paymentMethod contribution for ${request.country.alpha2} user")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
@@ -122,6 +118,7 @@ class RegularContributionsClient(
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
       statusResponse
     }
+    underlying.history(jobId).map(ss => ss.head.getLambdaFunctionSucceededEventDetails)
     underlying.history(jobId).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")

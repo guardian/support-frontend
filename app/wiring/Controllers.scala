@@ -4,8 +4,7 @@ import controllers._
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders
-    with Assets with GoogleAuth with Monitoring =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
 
@@ -99,5 +98,11 @@ trait Controllers {
     controllerComponents,
     goCardlessServiceProvider,
     testUsers
+  )
+
+  lazy val prodMonitoring = new ProdMonitoring(
+    actionRefiners,
+    controllerComponents,
+    tipMonitoring
   )
 }

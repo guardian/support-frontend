@@ -53,6 +53,7 @@ trait AppComponents extends PlayComponents
     payPalRegularController,
     payPalOneOffController,
     directDebitController,
+    prodMonitoring,
     assetController
   )
 

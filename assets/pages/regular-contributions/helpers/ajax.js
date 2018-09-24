@@ -19,7 +19,7 @@ import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
+import { checkoutPending, paymentSuccessful, checkoutError, creatingContributor } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
@@ -198,6 +198,8 @@ function statusPoll(
   referrerAcquisitionData: ReferrerAcquisitionData,
   paymentMethod: PaymentMethod,
   participations: Participations,
+  contributionType: Contrib,
+  country: IsoCountry,
 ): ?Promise<void> {
 
   if (pollCount >= MAX_POLLS) {
@@ -218,7 +220,7 @@ function statusPoll(
       // eslint-disable-next-line no-use-before-define
       handleStatus(
         response, dispatch, csrf,
-        referrerAcquisitionData, paymentMethod, participations,
+        referrerAcquisitionData, paymentMethod, participations, contributionType, country,
       );
     });
   }
@@ -231,9 +233,11 @@ function delayedStatusPoll(
   referrerAcquisitionData: ReferrerAcquisitionData,
   paymentMethod: PaymentMethod,
   participations: Participations,
+  contributionType: Contrib,
+  country: IsoCountry,
 ) {
   setTimeout(
-    () => statusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations),
+    () => statusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations, contributionType, country),
     POLLING_INTERVAL,
   );
 }
@@ -246,6 +250,8 @@ function handleStatus(
   referrerAcquisitionData: ReferrerAcquisitionData,
   paymentMethod: PaymentMethod,
   participations: Participations,
+  contributionType: Contrib,
+  country: IsoCountry,
 ) {
 
   if (response.ok) {
@@ -258,14 +264,30 @@ function handleStatus(
           break;
         case 'success':
           trackConversion(participations, routes.recurringContribThankyou);
-          dispatch(checkoutSuccess(paymentMethod));
+          dispatch(paymentSuccessful(country, contributionType, paymentMethod));
           break;
         default: // pending
-          delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations);
+          delayedStatusPoll(
+            dispatch,
+            csrf,
+            referrerAcquisitionData,
+            paymentMethod,
+            participations,
+            contributionType,
+            country,
+          );
       }
     });
   } else if (trackingURI) {
-    delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations);
+    delayedStatusPoll(
+      dispatch,
+      csrf,
+      referrerAcquisitionData,
+      paymentMethod,
+      participations,
+      contributionType,
+      country,
+    );
   } else {
     dispatch(checkoutError());
   }
@@ -282,6 +304,7 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
+  country: IsoCountry,
 ): RegularCheckoutCallback {
   return (
     token?: string,
@@ -317,6 +340,8 @@ function postCheckout(
         referrerAcquisitionData,
         paymentMethod,
         abParticipations,
+        contributionType,
+        country,
       );
     });
   };

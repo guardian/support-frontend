@@ -3,6 +3,8 @@
 // ----- Imports ----- //
 
 import type { PaymentMethod } from 'helpers/checkouts';
+import { routes } from 'helpers/routes';
+import { addQueryParamsToURL } from 'helpers/url';
 
 
 // ----- Types ----- //
@@ -24,6 +26,18 @@ function checkoutSuccess(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_SUCCESS', paymentMethod };
 }
 
+function paymentSuccessful(ctry: string, paymentType: string, paymentMethod: PaymentMethod) {
+  return (dispatch: Dispatch<Action>) => {
+
+    const url = addQueryParamsToURL(
+      routes.tipContributionSuccess,
+      { country: ctry, contribution_type: paymentType, payment_method: paymentMethod },
+    );
+    fetch(url);
+    dispatch(checkoutSuccess(paymentMethod));
+  };
+}
+
 function checkoutError(specificError: ?string): Action {
   const defaultError = 'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.';
   const message = specificError || defaultError;
@@ -42,7 +56,7 @@ function creatingContributor(): Action {
 
 export {
   checkoutPending,
-  checkoutSuccess,
+  paymentSuccessful,
   checkoutError,
   setPayPalHasLoaded,
   creatingContributor,

@@ -59,7 +59,6 @@ class PayPalOneOff(
     def processPaymentApiResponse(success: Boolean): Result = {
       if (success) {
         SafeLogger.info(s"One-off contribution for Paypal payment is successful. Sending user to thank-you page")
-        tipMonitoring.verify("One-off Paypal Payment")
         Redirect("/contribute/one-off/thankyou")
       } else {
         SafeLogger.error(scrub"Error making paypal payment. Sending user to error page.")

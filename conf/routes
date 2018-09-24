@@ -96,6 +96,9 @@ GET  /paypal/rest/cancel                                controllers.PayPalOneOff
 
 POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
+# ----- Tip Monitoring ----- #
+GET /tip/contribution/success                       controllers.ProdMonitoring.handleTipRequest(country: String, contribution_type: String, payment_method: String)
+
 # ----- Assets ----- #
 
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)

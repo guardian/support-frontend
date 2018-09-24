@@ -15,7 +15,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 
-import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
 
 
 // ----- Setup ----- //
@@ -85,11 +85,16 @@ function requestData(
   });
 }
 
-function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
+function postToEndpoint(
+  request: Object,
+  dispatch: Function,
+  abParticipations: Participations,
+  currencyId: IsoCurrency,
+): Promise<*> {
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
     if (response.ok) {
       trackConversion(abParticipations, routes.oneOffContribThankyou);
-      dispatch(checkoutSuccess());
+      dispatch(paymentSuccessful(currencyId, 'One-off', 'Stripe'));
     }
     return response.json();
   }).then((responseJson) => {
@@ -128,6 +133,6 @@ export default function postCheckout(
       optimizeExperiments,
     );
 
-    return postToEndpoint(request, dispatch, abParticipations);
+    return postToEndpoint(request, dispatch, abParticipations, currencyId);
   };
 }
