@@ -18,13 +18,6 @@ type StripeHandler = { open: Function, close: Function };
 
 export type PaymentHandler = StripeHandler;
 
-export type RegularCheckoutCallback = (
-  token?: string,
-  accountNumber?: string,
-  sortCode?: string,
-  accountHolderName?: string
-) => Promise<*>
-
 // ----- Functions ----- //
 
 function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): number {

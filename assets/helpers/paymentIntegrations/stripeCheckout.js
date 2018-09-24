@@ -47,14 +47,14 @@ const getStripeKey = (currency: string, isTestUser: boolean) => {
 };
 
 export const setupStripeCheckout = (
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: string => void,
   closeHandler: ?() => void,
   currency: string,
   isTestUser: boolean,
 ): Promise<void> => loadStripe().then(() => {
 
   const handleToken = (token) => {
-    callback(token.id);
+    onPaymentAuthorisation(token.id);
   };
   const defaultCloseHandler: () => void = () => {};
 

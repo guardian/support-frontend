@@ -62,10 +62,16 @@ export type PaymentFields
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
-export type Token
-  = {| paymentMethod: 'Stripe', token: string |}
-  | {| paymentMethod: 'PayPal', token: string |}
-  | {| paymentMethod: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |};
+export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
+export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
+export type DirectDebitAuthorisation = {|
+  paymentMethod: 'DirectDebit',
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string
+|};
+
+export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | DirectDebitAuthorisation;
 
 export type PaymentResult
   = {| paymentStatus: 'success' |}
