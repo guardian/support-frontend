@@ -14,7 +14,7 @@
 @import '~components/priceCta/priceCta';
 @import '~components/customerService/customerService';
 @import 'components/independentJournalismSection';
-
+@import 'components/promotionPopUp';
 
 // ----- Page-Specific Styles ----- //
 
@@ -154,13 +154,13 @@
     font-family: $gu-headline;
     list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ff4e36"/></svg>');
     margin-left: 26px;
+    display: flex;
+    flex-flow: column wrap;
 
     @include mq($from: leftCol) {
-      columns: 2;
-      column-gap: 54px;
-      column-fill: auto;
-      height: 175px;
+      height: 200px;
     }
+
   }
 
   .component-feature-list__heading {
@@ -171,6 +171,10 @@
 
   .component-feature-list__item {
     margin-bottom: $gu-v-spacing / 2;
+
+    @include mq($from: leftCol) {
+      width: 200px;
+    }
   }
 
   .product-block__highlight {
@@ -243,6 +247,10 @@
     display: block;
   }
 
+  .digital-subscription-landing-header__wrapper {
+    position: relative;
+  }
+
   .digital-subscription-landing-header__picture {
     @include mq($until: tablet) {
       height: 351px
@@ -255,41 +263,59 @@
     }
   }
 
+  .digital-subscription-landing-header__product {
+    background-color: gu-colour(news-garnett-highlight);
+    width: 144px;
+    position: absolute;
+    top: -44px;
+    font-family: $gu-headline;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 4px 12px;
+  }
+
   .digital-subscription-landing-header__title {
     position: relative;
     width: 100%;
-    height: 92px;
     background-color: #000000;
   }
 
   .digital-subscription-landing-header__title-copy {
+    display: block;
     color: #ffffff;
     font-family: $gu-headline;
     font-weight: bold;
     margin-left: 10px;
     padding-top: 2px;
-    font-size: 26px;
+    font-size: 22px;
     line-height: 29px;
+    height: 70px;
 
     @include mq($until: mobileMedium) {
-      width: 320px;
+      width: 310px;
     }
 
     @include mq($from: mobileMedium, $until: tablet) {
-      width: 330px;
+      padding-top: 8px;
+      font-size: 28px;
+      line-height: 34px;
+      width: 380px;
+      height: 80px;
     }
 
     @include mq($from: tablet, $until: leftCol) {
-      width: 500px;
-      font-size: 32px;
-      line-height: 36px;
+      width: 560px;
+      font-size: 42px;
+      line-height: 48px;
+      height: 106px;
     }
 
     @include mq($from: leftCol) {
-      width: 490px;
+      width: 580px;
+      font-size: 44px;
+      line-height: 50px;
       margin-left: 12px;
-      font-size: 36px;
-      line-height: 42px;
+      height: 108px;
     }
   }
 
@@ -297,7 +323,7 @@
     .component-grid-picture {
       position: relative;
     }
-    
+
     .component-price-cta__cancel {
       background-color: #f6f6f6;
     }
@@ -383,6 +409,13 @@
         margin-left: 12px;
       }
     }
+  }
+
+  // cta link text should be 16px throughout the whole site but that will require
+  // quite a bit of work to make everything else match up, so for now I'm just going
+  // to change it here.
+  .component-cta-link__text {
+    font-size: 16px;
   }
 }
 

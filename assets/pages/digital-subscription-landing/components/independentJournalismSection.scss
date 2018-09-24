@@ -55,7 +55,7 @@
   position: relative;
   top: -81px;
   margin-bottom: -143px;
-  z-index: 2;
+  z-index: 1;
   @include mq($until: leftCol) {
     display: none;
   }
@@ -64,7 +64,7 @@
 .svg-zuck {
   position: absolute;
   left: -281px;
-  top: -34px;
+  top: -55px;
   @include mq($until: leftCol) {
     display: none;
   }

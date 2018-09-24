@@ -4,8 +4,7 @@ import admin.SettingsProvider
 import cats.syntax.either._
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
-
-import services._
+import services.{IdentityService, _}
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}

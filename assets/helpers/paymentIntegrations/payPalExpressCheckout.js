@@ -10,6 +10,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { formClassName } from '../../pages/regular-contributions/components/formFields';
 
+
 // ----- Functions ----- //
 
 function loadPayPalExpress(): Promise<void> {
@@ -88,13 +89,13 @@ function setup(
   amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
-    callback(baid.token);
+    onPaymentAuthorisation(baid.token);
   };
 
   const onAuthorize = (data) => {

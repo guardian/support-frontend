@@ -15,6 +15,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -56,7 +57,7 @@ type OnFailure = CheckoutFailureReason => void;
 
 function requestData(
   abParticipations: Participations,
-  paymentToken: string,
+  stripeAuthorisation: StripeAuthorisation,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -72,7 +73,7 @@ function requestData(
       paymentData: {
         currency,
         amount,
-        token: paymentToken,
+        token: stripeAuthorisation.token,
         email: user.email,
       },
       acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
@@ -129,7 +130,7 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): (string) => Promise<*> {
+): StripeAuthorisation => void {
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
@@ -140,10 +141,10 @@ function postCheckout(
     dispatch(checkoutError(checkoutFailureReason));
   };
 
-  return (paymentToken: string) => {
+  return (stripeAuthorisation: StripeAuthorisation) => {
     const request = requestData(
       abParticipations,
-      paymentToken,
+      stripeAuthorisation,
       currencyId,
       amount,
       referrerAcquisitionData,
@@ -151,7 +152,7 @@ function postCheckout(
       optimizeExperiments,
     );
 
-    return postToEndpoint(request, onSuccess, onFailure);
+    postToEndpoint(request, onSuccess, onFailure);
   };
 }
 

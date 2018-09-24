@@ -10,6 +10,8 @@ import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 import { type Action } from './contributionsLandingActions';
@@ -18,15 +20,13 @@ import { type Action } from './contributionsLandingActions';
 
 type FormData = {
   firstName: string | null,
-  firstNameBlurred: boolean,
   lastName: string | null,
-  lastNameBlurred: boolean,
   email: string | null,
-  emailBlurred: boolean,
   otherAmounts: {
-    [Contrib]: { amount: string | null, blurred: boolean }
+    [Contrib]: { amount: string | null }
   },
   state: UsState | CaState | null,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 
 type FormState = {
@@ -40,12 +40,14 @@ type FormState = {
   isWaiting: boolean,
   formData: FormData,
   done: boolean,
+  guestAccountCreationToken: ?string,
 };
 
 type PageState = {
   form: FormState,
   user: UserState,
   csrf: CsrfState,
+  directDebit: DirectDebitState,
 };
 
 export type State = {
@@ -81,22 +83,21 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentReady: false,
     formData: {
       firstName: null,
-      firstNameBlurred: false,
       lastName: null,
-      lastNameBlurred: false,
       email: null,
-      emailBlurred: false,
       otherAmounts: {
-        ONE_OFF: { amount: null, blurred: false },
-        MONTHLY: { amount: null, blurred: false },
-        ANNUAL: { amount: null, blurred: false },
+        ONE_OFF: { amount: null },
+        MONTHLY: { amount: null },
+        ANNUAL: { amount: null },
       },
       state: null,
+      checkoutFormHasBeenSubmitted: false,
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
     isWaiting: false,
     done: false,
+    guestAccountCreationToken: null,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -133,31 +134,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-      case 'UPDATE_BLURRED':
-        switch (action.field) {
-          case 'otherAmount':
-            return {
-              ...state,
-              formData: {
-                ...state.formData,
-                otherAmounts: {
-                  ...state.formData.otherAmounts,
-                  [state.contributionType]: {
-                    amount: state.formData.otherAmounts[state.contributionType].amount,
-                    blurred: true,
-                  },
-                },
-              },
-            };
-          case 'email':
-            return { ...state, formData: { ...state.formData, emailBlurred: true } };
-          case 'lastName':
-            return { ...state, formData: { ...state.formData, lastNameBlurred: true } };
-          case 'firstName':
-          default:
-            return { ...state, formData: { ...state.formData, firstNameBlurred: true } };
-        }
-
       case 'SELECT_AMOUNT':
         return {
           ...state,
@@ -173,7 +149,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
               ...state.formData.otherAmounts,
               [state.contributionType]: {
                 amount: action.otherAmount,
-                blurred: state.formData.otherAmounts[state.contributionType].blurred,
               },
             },
           },
@@ -188,6 +163,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'PAYMENT_SUCCESS':
         return { ...state, done: true };
 
+      case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
+        return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
+
+      case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
+        return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
+
       default:
         return state;
     }
@@ -199,6 +180,7 @@ function initReducer(countryGroupId: CountryGroupId) {
   return combineReducers({
     form: createFormReducer(countryGroupId),
     user: createUserReducer(countryGroupId),
+    directDebit,
     csrf,
   });
 }

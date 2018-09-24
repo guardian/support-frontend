@@ -16,7 +16,6 @@ import { setInitialAmountsForAnnualHigherAmountsVariant } from 'helpers/abTests/
 
 // React components connected to redux store
 import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
-import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
 import { init as pageInit } from 'helpers/page/page';
@@ -30,6 +29,7 @@ import ContributionSelectionContainer from './components/contributionSelectionCo
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 import ContributionAwarePaymentLogosContainer from './components/contributionAwarePaymentLogosContainer';
+import SubscriptionsSection from './components/subscriptionsSection';
 
 
 // ----- Setup ----- //
@@ -78,11 +78,7 @@ const content = (
           }
           />
         </Contribute>
-        <ThreeSubscriptionsContainer
-          digitalHeadingSize={3}
-          paperHeadingSize={3}
-          paperDigitalHeadingSize={3}
-        />
+        <SubscriptionsSection />
       </section>
       <WhySupport headingSize={3} />
       <ReadyToSupport

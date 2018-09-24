@@ -5,7 +5,15 @@
 import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type Token, type PaymentFields, type PaymentResult, PaymentSuccess, postOneOffStripeRequest, postRegularStripeRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import {
+  type PaymentAuthorisation,
+  type PaymentFields,
+  type PaymentResult,
+  type PaymentDetails,
+  PaymentSuccess,
+  postOneOffStripeRequest,
+  postRegularPaymentRequest,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';
@@ -20,12 +28,13 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
-  | { type: 'UPDATE_BLURRED', field: FieldName }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', error: string }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
+  | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
+  | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib): Action =>
@@ -42,12 +51,12 @@ const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email })
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
-const updateBlurred = (field: FieldName): Action => ({ type: 'UPDATE_BLURRED', field });
-
 const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
   });
+
+const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -56,6 +65,9 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
 const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
+
+const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
+  ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
 
 const isPaymentReady = (paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandler: paymentHandler || null });
@@ -77,32 +89,47 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
     });
   };
 
-const sendData = (data: PaymentFields) =>
+const setupRegularPayment = (data: PaymentFields) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
     switch (state.page.form.paymentMethod) {
       case 'Stripe':
-        switch (state.page.form.contributionType) {
-          case 'ONE_OFF':
-            dispatch(onPaymentResult(postOneOffStripeRequest(data)));
-            return;
-
-          default:
-            dispatch(onPaymentResult(postRegularStripeRequest(data, state.common.abParticipations, state.page.csrf)));
-            return;
-        }
+      case 'DirectDebit':
+        dispatch(onPaymentResult(postRegularPaymentRequest(
+          data,
+          state.common.abParticipations,
+          state.page.csrf,
+          token => dispatch(setGuestAccountCreationToken(token)),
+        )));
+        return;
 
       case 'PayPal':
         // TODO
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
         return;
 
-      case 'DirectDebit':
       default:
+        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+    }
+  };
+
+const executeOneOffPayment = (data: PaymentFields) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    const state = getState();
+
+    switch (state.page.form.paymentMethod) {
+      case 'Stripe':
+        dispatch(onPaymentResult(postOneOffStripeRequest(data)));
+        return;
+
+      case 'PayPal':
         // TODO
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
+        return;
 
+      default:
+        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
     }
   };
 
@@ -111,7 +138,7 @@ const getAmount = (state: State) =>
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+const makeOneOffPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -128,7 +155,21 @@ const makeOneOffPaymentData: (Token, State) => PaymentFields = (token, state) =>
   },
 });
 
-const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) => ({
+function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): PaymentDetails {
+  switch (authorisation.paymentMethod) {
+    case 'Stripe': return { stripeToken: authorisation.token };
+    case 'PayPal': return { baid: authorisation.token };
+    case 'DirectDebit': return {
+      accountHolderName: authorisation.accountHolderName,
+      sortCode: authorisation.sortCode,
+      accountNumber: authorisation.accountNumber,
+    };
+    // TODO: what is a sane way to handle such cases?
+    default: throw new Error('If Flow works, this cannot happen');
+  }
+}
+
+const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (authorisation, state) => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
@@ -141,27 +182,29 @@ const makeRegularPaymentData: (Token, State) => PaymentFields = (token, state) =
       currency: state.common.internationalisation.currencyId,
       billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
     },
-    paymentFields: token.paymentMethod === 'Stripe'
-      ? { stripeToken: token.token }
-      : { baid: '' },
+    paymentFields: paymentDetailsFromAuthorisation(authorisation),
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
   },
 });
 
-const onThirdPartyPaymentDone = (token: Token) =>
+const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(sendData(makeOneOffPaymentData(token, state)));
+        dispatch(executeOneOffPayment(makeOneOffPaymentData(paymentAuthorisation, state)));
+        return;
+
+      case 'ANNUAL':
+      case 'MONTHLY':
+        dispatch(setupRegularPayment(makeRegularPaymentData(paymentAuthorisation, state)));
         return;
 
       default:
-        dispatch(sendData(makeRegularPaymentData(token, state)));
-
+        dispatch(paymentFailure(`Invalid contribute type ${state.page.form.contributionType}`));
     }
   };
 
@@ -172,12 +215,13 @@ export {
   updateLastName,
   updateEmail,
   updateState,
-  updateBlurred,
   isPaymentReady,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
   paymentWaiting,
   paymentSuccess,
-  onThirdPartyPaymentDone,
+  onThirdPartyPaymentAuthorised,
+  setCheckoutFormHasBeenSubmitted,
+  setGuestAccountCreationToken,
 };

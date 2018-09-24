@@ -20,7 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Contrib } from 'helpers/contributions';
-import { type Token } from './readerRevenueApis';
+import { type PaymentAuthorisation } from './readerRevenueApis';
 
 // ----- Functions ----- //
 
@@ -56,14 +56,14 @@ function getStripeKey(contributionType: Contrib, currency: IsoCurrency, isTestUs
 }
 
 function setupStripeCheckout(
-  callback: Token => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   contributionType: Contrib,
   currency: IsoCurrency,
   isTestUser: boolean,
 ): Promise<Object> {
   return loadStripe().then(() => {
     const handleToken = (token) => {
-      callback({ paymentMethod: 'Stripe', token: token.id });
+      onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id });
     };
 
     const stripeKey = getStripeKey(contributionType, currency, isTestUser);

@@ -11,13 +11,14 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ---- Types ----- //
 
 type PropTypes = {|
   amount: number,
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
@@ -51,11 +52,20 @@ function Button(props: PropTypes) {
     return null;
   }
 
+  const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
+    paymentMethod: 'PayPal',
+    token,
+  });
+
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
+  };
+
   const payPalOptions = setup(
     props.amount,
     props.currencyId,
     props.csrf,
-    props.callback,
+    onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
   );

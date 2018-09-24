@@ -1,5 +1,4 @@
 // @flow
-
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import {
@@ -38,11 +37,22 @@ type RegularContribution = {|
   billingPeriod: BillingPeriod,
 |};
 
-type PayPalDetails = {| baid: string |};
+// TODO: can we do away with these types and use the PaymentAuthorisation here?
+// and thus do away with getPaymentFields and paymentDetailsFromAuthorisation
+// (would probably require backend renaming)
+export type PayPalDetails = {| baid: string |};
 
-type StripeDetails = {| stripeToken: string |};
+export type StripeDetails = {| stripeToken: string |};
 
-type PaymentDetails = PayPalDetails | StripeDetails;
+export type DirectDebitDetails = {|
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string,
+|};
+
+// TODO: rename this type and its constituent types since the below structure is a bit baffling
+// PaymentFields: {contributionType, fields: {...other stuff, paymentFields: PaymentDetails}}
+export type PaymentDetails = PayPalDetails | StripeDetails | DirectDebitDetails;
 
 type RegularFields = {|
   firstName: string,
@@ -63,17 +73,22 @@ export type PaymentFields
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
-export type Token
-  = {| paymentMethod: 'Stripe', token: string |}
-  | {| paymentMethod: 'PayPal', token: string |}
-  | {| paymentMethod: 'DirectDebit', accountHolderName: string, sortCode: string, accountNumber: string |};
+export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
+export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
+export type DirectDebitAuthorisation = {|
+  paymentMethod: 'DirectDebit',
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string
+|};
+
+export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | DirectDebitAuthorisation;
 
 export type PaymentResult
   = {| paymentStatus: 'success' |}
   | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
 
 // ----- Setup ----- //
-
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
@@ -123,7 +138,11 @@ function checkOneOffStatus(json: Object): Promise<PaymentResult> {
  * - failed, then we bubble up an error value
  * - otherwise, we bubble up a success value
  */
-function checkRegularStatus(participations: Participations, csrf: CsrfState): Object => Promise<PaymentResult> {
+function checkRegularStatus(
+  participations: Participations,
+  csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
+): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
       case 'success':
@@ -145,6 +164,9 @@ function checkRegularStatus(participations: Participations, csrf: CsrfState): Ob
   };
 
   return (json) => {
+    if (json.guestAccountCreationToken) {
+      setGuestAccountCreationToken(json.guestAccountCreationToken);
+    }
     switch (json.status) {
       case 'pending':
         return logPromise(pollUntilPromise(
@@ -184,19 +206,20 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
 }
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
-function postRegularStripeRequest(
+function postRegularPaymentRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
+  setGuestAccountCreationToken: (string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
 }
 
 export {
   postOneOffStripeRequest,
-  postRegularStripeRequest,
+  postRegularPaymentRequest,
   PaymentSuccess,
 };
