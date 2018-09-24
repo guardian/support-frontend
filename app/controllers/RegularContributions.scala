@@ -15,11 +15,10 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.{Settings, SettingsSurrogateKeySyntax, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -6,16 +6,14 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
 import com.gu.googleauth.AuthAction
-import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
+import com.gu.identity.play.IdUser
 import models.Autofill
 import io.circe.syntax._
-import play.twirl.api.Html
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 class OneOffContributions(
