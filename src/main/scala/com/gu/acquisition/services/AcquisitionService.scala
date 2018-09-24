@@ -9,8 +9,7 @@ import okhttp3.OkHttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 trait AcquisitionService {
-  def submit[A : AcquisitionSubmissionBuilder](a: A)(
-    implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission]
+  def submit[A : AcquisitionSubmissionBuilder](a: A)(implicit ec: ExecutionContext): EitherT[Future, OphanServiceError, AcquisitionSubmission]
 }
 
 object AcquisitionService {

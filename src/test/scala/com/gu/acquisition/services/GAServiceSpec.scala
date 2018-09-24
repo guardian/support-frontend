@@ -1,17 +1,16 @@
 package com.gu.acquisition.services
 
+import cats.implicits._
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import okhttp3.OkHttpClient
 import ophan.thrift.event._
-import org.scalatest.{AsyncWordSpecLike, Matchers, WordSpecLike}
-import cats.data._
-import cats.implicits._
+import org.scalatest.{AsyncWordSpecLike, Matchers}
 
 class GAServiceSpec extends AsyncWordSpecLike with Matchers {
 
   implicit val client: OkHttpClient = new OkHttpClient()
 
-  val service = new GAService("UA-51507017-5")
+  val service = new GAService
 
   val submission = AcquisitionSubmission(
     OphanIds(None, Some("123456789"), Some("987654321")),
@@ -36,10 +35,11 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers {
 
   "A GAService" should {
     "build a correct payload" in {
-
       val payload = service.buildPayload(submission)
-      payload shouldEqual "ec=AcquisitionConversion&ev=20.0&pr1nm=Contribution&pa=purchase&t=event&cu=GBP&el=OneOff&v=1&ea=Contribution&uid=987654321&pr1qt=1&tid=UA-12345678-9&ti=7bc5c50d-85ce-49ef-9647-96c27c3809b9&pr1pr=20.0"
-      //"v=1&t=event&tid=UA-12345678-9&cid=123456789&dh=support.code.dev-theguardian.com&ec=AcquisitionConversion&ea=RecurringContribution&ti=MjXBgOox8DY1kNbR3c93ddddd&pa=purchase&pr1nm=RecurringContribution&el=monthly&ev=5&cu=GBP&pr1pr=5&pr1qt=1"
+      val payloadMap = payloadAsMap(payload)
+      payloadMap.get("ec") shouldEqual Some("AcquisitionConversion")
+      payloadMap.get("ea") shouldEqual Some("Contribution")
+      payloadMap.get("cu") shouldEqual Some("GBP")
     }
 
     "build a correct ABTest payload" in {
@@ -48,11 +48,13 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers {
     }
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
-    "submit a request" ignore {
+    "submit a request" in {
       service.submit(submission).fold(
         serviceError => fail(),
         acquisitionSubmission => succeed
       )
     }
   }
+
+  private def payloadAsMap(payload: String) = payload.split("&").map(text => text.split("=")).map(a => a(0) -> a(1)).toMap
 }

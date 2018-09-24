@@ -7,9 +7,10 @@ import com.gu.acquisition.services.AnalyticsService.RequestData
 import okhttp3._
 import ophan.thrift.event.AbTestInfo
 
-private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpClient)
+private[services] class GAService(implicit client: OkHttpClient)
   extends AnalyticsService {
 
+  private val gaPropertyId: String = "UA-51507017-5"
   private val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
   private[services] def buildBody(submission: AcquisitionSubmission) = {
@@ -45,17 +46,17 @@ private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpC
       "pr1qt" -> "1", // Product Quantity
       "cu" -> submission.acquisition.currency.toString // Currency
 
+      // Could add the following?
       // &ta=Google%20Store%20-%20Online       // Affiliation.
       // &tt=2.85                              // Tax.
       // &ts=5.34                              // Shipping.
     )
 
-
     body
       .filter { case (key, value) => value != "" }
       .map { case (key, value) => s"$key=$value" }
       .mkString("&")
-    //Link to a hit in hitbuilder https://ga-dev-tools.appspot.com/hit-builder/?v=1&t=event&tid=UA-51507017-5&cid=555&dh=support.code.dev-theguardian.com&ec=AcquisitionConversion&ea=RecurringContribution&ti=T12345&tr=5&pa=purchase&pr1nm=RecurringContribution&el=monthly&ev=5&cu=AUD
+      //Link to a hit in hitbuilder https://ga-dev-tools.appspot.com/hit-builder/?v=1&t=event&tid=UA-51507017-5&cid=555&dh=support.code.dev-theguardian.com&ec=AcquisitionConversion&ea=RecurringContribution&ti=T12345&tr=5&pa=purchase&pr1nm=RecurringContribution&el=monthly&ev=5&cu=AUD
   }
 
   private[services] def buildABTestPayload(maybeTests: Option[AbTestInfo]) =
@@ -75,7 +76,7 @@ private[services] class GAService(gaPropertyId: String)(implicit client: OkHttpC
 
     val request = new Request.Builder()
       .url(url)
-      .addHeader("User-Agent", "") //TODO: If we can get this then GA can work out a whole load of stuff
+      .addHeader("User-Agent", submission.gaData.clientUserAgent.getOrElse(""))
       .post(buildBody(submission))
       .build()
 
