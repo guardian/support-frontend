@@ -5,7 +5,7 @@ import com.gu.acquisition.services.AnalyticsService.RequestData
 import okhttp3._
 
 /**
-  * Build an acquisition submission, and submit it to the Ophan endpoint specified in the class constructor.
+  * Build an acquisition submission, and submit it to Ophan.
   * Uses OkHttp for executing the Http request.
   */
 private [acquisition] class OphanService(implicit client: OkHttpClient)

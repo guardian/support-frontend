@@ -22,7 +22,7 @@ private[services] class GAService(implicit client: OkHttpClient)
     val body = Map(
       "v" -> "1", //Version
       "tid" -> gaPropertyId,
-      "dh" -> submission.gaData.hostname.getOrElse(""),
+      "dh" -> submission.gaData.hostname,
       "uip" -> submission.gaData.clientIp.getOrElse(""), // IP Override
       "ua" -> submission.gaData.clientUserAgent.getOrElse(""), // User Agent Override
       "uid" -> submission.ophanIds.browserId.getOrElse(""), // TODO: Or visitId? Does this work here? https://support.google.com/analytics/answer/3123662

@@ -19,7 +19,7 @@ object BasicMockDataGenerator extends MockDataGenerator {
   override def generateSubmission: AcquisitionSubmission =
     AcquisitionSubmission(
       OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
-      GAData(Some("support.theguardian.com"), None, None),
+      GAData("support.theguardian.com", None, None),
       Acquisition(
         product = ophan.thrift.event.Product.Contribution,
         paymentFrequency = PaymentFrequency.OneOff,

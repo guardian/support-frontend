@@ -1,6 +1,6 @@
 package com.gu.acquisition.typeclasses
 
-import com.gu.acquisition.model.errors.OphanServiceError.BuildError
+import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import ophan.thrift.event.Acquisition
 import simulacrum.typeclass

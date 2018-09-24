@@ -2,11 +2,12 @@ package com.gu.acquisition.services
 
 import cats.implicits._
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
+import com.typesafe.scalalogging.LazyLogging
 import okhttp3.OkHttpClient
 import ophan.thrift.event._
 import org.scalatest.{AsyncWordSpecLike, Matchers}
 
-class GAServiceSpec extends AsyncWordSpecLike with Matchers {
+class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
   implicit val client: OkHttpClient = new OkHttpClient()
 
@@ -14,7 +15,7 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers {
 
   val submission = AcquisitionSubmission(
     OphanIds(None, Some("123456789"), Some("987654321")),
-    GAData(Some("support.code.dev-theguardian.com"), None, None),
+    GAData("support.code.dev-theguardian.com", None, None),
     Acquisition(
       product = ophan.thrift.event.Product.Contribution,
       paymentFrequency = PaymentFrequency.OneOff,
@@ -48,10 +49,13 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers {
     }
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
-    "submit a request" in {
+    "submit a request" ignore {
       service.submit(submission).fold(
-        serviceError => fail(),
-        acquisitionSubmission => succeed
+        serviceError => {
+          logger.error(s"$serviceError")
+          fail()
+        },
+        _ => succeed
       )
     }
   }
