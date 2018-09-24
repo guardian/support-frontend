@@ -13,15 +13,16 @@ import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import PromotionPopUp from './components/promotionPopUp';
+import promotionPopUpReducer from './components/promotionPopUpReducer';
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit();
+const store = pageInit(promotionPopUpReducer);
 
 // ----- Internationalisation ----- //
 
@@ -54,11 +55,12 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
+      <DigitalSubscriptionLandingHeader
+        countryGroupId={countryGroupId}
+      />
       <ProductBlock countryGroupId={countryGroupId} />
-      <LeftMarginSection modifierClasses={['grey']}>
-        <IndependentJournalismSection />
-      </LeftMarginSection>
+      <IndependentJournalismSection />
+      <PromotionPopUp />
     </Page>
   </Provider>
 );

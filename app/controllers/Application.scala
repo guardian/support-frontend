@@ -9,6 +9,7 @@ import com.gu.support.config.StripeConfigProvider
 import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
+
 import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck

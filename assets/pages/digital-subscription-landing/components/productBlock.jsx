@@ -12,7 +12,7 @@ import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import PriceCtaContainer from './priceCtaContainer';
+import CtaSwitch from './ctaSwitch';
 
 
 // ----- Types ----- //
@@ -140,7 +140,7 @@ function ProductBlock(props: PropTypes) {
             },
           ]}
         />
-        <PriceCtaContainer referringCta="support_digipack_page_product_benefits_section" />
+        <CtaSwitch referringCta="support_digipack_page_product_benefits_section" />
       </LeftMarginSection>
     </div>
   );
