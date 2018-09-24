@@ -8,7 +8,6 @@ import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
 import services._
-import IdentityService
 import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger

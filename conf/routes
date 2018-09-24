@@ -53,6 +53,9 @@ GET  /contribute/recurring/pending                  controllers.RegularContribut
 # the need for a client token
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
 
+POST  /contribute/set-password-guest                 controllers.IdentityController.setPasswordGuest
+
+
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
 GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm()

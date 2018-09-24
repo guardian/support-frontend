@@ -12,9 +12,9 @@ import services.IdentityService
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
-  identityService: IdentityService,
-  components: ControllerComponents,
-  actionRefiners: CustomActionBuilders
+    identityService: IdentityService,
+    components: ControllerComponents,
+    actionRefiners: CustomActionBuilders
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
@@ -56,3 +56,4 @@ object SetPasswordRequest {
   implicit val decoder: Decoder[SetPasswordRequest] = deriveDecoder
 }
 case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
+

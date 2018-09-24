@@ -15,7 +15,6 @@ import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-import services.StubIdentityService
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
@@ -138,10 +137,10 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         .withRequestTimeout(1.second)
         .withMethod("POST")
     ) { resp =>
-      resp.json.validate[GuestRegistrationResponse]
-        .asEither
-        .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
-    }
+          resp.json.validate[GuestRegistrationResponse]
+            .asEither
+            .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
+        }
   }
 
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
@@ -149,10 +148,10 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   }
 
   private def get[A](
-                      endpoint: String,
-                      headers: List[(String, String)],
-                      parameters: List[(String, String)]
-                    )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
+    endpoint: String,
+    headers: List[(String, String)],
+    parameters: List[(String, String)]
+  )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
     execute(
       wsClient.url(s"$apiUrl/$endpoint")
         .withHttpHeaders(headers: _*)

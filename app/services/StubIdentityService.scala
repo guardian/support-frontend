@@ -1,4 +1,4 @@
-package services.IdentityService
+package services
 
 import cats.data.EitherT
 import cats.implicits._
@@ -6,7 +6,6 @@ import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
 import models.identity.UserIdWithGuestAccountToken
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
-import services.IdentityService
 
 import scala.concurrent.{ExecutionContext, Future}
 
