@@ -1,4 +1,4 @@
-package services
+package services.IdentityService
 
 import cats.data.EitherT
 import cats.implicits._
@@ -6,6 +6,7 @@ import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
 import models.identity.UserIdWithGuestAccountToken
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
+import services.IdentityService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -19,6 +20,11 @@ class StubIdentityService extends IdentityService {
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+    SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
+    Future.successful(true)
+  }
+
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Boolean] = {
     SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
     Future.successful(true)
   }

@@ -12,9 +12,9 @@ import services.IdentityService
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
-    identityService: IdentityService,
-    components: ControllerComponents,
-    actionRefiners: CustomActionBuilders
+  identityService: IdentityService,
+  components: ControllerComponents,
+  actionRefiners: CustomActionBuilders
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
@@ -32,6 +32,19 @@ class IdentityController(
       }
     }
   }
+
+  def setPasswordGuest(): Action[SetPasswordRequest] = PrivateAction.async(circe.json[SetPasswordRequest]) { implicit request =>
+    val result = identityService.setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
+    result.map { res =>
+      if (res) {
+        SafeLogger.info("Successfully set password")
+        Ok
+      } else {
+        SafeLogger.error(scrub"Failed to set password")
+        BadRequest
+      }
+    }
+  }
 }
 
 object SendMarketingRequest {
@@ -39,3 +52,7 @@ object SendMarketingRequest {
 }
 case class SendMarketingRequest(email: String)
 
+object SetPasswordRequest {
+  implicit val decoder: Decoder[SetPasswordRequest] = deriveDecoder
+}
+case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)

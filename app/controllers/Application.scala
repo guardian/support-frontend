@@ -13,7 +13,6 @@ import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
-
 import scala.concurrent.{ExecutionContext, Future}
 import monitoring.SafeLogger
 
