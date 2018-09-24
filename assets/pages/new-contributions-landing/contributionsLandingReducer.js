@@ -70,6 +70,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
   };
 
+
   // ----- Initial state ----- //
 
   const initialState: FormState = {

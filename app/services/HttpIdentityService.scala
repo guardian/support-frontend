@@ -7,9 +7,9 @@ import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import config.Identity
-import models.identity.UserIdWithGuestAccountToken
+import models.identity.{CookiesResponse, UserIdWithGuestAccountToken}
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.{GuestRegistrationResponse, UserResponse}
+import models.identity.responses.{GuestRegistrationResponse, IdentityApiResponseError, UserResponse}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.Json
@@ -80,7 +80,8 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)
+                      (implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
     val payload = Json.obj("password" -> password)
     val headers =
       List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json");
@@ -93,7 +94,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     } recover {
       case e: Exception =>
         SafeLogger.error(scrub"Failed to set the user's password: $e")
-        false
+        Left(IdentityApiResponseError(e.getClass.getName, e.toString))
     }
   }
 
@@ -137,10 +138,10 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         .withRequestTimeout(1.second)
         .withMethod("POST")
     ) { resp =>
-          resp.json.validate[GuestRegistrationResponse]
-            .asEither
-            .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
-        }
+        resp.json.validate[GuestRegistrationResponse]
+          .asEither
+          .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
+      }
   }
 
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
