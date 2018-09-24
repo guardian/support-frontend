@@ -16,6 +16,9 @@ import services.fastly.FastlyService
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
+import SettingsProvider._
+import SafeLogger._
+
 abstract class SettingsProvider {
 
   // Models the possibility of settings changing over the application life cycle.
@@ -39,8 +42,6 @@ class S3SettingsProvider private (
     source: SettingsSource.S3,
     fastlyService: FastlyService
 )(implicit ec: ExecutionContext, s3Client: AmazonS3, system: ActorSystem) extends SettingsProvider {
-  import SettingsProvider._
-  import SafeLogger._
 
   private val cachedSettings = new AtomicReference[Settings](initialSettings)
 
@@ -55,17 +56,14 @@ class S3SettingsProvider private (
     purgeResult.map(_ => diff)
   }
 
-  // TODO: check using a recursive function in this context is stack safe
-  private def pollS3(): Unit =
-    // TODO: should duration be configurable?
-    system.scheduler.scheduleOnce(1.minute) {
+  private def startPollingS3(): Unit =
+    system.scheduler.schedule(1.minute, 1.minute) {
       getAndSetSettings()
         .flatMap(purgeIfChanged)
         .fold(
           err => SafeLogger.error(scrub"error occurred getting settings from S3", err),
           update => if (update.isChange) SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
         )
-        .map(_ => pollS3())
     }
 
   override def settings(): Settings = cachedSettings.get
@@ -85,7 +83,7 @@ object S3SettingsProvider {
     val fastlyService = new FastlyService(fastlyConfig)
     Settings.fromS3(s3).map { settings =>
       val service = new S3SettingsProvider(settings, s3, fastlyService)
-      service.pollS3()
+      service.startPollingS3()
       service
     }
   }

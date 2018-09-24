@@ -7,13 +7,13 @@ import cats.syntax.either._
 import config.FastlyConfig
 import io.circe.{Decoder, DecodingFailure}
 import io.circe.generic.semiauto.deriveDecoder
-import io.circe.parser.decode
 import play.api.libs.ws.WSClient
+
+import FastlyService._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FastlyService(config: FastlyConfig)(implicit client: WSClient) {
-  import FastlyService._
 
   // A left-hand type of throwable is fine,
   // since we are only handling the error by logging it (c.f. S3SettingsProvider)
@@ -27,7 +27,7 @@ class FastlyService(config: FastlyConfig)(implicit client: WSClient) {
       .execute("POST")
       .attemptT
       .subflatMap[Throwable, PurgeResponse] { response =>
-        PurgeResponse.decodePurgeResponse(response.body)
+        PurgeResponse.decode(response.body)
       }
 }
 
@@ -47,8 +47,8 @@ object FastlyService {
     implicit val purgeResponseDecoder: Decoder[PurgeResponse] = deriveDecoder[PurgeResponse]
 
     // Utility function adds json to decoding failure messages.
-    def decodePurgeResponse(json: String): Either[io.circe.Error, PurgeResponse] =
-      decode[PurgeResponse](json).leftMap {
+    def decode(json: String): Either[io.circe.Error, PurgeResponse] =
+      io.circe.parser.decode[PurgeResponse](json).leftMap {
         case err: DecodingFailure => DecodingFailure(s"${err.message} - $json", err.history)
         case err => err
       }
