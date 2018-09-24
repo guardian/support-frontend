@@ -9,9 +9,10 @@ import {
   type PaymentAuthorisation,
   type PaymentFields,
   type PaymentResult,
+  type PaymentDetails,
   PaymentSuccess,
   postOneOffStripeRequest,
-  postRegularStripeRequest,
+  postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
@@ -88,26 +89,19 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
     });
   };
 
-const sendData = (data: PaymentFields) =>
+const setupRegularPayment = (data: PaymentFields) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
     switch (state.page.form.paymentMethod) {
       case 'Stripe':
-        switch (state.page.form.contributionType) {
-          case 'ONE_OFF':
-            dispatch(onPaymentResult(postOneOffStripeRequest(data)));
-            return;
-
-          default:
-            dispatch(onPaymentResult(postRegularStripeRequest(
-              data,
-              state.common.abParticipations,
-              state.page.csrf,
-              token => dispatch(setGuestAccountCreationToken(token)),
-            )));
-            return;
-        }
+        dispatch(onPaymentResult(postRegularPaymentRequest(
+          data,
+          state.common.abParticipations,
+          state.page.csrf,
+          token => dispatch(setGuestAccountCreationToken(token)),
+        )));
+        return;
 
       case 'PayPal':
         // TODO
@@ -115,10 +109,35 @@ const sendData = (data: PaymentFields) =>
         return;
 
       case 'DirectDebit':
+        dispatch(onPaymentResult(postRegularPaymentRequest(
+          data,
+          state.common.abParticipations,
+          state.page.csrf,
+          token => dispatch(setGuestAccountCreationToken(token)),
+        )));
+        return;
+
       default:
+        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`))
+    }
+  };
+
+const executeOneOffPayment = (data: PaymentFields) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    const state = getState();
+
+    switch (state.page.form.paymentMethod) {
+      case 'Stripe':
+        dispatch(onPaymentResult(postOneOffStripeRequest(data)));
+        return;
+
+      case 'PayPal':
         // TODO
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
+        return;
 
+      default:
+        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`))
     }
   };
 
@@ -144,7 +163,20 @@ const makeOneOffPaymentData: (PaymentAuthorisation, State) => PaymentFields = (t
   },
 });
 
-const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
+function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): PaymentDetails {
+  switch (authorisation.paymentMethod) {
+    case 'Stripe': return { stripeToken: authorisation.token };
+    case 'PayPal': return { baid: authorisation.token };
+    case 'DirectDebit': return {
+      accountHolderName: authorisation.accountHolderName,
+      sortCode: authorisation.sortCode,
+      accountNumber: authorisation.accountNumber,
+    };
+    default: throw new Error('If Flow works, this cannot happen');
+  }
+}
+
+const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (authorisation, state) => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
@@ -157,9 +189,7 @@ const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (
       currency: state.common.internationalisation.currencyId,
       billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
     },
-    paymentFields: token.paymentMethod === 'Stripe'
-      ? { stripeToken: token.token }
-      : { baid: '' },
+    paymentFields: paymentDetailsFromAuthorisation(authorisation),
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
@@ -172,12 +202,16 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(sendData(makeOneOffPaymentData(paymentAuthorisation, state)));
+        dispatch(executeOneOffPayment(makeOneOffPaymentData(paymentAuthorisation, state)));
+        return;
+
+      case 'ANNUAL':
+      case 'MONTHLY':
+        dispatch(setupRegularPayment(makeRegularPaymentData(paymentAuthorisation, state)));
         return;
 
       default:
-        dispatch(sendData(makeRegularPaymentData(paymentAuthorisation, state)));
-
+        dispatch(paymentFailure(`Invalid contribute type ${state.page.form.contributionType}`));
     }
   };
 

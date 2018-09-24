@@ -37,11 +37,22 @@ type RegularContribution = {|
   billingPeriod: BillingPeriod,
 |};
 
-type PayPalDetails = {| baid: string |};
+// TODO: can we do away with these types and use the PaymentAuthorisation here?
+// and do away with getPaymentFields and paymentDetailsFromAuthorisation
+// (would probably require backend renaming)
+export type PayPalDetails = {| baid: string |};
 
-type StripeDetails = {| stripeToken: string |};
+export type StripeDetails = {| stripeToken: string |};
 
-type PaymentDetails = PayPalDetails | StripeDetails;
+export type DirectDebitDetails = {|
+  accountHolderName: string,
+  sortCode: string,
+  accountNumber: string,
+|};
+
+// TODO: rename this type and its constituent types since the below structure is a bit baffling
+// PaymentFields: {contributionType, fields: {...other stuff, paymentFields: PaymentDetails}}
+export type PaymentDetails = PayPalDetails | StripeDetails | DirectDebitDetails;
 
 type RegularFields = {|
   firstName: string,
@@ -195,7 +206,7 @@ function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
 }
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
-function postRegularStripeRequest(
+function postRegularPaymentRequest(
   data: PaymentFields,
   participations: Participations,
   csrf: CsrfState,
@@ -209,6 +220,6 @@ function postRegularStripeRequest(
 
 export {
   postOneOffStripeRequest,
-  postRegularStripeRequest,
+  postRegularPaymentRequest,
   PaymentSuccess,
 };

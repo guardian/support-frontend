@@ -246,8 +246,7 @@ function ContributionForm(props: PropTypes) {
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
         <DirectDebitPopUpForm
-          // TODO: put payment through
-          onPaymentAuthorisation={() => undefined}
+          onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
       </div>
