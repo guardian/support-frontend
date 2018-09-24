@@ -5,9 +5,11 @@
 import React from 'react';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
-import { type HeadingSize } from 'components/heading/heading';
+import { displayDigitalPackBenefitCopy } from 'helpers/subscriptions';
 
+import { type HeadingSize } from 'components/heading/heading';
 import { type SubsUrls } from 'helpers/externalLinks';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import PremiumTier from './premiumTier';
 import DigitalPack from './digitalPack';
@@ -19,6 +21,7 @@ import Weekly from './weekly';
 function InternationalSection(props: {
   headingSize: HeadingSize,
   subsLinks: SubsUrls,
+  countryGroupId: CountryGroupId,
   appReferrer: string,
 }) {
 
@@ -30,7 +33,7 @@ function InternationalSection(props: {
         url={props.subsLinks.DigitalPack}
         subheading="14-day free trial"
         gridId="digitalCircleInternational"
-        copy="The Premium App and the Daily Edition iPad app of the UK newspaper in one pack"
+        copy={displayDigitalPackBenefitCopy(props.countryGroupId)}
       />
       <Weekly headingSize={props.headingSize} subheading="&nbsp;" url={props.subsLinks.GuardianWeekly} />
     </ThreeSubscriptions>

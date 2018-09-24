@@ -84,6 +84,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
       <InternationalSection
         headingSize={headingSize}
         subsLinks={subsLinks}
+        countryGroupId={countryGroupId}
         appReferrer={appReferrer}
       />
     </div>
