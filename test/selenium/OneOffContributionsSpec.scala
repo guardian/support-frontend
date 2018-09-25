@@ -90,7 +90,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       payPalCheckout.logIn
 
       Then("the payment summary appears")
-      assert(payPalCheckout.payPalHasPaymentSummary)
+      assert(payPalCheckout.payPalSummaryHasLoaded)
 
       Given("that the summary displays the correct details")
       assert(payPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
