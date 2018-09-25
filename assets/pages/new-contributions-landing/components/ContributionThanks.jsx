@@ -29,7 +29,7 @@ const mapStateToProps = state => ({
 function ContributionThanks(props: PropTypes) {
   return (
     <div className="gu-content__content">
-      <h1 class="header">Thank you for a valuable contribution</h1>
+      <h1 className="header">Thank you for a valuable contribution</h1>
 
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
