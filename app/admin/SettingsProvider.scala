@@ -54,6 +54,10 @@ class S3SettingsProvider private (
       // Only consider using the service if there has been a change
       .filter(_ => diff.isChange)
       .fold(EitherT.pure[Future, Throwable](diff)) { service =>
+        SafeLogger.info(
+          s"settings update detected, purging Fastly by surrogate key ${SettingsSurrogateKey.settingsSurrogateKey} " +
+            "so that new settings propagate to the user"
+        )
         service.purgeSurrogateKey(SettingsSurrogateKey.settingsSurrogateKey)
           // If there is a purge response, but it's not ok,
           // propagate the error so that it will be logged at the end of the flow.
@@ -72,7 +76,7 @@ class S3SettingsProvider private (
               SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
             } else {
               // TODO: remove else statement once we have collected some information on the polling
-              SafeLogger.info(s"settings still ${update.old}")
+              SafeLogger.info(s"settings not changed from ${update.old}")
             }
         )
     }
@@ -91,7 +95,12 @@ object S3SettingsProvider {
     // Ok using a single threaded execution context,
     // since the only one task is getting executed periodically (pollS3())
     implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(1))
+
     val fastlyService = fastlyConfig.map(new FastlyService(_))
+    if (fastlyConfig.isEmpty) {
+      SafeLogger.warn("no Fastly config defined, Fastly will not be purged if there are settings updates from RRAC")
+    }
+
     Settings.fromS3(s3).map { settings =>
       val service = new S3SettingsProvider(settings, s3, fastlyService)
       service.startPollingS3()
