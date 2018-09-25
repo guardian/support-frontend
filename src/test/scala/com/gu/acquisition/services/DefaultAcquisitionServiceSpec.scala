@@ -1,28 +1,29 @@
 package com.gu.acquisition.services
 
-import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
+import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
+import com.typesafe.scalalogging.LazyLogging
 import okhttp3.OkHttpClient
 import ophan.thrift.event._
-import org.scalatest.{Matchers, WordSpecLike}
+import org.scalatest.{AsyncWordSpecLike, Matchers}
 
-class DefaultAcquisitionServiceSpec extends WordSpecLike with Matchers{
+class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
   implicit val client: OkHttpClient = new OkHttpClient()
 
-  val service = new DefaultAcquisitionService()
+  val service = AcquisitionService.prod
 
-  val submission: AcquisitionSubmission = AcquisitionSubmission(
-    OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
-    GAData("support.theguardian.com", None, None),
+  val submission = AcquisitionSubmission(
+    OphanIds(None, None, Some("None")),
+    GAData("support.code.dev-theguardian.com", None, None),
     Acquisition(
-      product = ophan.thrift.event.Product.Contribution,
-      paymentFrequency = PaymentFrequency.OneOff,
+      product = ophan.thrift.event.Product.RecurringContribution,
+      paymentFrequency = PaymentFrequency.Monthly,
       currency = "GBP",
       amount = 20d,
       paymentProvider = Some(PaymentProvider.Stripe),
       campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
-      abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name")))),
+      abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name"), AbTest("second_test", "control")))),
       countryCode = Some("US"),
       referrerPageViewId = None,
       referrerUrl = None,

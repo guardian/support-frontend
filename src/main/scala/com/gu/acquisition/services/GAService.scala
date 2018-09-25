@@ -17,40 +17,38 @@ private[services] class GAService(implicit client: OkHttpClient)
     RequestBody.create(null, buildPayload(submission))
   }
 
-  private[services] def buildPayload(submission: AcquisitionSubmission): String = {
-    val transactionId = UUID.randomUUID().toString
+  private[services] def buildPayload(submission: AcquisitionSubmission, transactionId: Option[String] = None): String = {
+    import submission._
+    val tid = transactionId.getOrElse(UUID.randomUUID().toString)
     val body = Map(
       "v" -> "1", //Version
       "tid" -> gaPropertyId,
-      "dh" -> submission.gaData.hostname,
-      "uip" -> submission.gaData.clientIp.getOrElse(""), // IP Override
-      "ua" -> submission.gaData.clientUserAgent.getOrElse(""), // User Agent Override
-      "uid" -> submission.ophanIds.browserId.getOrElse(""), // TODO: Or visitId? Does this work here? https://support.google.com/analytics/answer/3123662
+      "dh" -> gaData.hostname,
+      "uip" -> gaData.clientIp.getOrElse(""), // IP Override
+      "ua" -> gaData.clientUserAgent.getOrElse(""), // User Agent Override
 
       // Custom Dimensions
-      "cd16" -> buildABTestPayload(submission.acquisition.abTests),
+      "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
 
       // The GA conversion event
       "t" -> "event",
       "ec" -> "AcquisitionConversion", //Event Category
-      "ea" -> submission.acquisition.product.name, //Event Action
-      "el" -> submission.acquisition.paymentFrequency.name, //Event Label
-      "ev" -> submission.acquisition.amount.toInt.toString, //Event Value is an Integer
+      "ea" -> acquisition.product.name, //Event Action
+      "el" -> acquisition.paymentFrequency.name, //Event Label
+      "ev" -> acquisition.amount.toInt.toString, //Event Value is an Integer
 
       // Enhanced Ecommerce tracking https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide#enhancedecom
-      "ti" -> transactionId,
-      "tcc" -> submission.acquisition.promoCode.getOrElse(""), // Transaction coupon.
+      "ti" -> tid,
+      "tcc" -> acquisition.promoCode.getOrElse(""), // Transaction coupon.
       "pa" -> "purchase", //This is a purchase
-      "pr1nm" -> submission.acquisition.product.name, // Product Name
-      "pr1pr" -> submission.acquisition.amount.toString, // Product Price
+      "pr1nm" -> acquisition.product.name, // Product Name
+      "pr1pr" -> acquisition.amount.toString, // Product Price
       "pr1qt" -> "1", // Product Quantity
-      "cu" -> submission.acquisition.currency.toString // Currency
+      "cu" -> acquisition.currency.toString // Currency
 
-      // Could add the following?
-      // &ta=Google%20Store%20-%20Online       // Affiliation.
-      // &tt=2.85                              // Tax.
-      // &ts=5.34                              // Shipping.
-    )
+    ) + ophanIds.browserId.map(uid =>  "uid" -> uid).getOrElse("cid" -> tid) // Pass browserId to uid if present, otherwise pass
+                                                                             // transactionId to cid
+                                                                             // see: https://support.google.com/analytics/answer/3123662
 
     body
       .filter { case (key, value) => value != "" }

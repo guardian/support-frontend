@@ -13,34 +13,51 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
   val service = new GAService
 
+  private val acquisition = Acquisition(
+    product = ophan.thrift.event.Product.Contribution,
+    paymentFrequency = PaymentFrequency.OneOff,
+    currency = "GBP",
+    amount = 20d,
+    paymentProvider = Some(PaymentProvider.Stripe),
+    campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
+    abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name"), AbTest("second_test", "control")))),
+    countryCode = Some("US"),
+    referrerPageViewId = None,
+    referrerUrl = None,
+    componentId = None,
+    componentTypeV2 = None,
+    source = None
+  )
+  val gaData = GAData("support.code.dev-theguardian.com", None, None)
   val submission = AcquisitionSubmission(
     OphanIds(None, Some("123456789"), Some("987654321")),
-    GAData("support.code.dev-theguardian.com", None, None),
-    Acquisition(
-      product = ophan.thrift.event.Product.Contribution,
-      paymentFrequency = PaymentFrequency.OneOff,
-      currency = "GBP",
-      amount = 20d,
-      paymentProvider = Some(PaymentProvider.Stripe),
-      campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
-      abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name"), AbTest("second_test", "control")))),
-      countryCode = Some("US"),
-      referrerPageViewId = None,
-      referrerUrl = None,
-      componentId = None,
-      componentTypeV2 = None,
-      source = None
-    )
+    gaData,
+    acquisition
   )
 
 
   "A GAService" should {
     "build a correct payload" in {
-      val payload = service.buildPayload(submission)
-      val payloadMap = payloadAsMap(payload)
-      payloadMap.get("ec") shouldEqual Some("AcquisitionConversion")
-      payloadMap.get("ea") shouldEqual Some("Contribution")
-      payloadMap.get("cu") shouldEqual Some("GBP")
+      val payloadWithUid = service.buildPayload(submission)
+      val payloadMapWithUid = payloadAsMap(payloadWithUid)
+      payloadMapWithUid.get("ec") shouldEqual Some("AcquisitionConversion")
+      payloadMapWithUid.get("ea") shouldEqual Some("Contribution")
+      payloadMapWithUid.get("cu") shouldEqual Some("GBP")
+      // The payload should only ever have one of 'cid' and 'uid'
+      // If we have an Ophan browserId then this is passed into uid
+      // If not then we pass a random value in 'cid'
+      payloadMapWithUid.get("uid") shouldEqual Some("987654321")
+      payloadMapWithUid.get("cid") shouldEqual None
+
+      val payloadWithCid = service.buildPayload(AcquisitionSubmission(
+        OphanIds(None, None, None),
+        gaData,
+        acquisition
+      ), Some("123"))
+      val payloadMapWithCid = payloadAsMap(payloadWithCid)
+      payloadMapWithCid.get("cid") shouldEqual Some("123")
+      payloadMapWithCid.get("uid") shouldEqual None
+
     }
 
     "build a correct ABTest payload" in {
