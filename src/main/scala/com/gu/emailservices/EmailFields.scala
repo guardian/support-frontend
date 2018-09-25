@@ -6,11 +6,13 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import com.gu.salesforce.Salesforce.SfContactId
 
+// scalastyle:off
 case class EmailPayloadContactAttributes(SubscriberAttributes: Map[String, String])
 case class EmailPayloadTo(Address: String, SubscriberKey: String, ContactAttributes: EmailPayloadContactAttributes)
 case class EmailPayload(To: EmailPayloadTo, DataExtensionName: String, SfContactId: Option[String], IdentityUserId: Option[String]) {
   lazy val jsonString: String = this.asJson.toString
 }
+// scalastyle:on
 
 case class IdentityUserId(id: String)
 

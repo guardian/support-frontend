@@ -73,7 +73,18 @@ class SendThankYouEmailSpec extends LambdaSpec {
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 20, Currency.GBP, "UK", "", Monthly, SfContactId("sfContactId"), Some(dd), Some(mandateId))
+    val ef = ContributionEmailFields(
+      "",
+      new DateTime(1999, 12, 31, 11, 59),
+      20,
+      Currency.GBP,
+      "UK",
+      "",
+      Monthly,
+      SfContactId("sfContactId"),
+      Some(dd),
+      Some(mandateId)
+    )
     val resultJson = parse(ef.payload)
 
     resultJson.isRight should be(true)
