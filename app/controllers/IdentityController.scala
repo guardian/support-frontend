@@ -36,12 +36,14 @@ class IdentityController(
   def setPasswordGuest(): Action[SetPasswordRequest] = PrivateAction.async(circe.json[SetPasswordRequest]) { implicit request =>
     val result = identityService.setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
     result.map { res =>
-      if (res) {
-        SafeLogger.info("Successfully set password")
-        Ok
-      } else {
-        SafeLogger.error(scrub"Failed to set password")
-        BadRequest
+      res match {
+        case Right(x) => {
+          print(x.toString)
+          Ok
+        }
+        case _ => {
+          BadRequest
+        }
       }
     }
   }

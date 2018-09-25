@@ -31,7 +31,6 @@ const countryGroupId: CountryGroupId = detect();
 const store = pageInit(initReducer(countryGroupId), true);
 
 user.init(store.dispatch);
-form.init(store.dispatch);
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 

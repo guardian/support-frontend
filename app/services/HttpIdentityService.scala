@@ -15,7 +15,7 @@ import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-
+import utils.JsonBodyParser
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -80,22 +80,12 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)
-                      (implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Either[IdentityApiResponseError, CookiesResponse]] = {
     val payload = Json.obj("password" -> password)
     val headers =
-      List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json");
+      List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
     val urlParameters = List("validate-email" -> "0")
-    request(s"guest/password", headers, urlParameters).put(payload).map { response =>
-      val validResponse = response.status >= 200 && response.status < 300
-      if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
-      else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
-      validResponse
-    } recover {
-      case e: Exception =>
-        SafeLogger.error(scrub"Failed to set the user's password: $e")
-        Left(IdentityApiResponseError(e.getClass.getName, e.toString))
-    }
+    request(s"guest/password", headers, urlParameters).put(payload) map JsonBodyParser.extract[CookiesResponse](JsonBodyParser.jsonField("cookies"))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -177,6 +167,6 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Either[IdentityApiResponseError, CookiesResponse]]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }
