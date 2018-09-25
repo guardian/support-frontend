@@ -67,7 +67,13 @@ class S3SettingsProvider private (
         .flatMap(purgeIfChanged)
         .fold(
           err => SafeLogger.error(scrub"error occurred updating the settings from S3", err),
-          update => if (update.isChange) SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
+          update =>
+            if (update.isChange) {
+              SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
+            } else {
+              // TODO: remove else statement once we have collected some information on the polling
+              SafeLogger.info(s"settings still ${update.old}")
+            }
         )
     }
 
