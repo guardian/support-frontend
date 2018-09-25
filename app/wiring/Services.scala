@@ -1,6 +1,7 @@
 package wiring
 
 import admin.SettingsProvider
+import cats.syntax.either._
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services.{IdentityService, _}
@@ -37,5 +38,5 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val settingsProvider: SettingsProvider = SettingsProvider.fromConfigurationUnsafe(appConfig.config)
+  lazy val settingsProvider: SettingsProvider = SettingsProvider.fromAppConfig(appConfig).valueOr(throw _)
 }
