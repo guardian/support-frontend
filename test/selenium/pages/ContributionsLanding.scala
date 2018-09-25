@@ -16,7 +16,10 @@ case class ContributionsLanding(region: String)(implicit val webDriver: WebDrive
 
   private val otherAmountField = id("qa-payment-amount-input")
 
-  def pageHasLoaded: Boolean = pageHasElement(contributeButton)
+  def pageHasLoaded: Boolean = {
+    pageHasElement(contributeButton)
+    elementIsClickable(contributeButton)
+  }
 
   def clickContribute: Unit = clickOn(contributeButton)
 
