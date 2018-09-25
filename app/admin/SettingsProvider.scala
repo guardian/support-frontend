@@ -62,7 +62,10 @@ class S3SettingsProvider private (
           // If there is a purge response, but it's not ok,
           // propagate the error so that it will be logged at the end of the flow.
           .ensureOr(response => new RuntimeException(s"failed to purge support frontend: $response"))(_.isOk)
-          .map(_ => diff)
+          .map { response =>
+            SafeLogger.info(s"settings purged successfully: $response")
+            diff
+          }
       }
 
   private def startPollingS3(): Unit =
