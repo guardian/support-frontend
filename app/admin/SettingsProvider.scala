@@ -40,7 +40,7 @@ object LocalFileSettingsProvider {
 class S3SettingsProvider private (
     initialSettings: Settings,
     source: SettingsSource.S3,
-    fastlyService: FastlyService
+    fastlyService: Option[FastlyService]
 )(implicit ec: ExecutionContext, s3Client: AmazonS3, system: ActorSystem) extends SettingsProvider {
 
   private val cachedSettings = new AtomicReference[Settings](initialSettings)
@@ -49,19 +49,24 @@ class S3SettingsProvider private (
     EitherT.fromEither(Settings.fromS3(source))
       .map(settings => SettingsUpdate(cachedSettings.getAndSet(settings), settings))
 
-  def purgeIfChanged(diff: SettingsUpdate): EitherT[Future, Throwable, SettingsUpdate] = {
-    val purgeResult =
-      if (diff.isChange) fastlyService.purgeSurrogateKey(SettingsSurrogateKey.settingsSurrogateKey)
-      else EitherT.pure[Future, Throwable](())
-    purgeResult.map(_ => diff)
-  }
+  def purgeIfChanged(diff: SettingsUpdate): EitherT[Future, Throwable, SettingsUpdate] =
+    fastlyService
+      // Only consider using the service if there has been a change
+      .filter(_ => diff.isChange)
+      .fold(EitherT.pure[Future, Throwable](diff)) { service =>
+        service.purgeSurrogateKey(SettingsSurrogateKey.settingsSurrogateKey)
+          // If there is a purge response, but it's not ok,
+          // propagate the error so that it will be logged at the end of the flow.
+          .ensureOr(response => new RuntimeException(s"failed to purge support frontend: $response"))(_.isOk)
+          .map(_ => diff)
+      }
 
   private def startPollingS3(): Unit =
     system.scheduler.schedule(1.minute, 1.minute) {
       getAndSetSettings()
         .flatMap(purgeIfChanged)
         .fold(
-          err => SafeLogger.error(scrub"error occurred getting settings from S3", err),
+          err => SafeLogger.error(scrub"error occurred updating the settings from S3", err),
           update => if (update.isChange) SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
         )
     }
@@ -71,7 +76,7 @@ class S3SettingsProvider private (
 
 object S3SettingsProvider {
 
-  def fromS3(s3: SettingsSource.S3, fastlyConfig: FastlyConfig)(
+  def fromS3(s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(
     implicit
     client: AmazonS3,
     system: ActorSystem,
@@ -80,7 +85,7 @@ object S3SettingsProvider {
     // Ok using a single threaded execution context,
     // since the only one task is getting executed periodically (pollS3())
     implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(1))
-    val fastlyService = new FastlyService(fastlyConfig)
+    val fastlyService = fastlyConfig.map(new FastlyService(_))
     Settings.fromS3(s3).map { settings =>
       val service = new S3SettingsProvider(settings, s3, fastlyService)
       service.startPollingS3()

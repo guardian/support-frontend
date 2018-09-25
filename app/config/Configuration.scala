@@ -43,5 +43,5 @@ class Configuration {
 
   lazy val settingsSource: SettingsSource = SettingsSource.fromConfig(config).valueOr(throw _)
 
-  lazy val fastlyConfig: FastlyConfig = FastlyConfig.fromConfig(config).valueOr(throw _)
+  lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 }
