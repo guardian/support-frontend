@@ -4,7 +4,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const defaultHeaderCopy = 'Help us deliver the independent journalism the world needs';
 const defaultContributeCopy = `
-  Make a recurring commitment to support The Guardian long term or a one-off contribution 
+  Make a recurring commitment to support The\u00a0Guardian long-term or a single contribution 
   as and when you feel like it – choose the option that suits you best.
 `;
 

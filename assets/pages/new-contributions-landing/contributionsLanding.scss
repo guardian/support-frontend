@@ -183,8 +183,7 @@ button {
 }
 
 .blurb {
-  font-size: 14px;
-  line-height: 1.4;
+  font: 100 16px/1.25 $gu-headline;
   margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
 }
 
