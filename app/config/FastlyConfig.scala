@@ -19,8 +19,8 @@ object FastlyConfig {
       .traverse[Result, FastlyConfig] { raw =>
         Either.catchNonFatal {
           FastlyConfig(
-            raw.getString("fastly.serviceId"),
-            raw.getString("fastly.apiToken")
+            raw.getString("serviceId"),
+            raw.getString("apiToken")
           )
         }
       }
