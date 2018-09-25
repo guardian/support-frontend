@@ -39,6 +39,12 @@ const mapStateToProps = (state: State) =>
 
 
 function ContributionSubmit(props: PropTypes) {
+
+  // if all payment methods are switched off, do not display the button
+  if(!props.paymentMethod) {
+    return;
+  }
+
   const frequency = getFrequency(props.contributionType);
   const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
   const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];

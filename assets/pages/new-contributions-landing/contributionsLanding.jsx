@@ -12,6 +12,7 @@ import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import * as user from 'helpers/user/user';
+import { init as formInit } from './contributionsLandingInit';
 import { set as setCookie } from 'helpers/cookie';
 
 import Page from 'components/page/page';
@@ -31,6 +32,7 @@ const countryGroupId: CountryGroupId = detect();
 const store = pageInit(initReducer(countryGroupId), true);
 
 user.init(store.dispatch);
+formInit(store);
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 

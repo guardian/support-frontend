@@ -110,7 +110,7 @@ const setupRegularPayment = (data: PaymentFields) =>
         return;
 
       default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+        dispatch(paymentFailure(`No payment method selected`));
     }
   };
 
@@ -129,7 +129,7 @@ const executeOneOffPayment = (data: PaymentFields) =>
         return;
 
       default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+        dispatch(paymentFailure(`No payment method selected`));
     }
   };
 
