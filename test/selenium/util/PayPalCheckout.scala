@@ -19,7 +19,11 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def logIn(): Unit = clickOn(loginButton)
 
-  def acceptPayment(): Unit = clickOn(agreeAndPay)
+  def acceptPayment(): Unit = {
+    pageHasElement(agreeAndPay)
+    elementIsClickable(agreeAndPay)
+    clickOn(agreeAndPay)
+  }
 
   def payPalHasPaymentSummary(): Boolean = pageHasElement(agreeAndPay)
 
