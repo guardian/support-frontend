@@ -921,3 +921,10 @@ form {
   margin: ($gu-v-spacing * 2) -10px 0;
 }
 
+/* = SIGN OUT link */
+
+.component-signout {
+  color: inherit;
+  display: block;
+  text-align: right;
+}

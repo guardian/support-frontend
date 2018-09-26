@@ -23,6 +23,7 @@ import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import Signout from 'components/signout/signout';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -244,6 +245,7 @@ function ContributionForm(props: PropTypes) {
             required
             disabled={isSignedIn}
           />
+          <Signout isSignedIn={isSignedIn} />
           <NewContributionState onChange={props.updateState} value={state} />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
