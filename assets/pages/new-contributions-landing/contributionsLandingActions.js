@@ -10,6 +10,7 @@ import {
   type PaymentFields,
   type PaymentResult,
   type PaymentDetails,
+  type StripeOneOffPaymentFields,
   PaymentSuccess,
   postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
@@ -114,7 +115,7 @@ const setupRegularPayment = (data: PaymentFields) =>
     }
   };
 
-const executeOneOffPayment = (data: PaymentFields) =>
+const executeStripeOneOffPayment = (data: StripeOneOffPaymentFields) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
@@ -128,36 +129,38 @@ const executeOneOffPayment = (data: PaymentFields) =>
     }
   };
 
-const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    paymentResult.then((result) => {
-      const state = getState();
+// TODO: PayPal functionality
+// const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
+//   (dispatch: Dispatch<Action>, getState: () => State): void => {
+//     paymentResult.then((result) => {
+//       const state = getState();
+//
+//       switch (result.paymentStatus) {
+//         case 'success':
+//           trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
+//           dispatch(paymentSuccess());
+//           break;
+//
+//         default:
+//           dispatch(paymentFailure(result.error));
+//       }
+//     });
+//   };
 
-      switch (result.paymentStatus) {
-        case 'success':
-          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
-          dispatch(paymentSuccess());
-          break;
-
-        default:
-          dispatch(paymentFailure(result.error));
-      }
-    });
-  };
-
-const createOneOffPayPalPayment = (data: OneOffPayPalCreatePaymentData) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    const state = getState();
-
-    dispatch(onOneOffPayPalPaymentCreated(data))
-  }
+// TODO: PayPal functionality
+// const createOneOffPayPalPayment = (data: OneOffPayPalCreatePaymentData) =>
+//   (dispatch: Dispatch<Action>, getState: () => State): void => {
+//     const state = getState();
+//
+//     dispatch(onOneOffPayPalPaymentCreated(data))
+//   }
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeOneOffPaymentData: (PaymentAuthorisation, State) => PaymentFields = (token, state) => ({
+const makeStripeOneOffPaymentData: (PaymentAuthorisation, State) => StripeOneOffPaymentFields = (token, state) => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -214,7 +217,10 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        dispatch(executeOneOffPayment(makeOneOffPaymentData(paymentAuthorisation, state)));
+        // With PayPal one off
+        if (state.page.form.paymentMethod === 'Stripe') {
+          dispatch(executeStripeOneOffPayment(makeStripeOneOffPaymentData(paymentAuthorisation, state)));
+        }
         return;
 
       case 'ANNUAL':
