@@ -131,6 +131,7 @@ const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    // Sets the checkoutFormHasBeenSubmitted to true
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     if (!(event.target: any).checkValidity()) {
@@ -147,8 +148,8 @@ function onSubmit(props: PropTypes): Event => void {
 
         case 'PayPal':
           if (props.contributionType === 'ONE_OFF') {
+            // Displays the processing transaction, please wait screen
             props.setPaymentIsWaiting(true);
-            props.createPayPalPayment();
           } else {
             // TODO
           }
