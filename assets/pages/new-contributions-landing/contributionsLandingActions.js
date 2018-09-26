@@ -109,8 +109,9 @@ const setupRegularPayment = (data: PaymentFields) =>
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
         return;
 
+      case 'None':
       default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+        dispatch(paymentFailure('No payment method selected'));
     }
   };
 
@@ -128,8 +129,9 @@ const executeOneOffPayment = (data: PaymentFields) =>
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
         return;
 
+      case 'None':
       default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+        dispatch(paymentFailure('No payment method selected'));
     }
   };
 

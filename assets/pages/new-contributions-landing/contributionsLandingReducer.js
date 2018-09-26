@@ -74,11 +74,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
-    paymentMethod: 'Stripe',
+    paymentMethod: 'None',
     paymentHandler: {
       Stripe: null,
       DirectDebit: null,
       PayPal: null,
+      None: null,
     },
     paymentReady: false,
     formData: {

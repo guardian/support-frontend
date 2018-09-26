@@ -5,14 +5,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentMethod, type PaymentHandler, getPaymentLabel } from 'helpers/checkouts';
+import { type PaymentMethod, type PaymentHandler, getPaymentLabel, getPaymentMethods } from 'helpers/checkouts';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
@@ -74,9 +73,11 @@ function setupPaymentMethod(props: PropTypes): void {
         break;
 
       case 'Stripe':
-      default:
         setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
           .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
+        break;
+
+      default: break;
     }
   }
 }
@@ -84,9 +85,7 @@ function setupPaymentMethod(props: PropTypes): void {
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
-  const paymentMethods: PaymentMethod[] = props.contributionType !== 'ONE_OFF' && props.countryId === 'GB'
-    ? ['DirectDebit', 'Stripe', 'PayPal']
-    : ['Stripe', 'PayPal'];
+  const paymentMethods: PaymentMethod[] = getPaymentMethods(props.contributionType, props.countryId);
 
   setupPaymentMethod(props);
 

@@ -13,16 +13,16 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import * as user from 'helpers/user/user';
 import { set as setCookie } from 'helpers/cookie';
-
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-
 import { NewHeader } from 'components/headers/new-header/Header';
+
+import { init as formInit } from './contributionsLandingInit';
+import { initReducer } from './contributionsLandingReducer';
 import { NewContributionForm } from './components/ContributionForm';
 import { NewContributionThanks } from './components/ContributionThanks';
 import { NewContributionBackground } from './components/ContributionBackground';
 
-import { initReducer } from './contributionsLandingReducer';
 
 // ----- Redux Store ----- //
 
@@ -31,6 +31,7 @@ const countryGroupId: CountryGroupId = detect();
 const store = pageInit(initReducer(countryGroupId), true);
 
 user.init(store.dispatch);
+formInit(store);
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
