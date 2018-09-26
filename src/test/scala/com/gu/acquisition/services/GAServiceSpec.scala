@@ -65,6 +65,13 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
       tp shouldEqual "test_name=variant_name,second_test=control"
     }
 
+    "build a correct OptimizeTests payload" in {
+      var abTests = Some(AbTestInfo(Set(AbTest("optimize$$test_name", "0"), AbTest("optimize$$second_test", "1"))))
+      val tp = service.buildOptimizeTestsPayload(abTests)
+      tp.get._1 shouldEqual "test_name,second_test"
+      tp.get._2 shouldEqual "0,1"
+    }
+
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
     "submit a request" ignore {
       service.submit(submission).fold(

@@ -20,6 +20,7 @@ private[services] class GAService(implicit client: OkHttpClient)
   private[services] def buildPayload(submission: AcquisitionSubmission, transactionId: Option[String] = None): String = {
     import submission._
     val tid = transactionId.getOrElse(UUID.randomUUID().toString)
+    val goExp = buildOptimizeTestsPayload(acquisition.abTests)
     val body = Map(
       "v" -> "1", //Version
       "tid" -> gaPropertyId,
@@ -29,6 +30,10 @@ private[services] class GAService(implicit client: OkHttpClient)
 
       // Custom Dimensions
       "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
+
+      // Google Optimize Experiment Id
+      "xid" -> goExp.map(_._1).getOrElse(""),
+      "xvar" -> goExp.map(_._2).getOrElse(""),
 
       // The GA conversion event
       "t" -> "event",
@@ -46,15 +51,26 @@ private[services] class GAService(implicit client: OkHttpClient)
       "pr1qt" -> "1", // Product Quantity
       "cu" -> acquisition.currency.toString // Currency
 
-    ) + ophanIds.browserId.map(uid =>  "uid" -> uid).getOrElse("cid" -> tid) // Pass browserId to uid if present, otherwise pass
-                                                                             // transactionId to cid
-                                                                             // see: https://support.google.com/analytics/answer/3123662
+    ) + ophanIds.browserId.map(uid => "uid" -> uid).getOrElse("cid" -> tid) // Pass browserId to uid if present, otherwise pass
+    // transactionId to cid
+    // see: https://support.google.com/analytics/answer/3123662
 
     body
       .filter { case (key, value) => value != "" }
       .map { case (key, value) => s"$key=$value" }
       .mkString("&")
-      //Link to a hit in hitbuilder https://ga-dev-tools.appspot.com/hit-builder/?v=1&t=event&tid=UA-51507017-5&cid=555&dh=support.code.dev-theguardian.com&ec=AcquisitionConversion&ea=RecurringContribution&ti=T12345&tr=5&pa=purchase&pr1nm=RecurringContribution&el=monthly&ev=5&cu=AUD
+  }
+
+  private[services] def buildOptimizeTestsPayload(maybeTests: Option[AbTestInfo]) = {
+    val optimizePrefix = "optimize$$"
+    maybeTests.map {
+      abTests =>
+        abTests.tests
+          .filter(test => test._1.startsWith(optimizePrefix))
+          .map(test => test._1.replace(optimizePrefix, "") -> test._2)
+          .toMap
+    }.map(tests => (tests.keys.mkString(","), tests.values.mkString(",")))
+
   }
 
   private[services] def buildABTestPayload(maybeTests: Option[AbTestInfo]) =
