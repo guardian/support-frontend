@@ -148,7 +148,9 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             Digital Pack
           </div>
           <div className="digital-subscription-landing-header__title">
-            <h1 className="digital-subscription-landing-header__title-copy">{getPageTitle()}</h1>
+            <h1 className="digital-subscription-landing-header__title-copy">
+              {getPageTitle(props.countryGroupId)}
+            </h1>
           </div>
         </div>
         <CtaSwitch referringCta="support_digipack_page_header" />
