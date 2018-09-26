@@ -1,0 +1,138 @@
+.component-featured-digital-pack {
+  @include mq($from: desktop) {
+    width: gu-breakpoint(desktop);
+    margin: 0 auto;
+    display: flex;
+  }
+
+  @include mq($from: leftCol) {
+    width: gu-breakpoint(leftCol);
+  }
+
+  @include mq($from: wide) {
+    width: gu-breakpoint(wide);
+  }
+
+  .component-cta-link {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+    width: 90px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    padding-left: 18px;
+    margin-top: $gu-v-spacing * 2;
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      height: 22px;
+      top: 9px;
+      left: calc(100% - 32px);
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+
+    @include mq($from: desktop) {
+      margin-top: $gu-v-spacing;
+    }
+  }
+
+  .component-grid-picture__image {
+    width: 90%;
+    margin-left: 10%;
+    position: relative;
+    display: block;
+
+    @include mq($from: tablet) {
+      width: 60%;
+      margin-left: 30%;
+    }
+
+    @include mq($from: desktop) {
+      top: 130px;
+      width: 600px;
+      margin-left: 70px;
+    }
+
+    @include mq($from: leftCol) {
+      top: 70px;
+      width: 700px;
+    }
+
+    @include mq($from: wide) {
+      top: 80px;
+      margin-left: 160px;
+    }
+  }
+
+  .svg-circle {
+    width: 200%;
+    left: -25%;
+    top: 7%;
+    position: absolute;
+
+    @include mq($from: tablet) {
+      width: 100%;
+      left: 15%;
+    }
+
+    @include mq($from: desktop) {
+      top: 190px;
+      left: 0;
+    }
+
+    @include mq($from: leftCol) {
+      top: 95px;
+    }
+
+    @include mq($from: wide) {
+      top: 150px;
+    }
+  }
+}
+
+.component-featured-digital-pack__description {
+  @extend .gu-content-margin;
+
+  @include mq($from: desktop) {
+    flex: 0 260px;
+    margin: 0 0 120px;
+    padding-right: 0;
+  }
+}
+
+.component-featured-digital-pack__image {
+  position: relative;
+  overflow: hidden;
+
+  @include mq($from: desktop) {
+    flex-grow: 1;
+  }
+}
+
+.component-featured-digital-pack__heading {
+  font-size: 24px;
+  line-height: 1.25;
+  font-family: $gu-headline;
+  font-weight: bold;
+
+  @include mq($from: tablet) {
+    font-size: 36px;
+  }
+}
+
+.component-featured-digital-pack__subheading {
+  font-size: 17px;
+  line-height: 1.41;
+  font-family: $gu-headline;
+  font-weight: bold;
+  margin-top: $gu-v-spacing;
+}
+
+.component-featured-digital-pack__copy {
+  font-size: 17px;
+  line-height: 1.41;
+  margin-top: $gu-v-spacing / 2;
+}

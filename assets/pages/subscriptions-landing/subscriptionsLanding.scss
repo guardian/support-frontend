@@ -7,6 +7,7 @@
 
 @import '~components/ctaLink/ctaLink';
 @import '~components/doubleHeading/doubleHeading';
+@import '~components/featuredDigitalPack/featuredDigitalPack';
 @import '~components/featureList/featureList';
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
@@ -30,10 +31,6 @@
 
   .component-subscriptions-by-country-group {
     @include multiline-top-border;
-
-    .component-three-subscriptions:nth-of-type(1) {
-      border-top: none;
-    }
   }
 
   .component-cta-link--android {
