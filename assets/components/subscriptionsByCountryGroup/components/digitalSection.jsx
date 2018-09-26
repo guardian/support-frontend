@@ -38,7 +38,7 @@ function DigitalSection(props: {
       <SubscriptionBundle
         modifierClass="daily-edition"
         heading="Daily Edition"
-        subheading={displayPrice('DailyEdition', props.countryGroupId)}
+        subheading={`from ${displayPrice('DailyEdition', props.countryGroupId)}`}
         headingSize={props.headingSize}
         benefits={{
           list: false,
