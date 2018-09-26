@@ -25,7 +25,7 @@ type PropTypes = {
   countryId: IsoCountry,
   contributionType: Contrib,
   currency: IsoCurrency,
-  paymentMethod: PaymentMethod | null,
+  paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
@@ -60,7 +60,7 @@ function setupPaymentMethod(props: PropTypes): void {
     isTestUser,
   } = props;
 
-  if (paymentMethod && !paymentHandler[paymentMethod]) {
+  if (!paymentHandler[paymentMethod]) {
     props.isPaymentReady(false);
 
     switch (paymentMethod) {

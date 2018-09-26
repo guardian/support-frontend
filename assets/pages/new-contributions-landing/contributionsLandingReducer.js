@@ -79,6 +79,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       Stripe: null,
       DirectDebit: null,
       PayPal: null,
+      None: null,
     },
     paymentReady: false,
     formData: {

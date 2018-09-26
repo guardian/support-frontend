@@ -53,7 +53,8 @@ function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): num
 
 }
 
-
+// Returns an array of Payment Methods, in the order of preference,
+// i.e the first element in the array will be the default option
 function getPaymentMethods(contributionType: Contrib, countryId: IsoCountry): PaymentMethod[] {
   return contributionType !== 'ONE_OFF' && countryId === 'GB'
     ? ['DirectDebit', 'Stripe', 'PayPal']
@@ -74,7 +75,7 @@ function getValidPaymentMethods(
     .filter(paymentMethod => switchIsOn(switches, toPaymentMethodSwitchNaming(paymentMethod)));
 }
 
-function getPaymentMethod(): ?PaymentMethod {
+function getPaymentMethodFromSession(): ?PaymentMethod {
   const pm: ?string = storage.getSession('paymentMethod');
   if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
     return (pm: PaymentMethod);
@@ -112,7 +113,7 @@ export {
   getAmount,
   getPaymentMethods,
   getValidPaymentMethods,
-  getPaymentMethod,
+  getPaymentMethodFromSession,
   getPaymentDescription,
   getPaymentLabel,
 };
