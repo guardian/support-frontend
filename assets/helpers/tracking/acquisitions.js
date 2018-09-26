@@ -41,7 +41,7 @@ export type ReferrerAcquisitionData = {|
   componentId: ?string,
   componentType: ?string,
   source: ?string,
-  abTest: ?AcquisitionABTest,
+  abTests: ?AcquisitionABTest[],
   // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
   // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
   queryParameters: ?AcquisitionQueryParameters,
@@ -137,7 +137,7 @@ function storeReferrerAcquisitionData(referrerAcquisitionData: ReferrerAcquisiti
 }
 
 // Reads the acquisition data from sessionStorage.
-function readReferrerAcquisitionData(): ?ReferrerAcquisitionData {
+function readReferrerAcquisitionData(): ?Object {
 
   const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
   return stored ? deserialiseJsonObject(stored) : null;
@@ -201,7 +201,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     componentId: acquisitionData.componentId,
     componentType: acquisitionData.componentType,
     source: acquisitionData.source,
-    abTest: acquisitionData.abTest,
+    abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
   };
 }
@@ -226,11 +226,10 @@ function derivePaymentApiAcquisitionData(
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests = getSupportAbTests(nativeAbParticipations, optimizeExperiments);
-
-  if (referrerAcquisitionData.abTest) {
-    abTests.push(referrerAcquisitionData.abTest);
-  }
+  const abTests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
 
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
