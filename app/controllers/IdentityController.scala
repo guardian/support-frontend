@@ -3,11 +3,14 @@ package controllers
 import actions.CustomActionBuilders
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
+import io.circe.syntax._
+import models.identity.responses.IdentityApiResponseError
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
+import codecs.CirceDecoders._
 
 import scala.concurrent.ExecutionContext
 
@@ -19,6 +22,11 @@ class IdentityController(
   extends AbstractController(components) with Circe {
 
   import actionRefiners._
+  import cats.implicits._
+
+  def toErrorResult(error: IdentityApiResponseError): Result = {
+    new Status(error.statusCode)(error.asJson)
+  }
 
   def submitMarketing(): Action[SendMarketingRequest] = PrivateAction.async(circe.json[SendMarketingRequest]) { implicit request =>
     val result = identityService.sendConsentPreferencesEmail(request.body.email)
@@ -34,18 +42,12 @@ class IdentityController(
   }
 
   def setPasswordGuest(): Action[SetPasswordRequest] = PrivateAction.async(circe.json[SetPasswordRequest]) { implicit request =>
-    val result = identityService.setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
-    result.map { res =>
-      res match {
-        case Right(x) => {
-          print(x.toString)
-          Ok
-        }
-        case _ => {
-          BadRequest
-        }
-      }
-    }
+    identityService
+      .setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
+      .fold(
+        err => toErrorResult(err),
+        cookies => Ok(cookies.asJson)
+      )
   }
 }
 

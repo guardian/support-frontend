@@ -80,12 +80,13 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Either[IdentityApiResponseError, CookiesResponse]] = {
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)
+                      (implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
     val payload = Json.obj("password" -> password)
     val headers =
       List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
     val urlParameters = List("validate-email" -> "0")
-    request(s"guest/password", headers, urlParameters).put(payload) map JsonBodyParser.extract[CookiesResponse](JsonBodyParser.jsonField("cookies"))
+    EitherT(request(s"guest/password", headers, urlParameters).put(payload) map JsonBodyParser.extract[CookiesResponse](JsonBodyParser.jsonField("cookies")))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -167,6 +168,6 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Either[IdentityApiResponseError, CookiesResponse]]
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }

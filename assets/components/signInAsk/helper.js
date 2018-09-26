@@ -26,6 +26,7 @@ function setPasswordGuest(
 
   return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestData(password, guestAccountRegistrationToken, csrf)))
     .then((response) => {
+      console.log(response);
       if (response.status === 200) {
         return true;
       } else {

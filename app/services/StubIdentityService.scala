@@ -25,9 +25,9 @@ class StubIdentityService extends IdentityService {
     Future.successful(true)
   }
 
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): Future[Either[IdentityApiResponseError, CookiesResponse]] = {
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
     SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
-    Future.successful(Right(CookiesResponse(DateTime.now(), List.empty)))
+    EitherT.rightT[Future, IdentityApiResponseError](CookiesResponse(DateTime.now(), List.empty))
   }
 
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
