@@ -80,8 +80,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)
-                      (implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
     val payload = Json.obj("password" -> password)
     val headers =
       List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")

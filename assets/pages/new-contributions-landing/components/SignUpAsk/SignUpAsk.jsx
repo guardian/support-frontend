@@ -47,9 +47,9 @@ function onSubmit(props: PropTypes): Event => void {
     const password = document.getElementById('password').value;
     setPasswordGuest(password, props.guestAccountCreationToken, props.csrf).then(response => {
       if (response === true){
-        alert("set password");
+        //TODO: navigate user to thank you page
       } else {
-        alert("didn't set password");
+        //TODO: alert user of error and navigate user to thank you page
       }
     });
   };

@@ -19,6 +19,7 @@ import Footer from 'components/footer/footer';
 
 import { NewHeader } from 'components/headers/new-header/Header';
 import { NewContributionForm } from './components/ContributionForm';
+import { NewContributionThanks } from './components/ContributionThanks';
 import { SignUpAsk } from './components/SignUpAsk/SignUpAsk';
 import { NewContributionBackground } from './components/ContributionBackground';
 
@@ -68,6 +69,26 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou.new"
+          render={() => {
+            setCookie(
+              ONE_OFF_CONTRIBUTION_COOKIE,
+              currentTimeInEpochMilliseconds.toString(),
+            );
+            return (
+              <Page
+                classModifiers={['contribution-thankyou']}
+                header={<NewHeader />}
+                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+              >
+                <NewContributionThanks />
+                <NewContributionBackground />
+              </Page>
+            );
+          }}
+        />
+        <Route
+          exact
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/signupask.new"
           render={() => {
             setCookie(
               ONE_OFF_CONTRIBUTION_COOKIE,
