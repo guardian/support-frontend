@@ -60,7 +60,7 @@
       }
     }
 
-    .component-price-cta__cancel {
+    .component-price-cta__secondary {
       background-color: #fff;
     }
   }
@@ -245,6 +245,12 @@
 
   .component-grid-picture__image {
     display: block;
+  }
+
+  .digital-subscription-landing-header {
+    .component-price-cta__secondary {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
   }
 
   .digital-subscription-landing-header__wrapper {
