@@ -1,5 +1,8 @@
 package com.gu.emailservices
 
-case class FailedContributionEmailFields(email: String) extends EmailFields {
+import com.gu.salesforce.Salesforce.SfContactId
+
+case class FailedContributionEmailFields(email: String, identityUserId: IdentityUserId) extends EmailFields {
   override def payload: String = super.payload(email, "contribution-failed")
+  override def userId: Either[SfContactId, IdentityUserId] = Right(identityUserId)
 }

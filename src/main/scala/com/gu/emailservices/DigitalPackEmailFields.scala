@@ -1,6 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.i18n.Currency
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers.model._
 import org.joda.time.DateTime
 
@@ -41,6 +42,7 @@ case class DigitalPackEmailFields(
     user: User,
     currency: Currency,
     paymentMethod: PaymentMethod,
+    sfContactId: SfContactId,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
@@ -78,4 +80,5 @@ case class DigitalPackEmailFields(
   ) ++ paymentFields //TODO: ++ promotionFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
+  override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
 }
