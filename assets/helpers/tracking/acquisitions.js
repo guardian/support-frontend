@@ -167,11 +167,11 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
-// Appends all the experiment names (the keys) with '$Optimize' to avoid name
-// collision with native tests, and returns as array of AB tests.
+// Prepends all the experiment names (the keys) with 'optimize$$' to be able to
+// differentiate from native tests, and returns as array of AB tests.
 function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
   return Object.keys(opt).map(k => ({
-    name: k,
+    name: `optimize$$${k}`,
     variant: opt[k],
   }));
 }
