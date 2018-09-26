@@ -26,12 +26,15 @@ type PropTypes = {
   autoFocus: boolean,
   min: number | void,
   max: number | void,
+  disabled: boolean,
 };
 
 // ----- Render ----- //
 
 function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.checkoutFormHasBeenSubmitted;
+  const modifiersArray = showError ? ['invalid', props.id] : [props.id];
+
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
@@ -41,7 +44,7 @@ function NewContributionTextInput(props: PropTypes) {
       <span className="form__input-with-icon">
         <input
           id={props.id}
-          className={classNameWithModifiers('form__input', showError ? ['invalid'] : [])}
+          className={classNameWithModifiers('form__input', modifiersArray)}
           type={props.type}
           autoCapitalize={props.autoCapitalize}
           autoComplete={props.autoComplete}
@@ -52,6 +55,7 @@ function NewContributionTextInput(props: PropTypes) {
           value={props.value}
           min={props.min}
           max={props.max}
+          disabled={props.disabled}
         />
         <span className="form__icon">
           {props.icon}
@@ -77,6 +81,7 @@ NewContributionTextInput.defaultProps = {
   autoFocus: false,
   max: undefined,
   min: undefined,
+  disabled: false,
 };
 
 export { NewContributionTextInput };

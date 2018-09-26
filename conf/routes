@@ -40,6 +40,7 @@ GET  /contribute                                    controllers.Application.cont
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new controllers.Application.newContributionsLanding(country: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new controllers.Application.newContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/signupask.new controllers.Application.newContributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
@@ -52,6 +53,9 @@ GET  /contribute/recurring/pending                  controllers.RegularContribut
 # this endpoint should be removed once identity remove
 # the need for a client token
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
+
+POST  /contribute/set-password-guest                 controllers.IdentityController.setPasswordGuest
+
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()

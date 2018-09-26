@@ -1,0 +1,54 @@
+.sign-up-ask {
+  .form__input--email {
+    pointer-events:none;
+    background-color: #dcdcdc;
+
+  }
+
+  .sign-up-ask__standfirst {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
+  }
+
+  .form__field--contribution-password {
+    margin-top: $gu-v-spacing;
+  }
+
+  .form__submit-button--create-account {
+    width: 100%;
+    position: relative;
+  }
+
+  .svg-arrow-right-straight {
+    position: absolute;
+    right: $gu-v-spacing;
+  }
+
+  .form__submit {
+    padding-bottom: 0;
+  }
+
+  .component-cta-link--no-thanks {
+    background-color: transparent;
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(neutral-1);
+    display: inline-block;
+    position: relative;
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      position: absolute;
+      right: $gu-v-spacing;
+      width: 20px;
+      height: 18px;
+      vertical-align: middle;
+    }
+
+    .component-cta-link__text {
+      font-size: 16px;
+    }
+  }
+
+}

@@ -7,15 +7,15 @@ import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import config.Identity
-import models.identity.UserIdWithGuestAccountToken
+import models.identity.{CookiesResponse, UserIdWithGuestAccountToken}
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.{GuestRegistrationResponse, UserResponse}
+import models.identity.responses.{GuestRegistrationResponse, IdentityApiResponseError, UserResponse}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-
+import utils.JsonBodyParser
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -59,14 +59,16 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 
   import IdentityServiceEnrichers._
 
-  private def request(path: String): WSRequest = {
+  private def request(path: String, headers: List[(String, String)], parameters: List[(String, String)]): WSRequest = {
     wsClient.url(s"$apiUrl/$path")
-      .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
+      .withHttpHeaders(headers: _*)
+      .withQueryStringParameters(parameters: _*)
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+    val headers = List("Authorization" -> s"Bearer $apiClientToken");
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
-    request(s"consent-email").post(payload).map { response =>
+    request(s"consent-email", headers, List.empty).post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
       if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
       else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
@@ -76,6 +78,14 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
         false
     }
+  }
+
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse] = {
+    val payload = Json.obj("password" -> password)
+    val headers =
+      List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
+    val urlParameters = List("validate-email" -> "0")
+    EitherT(request(s"guest/password", headers, urlParameters).put(payload) map JsonBodyParser.extract[CookiesResponse](JsonBodyParser.jsonField("cookies")))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -157,5 +167,6 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def setPasswordGuest(password: String, guestAccountRegistrationToken: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityApiResponseError, CookiesResponse]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }
