@@ -31,6 +31,8 @@ type OneOffFields = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+export type OneOffPayPalCreatePaymentData = {|currency: string, amount: string|};
+
 type RegularContribution = {|
   amount: number,
   currency: string,
@@ -198,11 +200,17 @@ function getOneOffStripeEndpoint() {
 }
 
 /** Sends a one-off payment request to the payment API and checks the result */
-function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
+function postOneOffStripeExecutePaymentRequest(data: PaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
     getOneOffStripeEndpoint(),
     postRequestOptions(data, 'include', null),
   ).then(checkOneOffStatus));
+}
+
+function postOneOffPayPalCreatePaymentRequest(data: OneOffPayPalCreatePaymentData): Promise<PaymentResult> {
+  return logPromise(fetchJson(
+
+  ))
 }
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
@@ -219,7 +227,7 @@ function postRegularPaymentRequest(
 }
 
 export {
-  postOneOffStripeRequest,
+  postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
   PaymentSuccess,
 };

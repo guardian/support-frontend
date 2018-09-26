@@ -65,7 +65,7 @@ type PropTypes = {|
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
-  onWaiting: boolean => void,
+  setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
@@ -105,7 +105,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
@@ -146,7 +146,12 @@ function onSubmit(props: PropTypes): Event => void {
           break;
 
         case 'PayPal':
-          // TODO
+          if (props.contributionType === 'ONE_OFF') {
+            props.setPaymentIsWaiting(true);
+            props.createPayPalPayment();
+          } else {
+            // TODO
+          }
           break;
 
         case 'Stripe':
@@ -175,7 +180,7 @@ function ContributionForm(props: PropTypes) {
   } = props;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.onWaiting(true);
+    props.setPaymentIsWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 

@@ -42,11 +42,11 @@ function ContributionSubmit(props: PropTypes) {
   const frequency = getFrequency(props.contributionType);
   const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
   const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
-  const showPayPalButton = props.paymentMethod === 'PayPal';
+  const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
   return (
     <div className="form__submit">
-      {showPayPalButton ? (
+      {showPayPalExpressButton ? (
         <button disabled={props.isWaiting}>Pay with PayPal, bro</button>
       ) : (
         <button disabled={props.isWaiting} className="form__submit-button" type="submit">

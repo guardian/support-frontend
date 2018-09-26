@@ -11,7 +11,7 @@ import {
   type PaymentResult,
   type PaymentDetails,
   PaymentSuccess,
-  postOneOffStripeRequest,
+  postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
@@ -118,20 +118,39 @@ const executeOneOffPayment = (data: PaymentFields) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
-    switch (state.page.form.paymentMethod) {
-      case 'Stripe':
-        dispatch(onPaymentResult(postOneOffStripeRequest(data)));
-        return;
-
-      case 'PayPal':
-        // TODO
-        dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
-        return;
-
-      default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+    // Why no mention of PayPal?
+    // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
+    // endpoint, after PayPal redirects the browser back to our site.
+    if (state.page.form.paymentMethod === 'Stripe') {
+      dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
+    } else {
+      dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
     }
   };
+
+const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    paymentResult.then((result) => {
+      const state = getState();
+
+      switch (result.paymentStatus) {
+        case 'success':
+          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
+          dispatch(paymentSuccess());
+          break;
+
+        default:
+          dispatch(paymentFailure(result.error));
+      }
+    });
+  };
+
+const createOneOffPayPalPayment = (data: OneOffPayPalCreatePaymentData) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    const state = getState();
+
+    dispatch(onOneOffPayPalPaymentCreated(data))
+  }
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
