@@ -26,6 +26,7 @@ type PropTypes = {
   autoFocus: boolean,
   min: number | void,
   max: number | void,
+  disabled: boolean,
 };
 
 // ----- Render ----- //
@@ -52,6 +53,7 @@ function NewContributionTextInput(props: PropTypes) {
           value={props.value}
           min={props.min}
           max={props.max}
+          disabled={props.disabled}
         />
         <span className="form__icon">
           {props.icon}
@@ -77,6 +79,7 @@ NewContributionTextInput.defaultProps = {
   autoFocus: false,
   max: undefined,
   min: undefined,
+  disabled: false,
 };
 
 export { NewContributionTextInput };

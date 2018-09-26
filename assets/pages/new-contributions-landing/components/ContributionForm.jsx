@@ -60,6 +60,7 @@ type PropTypes = {|
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
+  isSignedIn: boolean,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
@@ -93,6 +94,7 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
+  isSignedIn: state.page.user.isSignedIn,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -171,6 +173,7 @@ function ContributionForm(props: PropTypes) {
     lastName,
     email,
     state,
+    isSignedIn,
     checkoutFormHasBeenSubmitted,
   } = props;
 
@@ -239,6 +242,7 @@ function ContributionForm(props: PropTypes) {
             checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
+            disabled={isSignedIn}
           />
           <NewContributionState onChange={props.updateState} value={state} />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
