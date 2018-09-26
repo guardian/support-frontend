@@ -9,6 +9,7 @@ import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
 import { type ImageId } from 'helpers/theGrid';
+import { sendTrackingEventsOnClick, type ComponentAbTest } from 'helpers/subscriptions';
 
 
 // ----- Component ----- //
@@ -19,6 +20,7 @@ function DigitalPack(props: {
   subheading: string,
   copy: string,
   gridId: ImageId,
+  abTest: ComponentAbTest | void,
 }) {
 
   return (
@@ -42,12 +44,20 @@ function DigitalPack(props: {
           url: props.url,
           accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['border'],
+          onClick: sendTrackingEventsOnClick('digipack_cta', 'digital', props.abTest),
         },
       ]}
     />
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+DigitalPack.defaultProps = {
+  abTest: undefined,
+};
 
 
 // ----- Exports ----- //

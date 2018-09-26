@@ -6,6 +6,7 @@ import React from 'react';
 
 import { getQueryParameter } from 'helpers/url';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type ComponentAbTest } from 'helpers/subscriptions';
 
 import FeaturedDigitalPack from 'components/featuredDigitalPack/featuredDigitalPack';
 
@@ -16,8 +17,8 @@ import PaperSection from './paperSection';
 // ----- Types ----- //
 
 type PropTypes = {
-  paperSection: React$Element<typeof PaperSection>,
-  digitalSection: React$Element<typeof DigitalSection>,
+  paperSection: (ComponentAbTest | void) => React$Element<typeof PaperSection>,
+  digitalSection: (ComponentAbTest | void) => React$Element<typeof DigitalSection>,
   countryGroupId: CountryGroupId,
   digitalPackUrl: string,
 };
@@ -40,8 +41,8 @@ function FeaturedProductTest(props: PropTypes) {
             countryGroupId={props.countryGroupId}
             url={props.digitalPackUrl}
           />
-          {props.digitalSection}
-          {props.paperSection}
+          {props.digitalSection({ name: 'featuredProduct', variant: 'featured' })}
+          {props.paperSection({ name: 'featuredProduct', variant: 'featured' })}
         </div>
       );
 
@@ -53,16 +54,23 @@ function FeaturedProductTest(props: PropTypes) {
             countryGroupId={props.countryGroupId}
             url={props.digitalPackUrl}
           />
-          {props.paperSection}
+          {props.paperSection({ name: 'featuredProduct', variant: 'featuredShort' })}
         </div>
       );
 
     case 'control':
+      return (
+        <div className={className}>
+          {props.digitalSection({ name: 'featuredProduct', variant: 'control' })}
+          {props.paperSection({ name: 'featuredProduct', variant: 'control' })}
+        </div>
+      );
+
     default:
       return (
         <div className={className}>
-          {props.digitalSection}
-          {props.paperSection}
+          {props.digitalSection()}
+          {props.paperSection()}
         </div>
       );
 

@@ -9,7 +9,11 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
 
-import { displayPrice } from 'helpers/subscriptions';
+import {
+  displayPrice,
+  sendTrackingEventsOnClick,
+  type ComponentAbTest,
+} from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
@@ -19,6 +23,7 @@ type PropTypes = {
   headingSize: HeadingSize,
   countryGroupId: CountryGroupId,
   url: string,
+  abTest: ComponentAbTest | void,
 };
 
 
@@ -50,6 +55,7 @@ function FeaturedDigitalPack(props: PropTypes) {
           text="Buy now"
           url={props.url}
           accessibilityHint="Buy now"
+          onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'digital', props.abTest)}
         />
       </div>
       <div className="component-featured-digital-pack__image">
@@ -81,6 +87,13 @@ function FeaturedDigitalPack(props: PropTypes) {
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+FeaturedDigitalPack.defaultProps = {
+  abTest: undefined,
+};
 
 
 // ----- Exports ----- //

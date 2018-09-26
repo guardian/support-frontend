@@ -9,6 +9,7 @@ import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
 import { getDiscountedPrice } from './flashSale';
 
+
 // ----- Types ------ //
 
 export type SubscriptionProduct =
@@ -18,6 +19,12 @@ export type SubscriptionProduct =
   'GuardianWeekly' |
   'Paper' |
   'PaperAndDigital';
+
+export type ComponentAbTest = {
+  name: string,
+  variant: string,
+};
+
 
 // ----- Config ----- //
 
@@ -66,6 +73,9 @@ const defaultBillingPeriods: {
   DailyEdition: 'month',
 };
 
+
+// ----- Functions ----- //
+
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const price = subscriptionPrices[product][countryGroupId];
   const discounted = getDiscountedPrice(product, price);
@@ -87,29 +97,29 @@ function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
 function sendTrackingEventsOnClick(
   id: string,
   product: 'digital' | 'print',
-  abTest: string,
-  variant: boolean,
+  abTest: ComponentAbTest | void,
 ): () => void {
+
+  const componentEvent = {
+    component: {
+      componentType: 'ACQUISITIONS_BUTTON',
+      id,
+      products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
+    },
+    action: 'CLICK',
+    id,
+    abTest,
+  };
+
+  const gaAction = abTest ? abTest.name : product;
 
   return () => {
 
-    trackComponentEvents({
-      component: {
-        componentType: 'ACQUISITIONS_BUTTON',
-        id,
-        products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
-      },
-      action: 'CLICK',
-      id: `${abTest}${id}`,
-      abTest: {
-        name: `${abTest}`,
-        variant: variant ? 'variant' : 'control',
-      },
-    });
+    trackComponentEvents(componentEvent);
 
     gaEvent({
       category: 'click',
-      action: `${abTest}`,
+      action: gaAction,
       label: id,
     });
 
@@ -117,6 +127,12 @@ function sendTrackingEventsOnClick(
 
 }
 
+
 // ----- Exports ----- //
 
-export { sendTrackingEventsOnClick, displayPrice, getProductPrice, displayDigitalPackBenefitCopy };
+export {
+  sendTrackingEventsOnClick,
+  displayPrice,
+  getProductPrice,
+  displayDigitalPackBenefitCopy,
+};

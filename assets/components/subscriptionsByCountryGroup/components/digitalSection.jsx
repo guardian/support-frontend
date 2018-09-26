@@ -15,19 +15,26 @@ import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
 import { displayPrice, displayDigitalPackBenefitCopy } from 'helpers/subscriptions';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type ComponentAbTest } from 'helpers/subscriptions';
 
 import PremiumTier from './premiumTier';
 import DigitalPack from './digitalPack';
 
 
-// ----- Component ----- //
+// ----- Types ----- //
 
-function DigitalSection(props: {
+type PropTypes = {|
   headingSize: HeadingSize,
   subsLinks: SubsUrls,
   countryGroupId: CountryGroupId,
   appReferrer: string,
-}) {
+  abTest: ComponentAbTest | void,
+|};
+
+
+// ----- Component ----- //
+
+function DigitalSection(props: PropTypes) {
   return (
     <ThreeSubscriptions heading="Digital Subscriptions">
       <PremiumTier
@@ -65,10 +72,18 @@ function DigitalSection(props: {
         subheading={displayPrice('DigitalPack', props.countryGroupId)}
         gridId="digitalCircleAlt"
         copy={displayDigitalPackBenefitCopy(props.countryGroupId)}
+        abTest={props.abTest}
       />
     </ThreeSubscriptions>
   );
 }
+
+
+// ----- Default Props ----- //
+
+DigitalSection.defaultProps = {
+  abTest: undefined,
+};
 
 
 // ----- Exports ----- //

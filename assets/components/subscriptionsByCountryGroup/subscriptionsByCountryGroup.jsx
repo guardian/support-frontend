@@ -14,6 +14,7 @@ import { getSubsLinks } from 'helpers/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getAppReferrer } from 'helpers/tracking/appStores';
+import { type ComponentAbTest } from 'helpers/subscriptions';
 
 import FeaturedProductTest from './components/featuredProductTest';
 import DigitalSection from './components/digitalSection';
@@ -68,21 +69,23 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
         <FeaturedProductTest
           countryGroupId="GBPCountries"
           digitalPackUrl={subsLinks.DigitalPack}
-          digitalSection={
+          digitalSection={(abTest: ComponentAbTest | void) => (
             <DigitalSection
               headingSize={headingSize}
               subsLinks={subsLinks}
               countryGroupId={countryGroupId}
               appReferrer={appReferrer}
+              abTest={abTest}
             />
-          }
-          paperSection={
+          )}
+          paperSection={(abTest: ComponentAbTest | void) => (
             <PaperSection
               headingSize={headingSize}
               subsLinks={subsLinks}
               countryGroupId={countryGroupId}
+              abTest={abTest}
             />
-          }
+          )}
         />
       </div>
     );
