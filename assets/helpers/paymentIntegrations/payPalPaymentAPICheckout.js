@@ -17,7 +17,10 @@ import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 
 // ----- Types ----- //
 
-type PayPalPaymentAPIPostData = {|
+// Data that should be posted to the payment API to get a url for the PayPal UI
+// where the user is redirected to so that they can authorize the payment.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
+export type CreatePaypalPaymentData = {|
   currency: IsoCurrency,
   amount: number,
   returnURL: string,
@@ -55,7 +58,7 @@ export function paypalPaymentAPIRedirect(
   cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
 
   const { currency } = countryGroups[countryGroupId];
-  const postData: PayPalPaymentAPIPostData = {
+  const postData: CreatePaypalPaymentData = {
     amount,
     currency,
     returnURL: getAbsoluteURL(routes.payPalRestReturnURL),

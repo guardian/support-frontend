@@ -16,6 +16,7 @@ import { type UsState, type CaState, type IsoCountry } from 'helpers/internation
 import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 
 import * as cookie from 'helpers/cookie';
 
@@ -72,14 +73,14 @@ type RegularFields = {|
   supportAbTests: AcquisitionABTest[],
 |};
 
-
 // TODO: why is contributionType required?
 export type StripeOneOffPaymentFields = {| contributionType: 'oneoff', fields: StripeChargeData |};
-
+export type PayPalOneOffPaymentFields = {| contributionType: 'oneoff', fields: CreatePaypalPaymentData |};
 export type RegularPaymentFields = {| contributionType: 'regular', fields: RegularFields |};
 
 // TODO: is this union type required?
-export type PaymentFields = StripeOneOffPaymentFields | RegularPaymentFields;
+// It is a type of an argument passed to postRequestOptions(), but this could just be an object (?)
+export type PaymentFields = StripeOneOffPaymentFields | PayPalOneOffPaymentFields | RegularPaymentFields;
 
 type Credentials = 'omit' | 'same-origin' | 'include';
 
@@ -209,6 +210,18 @@ function getOneOffStripeEndpoint() {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
+// TODO: uncomment
+// function paymentApiEndpointWithMode(url: string) {
+//   if (cookie.get('_test_username')) {
+//     return addQueryParamsToURL(
+//       url,
+//       { mode: 'test' },
+//     );
+//   }
+//
+//   return url
+// }
+
 /** Sends a one-off payment request to the payment API and checks the result */
 function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
@@ -217,12 +230,18 @@ function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields):
   ).then(checkOneOffStatus));
 }
 
-// TODO: PayPal functionality
-// function postOneOffPayPalCreatePaymentRequest(data: OneOffPayPalCreatePaymentData): Promise<PaymentResult> {
-//   return logPromise(fetchJson(
-//
-//   ))
-// }
+// FIXME: implement
+function getOneOffPayPalEndpoint(): string {
+  return 'TODO';
+}
+
+function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<PaymentResult> {
+  return logPromise(fetchJson(
+    getOneOffPayPalEndpoint(),
+    // TODO: if we remove the PaymentFields type then we can just pass the data through
+    postRequestOptions({ contributionType: 'oneoff', fields: data }, 'include', null),
+  ));
+}
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
@@ -239,6 +258,7 @@ function postRegularPaymentRequest(
 
 export {
   postOneOffStripeExecutePaymentRequest,
+  postOneOffPayPalCreatePaymentRequest,
   postRegularPaymentRequest,
   PaymentSuccess,
 };

@@ -16,6 +16,8 @@ import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -41,6 +43,7 @@ import {
   updateState,
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
+  createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 
 // ----- Types ----- //
@@ -70,7 +73,9 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
-  isDirectDebitPopUpOpen: boolean
+  isDirectDebitPopUpOpen: boolean,
+  createOneOffPayPalPayment: CreatePaypalPaymentData => void,
+  currency: IsoCurrency,
 |};
 
 type FormValueType = string | null;
@@ -97,6 +102,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
+  currency: state.common.internationalisation.countryId,
 });
 
 
@@ -109,6 +115,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
 });
 
 // ----- Functions ----- //
@@ -150,6 +157,13 @@ function onSubmit(props: PropTypes): Event => void {
           if (props.contributionType === 'ONE_OFF') {
             // Displays the processing transaction, please wait screen
             props.setPaymentIsWaiting(true);
+            props.createOneOffPayPalPayment({
+              currency: props.currency,
+              amount,
+              returnURL: 'TODO: return url',
+              cancelURL: 'TODO: cancel url',
+            });
+
           } else {
             // TODO
           }

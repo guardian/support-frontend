@@ -14,7 +14,9 @@ import {
   PaymentSuccess,
   postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
+  postOneOffPayPalCreatePaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State } from './contributionsLandingReducer';
@@ -129,31 +131,30 @@ const executeStripeOneOffPayment = (data: StripeOneOffPaymentFields) =>
     }
   };
 
-// TODO: PayPal functionality
-// const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
-//   (dispatch: Dispatch<Action>, getState: () => State): void => {
-//     paymentResult.then((result) => {
-//       const state = getState();
-//
-//       switch (result.paymentStatus) {
-//         case 'success':
-//           trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
-//           dispatch(paymentSuccess());
-//           break;
-//
-//         default:
-//           dispatch(paymentFailure(result.error));
-//       }
-//     });
-//   };
+const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    paymentResult.then((result) => {
+      const state = getState();
 
-// TODO: PayPal functionality
-// const createOneOffPayPalPayment = (data: OneOffPayPalCreatePaymentData) =>
-//   (dispatch: Dispatch<Action>, getState: () => State): void => {
-//     const state = getState();
-//
-//     dispatch(onOneOffPayPalPaymentCreated(data))
-//   }
+      switch (result.paymentStatus) {
+        case 'success':
+          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
+          // TODO: return url from result
+          // window.location.href = result.returnUrl;
+          break;
+
+        default:
+          dispatch(paymentFailure(result.error));
+      }
+    });
+  };
+
+const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
+  (dispatch: Dispatch<Action>): void => {
+    // TODO: if this needed
+    // const state = getState();
+    dispatch(onOneOffPayPalPaymentCreated(postOneOffPayPalCreatePaymentRequest(data)));
+  };
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -249,4 +250,5 @@ export {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   setGuestAccountCreationToken,
+  createOneOffPayPalPayment,
 };
