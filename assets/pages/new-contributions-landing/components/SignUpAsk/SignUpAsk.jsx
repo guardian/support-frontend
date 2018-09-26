@@ -11,11 +11,10 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
 import CtaLink from 'components/ctaLink/ctaLink';
-import { setPasswordGuest } from 'components/signInAsk/helper'
+import { setPasswordGuest } from 'components/signInAsk/helper';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { NewContributionTextInput } from '../ContributionTextInput';
 import { CreateAccountButton } from './CreateAccountButton';
-import {logPromise} from "../../../../helpers/promise";
 
 // ----- Types ----- //
 
@@ -45,13 +44,14 @@ function onSubmit(props: PropTypes): Event => void {
     }
 
     const password = document.getElementById('password').value;
-    setPasswordGuest(password, props.guestAccountCreationToken, props.csrf).then(response => {
-      if (response === true){
-        //TODO: navigate user to thank you page
-      } else {
-        //TODO: alert user of error and navigate user to thank you page
-      }
-    });
+    setPasswordGuest(password, props.guestAccountCreationToken, props.csrf);
+    // .then(response => {
+    //   if (response === true){
+    //     //TODO: navigate user to thank you page
+    //   } else {
+    //     //TODO: alert user of error and navigate user to thank you page
+    //   }
+    // });
   };
 }
 
@@ -62,48 +62,47 @@ function SignUpAsk(props: PropTypes) {
   return (
     <div className="gu-content__content">
       <h1>Get a free account to manage your payments and subscriptions</h1>
-       <section className="sign-up-ask">
-          <p className="sign-up-ask__standfirst">
-            If you give a monthly contribution to the Guardian, being signed in means you will no longer see the “Since you’re here…” messages asking you to support our journalism.
-          </p>
-         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-           <NewContributionTextInput
-             id="email"
-             name="contribution-email"
-             label="Email address"
-             value={props.email}
-             icon={<SvgEnvelope />}
-             autoComplete="off"
-             autoCapitalize="words"
-             required
-             disabled
-           />
+      <section className="sign-up-ask">
+        <p className="sign-up-ask__standfirst">
+          If you give a monthly contribution to the Guardian,
+          being signed in means you will no longer see the “Since you’re here…”
+          messages asking you to support our journalism.
+        </p>
+        <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
+          <NewContributionTextInput
+            id="email"
+            name="contribution-email"
+            label="Email address"
+            value={props.email}
+            icon={<SvgEnvelope />}
+            autoComplete="off"
+            autoCapitalize="words"
+            required
+            disabled
+          />
 
-           <NewContributionTextInput
-             id="password"
-             type={"password"}
-             name="contribution-password"
-             label="Set a password"
-             icon={<SvgPasswordKey />}
-             autoComplete="off"
-             autoCapitalize="words"
-             required
-           />
-           <CreateAccountButton />
-           <CtaLink
-             text="No, thank you"
-             accessibilityHint="no thank you"
-             id="qa-no-thankyou"
-             onClick={() => alert("No thanks")}
-             modifierClasses={['form-navigation', 'no-thanks']}
-           />
-         </form>
-       </section>
+          <NewContributionTextInput
+            id="password"
+            type="password"
+            name="contribution-password"
+            label="Set a password"
+            icon={<SvgPasswordKey />}
+            autoComplete="off"
+            autoCapitalize="words"
+            required
+          />
+          <CreateAccountButton />
+          <CtaLink
+            text="No, thank you"
+            accessibilityHint="no thank you"
+            id="qa-no-thankyou"
+            onClick={() => { /* TODO: add naivigation */ }}
+            modifierClasses={['form-navigation', 'no-thanks']}
+          />
+        </form>
+      </section>
     </div>
   );
 }
 
-const SignUpAsk = connect(mapStateToProps)(SignUpAsk);
-
-
-export { SignUpAsk };
+export default connect(mapStateToProps)(SignUpAsk);

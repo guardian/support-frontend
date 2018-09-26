@@ -3,14 +3,13 @@
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-import { fetchJson } from 'helpers/fetch';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import {logPromise} from "../../helpers/promise";
+import { logPromise } from 'helpers/promise';
 
 // ----- Functions ----- //
 
-const requestData = (password: string, guestAccountRegistrationToken: string,  csrf: CsrfState) => ({
+const requestData = (password: string, guestAccountRegistrationToken: string, csrf: CsrfState) => ({
   method: 'POST',
   headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
   credentials: 'same-origin',
@@ -27,22 +26,20 @@ function setPasswordGuest(
   return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestData(password, guestAccountRegistrationToken, csrf)))
     .then((response) => {
       if (response.status === 200) {
-        response.json().then(json => {
-            //TODO: extract and set sign in cookies from json
-          }
-        );
+        // response.json().then((json) => {
+        //   TODO: extract and set sign in cookies from json
+        // });
         return true;
-      } else {
-        logException('/contribute/set-password-guest endpoint returned an error');
-        return false;
       }
+      logException('/contribute/set-password-guest endpoint returned an error');
+      return false;
+
     })
     .catch(() => {
       logException('Error while trying to interact with /contribute/set-password-guest');
-      return false
+      return false;
     });
 }
-
 
 
 // ----- Exports ----- //

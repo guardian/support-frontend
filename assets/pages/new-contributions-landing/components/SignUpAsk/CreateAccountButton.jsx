@@ -18,7 +18,7 @@ function CreateAccountButton() {
   return (
     <div className="form__submit">
       <button
-        className={classNameWithModifiers("form__submit-button", ['create-account'])}
+        className={classNameWithModifiers('form__submit-button', ['create-account'])}
         type="submit"
         aria-describedby="accessibility-hint-create-account"
       >
