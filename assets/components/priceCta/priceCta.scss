@@ -1,12 +1,10 @@
 .component-price-cta {
   padding-top: $gu-v-spacing;
   padding-bottom: $gu-v-spacing;
-  background-color: #000;
   position: relative;
-  border-top: white 1px solid;
 
   .component-cta-link {
-    width: 185px;
+    width: 200px;
     background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);
     margin-left: $gu-h-spacing / 2;
@@ -16,7 +14,7 @@
     }
 
     @include mq($from: mobileMedium) {
-      width: 190px;
+      width: 200px;
     }
 
     @include mq($from: desktop) {

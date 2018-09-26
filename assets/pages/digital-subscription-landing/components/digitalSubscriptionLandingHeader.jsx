@@ -144,13 +144,13 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
           <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
         <div className="digital-subscription-landing-header__wrapper">
-          <div className="digital-subscription-landing-header__product">
+          <h1 className="digital-subscription-landing-header__product">
             Digital Pack
-          </div>
+          </h1>
           <div className="digital-subscription-landing-header__title">
-            <h1 className="digital-subscription-landing-header__title-copy">
+            <p className="digital-subscription-landing-header__title-copy">
               {getPageTitle(props.countryGroupId)}
-            </h1>
+            </p>
           </div>
         </div>
         <CtaSwitch referringCta="support_digipack_page_header" />
