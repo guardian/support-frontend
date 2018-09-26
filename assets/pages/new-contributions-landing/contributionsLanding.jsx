@@ -12,18 +12,17 @@ import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import * as user from 'helpers/user/user';
-import { init as formInit } from './contributionsLandingInit';
 import { set as setCookie } from 'helpers/cookie';
-
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-
 import { NewHeader } from 'components/headers/new-header/Header';
+
+import { init as formInit } from './contributionsLandingInit';
+import { initReducer } from './contributionsLandingReducer';
 import { NewContributionForm } from './components/ContributionForm';
 import { NewContributionThanks } from './components/ContributionThanks';
 import { NewContributionBackground } from './components/ContributionBackground';
 
-import { initReducer } from './contributionsLandingReducer';
 
 // ----- Redux Store ----- //
 

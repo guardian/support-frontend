@@ -31,7 +31,7 @@ type FormData = {
 
 type FormState = {
   contributionType: Contrib,
-  paymentMethod: PaymentMethod | null,
+  paymentMethod: PaymentMethod,
   paymentReady: boolean,
   paymentHandler: {
     [PaymentMethod]: PaymentHandler | null
@@ -74,7 +74,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
-    paymentMethod: null,
+    paymentMethod: 'None',
     paymentHandler: {
       Stripe: null,
       DirectDebit: null,

@@ -5,7 +5,7 @@
 import { getQueryParameter } from 'helpers/url';
 import { getMinContribution, parseContribution, validateContribution } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
-import type { Switches } from 'helpers/settings'
+import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { Contrib } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -13,9 +13,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
-export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe';
+export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe' | 'None';
 
-export type PaymentMethodSwitchNaming = 'directDebit' | 'payPal' | 'stripe';
+export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe';
 
 type StripeHandler = { open: Function, close: Function };
 
@@ -23,13 +23,13 @@ export type PaymentHandler = StripeHandler;
 
 // ----- Functions ----- //
 
-function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMethodSwitchNaming | null {
+function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMethodSwitch | null {
   switch (paymentMethod) {
     case 'PayPal': return 'payPal';
     case 'Stripe': return 'stripe';
     case 'DirectDebit': return 'directDebit';
+    default: return null;
   }
-  return null;
 }
 
 
@@ -54,21 +54,27 @@ function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): num
 }
 
 
-function paymentMethodsForCountryAndContributionType(contributionType: Contrib, countryId: IsoCountry): PaymentMethod[] {
+function getPaymentMethods(contributionType: Contrib, countryId: IsoCountry): PaymentMethod[] {
   return contributionType !== 'ONE_OFF' && countryId === 'GB'
     ? ['DirectDebit', 'Stripe', 'PayPal']
     : ['Stripe', 'PayPal'];
 }
 
-function getValidPaymentMethods(contributionType: Contrib, switches: Switches, countryId: IsoCountry): Array<PaymentMethod> {
-  const switchNames = (contributionType === "ONE_OFF") ? switches.oneOffPaymentMethods : switches.recurringPaymentMethods;
-  return paymentMethodsForCountryAndContributionType(contributionType, countryId).filter(x => {
-    const switchName = toPaymentMethodSwitchNaming(x);
-    return switchName && switchNames[switchName] === 'On';
-  });
+const switchIsOn =
+  (switches: SwitchObject, switchName: PaymentMethodSwitch | null) =>
+    switchName && switches[switchName] && switches[switchName] === 'On';
+
+function getValidPaymentMethods(
+  contributionType: Contrib,
+  allSwitches: Switches,
+  countryId: IsoCountry,
+): PaymentMethod[] {
+  const switches = (contributionType === 'ONE_OFF') ? allSwitches.oneOffPaymentMethods : allSwitches.recurringPaymentMethods;
+  return getPaymentMethods(contributionType, countryId)
+    .filter(paymentMethod => switchIsOn(switches, toPaymentMethodSwitchNaming(paymentMethod)));
 }
 
-function getPaymentMethodFromSession(): ?PaymentMethod {
+function getPaymentMethod(): ?PaymentMethod {
   const pm: ?string = storage.getSession('paymentMethod');
   if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
     return (pm: PaymentMethod);
@@ -104,9 +110,9 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 
 export {
   getAmount,
-  paymentMethodsForCountryAndContributionType,
+  getPaymentMethods,
   getValidPaymentMethods,
-  getPaymentMethodFromSession,
+  getPaymentMethod,
   getPaymentDescription,
   getPaymentLabel,
 };

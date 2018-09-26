@@ -2,7 +2,7 @@
 
 export type Status = 'On' | 'Off';
 
-type SwitchObject = {
+export type SwitchObject = {
   [string]: Status,
 };
 

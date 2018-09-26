@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentMethod, type PaymentHandler, getPaymentLabel, paymentMethodsForCountryAndContributionType } from 'helpers/checkouts';
+import { type PaymentMethod, type PaymentHandler, getPaymentLabel, getPaymentMethods } from 'helpers/checkouts';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
@@ -76,6 +76,8 @@ function setupPaymentMethod(props: PropTypes): void {
         setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
           .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
         break;
+
+      default: break;
     }
   }
 }
@@ -83,7 +85,7 @@ function setupPaymentMethod(props: PropTypes): void {
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
-  const paymentMethods: PaymentMethod[] = paymentMethodsForCountryAndContributionType(props.contributionType, props.countryId);
+  const paymentMethods: PaymentMethod[] = getPaymentMethods(props.contributionType, props.countryId);
 
   setupPaymentMethod(props);
 
