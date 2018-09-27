@@ -111,7 +111,6 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 
 export {
   getAmount,
-  getPaymentMethods,
   getValidPaymentMethods,
   getPaymentMethodFromSession,
   getPaymentDescription,
