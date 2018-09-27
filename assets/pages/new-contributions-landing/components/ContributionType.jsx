@@ -10,6 +10,8 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
+import {getValidPaymentMethods} from "../../../helpers/checkouts";
+import {setPaymentMethod} from "../contributionsLandingInit";
 
 // ----- Types ----- //
 
@@ -19,16 +21,29 @@ type PropTypes = {
 };
 
 const mapStateToProps = (state: State) => ({
+  state,
   contributionType: state.page.form.contributionType,
+  countryId: state.common.internationalisation.countryId,
+  switches: state.common.settings.switches,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  onSelectContributionType: (e) => {
-    if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
-
-    dispatch(updateContributionType(e.target.value));
-  },
+  dispatch,
 });
+
+function mergeProps(stateProps, dispatchProps, ownProps) {
+
+  const onSelectContributionType = (e) => {
+    if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
+    setPaymentMethod(dispatchProps.dispatch, e.target.value, stateProps.switches, stateProps.countryId);
+    dispatchProps.dispatch(updateContributionType(e.target.value));
+  };
+
+  return {
+    ...ownProps,
+    onSelectContributionType,
+  };
+}
 
 // ----- Render ----- //
 
@@ -78,6 +93,6 @@ function ContributionType(props: PropTypes) {
   );
 }
 
-const NewContributionType = connect(mapStateToProps, mapDispatchToProps)(ContributionType);
+const NewContributionType = connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionType);
 
 export { NewContributionType };
