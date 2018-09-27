@@ -3,23 +3,21 @@
 // ----- Imports ----- //
 import { type Store, type Dispatch } from 'redux';
 import { getValidPaymentMethods } from 'helpers/checkouts';
-import { type Switches } from 'helpers/settings';
-import { type IsoCountry } from 'helpers/internationalisation/country';
 import {
-updatePaymentMethod,
-updateUserFormData,
+  updatePaymentMethod,
+  updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import { type Action } from './contributionsLandingActions';
 
 // ----- Functions ----- //
 
-function setPaymentMethod(
-  dispatch: Dispatch<Action>,
-  contributionType: string,
-  switches: Switches,
-  countryId: IsoCountry
-) {
+
+function initialisePaymentMethod(state: State, dispatch: Dispatch<Action>) {
+  const { contributionType } = state.page.form;
+  const { countryId } = state.common.internationalisation;
+  const { switches } = state.common.settings;
+
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
   if (validPaymentMethods[0]) {
@@ -32,12 +30,9 @@ function setPaymentMethod(
 
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
   const { dispatch } = store;
-  const state = store.getState();
 
-  const { contributionType } = state.page.form;
-  const { countryId } = state.common.internationalisation;
-  const { switches } = state.common.settings;
-  setPaymentMethod(dispatch, contributionType, switches, countryId);
+  const state = store.getState();
+  initialisePaymentMethod(state, dispatch);
 
   const { firstName, lastName, email } = state.page.user;
   dispatch(updateUserFormData({ firstName, lastName, email }));
@@ -48,4 +43,4 @@ const init = (store: Store<State, Action, Dispatch<Action>>) => {
 
 // ----- Exports ----- //
 
-export { init, setPaymentMethod };
+export { init };

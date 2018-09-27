@@ -7,11 +7,10 @@ import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { getValidPaymentMethods } from 'helpers/checkouts';
 
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
-import {getValidPaymentMethods} from "../../../helpers/checkouts";
-import {setPaymentMethod} from "../contributionsLandingInit";
 
 // ----- Types ----- //
 
@@ -35,12 +34,14 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 
   const onSelectContributionType = (e) => {
     if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
-    setPaymentMethod(dispatchProps.dispatch, e.target.value, stateProps.switches, stateProps.countryId);
-    dispatchProps.dispatch(updateContributionType(e.target.value));
+    const paymentMethodToSelect =
+      getValidPaymentMethods(e.target.value, stateProps.switches, stateProps.countryId)[0] || 'None';
+    dispatchProps.dispatch(updateContributionType(e.target.value, paymentMethodToSelect));
   };
 
   return {
     ...ownProps,
+    ...stateProps,
     onSelectContributionType,
   };
 }
