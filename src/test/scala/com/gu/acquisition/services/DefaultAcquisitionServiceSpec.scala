@@ -15,7 +15,7 @@ class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with
 
   val submission = AcquisitionSubmission(
     OphanIds(None, None, Some("None")),
-    GAData("support.code.dev-theguardian.com", None, None),
+    GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", None, None),
     Acquisition(
       product = ophan.thrift.event.Product.RecurringContribution,
       paymentFrequency = PaymentFrequency.Monthly,

@@ -4,11 +4,12 @@ import java.util.UUID
 
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.services.AnalyticsService.RequestData
+import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
 import ophan.thrift.event.AbTestInfo
 
 private[services] class GAService(implicit client: OkHttpClient)
-  extends AnalyticsService {
+  extends AnalyticsService with LazyLogging {
 
   private val gaPropertyId: String = "UA-51507017-5"
   private val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
@@ -21,11 +22,16 @@ private[services] class GAService(implicit client: OkHttpClient)
     import submission._
     val tid = transactionId.getOrElse(UUID.randomUUID().toString)
     val goExp = buildOptimizeTestsPayload(acquisition.abTests)
+
+    // clientId cannot be empty or the call will fail
+    val clientId = if(gaData.clientId != "") gaData.clientId else transactionId
+
     val body = Map(
       "v" -> "1", //Version
+      "cid" -> clientId,
       "tid" -> gaPropertyId,
       "dh" -> gaData.hostname,
-      "uip" -> gaData.clientIp.getOrElse(""), // IP Override
+      "uip" -> gaData.clientIpAddress.getOrElse(""), // IP Override
       "ua" -> gaData.clientUserAgent.getOrElse(""), // User Agent Override
 
       // Custom Dimensions
@@ -50,10 +56,7 @@ private[services] class GAService(implicit client: OkHttpClient)
       "pr1pr" -> acquisition.amount.toString, // Product Price
       "pr1qt" -> "1", // Product Quantity
       "cu" -> acquisition.currency.toString // Currency
-
-    ) + ophanIds.browserId.map(uid => "uid" -> uid).getOrElse("cid" -> tid) // Pass browserId to uid if present, otherwise pass
-    // transactionId to cid
-    // see: https://support.google.com/analytics/answer/3123662
+    )
 
     body
       .filter { case (key, value) => value != "" }
