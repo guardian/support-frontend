@@ -103,7 +103,6 @@ export type PaymentResult
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
-const ONEOFF_CONTRIB_ENDPOINT = window.guardian.paymentApiStripeEndpoint;
 
 // ----- Functions ----- //
 
@@ -198,46 +197,28 @@ function checkRegularStatus(
   };
 }
 
-/** Returns the URL for one-off payments (should probably be a `const` somewhere) */
-function getOneOffStripeEndpoint() {
+function paymentApiEndpointWithMode(url: string) {
   if (cookie.get('_test_username')) {
     return addQueryParamsToURL(
-      ONEOFF_CONTRIB_ENDPOINT,
+      url,
       { mode: 'test' },
     );
   }
 
-  return ONEOFF_CONTRIB_ENDPOINT;
+  return url;
 }
-
-// TODO: uncomment
-// function paymentApiEndpointWithMode(url: string) {
-//   if (cookie.get('_test_username')) {
-//     return addQueryParamsToURL(
-//       url,
-//       { mode: 'test' },
-//     );
-//   }
-//
-//   return url
-// }
 
 /** Sends a one-off payment request to the payment API and checks the result */
 function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
-    getOneOffStripeEndpoint(),
+    paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     postRequestOptions(data, 'include', null),
   ).then(checkOneOffStatus));
 }
 
-// FIXME: implement
-function getOneOffPayPalEndpoint(): string {
-  return 'TODO';
-}
-
 function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<PaymentResult> {
   return logPromise(fetchJson(
-    getOneOffPayPalEndpoint(),
+    paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     // TODO: if we remove the PaymentFields type then we can just pass the data through
     postRequestOptions({ contributionType: 'oneoff', fields: data }, 'include', null),
   ));
