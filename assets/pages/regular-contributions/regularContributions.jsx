@@ -12,7 +12,7 @@ import * as user from 'helpers/user/user';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
-import { getAmount, getPaymentMethod } from 'helpers/checkouts';
+import { getAmount, getPaymentMethodFromSession } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -31,7 +31,7 @@ const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(
   getAmount(contributionType, countryGroup),
-  getPaymentMethod(),
+  getPaymentMethodFromSession(),
   contributionType,
   countryGroup,
 ), true);

@@ -112,8 +112,9 @@ const setupRegularPayment = (data: PaymentFields) =>
         dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
         return;
 
+      case 'None':
       default:
-        dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
+        dispatch(paymentFailure('No payment method selected'));
     }
   };
 
@@ -143,8 +144,9 @@ const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
           // window.location.href = result.returnUrl;
           break;
 
+        case 'None':
         default:
-          dispatch(paymentFailure(result.error));
+          dispatch(paymentFailure('No payment method selected'));
       }
     });
   };
