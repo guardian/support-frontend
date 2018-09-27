@@ -19,9 +19,7 @@ import {
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
-import { type State } from './contributionsLandingReducer';
-
-export type FieldName = 'otherAmount' | 'email' | 'lastName' | 'firstName';
+import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib }
@@ -30,6 +28,7 @@ export type Action =
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
+  | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
@@ -51,6 +50,8 @@ const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NA
 const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME', lastName });
 
 const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email });
+
+const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPDATE_USER_FORM_DATA', userFormData });
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
@@ -243,6 +244,7 @@ export {
   updateLastName,
   updateEmail,
   updateState,
+  updateUserFormData,
   isPaymentReady,
   selectAmount,
   updateOtherAmount,
