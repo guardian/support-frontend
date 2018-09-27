@@ -20,7 +20,7 @@ function DigitalPack(props: {
   subheading: string,
   copy: string,
   gridId: ImageId,
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 }) {
 
   return (
@@ -56,7 +56,7 @@ function DigitalPack(props: {
 // ----- Default Props ----- //
 
 DigitalPack.defaultProps = {
-  abTest: undefined,
+  abTest: null,
 };
 
 

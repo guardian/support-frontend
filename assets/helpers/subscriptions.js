@@ -97,7 +97,7 @@ function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
 function sendTrackingEventsOnClick(
   id: string,
   product: 'digital' | 'print',
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 ): () => void {
 
   const componentEvent = {
@@ -108,7 +108,7 @@ function sendTrackingEventsOnClick(
     },
     action: 'CLICK',
     id,
-    abTest,
+    ...(abTest ? { abTest } : {}),
   };
 
   const gaAction = abTest ? abTest.name : product;

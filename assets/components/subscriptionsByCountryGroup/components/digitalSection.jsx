@@ -28,7 +28,7 @@ type PropTypes = {|
   subsLinks: SubsUrls,
   countryGroupId: CountryGroupId,
   appReferrer: string,
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 |};
 
 
@@ -82,7 +82,7 @@ function DigitalSection(props: PropTypes) {
 // ----- Default Props ----- //
 
 DigitalSection.defaultProps = {
-  abTest: undefined,
+  abTest: null,
 };
 
 

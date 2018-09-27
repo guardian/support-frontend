@@ -23,7 +23,7 @@ type PropTypes = {
   headingSize: HeadingSize,
   countryGroupId: CountryGroupId,
   url: string,
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 };
 
 
@@ -92,7 +92,7 @@ function FeaturedDigitalPack(props: PropTypes) {
 // ----- Default Props ----- //
 
 FeaturedDigitalPack.defaultProps = {
-  abTest: undefined,
+  abTest: null,
 };
 
 

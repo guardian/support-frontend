@@ -23,7 +23,7 @@ type PropTypes = {|
   headingSize: HeadingSize,
   subsLinks: SubsUrls,
   countryGroupId: CountryGroupId,
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 |};
 
 
@@ -95,7 +95,7 @@ function PaperSection(props: PropTypes) {
 // ----- Default Props ----- //
 
 PaperSection.defaultProps = {
-  abTest: undefined,
+  abTest: null,
 };
 
 

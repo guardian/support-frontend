@@ -17,8 +17,8 @@ import PaperSection from './paperSection';
 // ----- Types ----- //
 
 type PropTypes = {
-  paperSection: (ComponentAbTest | void) => React$Element<typeof PaperSection>,
-  digitalSection: (ComponentAbTest | void) => React$Element<typeof DigitalSection>,
+  paperSection: (ComponentAbTest | null) => React$Element<typeof PaperSection>,
+  digitalSection: (ComponentAbTest | null) => React$Element<typeof DigitalSection>,
   countryGroupId: CountryGroupId,
   digitalPackUrl: string,
 };
@@ -69,8 +69,8 @@ function FeaturedProductTest(props: PropTypes) {
     default:
       return (
         <div className={className}>
-          {props.digitalSection()}
-          {props.paperSection()}
+          {props.digitalSection(null)}
+          {props.paperSection(null)}
         </div>
       );
 

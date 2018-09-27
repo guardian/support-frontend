@@ -83,7 +83,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
         <FeaturedProductTest
           countryGroupId="GBPCountries"
           digitalPackUrl={subsLinks.DigitalPack}
-          digitalSection={(abTest: ComponentAbTest | void) => (
+          digitalSection={(abTest: ComponentAbTest | null) => (
             <DigitalSection
               headingSize={headingSize}
               subsLinks={subsLinks}
@@ -92,7 +92,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
               abTest={abTest}
             />
           )}
-          paperSection={(abTest: ComponentAbTest | void) => (
+          paperSection={(abTest: ComponentAbTest | null) => (
             <PaperSection
               headingSize={headingSize}
               subsLinks={subsLinks}

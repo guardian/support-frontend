@@ -17,7 +17,7 @@ type PropTypes = {
   headingSize: HeadingSize,
   url: string,
   subheading: string,
-  abTest: ComponentAbTest | void,
+  abTest: ComponentAbTest | null,
 };
 
 
@@ -58,7 +58,7 @@ function Weekly(props: PropTypes) {
 // ----- Default Props ----- //
 
 Weekly.defaultProps = {
-  abTest: undefined,
+  abTest: null,
 };
 
 
