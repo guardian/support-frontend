@@ -705,13 +705,12 @@ form {
   transition: box-shadow .2s ease-in-out;
 }
 
-.form__input:not(:disabled):hover {
+.form__input:enabled:hover {
   box-shadow: 0 0 0 3px #ededed;
 }
 
 .form__input:disabled {
-  background: #ddccdd;
-  color: #757575;
+  background: gu-colour(garnett-neutral-4);
 }
 
 .form__input:focus {
