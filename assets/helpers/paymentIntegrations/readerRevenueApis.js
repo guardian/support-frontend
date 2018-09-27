@@ -212,6 +212,7 @@ function paymentApiEndpointWithMode(url: string) {
 function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
+    // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
     postRequestOptions(data, 'include', null),
   ).then(checkOneOffStatus));
 }
@@ -220,6 +221,7 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     // TODO: if we remove the PaymentFields type then we can just pass the data through
+    // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
     postRequestOptions({ contributionType: 'oneoff', fields: data }, 'include', null),
   ));
 }
