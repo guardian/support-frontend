@@ -60,7 +60,7 @@
       }
     }
 
-    .component-price-cta__cancel {
+    .component-price-cta__secondary {
       background-color: #fff;
     }
   }
@@ -247,6 +247,16 @@
     display: block;
   }
 
+  .digital-subscription-landing-header {
+    .component-price-cta {
+      background-color: gu-colour(garnett-neutral-1);
+      border-top: 1px solid #fff;
+    }
+    .component-price-cta__secondary {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
   .digital-subscription-landing-header__wrapper {
     position: relative;
   }
@@ -272,12 +282,13 @@
     font-weight: bold;
     font-size: 24px;
     padding: 4px 12px;
+    color: gu-colour(garnett-neutral-1);
   }
 
   .digital-subscription-landing-header__title {
     position: relative;
     width: 100%;
-    background-color: #000000;
+    background-color: gu-colour(garnett-neutral-1);
   }
 
   .digital-subscription-landing-header__title-copy {
@@ -290,28 +301,25 @@
     font-size: 22px;
     line-height: 29px;
     height: 70px;
-
-    @include mq($until: mobileMedium) {
-      width: 310px;
-    }
+    width: 250px;
 
     @include mq($from: mobileMedium, $until: tablet) {
       padding-top: 8px;
       font-size: 28px;
       line-height: 34px;
-      width: 380px;
+      width: 320px;
       height: 80px;
     }
 
     @include mq($from: tablet, $until: leftCol) {
-      width: 560px;
+      width: 480px;
       font-size: 42px;
       line-height: 48px;
       height: 106px;
     }
 
     @include mq($from: leftCol) {
-      width: 580px;
+      width: 520px;
       font-size: 44px;
       line-height: 50px;
       margin-left: 12px;
@@ -322,10 +330,6 @@
   .component-left-margin-section--header-block {
     .component-grid-picture {
       position: relative;
-    }
-
-    .component-price-cta__cancel {
-      background-color: #f6f6f6;
     }
 
     .svg-title-circles-left-mobile {
