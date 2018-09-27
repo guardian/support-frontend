@@ -102,7 +102,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
-  currency: state.common.internationalisation.countryId,
+  currency: state.common.internationalisation.currencyId,
 });
 
 
