@@ -18,10 +18,13 @@ import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
-type FormData = {
+export type UserFormData = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+}
+
+type FormData = UserFormData & {
   otherAmounts: {
     [Contrib]: { amount: string | null }
   },
@@ -134,6 +137,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
+
+      case 'UPDATE_USER_FORM_DATA':
+        return { ...state, formData: { ...state.formData, ...action.userFormData } };
 
       case 'SELECT_AMOUNT':
         return {
