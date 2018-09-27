@@ -11,6 +11,8 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getDigitalBenefits, getPaperBenefits, getPaperDigitalBenefits } from 'helpers/flashSale';
 import { displayPrice } from 'helpers/subscriptions';
+import { type Participations } from 'helpers/abTests/abtest';
+import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
@@ -24,6 +26,8 @@ import type { State } from '../supportLandingReducer';
 type PropTypes = {
   referrerAcquisitionData: ReferrerAcquisitionData,
   countryGroupId: CountryGroupId,
+  abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 };
 
 
@@ -34,6 +38,8 @@ function mapStateToProps(state: State) {
   return {
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     countryGroupId: state.common.internationalisation.countryGroupId,
+    abParticipations: state.common.abParticipations,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 
 }
@@ -48,6 +54,8 @@ function SubscriptionsSection(props: PropTypes) {
     props.referrerAcquisitionData.campaignCode,
     getCampaign(props.referrerAcquisitionData),
     props.referrerAcquisitionData,
+    props.abParticipations,
+    props.optimizeExperiments,
   );
 
   return (

@@ -16,7 +16,7 @@ import { getProductPrice } from 'helpers/subscriptions';
 
 function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string }) {
   const { countryGroupId } = state.common.internationalisation;
-  const { referrerAcquisitionData } = state.common;
+  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
   const price = getProductPrice('PremiumTier', countryGroupId);
 
   return {
@@ -25,6 +25,8 @@ function mapStateToProps(state: { common: CommonState }, ownProps: { referringCt
       referrerAcquisitionData,
       countryGroupId,
       ownProps.referringCta,
+      abParticipations,
+      optimizeExperiments,
     ),
     price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };

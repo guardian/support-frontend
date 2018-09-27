@@ -249,6 +249,24 @@ function derivePaymentApiAcquisitionData(
   };
 }
 
+function deriveSubsAcquisitionData(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+): ReferrerAcquisitionData {
+
+  const abTests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
+
+  return {
+    ...referrerAcquisitionData,
+    abTests,
+  };
+
+}
+
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
@@ -272,5 +290,6 @@ export {
   participationsToAcquisitionABTest,
   optimizeExperimentsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
+  deriveSubsAcquisitionData,
   getSupportAbTests,
 };

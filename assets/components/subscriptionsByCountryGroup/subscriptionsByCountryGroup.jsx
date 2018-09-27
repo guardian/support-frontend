@@ -15,6 +15,8 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 import { type ComponentAbTest } from 'helpers/subscriptions';
+import { type Participations } from 'helpers/abTests/abtest';
+import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 
 import FeaturedProductTest from './components/featuredProductTest';
 import DigitalSection from './components/digitalSection';
@@ -28,6 +30,8 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   headingSize: HeadingSize,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
   appMedium: string,
 };
 
@@ -36,6 +40,8 @@ function mapStateToProps(state: { common: CommonState }) {
   return {
     countryGroupId: state.common.internationalisation.countryGroupId,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
+    abParticipations: state.common.abParticipations,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 
 }
@@ -46,7 +52,13 @@ function mapStateToProps(state: { common: CommonState }) {
 function SubscriptionsByCountryGroup(props: PropTypes) {
 
   const {
-    countryGroupId, headingSize, referrerAcquisitionData, appMedium, ...otherProps
+    countryGroupId,
+    headingSize,
+    referrerAcquisitionData,
+    appMedium,
+    abParticipations,
+    optimizeExperiments,
+    ...otherProps
   } = props;
 
   const subsLinks = getSubsLinks(
@@ -54,6 +66,8 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
     referrerAcquisitionData.campaignCode,
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
+    abParticipations,
+    optimizeExperiments,
   );
 
   const className = classNameWithModifiers(
