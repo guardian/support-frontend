@@ -69,7 +69,7 @@ class S3SettingsProvider private (
       }
 
   private def startPollingS3(): Unit =
-    system.scheduler.schedule(1.minute, 1.minute) {
+    system.scheduler.schedule(10.seconds, 10.seconds) {
       getAndSetSettings()
         .flatMap(purgeIfChanged)
         .fold(
