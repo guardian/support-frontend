@@ -13,7 +13,7 @@ class OphanServiceSpec extends WordSpecLike with Matchers {
 
   val submission: AcquisitionSubmission = AcquisitionSubmission(
     OphanIds(Some("pageviewId"), Some("visitId"), Some("browserId")),
-    GAData("support.theguardian.com", None, None),
+    GAData("support.theguardian.com", "GA1.1.1633795050.1537436107", None, None),
     Acquisition(
       product = ophan.thrift.event.Product.Contribution,
       paymentFrequency = PaymentFrequency.OneOff,

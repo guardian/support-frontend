@@ -28,7 +28,7 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
     componentTypeV2 = None,
     source = None
   )
-  val gaData = GAData("support.code.dev-theguardian.com", None, None)
+  val gaData = GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", None, None)
   val submission = AcquisitionSubmission(
     OphanIds(None, Some("123456789"), Some("987654321")),
     gaData,
@@ -43,21 +43,7 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
       payloadMapWithUid.get("ec") shouldEqual Some("AcquisitionConversion")
       payloadMapWithUid.get("ea") shouldEqual Some("Contribution")
       payloadMapWithUid.get("cu") shouldEqual Some("GBP")
-      // The payload should only ever have one of 'cid' and 'uid'
-      // If we have an Ophan browserId then this is passed into uid
-      // If not then we pass a random value in 'cid'
-      payloadMapWithUid.get("uid") shouldEqual Some("987654321")
-      payloadMapWithUid.get("cid") shouldEqual None
-
-      val payloadWithCid = service.buildPayload(AcquisitionSubmission(
-        OphanIds(None, None, None),
-        gaData,
-        acquisition
-      ), Some("123"))
-      val payloadMapWithCid = payloadAsMap(payloadWithCid)
-      payloadMapWithCid.get("cid") shouldEqual Some("123")
-      payloadMapWithCid.get("uid") shouldEqual None
-
+      payloadMapWithUid.get("cid") shouldEqual Some("GA1.1.1633795050.1537436107")
     }
 
     "build a correct ABTest payload" in {
