@@ -83,7 +83,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse] = {
     val payload = Json.obj("password" -> password)
     val headers =
-      List("Authorization" -> s"Bearer $apiClientToken", "X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
+      List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
     val urlParameters = List("validate-email" -> "0")
     request(s"guest/password")
       .withHttpHeaders(headers: _*)

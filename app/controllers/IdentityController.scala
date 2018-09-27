@@ -4,13 +4,13 @@ import actions.CustomActionBuilders
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._
-import models.identity.responses.IdentityApiResponseError
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
 import codecs.CirceDecoders._
+import cats.implicits._
 
 import scala.concurrent.ExecutionContext
 
@@ -22,7 +22,6 @@ class IdentityController(
   extends AbstractController(components) with Circe {
 
   import actionRefiners._
-  import cats.implicits._
 
   def submitMarketing(): Action[SendMarketingRequest] = PrivateAction.async(circe.json[SendMarketingRequest]) { implicit request =>
     val result = identityService.sendConsentPreferencesEmail(request.body.email)
@@ -45,7 +44,7 @@ class IdentityController(
           SafeLogger.error(scrub"Failed to set password")
           InternalServerError(err.asJson)
         },
-        cookies =>  {
+        cookies => {
           SafeLogger.info("Successfully set passwrod")
           Ok(cookies.asJson)
         }
