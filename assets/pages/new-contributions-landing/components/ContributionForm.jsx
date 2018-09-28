@@ -46,7 +46,7 @@ import {
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  done: boolean,
+  paymentComplete: boolean,
   error: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
@@ -83,7 +83,7 @@ const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
-  done: state.page.form.done,
+  paymentComplete: state.page.form.paymentComplete,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
@@ -184,7 +184,7 @@ function ContributionForm(props: PropTypes) {
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
 
-  return props.done ?
+  return props.paymentComplete ?
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
