@@ -19,6 +19,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
+import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -36,7 +37,7 @@ import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
 import { payPalCancelUrl } from '../../contributions-landing/pagesVersions/horizontalLayoutLandingPage';
-import type {CreatePaypalPaymentData} from "../../../helpers/paymentIntegrations/payPalPaymentAPICheckout";
+
 
 import {
   paymentWaiting,
@@ -139,16 +140,14 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   // TODO: is it a good idea putting this function here?
   // Allows the component to create a payment without having to think directly about what arguments are required.
   createOneOffPayPalPayment: () => {
-    const data = {
+    /* eslint-disable no-underscore-dangle */
+    dispatchProps._createOneOffPayPalPayment({
       currency: stateProps.currency,
       amount: getAmount(stateProps),
       returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
       // TODO: use new cancel url
       cancelURL: payPalCancelUrl(stateProps.countryGroupId),
-    };
-    console.log(data);
-    /* eslint-disable no-underscore-dangle */
-    dispatchProps._createOneOffPayPalPayment(data);
+    });
   },
 });
 
