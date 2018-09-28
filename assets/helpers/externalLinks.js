@@ -118,13 +118,16 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 function buildParamString(
   product: SubscriptionProduct,
   intCmp: ?string,
-  referrerAcquisitionData: ReferrerAcquisitionData,
+  referrerAcquisitionData: ReferrerAcquisitionData | null,
 ): string {
   const params = new URLSearchParams(window.location.search);
 
   const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
   params.set('INTCMP', maybeCustomIntcmp);
-  params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
+
+  if (referrerAcquisitionData) {
+    params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
+  }
 
   return params.toString();
 }
@@ -141,7 +144,7 @@ function buildSubsUrls(
 
   const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, referrerAcquisitionData)}`;
-  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, null)}`;
   const weekly = `${subsUrl}/weekly?${buildParamString('GuardianWeekly', intCmp, referrerAcquisitionData)}`;
 
   return {
