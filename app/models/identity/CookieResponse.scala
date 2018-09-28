@@ -10,10 +10,9 @@ case class CookieResponse(key: String, value: String, sessionCookie: Option[Bool
 case class CookiesResponse(expiresAt: DateTime, values: List[CookieResponse])
 
 object CookiesResponse {
-  val dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
   implicit val jodaDateReads = Reads[DateTime](js =>
     js.validate[String].map[DateTime](dtString =>
-      DateTime.parse(dtString, DateTimeFormat.forPattern(dateFormat))))
+      DateTime.parse(dtString)))
   implicit val readsCookieResponse: Reads[CookieResponse] = Json.reads[CookieResponse]
   implicit val readsCookiesResponse: Reads[CookiesResponse] = Json.reads[CookiesResponse]
 }
