@@ -220,31 +220,76 @@ function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields):
   ).then(getPaymentResultFromOneOffStripeResponse));
 }
 
+// TODO: is unknown error a decent name?
+type UnknownError = {|
+  type: 'unknownError',
+  error: string,
+|}
+
+function unknownError(message: string): UnknownError {
+  return {
+    type: 'unknownError',
+    error: message,
+  };
+}
+
+type PaymentApiError<E> = {|
+  type: 'error',
+  error: E,
+|}
+
+type PaymentApiSuccess<A> = {|
+  type: 'success',
+  data: A,
+|}
+
+export type PaymentApiResponse<E, A> = UnknownError | PaymentApiError<E> | PaymentApiSuccess<A>
+
 // Models a PayPal payment being successfully created.
 // The user should be redirected to the approvalUrl so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentSuccess.scala
-type PayPalPaymentSuccess = {|
+// TODO: this should really be named something like CreatePayPalPaymentSuccess in the payment API
+export type PayPalPaymentSuccess = {|
+  // For brevity, unneeded fields are omitted
   approvalUrl: string,
-  paymentId: string,
+  // paymentId: string,
 |}
 
 // Models a failure to create a PayPal payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalApiError.scala
-type PayPalApiError = {|
-  responseCode: number | null,
-  errorName: number | null,
+export type PayPalApiError = {|
+  // For brevity, unneeded fields are omitted
+  // responseCode: number | null,
+  // errorName: number | null,
   message: string,
 |}
 
-function postOneOffPayPalCreatePaymentRequest(
-  data: CreatePaypalPaymentData,
-): Promise<PayPalPaymentSuccess | PayPalApiError> {
+// Object is expected to have structure:
+// { type: "error", error: PayPalApiError }, or
+// { type: "success", data: PaypalPaymentSuccess }
+function getPayPalResult(res: Object): PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess> {
+  if (res.data && res.data.approvalUrl) {
+    return { type: 'success', data: { approvalUrl: res.data.approvalUrl } };
+  }
+  if (res.error && res.error.message) {
+    return { type: 'error', error: { message: res.error.message } };
+  }
+  // This should never be returned.
+  // If it is, then something has gone wrong!
+  // TODO: alert on this error being returned
+  return unknownError(`unable to deserialize response from payment API: ${JSON.stringify(res)}`);
+}
+
+// TODO: remove this - only created to get the linter to pass - LOL
+type LintingAlias = Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>
+
+function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): LintingAlias {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     // TODO: if we remove the PaymentFields type then we can just pass the data through
     // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
     postRequestOptions({ contributionType: 'oneoff', fields: data }, 'include', null),
-  ));
+  )).then(getPayPalResult).catch(err => unknownError(`error creating a PayPal payment: ${err}`));
 }
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */

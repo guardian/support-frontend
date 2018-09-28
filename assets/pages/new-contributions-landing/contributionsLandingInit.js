@@ -5,10 +5,7 @@ import { type Store, type Dispatch } from 'redux';
 import { getValidPaymentMethods } from 'helpers/checkouts';
 import {
   updatePaymentMethod,
-  updateEmail,
-  updateFirstName,
-  updateLastName,
-  updateUserFormData
+  updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import { type Action } from './contributionsLandingActions';
@@ -17,9 +14,9 @@ import { type Action } from './contributionsLandingActions';
 
 
 function initialisePaymentMethod(state, dispatch) {
-  const {contributionType} = state.page.form;
-  const {countryId} = state.common.internationalisation;
-  const {switches} = state.common.settings;
+  const { contributionType } = state.page.form;
+  const { countryId } = state.common.internationalisation;
+  const { switches } = state.common.settings;
 
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 

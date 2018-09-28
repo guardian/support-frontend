@@ -11,6 +11,9 @@ import {
   type PaymentResult,
   type PaymentDetails,
   type StripeOneOffPaymentFields,
+  type PaymentApiResponse,
+  type PayPalApiError,
+  type PayPalPaymentSuccess,
   PaymentSuccess,
   postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
@@ -133,30 +136,25 @@ const executeStripeOneOffPayment = (data: StripeOneOffPaymentFields) =>
     }
   };
 
-const onOneOffPayPalPaymentCreated = (paymentResult: Promise<PaymentResult>) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    paymentResult.then((result) => {
-      const state = getState();
-
-      switch (result.paymentStatus) {
-        case 'success':
+const handleCreateOneOffPayPalPaymentResponse =
+  (paymentResult: Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>) =>
+    (dispatch: Dispatch<Action>, getState: () => State): void => {
+      paymentResult.then((result) => {
+        const state = getState();
+        if (result.type === 'success') {
           trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
-          // TODO: return url from result
-          // window.location.href = result.returnUrl;
-          break;
-
-        case 'None':
-        default:
-          dispatch(paymentFailure('No payment method selected'));
-      }
-    });
-  };
+          window.location.href = result.data.approvalUrl;
+        }
+        // TODO: handle error
+        // dispatch(paymentFailure('No payment method selected'));
+      });
+    };
 
 const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
   (dispatch: Dispatch<Action>): void => {
     // TODO: if this needed
     // const state = getState();
-    dispatch(onOneOffPayPalPaymentCreated(postOneOffPayPalCreatePaymentRequest(data)));
+    dispatch(handleCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
 const getAmount = (state: State) =>
