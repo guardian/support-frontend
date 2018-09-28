@@ -12,11 +12,9 @@ import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import services.{IdentityService, PaymentAPIService, TestUserService}
-import admin.Settings
-import com.gu.tip.Tip
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -25,8 +23,7 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settingsProvider: SettingsProvider,
-    prodMonitoring: ProdMonitoring
+    settingsProvider: SettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -61,25 +58,9 @@ class PayPalOneOff(
     }
   }
 
-  def getQueryParameters(urlOpt: Option[String]): Option[Map[String, String]] = {
-    if (urlOpt.isDefined) {
-      val url = urlOpt.get
-      val queries = url.split('?').toList.tail.flatMap(q => q.split('&'))
-      val queryBreakdown = queries.map(q => q.split("="))
-      val queriesToTuple = queryBreakdown.map(a => (a(0), a(1)))
-      Some(queriesToTuple.toMap[String, String])
-    } else
-      None
-  }
-
   def resultFromPaypalSuccess(success: PayPalSuccess)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val referrer: Option[String] = request.headers.get("referrer")
-    val referrerQueries = getQueryParameters(referrer)
-    val country = referrerQueries.flatMap(_.get("country.x")).getOrElse("Unknown")
-    SafeLogger.info(s"obtained country $country from queries: ${referrerQueries.map(q => q.toList.map(t => t._1 + ":" + t._2)).mkString("\n")}")
     val redirect = Redirect("/contribute/one-off/thankyou")
-    prodMonitoring.handleTipRequest(country, "PayPal", "One-off")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
