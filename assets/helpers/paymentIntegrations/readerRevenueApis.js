@@ -280,10 +280,9 @@ function getPayPalResult(res: Object): PaymentApiResponse<PayPalApiError, PayPal
   return unknownError(`unable to deserialize response from payment API: ${JSON.stringify(res)}`);
 }
 
-// TODO: remove this - only created to get the linter to pass - LOL
-type LintingAlias = Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>
+type CreatePaymentResponse = Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>
 
-function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): LintingAlias {
+function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): CreatePaymentResponse {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     // TODO: if we remove the PaymentFields type then we can just pass the data through

@@ -16,8 +16,9 @@ import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getAbsoluteURL } from 'helpers/url';
+import { routes } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -34,6 +35,7 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
+import { payPalCancelUrl } from '../../contributions-landing/pagesVersions/horizontalLayoutLandingPage';
 
 import {
   paymentWaiting,
@@ -74,7 +76,7 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
   isDirectDebitPopUpOpen: boolean,
-  createOneOffPayPalPayment: CreatePaypalPaymentData => void,
+  createOneOffPayPalPayment: (currency: IsoCurrency, amount: number, id: CountryGroupId) => void,
   currency: IsoCurrency,
 |};
 
@@ -115,7 +117,21 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
-  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+
+  // TODO: could try and create a function with all the data already provided using mergeProps
+  // getting the amount is problematic however - flow complains about getAmount(Object)
+  // TODO: uh! passing through country group id here is weird
+  createOneOffPayPalPayment: (currency: IsoCurrency, amount: number, id: CountryGroupId) => {
+    const data = {
+      currency,
+      amount,
+      returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+      // TODO: use new cancel url
+      cancelURL: payPalCancelUrl(id),
+    };
+    console.log(data);
+    dispatch(createOneOffPayPalPayment(data));
+  },
 });
 
 // ----- Functions ----- //
@@ -157,13 +173,7 @@ function onSubmit(props: PropTypes): Event => void {
           if (props.contributionType === 'ONE_OFF') {
             // Displays the processing transaction, please wait screen
             props.setPaymentIsWaiting(true);
-            props.createOneOffPayPalPayment({
-              currency: props.currency,
-              amount,
-              returnURL: 'TODO: return url',
-              cancelURL: 'TODO: cancel url',
-            });
-
+            props.createOneOffPayPalPayment(props.currency, getAmount(props), props.countryGroupId);
           } else {
             // TODO
           }

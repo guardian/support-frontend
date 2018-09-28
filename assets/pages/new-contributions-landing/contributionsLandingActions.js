@@ -152,8 +152,6 @@ const handleCreateOneOffPayPalPaymentResponse =
 
 const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
   (dispatch: Dispatch<Action>): void => {
-    // TODO: if this needed
-    // const state = getState();
     dispatch(handleCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 

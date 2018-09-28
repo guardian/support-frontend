@@ -23,7 +23,10 @@ import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 export type CreatePaypalPaymentData = {|
   currency: IsoCurrency,
   amount: number,
+  // Specifies the url that PayPal should make a GET request to, should the user authorize the payment.
+  // Path of url should be /paypal/rest/return (see routes file)
   returnURL: string,
+  // Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
   cancelURL: string,
 |}
 

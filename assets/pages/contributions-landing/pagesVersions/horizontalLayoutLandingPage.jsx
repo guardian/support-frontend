@@ -73,7 +73,7 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );
 
-function payPalCancelUrl(cgId: CountryGroupId): string {
+export function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
 
