@@ -61,25 +61,12 @@ class PayPalOneOff(
     }
   }
 
-  def getQueryParameters(urlOpt: Option[String]): Option[Map[String, String]] = {
-    if (urlOpt.isDefined) {
-      val url = urlOpt.get
-      val queries = url.split('?').toList.tail.flatMap(q => q.split('&'))
-      val queryBreakdown = queries.map(q => q.split("="))
-      val queriesToTuple = queryBreakdown.map(a => (a(0), a(1)))
-      Some(queriesToTuple.toMap[String, String])
-    } else
-      None
-  }
-
   def resultFromPaypalSuccess(success: PayPalSuccess)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val referrer: Option[String] = request.headers.get("referrer")
-    val referrerQueries = getQueryParameters(referrer)
-    val country = referrerQueries.flatMap(_.get("country.x")).getOrElse("Unknown")
-    SafeLogger.info(s"obtained country $country from queries: ${referrerQueries.map(q => q.toList.map(t => t._1 + ":" + t._2)).mkString("\n")}")
+    val countryCookie = request.cookies.get("GU_country")
+    val country = countryCookie.map(_.value).getOrElse("Unknown")
     val redirect = Redirect("/contribute/one-off/thankyou")
-    prodMonitoring.handleTipRequest(country, "PayPal", "One-off")
+    prodMonitoring.sendTip(country, "One-off", "PayPal")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect

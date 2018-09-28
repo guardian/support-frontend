@@ -25,7 +25,7 @@ class ProdMonitoring(
         }
     }
 
-  private def sendTip(country: String, paymentType: String, paymentMethod: String): Unit = {
+  def sendTip(country: String, paymentType: String, paymentMethod: String): Unit = {
     tipMonitoring.verify(country + " " + paymentType + " " + paymentMethod + " contribution")
   }
 

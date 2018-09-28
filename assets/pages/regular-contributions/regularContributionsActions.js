@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import type { PaymentMethod } from 'helpers/checkouts';
-import { routes } from 'helpers/routes';
-import { addQueryParamsToURL } from 'helpers/url';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 
 
@@ -28,18 +26,6 @@ function checkoutSuccess(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_SUCCESS', paymentMethod };
 }
 
-function paymentSuccessful(ctry: string, paymentType: string, paymentMethod: PaymentMethod) {
-  return (dispatch: Dispatch<Action>) => {
-
-    const url = addQueryParamsToURL(
-      routes.tipContributionSuccess,
-      { country: ctry, contribution_type: paymentType, payment_method: paymentMethod },
-    );
-    fetch(url);
-    dispatch(checkoutSuccess(paymentMethod));
-  };
-}
-
 function checkoutError(checkoutFailureReason: CheckoutFailureReason): Action {
   return { type: 'CHECKOUT_ERROR', checkoutFailureReason };
 }
@@ -60,7 +46,7 @@ function setGuestAccountCreationToken(guestAccountCreationToken: string): Action
 
 export {
   checkoutPending,
-  paymentSuccessful,
+  checkoutSuccess,
   checkoutError,
   setPayPalHasLoaded,
   creatingContributor,

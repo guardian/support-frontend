@@ -4,6 +4,7 @@
 
 import { addQueryParamsToURL } from 'helpers/url';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
+
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -15,7 +16,8 @@ import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
+import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+
 
 // ----- Setup ----- //
 
@@ -96,10 +98,9 @@ const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiErro
   onFailure(failureReason);
 };
 
-const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency) => (response): Promise<void> => {
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
 
   if (response.ok) {
-    paymentSuccessful(currencyId, 'One-off', 'Stripe');
     onSuccess();
     return Promise.resolve();
   }
@@ -113,10 +114,10 @@ const handleUnknownError = (onFailure: OnFailure) => () => {
   onFailure('unknown');
 };
 
-function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency): Promise<*> {
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
 
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
-    .then(handleResponse(onSuccess, onFailure, currencyId))
+    .then(handleResponse(onSuccess, onFailure))
     .catch(handleUnknownError(onFailure));
 
 }
@@ -133,7 +134,7 @@ function postCheckout(
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
-    dispatch(paymentSuccessful(currencyId, "One-off", "Stripe"));
+    dispatch(checkoutSuccess());
   };
 
   const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
@@ -151,7 +152,7 @@ function postCheckout(
       optimizeExperiments,
     );
 
-    postToEndpoint(request, onSuccess, onFailure, currencyId);
+    postToEndpoint(request, onSuccess, onFailure);
   };
 }
 
@@ -159,4 +160,3 @@ function postCheckout(
 // ----- Export ----- //
 
 export default postCheckout;
-export { paymentSuccessful };
