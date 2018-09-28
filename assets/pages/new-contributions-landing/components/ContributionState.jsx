@@ -30,10 +30,15 @@ const mapStateToProps = (state: State) => ({
 // ----- Render ----- //
 
 const renderState = (selectedState: CaState | UsState | null) => ([stateValue, stateName]: [string, string]) => (
-  <option value={stateValue} selected={selectedState == stateValue}>{stateName}</option>
+  <option value={stateValue} selected={selectedState === stateValue}>{stateName}</option>
 );
 
-const renderStatesField = (states: { [string]: string }, selectedState: UsState | CaState | null, onChange: (Event => void) | false, showError: boolean, errorMessage: string | null) => (
+const renderStatesField = (
+  states: { [string]: string },
+  selectedState: UsState | CaState | null,
+  onChange: (Event => void) | false,
+  showError: boolean, errorMessage: string | null,
+) => (
   <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
     <label className="form__label" htmlFor="contributionState">State</label>
     <span className="form__input-with-icon">
@@ -46,9 +51,9 @@ const renderStatesField = (states: { [string]: string }, selectedState: UsState 
       </span>
     </span>
     {showError ? (
-        <div className="form__error">
-          {errorMessage}
-        </div>
+      <div className="form__error">
+        {errorMessage}
+      </div>
       ) : null}
   </div>
 );
