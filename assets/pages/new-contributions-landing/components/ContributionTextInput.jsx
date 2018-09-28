@@ -27,6 +27,7 @@ type PropTypes = {
   min: number | void,
   max: number | void,
   step: number | void,
+  disabled: boolean,
 };
 
 // ----- Render ----- //
@@ -54,6 +55,7 @@ function NewContributionTextInput(props: PropTypes) {
           min={props.min}
           max={props.max}
           step={props.step}
+          disabled={props.disabled}
         />
         <span className="form__icon">
           {props.icon}
@@ -80,6 +82,7 @@ NewContributionTextInput.defaultProps = {
   max: undefined,
   min: undefined,
   step: undefined,
+  disabled: false,
 };
 
 export { NewContributionTextInput };

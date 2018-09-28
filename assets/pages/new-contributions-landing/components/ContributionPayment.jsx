@@ -5,14 +5,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentMethod, type PaymentHandler, getPaymentLabel } from 'helpers/checkouts';
+import { type PaymentMethod, type PaymentHandler, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
+import { type Switches } from 'helpers/settings';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 
@@ -32,6 +32,7 @@ type PropTypes = {
   updatePaymentMethod: PaymentMethod => Action,
   isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
   isTestUser: boolean,
+  switches: Switches,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -42,6 +43,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   paymentHandler: state.page.form.paymentHandler,
   isTestUser: state.page.user.isTestUser || false,
+  switches: state.common.settings.switches,
 });
 
 const mapDispatchToProps = {
@@ -74,9 +76,11 @@ function setupPaymentMethod(props: PropTypes): void {
         break;
 
       case 'Stripe':
-      default:
         setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
           .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
+        break;
+
+      default: break;
     }
   }
 }
@@ -84,9 +88,9 @@ function setupPaymentMethod(props: PropTypes): void {
 // ----- Render ----- //
 
 function ContributionPayment(props: PropTypes) {
-  const paymentMethods: PaymentMethod[] = props.contributionType !== 'ONE_OFF' && props.countryId === 'GB'
-    ? ['DirectDebit', 'Stripe', 'PayPal']
-    : ['Stripe', 'PayPal'];
+
+  const paymentMethods: PaymentMethod[] =
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
 
   setupPaymentMethod(props);
 

@@ -6,7 +6,6 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 
 
@@ -143,7 +142,6 @@ function sendData(
       campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,
       experience: getVariantsAsString(participations),
-      ophanBrowserID: getOphanIds().browserId,
       paymentRequestApiStatus,
       ecommerce: {
         currencyCode: currency,

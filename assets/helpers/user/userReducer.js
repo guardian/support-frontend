@@ -104,7 +104,6 @@ function createUserReducer(countryGroup: CountryGroupId) {
 
       default:
         return state;
-
     }
   };
 }
