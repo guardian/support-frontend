@@ -23,6 +23,7 @@ import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import Signout from 'components/signout/signout';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -46,7 +47,7 @@ import {
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  done: boolean,
+  paymentComplete: boolean,
   error: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
@@ -60,6 +61,7 @@ type PropTypes = {|
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
+  isSignedIn: boolean,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
@@ -81,7 +83,7 @@ const getCheckoutFormValue = <A>(formValue: A | null, userValue: A | null): A | 
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
-  done: state.page.form.done,
+  paymentComplete: state.page.form.paymentComplete,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
@@ -91,6 +93,7 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
+  isSignedIn: state.page.user.isSignedIn,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -170,6 +173,7 @@ function ContributionForm(props: PropTypes) {
     lastName,
     email,
     state,
+    isSignedIn,
     checkoutFormHasBeenSubmitted,
   } = props;
 
@@ -183,7 +187,7 @@ function ContributionForm(props: PropTypes) {
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
 
-  return props.done ?
+  return props.paymentComplete ?
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
@@ -196,6 +200,23 @@ function ContributionForm(props: PropTypes) {
             countryGroupDetails={selectedCountryGroupDetails}
             checkOtherAmount={checkOtherAmount}
           />
+          <NewContributionTextInput
+            id="contributionEmail"
+            name="contribution-email"
+            label="Email address"
+            value={email}
+            type="email"
+            autoComplete="email"
+            placeholder="example@domain.com"
+            icon={<SvgEnvelope />}
+            onInput={props.updateEmail}
+            isValid={checkEmail(email)}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a valid email address"
+            required
+            disabled={isSignedIn}
+          />
+          <Signout isSignedIn={isSignedIn} />
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
@@ -222,21 +243,6 @@ function ContributionForm(props: PropTypes) {
             isValid={checkLastName(lastName)}
             checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
-            required
-          />
-          <NewContributionTextInput
-            id="contributionEmail"
-            name="contribution-email"
-            label="Email address"
-            value={email}
-            type="email"
-            autoComplete="email"
-            placeholder="example@domain.com"
-            icon={<SvgEnvelope />}
-            onInput={props.updateEmail}
-            isValid={checkEmail(email)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-            errorMessage="Please provide a valid email address"
             required
           />
           <NewContributionState

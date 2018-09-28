@@ -242,7 +242,7 @@ header[role="banner"] {
     left: 50%;
     position: absolute;
     transform: translate(-50%,0);
-    width: 375px;
+    width: 100%;
   }
 
   .countryGroups {
@@ -705,8 +705,13 @@ form {
   transition: box-shadow .2s ease-in-out;
 }
 
-.form__input:hover {
+.form__input:enabled:hover {
   box-shadow: 0 0 0 3px #ededed;
+}
+
+.form__input:disabled {
+  background: gu-colour(garnett-neutral-4);
+  color: gu-colour(media-garnett-main-1);
 }
 
 .form__input:focus {
@@ -916,3 +921,10 @@ form {
   margin: ($gu-v-spacing * 2) -10px 0;
 }
 
+/* = SIGN OUT link */
+
+.component-signout {
+  color: inherit;
+  display: block;
+  text-align: right;
+}

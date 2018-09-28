@@ -20,7 +20,7 @@ function mapStateToProps(state: { common: CommonState }, ownProps: { referringCt
   const price = getProductPrice('DigitalPack', countryGroupId);
 
   return {
-    ctaText: 'Start a 14 day free trial',
+    ctaText: 'Start your free trial now',
     url: getDigitalCheckout(
       referrerAcquisitionData,
       countryGroupId,

@@ -18,10 +18,13 @@ import { type Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
-type FormData = {
+export type UserFormData = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+}
+
+type FormData = UserFormData & {
   otherAmounts: {
     [Contrib]: { amount: string | null }
   },
@@ -39,7 +42,7 @@ type FormState = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
-  done: boolean,
+  paymentComplete: boolean,
   guestAccountCreationToken: ?string,
 };
 
@@ -74,11 +77,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
   const initialState: FormState = {
     contributionType: 'MONTHLY',
-    paymentMethod: 'Stripe',
+    paymentMethod: 'None',
     paymentHandler: {
       Stripe: null,
       DirectDebit: null,
       PayPal: null,
+      None: null,
     },
     paymentReady: false,
     formData: {
@@ -96,7 +100,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     showOtherAmount: false,
     selectedAmounts: initialAmount,
     isWaiting: false,
-    done: false,
+    paymentComplete: false,
     guestAccountCreationToken: null,
   };
 
@@ -134,6 +138,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
+      case 'UPDATE_USER_FORM_DATA':
+        return { ...state, formData: { ...state.formData, ...action.userFormData } };
+
       case 'SELECT_AMOUNT':
         return {
           ...state,
@@ -155,13 +162,13 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'PAYMENT_FAILURE':
-        return { ...state, done: false, error: action.error };
+        return { ...state, paymentComplete: false, error: action.error };
 
       case 'PAYMENT_WAITING':
-        return { ...state, done: false, isWaiting: action.isWaiting };
+        return { ...state, paymentComplete: false, isWaiting: action.isWaiting };
 
       case 'PAYMENT_SUCCESS':
-        return { ...state, done: true };
+        return { ...state, paymentComplete: true };
 
       case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
         return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };

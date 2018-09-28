@@ -36,7 +36,7 @@ type ContributionRequest = {
   billingPeriod: BillingPeriod,
 };
 
-type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
+type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData' | 'none';
 
 type PayPalDetails = {|
   'baid': string
@@ -86,6 +86,7 @@ const paymentMethodToPaymentFieldMap = {
   DirectDebit: 'directDebitData',
   PayPal: 'baid',
   Stripe: 'stripeToken',
+  None: 'none',
 };
 
 const getPaymentFields =
