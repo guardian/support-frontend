@@ -20,6 +20,8 @@ export type SubscriptionProduct =
   'Paper' |
   'PaperAndDigital';
 
+type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
+
 export type ComponentAbTest = {
   name: string,
   variant: string,
@@ -94,9 +96,25 @@ function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
     : 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices';
 }
 
+function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
+
+  switch (product) {
+    case 'DigitalPack':
+    case 'PremiumTier':
+    case 'DailyEdition':
+      return 'DIGITAL_SUBSCRIPTION';
+    case 'GuardianWeekly':
+    case 'Paper':
+    case 'PaperAndDigital':
+    default:
+      return 'PRINT_SUBSCRIPTION';
+  }
+
+}
+
 function sendTrackingEventsOnClick(
   id: string,
-  product: 'digital' | 'print',
+  product: SubscriptionProduct,
   abTest: ComponentAbTest | null,
 ): () => void {
 
@@ -104,14 +122,12 @@ function sendTrackingEventsOnClick(
     component: {
       componentType: 'ACQUISITIONS_BUTTON',
       id,
-      products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
+      products: [ophanProductFromSubscriptionProduct(product)],
     },
     action: 'CLICK',
     id,
     ...(abTest ? { abTest } : {}),
   };
-
-  const gaAction = abTest ? abTest.name : product;
 
   return () => {
 
@@ -119,7 +135,7 @@ function sendTrackingEventsOnClick(
 
     gaEvent({
       category: 'click',
-      action: gaAction,
+      action: product,
       label: id,
     });
 

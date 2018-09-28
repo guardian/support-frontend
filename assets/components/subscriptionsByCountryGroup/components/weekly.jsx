@@ -46,7 +46,7 @@ function Weekly(props: PropTypes) {
           url: props.url,
           accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('weekly_cta', 'print', props.abTest),
+          onClick: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', props.abTest),
         },
       ]}
     />

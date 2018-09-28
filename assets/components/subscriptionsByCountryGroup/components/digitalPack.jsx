@@ -44,7 +44,7 @@ function DigitalPack(props: {
           url: props.url,
           accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('digipack_cta', 'digital', props.abTest),
+          onClick: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', props.abTest),
         },
       ]}
     />

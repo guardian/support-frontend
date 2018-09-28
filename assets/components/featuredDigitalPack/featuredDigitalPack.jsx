@@ -55,7 +55,7 @@ function FeaturedDigitalPack(props: PropTypes) {
           text="Buy now"
           url={props.url}
           accessibilityHint="Buy now"
-          onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'digital', props.abTest)}
+          onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
         />
       </div>
       <div className="component-featured-digital-pack__image">

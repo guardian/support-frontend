@@ -53,7 +53,7 @@ function PaperSection(props: PropTypes) {
             url: props.subsLinks.Paper,
             accessibilityHint: 'Proceed to paper subscription options',
             modifierClasses: ['border'],
-            onClick: sendTrackingEventsOnClick('paper_cta', 'print', props.abTest),
+            onClick: sendTrackingEventsOnClick('paper_cta', 'Paper', props.abTest),
           },
         ]}
       />
@@ -77,7 +77,7 @@ function PaperSection(props: PropTypes) {
             url: props.subsLinks.PaperAndDigital,
             accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
             modifierClasses: ['border'],
-            onClick: sendTrackingEventsOnClick('paper_digital_cta', 'print', props.abTest),
+            onClick: sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', props.abTest),
           },
         ]}
       />
