@@ -220,7 +220,25 @@ function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields):
   ).then(getPaymentResultFromOneOffStripeResponse));
 }
 
-function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<PaymentResult> {
+// Models a PayPal payment being successfully created.
+// The user should be redirected to the approvalUrl so that they can authorize the payment.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentSuccess.scala
+type PayPalPaymentSuccess = {|
+  approvalUrl: string,
+  paymentId: string,
+|}
+
+// Models a failure to create a PayPal payment.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalApiError.scala
+type PayPalApiError = {|
+  responseCode: number | null,
+  errorName: number | null,
+  message: string,
+|}
+
+function postOneOffPayPalCreatePaymentRequest(
+  data: CreatePaypalPaymentData,
+): Promise<PayPalPaymentSuccess | PayPalApiError> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     // TODO: if we remove the PaymentFields type then we can just pass the data through
