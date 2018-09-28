@@ -78,6 +78,11 @@ function FeaturedProductTest(props: PropTypes) {
     default:
       return (
         <div className={className}>
+          <FeaturedDigitalPack
+            headingSize={3}
+            countryGroupId={props.countryGroupId}
+            url={props.digitalPackUrl}
+          />
           {props.digitalSection(null)}
           {props.paperSection(null)}
         </div>
