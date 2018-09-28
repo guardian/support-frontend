@@ -38,7 +38,6 @@ object Config {
     logger.info(s"Stage: ${conf.getString("stage")}")
     logger.info(s"Support Frontend: ${supportFrontendUrl}")
     logger.info(s"Identity Frontend: ${identityFrontendUrl}")
-    logger.info(s"Screencast = https://saucelabs.com/tests/${sessionId.toString}")
   }
 
 }

@@ -1,12 +1,14 @@
 package config
 
+import admin.SettingsSource
+import cats.syntax.either._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
+
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
-import admin.Settings
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -25,7 +27,7 @@ class Configuration {
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val paymentApiUrl = config.getString("paymentApi.url");
+  lazy val paymentApiUrl = config.getString("paymentApi.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
@@ -39,8 +41,9 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
+  lazy val settingsSource: SettingsSource = SettingsSource.fromConfig(config).valueOr(throw _)
+
   lazy val tipPersonalAccessToken: String = ""
 
-  implicit val settings = Settings.fromConfig(config.getConfig("switches"))
-
+  lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 }

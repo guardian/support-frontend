@@ -53,7 +53,17 @@ object RegularContributionsClient {
     new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
-case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
+case class StatusResponse(
+    status: Status,
+    trackingUri: String,
+    failureReason: Option[CheckoutFailureReason] = None,
+    guestAccountCreationToken: Option[String] = None
+)
+
+object StatusResponse {
+  def fromStatusResponseAndToken(statusResponse: StatusResponse, token: Option[String]): StatusResponse =
+    StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
+}
 
 class RegularContributionsClient(
     arn: StateMachineArn,

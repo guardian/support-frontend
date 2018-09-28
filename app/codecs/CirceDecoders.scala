@@ -18,7 +18,9 @@ import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._
-import services.{PayPalError, PaymentApiError}
+import models.identity.{CookieResponse, CookiesResponse}
+import services.{PayPalError, PayPalSuccess}
+import org.joda.time.DateTime
 
 object CirceDecoders {
 
@@ -114,7 +116,11 @@ object CirceDecoders {
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
   implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
 
-  private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
-  implicit val paymentApiError: Decoder[PaymentApiError] = deriveDecoder
-}
+  implicit val payPalErrorBodyDecoder: Decoder[PayPalError] = deriveDecoder
+  implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
 
+  implicit val dateTimeEncoder: Encoder[DateTime] = Encoder.encodeString.contramap(_.toString)
+  implicit val cookieResponseEncoder: Encoder[CookieResponse] = deriveEncoder
+  implicit val cookiesResponseEncoder: Encoder[CookiesResponse] = deriveEncoder
+
+}

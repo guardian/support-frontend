@@ -49,6 +49,15 @@
     }
   }
 
+  .component-subscription-bundle__description {
+    line-height: 20px;
+    margin-bottom: $gu-v-spacing;
+
+    @include mq($from: phablet, $until: leftCol) {
+      margin-left: 1.5 * $gu-h-spacing;
+    }
+  }
+
   .component-grid-image {
     width: 165px;
     height: 165px;
@@ -65,7 +74,7 @@
     }
   }
 
-  .component-subscription-bundle--digital, .component-subscription-bundle--paper {
+  .component-subscription-bundle:nth-child(1), .component-subscription-bundle:nth-child(2) {
     @include mq($from: leftCol) {
       @include dropline;
     }
@@ -111,74 +120,28 @@
     line-height: 1.25;
   }
 
-  .component-feature-list--digital {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#bb3b80" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
-  .component-feature-list--paper {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#0084c6" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
-  .component-feature-list--paper-digital {
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#ed6300" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
-  }
-
   .component-cta-link {
     padding-left: 28px;
     background-color: transparent;
   }
+}
 
-  .svg-arrow-right-straight {
-    fill: gu-colour(garnett-neutral-1);
+@mixin colour-bundle($colour) {
+  .component-feature-list {
+    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 28 28"><path fill="#{gu-colour($colour)}" d="M7.885 25.74L0 14.82l3.22-3.217L8.3 16.74 24.695 2.26 28 5.565"/></svg>');
   }
 
-  .component-cta-link--digital {
-    color: gu-colour(lifestyle-garnett-main-1);
-    border-color: gu-colour(lifestyle-garnett-main-1);
+  .component-cta-link {
+    color: gu-colour($colour);
+    border-color: gu-colour($colour);
 
     .svg-arrow-right-straight {
-      fill: gu-colour(lifestyle-garnett-main-1);
+      fill: gu-colour($colour);
     }
 
     &:hover {
       color: #fff;
-      background-color: gu-colour(lifestyle-garnett-main-1);
-
-      .svg-arrow-right-straight {
-        fill: #fff;
-      }
-    }
-  }
-
-  .component-cta-link--paper {
-    color: gu-colour(sport-garnett-media-main-1);
-    border-color: gu-colour(sport-garnett-media-main-1);
-
-    .svg-arrow-right-straight {
-      fill: gu-colour(sport-garnett-media-main-1);
-    }
-
-    &:hover {
-      color: #fff;
-      background-color: gu-colour(sport-garnett-media-main-1);
-
-      .svg-arrow-right-straight {
-        fill: #fff;
-      }
-    }
-  }
-
-  .component-cta-link--paper-digital {
-    color: gu-colour(opinion-garnett-main-1);
-    border-color: gu-colour(opinion-garnett-main-1);
-
-    .svg-arrow-right-straight {
-      fill: gu-colour(opinion-garnett-main-1);
-    }
-
-    &:hover {
-      color: #fff;
-      background-color: gu-colour(opinion-garnett-main-1);
+      background-color: gu-colour($colour);
 
       .svg-arrow-right-straight {
         fill: #fff;

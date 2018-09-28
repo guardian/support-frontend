@@ -15,13 +15,15 @@ import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import PriceCtaContainer from './priceCtaContainer';
+import CtaSwitch from './ctaSwitch';
+
+import { getPageTitle } from '../helpers/promotions';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId
+  countryGroupId: CountryGroupId,
 };
 
 type GridImages = {
@@ -141,12 +143,17 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <div className="digital-subscription-landing-header__picture">
           <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
-        <div className="digital-subscription-landing-header__title">
-          <div className="digital-subscription-landing-header__title-copy">
-            <h1>Support The Guardian with a digital subscription</h1>
+        <div className="digital-subscription-landing-header__wrapper">
+          <h1 className="digital-subscription-landing-header__product">
+            Digital Pack
+          </h1>
+          <div className="digital-subscription-landing-header__title">
+            <p className="digital-subscription-landing-header__title-copy">
+              {getPageTitle(props.countryGroupId)}
+            </p>
           </div>
         </div>
-        <PriceCtaContainer dark referringCta="support_digipack_page_header" />
+        <CtaSwitch referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>
   );

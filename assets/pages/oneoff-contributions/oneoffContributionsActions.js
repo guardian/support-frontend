@@ -1,22 +1,27 @@
 // @flow
 
 // ----- Imports ----- //
+<<<<<<< HEAD
 import { type Dispatch } from 'redux';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import type { IsoCurrency } from '../../helpers/internationalisation/currency';
+=======
+
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+>>>>>>> master
 
 // ----- Types ----- //
 
 export type Action =
-    | { type: 'CHECKOUT_ERROR', message: ?string }
+    | { type: 'CHECKOUT_ERROR', checkoutFailureReason: CheckoutFailureReason }
     | { type: 'CHECKOUT_SUCCESS' };
 
 
 // ----- Action Creators ----- //
 
-function checkoutError(message: ?string): Action {
-  return { type: 'CHECKOUT_ERROR', message };
+function checkoutError(checkoutFailureReason: CheckoutFailureReason): Action {
+  return { type: 'CHECKOUT_ERROR', checkoutFailureReason };
 }
 
 function checkoutSuccess(): Action {

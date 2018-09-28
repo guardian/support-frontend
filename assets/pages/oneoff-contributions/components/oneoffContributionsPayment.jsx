@@ -8,19 +8,20 @@ import type { Dispatch } from 'redux';
 import { Redirect } from 'react-router';
 import { routes } from 'helpers/routes';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type UserFormFieldAttribute } from 'helpers/checkoutForm/checkoutForm';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
 import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 import { type State } from '../oneOffContributionsReducer';
+import { formClassName } from './formFields';
 
 // ----- Types ----- //
 
@@ -28,7 +29,7 @@ type PropTypes = {|
   dispatch: Function,
   email: string,
   setShouldValidateFunctions: Array<() => void>,
-  error: ?string,
+  checkoutFailureReason: ?CheckoutFailureReason,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -38,7 +39,6 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
   optimizeExperiments: OptimizeExperiments,
-  formFields: Array<UserFormFieldAttribute>
 |};
 
 
@@ -46,14 +46,11 @@ type PropTypes = {|
 
 
 function mapStateToProps(state: State) {
-  const { fullName, email } = getFormFields(state);
-
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-    email: email.value,
-    formFields: [email, fullName],
-    error: state.page.oneoffContrib.error,
+    email: state.page.user.email,
+    checkoutFailureReason: state.page.oneoffContrib.checkoutFailureReason,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
@@ -69,8 +66,8 @@ function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
     setShouldValidateFunctions: [
-      () => dispatch(setFullNameShouldValidate()),
-      () => dispatch(setEmailShouldValidate()),
+      () => dispatch(setFullNameShouldValidate(true)),
+      () => dispatch(setEmailShouldValidate(true)),
     ],
   };
 }
@@ -88,10 +85,10 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
-      <ErrorMessage message={props.error} />
+      <PaymentFailureMessage checkoutFailureReason={props.checkoutFailureReason} />
       <StripePopUpButton
         email={props.email}
-        callback={postCheckout(
+        onPaymentAuthorisation={postCheckout(
           props.abParticipations,
           props.dispatch,
           props.amount,
@@ -100,14 +97,13 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           context.store.getState,
           props.optimizeExperiments,
         )}
-        canOpen={() => props.formFields.every(f => f.isValid)}
+        canOpen={() => formIsValid(formClassName)}
         whenUnableToOpen={() => props.setShouldValidateFunctions.forEach(f => f())}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
-        disable={false}
         svg={<SvgCreditCard />}
       />
     </section>

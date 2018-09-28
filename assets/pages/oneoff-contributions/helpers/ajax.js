@@ -14,8 +14,14 @@ import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
+<<<<<<< HEAD
 
 import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
+=======
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
+>>>>>>> master
 
 
 // ----- Setup ----- //
@@ -33,6 +39,7 @@ function stripeOneOffContributionEndpoint(testUser: ?string) {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
+
 // ----- Types ----- //
 
 type PaymentApiStripeExecutePaymentBody = {|
@@ -45,11 +52,17 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type PaymentApiError = {| type: string, error: Object |}
+
+type OnSuccess = () => void;
+type OnFailure = CheckoutFailureReason => void;
+
+
 // ----- Functions ----- //
 
 function requestData(
   abParticipations: Participations,
-  paymentToken: string,
+  stripeAuthorisation: StripeAuthorisation,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -65,7 +78,7 @@ function requestData(
       paymentData: {
         currency,
         amount,
-        token: paymentToken,
+        token: stripeAuthorisation.token,
         email: user.email,
       },
       acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
@@ -85,6 +98,7 @@ function requestData(
   });
 }
 
+<<<<<<< HEAD
 function postToEndpoint(
   request: Object,
   dispatch: Function,
@@ -111,9 +125,38 @@ function postToEndpoint(
     logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
     dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
   });
+=======
+const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiError): void => {
+  const failureReason: CheckoutFailureReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
+  onFailure(failureReason);
+};
+
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
+
+  if (response.ok) {
+    onSuccess();
+    return Promise.resolve();
+  }
+
+  return response.json().then(handleFailure(onFailure));
+
+};
+
+const handleUnknownError = (onFailure: OnFailure) => () => {
+  logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+  onFailure('unknown');
+};
+
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
+
+  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
+    .then(handleResponse(onSuccess, onFailure))
+    .catch(handleUnknownError(onFailure));
+
+>>>>>>> master
 }
 
-export default function postCheckout(
+function postCheckout(
   abParticipations: Participations,
   dispatch: Function,
   amount: number,
@@ -121,11 +164,21 @@ export default function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-): (string) => Promise<*> {
-  return (paymentToken: string) => {
+): StripeAuthorisation => void {
+
+  const onSuccess: OnSuccess = () => {
+    trackConversion(abParticipations, routes.oneOffContribThankyou);
+    dispatch(checkoutSuccess());
+  };
+
+  const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
+    dispatch(checkoutError(checkoutFailureReason));
+  };
+
+  return (stripeAuthorisation: StripeAuthorisation) => {
     const request = requestData(
       abParticipations,
-      paymentToken,
+      stripeAuthorisation,
       currencyId,
       amount,
       referrerAcquisitionData,
@@ -133,6 +186,15 @@ export default function postCheckout(
       optimizeExperiments,
     );
 
+<<<<<<< HEAD
     return postToEndpoint(request, dispatch, abParticipations, currencyId);
+=======
+    postToEndpoint(request, onSuccess, onFailure);
+>>>>>>> master
   };
 }
+
+
+// ----- Export ----- //
+
+export default postCheckout;

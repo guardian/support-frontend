@@ -22,7 +22,10 @@ case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: Str
     }
   }
 
-  def pageHasLoaded: Boolean = pageHasElement(payWithCard)
+  def pageHasLoaded: Boolean = {
+    pageHasElement(payWithCard)
+    elementIsClickable(payWithCard)
+  }
 
   def getAmountDisplayed(): Double = webDriver.findElement(paymentAmountDisplay.by).getText.tail.trim.toDouble
 

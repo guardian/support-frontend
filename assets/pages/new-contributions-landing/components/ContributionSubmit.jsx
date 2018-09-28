@@ -20,43 +20,55 @@ type PropTypes = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
-  amount: Amount | null
+  isWaiting: boolean,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
+  otherAmount: string | null,
 };
 
 const mapStateToProps = (state: State) =>
   ({
+    currency: state.common.internationalisation.currencyId,
     contributionType: state.page.form.contributionType,
+    isWaiting: state.page.form.isWaiting,
     paymentMethod: state.page.form.paymentMethod,
-    amount: state.page.form.amount,
+    selectedAmounts: state.page.form.selectedAmounts,
+    otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   });
 
 // ----- Render ----- //
 
 
 function ContributionSubmit(props: PropTypes) {
-  const frequency = getFrequency(props.contributionType);
 
-  return (
-    <div className="form__submit">
-      <button className="form__submit-button" type="submit">
-        Contribute&nbsp;
-        {props.amount ? formatAmount(
-          currencies[props.currency],
-          spokenCurrencies[props.currency],
-          props.amount,
-          false,
-        ) : null}&nbsp;
-        {frequency ? `${frequency} ` : null}
-        {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-        <SvgArrowRight />
-      </button>
-    </div>
-  );
+  // if all payment methods are switched off, do not display the button
+  if (props.paymentMethod !== 'None') {
+    const frequency = getFrequency(props.contributionType);
+    const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
+    const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
+    const showPayPalButton = props.paymentMethod === 'PayPal';
+
+    return (
+      <div className="form__submit">
+        {showPayPalButton ? (
+          <button disabled={props.isWaiting}>Pay with PayPal, bro</button>
+        ) : (
+          <button disabled={props.isWaiting} className="form__submit-button" type="submit">
+            Contribute&nbsp;
+            {amount ? formatAmount(
+              currencies[props.currency],
+              spokenCurrencies[props.currency],
+              amount,
+              false,
+            ) : null}&nbsp;
+            {frequency ? `${frequency} ` : null}
+            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+            <SvgArrowRight />
+          </button>
+        )}
+      </div>
+    );
+  }
 }
-
-ContributionSubmit.defaultProps = {
-  amount: null,
-};
 
 const NewContributionSubmit = connect(mapStateToProps)(ContributionSubmit);
 

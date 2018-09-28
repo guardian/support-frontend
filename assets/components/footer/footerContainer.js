@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import type { CommonState } from 'helpers/page/page';
 
-import PaperSubscriptions from './paperSubscriptions';
+import Footer from './footer';
 
 
 // ----- State Maps ----- //
@@ -14,7 +14,7 @@ import PaperSubscriptions from './paperSubscriptions';
 function mapStateToProps(state: { common: CommonState }) {
 
   return {
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 
 }
@@ -22,4 +22,4 @@ function mapStateToProps(state: { common: CommonState }) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(PaperSubscriptions);
+export default connect(mapStateToProps)(Footer);

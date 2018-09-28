@@ -41,4 +41,16 @@
   .component-paypal-contribution-button {
     margin-top: $gu-v-spacing;
   }
+
+  .component-subscription-bundle--digital {
+    @include colour-bundle(lifestyle-garnett-main-1);
+  }
+
+  .component-subscription-bundle--paper {
+    @include colour-bundle(sport-garnett-media-main-1);
+  }
+
+  .component-subscription-bundle--paper-digital {
+    @include colour-bundle(opinion-garnett-main-1);
+  }
 }

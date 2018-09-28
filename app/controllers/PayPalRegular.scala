@@ -11,7 +11,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import admin.Settings
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import com.gu.tip.Tip
 
 import scala.concurrent.ExecutionContext
@@ -22,14 +22,13 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settings: Settings,
+    settingsProvider: SettingsProvider,
     tipMonitoring: Tip
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
   implicit val a: AssetsResolver = assets
-  implicit val s: Settings = settings
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
@@ -59,24 +58,26 @@ class PayPalRegular(
   // The endpoint corresponding to the PayPal return url, hit if the user is
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 }

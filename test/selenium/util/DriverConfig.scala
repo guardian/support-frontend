@@ -23,10 +23,10 @@ class DriverConfig {
     new ChromeDriver()
   }
 
-  // Used by Travis to run tests in SauceLabs
+  // Used by Travis to run tests in BrowserStack
   private def instantiateRemoteBrowser(): WebDriver = {
     val chromeOptions = new ChromeOptions
-    chromeOptions.setCapability("platform", "Windows 8.1")
+    chromeOptions.setCapability("platform", "WINDOWS")
     chromeOptions.setCapability("name", "support-frontend")
     new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), chromeOptions)
   }
