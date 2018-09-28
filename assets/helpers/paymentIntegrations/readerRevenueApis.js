@@ -133,15 +133,6 @@ function postRequestOptions(
   return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
 }
 
-/** Process the response for a one-off payment from the payment API */
-function checkOneOffStatus(json: Object): Promise<PaymentResult> {
-  if (json.error) {
-    const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
-    return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
-  }
-  return Promise.resolve(PaymentSuccess);
-}
-
 /**
  * Process the response for a regular payment from the recurring contribution endpoint.
  *
@@ -208,13 +199,25 @@ function paymentApiEndpointWithMode(url: string) {
   return url;
 }
 
-/** Sends a one-off payment request to the payment API and checks the result */
+// Object is expected to have structure:
+// { type: "error", error: { failureReason: string } }, or
+// { type: "success", data: { currency: string, amount: number } }
+function getPaymentResultFromOneOffStripeResponse(json: Object): Promise<PaymentResult> {
+  if (json.error) {
+    const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
+    return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
+  }
+  return Promise.resolve(PaymentSuccess);
+}
+
+// Sends a one-off payment request to the payment API and standardises the result
+// https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
 function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
     postRequestOptions(data, 'include', null),
-  ).then(checkOneOffStatus));
+  ).then(getPaymentResultFromOneOffStripeResponse));
 }
 
 function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<PaymentResult> {
