@@ -36,6 +36,7 @@ import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
 import { payPalCancelUrl } from '../../contributions-landing/pagesVersions/horizontalLayoutLandingPage';
+import type {CreatePaypalPaymentData} from "../../../helpers/paymentIntegrations/payPalPaymentAPICheckout";
 
 import {
   paymentWaiting,
@@ -47,6 +48,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -76,7 +78,7 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
   isDirectDebitPopUpOpen: boolean,
-  createOneOffPayPalPayment: (currency: IsoCurrency, amount: number, id: CountryGroupId) => void,
+  createOneOffPayPalPayment: () => void,
   currency: IsoCurrency,
 |};
 
@@ -117,29 +119,40 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  // Not intended to be called by component.
+  // Only used to implement createOneOffPayPalPayment in mergeProps()
+  _createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+});
 
-  // TODO: could try and create a function with all the data already provided using mergeProps
-  // getting the amount is problematic however - flow complains about getAmount(Object)
-  // TODO: uh! passing through country group id here is weird
-  createOneOffPayPalPayment: (currency: IsoCurrency, amount: number, id: CountryGroupId) => {
+
+// TODO: some type-safety
+const getAmount = (props: Object) =>
+  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
+    ? props.otherAmount
+    : props.selectedAmounts[props.contributionType].value);
+
+
+const mergeProps = (stateProps, dispatchProps, ownProps) => ({
+  ...stateProps,
+  ...dispatchProps,
+  ...ownProps,
+  // TODO: is it a good idea putting this function here?
+  // Allows the component to create a payment without having to think directly about what arguments are required.
+  createOneOffPayPalPayment: () => {
     const data = {
-      currency,
-      amount,
+      currency: stateProps.currency,
+      amount: getAmount(stateProps),
       returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
       // TODO: use new cancel url
-      cancelURL: payPalCancelUrl(id),
+      cancelURL: payPalCancelUrl(stateProps.countryGroupId),
     };
     console.log(data);
-    dispatch(createOneOffPayPalPayment(data));
+    /* eslint-disable no-underscore-dangle */
+    dispatchProps._createOneOffPayPalPayment(data);
   },
 });
 
 // ----- Functions ----- //
-
-const getAmount = (props: PropTypes) =>
-  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
-    ? props.otherAmount
-    : props.selectedAmounts[props.contributionType].value);
 
 const isNotEmpty: string => boolean = input => input.trim() !== '';
 const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
@@ -173,7 +186,8 @@ function onSubmit(props: PropTypes): Event => void {
           if (props.contributionType === 'ONE_OFF') {
             // Displays the processing transaction, please wait screen
             props.setPaymentIsWaiting(true);
-            props.createOneOffPayPalPayment(props.currency, getAmount(props), props.countryGroupId);
+            // Hey Joe - this didn't appear to be working with amount type other, but as seemed to of fixed itself (?)
+            props.createOneOffPayPalPayment();
           } else {
             // TODO
           }
@@ -287,6 +301,6 @@ ContributionForm.defaultProps = {
   error: null,
 };
 
-const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
+const NewContributionForm = connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionForm);
 
 export { NewContributionForm };
