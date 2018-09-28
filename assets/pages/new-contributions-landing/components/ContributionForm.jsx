@@ -73,11 +73,9 @@ type PropTypes = {|
   isDirectDebitPopUpOpen: boolean
 |};
 
-type FormValueType = string | null;
-
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
-const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
+const getCheckoutFormValue = <A>(formValue: A | null, userValue: A | null): A | null =>
   (formValue === null ? userValue : formValue);
 
 /* eslint-enable react/no-unused-prop-types */
@@ -89,7 +87,7 @@ const mapStateToProps = (state: State) => ({
   firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
   lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  state: state.page.form.formData.state || state.page.user.stateField,
+  state: state.page.form.formData.state,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
@@ -125,6 +123,7 @@ const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat
 
 const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
+const checkState: (string | null) => boolean = s => isNotEmpty(s || '');
 const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
@@ -240,7 +239,13 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide a valid email address"
             required
           />
-          <NewContributionState onChange={props.updateState} value={state} />
+          <NewContributionState 
+            onChange={props.updateState} 
+            selectedState={state}
+            isValid={checkState(state)} 
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a state"
+            />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
