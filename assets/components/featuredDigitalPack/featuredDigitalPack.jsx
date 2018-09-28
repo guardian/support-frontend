@@ -64,14 +64,14 @@ function FeaturedDigitalPack(props: PropTypes) {
           sources={[
             {
               gridId: 'digitalPackBenefitsMobile',
-              srcSizes: [140, 500, 1000, 1730],
+              srcSizes: [140, 500, 1000, 1729],
               imgType: 'png',
               sizes: '90vw',
               media: '(max-width: 659px)',
             },
             {
               gridId: 'digitalPackBenefitsDesktop',
-              srcSizes: [140, 500, 796],
+              srcSizes: [140, 500, 1000, 2000],
               imgType: 'png',
               sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw, 90vw',
               media: '(min-width: 660px)',
