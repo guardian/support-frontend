@@ -24,6 +24,13 @@ type PropTypes = {
 };
 
 
+// ----- Functions ----- //
+
+function getTestProperties(variant: string): ComponentAbTest {
+  return { name: 'featuredProduct', variant };
+}
+
+
 // ----- Component ----- //
 
 function FeaturedProductTest(props: PropTypes) {
@@ -40,9 +47,10 @@ function FeaturedProductTest(props: PropTypes) {
             headingSize={3}
             countryGroupId={props.countryGroupId}
             url={props.digitalPackUrl}
+            abTest={getTestProperties('featured')}
           />
-          {props.digitalSection({ name: 'featuredProduct', variant: 'featured' })}
-          {props.paperSection({ name: 'featuredProduct', variant: 'featured' })}
+          {props.digitalSection(getTestProperties('featured'))}
+          {props.paperSection(getTestProperties('featured'))}
         </div>
       );
 
@@ -53,16 +61,17 @@ function FeaturedProductTest(props: PropTypes) {
             headingSize={3}
             countryGroupId={props.countryGroupId}
             url={props.digitalPackUrl}
+            abTest={getTestProperties('featuredShort')}
           />
-          {props.paperSection({ name: 'featuredProduct', variant: 'featuredShort' })}
+          {props.paperSection(getTestProperties('featuredShort'))}
         </div>
       );
 
     case 'control':
       return (
         <div className={className}>
-          {props.digitalSection({ name: 'featuredProduct', variant: 'control' })}
-          {props.paperSection({ name: 'featuredProduct', variant: 'control' })}
+          {props.digitalSection(getTestProperties('control'))}
+          {props.paperSection(getTestProperties('control'))}
         </div>
       );
 
