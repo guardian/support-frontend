@@ -4,7 +4,6 @@
 
 import { addQueryParamsToURL } from 'helpers/url';
 import { derivePaymentApiAcquisitionData } from 'helpers/tracking/acquisitions';
-
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -14,15 +13,9 @@ import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-<<<<<<< HEAD
-
-import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
-=======
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
->>>>>>> master
-
+import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
 
 // ----- Setup ----- //
 
@@ -98,42 +91,15 @@ function requestData(
   });
 }
 
-<<<<<<< HEAD
-function postToEndpoint(
-  request: Object,
-  dispatch: Function,
-  abParticipations: Participations,
-  currencyId: IsoCurrency,
-): Promise<*> {
-  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-    if (response.ok) {
-      trackConversion(abParticipations, routes.oneOffContribThankyou);
-      dispatch(paymentSuccessful(currencyId, 'One-off', 'Stripe'));
-    }
-    return response.json();
-  }).then((responseJson) => {
-    if (responseJson.error.exceptionType === 'CardException') {
-      dispatch(checkoutError('Your card has been declined.'));
-    } else {
-      const errorHttpCode = responseJson.error.errorCode || 'unknown';
-      const exceptionType = responseJson.error.exceptionType || 'unknown';
-      const errorName = responseJson.error.errorName || 'unknown';
-      logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-    }
-  }).catch(() => {
-    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  });
-=======
 const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiError): void => {
   const failureReason: CheckoutFailureReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
   onFailure(failureReason);
 };
 
-const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency) => (response): Promise<void> => {
 
   if (response.ok) {
+    paymentSuccessful(currencyId, 'One-off', 'Stripe');
     onSuccess();
     return Promise.resolve();
   }
@@ -147,13 +113,12 @@ const handleUnknownError = (onFailure: OnFailure) => () => {
   onFailure('unknown');
 };
 
-function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency): Promise<*> {
 
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
-    .then(handleResponse(onSuccess, onFailure))
+    .then(handleResponse(onSuccess, onFailure, currencyId))
     .catch(handleUnknownError(onFailure));
 
->>>>>>> master
 }
 
 function postCheckout(
@@ -168,7 +133,7 @@ function postCheckout(
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
-    dispatch(checkoutSuccess());
+    dispatch(paymentSuccessful(currencyId, "One-off", "Stripe"));
   };
 
   const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
@@ -186,11 +151,7 @@ function postCheckout(
       optimizeExperiments,
     );
 
-<<<<<<< HEAD
-    return postToEndpoint(request, dispatch, abParticipations, currencyId);
-=======
-    postToEndpoint(request, onSuccess, onFailure);
->>>>>>> master
+    postToEndpoint(request, onSuccess, onFailure, currencyId);
   };
 }
 
@@ -198,3 +159,4 @@ function postCheckout(
 // ----- Export ----- //
 
 export default postCheckout;
+export { paymentSuccessful };

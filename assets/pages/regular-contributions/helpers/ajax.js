@@ -20,11 +20,7 @@ import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/checkouts';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-<<<<<<< HEAD
-import { checkoutPending, paymentSuccessful, checkoutError, creatingContributor } from '../regularContributionsActions';
-=======
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
->>>>>>> master
+import { checkoutPending, paymentSuccessful, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
@@ -302,20 +298,9 @@ function postCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
   optimizeExperiments: OptimizeExperiments,
-<<<<<<< HEAD
   country: IsoCountry,
-): RegularCheckoutCallback {
-  return (
-    token?: string,
-    accountNumber?: string,
-    sortCode?: string,
-    accountHolderName?: string,
-  ) => {
-
-=======
 ): PaymentAuthorisation => void {
   return (paymentAuthorisation: PaymentAuthorisation) => {
->>>>>>> master
     pollCount = 0;
     dispatch(creatingContributor());
 

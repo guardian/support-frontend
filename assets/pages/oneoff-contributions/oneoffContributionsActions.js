@@ -1,15 +1,12 @@
 // @flow
 
 // ----- Imports ----- //
-<<<<<<< HEAD
+
 import { type Dispatch } from 'redux';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 import type { IsoCurrency } from '../../helpers/internationalisation/currency';
-=======
-
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
->>>>>>> master
 
 // ----- Types ----- //
 

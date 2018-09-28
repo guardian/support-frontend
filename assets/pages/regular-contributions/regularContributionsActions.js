@@ -3,12 +3,9 @@
 // ----- Imports ----- //
 
 import type { PaymentMethod } from 'helpers/checkouts';
-<<<<<<< HEAD
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
-=======
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
->>>>>>> master
 
 
 // ----- Types ----- //
@@ -31,7 +28,6 @@ function checkoutSuccess(paymentMethod: PaymentMethod): Action {
   return { type: 'CHECKOUT_SUCCESS', paymentMethod };
 }
 
-<<<<<<< HEAD
 function paymentSuccessful(ctry: string, paymentType: string, paymentMethod: PaymentMethod) {
   return (dispatch: Dispatch<Action>) => {
 
@@ -44,14 +40,8 @@ function paymentSuccessful(ctry: string, paymentType: string, paymentMethod: Pay
   };
 }
 
-function checkoutError(specificError: ?string): Action {
-  const defaultError = 'There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.';
-  const message = specificError || defaultError;
-  return { type: 'CHECKOUT_ERROR', message };
-=======
 function checkoutError(checkoutFailureReason: CheckoutFailureReason): Action {
   return { type: 'CHECKOUT_ERROR', checkoutFailureReason };
->>>>>>> master
 }
 
 function setPayPalHasLoaded(): Action {
