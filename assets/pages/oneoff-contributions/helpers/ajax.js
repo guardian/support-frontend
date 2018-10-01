@@ -96,27 +96,28 @@ const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiErro
   onFailure(failureReason);
 };
 
-const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency) => (response): Promise<void> => {
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency) =>
+  (response): Promise<void> => {
 
-  if (response.ok) {
-    paymentSuccessful(currencyId, 'One-off', 'Stripe');
-    onSuccess();
-    return Promise.resolve();
-  }
+    if (response.ok) {
+      paymentSuccessful(currencyId, 'One-off', 'Stripe');
+      onSuccess();
+      return Promise.resolve();
+    }
 
-  return response.json().then(handleFailure(onFailure));
+    return response.json().then(handleFailure(onFailure));
 
-};
+  };
 
 const handleUnknownError = (onFailure: OnFailure) => () => {
   logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
   onFailure('unknown');
 };
 
-function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure, currencyId: IsoCurrency): Promise<*> {
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure, currId: IsoCurrency): Promise<*> {
 
   return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
-    .then(handleResponse(onSuccess, onFailure, currencyId))
+    .then(handleResponse(onSuccess, onFailure, currId))
     .catch(handleUnknownError(onFailure));
 
 }
@@ -133,7 +134,7 @@ function postCheckout(
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
-    dispatch(paymentSuccessful(currencyId, "One-off", "Stripe"));
+    dispatch(paymentSuccessful(currencyId, 'One-off', 'Stripe'));
   };
 
   const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
