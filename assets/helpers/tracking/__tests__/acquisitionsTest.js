@@ -28,10 +28,10 @@ describe('acquisitions', () => {
         componentId: 'exampleComponentId',
         componentType: 'exampleComponentType',
         source: 'exampleSource',
-        abTest: {
+        abTests: [{
           name: 'referrerAbTest',
           variant: 'value1',
-        },
+        }],
         queryParameters: [{ name: 'param1', value: 'value1' }, { name: 'param2', value: 'value2' }],
       };
 
@@ -109,7 +109,7 @@ describe('acquisitions', () => {
       expect(optimizeExperimentsToAcquisitionABTest({})).toEqual([]);
     });
 
-    it('should return an array of AcquisitionAbTests appended with an Optimize tag', () => {
+    it('should return an array of AcquisitionAbTests prepended with an Optimize tag', () => {
 
       const optimizeExperiments: OptimizeExperiments = {
         testOne: 'variantOne',
@@ -120,7 +120,7 @@ describe('acquisitions', () => {
       const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
 
       expect(acquisitionABTests.length).toBe(3);
-      expect(acquisitionABTests[0]).toEqual({ name: 'testOne', variant: 'variantOne' });
+      expect(acquisitionABTests[0]).toEqual({ name: 'optimize$$testOne', variant: 'variantOne' });
 
     });
 

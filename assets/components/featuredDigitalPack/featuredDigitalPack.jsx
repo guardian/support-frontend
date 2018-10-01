@@ -9,7 +9,11 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
 
-import { displayPrice } from 'helpers/subscriptions';
+import {
+  displayPrice,
+  sendTrackingEventsOnClick,
+  type ComponentAbTest,
+} from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
@@ -19,6 +23,7 @@ type PropTypes = {
   headingSize: HeadingSize,
   countryGroupId: CountryGroupId,
   url: string,
+  abTest: ComponentAbTest | null,
 };
 
 
@@ -50,6 +55,7 @@ function FeaturedDigitalPack(props: PropTypes) {
           text="Buy now"
           url={props.url}
           accessibilityHint="Buy now"
+          onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
         />
       </div>
       <div className="component-featured-digital-pack__image">
@@ -58,14 +64,14 @@ function FeaturedDigitalPack(props: PropTypes) {
           sources={[
             {
               gridId: 'digitalPackBenefitsMobile',
-              srcSizes: [140, 500, 1000, 1730],
+              srcSizes: [140, 500, 1000, 1729],
               imgType: 'png',
               sizes: '90vw',
               media: '(max-width: 659px)',
             },
             {
               gridId: 'digitalPackBenefitsDesktop',
-              srcSizes: [140, 500, 796],
+              srcSizes: [140, 500, 1000, 2000],
               imgType: 'png',
               sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw, 90vw',
               media: '(min-width: 660px)',
@@ -81,6 +87,13 @@ function FeaturedDigitalPack(props: PropTypes) {
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+FeaturedDigitalPack.defaultProps = {
+  abTest: null,
+};
 
 
 // ----- Exports ----- //

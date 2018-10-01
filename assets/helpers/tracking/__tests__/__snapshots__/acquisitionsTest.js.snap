@@ -16,15 +16,15 @@ Object {
       "variant": "variant3",
     },
     Object {
-      "name": "optimizeExperiment1",
+      "name": "optimize$$optimizeExperiment1",
       "variant": "variant1",
     },
     Object {
-      "name": "optimizeExperiment2",
+      "name": "optimize$$optimizeExperiment2",
       "variant": "variant2",
     },
     Object {
-      "name": "optimizeExperiment3",
+      "name": "optimize$$optimizeExperiment3",
       "variant": "variant3",
     },
     Object {

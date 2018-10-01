@@ -15,19 +15,26 @@ import { appStoreCtaClick } from 'helpers/tracking/googleTagManager';
 import { displayPrice, displayDigitalPackBenefitCopy } from 'helpers/subscriptions';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type ComponentAbTest } from 'helpers/subscriptions';
 
 import PremiumTier from './premiumTier';
 import DigitalPack from './digitalPack';
 
 
-// ----- Component ----- //
+// ----- Types ----- //
 
-function DigitalSection(props: {
+type PropTypes = {|
   headingSize: HeadingSize,
   subsLinks: SubsUrls,
   countryGroupId: CountryGroupId,
   appReferrer: string,
-}) {
+  abTest: ComponentAbTest | null,
+|};
+
+
+// ----- Component ----- //
+
+function DigitalSection(props: PropTypes) {
   return (
     <ThreeSubscriptions heading="Digital Subscriptions">
       <PremiumTier
@@ -38,7 +45,7 @@ function DigitalSection(props: {
       <SubscriptionBundle
         modifierClass="daily-edition"
         heading="Daily Edition"
-        subheading={`from ${displayPrice('DailyEdition', props.countryGroupId)}`}
+        subheading={displayPrice('DailyEdition', props.countryGroupId)}
         headingSize={props.headingSize}
         benefits={{
           list: false,
@@ -65,10 +72,18 @@ function DigitalSection(props: {
         subheading={displayPrice('DigitalPack', props.countryGroupId)}
         gridId="digitalCircleAlt"
         copy={displayDigitalPackBenefitCopy(props.countryGroupId)}
+        abTest={props.abTest}
       />
     </ThreeSubscriptions>
   );
 }
+
+
+// ----- Default Props ----- //
+
+DigitalSection.defaultProps = {
+  abTest: null,
+};
 
 
 // ----- Exports ----- //
