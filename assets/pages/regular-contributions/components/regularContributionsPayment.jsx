@@ -96,7 +96,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.referrerAcquisitionData,
           context.store.getState,
           props.optimizeExperiments,
-          props.country,
         )}
         switchStatus={props.directDebitSwitchStatus}
         canOpen={props.canOpen}
@@ -117,7 +116,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
       props.optimizeExperiments,
-      props.country,
     )}
     currencyId={props.currencyId}
     isTestUser={props.isTestUser}
@@ -144,7 +142,6 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.referrerAcquisitionData,
       context.store.getState,
       props.optimizeExperiments,
-      props.country,
     )}
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
