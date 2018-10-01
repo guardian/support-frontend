@@ -9,6 +9,7 @@ import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
 import { getDiscountedPrice } from './flashSale';
 
+
 // ----- Types ------ //
 
 export type SubscriptionProduct =
@@ -18,6 +19,14 @@ export type SubscriptionProduct =
   'GuardianWeekly' |
   'Paper' |
   'PaperAndDigital';
+
+type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
+
+export type ComponentAbTest = {
+  name: string,
+  variant: string,
+};
+
 
 // ----- Config ----- //
 
@@ -51,7 +60,7 @@ const subscriptionPrices: {
     GBPCountries: 21.62,
   },
   DailyEdition: {
-    GBPCountries: 6.99,
+    GBPCountries: 11.99,
   },
 };
 
@@ -65,6 +74,9 @@ const defaultBillingPeriods: {
   PaperAndDigital: 'month',
   DailyEdition: 'month',
 };
+
+
+// ----- Functions ----- //
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const price = subscriptionPrices[product][countryGroupId];
@@ -84,32 +96,46 @@ function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
     : 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices';
 }
 
+function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
+
+  switch (product) {
+    case 'DigitalPack':
+    case 'PremiumTier':
+    case 'DailyEdition':
+      return 'DIGITAL_SUBSCRIPTION';
+    case 'GuardianWeekly':
+    case 'Paper':
+    case 'PaperAndDigital':
+    default:
+      return 'PRINT_SUBSCRIPTION';
+  }
+
+}
+
 function sendTrackingEventsOnClick(
   id: string,
-  product: 'digital' | 'print',
-  abTest: string,
-  variant: boolean,
+  product: SubscriptionProduct,
+  abTest: ComponentAbTest | null,
 ): () => void {
+
+  const componentEvent = {
+    component: {
+      componentType: 'ACQUISITIONS_BUTTON',
+      id,
+      products: [ophanProductFromSubscriptionProduct(product)],
+    },
+    action: 'CLICK',
+    id,
+    ...(abTest ? { abTest } : {}),
+  };
 
   return () => {
 
-    trackComponentEvents({
-      component: {
-        componentType: 'ACQUISITIONS_BUTTON',
-        id,
-        products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
-      },
-      action: 'CLICK',
-      id: `${abTest}${id}`,
-      abTest: {
-        name: `${abTest}`,
-        variant: variant ? 'variant' : 'control',
-      },
-    });
+    trackComponentEvents(componentEvent);
 
     gaEvent({
       category: 'click',
-      action: `${abTest}`,
+      action: product,
       label: id,
     });
 
@@ -117,6 +143,12 @@ function sendTrackingEventsOnClick(
 
 }
 
+
 // ----- Exports ----- //
 
-export { sendTrackingEventsOnClick, displayPrice, getProductPrice, displayDigitalPackBenefitCopy };
+export {
+  sendTrackingEventsOnClick,
+  displayPrice,
+  getProductPrice,
+  displayDigitalPackBenefitCopy,
+};

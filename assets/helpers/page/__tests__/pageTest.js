@@ -23,7 +23,7 @@ describe('reducer tests', () => {
         componentId: null,
         componentType: null,
         source: null,
-        abTest: null,
+        abTests: [],
         queryParameters: [],
       },
       internationalisation: {

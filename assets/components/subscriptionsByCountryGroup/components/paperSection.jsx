@@ -12,17 +12,24 @@ import { type HeadingSize } from 'components/heading/heading';
 import { displayPrice } from 'helpers/subscriptions';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick, type ComponentAbTest } from 'helpers/subscriptions';
 
 import Weekly from './weekly';
 
 
-// ----- Component ----- //
+// ----- Types ----- //
 
-function PaperSection(props: {
+type PropTypes = {|
   headingSize: HeadingSize,
   subsLinks: SubsUrls,
   countryGroupId: CountryGroupId,
-}) {
+  abTest: ComponentAbTest | null,
+|};
+
+
+// ----- Component ----- //
+
+function PaperSection(props: PropTypes) {
 
   return (
     <ThreeSubscriptions heading="Print Subscriptions">
@@ -46,6 +53,7 @@ function PaperSection(props: {
             url: props.subsLinks.Paper,
             accessibilityHint: 'Proceed to paper subscription options',
             modifierClasses: ['border'],
+            onClick: sendTrackingEventsOnClick('paper_cta', 'Paper', props.abTest),
           },
         ]}
       />
@@ -69,6 +77,7 @@ function PaperSection(props: {
             url: props.subsLinks.PaperAndDigital,
             accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
             modifierClasses: ['border'],
+            onClick: sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', props.abTest),
           },
         ]}
       />
@@ -76,11 +85,18 @@ function PaperSection(props: {
         headingSize={props.headingSize}
         url={props.subsLinks.GuardianWeekly}
         subheading={displayPrice('GuardianWeekly', props.countryGroupId)}
+        abTest={props.abTest}
       />
     </ThreeSubscriptions>
   );
 
 }
+
+// ----- Default Props ----- //
+
+PaperSection.defaultProps = {
+  abTest: null,
+};
 
 
 // ----- Exports ----- //
