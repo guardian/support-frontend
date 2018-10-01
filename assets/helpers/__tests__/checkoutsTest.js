@@ -2,13 +2,14 @@
 
 // ----- Imports ----- //
 
-import { getValidPaymentMethods } from '../checkouts';
+import { getValidPaymentMethods, getPaymentMethodToSelect } from '../checkouts';
 
 // ----- Tests ----- //
 
+
 describe('checkouts', () => {
 
-  describe('getValidPaymentMethods', () => {
+  describe('getValidPaymentMethods and getPaymentMethodToSelect', () => {
 
     const allSwitchesOn = {
       oneOffPaymentMethods: {
@@ -38,12 +39,16 @@ describe('checkouts', () => {
       const contributionType = 'MONTHLY';
       const countryId = 'GB';
       expect(getValidPaymentMethods(contributionType, allSwitchesOn, countryId)).toEqual(['DirectDebit', 'Stripe', 'PayPal']);
+      expect(getPaymentMethodToSelect(contributionType, allSwitchesOn, countryId)).toEqual('DirectDebit');
+
     });
 
-    it('should return en empty array for Monthly Recurring UK when switches are all off', () => {
+    it('should return en empty array/\'None\' for Monthly Recurring UK when switches are all off', () => {
       const contributionType = 'MONTHLY';
       const countryId = 'GB';
       expect(getValidPaymentMethods(contributionType, allSwitchesOff, countryId)).toEqual([]);
+      expect(getPaymentMethodToSelect(contributionType, allSwitchesOff, countryId)).toEqual('None');
+
     });
 
     it('should return just Stripe for One Off US when only Stripe is on', () => {
@@ -51,6 +56,8 @@ describe('checkouts', () => {
       const justStripeOn = { ...allSwitchesOff, oneOffPaymentMethods: { ...allSwitchesOff.oneOffPaymentMethods, stripe: 'On' } };
       const countryId = 'US';
       expect(getValidPaymentMethods(contributionType, justStripeOn, countryId)).toEqual(['Stripe']);
+      expect(getPaymentMethodToSelect(contributionType, justStripeOn, countryId)).toEqual('Stripe');
+
     });
 
   });
