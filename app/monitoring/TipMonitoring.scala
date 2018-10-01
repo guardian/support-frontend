@@ -20,8 +20,7 @@ object TipMonitoring {
     if (config.stage.toString == "PROD") //todo - verify this works correctly
       TipFactory.create(tipConfig)
     else
-      //TipFactory.createDummy(tipConfig)
-      TipFactory.create(tipConfig) // todo - replace with createDummy line (commented above) after local testing
+      TipFactory.createDummy(tipConfig)
   }
 
 }
