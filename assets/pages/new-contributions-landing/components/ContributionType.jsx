@@ -7,8 +7,10 @@ import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { getValidPaymentMethods } from 'helpers/checkouts';
+import { getPaymentMethodToSelect } from 'helpers/checkouts';
 
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Switches } from 'helpers/settings';
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
 
@@ -16,39 +18,30 @@ import { type Action, updateContributionType } from '../contributionsLandingActi
 
 type PropTypes = {
   contributionType: Contrib,
-  onSelectContributionType: Event => Action,
+  countryId: IsoCountry,
+  switches: Switches,
+  onSelectContributionType: (Contrib, Switches, IsoCountry) => void,
 };
 
 const mapStateToProps = (state: State) => ({
-  state,
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  dispatch,
+  onSelectContributionType: (contributionType: Contrib, switches: Switches, countryId: IsoCountry) => {
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    dispatch(updateContributionType(contributionType, paymentMethodToSelect));
+  },
 });
-
-function mergeProps(stateProps, dispatchProps, ownProps) {
-
-  const onSelectContributionType = (e) => {
-    if (e.target.value !== 'ONE_OFF' && e.target.value !== 'MONTHLY' && e.target.value !== 'ANNUAL') { return; }
-    const paymentMethodToSelect =
-      getValidPaymentMethods(e.target.value, stateProps.switches, stateProps.countryId)[0] || 'None';
-    dispatchProps.dispatch(updateContributionType(e.target.value, paymentMethodToSelect));
-  };
-
-  return {
-    ...ownProps,
-    ...stateProps,
-    onSelectContributionType,
-  };
-}
 
 // ----- Render ----- //
 
 function ContributionType(props: PropTypes) {
+  const oneOff = 'ONE_OFF';
+  const monthly = 'MONTHLY';
+  const annual = 'ANNUAL';
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
@@ -59,9 +52,9 @@ function ContributionType(props: PropTypes) {
             className="form__radio-group-input"
             type="radio"
             name="contributionType"
-            value="ONE_OFF"
-            onChange={props.onSelectContributionType}
-            checked={props.contributionType === 'ONE_OFF'}
+            value={oneOff}
+            onChange={() => props.onSelectContributionType(oneOff, props.switches, props.countryId)}
+            checked={props.contributionType === oneOff}
           />
           <label htmlFor="contributionType-oneoff" className="form__radio-group-label">Single</label>
         </li>
@@ -71,9 +64,9 @@ function ContributionType(props: PropTypes) {
             className="form__radio-group-input"
             type="radio"
             name="contributionType"
-            value="MONTHLY"
-            onChange={props.onSelectContributionType}
-            checked={props.contributionType === 'MONTHLY'}
+            value={monthly}
+            onChange={() => props.onSelectContributionType(monthly, props.switches, props.countryId)}
+            checked={props.contributionType === monthly}
           />
           <label htmlFor="contributionType-monthly" className="form__radio-group-label">Monthly</label>
         </li>
@@ -83,9 +76,9 @@ function ContributionType(props: PropTypes) {
             className="form__radio-group-input"
             type="radio"
             name="contributionType"
-            value="ANNUAL"
-            onChange={props.onSelectContributionType}
-            checked={props.contributionType === 'ANNUAL'}
+            value={annual}
+            onChange={() => props.onSelectContributionType(annual, props.switches, props.countryId)}
+            checked={props.contributionType === annual}
           />
           <label htmlFor="contributionType-annual" className="form__radio-group-label">Annual</label>
         </li>
@@ -94,6 +87,6 @@ function ContributionType(props: PropTypes) {
   );
 }
 
-const NewContributionType = connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionType);
+const NewContributionType = connect(mapStateToProps, mapDispatchToProps)(ContributionType);
 
 export { NewContributionType };
