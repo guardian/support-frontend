@@ -4,6 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 
@@ -17,8 +18,7 @@ class EmailService(implicit val executionContext: ExecutionContext) {
     .withRegion(Regions.EU_WEST_1)
     .build()
 
-  private val queueName = "contributions-thanks"
-  private val queueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
+  private val queueUrl = sqsClient.getQueueUrl(Configuration.contributionThanksQueueName).getQueueUrl
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
     SafeLogger.info(s"Sending message to SQS queue $queueUrl")
