@@ -2,11 +2,11 @@ package com.gu.acquisition.services
 
 import java.util.UUID
 
-import com.gu.acquisition.model.AcquisitionSubmission
+import com.gu.acquisition.model._
 import com.gu.acquisition.services.AnalyticsService.RequestData
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
-import ophan.thrift.event.AbTestInfo
+import ophan.thrift.event.{AbTestInfo, Acquisition, Product}
 
 private[services] class GAService(implicit client: OkHttpClient)
   extends AnalyticsService with LazyLogging {
@@ -24,8 +24,9 @@ private[services] class GAService(implicit client: OkHttpClient)
     val goExp = buildOptimizeTestsPayload(acquisition.abTests)
 
     // clientId cannot be empty or the call will fail
-    val clientId = if(gaData.clientId != "") gaData.clientId else transactionId
-
+    val clientId = if (gaData.clientId != "") gaData.clientId else transactionId
+    val productName = getProductName(submission.acquisition)
+    val conversionCategory = getConversionCategory(submission.acquisition)
     val body = Map(
       "v" -> "1", //Version
       "cid" -> clientId,
@@ -35,7 +36,9 @@ private[services] class GAService(implicit client: OkHttpClient)
       "ua" -> gaData.clientUserAgent.getOrElse(""), // User Agent Override
 
       // Custom Dimensions
+      "cd12" -> acquisition.campaignCode.map(_.mkString(",")), // Campaign code
       "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
+      "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
 
       // Google Optimize Experiment Id
       "xid" -> goExp.map(_._1).getOrElse(""),
@@ -43,8 +46,8 @@ private[services] class GAService(implicit client: OkHttpClient)
 
       // The GA conversion event
       "t" -> "event",
-      "ec" -> "AcquisitionConversion", //Event Category
-      "ea" -> acquisition.product.name, //Event Action
+      "ec" -> conversionCategory, //Event Category
+      "ea" -> productName, //Event Action
       "el" -> acquisition.paymentFrequency.name, //Event Label
       "ev" -> acquisition.amount.toInt.toString, //Event Value is an Integer
 
@@ -52,9 +55,11 @@ private[services] class GAService(implicit client: OkHttpClient)
       "ti" -> tid,
       "tcc" -> acquisition.promoCode.getOrElse(""), // Transaction coupon.
       "pa" -> "purchase", //This is a purchase
-      "pr1nm" -> acquisition.product.name, // Product Name
+      "pr1nm" -> productName, // Product Name
+      "pr1ca" -> conversionCategory, // Product category
       "pr1pr" -> acquisition.amount.toString, // Product Price
       "pr1qt" -> "1", // Product Quantity
+      "pr1cc" -> acquisition.promoCode.getOrElse(""), // Product coupon code.
       "cu" -> acquisition.currency.toString // Currency
     )
 
@@ -63,6 +68,20 @@ private[services] class GAService(implicit client: OkHttpClient)
       .map { case (key, value) => s"$key=$value" }
       .mkString("&")
   }
+
+  private[services] def getProductName(acquisition: Acquisition) =
+    acquisition.printOptions.map(_.product.name).getOrElse(acquisition.product.name)
+
+  private[services] def getConversionCategory(acquisition: Acquisition) =
+    acquisition.printOptions.map(p => ConversionCategory.PrintConversion.name)
+      .getOrElse(getDigitalConversionCategory(acquisition))
+
+  private[services] def getDigitalConversionCategory(acquisition: Acquisition) =
+    acquisition.product match {
+      case _: Product.RecurringContribution.type |
+           _: Product.Contribution.type => ConversionCategory.ContributionConversion.name
+      case _ => ConversionCategory.DigitalConversion.name
+    }
 
   private[services] def buildOptimizeTestsPayload(maybeTests: Option[AbTestInfo]) = {
     val optimizePrefix = "optimize$$"
