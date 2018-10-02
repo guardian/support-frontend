@@ -126,7 +126,7 @@ const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat
 
 const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
-const checkState: (string | null) => boolean = s => isNotEmpty(s || '');
+const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
 const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
