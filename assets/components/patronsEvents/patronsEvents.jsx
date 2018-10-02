@@ -27,7 +27,7 @@ export default function PatronsEvents(props: PropTypes) {
         gridImg="windrushGreyscale"
         imgAlt="passengers aboard windrush ship"
         heading="Patrons"
-        copy="Support from our patrons is crucial to ensure that generations to come will be able to enjoy The Guardian."
+        copy="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian."
         ctaText="Find out more"
         ctaUrl={getPatronsLink(props.campaignCode)}
         ctaAccessibilityHint="Find out more about becoming a Patron"
