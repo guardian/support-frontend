@@ -50,6 +50,11 @@ Resources:
               - sqs:GetQueueUrl
               - sqs:SendMessage
               Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
+            - Effect: Allow
+              Action:
+              - sqs:GetQueueUrl
+              - sqs:SendMessage
+              Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
         - PolicyName: CloudWatchLogging
           PolicyDocument:
             Version: '2012-10-17'
