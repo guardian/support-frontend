@@ -121,6 +121,7 @@ function ContributionAmount(props: PropTypes) {
           checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
+          step={0.01}
           min={min}
           max={max}
           autoFocus
