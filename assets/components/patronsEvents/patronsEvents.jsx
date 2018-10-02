@@ -8,8 +8,6 @@ import PageSection from 'components/pageSection/pageSection';
 import OtherProduct from 'components/otherProduct/otherProduct';
 
 import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
-import type { ImageType } from 'helpers/theGrid';
-
 
 // ----- Types ----- //
 
@@ -33,7 +31,7 @@ export default function PatronsEvents(props: PropTypes) {
         ctaText="Find out more"
         ctaUrl={getPatronsLink(props.campaignCode)}
         ctaAccessibilityHint="Find out more about becoming a Patron"
-        imgType='png'
+        imgType="png"
       />
       <OtherProduct
         modifierClass="live-events"

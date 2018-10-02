@@ -10,8 +10,6 @@ import GridImage from 'components/gridImage/gridImage';
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { ImageType } from 'helpers/theGrid';
 
-
-
 // ----- Props ----- //
 
 type PropTypes = {
