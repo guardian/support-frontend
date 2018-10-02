@@ -24,7 +24,8 @@ import io.circe.generic.JsonCodec
  */
 @JsonCodec case class ContributorRowSqsMessage(
   To: ToSqsMessage,
-  DataExtensionName: String
+  DataExtensionName: String,
+  IdentityUserId: String
 )
 
 @JsonCodec case class ToSqsMessage(
@@ -42,7 +43,7 @@ import io.circe.generic.JsonCodec
   edition: String
 )
 
-case class ContributorRow(email: String, currency: String) {
+case class ContributorRow(email: String, currency: String, identityId: Long) {
   def edition: String = currency match {
     case "GBP" => "uk"
     case "USD" => "us"
@@ -62,7 +63,8 @@ case class ContributorRow(email: String, currency: String) {
           )
         )
       ),
-      DataExtensionName = "contribution-thank-you"
+      DataExtensionName = "contribution-thank-you",
+      IdentityUserId = identityId.toString
     ).asJson.toString()
   }
 }

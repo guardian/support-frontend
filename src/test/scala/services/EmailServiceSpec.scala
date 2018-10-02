@@ -36,6 +36,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
     val payerInfo = mock[PayerInfo]
     val transaction = mock[com.paypal.api.payments.Transaction]
     val transactions = List(transaction).asJava
+    val identityId = 666l
     when(transaction.getAmount).thenReturn(amount)
     when(amount.getCurrency).thenReturn("GBP")
     when(amount.getTotal).thenReturn("2")
@@ -51,7 +52,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP")
+    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP", identityId)
     whenReady(emailResult.value) { result =>
       result shouldBe Right(new SendMessageResult)
     }
@@ -64,6 +65,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
     val payerInfo = mock[PayerInfo]
     val transaction = mock[com.paypal.api.payments.Transaction]
     val transactions = List(transaction).asJava
+    val identityId = 666l
     when(transaction.getAmount).thenReturn(amount)
     when(amount.getCurrency).thenReturn("GBP")
     when(amount.getTotal).thenReturn("2")
@@ -82,7 +84,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP").value) { result =>
+    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP", identityId).value) { result =>
       result.fold(
         error => {
           // TODO: understand how this java.lang.Exception bit gets added

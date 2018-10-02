@@ -66,8 +66,10 @@ class StripeBackend(
 
   private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
 
+    val identityIdM: EitherT[Future, BackendError, Long] = getOrCreateIdentityIdFromEmail(email)
+
     val trackContributionResult = {
-      getOrCreateIdentityIdFromEmail(email)
+      identityIdM
         .flatMap(identityId => trackContribution(charge, data, Option(identityId), countrySubdivisionCode))
         .leftMap { err =>
           logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
@@ -78,7 +80,8 @@ class StripeBackend(
     }
 
     val sendThankYouEmailResult = for {
-      _ <- sendThankYouEmail(email, data)
+      identityId <- identityIdM
+      _ <- sendThankYouEmail(email, data, identityId)
     } yield ()
 
     BackendError.combineResults(
@@ -117,8 +120,8 @@ class StripeBackend(
     databaseService.flagContributionAsRefunded(stripePaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, data: StripeChargeData): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, data.paymentData.currency.toString)
+  private def sendThankYouEmail(email: String, data: StripeChargeData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
+    emailService.sendThankYouEmail(email, data.paymentData.currency.toString, identityId)
       .leftMap(BackendError.fromEmailError)
 
 }

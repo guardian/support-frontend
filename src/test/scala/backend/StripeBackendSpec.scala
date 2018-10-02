@@ -10,6 +10,7 @@ import model.paypal.PaypalApiError
 import model.stripe.{StripeApiError, _}
 import model.{AcquisitionData, _}
 import org.mockito.Matchers._
+import org.mockito.Matchers.{eq => mockitoEq}
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
@@ -123,7 +124,6 @@ class StripeBackendSpec
 
       "return successful payment response even if identityService, " +
         "ophanService, databaseService and emailService all fail" in new StripeBackendFixture {
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
@@ -166,7 +166,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)
@@ -185,7 +185,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)

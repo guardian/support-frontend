@@ -9,6 +9,7 @@ import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.paypal._
 import model._
 import org.mockito.Matchers._
+import org.mockito.Matchers.{eq => mockitoEq}
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
@@ -158,7 +159,6 @@ class PaypalBackendSpec
         "databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
         val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
@@ -182,7 +182,6 @@ class PaypalBackendSpec
         "ophanService, databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
         val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
@@ -224,7 +223,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val result = paypalBackend invokePrivate postPaymentTasks(enrichedPaymentMock, mockAcquisitionData, countrySubdivisionCode)
@@ -242,7 +241,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString())).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val errors = BackendError.MultipleErrors(List(

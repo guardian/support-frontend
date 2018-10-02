@@ -116,7 +116,10 @@ class PaypalBackend(
   private def postPaymentTasks(enrichedPayment: EnrichedPaypalPayment, acquisitionData: AcquisitionData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
     val payment = enrichedPayment.payment
     EitherT.fromEither(getEmail(enrichedPayment)).flatMap { email =>
-      val trackContributionResult: EitherT[Future, BackendError, Unit] = getOrCreateIdentityIdFromEmail(email)
+
+      val identityIdM = getOrCreateIdentityIdFromEmail(email)
+
+      val trackContributionResult: EitherT[Future, BackendError, Unit] = identityIdM
         .flatMap { identityId =>
           trackContribution(payment, acquisitionData, email, Option(identityId), countrySubdivisionCode)
         }
@@ -128,8 +131,9 @@ class PaypalBackend(
         }
 
       val sendThankYouEmailResult = for {
+        identityId <- identityIdM
         currency <- currencyFromPayment(payment)
-        _ <- sendThankYouEmail(email, currency)
+        _ <- sendThankYouEmail(email, currency, identityId)
       } yield ()
 
       BackendError.combineResults(
@@ -185,8 +189,8 @@ class PaypalBackend(
     databaseService.flagContributionAsRefunded(paypalPaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, currency: String): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, currency)
+  private def sendThankYouEmail(email: String, currency: String, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
+    emailService.sendThankYouEmail(email, currency, identityId)
       .leftMap(BackendError.fromEmailError)
 
   private def currencyFromPayment(p: Payment): EitherT[Future, BackendError, String] =

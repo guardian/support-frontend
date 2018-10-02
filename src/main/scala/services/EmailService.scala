@@ -15,8 +15,8 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendThankYouEmail(email: String, currency: String): EitherT[Future, EmailService.Error, SendMessageResult] = {
-    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email, currency))
+  def sendThankYouEmail(email: String, currency: String, identityId: Long): EitherT[Future, EmailService.Error, SendMessageResult] = {
+    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email, currency, identityId))
   }
 
   /*
