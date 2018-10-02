@@ -12,7 +12,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/newStripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 

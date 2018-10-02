@@ -15,7 +15,7 @@ import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/newStripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';

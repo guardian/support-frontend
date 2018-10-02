@@ -18,7 +18,7 @@ import {
   postOneOffStripeExecutePaymentRequest,
   postRegularPaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';

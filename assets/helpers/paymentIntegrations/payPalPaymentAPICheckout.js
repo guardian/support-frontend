@@ -13,7 +13,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 
 // ----- Functions ----- //

@@ -20,7 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Contrib } from 'helpers/contributions';
-import { type PaymentAuthorisation } from '../readerRevenueApis';
+import { type PaymentAuthorisation } from './readerRevenueApis';
 
 // ----- Functions ----- //
 
