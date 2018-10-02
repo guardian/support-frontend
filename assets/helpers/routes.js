@@ -11,6 +11,7 @@ const routes: {
   recurringContribCreate: '/contribute/recurring/create',
   recurringContribPending: '/contribute/recurring/pending',
   contributionsSendMarketing: '/contribute/send-marketing',
+  contributionsSetPasswordGuest: '/contribute/set-password-guest',
   oneOffContribCheckout: '/contribute/one-off',
   oneOffContribThankyou: '/contribute/one-off/thankyou',
   oneOffContribAutofill: '/contribute/one-off/autofill',

@@ -41,11 +41,11 @@ class IdentityController(
       .setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
       .fold(
         err => {
-          SafeLogger.error(scrub"Failed to set password")
+          SafeLogger.error(scrub"Failed to set password: ${err.toString}")
           InternalServerError(err.asJson)
         },
         cookies => {
-          SafeLogger.info("Successfully set passwrod")
+          SafeLogger.info("Successfully set password")
           Ok(cookies.asJson)
         }
       )

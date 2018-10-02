@@ -24,6 +24,8 @@ export type UserFormData = {
   email: string | null,
 }
 
+export type ThankYouPageStage = 'setPassword' | 'thankYou' | 'thankYouPasswordSet' | 'thankYouPasswordNotSet';
+
 type FormData = UserFormData & {
   otherAmounts: {
     [Contrib]: { amount: string | null }
@@ -31,6 +33,11 @@ type FormData = UserFormData & {
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
+
+type SetPasswordData = {
+  password: string,
+  passwordHasBeenSubmitted: boolean,
+}
 
 type FormState = {
   contributionType: Contrib,
@@ -42,8 +49,10 @@ type FormState = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
+  setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   guestAccountCreationToken: ?string,
+  thankYouPageStage: ThankYouPageStage,
 };
 
 type PageState = {
@@ -97,11 +106,16 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       state: null,
       checkoutFormHasBeenSubmitted: false,
     },
+    setPasswordData: {
+      password: '',
+      passwordHasBeenSubmitted: false,
+    },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
     isWaiting: false,
     paymentComplete: false,
     guestAccountCreationToken: null,
+    thankYouPageStage: 'thankYou',
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -135,6 +149,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_EMAIL':
         return { ...state, formData: { ...state.formData, email: action.email } };
+
+      case 'UPDATE_PASSWORD':
+        return { ...state, setPasswordData: { ...state.setPasswordData, password: action.password } };
+
+      case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
+        return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
@@ -176,6 +196,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
         return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
+
+      case 'SET_THANK_YOU_PAGE_STAGE':
+        return { ...state, thankYouPageStage: action.thankYouPageStage };
 
       default:
         return state;

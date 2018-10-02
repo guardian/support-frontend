@@ -18,6 +18,7 @@ import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
 import * as cookie from 'helpers/cookie';
+import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -142,6 +143,7 @@ function checkRegularStatus(
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
@@ -164,8 +166,10 @@ function checkRegularStatus(
   };
 
   return (json) => {
+    console.log(json);
     if (json.guestAccountCreationToken) {
       setGuestAccountCreationToken(json.guestAccountCreationToken);
+      setThankYouPageStage('setPassword');
     }
     switch (json.status) {
       case 'pending':
@@ -211,11 +215,12 @@ function postRegularPaymentRequest(
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
     postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
 export {

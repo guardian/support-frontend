@@ -211,7 +211,7 @@ function ContributionForm(props: PropTypes) {
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
             isValid={checkEmail(email)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
             disabled={isSignedIn}
@@ -227,7 +227,7 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateFirstName}
             isValid={checkFirstName(firstName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
           />
@@ -241,7 +241,7 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateLastName}
             isValid={checkLastName(lastName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
           />
@@ -249,7 +249,7 @@ function ContributionForm(props: PropTypes) {
             onChange={props.updateState}
             selectedState={state}
             isValid={checkState(state)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a state"
           />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
