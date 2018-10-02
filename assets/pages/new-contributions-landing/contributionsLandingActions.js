@@ -151,7 +151,7 @@ const getAmount = (state: State) =>
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeStripeOneOffPaymentData: (PaymentAuthorisation, State) => StripeOneOffPaymentFields = (token, state) => ({
+const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State): StripeOneOffPaymentFields => ({
   contributionType: 'oneoff',
   fields: {
     paymentData: {
@@ -182,7 +182,7 @@ function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): P
   }
 }
 
-const makeRegularPaymentData: (PaymentAuthorisation, State) => PaymentFields = (authorisation, state) => ({
+const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: State): PaymentFields => ({
   contributionType: 'regular',
   fields: {
     firstName: state.page.form.formData.firstName || '',
